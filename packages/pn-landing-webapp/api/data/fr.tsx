@@ -846,12 +846,5 @@ export const frAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };

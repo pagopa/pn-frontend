@@ -94,7 +94,7 @@ export const getFaqData = (): IFaqData => itFaqData;
 // export const getFooterData = (userType: UserType = UserType.PA): FooterProps => getAppData()[userType].footer;
 
 export const getCommonHeadingTitleData = (name: string): IHeadingTitleProps => {
-  const headingTitleData = getAppData().common.headingTitles.filter(
+  const headingTitleData = perfezionamentoData.headingTitles.filter(
     (f) => f.name === name
   )[0];
   return headingTitleData.data;

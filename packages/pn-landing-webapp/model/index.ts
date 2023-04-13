@@ -89,7 +89,6 @@ export interface IAppData {
     companyLegalInfo: JSX.Element;
     preLoginLinks: PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
-    headingTitles: Array<IHeadingTitlesData>;
   };
   pa: ILandingComponents;
   pf: ILandingComponents;

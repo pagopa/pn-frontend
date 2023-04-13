@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
+import { useState, useEffect, useCallback } from "react";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import { Hero } from "@pagopa/mui-italia";
 import { Box, Typography, Stack, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
@@ -8,10 +10,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IMAGES_PATH } from "@utils/constants";
 import { getFaqData } from "api";
 import { FaqDescription, IFaqDataItem, IFaqDataSection } from "model";
-import { useCallback } from "react";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 
 type SetActiveItemFunction = (itemId: string) => (_: any, isExpanded: boolean) => void;
@@ -49,7 +47,7 @@ function FaqDataItemBlock(props: { item: IFaqDataItem } & ActiveItemProps) {
   return <Box id={item.id} sx={{ mb: '16px' }}>
     <Accordion onChange={setActiveItem(item.id)} expanded={item.id === activeItem}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-        <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.title}</Typography>        
+        <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Box sx={{ mr: 4, textAlign: 'justify' }}>
@@ -65,9 +63,9 @@ export function FaqDataSectionBlock(props: { section: IFaqDataSection } & Active
 
   return <Box sx={{ pb: '64px' }}>
     <Typography variant="h4" sx={{ pb: '48px' }}>{section.title}</Typography>
-    { section.items.map((item) => 
-      <FaqDataItemBlock item={item} setActiveItem={setActiveItem} key={item.id} activeItem={activeItem}/>
-    ) }
+    {section.items.map((item) =>
+      <FaqDataItemBlock item={item} setActiveItem={setActiveItem} key={item.id} activeItem={activeItem} />
+    )}
   </Box>;
 }
 
@@ -99,10 +97,10 @@ const FaqPage: NextPage = () => {
 
     <main>
       <Hero title="FAQ" type="text" background={`${IMAGES_PATH}/hero-faq-background.png`} />
-      <Stack direction="column" sx={{ px: {xs: '30px', sm: '80px', md: '142px'}, pt: '100px', backgroundColor: '#FAFAFA' }}>
-        { faqData.sections.map(( section, ix ) => 
+      <Stack direction="column" sx={{ px: { xs: '30px', sm: '80px', md: '142px' }, pt: '100px', backgroundColor: '#FAFAFA' }}>
+        {faqData.sections.map((section, ix) =>
           <FaqDataSectionBlock section={section} key={ix} setActiveItem={setActiveItem} activeItem={currentItem} />
-        ) }
+        )}
       </Stack>
     </main>
   </>;

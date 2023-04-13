@@ -90,8 +90,7 @@ const Tabs = ({
             open={dropdownOpen}
             anchorEl={anchorRef.current}
             transition
-            disablePortal
-          >
+            disablePortal nonce={undefined} onResize={undefined} onResizeCapture={undefined}>
             {({
               TransitionProps,
               placement,

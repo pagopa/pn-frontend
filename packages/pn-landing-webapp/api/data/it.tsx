@@ -1,7 +1,4 @@
 import {
-  Alert,
-  AlertTitle,
-  Box,
   Link,
   List,
   ListItem,
@@ -27,7 +24,6 @@ import {
   EcologyIcon,
   FireworksIcon,
   HourglassIcon,
-  IOIcon,
   MessageIcon,
   NotificationIcon,
   PECIcon,
@@ -40,12 +36,10 @@ import {
 } from "./icons";
 import {
   IAppData,
-  IHeadingTitlesData,
   IInfoblockData,
   ILinkData,
   INavigationBarProps,
   IShowcaseData,
-  ITabsData,
 } from "model";
 
 import {
@@ -847,21 +841,6 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
-const headingTitles: Array<IHeadingTitlesData> = [
-  {
-    name: "heading title notification viewed 1",
-    data: {
-      title: "Quando si perfeziona una notifica?",
-      subtitle: (
-        <>
-          Dipende dal modo in cui la si riceve: seleziona i canali per sapere
-          quando avviene il <Link>perfezionamento</Link>.
-        </>
-      ),
-    },
-  },
-];
-
 /** Application Data Mock */
 export const itAppData: IAppData = {
   common: {
@@ -871,7 +850,6 @@ export const itAppData: IAppData = {
     companyLegalInfo,
     preLoginLinks,
     postLoginLinks,
-    headingTitles
   },
   pa: {
     hero: paHero,
