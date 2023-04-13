@@ -1,6 +1,6 @@
-import {NOTIFICHE} from '../../src/navigation/routes.const';
-import {NOTIFICATIONS_LIST} from '../../src/api/notifications/notifications.routes';
-import {DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR,} from '../../src/api/delegations/delegations.routes';
+import { NOTIFICHE } from '../../src/navigation/routes.const';
+import { NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
+import { DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR } from '../../src/api/delegations/delegations.routes';
 
 describe('Pagination', () => {
   beforeEach(() => {
