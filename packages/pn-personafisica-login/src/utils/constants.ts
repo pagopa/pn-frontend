@@ -13,7 +13,9 @@ export const OT_DOMAIN_ID = ENV.COOKIE.OT_DOMAIN_ID;
 export const ONE_TRUST_DRAFT_MODE = process.env.REACT_APP_ONE_TRUST_DRAFT_MODE === 'true';
 export const ONE_TRUST_PP = process.env.REACT_APP_ONE_TRUST_PP || '';
 export const PF_URL = process.env.REACT_APP_PF_URL;
-export const PG_URL = process.env.REACT_APP_PG_URL;
+// momentarily commented for pn-5157
+// export const PG_URL = process.env.REACT_APP_PG_URL;
+export const PG_URL = PF_URL;
 
 export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
 

@@ -186,6 +186,7 @@ const FilterNotificationsFormBody = ({
       </LocalizationProvider>
       <TextField
         id="status"
+        data-testid="notificationStatus"
         name="status"
         label={t('filters.status')}
         select
