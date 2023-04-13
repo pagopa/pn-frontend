@@ -72,7 +72,7 @@ function ItemsTable<ColumnId extends string>({
               ? ariaTitle
               : getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
           }
-          data-cy="table(notifications)"
+          data-testid="table(notifications)"
         >
           <TableHead role="rowgroup">
             <TableRow role="row">
@@ -112,7 +112,7 @@ function ItemsTable<ColumnId extends string>({
             {rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-cy="table(notifications).row"
+                data-testid="table(notifications).row"
                 role="row"
                 aria-rowindex={index + 1}
               >
