@@ -10,3 +10,5 @@ declare namespace Cypress {
      loginWithUI(): void;
   }
 }
+
+declare const Chainable: Cypress.Chainable

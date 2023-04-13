@@ -104,7 +104,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                     <item.icon />
                   </ListItemIcon>
                 )}
-                <ListItemText primary={item.label} data-cy="collapsible-menu" />
+                <ListItemText primary={item.label} data-testid="collapsible-menu" />
                 {openId === item.label && open ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse
@@ -113,7 +113,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                 unmountOnExit
                 data-testid={`collapse-${item.label}`}
               >
-                <List data-cy="collapsible-list">
+                <List data-testid="collapsible-list">
                   {item.children.map((child, childIndex) => (
                     <SideMenuListItem
                       key={child.label}
