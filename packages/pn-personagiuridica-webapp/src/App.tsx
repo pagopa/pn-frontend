@@ -14,7 +14,8 @@ import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import {
   AppMessage,
   AppResponseMessage,
-  AppRouteType,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -45,13 +46,14 @@ import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 
-
 const App = () => {
   setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -73,20 +75,23 @@ const App = () => {
   const role = loggedUser.organization?.roles[0];
 
   // TODO: get products list from be (?)
-  const productsList: Array<ProductSwitchItem> = useMemo(() => [
-    {
-      id: '1',
-      title: t('header.product.organization-dashboard'),
-      productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
-      linkType: 'external',
-    },
-    {
-      id: '0',
-      title: t('header.product.notification-platform'),
-      productUrl: '',
-      linkType: 'internal',
-    },
-  ], [t, organization?.id]);
+  const productsList: Array<ProductSwitchItem> = useMemo(
+    () => [
+      {
+        id: '1',
+        title: t('header.product.organization-dashboard'),
+        productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
+        linkType: 'external',
+      },
+      {
+        id: '0',
+        title: t('header.product.notification-platform'),
+        productUrl: '',
+        linkType: 'internal',
+      },
+    ],
+    [t, organization?.id]
+  );
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -203,8 +208,9 @@ const App = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
-
-    goToLoginPortal(AppRouteType.PG);
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PG);
+    goToLoginPortal();
   };
 
   return (
