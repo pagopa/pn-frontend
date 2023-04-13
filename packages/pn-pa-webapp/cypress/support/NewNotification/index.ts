@@ -46,6 +46,7 @@ Cypress.Commands.add('fillRecipient', (recipient: RecipientFormData) => {
   }
 
   if(recipient.data.noticeCode && Cypress.env('IS_PAYMENT_ENABLED')) {
+    cy.log('payment enabled', Cypress.env('IS_PAYMENT_ENABLED'));
     cy.log('writing valid notice code');
     cy.get(`input[name="recipients\[${recipient.position}\]\.noticeCode"]`).clear().type(recipient.data.noticeCode);
   }
