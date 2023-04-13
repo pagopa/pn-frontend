@@ -11,7 +11,6 @@ import {
 export enum UserType {
   PA = "pa",
   PF = "pf",
-  CO = "co"
 }
 
 export interface ILinkData {
@@ -55,12 +54,9 @@ export interface IAppData {
     preLoginLinks: PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
     headingTitles: Array<IHeadingTitlesData>;
-    tabs: Array<ITabsData>;
-    infoblocks: Array<IInfoblockData>;
   };
   pa: ILandingComponents;
   pf: ILandingComponents;
-  co: ILandingComponents;
 }
 
 export interface IHeadingTitlesData {

@@ -16,6 +16,7 @@ import { enAppData } from "./data/en";
 import { frAppData } from "./data/fr";
 import { itAppData } from "./data/it";
 import { slAppData } from "./data/sl";
+import { perfezionamentoData } from "./data/perfezionamento";
 
 export const getAppData = (): IAppData => {
   const lang = useContext(LangContext);
@@ -92,12 +93,12 @@ export const getCommonHeadingTitleData = (name: string): IHeadingTitleProps => {
 };
 
 export const getCommonTabsData = (name: string): ITabsProps => {
-  const tabsData = getAppData().common.tabs.filter((f) => f.name === name)[0];
+  const tabsData = perfezionamentoData.tabs.filter((f) => f.name === name)[0];
   return tabsData.data;
 };
 
 export const getCommonInfoblockData = (name: string): InfoblockProps => {
-  const infoblockData = getAppData().common.infoblocks.filter(
+  const infoblockData = perfezionamentoData.infoblocks.filter(
     (f) => f.name === name
   )[0];
   return infoblockData.data;
