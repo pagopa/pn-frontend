@@ -1,4 +1,4 @@
-import { AccessDenied, LoadingPage } from '@pagopa-pn/pn-commons';
+import { AccessDenied, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
@@ -36,7 +36,7 @@ const AARGuard = () => {
     }
     // get from localstorage
     if (storedAar) {
-      return storedAar;
+      return sanitizeString(storedAar);
     }
     return null;
   }, [location.search, storedAar]);

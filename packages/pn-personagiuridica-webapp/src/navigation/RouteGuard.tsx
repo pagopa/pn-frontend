@@ -1,6 +1,6 @@
 // momentarily commented for pn-5157
 // import { AccessDenied, AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
-import { AccessDenied, AppRouteParams } from '@pagopa-pn/pn-commons';
+import { AccessDenied, AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAppSelector } from '../redux/hooks';
@@ -18,7 +18,7 @@ const RouteGuard = () => {
     const aar = params.get(AppRouteParams.AAR);
     if (aar) {
       // save to localstorage
-      localStorage.setItem(AppRouteParams.AAR, aar);
+      localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
     }
     return (
       <AccessDenied
