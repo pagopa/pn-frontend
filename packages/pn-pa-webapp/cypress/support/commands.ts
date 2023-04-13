@@ -40,6 +40,9 @@
 import { PNRole } from '../../src/models/user';
 import { User } from '../../src/redux/auth/types';
 import './NewNotification';
+import { GET_CONSENTS } from '../../src/api/consents/consents.routes';
+import { AUTH_TOKEN_EXCHANGE } from '../../src/api/auth/auth.routes';
+import { ConsentType } from '../../src/models/consents';
 
 /*
  * Set user role
@@ -56,12 +59,24 @@ Cypress.Commands.add('setRole', (role: PNRole) => {
  * Login with token exchange
  */
 Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
+  Cypress.on('window:before:load', (window) => {
+    window.document.cookie =
+      'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
+      'OptanonConsent=isGpcEnabled=0' +
+      '&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)' +
+      '&version=202302.1.0' +
+      '&isIABGlobal=false' +
+      '&hosts=' +
+      '&landingPath=NotLandingPage' +
+      '&groups=C0001%3A1%2CC0002%3A1' +
+      '&geolocation=%3B' +
+      '&AwaitingReconsent=false';
+  });
   cy.intercept({
     method: 'POST',
-    url: /token-exchange/,
+    url: AUTH_TOKEN_EXCHANGE(),
   }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
-  cy.get('#onetrust-accept-btn-handler').click();
   cy.wait('@login');
   if (role) {
     cy.log(`Setting user role to ${role}`);
@@ -85,27 +100,13 @@ Cypress.Commands.add('logout', () => {
   });
 });
 
-Cypress.Commands.add('loginWithUI', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => {
-    return false;
+Cypress.Commands.add('stubConsents', () => {
+  cy.intercept(GET_CONSENTS(ConsentType.TOS), {
+    statusCode: 200,
+    fixture: 'tos/tos-accepted',
   });
-
-  cy.visit('');
-  cy.get('.css-131dr2y-MuiStack-root > :nth-child(2) > .MuiButton-root').click();
-  cy.get('#onetrust-accept-btn-handler').click();
-  cy.get('#spidButton').click();
-  cy.get('[alt="test"]').click();
-
-  cy.origin('selc-u-spid-testenv.westeurope.azurecontainer.io', () => {
-    cy.get('#username').type('baldassarremazza');
-    cy.get('#password').type('test');
-    cy.get('button[type="submit"]').eq(0).click();
-    cy.get('button[type="submit"]').eq(0).click();
+  cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
+    statusCode: 200,
+    fixture: 'tos/privacy-accepted',
   });
-
-  cy.get('[data-testid="PartyItemContainer: Comune di Milano"]').click();
-  cy.get('.css-ld1zcw > .MuiButton-root').click();
-  cy.get(
-    ':nth-child(7) > .MuiPaper-root > .MuiCardContent-root > .MuiGrid-container > .css-gzsrxl > .MuiCardActions-root > .MuiButton-root'
-  ).click();
 });

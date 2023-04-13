@@ -17,7 +17,6 @@ function notificationDetailPath(notificationId: NotificationId): string {
     : GET_DETTAGLIO_NOTIFICA_PATH(notificationId.iun);
 }
 
-/* eslint-disable-next-line arrow-body-style */
 const AARGuard = () => {
   const location = useLocation();
   const navigate = useNavigate();
