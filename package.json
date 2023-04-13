@@ -25,7 +25,7 @@
     "test": "lerna run --scope @pagopa-pn/* test",
     "refresh:monorepo": "lerna clean -y && yarn install",
     "clean:win": "rmdir node_modules /s",
-    "clean:nx": "rm -rf node_modules",
+    "clean:nx": "rm -rf node_modules **/**/node_modules",
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
     "version": "lerna version --no-push --conventional-commits",

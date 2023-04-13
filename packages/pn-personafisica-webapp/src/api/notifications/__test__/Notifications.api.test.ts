@@ -19,6 +19,7 @@ import {
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { mockApi } from '../../../__test__/test-utils';
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
@@ -125,11 +126,17 @@ describe('Notifications api tests', () => {
   it('getNotificationPaymentInfo', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_INFO(taxId, noticeCode),
+      200,
+      null,
+      {
+        status: 'SUCCEEDED',
+        amount: 10,
+      }
+    );
     const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
     expect(res).toStrictEqual({
       status: 'SUCCEEDED',

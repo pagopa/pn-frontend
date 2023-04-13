@@ -1,8 +1,10 @@
 describe('Auth', () => {
   beforeEach(() => {
+    // this prevents random errors in the app from breaking cypress tests
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
+
     cy.viewport(1920, 1080);
   });
 

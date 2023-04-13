@@ -93,7 +93,9 @@ export default function CustomPagination({
       // reset current page
       paginationData.page = 0;
       onPageRequest(paginationData);
-      if (eventTrackingCallbackPageSize) eventTrackingCallbackPageSize(selectedSize);
+      if (eventTrackingCallbackPageSize) {
+        eventTrackingCallbackPageSize(selectedSize);
+      }
     }
     handleClose();
   };
@@ -121,6 +123,7 @@ export default function CustomPagination({
             'paginator.rows-per-page',
             'Righe per pagina'
           )}
+          data-testid="rows-per-page"
         >
           {size}
         </Button>
@@ -136,9 +139,14 @@ export default function CustomPagination({
               'Righe per pagina'
             ),
           }}
+          data-testid=""
         >
           {elementsPerPage.map((ep) => (
-            <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>
+            <MenuItem
+              key={ep}
+              data-testid={`pageSize-${ep}`}
+              onClick={() => handleChangeElementsPerPage(ep)}
+            >
               {ep}
             </MenuItem>
           ))}
