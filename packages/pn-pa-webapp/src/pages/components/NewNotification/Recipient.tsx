@@ -626,6 +626,7 @@ const Recipient = ({
                           color="primary"
                           size="large"
                           disabled={values.recipients.length >= 5}
+                          data-testid="add-recipient"
                         >
                           {t('add-recipient')}
                         </ButtonNaked>
