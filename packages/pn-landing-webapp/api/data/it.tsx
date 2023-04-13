@@ -1,6 +1,13 @@
-import Link from "next/link";
-
-import { List, ListItem, SvgIcon, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Link,
+  List,
+  ListItem,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
 
 import {
   FooterLinksType,
@@ -31,7 +38,15 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+import {
+  IAppData,
+  IHeadingTitlesData,
+  IInfoblockData,
+  ILinkData,
+  INavigationBarProps,
+  IShowcaseData,
+  ITabsData,
+} from "model";
 
 import {
   IMAGES_PATH,
@@ -406,26 +421,6 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   },
 ];
 
-const coInfoBlocks: Array<IInfoblockData> = [
-  {
-    name: "infoblock 1",
-    data: {
-      title: "",
-      inverse: false,
-      image: "",
-      imageShadow: false,
-    },
-  },
-  {
-    name: "infoblock 2",
-    data: {
-      title: "",
-      inverse: true,
-      image: "",
-      imageShadow: false,
-    },
-  },
-];
 /* ************************************** */
 
 /** Showcase mocked data */
@@ -548,35 +543,6 @@ const pfShowcases: Array<IShowcaseData> = [
     },
   },
 ];
-
-const coShowcases: Array<IShowcaseData> = [
-  {
-    name: "",
-    data: {
-      title: "",
-      items: [
-        {
-          icon: <PECIcon />,
-          title: "",
-          subtitle: `
-            `,
-        },
-        {
-          icon: <IOIcon />,
-          title: "",
-          subtitle: `
-          `,
-        },
-        {
-          icon: <MessageIcon />,
-          title: "",
-          subtitle: `
-          `,
-        },
-      ],
-    },
-  },
-];
 /* ************************************** */
 
 /** Walkthrough mocked data */
@@ -654,19 +620,6 @@ const pfWalkthrough: WalkthroughProps = {
   ],
 };
 
-const coWalkthrough: WalkthroughProps = {
-  title: "",
-  items: [
-    {
-      title: "",
-      subtitle: "",
-    },
-    {
-      title: "",
-      subtitle: "",
-    },
-  ],
-};
 /* ************************************** */
 
 /** HorizontalNav mocked data */
@@ -731,28 +684,6 @@ const pfHorizontalNav = {
 };
 
 // const pfHorizontalNav: HorizontalNavProps = {
-const coHorizontalNav = {
-  sections: [
-    {
-      title: "",
-      subtitle: "",
-      cta: {
-        label: "",
-        title: "",
-        href: "",
-      },
-    },
-    {
-      title: "",
-      subtitle: "",
-      cta: {
-        label: "",
-        title: "",
-        href: "",
-      },
-    },
-  ],
-};
 /* ************************************** */
 
 /**
@@ -915,6 +846,20 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
+const headingTitles: Array<IHeadingTitlesData> = [
+  {
+    name: "heading title notification viewed 1",
+    data: {
+      title: "Quando si perfeziona una notifica?",
+      subtitle: (
+        <>
+          Dipende dal modo in cui la si riceve: seleziona i canali per sapere
+          quando avviene il <Link>perfezionamento</Link>.
+        </>
+      ),
+    },
+  },
+];
 
 /** Application Data Mock */
 export const itAppData: IAppData = {
@@ -924,7 +869,8 @@ export const itAppData: IAppData = {
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
+    headingTitles
   },
   pa: {
     hero: paHero,
@@ -939,12 +885,5 @@ export const itAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };
