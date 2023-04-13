@@ -18,7 +18,7 @@ const StatusTooltip = ({
 
   return (
     <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} onOpen={eventTrackingCallback}>
-      <Chip label={label} color={color} sx={{cursor: 'default'}}/>
+      <Chip label={label} color={color} sx={{ cursor: 'default' }} data-testid={`statusChip-${label}`} />
     </CustomTooltip>
   );
 };

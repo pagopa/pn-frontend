@@ -40,7 +40,7 @@ describe('Delegation', () => {
         fixture: 'notifications/delegator/detail',
       }).as('notificationAsDelegate');
       
-      cy.get('[data-cy="collapsible-list"] > :nth-child(2)').click();
+      cy.get('[data-testid="collapsible-list"] > :nth-child(2)').click();
 
       cy.wait('@notificationsAsDelegate').then((interception) => {
         expect(interception.request.url).include(`mandateId=${mandateId}`);
@@ -48,7 +48,7 @@ describe('Delegation', () => {
       });
       cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-      cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
+      cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
 
       cy.contains(iun).click();
       

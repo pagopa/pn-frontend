@@ -12,14 +12,14 @@ Cypress.Commands.add('login', () => {
   /**
    * TODO: implement login through api
    */
+  Cypress.on('uncaught:exception', (err, runnable) => {
+    return false;
+  });
+
   Cypress.on("window:before:load", window => {
     window.document.cookie =
       'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
       'OptanonConsent=isGpcEnabled=0&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)&version=202302.1.0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1&geolocation=%3B&AwaitingReconsent=false';
-  });
-
-  Cypress.on('uncaught:exception', (err, runnable) => {
-    return false;
   });
 
   cy.window().then((win) => {

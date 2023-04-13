@@ -146,8 +146,8 @@ describe('Contacts', () => {
       fixture: 'contacts/contacts',
     }).as('getContacts');
 
-    cy.get('[data-cy="menu-item(notifiche)"]').click();
-    cy.get('[data-cy="menu-item(i tuoi recapiti)"]').click();
+    cy.get('[data-testid="menu-item(notifiche)"]').click();
+    cy.get('[data-testid="menu-item(i tuoi recapiti)"]').click();
 
     cy.wait('@getContacts');
     cy.get('[data-testid="body"]').should('not.exist');

@@ -1,4 +1,5 @@
 import { today } from '@pagopa-pn/pn-commons';
+
 import { NOTIFICHE } from '../../src/navigation/routes.const';
 import { NOTIFICATION_PAYMENT_INFO } from '../../src/api/notifications/notifications.routes';
 import {
@@ -19,13 +20,13 @@ const notifications = [
   },
 ];
 
-const startDateInput = '[data-cy="input(start date)"]';
-const endDateInput = '[data-cy="input(end date)"]';
+const startDateInput = '[data-testid="input(start date)"]';
+const endDateInput = '[data-testid="input(end date)"]';
 const filterButton = 'Filtra';
-const notificationMenuItem = '[data-cy="menu-item(notifiche)"]';
-const delegationMenuItem = '[data-cy="menu-item(deleghe)"]';
-const notificationListItem = '[data-cy="table(notifications)"] > :nth-child(2) > :first';
-const notificationsByDelegateMenuItem = '[data-cy="collapsible-list"] > :nth-child(2)';
+const notificationMenuItem = '[data-testid="menu-item(notifiche)"]';
+const delegationMenuItem = '[data-testid="menu-item(deleghe)"]';
+const notificationListItem = '[data-testid="table(notifications)"] > :nth-child(2) > :first';
+const notificationsByDelegateMenuItem = '[data-testid="collapsible-list"] > :nth-child(2)';
 
 const getDates = (endToday: boolean = false) => {
   const startDate = new Date();
@@ -232,7 +233,7 @@ describe('Notification Filters (no delegators)', () => {
 
     cy.get('#iunMatch').should('have.value', filteredIun);
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 1);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 1);
   });
 });
 

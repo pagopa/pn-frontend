@@ -45,7 +45,6 @@ describe('Notification Detail', () => {
     );
 
     cy.intercept(`${NOTIFICATION_PAYMENT_INFO('', '')}/**`, { fixture: 'payments/required'}).as('getPaymentInfo');
-    // cy.intercept('/ext-registry/pagopa/v1/paymentinfo/**', { fixture: 'payments/required' }).as('getPaymentInfo');
 
     cy.stubConsents();
 
@@ -101,14 +100,14 @@ describe('Notification Detail', () => {
       fixture: 'notifications/list-10/page-1_viewed',
     }).as('getNotifications');
 
-    cy.get('[data-cy="menu-item(notifiche)"]').click();
+    cy.get('[data-testid="menu-item(notifiche)"]').click();
 
     cy.wait('@getNotifications');
     cy.get('[data-testid="content"]').should('not.exist');
 
-    cy.get('[data-cy="table(notifications).row"]')
+    cy.get('[data-testid="table(notifications).row"]')
       .eq(0)
-      .find('.MuiChip-label')
+      .find('[data-testid^="statusChip"]')
       .should('have.text', 'Perfezionata per visione');
   });
 
@@ -118,9 +117,9 @@ describe('Notification Detail', () => {
       fixture: 'notifications/effective_date',
     }).as('selectedNotification');
 
-    cy.get('[data-cy="table(notifications).row"]')
+    cy.get('[data-testid="table(notifications).row"]')
       .eq(2)
-      .find('.MuiChip-label')
+      .find('[data-testid^="statusChip"]')
       .should('have.text', 'Perfezionata per decorrenza termini');
 
     cy.contains(`${notifications[1].iun}`).click();

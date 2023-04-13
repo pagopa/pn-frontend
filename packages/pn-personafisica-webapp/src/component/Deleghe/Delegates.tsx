@@ -72,7 +72,7 @@ const Delegates = () => {
       align: 'center' as const,
       getCellLabel(value: string) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={label} color={color} />;
+        return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
       },
     },
     {

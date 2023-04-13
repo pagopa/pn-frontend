@@ -62,14 +62,14 @@ describe('Delegation', () => {
         }).as('notificationDetailAsDelegate');
 
         cy.get('[data-testid="sideMenuItem-Notifiche"]').click();
-        cy.get('[data-cy="collapsible-list"] > :nth-child(2)').click();
+        cy.get('[data-testid="collapsible-list"] > :nth-child(2)').click();
 
         cy.wait('@notificationsListAsDelegate').then((interception) => {
           expect(interception.request.url).include(`mandateId=${mandateId}`);
           expect(interception.response.statusCode).to.equal(200);
         });
 
-        cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
+        cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
         cy.contains(iun).click();
         
         cy.wait('@notificationDetailAsDelegate').then((interception) => {
@@ -84,7 +84,7 @@ describe('Delegation', () => {
       cy.wait('@getDelegators');
 
       cy.get('[data-testid="sideMenuItem-Deleghe"]').contains(/1/).should('exist');
-      cy.get('[data-testid="delegators-wrapper"] [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(1) [data-testid="delegationMenuIcon"]').click();
+      cy.get('[data-testid="delegators-wrapper"] [data-testid="table(notifications)"] > .MuiTableBody-root > :nth-child(1) [data-testid="delegationMenuIcon"]').click();
       cy.get('.MuiPaper-root > .MuiList-root > .MuiButtonBase-root').click();
 
       cy.intercept('PATCH', `${REJECT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
@@ -153,7 +153,9 @@ describe('Delegation', () => {
       cy.visit(DELEGHE);
       cy.wait('@getDelegatorsAfterNewDelegation');
       cy.get('[data-testid="delegates-wrapper"]').contains(/Cristoforo Colombo/).should('exist');
-      cy.get('[data-testid="delegates-wrapper"] [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(2) .MuiChip-label').contains(/In attesa di conferma/).should('exist');
+      cy.get('[data-testid="delegates-wrapper"] [data-testid="table(notifications)"]').within(() => {
+        cy.get('[data-testid^="statusChip"]').eq(1).contains(/In attesa di conferma/).should('exist');
+      });
     });
 
     it('Shoud revoke a delegate', () => {
