@@ -8,7 +8,7 @@ import {
   WalkthroughProps,
 } from "@pagopa/mui-italia";
 
-import { IAppData, UserType } from "model";
+import { IAppData, ITabsProps, UserType, IHeadingTitleProps } from "model";
 import LangContext from "provider/lang-context";
 
 import { deAppData } from "./data/de";
@@ -16,6 +16,7 @@ import { enAppData } from "./data/en";
 import { frAppData } from "./data/fr";
 import { itAppData } from "./data/it";
 import { slAppData } from "./data/sl";
+import { perfezionamentoData } from "./data/perfezionamento";
 
 export const getAppData = (): IAppData => {
   const lang = useContext(LangContext);
@@ -83,3 +84,22 @@ export const getHorizontalNavData = (
 ): HorizontalNavProps => getAppData()[userType].horizontalNav;
 
 // export const getFooterData = (userType: UserType = UserType.PA): FooterProps => getAppData()[userType].footer;
+
+export const getCommonHeadingTitleData = (name: string): IHeadingTitleProps => {
+  const headingTitleData = getAppData().common.headingTitles.filter(
+    (f) => f.name === name
+  )[0];
+  return headingTitleData.data;
+};
+
+export const getCommonTabsData = (name: string): ITabsProps => {
+  const tabsData = perfezionamentoData.tabs.filter((f) => f.name === name)[0];
+  return tabsData.data;
+};
+
+export const getCommonInfoblockData = (name: string): InfoblockProps => {
+  const infoblockData = perfezionamentoData.infoblocks.filter(
+    (f) => f.name === name
+  )[0];
+  return infoblockData.data;
+};

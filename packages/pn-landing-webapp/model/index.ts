@@ -11,7 +11,6 @@ import {
 export enum UserType {
   PA = "pa",
   PF = "pf",
-  CO = "co"
 }
 
 export interface ILinkData {
@@ -54,8 +53,27 @@ export interface IAppData {
     companyLegalInfo: JSX.Element;
     preLoginLinks: PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
+    headingTitles: Array<IHeadingTitlesData>;
   };
   pa: ILandingComponents;
   pf: ILandingComponents;
-  co: ILandingComponents;
+}
+
+export interface IHeadingTitlesData {
+  name: string;
+  data: IHeadingTitleProps;
+}
+
+export interface IHeadingTitleProps {
+  title?: string;
+  subtitle?: string | JSX.Element;
+}
+
+export interface ITabsData {
+  name: string;
+  data: ITabsProps;
+}
+
+export interface ITabsProps {
+  tabs: Array<string>;
 }

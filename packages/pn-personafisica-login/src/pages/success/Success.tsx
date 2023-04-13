@@ -80,7 +80,9 @@ const SuccessPage = () => {
   const isMobile = useIsMobile();
   const [typeSelected, setTypeSelected] = useState<AppRouteType | null>(null);
 
-  const typeUrl = useMemo(() => storageTypeOps.read(), []);
+  // momentarily changed for pn-5157
+  // const typeUrl = useMemo(() => storageTypeOps.read(), []);
+  const typeUrl = useMemo(() => AppRouteType.PF, []);
   const aar = useMemo(() => storageAarOps.read(), []);
   const token = useMemo(() => window.location.hash, []);
 
@@ -90,24 +92,26 @@ const SuccessPage = () => {
 
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
-    /* eslint-disable-next-line functional/immutable-data */
+    // eslint-disable-next-line functional/immutable-data
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
   const calcRedirectUrl = useCallback(
     (type: AppRouteType): string => {
-      /* eslint-disable-next-line functional/no-let */
-      let redirectUrl = '';
+      // momentarily changed for pn-5157
+      // eslint-disable-next-line functional/no-let
+      let redirectUrl = PF_URL ? PF_URL : '';
+      // let redirectUrl = '';
       if ((PF_URL && type === AppRouteType.PF) || (PG_URL && type === AppRouteType.PG)) {
         storageTypeOps.delete();
-        /* eslint-disable-next-line functional/immutable-data */
+        // eslint-disable-next-line functional/immutable-data
         redirectUrl = `${type === AppRouteType.PF ? PF_URL : PG_URL}`;
       }
 
       // the includes check is needed to prevent xss attacks
       if (redirectUrl && [PF_URL, PG_URL].includes(redirectUrl) && aar) {
         storageAarOps.delete();
-        /* eslint-disable-next-line functional/immutable-data */
+        // eslint-disable-next-line functional/immutable-data
         redirectUrl += `?${AppRouteParams.AAR}=${sanitizeString(aar)}`;
       }
 

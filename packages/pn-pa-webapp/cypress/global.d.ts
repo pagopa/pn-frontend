@@ -29,17 +29,3 @@ export interface RecipientFormData {
     foreignState: string;
   }
 }
-
-declare namespace Cypress {
-  interface Chainable {
-    /**
-     * Logs-in user by using UI
-     */
-     login(): void;
-     logout(): void;
-     loginWithUI(): void;
-     setRole(role: PNRole): void;
-     loginWithTokenExchange(role?: PNRole): void;
-     fillRecipient(recipient: RecipientFormData): void;
-  }
-}
