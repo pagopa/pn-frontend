@@ -11,6 +11,7 @@ import {
   getNextDay,
   formatToTimezoneString,
   ApiErrorWrapper,
+  useHasPermissions,
 } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
@@ -21,7 +22,9 @@ import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
+import { PNRole } from '../redux/auth/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 import { NotificationColumn } from '../models/Notifications';
@@ -39,7 +42,10 @@ const Notifiche = () => {
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
-  const organization =  useAppSelector((state: RootState) => state.userState.user.organization);
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const role = organization?.roles ? organization?.roles[0] : null;
+
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   const isMobile = useIsMobile();
   const pageTitle = currentDelegator
@@ -107,6 +113,7 @@ const Notifiche = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
+        {userHasAdminPermissions && <DomicileBanner />}
         <TitleBox
           variantTitle="h4"
           title={pageTitle}
