@@ -43,7 +43,7 @@ jest.mock('../../services/localization.service', () => {
     ...original,
     getLocalizedOrDefaultLabel: (_1: string, key: string, _2: string, data: any) => {
       // Ad-hoc handling of a particular case: in order to generate the description for the
-      // VIEWED / VIEWED_AFTER_DEADLINE statuses, if the notification has been viewed by a delegate,
+      // VIEWED statuses, if the notification has been viewed by a delegate,
       // a previous i18n call allows to obtain the text that refers to the delegate,
       // and then the obtained value is passed as a data item (say "recipient") to the "main" i18n call.
       // But in turn, the first i18n call has also data passed, namely the name of the delegate.
@@ -391,56 +391,6 @@ describe('notification status texts', () => {
       'status.viewed-tooltip-multirecipient',
       'status.viewed-description-multirecipient',
       { subject: 'status.recipient' }
-    );
-  });
-
-  it('return notification status infos - VIEWED_AFTER_DEADLINE - single recipient - no delegate (named as "recipient") info', () => {
-    testNotificationStatusInfosFnIncludingDescription(
-      {
-        status: NotificationStatus.VIEWED_AFTER_DEADLINE,
-        activeFrom: '2023-01-26T13:57:16.42843144Z',
-        relatedTimelineElements: [],
-      },
-      ['single-recipient'],
-      'status.viewed-after-deadline',
-      'success',
-      'status.viewed-after-deadline-tooltip',
-      'status.viewed-after-deadline-description',
-      { subject: 'status.recipient' }
-    );
-  });
-
-  it('return notification status infos - VIEWED_AFTER_DEADLINE - single recipient - including delegate (named as "recipient") info', () => {
-    testNotificationStatusInfosFnIncludingDescription(
-      {
-        status: NotificationStatus.VIEWED_AFTER_DEADLINE,
-        activeFrom: '2023-01-26T13:57:16.42843144Z',
-        relatedTimelineElements: [],
-        recipient: 'Gloria Gaynor',
-      },
-      ['single-recipient'],
-      'status.viewed-after-deadline',
-      'success',
-      'status.viewed-after-deadline-tooltip',
-      'status.viewed-after-deadline-description',
-      { subject: 'status.delegate.Gloria Gaynor' }
-    );
-  });
-
-  it('return notification status infos - VIEWED_AFTER_DEADLINE - multi recipient - including delegate (named as "recipient") info', () => {
-    testNotificationStatusInfosFnIncludingDescription(
-      {
-        status: NotificationStatus.VIEWED_AFTER_DEADLINE,
-        activeFrom: '2023-01-26T13:57:16.42843144Z',
-        relatedTimelineElements: [],
-        recipient: 'Laura Bissoli',
-      },
-      ['recipient-1', 'recipient-2'],
-      'status.viewed-after-deadline-multirecipient',
-      'success',
-      'status.viewed-after-deadline-tooltip-multirecipient',
-      'status.viewed-after-deadline-description-multirecipient',
-      { subject: 'status.delegate.Laura Bissoli' }
     );
   });
 
@@ -1359,56 +1309,6 @@ describe('parse notification & filters', () => {
     );
   });
 
-  // The situation for a multirecipient notification
-  // when the notification detail is accessed by either a sender or
-  // a recipient who has already viewed the notification is similar to this,
-  // since the decision about including or not the VIEWED_AFTER_DEADLINE status
-  // regards *only* the presence of a NOTIFICATION_VIEWED timeline element.
-  // Consequently, all these scenarios are covered by the following test.
-  it('changed VIEWED unto VIEWED_AFTER_DEADLINE', () => {
-    // add an EFFECTIVE_DATE status, and afterwards a VIEWED status with one NOTIFICATION_VIEWED element - no delegate
-    const refinementElement: INotificationDetailTimeline = {
-      elementId: 'refinement-0',
-      timestamp: '2023-01-26T14:18:26.525827086Z',
-      category: TimelineCategory.REFINEMENT,
-      details: { recIndex: 0 },
-    };
-    const notificationViewedElement: INotificationDetailTimeline = {
-      elementId: 'notification-viewed-0',
-      timestamp: '2023-01-26T14:20:26.525827086Z',
-      category: TimelineCategory.NOTIFICATION_VIEWED,
-      details: { recIndex: 0 },
-    };
-    const effectiveDateStatus: NotificationStatusHistory = {
-      status: NotificationStatus.EFFECTIVE_DATE,
-      activeFrom: '2023-01-26T14:18:26.525827086Z',
-      relatedTimelineElements: [refinementElement.elementId],
-    };
-    const viewedStatus: NotificationStatusHistory = {
-      status: NotificationStatus.VIEWED,
-      activeFrom: '2023-01-26T14:20:26.525827086Z',
-      relatedTimelineElements: [notificationViewedElement.elementId],
-    };
-    const timeline = acceptedDeliveringDeliveredTimeline();
-    timeline.push(refinementElement, notificationViewedElement);
-    sourceNotification.timeline = timeline;
-    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
-    statusHistory.push(effectiveDateStatus, viewedStatus);
-    sourceNotification.notificationStatusHistory = statusHistory;
-
-    // parse
-    const parsedNotification = parseNotificationDetail(sourceNotification);
-
-    // ----------- checks
-    expect(parsedNotification.notificationStatusHistory).toHaveLength(5);
-    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
-      NotificationStatus.VIEWED_AFTER_DEADLINE
-    );
-    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(
-      NotificationStatus.EFFECTIVE_DATE
-    );
-  });
-
   it('VIEWED status erased - multi-recipient notification, detail requested by a recipient who has not yet viewed the notification', () => {
     // add a recipient to the notification
     sourceNotification.recipients.push(additionalRecipient);
@@ -1446,9 +1346,9 @@ describe('parse notification & filters', () => {
     const parsedNotification = parseNotificationDetail(sourceNotification);
 
     // ----------- checks
-    expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
+    expect(parsedNotification.notificationStatusHistory).toHaveLength(5);
     expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
-      NotificationStatus.EFFECTIVE_DATE
+      NotificationStatus.VIEWED
     );
   });
 

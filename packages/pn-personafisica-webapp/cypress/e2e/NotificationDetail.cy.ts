@@ -99,7 +99,7 @@ describe('Notification Detail', () => {
     cy.wait('@getPaymentInfo');
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-    cy.contains('Perfezionata per visione');
+    cy.contains('Avvenuto accesso');
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
       fixture: 'notifications/list-10/page-1_viewed',
@@ -113,7 +113,7 @@ describe('Notification Detail', () => {
     cy.get('[data-cy="table(notifications).row"]')
       .eq(0)
       .find('.MuiChip-label')
-      .should('have.text', 'Perfezionata per visione');
+      .should('have.text', 'Avvenuto accesso');
   });
 
   it("should have status 'EFFECTIVE_DATE'", () => {
