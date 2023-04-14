@@ -9,6 +9,4 @@ export enum NotificationStatus {
   UNREACHABLE = 'UNREACHABLE',
   CANCELLED = 'CANCELLED',
   REFUSED = 'REFUSED',
-  // only fe
-  VIEWED_AFTER_DEADLINE = 'VIEWED_AFTER_DEADLINE'
 }

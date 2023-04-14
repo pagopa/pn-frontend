@@ -17,6 +17,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
+          REACT_APP_LANDING_SITE_URL: "https://www.dev.pn.pagopa.it"
     - identifier: pn_pg_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -34,6 +35,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
+          REACT_APP_LANDING_SITE_URL: "https://www.svil.pn.pagopa.it"
     - identifier: pn_pg_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -50,6 +52,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
+          REACT_APP_LANDING_SITE_URL: "https://www.coll.pn.pagopa.it"
     - identifier: pn_pg_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -66,6 +69,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
+          REACT_APP_LANDING_SITE_URL: "https://www.cert.pn.pagopa.it"
     - identifier: pn_pg_hotfix_build
       buildspec: cra_buildspec.yaml
       env:
@@ -82,6 +86,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
+          REACT_APP_LANDING_SITE_URL: "https://www.hotfix.pn.pagopa.it"
     # - identifier: pn_pg_prod_build
     #     buildspec: cra_buildspec.yaml
     #     env:
@@ -95,3 +100,4 @@ batch:
     #        REACT_APP_DISABLE_INACTIVITY_HANDLER: false
     #        REACT_APP_MIXPANEL_TOKEN: "e860a58bfce634272eca1e0ce288f33a"
     #        REACT_APP_ONETRUST_DOMAIN_ID: "337d1f8a-9339-4dea-83df-77b6cd229521"
+    #        REACT_APP_LANDING_SITE_URL: "https://notifichedigitali.pagopa.it/"
