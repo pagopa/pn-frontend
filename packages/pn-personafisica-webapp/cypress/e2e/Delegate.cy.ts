@@ -152,7 +152,7 @@ describe('Delegation', () => {
       });
     });
 
-    it.only('Shoud revoke a delegate', () => {
+    it('Shoud revoke a delegate', () => {
       cy.wait(['@getDelegators', '@getDelegates']);
       cy.get('[data-testid="sideMenuItem-Deleghe"]').contains(/1/).should('exist');
 
