@@ -17,7 +17,8 @@ import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
-import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE, LANDING_SITE_URL } from '../utils/constants';
+import { LANDING_SITE_URL } from '../utils/constants';
+import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 
 const Contacts = () => {
   const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);

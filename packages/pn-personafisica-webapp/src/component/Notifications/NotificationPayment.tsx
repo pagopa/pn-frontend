@@ -42,7 +42,8 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { FAQ_DIFFERENT_AMOUNTS_SUFFIX, LANDING_SITE_URL, PAGOPA_HELP_EMAIL } from '../../utils/constants';
+import { LANDING_SITE_URL, PAGOPA_HELP_EMAIL } from '../../utils/constants';
+import { FAQ_DIFFERENT_AMOUNTS_SUFFIX } from '../../navigation/externalRoutes.const';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
