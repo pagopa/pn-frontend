@@ -99,7 +99,7 @@ describe('Contacts page - assuming contact API works properly', () => {
   });
 
   it('subtitle link properly redirects to profile page', () => {
-    const subtitleLink = result.getByText('subtitle-link');
+    const subtitleLink = result.getByText('subtitle-link-3');
     expect(subtitleLink).toBeInTheDocument();
 
     fireEvent.click(subtitleLink);
