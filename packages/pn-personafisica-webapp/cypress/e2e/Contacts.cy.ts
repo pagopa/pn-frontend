@@ -87,7 +87,7 @@ describe('Contacts', () => {
     cy.contains(mockData.copy.modal.help.replace('{{value}}', mockData.copy.pec.modalHelpValue));
 
     cy.get('[data-testid="codeConfirmButton"]').should('be.disabled');
-    cy.get('[data-testid="code cancel button"]').should('be.enabled');
+    cy.get('[data-testid="codeCancelButton"]').should('be.enabled');
 
     // insert an invalid code
     cy.intercept('POST', `${LEGAL_CONTACT('default', LegalChannelType.PEC)}`, {
@@ -95,7 +95,7 @@ describe('Contacts', () => {
       fixture: 'contacts/invalid-code-response',
     }).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     // verify the request is properly formatted
@@ -115,7 +115,7 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addPec');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     cy.wait('@addPec');
@@ -270,7 +270,7 @@ describe('Contacts', () => {
     cy.contains(mockData.copy.modal.help.replace('{{value}}', mockData.copy.mail.modalHelpValue));
 
     cy.get('[data-testid="codeConfirmButton"]').should('be.disabled');
-    cy.get('[data-testid="code cancel button"]').should('be.enabled');
+    cy.get('[data-testid="codeCancelButton"]').should('be.enabled');
 
     // insert an invalid code
     cy.intercept('POST', `${COURTESY_CONTACT('default', CourtesyChannelType.EMAIL)}`, {
@@ -278,7 +278,7 @@ describe('Contacts', () => {
       fixture: 'contacts/invalid-code-response',
     }).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     // verify the request is properly formatted
@@ -295,7 +295,7 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addEmail');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     cy.wait('@addEmail');
@@ -366,7 +366,7 @@ describe('Contacts', () => {
     cy.contains(mockData.copy.modal.help.replace('{{value}}', mockData.copy.phone.modalHelpValue));
 
     cy.get('[data-testid="codeConfirmButton"]').should('be.disabled');
-    cy.get('[data-testid="code cancel button"]').should('be.enabled');
+    cy.get('[data-testid="codeCancelButton"]').should('be.enabled');
 
     // insert an invalid code
     cy.intercept('POST', `${COURTESY_CONTACT('default', CourtesyChannelType.SMS)}`, {
@@ -374,7 +374,7 @@ describe('Contacts', () => {
       fixture: 'contacts/invalid-code-response',
     }).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     // verify the request is properly formatted
@@ -391,7 +391,7 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addPhone');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     cy.wait('@addPhone');
@@ -453,7 +453,7 @@ describe('Contacts', () => {
     cy.get('[data-testid="Special contact add button"]').should('be.enabled').click();
 
     cy.get('[data-testid="codeConfirmButton"]').should('be.disabled');
-    cy.get('[data-testid="code cancel button"]').should('be.enabled');
+    cy.get('[data-testid="codeCancelButton"]').should('be.enabled');
 
     // insert an invalid code
     cy.intercept(
@@ -465,7 +465,7 @@ describe('Contacts', () => {
       }
     ).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     // verify the request is properly formatted
@@ -486,7 +486,7 @@ describe('Contacts', () => {
       }
     ).as('addPec');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     // verify the successful toast and the new address are shown
@@ -524,7 +524,7 @@ describe('Contacts', () => {
     cy.get('[data-testid="Special contact add button"]').should('be.enabled').click();
     
     cy.get('[data-testid="codeConfirmButton"]').should('be.disabled');
-    cy.get('[data-testid="code cancel button"]').should('be.enabled');
+    cy.get('[data-testid="codeCancelButton"]').should('be.enabled');
 
     // insert an invalid code
     cy.intercept(
@@ -536,7 +536,7 @@ describe('Contacts', () => {
       }
     ).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.invalid, { delay: 100 });
 
     cy.get('[data-testid="codeConfirmButton"]').click();
 
@@ -558,7 +558,7 @@ describe('Contacts', () => {
       }
     ).as('addPhone');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
+    cy.get('[data-testid="codeInput(0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="codeConfirmButton"]').click();
 
     cy.wait('@addPhone');

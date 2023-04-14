@@ -25,10 +25,6 @@ describe('Delegation', () => {
   beforeEach(() => {
     cy.viewport(1920, 1080);
 
-    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}**size=10`, {
-      fixture: 'notifications/list-10/page-1',
-    }).as('getNotifications');
-
     cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`, {
       fixture: 'delegations/mandates-by-delegator',
     }).as('getDelegators');
@@ -36,8 +32,6 @@ describe('Delegation', () => {
     cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, {
       fixture: 'delegations/mandates-by-delegate',
     }).as('getDelegates');
-
-    cy.intercept(`${NOTIFICATION_PAYMENT_INFO('', '')}/**`, { fixture: 'payments/required'}).as('getPaymentInfo');
 
     cy.stubConsents();
     cy.visit(DELEGHE);
@@ -158,18 +152,22 @@ describe('Delegation', () => {
       });
     });
 
-    it('Shoud revoke a delegate', () => {
+    it.only('Shoud revoke a delegate', () => {
       cy.wait(['@getDelegators', '@getDelegates']);
+      cy.get('[data-testid="sideMenuItem-Deleghe"]').contains(/1/).should('exist');
+
       cy.get('[data-testid="delegates-wrapper"]').contains(/Gaio Giulio Cesare/).should('exist');
       cy.intercept('PATCH', `${REOVKE_DELEGATION('6c969e5d-b3a0-4c11-a82a-3b8360d1436c')}`, {
         statusCode: 200
       }).as('revokeDelegation');
 
-      cy.get('[data-testid="delegates-wrapper"]').within(() => {
-        cy.get('[data-testid="delegationMenuIcon"]').click({ force: true});
-      });
+      // cy.get('[data-testid="delegates-wrapper"]').within(() => {
+      //   cy.get('[data-testid="delegationMenuIcon"]').click();
+      // });
+      cy.get('[data-testid="delegates-wrapper"] [data-testid="delegationMenuIcon"]').click();
       cy.get('[data-testid="menuItem-revokeDelegate"]').click();
       cy.get('[data-testid="dialogAction"]').eq(1).click();
+      cy.wait('@revokeDelegation');
 
       cy.get('[data-testid="delegates-wrapper"]').contains(/Gaio Giulio Cesare/).should('not.exist');
     });

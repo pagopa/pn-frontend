@@ -132,7 +132,7 @@ const CodeModal = memo(
               variant="outlined"
               onClick={cancelCallback}
               fullWidth={isMobile}
-              data-testid="code cancel button"
+              data-testid="codeCancelButton"
             >
               {cancelLabel}
             </Button>
