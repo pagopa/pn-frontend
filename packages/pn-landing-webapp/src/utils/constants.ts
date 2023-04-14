@@ -9,6 +9,10 @@ export const PAGOPA_HELP_EMAIL = process.env.NEXT_PUBLIC_PAGOPA_HELP_EMAIL;
 
 export const PN_URL = process.env.NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL;
 
+export const PN_PF_URL = process.env.NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_PF_URL;
+
+export const PN_PG_URL = process.env.NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_PG_URL;
+
 export const MANUALE_URL = "https://docs.pagopa.it/pn-manuale-operativo/";
 
 const ONE_TRUST_DRAFT_MODE = !!process.env.NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE;
@@ -19,3 +23,5 @@ export const ONE_TRUST_CDN = `https://privacyportalde-cdn.onetrust.com/77f17844-
 
 export const PARTNER_AND_INTERMEDIARIES_PATH =
   "https://docs.pagopa.it/lista-partner-tecnologici-pn_pagopa-s.p.a./";
+
+export const PERFEZIONAMENTO_PATH = process.env.NEXT_PUBLIC_PERFEZIONAMENTO_PATH;

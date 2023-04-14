@@ -8,7 +8,7 @@ import {
   WalkthroughProps,
 } from "@pagopa/mui-italia";
 
-import { IAppData, ITabsProps, UserType, IHeadingTitleProps } from "model";
+import { IAppData, ITabsProps, UserType, IFaqData, IHeadingTitleProps } from "model";
 import LangContext from "provider/lang-context";
 
 import { deAppData } from "./data/de";
@@ -16,6 +16,7 @@ import { enAppData } from "./data/en";
 import { frAppData } from "./data/fr";
 import { itAppData } from "./data/it";
 import { slAppData } from "./data/sl";
+import { itFaqData } from "./data/faq-it";
 import { perfezionamentoData } from "./data/perfezionamento";
 
 export const getAppData = (): IAppData => {
@@ -83,10 +84,17 @@ export const getHorizontalNavData = (
   userType: UserType = UserType.PA
 ): HorizontalNavProps => getAppData()[userType].horizontalNav;
 
+// I preferred to keep FAQ data outside the language-dependent info
+// while we have the FAQ definition for one language (i.e. Italian) only.
+// To add into the IAddData structures for each language when the remaining definitions arrive.
+// --------------------------------------------------
+// Carlos Lombardi, 2023.04.06
+export const getFaqData = (): IFaqData => itFaqData;
+
 // export const getFooterData = (userType: UserType = UserType.PA): FooterProps => getAppData()[userType].footer;
 
 export const getCommonHeadingTitleData = (name: string): IHeadingTitleProps => {
-  const headingTitleData = getAppData().common.headingTitles.filter(
+  const headingTitleData = perfezionamentoData.headingTitles.filter(
     (f) => f.name === name
   )[0];
   return headingTitleData.data;
