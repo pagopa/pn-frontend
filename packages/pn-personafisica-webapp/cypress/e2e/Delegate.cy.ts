@@ -161,9 +161,6 @@ describe('Delegation', () => {
         statusCode: 200
       }).as('revokeDelegation');
 
-      // cy.get('[data-testid="delegates-wrapper"]').within(() => {
-      //   cy.get('[data-testid="delegationMenuIcon"]').click();
-      // });
       cy.get('[data-testid="delegates-wrapper"] [data-testid="delegationMenuIcon"]').click();
       cy.get('[data-testid="menuItem-revokeDelegate"]').click();
       cy.get('[data-testid="dialogAction"]').eq(1).click();
