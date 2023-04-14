@@ -211,7 +211,7 @@ export function getNotificationStatusInfos(
           'viewed',
           'Avvenuto accesso',
           `Il ${subject} ha letto la notifica`,
-          `Il ${subject} ha letto la notifica entro il termine stabilito`,
+          `Il ${subject} ha letto la notifica`,
           { subject, isMultiRecipient }
         ),
       };
@@ -460,19 +460,21 @@ const TimelineAllowedStatus = [
 
 /*
  * PN-4484 - courtesy message through app IO only seen
- * if details.ioSendMessageResult = SENT_COURTESY 
+ * if details.ioSendMessageResult = SENT_COURTESY
  * (cfr. definition of AppIoCourtesyMessageEventType)
  * so any other kind of message is deemed as internal.
- * 
+ *
  * To preserve backward compatibility, if the attribute has no value,
  * the message is not considered internal (and thus shown).
  */
 function isInternalAppIoEvent(step: INotificationDetailTimeline): boolean {
   if (step.category === TimelineCategory.SEND_COURTESY_MESSAGE) {
     const details = step.details as SendCourtesyMessageDetails;
-    return details.digitalAddress.type === DigitalDomicileType.APPIO 
-      && !!details.ioSendMessageResult
-      && details.ioSendMessageResult !== AppIoCourtesyMessageEventType.SENT_COURTESY;
+    return (
+      details.digitalAddress.type === DigitalDomicileType.APPIO &&
+      !!details.ioSendMessageResult &&
+      details.ioSendMessageResult !== AppIoCourtesyMessageEventType.SENT_COURTESY
+    );
   } else {
     return false;
   }
@@ -497,13 +499,13 @@ function populateMacroStep(
     // hide accepted status micro steps
     if (status.status === NotificationStatus.ACCEPTED) {
       status.steps!.push({ ...step, hidden: true });
-    // PN-4484 - hide the internal events related to the courtesy messages sent through app IO
+      // PN-4484 - hide the internal events related to the courtesy messages sent through app IO
     } else if (isInternalAppIoEvent(step)) {
       status.steps!.push({ ...step, hidden: true });
-    // remove legal facts for those microsteps that are releated to accepted status
+      // remove legal facts for those microsteps that are releated to accepted status
     } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
       status.steps!.push({ ...step, legalFactsIds: [] });
-    // default case
+      // default case
     } else {
       status.steps!.push(step);
     }
@@ -558,8 +560,9 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
         if (!deliveryMode && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
           deliveryMode = NotificationDeliveryMode.DIGITAL;
         } else if (
-          !deliveryMode && 
-          (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER  || step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW)          
+          !deliveryMode &&
+          (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER ||
+            step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW)
         ) {
           deliveryMode = NotificationDeliveryMode.ANALOG;
         }
