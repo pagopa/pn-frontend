@@ -4,12 +4,13 @@ import { useRouter } from "next/router";
 import { Box, Chip, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { INavigationBarProps } from "model";
 
-const NavigationBar = ({ title, chip, pa }: INavigationBarProps) => {
+const NavigationBar = ({ title, chip, pa, faq }: INavigationBarProps) => {
   const { pathname } = useRouter();
   const [index, setIndex] = useState<number | undefined>();
 
   // const pfPath = "/cittadini";
   const paPath = "/pubbliche-amministrazioni";
+  const faqPath = "/faq";
 
   function a11yProps(index: number) {
     return {
@@ -18,11 +19,26 @@ const NavigationBar = ({ title, chip, pa }: INavigationBarProps) => {
     };
   }
 
+  // useEffect(() => {
+  //   // if (pathname === pfPath) {
+  //   //   setIndex(0);
+  //   // }
+  //   if (pathname === paPath) {
+  //     setIndex(1);
+  //   }
+  //   if (pathname === faqPath) {
+  //     setIndex(2);
+  //   }
+  // }, [pathname]);
+
   useEffect(() => {
     // if (pathname === pfPath) {
     //   setIndex(0);
     // }
     if (pathname === paPath) {
+      setIndex(0);
+    }
+    if (pathname === faqPath) {
       setIndex(1);
     }
   }, [pathname]);
@@ -66,6 +82,21 @@ const NavigationBar = ({ title, chip, pa }: INavigationBarProps) => {
             label={pa}
             href={paPath}
             {...a11yProps(1)}
+          />
+          <Tab
+            sx={{ paddingTop: 4, paddingBottom: 3 }}
+            component="a"
+            onClick={(
+              event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+            ) => {
+              if (pathname === `${faqPath}/`) {
+                event.preventDefault();
+              }
+            }}
+            key="faq"
+            label={faq}
+            href={faqPath}
+            {...a11yProps(2)}
           />
         </Tabs>
       </Stack>
