@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { LoadingButton } from '@mui/lab';
@@ -42,7 +42,8 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
+import { LANDING_SITE_URL, PAGOPA_HELP_EMAIL } from '../../utils/constants';
+import { FAQ_DIFFERENT_AMOUNTS_SUFFIX } from '../../navigation/externalRoutes.const';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
@@ -226,12 +227,6 @@ const NotificationPayment: React.FC<Props> = ({
     );
   };
 
-  /*
-    PN-2029
-    const onDisclaimerClick = () => {
-      window.open(PAYMENT_DISCLAIMER_URL);
-    };
-  */
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
@@ -285,18 +280,26 @@ const NotificationPayment: React.FC<Props> = ({
     };
   };
 
+  const completeFaqDifferentAmountsUrl = useMemo(
+    () => LANDING_SITE_URL && FAQ_DIFFERENT_AMOUNTS_SUFFIX
+      ? `${LANDING_SITE_URL}${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`
+      : undefined,
+    []
+  );
+
   /** returns disclaimer JSX */
-  const getDisclaimer = (): JSX.Element => (
+  const getDisclaimer = useCallback((): JSX.Element | undefined => (
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      {/* PN-2029
-        <Link href="#" onClick={onDisclaimerClick}>
+      {
+        completeFaqDifferentAmountsUrl &&
+        <Link href={completeFaqDifferentAmountsUrl} target="_blank">
           {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
         </Link>
-        */}
+      }
     </>
-  );
+  ), [completeFaqDifferentAmountsUrl]);
 
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {

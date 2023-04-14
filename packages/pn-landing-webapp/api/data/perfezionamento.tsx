@@ -1,7 +1,7 @@
 import { Typography, Alert, AlertTitle, SvgIcon, Link } from "@mui/material";
 import { Box } from "@mui/system";
 import { IMAGES_PATH } from "@utils/constants";
-import { ITabsData, IInfoblockData } from "model";
+import { ITabsData, IInfoblockData, IHeadingTitlesData } from "model";
 
 const IconInfo = () => (
     <SvgIcon
@@ -17,6 +17,22 @@ const IconInfo = () => (
         />
     </SvgIcon>
 );
+
+const headingTitles: Array<IHeadingTitlesData> = [
+    {
+      name: "heading title notification viewed 1",
+      data: {
+        title: "Quando si perfeziona una notifica?",
+        subtitle: (
+          <>
+            Dipende dal modo in cui la si riceve: seleziona i canali per sapere
+            quando avviene il perfezionamento.
+          </>
+        ),
+      },
+    },
+  ];  
+
 
 const tabs: Array<ITabsData> = [
     {
@@ -107,7 +123,7 @@ const infoblocks: Array<IInfoblockData> = [
                         <Typography variant="body2" sx={{ mb: 3 }}>
                             che hai ricevuto su IO dal servizio “Notifiche digitali” di SEND,
                             a meno che non si sia già perfezionata prima tramite{" "}
-                            <Link>PEC</Link> o <Link>raccomandata</Link>. Per aprire il
+                            PEC o raccomandata. Per aprire il
                             messaggio, selezionalo dalla lista e premi “Continua”.
                         </Typography>
                     </Box>
@@ -132,7 +148,7 @@ const infoblocks: Array<IInfoblockData> = [
                         <Typography variant="body2">
                             dopo avere effettuato l’accesso con SPID o CIE e avere premuto
                             sulla notifica, a meno che non si sia già perfezionata prima
-                            tramite <Link>PEC</Link> o <Link>raccomandata</Link>.
+                            tramite PEC o raccomandata.
                         </Typography>
                     </Box>
                 </>
@@ -156,7 +172,7 @@ const infoblocks: Array<IInfoblockData> = [
                         <Typography variant="body2">
                             su SEND, dopo avere effettuato l’accesso con SPID o CIE e avere
                             premuto sulla notifica, a meno che non si sia già perfezionata
-                            prima tramite <Link>PEC</Link> o <Link>raccomandata</Link>.
+                            prima tramite PEC o raccomandata.
                         </Typography>
                     </Box>
                 </>
@@ -166,6 +182,7 @@ const infoblocks: Array<IInfoblockData> = [
 ];
 
 export const perfezionamentoData = {
+    headingTitles,
     tabs,
     infoblocks
 }

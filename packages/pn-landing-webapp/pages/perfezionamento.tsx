@@ -1,12 +1,13 @@
 import { Infoblock } from "@pagopa/mui-italia";
 import { NextPage } from "next";
 import { useRef, useState } from "react";
+import { Box, Slide } from "@mui/material";
+
 import {
   getCommonHeadingTitleData,
   getCommonInfoblockData,
   getCommonTabsData,
 } from "api";
-import { Box, Slide } from "@mui/material";
 import HeadingTitle from "src/components/HeadingTitle";
 import Tabs from "src/components/Tabs";
 
