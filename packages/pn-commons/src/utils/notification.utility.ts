@@ -26,9 +26,9 @@ import {
   PaidDetails,
   PaymentHistory,
 } from '../types';
+import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
-import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
 
 /*
  * Besides the values used in the generation of the final messages,
@@ -99,7 +99,7 @@ export function getNotificationStatusInfos(
     : (status as NotificationStatus);
   const isMultiRecipient = options && options.recipients.length > 1;
 
-  // the subject is either the recipient or (for the VIEWED and VIEWED_AFTER_DEADLINE)
+  // the subject is either the recipient or (for the VIEWED)
   // the delegate who have seen the notification for first.
   // Hence the "let" is OK, in the particular cases inside the following switch statement
   // it will be reassigned if needed (i.e. if the value should reference a delegate instead).
@@ -212,25 +212,6 @@ export function getNotificationStatusInfos(
           'Avvenuto accesso',
           `Il ${subject} ha letto la notifica`,
           `Il ${subject} ha letto la notifica entro il termine stabilito`,
-          { subject, isMultiRecipient }
-        ),
-      };
-    case NotificationStatus.VIEWED_AFTER_DEADLINE:
-      if (statusObject && statusObject.recipient) {
-        subject = getLocalizedOrDefaultLabel(
-          'notifications',
-          `status.delegate`,
-          `delegato ${statusObject.recipient}`,
-          { name: statusObject.recipient }
-        );
-      }
-      return {
-        color: 'success',
-        ...localizeStatus(
-          'viewed-after-deadline',
-          'Visualizzata',
-          `Il ${subject} ha visualizzato la notifica`,
-          `Il ${subject} ha visualizzato la notifica`,
           { subject, isMultiRecipient }
         ),
       };
@@ -539,7 +520,6 @@ function fromLatestToEarliest(a: INotificationDetailTimeline, b: INotificationDe
 
 function populateMacroSteps(parsedNotification: NotificationDetail) {
   /* eslint-disable functional/no-let */
-  let isEffectiveDateStatus = false;
   let acceptedStatusItems: Array<string> = [];
   let deliveryMode: NotificationDeliveryMode | undefined;
   let deliveringStatus: NotificationStatusHistory | undefined;
@@ -550,8 +530,6 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
   let lastDeliveredIndexToShiftIsFixed = false;
   let preventShiftFromDeliveredToDelivering = false;
   /* eslint-enable functional/no-let */
-
-  const statusesToRemove: Array<NotificationStatus> = [];
 
   for (const status of parsedNotification.notificationStatusHistory) {
     // keep pointer to delivering status for eventual later use
@@ -666,47 +644,9 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
             .delegateInfo!;
           status.recipient = `${denomination} (${taxId})`;
         }
-      } else {
-        // (a quite subtle detail)
-        // if the logged user has no NOTIFICATION_VIEWED events related to the VIEWED state,
-        // this means that:
-        // 1. this is a multirecipient notification, and
-        // 2. this particular recipient has not yet viewed the notification, i.e. other recipients
-        //    have viewed the notification but not the currently logged one.
-        // In this situation, the specification indicates that
-        // - if at least one recipient has seen the notification before the earliest view deadline
-        //   (i.e. the notification never passed through the EFFECTIVE_DATE state)
-        //   then the VIEWED state is shown without legal fact
-        //   (since there is no legal fact concerning the logged user)
-        // - otherwise, i.e. if the notification passed through the EFFECTIVE_DATE state
-        //   before having reached the VIEWED state,
-        //   then the VIEWED_AFTER_DEADLINE should *not* be rendered for the current user,
-        // I implement this in a rather tricky way, indicating that if the VIEWED status
-        // is transformed into VIEWED_AFTER_DEADLINE, then it must be removed after the
-        // status cycle.
-        // -----------------------------------------
-        // Carlos Lombardi, 2023.02.23
-        // -----------------------------------------
-        statusesToRemove.push(NotificationStatus.VIEWED_AFTER_DEADLINE);
       }
     }
-    // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
-    if (status.status === NotificationStatus.EFFECTIVE_DATE) {
-      isEffectiveDateStatus = true;
-    }
-    if (status.status === NotificationStatus.VIEWED && isEffectiveDateStatus) {
-      status.status = NotificationStatus.VIEWED_AFTER_DEADLINE;
-    }
   }
-
-  // now we are after the loop over the statuses
-  // maybe some statuses are to be removed
-  // at the moment, the only case is the VIEWED_AFTER_DEADLINE for recipients who
-  // haven't yet viewed the notification (cfr. the huge comment right above)
-  parsedNotification.notificationStatusHistory =
-    parsedNotification.notificationStatusHistory.filter(
-      (status) => !statusesToRemove.includes(status.status)
-    );
 }
 
 /**
