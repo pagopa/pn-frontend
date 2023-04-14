@@ -293,6 +293,10 @@
       "invalid_parameter": {
         "title": "Dati non validi",
         "message": "Uno o più dei dati inseriti non sono validi"
+      },
+      "invalid_parameter_protocol_number_duplicate": {
+        "title": "Dati non validi",
+        "message": "Il numero di protocollo inserito è già esistente"
       }
     }
   }
