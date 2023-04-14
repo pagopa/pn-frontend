@@ -14,7 +14,8 @@ import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import {
   AppMessage,
   AppResponseMessage,
-  AppRouteType,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -221,8 +222,9 @@ const App = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
-
-    goToLoginPortal(AppRouteType.PG);
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PG);
+    goToLoginPortal();
   };
 
   return (

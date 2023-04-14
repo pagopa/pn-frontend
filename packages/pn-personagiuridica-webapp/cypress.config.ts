@@ -36,6 +36,11 @@ export default defineConfig({
         watchOptions: {},
       };
 
+      on('before:browser:launch', (browser, launchOptions) => {
+          launchOptions.args.push('--disable-gpu')
+          return launchOptions
+      })
+
       on('file:preprocessor', webpackPreprocessor(options));
 
       // Decomment if you want log something to console

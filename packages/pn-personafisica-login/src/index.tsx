@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { theme } from '@pagopa/mui-italia';
-import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import './locales/i18n.ts';
 import './index.css';
@@ -12,6 +12,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Suspense fallback={'loading...'}>
           <App />
         </Suspense>
