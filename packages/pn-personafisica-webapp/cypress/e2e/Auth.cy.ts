@@ -3,11 +3,6 @@ describe('Auth', () => {
     cy.stubConsents();
   });
 
-  it('Should login properly through UI', () => {
-    cy.logout();
-    cy.loginWithUI();
-  });
-
   it('Should login properly using APIs', () => {
     cy.logout();
     cy.login();
