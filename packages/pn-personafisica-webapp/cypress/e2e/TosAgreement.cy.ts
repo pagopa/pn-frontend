@@ -18,7 +18,7 @@ describe('TOS agreement', () => {
       fixture: 'tos/privacy-first-acceptance'
     });
     cy.login();
-    cy.contains('Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.');
+    cy.contains('Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.');
     cy.get('.css-xi606m > .MuiButtonBase-root').should('be.disabled')
     cy.get('.PrivateSwitchBase-input').click();
     cy.get('.css-xi606m > .MuiButtonBase-root').should('be.enabled').click();

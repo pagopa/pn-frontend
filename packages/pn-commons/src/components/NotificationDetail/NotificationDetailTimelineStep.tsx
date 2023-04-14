@@ -160,6 +160,7 @@ const NotificationDetailTimelineStep = ({
                 onClick={() => clickHandler(lf.file)}
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
+                data-testid="download-legalfact"
               >
                 {getLegalFactLabel(lf.step, lf.file.category)}
               </ButtonNaked>
@@ -234,6 +235,7 @@ const NotificationDetailTimelineStep = ({
                   sx={{ cursor: 'pointer' }}
                   onClick={() => s.legalFactsIds && clickHandler(lf)}
                   key={lf.key}
+                  data-testid="download-legalfact"
                 >
                   {getLegalFactLabel(s, lf.category)}
                 </Typography>
