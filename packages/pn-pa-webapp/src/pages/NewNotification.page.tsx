@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -34,11 +35,7 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
-      {t('menu.api-key')}
-      {/*
-        PN-2028
-        <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>.
-      */}
+      <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>
     </Fragment>
   );
 };
