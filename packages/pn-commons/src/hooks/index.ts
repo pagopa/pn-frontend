@@ -7,6 +7,7 @@ import { useErrors } from './useErrors';
 import { useTracking } from './useTracking';
 import { useDownloadDocument } from './useDownloadDocument';
 import { useRewriteLinks } from './useRewriteLinks';
+import { useHasPermissions } from './useHasPermissions';
 
 export {
   useIsMobile,
@@ -18,4 +19,5 @@ export {
   useDownloadDocument,
   useProcess,
   useRewriteLinks,
+  useHasPermissions,
 };
