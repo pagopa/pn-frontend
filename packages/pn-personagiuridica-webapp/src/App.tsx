@@ -23,6 +23,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  useHasPermissions,
   useMultiEvent,
   useTracking,
   useUnload,
@@ -38,6 +39,7 @@ import {
   getDomicileInfo,
   // getSidemenuInformation
 } from './redux/sidemenu/actions';
+import { PNRole } from './redux/auth/types';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -72,7 +74,9 @@ const App = () => {
 
   const isPrivacyPage = path[1] === 'privacy-tos';
   const organization = loggedUser.organization;
-  const role = loggedUser.organization?.roles[0];
+  const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
+
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   // TODO: get products list from be (?)
   const productsList: Array<ProductSwitchItem> = useMemo(
@@ -108,7 +112,9 @@ const App = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDomicileInfo());
+      if (userHasAdminPermissions) {
+        void dispatch(getDomicileInfo());
+      }
       // void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }
@@ -130,7 +136,6 @@ const App = () => {
       children: notificationMenuItems,
       notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
     },
-    { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
       label: t('menu.app-status'),
       // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
@@ -147,6 +152,15 @@ const App = () => {
       route: routes.APP_STATUS,
     },
   ];
+
+  if (userHasAdminPermissions) {
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(1, 0, {
+      label: t('menu.contacts'),
+      icon: MarkunreadMailboxIcon,
+      route: routes.RECAPITI,
+    });
+  }
 
   const selfcareMenuItems: Array<SideMenuItem> = [
     { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },

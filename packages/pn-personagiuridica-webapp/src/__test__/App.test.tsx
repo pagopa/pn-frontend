@@ -1,12 +1,12 @@
 /* eslint-disable functional/no-let */
+import React from 'react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { act, screen } from '@testing-library/react';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
 
 /* eslint-disable import/order */
-import { axe, render } from './test-utils';
+import { render, act, screen } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
@@ -37,7 +37,7 @@ const initialState = (token: string) => ({
         family_name: 'mocked-family-name',
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
-        organizzation: {
+        organization: {
           id: 'mocked-id',
           name: 'mocked-organizzation',
           roles: [
@@ -89,8 +89,6 @@ describe('App', () => {
     });
 
     // mock actions
-    const getSidemenuInfoActionSpy = jest.spyOn(sidemenuActions, 'getSidemenuInformation');
-    // getSidemenuInfoActionSpy.mockImplementation(mockSidemenuInformationActionFn as any);
     const getDomicileInfoActionSpy = jest.spyOn(sidemenuActions, 'getDomicileInfo');
     getDomicileInfoActionSpy.mockImplementation(mockDomicileInfoActionFn as any);
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
