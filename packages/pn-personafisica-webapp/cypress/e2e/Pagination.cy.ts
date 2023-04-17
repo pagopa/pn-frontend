@@ -1,15 +1,11 @@
 import { NOTIFICHE } from '../../src/navigation/routes.const';
 import { NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
-import {
-  DELEGATIONS_BY_DELEGATOR,
-  DELEGATIONS_BY_DELEGATE,
-} from '../../src/api/delegations/delegations.routes';
+import { DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR } from '../../src/api/delegations/delegations.routes';
 
 describe('Pagination', () => {
   beforeEach(() => {
     cy.viewport(1920, 1080);
 
-    // cy.intercept('GET', /delivery\/notifications\/sent/, {
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}**size=10`, {
       fixture: 'notifications/list-10/page-1',
@@ -19,15 +15,7 @@ describe('Pagination', () => {
       'getDelegators'
     );
 
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted'
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
-
+    cy.stubConsents();
     cy.login();
     cy.visit(NOTIFICHE);
   });
@@ -38,7 +26,7 @@ describe('Pagination', () => {
       fixture: 'notifications/list-20/page-1',
     }).as('notifications_2');
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
 
     cy.get('.MuiButton-endIcon > [data-testid="ArrowDropDownIcon"]').click();
     cy.get('.MuiPaper-root > .MuiList-root > :nth-child(2)').click();
@@ -52,7 +40,7 @@ describe('Pagination', () => {
 
     cy.get('[data-testid="itemsPerPageSelector"] > .MuiButton-root').should('have.text', '20');
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 20);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 20);
   });
 
   it('Should change current page', () => {

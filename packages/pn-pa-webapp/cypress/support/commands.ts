@@ -37,8 +37,8 @@
 //   }
 // }
 
-import { PNRole } from '../../src/models/user';
-import { User } from '../../src/redux/auth/types';
+import {PNRole} from '../../src/models/user';
+import {User} from '../../src/redux/auth/types';
 import './NewNotification';
 import { GET_CONSENTS } from '../../src/api/consents/consents.routes';
 import { AUTH_TOKEN_EXCHANGE } from '../../src/api/auth/auth.routes';

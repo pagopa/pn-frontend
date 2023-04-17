@@ -98,6 +98,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                   handleLinkClick(item, true);
                   handleClick(item.label);
                 }}
+                data-testid={`sideMenuItem-${item.label}`}
               >
                 {item.icon && (
                   <ListItemIcon>

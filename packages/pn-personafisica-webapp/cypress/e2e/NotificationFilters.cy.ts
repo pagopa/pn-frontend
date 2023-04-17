@@ -1,4 +1,5 @@
 import { today } from '@pagopa-pn/pn-commons';
+
 import { NOTIFICHE } from '../../src/navigation/routes.const';
 import { NOTIFICATION_PAYMENT_INFO } from '../../src/api/notifications/notifications.routes';
 import {
@@ -19,13 +20,13 @@ const notifications = [
   },
 ];
 
-const startDateInput = '[data-cy="input(start date)"]';
-const endDateInput = '[data-cy="input(end date)"]';
+const startDateInput = '[data-testid="input(start date)"]';
+const endDateInput = '[data-testid="input(end date)"]';
 const filterButton = 'Filtra';
-const notificationMenuItem = '[data-cy="menu-item(notifiche)"]';
-const delegationMenuItem = '[data-cy="menu-item(deleghe)"]';
-const notificationListItem = '[data-cy="table(notifications)"] > :nth-child(2) > :first';
-const notificationsByDelegateMenuItem = '[data-cy="collapsible-list"] > :nth-child(2)';
+const notificationMenuItem = '[data-testid="menu-item(notifiche)"]';
+const delegationMenuItem = '[data-testid="menu-item(deleghe)"]';
+const notificationListItem = '[data-testid="table(notifications)"] > :nth-child(2) > :first';
+const notificationsByDelegateMenuItem = '[data-testid="collapsible-list"] > :nth-child(2)';
 
 const getDates = (endToday: boolean = false) => {
   const startDate = new Date();
@@ -51,6 +52,10 @@ const getDates = (endToday: boolean = false) => {
 };
 
 describe('Notification Filters (no delegators)', () => {
+  before(() => {
+    cy.login();
+  });
+
   beforeEach(() => {
     cy.viewport(1920, 1080);
 
@@ -61,8 +66,8 @@ describe('Notification Filters (no delegators)', () => {
       statusCode: 200,
       fixture: 'notifications/viewed',
     }).as('selectedNotification');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`).as('getDelegates');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, { fixture: 'delegations/no-mandates' }).as(
+    cy.intercept(DELEGATIONS_BY_DELEGATOR()).as('getDelegates');
+    cy.intercept(DELEGATIONS_BY_DELEGATE(), { fixture: 'delegations/no-mandates' }).as(
       'getDelegators'
     );
 
@@ -70,15 +75,7 @@ describe('Notification Filters (no delegators)', () => {
       'getPaymentInfo'
     );
 
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted',
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
-    cy.login();
+    cy.stubConsents();
     cy.visit(NOTIFICHE);
 
     cy.wait('@getNotifications');
@@ -125,7 +122,7 @@ describe('Notification Filters (no delegators)', () => {
       fixture: 'notifications/viewed',
     }).as('selectedNotification');
 
-    cy.get(notificationListItem).click();
+    cy.contains(iun).click();
 
     cy.wait('@selectedNotification');
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
@@ -156,7 +153,7 @@ describe('Notification Filters (no delegators)', () => {
       fixture: 'notifications/viewed',
     }).as('selectedNotification');
 
-    cy.get(notificationListItem).click();
+    cy.contains(iun).click();
 
     cy.wait('@selectedNotification');
     cy.wait('@getPaymentInfo');
@@ -236,21 +233,27 @@ describe('Notification Filters (no delegators)', () => {
 
     cy.get('#iunMatch').should('have.value', filteredIun);
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 1);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 1);
   });
 });
 
 describe('Notification Filters (delegators)', () => {
+  before(() => {
+    cy.login();
+  });
+
   beforeEach(() => {
     cy.viewport(1920, 1080);
+    cy.stubConsents();
 
-    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`).as('getNotifications');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}*`).as('getDelegates');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}*`, {
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
+      fixture: 'notifications/list-10/page-1',
+    }).as('getNotifications');
+    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`).as('getDelegates');
+    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, {
       fixture: 'delegations/mandates-by-delegate',
     }).as('getDelegators');
 
-    cy.login();
     cy.visit(NOTIFICHE);
 
     cy.wait('@getNotifications');
