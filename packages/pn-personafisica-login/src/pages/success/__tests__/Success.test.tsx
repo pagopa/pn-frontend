@@ -38,7 +38,8 @@ describe('test login page', () => {
     expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '#token=fake-token');
   });
 
-  test('test redirect - PG', () => {
+  // momentarily skipped for pn-5157 - pg login is managed by selfcare pnpg
+  test.skip('test redirect - PG', () => {
     storageTypeOps.write(AppRouteType.PG);
     render(
       <BrowserRouter>

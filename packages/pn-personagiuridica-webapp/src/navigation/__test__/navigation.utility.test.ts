@@ -1,6 +1,5 @@
 // momentarily commented for pn-5157
 // import { AppRouteType } from '@pagopa-pn/pn-commons';
-import { URL_FE_LOGOUT } from '../../utils/constants';
 import { goToLoginPortal } from '../navigation.utility';
 import { getConfiguration } from "../../services/configuration.service";
 

@@ -23,6 +23,7 @@ test-report.xml
 # editor configs
 .idea
 .vscode/*
+*.code-workspace
 
 # misc
 npm-debug.log*
