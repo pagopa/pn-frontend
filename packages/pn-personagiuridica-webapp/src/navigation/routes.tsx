@@ -1,7 +1,10 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AppNotAccessible, LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
+import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-pn/pn-commons';
 
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { PNRole } from '../redux/auth/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 import { getConfiguration } from "../services/configuration.service";
@@ -27,6 +30,12 @@ const handleAssistanceClick = () => {
 };
 
 function Router() {
+  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const currentRoles =
+    loggedUser.organization && loggedUser.organization.roles
+      ? loggedUser.organization.roles.map((role) => role.role)
+      : [];
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -37,7 +46,18 @@ function Router() {
               <Route path="/" element={<AARGuard />}>
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-                <Route path={routes.RECAPITI} element={<Contacts />} />
+                <Route
+                  path={routes.RECAPITI}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      redirectTo={<NotFound />}
+                    >
+                      <Contacts />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
             </Route>

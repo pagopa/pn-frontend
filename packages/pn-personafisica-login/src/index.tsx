@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { theme } from '@pagopa/mui-italia';
-import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import './locales/i18n.ts';
 import './index.css';
@@ -23,6 +23,7 @@ async function doTheRender() {
       <React.StrictMode>
         <BrowserRouter>
           <ThemeProvider theme={theme}>
+            <CssBaseline />
             <Suspense fallback={'loading...'}>
               <App />
             </Suspense>
@@ -38,7 +39,7 @@ async function doTheRender() {
 
     ReactDOM.render(
       <React.StrictMode>
-        <div style={{fontSize: 20, marginLeft: '2rem'}}>Problems loading configuration - see console</div>
+        <div style={{ fontSize: 20, marginLeft: '2rem' }}>Problems loading configuration - see console</div>
       </React.StrictMode>,
       document.getElementById('root')
     );

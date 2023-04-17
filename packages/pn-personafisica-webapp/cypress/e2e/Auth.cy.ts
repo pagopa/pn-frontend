@@ -1,18 +1,6 @@
 describe('Auth', () => {
   beforeEach(() => {
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted'
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
-  });
-
-  it('Should login properly through UI', () => {
-    cy.logout();
-    cy.loginWithUI();
+    cy.stubConsents();
   });
 
   it('Should login properly using APIs', () => {

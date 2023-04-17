@@ -16,7 +16,8 @@ import { ProductSwitchItem } from '@pagopa/mui-italia';
 import {
   AppMessage,
   AppResponseMessage,
-  AppRouteType,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -60,7 +61,9 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -234,8 +237,9 @@ const App = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
-
-    goToLoginPortal(AppRouteType.PF);
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PF);
+    goToLoginPortal();
   };
 
   return (

@@ -1,5 +1,6 @@
 import {
-  AppRouteType,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
   InactivityHandler,
   SessionModal,
@@ -74,7 +75,9 @@ const SessionGuardRender = () => {
         open
         title={goodbyeMessage.title}
         message={goodbyeMessage.message}
-        handleClose={() => goToLoginPortal(AppRouteType.PG)}
+        // momentarily commented for pn-5157
+        // handleClose={() => goToLoginPortal(AppRouteType.PG)}
+        handleClose={() => goToLoginPortal()}
         initTimeout
       />
     ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (

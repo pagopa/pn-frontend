@@ -52,6 +52,7 @@ const navigation: INavigationBarProps = {
   chip: "Beta",
   pf: "Bürger",
   pa: "Einrichtungen",
+  faq: 'FAQ',
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -833,12 +834,5 @@ export const deAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };

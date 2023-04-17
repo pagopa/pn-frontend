@@ -19,11 +19,11 @@
     "go-to-login": "Accedi"
   },
   "menu": {
-    "notifiche": "Le tue notifiche",
+    "notifiche": "Notifiche",
     "notifiche-come-delegato": "Le notifiche a te delegate",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
-    "contacts": "I tuoi recapiti",
+    "contacts": "Recapiti",
     "app-status": "Stato della piattaforma",
     "users": "Utenti",
     "groups": "Gruppi",

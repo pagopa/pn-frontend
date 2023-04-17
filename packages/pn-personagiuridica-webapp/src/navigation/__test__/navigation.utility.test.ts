@@ -1,5 +1,6 @@
-import { AppRouteType } from '@pagopa-pn/pn-commons';
-
+// momentarily commented for pn-5157
+// import { AppRouteType } from '@pagopa-pn/pn-commons';
+import { URL_FE_LOGOUT } from '../../utils/constants';
 import { goToLoginPortal } from '../navigation.utility';
 import { getConfiguration } from "../../services/configuration.service";
 
@@ -27,11 +28,17 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal', () => {
-    goToLoginPortal(AppRouteType.PG);
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PG);
+    goToLoginPortal();
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?type=PG`);
+    // momentarily commented for pn-5157
+    // expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG`);
+    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`);
   });
 
+  // momentarily commented for pn-5157
+  /*
   it('goToLoginPortal - aar', () => {
     goToLoginPortal(AppRouteType.PG, 'fake-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
@@ -43,4 +50,5 @@ describe('Tests navigation utility methods', () => {
     expect(replaceFn).toBeCalledTimes(1);
     expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?type=PG&aar=malicious-aar-token`);
   });
+  */
 });

@@ -1,3 +1,6 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import _ from 'lodash';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
@@ -12,8 +15,8 @@ import {
   SxProps,
   Theme,
   Typography,
+  Box,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -30,8 +33,6 @@ import {
   NotificationPaidDetail,
   PaymentHistory,
 } from '@pagopa-pn/pn-commons';
-import { ReactNode, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -41,6 +42,9 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
+import {
+  FAQ_DIFFERENT_AMOUNTS_SUFFIX,
+} from '../../navigation/externalRoutes.const';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 import { getConfiguration } from "../../services/configuration.service";
@@ -79,6 +83,33 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
+const ReloadPaymentInfoButton: React.FC<{ fetchPaymentInfo: () => void }> = ({
+  children,
+  fetchPaymentInfo,
+}) => (
+  <Link
+    key="reload-payment-button"
+    sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+    color="primary"
+    onClick={fetchPaymentInfo}
+  >
+    {children}
+  </Link>
+);
+
+const SupportButton: React.FC<{ contactSupportClick: () => void }> = ({
+  children,
+  contactSupportClick,
+}) => (
+  <Link
+    key="support-button"
+    sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+    onClick={contactSupportClick}
+  >
+    {children}
+  </Link>
+);
+
 const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
@@ -87,7 +118,7 @@ const NotificationPayment: React.FC<Props> = ({
   senderDenomination,
   subject,
 }) => {
-  const { PAGOPA_HELP_EMAIL } = getConfiguration();
+  const { PAGOPA_HELP_EMAIL, LANDING_SITE_URL } = getConfiguration();
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
@@ -112,7 +143,11 @@ const NotificationPayment: React.FC<Props> = ({
   useDownloadDocument({ url: f24AttachmentUrl });
 
   const fetchPaymentInfo = () => {
-    if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
+    if (
+      (!paymentHistory || paymentHistory.length === 0) &&
+      notificationPayment.noticeCode &&
+      notificationPayment.creditorTaxId
+    ) {
       void dispatch(
         getNotificationPaymentInfo({
           noticeCode: notificationPayment.noticeCode,
@@ -132,6 +167,8 @@ const NotificationPayment: React.FC<Props> = ({
           setLoading(() => false);
         })
         .catch(() => {});
+    } else if (paymentHistory && paymentHistory.length > 0) {
+      setLoading(() => false);
     } else {
       setLoading(() => false);
       dispatch(
@@ -193,17 +230,11 @@ const NotificationPayment: React.FC<Props> = ({
     );
   };
 
-  /*
-    PN-2029
-    const onDisclaimerClick = () => {
-      window.open(PAYMENT_DISCLAIMER_URL);
-    };
-  */
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
 
-    if (paymentInfo?.status === PaymentStatus.REQUIRED) {
+    if (paymentInfo.status === PaymentStatus.REQUIRED) {
       const pagopaDoc = notificationPayment.pagoPaForm;
       const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
@@ -228,19 +259,19 @@ const NotificationPayment: React.FC<Props> = ({
 
   /** composes Payment Data to be rendered */
   const composePaymentData = (): PaymentData => {
-    const title =
-      paymentInfo?.status === PaymentStatus.SUCCEEDED
-        ? t('detail.payment.summary-succeeded', { ns: 'notifiche' })
-        : paymentInfo?.status === PaymentStatus.INPROGRESS
-        ? t('detail.payment.summary-in-progress', { ns: 'notifiche' })
-        : t('detail.payment.summary-pending', { ns: 'notifiche' });
-
-    const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
-
+    /* eslint-disable-next-line functional/no-let */
+    let title = t('detail.payment.summary-pending', { ns: 'notifiche' });
+    if (
+      paymentInfo.status === PaymentStatus.SUCCEEDED ||
+      (paymentHistory && paymentHistory.length > 0)
+    ) {
+      title = t('detail.payment.summary-succeeded', { ns: 'notifiche' });
+    } else if (paymentInfo.status === PaymentStatus.INPROGRESS) {
+      title = t('detail.payment.summary-in-progress', { ns: 'notifiche' });
+    }
+    const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
     const disclaimer = amount ? getDisclaimer() : undefined;
-
     const message = getMessageData();
-
     const action = getActionData(amount);
 
     return {
@@ -252,37 +283,27 @@ const NotificationPayment: React.FC<Props> = ({
     };
   };
 
+  const completeFaqDifferentAmountsUrl = useMemo(
+    () => LANDING_SITE_URL && FAQ_DIFFERENT_AMOUNTS_SUFFIX
+      ? `${LANDING_SITE_URL}${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`
+      : undefined,
+    []
+  );
+
   /** returns disclaimer JSX */
-  const getDisclaimer = (): JSX.Element => (
+  const getDisclaimer = useCallback((): JSX.Element | undefined => (
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      {/* PN-2029
-        <Link href="#" onClick={onDisclaimerClick}>
+      {
+        completeFaqDifferentAmountsUrl &&
+        <Link href={completeFaqDifferentAmountsUrl} target="_blank">
           {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
         </Link>
-        */}
+      }
     </>
-  );
+  ), [completeFaqDifferentAmountsUrl]);
 
-  const ReloadPaymentInfoButton = ({ children }: { children?: ReactNode }) => (
-    <Link
-      key='reload-payment-button'
-      sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
-      color="primary"
-      onClick={fetchPaymentInfo}
-    >
-      {children}
-    </Link>
-  );
-  
-  const SupportButton = ({children}: {children?: ReactNode}) => (
-    <Link
-      key="support-button"
-      sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
-      onClick={contactSupportClick}
-    >{children}</Link>
-  );
 
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
@@ -293,7 +314,7 @@ const NotificationPayment: React.FC<Props> = ({
       };
     }
 
-    if (paymentInfo) {
+    if (!_.isEmpty(paymentInfo)) {
       switch (paymentInfo.status) {
         case PaymentStatus.SUCCEEDED:
           return {
@@ -308,18 +329,36 @@ const NotificationPayment: React.FC<Props> = ({
                 ns={'notifiche'}
                 i18nKey={'detail.payment.message-in-progress'}
                 components={[
-                  <ReloadPaymentInfoButton key={'reload-payment-button'} />,
-                  <SupportButton key={'support-button'} />,
+                  <ReloadPaymentInfoButton
+                    key={'reload-payment-button'}
+                    fetchPaymentInfo={fetchPaymentInfo}
+                  />,
+                  <SupportButton
+                    key={'support-button'}
+                    contactSupportClick={contactSupportClick}
+                  />,
                 ]}
               >
-                Il pagamento è in corso: <ReloadPaymentInfoButton>ricarica la pagina</ReloadPaymentInfoButton> tra qualche
-                ora per verificarne lo stato. Se risulta ancora in corso, <SupportButton>contatta l’assistenza</SupportButton>.
+                Il pagamento è in corso:{' '}
+                <ReloadPaymentInfoButton fetchPaymentInfo={fetchPaymentInfo}>
+                  ricarica la pagina
+                </ReloadPaymentInfoButton>{' '}
+                tra qualche ora per verificarne lo stato. Se risulta ancora in corso,{' '}
+                <SupportButton contactSupportClick={contactSupportClick}>
+                  contatta l’assistenza
+                </SupportButton>
+                .
               </Trans>
             ),
           };
         case PaymentStatus.FAILED:
           return getFailedMessageData();
       }
+    } else if (paymentHistory && paymentHistory.length > 0) {
+      return {
+        type: 'success',
+        body: t('detail.payment.message-completed', { ns: 'notifiche' }),
+      };
     }
     return undefined;
   };
@@ -375,7 +414,7 @@ const NotificationPayment: React.FC<Props> = ({
 
   /** returns action data used to render the main button */
   const getActionData = (amount: string): PrimaryAction | undefined => {
-    switch (paymentInfo?.status) {
+    switch (paymentInfo.status) {
       case PaymentStatus.REQUIRED:
         return {
           text: t('detail.payment.submit', { ns: 'notifiche' }) + (amount ? ' ' + amount : ''),
@@ -536,12 +575,9 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
-            {!loading &&
-              paymentInfo.status === PaymentStatus.SUCCEEDED &&
-              paymentHistory &&
-              paymentHistory.length > 0 && (
-                <NotificationPaidDetail paymentDetailsList={paymentHistory} />
-              )}
+            {!loading && paymentHistory && paymentHistory.length > 0 && (
+              <NotificationPaidDetail paymentDetailsList={paymentHistory} />
+            )}
           </Stack>
         </Grid>
       </Paper>

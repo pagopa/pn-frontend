@@ -14,7 +14,8 @@ import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import {
   AppMessage,
   AppResponseMessage,
-  AppRouteType,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -22,6 +23,7 @@ import {
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  useHasPermissions,
   useMultiEvent,
   useTracking,
   useUnload,
@@ -36,6 +38,7 @@ import {
   getDomicileInfo,
   // getSidemenuInformation
 } from './redux/sidemenu/actions';
+import { PNRole } from './redux/auth/types';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -45,14 +48,15 @@ import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { getConfiguration } from "./services/configuration.service";
 
-
 const App = () => {
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } = getConfiguration();
   setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -71,23 +75,28 @@ const App = () => {
 
   const isPrivacyPage = path[1] === 'privacy-tos';
   const organization = loggedUser.organization;
-  const role = loggedUser.organization?.roles[0];
+  const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
+
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   // TODO: get products list from be (?)
-  const productsList: Array<ProductSwitchItem> = useMemo(() => [
-    {
-      id: '1',
-      title: t('header.product.organization-dashboard'),
-      productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
-      linkType: 'external',
-    },
-    {
-      id: '0',
-      title: t('header.product.notification-platform'),
-      productUrl: '',
-      linkType: 'internal',
-    },
-  ], [t, organization?.id]);
+  const productsList: Array<ProductSwitchItem> = useMemo(
+    () => [
+      {
+        id: '1',
+        title: t('header.product.organization-dashboard'),
+        productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
+        linkType: 'external',
+      },
+      {
+        id: '0',
+        title: t('header.product.notification-platform'),
+        productUrl: '',
+        linkType: 'internal',
+      },
+    ],
+    [t, organization?.id]
+  );
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -104,7 +113,9 @@ const App = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDomicileInfo());
+      if (userHasAdminPermissions) {
+        void dispatch(getDomicileInfo());
+      }
       // void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }
@@ -126,7 +137,6 @@ const App = () => {
       children: notificationMenuItems,
       notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
     },
-    { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
       label: t('menu.app-status'),
       // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
@@ -143,6 +153,15 @@ const App = () => {
       route: routes.APP_STATUS,
     },
   ];
+
+  if (userHasAdminPermissions) {
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(1, 0, {
+      label: t('menu.contacts'),
+      icon: MarkunreadMailboxIcon,
+      route: routes.RECAPITI,
+    });
+  }
 
   const selfcareMenuItems: Array<SideMenuItem> = [
     { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
@@ -204,8 +223,9 @@ const App = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
-
-    goToLoginPortal(AppRouteType.PG);
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PG);
+    goToLoginPortal();
   };
 
   return (

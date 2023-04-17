@@ -132,7 +132,7 @@ const CodeModal = memo(
               variant="outlined"
               onClick={cancelCallback}
               fullWidth={isMobile}
-              data-testid="code cancel button"
+              data-testid="codeCancelButton"
             >
               {cancelLabel}
             </Button>
@@ -140,7 +140,7 @@ const CodeModal = memo(
           {confirmLabel && confirmCallback && (
             <Button
               variant="contained"
-              data-testid="code confirm button"
+              data-testid="codeConfirmButton"
               onClick={confirmHandler}
               disabled={!codeIsValid}
               fullWidth={isMobile}

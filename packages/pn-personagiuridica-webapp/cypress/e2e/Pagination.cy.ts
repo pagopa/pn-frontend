@@ -29,7 +29,7 @@ describe('Pagination', () => {
       fixture: 'notifications/list-20/page-1',
     }).as('notifications_2');
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
 
     cy.get('.MuiButton-endIcon > [data-testid="ArrowDropDownIcon"]').click();
     cy.get('.MuiPaper-root > .MuiList-root > :nth-child(2)').click();
@@ -43,7 +43,7 @@ describe('Pagination', () => {
 
     cy.get('[data-testid="itemsPerPageSelector"] > .MuiButton-root').should('have.text', '20');
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 20);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 20);
   });
 
   it('Should change current page', () => {

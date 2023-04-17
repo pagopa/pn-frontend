@@ -90,21 +90,21 @@ describe('Notification Detail', () => {
     cy.wait('@getPaymentInfo');
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-    cy.contains('Perfezionata per visione');
+    cy.contains('Avvenuto accesso');
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
       fixture: 'notifications/list-10/page-1_viewed',
     }).as('getNotifications');
 
-    cy.get('[data-cy="menu-item(notifiche)"]').click();
+    cy.get('[data-testid="menu-item(notifiche)"]').click();
 
     cy.wait('@getNotifications');
     cy.get('[data-testid="content"]').should('not.exist');
 
-    cy.get('[data-cy="table(notifications).row"]')
+    cy.get('[data-testid="table(notifications).row"]')
       .eq(0)
       .find('.MuiChip-label')
-      .should('have.text', 'Perfezionata per visione');
+      .should('have.text', 'Avvenuto accesso');
   });
 
   it("should have status 'EFFECTIVE_DATE'", () => {
@@ -113,7 +113,7 @@ describe('Notification Detail', () => {
       fixture: 'notifications/effective_date',
     }).as('selectedNotification');
 
-    cy.get('[data-cy="table(notifications).row"]')
+    cy.get('[data-testid="table(notifications).row"]')
       .eq(2)
       .find('.MuiChip-label')
       .should('have.text', 'Perfezionata per decorrenza termini');

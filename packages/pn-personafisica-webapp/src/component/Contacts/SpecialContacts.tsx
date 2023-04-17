@@ -210,10 +210,12 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const getOptionLabel = (option: Party) => option.name || '';
 
   // handling of search string for sender
-  const entitySearchLabel = (searchString: string): string => 
-    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(searchString)}`
-  ;
-  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
+  const entitySearchLabel = (searchString: string): string =>
+    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(
+      searchString
+    )}`;
+  const handleChangeInput = (newInputValue: string) =>
+    handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);

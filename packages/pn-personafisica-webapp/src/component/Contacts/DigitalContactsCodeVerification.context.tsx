@@ -97,7 +97,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
 
   const handleConfirm = () => {
     setIsConfirmationModalVisible(false);
-    handleCodeVerification();
+    handleDisclaimerVisibilityFirst();
   };
 
   const handleDiscard = () => {
@@ -156,20 +156,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           );
           handleClose('validated');
         } else {
-          // if senderId !== 'default' they are a special contact => don't show disclaimer
-          // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
-          // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
-          // courtesy contact => show disclaimer
-          if (
-            modalProps.digitalDomicileType === LegalChannelType.PEC ||
-            modalProps.senderId !== 'default'
-          ) {
-            // open verification code dialog
-            setOpen(true);
-          } else {
-            // open disclaimer dialog
-            setDisclaimerOpen(true);
-          }
+          setOpen(true);
         }
       });
   };
@@ -207,11 +194,28 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
 
   useEffect(() => {
     if (!_.isEqual(modalProps, initialProps) && !contactAlreadyExists()) {
-      handleCodeVerification();
+      handleDisclaimerVisibilityFirst();
     } else if (contactAlreadyExists()) {
       setIsConfirmationModalVisible(true);
     }
   }, [modalProps]);
+
+  const handleDisclaimerVisibilityFirst = () => {
+    // if senderId !== 'default' they are a special contact => don't show disclaimer
+    // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
+    // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
+    // courtesy contact => show disclaimer
+    if (
+      modalProps.digitalDomicileType === LegalChannelType.PEC ||
+      modalProps.senderId !== 'default'
+    ) {
+      // open verification code dialog
+      handleCodeVerification();
+    } else {
+      // open disclaimer dialog
+      setDisclaimerOpen(true);
+    }
+  };
 
   const handleAddressUpdateError = useCallback(
     (responseError: AppResponse) => {
@@ -255,6 +259,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         <DisclaimerModal
           onConfirm={() => {
             setDisclaimerOpen(false);
+            handleCodeVerification();
             setOpen(true);
           }}
           onCancel={() => setDisclaimerOpen(false)}
