@@ -68,11 +68,11 @@ export function getConfiguration(): LoginConfiguration {
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
-    ONE_TRUST_DRAFT_MODE: configurationFromFile.ONE_TRUST_DRAFT_MODE || false,
+    ONE_TRUST_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_DRAFT_MODE),
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
-    SPID_TEST_ENV_ENABLED: configurationFromFile.SPID_TEST_ENV_ENABLED || false,
-    SPID_VALIDATOR_ENV_ENABLED: configurationFromFile.SPID_TEST_ENV_ENABLED || false,
+    SPID_TEST_ENV_ENABLED: Boolean(configurationFromFile.SPID_TEST_ENV_ENABLED),
+    SPID_VALIDATOR_ENV_ENABLED: Boolean(configurationFromFile.SPID_VALIDATOR_ENV_ENABLED),
     VERSION,
     BASE_URL,
     ROUTE_LOGOUT: BASE_URL + '/logout',
@@ -85,5 +85,5 @@ export function getConfiguration(): LoginConfiguration {
 
 export async function loadLoginConfiguration(): Promise<void> {
   await Configuration.load(new LoginConfigurationValidator());
-  console.log(getConfiguration());
+  getConfiguration().IS_DEVELOP && console.log(getConfiguration());
 }
