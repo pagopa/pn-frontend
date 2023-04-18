@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { apiClient } from '../apiClients';
+
 import {
   AcceptDelegationResponse,
   CreateDelegationProps,
@@ -7,7 +7,8 @@ import {
   Delegate,
   Delegation,
   Delegator,
-} from '../../redux/delegation/types';
+} from '../../models/Deleghe';
+import { apiClient } from '../apiClients';
 import {
   ACCEPT_DELEGATION,
   CREATE_DELEGATION,
@@ -32,16 +33,16 @@ export const DelegationsApi = {
   getDelegates: (): Promise<Array<Delegate>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATOR())
-      .then((response: AxiosResponse<Array<Delegation>>) => 
-          response.data.map((delegation) => ({
-            mandateId: delegation.mandateId,
-            status: delegation.status,
-            visibilityIds: delegation.visibilityIds,
-            verificationCode: delegation.verificationCode,
-            datefrom: delegation.datefrom,
-            dateto: delegation.dateto,
-            delegate: 'delegate' in delegation ? delegation.delegate : null,
-          }))
+      .then((response: AxiosResponse<Array<Delegation>>) =>
+        response.data.map((delegation) => ({
+          mandateId: delegation.mandateId,
+          status: delegation.status,
+          visibilityIds: delegation.visibilityIds,
+          verificationCode: delegation.verificationCode,
+          datefrom: delegation.datefrom,
+          dateto: delegation.dateto,
+          delegate: 'delegate' in delegation ? delegation.delegate : null,
+        }))
       ),
 
   /**
@@ -51,7 +52,7 @@ export const DelegationsApi = {
   getDelegators: (): Promise<Array<Delegator>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
-      .then((response: AxiosResponse<Array<Delegation>>) => 
+      .then((response: AxiosResponse<Array<Delegation>>) =>
         response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
           status: delegation.status,
@@ -62,7 +63,7 @@ export const DelegationsApi = {
           delegator: 'delegator' in delegation ? delegation.delegator : null,
         }))
       ),
-  
+
   /**
    * Removes a delegation that the user created
    * @param id
@@ -72,6 +73,7 @@ export const DelegationsApi = {
     apiClient
       .patch(REOVKE_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
+
   /**
    * Removes a delegation created for the user
    * @param {string} id
@@ -81,6 +83,7 @@ export const DelegationsApi = {
     apiClient
       .patch(REJECT_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
+
   /**
    * Accepts a delegation created for the user
    * @param {string} id
@@ -101,6 +104,7 @@ export const DelegationsApi = {
           id: '-1',
         } as AcceptDelegationResponse;
       }),
+
   /**
    * Creates a new delegation
    * @param data

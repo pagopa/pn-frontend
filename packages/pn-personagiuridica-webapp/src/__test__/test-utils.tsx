@@ -53,7 +53,7 @@ function mockApi(
   client: AxiosInstance,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
   path: string,
-  code: 200,
+  code: 200 | 204 | 500 | 401 | 400,
   request?: any,
   response?: any
 ): MockAdapter {

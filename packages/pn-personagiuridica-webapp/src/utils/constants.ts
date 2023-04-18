@@ -30,3 +30,6 @@ export const ONE_TRUST_PP = process.env.REACT_APP_ONE_TRUST_PP || '';
 export const ONE_TRUST_TOS = process.env.REACT_APP_ONE_TRUST_TOS || '';
 
 export const VERSION = process.env.REACT_APP_VERSION ?? '';
+
+// this will be removed when delegations to pg works correctly
+export const DELEGATIONS_TO_PG_ENABLED = process.env.REACT_APP_DELEGATIONS_TO_PG_ENABLED;
