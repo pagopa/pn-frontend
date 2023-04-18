@@ -2,6 +2,7 @@ import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import AltRouteIcon from '@mui/icons-material/AltRoute';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -156,6 +157,12 @@ const App = () => {
   if (userHasAdminPermissions) {
     /* eslint-disable-next-line functional/immutable-data */
     menuItems.splice(1, 0, {
+      label: t('menu.deleghe'),
+      icon: () => <AltRouteIcon sx={{ rotate: '90deg' }} />,
+      route: routes.DELEGHE,
+    });
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(2, 0, {
       label: t('menu.contacts'),
       icon: MarkunreadMailboxIcon,
       route: routes.RECAPITI,
