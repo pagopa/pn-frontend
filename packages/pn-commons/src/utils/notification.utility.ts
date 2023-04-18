@@ -716,6 +716,16 @@ const populatePaymentHistory = (
   return paymentHistory;
 };
 
+
+
+function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
+  if (t.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
+    const deliveryDetailCode = (t.details as any).deliveryDetailCode as string;
+    return deliveryDetailCode.length > 1;   //  !== "CON080";
+  }
+  return TimelineAllowedStatus.includes(t.category);
+}
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
@@ -733,7 +743,7 @@ export function parseNotificationDetail(
   // set which elements are visible
   parsedNotification.timeline = parsedNotification.timeline.map((t) => ({
     ...t,
-    hidden: !TimelineAllowedStatus.includes(t.category),
+    hidden: !timelineElementMustBeShown(t),
   }));
   // populate notification macro steps with corresponding timeline micro steps
   populateMacroSteps(parsedNotification);
