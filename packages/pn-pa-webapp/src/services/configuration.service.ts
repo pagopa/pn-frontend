@@ -57,7 +57,7 @@ export function getConfiguration(): PaConfiguration {
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
-    ONE_TRUST_DRAFT_MODE: !!configurationFromFile.ONE_TRUST_DRAFT_MODE,
+    ONE_TRUST_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_DRAFT_MODE),
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
     IS_DEVELOP,
@@ -65,7 +65,7 @@ export function getConfiguration(): PaConfiguration {
     LOG_REDUX_ACTIONS: IS_DEVELOP,
     APP_VERSION,
     DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER ?? true,
-    IS_PAYMENT_ENABLED: !!configurationFromFile.IS_PAYMENT_ENABLED,
+    IS_PAYMENT_ENABLED: Boolean(configurationFromFile.IS_PAYMENT_ENABLED),
     MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
   };
 }
