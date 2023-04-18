@@ -1,37 +1,44 @@
 import { useEffect, useState } from 'react';
-import { Box, Stack } from '@mui/material';
-import {
+import { Box, /*  Stack, */ Tab, Tabs } from '@mui/material';
+/* import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
   TitleBox,
-  useIsMobile,
+   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { Trans, useTranslation } from 'react-i18next'; */
+import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
-
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import { TabPanel } from '@pagopa-pn/pn-commons';
+import { useAppDispatch /* useAppSelector */ } from '../redux/hooks';
+// import { RootState } from '../redux/store';
 import {
-  rejectDelegation,
-  revokeDelegation,
+  // rejectDelegation,
+  // revokeDelegation,
   getDelegates,
   getDelegators,
-  acceptDelegation,
+  // acceptDelegation,
 } from '../redux/delegation/actions';
-import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
-import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
+import {
+  /*  closeAcceptModal, closeRevocationModal, */ resetState,
+} from '../redux/delegation/reducers';
+/* import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
+import { TrackEventType } from '../utils/events'; */
+
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import Delegates from '../component/Deleghe/Delegates';
 
 const Deleghe = () => {
-  const isMobile = useIsMobile();
   const { t } = useTranslation(['deleghe']);
+
+  /*  
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
   );
@@ -41,13 +48,20 @@ const Deleghe = () => {
     name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
+   */
   const [pageReady, setPageReady] = useState(false);
 
-  const [errorText, setErrorText] = useState('');
+  const [value, setValue] = useState(0);
+
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+  const isMobile = useIsMobile();
+  // const [errorText, setErrorText] = useState('');
 
   const dispatch = useAppDispatch();
 
-  const handleCloseModal = () => {
+  /*   const handleCloseModal = () => {
     dispatch(closeRevocationModal());
   };
 
@@ -68,7 +82,7 @@ const Deleghe = () => {
     void dispatch(getDelegators());
     void dispatch(getSidemenuInformation);
     trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
-  };
+  }; */
 
   const retrieveData = async () => {
     await dispatch(getDelegates());
@@ -83,7 +97,7 @@ const Deleghe = () => {
     };
   }, []);
 
-  const handleAcceptDelegationError = (errorResponse: AppResponse) => {
+  /*  const handleAcceptDelegationError = (errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
     setErrorText(error?.message.content || '');
   };
@@ -93,11 +107,11 @@ const Deleghe = () => {
 
     return () =>
       AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptDelegationError);
-  }, []);
+  }, []); */
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      <Box p={3}>
+      {/* <Box p={3}>
         <CodeModal
           title={t('deleghe.accept_title')}
           subtitle={t('deleghe.accept_description', { name: acceptName })}
@@ -145,6 +159,37 @@ const Deleghe = () => {
             <Delegators />
           </>
         )}
+      </Box> */}
+      <Box
+        sx={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: isMobile ? 'flex-start' : 'normal',
+        }}
+      >
+        <Box mb={2} p={3}>
+          <TitleBox title={t('deleghe.title')} variantTitle={'h4'}>
+            <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
+              deleghe.description
+            </Trans>
+          </TitleBox>
+        </Box>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+            centered
+            variant="fullWidth"
+          >
+            <Tab label={t('deleghe.tab_delegati')} />
+            <Tab label={t('deleghe.tab_deleghe')} />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <Delegates />
+        </TabPanel>
+        <TabPanel value={value} index={1}></TabPanel>
       </Box>
     </LoadingPageWrapper>
   );
