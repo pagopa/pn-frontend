@@ -1,7 +1,6 @@
 import { Fragment, useState, MouseEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,8 +12,16 @@ import {
   EmptyState,
   CopyToClipboard,
   formatDate,
+  CustomTagGroup,
 } from '@pagopa-pn/pn-commons';
-import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, ModalApiKeyView } from '../../../models/ApiKeys';
+import { Tag } from '@pagopa/mui-italia';
+import {
+  ApiKey,
+  ApiKeyColumn,
+  ApiKeyStatus,
+  ApiKeyStatusHistory,
+  ModalApiKeyView,
+} from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
 import * as routes from '../../../navigation/routes.const';
 
@@ -23,10 +30,7 @@ type Props = {
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
-const DesktopApiKeys = ({
-  apiKeys,
-  handleModalClick,
-}: Props) => {
+const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
   const navigate = useNavigate();
@@ -34,6 +38,16 @@ const DesktopApiKeys = ({
   const [tableKey, setTableKey] = useState(0);
   type ApiKeyContextMenuProps = {
     row: Item;
+  };
+
+  /**
+   * Checks if status history of a api key contains a status set as ROTATED
+   * @param apiKeyIdx index of ApiKey array
+   * @returns true if the api key history contains status ROTATED, otherwise false
+   */
+  const isApiKeyRotated = (apiKeyIdx: number): boolean => {
+    const currentApiKey = rows[apiKeyIdx] as any as ApiKey;
+    return !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
   };
 
   const ApiKeyContextMenu = ({ row }: ApiKeyContextMenuProps) => {
@@ -54,7 +68,7 @@ const DesktopApiKeys = ({
             onClick={handleClick}
             size="small"
             data-testid="contextMenuButton"
-            aria-label="context menu"
+            aria-label={t('context-menu.title')}
             aria-controls={open ? 'context-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -79,15 +93,53 @@ const DesktopApiKeys = ({
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
-          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
-          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(ModalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
+          {row.status !== ApiKeyStatus.ROTATED && (
+            <MenuItem
+              data-testid="buttonView"
+              onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
+            >
+              {t('context-menu.view')}
+            </MenuItem>
+          )}
+          {row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED && (
+            <MenuItem
+              data-testid="buttonRotate"
+              onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
+            >
+              {t('context-menu.rotate')}
+            </MenuItem>
+          )}
+          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && (
+            <MenuItem
+              data-testid="buttonBlock"
+              onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
+            >
+              {t('context-menu.block')}
+            </MenuItem>
+          )}
+          {row.status === ApiKeyStatus.BLOCKED && (
+            <MenuItem
+              data-testid="buttonDelete"
+              onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
+            >
+              {t('context-menu.delete')}
+            </MenuItem>
+          )}
+          {row.status === ApiKeyStatus.BLOCKED && !isApiKeyRotated(apiKeyId) && (
+            <MenuItem
+              data-testid="buttonEnable"
+              onClick={() => handleModalClick(ModalApiKeyView.ENABLE, apiKeyId)}
+            >
+              {t('context-menu.enable')}
+            </MenuItem>
+          )}
         </Menu>
       </Box>
     );
   };
+
+  const setRowColorByStatus = (rowId: number): string | undefined =>
+    isApiKeyRotated(Number(rowId)) ? '#aaa' : undefined;
 
   const columns: Array<Column<ApiKeyColumn>> = [
     {
@@ -97,7 +149,11 @@ const DesktopApiKeys = ({
       sortable: false,
       getCellLabel(value: string, row: Item) {
         return (
-          <Typography sx={{ color: row.status === ApiKeyStatus.ROTATED ? '#aaa' : undefined }}>
+          <Typography
+            sx={{
+              color: setRowColorByStatus(Number(row.id)),
+            }}
+          >
             {value}
           </Typography>
         );
@@ -115,15 +171,16 @@ const DesktopApiKeys = ({
               display: 'flex',
               alignItems: 'center',
               userSelect: 'none',
-              color: row.status === ApiKeyStatus.ROTATED ? '#aaa' : undefined,
+              color: setRowColorByStatus(Number(row.id)),
             }}
           >
             {`${value.substring(0, 10)}...`}
             <CopyToClipboard
               data-testid="copyToClipboard"
-              disabled={row.status === ApiKeyStatus.ROTATED}
+              disabled={isApiKeyRotated(Number(row.id))}
               tooltipMode={true}
               tooltip={t('api-key-copied')}
+              tooltipBefore={t('api-key-copy')}
               getValue={() => value || ''}
             />
           </Box>
@@ -136,7 +193,7 @@ const DesktopApiKeys = ({
       width: '15%',
       getCellLabel(value: string, row: Item) {
         return (
-          <Typography sx={{ color: row.status === ApiKeyStatus.ROTATED ? '#aaa' : undefined }}>
+          <Typography aria-current="date" sx={{ color: setRowColorByStatus(Number(row.id)) }}>
             {formatDate(value)}
           </Typography>
         );
@@ -148,11 +205,13 @@ const DesktopApiKeys = ({
       width: '15%',
       getCellLabel(value: Array<string>) {
         return (
-          <TagGroup visibleItems={3}>
-            {value.map((v) => (
-              <Tag key={v} value={v} />
+          <CustomTagGroup visibleItems={3}>
+            {value.map((v, i) => (
+              <Box key={i} sx={{ my: 1 }}>
+                <Tag value={v} />
+              </Box>
             ))}
-          </TagGroup>
+          </CustomTagGroup>
         );
       },
     },
@@ -193,11 +252,9 @@ const DesktopApiKeys = ({
       align: 'left',
       sortable: false,
       getCellLabel(_value: string, row: Item) {
-        return (
-          <ApiKeyContextMenu row={row} />
-        );
-      }
-    }
+        return <ApiKeyContextMenu row={row} />;
+      },
+    },
   ];
 
   useEffect(() => {
@@ -214,7 +271,13 @@ const DesktopApiKeys = ({
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
-            <ItemsTable key={tableKey} data-testid="tableApiKeys" columns={columns} rows={rows} />
+            <ItemsTable
+              key={tableKey}
+              data-testid="tableApiKeys"
+              columns={columns}
+              rows={rows}
+              ariaTitle={t('table.title')}
+            />
           ) : (
             <EmptyState
               data-testid="emptyState"

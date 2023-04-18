@@ -5,10 +5,10 @@ import { ConsentsApi } from '../../api/consents/Consents.api';
 import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
 import { User } from './types';
 
-export enum AUTH_ACTIONS  {
+export enum AUTH_ACTIONS {
   GET_TOS_APPROVAL = 'getToSApproval',
+  GET_PRIVACY_APPROVAL = 'getPrivacyApproval',
 }
-
 
 /**
  * Exchange token action between selfcare and pn.
@@ -18,9 +18,7 @@ export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
   async (spidToken: string, { rejectWithValue }) => {
     try {
-      const user = await AuthApi.exchangeToken(spidToken);
-      sessionStorage.setItem('user', JSON.stringify(user));
-      return user;
+      return await AuthApi.exchangeToken(spidToken);
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -59,13 +57,27 @@ export const getToSApproval = createAsyncThunk<Consent>(
   performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.TOS))
 );
 
-export const acceptToS = createAsyncThunk<string>('acceptToS', async (_, { rejectWithValue }) => {
-  const body = {
-    action: ConsentActionType.ACCEPT,
-  };
-  try {
-    return await ConsentsApi.setConsentByType(ConsentType.TOS, body);
-  } catch (e) {
-    return rejectWithValue(e);
-  }
-});
+export const getPrivacyApproval = createAsyncThunk<Consent>(
+  AUTH_ACTIONS.GET_PRIVACY_APPROVAL,
+  performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.DATAPRIVACY))
+);
+
+export const acceptToS = createAsyncThunk<string, string>(
+  'acceptToS',
+  performThunkAction((consentVersion: string) => {
+    const body = {
+      action: ConsentActionType.ACCEPT,
+    };
+    return ConsentsApi.setConsentByType(ConsentType.TOS, consentVersion, body);
+  })
+);
+
+export const acceptPrivacy = createAsyncThunk<string, string>(
+  'acceptPrivacy',
+  performThunkAction((consentVersion: string) => {
+    const body = {
+      action: ConsentActionType.ACCEPT,
+    };
+    return ConsentsApi.setConsentByType(ConsentType.DATAPRIVACY, consentVersion, body);
+  })
+);

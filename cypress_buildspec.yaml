@@ -1,0 +1,42 @@
+version: 0.2
+env:
+  shell: bash
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - apt-get update
+      - apt-get -y upgrade
+      # install yarn
+      - echo Installing yarn...
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt install --no-install-recommends yarn
+      # install cypress dependencies
+      - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+  pre_build:
+    commands:
+      - echo launching yarn install in $SUB_PRJ_NAME...
+      - cd $SUB_PRJ_NAME
+      - yarn install --frozen-lockfile
+  build:
+    commands:
+      ## Running the development server
+      - echo Setting up and running the web application...
+      # Fetching .env variables
+      - source .env.cypress
+      # Setting up hosts file
+      - echo "127.0.0.1 $HOST" >> /etc/hosts
+      # Renaming file .env.cypress to .env.development.local
+      - mv .env.cypress .env.development.local
+      # starting the webapp and waiting for its availability
+      - yarn start-waiton $WEBAPP_URL
+      ## Running Cypress
+      - echo Setting up and running the test environment
+      # Creating cypress.env.json file
+      - echo -e $CYPRESS_ENV > cypress.env.json
+      # - aws secretsmanager get-secret-value --secret-id $CYPRESS_ENV --query SecretString --output text > cypress.env.json
+      - cat cypress.env.json
+      # Running Cypress in headless mode
+      - yarn cy-run --config video=false,screenshotOnRunFailure=false

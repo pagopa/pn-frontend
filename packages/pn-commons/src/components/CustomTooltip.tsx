@@ -31,6 +31,7 @@ function CustomTooltip({ openOnClick, tooltipContent, children, sx, onOpen }: Pr
       <Box sx={sx}>
         <Tooltip
           arrow
+          leaveTouchDelay={5000}
           title={tooltipContent}
           PopperProps={{
             disablePortal: true,

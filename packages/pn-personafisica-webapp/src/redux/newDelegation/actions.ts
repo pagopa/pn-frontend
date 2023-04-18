@@ -1,9 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { formatToSlicedISOString, RecipientType } from '@pagopa-pn/pn-commons';
+import { RecipientType, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
+import { DelegationParty } from '../../models/Deleghe';
+import { FilterPartiesParams, Party } from '../../models/party';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
@@ -15,7 +17,15 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
         fiscalCode: data.codiceFiscale,
         person: data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
       },
-      visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : [data.enteSelect],
+      visibilityIds:
+        data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
+          ? []
+          : data.enti.map(function (ente) {
+              return {
+                uniqueIdentifier: ente.id,
+                name: ente.name,
+              } as DelegationParty;
+            }),
       verificationCode: data.verificationCode,
       dateto: formatToSlicedISOString(data.expirationDate),
     };
@@ -27,10 +37,13 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   }
 );
 
-export const getAllEntities = createAsyncThunk('getAllEntities', async (_, { rejectWithValue }) => {
-  try {
-    return await ExternalRegistriesAPI.getAllActivatedParties();
-  } catch (e) {
-    return rejectWithValue(e);
+export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams | null>(
+  'getAllEntities',
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+    } catch (e) {
+      return rejectWithValue(e);
+    }
   }
-});
+);

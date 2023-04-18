@@ -1,37 +1,49 @@
 {
+  "button": {
+    "filtra": "Filtra",
+    "annulla filtro": "Rimuovi filtri",
+    "indietro": "Indietro",
+    "associa": "Associa",
+    "capito": "Ho capito",
+    "conferma": "Conferma",
+    "annulla": "Annulla",
+    "modifica": "Modifica",
+    "salva": "Salva",
+    "elimina": "Elimina",
+    "enter": "Entra",
+    "exit": "Esci",
+    "close": "Chiudi",
+    "enable": "Attiva",
+    "disable": "Disattiva",
+    "go-to-home": "Vai alla home page",
+    "go-to-login": "Accedi"
+  },
   "menu": {
+    "notifiche": "Notifiche",
+    "notifiche-come-delegato": "Le notifiche a te delegate",
+    "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
-    "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica",
-    "notifications": "Notifiche",
-    "delegations": "Deleghe",
+    "contacts": "Recapiti",
     "app-status": "Stato della piattaforma",
     "users": "Utenti",
-    "groups": "Gruppi"
+    "groups": "Gruppi",
+    "aria-label": "piattaforma-notifiche navigazione principale",
+    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica"
   },
   "header": {
+    "product": {
+      "organization-dashboard": "La tua impresa",
+      "notification-platform": "Notifiche digitali"
+    },
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
   },
-  "footer": {
-    "go-to-pagopa": "Link: vai al sito di PagoPA S.p.A.",
-    "go-to": "Vai al link",
-    "who": "Chi siamo",
-    "work": "Lavora con noi",
-    "certifications": "Certificazioni",
-    "security": "Sicurezza delle informazioni",
-    "personal-data": "Diritto alla protezione dei dati personali",
-    "cookie": "Preferenze Cookie",
-    "terms-conditions": "Termini e Condizioni",
-    "company": "Società trasparente",
-    "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Modello 321",
-    "accessibility": "Accessibilità",
-    "social": "Link: vai al sito {{social}} di PagoPA S.p.A.",
-    "resources": "Risorse",
-    "follow": "Seguici su",
-    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009"
+  "tos": {
+    "title": "SEND - Servizio Notifiche Digitali",
+    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
+    "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
+    "switch-label": "Accetto l’<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di SEND",
+    "button": "Accedi"
   },
   "table": {
     "aria-label": "Tabella di item"
@@ -49,19 +61,6 @@
   "toast": {
     "aria-label": "Icona di chisura toast"
   },
-  "error-boundary": {
-    "title": "Qualcosa è andato storto",
-    "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
-    "action": "Ricarica la pagina"
-  },
-  "not-found": {
-    "title": "404: La pagina che stai cercando non esiste",
-    "descpription": "Sei qui per errore, prova ad usare la navigazione."
-  },
-  "leaving-app": {
-    "title": "Stai uscendo da Piattaforma Notifiche",
-    "message": "Verrai reindirizzato"
-  },
   "date-picker": {
     "left-arrow": "Vai al mese precedente",
     "right-arrow": "Vai al mese successivo",
@@ -73,5 +72,112 @@
   "date-time": {
     "today-uppercase-initial": "Oggi",
     "hour-of-day": "ore"
+  },
+  "error-boundary": {
+    "title": "Qualcosa è andato storto",
+    "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
+    "action": "Ricarica la pagina"
+  },
+  "not-accessible": {
+    "title": "Non è possibile accedere alla piattaforma",
+    "description": "Riprova tra qualche ora. Se hai bisogno di assistenza",
+    "action": "scrivici"
+  },
+  "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
+  "not-logged": "Accedi a SEND",
+  "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
+  "not-found": {
+    "title": "404: La pagina che stai cercando non esiste",
+    "descpription": "Sei qui per errore, prova ad usare la navigazione."
+  },
+  "leaving-app": {
+    "title": "Stai uscendo da SEND",
+    "message": "Verrai reindirizzato"
+  },
+  "error-when-fetching-tos-status": {
+    "title": "Problemi nell'accesso in SEND",
+    "message": "Riprova più tardi"
+  },
+  "messages": {
+    "404-title": "Risorsa non trovata",
+    "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "403-title": "La sessione è scaduta",
+    "403-message": "Entra e accedi con SPID o CIE.",
+    "401-title": "Utente non autorizzato",
+    "401-message": "L'utente corrente non ha le autorizzazioni",
+    "451-title": "Piattaforma non accessibile",
+    "451-message": "Non è possibile accedere alla piattaforma",
+    "500-title": "Il servizio non è disponibile",
+    "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
+    "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
+    "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
+    "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "generic-title": "Errore generico",
+    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "generic-api-error-main-text": "Non siamo riusciti a recuperare questi dati.",
+    "generic-api-error-action-text": "Ricarica"
+  },
+  "footer": {
+    "go-to-pagopa": "Link: vai al sito di PagoPA S.p.A.",
+    "go-to": "Vai al link",
+    "who": "Chi siamo",
+    "work": "Lavora con noi",
+    "certifications": "Certificazioni",
+    "security": "Sicurezza delle informazioni",
+    "personal-data": "Diritto alla protezione dei dati personali",
+    "cookie": "Preferenze Cookie",
+    "terms-conditions": "Termini e Condizioni",
+    "company": "Società trasparente",
+    "disclosure": "Responsible Disclosure Policy",
+    "321-model": "Modello 231",
+    "accessibility": "Accessibilità",
+    "social": "Link: vai al sito {{social}} di PagoPA S.p.A.",
+    "resources": "Risorse",
+    "follow": "Seguici su",
+    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009"
+  },
+  "required-fields": "*Campi obbligatori",
+  "validation": {
+    "search-pattern-length-limit": "ricerca max {{maxLength}} caratteri",
+    "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
+  },
+  "errors": {
+    "bad_request": {
+      "title": "Errore nell'invio dei dati",
+      "message": "Il formato della richiesta non è valido."
+    },
+    "unauthorized": {
+      "title": "Utente non autorizzato",
+      "message": "L'utente corrente non ha le autorizzazioni."
+    },
+    "unavailable_legal_reasons": {
+      "title": "Piattaforma non accessibile",
+      "message": "Non è possibile accedere alla piattaforma"
+    },
+    "forbidden": {
+      "title": "La sessione è scaduta",
+      "message": "Entra e accedi con SPID o CIE."
+    },
+    "not_found": {
+      "title": "Risorsa non trovata",
+      "message": "Si è verificato un errore. Si prega di riprovare più tardi."
+    },
+    "internal_server": {
+      "title": "Il servizio non è disponibile",
+      "message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."
+    },
+    "unhandled": {
+      "title": "Errore generico",
+      "message": "Si è verificato un errore. Si prega di riprovare più tardi."
+    },
+    "unknown": {
+      "title": "Errore",
+      "message": "Errore non previsto"
+    }
+  },
+  "roles": {
+    "pg-operator": "Referente operativo",
+    "pg-admin": "Referente amministrativo"
   }
 }

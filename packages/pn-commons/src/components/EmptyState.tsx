@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Typography, Box } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { KnownSentiment } from '../types';
 import { iconForKnownSentiment } from '../types/EmptyState';
 
@@ -12,7 +13,7 @@ type Props = {
   /** Empty action label */
   emptyActionLabel?: string;
   /** Indication for which emoticon to show */
-  sentimentIcon?: KnownSentiment | SvgIconComponent; 
+  sentimentIcon?: KnownSentiment | SvgIconComponent;
   /** Secondary Message */
   secondaryMessage?: Message;
 };
@@ -33,7 +34,8 @@ function EmptyState({
     emptyActionLabel: '',
   },
 }: Props) {
-  const FinalIcon = typeof sentimentIcon === "string" ? iconForKnownSentiment(sentimentIcon) : sentimentIcon;
+  const FinalIcon =
+    typeof sentimentIcon === 'string' ? iconForKnownSentiment(sentimentIcon) : sentimentIcon;
 
   return (
     <Box
@@ -47,47 +49,51 @@ function EmptyState({
       }}
     >
       {FinalIcon && (
-        <FinalIcon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: "1.25rem" }} />
+        <FinalIcon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: '1.25rem' }} />
       )}
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {emptyMessage}
       </Typography>
-      { emptyActionCallback && 
+      {emptyActionCallback && (
+        <>
+          &nbsp;
+          <ButtonNaked
+            data-testid="callToActionFirst"
+            onClick={emptyActionCallback}
+            sx={{ verticalAlign: 'unset' }}
+          >
+            <Typography color="primary" variant="body2" fontWeight={'bold'}>
+              {emptyActionLabel}
+            </Typography>
+          </ButtonNaked>
+        </>
+      )}
+      {secondaryMessage.emptyMessage && (
+        <>
+          &nbsp;
+          <Typography variant="body2" sx={{ display: 'inline' }}>
+            {secondaryMessage.emptyMessage}
+          </Typography>
+        </>
+      )}
+      {secondaryMessage.emptyActionLabel && (
         <>
           &nbsp;
           <Typography
             color="primary"
             variant="body2"
             fontWeight={'bold'}
-            data-testid="callToActionFirst"
+            data-testid="callToActionSecond"
             sx={{
               cursor: 'pointer',
               display: 'inline',
             }}
-            onClick={emptyActionCallback}
+            onClick={secondaryMessage.emptyActionCallback}
           >
-            {emptyActionLabel}
+            {secondaryMessage.emptyActionLabel}
           </Typography>
-        </> 
-      }
-      &nbsp;
-      <Typography variant="body2" sx={{ display: 'inline' }}>
-        {secondaryMessage.emptyMessage}
-      </Typography>
-      &nbsp;
-      <Typography
-        color="primary"
-        variant="body2"
-        fontWeight={'bold'}
-        data-testid="callToActionSecond"
-        sx={{
-          cursor: 'pointer',
-          display: 'inline',
-        }}
-        onClick={secondaryMessage.emptyActionCallback}
-      >
-        {secondaryMessage.emptyActionLabel}
-      </Typography>
+        </>
+      )}
     </Box>
   );
 }

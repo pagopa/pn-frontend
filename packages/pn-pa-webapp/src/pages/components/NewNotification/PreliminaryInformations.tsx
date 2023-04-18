@@ -12,7 +12,12 @@ import {
   Typography,
   MenuItem,
 } from '@mui/material';
-import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper, dataRegex } from '@pagopa-pn/pn-commons';
+import {
+  PhysicalCommunicationType,
+  CustomDropdown,
+  ApiErrorWrapper,
+  dataRegex,
+} from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
@@ -23,6 +28,7 @@ import { PreliminaryInformationsPayload } from '../../../redux/newNotification/t
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
+import { IS_PAYMENT_ENABLED } from '../../../utils/constants';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
@@ -33,6 +39,7 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
+  const hasGroups = useAppSelector((state: RootState) => state.userState.user.organization.hasGroups);
 
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
@@ -46,19 +53,22 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     group: notification.group || '',
     taxonomyCode: notification.taxonomyCode || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
-    paymentMode: notification.paymentMode || '',
+    paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
   });
 
   const validationSchema = yup.object({
     paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`),
-    subject: yup.string().required(`${t('subject')} ${tc('required')}`),
+    subject: yup.string().required(`${t('subject')} ${tc('required')}`).max(134, tc('too-long-field-error', { maxLength: 134 })),
+    abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: groups.length > 0 ? yup.string().required() : yup.string(),
+    group: (hasGroups) ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()
       .required(`${t('taxonomy-id')} ${tc('required')}`)
-      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) => dataRegex.taxonomyCode.test(value as string)),
+      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) =>
+        dataRegex.taxonomyCode.test(value as string)
+      ),
   });
 
   const formik = useFormik({
@@ -98,7 +108,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }, [fetchGroups]);
 
   return (
-
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
       reloadAction={() => fetchGroups()}
@@ -138,12 +147,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             name="abstract"
             value={formik.values.abstract}
             onChange={handleChangeTouched}
+            error={formik.touched.abstract && Boolean(formik.errors.abstract)}
+            helperText={formik.touched.abstract && formik.errors.abstract}
             size="small"
             margin="normal"
           />
           <CustomDropdown
             id="group"
-            label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
+            label={`${t('group')}${(hasGroups) ? '*' : ''}`}
             fullWidth
             name="group"
             size="small"
@@ -151,7 +162,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             value={formik.values.group}
             onChange={handleChangeTouched}
             error={formik.touched.group && Boolean(formik.errors.group)}
-            helperText={formik.touched.group && formik.errors.group}>
+            helperText={formik.touched.group && formik.errors.group}
+          >
             {groups.length > 0 &&
               groups.map((group) => (
                 <MenuItem key={group.id} value={group.id}>
@@ -198,44 +210,48 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               />
             </RadioGroup>
           </FormControl>
-          <FormControl margin="normal" fullWidth>
-            <FormLabel id="payment-method-label">
-              <Typography fontWeight={600} fontSize={16}>
-                {`${t('payment-method')}*`}
-              </Typography>
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="payment-method-label"
-              name="paymentMode"
-              value={formik.values.paymentMode}
-              onChange={handleChangePaymentMode}
-            >
-              <FormControlLabel
-                value={PaymentModel.PAGO_PA_NOTICE}
-                control={<Radio />}
-                label={t('pagopa-notice')}
-                data-testid="paymentMethodRadio"
-              />
-              <FormControlLabel
-                value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
-                control={<Radio />}
-                label={t('pagopa-notice-f24-flatrate')}
-                data-testid="paymentMethodRadio"
-              />
-              <FormControlLabel
-                value={PaymentModel.PAGO_PA_NOTICE_F24}
-                control={<Radio />}
-                label={t('pagopa-notice-f24')}
-                data-testid="paymentMethodRadio"
-              />
-              <FormControlLabel
-                value={PaymentModel.NOTHING}
-                control={<Radio />}
-                label={t('nothing')}
-                data-testid="paymentMethodRadio"
-              />
-            </RadioGroup>
-          </FormControl>
+          {IS_PAYMENT_ENABLED && (
+            <>
+              <FormControl margin="normal" fullWidth>
+                <FormLabel id="payment-method-label">
+                  <Typography fontWeight={600} fontSize={16}>
+                    {`${t('payment-method')}*`}
+                  </Typography>
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="payment-method-label"
+                  name="paymentMode"
+                  value={formik.values.paymentMode}
+                  onChange={handleChangePaymentMode}
+                >
+                  <FormControlLabel
+                    value={PaymentModel.PAGO_PA_NOTICE}
+                    control={<Radio />}
+                    label={t('pagopa-notice')}
+                    data-testid="paymentMethodRadio"
+                  />
+                  <FormControlLabel
+                    value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
+                    control={<Radio />}
+                    label={t('pagopa-notice-f24-flatrate')}
+                    data-testid="paymentMethodRadio"
+                  />
+                  <FormControlLabel
+                    value={PaymentModel.PAGO_PA_NOTICE_F24}
+                    control={<Radio />}
+                    label={t('pagopa-notice-f24')}
+                    data-testid="paymentMethodRadio"
+                  />
+                  <FormControlLabel
+                    value={PaymentModel.NOTHING}
+                    control={<Radio />}
+                    label={t('nothing')}
+                    data-testid="paymentMethodRadio"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </>
+          )}
         </NewNotificationCard>
       </form>
     </ApiErrorWrapper>

@@ -8,6 +8,7 @@ import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
 import { Notification, GetNotificationsResponse, GetNotificationsParams } from './Notifications';
 import { KnownSentiment } from './EmptyState';
+import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import {
   AnalogWorkflowDetails,
   NotHandledDetails,
@@ -17,15 +18,18 @@ import {
   NotificationDetailRecipient,
   NotificationDetailDocument,
   NotificationFeePolicy,
+  NotificationDeliveryMode,
   NotificationDetailPayment,
   PaymentInfo,
   NotificationStatusHistory,
   TimelineCategory,
   DigitalDomicileType,
   RecipientType,
+  ResponseStatus,
   AddressSource,
   LegalFactType,
   LegalFactId,
+  NotificationDetailOtherDocument,
   PhysicalCommunicationType,
   PaymentInfoDetail,
   PaymentNotice,
@@ -35,10 +39,15 @@ import {
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
+  PaidDetails,
+  DigitalWorkflowDetails,
+  ViewedDetails,
+  AarDetails,
+  PaymentHistory,
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
-import { BasicUser, basicNoLoggedUserData } from './User';
+import { BasicUser, basicNoLoggedUserData, ConsentUser } from './User';
 import { EventsType } from './MixpanelEvents';
 import { AppResponse, ServerResponseError, ErrorMessage } from './AppResponse';
 
@@ -46,9 +55,11 @@ export {
   basicNoLoggedUserData,
   NotificationStatus,
   NotificationFeePolicy,
+  NotificationDeliveryMode,
   TimelineCategory,
   DigitalDomicileType,
   RecipientType,
+  ResponseStatus,
   AddressSource,
   LegalFactType,
   PhysicalCommunicationType,
@@ -62,6 +73,7 @@ export type {
   AnalogWorkflowDetails,
   AppStatusData,
   BasicUser,
+  ConsentUser,
   CardAction,
   CardElement,
   CardSort,
@@ -74,6 +86,7 @@ export type {
   INotificationDetailTimeline,
   Item,
   LegalFactId,
+  NotificationDetailOtherDocument,
   NotHandledDetails,
   Notification,
   NotificationDetail,
@@ -82,16 +95,22 @@ export type {
   NotificationDetailPayment,
   NotificationDetailTableRow,
   NotificationStatusHistory,
+  GetNotificationDowntimeEventsParams,
   PaginationData,
+  PaidDetails,
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
+  DigitalWorkflowDetails,
+  AarDetails,
+  ViewedDetails,
   SideMenuItem,
   Sort,
   AppResponse,
   ServerResponseError,
   ErrorMessage,
+  PaymentHistory,
 };

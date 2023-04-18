@@ -1,128 +1,198 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { Box } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
+import { useTranslation } from 'react-i18next';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
+import { People, SupervisedUserCircle } from '@mui/icons-material';
+import { Box } from '@mui/material';
+
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+
 import {
   AppMessage,
   AppResponseMessage,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
+  errorFactoryManager,
   initLocalization,
   Layout,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  useHasPermissions,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
-import { Email } from '@mui/icons-material';
 
-import { useAppDispatch, useAppSelector } from './redux/hooks';
-import Router from './navigation/routes';
-import { TrackEventType } from './utils/events';
-import { trackEventByType } from './utils/mixpanel';
-import { MIXPANEL_TOKEN, VERSION } from './utils/constants';
 import * as routes from './navigation/routes.const';
-import { getMenuItems } from './utils/role.utility';
-import { RootState } from './redux/store';
+import Router from './navigation/routes';
+import { logout } from './redux/auth/actions';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } from './utils/constants';
+import { RootState, store } from './redux/store';
+import {
+  getDomicileInfo,
+  // getSidemenuInformation
+} from './redux/sidemenu/actions';
+import { PNRole } from './redux/auth/types';
+import { trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from './utils/events';
+import './utils/onetrust';
+import { PGAppErrorFactory } from './utils/AppError/PGAppErrorFactory';
+import { goToLoginPortal } from './navigation/navigation.utility';
+import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 
-// TODO: get products list from be (?)
-const productsList: Array<ProductSwitchItem> = [
-  {
-    id: '0',
-    title: `Piattaforma Notifiche`,
-    productUrl: '',
-    linkType: 'internal',
-  },
-];
-
-function App() {
+const App = () => {
+  setUpInterceptor(store);
   const dispatch = useAppDispatch();
-  const { t, i18n } = useTranslation(['common']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
+  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
+    (state: RootState) => state.userState
+  );
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
 
-  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
+  const sessionToken = loggedUser.sessionToken;
+  const jwtUser = useMemo(
+    () => ({
+      id: loggedUser.fiscal_number,
+      name: loggedUser.name,
+      surname: loggedUser.family_name,
+      mail: loggedUser.email,
+    }),
+    [loggedUser]
+  );
 
-  // TODO: remove mocked data
-  const jwtUser = {
-    id: 'FiscalCode',
-    name: 'Name',
-    surname: 'Surname',
-    mail: 'mail',
-  };
+  const isPrivacyPage = path[1] === 'privacy-tos';
+  const organization = loggedUser.organization;
+  const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
 
-  // TODO: define side menu items
-  const menuItems = useMemo(() => {
-    const basicMenuItems: Array<SideMenuItem> = [
-      { label: 'menu.notifications', icon: Email, route: routes.NOTIFICHE },
-      // TODO: gestire badge
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+
+  // TODO: get products list from be (?)
+  const productsList: Array<ProductSwitchItem> = useMemo(
+    () => [
       {
-        label: 'menu.delegations',
-        icon: AltRouteIcon,
-        route: routes.DELEGHE,
-        rightBadgeNotification: undefined,
+        id: '1',
+        title: t('header.product.organization-dashboard'),
+        productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
+        linkType: 'external',
       },
-      { 
-        label: 'menu.app-status', 
-        // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
-        icon: () => currentStatus 
-          ? (currentStatus.appIsFullyOperative
-            ? <CheckCircleIcon sx={{ color: 'success.main' }} />
-            : <ErrorIcon sx={{ color: 'error.main' }} />)
-          : <HelpIcon />
-        , 
-        route: routes.APP_STATUS 
+      {
+        id: '0',
+        title: t('header.product.notification-platform'),
+        productUrl: '',
+        linkType: 'internal',
       },
-    ];
-    const items = { ...getMenuItems(basicMenuItems, 'id-organizazzione') };
-    // localize menu items
-    /* eslint-disable-next-line functional/immutable-data */
-    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
-    if (items.selfCareItems) {
-      /* eslint-disable-next-line functional/immutable-data */
-      items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
-    }
-    return items;
-  }, [currentStatus]);
+    ],
+    [t, organization?.id]
+  );
 
-  // TODO: manage tos
-  const userActions = useMemo(() => {
-    const profiloAction = {
-      id: 'profile',
-      label: t('menu.profilo'),
-      onClick: () => {
-        trackEventByType(TrackEventType.USER_VIEW_PROFILE);
-        // TODO: navigate to profile page
-      },
-      icon: <SettingsIcon fontSize="small" color="inherit" />,
-    };
-    const logoutAction = {
-      id: 'logout',
-      label: t('header.logout'),
-      onClick: () => handleUserLogout(),
-      icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-    };
-    return [profiloAction, logoutAction];
+  useUnload(() => {
+    trackEventByType(TrackEventType.APP_UNLOAD);
+  });
+
+  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
+
+  useEffect(() => {
+    // init localization
+    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+    // eslint-disable-next-line functional/immutable-data
+    errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
-  useEffect(() => /* { */
-    // if (sessionToken) {
-      void dispatch(getCurrentAppStatus())
-    // }
-  /* } */ , [ /* sessionToken, */ getCurrentAppStatus]);
+  useEffect(() => {
+    if (sessionToken !== '') {
+      if (userHasAdminPermissions) {
+        void dispatch(getDomicileInfo());
+      }
+      // void dispatch(getSidemenuInformation());
+      void dispatch(getCurrentAppStatus());
+    }
+  }, [sessionToken]);
 
-  const handleUserLogout = () => {
-    // TODO: manage logout
+  const notificationMenuItems: Array<SideMenuItem> = [
+    {
+      label: t('menu.notifiche'),
+      route: routes.NOTIFICHE,
+    },
+  ];
+
+  // TODO spostare questo in un file di utility
+  const menuItems: Array<SideMenuItem> = [
+    {
+      label: t('menu.notifiche'),
+      icon: MailOutlineIcon,
+      route: routes.NOTIFICHE,
+      children: notificationMenuItems,
+      notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
+    },
+    {
+      label: t('menu.app-status'),
+      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+      icon: () =>
+        currentStatus ? (
+          currentStatus.appIsFullyOperative ? (
+            <CheckCircleIcon sx={{ color: 'success.main' }} />
+          ) : (
+            <ErrorIcon sx={{ color: 'error.main' }} />
+          )
+        ) : (
+          <HelpIcon />
+        ),
+      route: routes.APP_STATUS,
+    },
+  ];
+
+  if (userHasAdminPermissions) {
+    /* eslint-disable-next-line functional/immutable-data */
+    menuItems.splice(1, 0, {
+      label: t('menu.contacts'),
+      icon: MarkunreadMailboxIcon,
+      route: routes.RECAPITI,
+    });
+  }
+
+  const selfcareMenuItems: Array<SideMenuItem> = [
+    { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
+    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS(organization?.id) },
+  ];
+
+  const partyList: Array<PartyEntity> = useMemo(
+    () => [
+      {
+        id: '0',
+        name: organization?.name,
+        // productRole: role?.role,
+        productRole: t(`roles.${role?.role}`),
+        logoUrl: undefined,
+        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
+        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
+        // ------------------
+        // Carlos Lombardi, 2022.07.28
+        // logoUrl: <AccountBalanceIcon />
+      },
+    ],
+    [role, organization]
+  );
+
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
@@ -140,15 +210,6 @@ function App() {
     trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
 
-  const changeLanguageHandler = async (langCode: string) => {
-    await i18n.changeLanguage(langCode);
-  };
-
-  const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
-    // TODO: manage assistance click
-  };
-
   const [clickVersion] = useMultiEvent({
     callback: () =>
       dispatch(
@@ -159,44 +220,57 @@ function App() {
       ),
   });
 
-  useUnload(() => {
-    trackEventByType(TrackEventType.APP_UNLOAD);
-  });
-
-  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
-
-  useEffect(() => {
-    // init localization
-    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-  }, []);
+  const handleUserLogout = () => {
+    void dispatch(logout());
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PG);
+    goToLoginPortal();
+  };
 
   return (
     <>
       <ResponseEventDispatcher />
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
+        onExitAction={handleUserLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
           handleEventTrackingCallbackProductSwitch(target)
         }
-        loggedUser={jwtUser}
-        enableUserDropdown
-        productsList={productsList}
         sideMenu={
-          menuItems && (
-            <SideMenu
-              menuItems={menuItems.menuItems}
-              selfCareItems={menuItems.selfCareItems}
-              eventTrackingCallback={(target) =>
-                trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-              }
-            />
-          )
+          <SideMenu
+            menuItems={menuItems}
+            selfCareItems={selfcareMenuItems}
+            eventTrackingCallback={(target) =>
+              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+            }
+          />
         }
-        userActions={userActions}
+        showSideMenu={
+          !!sessionToken &&
+          tosConsent &&
+          tosConsent.accepted &&
+          fetchedTos &&
+          privacyConsent &&
+          privacyConsent.accepted &&
+          fetchedPrivacy &&
+          !isPrivacyPage
+        }
+        productsList={productsList}
+        productId={'0'}
+        showHeaderProduct={
+          tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
+        }
+        loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        partyList={partyList}
+        isLogged={!!sessionToken}
+        hasTermsOfService={true}
       >
+        {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage />
         <Router />
@@ -204,6 +278,6 @@ function App() {
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
     </>
   );
-}
+};
 
 export default App;

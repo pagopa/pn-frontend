@@ -13,6 +13,16 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(): void;
+      logout(): void;
+      stubConsents(): void;
+    }
+  }
+}
+
 // Import commands.js using ES2015 syntax:
 import './commands'
 

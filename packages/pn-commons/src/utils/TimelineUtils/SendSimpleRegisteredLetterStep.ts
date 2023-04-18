@@ -6,16 +6,16 @@ export class SendSimpleRegisteredLetterStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-simple-registered-letter',
+        payload.isMultiRecipient, 
         'Invio via raccomandata semplice',
         `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
           (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address
         } tramite raccomandata semplice.`,
         {
-          name: payload.recipient?.denomination,
-          address: (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address,
+          ...this.nameAndTaxId(payload),
+          ...this.completePhysicalAddress(payload),
         }
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
@@ -17,6 +17,8 @@ import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
+import { LANDING_SITE_URL } from '../utils/constants';
+import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 
 const Contacts = () => {
   const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);
@@ -24,16 +26,17 @@ const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
-  const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
+  const digitalAddresses = useAppSelector(
+    (state: RootState) => state.contactsState.digitalAddresses
+  );
   const [pageReady, setPageReady] = useState(false);
 
-  const contactIO = useMemo(() => isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
-    (address) => address.channelType === CourtesyChannelType.IOMSG
-  ) : null, [isDigitalAddressLoaded]);
+  const contactIO = isDigitalAddressLoaded
+    ? digitalAddresses.courtesy.find((address) => address.channelType === CourtesyChannelType.IOMSG)
+    : null;
 
   const fetchAddresses = useCallback(() => {
-    void dispatch(getDigitalAddresses(recipientId))
-    .then(() => {
+    void dispatch(getDigitalAddresses(recipientId)).then(() => {
       setIsDigitalAddressLoaded(true);
       setPageReady(true);
     });
@@ -48,15 +51,41 @@ const Contacts = () => {
     navigate(PROFILO);
   };
 
-  const subtitle = (
-    <>
-      {t('subtitle-1', { ns: 'recapiti' })}
-      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
-        {t('subtitle-link', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-2', { ns: 'recapiti' })}
-    </>
+  const faqWhatIsAarCompleteLink = useMemo(
+    () => LANDING_SITE_URL && FAQ_WHAT_IS_AAR 
+      ? `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}` 
+      : undefined
+    , []
   );
+
+  const faqWhatIsCourtesyMessageCompleteLink = useMemo(
+    () => LANDING_SITE_URL && FAQ_WHAT_IS_COURTESY_MESSAGE ? 
+      `${LANDING_SITE_URL}${FAQ_WHAT_IS_COURTESY_MESSAGE}`
+      : undefined
+    , []
+  );
+
+  const subtitle = <>
+    {t('subtitle-text-1', { ns: 'recapiti' })}
+    { faqWhatIsAarCompleteLink 
+      ? <Link href={faqWhatIsAarCompleteLink} target="_blank">
+          {t('subtitle-link-1', { ns: 'recapiti' })}
+        </Link>
+      : t('subtitle-link-1', { ns: 'recapiti' })
+    }
+    {t('subtitle-text-2', { ns: 'recapiti' })}
+    { faqWhatIsCourtesyMessageCompleteLink
+      ? <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
+          {t('subtitle-link-2', { ns: 'recapiti' })}
+        </Link>
+      : t('subtitle-link-2', { ns: 'recapiti' }) 
+    }
+    {t('subtitle-text-3', { ns: 'recapiti' })}
+    <Link onClick={handleRedirectToProfilePage}>
+      {t('subtitle-link-3', { ns: 'recapiti' })}
+    </Link>
+    {t('subtitle-text-4', { ns: 'recapiti' })}
+  </>;
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
@@ -68,7 +97,11 @@ const Contacts = () => {
             subTitle={subtitle}
             variantSubTitle={'body1'}
           />
-          <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
+          <ApiErrorWrapper
+            apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+            reloadAction={fetchAddresses}
+            mt={2}
+          >
             <Stack direction="column" spacing={8} mt={8}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>

@@ -1,4 +1,6 @@
+import { ConsentUser } from "@pagopa-pn/pn-commons";
 import { act, screen } from "@testing-library/react";
+import React from "react";
 import * as redux from "react-redux";
 
 import { render } from "../../__test__/test-utils";
@@ -24,13 +26,72 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-const mockTosState = (fetchedTos: boolean, tos: boolean) => ({
+const paramsTosNotFetched = {
+  fetchedTos: false,
+  fetchedPrivacy: true,
+  tosConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: 'mocked-version-1',
+  },
+  privacyConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: 'mocked-version-1',
+  },
+}
+
+const paramsTosNotAccepted = {
+  fetchedTos: true,
+  fetchedPrivacy: true,
+  tosConsent: {
+    accepted: false,
+    isFirstAccept: true,
+    consentVersion: 'mocked-version-1',
+  },
+  privacyConsent: {
+    accepted: false,
+    isFirstAccept: true,
+    consentVersion: 'mocked-version-1',
+  },
+}
+
+const paramsPrivacyNotFetched = {
+  fetchedTos: true,
+  fetchedPrivacy: false,
+  tosConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: 'mocked-version-1',
+  },
+  privacyConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: 'mocked-version-1',
+  },
+}
+
+const paramsPrivacyNotAccepted = {
+  fetchedTos: true,
+  fetchedPrivacy: true,
+  tosConsent: {
+    accepted: true,
+    isFirstAccept: true,
+    consentVersion: 'mocked-version-1',
+  },
+  privacyConsent: {
+    accepted: false,
+    isFirstAccept: true,
+    consentVersion: 'mocked-version-1',
+  },
+}
+
+const mockTosState = (params: {fetchedTos: boolean, fetchedPrivacy: boolean, tosConsent: ConsentUser, privacyConsent: ConsentUser}) => ({
   userState: {
     user: {
       sessionToken: "mockedToken"
     },
-    fetchedTos,
-    tos
+    ...params
   }});
 
 describe('Tests the ToSGuard component', () => {
@@ -46,7 +107,9 @@ describe('Tests the ToSGuard component', () => {
   });
 
   it('renders the loading page component if tos are not fetched', async () => {
-    await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(false, false) } ));
+    await act(
+      async () => void render(<ToSGuard />, { preloadedState: mockTosState(paramsTosNotFetched) })
+    );
 
     const pageComponent = screen.queryByText('loading page');
     const tosComponent = screen.queryByText('tos acceptance page');
@@ -54,11 +117,13 @@ describe('Tests the ToSGuard component', () => {
     expect(pageComponent).toBeTruthy();
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeNull();
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(2);
   });
 
   it('renders the loading page component if tos are not accepted', async () => {
-    await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(true, false) } ));
+    await act(
+      async () => void render(<ToSGuard />, { preloadedState: mockTosState(paramsTosNotAccepted) })
+    );
 
     const pageComponent = screen.queryByText('loading page');
     const tosComponent = screen.queryByText('tos acceptance page');
@@ -66,18 +131,34 @@ describe('Tests the ToSGuard component', () => {
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeTruthy();
     expect(genericPage).toBeNull();
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(2);
   });
 
-  it('renders the loading page component if tos are not fetched', async () => {
-    await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(true, true) } ));
+  it('renders the loading page component if privacy are not fetched', async () => {
+    await act(
+      async () => void render(<ToSGuard />, { preloadedState: mockTosState(paramsPrivacyNotFetched) })
+    );
+
+    const pageComponent = screen.queryByText('loading page');
+    const tosComponent = screen.queryByText('tos acceptance page');
+    const genericPage = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+    expect(tosComponent).toBeNull();
+    expect(genericPage).toBeNull();
+    expect(mockDispatchFn).toBeCalledTimes(2);
+  });
+
+  it('renders the loading page component if privacy are not accepted', async () => {
+    await act(
+      async () => void render(<ToSGuard />, { preloadedState: mockTosState(paramsPrivacyNotAccepted) })
+    );
 
     const pageComponent = screen.queryByText('loading page');
     const tosComponent = screen.queryByText('tos acceptance page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeNull();
-    expect(tosComponent).toBeNull();
-    expect(genericPage).toBeTruthy();
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(tosComponent).toBeTruthy();
+    expect(genericPage).toBeNull();
+    expect(mockDispatchFn).toBeCalledTimes(2);
   });
 });

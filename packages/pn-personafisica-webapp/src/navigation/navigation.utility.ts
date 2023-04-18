@@ -1,9 +1,35 @@
-import { URL_FE_LOGIN } from '../utils/constants';
+// momentarily commented for pn-5157
+// import { AppRouteType, sanitizeString, AppRouteParams } from '@pagopa-pn/pn-commons';
+import { sanitizeString, AppRouteParams } from '@pagopa-pn/pn-commons';
 
-export function goToLoginPortal(origin: string) {
-  const baseUrl = URL_FE_LOGIN ?? '';
-  const encodedPathname = encodeURIComponent(origin);
+import { URL_FE_LOGOUT } from '../utils/constants';
 
-  /* eslint-disable functional/immutable-data */
-  window.location.replace(baseUrl + 'logout' + `?origin=${encodedPathname}`);
+// momentarily commented for pn-5157
+/*
+export function goToLoginPortal(type: AppRouteType.PF | AppRouteType.PG, aarToken?: string | null) {
+  // eslint-disable-next-line functional/no-let
+  let urlToRiderect = `${URL_FE_LOGOUT}?${AppRouteParams.TYPE}=${type}`;
+  // the startsWith check is to prevent xss attacks
+  if (urlToRiderect.startsWith(URL_FE_LOGOUT) && aarToken) {
+    // eslint-disable-next-line functional/immutable-data
+    urlToRiderect += `&${AppRouteParams.AAR}=${sanitizeString(aarToken)}`;
+  }
+  // the indexOf check is to prevent xss attacks
+  if (urlToRiderect.startsWith(URL_FE_LOGOUT)) {
+    window.location.replace(`${urlToRiderect}`);
+  }
+}
+*/
+export function goToLoginPortal(aarToken?: string | null) {
+  // eslint-disable-next-line functional/no-let
+  let urlToRiderect = `${URL_FE_LOGOUT}`;
+  // the startsWith check is to prevent xss attacks
+  if (urlToRiderect.startsWith(URL_FE_LOGOUT) && aarToken) {
+    // eslint-disable-next-line functional/immutable-data
+    urlToRiderect += `?${AppRouteParams.AAR}=${sanitizeString(aarToken)}`;
+  }
+  // the indexOf check is to prevent xss attacks
+  if (urlToRiderect.startsWith(URL_FE_LOGOUT)) {
+    window.location.replace(`${urlToRiderect}`);
+  }
 }

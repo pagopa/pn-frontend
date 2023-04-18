@@ -26,8 +26,10 @@ Cypress.Commands.add('fillPreliminaryInfo', (data: PreliminaryInfoFormData) => {
   const communicationType = data.communicationType === 'A/R' ? 1 : 0;
   cy.get('[data-testid="comunicationTypeRadio"]').eq(communicationType).click();
 
-  const paymentMethodIndex = getPaymentMethodIndex(data.paymentMethod);
-  cy.get('[data-testid="paymentMethodRadio"]').eq(paymentMethodIndex).click();
+  if(Cypress.env('IS_PAYMENT_ENABLED')) {
+    const paymentMethodIndex = getPaymentMethodIndex(data.paymentMethod);
+    cy.get('[data-testid="paymentMethodRadio"]').eq(paymentMethodIndex).click();
+  }
 });
 
 Cypress.Commands.add('fillRecipient', (recipient: RecipientFormData) => {
@@ -38,12 +40,13 @@ Cypress.Commands.add('fillRecipient', (recipient: RecipientFormData) => {
   cy.log('writing valid taxtId');
   cy.get(`input[name="recipients\[${recipient.position}\]\.taxId"]`).clear().type(recipient.data.taxId);
   
-  if(recipient.data.creditorTaxId) {
+  if(recipient.data.creditorTaxId && Cypress.env('IS_PAYMENT_ENABLED')) {
     cy.log('writing valid creditor taxtId');
     cy.get(`input[name="recipients\[${recipient.position}\]\.creditorTaxId"]`).clear().type(recipient.data.creditorTaxId);
   }
 
-  if(recipient.data.noticeCode) {
+  if(recipient.data.noticeCode && Cypress.env('IS_PAYMENT_ENABLED')) {
+    cy.log('payment enabled', Cypress.env('IS_PAYMENT_ENABLED'));
     cy.log('writing valid notice code');
     cy.get(`input[name="recipients\[${recipient.position}\]\.noticeCode"]`).clear().type(recipient.data.noticeCode);
   }

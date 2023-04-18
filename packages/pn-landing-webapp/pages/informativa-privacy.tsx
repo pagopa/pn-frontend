@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Script from "next/script";
 
-import { ONE_TRUST_PORTAL_CDN } from "@utils/constants";
+import { ONE_TRUST_CDN } from "@utils/constants";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -17,9 +17,9 @@ declare const OneTrust: {
 
 const PrivacyPage: NextPage = () => {
   useEffect(() => {
-    if (ONE_TRUST_PORTAL_CDN) {
+    if (ONE_TRUST_CDN) {
       OneTrust.NoticeApi.Initialized.then(() => {
-        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN as string], false);
+        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_CDN], false);
       });
     }
   }, []);
@@ -27,10 +27,10 @@ const PrivacyPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Piattaforma Notifiche</title>
+        <title>SEND</title>
         <meta
           name="description"
-          content="Informativa Privacy Piattaforma notifiche"
+          content="Informativa Privacy Servizio notifiche digitali"
         />
         <link rel="icon" href="/static/favicon.svg" />
       </Head>

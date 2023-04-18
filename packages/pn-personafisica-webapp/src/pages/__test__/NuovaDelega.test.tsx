@@ -157,7 +157,7 @@ describe('NuovaDelega page', () => {
         cognome: 'Rossi',
         selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
         expirationDate: new Date('01/01/2122'),
-        enteSelect: { name: '', uniqueIdentifier: '' },
+        enti: [],
         verificationCode: 'verification code',
       });
     });

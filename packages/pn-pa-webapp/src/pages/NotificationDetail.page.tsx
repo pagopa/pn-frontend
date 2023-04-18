@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
@@ -35,6 +36,9 @@ import {
   formatEurocentToCurrency,
   TimedMessage,
   useDownloadDocument,
+  NotificationDetailOtherDocument,
+  NotificationRelatedDowntimes,
+  GetNotificationDowntimeEventsParams, NotificationPaidDetail,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -44,13 +48,20 @@ import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
+  getDowntimeEvents,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
+  getSentNotificationOtherDocument,
+  getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import { setCancelledIun } from '../redux/newNotification/reducers';
-import { resetLegalFactState, resetState } from '../redux/notification/reducers';
+import {
+  resetLegalFactState,
+  resetState,
+  clearDowntimeLegalFactData,
+} from '../redux/notification/reducers';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -68,8 +79,17 @@ const NotificationDetail = () => {
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const downtimeEvents = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeEvents
+  );
+  const downtimeLegalFactUrl = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeLegalFactUrl
+  );
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
+  );
+  const otherDocumentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
@@ -82,7 +102,13 @@ const NotificationDetail = () => {
   const recipientsWithAltNoticeCode = recipients.filter(
     (recipient) => recipient.payment?.noticeCodeAlternative
   );
-  const { t } = useTranslation(['common', 'notifiche']);
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
+  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
 
@@ -202,8 +228,14 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const documentDowloadHandler = (documentIndex: string | undefined) => {
-    if (documentIndex) {
+  const documentDowloadHandler = (
+    document: string | NotificationDetailOtherDocument | undefined
+  ) => {
+    if (_.isObject(document)) {
+      const otherDocument = document as NotificationDetailOtherDocument;
+      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+    } else {
+      const documentIndex = document as string;
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
@@ -226,19 +258,18 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+  const hasDocumentsAvailable = !(isCancelled || !notification.documentsAvailable);
 
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
-      return 'Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.';
-    } else if (hasDocumentsAvailable) {
-      return 'I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.';
-    } else {
-      return 'Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.';
+      return t('detail.download-message-cancelled', { ns: 'notifiche' });
     }
+    if (hasDocumentsAvailable) {
+      return t('detail.download-message-available', { ns: 'notifiche' });
+    }
+    return t('detail.download-message-expired', { ns: 'notifiche' });
   }, [isCancelled, hasDocumentsAvailable]);
 
   // PN-1714
@@ -260,8 +291,23 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
 
+  /* function which loads relevant information about donwtimes */
+  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
+    const fetchParams: GetNotificationDowntimeEventsParams = {
+      startDate: fromDate,
+      endDate: toDate,
+    };
+    void dispatch(getDowntimeEvents(fetchParams));
+  }, []);
+
+  const fetchDowntimeLegalFactDocumentDetails = useCallback(
+    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
+    []
+  );
+
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
+  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 
@@ -364,6 +410,9 @@ const NotificationDetail = () => {
     </Dialog>
   );
 
+  const direction = isMobile ? 'column-reverse' : 'row';
+  const spacing = isMobile ? 3 : 0;
+
   return (
     <>
       {hasNotificationSentApiError && (
@@ -377,23 +426,58 @@ const NotificationDetail = () => {
           {isMobile && breadcrumb}
           <Grid
             container
-            direction={isMobile ? 'column-reverse' : 'row'}
-            spacing={isMobile ? 3 : 0}
+            direction={direction}
+            spacing={spacing}
           >
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
+                {notification.paymentHistory && notification.paymentHistory.length > 0 && (
+                  <Paper sx={{p: 3, mb: 3}} className="paperContainer">
+                    <Typography variant="h5">{t("payment.title", { ns: 'notifiche' })}</Typography>
+                    {notification.paymentHistory.length === 1 && (
+                      <Typography>
+                        {t("payment.subtitle-single", { ns: 'notifiche' })}
+                      </Typography>
+                    )}
+                    {notification.paymentHistory.length > 1 && (
+                      <Typography>
+                        {t("payment.subtitle-multiple", { ns: 'notifiche' })}
+                      </Typography>
+                    )}
+                    <NotificationPaidDetail paymentDetailsList={notification.paymentHistory} isSender />
+                  </Paper>
+                )}
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents ?? []}
+                    documents={notification.documents}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
-                    downloadFilesLink="Quando si perfeziona una notifica?"
+                    downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
+                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                  <NotificationDetailDocuments
+                    title={t('detail.other-acts', { ns: 'notifiche' })}
+                    documents={notification.otherDocuments}
+                    clickHandler={documentDowloadHandler}
+                    documentsAvailable={hasDocumentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
+                  />
+                </Paper>
+                <NotificationRelatedDowntimes
+                  downtimeEvents={downtimeEvents}
+                  fetchDowntimeEvents={fetchDowntimeEvents}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                  downtimeLegalFactUrl={downtimeLegalFactUrl}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                />
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>

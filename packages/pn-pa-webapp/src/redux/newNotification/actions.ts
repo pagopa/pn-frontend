@@ -105,7 +105,7 @@ const getPaymentDocumentsToUpload = (items: {
 }): Array<UploadDocumentParams> =>
   Object.values(items).reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
-    if (!item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
+    if (item.pagoPaForm && !item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
       arr.push(createPayloadToUpload(item.pagoPaForm));
     }
     if (item.f24flatRate && !item.f24flatRate.ref.key && !item.f24flatRate.ref.versionToken) {
@@ -134,7 +134,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
       const updatedItems = _.cloneDeep(items);
       for (const item of Object.values(updatedItems)) {
         /* eslint-disable functional/immutable-data */
-        if (documentsUploaded[item.pagoPaForm.id]) {
+        if (item.pagoPaForm && documentsUploaded[item.pagoPaForm.id]) {
           item.pagoPaForm.ref.key = documentsUploaded[item.pagoPaForm.id].key;
           item.pagoPaForm.ref.versionToken = documentsUploaded[item.pagoPaForm.id].versionToken;
         }

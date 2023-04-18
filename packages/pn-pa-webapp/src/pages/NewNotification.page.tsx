@@ -2,8 +2,9 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -12,6 +13,8 @@ import { createNewNotification } from '../redux/newNotification/actions';
 import { setSenderInfos, resetState } from '../redux/newNotification/reducers';
 import * as routes from '../navigation/routes.const';
 import { TrackEventType } from '../utils/events';
+import { IS_PAYMENT_ENABLED } from '../utils/constants';
+
 import { trackEventByType } from '../utils/mixpanel';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
@@ -32,11 +35,7 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
-      {t('menu.api-key')}
-      {/*
-        PN-2028
-        <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>.
-      */}
+      <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>
     </Fragment>
   );
 };
@@ -57,16 +56,22 @@ const NewNotification = () => {
     t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
     t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
     t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
-    t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }),
   ];
-  const childRef = useRef<{confirm: () => void}>();
+
+  const childRef = useRef<{ confirm: () => void }>();
 
   const eventStep = [
     TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
     TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
     TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
-    TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES,
   ];
+
+  if (IS_PAYMENT_ENABLED) {
+    // eslint-disable-next-line functional/immutable-data
+    eventStep.push(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES);
+    // eslint-disable-next-line functional/immutable-data
+    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
+  }
 
   const stepType = ['preliminary info', 'recipient', 'attachments', 'payment modes'];
 
@@ -88,6 +93,7 @@ const NewNotification = () => {
 
   const goToNextStep = () => {
     trackEventByType(eventStep[activeStep]);
+
     setActiveStep((previousStep) => previousStep + 1);
   };
 
@@ -104,8 +110,7 @@ const NewNotification = () => {
   };
 
   const createNotification = () => {
-    // if it is last step, save notification
-    if (activeStep === 3 && isCompleted) {
+    if (activeStep === steps.length - 1 && isCompleted) {
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1));
@@ -127,7 +132,7 @@ const NewNotification = () => {
 
   useEffect(() => () => void dispatch(resetState()), []);
 
-  if (activeStep === 4) {
+  if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
 
@@ -158,6 +163,14 @@ const NewNotification = () => {
             <Typography sx={{ marginTop: '10px' }} variant="body2">
               {t('required-fields')}
             </Typography>
+            {!IS_PAYMENT_ENABLED && (
+              <Alert data-testid="alert" sx={{ mt: 4 }} severity={'warning'}>
+                <Typography component="span" variant="body1">
+                  {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}{' '}
+                </Typography>
+              </Alert>
+            )}
+
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
               {steps.map((label, index) => (
                 <Step
@@ -169,8 +182,9 @@ const NewNotification = () => {
                 </Step>
               ))}
             </Stepper>
+
             {activeStep === 0 && (
-              <PreliminaryInformations notification={notification} onConfirm={goToNextStep}/>
+              <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
             )}
             {activeStep === 1 && (
               <Recipient
@@ -183,8 +197,9 @@ const NewNotification = () => {
             )}
             {activeStep === 2 && (
               <Attachments
-                onConfirm={goToNextStep}
+                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : createNotification}
                 onPreviousStep={goToPreviousStep}
+                isCompleted={isCompleted}
                 attachmentsData={notification.documents}
                 ref={childRef}
               />

@@ -3,7 +3,7 @@
   "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
   "new-notification-button": "Invia una nuova notifica",
   "filters": {
-    "fiscal-code": "Codice Fiscale",
+    "fiscal-code-tax-code": "Codice Fiscale o Partita Iva",
     "iun": "Codice IUN",
     "data_da": "Da",
     "data_da-aria-label": "Data inizio ricerca",
@@ -17,7 +17,14 @@
       "fiscal-code": "Inserisci il codice per intero"
     }
   },
+  "payment": {
+    "title": "Pagamenti",
+    "subtitle-single": "Il destinatario ha effettuato un pagamento. Ecco i dettagli:",
+    "subtitle-multiple": "Questi destinatari hanno effettuato un pagamento:",
+    "show-more": "Mostra dettagli"
+  },
   "table": {
+    "title": "Tabella delle notifiche",
     "date": "Data",
     "recipient": "Destinatario",
     "subject": "Oggetto",
@@ -41,6 +48,7 @@
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
     "table-aria-label": "Dettaglio notifica",
+    "payment-table-aria-label": "Dettaglio pagamenti",
     "sender": "Mittente",
     "recipient": "Destinatario",
     "recipients": "Destinatari",
@@ -61,6 +69,11 @@
       "message": "Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente."
     },
     "acts": "Documenti allegati",
+    "download-message-cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
+    "download-message-available": "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.",
+    "download-message-expired": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.",
+    "download-files-link": "Quando si perfeziona una notifica?",
+    "other-acts": "Altri documenti",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
@@ -68,78 +81,114 @@
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
     "timeline": {
-      "schedule-analog-workflow": "Invio per via cartacea in preparazione",
-      "schedule-analog-workflow-description": "L'invio della notifica per via cartacea a {{name}} è in preparazione.",
-      "schedule-digital-workflow": "Invio per via digitale in preparazione",
-      "schedule-digital-workflow-description": "L'invio della notifica per via digitale a {{name}} è in preparazione.",
+      "schedule-digital-workflow": "Ulteriore invio per via digitale",
+      "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
+      "schedule-digital-workflow-description-multirecipient": "È iniziato un ulteriore tentativo di invio della notifica a {{name}} {{taxId}} per via digitale.",
       "send-courtesy-message": "Invio del messaggio di cortesia",
-      "send-courtesy-message-description": "È in corso l'invio del messaggio di cortesia a {{name}} tramite {{type}}",
+      "send-courtesy-message-description": "È in corso l'invio del messaggio di cortesia tramite {{type}}.",
+      "send-courtesy-message-description-multirecipient": "È in corso l'invio del messaggio di cortesia a {{name}} {{taxId}} tramite {{type}}.",
       "send-digital-domicile": "Invio via PEC",
-      "send-digital-domicile-description": "È in corso l'invio della notifica a {{name}} all'indirizzo PEC {{address}}",
-      "send-digital-domicile-error": "Invio via PEC fallito",
-      "send-digital-domicile-error-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} non è riuscito.",
-      "send-digital-domicile-success": "Invio via PEC riuscito",
-      "send-digital-domicile-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è riuscito.",
-      "send-digital-error": "Invio per via digitale non riuscito",
-      "send-digital-error-description": "Il tentativo di invio della notifica per via digitale a {{name}} non è riuscito.",
-      "send-digital-success": "Invio per via digitale riuscito",
-      "send-digital-success-description": "Il tentativo di invio della notifica per via digitale a {{name}} è riuscito.",
+      "send-digital-domicile-description": "È in corso l'invio della notifica all'indirizzo PEC {{address}}.",
+      "send-digital-domicile-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}}.",
+      "send-digital-error": "Invio via PEC fallito",
+      "send-digital-error-description": "L'invio della notifica all'indirizzo PEC {{address}} è fallito perché la casella è satura, non valida o inattiva.",
+      "send-digital-error-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è fallito perché la casella è satura, non valida o inattiva.",
+      "send-digital-success": "Invio via PEC riuscito",
+      "send-digital-success-description": "L'invio della notifica all'indirizzo PEC {{address}} è riuscito.",
+      "send-digital-success-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è riuscito.",
       "send-simple-registered-letter": "Invio via raccomandata semplice",
-      "send-simple-registered-letter-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata semplice.",
+      "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",
+      "send-simple-registered-letter-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-analog-domicile-890": "Invio via raccomandata 890",
-      "send-analog-domicile-890-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata 890.",
+      "send-analog-domicile-890-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata 890.",
+      "send-analog-domicile-890-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata 890.",
       "send-analog-domicile-ar": "Invio via raccomandata A/R",
-      "send-analog-domicile-ar-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata A/R.",
-      "send-paper-feedback": "Aggiornamento stato raccomandata",
-      "send-paper-feedback-description": "Si allega un aggiornamento dello stato della raccomandata.",
-      "digital-failure-workflow": "Invio per via digitale fallito",
-      "digital-failure-workflow-description": "L'invio per via digitale della notifica a {{name}} è fallito.",
+      "send-analog-domicile-ar-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata A/R.",
+      "send-analog-domicile-ar-description-multirecipient": "È iniziato l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata A/R.",
       "send-digital-progress-error": "Invio via PEC non preso in carico",
-      "send-digital-progress-error-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} non è stato preso in carico.",
+      "send-digital-progress-error-description": "L'invio della notifica all'indirizzo PEC {{address}} non è stato preso in carico.",
+      "send-digital-progress-error-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} non è stato preso in carico.",
       "send-digital-progress-success": "Invio via PEC preso in carico",
-      "send-digital-progress-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è stato preso in carico.",
+      "send-digital-progress-success-description": "L'invio della notifica all'indirizzo PEC {{address}} è stato preso in carico.",
+      "send-digital-progress-success-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è stato preso in carico.",
+      "send-analog-progress": "Aggiornamento sull'invio cartaceo",
+      "send-analog-progress-description": "C'è un aggiornamento sull'invio cartaceo.",
+      "send-analog-progress-description-multirecipient": "C'è un aggiornamento sull'invio cartaceo.",
+      "send-analog-error": "Invio per via cartacea non andato a buon fine",
+      "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea non è andato a buon fine.",
+      "send-analog-error-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} non è andato a buon fine.",
+      "send-analog-success": "Invio per via cartacea andato a buon fine",
+      "send-analog-success-description": "Il tentativo di invio della notifica per via cartacea è andato a buon fine.",
+      "send-analog-success-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} è andato a buon fine.",
+      "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
         "digital-delivery-failure": "mancato recapito digitale",
-        "analog-delivery": "conformità",
         "recipient-access": "avvenuto accesso",
         "pec-receipt-accepted": "di accettazione PEC",
         "pec-receipt-not-accepted": "di mancata accettazione PEC",
         "pec-receipt-delivered": "di consegna PEC",
-        "pec-receipt-not-delivered": "di mancata consegna PEC"
+        "pec-receipt-not-delivered": "di mancata consegna PEC",
+        "paper-receipt-accepted": "di accettazione raccomandata",
+        "paper-receipt-delivered": "di consegna raccomandata",
+        "paper-receipt-not-delivered": "di mancata consegna raccomandata"
       }
+    },
+    "downtimes": {
+      "title": "DISSERVIZI",
+      "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
+      "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
+      "datePrefix": "il ",
+      "legalFactDownload": "Attestazione di malfunzionamento",
+      "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
     }
   },
   "status": {
+    "recipient": "destinatario",
+    "delegate": "delegato {{name}}",
+    "deliveryMode": {
+      "analog": "analogico",
+      "digital": "digitale"
+    },
     "all": "Tutti gli stati",
     "delivered": "Consegnata",
-    "delivered-tooltip": "La notifica è stata consegnata",
-    "delivered-description": "La notifica è stata consegnata",
+    "delivered-multirecipient": "Consegnata",
+    "delivered-tooltip": "L'invio della notifica è terminato",
+    "delivered-tooltip-multirecipient": "L'invio della notifica è terminato",
+    "delivered-description": "L'invio della notifica è terminato.",
+    "delivered-description-with-delivery-mode": "L'invio della notifica è terminato in quanto almeno un recapito {{deliveryMode}} è valido.",
+    "delivered-description-multirecipient": "L'invio della notifica è terminato in quanto un recapito di almeno un destinatario è valido.",
     "delivering": "Invio in corso",
     "delivering-tooltip": "L'invio della notifica è in corso",
-    "delivering-description": "L'invio della notifica è in corso",
+    "delivering-description": "L'invio della notifica è in corso.",
     "unreachable": "Destinatario irreperibile",
+    "unreachable-multirecipient": "Destinatari irreperibili",
     "unreachable-tooltip": "Il destinatario non è reperibile",
-    "unreachable-description": "Il destinatario non è reperibile",
+    "unreachable-tooltip-multirecipient": "Nessun destinatario è reperibile",
+    "unreachable-description": "Il destinatario non è reperibile.",
+    "unreachable-description-multirecipient": "Nessun destinatario è reperibile.",
     "paid": "Pagata",
     "paid-tooltip": "Il destinatario ha pagato i costi della notifica",
     "paid-description": "Il destinatario ha pagato i costi della notifica",
     "accepted": "Depositata",
     "accepted-tooltip": "L'ente ha depositato la notifica",
-    "accepted-description": "L'ente ha depositato la notifica",
+    "accepted-description": "L'ente ha depositato la notifica in piattaforma.",
     "effective-date": "Perfezionata per decorrenza termini",
+    "effective-date-multirecipient": "Perfezionata per decorrenza termini",
     "effective-date-tooltip": "Il destinatario non ha letto la notifica",
-    "effective-date-description": "Il destinatario non ha letto la notifica entro il termine stabilito",
-    "viewed": "Perfezionata per visione",
-    "viewed-tooltip": "Il destinatario ha letto la notifica",
-    "viewed-description": "Il destinatario ha letto la notifica entro il termine stabilito",
-    "viewed-after-deadline": "Visualizzata",
-    "viewed-after-deadline-tooltip": "Il destinatario ha visualizzato la notifica",
-    "viewed-after-deadline-description": "Il destinatario ha visualizzato la notifica",
+    "effective-date-tooltip-multirecipient": "La notifica non è stata letta",
+    "effective-date-description": "Il destinatario non ha letto la notifica entro il termine stabilito.",
+    "effective-date-description-multirecipient": "La notifica non è stata letta entro il termine stabilito.",
+    "viewed": "Avvenuto accesso",
+    "viewed-multirecipient": "Avvenuto accesso",
+    "viewed-tooltip": "Il {{subject}} ha letto la notifica",
+    "viewed-tooltip-multirecipient": "Almeno un destinatario ha letto la notifica",
+    "viewed-description": "Il {{subject}} ha letto la notifica.",
+    "viewed-description-multirecipient": "Almeno un destinatario ha letto la notifica.",
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
-    "canceled-description": "L'ente ha annullato l'invio della notifica"
+    "canceled-description": "L'ente ha annullato l'invio della notifica."
   },
   "new-notification": {
     "title": "Invia una nuova notifica",
@@ -152,6 +201,7 @@
     },
     "back-to-notifications": "Torna alle notifiche",
     "drag-doc": "Trascina qui il documento",
+    "warning-payment-disabled": "Al momento le notifiche che prevedono un pagamento si possono inviare solo tramite API Key.",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "Non siamo riusciti a recuperare i dati che servono per poter creare una nuova notifica.",
@@ -160,7 +210,7 @@
         "subject": "Oggetto della notifica",
         "abstract": "Descrizione",
         "group": "Gruppo",
-        "taxonomy-id": "Codice tassonometrico",
+        "taxonomy-id": "Codice tassonomico",
         "comunication-type": "Modalità di invio",
         "registered-letter-890": "Modello 890",
         "simple-registered-letter": "Raccomandata A/R",
@@ -177,7 +227,6 @@
         "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
-        "too-long-denomination-error": "Inserisci max 80 caratteri",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
         "legal-entity": "Soggetto giuridico",
         "physical-person": "Persona fisica",
@@ -201,7 +250,8 @@
         "foreign-state": "Stato",
         "at": "Presso",
         "address-details": "Note aggiuntive (scala, piano)",
-        "add-recipient": "Aggiungi un destinatario"
+        "add-recipient": "Aggiungi un destinatario",
+        "remove-recipient": "Rimuovi destinatario"
       },
       "attachments": {
         "title": "Allegati",
@@ -213,7 +263,9 @@
         "doc-name": "Nome del documento",
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
-        "back-to-recipient": "Torna a Destinatario"
+        "back-to-recipient": "Torna a Destinatario",
+        "remove-attachment": "Elimina allegato",
+        "remove-document": "Rimuovi documento"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
@@ -231,6 +283,20 @@
         "title": "La notifica è stata correttamente creata",
         "message": "Trovi gli aggiornamenti sul suo stato nella sezione \"Notifiche\"",
         "go-to-notifications": "Vai alle Notifiche"
+      }
+    },
+    "errors": {
+      "fiscal_code": {
+        "title": "Codice fiscale non valido",
+        "message": "Il codice fiscale per uno o più destinatari non è valido"
+      },
+      "invalid_parameter": {
+        "title": "Dati non validi",
+        "message": "Uno o più dei dati inseriti non sono validi"
+      },
+      "invalid_parameter_protocol_number_duplicate": {
+        "title": "Dati non validi",
+        "message": "Il numero di protocollo inserito è già esistente"
       }
     }
   }

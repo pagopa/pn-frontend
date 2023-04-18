@@ -3,17 +3,18 @@ import { dataRegex, RecipientType } from '@pagopa-pn/pn-commons';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { getDuplicateValuesByKeys } from '../../../utils/notification.utility';
 
-export function denominationTotalLength(
-  value: string | undefined,
-  recipientType: RecipientType,
+export function denominationLengthAndCharacters(
+  firstName: string | undefined,
   lastName: string
-): string {
-  const denomination = (value || '') + (lastName ? ' ' + lastName : '');
+): { messageKey: string; data?: { [key: string]: number | string } } | undefined {
+  const denomination = (firstName || '') + (lastName ? ' ' + lastName : '');
   if (dataRegex.denomination.test(denomination)) {
-    return '';
+    return undefined;
   }
-  // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-  return `too-long-denomination-error-${recipientType || RecipientType.PF}`;
+  if (denomination.length > 80) {
+    return { messageKey: 'too-long-field-error', data: { maxLength: 80 } };
+  }
+  return { messageKey: `forbidden-characters-denomination-error` };
 }
 
 export function taxIdDependingOnRecipientType(

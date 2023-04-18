@@ -1,6 +1,10 @@
-import Link from "next/link";
-
-import { SvgIcon, Typography } from "@mui/material";
+import {
+  Link,
+  List,
+  ListItem,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
 
 import {
   FooterLinksType,
@@ -9,10 +13,6 @@ import {
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL, MANUALE_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -24,7 +24,6 @@ import {
   EcologyIcon,
   FireworksIcon,
   HourglassIcon,
-  IOIcon,
   MessageIcon,
   NotificationIcon,
   PECIcon,
@@ -35,6 +34,23 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import {
+  IAppData,
+  IInfoblockData,
+  ILinkData,
+  INavigationBarProps,
+  IShowcaseData,
+} from "model";
+
+import {
+  IMAGES_PATH,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PN_URL,
+  MANUALE_URL,
+  PARTNER_AND_INTERMEDIARIES_PATH
+} from "@utils/constants";
+
 
 const assistanceLink = {
   label: "Assistenza",
@@ -50,16 +66,19 @@ const navigation: INavigationBarProps = {
   title: "Piattaforma Notifiche",
   chip: "Beta",
   pf: "Cittadini",
-  pa: "Enti"
+  pa: "Enti",
+  faq: 'FAQ',
 };
+
+const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
 
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Leggi le tue notifiche",
-      title: "Leggi le tue notifiche",
-      onClick: onReadClick,
-    }
+    label: "Leggi le tue notifiche",
+    title: "Leggi le tue notifiche",
+    onClick: onReadClick,
+  }
   : undefined;
 
 /** Hero mocked data */
@@ -72,6 +91,25 @@ const paHero: HeroProps = {
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
   background: `${IMAGES_PATH}/hero-background.png`,
+  ctaPrimary: {
+    label: "Scopri come aderire",
+    title: "Scopri come aderire",
+    /* Carlotta Dimatteo - workaround per gestire un anchor interno alla pagina richiesto dal team di comunicazione il 16/02/2023 */
+    onClick: function onClick() {
+      var loc = document.location.toString().split('#')[0];
+      document.location = loc + '#start-integration';
+      return false;
+    }
+  },
+  ctaSecondary: {
+    label: "Accedi",
+    title: "Accedi",
+    /* Carlotta Dimatteo - aggiunta della CTA richiesta dal team di comunicazione il 17/02/2023 */
+    onClick: function onClick() {
+      window.open(selfCareUrl, '_blank');
+      return false;
+    }
+  }
 };
 
 const pfHero: HeroProps = {
@@ -160,7 +198,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       title: "E il destinatario?",
       content: (
         <>
-          <Typography variant="body2">
+          <Typography variant="body2" >
             Il destinatario accede alla piattaforma tramite SPID o CIE, dove può
             visionare e scaricare l’atto notificato. Grazie all’integrazione con
             pagoPA, può anche pagare contestualmente quanto dovuto. Se ha
@@ -168,7 +206,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             app.
           </Typography>
           <Typography variant="body2">
-            Come l’ente, anche il desinatario ha accesso alla cronologia degli
+            Come l’ente, anche il destinatario ha accesso alla cronologia degli
             stati della notifica e alle attestazioni opponibili a terzi che ne
             danno prova.
           </Typography>
@@ -183,39 +221,122 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Presto disponibile per gli enti",
+      title: "Scopri come aderire",
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
-            numero ristretto di enti pilota.
+            La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a Piattaforma Notifiche, prevede le seguenti fasi:
           </Typography>
+
+          <Typography variant="h6">01. Scegli come integrarti</Typography>
+
           <Typography variant="body2">
-            Quando sarà operativa, anche il tuo ente potrà fare richiesta di
-            adesione e adottarla per digitalizzare il processo di notificazione.
+            Ogni ente può decidere se integrarsi alla piattaforma direttamente oppure tramite un fornitore.
+            Nel secondo caso, è disponibile <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+              <a target="_blank" rel="noopener noreferrer">la lista dei Partner e Intermediari tecnologici</a>
+            </Link> che stanno implementando le attività di integrazione alla piattaforma
+            e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici.
           </Typography>
+          <Typography variant="caption">
+            I soggetti che intendono integrarsi alla Piattaforma Notifiche in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
+            la procedura ed essere inseriti nella lista inviando una mail all’indirizzo account@pagopa.it.
+          </Typography>
+          <Typography variant="h6">02. Sottoscrivi l’accordo di adesione</Typography>
           <Typography variant="body2">
-            Nel frattempo, gli enti possono consultare il{" "}
-            <Link href={MANUALE_URL}>
-              manuale operativo
-            </Link>
-            {" "}(aggiornato al 28/06/2022),{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              le API b2b per le pubbliche amministrazioni
-            </Link>
-            {" "}e{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              le API b2b per l’avanzamento delle notifiche
-            </Link>
-            .
+            Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
+            <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
+              <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
+            </Link>{" "}e seguire i passaggi descritti in{" "}
+            <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
+              <a target="_blank" rel="noopener noreferrer">questa guida.</a>
+            </Link><br></br>
+            Una volta sottoscritto l’accordo in digitale,
+            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.
+            Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati ove richiesto:
           </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={"https://docs.pagopa.it/allegato-1bis-al-contratto-di-adesione/"}>
+                  <a target="_blank" rel="noopener noreferrer">Allegato 1-Bis</a>
+                </Link>
+                {" "}al Contratto di Adesione
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={"/static/documents/Modulo preventivo di fornitura.xlsx"}>
+                  Modulo di Profilazione
+                </Link>
+                {" "}necessario per l’avvio in esercizio
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={"/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"}>
+                  Modulo Commessa
+                </Link>
+                {" "}necessario per la fatturazione
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={"https://docs.pagopa.it/sla-di-servizio/"}>
+                  <a target="_blank" rel="noopener noreferrer">
+                    SLA di servizio
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+          </List>
+          <Typography variant="h6">03. Avvia l’integrazione tecnologica</Typography>
+          <Typography variant="body2">
+            Di seguito sono consultabili i materiali necessari per integrare i sistemi dell’ente alla piattaforma:
+          </Typography>
+
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  <a target="_blank" rel="noopener noreferrer">
+                    manuale operativo
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-bundle.yaml">
+                  <a target="_blank" rel="noopener noreferrer">
+                    API b2b per le pubbliche amministrazioni
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-bundle.yaml">
+                  <a target="_blank" rel="noopener noreferrer">
+                    API b2b per l’avanzamento delle notifiche
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+          </List>
+          <Typography variant="body2">Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
+            <Link href={"https://docs.pagopa.it/faq-enti/"}>
+              <a target="_blank" rel="noopener noreferrer">
+                qui
+              </a>
+            </Link> le principali FAQ. </Typography>
         </>
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: false
     },
   },
 ];
@@ -295,26 +416,6 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   },
 ];
 
-const coInfoBlocks: Array<IInfoblockData> = [
-  {
-    name: "infoblock 1",
-    data: {
-      title: "",
-      inverse: false,
-      image: "",
-      imageShadow: false,
-    },
-  },
-  {
-    name: "infoblock 2",
-    data: {
-      title: "",
-      inverse: true,
-      image: "",
-      imageShadow: false,
-    },
-  },
-];
 /* ************************************** */
 
 /** Showcase mocked data */
@@ -437,35 +538,6 @@ const pfShowcases: Array<IShowcaseData> = [
     },
   },
 ];
-
-const coShowcases: Array<IShowcaseData> = [
-  {
-    name: "",
-    data: {
-      title: "",
-      items: [
-        {
-          icon: <PECIcon />,
-          title: "",
-          subtitle: `
-            `,
-        },
-        {
-          icon: <IOIcon />,
-          title: "",
-          subtitle: `
-          `,
-        },
-        {
-          icon: <MessageIcon />,
-          title: "",
-          subtitle: `
-          `,
-        },
-      ],
-    },
-  },
-];
 /* ************************************** */
 
 /** Walkthrough mocked data */
@@ -543,19 +615,6 @@ const pfWalkthrough: WalkthroughProps = {
   ],
 };
 
-const coWalkthrough: WalkthroughProps = {
-  title: "",
-  items: [
-    {
-      title: "",
-      subtitle: "",
-    },
-    {
-      title: "",
-      subtitle: "",
-    },
-  ],
-};
 /* ************************************** */
 
 /** HorizontalNav mocked data */
@@ -620,28 +679,6 @@ const pfHorizontalNav = {
 };
 
 // const pfHorizontalNav: HorizontalNavProps = {
-const coHorizontalNav = {
-  sections: [
-    {
-      title: "",
-      subtitle: "",
-      cta: {
-        label: "",
-        title: "",
-        href: "",
-      },
-    },
-    {
-      title: "",
-      subtitle: "",
-      cta: {
-        label: "",
-        title: "",
-        href: "",
-      },
-    },
-  ],
-};
 /* ************************************** */
 
 /**
@@ -742,9 +779,9 @@ const preLoginLinks: PreLoginFooterLinksType = {
         linkType: "internal",
       },
       {
-        label: "Modello 321",
+        label: "Modello 231",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
-        ariaLabel: "Vai al link: Modello 321",
+        ariaLabel: "Vai al link: Modello 231",
         linkType: "internal",
       },
     ],
@@ -804,18 +841,15 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
-
 /** Application Data Mock */
 export const itAppData: IAppData = {
   common: {
     navigation,
-    alert:
-      "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
   },
   pa: {
     hero: paHero,
@@ -830,12 +864,5 @@ export const itAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };

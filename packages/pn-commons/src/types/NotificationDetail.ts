@@ -24,29 +24,49 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
+  // only fe
+  otherDocuments?: Array<NotificationDetailDocument>;
+  paymentHistory?: Array<PaymentHistory>;
 }
+
+export type PaymentHistory = PaidDetails & {
+  recipientDenomination: string;
+  recipientTaxId: string;
+};
+
+export type NotificationDetailTimelineDetails =
+  | BaseDetails
+  | AarDetails
+  | ViewedDetails
+  | AnalogWorkflowDetails
+  | DigitalWorkflowDetails
+  | AddressInfoDetails
+  | PublicRegistryCallDetails
+  | PublicRegistryResponseDetails
+  | RequestRefusedDetails
+  | ScheduleDigitalWorkflowDetails
+  | SendCourtesyMessageDetails
+  | SendDigitalDetails
+  | SendPaperDetails
+  | PaidDetails
+  // PN-1647
+  | NotHandledDetails;
 
 export interface INotificationDetailTimeline {
   elementId: string;
   timestamp: string;
   legalFactsIds?: Array<LegalFactId>;
   category: TimelineCategory;
-  details:
-    | BaseDetails
-    | AnalogWorkflowDetails
-    | DigitalWorkflowDetails
-    | AddressInfoDetails
-    | PublicRegistryCallDetails
-    | PublicRegistryResponseDetails
-    | RequestRefusedDetails
-    | ScheduleDigitalWorkflowDetails
-    | SendCourtesyMessageDetails
-    | SendDigitalDetails
-    | SendPaperDetails
-    // PN-1647
-    | NotHandledDetails;
-    // only fe
+  details: NotificationDetailTimelineDetails;
+  // only fe
   hidden?: boolean;
+}
+
+export enum ResponseStatus {
+  OK = 'OK',
+  PROGRESS = 'PROGRESS',
+  PROGRESS_WITH_RETRY = 'PROGRESS_WITH_RETRY',
+  KO = 'KO',
 }
 
 export interface SendPaperDetails extends BaseDetails {
@@ -56,10 +76,38 @@ export interface SendPaperDetails extends BaseDetails {
   investigation: boolean;
   newAddress?: PhysicalAddress;
   errors?: Array<string>;
+  productType?: string;
+  analogCost?: number;
+  responseStatus?: ResponseStatus;
+  sendingReceipts?: Array<{
+    id: string;
+    system: string;
+  }>;
+  requestTimelineId: string;
 }
 
 interface BaseDetails {
   recIndex?: number;
+}
+
+interface DelegateInfo {
+  internalId: string;
+  taxId: string;
+  operatorUuid: string;
+  mandateId: string;
+  denomination: string;
+  delegateType: RecipientType;
+}
+
+export interface ViewedDetails extends BaseDetails {
+  delegateInfo?: DelegateInfo;
+}
+
+export interface AarDetails {
+  recIndex?: number;
+  errors?: Array<string>;
+  generatedAarUrl?: string;
+  numberOfPages?: number;
 }
 
 export interface AnalogWorkflowDetails extends BaseDetails {
@@ -107,6 +155,7 @@ interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
 export interface SendCourtesyMessageDetails extends BaseDetails {
   digitalAddress: DigitalAddress;
   sendDate: string;
+  ioSendMessageResult?: AppIoCourtesyMessageEventType;
 }
 
 export interface SendDigitalDetails extends BaseDetails {
@@ -121,6 +170,16 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
   errors?: Array<string>;
   eventCode?: string;
+}
+
+export interface PaidDetails extends BaseDetails {
+  paymentSourceChannel: string;
+  recipientType: RecipientType;
+  amount?: number;
+  creditorTaxId?: string;
+  idF24?: string;
+  noticeCode?: string;
+  paymentObject?: string;
 }
 
 // PN-1647
@@ -150,6 +209,9 @@ export interface NotificationDetailDocument {
   title?: string;
   requiresAck?: boolean;
   docIdx?: string;
+  documentId?: string;
+  documentType?: string;
+  recIndex?: number;
 }
 
 export enum NotificationFeePolicy {
@@ -161,27 +223,27 @@ export interface NotificationDetailPayment {
   noticeCode?: string;
   noticeCodeAlternative?: string;
   creditorTaxId: string;
-  pagoPaForm: NotificationDetailDocument;
+  pagoPaForm?: NotificationDetailDocument;
   f24flatRate?: NotificationDetailDocument;
   f24standard?: NotificationDetailDocument;
 }
 
 export enum PaymentStatus {
-  REQUIRED = "REQUIRED",
-  SUCCEEDED = "SUCCEEDED",
-  INPROGRESS = "IN_PROGRESS",
-  FAILED = "FAILURE"
+  REQUIRED = 'REQUIRED',
+  SUCCEEDED = 'SUCCEEDED',
+  INPROGRESS = 'IN_PROGRESS',
+  FAILED = 'FAILURE',
 }
 
 export enum PaymentInfoDetail {
-  PAYMENT_UNAVAILABLE = "PAYMENT_UNAVAILABLE",    // Technical Error
-  PAYMENT_UNKNOWN = "PAYMENT_UNKNOWN",            // Payment data error
-  DOMAIN_UNKNOWN = "DOMAIN_UNKNOWN",              // Creditor institution error
-  PAYMENT_ONGOING = "PAYMENT_ONGOING",            // Payment on going
-  PAYMENT_EXPIRED = "PAYMENT_EXPIRED",            // Payment expired
-  PAYMENT_CANCELED = "PAYMENT_CANCELED",          // Payment canceled
-  PAYMENT_DUPLICATED = "PAYMENT_DUPLICATED",      // Payment duplicated
-  GENERIC_ERROR = "GENERIC_ERROR"                 // Generic error
+  PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
+  PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
+  DOMAIN_UNKNOWN = 'DOMAIN_UNKNOWN', // Creditor institution error
+  PAYMENT_ONGOING = 'PAYMENT_ONGOING', // Payment on going
+  PAYMENT_EXPIRED = 'PAYMENT_EXPIRED', // Payment expired
+  PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
+  PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
+  GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
 }
 
 export interface PaymentInfo {
@@ -202,18 +264,25 @@ export interface PaymentNotice {
 }
 
 export enum PaymentAttachmentSName {
-  PAGOPA = "PAGOPA",
-  F24 = "F24"
+  PAGOPA = 'PAGOPA',
+  F24 = 'F24',
 }
 
 export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
+export enum NotificationDeliveryMode {
+  ANALOG = 'analog',
+  DIGITAL = 'digital',
+}
 export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
   relatedTimelineElements: Array<string>;
   // only fe
   steps?: Array<INotificationDetailTimeline>;
+  recipient?: string;
+  // this is useful for the DELIVERED status only
+  deliveryMode?: NotificationDeliveryMode;
 }
 
 export enum TimelineCategory {
@@ -225,7 +294,6 @@ export enum TimelineCategory {
   SCHEDULE_ANALOG_WORKFLOW = 'SCHEDULE_ANALOG_WORKFLOW',
   SCHEDULE_DIGITAL_WORKFLOW = 'SCHEDULE_DIGITAL_WORKFLOW',
   SEND_DIGITAL_DOMICILE = 'SEND_DIGITAL_DOMICILE',
-  SEND_DIGITAL_DOMICILE_FEEDBACK = 'SEND_DIGITAL_DOMICILE_FEEDBACK',
   SEND_DIGITAL_PROGRESS = 'SEND_DIGITAL_PROGRESS',
   SEND_DIGITAL_FEEDBACK = 'SEND_DIGITAL_FEEDBACK',
   REFINEMENT = 'REFINEMENT',
@@ -237,12 +305,16 @@ export enum TimelineCategory {
   SEND_SIMPLE_REGISTERED_LETTER = 'SEND_SIMPLE_REGISTERED_LETTER',
   NOTIFICATION_VIEWED = 'NOTIFICATION_VIEWED',
   SEND_ANALOG_DOMICILE = 'SEND_ANALOG_DOMICILE',
-  SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
   REQUEST_REFUSED = 'REQUEST_REFUSED',
   // PN-1647
-  NOT_HANDLED = 'NOT_HANDLED'
+  NOT_HANDLED = 'NOT_HANDLED',
+  PREPARE_SIMPLE_REGISTERED_LETTER = 'PREPARE_SIMPLE_REGISTERED_LETTER',
+  PREPARE_ANALOG_DOMICILE = 'PREPARE_ANALOG_DOMICILE',
+  SEND_ANALOG_PROGRESS = 'SEND_ANALOG_PROGRESS',
+  SEND_ANALOG_FEEDBACK = 'SEND_ANALOG_FEEDBACK',
+  AAR_GENERATION = 'AAR_GENERATION',
 }
 
 interface DigitalAddress {
@@ -264,7 +336,8 @@ interface PhysicalAddress {
 export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
-  APPIO = 'APPIO' // PN-2068
+  APPIO = 'APPIO', // PN-2068
+  SMS = 'SMS', // possible type for courtesy message
 }
 
 export enum RecipientType {
@@ -277,6 +350,16 @@ enum DeliveryMode {
   ANALOG = 'ANALOG ',
 }
 
+// PN-4484 - only the messages of the SENT_COURTESY kind are meaningful to the user
+export enum AppIoCourtesyMessageEventType {
+  // message effettively sent
+  SENT_COURTESY = 'SENT_COURTESY',    
+  // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN" 
+  SENT_OPTIN = 'SENT_OPTIN',
+  // another event related to "OPTIN" internal messages
+  NOT_SENT_OPTIN_ALREADY_SENT = 'NOT_SENT_OPTIN_ALREADY_SENT',
+}
+
 export enum AddressSource {
   PLATFORM = 'PLATFORM',
   SPECIAL = 'SPECIAL',
@@ -284,6 +367,7 @@ export enum AddressSource {
 }
 
 export enum LegalFactType {
+  AAR = 'AAR',
   SENDER_ACK = 'SENDER_ACK',
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
@@ -294,6 +378,11 @@ export enum LegalFactType {
 export interface LegalFactId {
   key: string;
   category: LegalFactType;
+}
+
+export interface NotificationDetailOtherDocument {
+  documentId: string;
+  documentType: string;
 }
 
 export enum PhysicalCommunicationType {
@@ -307,6 +396,14 @@ export interface NotificationDetailTableRow {
   value: ReactNode;
 }
 
-export type DigitalDetails = DigitalWorkflowDetails | PublicRegistryResponseDetails | ScheduleDigitalWorkflowDetails | SendCourtesyMessageDetails | SendDigitalDetails;
+export type DigitalDetails =
+  | DigitalWorkflowDetails
+  | PublicRegistryResponseDetails
+  | ScheduleDigitalWorkflowDetails
+  | SendCourtesyMessageDetails
+  | SendDigitalDetails;
 
-export type AnalogDetails = SendPaperDetails | AnalogWorkflowDetails | PublicRegistryResponseDetails;
+export type AnalogDetails =
+  | SendPaperDetails
+  | AnalogWorkflowDetails
+  | PublicRegistryResponseDetails;

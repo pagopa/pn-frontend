@@ -18,7 +18,7 @@ import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
 const SubTitle = () => {
-  const { t } = useTranslation(['apiKeys']);
+  const { t } = useTranslation(['apikeys']);
   return (
     <Fragment>
       {t('subtitle.text1')}
@@ -133,7 +133,11 @@ const ApiKeys = () => {
       >
         <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
 
-        <Dialog open={modal.view !== ModalApiKeyView.NONE} onClose={handleCloseModal}>
+        <Dialog
+          open={modal.view !== ModalApiKeyView.NONE}
+          onClose={handleCloseModal}
+          aria-modal="true"
+        >
           <Box
             sx={{
               padding: 3,
@@ -156,6 +160,7 @@ const ApiKeys = () => {
                           <CopyToClipboard
                             tooltipMode={true}
                             tooltip={t('api-key-copied')}
+                            tooltipBefore={t('api-key-copy')}
                             getValue={() => modal.apiKey?.value || ''}
                           />
                         </InputAdornment>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { SvgIcon, Typography } from "@mui/material";
+import { List, ListItem, SvgIcon, Typography } from "@mui/material";
 
 import {
   FooterLinksType,
@@ -9,10 +9,6 @@ import {
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
+
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -43,17 +50,18 @@ const onReadClick = () => {
 const navigation: INavigationBarProps = {
   title: "Piattaforma Notifiche",
   chip: "Beta",
-  pf: "Cittadini",
-  pa: "Enti"
+  pf: "Bürger",
+  pa: "Einrichtungen",
+  faq: 'FAQ',
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Lies deine Bescheide",
-      title: "Lies deine Bescheide",
-      onClick: onReadClick,
-    }
+    label: "Lies deine Bescheide",
+    title: "Lies deine Bescheide",
+    onClick: onReadClick,
+  }
   : undefined;
 
 /** Hero mocked data */
@@ -98,12 +106,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalisiert und vereinfacht die Verwaltung von rechtlicher Kommunikation. 
-            Die übermittelnden Stellen müssen lediglich das zuzustellende Dokument hinterlegen: Die Plattform 
+            Piattaforma Notifiche digitalisiert und vereinfacht die Verwaltung von rechtlicher Kommunikation.
+            Die übermittelnden Stellen müssen lediglich das zuzustellende Dokument hinterlegen: Die Plattform
             sorgt für den Versand, entweder digital oder analog.
           </Typography>
           <Typography variant="body2">
-            Mit Piattaforma Notifiche wird die Ungewissheit hinsichtlich der Erreichbarkeit von Empfängern 
+            Mit Piattaforma Notifiche wird die Ungewissheit hinsichtlich der Erreichbarkeit von Empfängern
             verringert und der Verwaltungsaufwand und die Kosten werden reduziert.
           </Typography>
         </>
@@ -121,19 +129,19 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integriert sich in das Protokoll der Behörden und bietet sowohl APIs für 
-            den automatischen Versand von Bescheiden als auch die Möglichkeit, manuelle Sendungen zu tätigen. 
-            Nach dem Hochladen der Zahlungsunterlagen und -formulare generiert die Plattform die UIN (Unique 
+            Piattaforma Notifiche integriert sich in das Protokoll der Behörden und bietet sowohl APIs für
+            den automatischen Versand von Bescheiden als auch die Möglichkeit, manuelle Sendungen zu tätigen.
+            Nach dem Hochladen der Zahlungsunterlagen und -formulare generiert die Plattform die UIN (Unique
             Identification Number), einen eindeutigen Identifikationscode für den Bescheid.
           </Typography>
           <Typography variant="body2">
-            Sie sucht dann in ihren Archiven und öffentlichen Registern nach einer PEC, die sich auf den 
-            Adressaten zurückführen lässt, und sendet den Bescheid. Danach sendet sie eine Zahlungsaufforderung 
+            Sie sucht dann in ihren Archiven und öffentlichen Registern nach einer PEC, die sich auf den
+            Adressaten zurückführen lässt, und sendet den Bescheid. Danach sendet sie eine Zahlungsaufforderung
             an die anderen digitalen Kontakte des Empfängers (IO-App, E-Mail und SMS).
           </Typography>
           <Typography variant="body2">
-            Wenn der Empfänger keine digitale Adresse angegeben hat und keinen Zugang zur Plattform hat, fährt 
-            die Plattform mit der Suche nach einer physischen Adresse und anschließend mit dem Versand per 
+            Wenn der Empfänger keine digitale Adresse angegeben hat und keinen Zugang zur Plattform hat, fährt
+            die Plattform mit der Suche nach einer physischen Adresse und anschließend mit dem Versand per
             Einschreiben fort.
           </Typography>
         </>
@@ -151,13 +159,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Der Empfänger greift über SPID oder CIE auf die Plattform zu, wo er das zugestellte Dokument 
-            einsehen und herunterladen kann. Dank der Integration mit pagoPA kann er gleichzeitig auch die 
-            fälligen Zahlungen leisten. Wenn er den Dienst in der IO-App aktiviert hat, kann er alles 
+            Der Empfänger greift über SPID oder CIE auf die Plattform zu, wo er das zugestellte Dokument
+            einsehen und herunterladen kann. Dank der Integration mit pagoPA kann er gleichzeitig auch die
+            fälligen Zahlungen leisten. Wenn er den Dienst in der IO-App aktiviert hat, kann er alles
             direkt in der App erledigen.
           </Typography>
           <Typography variant="body2">
-            Wie die Behörde hat auch der Empfänger Zugriff auf die Historie des Zustellungsstatus und die 
+            Wie die Behörde hat auch der Empfänger Zugriff auf die Historie des Zustellungsstatus und die
             Bescheinigungen, die Dritten gegenüber geltend gemacht werden können.
           </Typography>
         </>
@@ -171,38 +179,55 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Demnächst für Behörden verfügbar",
+      title: "Starten Sie die Integration",
       content: (
         <>
           <Typography variant="body2">
-            Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Pilotbehörden getestet.
+            Derzeit können Institutionen die technische Arbeit initiieren, die für die Integration mit Piattaforma Notifiche erforderlich ist.
           </Typography>
           <Typography variant="body2">
-            Sobald sie betriebsbereit ist, kann auch deine Behörde einen Beitrittsantrag stellen und sie 
-            einsetzen, um den Benachrichtigungsprozess zu digitalisieren.
+            In der Zwischenzeit können Behörden:{" "}
           </Typography>
-          <Typography variant="body2">
-            In der Zwischenzeit können Behörden{" "}
-            <Link href={MANUALE_URL}>
-              das Betriebshandbuch
-            </Link>
-            {" "}(aktualisiert am 28.06.2022),{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              die b2b-APIs für öffentliche Verwaltungen
-            </Link>
-            {" "}und{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              die b2b-APIs über den Stand der Benachrichtigungen konsultieren
-            </Link>
-            .
-          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  das Betriebshandbuch
+                </Link>
+                {" "}(aktualisiert am 20.11.2022),{" "}
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+                  die b2b-APIs für öffentliche Verwaltungen
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+                  die b2b-APIs über den Stand der Benachrichtigungen konsultieren
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+                  die Liste der Technologiepartner und Vermittler
+                </Link>
+                {" "}die die Integrationsaktivitäten umsetzen, einsehen zur Plattform und die zur Unterstützung bei der Verwaltung der technischen Aspekte verwendet werden können
+              </Typography>
+            </ListItem>
+          </List>
+
         </>
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: false
     },
   },
 ];
@@ -215,15 +240,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Bescheide sind Mitteilungen mit rechtlichem Wert, die offiziell von einer Verwaltung herausgegeben werden, 
-            wie z. B. Bußgeldbescheide, Steuerbescheide, Ergebnisse von Verwaltungsverfahren bei öffentlichen 
-            Verwaltungen oder Erstattungen, die du bisher immer per Einschreiben erhalten hast. Von nun an kannst du 
-            sie digital empfangen und einsehen, indem du über SPID oder CIE oder direkt über die IO-App auf Piattaforma 
+            Bescheide sind Mitteilungen mit rechtlichem Wert, die offiziell von einer Verwaltung herausgegeben werden,
+            wie z. B. Bußgeldbescheide, Steuerbescheide, Ergebnisse von Verwaltungsverfahren bei öffentlichen
+            Verwaltungen oder Erstattungen, die du bisher immer per Einschreiben erhalten hast. Von nun an kannst du
+            sie digital empfangen und einsehen, indem du über SPID oder CIE oder direkt über die IO-App auf Piattaforma
             Notifiche zugreifst.
           </Typography>
           <Typography variant="body2">
-            Außerdem kannst du dank der Integration mit pagoPA eventuell angefallene Gebühren bezahlen, den Verlauf der 
-            erhaltenen Bescheide einsehen und diese direkt online verwalten. Darüber hinaus benötigst du nur eine 
+            Außerdem kannst du dank der Integration mit pagoPA eventuell angefallene Gebühren bezahlen, den Verlauf der
+            erhaltenen Bescheide einsehen und diese direkt online verwalten. Darüber hinaus benötigst du nur eine
             Vollmacht, um auch die Bescheide deiner Familienangehörigen zu verwalten.
           </Typography>
         </>
@@ -240,9 +265,9 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Bei der Versendung von rechtlicher Kommunikation gibt Piattaforma Notifiche immer den digitalen Adressen der 
-            Empfänger den Vorrang. Du kannst jederzeit mit SPID und CIE auf die Plattform zugreifen, um deine Präferenzen 
-            zwischen PEC, App IO, E-Mail oder SMS anzugeben oder zu aktualisieren. Wenn du keine Adresse angibst oder 
+            Bei der Versendung von rechtlicher Kommunikation gibt Piattaforma Notifiche immer den digitalen Adressen der
+            Empfänger den Vorrang. Du kannst jederzeit mit SPID und CIE auf die Plattform zugreifen, um deine Präferenzen
+            zwischen PEC, App IO, E-Mail oder SMS anzugeben oder zu aktualisieren. Wenn du keine Adresse angibst oder
             keinen Zugang zur Plattform hast, erhältst du die Bescheide weiterhin per Einschreiben in Papierform.
           </Typography>
         </>
@@ -262,7 +287,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Verwaltungen getestet.
           </Typography>
           <Typography variant="body2">
-            Nach und nach wird die Plattform von den öffentlichen Verwaltungen übernommen und für die Übermittlung von 
+            Nach und nach wird die Plattform von den öffentlichen Verwaltungen übernommen und für die Übermittlung von
             Bescheiden an alle Bürger genutzt.
           </Typography>
         </>
@@ -376,8 +401,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "Zertifizierte Mail (PEC)",
           subtitle: (
             <Typography variant="body2">
-              Wenn du eine PEC-Adresse hast, werden dir die Bescheide rechtmäßig zugestellt, und es gibt keine Einschreiben 
-              in Papierform mehr. Die dir zugesandte Empfangsbestätigung enthält den Link, über den du auf den Inhalt auf 
+              Wenn du eine PEC-Adresse hast, werden dir die Bescheide rechtmäßig zugestellt, und es gibt keine Einschreiben
+              in Papierform mehr. Die dir zugesandte Empfangsbestätigung enthält den Link, über den du auf den Inhalt auf
               Piattaforma Notifiche zugreifen kannst.
             </Typography>
           ),
@@ -391,8 +416,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "IO-App",
           subtitle: (
             <Typography variant="body2">
-              Wenn du den Dienst „Digitale Bescheide“ von Piattaforma Notifiche aktivierst, kannst du rechtliche Kommunikation{" "} 
-              <strong>direkt in der App</strong> erhalten und verwalten. Wenn du keine PEC hast und die Nachricht sofort liest, 
+              Wenn du den Dienst „Digitale Bescheide“ von Piattaforma Notifiche aktivierst, kannst du rechtliche Kommunikation{" "}
+              <strong>direkt in der App</strong> erhalten und verwalten. Wenn du keine PEC hast und die Nachricht sofort liest,
               erhältst du kein Einschreiben in Papierform und der Bescheid wird rechtmäßig zugestellt.
             </Typography>
           ),
@@ -402,8 +427,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "E-Mail oder SMS",
           subtitle: (
             <Typography variant="body2">
-              Außerdem kannst du wählen, ob du eine Zahlungsaufforderung an deine E-Mail-Adresse oder per SMS erhalten möchtest. 
-              Wenn du keine PEC hast und über den entsprechenden Link auf die Plattform zugreifst, erhältst du kein Einschreiben 
+              Außerdem kannst du wählen, ob du eine Zahlungsaufforderung an deine E-Mail-Adresse oder per SMS erhalten möchtest.
+              Wenn du keine PEC hast und über den entsprechenden Link auf die Plattform zugreifst, erhältst du kein Einschreiben
               in Papierform und der Bescheid gilt als rechtmäßig zugestellt.
             </Typography>
           ),
@@ -624,7 +649,7 @@ const coHorizontalNav = {
 /**
  * Footer data
  */
- const pagoPALink: ILinkData = {
+const pagoPALink: ILinkData = {
   label: "PagoPA S.p.A.",
   href: PAGOPA_HOME ?? "",
   ariaLabel: "Link: Gehe auf die Website von PagoPA S.p.A."
@@ -639,7 +664,7 @@ const assistanceLink = {
 const companyLegalInfo = (
   <>
     <strong>PagoPA S.p.A.</strong> — Aktiengesellschaft mit einem einzigen Gesellschafter -
-    voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, 
+    voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom,
     Piazza Colonna 370
     <br />
     PLZ 00187 - Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009
@@ -682,9 +707,9 @@ const preLoginLinks: PreLoginFooterLinksType = {
     title: "Quellen",
     links: [
       {
-        label: "Informativa Privacy",
+        label: "Datenschutzerklärung",
         href: `/informativa-privacy/`,
-        ariaLabel: "Zum Link: Informativa Privacy",
+        ariaLabel: "Zum Link: Datenschutzerklärung",
         linkType: "internal",
       },
       {
@@ -790,8 +815,6 @@ const postLoginLinks: Array<FooterLinksType> = [
 export const deAppData: IAppData = {
   common: {
     navigation,
-    alert:
-      "Die Plattform ist nicht betriebsbereit. Nur einige der auf dieser Seite beschriebenen Funktionen werden derzeit getestet und stehen nur einer begrenzten Anzahl von Nutzern zur Verfügung, die Empfänger der von den Pilotbehörden verschickten Bescheide sein werden.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,
@@ -811,12 +834,5 @@ export const deAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };

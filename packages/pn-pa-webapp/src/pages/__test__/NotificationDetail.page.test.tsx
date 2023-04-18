@@ -1,3 +1,4 @@
+import React from 'react';
 import * as redux from 'react-redux';
 import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
@@ -110,13 +111,18 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
+    // check payment history box
+    const paymentTable = result.getByTestId('paymentTable');
+    const paymentRecipient = result.getByTestId('paymentRecipient');
+    expect(paymentTable).toBeInTheDocument();
+    expect(paymentRecipient).toBeInTheDocument();
   });
 
   test('executes the document and legal fact download handler', async () => {
-    const documentButton = result.getByTestId('documentButton');
+    const documentButton = result.getAllByTestId('documentButton');
     const legalFactButton = result.getByTestId('legalFactButton');
     expect(mockDispatchFn).toBeCalledTimes(1);
-    fireEvent.click(documentButton);
+    fireEvent.click(documentButton[0]);
     expect(mockDispatchFn).toBeCalledTimes(2);
     fireEvent.click(legalFactButton);
     expect(mockDispatchFn).toBeCalledTimes(4);
@@ -156,7 +162,6 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 });
 
-
 describe('NotificationDetail Page (multi recipient)', () => {
   let result: RenderResult;
   const mockDispatchFn = jest.fn();
@@ -193,7 +198,9 @@ describe('NotificationDetail Page (multi recipient)', () => {
 
   test('renders NotificationDetail page', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFeMultiRecipient.subject);
+    expect(result.container.querySelector('h4')).toHaveTextContent(
+      notificationToFeMultiRecipient.subject
+    );
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);
     expect(result.container).toHaveTextContent(/2,00 €/i);

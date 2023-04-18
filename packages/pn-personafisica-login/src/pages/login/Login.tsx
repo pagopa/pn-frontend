@@ -4,16 +4,16 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from 'react-router-dom';
 
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import {storageOriginOps, storageSpidSelectedOps} from '../../utils/storage';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
-import { ENV } from "../../utils/env";
+import { storageTypeOps, storageSpidSelectedOps, storageAarOps } from '../../utils/storage';
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
+import { ENV } from '../../utils/env';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -29,10 +29,15 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
-  const origin = params.get('origin');
+  const type = params.get(AppRouteParams.TYPE);
+  const aar = params.get(AppRouteParams.AAR);
 
-  if (origin !== null && origin !== '') {
-    storageOriginOps.write(origin);
+  if (type !== null && type !== '' && (type === AppRouteType.PF || type === AppRouteType.PG)) {
+    storageTypeOps.write(type);
+  }
+
+  if (aar !== null && aar !== '') {
+    storageAarOps.write(aar);
   }
 
   const goCIE = () => {
@@ -40,13 +45,10 @@ const Login = () => {
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
-    trackEventByType(
-      TrackEventType.LOGIN_IDP_SELECTED,
-      {
-        SPID_IDP_NAME: 'CIE',
-        SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
-      },
-    );
+    trackEventByType(TrackEventType.LOGIN_IDP_SELECTED, {
+      SPID_IDP_NAME: 'CIE',
+      SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
+    });
   };
 
   if (showIDPS) {
@@ -59,7 +61,7 @@ const Login = () => {
 
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
-    /* eslint-disable-next-line functional/immutable-data */
+    // eslint-disable-next-line functional/immutable-data
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 

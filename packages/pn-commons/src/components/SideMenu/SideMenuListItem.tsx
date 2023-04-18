@@ -54,6 +54,7 @@ const SideMenuListItem = ({
         }
       }}
       sx={style}
+      data-testid={`sideMenuItem-${item.label}`}
     >
       {item.icon && (
         <ListItemIcon>
@@ -66,7 +67,7 @@ const SideMenuListItem = ({
           )}
         </ListItemIcon>
       )}
-      <ListItemText primary={item.label} data-cy={`menu-item(${item.label.toLowerCase()})`} />
+      <ListItemText primary={item.label} data-testid={`menu-item(${item.label.toLowerCase()})`} />
       {item.rightBadgeNotification && (
         <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
       )}

@@ -70,7 +70,7 @@ const CodeModal = memo(
   }: Props) => {
     const [code, setCode] = useState(initialValues);
     const isMobile = useIsMobile();
-    const textPosition = useMemo(() => isMobile ? 'center' : 'left', [isMobile]);
+    const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
     const codeIsValid = code.every((v) => v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
@@ -96,18 +96,11 @@ const CodeModal = memo(
           {title}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText
-            id="dialog-description"
-            sx={{ textAlign: textPosition }}
-          >
+          <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
             {subtitle}
           </DialogContentText>
           <Divider sx={{ margin: '20px 0' }} />
-          <Typography
-            fontSize={16}
-            fontWeight={600}
-            sx={{ textAlign: textPosition }}
-          >
+          <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
             {codeSectionTitle}
           </Typography>
           <Box sx={{ marginTop: '10px', textAlign: textPosition }}>
@@ -118,39 +111,40 @@ const CodeModal = memo(
               onChange={changeHandler}
             />
           </Box>
-          <Box sx={{ marginTop: '10px', textAlign: textPosition }}>
-            {codeSectionAdditional}
-          </Box>
+          <Box sx={{ marginTop: '10px', textAlign: textPosition }}>{codeSectionAdditional}</Box>
           <Divider sx={{ margin: '20px 0' }} />
           {hasError && (
-            <Alert
-              data-testid="errorAlert"
-              severity="error"
-              sx={{ textAlign: textPosition }}
-            >
-              <AlertTitle>{errorTitle}</AlertTitle>
+            <Alert data-testid="errorAlert" severity="error" sx={{ textAlign: textPosition }}>
+              <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
             </Alert>
           )}
         </DialogContent>
-        <DialogActions disableSpacing={isMobile}
+        <DialogActions
+          disableSpacing={isMobile}
           sx={{
             textAlign: textPosition,
             flexDirection: isMobile ? 'column' : 'row',
           }}
         >
           {cancelLabel && cancelCallback && (
-            <Button variant="outlined" onClick={cancelCallback} fullWidth={isMobile}>
+            <Button
+              variant="outlined"
+              onClick={cancelCallback}
+              fullWidth={isMobile}
+              data-testid="codeCancelButton"
+            >
               {cancelLabel}
             </Button>
           )}
           {confirmLabel && confirmCallback && (
             <Button
               variant="contained"
+              data-testid="codeConfirmButton"
               onClick={confirmHandler}
               disabled={!codeIsValid}
               fullWidth={isMobile}
-              sx={{ marginTop: isMobile ? '10px' : 0}}
+              sx={{ marginTop: isMobile ? '10px' : 0 }}
             >
               {confirmLabel}
             </Button>

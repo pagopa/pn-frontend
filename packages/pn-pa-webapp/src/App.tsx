@@ -8,6 +8,7 @@ import {
   AppMessage,
   AppResponseMessage,
   appStateActions,
+  errorFactoryManager,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -17,7 +18,7 @@ import {
   useErrors,
   useMultiEvent,
   useTracking,
-  useUnload
+  useUnload,
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { ErrorInfo, useEffect, useMemo } from 'react';
@@ -36,7 +37,8 @@ import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION, MIXPANEL_TOKEN } from '.
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
-import { setUpInterceptor } from "./api/interceptors";
+import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
+import { setUpInterceptor } from './api/interceptors';
 
 const App = () => {
   useUnload(() => {
@@ -48,7 +50,7 @@ const App = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.organizationParty
   );
-  const { tos } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
 
   const dispatch = useAppDispatch();
@@ -66,22 +68,26 @@ const App = () => {
       /**
        * Refers to PN-1741
        * Commented out because beyond MVP scope
-       * 
+       *
        * LINKED TO:
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
        * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
        */
       { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
-      { 
-        label: 'menu.app-status', 
+      {
+        label: 'menu.app-status',
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
-        icon: () => currentStatus 
-          ? (currentStatus.appIsFullyOperative
-            ? <CheckCircleIcon sx={{ color: 'success.main' }} />
-            : <ErrorIcon sx={{ color: 'error.main' }} />)
-          : <HelpIcon />
-        , 
-        route: routes.APP_STATUS 
+        icon: () =>
+          currentStatus ? (
+            currentStatus.appIsFullyOperative ? (
+              <CheckCircleIcon sx={{ color: 'success.main' }} />
+            ) : (
+              <ErrorIcon sx={{ color: 'error.main' }} />
+            )
+          ) : (
+            <HelpIcon />
+          ),
+        route: routes.APP_STATUS,
       },
     ];
 
@@ -154,6 +160,8 @@ const App = () => {
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+    // eslint-disable-next-line functional/immutable-data
+    errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
@@ -240,7 +248,13 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!!sessionToken && tos && !hasFetchOrganizationPartyError && !isPrivacyPage}
+        showSideMenu={
+          !!sessionToken &&
+          tosConsent && tosConsent.accepted &&
+          privacyConsent && privacyConsent.accepted &&
+          !hasFetchOrganizationPartyError &&
+          !isPrivacyPage
+        }
         productsList={productsList}
         productId={'0'}
         partyList={partyList}

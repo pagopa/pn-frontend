@@ -50,7 +50,7 @@
     "breadcrumb": "Nuova delega",
     "backToDelegations": "Torna alle deleghe",
     "createdTitle": "La tua richiesta di delega è stata creata con successo",
-    "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.",
+    "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la tua richiesta.",
     "title": "Le tue deleghe",
     "subtitle": "Inserisci i dati del soggetto giuridico a cui vuoi delegare la gestione delle tue notifiche",
     "form": {
@@ -116,6 +116,14 @@
     "invalid_verification_code": {
       "title": "Codice non valido",
       "message": "Codice di verifica non valido"
+    },
+    "fiscal_code": {
+      "title": "Codice fiscale non valido",
+      "message": "Il codice fiscale inserito non è valido"
+    },
+    "invalid_parameter": {
+      "title": "Dati non validi",
+      "message": "Uno o più dei dati inseriti non sono validi"
     }
   }
 }

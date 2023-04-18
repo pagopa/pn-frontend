@@ -6,17 +6,17 @@ import {
   Menu as MUIMenu,
   MenuItem,
   Box,
-  List,
-  ListItem,
   Typography,
 } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { CustomTagGroup } from '@pagopa-pn/pn-commons';
+import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,16 +51,16 @@ export const Menu = (props: any) => {
   const getMenuItemElements = () => {
     if (props.menuType === 'delegates') {
       return [
-        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
+        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal} data-testid="menuItem-showCode">
           {t('deleghe.show')}
         </MenuItem>,
-        <MenuItem key="revoke" onClick={handleOpenModalClick}>
+        <MenuItem key="revoke" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegate">
           {t('deleghe.revoke')}
         </MenuItem>,
       ];
     } else {
       return [
-        <MenuItem key="reject" onClick={handleOpenModalClick}>
+        <MenuItem key="reject" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegator">
           {t('deleghe.reject')}
         </MenuItem>,
       ];
@@ -86,33 +86,27 @@ export const Menu = (props: any) => {
 export const OrganizationsList = (props: {
   organizations: Array<string>;
   textVariant?: Variant;
+  visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>{t('deleghe.table.allNotifications')}</Typography>
+        <Typography variant={props.textVariant || 'inherit'}>
+          {t('deleghe.table.allNotifications')}
+        </Typography>
       ) : (
         <Box>
-          <Typography variant={props.textVariant || 'inherit'}>
+          <Typography variant={props.textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
-          <List
-            sx={{
-              padding: 0,
-              display: 'revert',
-              listStyle: 'square',
-            }}
-          >
+          <CustomTagGroup visibleItems={props.visibleItems}>
             {props.organizations.map((organization) => (
-              <ListItem
-                key={organization}
-                sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
-              >
-                <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
-              </ListItem>
+              <Box sx={{mb:1, mr: 1, display: 'inline-block'}} key={organization}>
+                <Tag value={organization}/>
+              </Box>
             ))}
-          </List>
+          </CustomTagGroup>
         </Box>
       )}
     </>
@@ -127,7 +121,7 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
   };
 
   return (
-    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
+    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'} data-testid='acceptButton'>
       {t('deleghe.accept')}
     </Button>
   );

@@ -102,7 +102,7 @@ describe('App', () => {
       void i18n.init();
     });
 
-    it('Renders Piattaforma notifiche', () => {
+    it('Renders SEND', () => {
       render(<Component />);
       const loading = screen.getByText(/loading.../i);
       expect(loading).toBeInTheDocument();

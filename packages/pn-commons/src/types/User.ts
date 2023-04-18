@@ -15,3 +15,9 @@ export const basicNoLoggedUserData = {
   email: '',
   uid: '',
 } as BasicUser;
+
+export interface ConsentUser {
+  accepted: boolean;
+  isFirstAccept: boolean;
+  consentVersion: string;
+}

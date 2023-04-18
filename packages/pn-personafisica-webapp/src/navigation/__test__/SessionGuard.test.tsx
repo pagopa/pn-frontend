@@ -29,7 +29,11 @@ jest.mock('react-router-dom', () => {
     ...original,
     Outlet: () => <div>Generic Page</div>,
     useNavigate: () => mockNavigateFn,
-    useLocation: () => ({ hash: mockLocationHash, search: mockLocationSearch, pathname: mockLocationPath }),
+    useLocation: () => ({
+      hash: mockLocationHash,
+      search: mockLocationSearch,
+      pathname: mockLocationPath,
+    }),
   };
 });
 
@@ -70,10 +74,14 @@ jest.mock('../../api/auth/Auth.api', () => {
   return {
     ...original,
     AuthApi: {
-      exchangeToken: (spidToken: string) =>
-        spidToken.startsWith('good')
-          ? Promise.resolve({ sessionToken: 'good-session-token' })
-          : Promise.reject({ response: { status: 403 } }),
+      exchangeToken: (spidToken: string) => {
+        if (spidToken.startsWith('403')) {
+          return Promise.reject({ response: { status: 403 } });
+        } else if (spidToken.startsWith('451')) {
+          return Promise.reject({ response: { status: 451 } });
+        }
+        return Promise.resolve({ sessionToken: 'good-session-token' });
+      },
     },
   };
 });
@@ -91,7 +99,6 @@ describe('SessionGuard Component', () => {
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck
   it('reload - session token already present', async () => {
-    mockLocationPath = routes.DETTAGLIO_NOTIFICA_QRCODE_PATH;
     mockLocationSearch = `?${routes.DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=toto`;
     const mockReduxState = {
       userState: { user: { sessionToken: 'mocked-token' } },
@@ -105,7 +112,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DETTAGLIO_NOTIFICA_QRCODE_PATH, search: mockLocationSearch, hash: ""}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: undefined, search: mockLocationSearch, hash: '' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
@@ -124,7 +134,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: mockLocationHash}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.DELEGHE, search: '', hash: mockLocationHash },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
@@ -140,7 +153,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - no path indicated', async () => {
-    mockLocationHash = '#token=good_token';
+    mockLocationHash = '#token=200_token';
     mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -148,12 +161,15 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NOTIFICHE, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.NOTIFICHE, search: '' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
   it('sound login - path indicated', async () => {
-    mockLocationHash = '#token=good_token';
+    mockLocationHash = '#token=200_token';
     mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -161,12 +177,15 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: ""}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.DELEGHE, search: '', hash: '' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
   it('sound login - path indicated - with additional hash value', async () => {
-    mockLocationHash = '#token=good_token&#greet=hola';
+    mockLocationHash = '#token=200_token&#greet=hola';
     mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -174,14 +193,17 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: "#greet=hola"}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.DELEGHE, search: '', hash: '#greet=hola' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
   // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
   // (i.e. different than the logout message)
-  it('bad SPID token', async () => {
-    mockLocationHash = '#token=bad_token';
+  it('bad SPID token (403)', async () => {
+    mockLocationHash = '#token=403_token';
     mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -191,6 +213,22 @@ describe('SessionGuard Component', () => {
     expect(logoutTitleComponent).toBeNull();
 
     expect(mockNavigateFn).toBeCalledTimes(0);
+    expect(mockSessionCheckFn).toBeCalledTimes(0);
+  });
+
+  // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
+  // (i.e. different than the logout message)
+  it('bad SPID token (451)', async () => {
+    mockLocationHash = '#token=451_token';
+    mockLocationPath = '/';
+
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const logoutComponent = screen.queryByText('Session Modal');
+    expect(logoutComponent).toBeTruthy();
+    const logoutTitleComponent = screen.queryByText('messages.451-message');
+    expect(logoutTitleComponent).toBeNull();
+
+    expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 

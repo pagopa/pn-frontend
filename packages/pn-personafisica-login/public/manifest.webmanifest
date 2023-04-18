@@ -1,6 +1,6 @@
 {
-  "name": "pagopa piattaforma notifiche login",
-  "short_name": "pagopa pn",
+  "name": "pagopa SEND login",
+  "short_name": "SEND",
   "start_url": "/",
   "background_color": "#FFFFFF",
   "theme_color": "#00a1b0",

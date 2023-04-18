@@ -24,7 +24,7 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-sonarjs": "^0.10.0",
     "jest-sonar-reporter": "^2.0.0",
-    "sonarqube-scanner": "^2.8.1"
+    "sonarqube-scanner": "^3.0.0"
   },
   "jest": {
     "testResultsProcessor": "jest-sonar-reporter"

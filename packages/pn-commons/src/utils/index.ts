@@ -1,4 +1,5 @@
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
+import { searchStringCleanDenomination, searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { calculatePages } from './pagination.utility';
 
 import {
@@ -10,6 +11,7 @@ import {
   getNotificationTimelineStatusInfos,
 } from './notification.utility';
 import { getValidValue } from './genericFunctions.utility';
+import { compileOneTrustPath } from './onetrust.utility';
 import {
   formatMonthString,
   formatDay,
@@ -18,6 +20,7 @@ import {
   isToday,
   tenYearsAgo,
   DATE_FORMAT,
+  dateIsDefined,
   getNextDay,
   minutesBeforeNow,
   formatToTimezoneString,
@@ -33,7 +36,7 @@ import {
   adaptedTokenExchangeError,
 } from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
-import { compileRoute } from './routes.utility';
+import { compileRoute, AppRouteType, AppRouteParams } from './routes.utility';
 import {
   URL_DIGITAL_NOTIFICATIONS,
   PRIVACY_LINK_RELATIVE_PATH,
@@ -47,6 +50,7 @@ import {
 import { performThunkAction } from './redux.utility';
 import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
 import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
+import { buttonNakedInheritStyle } from './styles.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -61,10 +65,14 @@ export {
   formatDay,
   formatTime,
   getNextDay,
+  dateIsDefined,
   minutesBeforeNow,
   formatToTimezoneString,
   getValidValue,
   formatFiscalCode,
+  searchStringCleanDenomination,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
   formatDateTime,
   IUN_regex,
   formatIun,
@@ -73,6 +81,8 @@ export {
   dataRegex,
   storageOpsBuilder,
   compileRoute,
+  AppRouteType,
+  AppRouteParams,
   today,
   tenYearsAgo,
   DATE_FORMAT,
@@ -95,4 +105,6 @@ export {
   errorFactoryManager,
   UnknownAppError,
   sanitizeString,
+  compileOneTrustPath,
+  buttonNakedInheritStyle,
 };

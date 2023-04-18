@@ -6,6 +6,7 @@ import {
   LegalFactType,
   formatToTimezoneString,
   getNextDay,
+  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 
 import {
@@ -27,6 +28,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -77,6 +79,25 @@ describe('Notifications api tests', () => {
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('getSentNotificationOtherDocument', async () => {
+    const iun = 'mocked-iun';
+    const otherDocument: NotificationDetailOtherDocument = {
+      documentId: 'mocked-id',
+      documentType: 'mocked-type',
+    };
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+        documentId: otherDocument.documentId,
+        documentType: otherDocument.documentType,
+      })
+      .reply(200, undefined);
+    const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
+    expect(res).toStrictEqual({ url: '' });
     mock.reset();
     mock.restore();
   });
