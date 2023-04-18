@@ -17,6 +17,7 @@ import AARGuard from './AARGuard';
 const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 // const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
+const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
@@ -45,6 +46,18 @@ function Router() {
               <Route path="/" element={<AARGuard />}>
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+                <Route
+                  path={routes.NUOVA_DELEGA}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      redirectTo={<NotFound />}
+                    >
+                      <NuovaDelega />
+                    </PrivateRoute>
+                  }
+                />
                 <Route
                   path={routes.RECAPITI}
                   element={
