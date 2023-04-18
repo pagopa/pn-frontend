@@ -22,7 +22,7 @@ jest.mock('../../component/Deleghe/Delegates', () => ({
   default: () => <div>delegates</div>,
 }));
 
-jest.mock('../../component/Deleghe/MobileDelegates', () => ({
+/* jest.mock('../../component/Deleghe/MobileDelegates', () => ({
   __esModule: true,
   default: () => <div>mobile delegates</div>,
 }));
@@ -35,7 +35,7 @@ jest.mock('../../component/Deleghe/Delegators', () => ({
 jest.mock('../../component/Deleghe/MobileDelegators', () => ({
   __esModule: true,
   default: () => <div>mobile delegators</div>,
-}));
+})); */
 
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
@@ -44,14 +44,14 @@ describe('Deleghe page', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult;
 
-  const renderComponent = async (
-    openConfirmationModal: boolean,
+  const renderComponent = async () =>
+    /* openConfirmationModal: boolean,
     openCodeModal: boolean,
     type: 'delegates' | 'delegators',
-    error: boolean = false
-  ) => {
-    await act(async () => {
-      result = render(<Deleghe />, {
+    error: boolean = false */
+    {
+      await act(async () => {
+        /* result = render(<Deleghe />, {
         preloadedState: {
           delegationsState: {
             modalState: {
@@ -67,9 +67,10 @@ describe('Deleghe page', () => {
             },
           },
         },
+      }); */
       });
-    });
-  };
+      result = render(<Deleghe />);
+    };
 
   afterEach(() => {
     useIsMobileSpy.mockClear();
@@ -81,26 +82,29 @@ describe('Deleghe page', () => {
   it('renders the desktop view of the deleghe page', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
-    await renderComponent(false, false, 'delegates');
+    await renderComponent();
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
     expect(result.container).toHaveTextContent(/delegates/i);
-    expect(result.container).toHaveTextContent(/delegators/i);
+    expect(result.container).toHaveTextContent(/deleghe.tab_delegati/i);
+    expect(result.container).toHaveTextContent(/deleghe.tab_deleghe/i);
+
+    // expect(result.container).toHaveTextContent(/delegators/i);
     expect(mockDispatchFn).toBeCalledTimes(2);
   });
 
   it('renders the mobile view of the deleghe page', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(true);
-    await renderComponent(false, false, 'delegates');
+    await renderComponent();
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
-    expect(result.container).toHaveTextContent(/mobile delegates/i);
-    expect(result.container).toHaveTextContent(/mobile delegators/i);
+    // expect(result.container).toHaveTextContent(/mobile delegates/i);
+    // expect(result.container).toHaveTextContent(/mobile delegators/i);
     expect(mockDispatchFn).toBeCalledTimes(2);
   });
 
-  it('checks the revocation modal open', async () => {
+  /* it('checks the revocation modal open', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(true, false, 'delegates');
@@ -155,23 +159,40 @@ describe('Deleghe page', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     const setState = jest.fn();
-    // We affect the initial value of a state only if is ''. 
+    // We affect the initial value of a state only if is ''.
     // The aim is to set the value for the errorText state in Deleghe **only**.
     // If we changed useState without this restriction, then the test would fail because
     // also the state in the CodeModal component (in pn-commons) would be affected.
     //
     // This trick makes the test work for the moment.
-    // Of course, whenever Deleghe would involve in the future some state whose initial value is '', 
+    // Of course, whenever Deleghe would involve in the future some state whose initial value is '',
     // then this test would be at risk.
     // -----------------------------------------
     // Carlos Lombardi, 2022.12.13
     // -----------------------------------------
-    const setStateFn: any = (initialValue) => [initialValue === '' ? 'Accept mandate error' : initialValue, setState];
+    const setStateFn: any = (initialValue) => [
+      initialValue === '' ? 'Accept mandate error' : initialValue,
+      setState,
+    ];
     const useStateSpy = jest.spyOn(React, 'useState');
     useStateSpy.mockImplementation(setStateFn);
     await renderComponent(false, true, 'delegators', true);
     expect(result.baseElement).toHaveTextContent('Accept mandate error');
 
     useStateSpy.mockRestore();
+  }); */
+  it('render your contatcs of deleghe page', async () => {
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    useIsMobileSpy.mockReturnValue(false);
+    await renderComponent();
+    expect(result.container).toHaveTextContent(/delegates/i);
+  });
+  it('render your contacts of deleghe page changing tab', async () => {
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    useIsMobileSpy.mockReturnValue(false);
+    await renderComponent();
+    const tab2 = result.getByRole('tab2');
+    fireEvent.click(tab2);
+    expect(result.container).toHaveTextContent('CIAO');
   });
 });

@@ -182,14 +182,16 @@ const Deleghe = () => {
             centered
             variant="fullWidth"
           >
-            <Tab label={t('deleghe.tab_delegati')} />
-            <Tab label={t('deleghe.tab_deleghe')} />
+            <Tab role="tab1" label={t('deleghe.tab_delegati')} />
+            <Tab role="tab2" label={t('deleghe.tab_deleghe')} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
           <Delegates />
         </TabPanel>
-        <TabPanel value={value} index={1}></TabPanel>
+        <TabPanel value={value} index={1}>
+          CIAO
+        </TabPanel>
       </Box>
     </LoadingPageWrapper>
   );
