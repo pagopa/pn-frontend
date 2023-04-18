@@ -241,7 +241,7 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       category: TimelineCategory.SEND_DIGITAL_PROGRESS,
       details: {
         recIndex: 0,
-        eventCode: 'C001',
+        deliveryDetailCode: 'C001',
         digitalAddressSource: AddressSource.PLATFORM,
         digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it' },
       } as NotificationDetailTimelineDetails,

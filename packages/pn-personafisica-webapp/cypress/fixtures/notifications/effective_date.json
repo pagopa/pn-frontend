@@ -151,7 +151,6 @@
           "address": "CSRGGL44L13H501E@pnpagopa.postecert.local"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0
       }
     },
@@ -172,11 +171,10 @@
           "address": "CSRGGL44L13H501E@pnpagopa.postecert.local"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0,
         "notificationDate": "2022-11-17T13:50:09.240662Z",
         "sendingReceipts": [{}],
-        "eventCode": "C001",
+        "deliveryDetailCode": "C001",
         "shouldRetry": false
       }
     },
@@ -196,8 +194,6 @@
           "type": "PEC",
           "address": "CSRGGL44L13H501E@pnpagopa.postecert.local"
         },
-        "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "responseStatus": "OK",
         "notificationDate": "2022-11-17T13:50:17.000552Z",
         "sendingReceipts": [{}]
