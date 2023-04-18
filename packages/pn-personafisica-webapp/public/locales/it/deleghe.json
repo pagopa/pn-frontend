@@ -70,7 +70,8 @@
       "verificationCode": "Codice di verifica",
       "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
       "submit": "Invia la richiesta",
-      "mandatoryField": "Campi obbligatori*"
+      "mandatoryField": "Campi obbligatori*",
+      "party-not-found": "Nessun ente trovato"
     },
     "validation": {
       "fiscalCode": {

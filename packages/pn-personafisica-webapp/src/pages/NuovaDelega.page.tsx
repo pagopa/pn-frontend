@@ -121,7 +121,15 @@ const NuovaDelega = () => {
     codiceFiscale: yup
       .string()
       .required(t('nuovaDelega.validation.fiscalCode.required'))
-      .matches(dataRegex.pIvaAndFiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
+      .when('selectPersonaFisicaOrPersonaGiuridica', {
+        is: (val: string) => val === RecipientType.PF,
+        then: yup
+          .string()
+          .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
+        otherwise: yup
+          .string()
+          .matches(dataRegex.pIvaAndFiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
+      }),
     nome: yup
       .string()
       .required(t('nuovaDelega.validation.name.required'))
@@ -389,7 +397,7 @@ const NuovaDelega = () => {
                                   fullWidth
                                   autoComplete
                                   getOptionLabel={getOptionLabel}
-                                  noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+                                  noOptionsText={t('nuovaDelega.form.party-not-found')}
                                   isOptionEqualToValue={(option, value) =>
                                     option.name === value.name
                                   }
