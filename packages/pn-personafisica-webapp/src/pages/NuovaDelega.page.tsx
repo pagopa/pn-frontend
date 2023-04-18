@@ -52,6 +52,7 @@ import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import { Party } from '../models/party';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
+import { DELEGATIONS_TO_PG_ENABLED } from '../utils/constants';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -281,6 +282,7 @@ const NuovaDelega = () => {
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
+                                disabled={!DELEGATIONS_TO_PG_ENABLED}
                               />
                             </RadioGroup>
                           </Stack>
