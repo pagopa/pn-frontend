@@ -5,10 +5,8 @@ import { StringRuleValidator } from "@pagopa-pn/pn-validator/src/ruleValidators/
 interface PgConfigurationFromFile {
   API_BASE_URL: string;
   DISABLE_INACTIVITY_HANDLER?: boolean;
-  ENABLE_ASSISTANCE: boolean;
   MIXPANEL_TOKEN: string;
   ONE_TRUST_DRAFT_MODE?: boolean;
-  ONE_TRUST_PARTICIPATING_ENTITIES?: string;
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
   OT_DOMAIN_ID?: string;
@@ -26,7 +24,6 @@ interface PgConfiguration extends PgConfigurationFromFile {
   LOG_REDUX_ACTIONS: boolean;
   MOCK_USER: boolean;
   ONE_TRUST_DRAFT_MODE: boolean;
-  ONE_TRUST_PARTICIPATING_ENTITIES: string;
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
   OT_DOMAIN_ID: string;
@@ -44,11 +41,9 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches((dataRegex.htmlPageUrl)));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.ruleFor('ENABLE_ASSISTANCE').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('ONE_TRUST_PARTICIPATING_ENTITIES').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('LANDING_SITE_URL').isString();
@@ -65,10 +60,9 @@ export function getConfiguration(): PgConfiguration {
   const VERSION = process.env.REACT_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
-    DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER || false,
+    DISABLE_INACTIVITY_HANDLER: Boolean(configurationFromFile.DISABLE_INACTIVITY_HANDLER),
     MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
-    ONE_TRUST_DRAFT_MODE: configurationFromFile.ONE_TRUST_DRAFT_MODE || false,
-    ONE_TRUST_PARTICIPATING_ENTITIES: configurationFromFile.ONE_TRUST_PARTICIPATING_ENTITIES || '',
+    ONE_TRUST_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_DRAFT_MODE),
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
@@ -84,5 +78,5 @@ export function getConfiguration(): PgConfiguration {
 
 export async function loadPgConfiguration(): Promise<void> {
   await Configuration.load(new PgConfigurationValidator());
-  console.log(getConfiguration());
+  getConfiguration().IS_DEVELOP && console.log(getConfiguration());
 }
