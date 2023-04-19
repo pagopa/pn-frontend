@@ -8,7 +8,7 @@ import { Box, /*  Stack, */ Tab, Tabs } from '@mui/material';
    useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next'; */
-import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { TitleBox } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 import { TabPanel } from '@pagopa-pn/pn-commons';
 import { useAppDispatch /* useAppSelector */ } from '../redux/hooks';
@@ -33,7 +33,8 @@ import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events'; */
 
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import Delegates from '../component/Deleghe/Delegates';
+import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
+import ProxiesChargedCompany from '../component/Deleghe/ProxiesChargedCompany';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
@@ -56,7 +57,6 @@ const Deleghe = () => {
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const isMobile = useIsMobile();
   // const [errorText, setErrorText] = useState('');
 
   const dispatch = useAppDispatch();
@@ -164,7 +164,6 @@ const Deleghe = () => {
         sx={{
           width: '100%',
           justifyContent: 'center',
-          alignItems: isMobile ? 'flex-start' : 'normal',
         }}
       >
         <Box mb={2} p={3}>
@@ -182,15 +181,15 @@ const Deleghe = () => {
             centered
             variant="fullWidth"
           >
-            <Tab role="tab1" label={t('deleghe.tab_delegati')} />
-            <Tab role="tab2" label={t('deleghe.tab_deleghe')} />
+            <Tab data-test-id="tab1" label={t('deleghe.tab_delegati')} />
+            <Tab data-test-id="tab2" label={t('deleghe.tab_deleghe')} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Delegates />
+          <DelegatesByCompany />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          CIAO
+          <ProxiesChargedCompany></ProxiesChargedCompany>
         </TabPanel>
       </Box>
     </LoadingPageWrapper>

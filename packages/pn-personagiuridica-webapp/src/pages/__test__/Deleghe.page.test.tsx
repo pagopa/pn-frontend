@@ -191,7 +191,7 @@ describe('Deleghe page', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent();
-    const tab2 = result.getByRole('tab2');
+    const tab2 = result.getByTestId('tab2');
     fireEvent.click(tab2);
     expect(result.container).toHaveTextContent('CIAO');
   });
