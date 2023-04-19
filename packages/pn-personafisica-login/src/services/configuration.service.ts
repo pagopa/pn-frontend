@@ -3,7 +3,6 @@ import { Validator } from '@pagopa-pn/pn-validator';
 import { StringRuleValidator } from "@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator";
 
 interface LoginConfigurationFromFile {
-  ENABLE_ASSISTANCE: boolean;
   MIXPANEL_TOKEN: string;
   ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PP: string;
@@ -40,7 +39,6 @@ interface LoginConfiguration extends LoginConfigurationFromFile {
 class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> {
   constructor() {
     super();
-    this.ruleFor('ENABLE_ASSISTANCE').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('SPID_TEST_ENV_ENABLED').isBoolean();
     this.ruleFor('SPID_VALIDATOR_ENV_ENABLED').isBoolean();

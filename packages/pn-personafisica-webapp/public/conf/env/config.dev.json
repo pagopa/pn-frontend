@@ -1,7 +1,6 @@
 {
     "API_BASE_URL": "https://webapi.dev.pn.pagopa.it/",
     "DISABLE_INACTIVITY_HANDLER": true,
-    "ENABLE_ASSISTANCE": true,
     "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
     "ONE_TRUST_DRAFT_MODE": true,
     "ONE_TRUST_PARTICIPATING_ENTITIES": "ffb2a640-8165-4d5f-94c2-6259e21bee51",

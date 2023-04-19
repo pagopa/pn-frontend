@@ -1,5 +1,4 @@
 {
-    "ENABLE_ASSISTANCE": true,
     "SPID_TEST_ENV_ENABLED": true,
     "SPID_VALIDATOR_ENV_ENABLED": false,
     "SPID_CIE_ENTITY_ID": "xx_servizicie_test",

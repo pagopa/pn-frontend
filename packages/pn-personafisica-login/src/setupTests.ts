@@ -8,7 +8,6 @@ beforeAll(async () => {
   const pnCommonsApi = await import('@pagopa-pn/pn-commons');
 
   pnCommonsApi.Configuration.setForTest<any>({
-    "ENABLE_ASSISTANCE": true,
     "MIXPANEL_TOKEN": "DUMMY",
     "ONE_TRUST_DRAFT_MODE": false,
     "ONE_TRUST_PP": "mocked-id",
