@@ -1,5 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
-
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   arrayOfDelegates,
@@ -113,7 +111,7 @@ describe('Delegations api tests', () => {
       'POST',
       CREATE_DELEGATION(),
       200,
-      undefined,
+      mockCreateDelegation,
       mockCreateDelegation
     );
     const res = await DelegationsApi.createDelegation(mockCreateDelegation);

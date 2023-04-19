@@ -7,31 +7,36 @@ import {
   DelegationParty,
   NewDelegationFormProps,
   CreateDelegationResponse,
+  CreateDelegationProps,
 } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
+
+export function createDelegationMapper(formData: NewDelegationFormProps): CreateDelegationProps {
+  return {
+    delegate: {
+      firstName: formData.nome,
+      lastName: formData.cognome,
+      fiscalCode: formData.codiceFiscale,
+      person: formData.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
+    },
+    visibilityIds:
+      formData.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
+        ? []
+        : formData.enti.map(function (ente) {
+            return {
+              uniqueIdentifier: ente.id,
+              name: ente.name,
+            } as DelegationParty;
+          }),
+    verificationCode: formData.verificationCode,
+    dateto: formatToSlicedISOString(formData.expirationDate),
+  };
+}
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
   async (data, { rejectWithValue }) => {
-    const payload = {
-      delegate: {
-        firstName: data.nome,
-        lastName: data.cognome,
-        fiscalCode: data.codiceFiscale,
-        person: data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
-      },
-      visibilityIds:
-        data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
-          ? []
-          : data.enti.map(function (ente) {
-              return {
-                uniqueIdentifier: ente.id,
-                name: ente.name,
-              } as DelegationParty;
-            }),
-      verificationCode: data.verificationCode,
-      dateto: formatToSlicedISOString(data.expirationDate),
-    };
+    const payload = createDelegationMapper(data);
     try {
       return await DelegationsApi.createDelegation(payload);
     } catch (e: any) {

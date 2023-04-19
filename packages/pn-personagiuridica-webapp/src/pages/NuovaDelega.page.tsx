@@ -59,6 +59,11 @@ const renderOption = (props: any, option: Party) => (
   </MenuItem>
 );
 
+const getOptionLabel = (option: Party) => option.name || '';
+
+const getError = (fieldTouched: boolean | undefined, fieldError: string | undefined) =>
+  fieldTouched && fieldError;
+
 const NuovaDelega = () => {
   const { t } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
@@ -134,9 +139,6 @@ const NuovaDelega = () => {
       ),
   });
 
-  const getError = (fieldTouched: boolean | undefined, fieldError: string | undefined) =>
-    fieldTouched && fieldError;
-
   useEffect(() => {
     dispatch(resetNewDelegation());
   }, []);
@@ -179,8 +181,6 @@ const NuovaDelega = () => {
   const handleChangeInput = (newInputValue: string) =>
     handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
-  const getOptionLabel = (option: Party) => option.name || '';
-
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
@@ -188,7 +188,7 @@ const NuovaDelega = () => {
         linkLabel={
           <Fragment>
             <PeopleIcon sx={{ mr: 0.5 }} />
-            {t('nuovaDelega.title')}
+            {t('deleghe.title')}
           </Fragment>
         }
         currentLocationLabel={t('nuovaDelega.breadcrumb')}
@@ -249,6 +249,7 @@ const NuovaDelega = () => {
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
+                                data-testid="selectPF"
                               />
                               <FormControlLabel
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
@@ -257,6 +258,7 @@ const NuovaDelega = () => {
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}
+                                data-testid="selectPG"
                               />
                             </RadioGroup>
                           </Stack>
@@ -368,6 +370,7 @@ const NuovaDelega = () => {
                               <FormControl fullWidth>
                                 <Autocomplete
                                   id="enti-select"
+                                  data-testid="enti-select"
                                   multiple
                                   options={entities}
                                   fullWidth
@@ -388,6 +391,7 @@ const NuovaDelega = () => {
                                   renderOption={renderOption}
                                   renderInput={(params) => (
                                     <TextField
+                                      name="enti-select"
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
                                     />
@@ -418,6 +422,7 @@ const NuovaDelega = () => {
                                 <TextField
                                   id="expirationDate"
                                   name="expirationDate"
+                                  data-testid="expirationDate"
                                   {...params}
                                   aria-label="Data termine delega" // aria-label for (TextField + Button) Group
                                   inputProps={{

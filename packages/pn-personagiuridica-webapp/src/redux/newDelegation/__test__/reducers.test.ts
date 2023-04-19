@@ -2,7 +2,7 @@ import { mockApi } from '../../../__test__/test-utils';
 import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
-import { createDelegation } from '../actions';
+import { createDelegation, createDelegationMapper } from '../actions';
 import { resetNewDelegation } from '../reducers';
 import {
   createDelegationDuplicatedErrorResponse,
@@ -25,7 +25,7 @@ describe('delegation redux state tests', () => {
       'POST',
       CREATE_DELEGATION(),
       200,
-      undefined,
+      createDelegationMapper(createDelegationPayload),
       createDelegationResponse
     );
     const action = await store.dispatch(createDelegation(createDelegationPayload));
@@ -41,7 +41,7 @@ describe('delegation redux state tests', () => {
       'POST',
       CREATE_DELEGATION(),
       200,
-      undefined,
+      createDelegationMapper(createDelegationSelectedPayload),
       createDelegationResponse
     );
     const action = await store.dispatch(createDelegation(createDelegationSelectedPayload));
@@ -57,7 +57,7 @@ describe('delegation redux state tests', () => {
       'POST',
       CREATE_DELEGATION(),
       401,
-      undefined,
+      createDelegationMapper(createDelegationPayload),
       createDelegationGenericErrorResponse
     );
     const action = await store.dispatch(createDelegation(createDelegationPayload));
@@ -73,7 +73,7 @@ describe('delegation redux state tests', () => {
       'POST',
       CREATE_DELEGATION(),
       400,
-      undefined,
+      createDelegationMapper(createDelegationPayload),
       createDelegationDuplicatedErrorResponse
     );
     const action = await store.dispatch(createDelegation(createDelegationPayload));

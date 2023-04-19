@@ -49,7 +49,7 @@
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
     "backToDelegations": "Torna alle deleghe",
-    "createdTitle": "La tua richiesta di delega è stata creata con successo",
+    "createdTitle": "La richiesta di delega è stata creata con successo",
     "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la tua richiesta.",
     "title": "Aggiungi una delega",
     "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle notifiche di {{organizationName}}",
@@ -61,6 +61,7 @@
       "lastName": "Cognome*",
       "fiscalCode": "Codice Fiscale*",
       "email": "Email*",
+      "businessName": "Ragione Sociale*",
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo gli enti selezionati",
@@ -85,6 +86,9 @@
       },
       "surname": {
         "required": "Il cognome è obbligatorio"
+      },
+      "businessName": {
+        "required": "La ragione sociale è obbligatoria"
       },
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",
