@@ -100,11 +100,13 @@ function testTimelineStatusInfosFn(
   timelineIndex: number,
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   const { label, description } = getNotificationTimelineStatusInfos(
     notification.timeline[timelineIndex],
-    notification.recipients
+    notification.recipients,
+    allStepsForThisStatus
   ) as { label: string; description: string };
   expect(label).toBe(`detail.timeline.${labelToTest}`);
   if (description.indexOf(' /-/ ') > -1) {
@@ -119,35 +121,40 @@ function testTimelineStatusInfosFn(
 function testTimelineStatusInfosFnSingle(
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   testTimelineStatusInfosFn(
     parsedNotificationCopy,
     0,
     labelToTest,
     descriptionToTest,
-    descriptionDataToTest
+    descriptionDataToTest,
+    allStepsForThisStatus
   );
 }
 
 function testTimelineStatusInfosFnMulti0(
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   testTimelineStatusInfosFn(
     parsedNotificationTwoRecipientsCopy,
     0,
     labelToTest,
     descriptionToTest,
-    descriptionDataToTest
+    descriptionDataToTest,
+    allStepsForThisStatus
   );
 }
 
 function testTimelineStatusInfosFnMulti1(
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   parsedNotificationTwoRecipientsCopy.timeline[0].details.recIndex = 1;
   testTimelineStatusInfosFn(
@@ -155,7 +162,8 @@ function testTimelineStatusInfosFnMulti1(
     0,
     labelToTest,
     descriptionToTest,
-    descriptionDataToTest
+    descriptionDataToTest,
+    allStepsForThisStatus
   );
 }
 
@@ -795,15 +803,44 @@ describe('timeline event description', () => {
 
   it('return timeline status infos - SEND_ANALOG_PROGRESS - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
-    testTimelineStatusInfosFnSingle('send-analog-progress', 'send-analog-progress-description');
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'CON080';
+    const allStepsForStatus: Array<INotificationDetailTimeline> = [{
+      category: TimelineCategory.SEND_ANALOG_DOMICILE,
+      elementId: 'SEND_ANALOG_DOMICILE_0',
+      timestamp: '2023-01-01',
+      details: {
+        recIndex: 0,
+        productType: 'AR'
+      }
+    }];
+    testTimelineStatusInfosFnSingle(
+      'send-analog-progress', 
+      'send-analog-progress-CON080-description', 
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', registeredLetterKind: ' detail.timeline.registered-letter-kind.AR' }, 
+      allStepsForStatus
+    );
   });
 
   it('return timeline status infos - SEND_ANALOG_PROGRESS - multi recipient', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_ANALOG_PROGRESS;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'CON080';
+    const allStepsForStatus: Array<INotificationDetailTimeline> = [{
+      category: TimelineCategory.SEND_ANALOG_DOMICILE,
+      elementId: 'SEND_ANALOG_DOMICILE_0',
+      timestamp: '2023-01-01',
+      details: {
+        recIndex: 0,
+        productType: 'AR'
+      }
+    }];
     testTimelineStatusInfosFnMulti1(
       'send-analog-progress',
-      'send-analog-progress-description-multirecipient'
+      'send-analog-progress-CON080-description-multirecipient',
+      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', registeredLetterKind: ' detail.timeline.registered-letter-kind.AR' },
+      allStepsForStatus
     );
   });
 

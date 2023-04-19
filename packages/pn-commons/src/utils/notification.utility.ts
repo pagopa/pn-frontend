@@ -432,7 +432,8 @@ export function getLegalFactLabel(
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
-  recipients: Array<NotificationDetailRecipient>
+  recipients: Array<NotificationDetailRecipient>,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ): TimelineStepInfo | null {
   const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
 
@@ -440,6 +441,7 @@ export function getNotificationTimelineStatusInfos(
     step,
     recipient,
     isMultiRecipient: recipients.length > 1,
+    allStepsForThisStatus
   });
 }
 
@@ -720,8 +722,8 @@ const populatePaymentHistory = (
 
 function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
   if (t.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
-    const deliveryDetailCode = (t.details as any).deliveryDetailCode as string;
-    return deliveryDetailCode.length > 1;   //  !== "CON080";
+    const deliveryDetailCode = (t.details as SendPaperDetails).deliveryDetailCode;
+    return !!deliveryDetailCode && deliveryDetailCode.length > 1;   //  !== "CON080";
   }
   return TimelineAllowedStatus.includes(t.category);
 }

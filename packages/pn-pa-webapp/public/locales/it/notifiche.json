@@ -113,7 +113,8 @@
       "send-digital-progress-success-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è stato preso in carico.",
       "send-analog-progress": "Aggiornamento sull'invio cartaceo",
       "send-analog-progress-description": "C'è un aggiornamento sull'invio cartaceo.",
-      "send-analog-progress-description-multirecipient": "C'è un aggiornamento sull'invio cartaceo.",
+      "send-analog-progress-CON080-description": "La raccomandata {{registeredLetterKind}} è stata stampata ed imbustata.",
+      "send-analog-progress-CON080-description-multirecipient": "La raccomandata {{registeredLetterKind}} per {{name}} {{CF}} è stata stampata ed imbustata.",
       "send-analog-error": "Invio per via cartacea non andato a buon fine",
       "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea non è andato a buon fine.",
       "send-analog-error-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} non è andato a buon fine.",
@@ -133,7 +134,19 @@
         "paper-receipt-accepted": "di accettazione raccomandata",
         "paper-receipt-delivered": "di consegna raccomandata",
         "paper-receipt-not-delivered": "di mancata consegna raccomandata"
+      },
+      "registered-letter-kind": {
+        "AR": "A/R",
+        "890": "890",
+        "RIR": "internazionale A/R"
+      },
+      "analog-workflow-attachment-kind": {
+        "Plico": "Scansione del plico",
+        "Indagine": "Scansione dell'analisi dell'indagine ",
+        "AR": "Ricevuta di ritorno",
+        "23L": "Ricevuta 23L"
       }
+
     },
     "downtimes": {
       "title": "DISSERVIZI",

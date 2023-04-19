@@ -69,21 +69,13 @@ export enum ResponseStatus {
   KO = 'KO',
 }
 
-export interface SendPaperDetails extends BaseDetails {
-  physicalAddress: PhysicalAddress;
-  serviceLevel: PhysicalCommunicationType;
-  sentAttemptMade: number;
-  investigation: boolean;
-  newAddress?: PhysicalAddress;
-  errors?: Array<string>;
+export interface SendPaperDetails extends AnalogWorkflowDetails {
+  serviceLevel?: PhysicalCommunicationType;
   productType?: string;
-  analogCost?: number;
   responseStatus?: ResponseStatus;
-  sendingReceipts?: Array<{
-    id: string;
-    system: string;
-  }>;
-  requestTimelineId: string;
+  deliveryFailureCause?: string;
+  deliveryDetailCode?: string;
+  sendRequestId?: string;
 }
 
 interface BaseDetails {

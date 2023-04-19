@@ -193,7 +193,7 @@ const NotificationDetailTimelineStep = ({
   );
 
   const microStep = (s: INotificationDetailTimeline) => {
-    const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients);
+    const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients, timelineStep.steps);
     if (!timelineStatusInfos) {
       return null;
     }

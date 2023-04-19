@@ -157,7 +157,6 @@ const multiTimeline = (digital1IsOK: boolean, sendDeliveredTo1 = false) => {
           "at": "", "address": "Via Roma 145", "addressDetails": "", "zip": "98036", 
           "municipality": "Graniti", "province": "Messina"
         },
-        "analogCost": 1
       }
     },
     {
@@ -171,7 +170,7 @@ const multiTimeline = (digital1IsOK: boolean, sendDeliveredTo1 = false) => {
           "at": "", "address": "Via Roma 145", "addressDetails": "", "zip": "98036", 
           "municipality": "Graniti", "province": "Messina"
         },
-        "productType": "RN_RS", "analogCost": 1100
+        "productType": "RN_RS"
       }
     },
   ];
@@ -211,8 +210,7 @@ const multiTimeline = (digital1IsOK: boolean, sendDeliveredTo1 = false) => {
         "physicalAddress": {
           "at": "", "address": "via prova 45", "addressDetails": "", "zip": "20121", 
           "municipality": "milano", "province": "milano"
-        },
-        "analogCost": 1
+        }
       }
     },
     {
@@ -226,7 +224,7 @@ const multiTimeline = (digital1IsOK: boolean, sendDeliveredTo1 = false) => {
           "at": "", "address": "via prova 45", "addressDetails": "", "zip": "20121", 
           "municipality": "milano", "province": "milano"
         },
-        "productType": "RN_RS", "analogCost": 1100
+        "productType": "RN_RS"
       }
     },
   ]

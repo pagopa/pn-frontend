@@ -5,6 +5,7 @@ export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
   recipient?: NotificationDetailRecipient;
   isMultiRecipient: boolean;
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>;
 }
 
 export interface TimelineStepInfo {
