@@ -16,6 +16,8 @@ interface PfConfigurationFromFile {
   URL_FE_LOGIN: string;
   URL_CHECKOUT: string;
   LANDING_SITE_URL: string;
+  // this will be removed when delegations to pg works correctly
+  DELEGATIONS_TO_PG_ENABLED: boolean;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -33,6 +35,7 @@ interface PfConfiguration extends PfConfigurationFromFile {
   URL_FE_LOGOUT: string;
   VERSION: string;
   LANDING_SITE_URL: string;
+  DELEGATIONS_TO_PG_ENABLED: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
@@ -48,6 +51,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('LANDING_SITE_URL').isString();
+    this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {
@@ -75,6 +79,7 @@ export function getConfiguration(): PfConfiguration {
     URL_FE_LOGOUT: `${configurationFromFile.URL_FE_LOGIN}logout`,
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
+    DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED)
   };
 }
 
