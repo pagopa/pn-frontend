@@ -278,6 +278,13 @@ export const getNotificationAllowedStatus = () => [
   },
 ];
 
+
+function legalFactTypeForAnalogEvent(timelineStep: INotificationDetailTimeline, legalFactKey?: string) {
+  const attachments = (timelineStep.details as SendPaperDetails).attachments;
+  const matchingAttachment = legalFactKey && attachments && attachments.find(att => att.url === legalFactKey);
+  return matchingAttachment ? matchingAttachment.documentType : undefined;
+}
+
 /**
  * Get legalFact label based on timeline step and legalfact type.
  * @param {INotificationDetailTimeline} timelineStep Timeline step
@@ -286,7 +293,8 @@ export const getNotificationAllowedStatus = () => [
  */
 export function getLegalFactLabel(
   timelineStep: INotificationDetailTimeline,
-  legalFactType?: LegalFactType
+  legalFactType?: LegalFactType,
+  legalFactKey?: string,
 ): string {
   const legalFactLabel = getLocalizedOrDefaultLabel(
     'notifications',
@@ -319,18 +327,22 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
-    // To the moment I could access to no example of a legal fact associated to this
-    // kind of events, neither to a documentation which indicates
-    // the legalFactType to expect for such events.
-    // Hence I keep the condition on the category only.
-    // -------------------------
-    // Carlos Lombardi, 2022.24.02
   } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
-    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+    const type = legalFactTypeForAnalogEvent(timelineStep, legalFactKey) || 'generic';
+    // eslint-disable-next-line functional/no-let
+    let text = getLocalizedOrDefaultLabel(
       'notifications',
-      'detail.timeline.legalfact.paper-receipt-accepted',
-      'di accettazione raccomandata'
-    )}`;
+      `detail.timeline.analog-workflow-attachment-kind.${type}`,
+      ''
+    );
+    if (text.length === 0) {
+      text = getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.analog-workflow-attachment-kind.generic',
+        `Documento allegato all'evento`
+      );
+    }
+    return text;
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
     legalFactType === LegalFactType.PEC_RECEIPT

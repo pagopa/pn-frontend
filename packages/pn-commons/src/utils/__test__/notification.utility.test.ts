@@ -1446,8 +1446,14 @@ describe('timeline legal fact link text', () => {
 
   it('return legalFact label - SEND_ANALOG_PROGRESS', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-accepted');
+    parsedNotificationCopy.timeline[0].legalFactsIds = [{
+      key: "legal-fact-1", category: LegalFactType.AAR
+    }]
+    parsedNotificationCopy.timeline[0].details = {
+      attachments: [{ documentType: "Plico", url: "legal-fact-1", id: "attachment-id-1" }]
+    }
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.AAR, "legal-fact-1");
+    expect(label).toBe('detail.timeline.analog-workflow-attachment-kind.Plico');
   });
 
   it('return legalFact label - SEND_DIGITAL_PROGRESS (success) - PEC_RECEIPT', () => {

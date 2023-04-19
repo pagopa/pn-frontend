@@ -69,6 +69,18 @@ export enum ResponseStatus {
   KO = 'KO',
 }
 
+/* options for documentType
+    - Plico: Indica il plico cartaceo
+    - AR: Indica la ricevuta di ritorno
+    - Indagine: Indica la ricevuta dell'analisi dell'indagine
+    - 23L: Indica la ricevuta 23L
+ */
+export interface AnalogFlowAttachment {
+  id: string;
+  documentType: string;
+  url: string;
+}
+
 export interface SendPaperDetails extends AnalogWorkflowDetails {
   serviceLevel?: PhysicalCommunicationType;
   productType?: string;
@@ -76,6 +88,7 @@ export interface SendPaperDetails extends AnalogWorkflowDetails {
   deliveryFailureCause?: string;
   deliveryDetailCode?: string;
   sendRequestId?: string;
+  attachments?: Array<AnalogFlowAttachment>;
 }
 
 interface BaseDetails {

@@ -131,7 +131,6 @@
         "pec-receipt-not-accepted": "di mancata accettazione PEC",
         "pec-receipt-delivered": "di consegna PEC",
         "pec-receipt-not-delivered": "di mancata consegna PEC",
-        "paper-receipt-accepted": "di accettazione raccomandata",
         "paper-receipt-delivered": "di consegna raccomandata",
         "paper-receipt-not-delivered": "di mancata consegna raccomandata"
       },
@@ -144,7 +143,8 @@
         "Plico": "Scansione del plico",
         "Indagine": "Scansione dell'analisi dell'indagine ",
         "AR": "Ricevuta di ritorno",
-        "23L": "Ricevuta 23L"
+        "23L": "Ricevuta 23L",
+        "generic": "Documento allegato"
       }
 
     },

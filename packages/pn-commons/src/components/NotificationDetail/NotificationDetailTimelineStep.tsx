@@ -162,7 +162,7 @@ const NotificationDetailTimelineStep = ({
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
               >
-                {getLegalFactLabel(lf.step, lf.file.category)}
+                {getLegalFactLabel(lf.step, lf.file.category, lf.file.key)}
               </ButtonNaked>
             ))}
         </Box>
@@ -237,7 +237,7 @@ const NotificationDetailTimelineStep = ({
                   key={lf.key}
                   data-testid="download-legalfact"
                 >
-                  {getLegalFactLabel(s, lf.category)}
+                  {getLegalFactLabel(s, lf.category, lf.key)}
                 </Typography>
               ))}
           </Typography>
