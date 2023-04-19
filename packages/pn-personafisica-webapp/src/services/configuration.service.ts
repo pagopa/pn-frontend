@@ -5,7 +5,6 @@ import { StringRuleValidator } from "@pagopa-pn/pn-validator/src/ruleValidators/
 interface PfConfigurationFromFile {
   API_BASE_URL: string;
   DISABLE_INACTIVITY_HANDLER?: boolean;
-  ENABLE_ASSISTANCE: boolean;
   MIXPANEL_TOKEN: string;
   ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PARTICIPATING_ENTITIES?: string;
@@ -42,7 +41,6 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches((dataRegex.htmlPageUrl)));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
-    this.ruleFor('ENABLE_ASSISTANCE').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
@@ -63,9 +61,9 @@ export function getConfiguration(): PfConfiguration {
   const VERSION = process.env.REACT_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
-    DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER || false,
+    DISABLE_INACTIVITY_HANDLER: Boolean(configurationFromFile.DISABLE_INACTIVITY_HANDLER),
     MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
-    ONE_TRUST_DRAFT_MODE: configurationFromFile.ONE_TRUST_DRAFT_MODE || false,
+    ONE_TRUST_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_DRAFT_MODE),
     ONE_TRUST_PARTICIPATING_ENTITIES: configurationFromFile.ONE_TRUST_PARTICIPATING_ENTITIES || '',
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
     ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
@@ -82,5 +80,5 @@ export function getConfiguration(): PfConfiguration {
 
 export async function loadPfConfiguration(): Promise<void> {
   await Configuration.load(new PfConfigurationValidator());
-  console.log(getConfiguration());
+  getConfiguration().IS_DEVELOP && console.log(getConfiguration());
 }

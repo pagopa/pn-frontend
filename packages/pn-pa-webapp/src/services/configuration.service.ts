@@ -72,4 +72,5 @@ export function getConfiguration(): PaConfiguration {
 
 export async function loadPaConfiguration(): Promise<void> {
   await Configuration.load(new PaConfigurationValidator());
+  getConfiguration().IS_DEVELOP && console.log(getConfiguration());
 }
