@@ -12,6 +12,8 @@ import {
   EmptyState,
   ApiErrorWrapper,
   useIsMobile,
+  CardElement,
+  ItemsCard,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -27,7 +29,7 @@ import { DelegatesColumn } from '../../models/Deleghe';
 
 import { Menu, OrganizationsList } from './DelegationsElements';
 
-const Delegates = () => {
+const DelegatesByCompany = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
@@ -103,6 +105,71 @@ const Delegates = () => {
     },
   ];
 
+  const cardHeader: [CardElement, CardElement] = [
+    {
+      id: 'status',
+      label: t('deleghe.table.status'),
+      getLabel(value: string) {
+        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        return <Chip label={label} color={color} />;
+      },
+      gridProps: {
+        xs: 8,
+      },
+    },
+    {
+      id: 'id',
+      label: '',
+      // eslint-disable-next-line sonarjs/no-identical-functions
+      getLabel(value: string, row: Item) {
+        return (
+          <Menu
+            menuType={'delegates'}
+            id={value}
+            verificationCode={row.verificationCode}
+            name={row.name}
+            setCodeModal={setShowCodeModal}
+          />
+        );
+      },
+      gridProps: {
+        xs: 4,
+      },
+    },
+  ];
+
+  const cardBody: Array<CardElement> = [
+    {
+      id: 'name',
+      label: t('deleghe.table.name'),
+      getLabel(value: string) {
+        return <b>{value}</b>;
+      },
+    },
+    {
+      id: 'startDate',
+      label: t('deleghe.table.delegationStart'),
+      getLabel(value: string) {
+        return value;
+      },
+    },
+    {
+      id: 'endDate',
+      label: t('deleghe.table.delegationEnd'),
+      getLabel(value: string) {
+        return value;
+      },
+    },
+    {
+      id: 'visibilityIds',
+      label: t('deleghe.table.permissions'),
+      getLabel(value: Array<string>) {
+        return <OrganizationsList organizations={value} textVariant="body2" visibleItems={3} />;
+      },
+      notWrappedInTypography: true,
+    },
+  ];
+
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
@@ -134,7 +201,7 @@ const Delegates = () => {
           mb={4}
           direction={isMobile ? 'column' : 'row'}
           justifyContent={'space-between'}
-          alignItems={'center'}
+          alignItems={isMobile ? 'flex-start' : 'center'}
         >
           <Typography variant="h5" mb={3}>
             {t('deleghe.delegatesTitle')}
@@ -154,7 +221,9 @@ const Delegates = () => {
           reloadAction={() => dispatch(getDelegates())}
         >
           <>
-            {rows.length > 0 ? (
+            {isMobile ? (
+              <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={rows} />
+            ) : rows.length > 0 ? (
               <Table
                 columns={delegatesColumns}
                 rows={rows}
@@ -177,4 +246,4 @@ const Delegates = () => {
   );
 };
 
-export default Delegates;
+export default DelegatesByCompany;
