@@ -158,7 +158,7 @@ const App = () => {
     /* eslint-disable-next-line functional/immutable-data */
     menuItems.splice(1, 0, {
       label: t('menu.deleghe'),
-      icon: () => <AltRouteIcon sx={{ rotate: '90deg' }} />,
+      icon: () => <AltRouteIcon />,
       route: routes.DELEGHE,
     });
     /* eslint-disable-next-line functional/immutable-data */
