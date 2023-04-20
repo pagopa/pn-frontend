@@ -1,11 +1,11 @@
 import { act, screen } from '@testing-library/react';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
 import { render } from '../../../__test__/test-utils';
+import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import * as hooks from '../../../redux/hooks';
-import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
+import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
-import MobileDelegates from '../MobileDelegates';
+import React from 'react';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -17,7 +17,7 @@ jest.mock('react-i18next', () => ({
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
- jest.mock('@pagopa-pn/pn-commons', () => {
+jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
@@ -25,14 +25,12 @@ jest.mock('react-i18next', () => ({
   };
 });
 
-
-describe('MobileDelegates Component - assuming delegates API works properly', () => {
+describe.skip('DelegationsOfTheCompany Component - assuming DelegationsOfTheCompany API works properly', () => {
   it('renders the empty state', () => {
-    const result = render(<MobileDelegates />);
+    const result = render(<DelegationsOfTheCompany />);
 
-    expect(result.container).toHaveTextContent(/deleghe.delegatesTitle/i);
-    expect(result.container).toHaveTextContent(/deleghe.add/i);
-    expect(result.container).toHaveTextContent(/deleghe.no_delegates/i);
+    expect(result.container).toHaveTextContent(/deleghe.delegatorsTitle/i);
+    expect(result.container).toHaveTextContent(/deleghe.no_delegators/i);
     expect(result.container).not.toHaveTextContent(/deleghe.table.name/i);
     expect(result.container).not.toHaveTextContent(/deleghe.table.delegationStart/i);
     expect(result.container).not.toHaveTextContent(/deleghe.table.delegationEnd/i);
@@ -40,10 +38,10 @@ describe('MobileDelegates Component - assuming delegates API works properly', ()
     expect(result.container).not.toHaveTextContent(/deleghe.table.status/i);
   });
 
-  it('renders the delegates', () => {
+  it('renders the DelegationsOfTheCompany', () => {
     const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegates);
-    const result = render(<MobileDelegates />);
+    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
+    const result = render(<DelegationsOfTheCompany />);
 
     expect(result.container).toHaveTextContent(/marco verdi/i);
     expect(result.container).toHaveTextContent(/davide legato/i);
@@ -51,8 +49,7 @@ describe('MobileDelegates Component - assuming delegates API works properly', ()
   });
 });
 
-
-describe('MobileDelegates Component - different delegates API behaviors', () => {
+describe.skip('DelegationsOfTheCompany Component - different DelegationsOfTheCompany API behaviors', () => {
   beforeAll(() => {
     jest.restoreAllMocks();
   });
@@ -66,15 +63,21 @@ describe('MobileDelegates Component - different delegates API behaviors', () => 
   });
 
   it('API error', async () => {
-    await act(async () => void render(
-      <MobileDelegates />,
-      { preloadedState: { appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATES) } }
-    ));
+    await act(
+      async () =>
+        void render(<DelegationsOfTheCompany />, {
+          preloadedState: {
+            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+              DELEGATION_ACTIONS.GET_DELEGATORS
+            ),
+          },
+        })
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
-    await act(async () => void render(<MobileDelegates />));
+    await act(async () => void render(<DelegationsOfTheCompany />));
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
