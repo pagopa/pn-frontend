@@ -2,8 +2,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 
 import Logout from '../Logout';
-import { ROUTE_LOGIN } from '../../../utils/constants';
 import { storageOnSuccessOps } from '../../../utils/storage';
+import { getConfiguration } from "../../../services/configuration.service";
 
 const mockNavigateFn = jest.fn();
 
@@ -24,5 +24,5 @@ test('test logout', () => {
   expect(storageOnSuccessOps.read()).toBeUndefined();
 
   expect(mockNavigateFn).toBeCalledTimes(1);
-  expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
+  expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
 });

@@ -43,14 +43,11 @@ import {
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
 import {
-  LANDING_SITE_URL,
-  PAGOPA_HELP_EMAIL,
-} from '../../utils/constants';
-import {
   FAQ_DIFFERENT_AMOUNTS_SUFFIX,
 } from '../../navigation/externalRoutes.const';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
+import { getConfiguration } from "../../services/configuration.service";
 
 interface Props {
   iun: string;
@@ -121,6 +118,7 @@ const NotificationPayment: React.FC<Props> = ({
   senderDenomination,
   subject,
 }) => {
+  const { PAGOPA_HELP_EMAIL, LANDING_SITE_URL } = getConfiguration();
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);

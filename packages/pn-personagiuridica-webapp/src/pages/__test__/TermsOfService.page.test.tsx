@@ -4,14 +4,6 @@ import { render } from '../../__test__/test-utils';
 import TermsOfServicePage from '../TermsOfService.page';
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
-jest.mock('../../utils/constants', () => {
-  return {
-    ...jest.requireActual('../../utils/constants'),
-    ONE_TRUST_TOS: 'mocked-id',
-    ONE_TRUST_DRAFT_MODE: false,
-  };
-});
-
 describe('TermsOfService page component', () => {
   const loadNoticesFn = jest.fn();
 

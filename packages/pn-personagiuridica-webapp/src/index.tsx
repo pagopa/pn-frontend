@@ -8,27 +8,54 @@ import { LoadingPage } from '@pagopa-pn/pn-commons';
 
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { store } from './redux/store';
+import { initStore, store } from './redux/store';
 import './i18n.ts';
 import App from './App';
+import { initOneTrust } from "./utils/onetrust";
+import { loadPgConfiguration } from "./services/configuration.service";
+import { initAxiosClients } from "./api/apiClients";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Suspense fallback={<LoadingPage renderType="whole"/>}>
-            <App />
-          </Suspense>
-        </ThemeProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+async function doTheRender() {
+  try {
+    // load config from JSON file
+    await loadPgConfiguration();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    // init actions (previously static code) which make use of config
+    initOneTrust();
+    initStore();
+    initAxiosClients();
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <Provider store={store}>
+          <BrowserRouter>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Suspense fallback={<LoadingPage renderType="whole"/>}>
+                <App />
+              </Suspense>
+            </ThemeProvider>
+          </BrowserRouter>
+        </Provider>
+      </React.StrictMode>,
+      document.getElementById('root')
+    );
+
+    // If you want to start measuring performance in your app, pass a function
+    // to log results (for example: reportWebVitals(console.log))
+    // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+    reportWebVitals();
+  } catch (e) {
+    console.error(e);
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <div style={{fontSize: 20, marginLeft: '2rem'}}>Problems loading configuration - see console</div>
+      </React.StrictMode>,
+      document.getElementById('root')
+    );
+  }
+}
+
+// actual launching of the React app
+void doTheRender();

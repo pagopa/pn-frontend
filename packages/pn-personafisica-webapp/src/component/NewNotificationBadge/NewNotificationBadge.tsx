@@ -21,6 +21,11 @@ const isNewNotification = (value: string) => {
  */
 export function getNewNotificationBadge(value: string): ReactNode {
   return isNewNotification(value) ? (
-    <Badge role="status" color="primary" variant="dot" sx={{ marginRight: '0px' }} />
+    <Badge
+      data-testid="new-notification-badge"
+      color="primary"
+      variant="dot"
+      sx={{ marginRight: '0px' }}
+    />
   ) : null;
 }

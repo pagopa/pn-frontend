@@ -5,4 +5,4 @@ import { apiClient } from '../apiClients';
    the API
    ------------------------------------------------------------------------ */
 
-export const AppStatusApi = createAppStatusApi(apiClient);
+export const AppStatusApi = createAppStatusApi(() => apiClient);

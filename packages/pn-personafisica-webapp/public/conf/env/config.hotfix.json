@@ -1,0 +1,13 @@
+{
+    "API_BASE_URL": "https://webapi.hotfix.pn.pagopa.it/",
+    "DISABLE_INACTIVITY_HANDLER": false,
+    "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
+    "ONE_TRUST_DRAFT_MODE": true,
+    "ONE_TRUST_PARTICIPATING_ENTITIES": "ffb2a640-8165-4d5f-94c2-6259e21bee51",
+    "ONE_TRUST_PP": "365c84c5-9329-4ec5-89f5-e53572eda132",
+    "ONE_TRUST_TOS": "b0da531e-8370-4373-8bd2-61ddc89e7fa6",
+    "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test",
+    "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
+    "URL_FE_LOGIN": "https://portale-login.hotfix.pn.pagopa.it/",
+    "LANDING_SITE_URL": "https://www.hotfix.pn.pagopa.it"
+}
