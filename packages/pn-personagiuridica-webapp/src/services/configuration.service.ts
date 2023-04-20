@@ -1,6 +1,6 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from "@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator";
+import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
 interface PgConfigurationFromFile {
   API_BASE_URL: string;
@@ -16,6 +16,8 @@ interface PgConfigurationFromFile {
   URL_FE_LOGIN: string;
   URL_CHECKOUT: string;
   LANDING_SITE_URL: string;
+  // this will be removed when delegations to pg works correctly
+  DELEGATIONS_TO_PG_ENABLED: boolean;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -32,13 +34,14 @@ interface PgConfiguration extends PgConfigurationFromFile {
   URL_FE_LOGOUT: string;
   VERSION: string;
   LANDING_SITE_URL: string;
+  DELEGATIONS_TO_PG_ENABLED: boolean;
 }
 
 class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
   constructor() {
     super();
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches((dataRegex.htmlPageUrl)));
+    this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.ruleFor('MIXPANEL_TOKEN').isString();
@@ -47,6 +50,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('LANDING_SITE_URL').isString();
+    this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PgConfigurationFromFile, string>): void {
@@ -73,6 +77,7 @@ export function getConfiguration(): PgConfiguration {
     URL_FE_LOGOUT: `${configurationFromFile.URL_FE_LOGIN}logout`,
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
+    DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
   };
 }
 

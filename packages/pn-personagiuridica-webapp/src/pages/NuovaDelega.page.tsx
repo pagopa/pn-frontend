@@ -50,8 +50,8 @@ import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import { Party } from '../models/party';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
-import { DELEGATIONS_TO_PG_ENABLED } from '../utils/constants';
 import { NewDelegationFormProps } from '../models/Deleghe';
+import { getConfiguration } from '../services/configuration.service';
 
 const renderOption = (props: any, option: Party) => (
   <MenuItem {...props} value={option.id} key={option.id}>
@@ -73,6 +73,7 @@ const NuovaDelega = () => {
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
+  const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));

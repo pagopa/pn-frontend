@@ -9,5 +9,6 @@
   "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
   "SELFCARE_BASE_URL": "https://pnpg.dev.selfcare.pagopa.it",
   "URL_FE_LOGIN": "https://pnpg.dev.selfcare.pagopa.it/auth/login",
-  "LANDING_SITE_URL": "https://www.dev.pn.pagopa.it"
+  "LANDING_SITE_URL": "https://www.dev.pn.pagopa.it",
+  "DELEGATIONS_TO_PG_ENABLED": true
 }
