@@ -194,6 +194,7 @@ describe('NuovaDelega page', () => {
       codiceFiscale: 'RSSMRA01A01A111A',
       nome: 'Mario',
       cognome: 'Rossi',
+      ragioneSociale: '',
       selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
       expirationDate: new Date('01/01/2122'),
       enti: [],
@@ -249,6 +250,7 @@ describe('NuovaDelega page', () => {
       codiceFiscale: 'RSSMRA01A01A111A',
       nome: 'Mario',
       cognome: 'Rossi',
+      ragioneSociale: '',
       selectTuttiEntiOrSelezionati: 'entiSelezionati',
       expirationDate: new Date('01/01/2122'),
       enti: [

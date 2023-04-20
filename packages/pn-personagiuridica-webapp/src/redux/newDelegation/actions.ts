@@ -8,17 +8,30 @@ import {
   NewDelegationFormProps,
   CreateDelegationResponse,
   CreateDelegationProps,
+  Person,
 } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
 
 export function createDelegationMapper(formData: NewDelegationFormProps): CreateDelegationProps {
+  const delegate = {
+    fiscalCode: formData.codiceFiscale,
+  } as Person;
+
+  /* eslint-disable functional/immutable-data */
+  if (formData.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF) {
+    delegate.person = true;
+    delegate.displayName = `${formData.nome} ${formData.cognome}`;
+    delegate.firstName = formData.nome;
+    delegate.lastName = formData.cognome;
+  } else {
+    delegate.person = false;
+    delegate.displayName = formData.ragioneSociale;
+    delegate.companyName = formData.ragioneSociale;
+  }
+  /* eslint-enable functional/immutable-data */
+
   return {
-    delegate: {
-      firstName: formData.nome,
-      lastName: formData.cognome,
-      fiscalCode: formData.codiceFiscale,
-      person: formData.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
-    },
+    delegate,
     visibilityIds:
       formData.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
         ? []

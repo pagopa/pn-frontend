@@ -23,6 +23,7 @@ export interface NewDelegationFormProps {
   codiceFiscale: string;
   nome: string;
   cognome: string;
+  ragioneSociale: string;
   selectTuttiEntiOrSelezionati: string;
   expirationDate: Date;
   enti: Array<Party>;
@@ -30,10 +31,10 @@ export interface NewDelegationFormProps {
 }
 
 export interface Person {
-  firstName: string;
-  lastName: string;
-  displayName?: string;
-  companyName?: string | null;
+  firstName?: string;
+  lastName?: string;
+  displayName: string;
+  companyName?: string;
   fiscalCode: string;
   person: boolean;
 }

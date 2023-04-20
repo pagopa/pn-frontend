@@ -113,26 +113,5 @@ export const DelegationsApi = {
   createDelegation: (data: CreateDelegationProps): Promise<CreateDelegationResponse> =>
     apiClient
       .post<CreateDelegationResponse>(CREATE_DELEGATION(), data)
-      .then((response: AxiosResponse<CreateDelegationResponse>) => {
-        if (response.data) {
-          return response.data;
-        }
-        return {
-          datefrom: '',
-          dateto: '',
-          delegate: {
-            firstName: '',
-            lastName: '',
-            companyName: null,
-            fiscalCode: '',
-            email: '',
-            person: true,
-          },
-          delegator: null,
-          mandateId: '',
-          status: '',
-          verificationCode: '',
-          visibilityIds: [],
-        } as CreateDelegationResponse;
-      }),
+      .then((response: AxiosResponse<CreateDelegationResponse>) => response.data),
 };
