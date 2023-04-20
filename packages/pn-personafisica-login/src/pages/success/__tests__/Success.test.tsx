@@ -5,8 +5,8 @@ import { AppRouteType } from '@pagopa-pn/pn-commons';
 
 import '../../../locales/i18n';
 import { storageAarOps, storageTypeOps } from '../../../utils/storage';
-import { PF_URL, PG_URL } from '../../../utils/constants';
 import SuccessPage from '../Success';
+import { getConfiguration } from "../../../services/configuration.service";
 
 const mockLocationAssign = jest.fn();
 
@@ -35,10 +35,11 @@ describe('test login page', () => {
     );
 
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(PF_URL + '#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '#token=fake-token');
   });
 
-  test('test redirect - PG', () => {
+  // momentarily skipped for pn-5157 - pg login is managed by selfcare pnpg
+  test.skip('test redirect - PG', () => {
     storageTypeOps.write(AppRouteType.PG);
     render(
       <BrowserRouter>
@@ -47,7 +48,7 @@ describe('test login page', () => {
     );
 
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(PG_URL + '#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PG_URL + '#token=fake-token');
   });
 
   // momentarily commented for pn-5157
@@ -72,7 +73,7 @@ describe('test login page', () => {
     );
 
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(PF_URL + '?aar=aar-token#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '?aar=aar-token#token=fake-token');
   });
 
   test('test redirect - aar with xss attack', () => {
@@ -85,7 +86,7 @@ describe('test login page', () => {
     );
 
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(PF_URL + '?aar=aar-malicious-token#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token');
   });
 
   // momentarily commented for pn-5157
@@ -113,7 +114,7 @@ describe('test login page', () => {
     fireEvent.click(confirmButton!);
     waitFor(() => {
       expect(mockLocationAssign).toBeCalled();
-      expect(mockLocationAssign).toBeCalledWith(PF_URL + '#token=fake-token');
+      expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '#token=fake-token');
     });
   });
 });

@@ -14,7 +14,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
+import { getConfiguration } from "../services/configuration.service";
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -54,6 +54,8 @@ const SessionGuardRender = () => {
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+
+  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
 
   const goodbyeMessage = {
     title: isUnauthorizedUser

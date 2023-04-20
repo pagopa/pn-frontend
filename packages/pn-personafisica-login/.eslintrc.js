@@ -68,7 +68,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-floating-promises': 'error',
     'no-unused-expressions': 'off',
-    '@typescript-eslint/no-unused-expressions': ['error'],
+    '@typescript-eslint/no-unused-expressions': ["error", { "allowShortCircuit": true }],
     '@typescript-eslint/prefer-function-type': 'error',
     '@typescript-eslint/restrict-plus-operands': 'error',
     semi: 'off',
