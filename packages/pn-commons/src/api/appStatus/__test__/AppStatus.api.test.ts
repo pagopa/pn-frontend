@@ -20,7 +20,7 @@ describe("AppStatus api tests", () => {
 
   /* eslint-disable-next-line functional/no-let */
   let mock: MockAdapter;
-  let appStatusApi = createAppStatusApi(fakeApiClient);
+  let appStatusApi = createAppStatusApi(() => fakeApiClient);
 
   beforeEach(() => {
     mock = new MockAdapter(fakeApiClient);

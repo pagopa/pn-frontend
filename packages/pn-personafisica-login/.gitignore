@@ -25,3 +25,6 @@ test-report.xml
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# config
+public/conf/config.json

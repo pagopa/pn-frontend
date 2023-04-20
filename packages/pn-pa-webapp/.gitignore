@@ -17,6 +17,7 @@ test-report.xml
 
 # misc
 .DS_Store
+/public/conf/config.json
 .env.local
 .env.development.local
 .env.test.local
