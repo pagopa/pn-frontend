@@ -1,9 +1,21 @@
+import { UserGroup } from "./user";
+
 export interface ApiKey {
   id: string;
   name: string;
   value: string;
   lastUpdate: string;
   groups: Array<string>;
+  status: ApiKeyStatus;
+  statusHistory: Array<ApiKeyStatusHistory>;
+}
+
+export interface ApiKeyDTO {
+  id: string;
+  name: string;
+  value: string;
+  lastUpdate: string;
+  groups: Array<UserGroup>;
   status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
@@ -36,6 +48,7 @@ export enum ModalApiKeyView {
   ENABLE = 'ENABLE',
   ROTATE = 'ROTATE',
   DELETE = 'DELETE',
+  VIEW_GROUPS_ID = 'VIEW_GROUPS_ID',
 }
 
 export interface GetApiKeysResponse {

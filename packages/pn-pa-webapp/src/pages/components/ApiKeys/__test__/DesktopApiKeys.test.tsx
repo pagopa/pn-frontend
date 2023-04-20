@@ -100,4 +100,15 @@ describe('DesktopApiKeys component', () => {
     await waitFor(() => fireEvent.click(viewButton));
     expect(mockHandleModalClick).toBeCalledTimes(1);
   });
+
+  it('Check click view groups id', async () => {
+    const result = render(<DesktopApiKeys
+      {...defaultProps}
+    />);
+    const contextMenuButton = result.getAllByTestId('contextMenuButton')[0];
+    await waitFor(() => fireEvent.click(contextMenuButton));
+    const viewButton = screen.getByTestId('buttonViewGroupsId');
+    await waitFor(() => fireEvent.click(viewButton));
+    expect(mockHandleModalClick).toBeCalledTimes(1);
+  });
 });
