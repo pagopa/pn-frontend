@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Align, Column, Item } from './ItemsTable';
-import { SxProps } from '@mui/material';
+import { GridProps } from '@mui/material';
 
 /**
  * @typedef TableConfiguration configuration for the table view
@@ -19,11 +19,11 @@ interface TableConfiguration<ColumnId> {
 /**
  * @typedef CardConfiguration configuration for the card view
  * @prop {('header' | 'body')} position position of the field into the card
- * @prop {SxProps} gridProps style properties to override custom ones
+ * @prop {GridProps} gridProps style properties to override custom ones
  */
 interface CardConfiguration {
   position: 'header' | 'body';
-  gridProps?: SxProps;
+  gridProps?: GridProps;
 }
 
 /**

@@ -42,6 +42,7 @@ const SmartTable = <ColumnId extends string>({
           label: cfg.label,
           getLabel: (value: string | number | Array<string | ReactNode>, data?: Item) =>
             cfg.getValue(value, data, true),
+          gridProps: cfg.cardConfiguration.gridProps,
         });
       } else if (cfg.cardConfiguration.position === 'body') {
         cardBody.push({

@@ -25,7 +25,7 @@
     "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "error_button": "Ricarica la pagina",
     "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
-    "no_delegators": "Non hai deleghe a tuo carico.",
+    "no_delegators": "Non c'è nessuna delega a carico di {{recipient}}.",
     "show_code_title": "Codice di verifica per la delega a {{name}}",
     "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",

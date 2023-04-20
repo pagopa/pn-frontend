@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { TabPanel } from '@pagopa-pn/pn-commons';
 import { useAppDispatch } from '../redux/hooks';
 import { resetState } from '../redux/delegation/reducers';
+import { getDelegators } from '../redux/delegation/actions';
 
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
@@ -22,6 +23,7 @@ const Deleghe = () => {
   };
 
   const retrieveData = async () => {
+    await dispatch(getDelegators());
     setPageReady(true);
   };
 

@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
   AutocompleteRenderOptionState,
-  Box,
   Button,
   Checkbox,
+  Chip,
   FormControl,
   InputLabel,
   ListItemText,
@@ -18,6 +18,22 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import {
+  ApiErrorWrapper,
+  EmptyState,
+  Item,
+  KnownSentiment,
+  SmartTable,
+  SmartTableData,
+} from '@pagopa-pn/pn-commons';
+
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import delegationToItem from '../../utils/delegation.utility';
+import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { DelegatorsColumn } from '../../models/Deleghe';
+import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const arrayStatus = [
   { status: 'attiva', id: 1 },
@@ -27,7 +43,106 @@ const arrayStatus = [
 
 const DelegationsOfTheCompany = () => {
   const { t } = useTranslation(['deleghe']);
-  const rows = false;
+  const dispatch = useAppDispatch();
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const delegators = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegators
+  );
+  const rows: Array<Item> = delegationToItem(delegators);
+
+  const smartCfg: Array<SmartTableData<DelegatorsColumn>> = [
+    {
+      id: 'name',
+      label: t('deleghe.table.name'),
+      getValue(value: string) {
+        return <Typography fontWeight="bold">{value}</Typography>;
+      },
+      tableConfiguration: {
+        width: '18%',
+      },
+      cardConfiguration: {
+        position: 'body',
+      },
+    },
+    {
+      id: 'startDate',
+      label: t('deleghe.table.delegationStart'),
+      getValue(value: string) {
+        return value;
+      },
+      tableConfiguration: {
+        width: '13%',
+      },
+      cardConfiguration: {
+        position: 'body',
+      },
+    },
+    {
+      id: 'endDate',
+      label: t('deleghe.table.delegationEnd'),
+      getValue(value: string) {
+        return value;
+      },
+      tableConfiguration: {
+        width: '13%',
+      },
+      cardConfiguration: {
+        position: 'body',
+      },
+    },
+    {
+      id: 'visibilityIds',
+      label: t('deleghe.table.permissions'),
+      getValue(value: Array<string>) {
+        return <OrganizationsList organizations={value} visibleItems={3} />;
+      },
+      tableConfiguration: {
+        width: '18%',
+      },
+      cardConfiguration: {
+        position: 'body',
+      },
+    },
+    {
+      id: 'status',
+      label: t('deleghe.table.status'),
+      getValue(value: string, row: Item) {
+        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        if (value === DelegationStatus.ACTIVE) {
+          return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
+        } else {
+          return <AcceptButton id={row.id} name={row.name as string} />;
+        }
+      },
+      tableConfiguration: {
+        width: '20%',
+        align: 'center',
+      },
+      cardConfiguration: {
+        position: 'header',
+        gridProps: {
+          xs: 8,
+        },
+      },
+    },
+    {
+      id: 'id',
+      label: '',
+      getValue(value: string) {
+        return <Menu menuType={'delegators'} id={value} />;
+      },
+      tableConfiguration: {
+        width: '5%',
+      },
+      cardConfiguration: {
+        position: 'header',
+        gridProps: {
+          xs: 4,
+        },
+      },
+    },
+  ];
+
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -50,11 +165,11 @@ const DelegationsOfTheCompany = () => {
   );
 
   return (
-    <Box mb={8}>
-      <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
-      </Stack>
-      <Stack direction={'row'} spacing={2} sx={{ width: '1082px' }}>
+    <>
+      <Typography variant="h6" mb={4}>
+        {t('deleghe.delegatorsTitle')}
+      </Typography>
+      <Stack direction={'row'} spacing={2} mb={4}>
         <Autocomplete
           id="names"
           size="small"
@@ -133,7 +248,21 @@ const DelegationsOfTheCompany = () => {
           {'Elimina filtri'}
         </Button>
       </Stack>
-    </Box>
+      <ApiErrorWrapper
+        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
+        reloadAction={() => dispatch(getDelegators())}
+        mainText={t('deleghe.delegatorsApiErrorMessage')}
+      >
+        {rows.length > 0 ? (
+          <SmartTable conf={smartCfg} data={rows} />
+        ) : (
+          <EmptyState
+            sentimentIcon={KnownSentiment.NONE}
+            emptyMessage={t('deleghe.no_delegators', { recipient: organization.name })}
+          />
+        )}
+      </ApiErrorWrapper>
+    </>
   );
 };
 
