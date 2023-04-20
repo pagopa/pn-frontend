@@ -3,14 +3,6 @@ import { render } from '@testing-library/react';
 
 import PrivacyPolicy from '../PrivacyPolicy';
 
-jest.mock('../../../utils/constants', () => {
-  return {
-    ...jest.requireActual('../../../utils/constants'),
-    ONE_TRUST_PP: 'mocked-id',
-    ONE_TRUST_DRAFT_MODE: false,
-  };
-});
-
 describe('test the Privacy Policy page', () => {
   const loadNoticesFn = jest.fn();
 

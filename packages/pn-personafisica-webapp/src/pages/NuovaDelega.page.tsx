@@ -52,7 +52,7 @@ import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import { Party } from '../models/party';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
-import { DELEGATIONS_TO_PG_ENABLED } from '../utils/constants';
+import { getConfiguration } from '../services/configuration.service';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -97,7 +97,7 @@ const NuovaDelega = () => {
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
   };
-
+  const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
   // Get tomorrow date
   const today = new Date();
   const tomorrow = new Date(today);

@@ -1,5 +1,5 @@
-/* eslint-disable functional/no-let */
 import React from 'react';
+/* eslint-disable functional/no-let */
 
 import { RenderResult, act, fireEvent, waitFor, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
@@ -17,11 +17,15 @@ jest.mock('react-i18next', () => ({
 }));
 
 const mockIsPaymentEnabledGetter = jest.fn();
-jest.mock('../../../../utils/constants', () => ({
-  get IS_PAYMENT_ENABLED() {
-    return mockIsPaymentEnabledGetter();
-  },
-}));
+jest.mock('../../../../services/configuration.service', () => {
+  return {
+    ...jest.requireActual('../../../../services/configuration.service'),
+    getConfiguration: () => ({
+      IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
+    }),
+  };
+});
+
 
 describe('Attachments Component with payment enabled', () => {
   let result: RenderResult;
@@ -54,6 +58,7 @@ describe('Attachments Component with payment enabled', () => {
   beforeEach(async () => {
     jest.resetAllMocks();
     jest.clearAllMocks();
+
     // mock action
     mockActionFn = jest.fn();
     const actionSpy = jest.spyOn(actions, 'uploadNotificationAttachment');

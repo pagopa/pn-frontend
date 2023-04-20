@@ -33,7 +33,6 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } from './utils/constants';
 import { RootState, store } from './redux/store';
 import {
   getDomicileInfo,
@@ -47,8 +46,10 @@ import { PGAppErrorFactory } from './utils/AppError/PGAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { getConfiguration } from "./services/configuration.service";
 
 const App = () => {
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } = getConfiguration();
   setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);

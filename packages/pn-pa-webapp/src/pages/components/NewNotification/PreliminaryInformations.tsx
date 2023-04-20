@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useCallback } from 'react';
+import { ChangeEvent, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -21,6 +21,7 @@ import {
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
+import { getConfiguration } from '../../../services/configuration.service';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
 import { getUserGroups, NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
@@ -28,7 +29,6 @@ import { PreliminaryInformationsPayload } from '../../../redux/newNotification/t
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
-import { IS_PAYMENT_ENABLED } from '../../../utils/constants';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
@@ -45,8 +45,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
   const { t: tc } = useTranslation(['common']);
+  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
 
-  const initialValues = () => ({
+  const initialValues = useCallback(() => ({
     paProtocolNumber: notification.paProtocolNumber || '',
     subject: notification.subject || '',
     abstract: notification.abstract || '',
@@ -54,7 +55,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     taxonomyCode: notification.taxonomyCode || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
     paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
-  });
+  }), [notification, IS_PAYMENT_ENABLED]);
 
   const validationSchema = yup.object({
     paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`),

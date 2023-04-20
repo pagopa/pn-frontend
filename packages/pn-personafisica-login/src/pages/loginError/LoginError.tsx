@@ -3,9 +3,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Dialog, Typography } from '@mui/material';
 
-import { ROUTE_LOGIN } from '../../utils/constants';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
+import { getConfiguration } from "../../services/configuration.service";
 
 const handleError = (queryParams: string) => {
   if (process.env.NODE_ENV !== 'test') {
@@ -15,6 +15,7 @@ const handleError = (queryParams: string) => {
 };
 
 const LoginError = () => {
+  const { ROUTE_LOGIN } = getConfiguration();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
