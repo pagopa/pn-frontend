@@ -53,8 +53,8 @@ const Deleghe = () => {
             centered
             variant="fullWidth"
           >
-            <Tab data-test-id="tab1" label={t('deleghe.tab_delegati')} />
-            <Tab data-test-id="tab2" label={t('deleghe.tab_deleghe')} />
+            <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
+            <Tab data-testid="tab2" label={t('deleghe.tab_deleghe')} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
