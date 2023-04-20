@@ -17,14 +17,13 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
-          REACT_APP_LANDING_SITE_URL: "https://www.dev.pn.pagopa.it"
+          REACT_APP_LANDING_SITE_URL: 'https://www.dev.pn.pagopa.it'
     - identifier: pn_pg_svil_build
       buildspec: cra_buildspec.yaml
       env:
         variables:
           BUILD_ID: svil
           # PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
-          # momentarily commented for pn-5157
           REACT_APP_URL_FE_LOGIN: https://pnpg.dev.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://pnpg.dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
@@ -35,7 +34,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
-          REACT_APP_LANDING_SITE_URL: "https://www.svil.pn.pagopa.it"
+          REACT_APP_LANDING_SITE_URL: 'https://www.svil.pn.pagopa.it'
     - identifier: pn_pg_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -52,7 +51,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
-          REACT_APP_LANDING_SITE_URL: "https://www.coll.pn.pagopa.it"
+          REACT_APP_LANDING_SITE_URL: 'https://www.coll.pn.pagopa.it'
     - identifier: pn_pg_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -69,7 +68,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
-          REACT_APP_LANDING_SITE_URL: "https://www.cert.pn.pagopa.it"
+          REACT_APP_LANDING_SITE_URL: 'https://www.cert.pn.pagopa.it'
     - identifier: pn_pg_hotfix_build
       buildspec: cra_buildspec.yaml
       env:
@@ -86,7 +85,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
           REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
-          REACT_APP_LANDING_SITE_URL: "https://www.hotfix.pn.pagopa.it"
+          REACT_APP_LANDING_SITE_URL: 'https://www.hotfix.pn.pagopa.it'
     # - identifier: pn_pg_prod_build
     #     buildspec: cra_buildspec.yaml
     #     env:

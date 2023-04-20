@@ -1,8 +1,7 @@
 import * as redux from 'react-redux';
-
 import { fireEvent, waitFor } from '@testing-library/react';
-
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
@@ -152,7 +151,7 @@ describe('NuovaDelega page', () => {
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockCreateActionFn).toBeCalledTimes(1);
       expect(mockCreateActionFn).toBeCalledWith({
-        selectPersonaFisicaOrPersonaGiuridica: 'pf',
+        selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
         codiceFiscale: 'RSSMRA01A01A111A',
         nome: 'Mario',
         cognome: 'Rossi',

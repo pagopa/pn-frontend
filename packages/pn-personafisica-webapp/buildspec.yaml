@@ -14,10 +14,12 @@ batch:
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29-test'
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
-          REACT_APP_ONE_TRUST_PP: "365c84c5-9329-4ec5-89f5-e53572eda132"
-          REACT_APP_ONE_TRUST_TOS: "b0da531e-8370-4373-8bd2-61ddc89e7fa6"
-          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: "ffb2a640-8165-4d5f-94c2-6259e21bee51"
-          REACT_APP_LANDING_SITE_URL: "https://www.dev.pn.pagopa.it"
+          REACT_APP_ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132'
+          REACT_APP_ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6'
+          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: 'ffb2a640-8165-4d5f-94c2-6259e21bee51'
+          REACT_APP_LANDING_SITE_URL: 'https://www.dev.pn.pagopa.it'
+          # this will be removed when delegations to pg works correctly
+          REACT_APP_DELEGATIONS_TO_PG_ENABLED: true
     - identifier: pn_pf_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -31,10 +33,10 @@ batch:
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29-test'
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
-          REACT_APP_ONE_TRUST_PP: "365c84c5-9329-4ec5-89f5-e53572eda132"
-          REACT_APP_ONE_TRUST_TOS: "b0da531e-8370-4373-8bd2-61ddc89e7fa6"
-          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: "ffb2a640-8165-4d5f-94c2-6259e21bee51"
-          REACT_APP_LANDING_SITE_URL: "https://www.svil.pn.pagopa.it"
+          REACT_APP_ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132'
+          REACT_APP_ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6'
+          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: 'ffb2a640-8165-4d5f-94c2-6259e21bee51'
+          REACT_APP_LANDING_SITE_URL: 'https://www.svil.pn.pagopa.it'
     - identifier: pn_pf_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -48,10 +50,10 @@ batch:
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29-test'
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
-          REACT_APP_ONE_TRUST_PP: "365c84c5-9329-4ec5-89f5-e53572eda132"
-          REACT_APP_ONE_TRUST_TOS: "b0da531e-8370-4373-8bd2-61ddc89e7fa6"
-          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: "ffb2a640-8165-4d5f-94c2-6259e21bee51"
-          REACT_APP_LANDING_SITE_URL: "https://www.coll.pn.pagopa.it"
+          REACT_APP_ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132'
+          REACT_APP_ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6'
+          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: 'ffb2a640-8165-4d5f-94c2-6259e21bee51'
+          REACT_APP_LANDING_SITE_URL: 'https://www.coll.pn.pagopa.it'
     - identifier: pn_pf_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -65,10 +67,10 @@ batch:
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29-test'
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
-          REACT_APP_ONE_TRUST_PP: "365c84c5-9329-4ec5-89f5-e53572eda132"
-          REACT_APP_ONE_TRUST_TOS: "b0da531e-8370-4373-8bd2-61ddc89e7fa6"
-          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: "ffb2a640-8165-4d5f-94c2-6259e21bee51"
-          REACT_APP_LANDING_SITE_URL: "https://www.cert.pn.pagopa.it"
+          REACT_APP_ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132'
+          REACT_APP_ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6'
+          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: 'ffb2a640-8165-4d5f-94c2-6259e21bee51'
+          REACT_APP_LANDING_SITE_URL: 'https://www.cert.pn.pagopa.it'
     - identifier: pn_pf_hotfix_build
       buildspec: cra_buildspec.yaml
       env:
@@ -82,10 +84,10 @@ batch:
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29-test'
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
-          REACT_APP_ONE_TRUST_PP: "365c84c5-9329-4ec5-89f5-e53572eda132"
-          REACT_APP_ONE_TRUST_TOS: "b0da531e-8370-4373-8bd2-61ddc89e7fa6"
-          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: "ffb2a640-8165-4d5f-94c2-6259e21bee51"
-          REACT_APP_LANDING_SITE_URL: "https://www.hotfix.pn.pagopa.it"
+          REACT_APP_ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132'
+          REACT_APP_ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6'
+          REACT_APP_ONE_TRUST_PARTICIPATING_ENTITIES: 'ffb2a640-8165-4d5f-94c2-6259e21bee51'
+          REACT_APP_LANDING_SITE_URL: 'https://www.hotfix.pn.pagopa.it'
     # - identifier: pn_pf_prod_build
     #     buildspec: cra_buildspec.yaml
     #     env:

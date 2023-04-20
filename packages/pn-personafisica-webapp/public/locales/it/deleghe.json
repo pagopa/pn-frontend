@@ -61,6 +61,7 @@
       "lastName": "Cognome*",
       "fiscalCode": "Codice Fiscale*",
       "email": "Email*",
+      "businessName": "Ragione Sociale*",
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo gli enti selezionati",
@@ -69,7 +70,8 @@
       "verificationCode": "Codice di verifica",
       "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
       "submit": "Invia la richiesta",
-      "mandatoryField": "Campi obbligatori*"
+      "mandatoryField": "Campi obbligatori*",
+      "party-not-found": "Nessun ente trovato"
     },
     "validation": {
       "fiscalCode": {
@@ -85,6 +87,9 @@
       },
       "surname": {
         "required": "Il cognome è obbligatorio"
+      },
+      "businessName": {
+        "required": "La ragione sociale è obbligatoria"
       },
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",

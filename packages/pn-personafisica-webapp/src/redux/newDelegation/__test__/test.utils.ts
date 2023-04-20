@@ -1,3 +1,5 @@
+import { RecipientType } from '@pagopa-pn/pn-commons';
+
 export const initialState = {
   created: false,
   error: false,
@@ -5,7 +7,7 @@ export const initialState = {
 };
 
 export const createDelegationPayload = {
-  selectPersonaFisicaOrPersonaGiuridica: 'pf',
+  selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
   codiceFiscale: 'fiscalCode',
   email: 'test@email.com',
   nome: 'nome',
@@ -17,7 +19,7 @@ export const createDelegationPayload = {
 };
 
 export const createDelegationSelectedPayload = {
-  selectPersonaFisicaOrPersonaGiuridica: 'pf',
+  selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
   codiceFiscale: 'fiscalCode',
   email: 'test@email.com',
   nome: 'nome',
