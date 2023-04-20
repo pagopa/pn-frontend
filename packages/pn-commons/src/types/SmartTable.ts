@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { Align, Column, Item } from './ItemsTable';
 import { SxProps } from '@mui/material';
+import { Align, Column, Item } from './ItemsTable';
 
 /**
  * @typedef TableConfiguration configuration for the table view
