@@ -2,8 +2,7 @@ import { INotificationDetailTimeline, TimelineCategory } from '../../types';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
 import { TimelineStep } from './TimelineStep';
 import { DefaultStep } from './DefaultStep';
-import { SendAnalogProgressStep } from './SendAnalogProgressStep';
-import { SendAnalogFeedbackStep } from './SendAnalogFeedbackStep';
+import { SendAnalogFlowStep } from './SendAnalogFlowStep';
 import { SendCourtesyMessageStep } from './SendCourtesyMessageStep';
 import { SendDigitalDomicileStep } from './SendDigitalDomicileStep';
 import { SendDigitalFeedbackStep } from './SendDigitalFeedbackStep';
@@ -30,9 +29,9 @@ export class TimelineStepFactory {
       case TimelineCategory.SEND_ANALOG_DOMICILE:
          return new SendAnalogDomicileStep();
       case TimelineCategory.SEND_ANALOG_FEEDBACK:
-        return new SendAnalogFeedbackStep();
+        return new SendAnalogFlowStep();
       case TimelineCategory.SEND_ANALOG_PROGRESS:
-        return new SendAnalogProgressStep();
+        return new SendAnalogFlowStep();
       case TimelineCategory.NOT_HANDLED:
         return new NotHandledStep();
       default:

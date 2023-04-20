@@ -1,14 +1,29 @@
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { SendPaperDetails } from '../../types';
+import { ResponseStatus, SendPaperDetails, TimelineCategory } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
-export class SendAnalogProgressStep extends TimelineStep {
+export class SendAnalogFlowStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
+    // label
+    // ///////////////////////////////////////////////////////////////
+    const responseStatus = (payload.step.details as SendPaperDetails).responseStatus; //  === ResponseStatus.KO
+
+    const labelEntry = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
+      ? 'send-analog-progress'
+      : responseStatus === ResponseStatus.KO ? 'send-analog-error' : 'send-analog-success';
+
+    const defaultLabel = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
+      ? `Aggiornamento sull'invio cartaceo`
+      : responseStatus === ResponseStatus.KO ? 'Invio per via cartacea non riuscito' : 'Invio per via cartacea riuscito';
+
     const label = getLocalizedOrDefaultLabel(
       'notifications',
-      'detail.timeline.send-analog-progress',
-      `Aggiornamento sull'invio cartaceo`
+      `detail.timeline.${labelEntry}`,
+      defaultLabel
     );
+
+    // details
+    // ///////////////////////////////////////////////////////////////
     const deliveryDetailCode = (payload.step.details as SendPaperDetails).deliveryDetailCode;
 
     // to obtain the registeredLetterKindCode, we must fetch the "originating" SEND_ANALOG_DOMICILE 
@@ -24,12 +39,25 @@ export class SendAnalogProgressStep extends TimelineStep {
       ? registeredLetterKindI18n           // i.e. ''
       : ` ${registeredLetterKindI18n}`;
       
-    console.log({ payload, registeredLetterKindCode, registeredLetterKindI18n, registeredLetterKindText });
+    const deliveryFailureCauseCode = (payload.step.details as SendPaperDetails).deliveryFailureCause;
+    const deliveryFailureCauseText = deliveryFailureCauseCode 
+      ? getLocalizedOrDefaultLabel('notifications', `detail.timeline.analog-workflow-failure-cause.${deliveryFailureCauseCode}`, '')
+      : '';
+
+    console.log({ payload, registeredLetterKindCode, registeredLetterKindI18n, registeredLetterKindText, 
+      deliveryFailureCauseCode, deliveryFailureCauseText });
+
+    // eslint-disable-next-line functional/no-let
     let description = getLocalizedOrDefaultLabel(
       'notifications',
       `detail.timeline.send-analog-progress-${deliveryDetailCode}-description${payload.isMultiRecipient ? '-multirecipient' : ''}`,
       '',
-      {...this.nameAndTaxId(payload), registeredLetterKind: registeredLetterKindText}
+      { 
+        ...this.nameAndTaxId(payload), 
+        registeredLetterKind: registeredLetterKindText, 
+        deliveryFailureCause: deliveryFailureCauseText,
+        registeredLetterNumber: ''
+      }
     );
 
     if (description.length === 0) {

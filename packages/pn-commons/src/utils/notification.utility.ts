@@ -472,6 +472,16 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_FEEDBACK,
 ];
 
+const AnalogFlowAllowedCodes = [
+  "CON080", "RECRN001C", "RECRN002C", "RECRN002C", "RECRN002F", "RECRN003C", "RECRN004C",
+  "RECRN005C", "RECRN006", "RECAG001C", "RECAG002C", "RECAG003C", "RECAG003F", "RECAG004",
+  "RECAG005C", "RECAG006C", "RECAG007C", "RECAG008C", "RECRI003C", "RECRI004C", "RECRI005",
+  // only to include the legal fact reference at the right point in the timeline
+  "RECRN001B", "RECRN002B", "RECRN002E", "RECRN003B", "RECRN004B", "RECRN005B", 
+  "RECAG001B", "RECAG002B", "RECAG003B", "RECAG003E", "RECAG005B", "RECAG006B", "RECAG007B",
+  "RECAG008B", "RECRI003B", "RECRI004B"
+];
+
 /*
  * PN-4484 - courtesy message through app IO only seen
  * if details.ioSendMessageResult = SENT_COURTESY
@@ -733,9 +743,9 @@ const populatePaymentHistory = (
 
 
 function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
-  if (t.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
+  if (t.category === TimelineCategory.SEND_ANALOG_PROGRESS || t.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
     const deliveryDetailCode = (t.details as SendPaperDetails).deliveryDetailCode;
-    return !!deliveryDetailCode && deliveryDetailCode.length > 1;   //  !== "CON080";
+    return !!deliveryDetailCode && AnalogFlowAllowedCodes.includes(deliveryDetailCode);
   }
   return TimelineAllowedStatus.includes(t.category);
 }
