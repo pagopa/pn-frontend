@@ -319,18 +319,33 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
-    // To the moment I could access to no example of a legal fact associated to this
-    // kind of events, neither to a documentation which indicates
-    // the legalFactType to expect for such events.
-    // Hence I keep the condition on the category only.
-    // -------------------------
-    // Carlos Lombardi, 2022.24.02
+
+  // To the moment I could access to no example of a legal fact associated to this
+  // kind of events, neither to a documentation which indicates
+  // the legalFactType to expect for such events.
+  // Hence I keep the condition on the category only.
+  // -------------------------
+  // Carlos Lombardi, 2022.24.02
   } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.paper-receipt-accepted',
       'di accettazione raccomandata'
     )}`;
+
+
+  // PN-5484  
+  // the label depends on the category of the step only,
+  // it disergards the kind of document (i.e. legalFactType)
+  } else if (
+    timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW
+  ) {
+    return getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.analog-failure-workflow',
+      'Deposito di avvenuta ricezione'
+    );
+
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
     legalFactType === LegalFactType.PEC_RECEIPT
@@ -398,8 +413,9 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.digital-delivery-failure',
       'mancato recapito digitale'
     )}`;
-    // this is (at least in the examples I've seen)
-    // related to the category NOTIFICATION_VIEWED
+
+  // this is (at least in the examples I've seen)
+  // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
