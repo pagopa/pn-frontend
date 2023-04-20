@@ -31,7 +31,7 @@ phases:
       # Renaming file .env.cypress to .env.local
       - mv .env.cypress .env.local
       # Adding configuration file
-      - cp ./public/conf/env/config.dev.json ./public/conf/config.json
+      - cp ./public/conf/env/config.cypress.json ./public/conf/config.json
       # starting the webapp and waiting for its availability
       - yarn start-waiton
       ## Running Cypress
