@@ -8,7 +8,6 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 jest.mock('../../component/Deleghe/DelegatesByCompany', () => ({

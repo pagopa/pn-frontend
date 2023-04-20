@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { TitleBox } from '@pagopa-pn/pn-commons';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { TabPanel } from '@pagopa-pn/pn-commons';
 import { useAppDispatch } from '../redux/hooks';
 import { resetState } from '../redux/delegation/reducers';
@@ -42,16 +42,14 @@ const Deleghe = () => {
       >
         <Box mb={2} p={3}>
           <TitleBox title={t('deleghe.title')} variantTitle={'h4'}>
-            <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
-              deleghe.description
-            </Trans>
+            {t('deleghe.description')}
           </TitleBox>
         </Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={value}
             onChange={handleChange}
-            aria-label="basic tabs example"
+            aria-label={t('deleghe.tab_aria_label')}
             centered
             variant="fullWidth"
           >

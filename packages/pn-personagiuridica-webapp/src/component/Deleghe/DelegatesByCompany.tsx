@@ -31,16 +31,14 @@ const DelegatesByCompany = () => {
         <Typography variant="h5" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
-        <Box>
-          <Button
-            variant="outlined"
-            onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
-            data-testid="addDeleghe"
-          >
-            <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
-            {t('deleghe.add')}
-          </Button>
-        </Box>
+        <Button
+          variant="outlined"
+          onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+          data-testid="addDeleghe"
+        >
+          <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
+          {t('deleghe.add')}
+        </Button>
       </Stack>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_DELEGATES}
