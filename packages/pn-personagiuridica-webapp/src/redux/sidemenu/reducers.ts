@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { DigitalAddress } from '../../models/contacts';
+import { Delegator } from '../../models/Deleghe';
 import { acceptDelegation, rejectDelegation } from '../delegation/actions';
-import { Delegator } from '../delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './actions';
 
 /* eslint-disable functional/immutable-data */

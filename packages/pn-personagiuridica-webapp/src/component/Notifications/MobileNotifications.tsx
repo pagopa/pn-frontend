@@ -24,8 +24,8 @@ import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { Delegator } from '../../redux/delegation/types';
 import { NotificationColumn } from '../../models/Notifications';
+import { Delegator } from '../../models/Deleghe';
 
 import FilterNotifications from './FilterNotifications';
 
@@ -34,7 +34,7 @@ type Props = {
   /** Card sort */
   sort?: Sort<NotificationColumn>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumn>  ) => void;
+  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -45,7 +45,7 @@ type Props = {
  * the MobileNotificationsSort component to be displayed, as commenting
  * out the relative code would have caused many "variable/prop declared
  * but never used" warnings to arise.
- * 
+ *
  * To enable the sort functionality again remove the line below and any
  * reference to IS_SORT_ENABLED
  */
@@ -90,9 +90,17 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
       label: t('table.status'),
       getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus, {recipients: row.recipients as Array<string>}
+          row.notificationStatus as NotificationStatus,
+          { recipients: row.recipients as Array<string> }
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return (
+          <StatusTooltip
+            label={label}
+            tooltip={tooltip}
+            color={color}
+            eventTrackingCallback={handleEventTrackingTooltip}
+          ></StatusTooltip>
+        );
       },
       gridProps: {
         xs: 12,
@@ -171,14 +179,17 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     secondaryMessage: filtersApplied
       ? undefined
       : {
-          emptyMessage: 'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
+          emptyMessage:
+            'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
         },
   };
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
+      navigate(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
+      );
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
@@ -212,9 +223,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         </Grid>
         <Grid item xs={6} textAlign="right">
           {/**
-            * Refers to PN-1741 
-            * See the comment above, where IS_SORT_ENABLE is declared!
-            * */}
+           * Refers to PN-1741
+           * See the comment above, where IS_SORT_ENABLE is declared!
+           * */}
           {IS_SORT_ENABLED && sort && showFilters && onChangeSorting && (
             <MobileNotificationsSort
               title={t('sort.title')}

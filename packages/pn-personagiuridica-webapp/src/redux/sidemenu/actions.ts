@@ -3,9 +3,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { DigitalAddress } from '../../models/contacts';
-import { Delegator } from '../delegation/types';
+import { Delegator } from '../../models/Deleghe';
 
-export enum SIDEMENU_ACTIONS  {
+export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
 }
 

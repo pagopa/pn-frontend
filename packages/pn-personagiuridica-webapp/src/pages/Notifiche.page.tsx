@@ -23,11 +23,11 @@ import DesktopNotifications from '../component/Notifications/DesktopNotification
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { Delegator } from '../redux/delegation/types';
 import { PNRole } from '../redux/auth/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 import { NotificationColumn } from '../models/Notifications';
+import { Delegator } from '../models/Deleghe';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
