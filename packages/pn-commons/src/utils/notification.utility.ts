@@ -311,7 +311,7 @@ export function getLegalFactLabel(
   // the legalFactType to expect for such events.
   // Hence I keep the condition on the category only.
   // -------------------------
-  // Carlos Lombardi, 2022.24.02
+  // Carlos Lombardi
   if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
     if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
@@ -327,7 +327,16 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
-  } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
+
+  // For the SEND_ANALOG_PROGRESS / SIMPLE_REGISTERED_LETTER_PROGRESS events,
+  // the text depend on the kind of document ... that is not indicated in legalFactType,
+  // but rather inside the "attachments" attribute present in the detail of the timeline step
+  // -------------------------
+  // Carlos Lombardi
+  } else if (
+    timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS || 
+    timelineStep.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
+  ) {
     const type = legalFactTypeForAnalogEvent(timelineStep, legalFactKey) || 'generic';
     // eslint-disable-next-line functional/no-let
     let text = getLocalizedOrDefaultLabel(
@@ -343,6 +352,7 @@ export function getLegalFactLabel(
       );
     }
     return text;
+
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
     legalFactType === LegalFactType.PEC_RECEIPT
@@ -470,6 +480,7 @@ const TimelineAllowedStatus = [
   TimelineCategory.NOT_HANDLED,
   TimelineCategory.SEND_ANALOG_PROGRESS,
   TimelineCategory.SEND_ANALOG_FEEDBACK,
+  TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
 ];
 
 const AnalogFlowAllowedCodes = [
@@ -602,8 +613,8 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
 
         // record the last timeline event from DELIVERED that must be shifted to DELIVERING
         // the rules:
-        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element,
-        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
+        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER or SIMPLE_REGISTERED_LETTER_PROGRESS element,
+        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER or SIMPLE_REGISTERED_LETTER_PROGRESS
         //   (in this case, excluding it)
         // if a DIGITAL_SUCCESS_WORKFLOW is found before a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
         // then no shift has to be done
@@ -612,8 +623,9 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
           !preventShiftFromDeliveredToDelivering
         ) {
           if (
-            (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW ||
-              step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) &&
+            (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW 
+              || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER 
+              || step.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS) &&
             !lastDeliveredIndexToShiftIsFixed
           ) {
             lastDeliveredIndexToShift = ix;
@@ -743,7 +755,11 @@ const populatePaymentHistory = (
 
 
 function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
-  if (t.category === TimelineCategory.SEND_ANALOG_PROGRESS || t.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
+  if (
+    t.category === TimelineCategory.SEND_ANALOG_PROGRESS || 
+    t.category === TimelineCategory.SEND_ANALOG_FEEDBACK || 
+    t.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
+  ) {
     const deliveryDetailCode = (t.details as SendPaperDetails).deliveryDetailCode;
     return !!deliveryDetailCode && AnalogFlowAllowedCodes.includes(deliveryDetailCode);
   }

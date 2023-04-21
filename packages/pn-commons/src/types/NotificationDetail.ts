@@ -84,6 +84,7 @@ export interface AnalogFlowAttachment {
 export interface SendPaperDetails extends AnalogWorkflowDetails {
   serviceLevel?: PhysicalCommunicationType;
   productType?: string;
+  registeredLetterCode?: string;
   responseStatus?: ResponseStatus;
   deliveryFailureCause?: string;
   deliveryDetailCode?: string;
@@ -308,6 +309,7 @@ export enum TimelineCategory {
   ANALOG_SUCCESS_WORKFLOW = 'ANALOG_SUCCESS_WORKFLOW',
   ANALOG_FAILURE_WORKFLOW = 'ANALOG_FAILURE_WORKFLOW',
   SEND_SIMPLE_REGISTERED_LETTER = 'SEND_SIMPLE_REGISTERED_LETTER',
+  SIMPLE_REGISTERED_LETTER_PROGRESS = 'SIMPLE_REGISTERED_LETTER_PROGRESS',
   NOTIFICATION_VIEWED = 'NOTIFICATION_VIEWED',
   SEND_ANALOG_DOMICILE = 'SEND_ANALOG_DOMICILE',
   PAYMENT = 'PAYMENT',

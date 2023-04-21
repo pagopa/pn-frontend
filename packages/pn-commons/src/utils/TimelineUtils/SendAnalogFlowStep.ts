@@ -3,24 +3,30 @@ import { ResponseStatus, SendPaperDetails, TimelineCategory } from '../../types'
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendAnalogFlowStep extends TimelineStep {
-  getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
-    // label
-    // ///////////////////////////////////////////////////////////////
+  getTimelineStepLabel(payload: TimelineStepPayload): string {
     const responseStatus = (payload.step.details as SendPaperDetails).responseStatus; //  === ResponseStatus.KO
 
     const labelEntry = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
       ? 'send-analog-progress'
+      : payload.step.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS ? `simple-registered-letter-progess`
       : responseStatus === ResponseStatus.KO ? 'send-analog-error' : 'send-analog-success';
 
     const defaultLabel = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
       ? `Aggiornamento sull'invio cartaceo`
+      : payload.step.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS ? `Aggiornamento dell'invio via raccomandata semplice`
       : responseStatus === ResponseStatus.KO ? 'Invio per via cartacea non riuscito' : 'Invio per via cartacea riuscito';
 
-    const label = getLocalizedOrDefaultLabel(
+    return getLocalizedOrDefaultLabel(
       'notifications',
       `detail.timeline.${labelEntry}`,
       defaultLabel
     );
+  }
+
+  getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
+    // label - separate method just to avoid "cognitive complexity" eslint errors
+    // ///////////////////////////////////////////////////////////////
+    const label = this.getTimelineStepLabel(payload);
 
     // details
     // ///////////////////////////////////////////////////////////////
@@ -44,26 +50,30 @@ export class SendAnalogFlowStep extends TimelineStep {
       ? getLocalizedOrDefaultLabel('notifications', `detail.timeline.analog-workflow-failure-cause.${deliveryFailureCauseCode}`, '')
       : '';
 
-    console.log({ payload, registeredLetterKindCode, registeredLetterKindI18n, registeredLetterKindText, 
-      deliveryFailureCauseCode, deliveryFailureCauseText });
+    const registeredLetterNumber = (payload.step.details as SendPaperDetails).registeredLetterCode || '';
+    
+    if (deliveryDetailCode === 'CON080') {
+      console.log({ payload, registeredLetterKindCode, registeredLetterKindI18n, registeredLetterKindText, 
+        deliveryFailureCauseCode, deliveryFailureCauseText });
+    }
 
     // eslint-disable-next-line functional/no-let
     let description = getLocalizedOrDefaultLabel(
       'notifications',
-      `detail.timeline.send-analog-progress-${deliveryDetailCode}-description${payload.isMultiRecipient ? '-multirecipient' : ''}`,
+      `detail.timeline.send-analog-flow-${deliveryDetailCode}-description${payload.isMultiRecipient ? '-multirecipient' : ''}`,
       '',
       { 
         ...this.nameAndTaxId(payload), 
         registeredLetterKind: registeredLetterKindText, 
         deliveryFailureCause: deliveryFailureCauseText,
-        registeredLetterNumber: ''
+        registeredLetterNumber
       }
     );
 
     if (description.length === 0) {
       description = getLocalizedOrDefaultLabel(
         'notifications',
-        `detail.timeline.send-analog-progress-description`,
+        `detail.timeline.send-analog-flow-description`,
         `C'è un aggiornamento sull'invio cartaceo.`
       );
     }

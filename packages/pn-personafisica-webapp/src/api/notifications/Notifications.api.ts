@@ -2,12 +2,16 @@ import {
   formatDate,
   GetNotificationsParams,
   GetNotificationsResponse,
+  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  NotificationStatus,
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,
+  SendPaperDetails,
+  TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
@@ -77,8 +81,63 @@ export const NotificationsApi = {
     delegatorsFromStore: Array<Delegator>,
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
       if (response.data) {
+        if (response.data.iun === 'GYJZ-WHRW-LEWJ-202304-K-1') {
+          // eslint-disable-next-line functional/immutable-data
+          (response.data.timeline.find(elem => elem.category === TimelineCategory.SEND_ANALOG_FEEDBACK)?.details as SendPaperDetails).deliveryFailureCause = "M08";
+        } else if (response.data.iun === 'PNEU-QAMA-GRJL-202304-H-1') {
+          // eslint-disable-next-line functional/immutable-data
+          (response.data.timeline.find(elem => elem.category === TimelineCategory.SEND_ANALOG_FEEDBACK)?.details as SendPaperDetails).deliveryFailureCause = "M04";
+        } else if (response.data.iun === 'QYJQ-JLRJ-PGMJ-202304-G-1') {
+          // eslint-disable-next-line functional/immutable-data
+          (response.data.timeline.find(elem => elem.category === TimelineCategory.SEND_ANALOG_FEEDBACK)?.details as SendPaperDetails).deliveryFailureCause = "M06";
+        } else if (response.data.iun === 'NRLT-VAUN-DGJH-202304-V-1') {
+          // eslint-disable-next-line functional/immutable-data
+          (response.data.timeline.find(elem => elem.category === TimelineCategory.SEND_ANALOG_FEEDBACK)?.details as SendPaperDetails).deliveryFailureCause = "M07";
+        } else if (response.data.iun === 'UAUK-VHAJ-WHQH-202304-W-1') {
+          // eslint-disable-next-line functional/immutable-data
+          (response.data.timeline.find(elem => elem.category === TimelineCategory.SEND_ANALOG_FEEDBACK)?.details as SendPaperDetails).deliveryFailureCause = "M03";
+          // aggiungo numero di raccomandata
+          const con080steps = response.data.timeline.filter(elem => 
+            elem.category === TimelineCategory.SEND_ANALOG_PROGRESS && 
+            (elem.details as SendPaperDetails).deliveryDetailCode === 'CON080'
+          );
+          if (con080steps.length > 0) {
+            // eslint-disable-next-line functional/immutable-data
+            (con080steps[0].details as SendPaperDetails).registeredLetterCode = "RACC-890-001";
+          }
+          if (con080steps.length > 1) {
+            // eslint-disable-next-line functional/immutable-data
+            (con080steps[1].details as SendPaperDetails).registeredLetterCode = "RACC-890-002";
+          }
+        } else if (response.data.iun === 'WJGU-JNTW-VXKD-202304-G-1') {
+          const sendSimpleRegisteredIndex = response.data.timeline.findIndex(elem => elem.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER);
+          if (sendSimpleRegisteredIndex > -1) {
+            const newStep: INotificationDetailTimeline = {
+              category: TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS,
+              elementId: 'SIMPLE_REGISTERED_LETTER_PROGRESS_0',
+              timestamp: "2023-04-18T13:41:57.918294455Z",
+              details: {
+                recIndex: 0,
+                registeredLetterCode: 'RACC-0-3-3423',
+                productType: 'RS',
+                deliveryDetailCode: 'CON080',
+                sendRequestId: 'SEND_SIMPLE_REGISTERED_LETTER.IUN_WJGU-JNTW-VXKD-202304-G-1.RECINDEX_0',
+                attachments: []
+              }
+            };
+            // eslint-disable-next-line functional/immutable-data
+            response.data.timeline.splice(sendSimpleRegisteredIndex + 1, 0, newStep);
+            const deliveredStatus = response.data.notificationStatusHistory.find(status => status.status === NotificationStatus.DELIVERED);
+            if (deliveredStatus) {
+              // eslint-disable-next-line functional/immutable-data
+              deliveredStatus.relatedTimelineElements.push('SIMPLE_REGISTERED_LETTER_PROGRESS_0');
+            }
+          }
+        } 
+
         return parseNotificationDetailForRecipient(
           response.data,
           currentUserTaxId,
