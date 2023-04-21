@@ -46,7 +46,11 @@
       "notificationsFrom": "Notifiche da:",
       "allNotifications": "Tutte le notifiche",
       "active": "Attiva",
-      "pending": "In attesa di conferma"
+      "pending": "In attesa di conferma",
+      "groups": "Gruppi",
+      "group": "Gruppo",
+      "no-group-found": "Nessun gruppo trovato",
+      "no-name-found": "Nessun nome trovato"
     }
   },
   "nuovaDelega": {

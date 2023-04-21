@@ -1,17 +1,15 @@
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
   AutocompleteRenderOptionState,
-  Button,
+  Box,
   Checkbox,
   Chip,
-  FormControl,
-  InputLabel,
+  Grid,
   ListItemText,
   MenuItem,
-  OutlinedInput,
-  Select,
-  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -23,8 +21,10 @@ import {
   EmptyState,
   Item,
   KnownSentiment,
+  SmartFilter,
   SmartTable,
   SmartTableData,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -36,14 +36,15 @@ import { DelegatorsColumn } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const arrayStatus = [
-  { status: 'attiva', id: 1 },
-  { status: 'revocata', id: 2 },
-  { status: 'conclusa', id: 3 },
+  { status: 'attiva', id: '1' },
+  { status: 'revocata', id: '2' },
+  { status: 'conclusa', id: '3' },
 ];
 
 const DelegationsOfTheCompany = () => {
-  const { t } = useTranslation(['deleghe']);
+  const { t } = useTranslation(['deleghe', 'common']);
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
@@ -145,9 +146,7 @@ const DelegationsOfTheCompany = () => {
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
   const getOptionLabel = (option: { name: string; id: number }) => option.name || '';
-  const getOptionLabel2 = (option: { name: string; id: number }) => option.name || '';
   const renderOption = (
     props: any,
     option: { name: string; id: number },
@@ -164,90 +163,142 @@ const DelegationsOfTheCompany = () => {
     </li>
   );
 
+  const initialValues: {
+    names: Array<{ id: number; name: string }>;
+    groups: Array<{ id: number; name: string }>;
+    status: Array<string>;
+  } = {
+    names: [],
+    groups: [],
+    status: [],
+  };
+
+  const validationSchema = yup.object({
+    name: yup.array(),
+    groups: yup.array(),
+    status: yup.array(),
+  });
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: () => {},
+  });
+
+  const clearFiltersHandler = () => {};
+
+  const handleChangeTouched = async (e: any) => {
+    formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
+  };
+
   return (
     <>
       <Typography variant="h6" mb={4}>
         {t('deleghe.delegatorsTitle')}
       </Typography>
-      <Stack direction={'row'} spacing={2} mb={4}>
-        <Autocomplete
-          id="names"
-          size="small"
-          fullWidth
-          options={[]}
-          disableCloseOnSelect
-          multiple
-          noOptionsText={'Nessun nome in lista'}
-          getOptionLabel={getOptionLabel}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          popupIcon={<SearchIcon />}
-          sx={{
-            width: '331px',
-            height: '40px',
-            [`& .MuiAutocomplete-popupIndicator`]: {
-              transform: 'none',
-            },
-          }}
-          renderOption={renderOption}
-          renderInput={(params) => <TextField {...params} label="Nome" placeholder="Nome" />}
-        />
-        <Autocomplete
-          id="group"
-          size="small"
-          fullWidth
-          options={[]}
-          disableCloseOnSelect
-          multiple
-          noOptionsText={'Nessun gruppo in lista'}
-          getOptionLabel={getOptionLabel2}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          popupIcon={<SearchIcon />}
-          sx={{
-            width: '263px',
-            height: '40px',
-            [`& .MuiAutocomplete-popupIndicator`]: {
-              transform: 'none',
-            },
-          }}
-          renderOption={renderOption}
-          renderInput={(params) => <TextField {...params} label="Gruppo" placeholder="Gruppo" />}
-        />
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
-          <Select
-            labelId="demo-multiple-checkbox-label"
-            id="demo-multiple-checkbox"
-            multiple
-            value={[]}
+      <SmartFilter
+        filterLabel={t('button.filtra', { ns: 'common' })}
+        cancelLabel={t('button.annulla filtro', { ns: 'common' })}
+        onSubmit={formik.handleSubmit}
+        onClear={clearFiltersHandler}
+        formIsValid={formik.isValid}
+        formValues={formik.values}
+        initialValues={initialValues}
+      >
+        <Grid item xs={12} lg>
+          <Autocomplete
+            id="names"
             size="small"
             fullWidth
-            // onChange={handleChange}
-            input={<OutlinedInput label="Tag" />}
-            renderValue={() => <></>}
-            // MenuProps={MenuProps}
+            options={[]}
+            disableCloseOnSelect
+            multiple
+            noOptionsText={t('deleghe.table.no-name-found')}
+            getOptionLabel={getOptionLabel}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            popupIcon={<SearchIcon />}
+            sx={{
+              [`& .MuiAutocomplete-popupIndicator`]: {
+                transform: 'none',
+              },
+              marginBottom: isMobile ? '20px' : '0',
+            }}
+            renderOption={renderOption}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('deleghe.table.name')}
+                placeholder={t('deleghe.table.name')}
+                name="names"
+              />
+            )}
+            value={formik.values.names}
+            onChange={handleChangeTouched}
+          />
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <Autocomplete
+            id="groups"
+            size="small"
+            fullWidth
+            options={[]}
+            disableCloseOnSelect
+            multiple
+            noOptionsText={t('deleghe.table.no-group-found')}
+            getOptionLabel={getOptionLabel}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            popupIcon={<SearchIcon />}
+            sx={{
+              [`& .MuiAutocomplete-popupIndicator`]: {
+                transform: 'none',
+              },
+              marginBottom: isMobile ? '20px' : '0',
+            }}
+            renderOption={renderOption}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('deleghe.table.group')}
+                placeholder={t('deleghe.table.group')}
+                name="groups"
+              />
+            )}
+            value={formik.values.groups}
+            onChange={handleChangeTouched}
+          />
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <TextField
+            label={t('deleghe.table.status')}
+            id="status"
+            name="status"
+            size="small"
+            fullWidth
+            select
+            SelectProps={{
+              renderValue: (selected: any) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value: any) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              ),
+              multiple: true,
+            }}
+            variant="outlined"
+            value={formik.values.status}
+            onChange={handleChangeTouched}
           >
-            {arrayStatus.map(({ status }) => (
-              <MenuItem key={status} value={status}>
-                <Checkbox />
+            {arrayStatus.map(({ id, status }) => (
+              <MenuItem key={id} value={id}>
+                <Checkbox checked={formik.values.status.includes(id)} />
                 <ListItemText primary={status} />
               </MenuItem>
             ))}
-          </Select>
-        </FormControl>
-
-        <Button
-          variant="outlined"
-          size="small"
-          disabled={!rows}
-          type="submit"
-          sx={{ height: '43px' }}
-        >
-          {'Filtra'}
-        </Button>
-        <Button variant="text" size="small" sx={{ height: '40px' }}>
-          {'Elimina filtri'}
-        </Button>
-      </Stack>
+          </TextField>
+        </Grid>
+      </SmartFilter>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
         reloadAction={() => dispatch(getDelegators())}

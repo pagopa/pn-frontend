@@ -1,10 +1,9 @@
 import React from 'react';
-import mediaQuery from 'css-mediaquery';
 
-import { fireEvent, prettyDOM, render } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { SmartTableData, SmartTableAction } from '../../../types/SmartTable';
-import SmartTable from '../SmartTable';
 import { Item, Sort } from '../../../types';
+import SmartTable from '../SmartTable';
 
 jest.mock('../ItemsCard', () => (props) => (
   <div>
@@ -55,19 +54,6 @@ jest.mock('../ItemsTable', () => (props) => (
     ))}
   </div>
 ));
-
-function createMatchMedia(width: number) {
-  return (query: string): MediaQueryList => ({
-    matches: mediaQuery.match(query, { width }) as boolean,
-    media: '',
-    addListener: () => {},
-    removeListener: () => {},
-    onchange: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => true,
-  });
-}
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
@@ -173,7 +159,6 @@ describe('Smart Table Component', () => {
       />
     );
     expect(result.container).toHaveTextContent('Card');
-    console.log(prettyDOM(result.container, 1000000));
     for (const d of data) {
       const card = result.container.querySelector(`#${d.id}`) as Element;
       expect(card).toBeInTheDocument();
