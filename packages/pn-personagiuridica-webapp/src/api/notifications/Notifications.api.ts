@@ -11,10 +11,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
-import { Delegator } from '../../redux/delegation/types';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
+import { Delegator } from '../../models/Deleghe';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,

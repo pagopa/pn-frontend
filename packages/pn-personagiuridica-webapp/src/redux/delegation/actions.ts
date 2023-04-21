@@ -1,8 +1,12 @@
 import { performThunkAction, Sort } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
-import { AcceptDelegationResponse, Delegation } from './types';
+import {
+  DelegatorsColumn,
+  DelegatesColumn,
+  AcceptDelegationResponse,
+  Delegation,
+} from '../../models/Deleghe';
 
 export enum DELEGATION_ACTIONS {
   GET_DELEGATES = 'getDelegates',
@@ -32,8 +36,9 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
 export const acceptDelegation = createAsyncThunk<
   AcceptDelegationResponse,
   { id: string; code: string }
->('acceptDelegation', 
-  performThunkAction(async ({id, code}: { id: string; code: string }) => {
+>(
+  'acceptDelegation',
+  performThunkAction(async ({ id, code }: { id: string; code: string }) => {
     const data = {
       verificationCode: code,
     };

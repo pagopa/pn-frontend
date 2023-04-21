@@ -1,4 +1,4 @@
-import { Delegator } from '../delegation/types';
+import { Delegator } from '../../models/Deleghe';
 
 export interface GetReceivedNotificationParams {
   iun: string;
