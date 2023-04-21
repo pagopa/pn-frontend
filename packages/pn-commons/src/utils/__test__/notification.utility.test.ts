@@ -1472,6 +1472,12 @@ describe('timeline legal fact link text', () => {
     expect(label).toBe('detail.legalfact: detail.timeline.legalfact.digital-delivery-failure');
   });
 
+  it('return legalFact label - ANALOG_FAILURE_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.ANALOG_FAILURE_WORKFLOW;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
+    expect(label).toBe('detail.timeline.legalfact.analog-failure-workflow');
+  });
+
   // Similar to the SENDER_ACK case above, in this case the timeline event category
   // associated but not explicitly verified in the code is NOTIFICATION_VIEWED
   // ------------------------------------

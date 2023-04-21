@@ -303,7 +303,7 @@ export function getLegalFactLabel(
   // the legalFactType to expect for such events.
   // Hence I keep the condition on the category only.
   // -------------------------
-  // Carlos Lombardi, 2022.24.02
+  // Carlos Lombardi
   if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
     if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
@@ -325,7 +325,7 @@ export function getLegalFactLabel(
   // the legalFactType to expect for such events.
   // Hence I keep the condition on the category only.
   // -------------------------
-  // Carlos Lombardi, 2022.24.02
+  // Carlos Lombardi
   } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
       'notifications',
