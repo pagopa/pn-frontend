@@ -2,11 +2,22 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { EmptyState, ApiErrorWrapper, useIsMobile, SmartTable, Item } from '@pagopa-pn/pn-commons';
+import {
+  EmptyState,
+  ApiErrorWrapper,
+  useIsMobile,
+  SmartTable,
+  Item,
+  Sort,
+} from '@pagopa-pn/pn-commons';
 import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import * as routes from '../../navigation/routes.const';
-import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
+import {
+  DELEGATION_ACTIONS,
+  getDelegatesByCompany,
+  setDelegatesSorting,
+} from '../../redux/delegation/actions';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { RootState } from '../../redux/store';
@@ -24,12 +35,18 @@ const DelegatesByCompany = () => {
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+  const sortDelegatesByCompany = useAppSelector(
+    (state: RootState) => state.delegationsState.sortDelegates
+  );
 
   const rows: Array<Item> = delegationToItem(delegatesByCompany);
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
+  };
+  const handleChangeSorting = (s: Sort<DelegatesColumn>) => {
+    dispatch(setDelegatesSorting(s));
   };
 
   const delegatesColumn: Array<SmartTableData<DelegatesColumn>> = [
@@ -82,7 +99,6 @@ const DelegatesByCompany = () => {
       label: t('deleghe.table.permissions'),
       tableConfiguration: {
         width: '11%',
-        sortable: true,
         align: 'center',
       },
       getValue(value: Array<string>) {
@@ -105,6 +121,7 @@ const DelegatesByCompany = () => {
       },
       cardConfiguration: {
         position: 'header',
+        gridProps: { xs: 8 },
       },
     },
     {
@@ -127,6 +144,7 @@ const DelegatesByCompany = () => {
       },
       cardConfiguration: {
         position: 'header',
+        gridProps: { xs: 4 },
       },
     },
   ];
@@ -156,7 +174,12 @@ const DelegatesByCompany = () => {
         reloadAction={() => dispatch(getDelegatesByCompany())}
       >
         {delegatesByCompany.length > 0 ? (
-          <SmartTable data={rows} conf={delegatesColumn}></SmartTable>
+          <SmartTable
+            data={rows}
+            conf={delegatesColumn}
+            currentSort={sortDelegatesByCompany}
+            onChangeSorting={handleChangeSorting}
+          ></SmartTable>
         ) : (
           <EmptyState
             emptyActionLabel={t('deleghe.add') as string}
