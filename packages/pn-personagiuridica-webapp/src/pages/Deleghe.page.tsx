@@ -45,7 +45,7 @@ const Deleghe = () => {
             {t('deleghe.description')}
           </TitleBox>
         </Box>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
           <Tabs
             value={value}
             onChange={handleChange}
