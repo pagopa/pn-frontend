@@ -122,12 +122,13 @@ export const NotificationsApi = {
               details: {
                 recIndex: 0,
                 registeredLetterCode: 'RACC-0-3-3423',
-                productType: 'RS',
                 deliveryDetailCode: 'CON080',
                 sendRequestId: 'SEND_SIMPLE_REGISTERED_LETTER.IUN_WJGU-JNTW-VXKD-202304-G-1.RECINDEX_0',
                 attachments: []
               }
             };
+            // eslint-disable-next-line functional/immutable-data
+            // (response.data.timeline[sendSimpleRegisteredIndex].details as SendPaperDetails).productType = "SOSO";
             // eslint-disable-next-line functional/immutable-data
             response.data.timeline.splice(sendSimpleRegisteredIndex + 1, 0, newStep);
             const deliveredStatus = response.data.notificationStatusHistory.find(status => status.status === NotificationStatus.DELIVERED);

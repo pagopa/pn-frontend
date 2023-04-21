@@ -116,11 +116,7 @@
       "send-analog-progress-CON080-description": "La raccomandata {{registeredLetterKind}} è stata stampata ed imbustata.",
       "send-analog-progress-CON080-description-multirecipient": "La raccomandata {{registeredLetterKind}} per {{name}} {{CF}} è stata stampata ed imbustata.",
       "send-analog-error": "Invio per via cartacea non andato a buon fine",
-      "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea non è andato a buon fine.",
-      "send-analog-error-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} non è andato a buon fine.",
       "send-analog-success": "Invio per via cartacea andato a buon fine",
-      "send-analog-success-description": "Il tentativo di invio della notifica per via cartacea è andato a buon fine.",
-      "send-analog-success-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} è andato a buon fine.",
       "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
@@ -142,10 +138,10 @@
         "RIS": "internazionale semplice"
       },
       "analog-workflow-attachment-kind": {
+        "AR": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
-        "Indagine": "Scansione dell'analisi dell'indagine ",
-        "AR": "Ricevuta di ritorno",
-        "23L": "Ricevuta 23L",
+        "23L": "Avviso di ricevimento",
+        "Indagine": "Scansione dell'indagine",
         "generic": "Documento allegato"
       }
     },

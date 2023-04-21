@@ -20,7 +20,6 @@ import {
   ViewedDetails,
   SendPaperDetails,
   NotificationDeliveryMode,
-  ResponseStatus,
   SendCourtesyMessageDetails,
   DigitalDomicileType,
   PaidDetails,
@@ -311,29 +310,38 @@ export function getLegalFactLabel(
   // the legalFactType to expect for such events.
   // Hence I keep the condition on the category only.
   // -------------------------
+  // Update as of 2023.04.21
+  // 
+  // As far as the new specification seems to indicate, 
+  // the attachments for the analog flow will be always linked to
+  // SEND_ANALOG_PROGRESS events and not to SEND_ANALOG_FEEDBACK ones.
+  // As this is quite recent and maybe not that stable, I prefer to keep this code commented out
+  // for a while
+  // -------------------------
   // Carlos Lombardi
-  if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
-    if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
-      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-        'notifications',
-        'detail.timeline.legalfact.paper-receipt-delivered',
-        'di consegna raccomandata'
-      )}`;
-    } else if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.KO) {
-      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-        'notifications',
-        'detail.timeline.legalfact.paper-receipt-not-delivered',
-        'di mancata consegna raccomandata'
-      )}`;
-    }
-    return receiptLabel;
+  // -------------------------
+  // if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
+  //   if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
+  //     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+  //       'notifications',
+  //       'detail.timeline.legalfact.paper-receipt-delivered',
+  //       'di consegna raccomandata'
+  //     )}`;
+  //   } else if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.KO) {
+  //     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+  //       'notifications',
+  //       'detail.timeline.legalfact.paper-receipt-not-delivered',
+  //       'di mancata consegna raccomandata'
+  //     )}`;
+  //   }
+  //   return receiptLabel;
 
   // For the SEND_ANALOG_PROGRESS / SIMPLE_REGISTERED_LETTER_PROGRESS events,
   // the text depend on the kind of document ... that is not indicated in legalFactType,
   // but rather inside the "attachments" attribute present in the detail of the timeline step
   // -------------------------
   // Carlos Lombardi
-  } else if (
+  if (
     timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS || 
     timelineStep.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
   ) {
@@ -428,20 +436,6 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.recipient-access',
       'avvenuto accesso'
     )}`;
-
-    // this case is not needed, since the only legal fact arriving currently
-    // regards the event type SEND_ANALOG_FEEDBACK
-    // which is handled separately.
-    // I prefer to keep it commented out, since the situation is not completely clear.
-    // -------------------------
-    // Carlos Lombardi, 2022.24.02
-    // -------------------------
-    // } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
-    //   return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
-    //     'notifications',
-    //     'detail.timeline.legalfact.analog-delivery',
-    //     'conformità'
-    //   )}`;
   }
   return legalFactLabel;
 }
