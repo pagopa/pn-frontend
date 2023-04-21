@@ -5,7 +5,7 @@ import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
   REJECT_DELEGATION,
-  REOVKE_DELEGATION,
+  REVOKE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { Delegation } from '../../../models/Deleghe';
 import { store } from '../../store';
@@ -112,7 +112,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should revoke a delegation for a delegate', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REOVKE_DELEGATION('2'), 200, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('2'), 200, undefined, undefined);
     const action = await store.dispatch(revokeDelegation('2'));
     const payload = action.payload;
     expect(action.type).toBe('revokeDelegation/fulfilled');
@@ -122,7 +122,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to revoke a delegation', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REOVKE_DELEGATION('2'), 500, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('2'), 500, undefined, undefined);
     const action = await store.dispatch(revokeDelegation('2'));
     const payload = action.payload as any;
     expect(action.type).toBe('revokeDelegation/rejected');

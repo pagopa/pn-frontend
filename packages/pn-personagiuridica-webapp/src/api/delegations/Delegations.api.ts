@@ -15,7 +15,7 @@ import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
   REJECT_DELEGATION,
-  REOVKE_DELEGATION,
+  REVOKE_DELEGATION,
 } from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
@@ -71,7 +71,7 @@ export const DelegationsApi = {
    */
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(REOVKE_DELEGATION(id))
+      .patch(REVOKE_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
 
   /**

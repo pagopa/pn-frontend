@@ -12,7 +12,7 @@ import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
   REJECT_DELEGATION,
-  REOVKE_DELEGATION,
+  REVOKE_DELEGATION,
 } from '../delegations.routes';
 import { mockApi } from '../../../__test__/test-utils';
 
@@ -66,7 +66,7 @@ describe('Delegations api tests', () => {
   });
 
   it('revokes a delegation', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REOVKE_DELEGATION('7'), 200, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('7'), 200, undefined, undefined);
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
     mock.reset();
@@ -74,7 +74,7 @@ describe('Delegations api tests', () => {
   });
 
   it("doesn't revoke a delegation", async () => {
-    const mock = mockApi(apiClient, 'PATCH', REOVKE_DELEGATION('10'), 204, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('10'), 204, undefined, undefined);
     const res = await DelegationsApi.revokeDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
