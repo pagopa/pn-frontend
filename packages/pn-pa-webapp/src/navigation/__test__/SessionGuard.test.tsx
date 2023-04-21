@@ -51,11 +51,12 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-jest.mock('../../utils/constants', () => {
-  const original = jest.requireActual('../../utils/constants');
+jest.mock('../../services/configuration.service', () => {
   return {
-    ...original,
-    DISABLE_INACTIVITY_HANDLER: true,
+    ...jest.requireActual('../../services/configuration.service'),
+    getConfiguration: () => ({
+      DISABLE_INACTIVITY_HANDLER: true,
+    }),
   };
 });
 

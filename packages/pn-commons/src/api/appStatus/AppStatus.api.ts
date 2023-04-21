@@ -13,13 +13,13 @@ export class BadApiDataException extends Error {
    the API
    ------------------------------------------------------------------------ */
 
-export function createAppStatusApi(apiClient: AxiosInstance) {
+export function createAppStatusApi(apiClientProvider: () => AxiosInstance) {
   return {
     getCurrentStatus: async (): Promise<AppCurrentStatus> => {
       /* eslint-disable functional/no-let */
       let apiResponse: AppStatusDTO;
   
-      const realApiResponse = await apiClient.get<AppStatusDTO>(DOWNTIME_STATUS());
+      const realApiResponse = await apiClientProvider().get<AppStatusDTO>(DOWNTIME_STATUS());
       apiResponse = realApiResponse.data;
   
       // pn-validator validation
@@ -41,7 +41,7 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
       /* eslint-disable functional/no-let */
       let apiResponse: DowntimeLogPageDTO;
   
-      const realApiResponse = await apiClient.get<DowntimeLogPageDTO>(DOWNTIME_HISTORY(params));
+      const realApiResponse = await apiClientProvider().get<DowntimeLogPageDTO>(DOWNTIME_HISTORY(params));
       apiResponse = realApiResponse.data;
   
       // pn-validator validation
@@ -61,7 +61,7 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
   
     /* eslint-disable-next-line arrow-body-style */
     getLegalFactDetails: async(legalFactId: string): Promise<LegalFactDocumentDetails> => {
-      const realApiResponse = await apiClient.get<LegalFactDocumentDetails>(DOWNTIME_LEGAL_FACT_DETAILS(legalFactId));
+      const realApiResponse = await apiClientProvider().get<LegalFactDocumentDetails>(DOWNTIME_LEGAL_FACT_DETAILS(legalFactId));
 
       // validation: the response must include an actual value for url
       if (!realApiResponse.data.url) {

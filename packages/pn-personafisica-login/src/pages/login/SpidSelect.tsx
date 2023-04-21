@@ -7,15 +7,17 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { Trans, useTranslation } from 'react-i18next';
-import { IdentityProvider, IDPS } from '../../utils/IDPS';
+import { getIDPS, IdentityProvider } from '../../utils/IDPS';
 import SpidBig from '../../assets/spid_big.svg';
-import { ENV } from '../../utils/env';
 import { shuffleList } from '../../utils/utils';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
+import { getConfiguration } from "../../services/configuration.service";
 
 const Login = ({ onBack }: { onBack: () => void }) => {
+  const { URL_API_LOGIN, SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED } = getConfiguration();
   const { t } = useTranslation();
+  const IDPS = getIDPS(SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED);
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
   const getSPID = (IDP: IdentityProvider) => {
@@ -26,7 +28,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
           SPID_IDP_ID: IDP.entityId,
         }
     );
-    window.location.assign(`${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
+    window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
   };
 
   return (

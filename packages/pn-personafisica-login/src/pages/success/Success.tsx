@@ -11,10 +11,10 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { PAGOPA_HELP_EMAIL, PF_URL, PG_URL } from '../../utils/constants';
 import { storageAarOps, storageTypeOps } from '../../utils/storage';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
+import { getConfiguration } from "../../services/configuration.service";
 
 type DisambiguationAccountProps = {
   type: AppRouteType;
@@ -79,6 +79,7 @@ const SuccessPage = () => {
   const { i18n, t } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const [typeSelected, setTypeSelected] = useState<AppRouteType | null>(null);
+  const { PF_URL, PG_URL, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   // momentarily changed for pn-5157
   // const typeUrl = useMemo(() => storageTypeOps.read(), []);

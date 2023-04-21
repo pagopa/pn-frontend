@@ -1,7 +1,7 @@
 // momentarily commented for pn-5157
 // import { AppRouteType } from '@pagopa-pn/pn-commons';
-import { URL_FE_LOGOUT } from '../../utils/constants';
 import { goToLoginPortal } from '../navigation.utility';
+import { getConfiguration } from "../../services/configuration.service";
 
 const replaceFn = jest.fn();
 
@@ -33,7 +33,7 @@ describe('Tests navigation utility methods', () => {
     expect(replaceFn).toBeCalledTimes(1);
     // momentarily commented for pn-5157
     // expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG`);
-    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}`);
+    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`);
   });
 
   // momentarily commented for pn-5157
@@ -41,13 +41,13 @@ describe('Tests navigation utility methods', () => {
   it('goToLoginPortal - aar', () => {
     goToLoginPortal(AppRouteType.PG, 'fake-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG&aar=fake-aar-token`);
+    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?type=PG&aar=fake-aar-token`);
   });
 
   it('goToLoginPortal - aar', () => {
     goToLoginPortal(AppRouteType.PG, '<script>malicious code</script>malicious-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG&aar=malicious-aar-token`);
+    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?type=PG&aar=malicious-aar-token`);
   });
   */
 });

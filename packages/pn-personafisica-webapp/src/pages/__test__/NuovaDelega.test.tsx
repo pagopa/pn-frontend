@@ -34,15 +34,12 @@ jest.mock('react-router-dom', () => ({
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 // mock action
-const entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
 const mockEntitiesActionFn = jest.fn();
-const createActionSpy = jest.spyOn(actions, 'createDelegation');
 const mockCreateActionFn = jest.fn();
 // mock tracking
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
 // mock dispatch
-const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
@@ -54,6 +51,12 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
 }
 
 describe('NuovaDelega page', () => {
+  let createActionSpy;
+  // mock action
+  let entitiesActionSpy;
+  // mock dispatch
+  let useDispatchSpy;
+
   const initialState = (created: boolean) => ({
     preloadedState: {
       newDelegationState: {
@@ -64,6 +67,9 @@ describe('NuovaDelega page', () => {
   });
 
   beforeEach(() => {
+    createActionSpy = jest.spyOn(actions, 'createDelegation')
+    entitiesActionSpy = jest.spyOn(actions, 'getAllEntities')
+    useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     createActionSpy.mockImplementation(mockCreateActionFn);
     entitiesActionSpy.mockImplementation(mockEntitiesActionFn);
     createTrackEventSpy.mockImplementation(mockTrackEventFn);

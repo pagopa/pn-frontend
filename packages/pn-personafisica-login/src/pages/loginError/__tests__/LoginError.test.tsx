@@ -2,8 +2,8 @@ import { render, waitFor, screen, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import LoginError from '../LoginError';
-import { ROUTE_LOGIN } from '../../../utils/constants';
 import '../../../locales/i18n';
+import { getConfiguration } from "../../../services/configuration.service";
 
 const mockNavigateFn = jest.fn();
 
@@ -42,7 +42,7 @@ test('login technical error - show transient error screen before redirecting to 
   await waitFor(
     () => {
       expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
+      expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
     },
     {
       timeout: 3500,
@@ -61,5 +61,5 @@ test('user cancelled the login - immediate redirect to login page', async () => 
   });
 
   expect(mockNavigateFn).toBeCalledTimes(1);
-  expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
+  expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
 });

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppNotAccessible, NotFound } from '@pagopa-pn/pn-commons';
 
+import { getConfiguration } from '../services/configuration.service';
 import Dashboard from '../pages/Dashboard.page';
 import NewNotification from '../pages/NewNotification.page';
 import ApiKeys from '../pages/ApiKeys.page';
@@ -11,7 +12,6 @@ import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
-import { PAGOPA_HELP_EMAIL } from '../utils/constants';
 import { PNRole } from '../models/user';
 import AppStatus from '../pages/AppStatus.page';
 import * as routes from './routes.const';
@@ -23,7 +23,7 @@ import OrganizationPartyGuard from './OrganizationPartyGuard';
 const handleAssistanceClick = () => {
   trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  window.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
 };
 
 function Router() {
