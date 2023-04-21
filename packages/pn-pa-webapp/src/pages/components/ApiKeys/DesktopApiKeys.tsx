@@ -18,7 +18,7 @@ import {
 import { Tag } from '@pagopa/mui-italia';
 import {
   ApiKeyColumn,
-  ApiKeyDTO,
+  ApiKey,
   ApiKeyStatus,
   ApiKeyStatusHistory,
   ModalApiKeyView,
@@ -28,7 +28,7 @@ import * as routes from '../../../navigation/routes.const';
 import { UserGroup } from '../../../models/user';
 
 type Props = {
-  apiKeys: Array<ApiKeyDTO>;
+  apiKeys: Array<ApiKey>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
@@ -48,7 +48,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
    * @returns true if the api key history contains status ROTATED, otherwise false
    */
   const isApiKeyRotated = (apiKeyIdx: number): boolean => {
-    const currentApiKey = rows[apiKeyIdx] as any as ApiKeyDTO;
+    const currentApiKey = rows[apiKeyIdx] as any as ApiKey;
     return !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
   };
 
@@ -286,7 +286,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   ];
 
   useEffect(() => {
-    const rowsMap: Array<Item> = apiKeys.map((n: ApiKeyDTO, index) => ({
+    const rowsMap: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
       ...n,
       id: index.toString(),
     }));

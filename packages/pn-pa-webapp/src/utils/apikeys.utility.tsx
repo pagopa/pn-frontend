@@ -21,7 +21,7 @@ function LocalizeStatus(
   };
 }
 
-const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
+export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
   const { t } = useTranslation(['apikeys']);
   return (
     <Box
@@ -95,13 +95,13 @@ export function getApiKeyStatusInfos(
 }
 
 export const apikeysMapper = (
-  apikeys: Array<ApiKey>,
+  apikeys: Array<ApiKeyDTO>,
   groups: Array<UserGroup>
-): Array<ApiKeyDTO> => {
+): Array<ApiKey> => {
   const getGroup = (group: string): UserGroup =>
     groups.filter((g: UserGroup) => g.name === group)[0];
 
-  const apikeysMapped: Array<ApiKeyDTO> = [];
+  const apikeysMapped: Array<ApiKey> = [];
 
   apikeys.forEach((apikey) => {
     const mappedGroups = apikey.groups.map(
@@ -117,7 +117,7 @@ export const apikeysMapper = (
       })
     );
 
-    const mappedApikey: ApiKeyDTO = {
+    const mappedApikey: ApiKey = {
       ...apikey,
       groups: mappedGroups,
     };

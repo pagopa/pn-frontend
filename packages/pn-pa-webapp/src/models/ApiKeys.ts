@@ -1,6 +1,6 @@
 import { UserGroup } from "./user";
 
-export interface ApiKey {
+export interface ApiKeyDTO {
   id: string;
   name: string;
   value: string;
@@ -10,7 +10,7 @@ export interface ApiKey {
   statusHistory: Array<ApiKeyStatusHistory>;
 }
 
-export interface ApiKeyDTO {
+export interface ApiKey {
   id: string;
   name: string;
   value: string;
@@ -52,7 +52,7 @@ export enum ModalApiKeyView {
 }
 
 export interface GetApiKeysResponse {
-  items: Array<ApiKey>;
+  items: Array<ApiKeyDTO>;
 }
 
 export interface GetNewApiKeyResponse {

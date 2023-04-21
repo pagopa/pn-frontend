@@ -2,11 +2,10 @@ import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import React from 'react';
 import * as redux from 'react-redux';
 import { ApiKey } from '../../models/ApiKeys';
-import { mockApiKeysForFE, mockGroupsFromBe } from '../../redux/apiKeys/__test__/test-utils';
+import { mockApiKeysForFE } from '../../redux/apiKeys/__test__/test-utils';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/apiKeys/actions';
 import ApiKeys from '../ApiKeys.page';
-import { UserGroup } from '../../models/user';
 
 const mockNavigateFn = jest.fn();
 
@@ -38,12 +37,11 @@ describe('ApiKeys Page', () => {
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
   
-  const initialState = (apiKeys: Array<ApiKey>, groups: Array<UserGroup>) => ({
+  const initialState = (apiKeys: Array<ApiKey>) => ({
     preloadedState: {
       apiKeysState: {
         loading: false,
         apiKeys,
-        groups
       },
     },
   });
@@ -65,19 +63,19 @@ describe('ApiKeys Page', () => {
 
   it('renders the page', async () => {
     await act(async () => {
-      result = render(<ApiKeys />, initialState([], []));
+      result = render(<ApiKeys />, initialState([]));
     });
     expect(result?.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
   });
 
   it('renders the page with apiKeys list and click Generate New Api Key button', async () => {
     await act(async () => {
-      result = render(<ApiKeys />, initialState(mockApiKeysForFE, mockGroupsFromBe));
+      result = render(<ApiKeys />, initialState(mockApiKeysForFE));
     });
     const tableApiKeys = result?.container.querySelector('table');
     expect(tableApiKeys).toBeInTheDocument();
 
-    expect(mockDispatchFn).toBeCalledTimes(2);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith();
 

@@ -22,6 +22,7 @@ const CustomTagGroup = ({
     : [children as JSX.Element];
   const isOverflow = visibleItems ? arrayChildren.length > visibleItems : false;
   const maxCount = isOverflow ? visibleItems : arrayChildren.length;
+  const tagIndicator = <Tag value={`+${arrayChildren.length - (visibleItems as number)}`} />;
   return (
     <>
       {arrayChildren.slice(0, maxCount).map((c) => c)}
@@ -38,7 +39,7 @@ const CustomTagGroup = ({
                 data-testid="custom-tooltip-indicator"
                 role="button"
               >
-                <Tag value={`+${arrayChildren.length - (visibleItems as number)}`} />
+                {tagIndicator}
               </Box>
             </CustomTooltip>
           )}
@@ -47,7 +48,7 @@ const CustomTagGroup = ({
               sx={{ cursor: 'pointer', display: 'inline-block' }}
               data-testid="remaining-tag-indicator"
             >
-              <Tag value={`+${arrayChildren.length - (visibleItems as number)}`} />
+              {tagIndicator}
             </Box>
           )}
         </Box>

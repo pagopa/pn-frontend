@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Button, Grid, SxProps, Typography } from '@mui/material';
 
-type Props = {
+export type ApiKeyModalProps = {
   titleSx: SxProps;
   title: string;
   subTitle?: ReactNode;
@@ -23,19 +23,19 @@ const ApiKeyModal = ({
   closeModalHandler,
   actionButtonLabel,
   actionHandler,
-}: Props) => (
+}: ApiKeyModalProps) => (
   <>
     <Typography variant="h5" sx={titleSx}>
       {title}
     </Typography>
     {subTitle && !subTitleAtBottom && (
-      <Typography variant="body1" sx={{ marginBottom: 3 }}>
+      <Typography data-testid="subtitle-top" variant="body1" sx={{ marginBottom: 3 }}>
         {subTitle}
       </Typography>
     )}
     {content}
     {subTitle && subTitleAtBottom && (
-      <Typography variant="body1" sx={{ my: 3 }}>
+      <Typography data-testid="subtitle-bottom" variant="body1" sx={{ my: 3 }}>
         {subTitle}
       </Typography>
     )}

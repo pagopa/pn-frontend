@@ -22,10 +22,8 @@ import {
   setApiKeyStatus,
   deleteApiKey,
   API_KEYS_ACTIONS,
-  getApiKeyUserGroups,
 } from '../redux/apiKeys/actions';
-import { ApiKeyDTO, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
-import { apikeysMapper } from '../utils/apikeys.utility';
+import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import { UserGroup } from '../models/user';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
@@ -82,21 +80,14 @@ const ApiKeys = () => {
   const { t } = useTranslation(['apikeys']);
 
   const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
-  const groups = useAppSelector((state: RootState) => state.apiKeysState.groups);
-  const [mappedApikeys, setMappedApikeys] = useState<Array<ApiKeyDTO>>([]);
 
   const fetchApiKeys = useCallback(() => {
     void dispatch(getApiKeys());
-    void dispatch(getApiKeyUserGroups());
   }, []);
-
-  useEffect(() => {
-    setMappedApikeys(apikeysMapper(apiKeys, groups));
-  }, [apiKeys, groups]);
 
   type modalType = {
     view: ModalApiKeyView;
-    apiKey?: ApiKeyDTO;
+    apiKey?: ApiKey;
   };
 
   const [modal, setModal] = useState<modalType>({ view: ModalApiKeyView.NONE });
@@ -106,7 +97,7 @@ const ApiKeys = () => {
   };
 
   const handleModalClick = (view: ModalApiKeyView, apiKeyId: number) => {
-    setModal({ view, apiKey: mappedApikeys[apiKeyId] });
+    setModal({ view, apiKey: apiKeys[apiKeyId] });
   };
 
   const handleNewApiKeyClick = () => {
@@ -179,7 +170,7 @@ const ApiKeys = () => {
         mainText={t('error-fecth-api-keys')}
         mt={3}
       >
-        <DesktopApiKeys apiKeys={mappedApikeys} handleModalClick={handleModalClick} />
+        <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
 
         <Dialog
           open={modal.view !== ModalApiKeyView.NONE}

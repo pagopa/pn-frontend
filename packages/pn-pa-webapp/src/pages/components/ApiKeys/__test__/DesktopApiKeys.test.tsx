@@ -1,6 +1,7 @@
 import { mockApiKeysForFE } from '../../../../redux/apiKeys/__test__/test-utils';
 import { fireEvent, render, waitFor, screen } from '../../../../__test__/test-utils';
 import DesktopApiKeys from '../DesktopApiKeys';
+import React from 'react';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
