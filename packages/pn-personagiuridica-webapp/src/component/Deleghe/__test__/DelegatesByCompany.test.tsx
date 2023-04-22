@@ -56,7 +56,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
           },
           sortDelegates: {
             orderBy: '',
-            order: 'asc',
+            order: 'desc',
           },
         },
       },
@@ -67,24 +67,20 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     expect(table).toBeInTheDocument();
     expect(result.container).toHaveTextContent('Davide');
     expect(result.container).toHaveTextContent('Marco');
-    /* const html = document.body.innerHTML;
-    const a = html.search('Davide');
-    const b = html.search('Marco');
-    expect(a).toBeGreaterThan(b); */
     const col = table.getElementsByClassName(
       'MuiTableCell-root MuiTableCell-head MuiTableCell-stickyHeader MuiTableCell-alignCenter MuiTableCell-sizeMedium css-t7iuwh-MuiTableCell-root'
     );
     const row = table.getElementsByClassName('MuiTableBody-root css-1nq9kkf-MuiTableBody-root');
-    const indexOrder1 = row[0].ariaRowIndex;
-    const rowNameRender = row[0];
-    const indexOrder2 = row[1].ariaRowIndex;
+    const indexOrder1 = row[0].getElementsByTagName('p')[0].innerHTML;
+    const indexOrder2 = row[0].getElementsByTagName('p')[2].innerHTML;
+    expect(indexOrder1).toBe('Marco Verdi');
+    expect(indexOrder2).toBe('Davide Legato');
 
-    // const row = result.getAllByRole('button');
-    // const buttonRow = result.getAllByTestId('delegationMenuIcon');
-
-    //fireEvent.click(col[0]);
+    fireEvent.click(col[0]);
     await waitFor(() => {
-      // console.log('arrayOfDelegates :>> ', arrayOfDelegates);
+      console.log('arrayOfDelegates :>> ', arrayOfDelegates);
+      /* expect(indexOrder1).toBe('Davide Legato');
+      expect(indexOrder2).toBe('Marco Verdi'); */
     });
     mock.reset();
     mock.restore();
