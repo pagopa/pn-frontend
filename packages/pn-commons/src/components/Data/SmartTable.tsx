@@ -1,10 +1,14 @@
-import { PropsWithChildren, ReactNode } from 'react';
+import { Children, PropsWithChildren, ReactNode, useMemo, useState } from 'react';
+import { Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
+import { sortArray } from '../../utils';
 import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
 import { CardAction, CardElement, Column, Item, Sort } from '../../types';
 import ItemsCard from './ItemsCard';
 import ItemsTable from './ItemsTable';
+import SmartFilter from './SmartFilter';
+import SmartSort from './SmartSort';
 
 type Props<ColumnId> = {
   /** smart table configuration */
@@ -13,6 +17,14 @@ type Props<ColumnId> = {
   data: Array<Item>;
   /** current sort value */
   currentSort?: Sort<ColumnId>;
+  /** labels for the sort fields */
+  sortLabels?: {
+    title: string;
+    optionsTitle: string;
+    cancel: string;
+    asc: string;
+    dsc: string;
+  };
   /** the function to be invoked if the user change sorting */
   onChangeSorting?: (sort: Sort<ColumnId>) => void;
   /* actions */
@@ -26,14 +38,38 @@ const SmartTable = <ColumnId extends string>({
   conf,
   data,
   currentSort,
+  sortLabels,
   onChangeSorting,
   actions,
+  children,
 }: PropsWithChildren<Props<ColumnId>>) => {
   const isMobile = useIsMobile();
+  const [sort, setSort] = useState<Sort<ColumnId> | undefined>(currentSort);
+
+  const filters = children
+    ? Children.toArray(children).filter((child) => child instanceof SmartFilter)
+    : [];
+
+  const handleSorting = (newSort: Sort<ColumnId>) => {
+    // manage sorting from external
+    if (onChangeSorting && newSort) {
+      onChangeSorting(newSort);
+    } else {
+      setSort(newSort);
+    }
+  };
+
+  const rowData = useMemo(() => {
+    if (sort) {
+      return sortArray(sort.order, sort.orderBy, data);
+    }
+    return data;
+  }, [sort]);
 
   if (isMobile) {
     const headerElem: Array<CardElement> = [];
     const cardBody: Array<CardElement> = [];
+    const sortFields: Array<{ id: string; label: string }> = [];
     for (const cfg of conf) {
       /* eslint-disable functional/immutable-data */
       if (cfg.cardConfiguration.position === 'header') {
@@ -50,6 +86,13 @@ const SmartTable = <ColumnId extends string>({
           label: cfg.label,
           getLabel: (value: string | number | Array<string | ReactNode>, data?: Item) =>
             cfg.getValue(value, data, true),
+          notWrappedInTypography: cfg.cardConfiguration.notWrappedInTypography,
+        });
+      }
+      if (cfg.tableConfiguration.sortable) {
+        sortFields.push({
+          id: cfg.id,
+          label: cfg.label,
         });
       }
       /* eslint-enable functional/immutable-data */
@@ -65,12 +108,32 @@ const SmartTable = <ColumnId extends string>({
         onClick: action.onClick,
       }));
     return (
-      <ItemsCard
-        cardHeader={cardHeader}
-        cardBody={cardBody}
-        cardData={data}
-        cardActions={cardActions}
-      />
+      <>
+        <Grid container direction="row" sx={{ mb: 2 }}>
+          <Grid item xs={6}></Grid>
+          <Grid item xs={6} textAlign="right">
+            {sort && sortFields.length > 0 && sortLabels && (
+              <SmartSort
+                title={sortLabels.title}
+                optionsTitle={sortLabels.optionsTitle}
+                cancelLabel={sortLabels.cancel}
+                ascLabel={sortLabels.asc}
+                dscLabel={sortLabels.dsc}
+                sortFields={sortFields}
+                sort={sort}
+                onChangeSorting={handleSorting}
+              />
+            )}
+          </Grid>
+        </Grid>
+        {filters}
+        <ItemsCard
+          cardHeader={cardHeader}
+          cardBody={cardBody}
+          cardData={rowData}
+          cardActions={cardActions}
+        />
+      </>
     );
   }
 
@@ -86,12 +149,10 @@ const SmartTable = <ColumnId extends string>({
   }));
 
   return (
-    <ItemsTable
-      columns={columns}
-      rows={data}
-      sort={currentSort}
-      onChangeSorting={onChangeSorting}
-    />
+    <>
+      {filters}
+      <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
+    </>
   );
 };
 

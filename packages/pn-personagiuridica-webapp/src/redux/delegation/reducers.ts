@@ -1,8 +1,7 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Sort } from '@pagopa-pn/pn-commons';
 
-import { sortDelegations } from '../../utils/delegation.utility';
-import { DelegatorsColumn, DelegatesColumn, Delegation } from '../../models/Deleghe';
+import { DelegatorsColumn, Delegation } from '../../models/Deleghe';
 import {
   getDelegatesByCompany,
   getDelegators,
@@ -11,11 +10,12 @@ import {
   revokeDelegation,
 } from './actions';
 
+import { arrayOfDelegators } from './__test__/test.utils';
+
 const initialState = {
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
-    isCompany: false,
   },
   modalState: {
     open: false,
@@ -32,10 +32,6 @@ const initialState = {
     orderBy: '',
     order: 'asc',
   } as Sort<DelegatorsColumn>,
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  } as Sort<DelegatesColumn>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -62,14 +58,6 @@ const delegationsSlice = createSlice({
       state.acceptModalState.open = false;
       state.acceptModalState.id = '';
     },
-    setDelegatesSorting: (state, action: PayloadAction<Sort<DelegatesColumn>>) => {
-      state.sortDelegates = action.payload;
-      state.delegations.delegates = sortDelegations(
-        action.payload.order,
-        action.payload.orderBy,
-        state.delegations.delegates
-      );
-    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -78,6 +66,9 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload;
+    });
+    builder.addCase(getDelegators.rejected, (state) => {
+      state.delegations.delegates = arrayOfDelegators;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
@@ -108,7 +99,6 @@ const delegationsSlice = createSlice({
 });
 
 export const {
-  setDelegatesSorting,
   openAcceptModal,
   closeAcceptModal,
   resetState,

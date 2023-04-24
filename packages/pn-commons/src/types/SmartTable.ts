@@ -20,10 +20,12 @@ interface TableConfiguration<ColumnId> {
  * @typedef CardConfiguration configuration for the card view
  * @prop {('header' | 'body')} position position of the field into the card
  * @prop {GridProps} gridProps style properties to override custom ones
+ * @prop {boolean} notWrappedInTypography element will be not enclosed in a Typrography element
  */
 interface CardConfiguration {
   position: 'header' | 'body';
   gridProps?: GridProps;
+  notWrappedInTypography?: boolean;
 }
 
 /**

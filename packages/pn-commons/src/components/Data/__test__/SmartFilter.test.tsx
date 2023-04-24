@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  createMatchMedia,
-  fireEvent,
-  render,
-  waitFor,
-  screen,
-  prettyDOM,
-} from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, waitFor, screen } from '../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
 const submitHandler = jest.fn();
@@ -78,7 +71,7 @@ describe('Smart Filter Component', () => {
     expect(dialogToggle).toHaveTextContent('Filter');
   });
 
-  it('click on confirm and cancel buttons (desktop version)', () => {
+  it('clicks on confirm and cancel buttons (desktop version)', () => {
     window.matchMedia = createMatchMedia(2000);
     const result = render(
       <SmartFilter
@@ -103,7 +96,7 @@ describe('Smart Filter Component', () => {
     expect(cancelHandler).toBeCalledTimes(1);
   });
 
-  it('click on toggle buttons (mobile version)', async () => {
+  it('clicks on toggle button (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
     const result = render(
       <SmartFilter

@@ -9,7 +9,6 @@ export const mockCreateDelegation = {
     fiscalCode: 'DVDLGT83C12H501C',
     person: true,
     email: 'email@falsa.it',
-    displayName: 'Davide Legato',
   },
   visibilityIds: [
     {
@@ -65,7 +64,7 @@ export const arrayOfDelegates = [
     ],
     verificationCode: '123456',
     datefrom: '2021-12-15',
-    dateto: '2022-04-16',
+    dateto: '2023-04-07',
   },
 ];
 
@@ -120,7 +119,6 @@ export const mockDelegationsState = {
   delegations: {
     delegators: arrayOfDelegators,
     delegates: arrayOfDelegates,
-    isCompany: false,
   },
   modalState: {
     open: false,
@@ -147,7 +145,6 @@ export const initialState = {
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
-    isCompany: false,
   },
   modalState: {
     open: false,

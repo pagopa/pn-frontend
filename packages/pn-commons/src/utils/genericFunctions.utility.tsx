@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { formatFromString } from './date.utility';
 
 export function getValidValue(a: string | number | undefined, b?: string | number): any {
   return a || (b ? b : '');
@@ -10,7 +11,7 @@ export function getValidValue(a: string | number | undefined, b?: string | numbe
  * @param  emptyValues TFilters
  * @returns number
  */
-export function filtersApplied<TFilters extends Object>(
+export function filtersApplied<TFilters extends object>(
   prevFilters: TFilters,
   emptyValues: TFilters
 ): number {
@@ -20,4 +21,30 @@ export function filtersApplied<TFilters extends Object>(
     }
     return c;
   }, 0);
+}
+
+/**
+ * Sorts an array of object
+ * @template TArray
+ * @param {('desc' | 'asc')} order descending or ascending order
+ * @param {keyof TArray} sortAttr attribute on witch order
+ * @param {Array<TArray>} values array to order
+ * @returns array
+ */
+export function sortArray<TArray>(
+  order: 'desc' | 'asc',
+  sortAttr: keyof TArray,
+  values: Array<TArray>
+) {
+  /* eslint-disable functional/immutable-data */
+  return [...values].sort((a: TArray, b: TArray) => {
+    const orderDirection = order === 'desc' ? 1 : -1;
+    const dateA = formatFromString(a[sortAttr] as unknown as string);
+    const dateB = formatFromString(b[sortAttr] as unknown as string);
+    if (dateA && dateB) {
+      return orderDirection * (dateB.getTime() - dateA.getTime());
+    }
+    return orderDirection * (a[sortAttr] < b[sortAttr] ? 1 : -1);
+  });
+  /* eslint-enable functional/immutable-data */
 }

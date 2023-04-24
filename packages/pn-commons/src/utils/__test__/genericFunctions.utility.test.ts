@@ -1,4 +1,4 @@
-import { filtersApplied, getValidValue } from '../genericFunctions.utility';
+import { filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
 
 describe('getValidValue function', () => {
   it('return A value', () => {
@@ -44,5 +44,33 @@ describe('getValidValue function', () => {
       }
     );
     expect(count).toEqual(2);
+  });
+
+  it('sorts array - number', () => {
+    const arrayToSort = [{ number: 1 }, { number: 2 }, { number: 3 }];
+    let sortedArray = sortArray('asc', 'number', arrayToSort);
+    expect(sortedArray).toStrictEqual(arrayToSort);
+    sortedArray = sortArray('desc', 'number', arrayToSort);
+    expect(sortedArray).toStrictEqual([{ number: 3 }, { number: 2 }, { number: 1 }]);
+  });
+
+  it('sorts array - string', () => {
+    const arrayToSort = [{ name: 'Andrea' }, { name: 'Mario' }, { name: 'Sara' }];
+    let sortedArray = sortArray('asc', 'name', arrayToSort);
+    expect(sortedArray).toStrictEqual(arrayToSort);
+    sortedArray = sortArray('desc', 'name', arrayToSort);
+    expect(sortedArray).toStrictEqual([{ name: 'Sara' }, { name: 'Mario' }, { name: 'Andrea' }]);
+  });
+
+  it('sorts array - date', () => {
+    const arrayToSort = [{ date: '11/03/2022' }, { date: '21/10/2023' }, { date: '1/07/2045' }];
+    let sortedArray = sortArray('asc', 'date', arrayToSort);
+    expect(sortedArray).toStrictEqual(arrayToSort);
+    sortedArray = sortArray('desc', 'date', arrayToSort);
+    expect(sortedArray).toStrictEqual([
+      { date: '1/07/2045' },
+      { date: '21/10/2023' },
+      { date: '11/03/2022' },
+    ]);
   });
 });

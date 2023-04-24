@@ -104,6 +104,7 @@ const DelegationsOfTheCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
+        notWrappedInTypography: true,
       },
     },
     {
@@ -208,6 +209,7 @@ const DelegationsOfTheCompany = () => {
   };
 
   useEffect(() => {
+    // TODO: not run twice at first initialization
     void dispatch(getDelegators(filters));
   }, [filters]);
 
@@ -216,115 +218,116 @@ const DelegationsOfTheCompany = () => {
       <Typography variant="h6" mb={4}>
         {t('deleghe.delegatorsTitle')}
       </Typography>
-      <SmartFilter
-        filterLabel={t('button.filtra', { ns: 'common' })}
-        cancelLabel={t('button.annulla filtro', { ns: 'common' })}
-        onSubmit={formik.handleSubmit}
-        onClear={clearFiltersHandler}
-        formIsValid={formik.isValid}
-        formValues={formik.values}
-        initialValues={initialValues}
-      >
-        <Grid item xs={12} lg>
-          <Autocomplete
-            id="delegatorIds"
-            size="small"
-            fullWidth
-            options={[]}
-            disableCloseOnSelect
-            multiple
-            noOptionsText={t('deleghe.table.no-name-found')}
-            getOptionLabel={getOptionLabel}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            popupIcon={<SearchIcon />}
-            sx={{
-              [`& .MuiAutocomplete-popupIndicator`]: {
-                transform: 'none',
-              },
-              marginBottom: isMobile ? '20px' : '0',
-            }}
-            renderOption={renderOption}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('deleghe.table.name')}
-                placeholder={t('deleghe.table.name')}
-                name="delegatorIds"
-              />
-            )}
-            value={formik.values.delegatorIds}
-            onChange={handleChangeTouched}
-          />
-        </Grid>
-        <Grid item xs={12} lg={3}>
-          <Autocomplete
-            id="groups"
-            size="small"
-            fullWidth
-            options={[]}
-            disableCloseOnSelect
-            multiple
-            noOptionsText={t('deleghe.table.no-group-found')}
-            getOptionLabel={getOptionLabel}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            popupIcon={<SearchIcon />}
-            sx={{
-              [`& .MuiAutocomplete-popupIndicator`]: {
-                transform: 'none',
-              },
-              marginBottom: isMobile ? '20px' : '0',
-            }}
-            renderOption={renderOption}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('deleghe.table.group')}
-                placeholder={t('deleghe.table.group')}
-                name="groups"
-              />
-            )}
-            value={formik.values.groups}
-            onChange={handleChangeTouched}
-          />
-        </Grid>
-        <Grid item xs={12} lg={3}>
-          <TextField
-            label={t('deleghe.table.status')}
-            id="status"
-            name="status"
-            size="small"
-            fullWidth
-            select
-            SelectProps={{
-              renderValue: (selected: any) => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((value: any) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </Box>
-              ),
-              multiple: true,
-            }}
-            variant="outlined"
-            value={formik.values.status}
-            onChange={handleChangeTouched}
-          >
-            {arrayStatus.map(({ id, status }) => (
-              <MenuItem key={id} value={id}>
-                <Checkbox checked={formik.values.status.includes(id)} />
-                <ListItemText primary={status} />
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-      </SmartFilter>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
         reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
         {rows.length > 0 ? (
-          <SmartTable conf={smartCfg} data={rows} />
+          <SmartTable conf={smartCfg} data={rows}>
+            <SmartFilter
+              filterLabel={t('button.filtra', { ns: 'common' })}
+              cancelLabel={t('button.annulla filtro', { ns: 'common' })}
+              onSubmit={formik.handleSubmit}
+              onClear={clearFiltersHandler}
+              formIsValid={formik.isValid}
+              formValues={formik.values}
+              initialValues={initialValues}
+            >
+              <Grid item xs={12} lg>
+                <Autocomplete
+                  id="delegatorIds"
+                  size="small"
+                  fullWidth
+                  options={[]}
+                  disableCloseOnSelect
+                  multiple
+                  noOptionsText={t('deleghe.table.no-name-found')}
+                  getOptionLabel={getOptionLabel}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  popupIcon={<SearchIcon />}
+                  sx={{
+                    [`& .MuiAutocomplete-popupIndicator`]: {
+                      transform: 'none',
+                    },
+                    marginBottom: isMobile ? '20px' : '0',
+                  }}
+                  renderOption={renderOption}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('deleghe.table.name')}
+                      placeholder={t('deleghe.table.name')}
+                      name="delegatorIds"
+                    />
+                  )}
+                  value={formik.values.delegatorIds}
+                  onChange={handleChangeTouched}
+                />
+              </Grid>
+              <Grid item xs={12} lg={3}>
+                <Autocomplete
+                  id="groups"
+                  size="small"
+                  fullWidth
+                  options={[]}
+                  disableCloseOnSelect
+                  multiple
+                  noOptionsText={t('deleghe.table.no-group-found')}
+                  getOptionLabel={getOptionLabel}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  popupIcon={<SearchIcon />}
+                  sx={{
+                    [`& .MuiAutocomplete-popupIndicator`]: {
+                      transform: 'none',
+                    },
+                    marginBottom: isMobile ? '20px' : '0',
+                  }}
+                  renderOption={renderOption}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('deleghe.table.group')}
+                      placeholder={t('deleghe.table.group')}
+                      name="groups"
+                    />
+                  )}
+                  value={formik.values.groups}
+                  onChange={handleChangeTouched}
+                />
+              </Grid>
+              <Grid item xs={12} lg={3}>
+                <TextField
+                  label={t('deleghe.table.status')}
+                  id="status"
+                  name="status"
+                  size="small"
+                  fullWidth
+                  select
+                  SelectProps={{
+                    renderValue: (selected: any) => (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((value: any) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    ),
+                    multiple: true,
+                  }}
+                  variant="outlined"
+                  value={formik.values.status}
+                  onChange={handleChangeTouched}
+                >
+                  {arrayStatus.map(({ id, status }) => (
+                    <MenuItem key={id} value={id}>
+                      <Checkbox checked={formik.values.status.includes(id)} />
+                      <ListItemText primary={status} />
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+            </SmartFilter>
+          </SmartTable>
         ) : (
           <EmptyState
             sentimentIcon={KnownSentiment.NONE}

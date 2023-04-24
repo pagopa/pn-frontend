@@ -1,12 +1,7 @@
-import { performThunkAction, Sort } from '@pagopa-pn/pn-commons';
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import {
-  DelegatesColumn,
-  AcceptDelegationResponse,
-  Delegation,
-  GetDelegatorsFilters,
-} from '../../models/Deleghe';
+import { AcceptDelegationResponse, Delegation, GetDelegatorsFilters } from '../../models/Deleghe';
 
 export enum DELEGATION_ACTIONS {
   GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
@@ -54,7 +49,5 @@ export const closeRevocationModal = createAction<void>('closeRevocationModal');
 export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
 
 export const closeAcceptModal = createAction<void>('closeAcceptModal');
-
-export const setDelegatesSorting = createAction<Sort<DelegatesColumn>>('setDelegatesSorting');
 
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

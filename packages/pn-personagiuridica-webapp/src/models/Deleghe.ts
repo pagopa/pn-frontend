@@ -65,7 +65,6 @@ export type UserAndDelegations = User & DelegationsList;
 export interface DelegationsList {
   delegators: Array<Delegation>;
   delegations: Array<Delegation>;
-  isCompany: boolean;
 }
 
 export interface IDelegation {

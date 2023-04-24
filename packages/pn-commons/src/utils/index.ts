@@ -13,7 +13,7 @@ import {
   getLegalFactLabel,
   getNotificationTimelineStatusInfos,
 } from './notification.utility';
-import { filtersApplied, getValidValue } from './genericFunctions.utility';
+import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { compileOneTrustPath } from './onetrust.utility';
 import {
   formatMonthString,
@@ -110,4 +110,5 @@ export {
   sanitizeString,
   compileOneTrustPath,
   buttonNakedInheritStyle,
+  sortArray,
 };

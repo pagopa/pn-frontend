@@ -22,7 +22,6 @@ import {
   closeRevocationModal,
   openAcceptModal,
   openRevocationModal,
-  setDelegatesSorting,
 } from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
 
@@ -150,12 +149,5 @@ describe('delegation redux state tests', () => {
     expect(closeAction.type).toBe('delegationsSlice/closeAcceptModal');
     const closeModalState = store.getState().delegationsState.acceptModalState;
     expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
-  });
-
-  it('sets the delegates sorting by test in ascendant order', () => {
-    const action = store.dispatch(setDelegatesSorting({ orderBy: 'startDate', order: 'asc' }));
-    expect(action.type).toBe('delegationsSlice/setDelegatesSorting');
-    const sortDelegates = store.getState().delegationsState.sortDelegates;
-    expect(sortDelegates).toEqual({ orderBy: 'startDate', order: 'asc' });
   });
 });
