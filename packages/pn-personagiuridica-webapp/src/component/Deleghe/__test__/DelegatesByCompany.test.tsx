@@ -78,7 +78,6 @@ describe('Delegates Component - assuming delegates API works properly', () => {
 
     fireEvent.click(col[0]);
     await waitFor(() => {
-      console.log('arrayOfDelegates :>> ', arrayOfDelegates);
       /* expect(indexOrder1).toBe('Davide Legato');
       expect(indexOrder2).toBe('Marco Verdi'); */
     });

@@ -4,7 +4,7 @@ import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import {
   acceptDelegation,
-  getDelegates,
+  getDelegatesByCompany,
   getDelegators,
   rejectDelegation,
   revokeDelegation,
@@ -28,9 +28,9 @@ describe('delegation redux state tests', () => {
   });
 
   it('should be able to fetch the delegates', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'getDelegates');
+    const apiSpy = jest.spyOn(DelegationsApi, 'getDelegatesByCompany');
     apiSpy.mockResolvedValue(arrayOfDelegates);
-    const action = await store.dispatch(getDelegates());
+    const action = await store.dispatch(getDelegatesByCompany());
     const payload = action.payload as Array<Delegation>;
     expect(action.type).toBe('getDelegates/fulfilled');
     expect(payload).toEqual(arrayOfDelegates);

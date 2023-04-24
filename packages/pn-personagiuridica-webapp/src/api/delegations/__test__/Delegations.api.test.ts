@@ -9,12 +9,19 @@ import {
 } from '../../../redux/delegation/__test__/test.utils';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
-import { ACCEPT_DELEGATION, CREATE_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REOVKE_DELEGATION } from '../delegations.routes';
+import {
+  ACCEPT_DELEGATION,
+  CREATE_DELEGATION,
+  DELEGATIONS_BY_DELEGATE,
+  DELEGATIONS_BY_DELEGATOR,
+  REJECT_DELEGATION,
+  REOVKE_DELEGATION,
+} from '../delegations.routes';
 
 async function getDelegates(response: Array<Delegation> | null) {
   const axiosMock = new MockAdapter(apiClient);
   axiosMock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, response);
-  const res = await DelegationsApi.getDelegates();
+  const res = await DelegationsApi.getDelegatesByCompany();
   axiosMock.reset();
   axiosMock.restore();
   return res;
