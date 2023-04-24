@@ -9,13 +9,13 @@ import {
 } from '../../models/Deleghe';
 
 export enum DELEGATION_ACTIONS {
-  GET_DELEGATES = 'getDelegates',
+  GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
   GET_DELEGATORS = 'getDelegators',
 }
 
-export const getDelegates = createAsyncThunk<Array<Delegation>>(
-  DELEGATION_ACTIONS.GET_DELEGATES,
-  performThunkAction(() => DelegationsApi.getDelegates())
+export const getDelegatesByCompany = createAsyncThunk<Array<Delegation>>(
+  DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY,
+  performThunkAction(() => DelegationsApi.getDelegatesByCompany())
 );
 
 export const getDelegators = createAsyncThunk<Array<Delegation>>(

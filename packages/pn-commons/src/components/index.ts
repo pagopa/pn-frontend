@@ -50,6 +50,8 @@ import TimedMessage from './TimedMessage/TimedMessage';
 import AppNotAccessible from './AppNotAccessible';
 import CustomTagGroup from './CustomTagGroup/CustomTagGroup';
 import TabPanel from './TabPanel';
+import SmartTable from './Data/SmartTable';
+
 export {
   LoadingOverlay,
   Header,
@@ -101,6 +103,7 @@ export {
   TimedMessage,
   AppNotAccessible,
   CustomTagGroup,
+  SmartTable,
 };
 
 export type { DowntimeLogColumn };

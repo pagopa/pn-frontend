@@ -30,7 +30,7 @@ export const DelegationsApi = {
    * Get all the delegates for the authenticated user
    * @returns {Promise<Array<Delegation>>}
    */
-  getDelegates: (): Promise<Array<Delegate>> =>
+  getDelegatesByCompany: (): Promise<Array<Delegate>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATOR())
       .then((response: AxiosResponse<Array<Delegation>>) =>
