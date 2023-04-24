@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { TitleBox } from '@pagopa-pn/pn-commons';
@@ -11,6 +11,7 @@ import { getDelegators } from '../redux/delegation/actions';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
+import { getDelegatesByCompany } from '../redux/delegation/actions';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
@@ -22,13 +23,14 @@ const Deleghe = () => {
     setValue(newValue);
   };
 
-  const retrieveData = async () => {
-    await dispatch(getDelegators({ size: 10 }));
+  const retrieveData = useCallback(() => {
+    void dispatch(getDelegatesByCompany());
+    void dispatch(getDelegators({ size: 10 }));
     setPageReady(true);
-  };
+  }, []);
 
   useEffect(() => {
-    void retrieveData();
+    retrieveData();
     return () => {
       dispatch(resetState());
     };

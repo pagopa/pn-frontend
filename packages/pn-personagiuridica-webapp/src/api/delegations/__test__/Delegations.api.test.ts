@@ -28,7 +28,7 @@ describe('Delegations api tests', () => {
       undefined,
       arrayOfDelegates
     );
-    const res = await DelegationsApi.getDelegates();
+    const res = await DelegationsApi.getDelegatesByCompany();
     expect(res).toStrictEqual(arrayOfDelegates);
     mock.reset();
     mock.restore();
@@ -36,7 +36,7 @@ describe('Delegations api tests', () => {
 
   it('gets empty delegates', async () => {
     const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    const res = await DelegationsApi.getDelegates();
+    const res = await DelegationsApi.getDelegatesByCompany();
     expect(res).toHaveLength(0);
     mock.reset();
     mock.restore();

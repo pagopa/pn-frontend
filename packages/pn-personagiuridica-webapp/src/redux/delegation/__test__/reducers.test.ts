@@ -12,7 +12,7 @@ import { store } from '../../store';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import {
   acceptDelegation,
-  getDelegates,
+  getDelegatesByCompany,
   getDelegators,
   rejectDelegation,
   revokeDelegation,
@@ -43,9 +43,9 @@ describe('delegation redux state tests', () => {
       undefined,
       arrayOfDelegates
     );
-    const action = await store.dispatch(getDelegates());
+    const action = await store.dispatch(getDelegatesByCompany());
     const payload = action.payload as Array<Delegation>;
-    expect(action.type).toBe('getDelegates/fulfilled');
+    expect(action.type).toBe('getDelegatesByCompany/fulfilled');
     expect(payload).toEqual(arrayOfDelegates);
     mock.reset();
     mock.restore();
