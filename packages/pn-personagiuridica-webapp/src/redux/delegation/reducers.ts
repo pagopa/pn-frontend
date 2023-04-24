@@ -1,7 +1,6 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
-import { Sort } from '@pagopa-pn/pn-commons';
 
-import { DelegatorsColumn, Delegation } from '../../models/Deleghe';
+import { Delegation } from '../../models/Deleghe';
 import {
   getDelegatesByCompany,
   getDelegators,
@@ -10,12 +9,16 @@ import {
   revokeDelegation,
 } from './actions';
 
-import { arrayOfDelegators } from './__test__/test.utils';
+// import { arrayOfDelegators } from './__test__/test.utils';
 
 const initialState = {
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
+  },
+  pagination: {
+    nextPagesKey: [] as Array<string>,
+    moreResult: false,
   },
   modalState: {
     open: false,
@@ -28,10 +31,6 @@ const initialState = {
     name: '',
     error: false,
   },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc',
-  } as Sort<DelegatorsColumn>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -65,10 +64,14 @@ const delegationsSlice = createSlice({
       state.delegations.delegates = action.payload;
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
-      state.delegations.delegators = action.payload;
-    });
-    builder.addCase(getDelegators.rejected, (state) => {
-      state.delegations.delegates = arrayOfDelegators;
+      state.delegations.delegators = action.payload.resultsPage;
+      state.pagination.nextPagesKey = action.payload.nextPagesKey;
+      state.pagination.moreResult = action.payload.moreResult;
+      /*
+      state.delegations.delegators = arrayOfDelegators;
+      state.pagination.moreResult = false;
+      state.pagination.nextPagesKey = ['a', 'b', 'c'];
+      */
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>

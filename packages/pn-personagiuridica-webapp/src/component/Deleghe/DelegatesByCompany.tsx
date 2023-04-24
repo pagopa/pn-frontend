@@ -46,6 +46,7 @@ const DelegatesByCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
+        notWrappedInTypography: true,
       },
     },
     {

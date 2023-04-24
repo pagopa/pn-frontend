@@ -6,8 +6,8 @@ import {
   CreateDelegationResponse,
   Delegate,
   Delegation,
-  Delegator,
   GetDelegatorsFilters,
+  GetDelegatorsResponse,
 } from '../../models/Deleghe';
 import { apiClient } from '../apiClients';
 import {
@@ -49,16 +49,17 @@ export const DelegationsApi = {
   /**
    * Get all the delegators for the authenticated user
    * @param {GetDelegatorsFilters} params
-   * @return {Promise<Array<Delegation>>}
+   * @return {Promise<GetDelegatorsResponse>}
    */
-  getDelegators: (params: GetDelegatorsFilters): Promise<Array<Delegator>> =>
+  getDelegators: (params: GetDelegatorsFilters): Promise<GetDelegatorsResponse> =>
     apiClient
-      .post<Array<Delegation>>(
+      .post<GetDelegatorsResponse>(
         DELEGATIONS_BY_DELEGATE({ size: params.size, nextPageKey: params.nextPageKey }),
         { delegatorIds: params.delegatorIds, groups: params.groups, status: params.status }
       )
-      .then((response: AxiosResponse<Array<Delegation>>) =>
-        response.data.map((delegation) => ({
+      .then((response: AxiosResponse<GetDelegatorsResponse>) => ({
+        ...response.data,
+        resultsPage: response.data.resultsPage.map((delegation) => ({
           mandateId: delegation.mandateId,
           status: delegation.status,
           visibilityIds: delegation.visibilityIds,
@@ -66,8 +67,8 @@ export const DelegationsApi = {
           datefrom: delegation.datefrom,
           dateto: delegation.dateto,
           delegator: 'delegator' in delegation ? delegation.delegator : null,
-        }))
-      ),
+        })),
+      })),
 
   /**
    * Removes a delegation that the user created

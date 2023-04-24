@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -22,6 +22,7 @@ import {
   EmptyState,
   Item,
   KnownSentiment,
+  PaginationData,
   SmartFilter,
   SmartTable,
   SmartTableData,
@@ -33,25 +34,39 @@ import { RootState } from '../../redux/store';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { DelegatorsColumn, GetDelegatorsFilters } from '../../models/Deleghe';
+import {
+  DelegatorsColumn,
+  DelegatorsFormFilters,
+  GetDelegatorsFilters,
+} from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
-
-const arrayStatus = [
-  { status: 'attiva', id: '1' },
-  { status: 'revocata', id: '2' },
-  { status: 'conclusa', id: '3' },
-];
 
 const DelegationsOfTheCompany = () => {
   const { t } = useTranslation(['deleghe', 'common']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+  const [filters, setFilters] = useState<DelegatorsFormFilters>({ size: 10, page: 0 });
+  const firstUpdate = useRef(true);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
+  const pagination = useAppSelector((state: RootState) => state.delegationsState.pagination);
+  const arrayStatus = [
+    { status: 'Pending', id: 'pending' },
+    { status: 'Attiva', id: 'active' },
+    { status: 'Rejected', id: 'rejected' },
+  ];
+
   const rows: Array<Item> = delegationToItem(delegators);
-  const [filters, setFilters] = useState<GetDelegatorsFilters>({ size: 10 });
+  // back end return at most the next three pages
+  // we have flag moreResult to check if there are more pages
+  // the minum number of pages, to have ellipsis in the paginator, is 8
+  const totalElements =
+    filters.size *
+    (pagination.moreResult
+      ? pagination.nextPagesKey.length + 5
+      : pagination.nextPagesKey.length + 1);
 
   const smartCfg: Array<SmartTableData<DelegatorsColumn>> = [
     {
@@ -65,6 +80,7 @@ const DelegationsOfTheCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
+        notWrappedInTypography: true,
       },
     },
     {
@@ -105,6 +121,24 @@ const DelegationsOfTheCompany = () => {
       cardConfiguration: {
         position: 'body',
         notWrappedInTypography: true,
+      },
+    },
+    {
+      id: 'groups',
+      label: t('deleghe.table.groups'),
+      getValue(value: Array<string>) {
+        if (value) {
+          return <OrganizationsList organizations={value} visibleItems={3} />;
+        }
+        return '';
+      },
+      tableConfiguration: {
+        width: '13%',
+      },
+      cardConfiguration: {
+        position: 'body',
+        notWrappedInTypography: true,
+        hideIfEmpty: true,
       },
     },
     {
@@ -188,10 +222,11 @@ const DelegationsOfTheCompany = () => {
     onSubmit: (values) => {
       const params = {
         size: filters.size,
+        page: 0,
         status: values.status,
         delegatorIds: values.delegatorIds.map((d) => d.id.toString()),
         groups: values.groups.map((d) => d.id.toString()),
-      } as GetDelegatorsFilters;
+      } as DelegatorsFormFilters;
       setFilters(params);
     },
   });
@@ -199,8 +234,10 @@ const DelegationsOfTheCompany = () => {
   const clearFiltersHandler = () => {
     const params = {
       size: filters.size,
-    } as GetDelegatorsFilters;
+      page: 0,
+    } as DelegatorsFormFilters;
     setFilters(params);
+    formik.resetForm();
   };
 
   const handleChangeTouched = async (e: any) => {
@@ -208,9 +245,28 @@ const DelegationsOfTheCompany = () => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
+  const handleChangePage = (paginationData: PaginationData) => {
+    setFilters((prevParams) => ({
+      ...prevParams,
+      size: paginationData.size,
+      page: paginationData.page,
+    }));
+  };
+
   useEffect(() => {
-    // TODO: not run twice at first initialization
-    void dispatch(getDelegators(filters));
+    if (firstUpdate.current) {
+      /* eslint-disable-next-line functional/immutable-data */
+      firstUpdate.current = false;
+      return;
+    }
+    const delegatorsFilters = {
+      size: filters.size,
+      nextPageKey: filters.page ? pagination.nextPagesKey[filters.page - 1] : undefined,
+      delegatorIds: filters.delegatorIds,
+      groups: filters.groups,
+      status: filters.status,
+    } as GetDelegatorsFilters;
+    void dispatch(getDelegators(delegatorsFilters));
   }, [filters]);
 
   return (
@@ -224,7 +280,17 @@ const DelegationsOfTheCompany = () => {
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
         {rows.length > 0 ? (
-          <SmartTable conf={smartCfg} data={rows}>
+          <SmartTable
+            conf={smartCfg}
+            data={rows}
+            pagination={{
+              size: filters.size,
+              currentPage: filters.page,
+              totalElements,
+              numOfDisplayedPages: Math.min(pagination.nextPagesKey.length + 1, 3),
+              onChangePage: handleChangePage,
+            }}
+          >
             <SmartFilter
               filterLabel={t('button.filtra', { ns: 'common' })}
               cancelLabel={t('button.annulla filtro', { ns: 'common' })}

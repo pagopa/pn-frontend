@@ -157,12 +157,8 @@ export const initialState = {
     name: '',
     error: false,
   },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
+  pagination: {
+    moreResult: false,
+    nextPagesKey: [],
   },
 };

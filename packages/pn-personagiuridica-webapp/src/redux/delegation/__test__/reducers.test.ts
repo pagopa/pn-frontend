@@ -7,7 +7,7 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
-import { Delegation } from '../../../models/Deleghe';
+import { Delegation, GetDelegatorsRequest, GetDelegatorsResponse } from '../../../models/Deleghe';
 import { store } from '../../store';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import {
@@ -51,18 +51,15 @@ describe('delegation redux state tests', () => {
   });
 
   it('should be able to fetch the delegators', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10 }),
-      200,
-      undefined,
-      arrayOfDelegators
-    );
+    const mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+      resultsPage: arrayOfDelegators,
+      nextPagesKey: [],
+      moreResult: false,
+    });
     const action = await store.dispatch(getDelegators({ size: 10 }));
-    const payload = action.payload as Array<Delegation>;
+    const payload = action.payload as GetDelegatorsResponse;
     expect(action.type).toBe('getDelegators/fulfilled');
-    expect(payload).toEqual(arrayOfDelegators);
+    expect(payload.resultsPage).toEqual(arrayOfDelegators);
     mock.reset();
     mock.restore();
   });

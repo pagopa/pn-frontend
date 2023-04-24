@@ -1,7 +1,12 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { AcceptDelegationResponse, Delegation, GetDelegatorsFilters } from '../../models/Deleghe';
+import {
+  AcceptDelegationResponse,
+  Delegation,
+  GetDelegatorsFilters,
+  GetDelegatorsResponse,
+} from '../../models/Deleghe';
 
 export enum DELEGATION_ACTIONS {
   GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
@@ -13,7 +18,7 @@ export const getDelegatesByCompany = createAsyncThunk<Array<Delegation>>(
   performThunkAction(() => DelegationsApi.getDelegatesByCompany())
 );
 
-export const getDelegators = createAsyncThunk<Array<Delegation>, GetDelegatorsFilters>(
+export const getDelegators = createAsyncThunk<GetDelegatorsResponse, GetDelegatorsFilters>(
   DELEGATION_ACTIONS.GET_DELEGATORS,
   performThunkAction((params: GetDelegatorsFilters) => DelegationsApi.getDelegators(params))
 );

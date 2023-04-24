@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 /**
  * SmartFilter show filter in desktop view and dialog in mobile view.
  */
-const SmartFilter = <FormValues extends Object>({
+const SmartFilter = <FormValues extends object>({
   filterLabel,
   cancelLabel,
   onSubmit,
@@ -102,7 +102,7 @@ const SmartFilter = <FormValues extends Object>({
   return (
     <form onSubmit={onSubmit}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} className={classes.helperTextFormat}>
+        <Grid container spacing={1} className={classes.helperTextFormat} alignItems="center">
           {children}
           <Grid item lg="auto" xs={12}>
             {confirmAction}

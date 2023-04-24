@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { Align, Column, Item } from './ItemsTable';
 import { GridProps } from '@mui/material';
+
+import { Align, Column, Item } from './ItemsTable';
 
 /**
  * @typedef TableConfiguration configuration for the table view
@@ -21,11 +22,13 @@ interface TableConfiguration<ColumnId> {
  * @prop {('header' | 'body')} position position of the field into the card
  * @prop {GridProps} gridProps style properties to override custom ones
  * @prop {boolean} notWrappedInTypography element will be not enclosed in a Typrography element
+ * @prop {boolean} hideIfEmpty element will be not shown if empty
  */
 interface CardConfiguration {
   position: 'header' | 'body';
   gridProps?: GridProps;
   notWrappedInTypography?: boolean;
+  hideIfEmpty?: boolean;
 }
 
 /**

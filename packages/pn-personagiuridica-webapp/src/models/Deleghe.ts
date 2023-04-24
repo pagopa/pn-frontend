@@ -8,6 +8,7 @@ export type DelegheColumn =
   | 'startDate'
   | 'endDate'
   | 'visibilityIds'
+  | 'groups'
   | 'status'
   | 'id'
   | '';
@@ -110,4 +111,12 @@ export interface GetDelegatorsRequest {
   status?: Array<string>;
 }
 
+export interface GetDelegatorsResponse {
+  resultsPage: Array<Delegator>;
+  moreResult: boolean;
+  nextPagesKey: Array<string>;
+}
+
 export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
+
+export type DelegatorsFormFilters = Exclude<GetDelegatorsFilters, 'nextPageKey'> & { page: number };

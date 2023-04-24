@@ -43,31 +43,25 @@ describe('Delegations api tests', () => {
   });
 
   it('gets non empty delegators', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10 }),
-      200,
-      undefined,
-      arrayOfDelegators
-    );
+    const mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+      resultsPage: arrayOfDelegators,
+      moreResult: false,
+      nextPagesKey: [],
+    });
     const res = await DelegationsApi.getDelegators({ size: 10 });
-    expect(res).toStrictEqual(arrayOfDelegators);
+    expect(res.resultsPage).toStrictEqual(arrayOfDelegators);
     mock.reset();
     mock.restore();
   });
 
   it('gets empty delegators', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10 }),
-      200,
-      undefined,
-      []
-    );
+    const mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+      resultsPage: [],
+      moreResult: false,
+      nextPagesKey: [],
+    });
     const res = await DelegationsApi.getDelegators({ size: 10 });
-    expect(res).toHaveLength(0);
+    expect(res.resultsPage).toHaveLength(0);
     mock.reset();
     mock.restore();
   });
