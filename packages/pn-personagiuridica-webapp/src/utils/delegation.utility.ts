@@ -1,5 +1,6 @@
 import { formatDate, Item } from '@pagopa-pn/pn-commons';
-import { Delegation, Person } from '../redux/delegation/types';
+
+import { Delegation, Person } from '../models/Deleghe';
 
 /**
  * Maps Delegation object to Item, in order to be visualised in an ItemsCard or ItemsTable component
@@ -59,7 +60,7 @@ export function sortDelegations(order: string, sortAttr: string, values: Array<D
 
 function compareOrderAttribute(person: Person, orderAttr: string) {
   return orderAttr === 'name'
-    ? person.firstName.toLowerCase()
+    ? person.displayName.toLowerCase()
     : person[orderAttr as keyof Person] || '';
 }
 

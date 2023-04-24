@@ -28,15 +28,15 @@ phases:
       - source .env.cypress
       # Setting up hosts file
       - echo "127.0.0.1 $HOST" >> /etc/hosts
-      # Renaming file .env.cypress to .env.development.local
-      - mv .env.cypress .env.development.local
+      # Renaming file .env.cypress to .env.local
+      - mv .env.cypress .env.local
+      # Adding configuration file
+      - cp ./public/conf/env/config.cypress.json ./public/conf/config.json
       # starting the webapp and waiting for its availability
-      - yarn start-waiton $WEBAPP_URL
+      - yarn start-waiton
       ## Running Cypress
       - echo Setting up and running the test environment
       # Creating cypress.env.json file
       - echo -e $CYPRESS_ENV > cypress.env.json
-      # - aws secretsmanager get-secret-value --secret-id $CYPRESS_ENV --query SecretString --output text > cypress.env.json
-      - cat cypress.env.json
       # Running Cypress in headless mode
       - yarn cy-run --config video=false,screenshotOnRunFailure=false

@@ -1,4 +1,4 @@
-import { Delegation } from '../types';
+import { Delegation } from '../../../models/Deleghe';
 
 export const mockCreateDelegation = {
   delegate: {

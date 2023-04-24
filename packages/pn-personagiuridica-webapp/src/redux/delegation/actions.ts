@@ -1,8 +1,12 @@
 import { performThunkAction, Sort } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
-import { AcceptDelegationResponse, Delegation } from './types';
+import {
+  DelegatorsColumn,
+  DelegatesColumn,
+  AcceptDelegationResponse,
+  Delegation,
+} from '../../models/Deleghe';
 
 export enum DELEGATION_ACTIONS {
   GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',

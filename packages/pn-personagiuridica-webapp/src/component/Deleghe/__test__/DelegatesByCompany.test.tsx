@@ -1,10 +1,11 @@
-import { fireEvent, mockApi, render, screen, waitFor } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import { DELEGATIONS_BY_DELEGATE } from '../../../api/delegations/delegations.routes';
-import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
-import { store } from '../../../redux/store';
-import DelegatesByCompany from '../DelegatesByCompany';
 import React from 'react';
+
+import { fireEvent, render } from '../../../__test__/test-utils';
+import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
+import * as routes from '../../../navigation/routes.const';
+import DelegatesByCompany from '../DelegatesByCompany';
+
+const mockNavigateFn = jest.fn();
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -13,9 +14,18 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
+
 describe('Delegates Component - assuming delegates API works properly', () => {
+  afterAll(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
+  });
+
   it('renders the empty state', () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     const result = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
@@ -35,19 +45,9 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     expect(addButton).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/deleghe.add/i);
     expect(result.container).toHaveTextContent(/deleghe.no_delegates/i);
-    mock.reset();
-    mock.restore();
   });
 
   it('render table with data', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATE(),
-      200,
-      undefined,
-      arrayOfDelegates
-    );
     const result = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
@@ -75,13 +75,13 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     const indexOrder2 = row[0].getElementsByTagName('p')[2].innerHTML;
     expect(indexOrder1).toBe('Marco Verdi');
     expect(indexOrder2).toBe('Davide Legato');
+  });
 
-    fireEvent.click(col[0]);
-    await waitFor(() => {
-      /* expect(indexOrder1).toBe('Davide Legato');
-      expect(indexOrder2).toBe('Marco Verdi'); */
-    });
-    mock.reset();
-    mock.restore();
+  it('clicks on add button and navigate to new delegation page', () => {
+    const result = render(<DelegatesByCompany />);
+    const addButton = result.getByTestId('addDeleghe');
+    fireEvent.click(addButton);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
   });
 });
