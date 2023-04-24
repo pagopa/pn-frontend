@@ -23,7 +23,6 @@ import {
   openAcceptModal,
   openRevocationModal,
   setDelegatesSorting,
-  setDelegatorsSorting,
 } from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
 
@@ -55,13 +54,13 @@ describe('delegation redux state tests', () => {
   it('should be able to fetch the delegators', async () => {
     const mock = mockApi(
       apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATE(),
+      'POST',
+      DELEGATIONS_BY_DELEGATE({ size: 10 }),
       200,
       undefined,
       arrayOfDelegators
     );
-    const action = await store.dispatch(getDelegators());
+    const action = await store.dispatch(getDelegators({ size: 10 }));
     const payload = action.payload as Array<Delegation>;
     expect(action.type).toBe('getDelegators/fulfilled');
     expect(payload).toEqual(arrayOfDelegators);
@@ -158,12 +157,5 @@ describe('delegation redux state tests', () => {
     expect(action.type).toBe('delegationsSlice/setDelegatesSorting');
     const sortDelegates = store.getState().delegationsState.sortDelegates;
     expect(sortDelegates).toEqual({ orderBy: 'startDate', order: 'asc' });
-  });
-
-  it('sets the delegates sorting by test in descendant order', () => {
-    const action = store.dispatch(setDelegatorsSorting({ orderBy: 'endDate', order: 'desc' }));
-    expect(action.type).toBe('delegationsSlice/setDelegatorsSorting');
-    const sortDelegators = store.getState().delegationsState.sortDelegators;
-    expect(sortDelegators).toEqual({ orderBy: 'endDate', order: 'desc' });
   });
 });

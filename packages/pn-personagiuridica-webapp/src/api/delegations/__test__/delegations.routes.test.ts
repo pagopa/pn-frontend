@@ -14,8 +14,8 @@ describe('Delegations routes', () => {
   });
 
   it('should compile DELEGATIONS_BY_DELEGATE', () => {
-    const route = DELEGATIONS_BY_DELEGATE();
-    expect(route).toEqual(`/mandate/api/v1/mandates-by-delegate`);
+    const route = DELEGATIONS_BY_DELEGATE({ size: 10 });
+    expect(route).toEqual(`/mandate/api/v1/mandates-by-delegate?size=10`);
   });
 
   it('should compile CREATE_DELEGATION', () => {

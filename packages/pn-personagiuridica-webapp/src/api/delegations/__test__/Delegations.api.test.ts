@@ -45,21 +45,28 @@ describe('Delegations api tests', () => {
   it('gets non empty delegators', async () => {
     const mock = mockApi(
       apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATE(),
+      'POST',
+      DELEGATIONS_BY_DELEGATE({ size: 10 }),
       200,
       undefined,
       arrayOfDelegators
     );
-    const res = await DelegationsApi.getDelegators();
+    const res = await DelegationsApi.getDelegators({ size: 10 });
     expect(res).toStrictEqual(arrayOfDelegators);
     mock.reset();
     mock.restore();
   });
 
   it('gets empty delegators', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
-    const res = await DelegationsApi.getDelegators();
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      DELEGATIONS_BY_DELEGATE({ size: 10 }),
+      200,
+      undefined,
+      []
+    );
+    const res = await DelegationsApi.getDelegators({ size: 10 });
     expect(res).toHaveLength(0);
     mock.reset();
     mock.restore();

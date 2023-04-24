@@ -100,8 +100,15 @@ export interface AcceptDelegationResponse {
   id: string;
 }
 
-export interface NewDelegationSlice {
-  created: boolean;
-  error: boolean;
-  entities: Array<any>;
+export interface GetDelegatorsParams {
+  size: number;
+  nextPageKey?: string;
 }
+
+export interface GetDelegatorsRequest {
+  delegatorIds?: Array<string>;
+  groups?: Array<string>;
+  status?: Array<string>;
+}
+
+export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;

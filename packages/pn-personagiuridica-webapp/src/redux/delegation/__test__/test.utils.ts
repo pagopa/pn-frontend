@@ -8,6 +8,7 @@ export const mockCreateDelegation = {
     fiscalCode: 'DVDLGT83C12H501C',
     person: true,
     email: 'email@falsa.it',
+    displayName: 'Davide Legato',
   },
   visibilityIds: [
     {

@@ -23,7 +23,7 @@ const Deleghe = () => {
   };
 
   const retrieveData = async () => {
-    await dispatch(getDelegators());
+    await dispatch(getDelegators({ size: 10 }));
     setPageReady(true);
   };
 

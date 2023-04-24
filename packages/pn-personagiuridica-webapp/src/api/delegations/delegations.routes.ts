@@ -1,5 +1,7 @@
 import { compileRoute } from '@pagopa-pn/pn-commons';
 
+import { GetDelegatorsParams } from '../../models/Deleghe';
+
 // Prefixes
 const API_DELEGATIONS_PREFIX = 'mandate';
 
@@ -15,6 +17,8 @@ const API_DELEGATIONS_ACCEPT = 'accept';
 
 // Parameters
 const API_DELEGATIONS_ID_PARAMETER = 'id';
+const API_DELEGATIONS_SIZE_PARAMETER = 'size';
+const API_DELEGATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPagesKey';
 
 // Paths
 const API_DELEGATIONS_BASE_PATH = `${API_SEGMENT}/${API_VERSION_SEGMENT}`;
@@ -33,10 +37,14 @@ export function DELEGATIONS_BY_DELEGATOR() {
   });
 }
 
-export function DELEGATIONS_BY_DELEGATE() {
+export function DELEGATIONS_BY_DELEGATE(params: GetDelegatorsParams) {
   return compileRoute({
     prefix: API_DELEGATIONS_PREFIX,
     path: API_DELEGATIONS_MANDATES_BY_DELEGATE_PATH,
+    query: {
+      [API_DELEGATIONS_SIZE_PARAMETER]: params.size ? params.size.toString() : '',
+      [API_DELEGATIONS_NEXT_PAGES_KEY_PARAMETER]: params.nextPageKey || '',
+    },
   });
 }
 

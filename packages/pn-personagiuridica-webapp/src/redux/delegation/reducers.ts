@@ -70,14 +70,6 @@ const delegationsSlice = createSlice({
         state.delegations.delegates
       );
     },
-    setDelegatorsSorting: (state, action: PayloadAction<Sort<DelegatorsColumn>>) => {
-      state.sortDelegators = action.payload;
-      state.delegations.delegators = sortDelegations(
-        action.payload.order,
-        action.payload.orderBy,
-        state.delegations.delegators
-      );
-    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -116,7 +108,6 @@ const delegationsSlice = createSlice({
 });
 
 export const {
-  setDelegatorsSorting,
   setDelegatesSorting,
   openAcceptModal,
   closeAcceptModal,

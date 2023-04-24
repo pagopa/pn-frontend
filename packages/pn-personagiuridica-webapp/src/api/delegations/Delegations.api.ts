@@ -7,6 +7,7 @@ import {
   Delegate,
   Delegation,
   Delegator,
+  GetDelegatorsFilters,
 } from '../../models/Deleghe';
 import { apiClient } from '../apiClients';
 import {
@@ -47,11 +48,15 @@ export const DelegationsApi = {
 
   /**
    * Get all the delegators for the authenticated user
+   * @param {GetDelegatorsFilters} params
    * @return {Promise<Array<Delegation>>}
    */
-  getDelegators: (): Promise<Array<Delegator>> =>
+  getDelegators: (params: GetDelegatorsFilters): Promise<Array<Delegator>> =>
     apiClient
-      .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
+      .post<Array<Delegation>>(
+        DELEGATIONS_BY_DELEGATE({ size: params.size, nextPageKey: params.nextPageKey }),
+        { delegatorIds: params.delegatorIds, groups: params.groups, status: params.status }
+      )
       .then((response: AxiosResponse<Array<Delegation>>) =>
         response.data.map((delegation) => ({
           mandateId: delegation.mandateId,

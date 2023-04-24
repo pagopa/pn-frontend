@@ -1,5 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -32,7 +33,7 @@ import { RootState } from '../../redux/store';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { DelegatorsColumn } from '../../models/Deleghe';
+import { DelegatorsColumn, GetDelegatorsFilters } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const arrayStatus = [
@@ -50,6 +51,7 @@ const DelegationsOfTheCompany = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
   const rows: Array<Item> = delegationToItem(delegators);
+  const [filters, setFilters] = useState<GetDelegatorsFilters>({ size: 10 });
 
   const smartCfg: Array<SmartTableData<DelegatorsColumn>> = [
     {
@@ -164,17 +166,17 @@ const DelegationsOfTheCompany = () => {
   );
 
   const initialValues: {
-    names: Array<{ id: number; name: string }>;
+    delegatorIds: Array<{ id: number; name: string }>;
     groups: Array<{ id: number; name: string }>;
     status: Array<string>;
   } = {
-    names: [],
+    delegatorIds: [],
     groups: [],
     status: [],
   };
 
   const validationSchema = yup.object({
-    name: yup.array(),
+    delegatorIds: yup.array(),
     groups: yup.array(),
     status: yup.array(),
   });
@@ -182,15 +184,32 @@ const DelegationsOfTheCompany = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      const params = {
+        size: filters.size,
+        status: values.status,
+        delegatorIds: values.delegatorIds.map((d) => d.id.toString()),
+        groups: values.groups.map((d) => d.id.toString()),
+      } as GetDelegatorsFilters;
+      setFilters(params);
+    },
   });
 
-  const clearFiltersHandler = () => {};
+  const clearFiltersHandler = () => {
+    const params = {
+      size: filters.size,
+    } as GetDelegatorsFilters;
+    setFilters(params);
+  };
 
   const handleChangeTouched = async (e: any) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
+
+  useEffect(() => {
+    void dispatch(getDelegators(filters));
+  }, [filters]);
 
   return (
     <>
@@ -208,7 +227,7 @@ const DelegationsOfTheCompany = () => {
       >
         <Grid item xs={12} lg>
           <Autocomplete
-            id="names"
+            id="delegatorIds"
             size="small"
             fullWidth
             options={[]}
@@ -230,10 +249,10 @@ const DelegationsOfTheCompany = () => {
                 {...params}
                 label={t('deleghe.table.name')}
                 placeholder={t('deleghe.table.name')}
-                name="names"
+                name="delegatorIds"
               />
             )}
-            value={formik.values.names}
+            value={formik.values.delegatorIds}
             onChange={handleChangeTouched}
           />
         </Grid>
@@ -301,7 +320,7 @@ const DelegationsOfTheCompany = () => {
       </SmartFilter>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
-        reloadAction={() => dispatch(getDelegators())}
+        reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
         {rows.length > 0 ? (

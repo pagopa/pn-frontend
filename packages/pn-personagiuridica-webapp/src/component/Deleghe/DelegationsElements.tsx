@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  IconButton,
-  Menu as MUIMenu,
-  MenuItem,
-  Box,
-  Typography,
-} from '@mui/material';
+import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CustomTagGroup } from '@pagopa-pn/pn-commons';
@@ -18,26 +11,34 @@ import { openAcceptModal, openRevocationModal } from '../../redux/delegation/red
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 
-export const Menu = (props: any) => {
+export const Menu: React.FC<{
+  menuType: 'delegates' | 'delegators';
+  id: string;
+  name?: string;
+  verificationCode?: string;
+  setCodeModal?: (props: { open: boolean; name: string; code: string }) => void;
+}> = ({ menuType, id, name, verificationCode, setCodeModal }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['deleghe']);
 
   const handleOpenModalClick = () => {
-    if (props.menuType === 'delegates') {
+    if (menuType === 'delegates') {
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_REVOKE);
     } else {
       trackEventByType(TrackEventType.DELEGATION_DELEGATOR_REJECT);
     }
-    dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
+    dispatch(openRevocationModal({ id, type: menuType }));
     setAnchorEl(null);
   };
 
   const handleOpenVerificationCodeModal = () => {
-    props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
-    setAnchorEl(null);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
+    if (setCodeModal && name && verificationCode) {
+      setCodeModal({ open: true, name, code: verificationCode });
+      setAnchorEl(null);
+      trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
+    }
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,7 +50,7 @@ export const Menu = (props: any) => {
   };
 
   const getMenuItemElements = () => {
-    if (props.menuType === 'delegates') {
+    if (menuType === 'delegates') {
       return [
         <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
           {t('deleghe.show')}
@@ -58,13 +59,12 @@ export const Menu = (props: any) => {
           {t('deleghe.revoke')}
         </MenuItem>,
       ];
-    } else {
-      return [
-        <MenuItem key="reject" onClick={handleOpenModalClick}>
-          {t('deleghe.reject')}
-        </MenuItem>,
-      ];
     }
+    return [
+      <MenuItem key="reject" onClick={handleOpenModalClick}>
+        {t('deleghe.reject')}
+      </MenuItem>,
+    ];
   };
 
   return (
@@ -72,7 +72,7 @@ export const Menu = (props: any) => {
       <IconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"
-        aria-label="Delegation Menu Icon"
+        aria-label="menu-aria-label"
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
@@ -83,27 +83,27 @@ export const Menu = (props: any) => {
   );
 };
 
-export const OrganizationsList = (props: {
+export const OrganizationsList: React.FC<{
   organizations: Array<string>;
   textVariant?: Variant;
   visibleItems?: number;
-}) => {
+}> = ({ organizations, textVariant, visibleItems }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <>
-      {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>
+      {organizations.length === 0 ? (
+        <Typography variant={textVariant || 'inherit'}>
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
         <Box>
-          <Typography variant={props.textVariant || 'inherit'} mb={2}>
+          <Typography variant={textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
-          <CustomTagGroup visibleItems={props.visibleItems}>
-            {props.organizations.map((organization) => (
-              <Box sx={{mb:1, mr: 1, display: 'inline-block'}} key={organization}>
-                <Tag value={organization}/>
+          <CustomTagGroup visibleItems={visibleItems}>
+            {organizations.map((organization) => (
+              <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={organization}>
+                <Tag value={organization} />
               </Box>
             ))}
           </CustomTagGroup>
