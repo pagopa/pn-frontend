@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Party } from '../../models/party';
+import { NewDelegationSlice } from '../../models/Deleghe';
 import { createDelegation, getAllEntities } from './actions';
-import { newDelegation } from './types';
 
 /* eslint-disable functional/immutable-data */
 const newDelegationSlice = createSlice({
@@ -10,7 +10,7 @@ const newDelegationSlice = createSlice({
     created: false,
     error: false,
     entities: [] as Array<Party>,
-  } as newDelegation,
+  } as NewDelegationSlice,
   reducers: {
     resetNewDelegation: (state) => {
       state.created = false;

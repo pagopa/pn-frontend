@@ -7,7 +7,7 @@ import { RootState } from '../redux/store';
 import { PNRole } from '../redux/auth/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -17,6 +17,7 @@ import AARGuard from './AARGuard';
 const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
+const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
@@ -47,18 +48,6 @@ function Router() {
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
                 <Route
-                  path={routes.RECAPITI}
-                  element={
-                    <PrivateRoute
-                      currentRoles={currentRoles}
-                      requiredRoles={[PNRole.ADMIN]}
-                      redirectTo={<NotFound />}
-                    >
-                      <Contacts />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
                   path={routes.DELEGHE}
                   element={
                     <PrivateRoute
@@ -67,6 +56,30 @@ function Router() {
                       redirectTo={<NotFound />}
                     >
                       <Deleghe />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path={routes.NUOVA_DELEGA}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      redirectTo={<NotFound />}
+                    >
+                      <NuovaDelega />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path={routes.RECAPITI}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      redirectTo={<NotFound />}
+                    >
+                      <Contacts />
                     </PrivateRoute>
                   }
                 />

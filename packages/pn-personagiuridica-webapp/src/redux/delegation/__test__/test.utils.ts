@@ -1,9 +1,10 @@
-import { Delegation } from '../types';
+import { Delegation } from '../../../models/Deleghe';
 
 export const mockCreateDelegation = {
   delegate: {
     firstName: 'Davide',
     lastName: 'Legato',
+    displayName: 'Davide Legato',
     companyName: 'eni',
     fiscalCode: 'DVDLGT83C12H501C',
     person: true,
