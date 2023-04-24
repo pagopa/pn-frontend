@@ -32,7 +32,7 @@ describe('delegation redux state tests', () => {
     apiSpy.mockResolvedValue(arrayOfDelegates);
     const action = await store.dispatch(getDelegatesByCompany());
     const payload = action.payload as Array<Delegation>;
-    expect(action.type).toBe('getDelegates/fulfilled');
+    expect(action.type).toBe('getDelegatesByCompany/fulfilled');
     expect(payload).toEqual(arrayOfDelegates);
   });
 
