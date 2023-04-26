@@ -68,9 +68,15 @@ export interface DelegationsList {
   delegations: Array<Delegation>;
 }
 
+export enum DelegationStatus {
+  ACTIVE = 'active',
+  PENDING = 'pending',
+  REJECTED = 'rejected',
+}
+
 export interface IDelegation {
   mandateId: string;
-  status: 'active' | 'pending';
+  status: DelegationStatus;
   visibilityIds: Array<{
     name: string;
     uniqueIdentifier: string;
@@ -108,7 +114,7 @@ export interface GetDelegatorsParams {
 export interface GetDelegatorsRequest {
   delegatorIds?: Array<string>;
   groups?: Array<string>;
-  status?: Array<string>;
+  status?: Array<DelegationStatus>;
 }
 
 export interface GetDelegatorsResponse {

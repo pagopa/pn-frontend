@@ -1,5 +1,5 @@
 import { Children, PropsWithChildren, ReactNode, useMemo, useState } from 'react';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
 import { calculatePages, sortArray } from '../../utils';
@@ -139,7 +139,9 @@ const SmartTable = <ColumnId extends string>({
     return (
       <>
         <Grid container direction="row" sx={{ mb: 2 }}>
-          <Grid item xs={6}></Grid>
+          <Grid item xs={6}>
+            {filters}
+          </Grid>
           <Grid item xs={6} textAlign="right">
             {sort && sortFields.length > 0 && sortLabels && (
               <SmartSort
@@ -155,7 +157,6 @@ const SmartTable = <ColumnId extends string>({
             )}
           </Grid>
         </Grid>
-        {filters}
         <ItemsCard
           cardHeader={cardHeader}
           cardBody={cardBody}
@@ -201,7 +202,7 @@ const SmartTable = <ColumnId extends string>({
 
   return (
     <>
-      {filters}
+      <Box mb={3}>{filters}</Box>
       <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
       {pagination && (
         <CustomPagination

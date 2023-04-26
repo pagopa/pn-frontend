@@ -1,5 +1,7 @@
+import { DelegationStatus } from '../../../models/Deleghe';
 import {
   ACCEPT_DELEGATION,
+  COUNT_DELEGATORS,
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
@@ -36,5 +38,10 @@ describe('Delegations routes', () => {
   it('should compile ACCEPT_DELEGATION', () => {
     const route = ACCEPT_DELEGATION('mocked-id');
     expect(route).toEqual(`/mandate/api/v1/mandate/mocked-id/accept`);
+  });
+
+  it('should compile COUNT_DELEGATORS', () => {
+    const route = COUNT_DELEGATORS(DelegationStatus.ACTIVE);
+    expect(route).toEqual(`/mandate/api/v1/count-by-delegate?status=active`);
   });
 });

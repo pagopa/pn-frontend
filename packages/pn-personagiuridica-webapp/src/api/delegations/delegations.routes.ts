@@ -1,6 +1,6 @@
 import { compileRoute } from '@pagopa-pn/pn-commons';
 
-import { GetDelegatorsParams } from '../../models/Deleghe';
+import { DelegationStatus, GetDelegatorsParams } from '../../models/Deleghe';
 
 // Prefixes
 const API_DELEGATIONS_PREFIX = 'mandate';
@@ -14,11 +14,13 @@ const API_DELEGATIONS_MANDATE = 'mandate';
 const API_DELEGATIONS_REVOKE = 'revoke';
 const API_DELEGATIONS_REJECT = 'reject';
 const API_DELEGATIONS_ACCEPT = 'accept';
+const API_DELEGATIONS_COUNT_BY_DELEGATE = 'count-by-delegate';
 
 // Parameters
 const API_DELEGATIONS_ID_PARAMETER = 'id';
 const API_DELEGATIONS_SIZE_PARAMETER = 'size';
 const API_DELEGATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPagesKey';
+const API_DELEGATIONS_STATUS_PARAMETER = 'status';
 
 // Paths
 const API_DELEGATIONS_BASE_PATH = `${API_SEGMENT}/${API_VERSION_SEGMENT}`;
@@ -28,6 +30,7 @@ const API_DELEGATIONS_MANDATE_BASE_PATH = `${API_SEGMENT}/${API_VERSION_SEGMENT}
 const API_DELEGATIONS_MANDATE_REVOKE_PATH = `${API_DELEGATIONS_MANDATE_BASE_PATH}/:${API_DELEGATIONS_ID_PARAMETER}/${API_DELEGATIONS_REVOKE}`;
 const API_DELEGATIONS_MANDATE_REJECT_PATH = `${API_DELEGATIONS_MANDATE_BASE_PATH}/:${API_DELEGATIONS_ID_PARAMETER}/${API_DELEGATIONS_REJECT}`;
 const API_DELEGATIONS_MANDATE_ACCEPT_PATH = `${API_DELEGATIONS_MANDATE_BASE_PATH}/:${API_DELEGATIONS_ID_PARAMETER}/${API_DELEGATIONS_ACCEPT}`;
+const API_DELEGATIONS_COUNT_BY_DELEGATE_PATH = `${API_DELEGATIONS_BASE_PATH}/${API_DELEGATIONS_COUNT_BY_DELEGATE}`;
 
 // APIs
 export function DELEGATIONS_BY_DELEGATOR() {
@@ -81,6 +84,16 @@ export function ACCEPT_DELEGATION(id: string) {
     path: API_DELEGATIONS_MANDATE_ACCEPT_PATH,
     params: {
       [API_DELEGATIONS_ID_PARAMETER]: id,
+    },
+  });
+}
+
+export function COUNT_DELEGATORS(status: DelegationStatus) {
+  return compileRoute({
+    prefix: API_DELEGATIONS_PREFIX,
+    path: API_DELEGATIONS_COUNT_BY_DELEGATE_PATH,
+    query: {
+      [API_DELEGATIONS_STATUS_PARAMETER]: status,
     },
   });
 }

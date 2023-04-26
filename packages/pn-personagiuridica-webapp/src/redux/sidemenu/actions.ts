@@ -1,23 +1,21 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-// import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { DigitalAddress } from '../../models/contacts';
-import { Delegator } from '../../models/Deleghe';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
 }
 
-export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
+export const getSidemenuInformation = createAsyncThunk<number>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
-  // performThunkAction(() => DelegationsApi.getDelegators())
   async () => {
     try {
-      // return await DelegationsApi.getDelegators();
-      return Promise.resolve([]);
+      const response = await DelegationsApi.countDelegators();
+      return response.value;
     } catch (e) {
-      return [];
+      return 0;
     }
   }
 );

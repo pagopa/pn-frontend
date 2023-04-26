@@ -1,9 +1,6 @@
-export enum DelegationStatus {
-  ACTIVE = 'active',
-  PENDING = 'pending',
-}
+import { DelegationStatus } from '../models/Deleghe';
 
-export function getDelegationStatusLabelAndColor(status: 'active' | 'pending'): {
+export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
   color: 'warning' | 'success' | 'info' | undefined;
   label: string;
 } {

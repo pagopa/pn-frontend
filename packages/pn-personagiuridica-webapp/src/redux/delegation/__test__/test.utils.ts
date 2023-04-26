@@ -1,4 +1,4 @@
-import { Delegation } from '../../../models/Deleghe';
+import { Delegation, DelegationStatus } from '../../../models/Deleghe';
 
 export const mockCreateDelegation = {
   delegate: {
@@ -33,7 +33,7 @@ export const arrayOfDelegates = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'pending' as const,
+    status: 'pending' as DelegationStatus,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -55,7 +55,7 @@ export const arrayOfDelegates = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'active' as const,
+    status: 'active' as DelegationStatus,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -80,7 +80,7 @@ export const arrayOfDelegators = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'pending' as const,
+    status: 'pending' as DelegationStatus,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -102,7 +102,7 @@ export const arrayOfDelegators = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'active' as const,
+    status: 'active' as DelegationStatus,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',

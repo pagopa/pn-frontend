@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 
-import { Delegation } from '../../models/Deleghe';
+import { Delegation, DelegationStatus } from '../../models/Deleghe';
 import {
   getDelegatesByCompany,
   getDelegators,
@@ -9,7 +9,7 @@ import {
   revokeDelegation,
 } from './actions';
 
-// import { arrayOfDelegators } from './__test__/test.utils';
+import { arrayOfDelegators } from './__test__/test.utils';
 
 const initialState = {
   delegations: {
@@ -67,15 +67,16 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = action.payload.resultsPage;
       state.pagination.nextPagesKey = action.payload.nextPagesKey;
       state.pagination.moreResult = action.payload.moreResult;
-      /*
+
       state.delegations.delegators = arrayOfDelegators;
       state.pagination.moreResult = false;
       state.pagination.nextPagesKey = ['a', 'b', 'c'];
-      */
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
+        delegator.mandateId === action.payload.id
+          ? { ...delegator, status: DelegationStatus.ACTIVE }
+          : delegator
       );
       state.acceptModalState.open = false;
       state.acceptModalState.error = false;

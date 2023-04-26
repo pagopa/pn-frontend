@@ -33,8 +33,9 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import {
+  DelegationStatus,
   DelegatorsColumn,
   DelegatorsFormFilters,
   GetDelegatorsFilters,
@@ -52,11 +53,9 @@ const DelegationsOfTheCompany = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
   const pagination = useAppSelector((state: RootState) => state.delegationsState.pagination);
-  const arrayStatus = [
-    { status: 'Pending', id: 'pending' },
-    { status: 'Attiva', id: 'active' },
-    { status: 'Rejected', id: 'rejected' },
-  ];
+  const statuses = (Object.keys(DelegationStatus) as Array<keyof typeof DelegationStatus>).map(
+    (key) => ({ id: DelegationStatus[key], label: t(`deleghe.table.${DelegationStatus[key]}`) })
+  );
 
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
@@ -373,9 +372,10 @@ const DelegationsOfTheCompany = () => {
                   SelectProps={{
                     renderValue: (selected: any) => (
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((value: any) => (
-                          <Chip key={value} label={value} />
-                        ))}
+                        {selected.map((value: any) => {
+                          const label = statuses.find((s) => s.id === value)?.label;
+                          return <Chip key={value} label={label} />;
+                        })}
                       </Box>
                     ),
                     multiple: true,
@@ -384,10 +384,10 @@ const DelegationsOfTheCompany = () => {
                   value={formik.values.status}
                   onChange={handleChangeTouched}
                 >
-                  {arrayStatus.map(({ id, status }) => (
+                  {statuses.map(({ id, label }) => (
                     <MenuItem key={id} value={id}>
                       <Checkbox checked={formik.values.status.includes(id)} />
-                      <ListItemText primary={status} />
+                      <ListItemText primary={label} />
                     </MenuItem>
                   ))}
                 </TextField>

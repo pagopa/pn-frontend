@@ -47,6 +47,7 @@
       "allNotifications": "Tutte le notifiche",
       "active": "Attiva",
       "pending": "In attesa di conferma",
+      "rejected": "Rifiutata",
       "groups": "Gruppi",
       "group": "Gruppo",
       "no-group-found": "Nessun gruppo trovato",

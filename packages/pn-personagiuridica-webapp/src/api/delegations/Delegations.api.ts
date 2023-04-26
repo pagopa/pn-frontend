@@ -6,12 +6,14 @@ import {
   CreateDelegationResponse,
   Delegate,
   Delegation,
+  DelegationStatus,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
 import { apiClient } from '../apiClients';
 import {
   ACCEPT_DELEGATION,
+  COUNT_DELEGATORS,
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
@@ -120,4 +122,13 @@ export const DelegationsApi = {
     apiClient
       .post<CreateDelegationResponse>(CREATE_DELEGATION(), data)
       .then((response: AxiosResponse<CreateDelegationResponse>) => response.data),
+
+  /**
+   * Count pending delegators
+   * @returns {Promise<{value: number}>}
+   */
+  countDelegators: (): Promise<{ value: number }> =>
+    apiClient
+      .get<{ value: number }>(COUNT_DELEGATORS(DelegationStatus.PENDING))
+      .then((response: AxiosResponse<{ value: number }>) => response.data),
 };

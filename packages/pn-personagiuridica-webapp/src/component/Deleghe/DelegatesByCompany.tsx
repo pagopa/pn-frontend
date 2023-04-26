@@ -11,8 +11,8 @@ import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegatesColumn } from '../../models/Deleghe';
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
+import { getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const DelegatesByCompany = () => {

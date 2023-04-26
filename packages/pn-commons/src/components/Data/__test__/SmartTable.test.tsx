@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, waitFor, screen } from '../../../test-utils';
 import { SmartTableData, SmartTableAction } from '../../../types/SmartTable';
 import { Item, Sort } from '../../../types';
 import SmartTable from '../SmartTable';
@@ -55,9 +55,12 @@ jest.mock('../ItemsTable', () => (props) => (
   </div>
 ));
 
+jest.mock('../../Pagination/CustomPagination', () => () => <div>Paginator</div>);
+
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
 const clickActionMockFn = jest.fn();
+const handleChangePagination = jest.fn();
 
 const smartCfg: Array<SmartTableData<'column-1' | 'column-2' | 'column-3'>> = [
   {
@@ -145,6 +148,12 @@ describe('Smart Table Component', () => {
     const sortableElem = result.container.querySelector('#column-1 #sortable') as Element;
     fireEvent.click(sortableElem);
     expect(handleSort).toBeCalledTimes(1);
+    const paginatorItemSelector = result.container.querySelector(
+      '[data-testid="itemsPerPageSelector"]'
+    );
+    expect(paginatorItemSelector).not.toBeInTheDocument();
+    const paginatorPageSelector = result.container.querySelector('[data-testid="pageSelector"]');
+    expect(paginatorPageSelector).not.toBeInTheDocument();
   });
 
   it('renders smart table (mobile version)', () => {
@@ -177,5 +186,26 @@ describe('Smart Table Component', () => {
     const actionElem = result.container.querySelector('#row-3 #action-1') as Element;
     fireEvent.click(actionElem);
     expect(clickActionMockFn).toBeCalledTimes(1);
+  });
+
+  it('paginated smart table (desktop version)', async () => {
+    window.matchMedia = createMatchMedia(2000);
+    const result = render(
+      <SmartTable
+        conf={smartCfg}
+        data={data}
+        currentSort={sort}
+        onChangeSorting={handleSort}
+        actions={smartActions}
+        pagination={{
+          size: 10,
+          totalElements: 100,
+          numOfDisplayedPages: 10,
+          currentPage: 0,
+          onChangePage: handleChangePagination,
+        }}
+      />
+    );
+    expect(result.container).toHaveTextContent(/Paginator/);
   });
 });

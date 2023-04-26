@@ -8,6 +8,7 @@ import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
 import {
   ACCEPT_DELEGATION,
+  COUNT_DELEGATORS,
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
@@ -15,6 +16,7 @@ import {
   REVOKE_DELEGATION,
 } from '../delegations.routes';
 import { mockApi } from '../../../__test__/test-utils';
+import { DelegationStatus } from '../../../models/Deleghe';
 
 describe('Delegations api tests', () => {
   mockAuthentication();
@@ -117,6 +119,21 @@ describe('Delegations api tests', () => {
     );
     const res = await DelegationsApi.createDelegation(mockCreateDelegation);
     expect(res).toStrictEqual(mockCreateDelegation);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('count delegators', async () => {
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      COUNT_DELEGATORS(DelegationStatus.PENDING),
+      200,
+      undefined,
+      { value: 5 }
+    );
+    const res = await DelegationsApi.countDelegators();
+    expect(res).toStrictEqual({ value: 5 });
     mock.reset();
     mock.restore();
   });
