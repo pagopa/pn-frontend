@@ -150,6 +150,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
           delegations: {
             delegators: arrayOfDelegators,
           },
+          groups,
         },
       },
     });
@@ -175,8 +176,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
         delegatorIds: [],
       });
-    });
-    await waitFor(() => {
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
     });
@@ -216,8 +215,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(button).toHaveTextContent(/20/i);
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=20');
-    });
-    await waitFor(() => {
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
     });
@@ -269,8 +266,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(mock.history.post[0].url).toContain(
         'mandate/api/v1/mandates-by-delegate?size=10&nextPageKey=page-1'
       );
-    });
-    await waitFor(() => {
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
     });
