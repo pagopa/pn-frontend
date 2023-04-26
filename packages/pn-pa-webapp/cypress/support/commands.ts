@@ -64,7 +64,7 @@ Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
       'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
       'OptanonConsent=isGpcEnabled=0' +
       '&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)' +
-      '&version=202302.1.0' +
+      '&version=202303.2.0' +
       '&isIABGlobal=false' +
       '&hosts=' +
       '&landingPath=NotLandingPage' +
