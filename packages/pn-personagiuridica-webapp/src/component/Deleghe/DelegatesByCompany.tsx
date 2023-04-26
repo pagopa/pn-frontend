@@ -4,7 +4,7 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {
   EmptyState,
-  // ApiErrorWrapper,
+  ApiErrorWrapper,
   useIsMobile,
   SmartTable,
   Item,
@@ -16,8 +16,8 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import * as routes from '../../navigation/routes.const';
 import {
-  /* DELEGATION_ACTIONS,
-  getDelegatesByCompany, */
+  DELEGATION_ACTIONS,
+  getDelegatesByCompany,
   setDelegatesSorting,
 } from '../../redux/delegation/actions';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -187,39 +187,25 @@ const DelegatesByCompany = () => {
             {t('deleghe.add')}
           </Button>
         </Stack>
-        {/* <ApiErrorWrapper
-       apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
-        reloadAction={() => dispatch(getDelegatesByCompany())}
-      >
-        {delegatesByCompany.length > 0 ? (
-          <SmartTable
-            data={rows}
-            conf={delegatesColumn}
-            currentSort={sortDelegatesByCompany}
-            onChangeSorting={handleChangeSorting}
-          ></SmartTable>
-        ) : (
-          <EmptyState
-            emptyActionLabel={t('deleghe.add') as string}
-            emptyMessage={t('deleghe.no_delegates') as string}
-            emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-          />
-        )}
-      </ApiErrorWrapper> */}
-        {delegatesByCompany.length > 0 ? (
-          <SmartTable
-            data={rows}
-            conf={delegatesColumn}
-            currentSort={sortDelegatesByCompany}
-            onChangeSorting={handleChangeSorting}
-          ></SmartTable>
-        ) : (
-          <EmptyState
-            emptyActionLabel={t('deleghe.add') as string}
-            emptyMessage={t('deleghe.no_delegates') as string}
-            emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-          />
-        )}
+        <ApiErrorWrapper
+          apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
+          reloadAction={() => dispatch(getDelegatesByCompany())}
+        >
+          {delegatesByCompany.length > 0 ? (
+            <SmartTable
+              data={rows}
+              conf={delegatesColumn}
+              currentSort={sortDelegatesByCompany}
+              onChangeSorting={handleChangeSorting}
+            ></SmartTable>
+          ) : (
+            <EmptyState
+              emptyActionLabel={t('deleghe.add') as string}
+              emptyMessage={t('deleghe.no_delegates') as string}
+              emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+            />
+          )}
+        </ApiErrorWrapper>
       </Box>
     </>
   );

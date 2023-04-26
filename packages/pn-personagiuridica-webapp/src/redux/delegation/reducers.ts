@@ -3,7 +3,6 @@ import { Sort } from '@pagopa-pn/pn-commons';
 
 import { sortDelegations } from '../../utils/delegation.utility';
 import { DelegatorsColumn, DelegatesColumn, Delegation } from '../../models/Deleghe';
-import { arrayOfDelegates } from './__test__/test.utils';
 
 import {
   getDelegatesByCompany,
@@ -85,9 +84,6 @@ const delegationsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getDelegatesByCompany.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
-    });
-    builder.addCase(getDelegatesByCompany.rejected, (state) => {
-      state.delegations.delegates = arrayOfDelegates;
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload;
