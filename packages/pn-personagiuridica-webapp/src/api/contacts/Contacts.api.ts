@@ -90,7 +90,6 @@ export const ContactsApi = {
         senderName,
         channelType,
         value: body.value,
-        code: 'verified',
       };
     }),
   /*
