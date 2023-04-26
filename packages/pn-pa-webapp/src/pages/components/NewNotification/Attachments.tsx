@@ -18,8 +18,8 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
+import { getConfiguration } from '../../../services/configuration.service';
 import { NewNotificationDocument } from '../../../models/NewNotification';
-import { IS_PAYMENT_ENABLED } from '../../../utils/constants';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -149,6 +149,8 @@ const Attachments = ({
     keyPrefix: 'new-notification.steps.attachments',
   });
   const { t: tc } = useTranslation(['common']);
+  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
+
   const validationSchema = yup.object({
     documents: yup.array().of(
       yup.object({

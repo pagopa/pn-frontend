@@ -3,7 +3,7 @@ import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { PNRole } from '../models/user';
-import { IS_DEVELOP } from './constants';
+import { getConfiguration } from '../services/configuration.service';
 
 const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
 
@@ -28,7 +28,7 @@ export function getMenuItems(
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
-  if (IS_DEVELOP) {
+  if (getConfiguration().IS_DEVELOP) {
     return {
       menuItems: [...basicMenuItems, statisticsMenuItem],
       selfCareItems: selfcareMenuItems(idOrganization),

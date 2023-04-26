@@ -1,6 +1,4 @@
-import {
-  compileRoute,
-} from '@pagopa-pn/pn-commons';
+import { compileRoute } from '@pagopa-pn/pn-commons';
 
 // Prefixes
 const API_DELEGATIONS_PREFIX = 'mandate';
@@ -31,31 +29,31 @@ const API_DELEGATIONS_MANDATE_ACCEPT_PATH = `${API_DELEGATIONS_MANDATE_BASE_PATH
 export function DELEGATIONS_BY_DELEGATOR() {
   return compileRoute({
     prefix: API_DELEGATIONS_PREFIX,
-    path: API_DELEGATIONS_MANDATES_BY_DELEGATOR_PATH
+    path: API_DELEGATIONS_MANDATES_BY_DELEGATOR_PATH,
   });
 }
 
 export function DELEGATIONS_BY_DELEGATE() {
   return compileRoute({
     prefix: API_DELEGATIONS_PREFIX,
-    path: API_DELEGATIONS_MANDATES_BY_DELEGATE_PATH
+    path: API_DELEGATIONS_MANDATES_BY_DELEGATE_PATH,
   });
 }
 
 export function CREATE_DELEGATION() {
   return compileRoute({
     prefix: API_DELEGATIONS_PREFIX,
-    path: API_DELEGATIONS_MANDATE_BASE_PATH
+    path: API_DELEGATIONS_MANDATE_BASE_PATH,
   });
 }
 
-export function REOVKE_DELEGATION(id: string) {
+export function REVOKE_DELEGATION(id: string) {
   return compileRoute({
     prefix: API_DELEGATIONS_PREFIX,
     path: API_DELEGATIONS_MANDATE_REVOKE_PATH,
     params: {
-      [API_DELEGATIONS_ID_PARAMETER]: id
-    }
+      [API_DELEGATIONS_ID_PARAMETER]: id,
+    },
   });
 }
 
@@ -64,8 +62,8 @@ export function REJECT_DELEGATION(id: string) {
     prefix: API_DELEGATIONS_PREFIX,
     path: API_DELEGATIONS_MANDATE_REJECT_PATH,
     params: {
-      [API_DELEGATIONS_ID_PARAMETER]: id
-    }
+      [API_DELEGATIONS_ID_PARAMETER]: id,
+    },
   });
 }
 
@@ -74,9 +72,7 @@ export function ACCEPT_DELEGATION(id: string) {
     prefix: API_DELEGATIONS_PREFIX,
     path: API_DELEGATIONS_MANDATE_ACCEPT_PATH,
     params: {
-      [API_DELEGATIONS_ID_PARAMETER]: id
-    }
+      [API_DELEGATIONS_ID_PARAMETER]: id,
+    },
   });
 }
-
-

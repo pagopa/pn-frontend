@@ -166,16 +166,18 @@ export interface SendCourtesyMessageDetails extends BaseDetails {
 
 export interface SendDigitalDetails extends BaseDetails {
   digitalAddress?: DigitalAddress;
+  responseStatus?: 'OK' | 'KO';
+  deliveryDetailCode?: string;
+  // ---------------------------------------------------
+  // the following fields are present in some digital-flow-related events,
+  // but they currently have no influence in the behavior of PN frontend.
+  // I keep them just because they are included in several test notification structures
+  // ---------------------------------------------------
+  // Carlos Lombardi, 2023.04.18
+  // ---------------------------------------------------
   digitalAddressSource?: AddressSource;
   retryNumber?: number;
-  downstreamId?: {
-    systemId: string;
-    messageId: string;
-  };
-  responseStatus?: 'OK' | 'KO';
   notificationDate?: string;
-  errors?: Array<string>;
-  eventCode?: string;
 }
 
 export interface PaidDetails extends BaseDetails {

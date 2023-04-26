@@ -222,7 +222,6 @@
           "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0
       }
     },
@@ -251,7 +250,6 @@
           "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0
       }
     },
@@ -272,11 +270,10 @@
           "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0,
         "notificationDate": "2022-11-16T07:05:11.865793Z",
         "sendingReceipts": [{}],
-        "eventCode": "C001",
+        "deliveryDetailCode": "C001",
         "shouldRetry": false
       }
     },
@@ -301,7 +298,7 @@
         "retryNumber": 0,
         "notificationDate": "2022-11-16T07:05:11.823799Z",
         "sendingReceipts": [{}],
-        "eventCode": "C001",
+        "deliveryDetailCode": "C001",
         "shouldRetry": false
       }
     },
@@ -321,8 +318,6 @@
           "type": "PEC",
           "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
         },
-        "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "responseStatus": "OK",
         "notificationDate": "2022-11-16T07:05:20.32423Z",
         "sendingReceipts": [{}]
@@ -344,8 +339,6 @@
           "type": "PEC",
           "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
         },
-        "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "responseStatus": "OK",
         "notificationDate": "2022-11-16T07:05:20.451956Z",
         "sendingReceipts": [{}]

@@ -2,15 +2,14 @@ import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Sort } from '@pagopa-pn/pn-commons';
 
 import { sortDelegations } from '../../utils/delegation.utility';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
+import { DelegatorsColumn, DelegatesColumn, Delegation } from '../../models/Deleghe';
 import {
-  getDelegates,
+  getDelegatesByCompany,
   getDelegators,
   acceptDelegation,
   rejectDelegation,
   revokeDelegation,
 } from './actions';
-import { Delegation } from './types';
 
 const initialState = {
   delegations: {
@@ -82,7 +81,7 @@ const delegationsSlice = createSlice({
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(getDelegates.fulfilled, (state, action) => {
+    builder.addCase(getDelegatesByCompany.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {

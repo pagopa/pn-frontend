@@ -1,8 +1,7 @@
 import * as redux from 'react-redux';
-
 import { fireEvent, waitFor } from '@testing-library/react';
-
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
@@ -35,15 +34,12 @@ jest.mock('react-router-dom', () => ({
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 // mock action
-const entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
 const mockEntitiesActionFn = jest.fn();
-const createActionSpy = jest.spyOn(actions, 'createDelegation');
 const mockCreateActionFn = jest.fn();
 // mock tracking
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
 // mock dispatch
-const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
@@ -55,6 +51,12 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
 }
 
 describe('NuovaDelega page', () => {
+  let createActionSpy;
+  // mock action
+  let entitiesActionSpy;
+  // mock dispatch
+  let useDispatchSpy;
+
   const initialState = (created: boolean) => ({
     preloadedState: {
       newDelegationState: {
@@ -65,6 +67,9 @@ describe('NuovaDelega page', () => {
   });
 
   beforeEach(() => {
+    createActionSpy = jest.spyOn(actions, 'createDelegation')
+    entitiesActionSpy = jest.spyOn(actions, 'getAllEntities')
+    useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     createActionSpy.mockImplementation(mockCreateActionFn);
     entitiesActionSpy.mockImplementation(mockEntitiesActionFn);
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
@@ -152,7 +157,7 @@ describe('NuovaDelega page', () => {
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockCreateActionFn).toBeCalledTimes(1);
       expect(mockCreateActionFn).toBeCalledWith({
-        selectPersonaFisicaOrPersonaGiuridica: 'pf',
+        selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
         codiceFiscale: 'RSSMRA01A01A111A',
         nome: 'Mario',
         cognome: 'Rossi',

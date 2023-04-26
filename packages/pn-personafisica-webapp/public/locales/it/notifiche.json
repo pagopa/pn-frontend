@@ -66,8 +66,6 @@
       "summary-succeeded": "Pagato",
       "summary-in-progress": "Pagamento in corso",
       "amount": "Importo",
-      "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
-      "disclaimer-link": "Come mai?",
       "submit": "Paga",
       "divider-text": "oppure",
       "download-pagopa-notification": "Scarica l'avviso pagoPA",

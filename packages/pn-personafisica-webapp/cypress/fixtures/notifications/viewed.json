@@ -166,7 +166,6 @@
           "address": "gcesare@test.pagopa.it"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0
       }
     },
@@ -187,11 +186,10 @@
           "address": "gcesare@test.pagopa.it"
         },
         "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "retryNumber": 0,
         "notificationDate": "2022-11-22T15:09:51.351501Z",
         "sendingReceipts": [{}],
-        "eventCode": "C001",
+        "deliveryDetailCode": "C001",
         "shouldRetry": false
       }
     },
@@ -211,8 +209,6 @@
           "type": "PEC",
           "address": "gcesare@test.pagopa.it"
         },
-        "digitalAddressSource": "SPECIAL",
-        "errors": [],
         "responseStatus": "OK",
         "notificationDate": "2022-11-22T15:09:59.100689Z",
         "sendingReceipts": [{}]

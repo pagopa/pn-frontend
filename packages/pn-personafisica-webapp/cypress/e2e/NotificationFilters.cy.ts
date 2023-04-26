@@ -1,10 +1,10 @@
 import { today } from '@pagopa-pn/pn-commons';
 
 import { NOTIFICHE } from '../../src/navigation/routes.const';
-import { NOTIFICATION_PAYMENT_INFO } from '../../src/api/notifications/notifications.routes';
 import {
+  NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_DETAIL,
-  NOTIFICATIONS_LIST,
+  NOTIFICATIONS_LIST
 } from '../../src/api/notifications/notifications.routes';
 import {
   DELEGATIONS_BY_DELEGATOR,

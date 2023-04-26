@@ -536,7 +536,7 @@ describe('timeline event description', () => {
 
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode = 'C008';
     testTimelineStatusInfosFnSingle(
       'send-digital-progress-error',
       'send-digital-progress-error-description',
@@ -547,7 +547,7 @@ describe('timeline event description', () => {
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 1', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode =
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode =
       'C010';
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress =
       {
@@ -563,7 +563,7 @@ describe('timeline event description', () => {
 
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - success - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode = 'C001';
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       address: 'titi35@other.org',
       type: DigitalDomicileType.PEC,
@@ -578,7 +578,7 @@ describe('timeline event description', () => {
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 0', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode =
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode =
       'DP00';
     testTimelineStatusInfosFnMulti0(
       'send-digital-progress-success',
@@ -1482,14 +1482,14 @@ describe('timeline legal fact link text', () => {
 
   it('return legalFact label - SEND_DIGITAL_PROGRESS (success) - PEC_RECEIPT', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode = 'C001';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
     expect(label).toBe('detail.receipt detail.timeline.legalfact.pec-receipt-accepted');
   });
 
   it('return legalFact label - SEND_DIGITAL_PROGRESS (failure) - PEC_RECEIPT', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode = 'C008';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
     expect(label).toBe('detail.receipt detail.timeline.legalfact.pec-receipt-not-accepted');
   });

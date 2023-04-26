@@ -84,11 +84,15 @@ jest.mock('../components/NewNotification/SyncFeedback', () => () => (
   <div data-testid="stepContent">SyncFeedback</div>
 ));
 const mockIsPaymentEnabledGetter = jest.fn();
-jest.mock('../../utils/constants', () => ({
-  get IS_PAYMENT_ENABLED() {
-    return mockIsPaymentEnabledGetter();
-  },
-}));
+jest.mock('../../services/configuration.service', () => {
+  return {
+    ...jest.requireActual('../../services/configuration.service'),
+    getConfiguration: () => ({
+      IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
+    }),
+  };
+});
+
 
 describe('NewNotification Page with payment', () => {
   let result: RenderResult | undefined;

@@ -46,7 +46,7 @@ import {
   IMAGES_PATH,
   PAGOPA_HELP_EMAIL,
   PAGOPA_HOME,
-  PN_URL,
+  PN_PF_URL,
   MANUALE_URL,
   PARTNER_AND_INTERMEDIARIES_PATH
 } from "@utils/constants";
@@ -59,7 +59,7 @@ const assistanceLink = {
 };
 
 const onReadClick = () => {
-  window.open(PN_URL, "_blank");
+  window.open(PN_PF_URL, "_blank");
 };
 
 const navigation: INavigationBarProps = {
@@ -73,7 +73,7 @@ const navigation: INavigationBarProps = {
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
 
 // eslint-disable-next-line no-extra-boolean-cast
-const heroCta = !!PN_URL
+const heroCta = !!PN_PF_URL
   ? {
     label: "Leggi le tue notifiche",
     title: "Leggi le tue notifiche",

@@ -24,9 +24,9 @@ import {
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/reducers';
-import { Delegator } from '../../redux/delegation/types';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import { Delegator } from '../../models/Deleghe';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
@@ -72,7 +72,6 @@ const initialValues = (
   };
 };
 
-
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -94,9 +93,10 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup.date()
+    endDate: yup
+      .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today)
+      .max(today),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);

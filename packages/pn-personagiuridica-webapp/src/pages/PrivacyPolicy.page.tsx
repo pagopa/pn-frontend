@@ -1,10 +1,8 @@
 import { compileOneTrustPath, useRewriteLinks } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
+
 import * as routes from '../navigation/routes.const';
-import {
-  ONE_TRUST_DRAFT_MODE,
-  ONE_TRUST_PP,
-} from '../utils/constants';
+import { getConfiguration } from "../services/configuration.service";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -16,6 +14,7 @@ declare const OneTrust: {
 };
 
 const PrivacyPolicyPage = () => {
+  const { ONE_TRUST_DRAFT_MODE, ONE_TRUST_PP } = getConfiguration();
   const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {

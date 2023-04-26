@@ -366,8 +366,8 @@ export function getLegalFactLabel(
     legalFactType === LegalFactType.PEC_RECEIPT
   ) {
     if (
-      (timelineStep.details as SendDigitalDetails).eventCode === 'C001' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'DP00'
+      (timelineStep.details as SendDigitalDetails).deliveryDetailCode === 'C001' ||
+      (timelineStep.details as SendDigitalDetails).deliveryDetailCode === 'DP00'
     ) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
@@ -375,9 +375,9 @@ export function getLegalFactLabel(
         'di accettazione PEC'
       )}`;
     } else if (
-      (timelineStep.details as SendDigitalDetails).eventCode === 'C008' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'C010' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'DP10'
+      (timelineStep.details as SendDigitalDetails).deliveryDetailCode === 'C008' ||
+      (timelineStep.details as SendDigitalDetails).deliveryDetailCode === 'C010' ||
+      (timelineStep.details as SendDigitalDetails).deliveryDetailCode === 'DP10'
     ) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',

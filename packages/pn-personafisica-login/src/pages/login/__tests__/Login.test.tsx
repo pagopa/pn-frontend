@@ -1,12 +1,12 @@
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
 
 import { storageAarOps, storageTypeOps } from '../../../utils/storage';
 import Login from '../Login';
-import { ENV } from '../../../utils/env';
 import '../../../locales/i18n';
-import React from 'react';
+import { getConfiguration } from "../../../services/configuration.service";
 
 const oldWindowLocation = global.window.location;
 
@@ -68,7 +68,7 @@ describe('test login page', () => {
     }
 
     expect(global.window.location.assign).toBeCalledWith(
-      `${ENV.URL_API.LOGIN}/login?entityID=xx_servizicie_test&authLevel=SpidL2`
+      `${getConfiguration().URL_API_LOGIN}/login?entityID=xx_servizicie_test&authLevel=SpidL2`
     );
   });
 

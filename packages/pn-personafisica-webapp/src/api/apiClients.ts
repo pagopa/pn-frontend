@@ -1,11 +1,19 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../utils/constants';
+import axios, { AxiosInstance } from 'axios';
 
-export const authClient = axios.create({
-  baseURL: API_BASE_URL,
-});
+import { getConfiguration } from "../services/configuration.service";
 
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-});
+// eslint-disable-next-line functional/no-let
+export let authClient: AxiosInstance;
 
+// eslint-disable-next-line functional/no-let
+export let apiClient: AxiosInstance;
+
+export function initAxiosClients() {
+  authClient = axios.create({
+    baseURL: getConfiguration().API_BASE_URL,
+  });
+
+  apiClient = axios.create({
+    baseURL: getConfiguration().API_BASE_URL,
+  });
+}

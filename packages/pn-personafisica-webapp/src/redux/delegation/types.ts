@@ -1,3 +1,4 @@
+import { RecipientType } from '@pagopa-pn/pn-commons';
 import { DelegationParty } from '../../models/Deleghe';
 import { Party } from '../../models/party';
 import { User } from '../auth/types';
@@ -45,7 +46,7 @@ export interface Person {
 }
 
 export interface NewDelegationFormProps {
-  selectPersonaFisicaOrPersonaGiuridica: string;
+  selectPersonaFisicaOrPersonaGiuridica: RecipientType;
   codiceFiscale: string;
   nome: string;
   cognome: string;

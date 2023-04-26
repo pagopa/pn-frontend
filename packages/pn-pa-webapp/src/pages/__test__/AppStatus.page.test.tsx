@@ -40,7 +40,7 @@ const mockDowntimeStatusOK = DowntimeStatus.OK;
 const mockLastCheckTimestamp = '2022-11-01T14:15:28Z';
 
 jest.mock('../../api/appStatus/AppStatus.api', () => {
-  const original = jest.requireActual('../../api/consents/Consents.api');
+  const original = jest.requireActual('../../api/appStatus/AppStatus.api');
   return {
     ...original,
     AppStatusApi: {

@@ -17,8 +17,8 @@ import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
-import { LANDING_SITE_URL } from '../utils/constants';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
+import { getConfiguration } from '../services/configuration.service';
 
 const Contacts = () => {
   const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);
@@ -30,6 +30,7 @@ const Contacts = () => {
     (state: RootState) => state.contactsState.digitalAddresses
   );
   const [pageReady, setPageReady] = useState(false);
+  const { LANDING_SITE_URL } = getConfiguration();
 
   const contactIO = isDigitalAddressLoaded
     ? digitalAddresses.courtesy.find((address) => address.channelType === CourtesyChannelType.IOMSG)
@@ -52,14 +53,14 @@ const Contacts = () => {
   };
 
   const faqWhatIsAarCompleteLink = useMemo(
-    () => LANDING_SITE_URL && FAQ_WHAT_IS_AAR 
-      ? `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}` 
+    () => LANDING_SITE_URL && FAQ_WHAT_IS_AAR
+      ? `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}`
       : undefined
     , []
   );
 
   const faqWhatIsCourtesyMessageCompleteLink = useMemo(
-    () => LANDING_SITE_URL && FAQ_WHAT_IS_COURTESY_MESSAGE ? 
+    () => LANDING_SITE_URL && FAQ_WHAT_IS_COURTESY_MESSAGE ?
       `${LANDING_SITE_URL}${FAQ_WHAT_IS_COURTESY_MESSAGE}`
       : undefined
     , []
@@ -67,18 +68,18 @@ const Contacts = () => {
 
   const subtitle = <>
     {t('subtitle-text-1', { ns: 'recapiti' })}
-    { faqWhatIsAarCompleteLink 
+    {faqWhatIsAarCompleteLink
       ? <Link href={faqWhatIsAarCompleteLink} target="_blank">
-          {t('subtitle-link-1', { ns: 'recapiti' })}
-        </Link>
+        {t('subtitle-link-1', { ns: 'recapiti' })}
+      </Link>
       : t('subtitle-link-1', { ns: 'recapiti' })
     }
     {t('subtitle-text-2', { ns: 'recapiti' })}
-    { faqWhatIsCourtesyMessageCompleteLink
+    {faqWhatIsCourtesyMessageCompleteLink
       ? <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
-          {t('subtitle-link-2', { ns: 'recapiti' })}
-        </Link>
-      : t('subtitle-link-2', { ns: 'recapiti' }) 
+        {t('subtitle-link-2', { ns: 'recapiti' })}
+      </Link>
+      : t('subtitle-link-2', { ns: 'recapiti' })
     }
     {t('subtitle-text-3', { ns: 'recapiti' })}
     <Link onClick={handleRedirectToProfilePage}>
