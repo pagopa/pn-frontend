@@ -13,7 +13,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
+import { getConfiguration } from '../services/configuration.service';
 import { goToSelfcareLogin } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -72,7 +72,7 @@ const SessionGuardRender = () => {
         handleClose={goToSelfcareLogin}
         initTimeout
       />
-    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
+    ) : isAnonymousUser || getConfiguration().DISABLE_INACTIVITY_HANDLER ? (
       <Outlet />
     ) : (
       <InactivityHandler

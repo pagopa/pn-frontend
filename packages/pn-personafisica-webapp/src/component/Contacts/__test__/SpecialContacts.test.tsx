@@ -1,3 +1,4 @@
+import React from 'react';
 import * as redux from 'react-redux';
 import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
 import {
@@ -13,7 +14,6 @@ import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeV
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
 import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
-import React from 'react';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

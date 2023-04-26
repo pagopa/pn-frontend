@@ -1,7 +1,7 @@
 import { NotificationDetail, parseNotificationDetail } from '@pagopa-pn/pn-commons';
 
-import { Delegator } from '../redux/delegation/types';
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
+import { Delegator } from '../models/Deleghe';
 
 function fiscalNumberDaDelegator(
   delegatorsFromStore: Array<Delegator>,

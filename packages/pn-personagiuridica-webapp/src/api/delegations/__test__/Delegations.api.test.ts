@@ -1,7 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
-
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { Delegation } from '../../../redux/delegation/types';
 import {
   arrayOfDelegates,
   arrayOfDelegators,
@@ -9,61 +6,67 @@ import {
 } from '../../../redux/delegation/__test__/test.utils';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
-import { ACCEPT_DELEGATION, CREATE_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REOVKE_DELEGATION } from '../delegations.routes';
-
-async function getDelegates(response: Array<Delegation> | null) {
-  const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, response);
-  const res = await DelegationsApi.getDelegates();
-  axiosMock.reset();
-  axiosMock.restore();
-  return res;
-}
-
-async function getDelegators(response: Array<Delegation> | null) {
-  const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, response);
-  const res = await DelegationsApi.getDelegators();
-  axiosMock.reset();
-  axiosMock.restore();
-  return res;
-}
-
-async function createDelegation() {
-  const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onPost(CREATE_DELEGATION()).reply(200, mockCreateDelegation);
-  const res = await DelegationsApi.createDelegation(mockCreateDelegation);
-  axiosMock.reset();
-  axiosMock.restore();
-  return res;
-}
+import {
+  ACCEPT_DELEGATION,
+  CREATE_DELEGATION,
+  DELEGATIONS_BY_DELEGATE,
+  DELEGATIONS_BY_DELEGATOR,
+  REJECT_DELEGATION,
+  REVOKE_DELEGATION,
+} from '../delegations.routes';
+import { mockApi } from '../../../__test__/test-utils';
 
 describe('Delegations api tests', () => {
   mockAuthentication();
 
   it('gets non empty delegates', async () => {
-    const res = await getDelegates(arrayOfDelegates);
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      DELEGATIONS_BY_DELEGATOR(),
+      200,
+      undefined,
+      arrayOfDelegates
+    );
+    const res = await DelegationsApi.getDelegatesByCompany();
     expect(res).toStrictEqual(arrayOfDelegates);
+    mock.reset();
+    mock.restore();
   });
 
   it('gets empty delegates', async () => {
-    const res = await getDelegates([]);
+    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    const res = await DelegationsApi.getDelegatesByCompany();
     expect(res).toHaveLength(0);
+    mock.reset();
+    mock.restore();
   });
 
   it('gets non empty delegators', async () => {
-    const res = await getDelegators(arrayOfDelegators);
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      DELEGATIONS_BY_DELEGATE(),
+      200,
+      undefined,
+      arrayOfDelegators
+    );
+    const res = await DelegationsApi.getDelegators();
     expect(res).toStrictEqual(arrayOfDelegators);
+    mock.reset();
+    mock.restore();
   });
 
   it('gets empty delegators', async () => {
-    const res = await getDelegators([]);
+    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
+    const res = await DelegationsApi.getDelegators();
     expect(res).toHaveLength(0);
+    mock.reset();
+    mock.restore();
   });
 
   it('revokes a delegation', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPatch(REOVKE_DELEGATION('7')).reply(200);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('7'), 200, undefined, undefined);
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
     mock.reset();
@@ -71,8 +74,7 @@ describe('Delegations api tests', () => {
   });
 
   it("doesn't revoke a delegation", async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPatch(REOVKE_DELEGATION('10')).reply(204);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('10'), 204, undefined, undefined);
     const res = await DelegationsApi.revokeDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
@@ -80,8 +82,7 @@ describe('Delegations api tests', () => {
   });
 
   it('rejects a delegation', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPatch(REJECT_DELEGATION('8')).reply(200);
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('8'), 200, undefined, undefined);
     const res = await DelegationsApi.rejectDelegation('8');
     expect(res).toStrictEqual({ id: '8' });
     mock.reset();
@@ -89,8 +90,7 @@ describe('Delegations api tests', () => {
   });
 
   it("doesn't reject a delegation", async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPatch(REJECT_DELEGATION('10')).reply(204);
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('10'), 204, undefined, undefined);
     const res = await DelegationsApi.rejectDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
@@ -98,8 +98,7 @@ describe('Delegations api tests', () => {
   });
 
   it('accept a delegation', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPatch(ACCEPT_DELEGATION('9')).reply(200, {});
+    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('9'), 200, undefined, {});
     const res = await DelegationsApi.acceptDelegation('9', { verificationCode: '12345' });
     expect(res).toStrictEqual({ id: '9' });
     mock.reset();
@@ -107,8 +106,15 @@ describe('Delegations api tests', () => {
   });
 
   it('creates a new delegation', async () => {
-    const mock = new MockAdapter(apiClient);
-    const res = await createDelegation();
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      CREATE_DELEGATION(),
+      200,
+      mockCreateDelegation,
+      mockCreateDelegation
+    );
+    const res = await DelegationsApi.createDelegation(mockCreateDelegation);
     expect(res).toStrictEqual(mockCreateDelegation);
     mock.reset();
     mock.restore();

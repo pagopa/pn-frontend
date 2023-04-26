@@ -9,7 +9,14 @@ import {
 } from '../../../redux/delegation/__test__/test.utils';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
-import { ACCEPT_DELEGATION, CREATE_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REOVKE_DELEGATION } from '../delegations.routes';
+import {
+  ACCEPT_DELEGATION,
+  CREATE_DELEGATION,
+  DELEGATIONS_BY_DELEGATE,
+  DELEGATIONS_BY_DELEGATOR,
+  REJECT_DELEGATION,
+  REVOKE_DELEGATION,
+} from '../delegations.routes';
 
 async function getDelegates(response: Array<Delegation> | null) {
   const axiosMock = new MockAdapter(apiClient);
@@ -63,7 +70,7 @@ describe('Delegations api tests', () => {
 
   it('revokes a delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(REOVKE_DELEGATION('7')).reply(200);
+    mock.onPatch(REVOKE_DELEGATION('7')).reply(200);
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
     mock.reset();
@@ -72,7 +79,7 @@ describe('Delegations api tests', () => {
 
   it("doesn't revoke a delegation", async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(REOVKE_DELEGATION('10')).reply(204);
+    mock.onPatch(REVOKE_DELEGATION('10')).reply(204);
     const res = await DelegationsApi.revokeDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
     mock.reset();

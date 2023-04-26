@@ -14,7 +14,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
+import { getConfiguration } from "../services/configuration.service";
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -43,6 +43,7 @@ const inactivityTimer = 5 * 60 * 1000;
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
+  const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(

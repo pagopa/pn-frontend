@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { LoadingButton } from '@mui/lab';
@@ -42,15 +42,9 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import {
-  LANDING_SITE_URL,
-  PAGOPA_HELP_EMAIL,
-} from '../../utils/constants';
-import {
-  FAQ_DIFFERENT_AMOUNTS_SUFFIX,
-} from '../../navigation/externalRoutes.const';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
+import { getConfiguration } from "../../services/configuration.service";
 
 interface Props {
   iun: string;
@@ -81,7 +75,6 @@ interface PaymentMessageData {
 interface PaymentData {
   title: string;
   amount?: string;
-  disclaimer?: JSX.Element;
   message?: PaymentMessageData;
   action?: PrimaryAction;
 }
@@ -121,6 +114,7 @@ const NotificationPayment: React.FC<Props> = ({
   senderDenomination,
   subject,
 }) => {
+  const { PAGOPA_HELP_EMAIL } = getConfiguration();
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
@@ -272,40 +266,16 @@ const NotificationPayment: React.FC<Props> = ({
       title = t('detail.payment.summary-in-progress', { ns: 'notifiche' });
     }
     const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
-    const disclaimer = amount ? getDisclaimer() : undefined;
     const message = getMessageData();
     const action = getActionData(amount);
 
     return {
       title,
       amount,
-      disclaimer,
       message,
       action,
     };
   };
-
-  const completeFaqDifferentAmountsUrl = useMemo(
-    () => LANDING_SITE_URL && FAQ_DIFFERENT_AMOUNTS_SUFFIX
-      ? `${LANDING_SITE_URL}${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`
-      : undefined,
-    []
-  );
-
-  /** returns disclaimer JSX */
-  const getDisclaimer = useCallback((): JSX.Element | undefined => (
-    <>
-      {t('detail.payment.disclaimer', { ns: 'notifiche' })}
-      &nbsp;
-      {
-        completeFaqDifferentAmountsUrl &&
-        <Link href={completeFaqDifferentAmountsUrl} target="_blank">
-          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-        </Link>
-      }
-    </>
-  ), [completeFaqDifferentAmountsUrl]);
-
 
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
@@ -511,11 +481,6 @@ const NotificationPayment: React.FC<Props> = ({
               ) : (
                 data.amount
               )}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-            <Typography variant="body2" display="inline">
-              {data.amount && data.disclaimer}
             </Typography>
           </Grid>
           <Stack spacing={2} width="100%">

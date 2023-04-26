@@ -3,8 +3,8 @@ import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineS
 
 export class SendDigitalProgressStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
-    const eventCode = (payload.step.details as SendDigitalDetails).eventCode;
-    if (eventCode === 'C008' || eventCode === 'C010' || eventCode === 'DP10') {
+    const deliveryDetailCode = (payload.step.details as SendDigitalDetails).deliveryDetailCode;
+    if (deliveryDetailCode === 'C008' || deliveryDetailCode === 'C010' || deliveryDetailCode === 'DP10') {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-progress-error',
@@ -19,7 +19,7 @@ export class SendDigitalProgressStep extends TimelineStep {
           }
         ),
       };
-    } else if (eventCode === 'C001' || eventCode === 'DP00') {
+    } else if (deliveryDetailCode === 'C001' || deliveryDetailCode === 'DP00') {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-progress-success',

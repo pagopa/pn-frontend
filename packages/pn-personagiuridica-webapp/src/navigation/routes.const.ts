@@ -3,7 +3,7 @@ import {
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
   AppRouteParams,
 } from '@pagopa-pn/pn-commons';
-import { SELFCARE_BASE_URL } from '../utils/constants';
+import { getConfiguration } from "../services/configuration.service";
 
 export const NOTIFICHE = '/notifiche';
 export const NOTIFICHE_DELEGATO = `${NOTIFICHE}-delegato`;
@@ -31,10 +31,10 @@ const GROUPS_SEGMENT = '/groups';
  * @param idOrganization
  */
 export const USERS = (idOrganization: string) =>
-  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}`;
+  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}`;
 
 /** GROUPS navigation link to SelfCare "Gruppi" section for SEND
  * @param idOrganization
  */
 export const GROUPS = (idOrganization: string) =>
-  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}`;
+  `${getConfiguration().SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}`;

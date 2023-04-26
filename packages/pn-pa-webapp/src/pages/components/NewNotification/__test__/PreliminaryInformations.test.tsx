@@ -33,11 +33,14 @@ async function testRadio(form: HTMLFormElement, dataTestId: string, index: numbe
 }
 
 const mockIsPaymentEnabledGetter = jest.fn();
-jest.mock('../../../../utils/constants', () => ({
-  get IS_PAYMENT_ENABLED() {
-    return mockIsPaymentEnabledGetter();
-  },
-}));
+jest.mock('../../../../services/configuration.service', () => {
+  return {
+    ...jest.requireActual('../../../../services/configuration.service'),
+    getConfiguration: () => ({
+      IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
+    }),
+  };
+});
 
 describe('PreliminaryInformations component with payment enabled', () => {
   let result: RenderResult;

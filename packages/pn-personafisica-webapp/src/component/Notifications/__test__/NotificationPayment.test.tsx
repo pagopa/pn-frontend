@@ -167,9 +167,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
-
     const loadingButton = screen.getByRole('button', { name: 'detail.payment.submit' });
     expect(loadingButton.querySelector('svg')).toBeInTheDocument();
     expect(loadingButton).toBeInTheDocument();
@@ -208,9 +205,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent(/473,50\b/);
-
-    const disclaimer = screen.getByText('detail.payment.disclaimer');
-    expect(disclaimer).toBeInTheDocument();
 
     const loadingButton = screen.getByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(loadingButton).toBeInTheDocument();
@@ -254,8 +248,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent(/473,50\b/);
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).toBeInTheDocument();
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(loadingButton).not.toBeInTheDocument();
     const alert = screen.getByTestId('InfoOutlinedIcon');
@@ -296,8 +288,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(loadingButton).not.toBeInTheDocument();
     const alert = screen.getByTestId('SuccessOutlinedIcon');
@@ -325,9 +315,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer_loading).not.toBeInTheDocument();
-
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');
@@ -340,9 +327,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
     expect(loadingButton).not.toBeInTheDocument();
@@ -379,9 +363,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer_loading).not.toBeInTheDocument();
-
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');
@@ -394,9 +375,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
     expect(loadingButton).not.toBeInTheDocument();
@@ -433,9 +411,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer_loading).not.toBeInTheDocument();
-
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');
@@ -448,9 +423,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
     expect(loadingButton).not.toBeInTheDocument();
@@ -487,9 +459,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer_loading).not.toBeInTheDocument();
-
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');
@@ -502,9 +471,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
     expect(loadingButton).not.toBeInTheDocument();
@@ -538,9 +504,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer_loading).not.toBeInTheDocument();
-
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');
@@ -553,9 +516,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
     expect(loadingButton).not.toBeInTheDocument();
@@ -586,9 +546,6 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer_loading).not.toBeInTheDocument();
-
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');
@@ -601,9 +558,6 @@ describe('NotificationPayment component', () => {
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-
-    const disclaimer = screen.queryByText('detail.payment.disclaimer');
-    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
     expect(loadingButton).not.toBeInTheDocument();
