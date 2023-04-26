@@ -82,6 +82,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
 
   const [open, setOpen] = useState(false);
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+  const [pecValidationOpen, setPecValidationOpen] = useState(false);
   const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
   const [modalProps, setModalProps] = useState(initialProps);
@@ -143,7 +144,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         if (noCallback) {
           return;
         }
-        if (res && res.code === 'verified') {
+
+        if (res && res.pecValid) {
           // contact has already been verified
           // show success message
           dispatch(
@@ -155,6 +157,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             })
           );
           handleClose('validated');
+        }
+        if (res && !res.pecValid) {
+          handleClose('validated');
+          setPecValidationOpen(true);
         } else {
           setOpen(true);
         }
@@ -330,6 +336,19 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             {t('button.annulla')}
           </Button>
           <Button onClick={handleConfirm} variant="contained">
+            {t('button.conferma')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={pecValidationOpen}>
+        <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
+          {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
+        </DialogTitle>
+        <DialogContent sx={{ px: 4 }}>
+          {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+        </DialogContent>
+        <DialogActions sx={{ pb: 4, px: 4 }}>
+          <Button onClick={() => setPecValidationOpen(false)} variant="contained">
             {t('button.conferma')}
           </Button>
         </DialogActions>

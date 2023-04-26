@@ -37,7 +37,12 @@
     "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
-    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
+    "validation-cancel-title": "Vuoi annullare la verifica?",
+    "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
+    "validation-in-progress": "Verifica in corso",
+    "validation-progress-title": "Grazie, ora tocca a noi",
+    "validation-progress-content": "Stiamo verificando che che l’indirizzo da te inserito sia una PEC valida per la ricezione delle notifiche della Pubblica Amministrazione. Riceverai l’esito della verifica tramite e-mail."
   },
   "io-contact": {
     "title": "",
@@ -120,6 +125,14 @@
     "invalid_verification_code": {
       "title": "Il codice inserito non è corretto",
       "message": "Prova a reinserirlo, oppure genera un nuovo codice."
+    },
+    "retry_limit_code": {
+      "title": "Troppi tentativi",
+      "message": "Genera un nuovo codice."
+    },
+    "expired_verification_code": {
+      "title": "Codice scaduto",
+      "message": "Genera un nuovo codice."
     }
   }
 }

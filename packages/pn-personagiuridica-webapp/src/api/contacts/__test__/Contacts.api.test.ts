@@ -46,7 +46,7 @@ describe('Contacts api tests', () => {
     );
     expect(res).toStrictEqual({
       value: body.value,
-      code: 'verified',
+      pecValid: true,
       addressType: 'legal',
       channelType: LegalChannelType.PEC,
       recipientId: 'mocked-recipientId',
@@ -97,7 +97,6 @@ describe('Contacts api tests', () => {
     );
     expect(res).toStrictEqual({
       value: body.value,
-      code: 'verified',
       addressType: 'courtesy',
       channelType: CourtesyChannelType.EMAIL,
       recipientId: 'mocked-recipientId',
