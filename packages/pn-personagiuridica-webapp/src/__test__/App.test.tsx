@@ -52,7 +52,6 @@ const initialState = (token: string) => ({
     },
     generalInfoState: {
       pendingDelegators: 0,
-      delegators: [],
     },
   },
 });
@@ -72,9 +71,8 @@ const initialState = (token: string) => ({
  * Carlos, 2022.08.10
  */
 describe('App', () => {
-  // let result: RenderResult | undefined;
   let mockUseDispatchFn: jest.Mock;
-  // let mockSidemenuInformationActionFn: jest.Mock;
+  let mockSidemenuInformationActionFn: jest.Mock;
   let mockDomicileInfoActionFn: jest.Mock;
   let axiosMock: MockAdapter;
 
@@ -82,13 +80,15 @@ describe('App', () => {
     axiosMock = new MockAdapter(axios);
     axiosMock.onAny().reply(200);
 
-    // mockSidemenuInformationActionFn = jest.fn();
+    mockSidemenuInformationActionFn = jest.fn();
     mockDomicileInfoActionFn = jest.fn();
     mockUseDispatchFn = jest.fn(() => (action: any, state: any) => {
       console.log({ action, state });
     });
 
     // mock actions
+    const getSidemenuInfoActionSpy = jest.spyOn(sidemenuActions, 'getSidemenuInformation');
+    getSidemenuInfoActionSpy.mockImplementation(mockSidemenuInformationActionFn as any);
     const getDomicileInfoActionSpy = jest.spyOn(sidemenuActions, 'getDomicileInfo');
     getDomicileInfoActionSpy.mockImplementation(mockDomicileInfoActionFn as any);
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
@@ -129,9 +129,8 @@ describe('App', () => {
 
     it('Dispatches proper actions when session token is not empty', async () => {
       await act(async () => void render(<App />, initialState('mocked-session-token')));
-
-      expect(mockUseDispatchFn).toBeCalledTimes(2);
-      // expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
+      expect(mockUseDispatchFn).toBeCalledTimes(3);
+      expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
       expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
     });
   });

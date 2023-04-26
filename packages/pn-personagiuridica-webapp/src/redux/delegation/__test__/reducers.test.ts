@@ -4,16 +4,21 @@ import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
-import { Delegation } from '../../../models/Deleghe';
+import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
+import { Delegation, GetDelegatorsResponse } from '../../../models/Deleghe';
+import { GroupStatus } from '../../../models/groups';
 import { store } from '../../store';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import {
   acceptDelegation,
   getDelegatesByCompany,
   getDelegators,
+  getDelegatorsNames,
+  getGroups,
   rejectDelegation,
   revokeDelegation,
 } from '../actions';
@@ -22,8 +27,6 @@ import {
   closeRevocationModal,
   openAcceptModal,
   openRevocationModal,
-  setDelegatesSorting,
-  setDelegatorsSorting,
 } from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
 
@@ -53,18 +56,15 @@ describe('delegation redux state tests', () => {
   });
 
   it('should be able to fetch the delegators', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATE(),
-      200,
-      undefined,
-      arrayOfDelegators
-    );
-    const action = await store.dispatch(getDelegators());
-    const payload = action.payload as Array<Delegation>;
+    const mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+      resultsPage: arrayOfDelegators,
+      nextPagesKey: [],
+      moreResult: false,
+    });
+    const action = await store.dispatch(getDelegators({ size: 10 }));
+    const payload = action.payload as GetDelegatorsResponse;
     expect(action.type).toBe('getDelegators/fulfilled');
-    expect(payload).toEqual(arrayOfDelegators);
+    expect(payload.resultsPage).toEqual(arrayOfDelegators);
     mock.reset();
     mock.restore();
   });
@@ -153,17 +153,49 @@ describe('delegation redux state tests', () => {
     expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
   });
 
-  it('sets the delegates sorting by test in ascendant order', () => {
-    const action = store.dispatch(setDelegatesSorting({ orderBy: 'startDate', order: 'asc' }));
-    expect(action.type).toBe('delegationsSlice/setDelegatesSorting');
-    const sortDelegates = store.getState().delegationsState.sortDelegates;
-    expect(sortDelegates).toEqual({ orderBy: 'startDate', order: 'asc' });
+  it('should get groups for the current PG', async () => {
+    const mock = mockApi(apiClient, 'GET', GET_GROUPS(), 200, undefined, [
+      {
+        id: 'group-1',
+        name: 'Group 1',
+        description: 'This is a mocked group',
+        status: GroupStatus.ACTIVE,
+      },
+    ]);
+    const action = await store.dispatch(getGroups());
+    const payload = action.payload as any;
+    expect(action.type).toBe('getGroups/fulfilled');
+    expect(payload).toEqual([
+      {
+        id: 'group-1',
+        name: 'Group 1',
+        description: 'This is a mocked group',
+        status: GroupStatus.ACTIVE,
+      },
+    ]);
+    mock.reset();
+    mock.restore();
   });
 
-  it('sets the delegates sorting by test in descendant order', () => {
-    const action = store.dispatch(setDelegatorsSorting({ orderBy: 'endDate', order: 'desc' }));
-    expect(action.type).toBe('delegationsSlice/setDelegatorsSorting');
-    const sortDelegators = store.getState().delegationsState.sortDelegators;
-    expect(sortDelegators).toEqual({ orderBy: 'endDate', order: 'desc' });
+  it('should get delegators names', async () => {
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      DELEGATIONS_NAME_BY_DELEGATE(),
+      200,
+      undefined,
+      arrayOfDelegators
+    );
+    const action = await store.dispatch(getDelegatorsNames());
+    const payload = action.payload as any;
+    expect(action.type).toBe('getDelegatorsNames/fulfilled');
+    expect(payload).toEqual(
+      arrayOfDelegators.map((delegator) => ({
+        id: delegator.mandateId,
+        name: delegator.delegator.displayName,
+      }))
+    );
+    mock.reset();
+    mock.restore();
   });
 });

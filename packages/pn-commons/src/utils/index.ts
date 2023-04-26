@@ -1,16 +1,19 @@
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
-import { searchStringCleanDenomination, searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
+import {
+  searchStringCleanDenomination,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
+} from './searchString.utility';
 import { calculatePages } from './pagination.utility';
 
 import {
   getNotificationStatusInfos,
   getNotificationAllowedStatus,
   parseNotificationDetail,
-  filtersApplied,
   getLegalFactLabel,
   getNotificationTimelineStatusInfos,
 } from './notification.utility';
-import { getValidValue } from './genericFunctions.utility';
+import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { compileOneTrustPath } from './onetrust.utility';
 import {
   formatMonthString,
@@ -107,4 +110,5 @@ export {
   sanitizeString,
   compileOneTrustPath,
   buttonNakedInheritStyle,
+  sortArray,
 };

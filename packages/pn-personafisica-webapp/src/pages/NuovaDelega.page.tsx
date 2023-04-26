@@ -89,11 +89,12 @@ const NuovaDelega = () => {
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
+  const [senderInputValue, setSenderInputValue] = useState('');
+
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
-  const [senderInputValue, setSenderInputValue] = useState('');
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
   };
@@ -109,6 +110,7 @@ const NuovaDelega = () => {
     codiceFiscale: '',
     nome: '',
     cognome: '',
+    ragioneSociale: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     expirationDate: tomorrow,
     enti: [],
@@ -131,17 +133,17 @@ const NuovaDelega = () => {
           .string()
           .matches(dataRegex.pIvaAndFiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
       }),
-    nome: yup
-      .string()
-      .required(t('nuovaDelega.validation.name.required'))
-      .when('selectPersonaFisicaOrPersonaGiuridica', {
-        is: (val: string) => val === RecipientType.PF,
-        then: yup.string().required(t('nuovaDelega.validation.name.required')),
-        otherwise: yup.string().required(t('nuovaDelega.validation.businessName.required')),
-      }),
+    nome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
+      is: RecipientType.PF,
+      then: yup.string().required(t('nuovaDelega.validation.name.required')),
+    }),
     cognome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
       is: RecipientType.PF,
       then: yup.string().required(t('nuovaDelega.validation.surname.required')),
+    }),
+    ragioneSociale: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
+      is: RecipientType.PG,
+      then: yup.string().required(t('nuovaDelega.validation.businessName.required')),
     }),
     enti: yup.array().required(),
     expirationDate: yup
@@ -167,8 +169,10 @@ const NuovaDelega = () => {
   ) => {
     funField('nome', initialValues.nome, false);
     funField('cognome', initialValues.cognome, false);
+    funField('ragioneSociale', initialValues.ragioneSociale, false);
     funTouched('nome', false, false);
     funTouched('cognome', false, true);
+    funTouched('ragioneSociale', false, true);
   };
 
   useEffect(() => {
@@ -327,15 +331,17 @@ const NuovaDelega = () => {
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PG && (
                               <TextField
                                 sx={{ margin: 'auto' }}
-                                id="nome"
-                                value={values.nome.toString()}
+                                id="ragioneSociale"
+                                value={values.ragioneSociale.toString()}
                                 onChange={(event) => {
-                                  setFieldValue('nome', event.currentTarget.value);
+                                  setFieldValue('ragioneSociale', event.currentTarget.value);
                                 }}
                                 label={t('nuovaDelega.form.businessName')}
-                                name="nome"
-                                error={Boolean(getError(touched.nome, errors.nome))}
-                                helperText={getError(touched.nome, errors.nome)}
+                                name="ragioneSociale"
+                                error={Boolean(
+                                  getError(touched.ragioneSociale, errors.ragioneSociale)
+                                )}
+                                helperText={getError(touched.ragioneSociale, errors.ragioneSociale)}
                                 fullWidth
                               />
                             )}

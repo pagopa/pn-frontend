@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { configureStore, Store } from '@reduxjs/toolkit';
-import { render, RenderOptions } from '@testing-library/react';
+import { fireEvent, render, RenderOptions, waitFor, within, screen } from '@testing-library/react';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
 
 import { appReducers } from '../redux/store';
@@ -81,6 +81,45 @@ function mockApi(
       break;
   }
   return mock;
+}
+
+/**
+ * Utility function to test autocomplete component
+ * @param form html element representing the form
+ * @param elementName data-testid of the autocomplete element
+ * @param options dropdown options
+ * @param mustBeOpened flag to set if dropdown must be opened
+ * @param optToSelect option to select
+ * @returns the mock instance
+ */
+export async function testAutocomplete(
+  form: HTMLFormElement,
+  elementName: string,
+  options: Array<{ id: string; name: string }>,
+  mustBeOpened: boolean,
+  optToSelect?: number,
+  closeOnSelect?: boolean
+) {
+  const autocomplete = form.querySelector(`[data-testid="${elementName}"]`) as Element;
+  if (mustBeOpened) {
+    const button = autocomplete.querySelector('button[title="Open"]') as Element;
+    fireEvent.click(button);
+  }
+  const dropdown = await waitFor(() => screen.findByRole('presentation'));
+  expect(dropdown).toBeInTheDocument();
+  const dropdownOptionsList = await within(dropdown).findByRole('listbox');
+  expect(dropdownOptionsList).toBeInTheDocument();
+  const dropdownOptionsListItems = await within(dropdownOptionsList).findAllByRole('option');
+  expect(dropdownOptionsListItems).toHaveLength(options.length);
+  dropdownOptionsListItems.forEach((opt, index) => {
+    expect(opt).toHaveTextContent(options[index].name);
+  });
+  if (optToSelect !== undefined) {
+    fireEvent.click(dropdownOptionsListItems[optToSelect]);
+    if (closeOnSelect) {
+      await waitFor(() => expect(dropdown).not.toBeInTheDocument());
+    }
+  }
 }
 
 // re-exporting everything

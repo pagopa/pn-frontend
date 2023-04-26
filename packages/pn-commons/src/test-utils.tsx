@@ -4,35 +4,20 @@ import { BrowserRouter } from 'react-router-dom';
 import { render, RenderOptions, fireEvent, waitFor, within, screen } from '@testing-library/react';
 import { configureStore, Store } from '@reduxjs/toolkit';
 import { createTheme, ThemeProvider } from '@mui/material';
+import mediaQuery from 'css-mediaquery';
+
 import { appStateSlice } from './redux/slices/appStateSlice';
 
-// const AllTheProviders = ({children}: {children: ReactNode}) => {
-//   const theme = createTheme({});
-//   return (
-//     <BrowserRouter>
-//       <ThemeProvider theme={theme}>
-//         {children}
-//       </ThemeProvider>
-//     </BrowserRouter>
-//   )
-// }
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
   const theme = createTheme({});
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Provider store={testStore}>
-          {children}
-        </Provider>
+        <Provider store={testStore}>{children}</Provider>
       </ThemeProvider>
     </BrowserRouter>
   );
-}
-
-// const customRender = (
-//   ui: ReactElement,
-//   options?: Omit<RenderOptions, 'wrapper'>,
-// ) => render(ui, {wrapper: AllTheProviders, ...options})
+};
 
 const customRender = (
   ui: ReactElement,
@@ -42,7 +27,7 @@ const customRender = (
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
   const testStore = configureStore({
-    reducer: {appState: appStateSlice.reducer},
+    reducer: { appState: appStateSlice.reducer },
     preloadedState,
   });
   return render(ui, {
@@ -51,9 +36,10 @@ const customRender = (
   });
 };
 
-export * from '@testing-library/react'
-export {customRender as render}
+export * from '@testing-library/react';
+export { customRender as render };
 
+// utility function
 export async function testSelect(
   form: HTMLElement,
   elementName: string,
@@ -77,10 +63,16 @@ export async function testSelect(
     expect(selectInput).toHaveValue(options[optToSelect].value);
   });
 }
-
-export const mockDropdownItems = [
-  {key: 'mock-id-1', value: 'mock-value-1', label: 'mock-label-1'},
-  {key: 'mock-id-2', value: 'mock-value-2', label: 'mock-label-2'},
-  {key: 'mock-id-3', value: 'mock-value-3', label: 'mock-label-3'},
-  {key: 'mock-id-4', value: 'mock-value-4', label: 'mock-label-4'},
-]
+/** This function simulate media query and is useful to test differences between mobile and desktop view */
+export function createMatchMedia(width: number) {
+  return (query: string): MediaQueryList => ({
+    matches: mediaQuery.match(query, { width }) as boolean,
+    media: '',
+    addListener: () => {},
+    removeListener: () => {},
+    onchange: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  });
+}

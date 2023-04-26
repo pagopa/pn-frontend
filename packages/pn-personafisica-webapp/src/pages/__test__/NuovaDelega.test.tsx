@@ -67,8 +67,8 @@ describe('NuovaDelega page', () => {
   });
 
   beforeEach(() => {
-    createActionSpy = jest.spyOn(actions, 'createDelegation')
-    entitiesActionSpy = jest.spyOn(actions, 'getAllEntities')
+    createActionSpy = jest.spyOn(actions, 'createDelegation');
+    entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
     useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     createActionSpy.mockImplementation(mockCreateActionFn);
     entitiesActionSpy.mockImplementation(mockEntitiesActionFn);
@@ -165,6 +165,7 @@ describe('NuovaDelega page', () => {
         expirationDate: new Date('01/01/2122'),
         enti: [],
         verificationCode: 'verification code',
+        ragioneSociale: '',
       });
     });
   });

@@ -12,9 +12,14 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   async (data, { rejectWithValue }) => {
     const payload = {
       delegate: {
-        firstName: data.nome,
-        lastName: data.cognome,
+        displayName:
+          data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF
+            ? `${data.nome} ${data.cognome}`
+            : data.ragioneSociale,
+        firstName: data.nome || undefined,
+        lastName: data.cognome || undefined,
         fiscalCode: data.codiceFiscale,
+        companyName: data.ragioneSociale || undefined,
         person: data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
       },
       visibilityIds:
