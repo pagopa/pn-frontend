@@ -12,6 +12,7 @@ import {
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../delegations.routes';
@@ -134,6 +135,34 @@ describe('Delegations api tests', () => {
     );
     const res = await DelegationsApi.countDelegators();
     expect(res).toStrictEqual({ value: 5 });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('gets non empty delegators names', async () => {
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      DELEGATIONS_NAME_BY_DELEGATE(),
+      200,
+      undefined,
+      arrayOfDelegators
+    );
+    const res = await DelegationsApi.getDelegatorsNames();
+    expect(res).toStrictEqual(
+      arrayOfDelegators.map((delegator) => ({
+        id: delegator.mandateId,
+        name: delegator.delegator.displayName,
+      }))
+    );
+    mock.reset();
+    mock.restore();
+  });
+
+  it('gets empty delegators names', async () => {
+    const mock = mockApi(apiClient, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
+    const res = await DelegationsApi.getDelegatorsNames();
+    expect(res).toHaveLength(0);
     mock.reset();
     mock.restore();
   });

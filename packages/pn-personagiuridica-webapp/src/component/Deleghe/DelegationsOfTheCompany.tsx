@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -27,6 +27,7 @@ import {
   SmartTable,
   SmartTableData,
   useIsMobile,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -48,14 +49,21 @@ const DelegationsOfTheCompany = () => {
   const isMobile = useIsMobile();
   const [filters, setFilters] = useState<DelegatorsFormFilters>({ size: 10, page: 0 });
   const firstUpdate = useRef(true);
+  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
   const pagination = useAppSelector((state: RootState) => state.delegationsState.pagination);
+  const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
+  const names = useAppSelector((state: RootState) => state.delegationsState.delegatorsNames);
   const statuses = (Object.keys(DelegationStatus) as Array<keyof typeof DelegationStatus>).map(
     (key) => ({ id: DelegationStatus[key], label: t(`deleghe.table.${DelegationStatus[key]}`) })
   );
+  const [nameInputValue, setNameInputValue] = useState('');
+  const [groupInputValue, setGroupInputValue] = useState('');
+  const handleChangeInput = (newInputValue: string, action: Dispatch<SetStateAction<string>>) =>
+    handleSearchStringChangeInput(newInputValue, action);
 
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
@@ -125,9 +133,11 @@ const DelegationsOfTheCompany = () => {
     {
       id: 'groups',
       label: t('deleghe.table.groups'),
-      getValue(value: Array<string>) {
+      getValue(value: Array<{ id: string; name: string }>) {
         if (value) {
-          return <OrganizationsList organizations={value} visibleItems={3} />;
+          return (
+            <OrganizationsList organizations={value.map((group) => group.name)} visibleItems={3} />
+          );
         }
         return '';
       },
@@ -182,10 +192,10 @@ const DelegationsOfTheCompany = () => {
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
-  const getOptionLabel = (option: { name: string; id: number }) => option.name || '';
+  const getOptionLabel = (option: { name: string; id: string }) => option.name || '';
   const renderOption = (
     props: any,
-    option: { name: string; id: number },
+    option: { name: string; id: string },
     { selected }: AutocompleteRenderOptionState
   ) => (
     <li {...props}>
@@ -200,8 +210,8 @@ const DelegationsOfTheCompany = () => {
   );
 
   const initialValues: {
-    delegatorIds: Array<{ id: number; name: string }>;
-    groups: Array<{ id: number; name: string }>;
+    delegatorIds: Array<{ id: string; name: string }>;
+    groups: Array<{ id: string; name: string }>;
     status: Array<string>;
   } = {
     delegatorIds: [],
@@ -242,6 +252,14 @@ const DelegationsOfTheCompany = () => {
   const handleChangeTouched = async (e: any) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
+  };
+
+  const handleChangeTouchedAutocomplete = async (
+    id: string,
+    newValue: Array<{ id: string; name: string }>
+  ) => {
+    await formik.setFieldValue(id, newValue);
+    await formik.setFieldTouched(id, true, false);
   };
 
   const handleChangePage = (paginationData: PaginationData) => {
@@ -304,7 +322,7 @@ const DelegationsOfTheCompany = () => {
                   id="delegatorIds"
                   size="small"
                   fullWidth
-                  options={[]}
+                  options={names}
                   disableCloseOnSelect
                   multiple
                   noOptionsText={t('deleghe.table.no-name-found')}
@@ -328,6 +346,10 @@ const DelegationsOfTheCompany = () => {
                   )}
                   value={formik.values.delegatorIds}
                   onChange={handleChangeTouched}
+                  onInputChange={(_event, newInputValue) =>
+                    handleChangeInput(newInputValue, setNameInputValue)
+                  }
+                  inputValue={nameInputValue}
                 />
               </Grid>
               <Grid item xs={12} lg={3}>
@@ -335,7 +357,7 @@ const DelegationsOfTheCompany = () => {
                   id="groups"
                   size="small"
                   fullWidth
-                  options={[]}
+                  options={groups}
                   disableCloseOnSelect
                   multiple
                   noOptionsText={t('deleghe.table.no-group-found')}
@@ -358,7 +380,14 @@ const DelegationsOfTheCompany = () => {
                     />
                   )}
                   value={formik.values.groups}
-                  onChange={handleChangeTouched}
+                  onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
+                    handleChangeTouchedAutocomplete('groups', newValue)
+                  }
+                  data-testid="groups"
+                  inputValue={groupInputValue}
+                  onInputChange={(_event, newInputValue) =>
+                    handleChangeInput(newInputValue, setGroupInputValue)
+                  }
                 />
               </Grid>
               <Grid item xs={12} lg={3}>

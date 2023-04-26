@@ -132,7 +132,7 @@ const SmartTable = <ColumnId extends string>({
       return sortArray(sort.order, sort.orderBy, data);
     }
     return data;
-  }, [sort]);
+  }, [sort, data]);
 
   if (isMobile) {
     const { cardHeader, cardBody, cardActions, sortFields } = getCardElements(conf, actions);

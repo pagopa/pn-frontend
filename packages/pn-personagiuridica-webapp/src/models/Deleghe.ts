@@ -84,6 +84,7 @@ export interface IDelegation {
   verificationCode: string;
   datefrom: string;
   dateto: string;
+  groups?: Array<{ id: string; name: string }>;
 }
 
 export interface Delegator extends IDelegation {

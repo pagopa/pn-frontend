@@ -22,6 +22,7 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     ),
     status: delegation.status,
     verificationCode: delegation.verificationCode,
+    groups: delegation.groups || [],
   }));
 }
 

@@ -32,10 +32,6 @@ describe('Delegates Component - assuming delegates API works properly', () => {
           delegations: {
             delegates: [],
           },
-          sortDelegates: {
-            orderBy: '',
-            order: 'asc',
-          },
         },
       },
     });
@@ -53,10 +49,6 @@ describe('Delegates Component - assuming delegates API works properly', () => {
         delegationsState: {
           delegations: {
             delegates: arrayOfDelegates,
-          },
-          sortDelegates: {
-            orderBy: '',
-            order: 'desc',
           },
         },
       },

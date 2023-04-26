@@ -7,6 +7,7 @@ import {
   Delegate,
   Delegation,
   DelegationStatus,
+  Delegator,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
@@ -17,6 +18,7 @@ import {
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from './delegations.routes';
@@ -131,4 +133,22 @@ export const DelegationsApi = {
     apiClient
       .get<{ value: number }>(COUNT_DELEGATORS(DelegationStatus.PENDING))
       .then((response: AxiosResponse<{ value: number }>) => response.data),
+
+  /**
+   * Get all the delegators names for the authenticated user
+   * @param {GetDelegatorsFilters} params
+   * @return {Promise<GetDelegatorsResponse>}
+   */
+  getDelegatorsNames: (): Promise<Array<{ id: string; name: string }>> =>
+    apiClient
+      .get<Array<Delegator>>(DELEGATIONS_NAME_BY_DELEGATE())
+      .then((response: AxiosResponse<Array<Delegator>>) => {
+        if (response.data) {
+          return response.data.map((delegator) => ({
+            id: delegator.mandateId,
+            name: delegator.delegator?.displayName || '',
+          }));
+        }
+        return [];
+      }),
 };

@@ -5,7 +5,9 @@ import { apiClient } from '../../api/apiClients';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_NAME_BY_DELEGATE,
 } from '../../api/delegations/delegations.routes';
+import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
@@ -28,7 +30,13 @@ jest.mock('../../component/Deleghe/DelegationsOfTheCompany', () => ({
 describe('Deleghe page', () => {
   it('renders deleghe page - no delegates', () => {
     const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, []);
+    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+      resultsPage: [],
+      nextPagesKey: [],
+      moreResult: false,
+    });
+    mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
+    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
     const result = render(<Deleghe />);
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
@@ -42,7 +50,13 @@ describe('Deleghe page', () => {
 
   it('test changing tab', async () => {
     const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, []);
+    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+      resultsPage: [],
+      nextPagesKey: [],
+      moreResult: false,
+    });
+    mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
+    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
     const result = render(<Deleghe />);
     const tab2 = result.getByTestId('tab2');
     fireEvent.click(tab2);

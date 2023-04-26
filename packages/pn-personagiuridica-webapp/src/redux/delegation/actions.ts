@@ -1,16 +1,19 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import {
   AcceptDelegationResponse,
   Delegation,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
+import { Groups } from '../../models/groups';
 
 export enum DELEGATION_ACTIONS {
   GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
   GET_DELEGATORS = 'getDelegators',
+  GET_DELEGATORS_NAMES = 'getDelegatorsNames',
 }
 
 export const getDelegatesByCompany = createAsyncThunk<Array<Delegation>>(
@@ -44,6 +47,16 @@ export const acceptDelegation = createAsyncThunk<
     };
     return await DelegationsApi.acceptDelegation(id, data);
   })
+);
+
+export const getGroups = createAsyncThunk<Array<Groups>>(
+  'getGroups',
+  performThunkAction(() => ExternalRegistriesAPI.getGroups())
+);
+
+export const getDelegatorsNames = createAsyncThunk<Array<{ id: string; name: string }>>(
+  DELEGATION_ACTIONS.GET_DELEGATORS_NAMES,
+  performThunkAction(() => DelegationsApi.getDelegatorsNames())
 );
 
 export const openRevocationModal =

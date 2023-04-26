@@ -5,6 +5,7 @@ import {
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../delegations.routes';
@@ -43,5 +44,10 @@ describe('Delegations routes', () => {
   it('should compile COUNT_DELEGATORS', () => {
     const route = COUNT_DELEGATORS(DelegationStatus.ACTIVE);
     expect(route).toEqual(`/mandate/api/v1/count-by-delegate?status=active`);
+  });
+
+  it('should compile DELEGATIONS_NAME_BY_DELEGATE', () => {
+    const route = DELEGATIONS_NAME_BY_DELEGATE();
+    expect(route).toEqual(`/mandate/api/v1/mandates-by-delegate`);
   });
 });

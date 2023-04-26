@@ -1,15 +1,16 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 
 import { Delegation, DelegationStatus } from '../../models/Deleghe';
+import { Groups } from '../../models/groups';
 import {
   getDelegatesByCompany,
   getDelegators,
   acceptDelegation,
   rejectDelegation,
   revokeDelegation,
+  getGroups,
+  getDelegatorsNames,
 } from './actions';
-
-import { arrayOfDelegators } from './__test__/test.utils';
 
 const initialState = {
   delegations: {
@@ -20,6 +21,8 @@ const initialState = {
     nextPagesKey: [] as Array<string>,
     moreResult: false,
   },
+  groups: [] as Array<Groups>,
+  delegatorsNames: [] as Array<{ id: string; name: string }>,
   modalState: {
     open: false,
     id: '',
@@ -67,10 +70,6 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = action.payload.resultsPage;
       state.pagination.nextPagesKey = action.payload.nextPagesKey;
       state.pagination.moreResult = action.payload.moreResult;
-
-      state.delegations.delegators = arrayOfDelegators;
-      state.pagination.moreResult = false;
-      state.pagination.nextPagesKey = ['a', 'b', 'c'];
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
@@ -95,6 +94,12 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = state.delegations.delegators.filter(
         (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
+    });
+    builder.addCase(getGroups.fulfilled, (state, action) => {
+      state.groups = action.payload;
+    });
+    builder.addCase(getDelegatorsNames.fulfilled, (state, action) => {
+      state.delegatorsNames = action.payload;
     });
     builder.addMatcher(isAnyOf(rejectDelegation.rejected, revokeDelegation.rejected), (state) => {
       state.modalState.open = false;

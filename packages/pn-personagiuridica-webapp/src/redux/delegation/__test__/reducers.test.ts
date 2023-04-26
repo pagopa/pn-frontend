@@ -4,16 +4,21 @@ import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
-import { Delegation, GetDelegatorsRequest, GetDelegatorsResponse } from '../../../models/Deleghe';
+import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
+import { Delegation, GetDelegatorsResponse } from '../../../models/Deleghe';
+import { GroupStatus } from '../../../models/groups';
 import { store } from '../../store';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import {
   acceptDelegation,
   getDelegatesByCompany,
   getDelegators,
+  getDelegatorsNames,
+  getGroups,
   rejectDelegation,
   revokeDelegation,
 } from '../actions';
@@ -146,5 +151,51 @@ describe('delegation redux state tests', () => {
     expect(closeAction.type).toBe('delegationsSlice/closeAcceptModal');
     const closeModalState = store.getState().delegationsState.acceptModalState;
     expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
+  });
+
+  it('should get groups for the current PG', async () => {
+    const mock = mockApi(apiClient, 'GET', GET_GROUPS(), 200, undefined, [
+      {
+        id: 'group-1',
+        name: 'Group 1',
+        description: 'This is a mocked group',
+        status: GroupStatus.ACTIVE,
+      },
+    ]);
+    const action = await store.dispatch(getGroups());
+    const payload = action.payload as any;
+    expect(action.type).toBe('getGroups/fulfilled');
+    expect(payload).toEqual([
+      {
+        id: 'group-1',
+        name: 'Group 1',
+        description: 'This is a mocked group',
+        status: GroupStatus.ACTIVE,
+      },
+    ]);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('should get delegators names', async () => {
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      DELEGATIONS_NAME_BY_DELEGATE(),
+      200,
+      undefined,
+      arrayOfDelegators
+    );
+    const action = await store.dispatch(getDelegatorsNames());
+    const payload = action.payload as any;
+    expect(action.type).toBe('getDelegatorsNames/fulfilled');
+    expect(payload).toEqual(
+      arrayOfDelegators.map((delegator) => ({
+        id: delegator.mandateId,
+        name: delegator.delegator.displayName,
+      }))
+    );
+    mock.reset();
+    mock.restore();
   });
 });

@@ -115,32 +115,6 @@ export const arrayOfDelegators = [
   },
 ];
 
-export const mockDelegationsState = {
-  delegations: {
-    delegators: arrayOfDelegators,
-    delegates: arrayOfDelegates,
-  },
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
-  acceptModalState: {
-    open: false,
-    id: '',
-    name: '',
-    error: false,
-  },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc',
-  },
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc',
-  },
-};
-
 export const initialState = {
   delegations: {
     delegators: [] as Array<Delegation>,
@@ -161,4 +135,6 @@ export const initialState = {
     moreResult: false,
     nextPagesKey: [],
   },
+  groups: [],
+  delegatorsNames: [],
 };

@@ -19,7 +19,7 @@ const API_DELEGATIONS_COUNT_BY_DELEGATE = 'count-by-delegate';
 // Parameters
 const API_DELEGATIONS_ID_PARAMETER = 'id';
 const API_DELEGATIONS_SIZE_PARAMETER = 'size';
-const API_DELEGATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPagesKey';
+const API_DELEGATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPageKey';
 const API_DELEGATIONS_STATUS_PARAMETER = 'status';
 
 // Paths
@@ -95,5 +95,12 @@ export function COUNT_DELEGATORS(status: DelegationStatus) {
     query: {
       [API_DELEGATIONS_STATUS_PARAMETER]: status,
     },
+  });
+}
+
+export function DELEGATIONS_NAME_BY_DELEGATE() {
+  return compileRoute({
+    prefix: API_DELEGATIONS_PREFIX,
+    path: API_DELEGATIONS_MANDATES_BY_DELEGATE_PATH,
   });
 }
