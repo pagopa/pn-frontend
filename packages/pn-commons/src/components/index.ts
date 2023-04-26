@@ -51,6 +51,7 @@ import AppNotAccessible from './AppNotAccessible';
 import CustomTagGroup from './CustomTagGroup/CustomTagGroup';
 import TabPanel from './TabPanel';
 import SmartTable from './Data/SmartTable';
+import SmartFilter from './Data/SmartFilter';
 
 export {
   LoadingOverlay,
@@ -104,6 +105,7 @@ export {
   AppNotAccessible,
   CustomTagGroup,
   SmartTable,
+  SmartFilter,
 };
 
 export type { DowntimeLogColumn };

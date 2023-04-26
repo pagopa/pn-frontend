@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, fireEvent, waitFor, mockApi, screen, within } from '../../__test__/test-utils';
+import { render, fireEvent, waitFor, mockApi, testAutocomplete } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
@@ -39,33 +39,6 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
   await waitFor(() => {
     expect(input).toHaveValue(value);
   });
-}
-
-async function testAutocomplete(
-  form: HTMLFormElement,
-  elementName: string,
-  options: Array<{ id: string; name: string }>,
-  mustBeOpened: boolean,
-  optToSelect?: number
-) {
-  const autocomplete = form.querySelector(`[data-testid="${elementName}"]`) as Element;
-  if (mustBeOpened) {
-    const button = autocomplete.querySelector('button[title="Open"]') as Element;
-    fireEvent.click(button);
-  }
-  const dropdown = await waitFor(() => screen.findByRole('presentation'));
-  expect(dropdown).toBeInTheDocument();
-  const dropdownOptionsList = await within(dropdown).findByRole('listbox');
-  expect(dropdownOptionsList).toBeInTheDocument();
-  const dropdownOptionsListItems = await within(dropdownOptionsList).findAllByRole('option');
-  expect(dropdownOptionsListItems).toHaveLength(options.length);
-  dropdownOptionsListItems.forEach((opt, index) => {
-    expect(opt).toHaveTextContent(options[index].name);
-  });
-  if (optToSelect !== undefined) {
-    fireEvent.click(dropdownOptionsListItems[optToSelect]);
-    await waitFor(() => expect(dropdown).not.toBeInTheDocument());
-  }
 }
 
 describe('NuovaDelega page', () => {
@@ -285,8 +258,8 @@ describe('NuovaDelega page', () => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
     });
-    await testAutocomplete(form, 'enti-select', entitiesList, true, 0);
-    await testAutocomplete(form, 'enti-select', entitiesList, true, 2);
+    await testAutocomplete(form, 'enti-select', entitiesList, true, 0, true);
+    await testAutocomplete(form, 'enti-select', entitiesList, true, 2, true);
     const button = result.queryByTestId('createButton') as Element;
     fireEvent.click(button);
     await waitFor(() => {

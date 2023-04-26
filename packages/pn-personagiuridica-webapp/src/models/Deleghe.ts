@@ -8,6 +8,7 @@ export type DelegheColumn =
   | 'startDate'
   | 'endDate'
   | 'visibilityIds'
+  | 'groups'
   | 'status'
   | 'id'
   | '';
@@ -65,12 +66,17 @@ export type UserAndDelegations = User & DelegationsList;
 export interface DelegationsList {
   delegators: Array<Delegation>;
   delegations: Array<Delegation>;
-  isCompany: boolean;
+}
+
+export enum DelegationStatus {
+  ACTIVE = 'active',
+  PENDING = 'pending',
+  REJECTED = 'rejected',
 }
 
 export interface IDelegation {
   mandateId: string;
-  status: 'active' | 'pending';
+  status: DelegationStatus;
   visibilityIds: Array<{
     name: string;
     uniqueIdentifier: string;
@@ -78,6 +84,7 @@ export interface IDelegation {
   verificationCode: string;
   datefrom: string;
   dateto: string;
+  groups?: Array<{ id: string; name: string }>;
 }
 
 export interface Delegator extends IDelegation {
@@ -100,8 +107,23 @@ export interface AcceptDelegationResponse {
   id: string;
 }
 
-export interface NewDelegationSlice {
-  created: boolean;
-  error: boolean;
-  entities: Array<any>;
+export interface GetDelegatorsParams {
+  size: number;
+  nextPageKey?: string;
 }
+
+export interface GetDelegatorsRequest {
+  delegatorIds?: Array<string>;
+  groups?: Array<string>;
+  status?: Array<DelegationStatus>;
+}
+
+export interface GetDelegatorsResponse {
+  resultsPage: Array<Delegator>;
+  moreResult: boolean;
+  nextPagesKey: Array<string>;
+}
+
+export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
+
+export type DelegatorsFormFilters = Exclude<GetDelegatorsFilters, 'nextPageKey'> & { page: number };

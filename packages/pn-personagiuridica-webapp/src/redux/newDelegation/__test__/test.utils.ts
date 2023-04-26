@@ -2,7 +2,6 @@ import { RecipientType } from '@pagopa-pn/pn-commons';
 
 export const initialState = {
   created: false,
-  error: false,
   entities: [],
 };
 

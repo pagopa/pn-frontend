@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { SxProps } from '@mui/material';
+import { GridProps } from '@mui/material';
+
 import { Align, Column, Item } from './ItemsTable';
 
 /**
@@ -19,11 +20,15 @@ interface TableConfiguration<ColumnId> {
 /**
  * @typedef CardConfiguration configuration for the card view
  * @prop {('header' | 'body')} position position of the field into the card
- * @prop {SxProps} gridProps style properties to override custom ones
+ * @prop {GridProps} gridProps style properties to override custom ones
+ * @prop {boolean} notWrappedInTypography element will be not enclosed in a Typrography element
+ * @prop {boolean} hideIfEmpty element will be not shown if empty
  */
 interface CardConfiguration {
   position: 'header' | 'body';
-  gridProps?: SxProps;
+  gridProps?: GridProps;
+  notWrappedInTypography?: boolean;
+  hideIfEmpty?: boolean;
 }
 
 /**
