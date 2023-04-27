@@ -47,12 +47,14 @@ const CustomTagGroup = ({
               onOpen={onOpen}
               tooltipContent={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
             >
-              <TagIndicator
-                boxProps={{ role: 'button' }}
-                arrayChildren={arrayChildren}
-                visibleItems={visibleItems as number}
-                dataTestId="custom-tooltip-indicator"
-              />
+              <div>
+                <TagIndicator
+                  boxProps={{ role: 'button' }}
+                  arrayChildren={arrayChildren}
+                  visibleItems={visibleItems as number}
+                  dataTestId="custom-tooltip-indicator"
+                />
+              </div>
             </CustomTooltip>
           )}
           {disableTooltip && (

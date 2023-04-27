@@ -51,11 +51,8 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
     <Box sx={{ my: 3 }}>
       {groups &&
         groups.map((group, i) => (
-          <>
-            <Box
-              key={group.name}
-              sx={{ width: '100%', display: 'flex', alignItems: 'center', p: 3 }}
-            >
+          <Fragment key={group.name}>
+            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', p: 3 }}>
               <Box sx={{ width: '90%' }}>
                 <Typography variant="body2">
                   <strong>{group.name}</strong>
@@ -67,7 +64,7 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
               </Box>
             </Box>
             {i < groups.length - 1 && <Divider />}
-          </>
+          </Fragment>
         ))}
     </Box>
   );

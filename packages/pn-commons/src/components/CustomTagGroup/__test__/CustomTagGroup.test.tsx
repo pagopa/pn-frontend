@@ -30,7 +30,7 @@ describe('CustomTagGroup component', () => {
     expect(result.container).not.toHaveTextContent(/mock-tag-4/);
     expect(result.container).toHaveTextContent(/\+1/);
     const tooltip = screen.getByTestId('custom-tooltip-indicator');
-    await waitFor(async () => fireEvent.mouseOver(tooltip));
+    fireEvent.mouseOver(tooltip);
     await waitFor(async () => expect(screen.getAllByText(/mock-tag-4/)[0]).toBeInTheDocument());
     expect(mockCallbackFn).toBeCalledTimes(1);
   });
