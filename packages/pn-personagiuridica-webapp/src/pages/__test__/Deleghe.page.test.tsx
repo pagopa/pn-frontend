@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { render, fireEvent, mockApi } from '../../__test__/test-utils';
-import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
 import { apiClient } from '../../api/apiClients';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
   DELEGATIONS_NAME_BY_DELEGATE,
 } from '../../api/delegations/delegations.routes';
+import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
