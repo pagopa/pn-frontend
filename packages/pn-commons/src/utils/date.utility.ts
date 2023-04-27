@@ -11,7 +11,9 @@ export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120))
 today.setHours(0, 0, 0, 0);
 tenYearsAgo.setHours(0, 0, 0, 0);
 
-export function dateIsDefined(date: Date | null | undefined) { return date && !isNaN(date.getTime()); }
+export function dateIsDefined(date: Date | null | undefined) {
+  return date && !isNaN(date.getTime());
+}
 
 export function formatMonthString(dateString: string): string {
   const date = new Date(dateString);
@@ -85,4 +87,12 @@ export function formatToSlicedISOString(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
   return `${date.getFullYear()}-${month}-${day}`;
+}
+
+export function formatFromString(date: string): Date | null {
+  const dateParsed = dateFns.parse(date, DATE_FORMAT);
+  if (dateFns.isValid(dateParsed)) {
+    return dateParsed;
+  }
+  return null;
 }

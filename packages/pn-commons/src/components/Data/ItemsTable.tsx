@@ -36,7 +36,7 @@ function ItemsTable<ColumnId extends string>({
   onChangeSorting,
   ariaTitle,
 }: Props<ColumnId>) {
-  const createSortHandler = (property: ColumnId) => () => {
+  const sortHandler = (property: ColumnId) => () => {
     if (sort && onChangeSorting) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
       onChangeSorting({ order: isAsc ? 'desc' : 'asc', orderBy: property });
@@ -92,7 +92,7 @@ function ItemsTable<ColumnId extends string>({
                     <TableSortLabel
                       active={sort.orderBy === column.id}
                       direction={sort.orderBy === column.id ? sort.order : 'asc'}
-                      onClick={createSortHandler(column.id)}
+                      onClick={sortHandler(column.id)}
                     >
                       {column.label}
                       {sort.orderBy === column.id && (

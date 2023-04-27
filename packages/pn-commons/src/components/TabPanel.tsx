@@ -6,14 +6,14 @@ interface TabPanelProps {
   value: number;
 }
 const TabPanel: React.FC<TabPanelProps> = ({ index, value, children }) => (
-  <div
+  <Box
     role="tabpanel"
     hidden={value !== index}
     id={`simple-tabpanel-${index}`}
     aria-labelledby={`simple-tab-${index}`}
   >
-    {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-  </div>
+    {value === index && <Box sx={{ px: 3, py: 4 }}>{children}</Box>}
+  </Box>
 );
 
 export default TabPanel;

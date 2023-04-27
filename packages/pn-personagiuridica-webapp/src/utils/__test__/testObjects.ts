@@ -44,6 +44,7 @@ export const testItem: Array<Item> = [
     status: 'pending',
     visibilityIds: [],
     verificationCode: '28633',
+    groups: [],
   },
   {
     id: '036421d2-0978-4bab-a94a-d508d303cc62',
@@ -53,6 +54,7 @@ export const testItem: Array<Item> = [
     status: 'pending',
     visibilityIds: [],
     verificationCode: '31429',
+    groups: [],
   },
 ];
 

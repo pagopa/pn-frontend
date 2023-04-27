@@ -37,6 +37,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState, store } from './redux/store';
 import {
   getDomicileInfo,
+  getSidemenuInformation,
   // getSidemenuInformation
 } from './redux/sidemenu/actions';
 import { PNRole } from './redux/auth/types';
@@ -47,7 +48,7 @@ import { PGAppErrorFactory } from './utils/AppError/PGAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { getConfiguration } from "./services/configuration.service";
+import { getConfiguration } from './services/configuration.service';
 
 const App = () => {
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } = getConfiguration();
@@ -58,6 +59,7 @@ const App = () => {
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
+  const { pendingDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -116,8 +118,8 @@ const App = () => {
     if (sessionToken !== '') {
       if (userHasAdminPermissions) {
         void dispatch(getDomicileInfo());
+        void dispatch(getSidemenuInformation());
       }
-      // void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
@@ -161,6 +163,7 @@ const App = () => {
       label: t('menu.deleghe'),
       icon: () => <AltRouteIcon />,
       route: routes.DELEGHE,
+      rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
     /* eslint-disable-next-line functional/immutable-data */
     menuItems.splice(2, 0, {
