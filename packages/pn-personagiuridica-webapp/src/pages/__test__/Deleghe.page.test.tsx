@@ -18,11 +18,10 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-/* jest.mock('../../component/Deleghe/DelegatesByCompany', () => ({
+jest.mock('../../component/Deleghe/DelegatesByCompany', () => ({
   __esModule: true,
   default: () => <div>DelegatesByCompany</div>,
 }));
- */
 
 jest.mock('../../component/Deleghe/DelegationsOfTheCompany', () => ({
   __esModule: true,

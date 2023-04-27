@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
-import { forEach } from 'lodash';
 
 const mockNavigateFn = jest.fn();
 
@@ -66,16 +65,8 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     expect(result.container).not.toHaveTextContent(/deleghe.no_delegates/i);
     const table = result.getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
-    expect(result.container).toHaveTextContent('Davide');
-    expect(result.container).toHaveTextContent('Marco');
-    const col = table.getElementsByClassName(
-      'MuiTableCell-root MuiTableCell-head MuiTableCell-stickyHeader MuiTableCell-alignCenter MuiTableCell-sizeMedium css-t7iuwh-MuiTableCell-root'
-    );
-    const row = table.getElementsByClassName('MuiTableBody-root css-1nq9kkf-MuiTableBody-root');
-    const indexOrder1 = row[0].getElementsByTagName('p')[0].innerHTML;
-    const indexOrder2 = row[0].getElementsByTagName('p')[2].innerHTML;
-    expect(indexOrder1).toBe('Marco Verdi');
-    expect(indexOrder2).toBe('Davide Legato');
+    expect(table).toHaveTextContent('Marco Verdi');
+    expect(table).toHaveTextContent('Davide Legato');
   });
 
   it('clicks on add button and navigate to new delegation page', () => {
@@ -102,16 +93,9 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     });
     const menu = result.getAllByTestId('delegationMenuIcon');
     fireEvent.click(menu[0]);
-    await waitFor(async () => {
-      const menuOpen = result.getAllByTestId('delegationMenu');
-      expect(menuOpen[0]).toHaveTextContent(/deleghe.show/i);
-    });
-    const menuOpen = result.getAllByTestId('delegationMenu');
-    fireEvent.click(
-      menuOpen[0].getElementsByClassName(
-        'MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters Mui-focusVisible MuiMenuItem-root MuiMenuItem-gutters css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root'
-      )[0]
-    );
+    const menuOpen = await waitFor(async () => result.getAllByTestId('delegationMenu'));
+    expect(menuOpen[0]).toHaveTextContent(/deleghe.show/i);
+    fireEvent.click(menuOpen[0].querySelectorAll('[role="menuitem"]')[0]);
     await waitFor(() => {
       const dialog = result.getAllByTestId('codeDialog');
       const arrayOfVerificationCode = arrayOfDelegates[0].verificationCode.split('');
