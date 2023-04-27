@@ -1,5 +1,6 @@
-import { fireEvent, waitFor, screen } from '@testing-library/react';
-import { render } from '../../../__test__/test-utils';
+import React from 'react';
+
+import { render, fireEvent, waitFor, screen } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({
@@ -11,7 +12,7 @@ jest.mock('react-i18next', () => ({
 
 describe('DelegationElements', () => {
   it('renders the Menu closed', () => {
-    const result = render(<Menu />);
+    const result = render(<Menu menuType="delegates" id="111" />);
     const menuIcon = result.queryByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
 
@@ -20,7 +21,7 @@ describe('DelegationElements', () => {
   });
 
   it('opens the delegate Menu', () => {
-    const result = render(<Menu menuType={'delegates'} id={'111'} />);
+    const result = render(<Menu menuType="delegates" id="111" />);
     const menuIcon = result.getByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
 
@@ -34,7 +35,7 @@ describe('DelegationElements', () => {
   });
 
   it('opens the delegator Menu', () => {
-    const result = render(<Menu menuType={'delegators'} id={'111'} />);
+    const result = render(<Menu menuType="delegators" id="111" />);
     const menuIcon = result.getByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
 
@@ -75,7 +76,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton', () => {
-    const result = render(<AcceptButton id={'1'} name={'test'} />);
+    const result = render(<AcceptButton id="1" name="test" />);
 
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
   });

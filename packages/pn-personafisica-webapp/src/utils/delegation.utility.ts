@@ -57,7 +57,7 @@ export function sortDelegations(order: string, sortAttr: string, values: Array<D
 
 function compareOrderAttribute(person: Person, orderAttr: string) {
   return orderAttr === 'name'
-    ? person.firstName.toLowerCase()
+    ? person.displayName.toLowerCase()
     : person[orderAttr as keyof Person] || '';
 }
 

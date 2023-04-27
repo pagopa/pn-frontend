@@ -11,6 +11,7 @@ import {
   formatToSlicedISOString,
   formatDateTime,
   dateIsDefined,
+  formatFromString,
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
@@ -109,5 +110,14 @@ describe('Date utility', () => {
     const isTodayVerify = isToday(date);
     const isTodayVerifySecond = isToday(date);
     expect(isTodayVerify).toBe(isTodayVerifySecond);
+  });
+
+  it('return a Date istance from string', () => {
+    const invalidDateString = 'abc';
+    const invalidDate = formatFromString(invalidDateString);
+    expect(invalidDate).toBeNull();
+    const dateString = '23/07/2023';
+    const date = formatFromString(dateString);
+    expect(date).toBeInstanceOf(Date);
   });
 });
