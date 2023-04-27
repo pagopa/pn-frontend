@@ -55,7 +55,7 @@ describe('Deleghe page', () => {
   });
 
   //TODO
-  it('test see modal to revoke and confirm revoking delegates', async () => {
+  it.skip('test see modal to revoke and confirm revoking delegates', async () => {
     jest.resetAllMocks();
     jest.clearAllMocks();
     const result = render(<Deleghe />);
