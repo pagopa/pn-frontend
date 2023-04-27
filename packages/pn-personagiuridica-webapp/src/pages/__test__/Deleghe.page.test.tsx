@@ -64,4 +64,7 @@ describe('Deleghe page', () => {
     mock.reset();
     mock.restore();
   });
+
+  //TODO
+  it.skip('test see modal to revoke and confirm revoking delegates', async () => {});
 });
