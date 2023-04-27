@@ -4,7 +4,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { resetState } from '../redux/delegation/reducers';
+import { closeRevocationModal, resetState } from '../redux/delegation/reducers';
 import {
   getDelegators,
   getGroups,
@@ -12,7 +12,6 @@ import {
   getDelegatorsNames,
   revokeDelegation,
   rejectDelegation,
-  closeRevocationModal,
 } from '../redux/delegation/actions';
 import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
