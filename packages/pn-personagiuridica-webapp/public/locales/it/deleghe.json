@@ -26,6 +26,7 @@
     "error_button": "Ricarica la pagina",
     "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
     "no_delegators": "Non c'è nessuna delega a carico di {{recipient}}.",
+    "no_delegators_after_filters": "I filtri che hai aggiunto non hanno dato nessun risultato.",
     "show_code_title": "Codice di verifica per la delega a {{name}}",
     "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",

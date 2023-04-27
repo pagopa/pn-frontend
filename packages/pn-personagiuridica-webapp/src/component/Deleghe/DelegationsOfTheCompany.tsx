@@ -1,5 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -296,7 +297,7 @@ const DelegationsOfTheCompany = () => {
         reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
-        {rows.length > 0 ? (
+        {rows.length > 0 || !_.isEqual({ size: 10 }, filters) ? (
           <SmartTable
             conf={smartCfg}
             data={rows}
@@ -306,6 +307,14 @@ const DelegationsOfTheCompany = () => {
               totalElements,
               numOfDisplayedPages: Math.min(pagination.nextPagesKey.length + 1, 3),
               onChangePage: handleChangePage,
+            }}
+            emptyStateProps={{
+              sentimentIcon: KnownSentiment.DISSATISFIED,
+              emptyMessage: t('deleghe.no_delegators_after_filters', {
+                recipient: organization.name,
+              }),
+              emptyActionLabel: t('button.annulla filtro', { ns: 'common' }),
+              emptyActionCallback: clearFiltersHandler,
             }}
           >
             <SmartFilter
@@ -345,7 +354,9 @@ const DelegationsOfTheCompany = () => {
                     />
                   )}
                   value={formik.values.delegatorIds}
-                  onChange={handleChangeTouched}
+                  onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
+                    handleChangeTouchedAutocomplete('delegatorIds', newValue)
+                  }
                   onInputChange={(_event, newInputValue) =>
                     handleChangeInput(newInputValue, setNameInputValue)
                   }
