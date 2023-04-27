@@ -1,7 +1,8 @@
 import { Tag } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import React from 'react';
 import CustomTooltip from '../CustomTooltip';
+
 interface CustomTagGroupProps {
   /** how many items will be visible */
   visibleItems?: number;
@@ -11,6 +12,18 @@ interface CustomTagGroupProps {
   onOpen?: () => void;
   children: JSX.Element | Array<JSX.Element>;
 }
+
+const TagIndicator: React.FC<{
+  boxProps?: BoxProps;
+  arrayChildren: Array<JSX.Element>;
+  visibleItems: number;
+  dataTestId: string;
+}> = ({ boxProps, arrayChildren, visibleItems, dataTestId }) => (
+  <Box {...boxProps} sx={{ cursor: 'pointer', display: 'inline-block' }} data-testid={dataTestId}>
+    <Tag value={`+${arrayChildren.length - visibleItems}`} />
+  </Box>
+);
+
 const CustomTagGroup = ({
   visibleItems,
   disableTooltip = false,
@@ -22,7 +35,7 @@ const CustomTagGroup = ({
     : [children as JSX.Element];
   const isOverflow = visibleItems ? arrayChildren.length > visibleItems : false;
   const maxCount = isOverflow ? visibleItems : arrayChildren.length;
-  const tagIndicator = <Tag value={`+${arrayChildren.length - (visibleItems as number)}`} />;
+
   return (
     <>
       {arrayChildren.slice(0, maxCount).map((c) => c)}
@@ -34,22 +47,20 @@ const CustomTagGroup = ({
               onOpen={onOpen}
               tooltipContent={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
             >
-              <Box
-                sx={{ cursor: 'pointer', display: 'inline-block' }}
-                data-testid="custom-tooltip-indicator"
-                role="button"
-              >
-                {tagIndicator}
-              </Box>
+              <TagIndicator
+                boxProps={{ role: 'button' }}
+                arrayChildren={arrayChildren}
+                visibleItems={visibleItems as number}
+                dataTestId="custom-tooltip-indicator"
+              />
             </CustomTooltip>
           )}
           {disableTooltip && (
-            <Box
-              sx={{ cursor: 'pointer', display: 'inline-block' }}
-              data-testid="remaining-tag-indicator"
-            >
-              {tagIndicator}
-            </Box>
+            <TagIndicator
+              dataTestId="remaining-tag-indicator"
+              arrayChildren={arrayChildren}
+              visibleItems={visibleItems as number}
+            />
           )}
         </Box>
       )}
