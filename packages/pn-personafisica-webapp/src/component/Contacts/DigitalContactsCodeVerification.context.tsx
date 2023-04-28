@@ -311,8 +311,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           cancelCallback={() => handleClose('cancelled')}
           confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
           hasError={codeNotValid}
-          // errorTitle={t(`${modalProps.labelRoot}.wrong-code`, { ns: 'recapiti' })}
-          // errorMessage={t(`${modalProps.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
           errorTitle={errorMessage?.title}
           errorMessage={errorMessage?.content}
         />
