@@ -15,7 +15,7 @@ export const ContactsApi = {
    */
   getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-      legal: response.data.legal ? response.data.legal : [],
+      legal: response.data.legal ? response.data.legal.filter(address => address.codeValid !== false) : [],
       courtesy: response.data.courtesy ? response.data.courtesy : [],
     })),
 

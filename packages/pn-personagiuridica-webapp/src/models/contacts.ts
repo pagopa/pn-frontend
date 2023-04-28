@@ -22,7 +22,7 @@ export interface DigitalAddress {
   value: string;
   requestId?: string;
   pecValid?: boolean;
-  codeRequired?: boolean;
+  codeValid?: boolean;
 }
 
 export interface DigitalAddresses {
