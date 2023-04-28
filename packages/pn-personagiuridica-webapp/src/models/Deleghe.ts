@@ -105,6 +105,7 @@ export interface RevocationModalProps {
 
 export interface AcceptDelegationResponse {
   id: string;
+  groups: Array<{ id: string; name: string }>;
 }
 
 export interface GetDelegatorsParams {

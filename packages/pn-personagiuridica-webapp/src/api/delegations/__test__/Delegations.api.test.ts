@@ -102,9 +102,12 @@ describe('Delegations api tests', () => {
   });
 
   it('accept a delegation', async () => {
-    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('9'), 200, undefined, {});
-    const res = await DelegationsApi.acceptDelegation('9', { verificationCode: '12345' });
-    expect(res).toStrictEqual({ id: '9' });
+    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('9'), 204, undefined, {});
+    const res = await DelegationsApi.acceptDelegation('9', {
+      verificationCode: '12345',
+      groups: [{ id: 'group-1', name: 'Group 1' }],
+    });
+    expect(res).toStrictEqual({ id: '9', groups: [{ id: 'group-1', name: 'Group 1' }] });
     mock.reset();
     mock.restore();
   });

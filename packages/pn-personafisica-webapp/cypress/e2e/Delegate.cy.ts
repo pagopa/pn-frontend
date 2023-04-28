@@ -105,7 +105,7 @@ describe('Delegation', () => {
       verificationCode
         .split('')
         .forEach((code, i) =>
-          cy.get(`:nth-child(${i + 1}) > .MuiInputBase-root > #outlined-basic`).type(code)
+          cy.get(`:nth-child(${i + 1}) > .MuiInputBase-root > #code-input-${i}`).type(code)
         );
       cy.intercept('PATCH', `${ACCEPT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
         statusCode: 204,

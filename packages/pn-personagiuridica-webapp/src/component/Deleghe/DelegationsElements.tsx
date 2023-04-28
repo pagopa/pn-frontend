@@ -7,9 +7,12 @@ import { CustomTagGroup } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
-import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
+import { openRevocationModal } from '../../redux/delegation/reducers';
+import { acceptDelegation } from '../../redux/delegation/actions';
+import { getSidemenuInformation } from '../../redux/sidemenu/actions';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import AcceptDelegationModal from './AcceptDelegationModal';
 
 export const Menu: React.FC<{
   menuType: 'delegates' | 'delegators';
@@ -113,16 +116,42 @@ export const OrganizationsList: React.FC<{
   );
 };
 
-export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
+export const AcceptButton: React.FC<{ id: string; name: string }> = ({ id, name }) => {
   const { t } = useTranslation(['deleghe']);
+  const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+
   const handleAcceptClick = () => {
-    void dispatch(openAcceptModal({ id, name }));
+    setOpen(true);
+  };
+
+  const handleCloseAcceptModal = () => {
+    setOpen(false);
+  };
+
+  const handleConfirm = (code: Array<string>, groups: Array<{ id: string; name: string }>) => {
+    void dispatch(acceptDelegation({ id, code: code.join(''), groups }))
+      .unwrap()
+      .then(() => dispatch(getSidemenuInformation()));
   };
 
   return (
-    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
-      {t('deleghe.accept')}
-    </Button>
+    <>
+      <AcceptDelegationModal
+        isEditMode={false}
+        name={name}
+        open={open}
+        handleCloseAcceptModal={handleCloseAcceptModal}
+        handleConfirm={handleConfirm}
+      />
+      <Button
+        onClick={handleAcceptClick}
+        variant={'contained'}
+        color={'primary'}
+        data-testid="acceptButton"
+      >
+        {t('deleghe.accept')}
+      </Button>
+    </>
   );
 };

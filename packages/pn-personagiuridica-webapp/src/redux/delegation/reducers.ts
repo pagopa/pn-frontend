@@ -28,12 +28,6 @@ const initialState = {
     id: '',
     type: '',
   },
-  acceptModalState: {
-    open: false,
-    id: '',
-    name: '',
-    error: false,
-  },
 };
 
 /* eslint-disable functional/immutable-data */
@@ -50,16 +44,6 @@ const delegationsSlice = createSlice({
       state.modalState.id = '';
       state.modalState.open = false;
     },
-    openAcceptModal: (state, action: PayloadAction<{ id: string; name: string }>) => {
-      state.acceptModalState.id = action.payload.id;
-      state.acceptModalState.name = action.payload.name;
-      state.acceptModalState.open = true;
-      state.acceptModalState.error = false;
-    },
-    closeAcceptModal: (state) => {
-      state.acceptModalState.open = false;
-      state.acceptModalState.id = '';
-    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -74,14 +58,9 @@ const delegationsSlice = createSlice({
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
         delegator.mandateId === action.payload.id
-          ? { ...delegator, status: DelegationStatus.ACTIVE }
+          ? { ...delegator, status: DelegationStatus.ACTIVE, groups: action.payload.groups }
           : delegator
       );
-      state.acceptModalState.open = false;
-      state.acceptModalState.error = false;
-    });
-    builder.addCase(acceptDelegation.rejected, (state) => {
-      state.acceptModalState.error = true;
     });
     builder.addCase(revokeDelegation.fulfilled, (state, action) => {
       state.modalState.open = false;
@@ -107,12 +86,6 @@ const delegationsSlice = createSlice({
   },
 });
 
-export const {
-  openAcceptModal,
-  closeAcceptModal,
-  resetState,
-  closeRevocationModal,
-  openRevocationModal,
-} = delegationsSlice.actions;
+export const { resetState, closeRevocationModal, openRevocationModal } = delegationsSlice.actions;
 
 export default delegationsSlice;

@@ -71,6 +71,7 @@ export const DelegationsApi = {
           datefrom: delegation.datefrom,
           dateto: delegation.dateto,
           delegator: 'delegator' in delegation ? delegation.delegator : null,
+          groups: delegation.groups,
         })),
       })),
 
@@ -102,13 +103,16 @@ export const DelegationsApi = {
    */
   acceptDelegation: (
     id: string,
-    data: { verificationCode: string }
+    data: { verificationCode: string; groups: Array<{ id: string; name: string }> }
   ): Promise<AcceptDelegationResponse> =>
     apiClient
-      .patch<AcceptDelegationResponse>(ACCEPT_DELEGATION(id), data)
+      .patch<AcceptDelegationResponse>(ACCEPT_DELEGATION(id), {
+        ...data,
+        groups: data.groups.map((g) => g.id),
+      })
       .then((response: AxiosResponse<AcceptDelegationResponse>) => {
-        if (response.status === 200) {
-          return { ...response.data, id };
+        if (response.status === 204) {
+          return { ...response.data, id, groups: data.groups };
         }
         return {
           id: '-1',

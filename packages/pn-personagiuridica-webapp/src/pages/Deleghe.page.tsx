@@ -18,6 +18,7 @@ import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapp
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
+import { getConfiguration } from '../services/configuration.service';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
@@ -27,6 +28,7 @@ const Deleghe = () => {
     (state: RootState) => state.delegationsState.modalState
   );
   const dispatch = useAppDispatch();
+  const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -45,9 +47,11 @@ const Deleghe = () => {
 
   const retrieveData = useCallback(() => {
     void dispatch(getDelegatesByCompany());
-    void dispatch(getDelegators({ size: 10 }));
-    void dispatch(getGroups());
-    void dispatch(getDelegatorsNames());
+    if (DELEGATIONS_TO_PG_ENABLED) {
+      void dispatch(getDelegators({ size: 10 }));
+      void dispatch(getGroups());
+      void dispatch(getDelegatorsNames());
+    }
     setPageReady(true);
   }, []);
 

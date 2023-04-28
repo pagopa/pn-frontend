@@ -28,7 +28,7 @@ jest.mock('../../component/Deleghe/DelegationsOfTheCompany', () => ({
 }));
 
 describe('Deleghe page', () => {
-  it('renders deleghe page - no delegates', () => {
+  it('renders deleghe page', () => {
     const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
       resultsPage: [],

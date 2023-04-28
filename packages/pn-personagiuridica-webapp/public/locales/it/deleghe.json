@@ -54,7 +54,12 @@
       "no-group-found": "Nessun gruppo trovato",
       "no-name-found": "Nessun nome trovato",
       "menu-aria-label": "Menù azioni"
-    }
+    },
+    "associate-groups-title": "Vuoi assegnare la delega ad un gruppo?",
+    "associate-groups-subtitle": "L’amministratore del gruppo potrà gestire la delega. Gli utenti del gruppo potranno leggere solo le notifiche relative a quella delega.",
+    "no-group": "Non assegnare ad un gruppo",
+    "associate-group": "Assegna ad un gruppo",
+    "select-group": "Seleziona un gruppo*"
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",

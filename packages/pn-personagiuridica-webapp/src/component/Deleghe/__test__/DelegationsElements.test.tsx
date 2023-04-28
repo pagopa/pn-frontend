@@ -75,9 +75,22 @@ describe('DelegationElements', () => {
     await waitFor(() => expect(screen.getByText(/Malpensa/i)).toBeInTheDocument());
   });
 
-  it('renders the AcceptButton', () => {
+  it('renders the AcceptButton', async () => {
     const result = render(<AcceptButton id="1" name="test" />);
-
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
+    const button = result.queryByTestId('acceptButton') as Element;
+    fireEvent.click(button);
+    const codeDialog = await waitFor(() => screen.findByTestId('codeDialog'));
+    expect(codeDialog).toBeInTheDocument();
+    const codeInputs = codeDialog.querySelectorAll('input');
+    codeInputs.forEach((input, index) => {
+      fireEvent.change(input, { target: { value: index.toString() } });
+    });
+    const codeConfirmButton = codeDialog.querySelector(
+      '[data-testid="codeConfirmButton"]'
+    ) as Element;
+    fireEvent.click(codeConfirmButton);
+    const groupDialog = await waitFor(() => screen.findByTestId('groupDialog'));
+    expect(groupDialog).toBeInTheDocument();
   });
 });

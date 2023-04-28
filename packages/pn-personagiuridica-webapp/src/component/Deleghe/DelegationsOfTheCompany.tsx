@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -20,6 +20,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
   ApiErrorWrapper,
+  CustomTagGroup,
   EmptyState,
   Item,
   KnownSentiment,
@@ -28,8 +29,8 @@ import {
   SmartTable,
   SmartTableData,
   useIsMobile,
-  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
+import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -50,7 +51,6 @@ const DelegationsOfTheCompany = () => {
   const isMobile = useIsMobile();
   const [filters, setFilters] = useState<DelegatorsFormFilters>({ size: 10, page: 0 });
   const firstUpdate = useRef(true);
-  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
@@ -63,8 +63,6 @@ const DelegationsOfTheCompany = () => {
   );
   const [nameInputValue, setNameInputValue] = useState('');
   const [groupInputValue, setGroupInputValue] = useState('');
-  const handleChangeInput = (newInputValue: string, action: Dispatch<SetStateAction<string>>) =>
-    handleSearchStringChangeInput(newInputValue, action);
 
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
@@ -135,9 +133,15 @@ const DelegationsOfTheCompany = () => {
       id: 'groups',
       label: t('deleghe.table.groups'),
       getValue(value: Array<{ id: string; name: string }>) {
-        if (value) {
+        if (value.length) {
           return (
-            <OrganizationsList organizations={value.map((group) => group.name)} visibleItems={3} />
+            <CustomTagGroup visibleItems={3}>
+              {value.map((group) => (
+                <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={group.id}>
+                  <Tag value={group.name} />
+                </Box>
+              ))}
+            </CustomTagGroup>
           );
         }
         return '';
@@ -199,7 +203,7 @@ const DelegationsOfTheCompany = () => {
     option: { name: string; id: string },
     { selected }: AutocompleteRenderOptionState
   ) => (
-    <li {...props}>
+    <li {...props} key={option.id}>
       <Checkbox
         icon={icon}
         checkedIcon={checkedIcon}
@@ -297,7 +301,7 @@ const DelegationsOfTheCompany = () => {
         reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
-        {rows.length > 0 || !_.isEqual({ size: 10 }, filters) ? (
+        {rows.length > 0 || !_.isEqual({ size: 10, page: 0 }, filters) ? (
           <SmartTable
             conf={smartCfg}
             data={rows}
@@ -357,9 +361,7 @@ const DelegationsOfTheCompany = () => {
                   onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
                     handleChangeTouchedAutocomplete('delegatorIds', newValue)
                   }
-                  onInputChange={(_event, newInputValue) =>
-                    handleChangeInput(newInputValue, setNameInputValue)
-                  }
+                  onInputChange={(_event, newInputValue) => setNameInputValue(newInputValue)}
                   inputValue={nameInputValue}
                 />
               </Grid>
@@ -396,9 +398,7 @@ const DelegationsOfTheCompany = () => {
                   }
                   data-testid="groups"
                   inputValue={groupInputValue}
-                  onInputChange={(_event, newInputValue) =>
-                    handleChangeInput(newInputValue, setGroupInputValue)
-                  }
+                  onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
                 />
               </Grid>
               <Grid item xs={12} lg={3}>

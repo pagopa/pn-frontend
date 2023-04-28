@@ -22,12 +22,7 @@ import {
   rejectDelegation,
   revokeDelegation,
 } from '../actions';
-import {
-  closeAcceptModal,
-  closeRevocationModal,
-  openAcceptModal,
-  openRevocationModal,
-} from '../reducers';
+import { closeRevocationModal, openRevocationModal } from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
 
 describe('delegation redux state tests', () => {
@@ -70,23 +65,23 @@ describe('delegation redux state tests', () => {
   });
 
   it('should accept a delegation request', async () => {
-    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 200, undefined, undefined);
-    const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345' }));
+    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 204, undefined, undefined);
+    const action = await store.dispatch(
+      acceptDelegation({ id: '1', code: '12345', groups: [{ id: 'group-1', name: 'Group 1' }] })
+    );
     const payload = action.payload;
     expect(action.type).toBe('acceptDelegation/fulfilled');
-    expect(payload).toEqual({ id: '1' });
+    expect(payload).toEqual({ id: '1', groups: [{ id: 'group-1', name: 'Group 1' }] });
     mock.reset();
     mock.restore();
   });
 
   it('should set the accept modal state to error', async () => {
     const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 500, undefined, undefined);
-    const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345' }));
+    const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345', groups: [] }));
     const payload = action.payload as any;
     expect(action.type).toBe('acceptDelegation/rejected');
     expect(payload.response.status).toEqual(500);
-    const acceptModalState = store.getState().delegationsState.acceptModalState;
-    expect(acceptModalState.error).toEqual(true);
     mock.reset();
     mock.restore();
   });
@@ -131,7 +126,7 @@ describe('delegation redux state tests', () => {
     mock.restore();
   });
 
-  it('sets the confirmation modal state to open and then to close', async () => {
+  it('sets the revoccation modal state to open and then to close', async () => {
     const openAction = store.dispatch(openRevocationModal({ id: '123', type: 'delegates' }));
     expect(openAction.type).toBe('delegationsSlice/openRevocationModal');
     const openModalState = store.getState().delegationsState.modalState;
@@ -140,17 +135,6 @@ describe('delegation redux state tests', () => {
     expect(closeAction.type).toBe('delegationsSlice/closeRevocationModal');
     const closeModalState = store.getState().delegationsState.modalState;
     expect(closeModalState).toEqual({ id: '', type: 'delegates', open: false });
-  });
-
-  it('sets the accept modal state to open and then to close', async () => {
-    const action = store.dispatch(openAcceptModal({ id: '123', name: 'test name' }));
-    expect(action.type).toBe('delegationsSlice/openAcceptModal');
-    const confirmModalState = store.getState().delegationsState.acceptModalState;
-    expect(confirmModalState).toEqual({ id: '123', open: true, name: 'test name', error: false });
-    const closeAction = store.dispatch(closeAcceptModal());
-    expect(closeAction.type).toBe('delegationsSlice/closeAcceptModal');
-    const closeModalState = store.getState().delegationsState.acceptModalState;
-    expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
   });
 
   it('should get groups for the current PG', async () => {
