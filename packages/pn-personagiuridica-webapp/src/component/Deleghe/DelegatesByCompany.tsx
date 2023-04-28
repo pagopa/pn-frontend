@@ -8,10 +8,10 @@ import {
   useIsMobile,
   SmartTable,
   Item,
-  CodeModal,
+  //  CodeModal,
 } from '@pagopa-pn/pn-commons';
 import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
@@ -28,7 +28,7 @@ const DelegatesByCompany = () => {
   const { t } = useTranslation(['deleghe', 'notifiche']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
+  // const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
@@ -41,9 +41,9 @@ const DelegatesByCompany = () => {
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
-  const handleCloseShowCodeModal = () => {
+  /*  const handleCloseShowCodeModal = () => {
     setShowCodeModal({ ...showCodeModal, open: false });
-  };
+  }; */
 
   const delegatesColumn: Array<SmartTableData<DelegatesColumn>> = [
     {
@@ -136,7 +136,7 @@ const DelegatesByCompany = () => {
             id={value}
             verificationCode={data.verificationCode as string}
             name={data.name as string}
-            setCodeModal={setShowCodeModal}
+            // setCodeModal={setShowCodeModal}
           />
         );
       },
@@ -149,7 +149,7 @@ const DelegatesByCompany = () => {
 
   return (
     <>
-      <CodeModal
+      {/* <CodeModal
         title={t('deleghe.show_code_title', { name: showCodeModal.name })}
         subtitle={t('deleghe.show_code_subtitle')}
         open={showCodeModal.open}
@@ -159,7 +159,7 @@ const DelegatesByCompany = () => {
         cancelLabel={t('deleghe.close')}
         codeSectionTitle={t('deleghe.verification_code')}
         isReadOnly
-      />
+      /> */}
       <Box mb={8}>
         <Stack
           mb={4}

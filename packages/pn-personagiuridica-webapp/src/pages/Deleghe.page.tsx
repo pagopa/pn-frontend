@@ -3,45 +3,41 @@ import { Box, Tab, Tabs } from '@mui/material';
 
 import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { closeRevocationModal, resetState } from '../redux/delegation/reducers';
+import { useAppDispatch } from '../redux/hooks';
+import { resetState } from '../redux/delegation/reducers';
 import {
   getDelegators,
   getGroups,
   getDelegatesByCompany,
   getDelegatorsNames,
-  revokeDelegation,
-  rejectDelegation,
 } from '../redux/delegation/actions';
-import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
-import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
   const [pageReady, setPageReady] = useState(false);
   const [value, setValue] = useState(0);
-  const { id, open, type } = useAppSelector(
+  /* const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
-  );
+  ); */
   const dispatch = useAppDispatch();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const handleConfirmClick = () => {
+  /* const handleConfirmClick = () => {
     if (type === 'delegates') {
       void dispatch(revokeDelegation(id));
     } else {
       void dispatch(rejectDelegation(id));
     }
-  };
-  const handleCloseModal = () => {
+  }; */
+  /* const handleCloseModal = () => {
     dispatch(closeRevocationModal());
-  };
+  }; */
 
   const retrieveData = useCallback(() => {
     void dispatch(getDelegatesByCompany());
@@ -60,7 +56,7 @@ const Deleghe = () => {
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      <ConfirmationModal
+      {/* <ConfirmationModal
         open={open}
         title={
           type === 'delegates' ? t('deleghe.revocation_question') : t('deleghe.rejection_question')
@@ -71,7 +67,7 @@ const Deleghe = () => {
         onConfirmLabel={
           type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
         }
-      />
+      /> */}
       <Box
         sx={{
           width: '100%',
