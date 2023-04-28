@@ -9,6 +9,7 @@ import {
   within,
   mockApi,
   act,
+  prettyDOM,
 } from '../../../__test__/test-utils';
 import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
@@ -271,6 +272,23 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     });
     mock.reset();
     mock.restore();
+  });
+
+  it('test reject delegation', async () => {
+    const result = render(<DelegationsOfTheCompany />, {
+      preloadedState: {
+        delegationsState: {
+          ...initialState.delegationsState,
+          delegations: {
+            delegators: arrayOfDelegators,
+          },
+        },
+      },
+    });
+    const menu = result.getAllByTestId('delegationMenuIcon');
+    fireEvent.click(menu[0]);
+    const menuOpen = await waitFor(async () => result.getAllByTestId('delegationMenu'));
+    expect(menuOpen[0]).toHaveTextContent(/deleghe.reject/i);
   });
 });
 
