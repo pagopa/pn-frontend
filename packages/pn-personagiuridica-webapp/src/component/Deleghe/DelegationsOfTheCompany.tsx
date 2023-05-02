@@ -41,6 +41,7 @@ import {
   DelegationStatus,
   DelegatorsColumn,
   DelegatorsFormFilters,
+  DelegatorsNames,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
@@ -215,9 +216,9 @@ const DelegationsOfTheCompany = () => {
   );
 
   const initialValues: {
-    delegatorIds: Array<{ id: string; name: string }>;
+    delegatorIds: Array<DelegatorsNames>;
     groups: Array<{ id: string; name: string }>;
-    status: Array<string>;
+    status: Array<DelegationStatus>;
   } = {
     delegatorIds: [],
     groups: [],
@@ -238,8 +239,11 @@ const DelegationsOfTheCompany = () => {
         size: filters.size,
         page: 0,
         status: values.status,
-        delegatorIds: values.delegatorIds.map((d) => d.id.toString()),
-        groups: values.groups.map((d) => d.id.toString()),
+        delegatorIds: values.delegatorIds.reduce(
+          (arr, d) => arr.concat(d.mandateIds),
+          [] as Array<string>
+        ),
+        groups: values.groups.map((d) => d.id),
       } as DelegatorsFormFilters;
       setFilters(params);
     },

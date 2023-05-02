@@ -175,8 +175,9 @@ describe('delegation redux state tests', () => {
     expect(action.type).toBe('getDelegatorsNames/fulfilled');
     expect(payload).toEqual(
       arrayOfDelegators.map((delegator) => ({
-        id: delegator.mandateId,
+        id: delegator.delegator.fiscalCode,
         name: delegator.delegator.displayName,
+        mandateIds: [delegator.mandateId],
       }))
     );
     mock.reset();

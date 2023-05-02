@@ -8,6 +8,7 @@ import {
   Delegation,
   DelegationStatus,
   Delegator,
+  DelegatorsNames,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
@@ -144,15 +145,26 @@ export const DelegationsApi = {
    * @param {GetDelegatorsFilters} params
    * @return {Promise<GetDelegatorsResponse>}
    */
-  getDelegatorsNames: (): Promise<Array<{ id: string; name: string }>> =>
+  getDelegatorsNames: (): Promise<Array<DelegatorsNames>> =>
     apiClient
       .get<Array<Delegator>>(DELEGATIONS_NAME_BY_DELEGATE())
       .then((response: AxiosResponse<Array<Delegator>>) => {
         if (response.data) {
-          return response.data.map((delegator) => ({
-            id: delegator.mandateId,
-            name: delegator.delegator?.displayName || '',
-          }));
+          return response.data.reduce((arr, delegator) => {
+            /* eslint-disable functional/immutable-data */
+            const isInArray = arr.findIndex((elem) => elem.id === delegator.delegator?.fiscalCode);
+            if (isInArray > -1) {
+              arr[isInArray].mandateIds.push(delegator.mandateId);
+              return arr;
+            }
+            arr.push({
+              id: delegator.delegator?.fiscalCode || '',
+              name: delegator.delegator?.displayName || '',
+              mandateIds: [delegator.mandateId],
+            });
+            return arr;
+            /* eslint-enable functional/immutable-data */
+          }, [] as Array<DelegatorsNames>);
         }
         return [];
       }),

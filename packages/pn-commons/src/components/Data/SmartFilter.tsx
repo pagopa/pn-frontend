@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FormEvent, PropsWithChildren } from 'react';
+import { FormEvent, PropsWithChildren, useRef } from 'react';
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
@@ -49,8 +49,9 @@ const SmartFilter = <FormValues extends object>({
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
   const classes = useStyles();
-  const isInitialSearch = _.isEqual(formValues, initialValues);
-  const filtersCount = filtersApplied(initialValues, formValues);
+  const currentFilters = useRef<FormValues>(formValues);
+  const isPreviousSearch = _.isEqual(formValues, currentFilters.current);
+  const filtersCount = filtersApplied(initialValues, currentFilters.current);
 
   const confirmAction = (
     <Button
@@ -58,7 +59,7 @@ const SmartFilter = <FormValues extends object>({
       variant="outlined"
       type="submit"
       size="small"
-      disabled={!formIsValid || (isInitialSearch && !filtersCount)}
+      disabled={!formIsValid || isPreviousSearch}
     >
       {filterLabel}
     </Button>
@@ -69,6 +70,12 @@ const SmartFilter = <FormValues extends object>({
       {cancelLabel}
     </Button>
   );
+
+  const submitHandler = (e?: FormEvent<HTMLFormElement> | undefined) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentFilters.current = formValues;
+    onSubmit(e);
+  };
 
   if (isMobile) {
     return (
@@ -87,7 +94,7 @@ const SmartFilter = <FormValues extends object>({
           {filterLabel}
         </CustomMobileDialogToggle>
         <CustomMobileDialogContent title={filterLabel}>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={submitHandler}>
             <DialogContent>{children}</DialogContent>
             <DialogActions>
               <CustomMobileDialogAction>{confirmAction}</CustomMobileDialogAction>
@@ -100,7 +107,7 @@ const SmartFilter = <FormValues extends object>({
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={submitHandler}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid container spacing={1} className={classes.helperTextFormat} alignItems="center">
           {children}

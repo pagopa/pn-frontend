@@ -128,3 +128,9 @@ export interface GetDelegatorsResponse {
 export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
 
 export type DelegatorsFormFilters = Exclude<GetDelegatorsFilters, 'nextPageKey'> & { page: number };
+
+export interface DelegatorsNames {
+  id: string;
+  name: string;
+  mandateIds: Array<string>;
+}

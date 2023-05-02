@@ -154,8 +154,9 @@ describe('Delegations api tests', () => {
     const res = await DelegationsApi.getDelegatorsNames();
     expect(res).toStrictEqual(
       arrayOfDelegators.map((delegator) => ({
-        id: delegator.mandateId,
+        id: delegator.delegator.fiscalCode,
         name: delegator.delegator.displayName,
+        mandateIds: [delegator.mandateId],
       }))
     );
     mock.reset();

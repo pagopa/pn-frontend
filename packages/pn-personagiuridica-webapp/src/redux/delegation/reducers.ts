@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 
-import { Delegation, DelegationStatus } from '../../models/Deleghe';
+import { Delegation, DelegationStatus, DelegatorsNames } from '../../models/Deleghe';
 import { Groups } from '../../models/groups';
 import {
   getDelegatesByCompany,
@@ -22,7 +22,7 @@ const initialState = {
     moreResult: false,
   },
   groups: [] as Array<Groups>,
-  delegatorsNames: [] as Array<{ id: string; name: string }>,
+  delegatorsNames: [] as Array<DelegatorsNames>,
   modalState: {
     open: false,
     id: '',
