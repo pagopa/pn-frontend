@@ -33,6 +33,7 @@ const DelegatesByCompany = () => {
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+  const userLogged = useAppSelector((state: RootState) => state.userState.user);
 
   const rows: Array<Item> = delegationToItem(delegatesByCompany);
 
@@ -136,6 +137,7 @@ const DelegatesByCompany = () => {
             id={value}
             verificationCode={data.verificationCode as string}
             name={data.name as string}
+            userLogged={userLogged}
             // setCodeModal={setShowCodeModal}
           />
         );

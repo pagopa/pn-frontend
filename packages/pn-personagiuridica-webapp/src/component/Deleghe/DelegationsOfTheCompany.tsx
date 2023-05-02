@@ -51,6 +51,7 @@ const DelegationsOfTheCompany = () => {
   const firstUpdate = useRef(true);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
@@ -64,7 +65,6 @@ const DelegationsOfTheCompany = () => {
   const [groupInputValue, setGroupInputValue] = useState('');
   const handleChangeInput = (newInputValue: string, action: Dispatch<SetStateAction<string>>) =>
     handleSearchStringChangeInput(newInputValue, action);
-
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
@@ -175,8 +175,8 @@ const DelegationsOfTheCompany = () => {
     {
       id: 'id',
       label: '',
-      getValue(value: string) {
-        return <Menu menuType={'delegators'} id={value} />;
+      getValue(_value: string, row: Item) {
+        return <Menu menuType={'delegators'} id={row.id} name={row.name as string} />;
       },
       tableConfiguration: {
         width: '5%',

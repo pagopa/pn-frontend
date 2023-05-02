@@ -52,7 +52,7 @@ export default function ConfirmationModal({
               <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
                 {title}
               </Typography>
-              <Typography variant="h6" sx={{ fontSize: '18px', fontWeight: '300' }}>
+              <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
                 {subtitle}
               </Typography>
             </Grid>
@@ -63,7 +63,7 @@ export default function ConfirmationModal({
             justifyContent={'flex-end'}
             alignItems={'center'}
             ml={'auto'}
-            pb={isMobile ? 4 : 0}
+            pb={4}
             data-testid="dialogStack"
           >
             <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4} mr={isMobile ? 0 : 1}>

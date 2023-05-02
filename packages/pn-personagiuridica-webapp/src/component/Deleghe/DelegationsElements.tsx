@@ -11,6 +11,7 @@ import { openAcceptModal } from '../../redux/delegation/reducers';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { rejectDelegation, revokeDelegation } from '../../redux/delegation/actions';
+import { User } from '../../redux/auth/types';
 import ConfirmationModal from './ConfirmationModal';
 
 type Props = {
@@ -20,12 +21,15 @@ type Props = {
   verificationCode?: string;
   // setCodeModal?: (props: { open: boolean; name: string; code: string }) => void;
   width?: string;
+  organization?: string;
+  userLogged?: User;
 };
 export const Menu: React.FC<Props> = ({
   menuType,
   id,
   name,
   verificationCode,
+  userLogged,
   // setCodeModal,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -101,7 +105,10 @@ export const Menu: React.FC<Props> = ({
     ];
   };
 
-  const subtitleModal = menuType === 'delegates' ? 'delegatesByCompany' : 'delegatesOfTheCompany';
+  const subtitleModal =
+    menuType === 'delegates'
+      ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
+      : t('deleghe.subtitle_rejection', { delegator: name });
 
   return (
     <>
@@ -109,8 +116,8 @@ export const Menu: React.FC<Props> = ({
         open={showConfirmationModal}
         title={
           menuType === 'delegates'
-            ? t('deleghe.revocation_question')
-            : t('deleghe.rejection_question')
+            ? t('deleghe.revocation_question', { delegator: name })
+            : t('deleghe.rejection_question', { delegator: name })
         }
         subtitle={subtitleModal}
         onConfirm={handleConfirmClick}
