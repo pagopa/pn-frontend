@@ -165,7 +165,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     await testAutocomplete(form, 'groups', groups, true, 1, false);
     await testMultiSelect(form, 'status', status, 0, true);
     await testMultiSelect(form, 'status', status, 2, false);
-    expect(cancelButton).toBeEnabled();
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     await waitFor(() => {
@@ -178,6 +177,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       });
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
+      expect(cancelButton).toBeEnabled();
     });
     mock.reset();
     mock.restore();

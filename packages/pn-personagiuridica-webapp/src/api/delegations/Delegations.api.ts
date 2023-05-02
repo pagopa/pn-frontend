@@ -25,7 +25,7 @@ import {
 } from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
-  if (response.status === 200) {
+  if (response.status === 204) {
     return { id };
   }
   return { id: '-1' };
