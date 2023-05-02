@@ -26,12 +26,16 @@ import {
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationStatusHistory,
+  NotificationDetailOtherDocument,
 } from '../../types';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  clickHandler: (legalFactId: LegalFactId) => void;
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
+  // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+  clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
   showLessButtonLabel?: string;
@@ -97,7 +101,7 @@ const NotificationDetailTimelineStep = ({
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
-  let legalFactsIds: Array<{ file: LegalFactId; step: INotificationDetailTimeline }> = [];
+  let legalFactsIds: Array<{ file: LegalFactId | NotificationDetailOtherDocument; step: INotificationDetailTimeline }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
 
@@ -110,7 +114,7 @@ const NotificationDetailTimelineStep = ({
         return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
       }
       return arr;
-    }, [] as Array<{ file: LegalFactId; step: INotificationDetailTimeline }>);
+    }, [] as Array<{ file: LegalFactId | NotificationDetailOtherDocument; step: INotificationDetailTimeline }>);
 
     visibleSteps = timelineStep.steps.filter((s) => !s.hidden);
     /* eslint-enable functional/immutable-data */
@@ -155,14 +159,14 @@ const NotificationDetailTimelineStep = ({
             legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
               <ButtonNaked
-                key={lf.file.key}
+                key={(lf.file as LegalFactId).key || (lf.file as NotificationDetailOtherDocument).documentId}
                 startIcon={<AttachFileIcon />}
                 onClick={() => clickHandler(lf.file)}
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
               >
-                {getLegalFactLabel(lf.step, lf.file.category)}
+                {getLegalFactLabel(lf.step, (lf.file as LegalFactId).category || (lf.file as NotificationDetailOtherDocument).documentType)}
               </ButtonNaked>
             ))}
         </Box>
@@ -233,11 +237,11 @@ const NotificationDetailTimelineStep = ({
                   variant="button"
                   color="primary"
                   sx={{ cursor: 'pointer' }}
-                  onClick={() => s.legalFactsIds && clickHandler(lf)}
-                  key={lf.key}
+                  onClick={() => clickHandler(lf)}
+                  key={(lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId}
                   data-testid="download-legalfact"
                 >
-                  {getLegalFactLabel(s, lf.category)}
+                  {getLegalFactLabel(s, (lf as LegalFactId).category || (lf as NotificationDetailOtherDocument).documentType)}
                 </Typography>
               ))}
           </Typography>

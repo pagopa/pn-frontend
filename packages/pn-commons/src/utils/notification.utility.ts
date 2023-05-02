@@ -335,15 +335,23 @@ export function getLegalFactLabel(
 
 
   // PN-5484  
-  // the label depends on the category of the step only,
-  // it disergards the kind of document (i.e. legalFactType)
   } else if (
-    timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW
+    timelineStep.category === TimelineCategory.COMPLETELY_UNREACHABLE && 
+    legalFactType === LegalFactType.ANALOG_FAILURE_DELIVERY
   ) {
     return getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.analog-failure-workflow',
       'Deposito di avvenuta ricezione'
+    );
+  } else if (
+    timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW && 
+    legalFactType === LegalFactType.AAR
+  ) {
+    return getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.aar-document',
+      'Avviso di avvenuta ricezione'
     );
 
   } else if (
@@ -518,7 +526,15 @@ function populateMacroStep(
       // PN-4484 - hide the internal events related to the courtesy messages sent through app IO
     } else if (isInternalAppIoEvent(step)) {
       status.steps!.push({ ...step, hidden: true });
-      // remove legal facts for those microsteps that are releated to accepted status
+    // add legal facts for ANALOG_FAILURE_WORKFLOW steps with linked generatedAarUrl
+    // since the AAR for such steps must be shown in timeline exactly the same way as legalFacts.
+    // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+    } else if (step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW && (step.details as AarDetails).generatedAarUrl) {
+      status.steps!.push({ 
+        ...step, 
+        legalFactsIds: [{ documentId: (step.details as AarDetails).generatedAarUrl as string, documentType: LegalFactType.AAR }] 
+      });
+    // remove legal facts for those microsteps that are releated to accepted status
     } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
       status.steps!.push({ ...step, legalFactsIds: [] });
       // default case
