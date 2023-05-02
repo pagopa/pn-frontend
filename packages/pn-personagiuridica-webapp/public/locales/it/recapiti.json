@@ -105,16 +105,16 @@
   },
   "errors": {
     "invalid_verification_code": {
-      "title": "Il codice inserito non è corretto",
-      "message": "Prova a reinserirlo, oppure genera un nuovo codice."
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo, oppure generane un altro."
     },
     "retry_limit_code": {
-      "title": "Troppi tentativi",
-      "message": "Genera un nuovo codice."
+      "title": "Hai fatto troppi tentativi",
+      "message": "Hai inserito troppe volte un codice sbagliato. Per riprovare premi “Annulla”, assicurati che il contatto sia corretto e inserisci il nuovo codice."
     },
     "expired_verification_code": {
-      "title": "Codice scaduto",
-      "message": "Genera un nuovo codice."
+      "title": "Il codice è scaduto",
+      "message": "Generane uno nuovo e inseriscilo."
     }
   }
 }
