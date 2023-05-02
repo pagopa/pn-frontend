@@ -131,11 +131,12 @@ export const DelegationsApi = {
 
   /**
    * Count pending delegators
+   * @param status status of the delegation
    * @returns {Promise<{value: number}>}
    */
-  countDelegators: (): Promise<{ value: number }> =>
+  countDelegators: (status: DelegationStatus): Promise<{ value: number }> =>
     apiClient
-      .get<{ value: number }>(COUNT_DELEGATORS(DelegationStatus.PENDING))
+      .get<{ value: number }>(COUNT_DELEGATORS(status))
       .then((response: AxiosResponse<{ value: number }>) => response.data),
 
   /**

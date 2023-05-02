@@ -136,7 +136,7 @@ describe('Delegations api tests', () => {
       undefined,
       { value: 5 }
     );
-    const res = await DelegationsApi.countDelegators();
+    const res = await DelegationsApi.countDelegators(DelegationStatus.PENDING);
     expect(res).toStrictEqual({ value: 5 });
     mock.reset();
     mock.restore();
