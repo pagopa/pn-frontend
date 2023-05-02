@@ -28,7 +28,6 @@ const DelegatesByCompany = () => {
   const { t } = useTranslation(['deleghe', 'notifiche']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
@@ -41,10 +40,6 @@ const DelegatesByCompany = () => {
     navigate(routes.NUOVA_DELEGA);
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
-
-  /*  const handleCloseShowCodeModal = () => {
-    setShowCodeModal({ ...showCodeModal, open: false });
-  }; */
 
   const delegatesColumn: Array<SmartTableData<DelegatesColumn>> = [
     {
@@ -138,7 +133,6 @@ const DelegatesByCompany = () => {
             verificationCode={data.verificationCode as string}
             name={data.name as string}
             userLogged={userLogged}
-            // setCodeModal={setShowCodeModal}
           />
         );
       },
@@ -151,17 +145,6 @@ const DelegatesByCompany = () => {
 
   return (
     <>
-      {/* <CodeModal
-        title={t('deleghe.show_code_title', { name: showCodeModal.name })}
-        subtitle={t('deleghe.show_code_subtitle')}
-        open={showCodeModal.open}
-        initialValues={showCodeModal.code.split('')}
-        handleClose={handleCloseShowCodeModal}
-        cancelCallback={handleCloseShowCodeModal}
-        cancelLabel={t('deleghe.close')}
-        codeSectionTitle={t('deleghe.verification_code')}
-        isReadOnly
-      /> */}
       <Box mb={8}>
         <Stack
           mb={4}

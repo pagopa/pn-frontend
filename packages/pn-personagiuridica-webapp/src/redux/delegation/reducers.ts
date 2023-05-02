@@ -41,15 +41,6 @@ const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState,
   reducers: {
-    openRevocationModal: (state, action: PayloadAction<{ id: string; type: string }>) => {
-      state.modalState.id = action.payload.id;
-      state.modalState.open = true;
-      state.modalState.type = action.payload.type;
-    },
-    closeRevocationModal: (state) => {
-      state.modalState.id = '';
-      state.modalState.open = false;
-    },
     openAcceptModal: (state, action: PayloadAction<{ id: string; name: string }>) => {
       state.acceptModalState.id = action.payload.id;
       state.acceptModalState.name = action.payload.name;
@@ -107,12 +98,6 @@ const delegationsSlice = createSlice({
   },
 });
 
-export const {
-  openAcceptModal,
-  closeAcceptModal,
-  resetState,
-  closeRevocationModal,
-  openRevocationModal,
-} = delegationsSlice.actions;
+export const { resetState, openAcceptModal, closeAcceptModal } = delegationsSlice.actions;
 
 export default delegationsSlice;

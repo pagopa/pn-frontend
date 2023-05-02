@@ -19,19 +19,11 @@ type Props = {
   id: string;
   name?: string;
   verificationCode?: string;
-  // setCodeModal?: (props: { open: boolean; name: string; code: string }) => void;
   width?: string;
   organization?: string;
   userLogged?: User;
 };
-export const Menu: React.FC<Props> = ({
-  menuType,
-  id,
-  name,
-  verificationCode,
-  userLogged,
-  // setCodeModal,
-}) => {
+export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, userLogged }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
@@ -49,7 +41,6 @@ export const Menu: React.FC<Props> = ({
     } else {
       trackEventByType(TrackEventType.DELEGATION_DELEGATOR_REJECT);
     }
-    // dispatch(openRevocationModal({ id, type: menuType }));
     setShowConfirmationModal(true);
     setAnchorEl(null);
   };
