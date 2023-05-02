@@ -36,7 +36,11 @@ export class PFAppErrorFactory extends AppErrorFactory {
         return new MandateDelegateHimselfAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE:
         return new MandateInvalidVerificationCodeAppError(error, this.translateFunction);
+      // I am using a fallthrough to avoid to define a factory for every error of user attributes having the same
+      // scope, i find it easier to edit them all in one place instead of three
       case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
+      case ServerResponseErrorCode.PN_USERATTRIBUTES_RETRYLIMITVERIFICATIONCODE:
+      case ServerResponseErrorCode.PN_USERATTRIBUTES_EXPIREDVERIFICATIONCODE:
         return new UserAttributesInvalidVerificationCodeAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER_PATTERN:
         return new GenericInvalidParameterPatternAppError(error, this.translateFunction);
