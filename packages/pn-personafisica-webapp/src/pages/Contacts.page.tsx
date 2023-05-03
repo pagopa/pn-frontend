@@ -31,12 +31,9 @@ const Contacts = () => {
   const [pageReady, setPageReady] = useState(false);
   const { LANDING_SITE_URL } = getConfiguration();
 
-  const contactIO =
-    digitalAddresses.courtesy && digitalAddresses.courtesy.length
-      ? digitalAddresses.courtesy.find(
-          (address) => address.channelType === CourtesyChannelType.IOMSG
-        )
-      : null;
+  const contactIO = digitalAddresses.courtesy
+    ? digitalAddresses.courtesy.find((address) => address.channelType === CourtesyChannelType.IOMSG)
+    : null;
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses(recipientId)).then(() => {
