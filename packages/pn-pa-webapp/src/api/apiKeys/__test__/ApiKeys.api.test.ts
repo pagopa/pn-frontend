@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { mockApiKeysForFE, mockApiKeysFromBE } from '../../../redux/apiKeys/__test__/test-utils';
+import { mockApiKeysFromBE } from '../../../redux/apiKeys/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient } from '../../apiClients';
 import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
@@ -27,7 +27,7 @@ describe('Api keys api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysFromBE);
     const res = await ApiKeysApi.getApiKeys();
-    expect(res).toStrictEqual(mockApiKeysForFE);
+    expect(res).toStrictEqual(mockApiKeysFromBE.items);
   });
 
   it('createNewApiKey', async () => {

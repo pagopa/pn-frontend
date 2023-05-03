@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
 import { Button, Grid, SxProps, Typography } from '@mui/material';
 
-type Props = {
+export type ApiKeyModalProps = {
   titleSx: SxProps;
   title: string;
-  subTitle: ReactNode;
+  subTitle?: ReactNode;
+  subTitleAtBottom?: boolean;
   content?: ReactNode;
   closeButtonLabel: string;
   closeModalHandler: () => void;
@@ -16,22 +17,35 @@ const ApiKeyModal = ({
   titleSx,
   title,
   subTitle,
+  subTitleAtBottom = false,
   content,
   closeButtonLabel,
   closeModalHandler,
   actionButtonLabel,
   actionHandler,
-}: Props) => (
+}: ApiKeyModalProps) => (
   <>
     <Typography variant="h5" sx={titleSx}>
       {title}
     </Typography>
-    <Typography variant="body1" sx={{ marginBottom: 3 }}>
-      {subTitle}
-    </Typography>
+    {subTitle && !subTitleAtBottom && (
+      <Typography data-testid="subtitle-top" variant="body1" sx={{ marginBottom: 3 }}>
+        {subTitle}
+      </Typography>
+    )}
     {content}
+    {subTitle && subTitleAtBottom && (
+      <Typography data-testid="subtitle-bottom" variant="body1" sx={{ my: 3 }}>
+        {subTitle}
+      </Typography>
+    )}
     <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-      <Button data-testid="close-modal-button" variant="outlined" onClick={closeModalHandler} sx={{ mr: actionButtonLabel ? 2 : 0 }}>
+      <Button
+        data-testid="close-modal-button"
+        variant="outlined"
+        onClick={closeModalHandler}
+        sx={{ mr: actionButtonLabel ? 2 : 0 }}
+      >
         {closeButtonLabel}
       </Button>
       {actionButtonLabel && (
