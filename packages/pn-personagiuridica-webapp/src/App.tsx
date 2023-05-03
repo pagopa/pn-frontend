@@ -59,7 +59,7 @@ const App = () => {
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const { pendingDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
+  const { pendingDelegators, activeDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -124,12 +124,25 @@ const App = () => {
     }
   }, [sessionToken]);
 
-  const notificationMenuItems: Array<SideMenuItem> = [
-    {
-      label: t('menu.notifiche'),
-      route: routes.NOTIFICHE,
-    },
-  ];
+  const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
+    // TODO: change -1 to 0
+    if (activeDelegators > -1) {
+      return ([
+        {
+          label: t('menu.notifiche-impresa'),
+          route: routes.NOTIFICHE,
+        },
+        {
+          label: t('menu.notifiche-delegato'),
+          route: routes.NOTIFICHE_DELEGATO
+        }
+      ]);
+    } else {
+      return undefined;
+    }
+  };
+
+  const notificationMenuItems: Array<SideMenuItem> | undefined = mapDelegatorSideMenuItem();
 
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [

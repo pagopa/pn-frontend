@@ -88,7 +88,7 @@ export function ACCEPT_DELEGATION(id: string) {
   });
 }
 
-export function COUNT_DELEGATORS(status: DelegationStatus) {
+export function COUNT_DELEGATORS(status: DelegationStatus | Array<DelegationStatus>) {
   return compileRoute({
     prefix: API_DELEGATIONS_PREFIX,
     path: API_DELEGATIONS_COUNT_BY_DELEGATE_PATH,

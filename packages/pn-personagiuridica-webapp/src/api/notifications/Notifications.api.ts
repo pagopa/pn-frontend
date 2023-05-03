@@ -38,13 +38,15 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
 export const NotificationsApi = {
   /**
    * Gets current user notifications
-   * @param  {string} startDate
-   * @param  {string} endDate
    * @returns Promise
+   * @param {GetNotificationsParams} params
+   * @param {boolean} isDelegated
    */
-  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
-    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
+  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
+    const {isDelegatedPage, ...payload} = params;
+    return apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage)).then((response) => {
       if (response.data && response.data.resultsPage) {
+
         const notifications = response.data.resultsPage.map((d) => ({
           ...d,
           sentAt: formatDate(d.sentAt),
@@ -59,7 +61,8 @@ export const NotificationsApi = {
         moreResult: false,
         nextPagesKey: [],
       };
-    }),
+    });
+  },
 
   /**
    * Gets current user notification detail
@@ -87,6 +90,7 @@ export const NotificationsApi = {
         return {} as NotificationDetailForRecipient;
       }
     }),
+
 
   /**
    * Get notification iun and mandate id from aar link

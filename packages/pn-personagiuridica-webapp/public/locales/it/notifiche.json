@@ -1,8 +1,11 @@
 {
   "title": "Notifiche di {{recipient}}",
+  "title-delegated-notifications": "Notifiche delegate a {{recipient}}",
   "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
+  "subtitle-delegated-notifications": "Leggi le notifiche delegate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "table": {
     "data": "Data",
+    "gruppo": "Gruppi",
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "iun": "Codice IUN",

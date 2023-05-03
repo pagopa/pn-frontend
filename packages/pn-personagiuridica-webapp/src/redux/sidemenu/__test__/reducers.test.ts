@@ -12,8 +12,12 @@ describe('Sidemenu redux state tests', () => {
 
   const setInitialState = async (delegatorsCount: number) => {
     // Get sidemenu information
-    const getDelegatorsApiSpy = jest.spyOn(DelegationsApi, 'countDelegators');
-    getDelegatorsApiSpy.mockResolvedValue({ value: delegatorsCount });
+    const getPendingDelegatorsApiSpy = jest
+      .spyOn(DelegationsApi, 'countPendingDelegators');
+    const getActiveDelegatorsApiSpy = jest
+      .spyOn(DelegationsApi, 'countActiveDelegators');
+    getPendingDelegatorsApiSpy.mockResolvedValue({ value: delegatorsCount });
+    getActiveDelegatorsApiSpy.mockResolvedValue({ value: delegatorsCount });
     await store.dispatch(getSidemenuInformation());
   };
 

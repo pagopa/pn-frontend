@@ -5,6 +5,7 @@ import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 export enum DASHBOARD_ACTIONS  {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
+  GET_DELEGATORS_RECEIVED_NOTIFICATIONS = 'getDelegatorsReceivedNotifications',
 }
 
 export const getReceivedNotifications = createAsyncThunk<

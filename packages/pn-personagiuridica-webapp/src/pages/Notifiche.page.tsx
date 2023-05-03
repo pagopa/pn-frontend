@@ -27,7 +27,11 @@ import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 import { NotificationColumn } from '../models/Notifications';
 
-const Notifiche = () => {
+type Props = {
+  isDelegatedPage?: boolean;
+};
+
+const Notifiche = ({ isDelegatedPage }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);
@@ -38,12 +42,20 @@ const Notifiche = () => {
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const role = organization?.roles ? organization?.roles[0] : null;
 
-  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+  const userHasAdminPermissions = useHasPermissions(
+    role ? [role.role] : [],
+    [PNRole.ADMIN]
+  );
 
   const isMobile = useIsMobile();
-  const pageTitle = t('title', { recipient: organization.name });
+  const pageTitle = !isDelegatedPage
+    ? t('title', { recipient: organization.name })
+    : t('title-delegated-notifications', { recipient: organization.name });
 
-  const pageSubTitle = t('subtitle', { recipient: organization.name });
+  const pageSubTitle = !isDelegatedPage
+    ? t('subtitle', { recipient: organization.name })
+    : t('subtitle-delegated-notifications', { recipient: organization.name });
+
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -66,12 +78,13 @@ const Notifiche = () => {
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
+      isDelegatedPage
     };
 
     void dispatch(
       getReceivedNotifications({
         ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
+        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
       })
     ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
@@ -115,12 +128,14 @@ const Notifiche = () => {
               notifications={notifications}
               sort={sort}
               onChangeSorting={handleChangeSorting}
+              isDelegatedPage={isDelegatedPage}
             />
           ) : (
             <DesktopNotifications
               notifications={notifications}
               sort={sort}
               onChangeSorting={handleChangeSorting}
+              isDelegatedPage={isDelegatedPage}
             />
           )}
           {notifications.length > 0 && (

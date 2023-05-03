@@ -129,11 +129,18 @@ export const DelegationsApi = {
    * Count pending delegators
    * @returns {Promise<{value: number}>}
    */
-  countDelegators: (): Promise<{ value: number }> =>
+  countPendingDelegators: (): Promise<{ value: number }> =>
     apiClient
-      .get<{ value: number }>(COUNT_DELEGATORS(DelegationStatus.PENDING))
+      .get<{ value: number }>(COUNT_DELEGATORS([DelegationStatus.PENDING]))
       .then((response: AxiosResponse<{ value: number }>) => response.data),
-
+  /**
+   * Count pending delegators
+   * @returns {Promise<{value: number}>}
+   */
+  countActiveDelegators: (): Promise<{ value: number }> =>
+    apiClient
+      .get<{ value: number }>(COUNT_DELEGATORS([DelegationStatus.ACTIVE]))
+      .then((response: AxiosResponse<{ value: number }>) => response.data),
   /**
    * Get all the delegators names for the authenticated user
    * @param {GetDelegatorsFilters} params
