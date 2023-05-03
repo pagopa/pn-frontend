@@ -20,7 +20,6 @@ type Props = {
   name?: string;
   verificationCode?: string;
   width?: string;
-  organization?: string;
   userLogged?: User;
 };
 export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, userLogged }) => {
@@ -28,11 +27,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['deleghe']);
-  const [showCodeModal, setShowCodeModal] = useState({
-    open: false,
-    name: '',
-    code: '',
-  });
+  const [showCodeModal, setShowCodeModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const handleOpenModalClick = () => {
@@ -47,7 +42,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
 
   const handleOpenVerificationCodeModal = () => {
     if (name && verificationCode) {
-      setShowCodeModal({ open: true, name, code: verificationCode });
+      setShowCodeModal(true);
       setAnchorEl(null);
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
     }
@@ -58,6 +53,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   };
 
   const handleConfirmClick = () => {
+    console.log('CIAO :>> ');
+
     if (menuType === 'delegates') {
       void dispatch(revokeDelegation(id));
     } else {
@@ -69,13 +66,13 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const onCloseModal = () => {
-    // dispatch(closeRevocationModal());
     setShowConfirmationModal(false);
   };
 
   const handleCloseShowCodeModal = () => {
-    setShowCodeModal({ ...showCodeModal, open: false });
+    setShowCodeModal(false);
   };
 
   const getMenuItemElements = () => {
@@ -121,17 +118,19 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
         onCloseLabel={t('button.annulla', { ns: 'common' })}
       />
 
-      <CodeModal
-        title={t('deleghe.show_code_title', { name: showCodeModal.name })}
-        subtitle={t('deleghe.show_code_subtitle')}
-        open={showCodeModal.open}
-        initialValues={showCodeModal.code.split('')}
-        handleClose={handleCloseShowCodeModal}
-        cancelCallback={handleCloseShowCodeModal}
-        cancelLabel={t('deleghe.close')}
-        codeSectionTitle={t('deleghe.verification_code')}
-        isReadOnly
-      />
+      {verificationCode && (
+        <CodeModal
+          title={t('deleghe.show_code_title', { name })}
+          subtitle={t('deleghe.show_code_subtitle')}
+          open={showCodeModal}
+          initialValues={verificationCode.split('')}
+          handleClose={handleCloseShowCodeModal}
+          cancelCallback={handleCloseShowCodeModal}
+          cancelLabel={t('deleghe.close')}
+          codeSectionTitle={t('deleghe.verification_code')}
+          isReadOnly
+        />
+      )}
 
       <IconButton
         onClick={handleClick}

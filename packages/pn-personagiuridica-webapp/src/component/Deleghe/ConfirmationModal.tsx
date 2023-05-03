@@ -39,22 +39,16 @@ export default function ConfirmationModal({
     >
       <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
         <Box mx={3} sx={{ height: '100%' }}>
-          {/* <Stack>
-            <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
-              {title}
-            </Typography>
-            <Typography variant="h6" sx={{ fontSize: '9px', fontWeight: '300' }}>
-              {subtitle}
-            </Typography>
-          </Stack> */}
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
                 {title}
               </Typography>
-              <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
-                {subtitle}
-              </Typography>
+              {subtitle && (
+                <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
+                  {subtitle}
+                </Typography>
+              )}
             </Grid>
           </Grid>
 

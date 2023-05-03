@@ -1,4 +1,4 @@
-import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Delegation, DelegationStatus } from '../../models/Deleghe';
 import { Groups } from '../../models/groups';
@@ -23,11 +23,6 @@ const initialState = {
   },
   groups: [] as Array<Groups>,
   delegatorsNames: [] as Array<{ id: string; name: string }>,
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
   acceptModalState: {
     open: false,
     id: '',
@@ -75,13 +70,11 @@ const delegationsSlice = createSlice({
       state.acceptModalState.error = true;
     });
     builder.addCase(revokeDelegation.fulfilled, (state, action) => {
-      state.modalState.open = false;
       state.delegations.delegates = state.delegations.delegates.filter(
         (delegate: Delegation) => delegate.mandateId !== action.payload.id
       );
     });
     builder.addCase(rejectDelegation.fulfilled, (state, action) => {
-      state.modalState.open = false;
       state.delegations.delegators = state.delegations.delegators.filter(
         (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
@@ -91,9 +84,6 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(getDelegatorsNames.fulfilled, (state, action) => {
       state.delegatorsNames = action.payload;
-    });
-    builder.addMatcher(isAnyOf(rejectDelegation.rejected, revokeDelegation.rejected), (state) => {
-      state.modalState.open = false;
     });
   },
 });

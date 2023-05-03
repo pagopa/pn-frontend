@@ -56,18 +56,6 @@ const Deleghe = () => {
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      {/* <ConfirmationModal
-        open={open}
-        title={
-          type === 'delegates' ? t('deleghe.revocation_question') : t('deleghe.rejection_question')
-        }
-        onCloseLabel={t('button.annulla', { ns: 'common' })}
-        handleClose={handleCloseModal}
-        onConfirm={handleConfirmClick}
-        onConfirmLabel={
-          type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
-        }
-      /> */}
       <Box
         sx={{
           width: '100%',
