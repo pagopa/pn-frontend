@@ -77,7 +77,6 @@ export const NotificationsApi = {
     delegatorsFromStore: Array<Delegator>,
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
-    // eslint-disable-next-line sonarjs/cognitive-complexity
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
       if (response.data) {
         return parseNotificationDetailForRecipient(

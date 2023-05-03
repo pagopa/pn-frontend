@@ -542,62 +542,6 @@ describe('timeline event description', () => {
     );
   });
 
-  it(`return timeline status infos - SEND_ANALOG_FEEDBACK - failure code - single recipient`, () => {
-
-    const mockDetailCode = 'mock-detail-code';
-    const mockFailureCode = 'mock-failure-code';
-    const mockLetterNumber = 'mock-letter-number';
-    
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
-      ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
-      deliveryDetailCode: mockDetailCode,
-      deliveryFailureCause: mockFailureCode,
-      registeredLetterCode: mockLetterNumber
-    };
-
-    testTimelineStatusInfosFnSingle(
-      'send-analog-success',
-      `send-analog-flow-${mockDetailCode}-description`,
-      {
-        name: 'Nome Cognome',
-        taxId: '(mocked-taxId)',
-        deliveryFailureCause: `detail.timeline.analog-workflow-failure-cause.${mockFailureCode}`,
-        registeredLetterKind: '',
-        registeredLetterNumber: mockLetterNumber,
-      }
-    );
-  });
-
-  it(`return timeline status infos - SEND_ANALOG_PROGRESS - failure code - single recipient`, () => {
-
-    const mockDetailCode = 'mock-detail-code';
-    const mockFailureCode = 'mock-failure-code';
-    const mockLetterNumber = 'mock-letter-number';
-    
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
-
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
-      ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
-      deliveryDetailCode: mockDetailCode,
-      deliveryFailureCause: mockFailureCode,
-      registeredLetterCode: mockLetterNumber
-    };
-
-    testTimelineStatusInfosFnSingle(
-      'send-analog-progress',
-      `send-analog-flow-${mockDetailCode}-description`,
-      {
-        name: 'Nome Cognome',
-        taxId: '(mocked-taxId)',
-        deliveryFailureCause: `detail.timeline.analog-workflow-failure-cause.${mockFailureCode}`,
-        registeredLetterKind: '',
-        registeredLetterNumber: mockLetterNumber,
-      }
-    );
-  });
-
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 1', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_DIGITAL_PROGRESS;
@@ -902,6 +846,61 @@ describe('timeline event description', () => {
         registeredLetterNumber: 'RACC-034-B93'
       },
       [sendAnalogDomicileStep()]
+    );
+  });
+
+  it(`return timeline status infos - SEND_ANALOG_PROGRESS - failure code - single recipient`, () => {
+    const mockDetailCode = 'mock-detail-code';
+    const mockFailureCode = 'mock-failure-code';
+    const mockLetterNumber = 'mock-letter-number';
+    
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
+
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
+      ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
+      deliveryDetailCode: mockDetailCode,
+      deliveryFailureCause: mockFailureCode,
+      registeredLetterCode: mockLetterNumber
+    };
+
+    testTimelineStatusInfosFnSingle(
+      'send-analog-progress',
+      `send-analog-flow-${mockDetailCode}-description`,
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        deliveryFailureCause: `detail.timeline.analog-workflow-failure-cause.${mockFailureCode}`,
+        registeredLetterKind: '',
+        registeredLetterNumber: mockLetterNumber,
+      }
+    );
+  });
+
+  it(`return timeline status infos - SEND_ANALOG_FEEDBACK - failure code - single recipient`, () => {
+    const mockDetailCode = 'mock-detail-code';
+    const mockFailureCode = 'mock-failure-code';
+    const mockLetterNumber = 'mock-letter-number';
+    
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
+      ResponseStatus.KO;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
+      ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
+      deliveryDetailCode: mockDetailCode,
+      deliveryFailureCause: mockFailureCode,
+      registeredLetterCode: mockLetterNumber
+    };
+
+    testTimelineStatusInfosFnSingle(
+      'send-analog-error',
+      `send-analog-flow-${mockDetailCode}-description`,
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        deliveryFailureCause: `detail.timeline.analog-workflow-failure-cause.${mockFailureCode}`,
+        registeredLetterKind: '',
+        registeredLetterNumber: mockLetterNumber,
+      }
     );
   });
 
