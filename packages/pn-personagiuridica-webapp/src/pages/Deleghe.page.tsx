@@ -19,6 +19,7 @@ import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import { getConfiguration } from '../services/configuration.service';
+import { PNRole } from '../redux/auth/types';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
@@ -27,8 +28,14 @@ const Deleghe = () => {
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
   );
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const dispatch = useAppDispatch();
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
+  const isGroupAdmin =
+    organization.roles &&
+    organization.roles[0].role === PNRole.ADMIN &&
+    organization.groups &&
+    organization.groups.length > 0;
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -46,7 +53,10 @@ const Deleghe = () => {
   };
 
   const retrieveData = useCallback(() => {
-    void dispatch(getDelegatesByCompany());
+    // groups administrator cannot see the delegates by the company
+    if (!isGroupAdmin) {
+      void dispatch(getDelegatesByCompany());
+    }
     if (DELEGATIONS_TO_PG_ENABLED) {
       void dispatch(getDelegators({ size: 10 }));
       void dispatch(getGroups());
@@ -87,24 +97,33 @@ const Deleghe = () => {
             {t('deleghe.description')}
           </TitleBox>
         </Box>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label={t('deleghe.tab_aria_label')}
-            centered
-            variant="fullWidth"
-          >
-            <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
-            <Tab data-testid="tab2" label={t('deleghe.tab_deleghe')} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <DelegatesByCompany />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <DelegationsOfTheCompany></DelegationsOfTheCompany>
-        </TabPanel>
+        {!isGroupAdmin && (
+          <>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label={t('deleghe.tab_aria_label')}
+                centered
+                variant="fullWidth"
+              >
+                <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
+                <Tab data-testid="tab2" label={t('deleghe.tab_deleghe')} />
+              </Tabs>
+            </Box>
+            <TabPanel value={value} index={0}>
+              <DelegatesByCompany />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <DelegationsOfTheCompany />
+            </TabPanel>
+          </>
+        )}
+        {isGroupAdmin && (
+          <Box sx={{ mx: 3 }}>
+            <DelegationsOfTheCompany />
+          </Box>
+        )}
       </Box>
     </LoadingPageWrapper>
   );

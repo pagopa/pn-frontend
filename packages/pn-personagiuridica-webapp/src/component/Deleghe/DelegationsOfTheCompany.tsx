@@ -216,17 +216,17 @@ const DelegationsOfTheCompany = () => {
   );
 
   const initialValues: {
-    delegatorIds: Array<DelegatorsNames>;
+    mandateIds: Array<DelegatorsNames>;
     groups: Array<{ id: string; name: string }>;
     status: Array<DelegationStatus>;
   } = {
-    delegatorIds: [],
+    mandateIds: [],
     groups: [],
     status: [],
   };
 
   const validationSchema = yup.object({
-    delegatorIds: yup.array(),
+    mandateIds: yup.array(),
     groups: yup.array(),
     status: yup.array(),
   });
@@ -239,7 +239,7 @@ const DelegationsOfTheCompany = () => {
         size: filters.size,
         page: 0,
         status: values.status,
-        delegatorIds: values.delegatorIds.reduce(
+        mandateIds: values.mandateIds.reduce(
           (arr, d) => arr.concat(d.mandateIds),
           [] as Array<string>
         ),
@@ -288,7 +288,7 @@ const DelegationsOfTheCompany = () => {
     const delegatorsFilters = {
       size: filters.size,
       nextPageKey: filters.page ? pagination.nextPagesKey[filters.page - 1] : undefined,
-      delegatorIds: filters.delegatorIds,
+      mandateIds: filters.mandateIds,
       groups: filters.groups,
       status: filters.status,
     } as GetDelegatorsFilters;
@@ -318,9 +318,7 @@ const DelegationsOfTheCompany = () => {
             }}
             emptyStateProps={{
               sentimentIcon: KnownSentiment.DISSATISFIED,
-              emptyMessage: t('deleghe.no_delegators_after_filters', {
-                recipient: organization.name,
-              }),
+              emptyMessage: t('deleghe.no_delegators_after_filters'),
               emptyActionLabel: t('button.annulla filtro', { ns: 'common' }),
               emptyActionCallback: clearFiltersHandler,
             }}
@@ -336,7 +334,7 @@ const DelegationsOfTheCompany = () => {
             >
               <Grid item xs={12} lg>
                 <Autocomplete
-                  id="delegatorIds"
+                  id="mandateIds"
                   size="small"
                   fullWidth
                   options={names}
@@ -358,12 +356,12 @@ const DelegationsOfTheCompany = () => {
                       {...params}
                       label={t('deleghe.table.name')}
                       placeholder={t('deleghe.table.name')}
-                      name="delegatorIds"
+                      name="mandateIds"
                     />
                   )}
-                  value={formik.values.delegatorIds}
+                  value={formik.values.mandateIds}
                   onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
-                    handleChangeTouchedAutocomplete('delegatorIds', newValue)
+                    handleChangeTouchedAutocomplete('mandateIds', newValue)
                   }
                   onInputChange={(_event, newInputValue) => setNameInputValue(newInputValue)}
                   inputValue={nameInputValue}
@@ -441,7 +439,7 @@ const DelegationsOfTheCompany = () => {
         ) : (
           <EmptyState
             sentimentIcon={KnownSentiment.NONE}
-            emptyMessage={t('deleghe.no_delegators', { recipient: organization.name })}
+            emptyMessage={t('deleghe.no_delegators', { organizationName: organization.name })}
           />
         )}
       </ApiErrorWrapper>

@@ -116,6 +116,10 @@ describe('AcceptDelegationModal', () => {
   });
 
   it('fills the code, go next step and returns back', async () => {
+    const groups = [
+      { id: 'group-1', name: 'Group 1' },
+      { id: 'group-2', name: 'Group 2' },
+    ];
     render(
       <AcceptDelegationModal
         isEditMode={false}
@@ -123,7 +127,14 @@ describe('AcceptDelegationModal', () => {
         name="Mario Rossi"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
-      />
+      />,
+      {
+        preloadedState: {
+          delegationsState: {
+            groups,
+          },
+        },
+      }
     );
     let codeDialog = screen.queryByTestId('codeDialog') as Element;
     const codeConfirmButton = codeDialog.querySelector(
@@ -154,6 +165,31 @@ describe('AcceptDelegationModal', () => {
     codeInputs.forEach((input, index) => {
       expect(input).toHaveValue(index.toString());
     });
+  });
+
+  it('fills the code and confirm - no groups', async () => {
+    render(
+      <AcceptDelegationModal
+        isEditMode={false}
+        open
+        name="Mario Rossi"
+        handleCloseAcceptModal={cancelCbk}
+        handleConfirm={confirmCbk}
+      />
+    );
+    const codeDialog = screen.queryByTestId('codeDialog') as Element;
+    const codeConfirmButton = codeDialog.querySelector(
+      '[data-testid="codeConfirmButton"]'
+    ) as Element;
+    expect(codeConfirmButton).toBeDisabled();
+    const codeInputs = codeDialog.querySelectorAll('input');
+    codeInputs.forEach((input, index) => {
+      fireEvent.change(input, { target: { value: index.toString() } });
+    });
+    expect(codeConfirmButton).toBeEnabled();
+    fireEvent.click(codeConfirmButton);
+    expect(confirmCbk).toBeCalledTimes(1);
+    expect(confirmCbk).toBeCalledWith(['0', '1', '2', '3', '4'], []);
   });
 
   it('fills the code, go next step, choose groups and confirm', async () => {

@@ -57,8 +57,12 @@ const AcceptDelegationModal: React.FC<Props> = ({
   );
 
   const handleFirstStepConfirm = (code: Array<string>) => {
-    setStep(1);
-    setCode(code);
+    if (groups.length) {
+      setStep(1);
+      setCode(code);
+      return;
+    }
+    handleConfirm(code, []);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +97,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         cancelCallback={handleClose}
         cancelLabel={t('button.annulla', { ns: 'common' })}
         confirmCallback={handleFirstStepConfirm}
-        confirmLabel={t('deleghe.accept')}
+        confirmLabel={t('deleghe.accept-delegation')}
         codeSectionTitle={t('deleghe.verification_code')}
       ></CodeModal>
     );
@@ -195,7 +199,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
           fullWidth={isMobile}
           sx={{ marginTop: isMobile ? '10px' : 0 }}
         >
-          {t('deleghe.accept')}
+          {t('button.conferma', { ns: 'common' })}
         </Button>
       </DialogActions>
     </Dialog>

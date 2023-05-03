@@ -114,7 +114,7 @@ export interface GetDelegatorsParams {
 }
 
 export interface GetDelegatorsRequest {
-  delegatorIds?: Array<string>;
+  mandateIds?: Array<string>;
   groups?: Array<string>;
   status?: Array<DelegationStatus>;
 }

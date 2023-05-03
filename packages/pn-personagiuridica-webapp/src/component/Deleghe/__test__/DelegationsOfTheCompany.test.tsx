@@ -120,7 +120,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       {
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
-        delegatorIds: [],
+        mandateIds: [],
       },
       {
         resultsPage: [arrayOfDelegators[1]],
@@ -173,7 +173,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
-        delegatorIds: [],
+        mandateIds: [],
       });
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);

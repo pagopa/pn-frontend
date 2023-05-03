@@ -70,7 +70,7 @@ describe('Delegations api tests', () => {
 
   it('revokes a delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(REVOKE_DELEGATION('7')).reply(200);
+    mock.onPatch(REVOKE_DELEGATION('7')).reply(204);
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
     mock.reset();
@@ -79,7 +79,7 @@ describe('Delegations api tests', () => {
 
   it("doesn't revoke a delegation", async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(REVOKE_DELEGATION('10')).reply(204);
+    mock.onPatch(REVOKE_DELEGATION('10')).reply(200);
     const res = await DelegationsApi.revokeDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
@@ -88,7 +88,7 @@ describe('Delegations api tests', () => {
 
   it('rejects a delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(REJECT_DELEGATION('8')).reply(200);
+    mock.onPatch(REJECT_DELEGATION('8')).reply(204);
     const res = await DelegationsApi.rejectDelegation('8');
     expect(res).toStrictEqual({ id: '8' });
     mock.reset();
@@ -97,7 +97,7 @@ describe('Delegations api tests', () => {
 
   it("doesn't reject a delegation", async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(REJECT_DELEGATION('10')).reply(204);
+    mock.onPatch(REJECT_DELEGATION('10')).reply(200);
     const res = await DelegationsApi.rejectDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
@@ -106,7 +106,7 @@ describe('Delegations api tests', () => {
 
   it('accept a delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch(ACCEPT_DELEGATION('9')).reply(200, {});
+    mock.onPatch(ACCEPT_DELEGATION('9')).reply(204, {});
     const res = await DelegationsApi.acceptDelegation('9', { verificationCode: '12345' });
     expect(res).toStrictEqual({ id: '9' });
     mock.reset();

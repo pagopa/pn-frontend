@@ -60,7 +60,7 @@ export const DelegationsApi = {
     apiClient
       .post<GetDelegatorsResponse>(
         DELEGATIONS_BY_DELEGATE({ size: params.size, nextPageKey: params.nextPageKey }),
-        { delegatorIds: params.delegatorIds, groups: params.groups, status: params.status }
+        { mandateIds: params.mandateIds, groups: params.groups, status: params.status }
       )
       .then((response: AxiosResponse<GetDelegatorsResponse>) => ({
         ...response.data,
