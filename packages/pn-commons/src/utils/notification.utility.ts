@@ -341,7 +341,7 @@ export function getLegalFactLabel(
   ) {
     return getLocalizedOrDefaultLabel(
       'notifications',
-      'detail.timeline.legalfact.analog-failure-workflow',
+      'detail.timeline.legalfact.analog-failure-delivery',
       'Deposito di avvenuta ricezione'
     );
   } else if (
