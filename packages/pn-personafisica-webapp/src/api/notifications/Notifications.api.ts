@@ -79,19 +79,6 @@ export const NotificationsApi = {
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
-      if (response.data.iun === 'XNEY-KZMA-RZLW-202305-X-1') {
-        const analogFailureStep = response.data.timeline.find(event => event.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW);
-        const unreachableStep = response.data.timeline.find(event => event.category === TimelineCategory.COMPLETELY_UNREACHABLE);
-        const aarGenerationStep = response.data.timeline.find(event => event.category === TimelineCategory.AAR_GENERATION);
-        if (analogFailureStep && unreachableStep && aarGenerationStep) {
-          // eslint-disable-next-line functional/immutable-data
-          unreachableStep.legalFactsIds = analogFailureStep.legalFactsIds;
-          // eslint-disable-next-line functional/immutable-data
-          analogFailureStep.legalFactsIds = [];
-          // eslint-disable-next-line functional/immutable-data
-          (analogFailureStep.details as any).generatedAarUrl = (aarGenerationStep.details as any).generatedAarUrl;
-        }
-      }
       if (response.data) {
         return parseNotificationDetailForRecipient(
           response.data,
