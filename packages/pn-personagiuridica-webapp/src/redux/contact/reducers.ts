@@ -33,6 +33,12 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
+    // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
+    // a new email to modify the verifying pec address
+    resetPecValidation: (state) => {
+      state.digitalAddresses.legal = state
+        .digitalAddresses.legal.filter((address) => address.senderId !== 'default');
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
@@ -108,6 +114,6 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState } = contactsSlice.actions;
+export const { resetState, resetPecValidation } = contactsSlice.actions;
 
 export default contactsSlice;

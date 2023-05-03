@@ -30,8 +30,22 @@ describe('CustomTagGroup component', () => {
     expect(result.container).not.toHaveTextContent(/mock-tag-4/);
     expect(result.container).toHaveTextContent(/\+1/);
     const tooltip = screen.getByTestId('custom-tooltip-indicator');
-    await waitFor(async () => fireEvent.mouseOver(tooltip));
+    fireEvent.mouseOver(tooltip);
     await waitFor(async () => expect(screen.getAllByText(/mock-tag-4/)[0]).toBeInTheDocument());
     expect(mockCallbackFn).toBeCalledTimes(1);
+  });
+
+  it('renders component with limited 3 tags with disabled tooltip, triggering mouseover should not do callback', async () => {
+    const result = render(
+      <CustomTagGroup visibleItems={3} onOpen={mockCallbackFn} disableTooltip>
+        {tags}
+      </CustomTagGroup>
+    );
+    expect(result.container).toHaveTextContent(/mock-tag-1mock-tag-2mock-tag-3/);
+    expect(result.container).not.toHaveTextContent(/mock-tag-4/);
+    expect(result.container).toHaveTextContent(/\+1/);
+    const tooltip = screen.getByTestId('remaining-tag-indicator');
+    await waitFor(async () => fireEvent.mouseOver(tooltip));
+    expect(mockCallbackFn).toBeCalledTimes(0);
   });
 });

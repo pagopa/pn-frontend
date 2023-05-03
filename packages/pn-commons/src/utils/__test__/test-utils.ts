@@ -15,6 +15,7 @@ import {
   AddressSource,
   LegalFactType,
   NotificationDetailTimelineDetails,
+  ResponseStatus,
 } from '../../types/NotificationDetail';
 
 const timeline: Array<INotificationDetailTimeline> = [
@@ -297,4 +298,90 @@ export function acceptedDeliveringDeliveredTimelineStatusHistory(): Array<Notifi
       relatedTimelineElements: ['digital_success_workflow_0', 'schedule_refinement_0'],
     },
   ];
+}
+
+export function analogFailureTimeline(): Array<INotificationDetailTimeline> {
+  return [
+    ...acceptedDeliveringDeliveredTimeline().slice(0, 2),
+    {
+      elementId: 'send_analog_domicile_0_AR',
+      timestamp: '2023-01-26T13:55:58.651901435Z',
+      category: TimelineCategory.SEND_ANALOG_DOMICILE,
+      details: {
+        recIndex: 0,
+        serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+        physicalAddress: { 
+          address: 'Via Umberto, 34',
+          municipality: 'Graniti',
+          zip: '98036'
+        },
+        sentAttemptMade: 0
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'send_analog_progress_0_AR',
+      timestamp: '2023-01-26T13:56:05.000870007Z',
+      category: TimelineCategory.SEND_ANALOG_PROGRESS,
+      details: {
+        recIndex: 0,
+        deliveryDetailCode: 'RECRN002B',
+        registeredLetterCode: 'IT348344A42'
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'send_analog_feedback_0_AR',
+      timestamp: '2023-01-26T13:56:15.001161877Z',
+      category: TimelineCategory.SEND_ANALOG_FEEDBACK,
+      details: {
+        recIndex: 0,
+        serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+        physicalAddress: { 
+          address: 'Via Umberto, 34',
+          municipality: 'Graniti',
+          zip: '98036'
+        },
+        sentAttemptMade: 0,
+        responseStatus: ResponseStatus.KO,
+        deliveryDetailCode: 'RECRN002C',
+        deliveryFailureCause: 'M01',
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'analog_failure_workflow_0',
+      timestamp: '2023-01-26T14:16:12.42843144Z',
+      category: TimelineCategory.ANALOG_FAILURE_WORKFLOW,
+      details: {
+        recIndex: 0,
+        generatedAarUrl: 'AAR-86-99',
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'completely_unreachable_0',
+      timestamp: '2023-01-26T14:17:16.525827086Z',
+      category: TimelineCategory.COMPLETELY_UNREACHABLE,
+      details: { recIndex: 0 } as NotificationDetailTimelineDetails,
+    },
+  ]
+};
+
+export function analogFailureStatusHistory(): Array<NotificationStatusHistory> {
+  return [
+    acceptedDeliveringDeliveredTimelineStatusHistory()[0],
+    {
+      status: NotificationStatus.DELIVERING,
+      activeFrom: '2023-01-26T13:55:52.651901435Z',
+      relatedTimelineElements: [
+        'send_analog_domicile_0_AR',
+        'send_analog_progress_0_AR',
+        'send_analog_feedback_0_AR',
+        'analog_failure_workflow_0',
+      ],
+    },
+    {
+      status: NotificationStatus.UNREACHABLE,
+      activeFrom: '2023-01-26T14:17:16.525827086Z',
+      relatedTimelineElements: ['completely_unreachable_0'],
+    },
+
+  ]
 }

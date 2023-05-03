@@ -1,9 +1,19 @@
 import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Link,
+  Dialog,
+  TextField,
+  InputAdornment,
+  Divider,
+} from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, CopyToClipboard, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import { useIsMobile, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
+import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -14,6 +24,7 @@ import {
   API_KEYS_ACTIONS,
 } from '../redux/apiKeys/actions';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
+import { UserGroup } from '../models/user';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
@@ -31,6 +42,31 @@ const SubTitle = () => {
       </Link>
       {t('subtitle.text5')}
     </Fragment>
+  );
+};
+
+const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
+  const { t } = useTranslation(['apikeys']);
+  return (
+    <Box sx={{ my: 3 }}>
+      {groups &&
+        groups.map((group, i) => (
+          <Fragment key={group.name}>
+            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', p: 3 }}>
+              <Box sx={{ width: '90%' }}>
+                <Typography variant="body2">
+                  <strong>{group.name}</strong>
+                </Typography>
+                <Typography variant="body2">Group ID: {group.id}</Typography>
+              </Box>
+              <Box sx={{ width: '10%' }}>
+                <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
+              </Box>
+            </Box>
+            {i < groups.length - 1 && <Divider />}
+          </Fragment>
+        ))}
+    </Box>
   );
 };
 
@@ -157,11 +193,9 @@ const ApiKeys = () => {
                       readOnly: true,
                       endAdornment: (
                         <InputAdornment position="end">
-                          <CopyToClipboard
-                            tooltipMode={true}
-                            tooltip={t('api-key-copied')}
-                            tooltipBefore={t('api-key-copy')}
-                            getValue={() => modal.apiKey?.value || ''}
+                          <CopyToClipboardButton
+                            value={() => modal.apiKey?.value || ''}
+                            tooltipTitle={t('api-key-copied')}
                           />
                         </InputAdornment>
                       ),
@@ -220,6 +254,17 @@ const ApiKeys = () => {
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('delete-button')}
                 actionHandler={() => apiKeyDeleted(modal.apiKey?.id as string)}
+              />
+            )}
+            {modal.view === ModalApiKeyView.VIEW_GROUPS_ID && (
+              <ApiKeyModal
+                titleSx={{ marginBottom: isMobile ? 3 : undefined }}
+                title={t('view-groups-id', { apikey: modal.apiKey?.name })}
+                subTitle={t('view-groups-id-message')}
+                subTitleAtBottom
+                content={<TableGroupsId groups={modal.apiKey?.groups} />}
+                closeButtonLabel={t('close-button')}
+                closeModalHandler={handleCloseModal}
               />
             )}
           </Box>
