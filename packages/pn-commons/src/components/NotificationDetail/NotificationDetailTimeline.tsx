@@ -8,6 +8,7 @@ import {
   LegalFactId,
   NotificationStatusHistory,
   NotificationDetailRecipient,
+  NotificationDetailOtherDocument,
 } from '../../types';
 import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
@@ -16,7 +17,10 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   title: string;
-  clickHandler: (legalFactId: LegalFactId) => void;
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
+  // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+  clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
   historyButtonLabel: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;

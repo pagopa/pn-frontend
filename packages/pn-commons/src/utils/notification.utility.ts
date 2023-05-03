@@ -302,7 +302,7 @@ export function getLegalFactLabel(
   // the legalFactType to expect for such events.
   // Hence I keep the condition on the category only.
   // -------------------------
-  // Carlos Lombardi, 2022.24.02
+  // Carlos Lombardi
   if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
     if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
@@ -318,18 +318,41 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
-    // To the moment I could access to no example of a legal fact associated to this
-    // kind of events, neither to a documentation which indicates
-    // the legalFactType to expect for such events.
-    // Hence I keep the condition on the category only.
-    // -------------------------
-    // Carlos Lombardi, 2022.24.02
+
+  // To the moment I could access to no example of a legal fact associated to this
+  // kind of events, neither to a documentation which indicates
+  // the legalFactType to expect for such events.
+  // Hence I keep the condition on the category only.
+  // -------------------------
+  // Carlos Lombardi
   } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.paper-receipt-accepted',
       'di accettazione raccomandata'
     )}`;
+
+
+  // PN-5484  
+  } else if (
+    timelineStep.category === TimelineCategory.COMPLETELY_UNREACHABLE && 
+    legalFactType === LegalFactType.ANALOG_FAILURE_DELIVERY
+  ) {
+    return getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.analog-failure-delivery',
+      'Deposito di avvenuta ricezione'
+    );
+  } else if (
+    timelineStep.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW && 
+    legalFactType === LegalFactType.AAR
+  ) {
+    return getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.aar-document',
+      'Avviso di avvenuta ricezione'
+    );
+
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
     legalFactType === LegalFactType.PEC_RECEIPT
@@ -397,8 +420,9 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.digital-delivery-failure',
       'mancato recapito digitale'
     )}`;
-    // this is (at least in the examples I've seen)
-    // related to the category NOTIFICATION_VIEWED
+
+  // this is (at least in the examples I've seen)
+  // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -501,7 +525,15 @@ function populateMacroStep(
       // PN-4484 - hide the internal events related to the courtesy messages sent through app IO
     } else if (isInternalAppIoEvent(step)) {
       status.steps!.push({ ...step, hidden: true });
-      // remove legal facts for those microsteps that are releated to accepted status
+    // add legal facts for ANALOG_FAILURE_WORKFLOW steps with linked generatedAarUrl
+    // since the AAR for such steps must be shown in timeline exactly the same way as legalFacts.
+    // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+    } else if (step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW && (step.details as AarDetails).generatedAarUrl) {
+      status.steps!.push({ 
+        ...step, 
+        legalFactsIds: [{ documentId: (step.details as AarDetails).generatedAarUrl as string, documentType: LegalFactType.AAR }] 
+      });
+    // remove legal facts for those microsteps that are releated to accepted status
     } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
       status.steps!.push({ ...step, legalFactsIds: [] });
       // default case

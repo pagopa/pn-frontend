@@ -132,7 +132,8 @@
         "pec-receipt-not-delivered": "di mancata consegna PEC",
         "paper-receipt-accepted": "di accettazione raccomandata",
         "paper-receipt-delivered": "di consegna raccomandata",
-        "paper-receipt-not-delivered": "di mancata consegna raccomandata"
+        "paper-receipt-not-delivered": "di mancata consegna raccomandata",
+        "analog-failure-delivery": "Deposito di avvenuta ricezione"
       }
     },
     "downtimes": {
