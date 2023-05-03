@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Alert, Box, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-
 import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
 import { DisclaimerModal } from '@pagopa-pn/pn-commons';
 
@@ -98,7 +96,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
         <Alert
           sx={{ mt: 4 }}
           severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
-          data-testid="AppIO contact disclaimer"
+          data-testid="appIO-contact-disclaimer"
         >
           <Typography component="span" variant="body1">
             {status === IOContactStatus.UNAVAILABLE

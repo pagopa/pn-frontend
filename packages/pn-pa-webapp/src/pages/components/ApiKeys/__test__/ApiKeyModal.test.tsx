@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
-import ApiKeyModal from '../ApiKeyModal';
+import ApiKeyModal, { ApiKeyModalProps } from '../ApiKeyModal';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -11,7 +11,7 @@ jest.mock('react-i18next', () => ({
 const closeModalFn = jest.fn();
 const actionModalFn = jest.fn();
 
-const defaultProps = {
+const defaultProps: ApiKeyModalProps = {
   titleSx: {},
   title: 'mock-title',
   subTitle: 'mock-subtitle',
@@ -22,11 +22,27 @@ const defaultProps = {
   actionHandler: actionModalFn,
 }
 
+const propsWithBottomSubtitle = {
+  ...defaultProps,
+  subTitleAtBottom: true
+}
+
 describe('ApiKeyModal component', () => {
 
   it('render component', () => {
     const result = render(<ApiKeyModal {...defaultProps}/>)
     expect(result.container).toHaveTextContent('mock-title');
+    expect(result.container).toHaveTextContent('mocked-content');
+    expect(result.queryByTestId('subtitle-top')).toBeInTheDocument();
+    expect(result.queryByTestId('subtitle-bottom')).not.toBeInTheDocument();
+  });
+
+  it('render component with subtitle at bottom', () => {
+    const result = render(<ApiKeyModal {...propsWithBottomSubtitle}/>)
+    expect(result.container).toHaveTextContent('mock-title');
+    expect(result.container).toHaveTextContent('mocked-content');
+    expect(result.queryByTestId('subtitle-top')).not.toBeInTheDocument();
+    expect(result.queryByTestId('subtitle-bottom')).toBeInTheDocument();
   });
 
   it('render component and click close button', async () => {

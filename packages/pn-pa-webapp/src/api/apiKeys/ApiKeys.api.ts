@@ -1,11 +1,11 @@
-import { ApiKey, ApiKeyStatusBE, GetApiKeysResponse, GetNewApiKeyResponse, NewApiKeyBE } from '../../models/ApiKeys';
+import { ApiKeyDTO, ApiKeyStatusBE, GetApiKeysResponse, GetNewApiKeyResponse, NewApiKeyBE } from '../../models/ApiKeys';
 import { apiClient } from '../apiClients';
 import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from './apiKeys.routes';
 
 const setResponseError = (response: number) => (response === 200 ? 'success' : 'error');
 
 export const ApiKeysApi = {
-  getApiKeys: (): Promise<Array<ApiKey>> =>
+  getApiKeys: (): Promise<Array<ApiKeyDTO>> =>
     apiClient.get<GetApiKeysResponse>(APIKEY_LIST(), {params: {showVirtualKey: true}}).then((response) => {
       if (response.data && response.data.items) {
         return response.data.items;

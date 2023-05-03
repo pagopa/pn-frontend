@@ -169,11 +169,21 @@ const NotificationDetail = () => {
     }
   };
 
-  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    dispatch(resetLegalFactState());
-    void dispatch(
-      getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId })
-    );
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
+  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
+  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
+    if ((legalFact as LegalFactId).key) {
+      dispatch(resetLegalFactState());
+      void dispatch(
+        getReceivedNotificationLegalfact({ iun: notification.iun, legalFact: legalFact as LegalFactId, mandateId })
+      );
+    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
+      const otherDocument = legalFact as NotificationDetailOtherDocument;
+      void dispatch(
+        getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId })
+      );
+    }
   };
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;

@@ -220,8 +220,8 @@
         "pec-receipt-delivered": "di consegna PEC",
         "pec-receipt-not-delivered": "di mancata consegna PEC",
         "paper-receipt-delivered": "di consegna raccomandata",
-        "paper-receipt-not-delivered": "di mancata consegna raccomandata"
-      },
+        "paper-receipt-not-delivered": "di mancata consegna raccomandata",
+        "analog-failure-delivery": "Deposito di avvenuta ricezione"      },
       "registered-letter-kind": {
         "AR": "A/R",
         "890": "890",

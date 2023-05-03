@@ -1,10 +1,11 @@
 import { ApiKeysApi } from '../../../api/apiKeys/ApiKeys.api';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { ApiKey } from '../../../models/ApiKeys';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getApiKeys } from '../actions';
 import { resetState } from  '../reducers';
-import { mockApiKeysForFE } from './test-utils';
+import { mockApiKeysForFE, mockApiKeysFromBE, mockGroups } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -17,13 +18,15 @@ describe('api keys page redux state test', () => {
     const state = store.getState().apiKeysState;
     expect(state).toEqual({
       loading: false,
-      apiKeys: [] as Array<ApiKey>
+      apiKeys: [] as Array<ApiKey>,
     });
   });
 
   it('Should be able to fetch the api keys list', async () => {
-    const apiSpy = jest.spyOn(ApiKeysApi, 'getApiKeys');
-    apiSpy.mockResolvedValue(mockApiKeysForFE);
+    const apiSpyApiKey = jest.spyOn(ApiKeysApi, 'getApiKeys');
+    const apiSpyNotification = jest.spyOn(NotificationsApi, 'getUserGroups')
+    apiSpyApiKey.mockResolvedValue(mockApiKeysFromBE.items);
+    apiSpyNotification.mockResolvedValue(mockGroups);
     const action = await store.dispatch(getApiKeys());
     const payload = action.payload;
     expect(action.type).toBe('getApiKeys/fulfilled');
@@ -38,4 +41,5 @@ describe('api keys page redux state test', () => {
     const state = store.getState().apiKeysState;
     expect(state).toEqual(initialState);
   });
+
 });
