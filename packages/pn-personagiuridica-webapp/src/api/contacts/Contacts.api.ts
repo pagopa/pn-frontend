@@ -15,13 +15,17 @@ export const ContactsApi = {
    */
   getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-      legal: response.data.legal ? response.data.legal : [],
+      legal: response.data.legal ? response.data.legal.filter(address => address.codeValid !== false) : [],
       courtesy: response.data.courtesy ? response.data.courtesy : [],
     })),
 
   /**
    * Create or update a digital address with legal value
    * @param  {string} recipientId
+   * @param  {string} senderId
+   * @param  {LegalChannelType} channelType
+   * @param  {object} body
+   * @param  {string} senderName
    * @returns Promise
    */
   createOrUpdateLegalAddress: (
@@ -31,21 +35,35 @@ export const ContactsApi = {
     body: { value: string; verificationCode?: string },
     senderName?: string
   ): Promise<void | DigitalAddress> =>
-    apiClient.post<void>(LEGAL_CONTACT(senderId, channelType), body).then((response) => {
-      if (response.status !== 204) {
-        // user must verify email
+    apiClient.post<void | { result: string }>(LEGAL_CONTACT(senderId, channelType), body).then((response) => {
+      if (response.status === 204) {
+        // email already verified
+        return {
+          addressType: 'legal',
+          recipientId,
+          senderId,
+          senderName,
+          channelType,
+          value: body.value,
+          pecValid: true
+        };
+      }
+
+      // PEC_VALIDATION_REQUIRED is received when the code has been inserted and is valid, but the pec validation is
+      // still in progress
+      if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
+        return {
+          addressType: 'legal',
+          recipientId,
+          senderId,
+          senderName,
+          channelType,
+          value: body.value,
+          pecValid: false
+        };
+      } else {
         return;
       }
-      // email already verified
-      return {
-        addressType: 'legal',
-        recipientId,
-        senderId,
-        senderName,
-        channelType,
-        value: body.value,
-        code: 'verified',
-      };
     }),
   /**
    * Create or update a courtesy address
@@ -72,7 +90,6 @@ export const ContactsApi = {
         senderName,
         channelType,
         value: body.value,
-        code: 'verified',
       };
     }),
   /*

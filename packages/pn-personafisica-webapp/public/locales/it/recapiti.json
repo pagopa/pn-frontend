@@ -28,8 +28,6 @@
     "insert-code": "Inserisci codice",
     "pec-new-code": "Non l’hai ricevuto? Controlla che l’indirizzo PEC sia corretto o",
     "new-code-link": "generane uno nuovo",
-    "wrong-code": "Il codice inserito non è corretto",
-    "wrong-code-message": "Prova a reinserirlo, oppure genera un nuovo codice.",
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
@@ -37,7 +35,12 @@
     "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
-    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
+    "validation-cancel-title": "Vuoi annullare la verifica?",
+    "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
+    "validation-in-progress": "Verifica in corso",
+    "validation-progress-title": "Grazie, ora tocca a noi",
+    "validation-progress-content": "Stiamo verificando che che l’indirizzo da te inserito sia una PEC valida per la ricezione delle notifiche della Pubblica Amministrazione. Riceverai l’esito della verifica tramite e-mail."
   },
   "io-contact": {
     "title": "",
@@ -78,8 +81,6 @@
     "email-new-code": "Non l’hai ricevuto? Controlla che l’indirizzo e-mail sia corretto o",
     "phone-new-code": "Non l’hai ricevuto? Controlla che il numero di cellulare sia corretto o",
     "new-code-link": "generane uno nuovo",
-    "wrong-code": "Il codice inserito non è corretto",
-    "wrong-code-message": "Prova a reinserirlo, oppure genera un nuovo codice.",
     "email-added": "Indirizzo email",
     "phone-added": "Numero di cellulare",
     "valid-email": "Indirizzo email non valido",
@@ -118,8 +119,16 @@
   },
   "errors": {
     "invalid_verification_code": {
-      "title": "Il codice inserito non è corretto",
-      "message": "Prova a reinserirlo, oppure genera un nuovo codice."
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo, oppure generane un altro."
+    },
+    "retry_limit_code": {
+      "title": "Hai fatto troppi tentativi",
+      "message": "Hai inserito troppe volte un codice sbagliato. Per riprovare premi “Annulla”, assicurati che il contatto sia corretto e inserisci il nuovo codice."
+    },
+    "expired_verification_code": {
+      "title": "Il codice è scaduto",
+      "message": "Generane uno nuovo e inseriscilo."
     }
   }
 }
