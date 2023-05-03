@@ -7,7 +7,6 @@ import {
   NotificationDetail,
   NotificationDetailOtherDocument,
   parseNotificationDetail,
-  TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';

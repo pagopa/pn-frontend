@@ -8,7 +8,6 @@ import {
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,
-  TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
