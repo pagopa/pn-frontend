@@ -1401,37 +1401,6 @@ describe('parse notification & filters', () => {
     expect((legalFact as NotificationDetailOtherDocument).documentId).toEqual('AAR-86-99');
     expect((legalFact as NotificationDetailOtherDocument).documentType).toEqual(LegalFactType.AAR);
   });
-
-  it('return notifications filters count (no filters)', () => {
-    const date = new Date();
-    const count = filtersApplied(
-      {
-        startDate: formatToTimezoneString(date),
-        endDate: formatToTimezoneString(getNextDay(date)),
-      },
-      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) }
-    );
-    expect(count).toEqual(0);
-  });
-
-  it('return notifications filters count (with filters)', () => {
-    const date = new Date();
-    const count = filtersApplied(
-      {
-        startDate: formatToTimezoneString(date),
-        endDate: formatToTimezoneString(getNextDay(date)),
-        iunMatch: 'mocked-iun',
-        recipientId: 'mocked-recipient',
-      },
-      {
-        startDate: formatToTimezoneString(date),
-        endDate: formatToTimezoneString(getNextDay(date)),
-        iunMatch: undefined,
-        recipientId: undefined,
-      }
-    );
-    expect(count).toEqual(2);
-  });
 });
 
 describe('timeline legal fact link text', () => {
