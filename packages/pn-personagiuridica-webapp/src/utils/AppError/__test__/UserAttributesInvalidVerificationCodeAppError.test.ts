@@ -1,7 +1,7 @@
 import { ServerResponseError } from '@pagopa-pn/pn-commons';
 
 import { UserAttributesInvalidVerificationCodeAppError } from '../UserAttributesInvalidVerificationCodeAppError';
-import {ServerResponseErrorCode} from "../types";
+import { ServerResponseErrorCode } from '../types';
 
 describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
   const translateFn = (path: string, ns: string) => `${path} ${ns}`;
@@ -9,12 +9,48 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
   it('Should return invalid verification code message', () => {
     const appError = new UserAttributesInvalidVerificationCodeAppError(
       {
-        code: ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE
+        code: ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE,
       } as ServerResponseError,
       translateFn
     );
     const messege = appError.getMessage();
     expect(messege.title).toBe('errors.invalid_verification_code.title recapiti');
     expect(messege.content).toBe('errors.invalid_verification_code.message recapiti');
+  });
+
+  it('Should return limit is exceeded code message', () => {
+    const appError = new UserAttributesInvalidVerificationCodeAppError(
+      {
+        code: ServerResponseErrorCode.PN_USERATTRIBUTES_RETRYLIMITVERIFICATIONCODE,
+      } as ServerResponseError,
+      translateFn
+    );
+    const messege = appError.getMessage();
+    expect(messege.title).toBe('errors.retry_limit_code.title recapiti');
+    expect(messege.content).toBe('errors.retry_limit_code.message recapiti');
+  });
+
+  it('Should return expired verification code message', () => {
+    const appError = new UserAttributesInvalidVerificationCodeAppError(
+      {
+        code: ServerResponseErrorCode.PN_USERATTRIBUTES_EXPIREDVERIFICATIONCODE,
+      } as ServerResponseError,
+      translateFn
+    );
+    const messege = appError.getMessage();
+    expect(messege.title).toBe('errors.expired_verification_code.title recapiti');
+    expect(messege.content).toBe('errors.expired_verification_code.message recapiti');
+  });
+
+  it('Should return unknown code message', () => {
+    const appError = new UserAttributesInvalidVerificationCodeAppError(
+      {
+        code: 'fake' as ServerResponseErrorCode,
+      } as ServerResponseError,
+      translateFn
+    );
+    const messege = appError.getMessage();
+    expect(messege.title).toBe('errors.unknown.title common');
+    expect(messege.content).toBe('errors.unknown.message common');
   });
 });
