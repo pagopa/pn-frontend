@@ -50,6 +50,7 @@ import { MessageType } from './MessageType';
 import { BasicUser, basicNoLoggedUserData, ConsentUser } from './User';
 import { EventsType } from './MixpanelEvents';
 import { AppResponse, ServerResponseError, ErrorMessage } from './AppResponse';
+import { SmartTableData } from './SmartTable';
 
 export {
   basicNoLoggedUserData,
@@ -113,4 +114,5 @@ export type {
   ServerResponseError,
   ErrorMessage,
   PaymentHistory,
+  SmartTableData,
 };

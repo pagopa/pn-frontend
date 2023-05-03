@@ -87,9 +87,6 @@ const NotificationDetail = () => {
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
 
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-  const delegatorsFromStore = useAppSelector(
-    (state: RootState) => state.generalInfoState.delegators
-  );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -215,7 +212,7 @@ const NotificationDetail = () => {
         getReceivedNotification({
           iun: id,
           currentUserTaxId: currentUser.fiscal_number,
-          delegatorsFromStore,
+          delegatorsFromStore: [],
           mandateId,
         })
       ).then(() => setPageReady(true));

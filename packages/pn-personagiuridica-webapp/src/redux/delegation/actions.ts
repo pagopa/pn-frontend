@@ -1,22 +1,29 @@
-import { performThunkAction, Sort } from '@pagopa-pn/pn-commons';
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
-import { AcceptDelegationResponse, Delegation } from './types';
+import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import {
+  AcceptDelegationResponse,
+  Delegation,
+  GetDelegatorsFilters,
+  GetDelegatorsResponse,
+} from '../../models/Deleghe';
+import { Groups } from '../../models/groups';
 
 export enum DELEGATION_ACTIONS {
-  GET_DELEGATES = 'getDelegates',
+  GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
   GET_DELEGATORS = 'getDelegators',
+  GET_DELEGATORS_NAMES = 'getDelegatorsNames',
 }
 
-export const getDelegates = createAsyncThunk<Array<Delegation>>(
-  DELEGATION_ACTIONS.GET_DELEGATES,
-  performThunkAction(() => DelegationsApi.getDelegates())
+export const getDelegatesByCompany = createAsyncThunk<Array<Delegation>>(
+  DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY,
+  performThunkAction(() => DelegationsApi.getDelegatesByCompany())
 );
 
-export const getDelegators = createAsyncThunk<Array<Delegation>>(
+export const getDelegators = createAsyncThunk<GetDelegatorsResponse, GetDelegatorsFilters>(
   DELEGATION_ACTIONS.GET_DELEGATORS,
-  performThunkAction(() => DelegationsApi.getDelegators())
+  performThunkAction((params: GetDelegatorsFilters) => DelegationsApi.getDelegators(params))
 );
 
 export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
@@ -32,13 +39,24 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
 export const acceptDelegation = createAsyncThunk<
   AcceptDelegationResponse,
   { id: string; code: string }
->('acceptDelegation', 
-  performThunkAction(async ({id, code}: { id: string; code: string }) => {
+>(
+  'acceptDelegation',
+  performThunkAction(async ({ id, code }: { id: string; code: string }) => {
     const data = {
       verificationCode: code,
     };
     return await DelegationsApi.acceptDelegation(id, data);
   })
+);
+
+export const getGroups = createAsyncThunk<Array<Groups>>(
+  'getGroups',
+  performThunkAction(() => ExternalRegistriesAPI.getGroups())
+);
+
+export const getDelegatorsNames = createAsyncThunk<Array<{ id: string; name: string }>>(
+  DELEGATION_ACTIONS.GET_DELEGATORS_NAMES,
+  performThunkAction(() => DelegationsApi.getDelegatorsNames())
 );
 
 export const openRevocationModal =
@@ -49,9 +67,5 @@ export const closeRevocationModal = createAction<void>('closeRevocationModal');
 export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
 
 export const closeAcceptModal = createAction<void>('closeAcceptModal');
-
-export const setDelegatorsSorting = createAction<Sort<DelegatorsColumn>>('setDelegatorsSorting');
-
-export const setDelegatesSorting = createAction<Sort<DelegatesColumn>>('setDelegatesSorting');
 
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

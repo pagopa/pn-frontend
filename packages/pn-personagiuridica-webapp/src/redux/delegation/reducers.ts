@@ -1,23 +1,28 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
-import { Sort } from '@pagopa-pn/pn-commons';
 
-import { sortDelegations } from '../../utils/delegation.utility';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
+import { Delegation, DelegationStatus } from '../../models/Deleghe';
+import { Groups } from '../../models/groups';
 import {
-  getDelegates,
+  getDelegatesByCompany,
   getDelegators,
   acceptDelegation,
   rejectDelegation,
   revokeDelegation,
+  getGroups,
+  getDelegatorsNames,
 } from './actions';
-import { Delegation } from './types';
 
 const initialState = {
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
-    isCompany: false,
   },
+  pagination: {
+    nextPagesKey: [] as Array<string>,
+    moreResult: false,
+  },
+  groups: [] as Array<Groups>,
+  delegatorsNames: [] as Array<{ id: string; name: string }>,
   modalState: {
     open: false,
     id: '',
@@ -29,14 +34,6 @@ const initialState = {
     name: '',
     error: false,
   },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc',
-  } as Sort<DelegatorsColumn>,
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  } as Sort<DelegatesColumn>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -63,34 +60,22 @@ const delegationsSlice = createSlice({
       state.acceptModalState.open = false;
       state.acceptModalState.id = '';
     },
-    setDelegatesSorting: (state, action: PayloadAction<Sort<DelegatesColumn>>) => {
-      state.sortDelegates = action.payload;
-      state.delegations.delegates = sortDelegations(
-        action.payload.order,
-        action.payload.orderBy,
-        state.delegations.delegates
-      );
-    },
-    setDelegatorsSorting: (state, action: PayloadAction<Sort<DelegatorsColumn>>) => {
-      state.sortDelegators = action.payload;
-      state.delegations.delegators = sortDelegations(
-        action.payload.order,
-        action.payload.orderBy,
-        state.delegations.delegators
-      );
-    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(getDelegates.fulfilled, (state, action) => {
+    builder.addCase(getDelegatesByCompany.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
-      state.delegations.delegators = action.payload;
+      state.delegations.delegators = action.payload.resultsPage;
+      state.pagination.nextPagesKey = action.payload.nextPagesKey;
+      state.pagination.moreResult = action.payload.moreResult;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
+        delegator.mandateId === action.payload.id
+          ? { ...delegator, status: DelegationStatus.ACTIVE }
+          : delegator
       );
       state.acceptModalState.open = false;
       state.acceptModalState.error = false;
@@ -110,6 +95,12 @@ const delegationsSlice = createSlice({
         (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
     });
+    builder.addCase(getGroups.fulfilled, (state, action) => {
+      state.groups = action.payload;
+    });
+    builder.addCase(getDelegatorsNames.fulfilled, (state, action) => {
+      state.delegatorsNames = action.payload;
+    });
     builder.addMatcher(isAnyOf(rejectDelegation.rejected, revokeDelegation.rejected), (state) => {
       state.modalState.open = false;
     });
@@ -117,8 +108,6 @@ const delegationsSlice = createSlice({
 });
 
 export const {
-  setDelegatorsSorting,
-  setDelegatesSorting,
   openAcceptModal,
   closeAcceptModal,
   resetState,

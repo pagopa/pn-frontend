@@ -25,7 +25,7 @@
     "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "error_button": "Ricarica la pagina",
     "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
-    "no_delegators": "Non hai deleghe a tuo carico.",
+    "no_delegators": "Non c'è nessuna delega a carico di {{recipient}}.",
     "show_code_title": "Codice di verifica per la delega a {{name}}",
     "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",
@@ -46,16 +46,22 @@
       "notificationsFrom": "Notifiche da:",
       "allNotifications": "Tutte le notifiche",
       "active": "Attiva",
-      "pending": "In attesa di conferma"
+      "pending": "In attesa di conferma",
+      "rejected": "Rifiutata",
+      "groups": "Gruppi",
+      "group": "Gruppo",
+      "no-group-found": "Nessun gruppo trovato",
+      "no-name-found": "Nessun nome trovato",
+      "menu-aria-label": "Menù azioni"
     }
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
     "backToDelegations": "Torna alle deleghe",
-    "createdTitle": "La tua richiesta di delega è stata creata con successo",
+    "createdTitle": "La richiesta di delega è stata creata con successo",
     "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la tua richiesta.",
-    "title": "Le tue deleghe",
-    "subtitle": "Inserisci i dati del soggetto giuridico a cui vuoi delegare la gestione delle tue notifiche",
+    "title": "Aggiungi una delega",
+    "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle notifiche di {{organizationName}}",
     "form": {
       "personType": "Soggetto giuridico*:",
       "naturalPerson": "Persona fisica",
@@ -64,6 +70,7 @@
       "lastName": "Cognome*",
       "fiscalCode": "Codice Fiscale*",
       "email": "Email*",
+      "businessName": "Ragione Sociale*",
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo gli enti selezionati",
@@ -88,6 +95,9 @@
       },
       "surname": {
         "required": "Il cognome è obbligatorio"
+      },
+      "businessName": {
+        "required": "La ragione sociale è obbligatoria"
       },
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",

@@ -10,7 +10,6 @@ import {
   TimelineCategory,
   NotificationDetailRecipient,
   NotificationDetail,
-  GetNotificationsParams,
   NotificationStatus,
   NotificationStatusHistory,
   AarDetails,
@@ -779,22 +778,4 @@ export function parseNotificationDetail(
   /* eslint-enable functional/immutable-data */
   /* eslint-enable functional/no-let */
   return parsedNotification;
-}
-
-/**
- * Returns the number of filters applied
- * @param  prevFilters GetNotificationsParams
- * @param  emptyValues GetNotificationsParams
- * @returns number
- */
-export function filtersApplied(
-  prevFilters: GetNotificationsParams,
-  emptyValues: GetNotificationsParams
-): number {
-  return Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
-    if (element[0] in emptyValues && element[1] !== (emptyValues as any)[element[0]]) {
-      return c + 1;
-    }
-    return c;
-  }, 0);
 }

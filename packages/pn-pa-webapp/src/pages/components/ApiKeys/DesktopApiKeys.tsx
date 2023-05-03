@@ -1,5 +1,6 @@
 import { Fragment, useState, MouseEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -10,20 +11,21 @@ import {
   ItemsTable,
   StatusTooltip,
   EmptyState,
-  CopyToClipboard,
   formatDate,
   CustomTagGroup,
+  CustomTooltip,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 import {
-  ApiKey,
   ApiKeyColumn,
+  ApiKey,
   ApiKeyStatus,
   ApiKeyStatusHistory,
   ModalApiKeyView,
 } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
 import * as routes from '../../../navigation/routes.const';
+import { UserGroup } from '../../../models/user';
 
 type Props = {
   apiKeys: Array<ApiKey>;
@@ -47,7 +49,10 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
    */
   const isApiKeyRotated = (apiKeyIdx: number): boolean => {
     const currentApiKey = rows[apiKeyIdx] as any as ApiKey;
-    return !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
+    return (
+      currentApiKey.statusHistory &&
+      !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED)
+    );
   };
 
   const ApiKeyContextMenu = ({ row }: ApiKeyContextMenuProps) => {
@@ -133,6 +138,12 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
               {t('context-menu.enable')}
             </MenuItem>
           )}
+          <MenuItem
+            data-testid="buttonViewGroupsId"
+            onClick={() => handleModalClick(ModalApiKeyView.VIEW_GROUPS_ID, apiKeyId)}
+          >
+            {t('context-menu.view-groups-id')}
+          </MenuItem>
         </Menu>
       </Box>
     );
@@ -175,13 +186,11 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
             }}
           >
             {`${value.substring(0, 10)}...`}
-            <CopyToClipboard
+            <CopyToClipboardButton
               data-testid="copyToClipboard"
               disabled={isApiKeyRotated(Number(row.id))}
-              tooltipMode={true}
-              tooltip={t('api-key-copied')}
-              tooltipBefore={t('api-key-copy')}
-              getValue={() => value || ''}
+              tooltipTitle={t('api-key-copied')}
+              value={() => value || ''}
             />
           </Box>
         );
@@ -203,15 +212,37 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       id: 'groups',
       label: t('table.groups'),
       width: '15%',
-      getCellLabel(value: Array<string>) {
+      getCellLabel(value: Array<UserGroup>) {
         return (
-          <CustomTagGroup visibleItems={3}>
-            {value.map((v, i) => (
-              <Box key={i} sx={{ my: 1 }}>
-                <Tag value={v} />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <CustomTooltip
+              openOnClick={false}
+              tooltipContent={
+                <Box sx={{ textAlign: 'left' }}>
+                  {value.map((v) => (
+                    <Box key={`tooltip_${v.id}`} sx={{ fontWeight: 'normal' }}>
+                      <strong>Group ID</strong> {v.id}
+                    </Box>
+                  ))}
+                </Box>
+              }
+            >
+              <Box>
+                <CustomTagGroup visibleItems={3} disableTooltip>
+                  {value.map((v, i) => (
+                    <Box key={i} sx={{ my: 1 }}>
+                      <Tag value={v.name} />
+                    </Box>
+                  ))}
+                </CustomTagGroup>
               </Box>
-            ))}
-          </CustomTagGroup>
+            </CustomTooltip>
+            <CopyToClipboardButton
+              data-testid="copyToClipboardGroupsId"
+              tooltipTitle={t('groups-id-copied')}
+              value={() => value.map((g) => g.id).join(',') || ''}
+            />
+          </Box>
         );
       },
     },

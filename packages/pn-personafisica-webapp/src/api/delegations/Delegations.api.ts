@@ -14,7 +14,7 @@ import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
   REJECT_DELEGATION,
-  REOVKE_DELEGATION,
+  REVOKE_DELEGATION,
 } from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
@@ -70,8 +70,9 @@ export const DelegationsApi = {
    */
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(REOVKE_DELEGATION(id))
+      .patch(REVOKE_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
+
   /**
    * Removes a delegation created for the user
    * @param {string} id
@@ -81,6 +82,7 @@ export const DelegationsApi = {
     apiClient
       .patch(REJECT_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
+
   /**
    * Accepts a delegation created for the user
    * @param {string} id
@@ -101,6 +103,7 @@ export const DelegationsApi = {
           id: '-1',
         } as AcceptDelegationResponse;
       }),
+
   /**
    * Creates a new delegation
    * @param data
@@ -109,26 +112,5 @@ export const DelegationsApi = {
   createDelegation: (data: CreateDelegationProps): Promise<CreateDelegationResponse> =>
     apiClient
       .post<CreateDelegationResponse>(CREATE_DELEGATION(), data)
-      .then((response: AxiosResponse<CreateDelegationResponse>) => {
-        if (response.data) {
-          return response.data;
-        }
-        return {
-          datefrom: '',
-          dateto: '',
-          delegate: {
-            firstName: '',
-            lastName: '',
-            companyName: null,
-            fiscalCode: '',
-            email: '',
-            person: true,
-          },
-          delegator: null,
-          mandateId: '',
-          status: '',
-          verificationCode: '',
-          visibilityIds: [],
-        } as CreateDelegationResponse;
-      }),
+      .then((response: AxiosResponse<CreateDelegationResponse>) => response.data),
 };

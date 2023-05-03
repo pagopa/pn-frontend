@@ -22,7 +22,6 @@ import {
 import { AppIoCourtesyMessageEventType, NotificationDetailOtherDocument } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
-  filtersApplied,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
@@ -529,8 +528,9 @@ describe('timeline event description', () => {
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 1', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode =
-      'C010';
+    (
+      parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails
+    ).deliveryDetailCode = 'C010';
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress =
       {
         address: 'titi99@some.org',
@@ -560,8 +560,9 @@ describe('timeline event description', () => {
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 0', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).deliveryDetailCode =
-      'DP00';
+    (
+      parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails
+    ).deliveryDetailCode = 'DP00';
     testTimelineStatusInfosFnMulti0(
       'send-digital-progress-success',
       'send-digital-progress-success-description-multirecipient',
@@ -1008,8 +1009,9 @@ describe('parse notification & filters', () => {
       timestamp: '2023-01-26T13:55:53.597019182Z',
       category: TimelineCategory.SEND_COURTESY_MESSAGE,
       details: {
-        recIndex: 0, sendDate: "some-date-optin",
-        digitalAddress: { type: DigitalDomicileType.APPIO, address: 'some-user-appio'},
+        recIndex: 0,
+        sendDate: 'some-date-optin',
+        digitalAddress: { type: DigitalDomicileType.APPIO, address: 'some-user-appio' },
         ioSendMessageResult: AppIoCourtesyMessageEventType.SENT_OPTIN,
       },
     };
@@ -1018,8 +1020,9 @@ describe('parse notification & filters', () => {
       timestamp: '2023-01-26T13:55:54.597019182Z',
       category: TimelineCategory.SEND_COURTESY_MESSAGE,
       details: {
-        recIndex: 0, sendDate: "some-date-actual_appio_send",
-        digitalAddress: { type: DigitalDomicileType.APPIO, address: 'some-user-appio'},
+        recIndex: 0,
+        sendDate: 'some-date-actual_appio_send',
+        digitalAddress: { type: DigitalDomicileType.APPIO, address: 'some-user-appio' },
         ioSendMessageResult: AppIoCourtesyMessageEventType.SENT_COURTESY,
       },
     };
@@ -1031,7 +1034,10 @@ describe('parse notification & filters', () => {
     // change the status history accordingly
     const history = acceptedDeliveringDeliveredTimelineStatusHistory();
     // ACCEPTED is the first status, the additional SEND_COURTESY_MESSAGE events are to be added at the end.
-    history[0].relatedTimelineElements.push(courtesyIOOptinEvent.elementId, courtesyIOActualSendEvent.elementId);
+    history[0].relatedTimelineElements.push(
+      courtesyIOOptinEvent.elementId,
+      courtesyIOActualSendEvent.elementId
+    );
     sourceNotification.notificationStatusHistory = history;
 
     // now the test
@@ -1044,18 +1050,34 @@ describe('parse notification & filters', () => {
     expect(currentSteps).toHaveLength(7);
     // fourth-to-last, i.e. fourth (of seven) step is the SENT_COURTESY - not hidden
     // the three latter steps are the "original" DELIVERY steps
-    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
-    expect(currentSteps && (currentSteps[3].details as SendCourtesyMessageDetails).digitalAddress?.type).toEqual(DigitalDomicileType.APPIO);
-    expect(currentSteps && (currentSteps[3].details as SendCourtesyMessageDetails).ioSendMessageResult).toEqual(AppIoCourtesyMessageEventType.SENT_COURTESY);
+    expect(currentSteps && currentSteps[3].category).toEqual(
+      TimelineCategory.SEND_COURTESY_MESSAGE
+    );
+    expect(
+      currentSteps && (currentSteps[3].details as SendCourtesyMessageDetails).digitalAddress?.type
+    ).toEqual(DigitalDomicileType.APPIO);
+    expect(
+      currentSteps && (currentSteps[3].details as SendCourtesyMessageDetails).ioSendMessageResult
+    ).toEqual(AppIoCourtesyMessageEventType.SENT_COURTESY);
     expect(currentSteps && currentSteps[3].hidden).toBeFalsy();
     // third-to-last, i.e. fifth, step is the SENT_OPTIN - hidden
-    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
-    expect(currentSteps && (currentSteps[4].details as SendCourtesyMessageDetails).digitalAddress?.type).toEqual(DigitalDomicileType.APPIO);
-    expect(currentSteps && (currentSteps[4].details as SendCourtesyMessageDetails).ioSendMessageResult).toEqual(AppIoCourtesyMessageEventType.SENT_OPTIN);
+    expect(currentSteps && currentSteps[4].category).toEqual(
+      TimelineCategory.SEND_COURTESY_MESSAGE
+    );
+    expect(
+      currentSteps && (currentSteps[4].details as SendCourtesyMessageDetails).digitalAddress?.type
+    ).toEqual(DigitalDomicileType.APPIO);
+    expect(
+      currentSteps && (currentSteps[4].details as SendCourtesyMessageDetails).ioSendMessageResult
+    ).toEqual(AppIoCourtesyMessageEventType.SENT_OPTIN);
     expect(currentSteps && currentSteps[4].hidden).toBeTruthy();
     // second-to-last, i.e. sixth step is a courtesy message sent through email - not hidden
-    expect(currentSteps && currentSteps[5].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
-    expect(currentSteps && (currentSteps[5].details as SendCourtesyMessageDetails).digitalAddress?.type).toEqual(DigitalDomicileType.EMAIL);
+    expect(currentSteps && currentSteps[5].category).toEqual(
+      TimelineCategory.SEND_COURTESY_MESSAGE
+    );
+    expect(
+      currentSteps && (currentSteps[5].details as SendCourtesyMessageDetails).digitalAddress?.type
+    ).toEqual(DigitalDomicileType.EMAIL);
     expect(currentSteps && currentSteps[5].hidden).toBeFalsy();
     // last, i.e. seventh step is REQUEST_ACEPTED - always hidden
     expect(currentSteps && currentSteps[6].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);

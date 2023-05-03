@@ -22,6 +22,8 @@
   "enable-api-key": "Attiva API Key",
   "rotate-api-key": "Ruota API Key",
   "delete-api-key": "Elimina API Key",
+  "view-groups-id": "Gruppi associati alla API Key {{apikey}}",
+  "view-groups-id-message": "Se hai bisogno di modificarli, genera una nuova API Key e sostituisci il secret nella piattaforma dell’ente. Poi, blocca ed elimina questa API Key.",
   "block-warning1": "Se blocchi <strong>{{apiKeyName}}</strong>, qualsiasi richiesta effettuata attraverso questa API Key avrà esito negativo.",
   "block-warning2": "Puoi attivarla di nuovo in qualsiasi momento.",
   "rotate-warning1": "Ruotando <strong>{{apiKeyName}}</strong>, disattivi la API Key esistente e ne generi una nuova, con gli stessi attributi.",
@@ -32,7 +34,8 @@
   "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
   "empty-action-label": "Genera API Key",
   "api-key-copied": "API Key copiata",
-  "api-key-copy": "Copia API Key",
+  "group-id-copied": "Group ID copiato",
+  "groups-id-copied": "Group ID copiati",
   "go-to-api-keys": "Torna a API Key",
   "table": {
     "title": "Tabella delle API Key",
@@ -48,7 +51,8 @@
     "block": "Blocca",
     "rotate": "Ruota",
     "delete": "Elimina",
-    "view": "Visualizza"
+    "view": "Visualizza",
+    "view-groups-id": "Visualizza ID dei gruppi"
   },
   "status": {
     "enabled": "Attiva",
