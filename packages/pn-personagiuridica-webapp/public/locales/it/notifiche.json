@@ -146,7 +146,7 @@
         "paper-receipt-accepted": "di accettazione raccomandata",
         "paper-receipt-delivered": "di consegna raccomandata",
         "paper-receipt-not-delivered": "di mancata consegna raccomandata",
-        "analog-failure-workflow": "Deposito di avvenuta ricezione"
+        "analog-failure-delivery": "Deposito di avvenuta ricezione"
       }
     },
     "downtimes": {
