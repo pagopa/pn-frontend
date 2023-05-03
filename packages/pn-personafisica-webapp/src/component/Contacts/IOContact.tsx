@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Stack, Typography } from '@mui/material';
@@ -27,7 +27,6 @@ enum IOContactStatus {
 
 const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [status, setStatus] = useState<IOContactStatus>();
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
 
@@ -43,19 +42,15 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     }
   };
 
-  useEffect(() => {
-    setStatus(parseContact());
-  }, [contact]);
+  const status = parseContact();
 
   const enableIO = () =>
     dispatch(enableIOAddress(recipientId)).then(() => {
-      setStatus(IOContactStatus.ENABLED);
       setIsConfirmModalOpen(false);
     });
 
   const disableIO = () =>
     dispatch(disableIOAddress(recipientId)).then(() => {
-      setStatus(IOContactStatus.DISABLED);
       setIsConfirmModalOpen(false);
     });
 

@@ -96,7 +96,7 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      if (addressIndex > 0) {
+      if (addressIndex > -1) {
         state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
       }
     });
@@ -104,7 +104,7 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      if (addressIndex > 0) {
+      if (addressIndex > -1) {
         state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
       }
     });
