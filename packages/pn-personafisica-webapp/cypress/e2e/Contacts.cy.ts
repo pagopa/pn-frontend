@@ -136,7 +136,7 @@ describe('Contacts', () => {
     cy.contains(mockData.copy.io.title);
     cy.contains(mockData.copy.io.subtitle);
 
-    cy.get('[data-testid="AppIO contact disclaimer"]').should(
+    cy.get('[data-testid="appIO-contact-disclaimer"]').should(
       'contain',
       mockData.copy.io.disclaimer
     );
@@ -522,7 +522,7 @@ describe('Contacts', () => {
     ).as('addPhone');
 
     cy.get('[data-testid="Special contact add button"]').should('be.enabled').click();
-    
+
     cy.get('[data-testid="codeConfirmButton"]').should('be.disabled');
     cy.get('[data-testid="codeCancelButton"]').should('be.enabled');
 
