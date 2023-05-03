@@ -13,7 +13,6 @@ export const digitalAddresses: DigitalAddresses = {
       senderId: 'cmbo',
       channelType: LegalChannelType.PEC,
       value: 'nome.utente@server.it',
-      code: '12345',
     },
   ],
   courtesy: [
@@ -23,14 +22,13 @@ export const digitalAddresses: DigitalAddresses = {
       senderId: 'cmbo',
       channelType: CourtesyChannelType.EMAIL,
       value: 'nome.utente@server.it',
-      code: '12345',
-    }, {
+    },
+    {
       addressType: 'courtesy',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
       senderId: 'default',
       channelType: CourtesyChannelType.IOMSG,
       value: IOAllowedValues.DISABLED,
-      code: '12345',
     },
   ],
 };
