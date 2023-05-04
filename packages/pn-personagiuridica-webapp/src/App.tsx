@@ -51,7 +51,7 @@ import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { getConfiguration } from './services/configuration.service';
 
 const App = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
   setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -88,7 +88,7 @@ const App = () => {
       {
         id: '1',
         title: t('header.product.organization-dashboard'),
-        productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
+        productUrl: routes.PROFILE(organization?.id),
         linkType: 'external',
       },
       {

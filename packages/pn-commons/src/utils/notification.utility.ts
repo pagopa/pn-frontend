@@ -19,7 +19,6 @@ import {
   ViewedDetails,
   SendPaperDetails,
   NotificationDeliveryMode,
-  ResponseStatus,
   SendCourtesyMessageDetails,
   DigitalDomicileType,
   PaidDetails,
@@ -277,6 +276,13 @@ export const getNotificationAllowedStatus = () => [
   },
 ];
 
+
+function legalFactTypeForAnalogEvent(timelineStep: INotificationDetailTimeline, legalFactKey?: string) {
+  const attachments = (timelineStep.details as SendPaperDetails).attachments;
+  const matchingAttachment = legalFactKey && attachments && attachments.find(att => att.url === legalFactKey);
+  return matchingAttachment ? matchingAttachment.documentType : undefined;
+}
+
 /**
  * Get legalFact label based on timeline step and legalfact type.
  * @param {INotificationDetailTimeline} timelineStep Timeline step
@@ -285,7 +291,8 @@ export const getNotificationAllowedStatus = () => [
  */
 export function getLegalFactLabel(
   timelineStep: INotificationDetailTimeline,
-  legalFactType?: LegalFactType
+  legalFactType?: LegalFactType,
+  legalFactKey?: string,
 ): string {
   const legalFactLabel = getLocalizedOrDefaultLabel(
     'notifications',
@@ -302,35 +309,57 @@ export function getLegalFactLabel(
   // the legalFactType to expect for such events.
   // Hence I keep the condition on the category only.
   // -------------------------
-  // Carlos Lombardi
-  if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
-    if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
-      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-        'notifications',
-        'detail.timeline.legalfact.paper-receipt-delivered',
-        'di consegna raccomandata'
-      )}`;
-    } else if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.KO) {
-      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-        'notifications',
-        'detail.timeline.legalfact.paper-receipt-not-delivered',
-        'di mancata consegna raccomandata'
-      )}`;
-    }
-    return receiptLabel;
-
-  // To the moment I could access to no example of a legal fact associated to this
-  // kind of events, neither to a documentation which indicates
-  // the legalFactType to expect for such events.
-  // Hence I keep the condition on the category only.
+  // Update as of 2023.04.21
+  // 
+  // As far as the new specification seems to indicate, 
+  // the attachments for the analog flow will be always linked to
+  // SEND_ANALOG_PROGRESS events and not to SEND_ANALOG_FEEDBACK ones.
+  // As this is quite recent and maybe not that stable, I prefer to keep this code commented out
+  // for a while
   // -------------------------
   // Carlos Lombardi
-  } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
-    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+  // -------------------------
+  // if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
+  //   if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
+  //     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+  //       'notifications',
+  //       'detail.timeline.legalfact.paper-receipt-delivered',
+  //       'di consegna raccomandata'
+  //     )}`;
+  //   } else if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.KO) {
+  //     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+  //       'notifications',
+  //       'detail.timeline.legalfact.paper-receipt-not-delivered',
+  //       'di mancata consegna raccomandata'
+  //     )}`;
+  //   }
+  //   return receiptLabel;
+
+  // For the SEND_ANALOG_PROGRESS / SIMPLE_REGISTERED_LETTER_PROGRESS events,
+  // the text depend on the kind of document ... that is not indicated in legalFactType,
+  // but rather inside the "attachments" attribute present in the detail of the timeline step
+  // -------------------------
+  // Carlos Lombardi
+  if (
+    timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS || 
+    timelineStep.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
+  ) {
+    const type = legalFactTypeForAnalogEvent(timelineStep, legalFactKey) || 'generic';
+    // eslint-disable-next-line functional/no-let
+    let text = getLocalizedOrDefaultLabel(
       'notifications',
-      'detail.timeline.legalfact.paper-receipt-accepted',
-      'di accettazione raccomandata'
-    )}`;
+      `detail.timeline.analog-workflow-attachment-kind.${type}`,
+      ''
+    );
+    if (text.length === 0) {
+      text = getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.analog-workflow-attachment-kind.generic',
+        `Documento allegato all'evento`
+      );
+    }
+    return text;
+  // Carlos Lombardi
 
 
   // PN-5484  
@@ -429,20 +458,6 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.recipient-access',
       'avvenuto accesso'
     )}`;
-
-    // this case is not needed, since the only legal fact arriving currently
-    // regards the event type SEND_ANALOG_FEEDBACK
-    // which is handled separately.
-    // I prefer to keep it commented out, since the situation is not completely clear.
-    // -------------------------
-    // Carlos Lombardi, 2022.24.02
-    // -------------------------
-    // } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
-    //   return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
-    //     'notifications',
-    //     'detail.timeline.legalfact.analog-delivery',
-    //     'conformità'
-    //   )}`;
   }
   return legalFactLabel;
 }
@@ -455,7 +470,8 @@ export function getLegalFactLabel(
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
-  recipients: Array<NotificationDetailRecipient>
+  recipients: Array<NotificationDetailRecipient>,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ): TimelineStepInfo | null {
   const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
 
@@ -463,6 +479,7 @@ export function getNotificationTimelineStatusInfos(
     step,
     recipient,
     isMultiRecipient: recipients.length > 1,
+    allStepsForThisStatus
   });
 }
 
@@ -479,6 +496,49 @@ const TimelineAllowedStatus = [
   TimelineCategory.NOT_HANDLED,
   TimelineCategory.SEND_ANALOG_PROGRESS,
   TimelineCategory.SEND_ANALOG_FEEDBACK,
+  TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
+];
+
+const AnalogFlowAllowedCodes = [
+  'CON080',
+  'RECRN001C',
+  'RECRN002C',
+  'RECRN002F',
+  'RECRN003C',
+  'RECRN004C',
+  'RECRN005C',
+  'RECRN006',
+  'RECAG001C',
+  'RECAG002C',
+  'RECAG003C',
+  'RECAG003F',
+  'RECAG004',
+  'PNAG012',
+  'RECAG005C',
+  'RECAG006C',
+  'RECAG007C',
+  'RECAG008C',
+  'RECRI003C',
+  'RECRI004C',
+  'RECRI005',
+  // only to include the legal fact reference at the right point in the timeline
+  'RECRN001B',
+  'RECRN002B',
+  'RECRN002E',
+  'RECRN003B',
+  'RECRN004B',
+  'RECRN005B',
+  'RECAG001B',
+  'RECAG002B',
+  'RECAG003B',
+  'RECAG003E',
+  'RECAG011B',
+  'RECAG005B',
+  'RECAG006B',
+  'RECAG007B',
+  'RECAG008B',
+  'RECRI003B',
+  'RECRI004B',
 ];
 
 /*
@@ -609,8 +669,8 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
 
         // record the last timeline event from DELIVERED that must be shifted to DELIVERING
         // the rules:
-        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element,
-        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
+        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER or SIMPLE_REGISTERED_LETTER_PROGRESS element,
+        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER or SIMPLE_REGISTERED_LETTER_PROGRESS
         //   (in this case, excluding it)
         // if a DIGITAL_SUCCESS_WORKFLOW is found before a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
         // then no shift has to be done
@@ -619,8 +679,9 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
           !preventShiftFromDeliveredToDelivering
         ) {
           if (
-            (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW ||
-              step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) &&
+            (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW 
+              || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER 
+              || step.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS) &&
             !lastDeliveredIndexToShiftIsFixed
           ) {
             lastDeliveredIndexToShift = ix;
@@ -747,6 +808,20 @@ const populatePaymentHistory = (
   return paymentHistory;
 };
 
+
+
+function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
+  if (
+    t.category === TimelineCategory.SEND_ANALOG_PROGRESS || 
+    t.category === TimelineCategory.SEND_ANALOG_FEEDBACK || 
+    t.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS
+  ) {
+    const deliveryDetailCode = (t.details as SendPaperDetails).deliveryDetailCode;
+    return !!deliveryDetailCode && AnalogFlowAllowedCodes.includes(deliveryDetailCode);
+  }
+  return TimelineAllowedStatus.includes(t.category);
+}
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
@@ -764,7 +839,7 @@ export function parseNotificationDetail(
   // set which elements are visible
   parsedNotification.timeline = parsedNotification.timeline.map((t) => ({
     ...t,
-    hidden: !TimelineAllowedStatus.includes(t.category),
+    hidden: !timelineElementMustBeShown(t),
   }));
   // populate notification macro steps with corresponding timeline micro steps
   populateMacroSteps(parsedNotification);

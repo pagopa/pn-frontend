@@ -5,6 +5,7 @@ export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
   recipient?: NotificationDetailRecipient;
   isMultiRecipient: boolean;
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>;
 }
 
 export interface TimelineStepInfo {
@@ -47,8 +48,9 @@ export abstract class TimelineStep {
     const physicalAddress = (payload.step.details as AnalogWorkflowDetails).physicalAddress;
     const zip = physicalAddress && physicalAddress.zip ? ` (${physicalAddress.zip})` : '';
     const city = physicalAddress && physicalAddress?.municipality ? ` - ${physicalAddress.municipality}` : '';
+    const country = physicalAddress && physicalAddress.foreignState ? ` ${physicalAddress.foreignState}` : '';
     return {
-      address: physicalAddress ? `${physicalAddress.address}${city}${zip}` : '',
+      address: physicalAddress ? `${physicalAddress.address}${city}${zip}${country}` : '',
       simpleAddress: physicalAddress ? physicalAddress.address : '',
     };
   }
