@@ -2,13 +2,12 @@ import { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
-  // Link,
+  Link,
   Stack,
   Typography,
 } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
-// import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetState } from '../redux/contact/reducers';
@@ -19,14 +18,14 @@ import LegalContactsList from '../component/Contacts/LegalContactsList';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-// import { PROFILO } from '../navigation/routes.const';
+import { PROFILE } from '../navigation/routes.const';
 
 const Contacts = () => {
-  // const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
   const organization =  useAppSelector((state: RootState) => state.userState.user.organization);
+  const profileUrl = PROFILE(organization?.id);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
@@ -43,17 +42,18 @@ const Contacts = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  // const handleRedirectToProfilePage = () => {
-  //   navigate(PROFILO);
-  // };
+  const handleRedirectToProfilePage = () => {
+    if (profileUrl) {
+      window.open(profileUrl);
+    }
+  };
 
   const subtitle = (
     <>
       {t('subtitle-1', { ns: 'recapiti', recipient: organization.name })}
-      {/* <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
+      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage} sx={{ cursor: 'pointer' }}>
         {t('subtitle-link', { ns: 'recapiti' })}
-      </Link> */}
-      {t('subtitle-link', { ns: 'recapiti' })}
+      </Link>
       {t('subtitle-2', { ns: 'recapiti' })}
     </>
   );

@@ -17,7 +17,7 @@ import {
   enableIOAddress,
   getDigitalAddresses,
 } from '../actions';
-import { resetState } from '../reducers';
+import { resetPecValidation, resetState } from '../reducers';
 import { digitalAddresses } from './test-utils';
 
 const initialState = {
@@ -26,7 +26,7 @@ const initialState = {
     legal: [],
     courtesy: [],
   },
-  parties: []
+  parties: [],
 };
 
 describe('Contacts redux state tests', () => {
@@ -56,7 +56,6 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -74,7 +73,6 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -107,7 +105,6 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -125,7 +122,6 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -175,5 +171,29 @@ describe('Contacts redux state tests', () => {
     expect(payload).toEqual(undefined);
     const state = store.getState().contactsState;
     expect(state).toEqual(initialState);
+  });
+
+  it('Should be able to reset pec validation', async () => {
+    const updatedDigitalAddress = {
+      ...digitalAddresses.legal[0],
+      value: 'mario.rossi@mail.it',
+      senderId: 'default',
+    };
+    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateLegalAddress');
+    apiSpy.mockResolvedValue(updatedDigitalAddress);
+    await store.dispatch(
+      createOrUpdateLegalAddress({
+        recipientId: updatedDigitalAddress.recipientId,
+        senderId: 'default',
+        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        value: updatedDigitalAddress.value,
+      })
+    );
+    const action = store.dispatch(resetPecValidation());
+    const payload = action.payload;
+    expect(action.type).toBe('contactsSlice/resetPecValidation');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().contactsState.digitalAddresses.legal;
+    expect(state).toEqual([]);
   });
 });

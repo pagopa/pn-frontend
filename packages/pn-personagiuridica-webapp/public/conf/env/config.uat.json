@@ -1,0 +1,14 @@
+{
+    "API_BASE_URL": "https://webapi.uat.notifichedigitali.it/",
+    "DISABLE_INACTIVITY_HANDLER": true,
+    "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
+    "ONE_TRUST_DRAFT_MODE": true,
+    "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
+    "ONE_TRUST_TOS": "112fd95d-6e88-461b-b8fc-534ee4277e96",
+    "OT_DOMAIN_ID": "8d53193a-e4c2-44e5-9fb7-01f08007d083-test",
+    "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
+    "SELFCARE_BASE_URL": "https://pnpg.uat.selfcare.pagopa.it",
+    "URL_FE_LOGIN": "https://pnpg.uat.selfcare.pagopa.it/auth/login",
+    "LANDING_SITE_URL": "https://www.uat.notifichedigitali.it",
+    "DELEGATIONS_TO_PG_ENABLED": true
+}
