@@ -18,6 +18,7 @@ import { getSidemenuInformation } from '../../redux/sidemenu/actions';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
+import { DelegationStatus } from '../../models/Deleghe';
 import AcceptDelegationModal from './AcceptDelegationModal';
 
 export const Menu: React.FC<{
@@ -25,9 +26,11 @@ export const Menu: React.FC<{
   id: string;
   name?: string;
   verificationCode?: string;
+  status?: DelegationStatus;
   setCodeModal?: (props: { open: boolean; name: string; code: string }) => void;
-}> = ({ menuType, id, name, verificationCode, setCodeModal }) => {
+}> = ({ menuType, id, name, verificationCode, status, setCodeModal }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [updateOpen, setUpdateOpen] = useState(false);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['deleghe']);
@@ -69,15 +72,35 @@ export const Menu: React.FC<{
         </MenuItem>,
       ];
     }
-    return [
+    const menuItems = [
       <MenuItem key="reject" onClick={handleOpenModalClick}>
         {t('deleghe.reject')}
       </MenuItem>,
     ];
+
+    if (status === DelegationStatus.ACTIVE) {
+      // eslint-disable-next-line functional/immutable-data
+      menuItems.push(
+        <MenuItem key="update" onClick={() => setUpdateOpen(true)}>
+          {t('deleghe.update')}
+        </MenuItem>
+      );
+    }
+
+    return menuItems;
   };
 
   return (
     <>
+      {menuType === 'delegators' && status === DelegationStatus.ACTIVE && (
+        <AcceptDelegationModal
+          isEditMode
+          name={name || ''}
+          open={updateOpen}
+          handleCloseAcceptModal={() => {}}
+          handleConfirm={() => {}}
+        />
+      )}
       <IconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"

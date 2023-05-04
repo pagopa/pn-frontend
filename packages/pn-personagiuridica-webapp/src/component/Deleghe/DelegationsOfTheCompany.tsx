@@ -181,8 +181,8 @@ const DelegationsOfTheCompany = () => {
     {
       id: 'id',
       label: '',
-      getValue(value: string) {
-        return <Menu menuType={'delegators'} id={value} />;
+      getValue(value: string, data: Item) {
+        return <Menu menuType={'delegators'} id={value} status={data.status as DelegationStatus} />;
       },
       tableConfiguration: {
         width: '5%',
@@ -301,7 +301,7 @@ const DelegationsOfTheCompany = () => {
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
+        apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
         reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >

@@ -111,7 +111,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
       data-testid="groupDialog"
     >
       <DialogTitle id="dialog-title" sx={{ textAlign: textPosition }}>
-        {t('deleghe.associate-groups-title')}
+        {isEditMode ? t('deleghe.edit-groups-title') : t('deleghe.associate-groups-title')}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
