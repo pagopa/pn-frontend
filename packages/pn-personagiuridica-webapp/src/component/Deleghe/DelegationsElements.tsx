@@ -37,6 +37,9 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
+  const message = menuType === 'delegates' ? t('deleghe.revoke-error') : t('deleghe.reject-error');
+  const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
+
   const handleOpenModalClick = () => {
     if (menuType === 'delegates') {
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_REVOKE);
@@ -86,6 +89,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
     }
     onCloseModal();
   };
+
   const handleConfirmationError = useCallback((responseError: AppResponse) => {
     if (Array.isArray(responseError.errors)) {
       const managedErrors = (
@@ -93,12 +97,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
       ).map((key) => ServerResponseErrorCode[key]);
       const error = responseError.errors[0];
       if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
-        // mettere condizione per il quale richiamo la funzione desiderata in base al menutype
-        if (menuType === 'delegates') {
-          dispatch(appStateActions.addError({ title: '', message: t('deleghe.revoke-error') }));
-        } else {
-          dispatch(appStateActions.addError({ title: '', message: t('deleghe.reject-error') }));
-        }
+        dispatch(appStateActions.addError({ title: '', message }));
         return false;
       }
       return true;
@@ -107,17 +106,10 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   }, []);
 
   useEffect(() => {
-    if (menuType === 'delegates') {
-      AppResponsePublisher.error.subscribe('revokeDelegation', handleConfirmationError);
-    } else {
-      AppResponsePublisher.error.subscribe('rejectDelegation', handleConfirmationError);
-    }
+    AppResponsePublisher.error.subscribe(action, handleConfirmationError);
+
     return () => {
-      if (menuType === 'delegates') {
-        AppResponsePublisher.error.unsubscribe('revokeDelegation', handleConfirmationError);
-      } else {
-        AppResponsePublisher.error.unsubscribe('rejectDelegation', handleConfirmationError);
-      }
+      AppResponsePublisher.error.unsubscribe(action, handleConfirmationError);
     };
   }, [handleConfirmationError]);
 
@@ -162,7 +154,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
         open={showConfirmationModal}
         title={
           menuType === 'delegates'
-            ? t('deleghe.revocation_question', { delegator: name })
+            ? t('deleghe.revocation_question', { delegate: name })
             : t('deleghe.rejection_question', { delegator: name })
         }
         subtitle={subtitleModal}
@@ -176,7 +168,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
         onCloseLabel={t('button.annulla', { ns: 'common' })}
       />
 
-      {verificationCode && (
+      {verificationCode && menuType === 'delegates' && (
         <CodeModal
           title={t('deleghe.show_code_title', { name })}
           subtitle={t('deleghe.show_code_subtitle')}

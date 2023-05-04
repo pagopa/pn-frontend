@@ -9,7 +9,6 @@ import {
   within,
   mockApi,
   act,
-  prettyDOM,
 } from '../../../__test__/test-utils';
 import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';

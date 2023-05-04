@@ -175,8 +175,8 @@ const DelegationsOfTheCompany = () => {
     {
       id: 'id',
       label: '',
-      getValue(_value: string, row: Item) {
-        return <Menu menuType={'delegators'} id={row.id} name={row.name as string} />;
+      getValue(value: string, row: Item) {
+        return <Menu menuType={'delegators'} id={value} name={row.name as string} />;
       },
       tableConfiguration: {
         width: '5%',

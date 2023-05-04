@@ -19,25 +19,12 @@ const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
   const [pageReady, setPageReady] = useState(false);
   const [value, setValue] = useState(0);
-  /* const { id, open, type } = useAppSelector(
-    (state: RootState) => state.delegationsState.modalState
-  ); */
+
   const dispatch = useAppDispatch();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  /* const handleConfirmClick = () => {
-    if (type === 'delegates') {
-      void dispatch(revokeDelegation(id));
-    } else {
-      void dispatch(rejectDelegation(id));
-    }
-  }; */
-  /* const handleCloseModal = () => {
-    dispatch(closeRevocationModal());
-  }; */
 
   const retrieveData = useCallback(() => {
     void dispatch(getDelegatesByCompany());
