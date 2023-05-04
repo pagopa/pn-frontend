@@ -57,7 +57,9 @@
       "menu-aria-label": "Menù azioni"
     },
     "revoke-successfully": "Delega Revocata.",
-    "reject-successfully": "Delega Rifiutata."
+    "reject-successfully": "Delega Rifiutata.",
+    "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
+    "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova."
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",

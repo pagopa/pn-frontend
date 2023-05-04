@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { CodeModal, CustomTagGroup, appStateActions } from '@pagopa-pn/pn-commons';
+import {
+  AppResponsePublisher,
+  CodeModal,
+  CustomTagGroup,
+  appStateActions,
+} from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
+import { AppResponse, ServerResponseErrorCode } from '@pagopa-pn/pn-commons/src/types/AppResponse';
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal } from '../../redux/delegation/reducers';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -80,6 +86,40 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
     }
     onCloseModal();
   };
+  const handleConfirmationError = useCallback((responseError: AppResponse) => {
+    if (Array.isArray(responseError.errors)) {
+      const managedErrors = (
+        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+      ).map((key) => ServerResponseErrorCode[key]);
+      const error = responseError.errors[0];
+      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+        // mettere condizione per il quale richiamo la funzione desiderata in base al menutype
+        if (menuType === 'delegates') {
+          dispatch(appStateActions.addError({ title: '', message: t('deleghe.revoke-error') }));
+        } else {
+          dispatch(appStateActions.addError({ title: '', message: t('deleghe.reject-error') }));
+        }
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }, []);
+
+  useEffect(() => {
+    if (menuType === 'delegates') {
+      AppResponsePublisher.error.subscribe('revokeDelegation', handleConfirmationError);
+    } else {
+      AppResponsePublisher.error.subscribe('rejectDelegation', handleConfirmationError);
+    }
+    return () => {
+      if (menuType === 'delegates') {
+        AppResponsePublisher.error.unsubscribe('revokeDelegation', handleConfirmationError);
+      } else {
+        AppResponsePublisher.error.unsubscribe('rejectDelegation', handleConfirmationError);
+      }
+    };
+  }, [handleConfirmationError]);
 
   const handleClose = () => {
     setAnchorEl(null);
