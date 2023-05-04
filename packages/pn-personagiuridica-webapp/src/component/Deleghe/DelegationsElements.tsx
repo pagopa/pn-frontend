@@ -53,8 +53,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   };
 
   const handleConfirmClick = () => {
-    console.log('CIAO :>> ');
-
     if (menuType === 'delegates') {
       void dispatch(revokeDelegation(id));
     } else {

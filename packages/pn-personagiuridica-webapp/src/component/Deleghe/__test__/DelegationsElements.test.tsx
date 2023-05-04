@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render, fireEvent, waitFor, mockApi, screen } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
-import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
+import { REJECT_DELEGATION, REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import { apiClient } from '../../../api/apiClients';
 
 jest.mock('react-i18next', () => ({
@@ -118,14 +118,6 @@ describe('DelegationElements', () => {
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
-    const cancelButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[0];
-    fireEvent.click(cancelButton!);
-    await waitFor(() => {
-      expect(showDialog).not.toBeInTheDocument();
-    });
-    fireEvent.click(menuIcon);
-    const revokeMenuButton = menu.querySelectorAll('[role="menuitem"]')[1];
-    fireEvent.click(revokeMenuButton);
     const revokeButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[1];
     screen.debug(revokeButton);
     fireEvent.click(revokeButton);
@@ -138,5 +130,41 @@ describe('DelegationElements', () => {
     mock.restore();
   });
 
-  it('check reject for delegator', () => {});
+  it('check close confimationDialog', async () => {
+    const result = render(<Menu menuType="delegates" id="111" name="Mario Rossi" />);
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
+    fireEvent.click(revoke);
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const cancelButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[0];
+    fireEvent.click(cancelButton!);
+    await waitFor(() => {
+      expect(showDialog).not.toBeInTheDocument();
+    });
+  });
+
+  it('check reject for delegator', async () => {
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('111'), 200);
+
+    const result = render(<Menu menuType="delegators" id="111" name="Mario Rossi" />);
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const reject = menu.querySelectorAll('[role="menuitem"]')[0];
+    fireEvent.click(reject);
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const rejectButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[1];
+    fireEvent.click(rejectButton);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/reject');
+      expect(showDialog).not.toBeInTheDocument();
+    });
+    mock.reset();
+    mock.restore();
+  });
 });
