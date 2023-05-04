@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { CodeModal, CustomTagGroup } from '@pagopa-pn/pn-commons';
+import { CodeModal, CustomTagGroup, appStateActions } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
@@ -12,6 +12,7 @@ import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { rejectDelegation, revokeDelegation } from '../../redux/delegation/actions';
 import { User } from '../../redux/auth/types';
+import { getSidemenuInformation } from '../../redux/sidemenu/actions';
 import ConfirmationModal from './ConfirmationModal';
 
 type Props = {
@@ -54,9 +55,28 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
 
   const handleConfirmClick = () => {
     if (menuType === 'delegates') {
-      void dispatch(revokeDelegation(id));
+      void dispatch(revokeDelegation(id))
+        .unwrap()
+        .then(async () => {
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t('deleghe.revoke-successfully'),
+            })
+          );
+        });
     } else {
-      void dispatch(rejectDelegation(id));
+      void dispatch(rejectDelegation(id))
+        .unwrap()
+        .then(async () => {
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t('deleghe.reject-successfully'),
+            })
+          );
+          await dispatch(getSidemenuInformation());
+        });
     }
     onCloseModal();
   };

@@ -55,7 +55,9 @@
       "no-group-found": "Nessun gruppo trovato",
       "no-name-found": "Nessun nome trovato",
       "menu-aria-label": "Menù azioni"
-    }
+    },
+    "revoke-successfully": "Delega Revocata.",
+    "reject-successfully": "Delega Rifiutata."
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
