@@ -6,7 +6,6 @@ import { act, fireEvent, RenderResult, screen } from '@testing-library/react';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
-import { PROFILO } from '../../navigation/routes.const';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import {
   apiOutcomeTestHelper,
@@ -99,15 +98,15 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
   });
 
-  // The link to profile page has been removed from pg.
-  // I comment out this test waiting to have a clear requirement on it
-  it.skip('subtitle link properly redirects to profile page', () => {
+  it('subtitle link properly redirects to profile page', () => {
     const subtitleLink = result.getByText('subtitle-link');
-    expect(subtitleLink).toBeInTheDocument();
+    const spyWindowOpen = jest.spyOn(window, 'open');
+    spyWindowOpen.mockImplementation(jest.fn());
 
+    expect(subtitleLink).toBeInTheDocument();
     fireEvent.click(subtitleLink);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(PROFILO);
+
+    expect(spyWindowOpen).toHaveBeenCalledTimes(1);
   });
 });
 

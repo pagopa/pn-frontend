@@ -37,11 +37,11 @@ describe('ApiKeys Page', () => {
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
   
-  const initialState = (param: Array<ApiKey>) => ({
+  const initialState = (apiKeys: Array<ApiKey>) => ({
     preloadedState: {
       apiKeysState: {
         loading: false,
-        apiKeys: param,
+        apiKeys,
       },
     },
   });

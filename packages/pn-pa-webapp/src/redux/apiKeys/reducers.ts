@@ -18,7 +18,7 @@ const apiKeysSlice = createSlice({
     builder.addCase(getApiKeys.fulfilled, (state, action) => {
       state.apiKeys = action.payload;
     });
-  }
+  },
 });
 
 export const { resetState } = apiKeysSlice.actions;

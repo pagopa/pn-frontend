@@ -23,7 +23,7 @@ const legalAddresses: Array<DigitalAddress> = [
     senderId: 'default',
     channelType: LegalChannelType.PEC,
     value: 'mocked@mail.it',
-    code: '12345',
+    pecValid: true
   },
 ];
 

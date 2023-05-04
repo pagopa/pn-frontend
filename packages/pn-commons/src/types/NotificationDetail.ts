@@ -55,7 +55,21 @@ export type NotificationDetailTimelineDetails =
 export interface INotificationDetailTimeline {
   elementId: string;
   timestamp: string;
-  legalFactsIds?: Array<LegalFactId>;
+  // ------------------------------------------------
+  // PN-5484
+  // ------------------------------------------------
+  // The link to the AAR (i.e. details.generatedAarUrl) included to ANALOG_FAILURE_WORKFLOW timeline elements
+  // must be handled analogously to legal facts, 
+  // i.e. a link must be shown inside the graphic timeline.
+  // To achieve this, we add the NotificationDetailOtherDocument object corresponding to such links
+  // to the legalFactsIds array for the ANALOG_FAILURE_WORKFLOW timeline elements.
+  // Consequently, each element of legalFactsIds can be either 
+  // - a LegalFactId object coming from legalFactsIds in the API response, or 
+  // - a NotificationDetailOtherDocument coming from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements
+  // ------------------------------------------------
+  // Carlos Lombardi, 2023.05.02
+  // ------------------------------------------------
+  legalFactsIds?: Array<LegalFactId | NotificationDetailOtherDocument>;
   category: TimelineCategory;
   details: NotificationDetailTimelineDetails;
   // only fe
@@ -69,21 +83,27 @@ export enum ResponseStatus {
   KO = 'KO',
 }
 
-export interface SendPaperDetails extends BaseDetails {
-  physicalAddress: PhysicalAddress;
-  serviceLevel: PhysicalCommunicationType;
-  sentAttemptMade: number;
-  investigation: boolean;
-  newAddress?: PhysicalAddress;
-  errors?: Array<string>;
+/* options for documentType
+    - Plico: Indica il plico cartaceo
+    - AR: Indica la ricevuta di ritorno
+    - Indagine: Indica la ricevuta dell'analisi dell'indagine
+    - 23L: Indica la ricevuta 23L
+ */
+export interface AnalogFlowAttachment {
+  id: string;
+  documentType: string;
+  url: string;
+}
+
+export interface SendPaperDetails extends AnalogWorkflowDetails {
+  serviceLevel?: PhysicalCommunicationType;
   productType?: string;
-  analogCost?: number;
+  registeredLetterCode?: string;
   responseStatus?: ResponseStatus;
-  sendingReceipts?: Array<{
-    id: string;
-    system: string;
-  }>;
-  requestTimelineId: string;
+  deliveryFailureCause?: string;
+  deliveryDetailCode?: string;
+  sendRequestId?: string;
+  attachments?: Array<AnalogFlowAttachment>;
 }
 
 interface BaseDetails {
@@ -305,6 +325,7 @@ export enum TimelineCategory {
   ANALOG_SUCCESS_WORKFLOW = 'ANALOG_SUCCESS_WORKFLOW',
   ANALOG_FAILURE_WORKFLOW = 'ANALOG_FAILURE_WORKFLOW',
   SEND_SIMPLE_REGISTERED_LETTER = 'SEND_SIMPLE_REGISTERED_LETTER',
+  SIMPLE_REGISTERED_LETTER_PROGRESS = 'SIMPLE_REGISTERED_LETTER_PROGRESS',
   NOTIFICATION_VIEWED = 'NOTIFICATION_VIEWED',
   SEND_ANALOG_DOMICILE = 'SEND_ANALOG_DOMICILE',
   PAYMENT = 'PAYMENT',
@@ -373,6 +394,7 @@ export enum LegalFactType {
   SENDER_ACK = 'SENDER_ACK',
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
+  ANALOG_FAILURE_DELIVERY = 'ANALOG_FAILURE_DELIVERY',  
   RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
   PEC_RECEIPT = 'PEC_RECEIPT', // PN-2107
 }

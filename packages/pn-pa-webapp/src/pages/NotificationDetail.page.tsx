@@ -159,7 +159,9 @@ const NotificationDetail = () => {
         <>
           {recipients.map((recipient, i) => (
             <Box key={i} fontWeight={600}>
-              {`${recipient.taxId} - ${recipient.denomination}`}
+              {recipients.length > 1
+                ? `${recipient.taxId} - ${recipient.denomination}`
+                : recipient.taxId}
             </Box>
           ))}
         </>
@@ -240,19 +242,29 @@ const NotificationDetail = () => {
     }
   };
 
-  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    dispatch(resetLegalFactState());
-    void dispatch(
-      getSentNotificationLegalfact({
-        iun: notification.iun,
-        legalFact: {
-          key: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          category: legalFact.category,
-        },
-      })
-    );
-  };
 
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
+  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
+  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
+    if ((legalFact as LegalFactId).key) {
+      const legalFactAsLegalFact = legalFact as LegalFactId;
+      dispatch(resetLegalFactState());
+      void dispatch(
+        getSentNotificationLegalfact({
+          iun: notification.iun,
+          legalFact: {
+            key: legalFactAsLegalFact.key.substring(legalFactAsLegalFact.key.lastIndexOf('/') + 1),
+            category: legalFactAsLegalFact.category,
+          },
+        })
+        );
+    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
+      const otherDocument = legalFact as NotificationDetailOtherDocument;
+      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+    }
+  };
+  
   const handleCancelNotification = () => {
     dispatch(setCancelledIun(notification.iun));
     navigate(routes.NUOVA_NOTIFICA);
