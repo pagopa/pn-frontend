@@ -7,6 +7,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   CustomTagGroup,
+  Item,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
@@ -26,9 +27,9 @@ export const Menu: React.FC<{
   id: string;
   name?: string;
   verificationCode?: string;
-  status?: DelegationStatus;
+  row?: Item;
   setCodeModal?: (props: { open: boolean; name: string; code: string }) => void;
-}> = ({ menuType, id, name, verificationCode, status, setCodeModal }) => {
+}> = ({ menuType, id, name, verificationCode, row, setCodeModal }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [updateOpen, setUpdateOpen] = useState(false);
   const open = Boolean(anchorEl);
@@ -51,6 +52,10 @@ export const Menu: React.FC<{
       setAnchorEl(null);
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
     }
+  };
+
+  const handleCloseAcceptModal = () => {
+    setUpdateOpen(false);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -78,7 +83,7 @@ export const Menu: React.FC<{
       </MenuItem>,
     ];
 
-    if (status === DelegationStatus.ACTIVE) {
+    if (row?.status === DelegationStatus.ACTIVE) {
       // eslint-disable-next-line functional/immutable-data
       menuItems.push(
         <MenuItem key="update" onClick={() => setUpdateOpen(true)}>
@@ -92,12 +97,13 @@ export const Menu: React.FC<{
 
   return (
     <>
-      {menuType === 'delegators' && status === DelegationStatus.ACTIVE && (
+      {menuType === 'delegators' && row?.status === DelegationStatus.ACTIVE && (
         <AcceptDelegationModal
           isEditMode
           name={name || ''}
           open={updateOpen}
-          handleCloseAcceptModal={() => {}}
+          currentGroups={row?.groups as Array<{ id: string; name: string }>}
+          handleCloseAcceptModal={handleCloseAcceptModal}
           handleConfirm={() => {}}
         />
       )}

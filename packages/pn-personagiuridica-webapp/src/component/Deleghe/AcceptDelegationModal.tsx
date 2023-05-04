@@ -24,6 +24,7 @@ type Props = {
   isEditMode: boolean;
   open: boolean;
   name: string;
+  currentGroups?: Array<{ id: string; name: string }>;
   handleCloseAcceptModal: () => void;
   handleConfirm: (code: Array<string>, groups: Array<{ id: string; name: string }>) => void;
 };
@@ -32,6 +33,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
   isEditMode,
   open,
   name,
+  currentGroups,
   handleCloseAcceptModal,
   handleConfirm,
 }) => {
@@ -42,7 +44,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
     value: Array<{ id: string; name: string }>;
   }>({
     touched: false,
-    value: [],
+    value: isEditMode && currentGroups?.length ? currentGroups : [],
   });
   const [groupInputValue, setGroupInputValue] = useState('');
   const [code, setCode] = useState<Array<string>>([]);
@@ -74,7 +76,10 @@ const AcceptDelegationModal: React.FC<Props> = ({
   };
 
   const handleClose = () => {
-    setGroupForm({ value: [], touched: false });
+    setGroupForm({
+      value: isEditMode && currentGroups?.length ? currentGroups : [],
+      touched: false,
+    });
     setCode([]);
     if (!isEditMode) {
       setStep(0);
@@ -121,7 +126,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         <FormControl>
           <RadioGroup
             aria-label={t('deleghe.associate-group')}
-            defaultValue="no-group"
+            defaultValue={isEditMode && currentGroups?.length ? 'associate-group' : 'no-group'}
             name="radio-buttons-group"
             onChange={handleChange}
           >

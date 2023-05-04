@@ -182,7 +182,7 @@ const DelegationsOfTheCompany = () => {
       id: 'id',
       label: '',
       getValue(value: string, data: Item) {
-        return <Menu menuType={'delegators'} id={value} status={data.status as DelegationStatus} />;
+        return <Menu menuType={'delegators'} id={value} row={data} />;
       },
       tableConfiguration: {
         width: '5%',
