@@ -38,7 +38,7 @@ import {
   useDownloadDocument,
   NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams, NotificationPaidDetail,
+  GetNotificationDowntimeEventsParams, NotificationPaidDetail, RecipientType,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -134,6 +134,9 @@ const NotificationDetail = () => {
     );
   };
 
+  const getRecipientStringType = (type: RecipientType): string =>
+    type === RecipientType.PF ? 'detail.fiscal-code-recipient' : 'detail.tax-id-recipient';
+
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;
@@ -153,7 +156,7 @@ const NotificationDetail = () => {
       label:
         recipients.length > 1
           ? t('detail.recipients', { ns: 'notifiche' })
-          : t('detail.fiscal-code-recipient', { ns: 'notifiche' }),
+          : t(getRecipientStringType(recipients[0]?.recipientType), { ns: 'notifiche' }),
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
       value: (
         <>

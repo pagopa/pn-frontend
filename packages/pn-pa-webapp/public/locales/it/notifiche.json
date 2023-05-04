@@ -53,6 +53,7 @@
     "recipient": "Destinatario",
     "recipients": "Destinatari",
     "fiscal-code-recipient": "Codice Fiscale destinatario",
+    "tax-id-recipient": "Partita IVA",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "amount": "Importo",
