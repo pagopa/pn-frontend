@@ -83,21 +83,27 @@ export enum ResponseStatus {
   KO = 'KO',
 }
 
-export interface SendPaperDetails extends BaseDetails {
-  physicalAddress: PhysicalAddress;
-  serviceLevel: PhysicalCommunicationType;
-  sentAttemptMade: number;
-  investigation: boolean;
-  newAddress?: PhysicalAddress;
-  errors?: Array<string>;
+/* options for documentType
+    - Plico: Indica il plico cartaceo
+    - AR: Indica la ricevuta di ritorno
+    - Indagine: Indica la ricevuta dell'analisi dell'indagine
+    - 23L: Indica la ricevuta 23L
+ */
+export interface AnalogFlowAttachment {
+  id: string;
+  documentType: string;
+  url: string;
+}
+
+export interface SendPaperDetails extends AnalogWorkflowDetails {
+  serviceLevel?: PhysicalCommunicationType;
   productType?: string;
-  analogCost?: number;
+  registeredLetterCode?: string;
   responseStatus?: ResponseStatus;
-  sendingReceipts?: Array<{
-    id: string;
-    system: string;
-  }>;
-  requestTimelineId: string;
+  deliveryFailureCause?: string;
+  deliveryDetailCode?: string;
+  sendRequestId?: string;
+  attachments?: Array<AnalogFlowAttachment>;
 }
 
 interface BaseDetails {
@@ -319,6 +325,7 @@ export enum TimelineCategory {
   ANALOG_SUCCESS_WORKFLOW = 'ANALOG_SUCCESS_WORKFLOW',
   ANALOG_FAILURE_WORKFLOW = 'ANALOG_FAILURE_WORKFLOW',
   SEND_SIMPLE_REGISTERED_LETTER = 'SEND_SIMPLE_REGISTERED_LETTER',
+  SIMPLE_REGISTERED_LETTER_PROGRESS = 'SIMPLE_REGISTERED_LETTER_PROGRESS',
   NOTIFICATION_VIEWED = 'NOTIFICATION_VIEWED',
   SEND_ANALOG_DOMICILE = 'SEND_ANALOG_DOMICILE',
   PAYMENT = 'PAYMENT',

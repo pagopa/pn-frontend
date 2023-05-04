@@ -101,11 +101,13 @@ function testTimelineStatusInfosFn(
   timelineIndex: number,
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   const { label, description } = getNotificationTimelineStatusInfos(
     notification.timeline[timelineIndex],
-    notification.recipients
+    notification.recipients,
+    allStepsForThisStatus
   ) as { label: string; description: string };
   expect(label).toBe(`detail.timeline.${labelToTest}`);
   if (description.indexOf(' /-/ ') > -1) {
@@ -120,35 +122,40 @@ function testTimelineStatusInfosFn(
 function testTimelineStatusInfosFnSingle(
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   testTimelineStatusInfosFn(
     parsedNotificationCopy,
     0,
     labelToTest,
     descriptionToTest,
-    descriptionDataToTest
+    descriptionDataToTest,
+    allStepsForThisStatus
   );
 }
 
 function testTimelineStatusInfosFnMulti0(
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   testTimelineStatusInfosFn(
     parsedNotificationTwoRecipientsCopy,
     0,
     labelToTest,
     descriptionToTest,
-    descriptionDataToTest
+    descriptionDataToTest,
+    allStepsForThisStatus
   );
 }
 
 function testTimelineStatusInfosFnMulti1(
   labelToTest: string,
   descriptionToTest: string,
-  descriptionDataToTest?: any
+  descriptionDataToTest?: any,
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ) {
   parsedNotificationTwoRecipientsCopy.timeline[0].details.recIndex = 1;
   testTimelineStatusInfosFn(
@@ -156,8 +163,21 @@ function testTimelineStatusInfosFnMulti1(
     0,
     labelToTest,
     descriptionToTest,
-    descriptionDataToTest
+    descriptionDataToTest,
+    allStepsForThisStatus
   );
+}
+
+function sendAnalogDomicileStep(registeredLetterKind = 'AR') {
+  return {
+    category: TimelineCategory.SEND_ANALOG_DOMICILE,
+    elementId: 'SEND_ANALOG_DOMICILE_0',
+    timestamp: '2023-01-01',
+    details: {
+      recIndex: 0,
+      productType: registeredLetterKind
+    }
+  };
 }
 
 describe('notification status texts', () => {
@@ -761,7 +781,7 @@ describe('timeline event description', () => {
       {
         name: 'Nome Cognome',
         taxId: '(mocked-taxId)',
-        address: 'Via Umberto 45 - Motta Camastra (98035)',
+        address: 'Via Umberto 45 - Motta Camastra (98035) Italia',
         simpleAddress: 'Via Umberto 45',
       }
     );
@@ -798,15 +818,92 @@ describe('timeline event description', () => {
 
   it('return timeline status infos - SEND_ANALOG_PROGRESS - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
-    testTimelineStatusInfosFnSingle('send-analog-progress', 'send-analog-progress-description');
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'CON080';
+    testTimelineStatusInfosFnSingle(
+      'send-analog-progress', 
+      'send-analog-flow-CON080-description', 
+      { 
+        name: 'Nome Cognome', taxId: '(mocked-taxId)', 
+        registeredLetterKind: ' detail.timeline.registered-letter-kind.AR',
+        deliveryFailureCause: '',
+        registeredLetterNumber: ''
+      }, 
+      [sendAnalogDomicileStep()]
+    );
   });
 
   it('return timeline status infos - SEND_ANALOG_PROGRESS - multi recipient', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_ANALOG_PROGRESS;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'CON080';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).registeredLetterCode = 'RACC-034-B93';
     testTimelineStatusInfosFnMulti1(
       'send-analog-progress',
-      'send-analog-progress-description-multirecipient'
+      'send-analog-flow-CON080-description-multirecipient',
+      { 
+        name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', 
+        registeredLetterKind: ' detail.timeline.registered-letter-kind.AR',
+        deliveryFailureCause: '',
+        registeredLetterNumber: 'RACC-034-B93'
+      },
+      [sendAnalogDomicileStep()]
+    );
+  });
+
+  it(`return timeline status infos - SEND_ANALOG_PROGRESS - failure code - single recipient`, () => {
+    const mockDetailCode = 'mock-detail-code';
+    const mockFailureCode = 'mock-failure-code';
+    const mockLetterNumber = 'mock-letter-number';
+    
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
+
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
+      ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
+      deliveryDetailCode: mockDetailCode,
+      deliveryFailureCause: mockFailureCode,
+      registeredLetterCode: mockLetterNumber
+    };
+
+    testTimelineStatusInfosFnSingle(
+      'send-analog-progress',
+      `send-analog-flow-${mockDetailCode}-description`,
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        deliveryFailureCause: `detail.timeline.analog-workflow-failure-cause.${mockFailureCode}`,
+        registeredLetterKind: '',
+        registeredLetterNumber: mockLetterNumber,
+      }
+    );
+  });
+
+  it(`return timeline status infos - SEND_ANALOG_FEEDBACK - failure code - single recipient`, () => {
+    const mockDetailCode = 'mock-detail-code';
+    const mockFailureCode = 'mock-failure-code';
+    const mockLetterNumber = 'mock-letter-number';
+    
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
+      ResponseStatus.KO;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
+      ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
+      deliveryDetailCode: mockDetailCode,
+      deliveryFailureCause: mockFailureCode,
+      registeredLetterCode: mockLetterNumber
+    };
+
+    testTimelineStatusInfosFnSingle(
+      'send-analog-error',
+      `send-analog-flow-${mockDetailCode}-description`,
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        deliveryFailureCause: `detail.timeline.analog-workflow-failure-cause.${mockFailureCode}`,
+        registeredLetterKind: '',
+        registeredLetterNumber: mockLetterNumber,
+      }
     );
   });
 
@@ -819,10 +916,18 @@ describe('timeline event description', () => {
       zip: 'zip',
       municipality: 'municipality',
     };
-    testTimelineStatusInfosFnSingle('send-analog-error', 'send-analog-error-description', {
-      name: 'Nome Cognome',
-      taxId: '(mocked-taxId)',
-    });
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN002C';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryFailureCause = 'M08';
+    testTimelineStatusInfosFnSingle('send-analog-error', 'send-analog-flow-RECRN002C-description', 
+      {
+        name: 'Nome Cognome', taxId: '(mocked-taxId)',
+        registeredLetterKind: ' detail.timeline.registered-letter-kind.RIR',
+        deliveryFailureCause: 'detail.timeline.analog-workflow-failure-cause.M08',
+        registeredLetterNumber: ''
+      }, 
+      [sendAnalogDomicileStep("RIR")]
+    );
   });
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - failure - multi recipient 0', () => {
@@ -838,10 +943,19 @@ describe('timeline event description', () => {
         zip: 'zip',
         municipality: 'municipality',
       };
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN002F';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryFailureCause = 'M03';
     testTimelineStatusInfosFnMulti0(
       'send-analog-error',
-      'send-analog-error-description-multirecipient',
-      { name: 'Lorenza Catrufizzio', taxId: '(mocked-taxId)' }
+      'send-analog-flow-RECRN002F-description-multirecipient',
+      { 
+        name: 'Lorenza Catrufizzio', taxId: '(mocked-taxId)',
+        registeredLetterKind: ' detail.timeline.registered-letter-kind.890',
+        deliveryFailureCause: 'detail.timeline.analog-workflow-failure-cause.M03',
+        registeredLetterNumber: ''
+      },
+      [sendAnalogDomicileStep("890")]
     );
   });
 
@@ -854,10 +968,19 @@ describe('timeline event description', () => {
       zip: 'zip',
       municipality: 'municipality',
     };
-    testTimelineStatusInfosFnSingle('send-analog-success', 'send-analog-success-description', {
-      name: 'Nome Cognome',
-      taxId: '(mocked-taxId)',
-    });
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN003C';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryFailureCause = '';
+    testTimelineStatusInfosFnSingle('send-analog-success', 'send-analog-flow-RECRN003C-description', 
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        registeredLetterKind: ' detail.timeline.registered-letter-kind.AR',
+        deliveryFailureCause: '',
+        registeredLetterNumber: ''
+      },
+      [sendAnalogDomicileStep()]
+    );
   });
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - success - multi recipient 1', () => {
@@ -873,10 +996,19 @@ describe('timeline event description', () => {
         zip: 'zip',
         municipality: 'municipality',
       };
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN005C';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryFailureCause = '';
     testTimelineStatusInfosFnMulti1(
       'send-analog-success',
-      'send-analog-success-description-multirecipient',
-      { name: `Catena Dall'Olio`, taxId: '(mocked-taxId2)' }
+      'send-analog-flow-RECRN005C-description-multirecipient',
+      { 
+        name: `Catena Dall'Olio`, taxId: '(mocked-taxId2)',
+        registeredLetterKind: ' detail.timeline.registered-letter-kind.AR',
+        deliveryFailureCause: '',
+        registeredLetterNumber: ''
+      },
+      [sendAnalogDomicileStep()]
     );
   });
 
@@ -1410,26 +1542,16 @@ describe('timeline legal fact link text', () => {
     expect(label).toBe('detail.legalfact');
   });
 
-  it('return legalFact label - SEND_ANALOG_FEEDBACK (success)', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.OK;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-delivered');
-  });
-
-  it('return legalFact label - SEND_ANALOG_FEEDBACK (failure)', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.KO;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-not-delivered');
-  });
-
   it('return legalFact label - SEND_ANALOG_PROGRESS', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-accepted');
+    parsedNotificationCopy.timeline[0].legalFactsIds = [{
+      key: "legal-fact-1", category: LegalFactType.AAR
+    }]
+    parsedNotificationCopy.timeline[0].details = {
+      attachments: [{ documentType: "Plico", url: "legal-fact-1", id: "attachment-id-1" }]
+    }
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.AAR, "legal-fact-1");
+    expect(label).toBe('detail.timeline.analog-workflow-attachment-kind.Plico');
   });
 
   it('return legalFact label - SEND_DIGITAL_PROGRESS (success) - PEC_RECEIPT', () => {
