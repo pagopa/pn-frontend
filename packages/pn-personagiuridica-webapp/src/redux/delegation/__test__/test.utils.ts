@@ -120,11 +120,6 @@ export const initialState = {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
   },
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
   acceptModalState: {
     open: false,
     id: '',

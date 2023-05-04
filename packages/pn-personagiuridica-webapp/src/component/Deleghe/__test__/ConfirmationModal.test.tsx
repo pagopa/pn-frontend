@@ -29,7 +29,7 @@ const renderConfirmationModal = ({ open = true, onConfirm, onConfirmLabel, onClo
   render(
     <ConfirmationModal
       title={'Test title'}
-      handleClose={mockCancelFunction}
+      onClose={mockCancelFunction}
       onCloseLabel={onCloseLabel}
       open={open}
       onConfirm={onConfirm}

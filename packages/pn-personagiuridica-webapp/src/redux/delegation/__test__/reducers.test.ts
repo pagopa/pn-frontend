@@ -22,12 +22,7 @@ import {
   rejectDelegation,
   revokeDelegation,
 } from '../actions';
-import {
-  closeAcceptModal,
-  closeRevocationModal,
-  openAcceptModal,
-  openRevocationModal,
-} from '../reducers';
+import { closeAcceptModal, openAcceptModal } from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
 
 describe('delegation redux state tests', () => {
@@ -129,17 +124,6 @@ describe('delegation redux state tests', () => {
     expect(payload.response.status).toEqual(500);
     mock.reset();
     mock.restore();
-  });
-
-  it('sets the confirmation modal state to open and then to close', async () => {
-    const openAction = store.dispatch(openRevocationModal({ id: '123', type: 'delegates' }));
-    expect(openAction.type).toBe('delegationsSlice/openRevocationModal');
-    const openModalState = store.getState().delegationsState.modalState;
-    expect(openModalState).toEqual({ id: '123', type: 'delegates', open: true });
-    const closeAction = store.dispatch(closeRevocationModal());
-    expect(closeAction.type).toBe('delegationsSlice/closeRevocationModal');
-    const closeModalState = store.getState().delegationsState.modalState;
-    expect(closeModalState).toEqual({ id: '', type: 'delegates', open: false });
   });
 
   it('sets the accept modal state to open and then to close', async () => {
