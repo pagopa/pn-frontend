@@ -31,14 +31,9 @@ const handleAssistanceClick = () => {
 };
 
 function Router() {
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const { organization, isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles =
     organization && organization.roles ? organization.roles.map((role) => role.role) : [];
-  const isGroupAdmin =
-    organization.roles &&
-    organization.roles[0].role === PNRole.ADMIN &&
-    organization.groups &&
-    organization.groups.length > 0;
 
   return (
     <Suspense fallback={<LoadingPage />}>

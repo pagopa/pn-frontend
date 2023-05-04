@@ -19,7 +19,6 @@ import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import { getConfiguration } from '../services/configuration.service';
-import { PNRole } from '../redux/auth/types';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
@@ -28,14 +27,9 @@ const Deleghe = () => {
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
   );
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
-  const isGroupAdmin =
-    organization.roles &&
-    organization.roles[0].role === PNRole.ADMIN &&
-    organization.groups &&
-    organization.groups.length > 0;
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
