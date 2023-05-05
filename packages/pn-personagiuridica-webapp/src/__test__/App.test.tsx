@@ -1,16 +1,14 @@
-/* eslint-disable functional/no-let */
 import React from 'react';
-import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
 
-/* eslint-disable import/order */
-import { render, act, screen } from './test-utils';
-import App from '../App';
 import i18n from '../i18n';
+import App from '../App';
 import * as sidemenuActions from '../redux/sidemenu/actions';
 import { PartyRole, PNRole } from '../redux/auth/types';
+import { apiClient } from '../api/apiClients';
+import { render, act, screen, mockApi } from './test-utils';
 
 // mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch;
 // questo totale viene verificato in un test
@@ -77,8 +75,7 @@ describe('App', () => {
   let axiosMock: MockAdapter;
 
   beforeEach(() => {
-    axiosMock = new MockAdapter(axios);
-    axiosMock.onAny().reply(200);
+    axiosMock = mockApi(apiClient, 'ANY', '', 200);
 
     mockSidemenuInformationActionFn = jest.fn();
     mockDomicileInfoActionFn = jest.fn();

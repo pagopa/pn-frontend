@@ -5,6 +5,7 @@ import { ExternalRegistriesAPI } from '../../api/external-registries/External-re
 import {
   AcceptDelegationResponse,
   Delegation,
+  DelegatorsNames,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
@@ -38,14 +39,15 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
 
 export const acceptDelegation = createAsyncThunk<
   AcceptDelegationResponse,
-  { id: string; code: string }
+  { id: string; code: string; groups: Array<{ id: string; name: string }> }
 >(
   'acceptDelegation',
-  performThunkAction(async ({ id, code }: { id: string; code: string }) => {
+  performThunkAction(({ id, code, groups }) => {
     const data = {
       verificationCode: code,
+      groups,
     };
-    return await DelegationsApi.acceptDelegation(id, data);
+    return DelegationsApi.acceptDelegation(id, data);
   })
 );
 
@@ -54,13 +56,9 @@ export const getGroups = createAsyncThunk<Array<Groups>>(
   performThunkAction(() => ExternalRegistriesAPI.getGroups())
 );
 
-export const getDelegatorsNames = createAsyncThunk<Array<{ id: string; name: string }>>(
+export const getDelegatorsNames = createAsyncThunk<Array<DelegatorsNames>>(
   DELEGATION_ACTIONS.GET_DELEGATORS_NAMES,
   performThunkAction(() => DelegationsApi.getDelegatorsNames())
 );
-
-export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
-
-export const closeAcceptModal = createAction<void>('closeAcceptModal');
 
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

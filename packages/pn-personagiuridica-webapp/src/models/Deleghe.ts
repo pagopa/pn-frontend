@@ -105,6 +105,7 @@ export interface RevocationModalProps {
 
 export interface AcceptDelegationResponse {
   id: string;
+  groups: Array<{ id: string; name: string }>;
 }
 
 export interface GetDelegatorsParams {
@@ -113,7 +114,7 @@ export interface GetDelegatorsParams {
 }
 
 export interface GetDelegatorsRequest {
-  delegatorIds?: Array<string>;
+  mandateIds?: Array<string>;
   groups?: Array<string>;
   status?: Array<DelegationStatus>;
 }
@@ -127,3 +128,9 @@ export interface GetDelegatorsResponse {
 export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
 
 export type DelegatorsFormFilters = Exclude<GetDelegatorsFilters, 'nextPageKey'> & { page: number };
+
+export interface DelegatorsNames {
+  id: string;
+  name: string;
+  mandateIds: Array<string>;
+}

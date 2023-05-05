@@ -20,7 +20,7 @@ const DelegatesByCompany = () => {
   const { t } = useTranslation(['deleghe', 'notifiche']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
@@ -176,7 +176,7 @@ const DelegatesByCompany = () => {
           ) : (
             <EmptyState
               emptyActionLabel={t('deleghe.add')}
-              emptyMessage={t('deleghe.no_delegates')}
+              emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
               emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
             />
           )}

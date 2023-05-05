@@ -8,6 +8,7 @@ import {
   Delegation,
   DelegationStatus,
   Delegator,
+  DelegatorsNames,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
@@ -24,7 +25,7 @@ import {
 } from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
-  if (response.status === 200) {
+  if (response.status === 204) {
     return { id };
   }
   return { id: '-1' };
@@ -59,7 +60,7 @@ export const DelegationsApi = {
     apiClient
       .post<GetDelegatorsResponse>(
         DELEGATIONS_BY_DELEGATE({ size: params.size, nextPageKey: params.nextPageKey }),
-        { delegatorIds: params.delegatorIds, groups: params.groups, status: params.status }
+        { mandateIds: params.mandateIds, groups: params.groups, status: params.status }
       )
       .then((response: AxiosResponse<GetDelegatorsResponse>) => ({
         ...response.data,
@@ -71,6 +72,7 @@ export const DelegationsApi = {
           datefrom: delegation.datefrom,
           dateto: delegation.dateto,
           delegator: 'delegator' in delegation ? delegation.delegator : null,
+          groups: delegation.groups,
         })),
       })),
 
@@ -102,13 +104,16 @@ export const DelegationsApi = {
    */
   acceptDelegation: (
     id: string,
-    data: { verificationCode: string }
+    data: { verificationCode: string; groups: Array<{ id: string; name: string }> }
   ): Promise<AcceptDelegationResponse> =>
     apiClient
-      .patch<AcceptDelegationResponse>(ACCEPT_DELEGATION(id), data)
+      .patch<AcceptDelegationResponse>(ACCEPT_DELEGATION(id), {
+        ...data,
+        groups: data.groups.map((g) => g.id),
+      })
       .then((response: AxiosResponse<AcceptDelegationResponse>) => {
-        if (response.status === 200) {
-          return { ...response.data, id };
+        if (response.status === 204) {
+          return { ...response.data, id, groups: data.groups };
         }
         return {
           id: '-1',
@@ -127,11 +132,12 @@ export const DelegationsApi = {
 
   /**
    * Count pending delegators
+   * @param status status of the delegation
    * @returns {Promise<{value: number}>}
    */
-  countDelegators: (): Promise<{ value: number }> =>
+  countDelegators: (status: DelegationStatus): Promise<{ value: number }> =>
     apiClient
-      .get<{ value: number }>(COUNT_DELEGATORS(DelegationStatus.PENDING))
+      .get<{ value: number }>(COUNT_DELEGATORS(status))
       .then((response: AxiosResponse<{ value: number }>) => response.data),
 
   /**
@@ -139,15 +145,26 @@ export const DelegationsApi = {
    * @param {GetDelegatorsFilters} params
    * @return {Promise<GetDelegatorsResponse>}
    */
-  getDelegatorsNames: (): Promise<Array<{ id: string; name: string }>> =>
+  getDelegatorsNames: (): Promise<Array<DelegatorsNames>> =>
     apiClient
       .get<Array<Delegator>>(DELEGATIONS_NAME_BY_DELEGATE())
       .then((response: AxiosResponse<Array<Delegator>>) => {
         if (response.data) {
-          return response.data.map((delegator) => ({
-            id: delegator.mandateId,
-            name: delegator.delegator?.displayName || '',
-          }));
+          return response.data.reduce((arr, delegator) => {
+            /* eslint-disable functional/immutable-data */
+            const isInArray = arr.findIndex((elem) => elem.id === delegator.delegator?.fiscalCode);
+            if (isInArray > -1) {
+              arr[isInArray].mandateIds.push(delegator.mandateId);
+              return arr;
+            }
+            arr.push({
+              id: delegator.delegator?.fiscalCode || '',
+              name: delegator.delegator?.displayName || '',
+              mandateIds: [delegator.mandateId],
+            });
+            return arr;
+            /* eslint-enable functional/immutable-data */
+          }, [] as Array<DelegatorsNames>);
         }
         return [];
       }),

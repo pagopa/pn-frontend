@@ -4,6 +4,7 @@ import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
+  AppResponse,
   AppResponsePublisher,
   CodeModal,
   CustomTagGroup,
@@ -11,14 +12,18 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
-import { AppResponse, ServerResponseErrorCode } from '@pagopa-pn/pn-commons/src/types/AppResponse';
 import { useAppDispatch } from '../../redux/hooks';
-import { openAcceptModal } from '../../redux/delegation/reducers';
+import {
+  acceptDelegation,
+  rejectDelegation,
+  revokeDelegation,
+} from '../../redux/delegation/actions';
+import { getSidemenuInformation } from '../../redux/sidemenu/actions';
+import { User } from '../../redux/auth/types';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { rejectDelegation, revokeDelegation } from '../../redux/delegation/actions';
-import { User } from '../../redux/auth/types';
-import { getSidemenuInformation } from '../../redux/sidemenu/actions';
+import { ServerResponseErrorCode } from '../../utils/AppError/types';
+import AcceptDelegationModal from './AcceptDelegationModal';
 import ConfirmationModal from './ConfirmationModal';
 
 type Props = {
@@ -224,16 +229,74 @@ export const OrganizationsList: React.FC<{
   );
 };
 
-export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
+export const AcceptButton: React.FC<{ id: string; name: string }> = ({ id, name }) => {
   const { t } = useTranslation(['deleghe']);
+  const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+
   const handleAcceptClick = () => {
-    void dispatch(openAcceptModal({ id, name }));
+    setOpen(true);
   };
 
+  const handleCloseAcceptModal = () => {
+    setOpen(false);
+  };
+
+  const handleConfirm = (code: Array<string>, groups: Array<{ id: string; name: string }>) => {
+    void dispatch(acceptDelegation({ id, code: code.join(''), groups }))
+      .unwrap()
+      .then(async () => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('deleghe.accepted-successfully'),
+          })
+        );
+        await dispatch(getSidemenuInformation());
+      });
+  };
+
+  const handleAcceptanceError = useCallback((responseError: AppResponse) => {
+    if (Array.isArray(responseError.errors)) {
+      const managedErrors = (
+        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+      ).map((key) => ServerResponseErrorCode[key]);
+      const error = responseError.errors[0];
+      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+        dispatch(appStateActions.addError({ title: '', message: t('deleghe.accepted-error') }));
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }, []);
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptanceError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptanceError);
+    };
+  }, [handleAcceptanceError]);
+
   return (
-    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
-      {t('deleghe.accept')}
-    </Button>
+    <>
+      <AcceptDelegationModal
+        isEditMode={false}
+        name={name}
+        open={open}
+        handleCloseAcceptModal={handleCloseAcceptModal}
+        handleConfirm={handleConfirm}
+      />
+      <Button
+        onClick={handleAcceptClick}
+        variant={'contained'}
+        color={'primary'}
+        data-testid="acceptButton"
+        size="small"
+      >
+        {t('deleghe.accept')}
+      </Button>
+    </>
   );
 };

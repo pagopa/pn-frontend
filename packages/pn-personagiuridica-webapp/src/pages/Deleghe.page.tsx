@@ -3,7 +3,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 
 import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState } from '../redux/delegation/reducers';
 import {
   getDelegators,
@@ -11,26 +11,34 @@ import {
   getDelegatesByCompany,
   getDelegatorsNames,
 } from '../redux/delegation/actions';
+import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
+import { getConfiguration } from '../services/configuration.service';
 
 const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
   const [pageReady, setPageReady] = useState(false);
   const [value, setValue] = useState(0);
-
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
+  const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const retrieveData = useCallback(() => {
-    void dispatch(getDelegatesByCompany());
-    void dispatch(getDelegators({ size: 10 }));
-    void dispatch(getGroups());
-    void dispatch(getDelegatorsNames());
+    // groups administrator cannot see the delegates by the company
+    if (!isGroupAdmin) {
+      void dispatch(getDelegatesByCompany());
+    }
+    if (DELEGATIONS_TO_PG_ENABLED) {
+      void dispatch(getDelegators({ size: 10 }));
+      void dispatch(getGroups());
+      void dispatch(getDelegatorsNames());
+    }
     setPageReady(true);
   }, []);
 
@@ -54,24 +62,33 @@ const Deleghe = () => {
             {t('deleghe.description')}
           </TitleBox>
         </Box>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label={t('deleghe.tab_aria_label')}
-            centered
-            variant="fullWidth"
-          >
-            <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
-            <Tab data-testid="tab2" label={t('deleghe.tab_deleghe')} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <DelegatesByCompany />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <DelegationsOfTheCompany></DelegationsOfTheCompany>
-        </TabPanel>
+        {!isGroupAdmin && (
+          <>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label={t('deleghe.tab_aria_label')}
+                centered
+                variant="fullWidth"
+              >
+                <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
+                <Tab data-testid="tab2" label={t('deleghe.tab_deleghe')} />
+              </Tabs>
+            </Box>
+            <TabPanel value={value} index={0}>
+              <DelegatesByCompany />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <DelegationsOfTheCompany />
+            </TabPanel>
+          </>
+        )}
+        {isGroupAdmin && (
+          <Box sx={{ mx: 3 }}>
+            <DelegationsOfTheCompany />
+          </Box>
+        )}
       </Box>
     </LoadingPageWrapper>
   );

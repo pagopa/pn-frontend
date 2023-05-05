@@ -39,13 +39,13 @@ const axe = configureAxe({
 });
 expect.extend(toHaveNoViolations);
 
-type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY';
 type MockCodes = 200 | 204 | 500 | 401 | 400;
 
 /**
  * Utility function to mock api response
  * @param client Axios client or Mock Adapter instance
- * @param method the api method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+ * @param method the api method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY
  * @param path the api path
  * @param code the response code
  * @param request body request
@@ -77,6 +77,8 @@ function mockApi(
     case 'PATCH':
       mock.onPatch(path, request).reply(code, response);
       break;
+    case 'ANY':
+      mock.onAny(path, request).reply(code, response);
     default:
       break;
   }
@@ -93,23 +95,25 @@ function mockApi(
  * @returns the mock instance
  */
 export async function testAutocomplete(
-  form: HTMLFormElement,
+  container: Element,
   elementName: string,
   options: Array<{ id: string; name: string }>,
   mustBeOpened: boolean,
   optToSelect?: number,
   closeOnSelect?: boolean
 ) {
-  const autocomplete = form.querySelector(`[data-testid="${elementName}"]`) as Element;
+  const autocomplete = container.querySelector(`[data-testid="${elementName}"]`) as Element;
   if (mustBeOpened) {
     const button = autocomplete.querySelector('button[title="Open"]') as Element;
     fireEvent.click(button);
   }
-  const dropdown = await waitFor(() => screen.findByRole('presentation'));
+  const dropdown = (await waitFor(() =>
+    document.querySelector('[role="presentation"][class^="MuiAutocomplete-popper"')
+  )) as HTMLElement;
   expect(dropdown).toBeInTheDocument();
-  const dropdownOptionsList = await within(dropdown).findByRole('listbox');
+  const dropdownOptionsList = (await within(dropdown).queryByRole('listbox')) as HTMLElement;
   expect(dropdownOptionsList).toBeInTheDocument();
-  const dropdownOptionsListItems = await within(dropdownOptionsList).findAllByRole('option');
+  const dropdownOptionsListItems = await within(dropdownOptionsList).queryAllByRole('option');
   expect(dropdownOptionsListItems).toHaveLength(options.length);
   dropdownOptionsListItems.forEach((opt, index) => {
     expect(opt).toHaveTextContent(options[index].name);
