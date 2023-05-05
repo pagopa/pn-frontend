@@ -38,19 +38,15 @@ export default function ConfirmationModal({
       aria-labelledby="responsive-dialog-title"
     >
       <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
-        <Box mx={3} sx={{ height: '100%' }}>
-          <Grid container item mt={4}>
-            <Grid item xs={10}>
-              <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
-                {title}
-              </Typography>
-              {subtitle && (
-                <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
-                  {subtitle}
-                </Typography>
-              )}
-            </Grid>
-          </Grid>
+        <Box mx={3} mt={4} sx={{ height: '100%' }}>
+          <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
+            {title}
+          </Typography>
+          {subtitle && (
+            <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
+              {subtitle}
+            </Typography>
+          )}
 
           <Stack
             direction={isMobile ? 'column' : 'row'}
