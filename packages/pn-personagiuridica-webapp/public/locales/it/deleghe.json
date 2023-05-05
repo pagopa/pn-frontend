@@ -2,30 +2,31 @@
   "deleghe": {
     "title": "Deleghe",
     "close": "Chiudi",
-    "description": "Qui puoi gestire i tuoi delegati e le deleghe a tuo carico. I primi sono le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione delle tue notifiche, le seconde sono coloro che hanno autorizzato te.",
+    "description": "Qui si possono gestire i delegati dell’impresa e le deleghe a suo carico. I primi sono quelli che l’impresa delega alla lettura delle sue notifiche. Le seconde sono le deleghe affidate all’impresa.",
     "delegatesTitle": "Delegati dall'impresa",
     "delegatorsTitle": "Deleghe a carico dell'impresa",
     "delegatorsApiErrorMessage": "Non siamo riusciti a recuperare i dati in merito alle deleghe a tuo carico.",
     "delegationStart": "Inizio delega",
     "delegationEnd": "Fine delega",
-    "empty_state": "Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.",
     "accept_title": "Inserisci il codice di verifica",
     "accept_description": "Per accettare la delega, inserisci il codice che {{name}} ha condiviso con te.",
     "add": "Aggiungi una delega",
-    "invalid_code": "Codice di verifica non valido",
     "revoke": "Revoca",
     "reject": "Rifiuta",
     "accept": "Accetta",
     "show": "Mostra codice",
-    "revocation_question": "Vuoi davvero revocare la delega?",
-    "rejection_question": "Vuoi davvero rifiutare la delega?",
+    "revocation_question": "Vuoi revocare la delega a {{delegate}}? ",
+    "rejection_question": "Vuoi rifiutare la delega di {{delegator}}?",
     "confirm_revocation": "Revoca la delega",
     "confirm_rejection": "Rifiuta la delega",
+    "subtitle_rejection": "Se la rifiuti, non potrai leggere le notifiche di {{delegator}}.",
+    "subtitle_revocation": "Non potrà più leggere le notifiche di {{recipient}}.",
     "error_title": "Spiacenti, qualcosa è andato storto",
     "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "error_button": "Ricarica la pagina",
-    "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
-    "no_delegators": "Non c'è nessuna delega a carico di {{recipient}}.",
+    "no_delegates": "{{organizationName}} non ha delegato nessuno alla lettura delle sue notifiche.",
+    "no_delegators": "Non c'è nessuna delega a carico di {{organizationName}}.",
+    "no_delegators_after_filters": "I filtri che hai aggiunto non hanno dato nessun risultato.",
     "show_code_title": "Codice di verifica per la delega a {{name}}",
     "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",
@@ -53,13 +54,25 @@
       "no-group-found": "Nessun gruppo trovato",
       "no-name-found": "Nessun nome trovato",
       "menu-aria-label": "Menù azioni"
-    }
+    },
+    "accept-delegation": "Accetta la delega",
+    "associate-groups-title": "Vuoi assegnare la delega ad un gruppo?",
+    "associate-groups-subtitle": "L’amministratore del gruppo potrà gestire la delega. Gli utenti del gruppo potranno leggere solo le notifiche relative a quella delega.",
+    "no-group": "Non assegnare ad un gruppo",
+    "associate-group": "Assegna ad un gruppo",
+    "select-group": "Seleziona un gruppo*",
+    "accepted-successfully": "La delega è stata accettata",
+    "accepted-error": "A causa di un errore, la delega non è stata accettata. Premi Annulla e riprova.",
+    "revoke-successfully": "Delega Revocata.",
+    "reject-successfully": "Delega Rifiutata.",
+    "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
+    "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova."
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
     "backToDelegations": "Torna alle deleghe",
     "createdTitle": "La richiesta di delega è stata creata con successo",
-    "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la tua richiesta.",
+    "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la richiesta.",
     "title": "Aggiungi una delega",
     "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle notifiche di {{organizationName}}",
     "form": {
@@ -123,6 +136,10 @@
       "message": "Non è possibile delegare se stessi"
     },
     "invalid_verification_code": {
+      "title": "Codice non valido",
+      "message": "Il codice che hai inserito è sbagliato. Riprova."
+    },
+    "invalid_verification_code_ua": {
       "title": "Codice non valido",
       "message": "Codice di verifica non valido"
     }

@@ -6,27 +6,45 @@ import SmartFilter from '../SmartFilter';
 const submitHandler = jest.fn();
 const cancelHandler = jest.fn();
 
-const field = [
-  <input id="username" name="username" key="username"></input>,
-  <input id="email" name="email" type="email" key="email"></input>,
-];
+const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
+  const [username, setUsername] = React.useState(inputUsername);
+  const [email, setEmail] = React.useState(inputEmail);
+  return (
+    <SmartFilter
+      filterLabel="Filter"
+      cancelLabel="Cancel"
+      formIsValid
+      onClear={cancelHandler}
+      onSubmit={(e) => {
+        e?.preventDefault();
+        submitHandler();
+      }}
+      formValues={{ username, email }}
+      initialValues={{ username: '', email: '' }}
+    >
+      <input
+        id="username"
+        name="username"
+        key="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      ></input>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        key="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      ></input>
+    </SmartFilter>
+  );
+};
 
 describe('Smart Filter Component', () => {
   it('renders smart filters (desktop version)', () => {
     window.matchMedia = createMatchMedia(2000);
-    const result = render(
-      <SmartFilter
-        filterLabel="Filter"
-        cancelLabel="Cancel"
-        formIsValid
-        onClear={cancelHandler}
-        onSubmit={submitHandler}
-        formValues={{ username: '', email: '' }}
-        initialValues={{ username: '', email: '' }}
-      >
-        {field}
-      </SmartFilter>
-    );
+    const result = render(<ExampleForm />);
     const username = result.container.querySelector('#username');
     const email = result.container.querySelector('#email');
     const confirmButton = result.queryByTestId('confirmButton');
@@ -45,19 +63,7 @@ describe('Smart Filter Component', () => {
 
   it('renders smart filters (mobile version)', () => {
     window.matchMedia = createMatchMedia(800);
-    const result = render(
-      <SmartFilter
-        filterLabel="Filter"
-        cancelLabel="Cancel"
-        formIsValid
-        onClear={cancelHandler}
-        onSubmit={submitHandler}
-        formValues={{ username: '', email: '' }}
-        initialValues={{ username: '', email: '' }}
-      >
-        {field}
-      </SmartFilter>
-    );
+    const result = render(<ExampleForm />);
     const username = result.container.querySelector('#username');
     const email = result.container.querySelector('#email');
     const confirmButton = result.queryByTestId('confirmButton');
@@ -71,46 +77,33 @@ describe('Smart Filter Component', () => {
     expect(dialogToggle).toHaveTextContent('Filter');
   });
 
-  it('clicks on confirm and cancel buttons (desktop version)', () => {
+  it('clicks on confirm button (desktop version)', async () => {
     window.matchMedia = createMatchMedia(2000);
-    const result = render(
-      <SmartFilter
-        filterLabel="Filter"
-        cancelLabel="Cancel"
-        formIsValid
-        onClear={cancelHandler}
-        onSubmit={submitHandler}
-        formValues={{ username: 'mariorossi', email: 'mario.ossimail.it' }}
-        initialValues={{ username: '', email: '' }}
-      >
-        {field}
-      </SmartFilter>
-    );
-    const confirmButton = result.queryByTestId('confirmButton') as Element;
-    const cancelButton = result.queryByTestId('cancelButton') as Element;
+    const result = render(<ExampleForm />);
+    const username = result.container.querySelector('#username') as Element;
+    const email = result.container.querySelector('#email') as Element;
+    fireEvent.change(username, { target: { value: 'mariorossi' } });
+    fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
+    const confirmButton = await waitFor(() => result.queryByTestId('confirmButton') as Element);
     expect(confirmButton).toBeEnabled();
-    expect(cancelButton).toBeEnabled();
     fireEvent.click(confirmButton);
     expect(submitHandler).toBeCalledTimes(1);
+  });
+
+  it('clicks on cancel button (desktop version)', async () => {
+    window.matchMedia = createMatchMedia(2000);
+    const result = render(
+      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
+    );
+    const cancelButton = result.queryByTestId('cancelButton') as Element;
+    expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     expect(cancelHandler).toBeCalledTimes(1);
   });
 
   it('clicks on toggle button (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
-    const result = render(
-      <SmartFilter
-        filterLabel="Filter"
-        cancelLabel="Cancel"
-        formIsValid
-        onClear={cancelHandler}
-        onSubmit={submitHandler}
-        formValues={{ username: '', email: '' }}
-        initialValues={{ username: '', email: '' }}
-      >
-        {field}
-      </SmartFilter>
-    );
+    const result = render(<ExampleForm />);
     const dialogToggle = result.container.querySelector(
       '[data-testid="dialogToggle"] button'
     ) as Element;
@@ -133,22 +126,12 @@ describe('Smart Filter Component', () => {
     });
   });
 
-  it('renders badge count (mobile version)', () => {
+  it('renders badge count (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
     const result = render(
-      <SmartFilter
-        filterLabel="Filter"
-        cancelLabel="Cancel"
-        formIsValid
-        onClear={cancelHandler}
-        onSubmit={submitHandler}
-        formValues={{ username: 'mariorossi', email: 'mario.ossimail.it' }}
-        initialValues={{ username: '', email: '' }}
-      >
-        {field}
-      </SmartFilter>
+      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
     );
-    const dialogToggle = result.queryByTestId('dialogToggle');
+    const dialogToggle = await waitFor(() => result.queryByTestId('dialogToggle'));
     expect(dialogToggle).toHaveTextContent('2');
   });
 });
