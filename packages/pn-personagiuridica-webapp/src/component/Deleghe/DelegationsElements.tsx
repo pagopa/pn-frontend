@@ -37,15 +37,23 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  const message = menuType === 'delegates' ? t('deleghe.revoke-error') : t('deleghe.reject-error');
-  const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
+  const titleModal =
+    menuType === 'delegates'
+      ? t('deleghe.revocation_question', { delegate: name })
+      : t('deleghe.rejection_question', { delegator: name });
+  const subtitleModal =
+    menuType === 'delegates'
+      ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
+      : t('deleghe.subtitle_rejection', { delegator: name });
+  const confirmLabel =
+    menuType === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection');
 
   const handleOpenModalClick = () => {
-    if (menuType === 'delegates') {
-      trackEventByType(TrackEventType.DELEGATION_DELEGATE_REVOKE);
-    } else {
-      trackEventByType(TrackEventType.DELEGATION_DELEGATOR_REJECT);
-    }
+    const eventToTrack =
+      menuType === 'delegates'
+        ? TrackEventType.DELEGATION_DELEGATE_REVOKE
+        : TrackEventType.DELEGATION_DELEGATOR_REJECT;
+    trackEventByType(eventToTrack);
     setShowConfirmationModal(true);
     setAnchorEl(null);
   };
@@ -63,34 +71,31 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   };
 
   const handleConfirmClick = () => {
-    if (menuType === 'delegates') {
-      void dispatch(revokeDelegation(id))
-        .unwrap()
-        .then(async () => {
-          dispatch(
-            appStateActions.addSuccess({
-              title: '',
-              message: t('deleghe.revoke-successfully'),
-            })
-          );
-        });
-    } else {
-      void dispatch(rejectDelegation(id))
-        .unwrap()
-        .then(async () => {
-          dispatch(
-            appStateActions.addSuccess({
-              title: '',
-              message: t('deleghe.reject-successfully'),
-            })
-          );
+    const actionToDispatch = menuType === 'delegates' ? revokeDelegation : rejectDelegation;
+    const message =
+      menuType === 'delegates'
+        ? t('deleghe.revoke-successfully')
+        : t('deleghe.reject-successfully');
+
+    void dispatch(actionToDispatch(id))
+      .unwrap()
+      .then(async () => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message,
+          })
+        );
+        if (menuType === 'delegators') {
           await dispatch(getSidemenuInformation());
-        });
-    }
+        }
+      });
     onCloseModal();
   };
 
   const handleConfirmationError = useCallback((responseError: AppResponse) => {
+    const message =
+      menuType === 'delegates' ? t('deleghe.revoke-error') : t('deleghe.reject-error');
     if (Array.isArray(responseError.errors)) {
       const managedErrors = (
         Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
@@ -106,6 +111,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   }, []);
 
   useEffect(() => {
+    const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
     AppResponsePublisher.error.subscribe(action, handleConfirmationError);
 
     return () => {
@@ -143,27 +149,14 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
     ];
   };
 
-  const subtitleModal =
-    menuType === 'delegates'
-      ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
-      : t('deleghe.subtitle_rejection', { delegator: name });
-
   return (
     <>
       <ConfirmationModal
         open={showConfirmationModal}
-        title={
-          menuType === 'delegates'
-            ? t('deleghe.revocation_question', { delegate: name })
-            : t('deleghe.rejection_question', { delegator: name })
-        }
+        title={titleModal}
         subtitle={subtitleModal}
         onConfirm={handleConfirmClick}
-        onConfirmLabel={
-          menuType === 'delegates'
-            ? t('deleghe.confirm_revocation')
-            : t('deleghe.confirm_rejection')
-        }
+        onConfirmLabel={confirmLabel}
         onClose={onCloseModal}
         onCloseLabel={t('button.annulla', { ns: 'common' })}
       />
