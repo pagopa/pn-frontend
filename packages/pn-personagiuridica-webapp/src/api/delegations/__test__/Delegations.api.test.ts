@@ -15,6 +15,7 @@ import {
   DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
+  UPDATE_DELEGATION,
 } from '../delegations.routes';
 import { mockApi } from '../../../__test__/test-utils';
 import { DelegationStatus } from '../../../models/Deleghe';
@@ -167,6 +168,14 @@ describe('Delegations api tests', () => {
     const mock = mockApi(apiClient, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
     const res = await DelegationsApi.getDelegatorsNames();
     expect(res).toHaveLength(0);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('update a delegation', async () => {
+    const mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('9'), 204, undefined, {});
+    const res = await DelegationsApi.updateDelegation('9', [{ id: 'group-1', name: 'Group 1' }]);
+    expect(res).toStrictEqual({ id: '9', groups: [{ id: 'group-1', name: 'Group 1' }] });
     mock.reset();
     mock.restore();
   });

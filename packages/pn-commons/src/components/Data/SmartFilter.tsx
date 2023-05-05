@@ -53,6 +53,18 @@ const SmartFilter = <FormValues extends object>({
   const isPreviousSearch = _.isEqual(formValues, currentFilters.current);
   const filtersCount = filtersApplied(initialValues, currentFilters.current);
 
+  const submitHandler = (e?: FormEvent<HTMLFormElement> | undefined) => {
+    // eslint-disable-next-line functional/immutable-data
+    currentFilters.current = formValues;
+    onSubmit(e);
+  };
+
+  const clearHandler = () => {
+    // eslint-disable-next-line functional/immutable-data
+    currentFilters.current = initialValues;
+    onClear();
+  };
+
   const confirmAction = (
     <Button
       data-testid="confirmButton"
@@ -66,16 +78,10 @@ const SmartFilter = <FormValues extends object>({
   );
 
   const cancelAction = (
-    <Button data-testid="cancelButton" size="small" onClick={onClear} disabled={!filtersCount}>
+    <Button data-testid="cancelButton" size="small" onClick={clearHandler} disabled={!filtersCount}>
       {cancelLabel}
     </Button>
   );
-
-  const submitHandler = (e?: FormEvent<HTMLFormElement> | undefined) => {
-    // eslint-disable-next-line functional/immutable-data
-    currentFilters.current = formValues;
-    onSubmit(e);
-  };
 
   if (isMobile) {
     return (

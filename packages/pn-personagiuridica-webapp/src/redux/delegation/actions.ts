@@ -61,4 +61,12 @@ export const getDelegatorsNames = createAsyncThunk<Array<DelegatorsNames>>(
   performThunkAction(() => DelegationsApi.getDelegatorsNames())
 );
 
+export const updateDelegation = createAsyncThunk<
+  AcceptDelegationResponse,
+  { id: string; groups: Array<{ id: string; name: string }> }
+>(
+  'updateDelegation',
+  performThunkAction(({ id, groups }) => DelegationsApi.updateDelegation(id, groups))
+);
+
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

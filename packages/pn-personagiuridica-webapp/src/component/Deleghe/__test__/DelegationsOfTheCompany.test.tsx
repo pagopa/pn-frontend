@@ -10,7 +10,7 @@ import {
   mockApi,
   act,
 } from '../../../__test__/test-utils';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
+import { arrayOfDelegators, initialState } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import { apiClient } from '../../../api/apiClients';
 import { DELEGATIONS_BY_DELEGATE } from '../../../api/delegations/delegations.routes';
@@ -34,20 +34,6 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
-
-const initialState = {
-  delegationsState: {
-    delegations: {
-      delegators: [],
-    },
-    pagination: {
-      nextPagesKey: [],
-      moreResult: false,
-    },
-    groups: [],
-    delegatorsNames: [],
-  },
-};
 
 export async function testMultiSelect(
   form: HTMLElement,
@@ -75,7 +61,9 @@ export async function testMultiSelect(
 describe('DelegationsOfTheCompany Component - assuming API works properly', () => {
   it('renders the empty state', () => {
     const result = render(<DelegationsOfTheCompany />, {
-      preloadedState: initialState,
+      preloadedState: {
+        delegationsState: initialState,
+      },
     });
 
     expect(result.container).toHaveTextContent(/deleghe.delegatorsTitle/i);
@@ -92,7 +80,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     const result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
-          ...initialState.delegationsState,
+          ...initialState,
           delegations: {
             delegators: arrayOfDelegators,
           },
@@ -146,7 +134,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     const result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
-          ...initialState.delegationsState,
+          ...initialState,
           delegations: {
             delegators: arrayOfDelegators,
           },
@@ -192,7 +180,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     const result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
-          ...initialState.delegationsState,
+          ...initialState,
           delegations: {
             delegators: [arrayOfDelegators[0]],
           },
@@ -238,7 +226,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     const result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
-          ...initialState.delegationsState,
+          ...initialState,
           delegations: {
             delegators: [arrayOfDelegators[0]],
           },
@@ -277,7 +265,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     const result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
-          ...initialState.delegationsState,
+          ...initialState,
           delegations: {
             delegators: arrayOfDelegators,
           },

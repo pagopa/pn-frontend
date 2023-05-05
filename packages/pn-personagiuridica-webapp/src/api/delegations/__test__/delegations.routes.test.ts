@@ -8,6 +8,7 @@ import {
   DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
+  UPDATE_DELEGATION,
 } from '../delegations.routes';
 
 describe('Delegations routes', () => {
@@ -49,5 +50,10 @@ describe('Delegations routes', () => {
   it('should compile DELEGATIONS_NAME_BY_DELEGATE', () => {
     const route = DELEGATIONS_NAME_BY_DELEGATE();
     expect(route).toEqual(`/mandate/api/v1/mandates-by-delegate`);
+  });
+
+  it('should compile UPDATE_DELEGATION', () => {
+    const route = UPDATE_DELEGATION('mocked-id');
+    expect(route).toEqual(`/mandate/api/v1/mandate/mocked-id/update`);
   });
 });

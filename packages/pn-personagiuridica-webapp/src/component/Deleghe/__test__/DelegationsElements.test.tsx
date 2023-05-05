@@ -11,12 +11,10 @@ import {
 import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import {
   ACCEPT_DELEGATION,
-  COUNT_DELEGATORS,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { apiClient } from '../../../api/apiClients';
-import { DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({
@@ -25,6 +23,8 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
+
+const acceptCbk = jest.fn();
 
 describe('DelegationElements', () => {
   it('renders the Menu closed', () => {
@@ -92,7 +92,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton - open the modal', async () => {
-    const result = render(<AcceptButton id="1" name="test" />);
+    const result = render(<AcceptButton id="1" name="test" onAccept={acceptCbk} />);
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
     const button = result.queryByTestId('acceptButton') as Element;
     fireEvent.click(button);
@@ -101,7 +101,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton - close the modal', async () => {
-    const result = render(<AcceptButton id="1" name="test" />);
+    const result = render(<AcceptButton id="1" name="test" onAccept={acceptCbk} />);
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
     const button = result.queryByTestId('acceptButton') as Element;
     fireEvent.click(button);
@@ -110,6 +110,7 @@ describe('DelegationElements', () => {
     const cancelButton = result.queryByTestId('codeCancelButton') as Element;
     fireEvent.click(cancelButton);
     await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
+    expect(acceptCbk).not.toBeCalled();
   });
 
   it('renders the AcceptButton - accept the delegation', async () => {
@@ -118,8 +119,7 @@ describe('DelegationElements', () => {
       { id: 'group-2', name: 'Group 2' },
     ];
     const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('4'), 204, undefined, undefined);
-    mockApi(mock, 'GET', COUNT_DELEGATORS(DelegationStatus.PENDING), 200, undefined, { value: 5 });
-    const result = render(<AcceptButton id="4" name="test" />, {
+    const result = render(<AcceptButton id="4" name="test" onAccept={acceptCbk} />, {
       preloadedState: {
         delegationsState: {
           groups,
@@ -166,8 +166,7 @@ describe('DelegationElements', () => {
         verificationCode: '01234',
       });
     });
-    mock.reset();
-    mock.restore();
+    expect(acceptCbk).toBeCalledTimes(1);
   });
 
   it('check verificationCode for delegates', async () => {

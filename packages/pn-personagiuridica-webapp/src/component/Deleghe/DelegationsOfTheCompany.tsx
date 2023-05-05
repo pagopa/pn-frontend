@@ -35,6 +35,7 @@ import { Tag } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { setFilters } from '../../redux/delegation/reducers';
 import delegationToItem from '../../utils/delegation.utility';
 import { getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import {
@@ -46,13 +47,23 @@ import {
 } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
+const initialEmptyValues: {
+  mandateIds: Array<DelegatorsNames>;
+  groups: Array<{ id: string; name: string }>;
+  status: Array<DelegationStatus>;
+} = {
+  mandateIds: [],
+  groups: [],
+  status: [],
+};
+
 const DelegationsOfTheCompany = () => {
   const { t } = useTranslation(['deleghe', 'common']);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
-  const [filters, setFilters] = useState<DelegatorsFormFilters>({ size: 10, page: 0 });
   const firstUpdate = useRef(true);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const filters = useAppSelector((state: RootState) => state.delegationsState.filters);
 
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
@@ -164,7 +175,7 @@ const DelegationsOfTheCompany = () => {
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
         } else {
-          return <AcceptButton id={row.id} name={row.name as string} />;
+          return <AcceptButton id={row.id} name={row.name as string} onAccept={handleAccept} />;
         }
       },
       tableConfiguration: {
@@ -220,9 +231,15 @@ const DelegationsOfTheCompany = () => {
     groups: Array<{ id: string; name: string }>;
     status: Array<DelegationStatus>;
   } = {
-    mandateIds: [],
-    groups: [],
-    status: [],
+    mandateIds: filters.mandateIds
+      ? names.filter(
+          (name) =>
+            filters.mandateIds &&
+            filters.mandateIds.findIndex((id) => name.mandateIds.includes(id)) > -1
+        )
+      : [],
+    groups: filters.groups ? groups.filter((group) => filters.groups?.includes(group.id)) : [],
+    status: filters.status || [],
   };
 
   const validationSchema = yup.object({
@@ -234,6 +251,7 @@ const DelegationsOfTheCompany = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
       const params = {
         size: filters.size,
@@ -245,7 +263,7 @@ const DelegationsOfTheCompany = () => {
         ),
         groups: values.groups.map((d) => d.id),
       } as DelegatorsFormFilters;
-      setFilters(params);
+      dispatch(setFilters(params));
     },
   });
 
@@ -254,8 +272,7 @@ const DelegationsOfTheCompany = () => {
       size: filters.size,
       page: 0,
     } as DelegatorsFormFilters;
-    setFilters(params);
-    formik.resetForm();
+    dispatch(setFilters(params));
   };
 
   const handleChangeTouched = async (e: any) => {
@@ -272,19 +289,29 @@ const DelegationsOfTheCompany = () => {
   };
 
   const handleChangePage = (paginationData: PaginationData) => {
-    setFilters((prevParams) => ({
-      ...prevParams,
-      size: paginationData.size,
-      page: paginationData.page,
-    }));
+    dispatch(
+      setFilters({
+        ...filters,
+        size: paginationData.size,
+        page: paginationData.page,
+      })
+    );
   };
 
-  useEffect(() => {
-    if (firstUpdate.current) {
-      /* eslint-disable-next-line functional/immutable-data */
-      firstUpdate.current = false;
-      return;
+  const handleAccept = () => {
+    // when a mandate is accepted, we must check if there are filters applied that can change the view
+    // for the acceptance, the only filter to check is the status one
+    if (
+      filters.status &&
+      filters.status.length &&
+      !filters.status.includes(DelegationStatus.ACTIVE)
+    ) {
+      // because the filters applied don't contain the status ACTIVE, we must redo the api call
+      getDelegatorsData();
     }
+  };
+
+  const getDelegatorsData = () => {
     const delegatorsFilters = {
       size: filters.size,
       nextPageKey: filters.page ? pagination.nextPagesKey[filters.page - 1] : undefined,
@@ -293,6 +320,15 @@ const DelegationsOfTheCompany = () => {
       status: filters.status,
     } as GetDelegatorsFilters;
     void dispatch(getDelegators(delegatorsFilters));
+  };
+
+  useEffect(() => {
+    if (firstUpdate.current) {
+      /* eslint-disable-next-line functional/immutable-data */
+      firstUpdate.current = false;
+      return;
+    }
+    getDelegatorsData();
   }, [filters]);
 
   return (
@@ -330,7 +366,7 @@ const DelegationsOfTheCompany = () => {
               onClear={clearFiltersHandler}
               formIsValid={formik.isValid}
               formValues={formik.values}
-              initialValues={initialValues}
+              initialValues={initialEmptyValues}
             >
               <Grid item xs={12} lg>
                 <Autocomplete

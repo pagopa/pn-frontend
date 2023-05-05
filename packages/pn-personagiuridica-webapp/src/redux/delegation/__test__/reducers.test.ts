@@ -7,9 +7,10 @@ import {
   DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
+  UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
-import { Delegation, GetDelegatorsResponse } from '../../../models/Deleghe';
+import { Delegation, DelegationStatus, GetDelegatorsResponse } from '../../../models/Deleghe';
 import { GroupStatus } from '../../../models/groups';
 import { store } from '../../store';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
@@ -21,8 +22,10 @@ import {
   getGroups,
   rejectDelegation,
   revokeDelegation,
+  updateDelegation,
 } from '../actions';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
+import { resetState, setFilters } from '../reducers';
 
 describe('delegation redux state tests', () => {
   mockAuthentication();
@@ -75,7 +78,7 @@ describe('delegation redux state tests', () => {
     mock.restore();
   });
 
-  it('should set the accept modal state to error', async () => {
+  it('should throw an error trying to accept a delegation', async () => {
     const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 500, undefined, undefined);
     const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345', groups: [] }));
     const payload = action.payload as any;
@@ -170,5 +173,52 @@ describe('delegation redux state tests', () => {
     );
     mock.reset();
     mock.restore();
+  });
+
+  it('should update a delegation request', async () => {
+    const mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('1'), 204);
+    const action = await store.dispatch(
+      updateDelegation({ id: '1', groups: [{ id: 'group-1', name: 'Group 1' }] })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('updateDelegation/fulfilled');
+    expect(payload).toEqual({ id: '1', groups: [{ id: 'group-1', name: 'Group 1' }] });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('should throw an error trying to update a delegation', async () => {
+    const mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('1'), 500);
+    const action = await store.dispatch(updateDelegation({ id: '1', groups: [] }));
+    const payload = action.payload as any;
+    expect(action.type).toBe('updateDelegation/rejected');
+    expect(payload.response.status).toEqual(500);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('Should be able to set filters', () => {
+    const filters = {
+      size: 20,
+      page: 3,
+      groups: ['group-1', 'group-3'],
+      status: [DelegationStatus.ACTIVE],
+      mandateIds: ['mandate-1'],
+    };
+    const action = store.dispatch(setFilters(filters));
+    const payload = action.payload;
+    expect(action.type).toBe('delegationsSlice/setFilters');
+    expect(payload).toEqual(filters);
+    const state = store.getState().delegationsState;
+    expect(state.filters).toEqual(filters);
+  });
+
+  it('Should be able to reset state', () => {
+    const action = store.dispatch(resetState());
+    const payload = action.payload;
+    expect(action.type).toBe('delegationsSlice/resetState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().delegationsState;
+    expect(state).toEqual(initialState);
   });
 });

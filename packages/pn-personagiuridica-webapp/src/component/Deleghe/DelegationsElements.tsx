@@ -19,7 +19,6 @@ import {
   rejectDelegation,
   revokeDelegation,
 } from '../../redux/delegation/actions';
-import { getSidemenuInformation } from '../../redux/sidemenu/actions';
 import { User } from '../../redux/auth/types';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
@@ -31,7 +30,6 @@ import ConfirmationModal from './ConfirmationModal';
 type Props = {
   menuType: 'delegates' | 'delegators';
   id: string;
-  width?: string;
   userLogged?: User;
   row?: Item;
 };
@@ -46,12 +44,12 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
 
   const titleModal =
     menuType === 'delegates'
-      ? t('deleghe.revocation_question', { delegate: name })
-      : t('deleghe.rejection_question', { delegator: name });
+      ? t('deleghe.revocation_question', { delegate: row?.name })
+      : t('deleghe.rejection_question', { delegator: row?.name });
   const subtitleModal =
     menuType === 'delegates'
       ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
-      : t('deleghe.subtitle_rejection', { delegator: name });
+      : t('deleghe.subtitle_rejection', { delegator: row?.name });
   const confirmLabel =
     menuType === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection');
 
@@ -97,9 +95,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
             message,
           })
         );
-        if (menuType === 'delegators') {
-          await dispatch(getSidemenuInformation());
-        }
       });
     onCloseModal();
   };
@@ -120,6 +115,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
     }
     return true;
   }, []);
+
+  const handleUpdate = () => {};
 
   useEffect(() => {
     const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
@@ -189,7 +186,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
           open={showUpdateModal}
           currentGroups={row?.groups as Array<{ id: string; name: string }>}
           handleCloseAcceptModal={handleCloseAcceptModal}
-          handleConfirm={() => {}}
+          handleConfirm={handleUpdate}
         />
       )}
       {row?.verificationCode && menuType === 'delegates' && (
@@ -255,7 +252,11 @@ export const OrganizationsList: React.FC<{
   );
 };
 
-export const AcceptButton: React.FC<{ id: string; name: string }> = ({ id, name }) => {
+export const AcceptButton: React.FC<{ id: string; name: string; onAccept: () => void }> = ({
+  id,
+  name,
+  onAccept,
+}) => {
   const { t } = useTranslation(['deleghe']);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -278,7 +279,7 @@ export const AcceptButton: React.FC<{ id: string; name: string }> = ({ id, name 
             message: t('deleghe.accepted-successfully'),
           })
         );
-        await dispatch(getSidemenuInformation());
+        onAccept();
       });
   };
 

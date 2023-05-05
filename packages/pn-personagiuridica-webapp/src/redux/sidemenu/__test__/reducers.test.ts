@@ -1,21 +1,20 @@
-/* eslint-disable functional/no-let */
-import { DelegationsApi } from '../../../api/delegations/Delegations.api';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import {
+  ACCEPT_DELEGATION,
+  COUNT_DELEGATORS,
+  REJECT_DELEGATION,
+} from '../../../api/delegations/delegations.routes';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { acceptDelegation, rejectDelegation } from '../../delegation/actions';
 import { store } from '../../store';
 import { getSidemenuInformation } from '../actions';
 import { closeDomicileBanner } from '../reducers';
 import { initialState } from './test-utils';
+import { DelegationStatus } from '../../../models/Deleghe';
 
 describe('Sidemenu redux state tests', () => {
   mockAuthentication();
-
-  const setInitialState = async (delegatorsCount: number) => {
-    // Get sidemenu information
-    const getDelegatorsApiSpy = jest.spyOn(DelegationsApi, 'countDelegators');
-    getDelegatorsApiSpy.mockResolvedValue({ value: delegatorsCount });
-    await store.dispatch(getSidemenuInformation());
-  };
 
   it('Initial state', () => {
     const state = store.getState().generalInfoState;
@@ -29,58 +28,62 @@ describe('Sidemenu redux state tests', () => {
     expect(state).toEqual({ ...initialState, domicileBannerOpened: false });
   });
 
-  it('Should load state properly', async () => {
-    // test getSidemenuInformation() with 0 "pending" delegators
-    await setInitialState(0);
-
-    let state = store.getState().generalInfoState;
-    expect(state.pendingDelegators).toBe(0);
-
-    // test getSidemenuInformation() with 2 "pending" delegators
-    await setInitialState(2);
-
-    state = store.getState().generalInfoState;
+  it('Should load delegators count', async () => {
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      COUNT_DELEGATORS(DelegationStatus.PENDING),
+      200,
+      undefined,
+      { value: 2 }
+    );
+    const action = await store.dispatch(getSidemenuInformation());
+    const state = store.getState().generalInfoState;
+    expect(action.type).toBe('getSidemenuInformation/fulfilled');
     expect(state.pendingDelegators).toBe(2);
-
-    // test getSidemenuInformation() with 1 "pending" delegator
-    await setInitialState(1);
-
-    state = store.getState().generalInfoState;
-    expect(state.pendingDelegators).toBe(1);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should update state after accepting a delegation', async () => {
-    // accept delegation (both in pending state)
-    await setInitialState(2);
-    const acceptDelegationApiSpy = jest.spyOn(DelegationsApi, 'acceptDelegation');
-    acceptDelegationApiSpy.mockResolvedValue({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8' });
-    let action = await store.dispatch(
-      acceptDelegation({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8', code: '12345' })
+    const mock = mockApi(
+      apiClient,
+      'PATCH',
+      ACCEPT_DELEGATION('1dc53e54-1368-4c2d-8583-2f1d672350d8'),
+      204
     );
-
-    let state = store.getState().generalInfoState;
+    // accept delegation (both in pending state)
+    mockApi(mock, 'GET', COUNT_DELEGATORS(DelegationStatus.PENDING), 200, undefined, {
+      value: 2,
+    });
+    await store.dispatch(getSidemenuInformation());
+    const action = await store.dispatch(
+      acceptDelegation({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8', code: '12345', groups: [] })
+    );
+    const state = store.getState().generalInfoState;
     expect(action.type).toBe('acceptDelegation/fulfilled');
     expect(state.pendingDelegators).toBe(1);
-
-    // accept delegation (one active and one pending)
-    action = await store.dispatch(
-      acceptDelegation({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8', code: '12345' })
-    );
-
-    state = store.getState().generalInfoState;
-    expect(action.type).toBe('acceptDelegation/fulfilled');
-    expect(state.pendingDelegators).toBe(0);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should update state after rejecting a pending delegation', async () => {
+    const mock = mockApi(
+      apiClient,
+      'PATCH',
+      REJECT_DELEGATION('1dc53e54-1368-4c2d-8583-2f1d672350d8'),
+      204
+    );
     // reject delegation (both in pending state)
-    await setInitialState(2);
-    const rejectDelegationApiSpy = jest.spyOn(DelegationsApi, 'rejectDelegation');
-    rejectDelegationApiSpy.mockResolvedValue({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8' });
+    mockApi(mock, 'GET', COUNT_DELEGATORS(DelegationStatus.PENDING), 200, undefined, {
+      value: 2,
+    });
+    await store.dispatch(getSidemenuInformation());
     const action = await store.dispatch(rejectDelegation('1dc53e54-1368-4c2d-8583-2f1d672350d8'));
-
     const state = store.getState().generalInfoState;
     expect(action.type).toBe('rejectDelegation/fulfilled');
     expect(state.pendingDelegators).toBe(1);
+    mock.reset();
+    mock.restore();
   });
 });
