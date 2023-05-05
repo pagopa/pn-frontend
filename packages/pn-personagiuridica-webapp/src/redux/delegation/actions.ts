@@ -61,9 +61,4 @@ export const getDelegatorsNames = createAsyncThunk<Array<DelegatorsNames>>(
   performThunkAction(() => DelegationsApi.getDelegatorsNames())
 );
 
-export const openRevocationModal =
-  createAction<{ id: string; type: string }>('openRevocationModal');
-
-export const closeRevocationModal = createAction<void>('closeRevocationModal');
-
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

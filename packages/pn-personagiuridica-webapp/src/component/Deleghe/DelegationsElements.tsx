@@ -6,45 +6,66 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
   AppResponse,
   AppResponsePublisher,
+  CodeModal,
   CustomTagGroup,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
-import { openRevocationModal } from '../../redux/delegation/reducers';
-import { acceptDelegation } from '../../redux/delegation/actions';
+import {
+  acceptDelegation,
+  rejectDelegation,
+  revokeDelegation,
+} from '../../redux/delegation/actions';
 import { getSidemenuInformation } from '../../redux/sidemenu/actions';
+import { User } from '../../redux/auth/types';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
 import AcceptDelegationModal from './AcceptDelegationModal';
+import ConfirmationModal from './ConfirmationModal';
 
-export const Menu: React.FC<{
+type Props = {
   menuType: 'delegates' | 'delegators';
   id: string;
   name?: string;
   verificationCode?: string;
-  setCodeModal?: (props: { open: boolean; name: string; code: string }) => void;
-}> = ({ menuType, id, name, verificationCode, setCodeModal }) => {
+  width?: string;
+  userLogged?: User;
+};
+export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, userLogged }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['deleghe']);
+  const [showCodeModal, setShowCodeModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const titleModal =
+    menuType === 'delegates'
+      ? t('deleghe.revocation_question', { delegate: name })
+      : t('deleghe.rejection_question', { delegator: name });
+  const subtitleModal =
+    menuType === 'delegates'
+      ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
+      : t('deleghe.subtitle_rejection', { delegator: name });
+  const confirmLabel =
+    menuType === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection');
 
   const handleOpenModalClick = () => {
-    if (menuType === 'delegates') {
-      trackEventByType(TrackEventType.DELEGATION_DELEGATE_REVOKE);
-    } else {
-      trackEventByType(TrackEventType.DELEGATION_DELEGATOR_REJECT);
-    }
-    dispatch(openRevocationModal({ id, type: menuType }));
+    const eventToTrack =
+      menuType === 'delegates'
+        ? TrackEventType.DELEGATION_DELEGATE_REVOKE
+        : TrackEventType.DELEGATION_DELEGATOR_REJECT;
+    trackEventByType(eventToTrack);
+    setShowConfirmationModal(true);
     setAnchorEl(null);
   };
 
   const handleOpenVerificationCodeModal = () => {
-    if (setCodeModal && name && verificationCode) {
-      setCodeModal({ open: true, name, code: verificationCode });
+    if (name && verificationCode) {
+      setShowCodeModal(true);
       setAnchorEl(null);
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
     }
@@ -54,8 +75,65 @@ export const Menu: React.FC<{
     setAnchorEl(event.currentTarget);
   };
 
+  const handleConfirmClick = () => {
+    const actionToDispatch = menuType === 'delegates' ? revokeDelegation : rejectDelegation;
+    const message =
+      menuType === 'delegates'
+        ? t('deleghe.revoke-successfully')
+        : t('deleghe.reject-successfully');
+
+    void dispatch(actionToDispatch(id))
+      .unwrap()
+      .then(async () => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message,
+          })
+        );
+        if (menuType === 'delegators') {
+          await dispatch(getSidemenuInformation());
+        }
+      });
+    onCloseModal();
+  };
+
+  const handleConfirmationError = useCallback((responseError: AppResponse) => {
+    const message =
+      menuType === 'delegates' ? t('deleghe.revoke-error') : t('deleghe.reject-error');
+    if (Array.isArray(responseError.errors)) {
+      const managedErrors = (
+        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+      ).map((key) => ServerResponseErrorCode[key]);
+      const error = responseError.errors[0];
+      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+        dispatch(appStateActions.addError({ title: '', message }));
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }, []);
+
+  useEffect(() => {
+    const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
+    AppResponsePublisher.error.subscribe(action, handleConfirmationError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe(action, handleConfirmationError);
+    };
+  }, [handleConfirmationError]);
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onCloseModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const handleCloseShowCodeModal = () => {
+    setShowCodeModal(false);
   };
 
   const getMenuItemElements = () => {
@@ -78,6 +156,30 @@ export const Menu: React.FC<{
 
   return (
     <>
+      <ConfirmationModal
+        open={showConfirmationModal}
+        title={titleModal}
+        subtitle={subtitleModal}
+        onConfirm={handleConfirmClick}
+        onConfirmLabel={confirmLabel}
+        onClose={onCloseModal}
+        onCloseLabel={t('button.annulla', { ns: 'common' })}
+      />
+
+      {verificationCode && menuType === 'delegates' && (
+        <CodeModal
+          title={t('deleghe.show_code_title', { name })}
+          subtitle={t('deleghe.show_code_subtitle')}
+          open={showCodeModal}
+          initialValues={verificationCode.split('')}
+          handleClose={handleCloseShowCodeModal}
+          cancelCallback={handleCloseShowCodeModal}
+          cancelLabel={t('deleghe.close')}
+          codeSectionTitle={t('deleghe.verification_code')}
+          isReadOnly
+        />
+      )}
+
       <IconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"
@@ -85,7 +187,12 @@ export const Menu: React.FC<{
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
-      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">
+      <MUIMenu
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleClose}
+        data-testid="delegationMenu"
+      >
         {getMenuItemElements()}
       </MUIMenu>
     </>

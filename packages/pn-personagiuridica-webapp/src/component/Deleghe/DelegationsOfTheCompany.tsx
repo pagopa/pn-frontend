@@ -53,6 +53,7 @@ const DelegationsOfTheCompany = () => {
   const [filters, setFilters] = useState<DelegatorsFormFilters>({ size: 10, page: 0 });
   const firstUpdate = useRef(true);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
@@ -64,7 +65,6 @@ const DelegationsOfTheCompany = () => {
   );
   const [nameInputValue, setNameInputValue] = useState('');
   const [groupInputValue, setGroupInputValue] = useState('');
-
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
@@ -181,8 +181,8 @@ const DelegationsOfTheCompany = () => {
     {
       id: 'id',
       label: '',
-      getValue(value: string) {
-        return <Menu menuType={'delegators'} id={value} />;
+      getValue(value: string, row: Item) {
+        return <Menu menuType={'delegators'} id={value} name={row.name as string} />;
       },
       tableConfiguration: {
         width: '5%',

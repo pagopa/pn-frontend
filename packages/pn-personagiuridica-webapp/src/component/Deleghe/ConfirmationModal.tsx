@@ -8,9 +8,10 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 type Props = {
   open: boolean;
   title: string;
+  subtitle?: string | JSX.Element;
   onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onConfirmLabel?: string;
-  handleClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onClose: React.MouseEventHandler<HTMLButtonElement> | undefined;
   onCloseLabel?: string;
   minHeight?: string;
   width?: string;
@@ -18,9 +19,10 @@ type Props = {
 export default function ConfirmationModal({
   open,
   title,
+  subtitle = '',
   onConfirm,
   onConfirmLabel = 'Riprova',
-  handleClose,
+  onClose,
   onCloseLabel = 'Annulla',
   minHeight = '4em',
 }: Props) {
@@ -32,31 +34,32 @@ export default function ConfirmationModal({
     <Dialog
       fullScreen={fullScreen}
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       aria-labelledby="responsive-dialog-title"
     >
       <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
-        <Box mx={3} sx={{ height: '100%' }}>
-          <Grid container item mt={4}>
-            <Grid item xs={10}>
-              <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
-                {title}
-              </Typography>
-            </Grid>
-          </Grid>
+        <Box mx={3} mt={4} sx={{ height: '100%' }}>
+          <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
+            {title}
+          </Typography>
+          {subtitle && (
+            <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
+              {subtitle}
+            </Typography>
+          )}
 
           <Stack
             direction={isMobile ? 'column' : 'row'}
             justifyContent={'flex-end'}
             alignItems={'center'}
             ml={'auto'}
-            pb={isMobile ? 4 : 0}
+            pb={4}
             data-testid="dialogStack"
           >
             <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4} mr={isMobile ? 0 : 1}>
               <Button
                 sx={{ width: isMobile ? '100%' : null }}
-                onClick={handleClose}
+                onClick={onClose}
                 color="primary"
                 variant="outlined"
                 data-testid="dialogAction"
