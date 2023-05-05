@@ -1,4 +1,4 @@
-import { User } from '../../redux/auth/types';
+import { PNRole, User } from '../../redux/auth/types';
 import { authClient } from '../apiClients';
 import { AUTH_TOKEN_EXCHANGE } from './auth.routes';
 
@@ -22,5 +22,11 @@ export const AuthApi = {
         jti: response.data.jti,
         organization: response.data.organization,
         desired_exp: response.data.desired_exp,
+        isGroupAdmin: Boolean(
+          response.data.organization.roles &&
+            response.data.organization.roles[0].role === PNRole.ADMIN &&
+            response.data.organization.groups &&
+            response.data.organization.groups.length > 0
+        ),
       })),
 };

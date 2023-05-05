@@ -18,7 +18,7 @@ import {
 } from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
-  if (response.status === 200) {
+  if (response.status === 204) {
     return { id };
   }
   return { id: '-1' };
@@ -96,7 +96,7 @@ export const DelegationsApi = {
     apiClient
       .patch<AcceptDelegationResponse>(ACCEPT_DELEGATION(id), data)
       .then((response: AxiosResponse<AcceptDelegationResponse>) => {
-        if (response.status === 200) {
+        if (response.status === 204) {
           return { ...response.data, id };
         }
         return {

@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -19,6 +20,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
   ApiErrorWrapper,
+  CustomTagGroup,
   EmptyState,
   Item,
   KnownSentiment,
@@ -27,8 +29,8 @@ import {
   SmartTable,
   SmartTableData,
   useIsMobile,
-  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
+import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -39,6 +41,7 @@ import {
   DelegationStatus,
   DelegatorsColumn,
   DelegatorsFormFilters,
+  DelegatorsNames,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
@@ -49,7 +52,6 @@ const DelegationsOfTheCompany = () => {
   const isMobile = useIsMobile();
   const [filters, setFilters] = useState<DelegatorsFormFilters>({ size: 10, page: 0 });
   const firstUpdate = useRef(true);
-  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
@@ -62,8 +64,6 @@ const DelegationsOfTheCompany = () => {
   );
   const [nameInputValue, setNameInputValue] = useState('');
   const [groupInputValue, setGroupInputValue] = useState('');
-  const handleChangeInput = (newInputValue: string, action: Dispatch<SetStateAction<string>>) =>
-    handleSearchStringChangeInput(newInputValue, action);
 
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
@@ -134,9 +134,15 @@ const DelegationsOfTheCompany = () => {
       id: 'groups',
       label: t('deleghe.table.groups'),
       getValue(value: Array<{ id: string; name: string }>) {
-        if (value) {
+        if (value.length) {
           return (
-            <OrganizationsList organizations={value.map((group) => group.name)} visibleItems={3} />
+            <CustomTagGroup visibleItems={3}>
+              {value.map((group) => (
+                <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={group.id}>
+                  <Tag value={group.name} />
+                </Box>
+              ))}
+            </CustomTagGroup>
           );
         }
         return '';
@@ -198,7 +204,7 @@ const DelegationsOfTheCompany = () => {
     option: { name: string; id: string },
     { selected }: AutocompleteRenderOptionState
   ) => (
-    <li {...props}>
+    <li {...props} key={option.id}>
       <Checkbox
         icon={icon}
         checkedIcon={checkedIcon}
@@ -210,17 +216,17 @@ const DelegationsOfTheCompany = () => {
   );
 
   const initialValues: {
-    delegatorIds: Array<{ id: string; name: string }>;
+    mandateIds: Array<DelegatorsNames>;
     groups: Array<{ id: string; name: string }>;
-    status: Array<string>;
+    status: Array<DelegationStatus>;
   } = {
-    delegatorIds: [],
+    mandateIds: [],
     groups: [],
     status: [],
   };
 
   const validationSchema = yup.object({
-    delegatorIds: yup.array(),
+    mandateIds: yup.array(),
     groups: yup.array(),
     status: yup.array(),
   });
@@ -233,8 +239,11 @@ const DelegationsOfTheCompany = () => {
         size: filters.size,
         page: 0,
         status: values.status,
-        delegatorIds: values.delegatorIds.map((d) => d.id.toString()),
-        groups: values.groups.map((d) => d.id.toString()),
+        mandateIds: values.mandateIds.reduce(
+          (arr, d) => arr.concat(d.mandateIds),
+          [] as Array<string>
+        ),
+        groups: values.groups.map((d) => d.id),
       } as DelegatorsFormFilters;
       setFilters(params);
     },
@@ -279,7 +288,7 @@ const DelegationsOfTheCompany = () => {
     const delegatorsFilters = {
       size: filters.size,
       nextPageKey: filters.page ? pagination.nextPagesKey[filters.page - 1] : undefined,
-      delegatorIds: filters.delegatorIds,
+      mandateIds: filters.mandateIds,
       groups: filters.groups,
       status: filters.status,
     } as GetDelegatorsFilters;
@@ -296,7 +305,7 @@ const DelegationsOfTheCompany = () => {
         reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
-        {rows.length > 0 ? (
+        {rows.length > 0 || !_.isEqual({ size: 10, page: 0 }, filters) ? (
           <SmartTable
             conf={smartCfg}
             data={rows}
@@ -306,6 +315,12 @@ const DelegationsOfTheCompany = () => {
               totalElements,
               numOfDisplayedPages: Math.min(pagination.nextPagesKey.length + 1, 3),
               onChangePage: handleChangePage,
+            }}
+            emptyStateProps={{
+              sentimentIcon: KnownSentiment.DISSATISFIED,
+              emptyMessage: t('deleghe.no_delegators_after_filters'),
+              emptyActionLabel: t('button.annulla filtro', { ns: 'common' }),
+              emptyActionCallback: clearFiltersHandler,
             }}
           >
             <SmartFilter
@@ -319,7 +334,7 @@ const DelegationsOfTheCompany = () => {
             >
               <Grid item xs={12} lg>
                 <Autocomplete
-                  id="delegatorIds"
+                  id="mandateIds"
                   size="small"
                   fullWidth
                   options={names}
@@ -341,14 +356,14 @@ const DelegationsOfTheCompany = () => {
                       {...params}
                       label={t('deleghe.table.name')}
                       placeholder={t('deleghe.table.name')}
-                      name="delegatorIds"
+                      name="mandateIds"
                     />
                   )}
-                  value={formik.values.delegatorIds}
-                  onChange={handleChangeTouched}
-                  onInputChange={(_event, newInputValue) =>
-                    handleChangeInput(newInputValue, setNameInputValue)
+                  value={formik.values.mandateIds}
+                  onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
+                    handleChangeTouchedAutocomplete('mandateIds', newValue)
                   }
+                  onInputChange={(_event, newInputValue) => setNameInputValue(newInputValue)}
                   inputValue={nameInputValue}
                 />
               </Grid>
@@ -385,9 +400,7 @@ const DelegationsOfTheCompany = () => {
                   }
                   data-testid="groups"
                   inputValue={groupInputValue}
-                  onInputChange={(_event, newInputValue) =>
-                    handleChangeInput(newInputValue, setGroupInputValue)
-                  }
+                  onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
                 />
               </Grid>
               <Grid item xs={12} lg={3}>
@@ -426,7 +439,7 @@ const DelegationsOfTheCompany = () => {
         ) : (
           <EmptyState
             sentimentIcon={KnownSentiment.NONE}
-            emptyMessage={t('deleghe.no_delegators', { recipient: organization.name })}
+            emptyMessage={t('deleghe.no_delegators', { organizationName: organization.name })}
           />
         )}
       </ApiErrorWrapper>

@@ -35,6 +35,7 @@ jest.mock('../ItemsCard', () => (props) => (
     ))}
   </div>
 ));
+
 jest.mock('../ItemsTable', () => (props) => (
   <div>
     Table
@@ -56,6 +57,8 @@ jest.mock('../ItemsTable', () => (props) => (
 ));
 
 jest.mock('../../Pagination/CustomPagination', () => () => <div>Paginator</div>);
+
+jest.mock('../../EmptyState', () => () => <div>EmptyState</div>);
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
@@ -154,6 +157,21 @@ describe('Smart Table Component', () => {
     expect(paginatorItemSelector).not.toBeInTheDocument();
     const paginatorPageSelector = result.container.querySelector('[data-testid="pageSelector"]');
     expect(paginatorPageSelector).not.toBeInTheDocument();
+  });
+
+  it('renders empty state (desktop version)', () => {
+    window.matchMedia = createMatchMedia(2000);
+    const result = render(
+      <SmartTable
+        conf={smartCfg}
+        data={[]}
+        currentSort={sort}
+        onChangeSorting={handleSort}
+        actions={smartActions}
+      />
+    );
+    expect(result.container).not.toHaveTextContent('Table');
+    expect(result.container).toHaveTextContent('EmptyState');
   });
 
   it('renders smart table (mobile version)', () => {

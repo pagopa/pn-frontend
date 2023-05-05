@@ -14,8 +14,8 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
       translateFn
     );
     const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.invalid_verification_code.title recapiti');
-    expect(messege.content).toBe('errors.invalid_verification_code.message recapiti');
+    expect(messege.title).toBe('errors.invalid_verification_code_ua.title recapiti');
+    expect(messege.content).toBe('errors.invalid_verification_code_ua.message recapiti');
   });
 
   it('Should return limit is exceeded code message', () => {

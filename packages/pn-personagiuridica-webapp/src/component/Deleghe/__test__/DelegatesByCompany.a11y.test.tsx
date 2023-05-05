@@ -1,6 +1,6 @@
 import * as React from 'react';
+
 import { axe, render } from '../../../__test__/test-utils';
-import * as hooks from '../../../redux/hooks';
 import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
 import DelegatesByCompany from '../DelegatesByCompany';
 
@@ -13,9 +13,19 @@ jest.mock('react-i18next', () => ({
 
 describe('Delegates Component - accessibility tests', () => {
   it('is Delegates component accessible', async () => {
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegates);
-    const result = render(<DelegatesByCompany />);
+    const result = render(<DelegatesByCompany />, {
+      preloadedState: {
+        delegationsState: {
+          delegations: {
+            delegates: arrayOfDelegates,
+          },
+          sortDelegates: {
+            orderBy: '',
+            order: 'desc',
+          },
+        },
+      },
+    });
     const results = await axe(result?.container);
     expect(results).toHaveNoViolations();
   });
