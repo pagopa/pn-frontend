@@ -16,10 +16,12 @@
     "accept": "Accetta",
     "update": "Modifica",
     "show": "Mostra codice",
-    "revocation_question": "Vuoi davvero revocare la delega?",
-    "rejection_question": "Vuoi davvero rifiutare la delega?",
+    "revocation_question": "Vuoi revocare la delega a {{delegate}}? ",
+    "rejection_question": "Vuoi rifiutare la delega di {{delegator}}?",
     "confirm_revocation": "Revoca la delega",
     "confirm_rejection": "Rifiuta la delega",
+    "subtitle_rejection": "Se la rifiuti, non potrai leggere le notifiche di {{delegator}}.",
+    "subtitle_revocation": "Non potrà più leggere le notifiche di {{recipient}}.",
     "error_title": "Spiacenti, qualcosa è andato storto",
     "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "error_button": "Ricarica la pagina",
@@ -62,7 +64,11 @@
     "associate-group": "Assegna ad un gruppo",
     "select-group": "Seleziona un gruppo*",
     "accepted-successfully": "La delega è stata accettata",
-    "accepted-error": "A causa di un errore, la delega non è stata accettata. Premi Annulla e riprova."
+    "accepted-error": "A causa di un errore, la delega non è stata accettata. Premi Annulla e riprova.",
+    "revoke-successfully": "Delega Revocata.",
+    "reject-successfully": "Delega Rifiutata.",
+    "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
+    "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova."
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",

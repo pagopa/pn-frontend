@@ -9,8 +9,13 @@ import {
   mockApi,
 } from '../../../__test__/test-utils';
 import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
+import {
+  ACCEPT_DELEGATION,
+  COUNT_DELEGATORS,
+  REJECT_DELEGATION,
+  REVOKE_DELEGATION,
+} from '../../../api/delegations/delegations.routes';
 import { apiClient } from '../../../api/apiClients';
-import { ACCEPT_DELEGATION, COUNT_DELEGATORS } from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
@@ -160,6 +165,91 @@ describe('DelegationElements', () => {
         groups: ['group-2'],
         verificationCode: '01234',
       });
+    });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('check verificationCode for delegates', async () => {
+    const verificationCode = '123456';
+    const result = render(
+      <Menu menuType="delegates" id="111" name="Mario Rossi" verificationCode={verificationCode} />
+    );
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const show = menu.querySelectorAll('[role="menuitem"]')[0];
+    fireEvent.click(show);
+    const showDialog = await waitFor(() => screen.getByTestId('codeDialog'));
+    const codeInputs = showDialog?.querySelectorAll('input');
+    const arrayOfVerificationCode = verificationCode.split('');
+    codeInputs?.forEach((input, index) => {
+      expect(input).toHaveValue(arrayOfVerificationCode[index]);
+    });
+    const cancelButton = showDialog.querySelector('[data-testid="codeCancelButton"]');
+    fireEvent.click(cancelButton!);
+    await waitFor(() => {
+      expect(showDialog).not.toBeInTheDocument();
+    });
+  });
+
+  it('check revoke for delegatates', async () => {
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('111'), 200);
+
+    const result = render(<Menu menuType="delegates" id="111" name="Mario Rossi" />);
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
+    fireEvent.click(revoke);
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const revokeButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[1];
+    screen.debug(revokeButton);
+    fireEvent.click(revokeButton);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/revoke');
+      expect(showDialog).not.toBeInTheDocument();
+    });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('check close confimationDialog', async () => {
+    const result = render(<Menu menuType="delegates" id="111" name="Mario Rossi" />);
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
+    fireEvent.click(revoke);
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const cancelButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[0];
+    fireEvent.click(cancelButton!);
+    await waitFor(() => {
+      expect(showDialog).not.toBeInTheDocument();
+    });
+  });
+
+  it('check reject for delegator', async () => {
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('111'), 200);
+
+    const result = render(<Menu menuType="delegators" id="111" name="Mario Rossi" />);
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const reject = menu.querySelectorAll('[role="menuitem"]')[0];
+    fireEvent.click(reject);
+    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const rejectButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[1];
+    fireEvent.click(rejectButton);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/reject');
+      expect(showDialog).not.toBeInTheDocument();
     });
     mock.reset();
     mock.restore();
