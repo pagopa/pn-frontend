@@ -2,16 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import {
-  EmptyState,
-  ApiErrorWrapper,
-  useIsMobile,
-  SmartTable,
-  Item,
-  CodeModal,
-} from '@pagopa-pn/pn-commons';
+import { EmptyState, ApiErrorWrapper, useIsMobile, SmartTable, Item } from '@pagopa-pn/pn-commons';
 import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
-import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
@@ -28,21 +20,17 @@ const DelegatesByCompany = () => {
   const { t } = useTranslation(['deleghe', 'notifiche']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
-
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+  const userLogged = useAppSelector((state: RootState) => state.userState.user);
 
   const rows: Array<Item> = delegationToItem(delegatesByCompany);
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
-  };
-
-  const handleCloseShowCodeModal = () => {
-    setShowCodeModal({ ...showCodeModal, open: false });
   };
 
   const delegatesColumn: Array<SmartTableData<DelegatesColumn>> = [
@@ -136,7 +124,7 @@ const DelegatesByCompany = () => {
             id={value}
             verificationCode={data.verificationCode as string}
             name={data.name as string}
-            setCodeModal={setShowCodeModal}
+            userLogged={userLogged}
           />
         );
       },
@@ -149,17 +137,6 @@ const DelegatesByCompany = () => {
 
   return (
     <>
-      <CodeModal
-        title={t('deleghe.show_code_title', { name: showCodeModal.name })}
-        subtitle={t('deleghe.show_code_subtitle')}
-        open={showCodeModal.open}
-        initialValues={showCodeModal.code.split('')}
-        handleClose={handleCloseShowCodeModal}
-        cancelCallback={handleCloseShowCodeModal}
-        cancelLabel={t('deleghe.close')}
-        codeSectionTitle={t('deleghe.verification_code')}
-        isReadOnly
-      />
       <Box mb={8}>
         <Stack
           mb={4}
@@ -199,7 +176,7 @@ const DelegatesByCompany = () => {
           ) : (
             <EmptyState
               emptyActionLabel={t('deleghe.add')}
-              emptyMessage={t('deleghe.no_delegates')}
+              emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
               emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
             />
           )}

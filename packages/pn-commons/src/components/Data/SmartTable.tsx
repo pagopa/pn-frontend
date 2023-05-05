@@ -6,6 +6,7 @@ import { calculatePages, sortArray } from '../../utils';
 import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
 import { CardAction, CardElement, Column, Item, PaginationData, Sort } from '../../types';
 import CustomPagination from '../Pagination/CustomPagination';
+import EmptyState, { Props as EmptyStateProps } from '../EmptyState';
 import ItemsCard from './ItemsCard';
 import ItemsTable from './ItemsTable';
 import SmartFilter from './SmartFilter';
@@ -38,6 +39,8 @@ type Props<ColumnId> = {
     currentPage: number;
     onChangePage: (paginationData: PaginationData) => void;
   };
+  /** empty state props */
+  emptyStateProps?: EmptyStateProps;
 };
 
 function getCardElements<ColumnId extends string>(
@@ -101,6 +104,7 @@ const SmartTable = <ColumnId extends string>({
   actions,
   children,
   pagination,
+  emptyStateProps,
 }: PropsWithChildren<Props<ColumnId>>) => {
   const isMobile = useIsMobile();
   const [sort, setSort] = useState<Sort<ColumnId> | undefined>(currentSort);
@@ -157,13 +161,15 @@ const SmartTable = <ColumnId extends string>({
             )}
           </Grid>
         </Grid>
-        <ItemsCard
-          cardHeader={cardHeader}
-          cardBody={cardBody}
-          cardData={rowData}
-          cardActions={cardActions}
-        />
-        {pagination && (
+        {rowData.length > 0 && (
+          <ItemsCard
+            cardHeader={cardHeader}
+            cardBody={cardBody}
+            cardData={rowData}
+            cardActions={cardActions}
+          />
+        )}
+        {rowData.length > 0 && pagination && (
           <CustomPagination
             paginationData={{
               size: pagination.size,
@@ -185,6 +191,7 @@ const SmartTable = <ColumnId extends string>({
             }
           />
         )}
+        {rowData.length === 0 && <EmptyState {...emptyStateProps} />}
       </>
     );
   }
@@ -203,8 +210,10 @@ const SmartTable = <ColumnId extends string>({
   return (
     <>
       <Box mb={3}>{filters}</Box>
-      <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
-      {pagination && (
+      {rowData.length > 0 && (
+        <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
+      )}
+      {rowData.length > 0 && pagination && (
         <CustomPagination
           paginationData={{
             size: pagination.size,
@@ -226,6 +235,7 @@ const SmartTable = <ColumnId extends string>({
           }
         />
       )}
+      {rowData.length === 0 && <EmptyState {...emptyStateProps} />}
     </>
   );
 };

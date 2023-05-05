@@ -120,7 +120,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       {
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
-        delegatorIds: [],
+        mandateIds: [],
       },
       {
         resultsPage: [arrayOfDelegators[1]],
@@ -165,7 +165,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     await testAutocomplete(form, 'groups', groups, true, 1, false);
     await testMultiSelect(form, 'status', status, 0, true);
     await testMultiSelect(form, 'status', status, 2, false);
-    expect(cancelButton).toBeEnabled();
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     await waitFor(() => {
@@ -174,10 +173,11 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
-        delegatorIds: [],
+        mandateIds: [],
       });
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
+      expect(cancelButton).toBeEnabled();
     });
     mock.reset();
     mock.restore();
@@ -271,6 +271,23 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     });
     mock.reset();
     mock.restore();
+  });
+
+  it('test reject delegation', async () => {
+    const result = render(<DelegationsOfTheCompany />, {
+      preloadedState: {
+        delegationsState: {
+          ...initialState.delegationsState,
+          delegations: {
+            delegators: arrayOfDelegators,
+          },
+        },
+      },
+    });
+    const menu = result.getAllByTestId('delegationMenuIcon');
+    fireEvent.click(menu[0]);
+    const menuOpen = await waitFor(async () => result.getAllByTestId('delegationMenu'));
+    expect(menuOpen[0]).toHaveTextContent(/deleghe.reject/i);
   });
 });
 

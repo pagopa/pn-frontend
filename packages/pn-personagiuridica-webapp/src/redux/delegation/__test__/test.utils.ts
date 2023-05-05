@@ -90,6 +90,7 @@ export const arrayOfDelegators = [
     verificationCode: '123456',
     datefrom: '2021-12-15',
     dateto: '2022-04-16',
+    groups: [],
   },
   {
     mandateId: '4',
@@ -112,6 +113,7 @@ export const arrayOfDelegators = [
     verificationCode: '123456',
     datefrom: '2021-12-15',
     dateto: '2022-04-16',
+    groups: [],
   },
 ];
 
@@ -119,17 +121,6 @@ export const initialState = {
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
-  },
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
-  acceptModalState: {
-    open: false,
-    id: '',
-    name: '',
-    error: false,
   },
   pagination: {
     moreResult: false,

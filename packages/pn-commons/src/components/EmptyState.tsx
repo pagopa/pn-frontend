@@ -5,7 +5,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { KnownSentiment } from '../types';
 import { iconForKnownSentiment } from '../types/EmptyState';
 
-type Props = {
+export type Props = {
   /** Callback to be called when performing an empty action */
   emptyActionCallback?: (e: any, source?: string) => void;
   /** Empty message for no result */
