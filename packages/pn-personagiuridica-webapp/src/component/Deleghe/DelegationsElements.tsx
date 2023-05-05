@@ -31,20 +31,11 @@ import ConfirmationModal from './ConfirmationModal';
 type Props = {
   menuType: 'delegates' | 'delegators';
   id: string;
-  name?: string;
-  verificationCode?: string;
   width?: string;
   userLogged?: User;
   row?: Item;
 };
-export const Menu: React.FC<Props> = ({
-  menuType,
-  id,
-  name,
-  verificationCode,
-  userLogged,
-  row,
-}) => {
+export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
@@ -75,7 +66,7 @@ export const Menu: React.FC<Props> = ({
   };
 
   const handleOpenVerificationCodeModal = () => {
-    if (name && verificationCode) {
+    if (row?.name && row?.verificationCode) {
       setShowCodeModal(true);
       setAnchorEl(null);
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
@@ -194,19 +185,19 @@ export const Menu: React.FC<Props> = ({
       {menuType === 'delegators' && row?.status === DelegationStatus.ACTIVE && (
         <AcceptDelegationModal
           isEditMode
-          name={name || ''}
+          name={(row?.name as string) || ''}
           open={showUpdateModal}
           currentGroups={row?.groups as Array<{ id: string; name: string }>}
           handleCloseAcceptModal={handleCloseAcceptModal}
           handleConfirm={() => {}}
         />
       )}
-      {verificationCode && menuType === 'delegates' && (
+      {row?.verificationCode && menuType === 'delegates' && (
         <CodeModal
           title={t('deleghe.show_code_title', { name })}
           subtitle={t('deleghe.show_code_subtitle')}
           open={showCodeModal}
-          initialValues={verificationCode.split('')}
+          initialValues={(row?.verificationCode as string).split('')}
           handleClose={handleCloseShowCodeModal}
           cancelCallback={handleCloseShowCodeModal}
           cancelLabel={t('deleghe.close')}

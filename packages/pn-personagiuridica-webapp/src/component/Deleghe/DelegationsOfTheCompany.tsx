@@ -301,7 +301,7 @@ const DelegationsOfTheCompany = () => {
         {t('deleghe.delegatorsTitle')}
       </Typography>
       <ApiErrorWrapper
-        apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
+        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
         reloadAction={() => dispatch(getDelegators(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >

@@ -173,7 +173,11 @@ describe('DelegationElements', () => {
   it('check verificationCode for delegates', async () => {
     const verificationCode = '123456';
     const result = render(
-      <Menu menuType="delegates" id="111" name="Mario Rossi" verificationCode={verificationCode} />
+      <Menu
+        menuType="delegates"
+        id="111"
+        row={{ id: 'row-id', name: 'Mario Rossi', verificationCode }}
+      />
     );
     const menuIcon = result.getByTestId('delegationMenuIcon');
 
@@ -196,17 +200,16 @@ describe('DelegationElements', () => {
 
   it('check revoke for delegatates', async () => {
     const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('111'), 200);
-
-    const result = render(<Menu menuType="delegates" id="111" name="Mario Rossi" />);
+    const result = render(
+      <Menu menuType="delegates" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
+    );
     const menuIcon = result.getByTestId('delegationMenuIcon');
-
     fireEvent.click(menuIcon);
     const menu = result.getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
     const revokeButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[1];
-    screen.debug(revokeButton);
     fireEvent.click(revokeButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
@@ -218,7 +221,9 @@ describe('DelegationElements', () => {
   });
 
   it('check close confimationDialog', async () => {
-    const result = render(<Menu menuType="delegates" id="111" name="Mario Rossi" />);
+    const result = render(
+      <Menu menuType="delegates" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
+    );
     const menuIcon = result.getByTestId('delegationMenuIcon');
 
     fireEvent.click(menuIcon);
@@ -236,7 +241,9 @@ describe('DelegationElements', () => {
   it('check reject for delegator', async () => {
     const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('111'), 200);
 
-    const result = render(<Menu menuType="delegators" id="111" name="Mario Rossi" />);
+    const result = render(
+      <Menu menuType="delegators" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
+    );
     const menuIcon = result.getByTestId('delegationMenuIcon');
 
     fireEvent.click(menuIcon);

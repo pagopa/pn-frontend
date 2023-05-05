@@ -118,15 +118,7 @@ const DelegatesByCompany = () => {
         align: 'center',
       },
       getValue(value: string, data: Item) {
-        return (
-          <Menu
-            menuType={'delegates'}
-            id={value}
-            verificationCode={data.verificationCode as string}
-            name={data.name as string}
-            userLogged={userLogged}
-          />
-        );
+        return <Menu menuType={'delegates'} id={value} row={data} userLogged={userLogged} />;
       },
       cardConfiguration: {
         position: 'header',

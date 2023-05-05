@@ -11,7 +11,6 @@ import {
   getGroups,
   getDelegatorsNames,
 } from './actions';
-import { arrayOfDelegators } from './__test__/test.utils';
 
 const initialState = {
   delegations: {
@@ -41,9 +40,6 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = action.payload.resultsPage;
       state.pagination.nextPagesKey = action.payload.nextPagesKey;
       state.pagination.moreResult = action.payload.moreResult;
-    });
-    builder.addCase(getDelegators.rejected, (state) => {
-      state.delegations.delegators = arrayOfDelegators;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
