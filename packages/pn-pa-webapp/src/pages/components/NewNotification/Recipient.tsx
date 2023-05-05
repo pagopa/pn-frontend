@@ -497,7 +497,9 @@ const Recipient = ({
                     <Grid container spacing={2} mt={2}>
                       <FormTextField
                         keyName={`recipients[${index}].taxId`}
-                        label={`${t('recipient-fiscal-code')}*`}
+                        label={`${t(
+                          values.recipients[index].recipientType === RecipientType.PG ? 'recipient-organization-tax-id' : 'recipient-citizen-tax-id'
+                        )}*`}
                         values={values}
                         touched={touched}
                         errors={errors}
