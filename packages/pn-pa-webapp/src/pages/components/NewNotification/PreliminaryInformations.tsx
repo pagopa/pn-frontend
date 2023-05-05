@@ -58,7 +58,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }), [notification, IS_PAYMENT_ENABLED]);
 
   const validationSchema = yup.object({
-    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`),
+    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`).max(256, tc('too-long-field-error', { maxLength: 256 })),
     subject: yup.string().required(`${t('subject')} ${tc('required')}`).max(134, tc('too-long-field-error', { maxLength: 134 })),
     abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })),
     physicalCommunicationType: yup.string().required(),

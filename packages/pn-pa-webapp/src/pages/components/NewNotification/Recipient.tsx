@@ -152,12 +152,12 @@ const Recipient = ({
         }),
       digitalDomicile: yup.string().when('showDigitalDomicile', {
         is: true,
-        then: yup.string().matches(dataRegex.email, t('pec-error')).required(tc('required-field')),
+        then: yup.string().matches(dataRegex.email, t('pec-error')).required(tc('required-field')).max(320, tc('too-long-field-error', { maxLength: 320 })),
       }),
       showPhysicalAddress: yup.boolean().isTrue(),
       address: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')),
+        then: yup.string().required(tc('required-field')).max(1024, tc('too-long-field-error', { maxLength: 1024 })),
       }),
       houseNumber: yup.string().when('showPhysicalAddress', {
         is: true,
@@ -171,15 +171,19 @@ const Recipient = ({
     */
       zip: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')),
+        then: yup.string().required(tc('required-field')).max(12, tc('too-long-field-error', { maxLength: 12 })),
+      }),
+      municipalityDetails: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().max(256, tc('too-long-field-error', { maxLength: 256 })),
       }),
       municipality: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')),
+        then: yup.string().required(tc('required-field')).max(256, tc('too-long-field-error', { maxLength: 256 })),
       }),
       province: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')),
+        then: yup.string().required(tc('required-field')).max(256, tc('too-long-field-error', { maxLength: 256 })),
       }),
       foreignState: yup.string().when('showPhysicalAddress', {
         is: true,
