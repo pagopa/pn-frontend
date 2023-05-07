@@ -8,29 +8,14 @@ export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
 }
 
-export const getSidemenuInformation = createAsyncThunk<{
-  pendingDelegators: number;
-  activeDelegators: number;
-}>(
+export const getSidemenuInformation = createAsyncThunk<number>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
   async () => {
     try {
-      const [
-        pendingDelegatorsResponse,
-        activeDelegatorsResponse
-      ] = await Promise.all([
-        DelegationsApi.countPendingDelegators(),
-        DelegationsApi.countActiveDelegators()
-      ]);
-      return {
-        pendingDelegators: pendingDelegatorsResponse.value,
-        activeDelegators: activeDelegatorsResponse.value
-      };
+      const response = await DelegationsApi.countPendingDelegators();
+      return response.value;
     } catch (e) {
-      return {
-        pendingDelegators: 0,
-        activeDelegators: 0
-    };
+      return 0;
     }
   }
 );

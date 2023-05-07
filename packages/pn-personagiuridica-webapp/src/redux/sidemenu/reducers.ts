@@ -9,7 +9,6 @@ const generalInfoSlice = createSlice({
   name: 'generalInfoSlice',
   initialState: {
     pendingDelegators: 0,
-    activeDelegators: 0,
     legalDomicile: [] as Array<DigitalAddress>,
     domicileBannerOpened: true,
   },
@@ -20,8 +19,7 @@ const generalInfoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
-      state.pendingDelegators = action.payload.pendingDelegators;
-      state.activeDelegators = action.payload.activeDelegators;
+      state.pendingDelegators = action.payload;
     });
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
       state.legalDomicile = action.payload;

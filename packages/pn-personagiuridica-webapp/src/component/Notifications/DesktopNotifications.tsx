@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -13,15 +13,25 @@ import {
   EmptyState,
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
-import { Tag } from "@pagopa/mui-italia";
+
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider, MenuItem,
+  Typography
+} from "@mui/material";
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { NotificationColumn } from '../../models/Notifications';
-
 import FilterNotifications from './FilterNotifications';
+import NotificationMenu from "./NotificationMenu";
 
 type Props = {
   notifications: Array<Notification>;
@@ -33,6 +43,11 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
+type GroupModalProps = {
+  recipient: string;
+  group?: string;
+};
+
 const DesktopNotifications = ({
   notifications,
   sort,
@@ -40,11 +55,20 @@ const DesktopNotifications = ({
   isDelegatedPage = false
 }: Props) => {
   const navigate = useNavigate();
-  const { t } = useTranslation('notifiche');
+  const { t } = useTranslation(['notifiche', 'common']);
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const [openGroupModal, setOpenGroupModal] = useState<undefined | GroupModalProps>(undefined);
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+
+  const handleModalClose = () => {
+    setOpenGroupModal(undefined);
+  };
+
+  const handleShowGroup = (row: Item) => {
+    setOpenGroupModal({ recipient: row.recipients as string, group: row.group as string});
   };
 
   const columns: Array<Column<NotificationColumn>> = [
@@ -129,26 +153,43 @@ const DesktopNotifications = ({
           ></StatusTooltip>
         );
       },
-    },
+    }
   ];
 
   if (isDelegatedPage) {
     const recipientField = {
-      id: 'group' as NotificationColumn,
-      label: t('table.gruppo'),
+      id: 'recipients' as NotificationColumn,
+      label: t('table.destinatario'),
       width: '15%',
       sortable: false,
       getCellLabel(value: string) {
-        const label = value.length > 12 ? value.substring(0, 12) + '...' : value;
-        return <Tag value={label} data-testid={`groupChip-${value}`} />;
+        return value;
       },
       onClick(row: Item) {
         handleRowClick(row);
       },
       disableAccessibility: true,
     };
+    const menuField = {
+      id: 'menu' as NotificationColumn,
+      label: '',
+      width: '18%',
+      sortable: false,
+      getCellLabel(_: string, row: Item) {
+        return <NotificationMenu>
+          <MenuItem
+            data-testid="buttonView"
+            onClick={() => handleShowGroup(row)}
+          >
+            {t('table.view-group')}
+          </MenuItem>
+        </NotificationMenu>;
+      },
+    };
     // eslint-disable-next-line functional/immutable-data
-    columns.splice(5, 0, recipientField);
+    columns.splice(3, 0, recipientField);
+    // eslint-disable-next-line functional/immutable-data
+    columns.splice(7, 0, menuField);
   }
 
   const rows: Array<Item> = notifications.map((n, i) => ({
@@ -205,6 +246,30 @@ const DesktopNotifications = ({
       ) : (
         <EmptyState {...EmptyStateProps} />
       )}
+      {openGroupModal !== undefined &&
+        <Dialog
+          open
+          onClick={handleModalClose}
+         >
+          <Box p={3}>
+            <DialogTitle>{t('table.group-modal.title', { recipient: openGroupModal.recipient })}</DialogTitle>
+            <DialogContent>
+              <Typography my={2} mx={4} fontWeight='bold'>{openGroupModal.group}</Typography>
+              <Divider/>
+              <Typography my={3}>{t('table.group-modal.body')}</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                variant="outlined"
+                onClick={handleModalClose}
+                data-testid="codeCancelButton"
+              >
+                {t('button.close', { ns: 'common' })}
+              </Button>
+            </DialogActions>
+          </Box>
+        </Dialog>
+      }
     </Fragment>
   );
 };

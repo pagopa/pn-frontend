@@ -7,6 +7,7 @@ export type NotificationColumn =
   | 'subject'
   | 'iun'
   | 'status'
+  | 'menu'
   | '';
 
 export type NotificationId = { iun: string; mandateId?: string };

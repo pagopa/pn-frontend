@@ -59,7 +59,7 @@ const App = () => {
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const { pendingDelegators, activeDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
+  const pendingDelegators = useAppSelector((state: RootState) => state.generalInfoState.pendingDelegators);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
