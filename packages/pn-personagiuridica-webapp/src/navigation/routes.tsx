@@ -31,11 +31,9 @@ const handleAssistanceClick = () => {
 };
 
 function Router() {
-  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const { organization, isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles =
-    loggedUser.organization && loggedUser.organization.roles
-      ? loggedUser.organization.roles.map((role) => role.role)
-      : [];
+    organization && organization.roles ? organization.roles.map((role) => role.role) : [];
 
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -68,6 +66,7 @@ function Router() {
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
                       redirectTo={<NotFound />}
+                      additionalCondition={!isGroupAdmin}
                     >
                       <NuovaDelega />
                     </PrivateRoute>

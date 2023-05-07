@@ -166,7 +166,7 @@ const NotificationDetailTimelineStep = ({
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
               >
-                {getLegalFactLabel(lf.step, (lf.file as LegalFactId).category || (lf.file as NotificationDetailOtherDocument).documentType)}
+                {getLegalFactLabel(lf.step, (lf.file as LegalFactId).category || (lf.file as NotificationDetailOtherDocument).documentType, (lf.file as LegalFactId).key || '')}
               </ButtonNaked>
             ))}
         </Box>
@@ -197,7 +197,7 @@ const NotificationDetailTimelineStep = ({
   );
 
   const microStep = (s: INotificationDetailTimeline) => {
-    const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients);
+    const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients, timelineStep.steps);
     if (!timelineStatusInfos) {
       return null;
     }
@@ -241,7 +241,7 @@ const NotificationDetailTimelineStep = ({
                   key={(lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId}
                   data-testid="download-legalfact"
                 >
-                  {getLegalFactLabel(s, (lf as LegalFactId).category || (lf as NotificationDetailOtherDocument).documentType)}
+                  {getLegalFactLabel(s, (lf as LegalFactId).category || (lf as NotificationDetailOtherDocument).documentType, (lf as LegalFactId).key || '')}
                 </Typography>
               ))}
           </Typography>

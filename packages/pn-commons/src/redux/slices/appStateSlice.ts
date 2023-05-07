@@ -17,7 +17,7 @@ export interface AppStateState {
     outcome: AppResponseOutcome;
     name: string;
     response: AppResponse;
-   } | null;
+  } | null;
   isInitialized: boolean;
 }
 
@@ -73,10 +73,7 @@ export const appStateSlice = createSlice({
         error.alreadyShown = true;
       }
     },
-    addSuccess(
-      state,
-      action: PayloadAction<{ title: string; message: string; status?: number }>
-    ) {
+    addSuccess(state, action: PayloadAction<{ title: string; message: string; status?: number }>) {
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
@@ -87,9 +84,9 @@ export const appStateSlice = createSlice({
     removeSuccess(state, action: PayloadAction<string>) {
       state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
     },
-    finishInitialization(state, _: PayloadAction<void>) {
+    finishInitialization(state) {
       state.isInitialized = true;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -100,7 +97,7 @@ export const appStateSlice = createSlice({
       })
       .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
-        const actionBeingFulfilled = action.type.slice(0, action.type.indexOf("/"));
+        const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
 
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
@@ -108,7 +105,7 @@ export const appStateSlice = createSlice({
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
-        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
+        const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
         state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };

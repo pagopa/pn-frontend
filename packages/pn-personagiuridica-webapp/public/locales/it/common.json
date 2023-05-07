@@ -180,5 +180,6 @@
   "roles": {
     "pg-operator": "Referente operativo",
     "pg-admin": "Referente amministrativo"
-  }
+  },
+  "required-field": "Campo obbligatorio"
 }
