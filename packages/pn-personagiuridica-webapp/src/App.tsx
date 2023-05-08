@@ -61,6 +61,7 @@ const App = () => {
   );
   const pendingDelegators = useAppSelector((state: RootState) => state.generalInfoState.pendingDelegators);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
@@ -125,8 +126,9 @@ const App = () => {
   }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    // TODO: change -1 to 0
-    if (activeDelegators > -1) {
+    // if the current user is not a groupAdmin can also see own PG notifications,
+    // else it sees only delegated notifications and we return undefined
+    if (!isGroupAdmin) {
       return ([
         {
           label: t('menu.notifiche-impresa'),
@@ -147,9 +149,9 @@ const App = () => {
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
     {
-      label: t('menu.notifiche'),
+      label: !isGroupAdmin ? t('menu.notifiche') : t('menu.notifiche-delegato'),
       icon: MailOutlineIcon,
-      route: routes.NOTIFICHE,
+      route: !isGroupAdmin ? routes.NOTIFICHE : routes.NOTIFICHE_DELEGATO,
       children: notificationMenuItems,
       notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
     },
