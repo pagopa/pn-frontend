@@ -38,30 +38,31 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
 export const NotificationsApi = {
   /**
    * Gets current user notifications
+   * @param {GetNotificationsParams & { isDelegatedPage: boolean }} params
+   *
    * @returns Promise
-   * @param {GetNotificationsParams} params
-   * @param {boolean} isDelegated
    */
-  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
-    const {isDelegatedPage, ...payload} = params;
-    return apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage)).then((response) => {
-      if (response.data && response.data.resultsPage) {
+  getReceivedNotifications:
+    (params: GetNotificationsParams & { isDelegatedPage: boolean }): Promise<GetNotificationsResponse> => {
+      const { isDelegatedPage, ...payload } = params;
+      return apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage)).then((response) => {
+        if (response.data && response.data.resultsPage) {
 
-        const notifications = response.data.resultsPage.map((d) => ({
-          ...d,
-          sentAt: formatDate(d.sentAt),
-        }));
+          const notifications = response.data.resultsPage.map((d) => ({
+            ...d,
+            sentAt: formatDate(d.sentAt),
+          }));
+          return {
+            ...response.data,
+            resultsPage: notifications,
+          };
+        }
         return {
-          ...response.data,
-          resultsPage: notifications,
+          resultsPage: [],
+          moreResult: false,
+          nextPagesKey: [],
         };
-      }
-      return {
-        resultsPage: [],
-        moreResult: false,
-        nextPagesKey: [],
-      };
-    });
+      });
   },
 
   /**

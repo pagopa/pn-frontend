@@ -31,7 +31,7 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
-const Notifiche = ({ isDelegatedPage }: Props) => {
+const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);

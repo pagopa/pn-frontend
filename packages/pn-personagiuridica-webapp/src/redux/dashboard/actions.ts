@@ -5,12 +5,14 @@ import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 export enum DASHBOARD_ACTIONS  {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
-  GET_DELEGATORS_RECEIVED_NOTIFICATIONS = 'getDelegatorsReceivedNotifications',
 }
 
 export const getReceivedNotifications = createAsyncThunk<
   GetNotificationsResponse,
-  GetNotificationsParams
+  GetNotificationsParams & { isDelegatedPage: boolean }
 >(DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS, 
-  performThunkAction((params: GetNotificationsParams) => NotificationsApi.getReceivedNotifications(params))
+  performThunkAction(
+    (params: GetNotificationsParams & { isDelegatedPage: boolean }) =>
+      NotificationsApi.getReceivedNotifications(params)
+  ),
 );
