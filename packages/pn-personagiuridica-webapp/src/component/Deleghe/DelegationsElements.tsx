@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Dispatch, useCallback, useEffect, useState } from 'react';
+import { AnyAction } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
@@ -13,13 +14,15 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   acceptDelegation,
   rejectDelegation,
   revokeDelegation,
+  updateDelegation,
 } from '../../redux/delegation/actions';
 import { User } from '../../redux/auth/types';
+import { RootState } from '../../redux/store';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
@@ -27,13 +30,33 @@ import { DelegationStatus } from '../../models/Deleghe';
 import AcceptDelegationModal from './AcceptDelegationModal';
 import ConfirmationModal from './ConfirmationModal';
 
+function handleCustomGenericError(
+  responseError: AppResponse,
+  message: string,
+  dispatch: Dispatch<AnyAction>
+) {
+  if (Array.isArray(responseError.errors)) {
+    const managedErrors = (
+      Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+    ).map((key) => ServerResponseErrorCode[key]);
+    const error = responseError.errors[0];
+    if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+      dispatch(appStateActions.addError({ title: '', message }));
+      return false;
+    }
+    return true;
+  }
+  return true;
+}
+
 type Props = {
   menuType: 'delegates' | 'delegators';
   id: string;
   userLogged?: User;
   row?: Item;
+  onAction?: (data: any) => void;
 };
-export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
+export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
@@ -41,6 +64,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
 
   const titleModal =
     menuType === 'delegates'
@@ -95,35 +120,53 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
             message,
           })
         );
+        if (onAction) {
+          onAction(id);
+        }
       });
     onCloseModal();
   };
 
+  const handleUpdateError = useCallback(
+    (responseError: AppResponse) =>
+      handleCustomGenericError(responseError, t('deleghe.update-error'), dispatch),
+    []
+  );
+
   const handleConfirmationError = useCallback((responseError: AppResponse) => {
     const message =
       menuType === 'delegates' ? t('deleghe.revoke-error') : t('deleghe.reject-error');
-    if (Array.isArray(responseError.errors)) {
-      const managedErrors = (
-        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
-      ).map((key) => ServerResponseErrorCode[key]);
-      const error = responseError.errors[0];
-      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
-        dispatch(appStateActions.addError({ title: '', message }));
-        return false;
-      }
-      return true;
-    }
-    return true;
+    return handleCustomGenericError(responseError, message, dispatch);
   }, []);
 
-  const handleUpdate = () => {};
+  const handleUpdate = (_code: Array<string>, groups: Array<{ id: string; name: string }>) => {
+    void dispatch(updateDelegation({ id, groups }))
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('deleghe.updated-successfully'),
+          })
+        );
+        if (onAction) {
+          onAction(groups);
+        }
+      });
+  };
 
   useEffect(() => {
     const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
     AppResponsePublisher.error.subscribe(action, handleConfirmationError);
+    if (menuType === 'delegators' && groups.length) {
+      AppResponsePublisher.error.subscribe('updateDelegation', handleUpdateError);
+    }
 
     return () => {
       AppResponsePublisher.error.unsubscribe(action, handleConfirmationError);
+      if (menuType === 'delegators' && groups.length) {
+        AppResponsePublisher.error.unsubscribe('updateDelegation', handleUpdateError);
+      }
     };
   }, [handleConfirmationError]);
 
@@ -156,7 +199,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
       </MenuItem>,
     ];
 
-    if (row?.status === DelegationStatus.ACTIVE) {
+    if (row?.status === DelegationStatus.ACTIVE && groups.length) {
       // eslint-disable-next-line functional/immutable-data
       menuItems.push(
         <MenuItem key="update" onClick={() => setShowUpdateModal(true)}>
@@ -179,16 +222,18 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row }) => {
         onClose={onCloseModal}
         onCloseLabel={t('button.annulla', { ns: 'common' })}
       />
-      {menuType === 'delegators' && row?.status === DelegationStatus.ACTIVE && (
-        <AcceptDelegationModal
-          isEditMode
-          name={(row?.name as string) || ''}
-          open={showUpdateModal}
-          currentGroups={row?.groups as Array<{ id: string; name: string }>}
-          handleCloseAcceptModal={handleCloseAcceptModal}
-          handleConfirm={handleUpdate}
-        />
-      )}
+      {menuType === 'delegators' &&
+        row?.status === DelegationStatus.ACTIVE &&
+        groups.length > 0 && (
+          <AcceptDelegationModal
+            isEditMode
+            name={(row?.name as string) || ''}
+            open={showUpdateModal}
+            currentGroups={row?.groups as Array<{ id: string; name: string }>}
+            handleCloseAcceptModal={handleCloseAcceptModal}
+            handleConfirm={handleUpdate}
+          />
+        )}
       {row?.verificationCode && menuType === 'delegates' && (
         <CodeModal
           title={t('deleghe.show_code_title', { name })}
@@ -283,20 +328,11 @@ export const AcceptButton: React.FC<{ id: string; name: string; onAccept: () => 
       });
   };
 
-  const handleAcceptanceError = useCallback((responseError: AppResponse) => {
-    if (Array.isArray(responseError.errors)) {
-      const managedErrors = (
-        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
-      ).map((key) => ServerResponseErrorCode[key]);
-      const error = responseError.errors[0];
-      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
-        dispatch(appStateActions.addError({ title: '', message: t('deleghe.accepted-error') }));
-        return false;
-      }
-      return true;
-    }
-    return true;
-  }, []);
+  const handleAcceptanceError = useCallback(
+    (responseError: AppResponse) =>
+      handleCustomGenericError(responseError, t('deleghe.accepted-error'), dispatch),
+    []
+  );
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptanceError);

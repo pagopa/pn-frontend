@@ -36,6 +36,7 @@ export default function ConfirmationModal({
       open={open}
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"
+      data-testid="confirmationDialog"
     >
       <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
         <Box mx={3} mt={4} sx={{ height: '100%' }}>

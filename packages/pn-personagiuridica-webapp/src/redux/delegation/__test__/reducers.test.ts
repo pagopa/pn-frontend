@@ -67,7 +67,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should accept a delegation request', async () => {
-    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 204, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 204);
     const action = await store.dispatch(
       acceptDelegation({ id: '1', code: '12345', groups: [{ id: 'group-1', name: 'Group 1' }] })
     );
@@ -79,7 +79,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to accept a delegation', async () => {
-    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 500, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('1'), 500);
     const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345', groups: [] }));
     const payload = action.payload as any;
     expect(action.type).toBe('acceptDelegation/rejected');
@@ -89,7 +89,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should reject a delegation from a delegator', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('2'), 204, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('2'), 204);
     const action = await store.dispatch(rejectDelegation('2'));
     const payload = action.payload;
     expect(action.type).toBe('rejectDelegation/fulfilled');
@@ -99,7 +99,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to reject a delegation', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('2'), 500, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('2'), 500);
     const action = await store.dispatch(rejectDelegation('2'));
     const payload = action.payload as any;
     expect(action.type).toBe('rejectDelegation/rejected');
@@ -109,7 +109,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should revoke a delegation for a delegate', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('2'), 204, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('2'), 204);
     const action = await store.dispatch(revokeDelegation('2'));
     const payload = action.payload;
     expect(action.type).toBe('revokeDelegation/fulfilled');
@@ -119,7 +119,7 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to revoke a delegation', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('2'), 500, undefined, undefined);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('2'), 500);
     const action = await store.dispatch(revokeDelegation('2'));
     const payload = action.payload as any;
     expect(action.type).toBe('revokeDelegation/rejected');

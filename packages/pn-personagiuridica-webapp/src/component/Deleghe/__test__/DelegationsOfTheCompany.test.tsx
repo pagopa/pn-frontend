@@ -13,7 +13,12 @@ import {
 import { arrayOfDelegators, initialState } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import { apiClient } from '../../../api/apiClients';
-import { DELEGATIONS_BY_DELEGATE } from '../../../api/delegations/delegations.routes';
+import {
+  ACCEPT_DELEGATION,
+  DELEGATIONS_BY_DELEGATE,
+  REJECT_DELEGATION,
+  UPDATE_DELEGATION,
+} from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
@@ -262,20 +267,155 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
   });
 
   it('test reject delegation', async () => {
+    const mock = mockApi(
+      apiClient,
+      'PATCH',
+      REJECT_DELEGATION(arrayOfDelegators[0].mandateId),
+      204
+    );
     const result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
           delegations: {
             delegators: arrayOfDelegators,
+            delegates: [],
           },
         },
       },
     });
     const menu = result.getAllByTestId('delegationMenuIcon');
     fireEvent.click(menu[0]);
-    const menuOpen = await waitFor(async () => result.getAllByTestId('delegationMenu'));
-    expect(menuOpen[0]).toHaveTextContent(/deleghe.reject/i);
+    const menuOpen = await waitFor(async () => result.getByTestId('delegationMenu'));
+    const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
+    expect(menuItems).toHaveLength(1);
+    expect(menuItems[0]).toHaveTextContent(/deleghe.reject/i);
+    fireEvent.click(menuItems[0]);
+    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    expect(dialog).toBeInTheDocument();
+    const dialogAction = within(dialog).getAllByTestId('dialogAction');
+    // click on confirm button
+    fireEvent.click(dialogAction[1]);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain(
+        `mandate/api/v1/mandate/${arrayOfDelegators[0].mandateId}/reject`
+      );
+      expect(dialog).not.toBeInTheDocument();
+    });
+    const table = result.getByTestId('table(notifications)');
+    expect(table).toBeInTheDocument();
+    expect(table).not.toHaveTextContent('Marco Verdi');
+    expect(table).toHaveTextContent('Davide Legato');
+    mock.reset();
+    mock.restore();
+  });
+
+  it('test accept delegation', async () => {
+    const mock = mockApi(
+      apiClient,
+      'PATCH',
+      ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId),
+      204
+    );
+    const result = render(<DelegationsOfTheCompany />, {
+      preloadedState: {
+        delegationsState: {
+          ...initialState,
+          delegations: {
+            delegators: arrayOfDelegators,
+            delegates: [],
+          },
+        },
+      },
+    });
+    const table = result.getByTestId('table(notifications)');
+    expect(table).toBeInTheDocument();
+    const acceptButton = within(table).getByTestId('acceptButton');
+    expect(acceptButton).toBeInTheDocument();
+    fireEvent.click(acceptButton);
+    const dialog = await waitFor(() => result.getByTestId('codeDialog'));
+    expect(dialog).toBeInTheDocument();
+    // fill the code
+    const codeInputs = dialog.querySelectorAll('input');
+    codeInputs.forEach((input, index) => {
+      fireEvent.change(input, { target: { value: index.toString() } });
+    });
+    const codeConfirmButton = within(dialog).getByTestId('codeConfirmButton');
+    // click on confirm button
+    fireEvent.click(codeConfirmButton);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain(
+        `mandate/api/v1/mandate/${arrayOfDelegators[0].mandateId}/accept`
+      );
+      expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
+        groups: [],
+        verificationCode: '01234',
+      });
+      expect(dialog).not.toBeInTheDocument();
+    });
+    expect(acceptButton).not.toBeInTheDocument();
+    mock.reset();
+    mock.restore();
+  });
+
+  it('test update delegation', async () => {
+    const groups = [
+      { id: 'group-1', name: 'Group 1' },
+      { id: 'group-2', name: 'Group 2' },
+      { id: 'group-3', name: 'Group 3' },
+    ];
+    const mock = mockApi(
+      apiClient,
+      'PATCH',
+      UPDATE_DELEGATION(arrayOfDelegators[1].mandateId),
+      204
+    );
+    const result = render(<DelegationsOfTheCompany />, {
+      preloadedState: {
+        delegationsState: {
+          ...initialState,
+          delegations: {
+            delegators: arrayOfDelegators,
+            delegates: [],
+          },
+          groups,
+        },
+      },
+    });
+    let table = result.getByTestId('table(notifications)');
+    expect(table).toBeInTheDocument();
+    expect(table).not.toHaveTextContent('Group 3');
+    const menu = result.getAllByTestId('delegationMenuIcon');
+    fireEvent.click(menu[1]);
+    const menuOpen = await waitFor(async () => result.getByTestId('delegationMenu'));
+    const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
+    expect(menuItems).toHaveLength(2);
+    expect(menuItems[1]).toHaveTextContent(/deleghe.update/i);
+    fireEvent.click(menuItems[1]);
+    const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
+    expect(updateDialog).toBeInTheDocument();
+    const associateGroupRadio = updateDialog.querySelector(
+      '[data-testid="associate-group"]'
+    ) as Element;
+    fireEvent.click(associateGroupRadio);
+    await testAutocomplete(updateDialog, 'groups', groups, true, 2);
+    const groupConfirmButton = within(updateDialog).getByTestId('groupConfirmButton');
+    fireEvent.click(groupConfirmButton);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain(
+        `/mandate/api/v1/mandate/${arrayOfDelegators[1].mandateId}/update`
+      );
+      expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
+        groups: ['group-3'],
+      });
+    });
+    table = result.getByTestId('table(notifications)');
+    expect(table).toHaveTextContent('Group 3');
+    mock.reset();
+    mock.restore();
   });
 });
 

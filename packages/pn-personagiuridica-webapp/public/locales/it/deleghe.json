@@ -65,6 +65,8 @@
     "select-group": "Seleziona un gruppo*",
     "accepted-successfully": "La delega è stata accettata",
     "accepted-error": "A causa di un errore, la delega non è stata accettata. Premi Annulla e riprova.",
+    "updated-successfully": "Gruppo modificato",
+    "updated-error": "Si è verificato un errore e il gruppo non è stato modificato. Riprova.",
     "revoke-successfully": "Delega Revocata.",
     "reject-successfully": "Delega Rifiutata.",
     "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",

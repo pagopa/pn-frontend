@@ -145,7 +145,7 @@ const DelegationsOfTheCompany = () => {
       id: 'groups',
       label: t('deleghe.table.groups'),
       getValue(value: Array<{ id: string; name: string }>) {
-        if (value.length) {
+        if (value.length > 0) {
           return (
             <CustomTagGroup visibleItems={3}>
               {value.map((group) => (
@@ -193,7 +193,7 @@ const DelegationsOfTheCompany = () => {
       id: 'id',
       label: '',
       getValue(value: string, data: Item) {
-        return <Menu menuType={'delegators'} id={value} row={data} />;
+        return <Menu menuType={'delegators'} id={value} row={data} onAction={handleUpdate} />;
       },
       tableConfiguration: {
         width: '5%',
@@ -303,10 +303,24 @@ const DelegationsOfTheCompany = () => {
     // for the acceptance, the only filter to check is the status one
     if (
       filters.status &&
-      filters.status.length &&
+      filters.status.length > 0 &&
       !filters.status.includes(DelegationStatus.ACTIVE)
     ) {
       // because the filters applied don't contain the status ACTIVE, we must redo the api call
+      getDelegatorsData();
+    }
+  };
+
+  const handleUpdate = (newGroups: Array<{ id: string; name: string }>) => {
+    // when a mandate is updated, we must check if there are filters applied that can change the view
+    // for the update, the only filter to check is the groups one
+    if (
+      filters.groups &&
+      filters.groups.length > 0 &&
+      // no group must be in common between updated groups and those in filters
+      !filters.groups.some((fGroups) => newGroups.findIndex((nGroup) => nGroup.id === fGroups) > -1)
+    ) {
+      // because the filters applied don't contain the updated groups, we must redo the api call
       getDelegatorsData();
     }
   };

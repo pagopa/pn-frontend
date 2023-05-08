@@ -13,8 +13,10 @@ import {
   ACCEPT_DELEGATION,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
+  UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { apiClient } from '../../../api/apiClients';
+import { DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({
@@ -24,7 +26,7 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const acceptCbk = jest.fn();
+const actionCbk = jest.fn();
 
 describe('DelegationElements', () => {
   it('renders the Menu closed', () => {
@@ -92,7 +94,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton - open the modal', async () => {
-    const result = render(<AcceptButton id="1" name="test" onAccept={acceptCbk} />);
+    const result = render(<AcceptButton id="1" name="test" onAccept={actionCbk} />);
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
     const button = result.queryByTestId('acceptButton') as Element;
     fireEvent.click(button);
@@ -101,7 +103,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton - close the modal', async () => {
-    const result = render(<AcceptButton id="1" name="test" onAccept={acceptCbk} />);
+    const result = render(<AcceptButton id="1" name="test" onAccept={actionCbk} />);
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
     const button = result.queryByTestId('acceptButton') as Element;
     fireEvent.click(button);
@@ -110,7 +112,7 @@ describe('DelegationElements', () => {
     const cancelButton = result.queryByTestId('codeCancelButton') as Element;
     fireEvent.click(cancelButton);
     await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
-    expect(acceptCbk).not.toBeCalled();
+    expect(actionCbk).not.toBeCalled();
   });
 
   it('renders the AcceptButton - accept the delegation', async () => {
@@ -118,8 +120,8 @@ describe('DelegationElements', () => {
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
     ];
-    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('4'), 204, undefined, undefined);
-    const result = render(<AcceptButton id="4" name="test" onAccept={acceptCbk} />, {
+    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('4'), 204);
+    const result = render(<AcceptButton id="4" name="test" onAccept={actionCbk} />, {
       preloadedState: {
         delegationsState: {
           groups,
@@ -166,7 +168,7 @@ describe('DelegationElements', () => {
         verificationCode: '01234',
       });
     });
-    expect(acceptCbk).toBeCalledTimes(1);
+    expect(actionCbk).toBeCalledTimes(1);
   });
 
   it('check verificationCode for delegates', async () => {
@@ -198,9 +200,14 @@ describe('DelegationElements', () => {
   });
 
   it('check revoke for delegatates', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('111'), 200);
+    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('111'), 204);
     const result = render(
-      <Menu menuType="delegates" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
+      <Menu
+        menuType="delegates"
+        id="111"
+        row={{ id: 'row-id', name: 'Mario Rossi' }}
+        onAction={actionCbk}
+      />
     );
     const menuIcon = result.getByTestId('delegationMenuIcon');
     fireEvent.click(menuIcon);
@@ -215,6 +222,7 @@ describe('DelegationElements', () => {
       expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/revoke');
       expect(showDialog).not.toBeInTheDocument();
     });
+    expect(actionCbk).toBeCalledTimes(1);
     mock.reset();
     mock.restore();
   });
@@ -238,7 +246,7 @@ describe('DelegationElements', () => {
   });
 
   it('check reject for delegator', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('111'), 200);
+    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('111'), 204);
 
     const result = render(
       <Menu menuType="delegators" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
@@ -259,5 +267,114 @@ describe('DelegationElements', () => {
     });
     mock.reset();
     mock.restore();
+  });
+
+  it("doesn't show the update button - delegator", async () => {
+    const result = render(
+      <Menu
+        menuType="delegators"
+        id="111"
+        row={{ id: 'row-id', name: 'Mario Rossi', status: DelegationStatus.ACTIVE }}
+      />
+    );
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const menuItems = menu.querySelectorAll('[role="menuitem"]');
+    expect(menuItems).toHaveLength(1);
+  });
+
+  it('shows the update button and modal - delegator', async () => {
+    const groups = [
+      { id: 'group-1', name: 'Group 1' },
+      { id: 'group-2', name: 'Group 2' },
+      { id: 'group-3', name: 'Group 3' },
+    ];
+    const result = render(
+      <Menu
+        menuType="delegators"
+        id="111"
+        row={{
+          id: 'row-id',
+          name: 'Mario Rossi',
+          status: DelegationStatus.ACTIVE,
+          groups: [groups[1]],
+        }}
+      />,
+      {
+        preloadedState: {
+          delegationsState: {
+            groups,
+          },
+        },
+      }
+    );
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const menuItems = menu.querySelectorAll('[role="menuitem"]');
+    expect(menuItems).toHaveLength(2);
+    const updateButton = menuItems[1];
+    fireEvent.click(updateButton);
+    const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
+    expect(updateDialog).toBeInTheDocument();
+    const cancelButton = result.queryByTestId('groupCancelButton') as Element;
+    fireEvent.click(cancelButton);
+    await waitFor(() => expect(updateDialog).not.toBeInTheDocument());
+    expect(actionCbk).not.toBeCalled();
+  });
+
+  it('update groups - delegator', async () => {
+    const groups = [
+      { id: 'group-1', name: 'Group 1' },
+      { id: 'group-2', name: 'Group 2' },
+      { id: 'group-3', name: 'Group 3' },
+    ];
+    const mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('4'), 204);
+    const result = render(
+      <Menu
+        menuType="delegators"
+        id="4"
+        row={{
+          id: 'row-id',
+          name: 'Mario Rossi',
+          status: DelegationStatus.ACTIVE,
+          groups: [groups[1]],
+        }}
+        onAction={actionCbk}
+      />,
+      {
+        preloadedState: {
+          delegationsState: {
+            groups,
+            delegations: {
+              delegators: arrayOfDelegators,
+            },
+          },
+        },
+      }
+    );
+    const menuIcon = result.getByTestId('delegationMenuIcon');
+    fireEvent.click(menuIcon);
+    const menu = result.getByTestId('delegationMenu');
+    const menuItems = menu.querySelectorAll('[role="menuitem"]');
+    expect(menuItems).toHaveLength(2);
+    const updateButton = menuItems[1];
+    fireEvent.click(updateButton);
+    const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
+    expect(updateDialog).toBeInTheDocument();
+    await testAutocomplete(updateDialog, 'groups', groups, true, 2);
+    const groupConfirmButton = updateDialog.querySelector(
+      '[data-testid="groupConfirmButton"]'
+    ) as Element;
+    fireEvent.click(groupConfirmButton);
+    await waitFor(() => {
+      expect(mock.history.patch.length).toBe(1);
+      expect(mock.history.patch[0].url).toContain('/mandate/api/v1/mandate/4/update');
+      expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
+        groups: ['group-2', 'group-3'],
+      });
+    });
+    expect(actionCbk).toBeCalledTimes(1);
   });
 });
