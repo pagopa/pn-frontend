@@ -129,6 +129,7 @@ const DesktopNotifications = ({
           ></StatusTooltip>
         );
       },
+      disableAccessibility: true,
     },
   ];
   const rows: Array<Item> = notifications.map((n, i) => ({

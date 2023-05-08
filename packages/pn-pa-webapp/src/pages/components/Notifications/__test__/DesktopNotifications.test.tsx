@@ -71,4 +71,31 @@ describe('DesktopNotifications Component', () => {
     });
   });
 
+  it('cells with/without tabindex', async () => {
+    const result = render(
+      <DesktopNotifications
+        notifications={notificationsToFe.resultsPage}
+        sort={{ orderBy: '', order: 'asc' }}
+        onManualSend={() => {}}
+        onApiKeys={() => {}}
+      />
+    );
+    const notificationsTableBody = result.container.querySelector(
+      'table tbody'
+    );
+    const notificationsTableRow = result.container.querySelector(
+      'table tbody tr:first-child'
+    );
+    const recipientCellButton = result.container.querySelector(
+      'table tbody tr:first-child td:nth-child(2) button'
+    );
+    const iunCellButton = result.container.querySelector(
+      'table tbody tr:first-child td:nth-child(4) button'
+    );
+    expect(notificationsTableBody?.children).toHaveLength(1);
+    expect(notificationsTableRow?.children).toHaveLength(6);
+    expect(recipientCellButton?.getAttribute("tabindex")).toEqual("-1");
+    expect(iunCellButton?.getAttribute("tabindex")).toEqual("0");
+  });
+
 });

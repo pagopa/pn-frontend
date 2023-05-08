@@ -121,6 +121,7 @@ const DesktopNotifications = ({
         );
         return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
+      disableAccessibility: true,
     },
   ];
   const rows: Array<Item> = notifications.map((n, i) => ({
