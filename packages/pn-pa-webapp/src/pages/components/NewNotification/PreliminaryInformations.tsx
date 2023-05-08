@@ -30,6 +30,7 @@ import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import NewNotificationCard from './NewNotificationCard';
+import { requiredStringFieldValidation } from './validation.utility';
 
 type Props = {
   notification: NewNotification;
@@ -58,9 +59,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }), [notification, IS_PAYMENT_ENABLED]);
 
   const validationSchema = yup.object({
-    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`).max(256, tc('too-long-field-error', { maxLength: 256 })),
-    subject: yup.string().required(`${t('subject')} ${tc('required')}`).max(134, tc('too-long-field-error', { maxLength: 134 })),
-    abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })),
+    paProtocolNumber: requiredStringFieldValidation(tc, 256),
+    subject: requiredStringFieldValidation(tc, 134),
+    abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })).matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
     group: (hasGroups) ? yup.string().required() : yup.string(),

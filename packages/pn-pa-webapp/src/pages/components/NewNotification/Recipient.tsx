@@ -37,6 +37,7 @@ import {
   identicalTaxIds,
   taxIdDependingOnRecipientType,
 } from './Recipient.validations';
+import { requiredStringFieldValidation } from './validation.utility';
 
 const singleRecipient = {
   recipientType: RecipientType.PF,
@@ -103,12 +104,10 @@ const Recipient = ({
       recipientType: yup.string(),
       // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
       // la lunghezza non può superare i 80 caratteri
-      firstName: yup
-        .string()
-        .required(tc('required-field'))
+      firstName: requiredStringFieldValidation(tc)
         .test({
           name: 'denominationLengthAndCharacters',
-          test(value) {
+          test(value?: string) {
             const error = denominationLengthAndCharacters(value, this.parent.lastName);
             if (error) {
               return this.createError({
@@ -126,12 +125,10 @@ const Recipient = ({
       // non viene richiesto
       lastName: yup.string().when('recipientType', {
         is: (value: string) => value !== RecipientType.PG,
-        then: yup
-          .string()
-          .required(tc('required-field'))
+        then: requiredStringFieldValidation(tc)
           .test({
             name: 'denominationLengthAndCharacters',
-            test(value) {
+            test(value?: string) {
               const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
               if (error) {
                 return this.createError({
@@ -152,12 +149,12 @@ const Recipient = ({
         }),
       digitalDomicile: yup.string().when('showDigitalDomicile', {
         is: true,
-        then: yup.string().matches(dataRegex.email, t('pec-error')).required(tc('required-field')).max(320, tc('too-long-field-error', { maxLength: 320 })),
+        then: requiredStringFieldValidation(tc, 320).matches(dataRegex.email, t('pec-error')),
       }),
       showPhysicalAddress: yup.boolean().isTrue(),
       address: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')).max(1024, tc('too-long-field-error', { maxLength: 1024 })),
+        then: requiredStringFieldValidation(tc, 1024),
       }),
       houseNumber: yup.string().when('showPhysicalAddress', {
         is: true,
@@ -171,23 +168,23 @@ const Recipient = ({
     */
       zip: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')).max(12, tc('too-long-field-error', { maxLength: 12 })),
+        then: requiredStringFieldValidation(tc, 12),
       }),
       municipalityDetails: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().max(256, tc('too-long-field-error', { maxLength: 256 })),
+        then: yup.string().max(256, tc('too-long-field-error', { maxLength: 256 })).matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
       }),
       municipality: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')).max(256, tc('too-long-field-error', { maxLength: 256 })),
+        then: requiredStringFieldValidation(tc, 256),
       }),
       province: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')).max(256, tc('too-long-field-error', { maxLength: 256 })),
+        then: requiredStringFieldValidation(tc, 256),
       }),
       foreignState: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().required(tc('required-field')),
+        then: requiredStringFieldValidation(tc),
       }),
     };
 
