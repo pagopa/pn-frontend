@@ -78,7 +78,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-      groups: organization.groups,
+      groups: isDelegatedPage ? organization.groups : undefined,
       isDelegatedPage
     };
 

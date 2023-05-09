@@ -1,8 +1,16 @@
 import React from 'react';
 import NotificationMenu from "../NotificationMenu";
-import {render, screen, waitFor} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Box, MenuItem } from "@mui/material";
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => (
+    {
+      t: (str: string) => str,
+    }
+  ),
+}));
 
 describe('NotificationMenu component', () => {
   it('checks that it opens and renders the children correctly', () => {
