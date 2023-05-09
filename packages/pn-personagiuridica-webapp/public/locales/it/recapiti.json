@@ -9,7 +9,7 @@
   "alert-dialog-SMS": "Se l’impresa non ha una PEC e un suo utente accede alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell’SMS, non verrà inviato l’avviso di avvenuta ricezione tramite raccomandata.",
   "legal-contacts": {
     "title": "",
-    "subtitle": "PEC",
+    "subtitle": "Recapito legale",
     "subtitle-2": "Recapito legale",
     "description": "Quando c’è una notifica per l’impresa, l’avviso di avvenuta ricezione viene inviato a questo indirizzo. Per leggere la notifica e pagare eventuali spese è necessario accedere alla piattaforma.",
     "description-2": "Ricevi gli avvisi di avvenuta di ricezione delle notifiche nella tua PEC. Accedi a SEND per leggerle e pagare eventuali spese.",
