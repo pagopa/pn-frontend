@@ -165,6 +165,9 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
+  }
+
+  if (userHasAdminPermissions && !isGroupAdmin) {
     /* eslint-disable-next-line functional/immutable-data */
     menuItems.splice(2, 0, {
       label: t('menu.contacts'),

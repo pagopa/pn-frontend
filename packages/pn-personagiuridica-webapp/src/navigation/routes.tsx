@@ -76,6 +76,7 @@ function Router() {
                     <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
+                      additionalCondition={!isGroupAdmin}
                       redirectTo={<NotFound />}
                     >
                       <Contacts />
