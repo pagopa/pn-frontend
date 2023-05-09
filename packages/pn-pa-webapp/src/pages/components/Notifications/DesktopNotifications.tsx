@@ -127,7 +127,10 @@ const DesktopNotifications = ({
         const { label, tooltip, color } = getNotificationStatusInfos(
           value as NotificationStatus, {recipients: i.recipients as Array<string>}
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip} />;
+      },
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
   ];

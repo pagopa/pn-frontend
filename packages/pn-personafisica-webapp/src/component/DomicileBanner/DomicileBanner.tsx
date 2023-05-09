@@ -61,7 +61,7 @@ const DomicileBanner = () => {
         */}
         <Stack direction="row">
           <Typography variant="body2" sx={{overflow: 'hidden'}}>
-            {t(`detail.domicile_${messageIndex}`)}{' '}
+            {t(`detail.domicile_${messageIndex}`)}
           </Typography>
           <Link component="button" variant='body2' fontWeight={'bold'} onClick={handleAddDomicile} tabIndex={0} sx={{marginLeft: "4px"}}>
             {t(`detail.add_domicile_${messageIndex}`)}

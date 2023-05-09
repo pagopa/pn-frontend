@@ -58,7 +58,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'sentAt',
@@ -71,7 +70,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'sender',
@@ -84,7 +82,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'subject',
@@ -96,7 +93,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'iun',
@@ -120,6 +116,9 @@ const DesktopNotifications = ({
           row.notificationStatus as NotificationStatus, {recipients: row.recipients as Array<string>}
         );
         return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+      },
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
   ];
