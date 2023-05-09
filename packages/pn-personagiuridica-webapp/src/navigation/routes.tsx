@@ -43,9 +43,33 @@ function Router() {
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
               <Route path="/" element={<AARGuard />}>
-                <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+                <Route
+                  path={routes.NOTIFICHE}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={!isGroupAdmin}
+                      redirectTo={<NotFound />}
+                    >
+                      <Notifiche />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche isDelegatedPage />} />
-                <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+                <Route
+                  path={routes.DETTAGLIO_NOTIFICA}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={!isGroupAdmin}
+                      redirectTo={<NotFound />}
+                    >
+                      <NotificationDetail />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route
                   path={routes.DELEGHE}
