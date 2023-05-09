@@ -24,6 +24,19 @@ describe('Notifications routes', () => {
     );
   });
 
+  it('should compile NOTIFICATIONS_LIST in case is delegated is true', () => {
+    const route = NOTIFICATIONS_LIST({
+        startDate: 'start-date',
+        endDate: 'end-date',
+        recipientId: 'recipient-id',
+        iunMatch: 'iun-match',
+      },
+      true);
+    expect(route).toEqual(
+      '/delivery/notifications/received/delegated?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
+    );
+  });
+
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
     expect(route).toEqual('/delivery/notifications/received/mocked-iun');
