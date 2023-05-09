@@ -21,6 +21,7 @@ import { setAttachments } from '../../../redux/newNotification/reducers';
 import { getConfiguration } from '../../../services/configuration.service';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
+import { requiredStringFieldValidation } from './validation.utility';
 
 type AttachmentBoxProps = {
   id: string;
@@ -170,7 +171,7 @@ const Attachments = ({
               .required(),
           })
           .required(),
-        name: yup.string().required(`${t('act-name')} ${tc('common:required')}`),
+        name: requiredStringFieldValidation(tc),
       })
     ),
   });
