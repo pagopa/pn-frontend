@@ -37,6 +37,7 @@ const API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPagesKey';
 const API_NOTIFICATIONS_IUN_MATCH_PARAMETER = 'iunMatch';
 const API_NOTIFICATIONS_MANDATE_ID_PARAMETER = 'mandateId';
 const API_NOTIFICATIONS_IUN_PARAMETER = 'iun';
+const API_NOTIFICATIONS_GROUP_PARAMETER = 'group';
 const API_NOTIFICATIONS_DOCUMENT_INDEX_PARAMETER = 'documentIndex';
 const API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER = 'legalfactType';
 const API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER = 'legalfactKey';
@@ -74,6 +75,7 @@ export function NOTIFICATIONS_LIST(params: GetNotificationsParams, delegated?: b
       [API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER]: params.nextPagesKey || '',
       [API_NOTIFICATIONS_IUN_MATCH_PARAMETER]: params.iunMatch || '',
       [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: params.mandateId || '',
+      [API_NOTIFICATIONS_GROUP_PARAMETER]: params.groups ? params.groups : '',
     },
   });
 }
