@@ -73,6 +73,18 @@ Conditions:
       - !Not [!Equals [!Ref Name, ""]]
       - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
 
+  # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
+  IsPortalePg:
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [!Select [0, !Split [webapp-pg-cdn-, !Ref Name]], ""]
+
+  # Is Portale PG prod if name is equals to 'webapp-pg-cdn-prod'
+  IsPortalePgProd:
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [ webapp-pg-cdn-prod, !Ref Name ]
+
   # If domain is used in certificate, add this domain to CloudFront
   CreateDNSname: !Equals
     - !Ref WebDomainReferenceToSite
@@ -279,6 +291,48 @@ Resources:
             CachePolicyId: !Ref WebsiteCDNCachingPolicyOneHour
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
             PathPattern: /icons*
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+              PathPattern: /auth*
+            - !Ref "AWS::NoValue"
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+              PathPattern: /dashboard*
+            - !Ref "AWS::NoValue"  
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+              PathPattern: /onboarding*
+            - !Ref "AWS::NoValue"                        
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -315,6 +369,15 @@ Resources:
                   - ""
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
+          - Fn::If:
+            - IsPortalePg
+            - DomainName: !If [ IsPortalePgProd, 'pnpg.selfcare.pagopa.it', 'pnpg.uat.selfcare.pagopa.it' ]
+              Id: "pn-SelfCare-PG"
+              CustomOriginConfig:
+                OriginProtocolPolicy: 'https-only'
+                OriginSSLProtocols:
+                  - TLSv1.2
+            - !Ref "AWS::NoValue"
         Logging:
           Fn::If:
             - HasLogsBucket
