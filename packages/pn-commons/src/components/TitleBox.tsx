@@ -37,16 +37,34 @@ export default function TitleBox({
   children,
 }: Props) {
   return (
-    <Grid container mt={mtGrid} sx={sx}>
-      {title && <Grid item xs={12} mb={mbTitle}>
-        <Typography variant={variantTitle}>{title}</Typography>
-      </Grid>}
-      {subTitle && <Grid item xs={12} mb={mbSubTitle}>
-        <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }} component={typeof subTitle !== "string" ? "div" : "p"}>
-          {subTitle}
-        </Typography>
-      </Grid>}
-      <Grid item xs={12}>
+    <Grid id="container" aria-orientation="horizontal" tabIndex={0} container mt={mtGrid} sx={sx}>
+      {title && (
+        <Grid id="item" item xs={12} mb={mbTitle}>
+          <Typography
+            component={'h1'}
+            key={'recapiti-title'}
+            id={'title'}
+            role="heading"
+            aria-label={title.toString()}
+            aria-selected="true"
+            variant={variantTitle}
+          >
+            {title}
+          </Typography>
+        </Grid>
+      )}
+      {subTitle && (
+        <Grid aria-orientation="horizontal" item xs={12} mb={mbSubTitle}>
+          <Typography
+            variant={variantSubTitle}
+            sx={{ fontSize: '18px' }}
+            component={typeof subTitle !== 'string' ? 'div' : 'p'}
+          >
+            {subTitle}
+          </Typography>
+        </Grid>
+      )}
+      <Grid aria-orientation="vertical" item xs={12}>
         <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
       </Grid>
     </Grid>

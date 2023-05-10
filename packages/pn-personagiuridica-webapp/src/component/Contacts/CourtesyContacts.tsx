@@ -27,9 +27,14 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
         <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
       </Box>
-      <Alert sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
-        <Typography component="span" variant="body1">
-          {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
+      <Alert tabIndex={0} sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
+        <Typography
+          role="banner"
+          aria-label={t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
+          component="span"
+          variant="body1"
+        >
+          {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
         </Typography>
         {/** 
            * Waiting for FAQs
