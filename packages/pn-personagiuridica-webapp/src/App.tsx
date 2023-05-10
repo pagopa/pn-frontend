@@ -61,6 +61,7 @@ const App = () => {
   );
   const { pendingDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
