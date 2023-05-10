@@ -39,10 +39,13 @@ const axe = configureAxe({
 });
 expect.extend(toHaveNoViolations);
 
+type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY';
+type MockCodes = 200 | 204 | 500 | 401 | 400;
+
 /**
  * Utility function to mock api response
- * @param client Axios client
- * @param method the api method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+ * @param client Axios client or Mock Adapter instance
+ * @param method the api method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY
  * @param path the api path
  * @param code the response code
  * @param request body request
@@ -50,14 +53,14 @@ expect.extend(toHaveNoViolations);
  * @returns the mock instance
  */
 function mockApi(
-  client: AxiosInstance,
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
+  client: AxiosInstance | MockAdapter,
+  method: MockMethods,
   path: string,
-  code: 200,
+  code: MockCodes,
   request?: any,
   response?: any
 ): MockAdapter {
-  const mock = new MockAdapter(client);
+  const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
   switch (method) {
     case 'GET':
       mock.onGet(path).reply(code, response);
@@ -74,6 +77,8 @@ function mockApi(
     case 'PATCH':
       mock.onPatch(path, request).reply(code, response);
       break;
+    case 'ANY':
+      mock.onAny(path, request).reply(code, response);
     default:
       break;
   }
