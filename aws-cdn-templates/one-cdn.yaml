@@ -302,7 +302,7 @@ Resources:
               TargetOriginId: pn-SelfCare-PG
               ViewerProtocolPolicy: redirect-to-https
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
               PathPattern: /auth*
             - !Ref "AWS::NoValue"
           - Fn::If:
@@ -316,7 +316,7 @@ Resources:
               TargetOriginId: pn-SelfCare-PG
               ViewerProtocolPolicy: redirect-to-https
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
               PathPattern: /dashboard*
             - !Ref "AWS::NoValue"  
           - Fn::If:
@@ -330,7 +330,7 @@ Resources:
               TargetOriginId: pn-SelfCare-PG
               ViewerProtocolPolicy: redirect-to-https
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
               PathPattern: /onboarding*
             - !Ref "AWS::NoValue"                        
         DefaultCacheBehavior:
@@ -389,6 +389,48 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
   #        WebACLId: !GetAtt ApiWafWebAcl.Arn
+
+  SelfcareHeaderPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: "PnpgHeaderPolicy"
+        SecurityHeadersConfig:
+          # add_header Content-Security-Policy
+          ContentSecurityPolicy:
+            ContentSecurityPolicy:
+              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ ; \ 
+              connect-src 'self' https://api-eu.mixpanel.com/track/ \
+              https://uat.selfcare.pagopa.it/assets/ \ # per selfcare prod dovrebbe essere https://selfcare.pagopa.it/assets/
+              https://pnpg.uat.selfcare.pagopa.it/assets/ \ # per selfcare prod dovrebbe essere https://pnpg.selfcare.pagopa.it/assets/
+              https://privacyportalde-cdn.onetrust.com/ \
+              https://api-pnpg.uat.selfcare.pagopa.it ; \ # per selfcare prod https://api-pnpg.selfcare.pagopa.it
+              style-src 'self' 'unsafe-inline' \
+              https://pnpg.uat.selfcare.pagopa.it/assets/ \ # per selfcare prod dovrebbe essere https://pnpg.selfcare.pagopa.it/assets/
+              https://privacyportalde-cdn.onetrust.com/ ; \
+              worker-src 'none'; \ 
+              font-src 'self'; \
+              frame-ancestors 'self' ; \
+              img-src 'self' https://assets.cdn.io.italia.it/ data:"
+            Override: true
+          # add_header X-Content-Type-Options "nosniff";
+          ContentTypeOptions:
+            #ContentTypeOptions: "nosniff"
+            Override: true
+          # add_header X-Frame-Options "SAMEORIGIN";
+          FrameOptions:
+            FrameOption: "SAMEORIGIN"
+            Override: true
+          # add_header Referrer-Policy "no-referrer";
+          ReferrerPolicy:
+            ReferrerPolicy: "no-referrer"
+            Override: true
+          # add_header Strict-Transport-Security "max-age=31536000";
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: false
+            Preload: false
+            Override: true
 
   DefaultHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
