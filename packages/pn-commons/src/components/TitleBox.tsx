@@ -20,6 +20,8 @@ type Props = {
   sx?: SxProps<Theme>;
   /** Children */
   children?: ReactFragment;
+  /** a11y for component */
+  ariaLabel?: string;
 };
 
 /**
@@ -34,18 +36,25 @@ export default function TitleBox({
   variantTitle = 'h1',
   variantSubTitle = 'h5',
   sx,
+  ariaLabel,
   children,
 }: Props) {
   return (
-    <Grid id="container" aria-orientation="horizontal" tabIndex={0} container mt={mtGrid} sx={sx}>
+    <Grid
+      id="page-header-container"
+      aria-orientation="horizontal"
+      tabIndex={0}
+      container
+      mt={mtGrid}
+      sx={sx}
+    >
       {title && (
         <Grid id="item" item xs={12} mb={mbTitle}>
           <Typography
             component={'h1'}
-            key={'recapiti-title'}
-            id={'title'}
+            id="title-of-page"
             role="heading"
-            aria-label={title.toString()}
+            aria-label={ariaLabel}
             aria-selected="true"
             variant={variantTitle}
           >
