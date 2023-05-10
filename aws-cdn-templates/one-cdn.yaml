@@ -399,7 +399,7 @@ Resources:
           # add_header Content-Security-Policy
           ContentSecurityPolicy:
             ContentSecurityPolicy:
-              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ ; \ 
+              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \ 
               connect-src 'self' https://api-eu.mixpanel.com/track/ \
               https://uat.selfcare.pagopa.it/assets/ \
               https://selfcare.pagopa.it/assets/ \
