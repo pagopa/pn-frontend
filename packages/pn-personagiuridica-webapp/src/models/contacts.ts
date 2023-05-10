@@ -5,12 +5,6 @@ export enum LegalChannelType {
 export enum CourtesyChannelType {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
-  IOMSG = 'APPIO',
-}
-
-export enum IOAllowedValues {
-  ENABLED = 'ENABLED',
-  DISABLED = 'DISABLED',
 }
 
 export interface DigitalAddress {

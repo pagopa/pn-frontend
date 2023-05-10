@@ -1,17 +1,14 @@
-/* eslint-disable functional/no-let */
 import React from 'react';
-
-import * as redux from 'react-redux';
-import { act, fireEvent, RenderResult, screen } from '@testing-library/react';
-import { render } from '../../__test__/test-utils';
-import * as actions from '../../redux/contact/actions';
-import Contacts from '../Contacts.page';
-import { ContactsApi } from '../../api/contacts/Contacts.api';
 import {
   apiOutcomeTestHelper,
   AppResponseMessage,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
+
+import { render, act, fireEvent, screen, mockApi } from '../../__test__/test-utils';
+import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
+import { apiClient } from '../../api/apiClients';
+import Contacts from '../Contacts.page';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -62,51 +59,40 @@ const initialState = {
 };
 
 describe('Contacts page - assuming contact API works properly', () => {
-  let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  const mockActionFn = jest.fn();
+  afterAll(() => {
+    jest.resetAllMocks();
+  });
 
-  beforeEach(async () => {
-    mockDispatchFn = jest.fn(() => ({
-      then: () => Promise.resolve(),
-    }));
-
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getDigitalAddresses');
-    actionSpy.mockImplementation(mockActionFn);
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-
-    // render component
+  it('renders Contacts (no contacts)', async () => {
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    let result;
     await act(async () => {
-      result = render(<Contacts />, initialState);
+      result = await render(<Contacts />, initialState);
     });
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it('renders Contacts (no contacts)', () => {
     expect(result.container).toHaveTextContent(/title/i);
     expect(result.container).toHaveTextContent(/subtitle/i);
     expect(result.container).toHaveTextContent(/InsertLegalContact/i);
     expect(result.container).toHaveTextContent(/CourtesyContacts/i);
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-recipientId');
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/address-book/v1/digital-address');
+    mock.reset();
+    mock.restore();
   });
 
-  it('subtitle link properly redirects to profile page', () => {
+  it('subtitle link properly redirects to profile page', async () => {
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    let result;
+    await act(async () => {
+      result = await render(<Contacts />, initialState);
+    });
     const subtitleLink = result.getByText('subtitle-link');
     const spyWindowOpen = jest.spyOn(window, 'open');
     spyWindowOpen.mockImplementation(jest.fn());
-
     expect(subtitleLink).toBeInTheDocument();
     fireEvent.click(subtitleLink);
-
     expect(spyWindowOpen).toHaveBeenCalledTimes(1);
+    mock.reset();
+    mock.restore();
   });
 });
 
@@ -120,8 +106,7 @@ describe('Contacts Page - different contact API behaviors', () => {
   });
 
   it('API error', async () => {
-    const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
-    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 500);
     await act(
       async () =>
         void render(
@@ -133,11 +118,12 @@ describe('Contacts Page - different contact API behaviors', () => {
         )
     );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
+    mock.reset();
+    mock.restore();
   });
 
   it('API OK', async () => {
-    const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
-    apiSpy.mockResolvedValue({ legal: [], courtesy: [] });
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
     await act(
       async () =>
         void render(
@@ -149,5 +135,7 @@ describe('Contacts Page - different contact API behaviors', () => {
         )
     );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
+    mock.reset();
+    mock.restore();
   });
 });

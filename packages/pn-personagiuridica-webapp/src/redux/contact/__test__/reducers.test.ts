@@ -3,7 +3,6 @@ import {
   DigitalAddresses,
   LegalChannelType,
   CourtesyChannelType,
-  IOAllowedValues,
 } from '../../../models/contacts';
 import { apiClient } from '../../../api/apiClients';
 import {
@@ -19,8 +18,6 @@ import {
   createOrUpdateLegalAddress,
   deleteCourtesyAddress,
   deleteLegalAddress,
-  disableIOAddress,
-  enableIOAddress,
   getDigitalAddresses,
 } from '../actions';
 import { resetPecValidation, resetState } from '../reducers';
@@ -216,40 +213,6 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('deleteCourtesyAddress/fulfilled');
     expect(payload).toEqual(digitalAddresses.courtesy[0].senderId);
-    mock.reset();
-    mock.restore();
-  });
-
-  it('Should be able to enable App IO', async () => {
-    const ioAddress = { ...digitalAddresses.courtesy[1], value: IOAllowedValues.ENABLED };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      COURTESY_CONTACT(ioAddress.senderId, CourtesyChannelType.IOMSG),
-      204,
-      { value: 'APPIO', verificationCode: '00000' },
-      ioAddress
-    );
-    const action = await store.dispatch(enableIOAddress(ioAddress.recipientId));
-    const payload = action.payload as DigitalAddress;
-    expect(action.type).toBe('enableIOAddress/fulfilled');
-    expect(payload).toEqual({ ...ioAddress, value: 'APPIO', senderName: undefined });
-    mock.reset();
-    mock.restore();
-  });
-
-  it('Should be able to disable App IO', async () => {
-    const ioAddress = digitalAddresses.courtesy[1];
-    const mock = mockApi(
-      apiClient,
-      'DELETE',
-      COURTESY_CONTACT(ioAddress.senderId, CourtesyChannelType.IOMSG),
-      204
-    );
-    const action = await store.dispatch(disableIOAddress(ioAddress.recipientId));
-    const payload = action.payload as DigitalAddress;
-    expect(action.type).toBe('disableIOAddress/fulfilled');
-    expect(payload).toEqual(ioAddress.senderId);
     mock.reset();
     mock.restore();
   });

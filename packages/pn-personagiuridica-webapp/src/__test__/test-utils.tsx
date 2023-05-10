@@ -63,7 +63,7 @@ function mockApi(
   const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
   switch (method) {
     case 'GET':
-      mock.onGet(path).reply(code, response);
+      mock.onGet(path, request).reply(code, response);
       break;
     case 'POST':
       mock.onPost(path, request).reply(code, response);
@@ -72,7 +72,7 @@ function mockApi(
       mock.onPut(path, request).reply(code, response);
       break;
     case 'DELETE':
-      mock.onDelete(path).reply(code, response);
+      mock.onDelete(path, request).reply(code, response);
       break;
     case 'PATCH':
       mock.onPatch(path, request).reply(code, response);

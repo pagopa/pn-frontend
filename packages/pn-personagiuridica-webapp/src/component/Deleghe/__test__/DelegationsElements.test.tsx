@@ -206,7 +206,6 @@ describe('DelegationElements', () => {
     fireEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
     const revokeButton = showDialog.querySelectorAll('[data-testid="dialogAction"]')[1];
-    screen.debug(revokeButton);
     fireEvent.click(revokeButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { act, RenderResult } from '@testing-library/react';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { axe, render, act, RenderResult } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 
@@ -18,13 +17,13 @@ describe('InsertLegalContact component', () => {
     // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
     await act(async () => {
-        result = render(
-          <DigitalContactsCodeVerificationProvider>
-            <InsertLegalContact recipientId={'mocked-recipientId'} />
-          </DigitalContactsCodeVerificationProvider>
-        );
-      });
-      if (result) {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <InsertLegalContact recipientId={'mocked-recipientId'} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
