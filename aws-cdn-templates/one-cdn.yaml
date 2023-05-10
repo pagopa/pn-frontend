@@ -401,12 +401,16 @@ Resources:
             ContentSecurityPolicy:
               "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ ; \ 
               connect-src 'self' https://api-eu.mixpanel.com/track/ \
-              https://uat.selfcare.pagopa.it/assets/ \ # per selfcare prod dovrebbe essere https://selfcare.pagopa.it/assets/
-              https://pnpg.uat.selfcare.pagopa.it/assets/ \ # per selfcare prod dovrebbe essere https://pnpg.selfcare.pagopa.it/assets/
+              https://uat.selfcare.pagopa.it/assets/ \
+              https://selfcare.pagopa.it/assets/ \
+              https://pnpg.uat.selfcare.pagopa.it/assets/ \
+              https://pnpg.selfcare.pagopa.it/assets/ \
               https://privacyportalde-cdn.onetrust.com/ \
-              https://api-pnpg.uat.selfcare.pagopa.it ; \ # per selfcare prod https://api-pnpg.selfcare.pagopa.it
+              https://api-pnpg.selfcare.pagopa.it \
+              https://api-pnpg.uat.selfcare.pagopa.it ; \
               style-src 'self' 'unsafe-inline' \
-              https://pnpg.uat.selfcare.pagopa.it/assets/ \ # per selfcare prod dovrebbe essere https://pnpg.selfcare.pagopa.it/assets/
+              https://pnpg.uat.selfcare.pagopa.it/assets/ \
+              https://pnpg.selfcare.pagopa.it/assets/ \
               https://privacyportalde-cdn.onetrust.com/ ; \
               worker-src 'none'; \ 
               font-src 'self'; \
