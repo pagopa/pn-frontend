@@ -392,9 +392,10 @@ Resources:
 
   SelfcareHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
+    Condition: IsPortalePg
     Properties:
       ResponseHeadersPolicyConfig:
-        Name: "PnpgHeaderPolicy"
+        Name: "pn-PnpgHeaderPolicy"
         SecurityHeadersConfig:
           # add_header Content-Security-Policy
           ContentSecurityPolicy:
