@@ -73,6 +73,18 @@ Conditions:
       - !Not [!Equals [!Ref Name, ""]]
       - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
 
+  # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
+  IsPortalePg:
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [!Select [0, !Split [webapp-pg-cdn-, !Ref Name]], ""]
+
+  # Is Portale PG prod if name is equals to 'webapp-pg-cdn-prod'
+  IsPortalePgProd:
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [ webapp-pg-cdn-prod, !Ref Name ]
+
   # If domain is used in certificate, add this domain to CloudFront
   CreateDNSname: !Equals
     - !Ref WebDomainReferenceToSite
@@ -279,6 +291,48 @@ Resources:
             CachePolicyId: !Ref WebsiteCDNCachingPolicyOneHour
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
             PathPattern: /icons*
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /auth*
+            - !Ref "AWS::NoValue"
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /dashboard*
+            - !Ref "AWS::NoValue"  
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /onboarding*
+            - !Ref "AWS::NoValue"                        
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -315,6 +369,15 @@ Resources:
                   - ""
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
+          - Fn::If:
+            - IsPortalePg
+            - DomainName: !If [ IsPortalePgProd, 'pnpg.selfcare.pagopa.it', 'pnpg.uat.selfcare.pagopa.it' ]
+              Id: "pn-SelfCare-PG"
+              CustomOriginConfig:
+                OriginProtocolPolicy: 'https-only'
+                OriginSSLProtocols:
+                  - TLSv1.2
+            - !Ref "AWS::NoValue"
         Logging:
           Fn::If:
             - HasLogsBucket
@@ -326,6 +389,52 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
   #        WebACLId: !GetAtt ApiWafWebAcl.Arn
+
+  SelfcareHeaderPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: "PnpgHeaderPolicy"
+        SecurityHeadersConfig:
+          # add_header Content-Security-Policy
+          ContentSecurityPolicy:
+            ContentSecurityPolicy:
+              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \ 
+              connect-src 'self' https://api-eu.mixpanel.com/track/ \
+              https://uat.selfcare.pagopa.it/assets/ \
+              https://selfcare.pagopa.it/assets/ \
+              https://pnpg.uat.selfcare.pagopa.it/assets/ \
+              https://pnpg.selfcare.pagopa.it/assets/ \
+              https://privacyportalde-cdn.onetrust.com/ \
+              https://api-pnpg.selfcare.pagopa.it \
+              https://api-pnpg.uat.selfcare.pagopa.it ; \
+              style-src 'self' 'unsafe-inline' \
+              https://pnpg.uat.selfcare.pagopa.it/assets/ \
+              https://pnpg.selfcare.pagopa.it/assets/ \
+              https://privacyportalde-cdn.onetrust.com/ ; \
+              worker-src 'none'; \ 
+              font-src 'self'; \
+              frame-ancestors 'self' ; \
+              img-src 'self' https://assets.cdn.io.italia.it/ data:"
+            Override: true
+          # add_header X-Content-Type-Options "nosniff";
+          ContentTypeOptions:
+            #ContentTypeOptions: "nosniff"
+            Override: true
+          # add_header X-Frame-Options "SAMEORIGIN";
+          FrameOptions:
+            FrameOption: "SAMEORIGIN"
+            Override: true
+          # add_header Referrer-Policy "no-referrer";
+          ReferrerPolicy:
+            ReferrerPolicy: "no-referrer"
+            Override: true
+          # add_header Strict-Transport-Security "max-age=31536000";
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: false
+            Preload: false
+            Override: true
 
   DefaultHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
