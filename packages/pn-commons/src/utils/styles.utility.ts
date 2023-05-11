@@ -10,6 +10,6 @@ export const buttonNakedInheritStyle: CSSProperties = {
   margin: 0,
   padding: 0,
   fontWeight: 'inherit',
-  display: 'inherit',
+  display: 'initial',
   textAlign: 'inherit'
 };

@@ -1,4 +1,4 @@
-import { Alert, Box, Link, Typography } from '@mui/material';
+import { Alert, Box, Link, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,6 +23,7 @@ const DomicileBanner = () => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const path = pathname.split('/');
   const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
@@ -36,10 +37,10 @@ const DomicileBanner = () => {
   };
 
   useEffect(() => {
-    if (legalDomicile && legalDomicile.length > 0) {
+    if ((legalDomicile && legalDomicile.length > 0) || isGroupAdmin ) {
       dispatch(closeDomicileBanner());
     }
-  }, [legalDomicile]);
+  }, [legalDomicile, isGroupAdmin]);
 
   return open ? (
     <Box mb={2.5}>
@@ -50,12 +51,21 @@ const DomicileBanner = () => {
         data-testid="addDomicileBanner"
         sx={{ padding: '16px' }}
       >
-        <Typography variant="body2" sx={{ overflow: 'hidden' }}>
-          {t(`detail.domicile_${messageIndex}`)}
-          <Link role="button" fontWeight={'bold'} onClick={handleAddDomicile}>
+        {/* 
+          The link has the attribute component="button" since this allows it to be launched by pressing the Enter key,
+          otherwise it is launched through the mouse only.
+          As the Typography renders as a <p> element, I added the stack to let the link be next (and not below) the text.
+          An explicit left margin had to be added to insert a slight separation between text and link.
+          Cfr. PN-5528.
+        */}
+        <Stack direction="row">
+          <Typography variant="body2" sx={{overflow: 'hidden'}}>
+            {t(`detail.domicile_${messageIndex}`)}
+          </Typography>
+          <Link component="button" variant='body2' fontWeight={'bold'} onClick={handleAddDomicile} tabIndex={0} sx={{marginLeft: "4px"}}>
             {t(`detail.add_domicile_${messageIndex}`)}
           </Link>
-        </Typography>
+        </Stack>
       </Alert>
     </Box>
   ) : (

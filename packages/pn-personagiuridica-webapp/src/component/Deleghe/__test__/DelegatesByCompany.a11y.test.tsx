@@ -19,10 +19,6 @@ describe('Delegates Component - accessibility tests', () => {
           delegations: {
             delegates: arrayOfDelegates,
           },
-          sortDelegates: {
-            orderBy: '',
-            order: 'desc',
-          },
         },
       },
     });

@@ -24,6 +24,7 @@ type Props = {
   isEditMode: boolean;
   open: boolean;
   name: string;
+  currentGroups?: Array<{ id: string; name: string }>;
   handleCloseAcceptModal: () => void;
   handleConfirm: (code: Array<string>, groups: Array<{ id: string; name: string }>) => void;
 };
@@ -32,17 +33,19 @@ const AcceptDelegationModal: React.FC<Props> = ({
   isEditMode,
   open,
   name,
+  currentGroups = [],
   handleCloseAcceptModal,
   handleConfirm,
 }) => {
+  const hasGroupsAssociated = isEditMode && currentGroups?.length > 0;
   const [step, setStep] = useState<0 | 1>(isEditMode ? 1 : 0);
-  const [associateGroup, setAssociateGroup] = useState(false);
+  const [associateGroup, setAssociateGroup] = useState(hasGroupsAssociated);
   const [groupForm, setGroupForm] = useState<{
     touched: boolean;
     value: Array<{ id: string; name: string }>;
   }>({
     touched: false,
-    value: [],
+    value: hasGroupsAssociated ? currentGroups : [],
   });
   const [groupInputValue, setGroupInputValue] = useState('');
   const [code, setCode] = useState<Array<string>>([]);
@@ -74,7 +77,10 @@ const AcceptDelegationModal: React.FC<Props> = ({
   };
 
   const handleClose = () => {
-    setGroupForm({ value: [], touched: false });
+    setGroupForm({
+      value: hasGroupsAssociated ? currentGroups : [],
+      touched: false,
+    });
     setCode([]);
     if (!isEditMode) {
       setStep(0);
@@ -111,7 +117,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
       data-testid="groupDialog"
     >
       <DialogTitle id="dialog-title" sx={{ textAlign: textPosition }}>
-        {t('deleghe.associate-groups-title')}
+        {isEditMode ? t('deleghe.edit-groups-title') : t('deleghe.associate-groups-title')}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
@@ -121,7 +127,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         <FormControl>
           <RadioGroup
             aria-label={t('deleghe.associate-group')}
-            defaultValue="no-group"
+            defaultValue={hasGroupsAssociated ? 'associate-group' : 'no-group'}
             name="radio-buttons-group"
             onChange={handleChange}
           >

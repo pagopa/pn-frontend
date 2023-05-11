@@ -1,13 +1,22 @@
 {
   "title": "Notifiche di {{recipient}}",
+  "title-delegated-notifications": "Notifiche delegate a {{recipient}}",
   "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
+  "subtitle-delegated-notifications": "Leggi le notifiche delegate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "table": {
     "data": "Data",
+    "gruppo": "Gruppi",
     "mittente": "Mittente",
+    "destinatario": "Destinatario",
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio"
+    "show-detail": "Vedi dettaglio",
+    "view-group": "Visualizza gruppo associato",
+    "group-modal": {
+      "title": "Gruppo associato alle notifiche di {{recipient}}",
+      "body": "Se hai bisogno di modificarlo, puoi farlo tramite la funzione di modifica all’interno della sezione “Deleghe”."
+    }
   },
   "filters": {
     "iun": "Inserisci il Codice IUN",
@@ -57,9 +66,9 @@
     "add_domicile_1": "Aggiungi cellulare",
     "add_domicile_2": "Aggiungi email",
     "add_domicile_3": "Aggiungi PEC",
-    "domicile_1": "Aggiungi il tuo numero di cellulare: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica. ",
-    "domicile_2": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica. ",
-    "domicile_3": "Aggiungi l’indirizzo PEC dell’impresa. ",
+    "domicile_1": "Aggiungi il tuo numero di cellulare: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica.",
+    "domicile_2": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica.",
+    "domicile_3": "Aggiungi l’indirizzo PEC dell’impresa.",
     "payment": {
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",

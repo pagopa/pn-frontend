@@ -20,7 +20,8 @@
   },
   "menu": {
     "notifiche": "Notifiche",
-    "notifiche-come-delegato": "Le notifiche a te delegate",
+    "notifiche-impresa": "Notifiche dell'impresa",
+    "notifiche-delegato": "Notifiche delegate",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "Recapiti",
