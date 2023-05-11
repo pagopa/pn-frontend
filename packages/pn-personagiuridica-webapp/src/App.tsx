@@ -61,6 +61,7 @@ const App = () => {
   );
   const { pendingDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
@@ -117,9 +118,12 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       if (userHasAdminPermissions) {
-        void dispatch(getDomicileInfo());
         void dispatch(getSidemenuInformation());
       }
+      if (userHasAdminPermissions && !isGroupAdmin) {
+        void dispatch(getDomicileInfo());
+      }
+
       void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
@@ -165,6 +169,9 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
+  }
+
+  if (userHasAdminPermissions && !isGroupAdmin) {
     /* eslint-disable-next-line functional/immutable-data */
     menuItems.splice(2, 0, {
       label: t('menu.contacts'),
