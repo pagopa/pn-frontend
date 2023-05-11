@@ -51,7 +51,6 @@ export default function TitleBox({
       {title && (
         <Grid id="item" item xs={12} mb={mbTitle}>
           <Typography
-            component={'h1'}
             id="title-of-page"
             role="heading"
             aria-label={ariaLabel}
