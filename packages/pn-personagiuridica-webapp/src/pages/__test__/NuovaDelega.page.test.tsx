@@ -202,7 +202,7 @@ describe('NuovaDelega page', () => {
     expect(result.container).toHaveTextContent(/nuovaDelega.createdDescription/i);
   });
 
-  it.only('fills the form and calls the create function - selected entities', async () => {
+  it('fills the form and calls the create function - selected entities', async () => {
     const entitiesList = [
       {
         id: 'entity-a',

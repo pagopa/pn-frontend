@@ -56,6 +56,7 @@ describe('Notifiche Page - with notifications', () => {
 
   it('renders notifiche page', () => {
     expect(screen.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
+    expect(screen.getAllByRole('heading')[0]).not.toHaveTextContent(/title-delegated-notifications/i);
     const filterForm = result?.container.querySelector('form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result?.container.querySelector('table');
@@ -69,6 +70,7 @@ describe('Notifiche Page - with notifications', () => {
     expect(mockActionFn).toBeCalledWith({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
+      isDelegatedPage: false,
       recipientId: '',
       status: '',
       subjectRegExp: '',
@@ -154,5 +156,48 @@ describe('Notifiche Page - query for notification API outcome', () => {
         )
     );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
+  });
+});
+
+describe('Notifiche Delegate Page - with delegated notifications', () => {
+  let result: RenderResult | undefined;
+  let mockDispatchFn: jest.Mock;
+  let mockActionFn: jest.Mock;
+
+  beforeEach(async () => {
+    const scenario = await doPrepareTestScenario(true);
+    result = scenario.result;
+    mockDispatchFn = scenario.mockDispatchFn;
+    mockActionFn = scenario.mockActionFn;
+  });
+
+  afterEach(() => {
+    result = undefined;
+    jest.resetAllMocks();
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
+
+  it('renders notifiche page', () => {
+    expect(screen.getAllByRole('heading')[0]).toHaveTextContent(/title-delegated-notifications/i);
+    const filterForm = result?.container.querySelector('form');
+    expect(filterForm).toBeInTheDocument();
+    const notificationsTable = result?.container.querySelector('table');
+    expect(notificationsTable).toBeInTheDocument();
+    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    expect(itemsPerPageSelector).toBeInTheDocument();
+    const pageSelector = result?.queryByTestId('pageSelector');
+    expect(pageSelector).toBeInTheDocument();
+    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockActionFn).toBeCalledTimes(1);
+    expect(mockActionFn).toBeCalledWith({
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
+      isDelegatedPage: true,
+      recipientId: '',
+      status: '',
+      subjectRegExp: '',
+      size: 10,
+    });
   });
 });
