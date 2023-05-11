@@ -157,11 +157,15 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             </ButtonNaked>
           </Box>
         )}
-        <Alert tabIndex={0} sx={{ mt: 4 }} severity="info">
+        <Alert
+          tabIndex={0}
+          aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
+          sx={{ mt: 4 }}
+          severity="info"
+        >
           <Typography
             role="banner"
             component="span"
-            aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
             variant="body1"
             data-testid="legal contact disclaimer"
           >
