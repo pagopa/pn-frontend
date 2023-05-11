@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Dispatch, useCallback, useEffect, useState } from 'react';
+import { AnyAction } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
@@ -8,48 +9,72 @@ import {
   AppResponsePublisher,
   CodeModal,
   CustomTagGroup,
+  Item,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   acceptDelegation,
   rejectDelegation,
   revokeDelegation,
+  updateDelegation,
 } from '../../redux/delegation/actions';
-import { getSidemenuInformation } from '../../redux/sidemenu/actions';
 import { User } from '../../redux/auth/types';
+import { RootState } from '../../redux/store';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
+import { DelegationStatus } from '../../models/Deleghe';
 import AcceptDelegationModal from './AcceptDelegationModal';
 import ConfirmationModal from './ConfirmationModal';
+
+function handleCustomGenericError(
+  responseError: AppResponse,
+  message: string,
+  dispatch: Dispatch<AnyAction>
+) {
+  if (Array.isArray(responseError.errors)) {
+    const managedErrors = (
+      Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+    ).map((key) => ServerResponseErrorCode[key]);
+    const error = responseError.errors[0];
+    if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+      dispatch(appStateActions.addError({ title: '', message }));
+      return false;
+    }
+    return true;
+  }
+  return true;
+}
 
 type Props = {
   menuType: 'delegates' | 'delegators';
   id: string;
-  name?: string;
-  verificationCode?: string;
-  width?: string;
   userLogged?: User;
+  row?: Item;
+  onAction?: (data: any) => void;
 };
-export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, userLogged }) => {
+export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['deleghe']);
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
 
   const titleModal =
     menuType === 'delegates'
-      ? t('deleghe.revocation_question', { delegate: name })
-      : t('deleghe.rejection_question', { delegator: name });
+      ? t('deleghe.revocation_question', { delegate: row?.name })
+      : t('deleghe.rejection_question', { delegator: row?.name });
   const subtitleModal =
     menuType === 'delegates'
       ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
-      : t('deleghe.subtitle_rejection', { delegator: name });
+      : t('deleghe.subtitle_rejection', { delegator: row?.name });
   const confirmLabel =
     menuType === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection');
 
@@ -64,11 +89,15 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
   };
 
   const handleOpenVerificationCodeModal = () => {
-    if (name && verificationCode) {
+    if (row?.name && row?.verificationCode) {
       setShowCodeModal(true);
       setAnchorEl(null);
       trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
     }
+  };
+
+  const handleCloseAcceptModal = () => {
+    setShowUpdateModal(false);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -91,36 +120,53 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
             message,
           })
         );
-        if (menuType === 'delegators') {
-          await dispatch(getSidemenuInformation());
+        if (onAction) {
+          onAction(id);
         }
       });
     onCloseModal();
   };
 
+  const handleUpdateError = useCallback(
+    (responseError: AppResponse) =>
+      handleCustomGenericError(responseError, t('deleghe.update-error'), dispatch),
+    []
+  );
+
   const handleConfirmationError = useCallback((responseError: AppResponse) => {
     const message =
       menuType === 'delegates' ? t('deleghe.revoke-error') : t('deleghe.reject-error');
-    if (Array.isArray(responseError.errors)) {
-      const managedErrors = (
-        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
-      ).map((key) => ServerResponseErrorCode[key]);
-      const error = responseError.errors[0];
-      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
-        dispatch(appStateActions.addError({ title: '', message }));
-        return false;
-      }
-      return true;
-    }
-    return true;
+    return handleCustomGenericError(responseError, message, dispatch);
   }, []);
+
+  const handleUpdate = (_code: Array<string>, groups: Array<{ id: string; name: string }>) => {
+    void dispatch(updateDelegation({ id, groups }))
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('deleghe.updated-successfully'),
+          })
+        );
+        if (onAction) {
+          onAction(groups);
+        }
+      });
+  };
 
   useEffect(() => {
     const action = menuType === 'delegates' ? 'revokeDelegation' : 'rejectDelegation';
     AppResponsePublisher.error.subscribe(action, handleConfirmationError);
+    if (menuType === 'delegators' && groups.length) {
+      AppResponsePublisher.error.subscribe('updateDelegation', handleUpdateError);
+    }
 
     return () => {
       AppResponsePublisher.error.unsubscribe(action, handleConfirmationError);
+      if (menuType === 'delegators' && groups.length) {
+        AppResponsePublisher.error.unsubscribe('updateDelegation', handleUpdateError);
+      }
     };
   }, [handleConfirmationError]);
 
@@ -147,11 +193,22 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
         </MenuItem>,
       ];
     }
-    return [
+    const menuItems = [
       <MenuItem key="reject" onClick={handleOpenModalClick}>
         {t('deleghe.reject')}
       </MenuItem>,
     ];
+
+    if (row?.status === DelegationStatus.ACTIVE && groups.length) {
+      // eslint-disable-next-line functional/immutable-data
+      menuItems.push(
+        <MenuItem key="update" onClick={() => setShowUpdateModal(true)}>
+          {t('deleghe.update')}
+        </MenuItem>
+      );
+    }
+
+    return menuItems;
   };
 
   return (
@@ -165,13 +222,24 @@ export const Menu: React.FC<Props> = ({ menuType, id, name, verificationCode, us
         onClose={onCloseModal}
         onCloseLabel={t('button.annulla', { ns: 'common' })}
       />
-
-      {verificationCode && menuType === 'delegates' && (
+      {menuType === 'delegators' &&
+        row?.status === DelegationStatus.ACTIVE &&
+        groups.length > 0 && (
+          <AcceptDelegationModal
+            isEditMode
+            name={(row?.name as string) || ''}
+            open={showUpdateModal}
+            currentGroups={row?.groups as Array<{ id: string; name: string }>}
+            handleCloseAcceptModal={handleCloseAcceptModal}
+            handleConfirm={handleUpdate}
+          />
+        )}
+      {row?.verificationCode && menuType === 'delegates' && (
         <CodeModal
           title={t('deleghe.show_code_title', { name })}
           subtitle={t('deleghe.show_code_subtitle')}
           open={showCodeModal}
-          initialValues={verificationCode.split('')}
+          initialValues={(row?.verificationCode as string).split('')}
           handleClose={handleCloseShowCodeModal}
           cancelCallback={handleCloseShowCodeModal}
           cancelLabel={t('deleghe.close')}
@@ -229,7 +297,11 @@ export const OrganizationsList: React.FC<{
   );
 };
 
-export const AcceptButton: React.FC<{ id: string; name: string }> = ({ id, name }) => {
+export const AcceptButton: React.FC<{ id: string; name: string; onAccept: () => void }> = ({
+  id,
+  name,
+  onAccept,
+}) => {
   const { t } = useTranslation(['deleghe']);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -252,24 +324,15 @@ export const AcceptButton: React.FC<{ id: string; name: string }> = ({ id, name 
             message: t('deleghe.accepted-successfully'),
           })
         );
-        await dispatch(getSidemenuInformation());
+        onAccept();
       });
   };
 
-  const handleAcceptanceError = useCallback((responseError: AppResponse) => {
-    if (Array.isArray(responseError.errors)) {
-      const managedErrors = (
-        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
-      ).map((key) => ServerResponseErrorCode[key]);
-      const error = responseError.errors[0];
-      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
-        dispatch(appStateActions.addError({ title: '', message: t('deleghe.accepted-error') }));
-        return false;
-      }
-      return true;
-    }
-    return true;
-  }, []);
+  const handleAcceptanceError = useCallback(
+    (responseError: AppResponse) =>
+      handleCustomGenericError(responseError, t('deleghe.accepted-error'), dispatch),
+    []
+  );
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptanceError);
