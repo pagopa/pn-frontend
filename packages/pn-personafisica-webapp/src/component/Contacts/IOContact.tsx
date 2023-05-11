@@ -94,11 +94,17 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     } else {
       return (
         <Alert
+          tabIndex={0}
           sx={{ mt: 4 }}
+          aria-label={
+            status === IOContactStatus.UNAVAILABLE
+              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
+              : t('io-contact.disclaimer-message', { ns: 'recapiti' })
+          }
           severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
           data-testid="appIO-contact-disclaimer"
         >
-          <Typography component="span" variant="body1">
+          <Typography component="span" variant="body1" role="banner">
             {status === IOContactStatus.UNAVAILABLE
               ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
               : t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}

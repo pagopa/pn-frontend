@@ -20,6 +20,8 @@ type Props = {
   sx?: SxProps<Theme>;
   /** Children */
   children?: ReactFragment;
+  /** a11y for component */
+  ariaLabel?: string;
 };
 
 /**
@@ -34,19 +36,43 @@ export default function TitleBox({
   variantTitle = 'h1',
   variantSubTitle = 'h5',
   sx,
+  ariaLabel,
   children,
 }: Props) {
   return (
-    <Grid container mt={mtGrid} sx={sx}>
-      {title && <Grid item xs={12} mb={mbTitle}>
-        <Typography variant={variantTitle}>{title}</Typography>
-      </Grid>}
-      {subTitle && <Grid item xs={12} mb={mbSubTitle}>
-        <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }} component={typeof subTitle !== "string" ? "div" : "p"}>
-          {subTitle}
-        </Typography>
-      </Grid>}
-      <Grid item xs={12}>
+    <Grid
+      id="page-header-container"
+      aria-orientation="horizontal"
+      tabIndex={0}
+      container
+      mt={mtGrid}
+      sx={sx}
+    >
+      {title && (
+        <Grid id="item" item xs={12} mb={mbTitle}>
+          <Typography
+            id="title-of-page"
+            role="heading"
+            aria-label={ariaLabel}
+            aria-selected="true"
+            variant={variantTitle}
+          >
+            {title}
+          </Typography>
+        </Grid>
+      )}
+      {subTitle && (
+        <Grid aria-orientation="horizontal" item xs={12} mb={mbSubTitle}>
+          <Typography
+            variant={variantSubTitle}
+            sx={{ fontSize: '18px' }}
+            component={typeof subTitle !== 'string' ? 'div' : 'p'}
+          >
+            {subTitle}
+          </Typography>
+        </Grid>
+      )}
+      <Grid aria-orientation="vertical" item xs={12}>
         <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
       </Grid>
     </Grid>

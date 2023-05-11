@@ -10,7 +10,7 @@ import { dataRegex } from '@pagopa-pn/pn-commons';
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import DigitalContactElem from './DigitalContactElem';
-import CancelVerificationModal from "./CancelVerificationModal";
+import CancelVerificationModal from './CancelVerificationModal';
 
 type Props = {
   recipientId: string;
@@ -77,7 +77,10 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
 
   return (
     <>
-      <CancelVerificationModal open={cancelDialogOpen} handleClose={() => setCancelDialogOpen(false)} />
+      <CancelVerificationModal
+        open={cancelDialogOpen}
+        handleClose={() => setCancelDialogOpen(false)}
+      />
       <DigitalContactsCard
         sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
         title={title}
@@ -85,10 +88,12 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         avatar={<IllusEmailValidation />}
       >
         <Box mt="20px">
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            digitalElemRef.current.editContact();
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              digitalElemRef.current.editContact();
+            }}
+          >
             <Typography mb={1} sx={{ fontWeight: 'bold' }}>
               {t('legal-contacts.pec-added', { ns: 'recapiti' })}
             </Typography>
@@ -127,9 +132,9 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 legalAddresses.length > 1
                   ? t('legal-contacts.block-remove-pec-message', { ns: 'recapiti' })
                   : t('legal-contacts.remove-pec-message', {
-                    value: formik.values.pec,
-                    ns: 'recapiti',
-                  })
+                      value: formik.values.pec,
+                      ns: 'recapiti',
+                    })
               }
               value={formik.values.pec}
               onConfirmClick={handleEditConfirm}
@@ -139,11 +144,11 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             />
           </form>
         </Box>
-        {verifyingAddress &&
+        {verifyingAddress && (
           <Box display="flex" flexDirection="row" mt={2.5}>
             <Box display="flex" flexDirection="row" mr={1}>
               <WatchLaterIcon fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" ml={1} >
+              <Typography fontWeight="bold" variant="body2" ml={1}>
                 {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
               </Typography>
             </Box>
@@ -151,9 +156,19 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               {t('button.annulla')}
             </ButtonNaked>
           </Box>
-        }
-        <Alert sx={{ mt: 4 }} severity="info">
-          <Typography component="span" variant="body1">
+        )}
+        <Alert
+          tabIndex={0}
+          aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
+          sx={{ mt: 4 }}
+          severity="info"
+        >
+          <Typography
+            role="banner"
+            component="span"
+            variant="body1"
+            data-testid="legal contact disclaimer"
+          >
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
           {/**

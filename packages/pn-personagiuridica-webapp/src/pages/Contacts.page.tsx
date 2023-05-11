@@ -1,11 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Box,
-  Link,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -24,7 +19,7 @@ const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
-  const organization =  useAppSelector((state: RootState) => state.userState.user.organization);
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const profileUrl = PROFILE(organization?.id);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
@@ -51,7 +46,12 @@ const Contacts = () => {
   const subtitle = (
     <>
       {t('subtitle-1', { ns: 'recapiti', recipient: organization.name })}
-      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage} sx={{ cursor: 'pointer' }}>
+      <Link
+        color="primary"
+        fontWeight={'bold'}
+        onClick={handleRedirectToProfilePage}
+        sx={{ cursor: 'pointer' }}
+      >
         {t('subtitle-link', { ns: 'recapiti' })}
       </Link>
       {t('subtitle-2', { ns: 'recapiti' })}
@@ -67,6 +67,7 @@ const Contacts = () => {
             title={t('title')}
             subTitle={subtitle}
             variantSubTitle={'body1'}
+            ariaLabel={t('title')}
           />
           <ApiErrorWrapper
             apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
