@@ -34,7 +34,7 @@ export class TimelineStepFactory {
         return new SendAnalogFlowStep();
       case TimelineCategory.SEND_ANALOG_PROGRESS:
         return new SendAnalogFlowStep();
-      case TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS:
+      case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS:
         return new SendAnalogFlowStep();
       // -------------------------------------------
         
