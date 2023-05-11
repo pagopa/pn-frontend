@@ -21,9 +21,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider, MenuItem,
-  Typography
-} from "@mui/material";
+  Divider,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
@@ -31,7 +32,7 @@ import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { NotificationColumn } from '../../models/Notifications';
 import FilterNotifications from './FilterNotifications';
-import NotificationMenu from "./NotificationMenu";
+import NotificationMenu from './NotificationMenu';
 
 type Props = {
   notifications: Array<Notification>;
@@ -52,7 +53,7 @@ const DesktopNotifications = ({
   notifications,
   sort,
   onChangeSorting,
-  isDelegatedPage = false
+  isDelegatedPage = false,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
@@ -68,7 +69,7 @@ const DesktopNotifications = ({
   };
 
   const handleShowGroup = (row: Item) => {
-    setOpenGroupModal({ recipient: row.recipients as string, group: row.group as string});
+    setOpenGroupModal({ recipient: row.recipients as string, group: row.group as string });
   };
 
   const columns: Array<Column<NotificationColumn>> = [
@@ -82,7 +83,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'sentAt',
@@ -95,7 +95,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'sender',
@@ -108,7 +107,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'subject',
@@ -120,7 +118,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'iun',
@@ -153,7 +150,10 @@ const DesktopNotifications = ({
           ></StatusTooltip>
         );
       },
-    }
+      onClick(row: Item) {
+        handleRowClick(row);
+      },
+    },
   ];
 
   if (isDelegatedPage) {
@@ -176,14 +176,13 @@ const DesktopNotifications = ({
       width: '18%',
       sortable: false,
       getCellLabel(_: string, row: Item) {
-        return <NotificationMenu>
-          <MenuItem
-            data-testid="buttonView"
-            onClick={() => handleShowGroup(row)}
-          >
-            {t('table.view-group')}
-          </MenuItem>
-        </NotificationMenu>;
+        return (
+          <NotificationMenu>
+            <MenuItem data-testid="buttonView" onClick={() => handleShowGroup(row)}>
+              {t('table.view-group')}
+            </MenuItem>
+          </NotificationMenu>
+        );
       },
     };
     // eslint-disable-next-line functional/immutable-data
@@ -237,39 +236,33 @@ const DesktopNotifications = ({
 
   return (
     <Fragment>
-      <FilterNotifications
-        ref={filterNotificationsRef}
-        showFilters={showFilters}
-      />
+      <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
         <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
       ) : (
         <EmptyState {...EmptyStateProps} />
       )}
-      {openGroupModal !== undefined &&
-        <Dialog
-          open
-          onClick={handleModalClose}
-         >
+      {openGroupModal !== undefined && (
+        <Dialog open onClick={handleModalClose}>
           <Box p={3}>
-            <DialogTitle>{t('table.group-modal.title', { recipient: openGroupModal.recipient })}</DialogTitle>
+            <DialogTitle>
+              {t('table.group-modal.title', { recipient: openGroupModal.recipient })}
+            </DialogTitle>
             <DialogContent>
-              <Typography my={2} mx={4} fontWeight='bold'>{openGroupModal.group}</Typography>
-              <Divider/>
+              <Typography my={2} mx={4} fontWeight="bold">
+                {openGroupModal.group}
+              </Typography>
+              <Divider />
               <Typography my={3}>{t('table.group-modal.body')}</Typography>
             </DialogContent>
             <DialogActions>
-              <Button
-                variant="outlined"
-                onClick={handleModalClose}
-                data-testid="codeCancelButton"
-              >
+              <Button variant="outlined" onClick={handleModalClose} data-testid="codeCancelButton">
                 {t('button.close', { ns: 'common' })}
               </Button>
             </DialogActions>
           </Box>
         </Dialog>
-      }
+      )}
     </Fragment>
   );
 };

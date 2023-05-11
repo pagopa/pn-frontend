@@ -10,7 +10,7 @@ import { RootState } from '../../redux/store';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 
-const messageIndex = Math.floor(Math.random() * 2) + 1;
+const messageIndex = Math.floor(Math.random() * 3) + 1;
 // const messages = [
 //   'detail.domicile_1',
 //   'detail.domicile_2',
@@ -51,7 +51,7 @@ const DomicileBanner = () => {
         sx={{ padding: '16px' }}
       >
         <Typography variant="body2" sx={{ overflow: 'hidden' }}>
-          {t(`detail.domicile_${messageIndex}`)}{' '}
+          {t(`detail.domicile_${messageIndex}`)}
           <Link role="button" fontWeight={'bold'} onClick={handleAddDomicile}>
             {t(`detail.add_domicile_${messageIndex}`)}
           </Link>
