@@ -305,6 +305,7 @@ const NotificationDetail = () => {
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
                     iun={notification.iun}
+                    paymentHistory={notification.paymentHistory}
                     senderDenomination={notification.senderDenomination}
                     subject={notification.subject}
                     notificationPayment={currentRecipient.payment}
