@@ -118,9 +118,12 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       if (userHasAdminPermissions) {
-        void dispatch(getDomicileInfo());
         void dispatch(getSidemenuInformation());
       }
+      if (userHasAdminPermissions && !isGroupAdmin) {
+        void dispatch(getDomicileInfo());
+      }
+
       void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
