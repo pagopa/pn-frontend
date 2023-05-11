@@ -15,7 +15,9 @@ export type TestScenario = {
   mockActionFn: jest.Mock;
 };
 
-export async function doPrepareTestScenario(): Promise<TestScenario> {
+
+
+export async function doPrepareTestScenario(isDelegatedPage: boolean = false): Promise<TestScenario> {
   const mockDispatchFn = jest.fn(() => ({
     then: () => Promise.resolve(),
   }));
@@ -57,7 +59,7 @@ export async function doPrepareTestScenario(): Promise<TestScenario> {
 
   // render component
   await act(async () => {
-    result = render(<Notifiche />);
+    result = render(<Notifiche isDelegatedPage={isDelegatedPage} />);
   });
 
   return { result, mockDispatchFn, mockActionFn };

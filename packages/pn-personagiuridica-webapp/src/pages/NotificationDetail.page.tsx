@@ -250,7 +250,7 @@ const NotificationDetail = () => {
   );
 
   const properBreadcrumb = useMemo(() => {
-    const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+    const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
     return (
       <PnBreadcrumb
         showBackAction={!fromQrCode}

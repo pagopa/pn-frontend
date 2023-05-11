@@ -106,6 +106,7 @@ const SessionGuard = () => {
   const { isClosedSession, isForbiddenUser } = useAppSelector(
     (state: RootState) => state.userState
   );
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
@@ -174,7 +175,11 @@ const SessionGuard = () => {
           // ----------------------
           // Andrea Cimini, 2023.01.27
           // ----------------------
-          navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
+          if(!isGroupAdmin) {
+            navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
+          } else {
+            navigate({ pathname: routes.NOTIFICHE_DELEGATO, search: location.search }, { replace: true });
+          }
         } else {
           const hashAsObject = new URLSearchParams(location.hash);
           hashAsObject.delete('#selfCareToken');
