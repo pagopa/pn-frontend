@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { render, fireEvent } from '../../../__test__/test-utils';
+import {fireEvent, render} from '../../../__test__/test-utils';
 import DomicileBanner from '../DomicileBanner';
+import {DigitalAddress, LegalChannelType} from "../../../models/contacts";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -15,6 +16,19 @@ jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
   useNavigate: () => mockNavigateFn,
 }));
+
+const getReduxInitialState = (isGroupAdmin: boolean, domicileBannerOpened: boolean = true) => ({
+  userState: {
+    user: {
+      isGroupAdmin
+    }
+  },
+  generalInfoState: {
+    pendingDelegators: 0,
+    legalDomicile: [],
+    domicileBannerOpened
+  }
+});
 
 describe('DomicileBanner component', () => {
   it('renders the component', () => {
@@ -41,5 +55,20 @@ describe('DomicileBanner component', () => {
     fireEvent.click(closeButton);
     const dialog = result.queryByTestId('addDomicileBanner');
     expect(dialog).toBeNull();
+  });
+
+  it('banner is open with isGroupAdmin as false', () => {
+    const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(false) });
+    expect(result.queryByTestId('CloseIcon')).toBeInTheDocument();
+  });
+
+  it('banner is closed with isGroupAdmin as true', () => {
+    const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(true) });
+    expect(result.queryByTestId('CloseIcon')).toBeNull();
+  });
+
+  it('banner is closed with domicileBannerOpened as false', () => {
+    const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(false, false) });
+    expect(result.queryByTestId('CloseIcon')).toBeNull();
   });
 });

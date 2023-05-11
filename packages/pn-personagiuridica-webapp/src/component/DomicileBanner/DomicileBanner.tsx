@@ -40,7 +40,7 @@ const DomicileBanner = () => {
     if ((legalDomicile && legalDomicile.length > 0) || isGroupAdmin ) {
       dispatch(closeDomicileBanner());
     }
-  }, [legalDomicile]);
+  }, [legalDomicile, isGroupAdmin]);
 
   return open ? (
     <Box mb={2.5}>
