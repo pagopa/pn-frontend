@@ -46,7 +46,6 @@ const API_NOTIFICATIONS_TAX_ID_PARAMETER = 'taxId';
 const API_NOTIFICATIONS_NOTICE_CODE_PARAMETER = 'noticeCode';
 const API_NOTIFICATIONS_OTHER_DOCUMENT_TYPE = 'documentType';
 
-
 // Paths
 const API_NOTIFICATIONS_RECEIVED_PATH = `${API_NOTIFICATIONS_BASE}/${API_NOTIFICATIONS_RECEIVED}`;
 const API_NOTIFICATIONS_DELEGATOR_PATH = `${API_NOTIFICATIONS_BASE}/${API_NOTIFICATIONS_RECEIVED}/${API_NOTIFICATIONS_DELEGATED}`;
@@ -75,7 +74,7 @@ export function NOTIFICATIONS_LIST(params: GetNotificationsParams, delegated?: b
       [API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER]: params.nextPagesKey || '',
       [API_NOTIFICATIONS_IUN_MATCH_PARAMETER]: params.iunMatch || '',
       [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: params.mandateId || '',
-      [API_NOTIFICATIONS_GROUP_PARAMETER]: params.groups ? params.groups : '',
+      [API_NOTIFICATIONS_GROUP_PARAMETER]: params.group ? params.group : '',
     },
   });
 }
@@ -118,14 +117,17 @@ export function NOTIFICATION_DETAIL_DOCUMENTS(
   });
 }
 
-export function NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun: string, otherDocument: NotificationDetailOtherDocument) {
+export function NOTIFICATION_DETAIL_OTHER_DOCUMENTS(
+  iun: string,
+  otherDocument: NotificationDetailOtherDocument
+) {
   return compileRoute({
     prefix: API_DELIVERY_PUSH_PREFIX,
     path: API_NOTIFICATION_DETAIL_OTHER_DOCUMENT_PATH,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
-      [API_NOTIFICATIONS_OTHER_DOCUMENT_TYPE]: otherDocument.documentType
-    }
+      [API_NOTIFICATIONS_OTHER_DOCUMENT_TYPE]: otherDocument.documentType,
+    },
   });
 }
 

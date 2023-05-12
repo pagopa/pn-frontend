@@ -56,7 +56,9 @@ describe('Notifiche Page - with notifications', () => {
 
   it('renders notifiche page', () => {
     expect(screen.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
-    expect(screen.getAllByRole('heading')[0]).not.toHaveTextContent(/title-delegated-notifications/i);
+    expect(screen.getAllByRole('heading')[0]).not.toHaveTextContent(
+      /title-delegated-notifications/i
+    );
     const filterForm = result?.container.querySelector('form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result?.container.querySelector('table');
@@ -75,6 +77,8 @@ describe('Notifiche Page - with notifications', () => {
       status: '',
       subjectRegExp: '',
       size: 10,
+      group: undefined,
+      nextPagesKey: undefined,
     });
   });
 
@@ -198,6 +202,8 @@ describe('Notifiche Delegate Page - with delegated notifications', () => {
       status: '',
       subjectRegExp: '',
       size: 10,
+      group: undefined,
+      nextPagesKey: undefined,
     });
   });
 });

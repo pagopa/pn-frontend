@@ -27,5 +27,5 @@ export interface GetNotificationsParams {
   size?: number;
   nextPagesKey?: string;
   iunMatch?: string;
-  groups?: Array<string>;
+  group?: string;
 }

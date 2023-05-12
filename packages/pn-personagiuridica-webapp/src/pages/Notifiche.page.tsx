@@ -15,13 +15,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
-import { setPagination, setSorting } from '../redux/dashboard/reducers';
+import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import GroupSelector from '../component/Notifications/GroupSelector';
 import { PNRole } from '../redux/auth/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
@@ -42,10 +43,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const role = organization?.roles ? organization?.roles[0] : null;
 
-  const userHasAdminPermissions = useHasPermissions(
-    role ? [role.role] : [],
-    [PNRole.ADMIN]
-  );
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+
+  const organizationGroup = organization.groups ? organization.groups[0] : undefined;
+  const delegationGroup = filters.group ? filters.group : organizationGroup;
+  const group = isDelegatedPage ? delegationGroup : undefined;
 
   const isMobile = useIsMobile();
   const pageTitle = !isDelegatedPage
@@ -78,14 +80,14 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-      groups: isDelegatedPage ? organization.groups : undefined,
-      isDelegatedPage
+      group,
+      isDelegatedPage,
     };
 
     void dispatch(
       getReceivedNotifications({
         ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
+        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
       })
     ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
@@ -105,6 +107,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
+  const handleGroupSelction = (id: string) => {
+    dispatch(setNotificationFilters({ ...filters, group: id }));
+  };
+
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
@@ -119,6 +125,13 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
           subTitle={pageSubTitle}
           variantSubTitle={'body1'}
           mbTitle={isMobile ? 3 : undefined}
+          titleButton={
+            isDelegatedPage &&
+            organization.groups &&
+            organization.groups?.length > 0 && (
+              <GroupSelector currentGroup={group || ''} onGroupSelection={handleGroupSelction} />
+            )
+          }
         />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
