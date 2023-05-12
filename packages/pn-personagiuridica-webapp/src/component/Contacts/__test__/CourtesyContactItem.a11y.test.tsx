@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { act, RenderResult } from '@testing-library/react';
-import { axe, render } from '../../../__test__/test-utils';
+
+import { axe, render, act, RenderResult } from '../../../__test__/test-utils';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -114,5 +114,4 @@ describe('CourtesyContactItem component - accessibility tests', () => {
       expect(results).toHaveNoViolations();
     }
   });
-  
 });

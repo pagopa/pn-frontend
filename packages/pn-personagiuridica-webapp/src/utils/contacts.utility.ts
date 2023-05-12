@@ -11,8 +11,6 @@ export const getContactEventType = (type: CourtesyChannelType | LegalChannelType
   switch (type) {
     case CourtesyChannelType.EMAIL:
       return TrackEventType.CONTACT_MAIL_COURTESY;
-    case CourtesyChannelType.IOMSG:
-      return TrackEventType.CONTACT_IOAPP_COURTESY;
     case CourtesyChannelType.SMS:
       return TrackEventType.CONTACT_TEL_COURTESY;
     case LegalChannelType.PEC:
