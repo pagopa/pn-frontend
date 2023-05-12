@@ -12,11 +12,7 @@
     "iun": "Codice IUN",
     "status": "Stato",
     "show-detail": "Vedi dettaglio",
-    "view-group": "Visualizza gruppo associato",
-    "group-modal": {
-      "title": "Gruppo associato alle notifiche di {{recipient}}",
-      "body": "Se hai bisogno di modificarlo, puoi farlo tramite la funzione di modifica all’interno della sezione “Deleghe”."
-    }
+    "group-selector-title": "Menu selezione gruppo"
   },
   "filters": {
     "iun": "Inserisci il Codice IUN",
