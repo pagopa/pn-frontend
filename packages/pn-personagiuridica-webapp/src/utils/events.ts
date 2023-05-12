@@ -58,10 +58,6 @@ export const events: EventsType = {
     category: 'contact',
     action: 'edit legal contact',
   },
-  [TrackEventType.CONTACT_IOAPP_COURTESY]: {
-    category: 'contact',
-    action: 'edit ioapp courtesy contact',
-  },
   [TrackEventType.CONTACT_MAIL_COURTESY]: {
     category: 'contact',
     action: 'edit email courtesy contact',
