@@ -4,7 +4,7 @@
     "SELFCARE_BASE_URL": "https://uat.selfcare.pagopa.it",
     "API_BASE_URL": "https://webapi.test.notifichedigitali.it/",
     "DISABLE_INACTIVITY_HANDLER": true,
-    "OT_DOMAIN_ID": "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test",
+    "OT_DOMAIN_ID": "62ebb6a0-1a65-48a4-8ca0-837de03b1199",
     "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
     "ONE_TRUST_DRAFT_MODE": true,
     "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",

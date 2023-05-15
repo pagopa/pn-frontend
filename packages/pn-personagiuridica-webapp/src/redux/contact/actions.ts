@@ -87,33 +87,6 @@ export const deleteCourtesyAddress = createAsyncThunk<string, DeleteDigitalAddre
   }
 );
 
-export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
-  'enableIOAddress',
-  async (recipientId: string, { rejectWithValue }) => {
-    try {
-      return await ContactsApi.createOrUpdateCourtesyAddress(
-        recipientId,
-        'default',
-        CourtesyChannelType.IOMSG,
-        { value: 'APPIO', verificationCode: '00000' }
-      );
-    } catch (e: any) {
-      return rejectWithValue(e);
-    }
-  }
-);
-
-export const disableIOAddress = createAsyncThunk<string, string>(
-  'disableIOAddress',
-  async (_params: string, { rejectWithValue }) => {
-    try {
-      return await ContactsApi.deleteCourtesyAddress('default', CourtesyChannelType.IOMSG);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
-);
-
 export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterPartiesParams | null>(
   CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
   async (payload, { rejectWithValue }) => {

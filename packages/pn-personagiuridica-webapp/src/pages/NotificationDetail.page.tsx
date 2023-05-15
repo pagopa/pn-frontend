@@ -250,7 +250,7 @@ const NotificationDetail = () => {
   );
 
   const properBreadcrumb = useMemo(() => {
-    const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+    const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
     return (
       <PnBreadcrumb
         showBackAction={!fromQrCode}
@@ -305,6 +305,7 @@ const NotificationDetail = () => {
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
                     iun={notification.iun}
+                    paymentHistory={notification.paymentHistory}
                     senderDenomination={notification.senderDenomination}
                     subject={notification.subject}
                     notificationPayment={currentRecipient.payment}

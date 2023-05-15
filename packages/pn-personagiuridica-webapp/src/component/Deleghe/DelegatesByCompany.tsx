@@ -24,6 +24,9 @@ const DelegatesByCompany = () => {
   const delegatesByCompany = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+  const delegators = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegators
+  );
   const userLogged = useAppSelector((state: RootState) => state.userState.user);
 
   const rows: Array<Item> = delegationToItem(delegatesByCompany);
@@ -122,9 +125,9 @@ const DelegatesByCompany = () => {
           <Menu
             menuType={'delegates'}
             id={value}
-            verificationCode={data.verificationCode as string}
-            name={data.name as string}
+            row={data}
             userLogged={userLogged}
+            onAction={handleRewoke}
           />
         );
       },
@@ -134,6 +137,15 @@ const DelegatesByCompany = () => {
       },
     },
   ];
+
+  const handleRewoke = (mandateId: string) => {
+    // because a PG can delegate itself, we must check if the rewoked delegation is in delegates object and redo the delegators api call
+    const isSelfMandate =
+      delegators.findIndex((delegator) => delegator.mandateId === mandateId) > -1;
+    if (isSelfMandate) {
+      getDelegatorsData();
+    }
+  };
 
   return (
     <>
@@ -187,3 +199,6 @@ const DelegatesByCompany = () => {
 };
 
 export default DelegatesByCompany;
+function getDelegatorsData() {
+  throw new Error('Function not implemented.');
+}

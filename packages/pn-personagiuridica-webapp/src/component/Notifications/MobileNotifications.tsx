@@ -18,14 +18,13 @@ import {
   MobileNotificationsSort,
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import {ButtonNaked, Tag} from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { NotificationColumn } from '../../models/Notifications';
-import { Delegator } from '../../models/Deleghe';
 
 import FilterNotifications from './FilterNotifications';
 
@@ -36,7 +35,7 @@ type Props = {
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort<NotificationColumn>) => void;
   /** Delegator */
-  currentDelegator?: Delegator;
+  isDelegatedPage?: boolean;
 };
 
 /**
@@ -51,10 +50,13 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDelegator }: Props) => {
+const MobileNotifications = ({ notifications, sort, onChangeSorting, isDelegatedPage = false }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const filterNotificationsRef = useRef({
+    filtersApplied: false,
+    cleanFilters: () => void 0
+  });
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
@@ -133,6 +135,19 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     },
   ];
 
+  if (isDelegatedPage) {
+    const recipientField = {
+        id: 'group',
+        label: t('table.gruppi'),
+        getLabel(value: string) {
+          return <Tag value={value} data-testid={`groupChip-${value}`} />;
+        },
+      };
+
+    // eslint-disable-next-line functional/immutable-data
+    cardBody.splice(3, 0, recipientField);
+  }
+
   const cardData: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: i.toString(),
@@ -186,9 +201,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
-    if (currentDelegator) {
+    if (isDelegatedPage) {
       navigate(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, row.mandateId as string)
       );
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
@@ -218,7 +233,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
           <FilterNotifications
             ref={filterNotificationsRef}
             showFilters={showFilters}
-            currentDelegator={currentDelegator}
           />
         </Grid>
         <Grid item xs={6} textAlign="right">

@@ -1,7 +1,7 @@
 {
     "API_BASE_URL": "https://webapi.uat.notifichedigitali.it/",
     "DISABLE_INACTIVITY_HANDLER": true,
-    "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
+    "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
     "ONE_TRUST_DRAFT_MODE": true,
     "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
     "ONE_TRUST_TOS": "112fd95d-6e88-461b-b8fc-534ee4277e96",

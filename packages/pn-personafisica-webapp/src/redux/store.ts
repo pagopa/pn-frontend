@@ -25,7 +25,7 @@ export const appReducers = {
   generalInfoState: generalInfoSlice.reducer
 };
 
-const createStore = (logReduxActions?: boolean) =>{
+const createStore = (logReduxActions?: boolean) => {
   const mustLogActions = logReduxActions ?? getConfiguration().LOG_REDUX_ACTIONS;
   const additionalMiddlewares = [mustLogActions ? logger : undefined, trackingMiddleware];
   return configureStore({

@@ -128,4 +128,8 @@ export const initialState = {
   },
   groups: [],
   delegatorsNames: [],
+  filters: {
+    size: 10,
+    page: 0,
+  },
 };

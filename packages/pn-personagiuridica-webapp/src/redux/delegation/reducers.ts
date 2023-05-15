@@ -1,6 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Delegation, DelegationStatus, DelegatorsNames } from '../../models/Deleghe';
+import {
+  Delegation,
+  DelegationStatus,
+  DelegatorsFormFilters,
+  DelegatorsNames,
+} from '../../models/Deleghe';
 import { Groups } from '../../models/groups';
 import {
   getDelegatesByCompany,
@@ -10,6 +15,7 @@ import {
   revokeDelegation,
   getGroups,
   getDelegatorsNames,
+  updateDelegation,
 } from './actions';
 
 const initialState = {
@@ -23,6 +29,10 @@ const initialState = {
   },
   groups: [] as Array<Groups>,
   delegatorsNames: [] as Array<DelegatorsNames>,
+  filters: {
+    size: 10,
+    page: 0,
+  } as DelegatorsFormFilters,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -30,6 +40,9 @@ const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState,
   reducers: {
+    setFilters: (state, action: PayloadAction<DelegatorsFormFilters>) => {
+      state.filters = action.payload;
+    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -57,6 +70,10 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = state.delegations.delegators.filter(
         (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
+      // because a PG can delegate itself, we must check if the rejected delegation is in delegates object and remove it
+      state.delegations.delegates = state.delegations.delegates.filter(
+        (delegate) => delegate.mandateId !== action.payload.id
+      );
     });
     builder.addCase(getGroups.fulfilled, (state, action) => {
       state.groups = action.payload;
@@ -64,9 +81,16 @@ const delegationsSlice = createSlice({
     builder.addCase(getDelegatorsNames.fulfilled, (state, action) => {
       state.delegatorsNames = action.payload;
     });
+    builder.addCase(updateDelegation.fulfilled, (state, action) => {
+      state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
+        delegator.mandateId === action.payload.id
+          ? { ...delegator, groups: action.payload.groups }
+          : delegator
+      );
+    });
   },
 });
 
-export const { resetState } = delegationsSlice.actions;
+export const { resetState, setFilters } = delegationsSlice.actions;
 
 export default delegationsSlice;

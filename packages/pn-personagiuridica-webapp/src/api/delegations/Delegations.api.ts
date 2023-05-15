@@ -22,6 +22,7 @@ import {
   DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
+  UPDATE_DELEGATION,
 } from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
@@ -135,6 +136,7 @@ export const DelegationsApi = {
    * @param status status of the delegation
    * @returns {Promise<{value: number}>}
    */
+
   countDelegators: (status: DelegationStatus): Promise<{ value: number }> =>
     apiClient
       .get<{ value: number }>(COUNT_DELEGATORS(status))
@@ -167,5 +169,28 @@ export const DelegationsApi = {
           }, [] as Array<DelegatorsNames>);
         }
         return [];
+      }),
+
+  /**
+   * Update a delegation created for the user
+   * @param {string} id
+   * @param data
+   * @return {Promise<{id: string}>}
+   */
+  updateDelegation: (
+    id: string,
+    groups: Array<{ id: string; name: string }>
+  ): Promise<AcceptDelegationResponse> =>
+    apiClient
+      .patch<AcceptDelegationResponse>(UPDATE_DELEGATION(id), {
+        groups: groups.map((g) => g.id),
+      })
+      .then((response: AxiosResponse<AcceptDelegationResponse>) => {
+        if (response.status === 204) {
+          return { ...response.data, id, groups };
+        }
+        return {
+          id: '-1',
+        } as AcceptDelegationResponse;
       }),
 };

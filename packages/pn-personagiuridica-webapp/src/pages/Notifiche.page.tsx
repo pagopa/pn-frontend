@@ -15,19 +15,24 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
-import { setPagination, setSorting } from '../redux/dashboard/reducers';
+import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import GroupSelector from '../component/Notifications/GroupSelector';
 import { PNRole } from '../redux/auth/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 import { NotificationColumn } from '../models/Notifications';
 
-const Notifiche = () => {
+type Props = {
+  isDelegatedPage?: boolean;
+};
+
+const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);
@@ -40,10 +45,19 @@ const Notifiche = () => {
 
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
-  const isMobile = useIsMobile();
-  const pageTitle = t('title', { recipient: organization.name });
+  const organizationGroup = organization.groups ? organization.groups[0] : undefined;
+  const delegationGroup = filters.group ? filters.group : organizationGroup;
+  const group = isDelegatedPage ? delegationGroup : undefined;
 
-  const pageSubTitle = t('subtitle', { recipient: organization.name });
+  const isMobile = useIsMobile();
+  const pageTitle = !isDelegatedPage
+    ? t('title', { recipient: organization.name })
+    : t('title-delegated-notifications', { recipient: organization.name });
+
+  const pageSubTitle = !isDelegatedPage
+    ? t('subtitle', { recipient: organization.name })
+    : t('subtitle-delegated-notifications', { recipient: organization.name });
+
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -66,6 +80,8 @@ const Notifiche = () => {
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
+      group,
+      isDelegatedPage,
     };
 
     void dispatch(
@@ -91,6 +107,10 @@ const Notifiche = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
+  const handleGroupSelction = (id: string) => {
+    dispatch(setNotificationFilters({ ...filters, group: id }));
+  };
+
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
@@ -105,6 +125,13 @@ const Notifiche = () => {
           subTitle={pageSubTitle}
           variantSubTitle={'body1'}
           mbTitle={isMobile ? 3 : undefined}
+          titleButton={
+            isDelegatedPage &&
+            organization.groups &&
+            organization.groups?.length > 0 && (
+              <GroupSelector currentGroup={group || ''} onGroupSelection={handleGroupSelction} />
+            )
+          }
         />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
@@ -115,12 +142,14 @@ const Notifiche = () => {
               notifications={notifications}
               sort={sort}
               onChangeSorting={handleChangeSorting}
+              isDelegatedPage={isDelegatedPage}
             />
           ) : (
             <DesktopNotifications
               notifications={notifications}
               sort={sort}
               onChangeSorting={handleChangeSorting}
+              isDelegatedPage={isDelegatedPage}
             />
           )}
           {notifications.length > 0 && (

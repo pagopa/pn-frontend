@@ -280,7 +280,7 @@ describe('NotificationDetail Page', () => {
       notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', false)
     );
     const breadcrumbLinkComponent = screen.queryByTestId("mock-breadcrumb-link");
-    expect(breadcrumbLinkComponent).toHaveTextContent(new RegExp(`^${routes.NOTIFICHE}$`));
+    expect(breadcrumbLinkComponent).toHaveTextContent(routes.NOTIFICHE);
   });
 
   it("'notifiche' link for mandate", async () => {
@@ -290,6 +290,6 @@ describe('NotificationDetail Page', () => {
       notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', true), fixedMandateId
     );
     const breadcrumbLinkComponent = screen.queryByTestId("mock-breadcrumb-link");
-    expect(breadcrumbLinkComponent).toHaveTextContent(new RegExp(`^${routes.GET_NOTIFICHE_DELEGATO_PATH(fixedMandateId)}$`));
+    expect(breadcrumbLinkComponent).toHaveTextContent(routes.NOTIFICHE_DELEGATO);
   });
 });

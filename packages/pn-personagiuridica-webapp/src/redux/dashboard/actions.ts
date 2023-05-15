@@ -9,7 +9,10 @@ export enum DASHBOARD_ACTIONS  {
 
 export const getReceivedNotifications = createAsyncThunk<
   GetNotificationsResponse,
-  GetNotificationsParams
+  GetNotificationsParams & { isDelegatedPage: boolean }
 >(DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS, 
-  performThunkAction((params: GetNotificationsParams) => NotificationsApi.getReceivedNotifications(params))
+  performThunkAction(
+    (params: GetNotificationsParams & { isDelegatedPage: boolean }) =>
+      NotificationsApi.getReceivedNotifications(params)
+  ),
 );

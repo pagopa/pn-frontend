@@ -157,9 +157,19 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             </ButtonNaked>
           </Box>
         )}
-        <Alert sx={{ mt: 4 }} severity="info">
-          <Typography component="span" variant="body1">
-            {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
+        <Alert
+          tabIndex={0}
+          aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
+          sx={{ mt: 4 }}
+          severity="info"
+        >
+          <Typography
+            role="banner"
+            component="span"
+            variant="body1"
+            data-testid="legal contact disclaimer"
+          >
+            {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
           {/**
              * Waiting for FAQs

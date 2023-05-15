@@ -4,8 +4,14 @@ import {
   LegalChannelType,
   CourtesyChannelType,
   IOAllowedValues,
-} from './../../../models/contacts';
-import { ContactsApi } from '../../../api/contacts/Contacts.api';
+} from '../../../models/contacts';
+import { apiClient } from '../../../api/apiClients';
+import {
+  CONTACTS_LIST,
+  COURTESY_CONTACT,
+  LEGAL_CONTACT,
+} from '../../../api/contacts/contacts.routes';
+import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
@@ -38,18 +44,24 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to fetch the digital addresses list', async () => {
-    const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
-    apiSpy.mockResolvedValue(digitalAddresses);
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, digitalAddresses);
     const action = await store.dispatch(getDigitalAddresses('mocked-recipientId'));
     const payload = action.payload as DigitalAddresses;
     expect(action.type).toBe('getDigitalAddresses/fulfilled');
     expect(payload).toEqual(digitalAddresses);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to update the digital address with legal value (email to verify)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
-    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateLegalAddress');
-    apiSpy.mockResolvedValue(void 0);
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
+      200,
+      { value: updatedDigitalAddress.value }
+    );
     const action = await store.dispatch(
       createOrUpdateLegalAddress({
         recipientId: updatedDigitalAddress.recipientId,
@@ -60,13 +72,49 @@ describe('Contacts redux state tests', () => {
     );
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
-    expect(payload).toEqual(void 0);
+    expect(payload).toEqual(undefined);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('Should be able to update the digital address with legal value (email to validate)', async () => {
+    const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
+      200,
+      { value: updatedDigitalAddress.value },
+      { result: 'PEC_VALIDATION_REQUIRED' }
+    );
+    const action = await store.dispatch(
+      createOrUpdateLegalAddress({
+        recipientId: updatedDigitalAddress.recipientId,
+        senderId: updatedDigitalAddress.senderId,
+        channelType: updatedDigitalAddress.channelType as LegalChannelType,
+        value: updatedDigitalAddress.value,
+      })
+    );
+    const payload = action.payload as DigitalAddress;
+    expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
+    expect(payload).toEqual({
+      ...digitalAddresses.legal[0],
+      value: '',
+      pecValid: false,
+    });
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to update the digital address with legal value (email verified)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
-    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateLegalAddress');
-    apiSpy.mockResolvedValue(updatedDigitalAddress);
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
+      204,
+      { value: updatedDigitalAddress.value }
+    );
     const action = await store.dispatch(
       createOrUpdateLegalAddress({
         recipientId: updatedDigitalAddress.recipientId,
@@ -77,12 +125,18 @@ describe('Contacts redux state tests', () => {
     );
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
-    expect(payload).toEqual(updatedDigitalAddress);
+    expect(payload).toEqual({ ...updatedDigitalAddress, pecValid: true, senderName: undefined });
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to remove the digital address with legal value', async () => {
-    const apiSpy = jest.spyOn(ContactsApi, 'deleteLegalAddress');
-    apiSpy.mockResolvedValue(digitalAddresses.legal[0].senderId);
+    const mock = mockApi(
+      apiClient,
+      'DELETE',
+      LEGAL_CONTACT(digitalAddresses.legal[0].senderId, LegalChannelType.PEC),
+      204
+    );
     const action = await store.dispatch(
       deleteLegalAddress({
         recipientId: digitalAddresses.legal[0].recipientId,
@@ -93,12 +147,19 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('deleteLegalAddress/fulfilled');
     expect(payload).toEqual(digitalAddresses.legal[0].senderId);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
-    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateCourtesyAddress');
-    apiSpy.mockResolvedValue(void 0);
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL),
+      200,
+      { value: updatedDigitalAddress.value }
+    );
     const action = await store.dispatch(
       createOrUpdateCourtesyAddress({
         recipientId: updatedDigitalAddress.recipientId,
@@ -109,13 +170,20 @@ describe('Contacts redux state tests', () => {
     );
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('createOrUpdateCourtesyAddress/fulfilled');
-    expect(payload).toEqual(void 0);
+    expect(payload).toEqual(undefined);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
-    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateCourtesyAddress');
-    apiSpy.mockResolvedValue(updatedDigitalAddress);
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL),
+      204,
+      { value: updatedDigitalAddress.value }
+    );
     const action = await store.dispatch(
       createOrUpdateCourtesyAddress({
         recipientId: updatedDigitalAddress.recipientId,
@@ -127,11 +195,17 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('createOrUpdateCourtesyAddress/fulfilled');
     expect(payload).toEqual(updatedDigitalAddress);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to remove the digital address with courtesy value', async () => {
-    const apiSpy = jest.spyOn(ContactsApi, 'deleteCourtesyAddress');
-    apiSpy.mockResolvedValue(digitalAddresses.courtesy[0].senderId);
+    const mock = mockApi(
+      apiClient,
+      'DELETE',
+      COURTESY_CONTACT(digitalAddresses.courtesy[0].senderId, CourtesyChannelType.EMAIL),
+      204
+    );
     const action = await store.dispatch(
       deleteCourtesyAddress({
         recipientId: digitalAddresses.courtesy[0].recipientId,
@@ -142,26 +216,42 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('deleteCourtesyAddress/fulfilled');
     expect(payload).toEqual(digitalAddresses.courtesy[0].senderId);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to enable App IO', async () => {
     const ioAddress = { ...digitalAddresses.courtesy[1], value: IOAllowedValues.ENABLED };
-    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateCourtesyAddress');
-    apiSpy.mockResolvedValue(ioAddress);
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      COURTESY_CONTACT(ioAddress.senderId, CourtesyChannelType.IOMSG),
+      204,
+      { value: 'APPIO', verificationCode: '00000' },
+      ioAddress
+    );
     const action = await store.dispatch(enableIOAddress(ioAddress.recipientId));
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('enableIOAddress/fulfilled');
-    expect(payload).toEqual(ioAddress);
+    expect(payload).toEqual({ ...ioAddress, value: 'APPIO', senderName: undefined });
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to disable App IO', async () => {
     const ioAddress = digitalAddresses.courtesy[1];
-    const apiSpy = jest.spyOn(ContactsApi, 'deleteCourtesyAddress');
-    apiSpy.mockResolvedValue(ioAddress.senderId);
+    const mock = mockApi(
+      apiClient,
+      'DELETE',
+      COURTESY_CONTACT(ioAddress.senderId, CourtesyChannelType.IOMSG),
+      204
+    );
     const action = await store.dispatch(disableIOAddress(ioAddress.recipientId));
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('disableIOAddress/fulfilled');
     expect(payload).toEqual(ioAddress.senderId);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to reset state', () => {
@@ -179,8 +269,14 @@ describe('Contacts redux state tests', () => {
       value: 'mario.rossi@mail.it',
       senderId: 'default',
     };
-    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateLegalAddress');
-    apiSpy.mockResolvedValue(updatedDigitalAddress);
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
+      200,
+      { value: updatedDigitalAddress.value },
+      { result: 'PEC_VALIDATION_REQUIRED' }
+    );
     await store.dispatch(
       createOrUpdateLegalAddress({
         recipientId: updatedDigitalAddress.recipientId,
@@ -195,5 +291,7 @@ describe('Contacts redux state tests', () => {
     expect(payload).toEqual(undefined);
     const state = store.getState().contactsState.digitalAddresses.legal;
     expect(state).toEqual([]);
+    mock.reset();
+    mock.restore();
   });
 });

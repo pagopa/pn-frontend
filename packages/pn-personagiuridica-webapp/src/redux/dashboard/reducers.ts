@@ -5,7 +5,7 @@ import {
   today,
   Notification,
   formatToTimezoneString,
-  Sort
+  Sort,
 } from '@pagopa-pn/pn-commons';
 import { NotificationColumn } from '../../models/Notifications';
 
@@ -35,7 +35,7 @@ const dashboardSlice = createSlice({
     } as Sort<NotificationColumn>,
   },
   reducers: {
-    setPagination: (state, action: PayloadAction<{page: number; size: number}>) => {
+    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
       if (state.pagination.size !== action.payload.size) {
         // reset pagination
         state.pagination.nextPagesKey = [];

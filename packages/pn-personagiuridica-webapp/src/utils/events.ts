@@ -4,7 +4,6 @@ export enum TrackEventType {
   APP_CRASH = 'APP_CRASH',
   APP_UNLOAD = 'APP_UNLOAD',
   CONTACT_LEGAL_CONTACT = 'CONTACT_LEGAL_CONTACT',
-  CONTACT_IOAPP_COURTESY = 'CONTACT_IOAPP_COURTESY',
   CONTACT_MAIL_COURTESY = 'CONTACT_MAIL_COURTESY',
   CONTACT_SPECIAL_CONTACTS = 'CONTACT_SPECIAL_CONTACTS',
   CONTACT_TEL_COURTESY = 'CONTACT_TEL_COURTESY',
@@ -43,112 +42,108 @@ export enum TrackEventType {
   USER_NAV_ITEM = 'USER_NAV_ITEM',
   USER_PRODUCT_SWITCH = 'USER_PRODUCT_SWITCH',
   USER_VIEW_CONTACTS_PROFILE = 'USER_VIEW_CONTACTS_PROFILE',
-  USER_VIEW_PROFILE = 'USER_VIEW_PROFILE'
+  USER_VIEW_PROFILE = 'USER_VIEW_PROFILE',
 }
 
 export const events: EventsType = {
   [TrackEventType.APP_CRASH]: {
     category: 'app',
-    action: 'app crashed'
+    action: 'app crashed',
   },
   [TrackEventType.APP_UNLOAD]: {
     category: 'app',
-    action: 'app unloaded'
+    action: 'app unloaded',
   },
   [TrackEventType.CONTACT_LEGAL_CONTACT]: {
     category: 'contact',
-    action: 'edit legal contact'
-  },
-  [TrackEventType.CONTACT_IOAPP_COURTESY]: {
-    category: 'contact',
-    action: 'edit ioapp courtesy contact'
+    action: 'edit legal contact',
   },
   [TrackEventType.CONTACT_MAIL_COURTESY]: {
     category: 'contact',
-    action: 'edit email courtesy contact'
+    action: 'edit email courtesy contact',
   },
   [TrackEventType.CONTACT_SPECIAL_CONTACTS]: {
     category: 'contact',
-    action: 'edit special contact'
+    action: 'edit special contact',
   },
   [TrackEventType.CONTACT_TEL_COURTESY]: {
     category: 'contact',
-    action: 'edit telephone courtesy contact'
+    action: 'edit telephone courtesy contact',
   },
   [TrackEventType.CUSTOMER_CARE_MAILTO]: {
     category: 'customer care',
-    action: 'click on customer care email'
+    action: 'click on customer care email',
   },
   [TrackEventType.DELEGATION_DELEGATE_ADD_ACTION]: {
     category: 'delegation',
-    action: 'add new delegate'
+    action: 'add new delegate',
   },
   [TrackEventType.DELEGATION_DELEGATE_ADD_CTA]: {
     category: 'delegation',
-    action: 'click/tap on the button that shows the new delegation form'
+    action: 'click/tap on the button that shows the new delegation form',
   },
   [TrackEventType.DELEGATION_DELEGATE_ADD_ERROR]: {
     category: 'delegation',
     action: 'error while adding new delegate',
-    getAttributes:  (payload: { [key: string]: any }) => ({
+    getAttributes: (payload: { [key: string]: any }) => ({
       type: payload.response.data.title || 'generic error',
-    })
+    }),
   },
   [TrackEventType.DELEGATION_DELEGATE_REVOKE]: {
     category: 'delegation',
-    action: 'click/tap on the revoke action'
+    action: 'click/tap on the revoke action',
   },
   [TrackEventType.DELEGATION_DELEGATE_VIEW_CODE]: {
     category: 'delegation',
-    action: 'click/tap on show code'
+    action: 'click/tap on show code',
   },
   [TrackEventType.DELEGATION_DELEGATOR_ACCEPT]: {
     category: 'delegation',
-    action: 'click/tap on the accept button'
+    action: 'click/tap on the accept button',
   },
   [TrackEventType.DELEGATION_DELEGATOR_REJECT]: {
     category: 'delegation',
-    action: 'click/tap on reject action'
+    action: 'click/tap on reject action',
   },
   [TrackEventType.DIGITAL_DOMICILE_BANNER_CLOSE]: {
     category: 'notification',
-    action: 'close the banner in notifications detail/list'
+    action: 'close the banner in notifications detail/list',
   },
   [TrackEventType.DIGITAL_DOMICILE_LINK]: {
     category: 'notification',
-    action: 'click/tap on  the banner link in notifications detail/list'
+    action: 'click/tap on  the banner link in notifications detail/list',
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE]: {
     category: 'notification',
-    action: 'contact assistance'
+    action: 'contact assistance',
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ERROR]: {
     category: 'notification',
-    action: 'failed payment'
+    action: 'failed payment',
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE]: {
     category: 'notification',
-    action: 'download the F24 file'
+    action: 'download the F24 file',
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION]: {
     category: 'notification',
-    action: 'click on the pay button'
+    action: 'click on the pay button',
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE]: {
     category: 'notification',
-    action: 'download the PagoPA file'
+    action: 'download the PagoPA file',
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_RELOAD]: {
     category: 'notification',
-    action: 'reload the payment page'
+    action: 'reload the payment page',
   },
   [TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT]: {
     category: 'notification',
-    action: 'click/tap on  the banner link in notifications detail/list'
+    action: 'click/tap on  the banner link in notifications detail/list',
   },
   [TrackEventType.NOTIFICATION_FILTER_SEARCH]: {
     category: 'notification',
-    action: 'click/tap on  the filter button in notifications filter'
+    action: 'click/tap on  the filter button in notifications filter',
   },
   [TrackEventType.NOTIFICATION_TABLE_PAGINATION]: {
     category: 'notification',
@@ -156,48 +151,48 @@ export const events: EventsType = {
   },
   [TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION]: {
     category: 'notification',
-    action: 'go to notification detail'
+    action: 'go to notification detail',
   },
   [TrackEventType.NOTIFICATION_TABLE_SORT]: {
     category: 'notification',
     action: 'change notification sorting order',
-    getAttributes:  (payload: { [key: string]: string }) => ({
+    getAttributes: (payload: { [key: string]: string }) => ({
       orderBy: payload.orderBy,
       order: payload.order,
-    })
+    }),
   },
   [TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT]: {
     category: 'notification',
-    action: 'click/tap on  the banner link in notifications timeline'
+    action: 'click/tap on  the banner link in notifications timeline',
   },
   [TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE]: {
     category: 'notification',
-    action: 'click/tap on timeline view more'
+    action: 'click/tap on timeline view more',
   },
   [TrackEventType.USER_LOGOUT]: {
     category: 'user',
-    action: 'user logs out from action'
+    action: 'user logs out from action',
   },
   [TrackEventType.USER_NAV_ITEM]: {
     category: 'user',
-    action: 'click on a sidebar link'
+    action: 'click on a sidebar link',
   },
   [TrackEventType.USER_PRODUCT_SWITCH]: {
     category: 'user',
-    action: 'switch product'
+    action: 'switch product',
   },
   [TrackEventType.USER_VIEW_PROFILE]: {
     category: 'user',
-    action: 'go to user profile'
+    action: 'go to user profile',
   },
   [TrackEventType.USER_VIEW_CONTACTS_PROFILE]: {
     category: 'user',
-    action: 'go to contacts from profile'
+    action: 'go to contacts from profile',
   },
 };
 
 export enum EventActions {
   ADD = 'add',
   EDIT = 'edit',
-  DELETE = 'delete'
+  DELETE = 'delete',
 }

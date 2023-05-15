@@ -1,7 +1,7 @@
 import React from 'react';
-import { act, RenderResult } from '@testing-library/react';
-import * as redux from 'react-redux';
-import { axe, render } from '../../__test__/test-utils';
+import { axe, mockApi, render, act, RenderResult } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import Contacts from '../Contacts.page';
 
 jest.mock('react-i18next', () => ({
@@ -30,14 +30,7 @@ const initialState = {
 
 describe('Contacts page - accessibility tests', () => {
   it('is contact page accessible', async () => {
-    // mock dispatch
-    const mockDispatchFn = jest.fn(() => ({
-      then: () => Promise.resolve(),
-    }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-  
-    // eslint-disable-next-line functional/no-let
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
     let result: RenderResult | undefined;
     await act(async () => {
       result = render(<Contacts />, initialState);
@@ -48,7 +41,7 @@ describe('Contacts page - accessibility tests', () => {
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   }, 15000);
 });

@@ -8,12 +8,12 @@ export class SendAnalogFlowStep extends TimelineStep {
 
     const labelEntry = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
       ? 'send-analog-progress'
-      : payload.step.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS ? `simple-registered-letter-progess`
+      : payload.step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS ? `simple-registered-letter-progess`
       : responseStatus === ResponseStatus.KO ? 'send-analog-error' : 'send-analog-success';
 
     const defaultLabel = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
       ? `Aggiornamento sull'invio cartaceo`
-      : payload.step.category === TimelineCategory.SIMPLE_REGISTERED_LETTER_PROGRESS ? `Aggiornamento dell'invio via raccomandata semplice`
+      : payload.step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS ? `Aggiornamento dell'invio via raccomandata semplice`
       : responseStatus === ResponseStatus.KO ? 'Invio per via cartacea non riuscito' : 'Invio per via cartacea riuscito';
 
     return getLocalizedOrDefaultLabel(

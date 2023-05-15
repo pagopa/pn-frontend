@@ -19,8 +19,6 @@ import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotification
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { NotificationColumn } from '../../models/Notifications';
-import { Delegator } from '../../models/Deleghe';
-
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -29,18 +27,18 @@ type Props = {
   sort?: Sort<NotificationColumn>;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort<NotificationColumn>) => void;
-  /** Delegator */
-  currentDelegator?: Delegator;
+  /** Defines if the component is in delegated page */
+  isDelegatedPage?: boolean;
 };
 
 const DesktopNotifications = ({
   notifications,
   sort,
   onChangeSorting,
-  currentDelegator,
+  isDelegatedPage = false,
 }: Props) => {
   const navigate = useNavigate();
-  const { t } = useTranslation('notifiche');
+  const { t } = useTranslation(['notifiche', 'common']);
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const handleEventTrackingTooltip = () => {
@@ -86,7 +84,7 @@ const DesktopNotifications = ({
     {
       id: 'subject',
       label: t('table.oggetto'),
-      width: '23%',
+      width: '22%',
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
@@ -130,6 +128,25 @@ const DesktopNotifications = ({
       },
     },
   ];
+
+  if (isDelegatedPage) {
+    const recipientField = {
+      id: 'recipients' as NotificationColumn,
+      label: t('table.destinatario'),
+      width: '15%',
+      sortable: false,
+      getCellLabel(value: string) {
+        return value;
+      },
+      onClick(row: Item) {
+        handleRowClick(row);
+      },
+      disableAccessibility: true,
+    };
+    // eslint-disable-next-line functional/immutable-data
+    columns.splice(3, 0, recipientField);
+  }
+
   const rows: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: n.paProtocolNumber + i.toString(),
@@ -162,9 +179,9 @@ const DesktopNotifications = ({
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
-    if (currentDelegator) {
+    if (isDelegatedPage) {
       navigate(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, row.mandateId as string)
       );
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
@@ -175,11 +192,7 @@ const DesktopNotifications = ({
 
   return (
     <Fragment>
-      <FilterNotifications
-        ref={filterNotificationsRef}
-        showFilters={showFilters}
-        currentDelegator={currentDelegator}
-      />
+      <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
         <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
       ) : (

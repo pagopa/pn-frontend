@@ -46,7 +46,7 @@ describe('AcceptDelegationModal', () => {
     expect(cancelCbk).toBeCalledTimes(1);
   });
 
-  it('renders GroupModal', () => {
+  it('renders GroupModal - no groups selected', () => {
     render(
       <AcceptDelegationModal
         isEditMode
@@ -58,6 +58,40 @@ describe('AcceptDelegationModal', () => {
     );
     const dialog = screen.queryByTestId('groupDialog') as Element;
     expect(dialog).toBeInTheDocument();
+    const noGroupRadio = dialog.querySelector('[data-testid="no-group"] input') as Element;
+    expect(noGroupRadio).toBeChecked();
+  });
+
+  it('renders GroupModal - groups selected', () => {
+    const groups = [
+      { id: 'group-1', name: 'Group 1' },
+      { id: 'group-2', name: 'Group 2' },
+    ];
+    render(
+      <AcceptDelegationModal
+        isEditMode
+        open
+        name="Mario Rossi"
+        handleCloseAcceptModal={cancelCbk}
+        handleConfirm={confirmCbk}
+        currentGroups={[groups[1]]}
+      />,
+      {
+        preloadedState: {
+          delegationsState: {
+            groups,
+          },
+        },
+      }
+    );
+    const dialog = screen.queryByTestId('groupDialog') as Element;
+    expect(dialog).toBeInTheDocument();
+    const associateGroupRadio = dialog.querySelector(
+      '[data-testid="associate-group"] input'
+    ) as Element;
+    expect(associateGroupRadio).toBeChecked();
+    const autocomplete = dialog.querySelector(`[data-testid="groups"]`) as Element;
+    expect(autocomplete).toHaveTextContent(groups[1].name);
   });
 
   it('calls cancel callback - groupModal', () => {
