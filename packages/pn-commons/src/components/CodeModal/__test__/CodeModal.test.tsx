@@ -1,9 +1,9 @@
+import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
-const handleCloseMock = jest.fn();
 const cancelButtonMock = jest.fn();
 const confirmButtonMock = jest.fn();
 
@@ -14,13 +14,12 @@ const openedModalComponent = (open: boolean, hasError: boolean = false) => (
     open={open}
     initialValues={new Array(5).fill('')}
     codeSectionTitle="mocked-section-title"
-    handleClose={handleCloseMock}
     cancelLabel="mocked-cancel"
     cancelCallback={cancelButtonMock}
     confirmLabel="mocked-confirm"
     confirmCallback={confirmButtonMock}
     hasError={hasError}
-    errorMessage='mocked-errorMessage'
+    errorMessage="mocked-errorMessage"
   />
 );
 
