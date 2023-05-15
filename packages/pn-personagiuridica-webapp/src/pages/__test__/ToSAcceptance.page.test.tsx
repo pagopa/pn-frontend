@@ -3,6 +3,7 @@ import React from 'react';
 import * as redux from 'react-redux';
 import { render } from '../../__test__/test-utils';
 import ToSAcceptance from '../ToSAcceptance.page';
+import userEvent from "@testing-library/user-event";
 
 const mockNavigateFn = jest.fn();
 const mockDispatchFn = jest.fn();
@@ -68,4 +69,19 @@ describe('test Terms of Service page', () => {
     expect(result.container).toHaveTextContent(/tos.switch-label/i);
     expect(result.container).toHaveTextContent(/tos.button/i);
   });
+
+  it('tests the switch and button', () => {
+    const result = render(<ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />);
+
+    const switchElement = result.getByRole('checkbox');
+    const acceptButton = result.getByRole('button');
+
+    expect(acceptButton).toBeDisabled();
+
+    userEvent.click(switchElement);
+    expect(acceptButton).toBeEnabled();
+
+    userEvent.click(acceptButton);
+    expect(mockDispatchFn).toBeCalledTimes(1);
+  })
 });
