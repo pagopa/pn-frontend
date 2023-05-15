@@ -473,7 +473,15 @@ export function getNotificationTimelineStatusInfos(
   recipients: Array<NotificationDetailRecipient>,
   allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ): TimelineStepInfo | null {
-  const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
+  const recipient = _.isNil(step.details.recIndex) 
+    ?  undefined
+    // For the accesses from recipient apps (cittadino / impresa)
+    // the API response will probably (in some future) include only the info about the requester recipient,
+    // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included 
+    // in the notification being requested.
+    // In that case, we don't consider the recIndex indicated in each timeline step, 
+    // but otherwise take all steps as related with the only recipient included in the API response.
+    : recipients.length === 1 ? recipients[0] : recipients[step.details.recIndex];
 
   return TimelineStepFactory.createTimelineStep(step).getTimelineStepInfo({
     step,
@@ -794,7 +802,13 @@ const populatePaymentHistory = (
     for (const payment of paymentTimelineStep) {
       const recIndex = payment.details.recIndex;
       if (recIndex !== null && recIndex !== undefined) {
-        const recipient = recipients[recIndex];
+        // For the accesses from recipient apps (cittadino / impresa)
+        // the API response will probably (in some future) include only the info about the requester recipient,
+        // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included 
+        // in the notification being requested.
+        // In that case, we don't consider the recIndex indicated in each timeline step, 
+        // but otherwise take all steps as related with the only recipient included in the API response.
+        const recipient = recipients.length === 1 ? recipients[0] : recipients[recIndex];
         /* eslint-disable-next-line functional/immutable-data */
         paymentHistory.push({
           ...(payment.details as PaidDetails),
