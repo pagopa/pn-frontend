@@ -101,6 +101,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               recipientId={recipientId}
               senderId="default"
               contactType={LegalChannelType.PEC}
+              isVerifyingAddress={(verifyingAddress != null)}
               fields={[
                 {
                   id: 'value',
