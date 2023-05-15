@@ -18,24 +18,22 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   return {
     ...original,
     NotificationsCard: () => <div>Cards</div>,
-    MobileNotificationsSort: () => <div>Sort</div>
+    MobileNotificationsSort: () => <div>Sort</div>,
   };
 });
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('../FilterNotifications', () => {
   const { forwardRef, useImperativeHandle } = jest.requireActual('react');
   return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
     useImperativeHandle(ref, () => ({
-      filtersApplied: false
+      filtersApplied: false,
     }));
     if (!showFilters) {
       return <></>;
@@ -45,7 +43,6 @@ jest.mock('../FilterNotifications', () => {
 });
 
 describe('MobileNotifications Component', () => {
-
   it('renders MobileNotifications', () => {
     // render component
     const result = render(
@@ -57,9 +54,9 @@ describe('MobileNotifications Component', () => {
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(
-      /Non hai ricevuto nessuna notifica. Vai alla sezione I tuoi recapiti e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo./i
-    );
+    expect(result.container).toHaveTextContent(/empty-notifications-contacts/i);
+    expect(result.container).toHaveTextContent(/empty-notifications-message/i);
+    expect(result.container).toHaveTextContent(/empty-notifications-secondary-message/i);
   });
 
   it('clicks on go to detail action', async () => {
