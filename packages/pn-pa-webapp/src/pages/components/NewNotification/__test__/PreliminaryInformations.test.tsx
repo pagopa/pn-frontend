@@ -216,7 +216,7 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     expect(submitButton).toBeEnabled();
     await testInput(form, 
       `subject`, 
-      'oneHundredAndTwentyOneoneHundredAndTwentyOneoneHundredAndTwentyOneoneHundredAndTwentyOneoneHundredAndTwentyOne1234567890a'
+      'oneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySix3456'
     );
     expect(submitButton).toBeDisabled();
     await testInput(form, `subject`, 'FifteenFifteenX');
