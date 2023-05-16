@@ -20,6 +20,9 @@
       "iun": "Inserisci un codice IUN valido"
     }
   },
+  "empty-state": {
+    "delegate": "{{name}} non ha ricevuto nessuna notifica."
+  },
   "sort": {
     "title": "Ordina",
     "cancel": "Annulla ordinamento",

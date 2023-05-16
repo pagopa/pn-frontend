@@ -137,12 +137,14 @@ const DesktopNotifications = ({
     emptyActionLabel: filtersApplied ? undefined : 'I tuoi Recapiti',
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : handleRouteContacts,
+      : currentDelegator ? undefined : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
-      : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
+      : currentDelegator 
+        ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName }) 
+        : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: filtersApplied
+    secondaryMessage: (filtersApplied || currentDelegator)
       ? undefined
       : {
           emptyMessage: 'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
