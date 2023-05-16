@@ -40,6 +40,9 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
   // store previous values
   const prevOpenId = useRef(openId);
 
+  const getSideMenuItemBorderWidth = (itemIndex: number) =>
+    selectedIndex && itemIndex === selectedIndex.index ? '2px' : 0;
+
   const handleClick = (label: string) => {
     if (prevOpenId.current === label) {
       setOpen(!open);
@@ -91,6 +94,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                   index === selectedIndex.index &&
                   selectedIndex.label === item.label
                 }
+                sx={{ borderRightWidth: getSideMenuItemBorderWidth(index) }}
                 onClick={() => {
                   if (!item.notSelectable) {
                     setSelectedIndex({ label: item.label, index, route: item.route });
@@ -125,7 +129,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                       }
                       item={child}
                       handleLinkClick={handleLinkClick}
-                      style={{ pl: 4 }}
+                      style={{ pl: 4, borderRightWidth: getSideMenuItemBorderWidth(childIndex) }}
                       onSelect={() =>
                         setSelectedIndex({
                           label: child.label,
@@ -141,6 +145,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           ) : (
             <SideMenuListItem
               key={item.label}
+              style={{ borderRightWidth: getSideMenuItemBorderWidth(index) }}
               item={item}
               handleLinkClick={handleLinkClick}
               selected={
@@ -167,6 +172,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
             <SideMenuListItem
               key={selfcareItem.label}
+              style={{ borderRightWidth: 0 }}
               item={selfcareItem}
               handleLinkClick={handleLinkClick}
               selected={
