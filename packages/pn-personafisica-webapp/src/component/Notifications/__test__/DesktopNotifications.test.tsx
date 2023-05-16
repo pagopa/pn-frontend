@@ -34,7 +34,7 @@ jest.mock('../FilterNotifications', () => {
 });
 
 describe('DesktopNotifications Component', () => {
-  it('renders DesktopNotifications', () => {
+  it('renders DesktopNotifications - empty case - recipient access', () => {
     // render component
     const result = render(
       <DesktopNotifications notifications={[]} sort={{ orderBy: '', order: 'asc' }} />
@@ -42,6 +42,25 @@ describe('DesktopNotifications Component', () => {
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
       /empty-state.first-message empty-state.action empty-state.second-message/i
+    );
+  });
+
+  it('renders DesktopNotifications - empty case - delegate access', () => {
+    // render component
+    const result = render(
+      <DesktopNotifications notifications={[]} sort={{ orderBy: '', order: 'asc' }} currentDelegator={{
+        mandateId: 'mandate-id-1', 
+        delegator: { displayName: 'mandate-display-name-1', fiscalCode: 'tax-id-1', person: true },
+        status: 'active',
+        visibilityIds: [],
+        datefrom: '2023-04-08',
+        dateto: '2028-04-07',
+        verificationCode: '33334'
+      }}/>
+    );
+    expect(result.container).not.toHaveTextContent(/Filters/i);
+    expect(result.container).toHaveTextContent(
+      /empty-state.delegate/i
     );
   });
 

@@ -171,10 +171,14 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : handleRouteContacts,
-    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
+      : currentDelegator ? undefined : handleRouteContacts,
+    emptyMessage: filtersApplied
+      ? undefined
+      : currentDelegator 
+        ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName }) 
+        : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: filtersApplied
+    secondaryMessage: (filtersApplied || currentDelegator)
       ? undefined
       : {
           emptyMessage: t('empty-state.second-message'),
