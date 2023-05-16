@@ -172,7 +172,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
             <SideMenuListItem
               key={selfcareItem.label}
-              style={{ borderRightWidth: 0 }}
+              style={{ borderRightWidth: getSideMenuItemBorderWidth(sIndex) }}
               item={selfcareItem}
               handleLinkClick={handleLinkClick}
               selected={
