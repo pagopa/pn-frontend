@@ -169,18 +169,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
               key={selfcareItem.label}
               item={selfcareItem}
               handleLinkClick={handleLinkClick}
-              selected={
-                selectedIndex &&
-                sIndex === selectedIndex.index &&
-                selectedIndex.label === selfcareItem.label
-              }
-              onSelect={() =>
-                setSelectedIndex({
-                  label: selfcareItem.label,
-                  index: sIndex,
-                  route: selfcareItem.route || '',
-                })
-              }
+              onSelect={() => {}}
               goOutside
             />
           ))}
