@@ -44,7 +44,7 @@ describe('DesktopNotifications Component', () => {
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
-      /Non hai ricevuto nessuna notifica. Vai alla sezione I tuoi recapiti e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo./i
+      /empty-state.first-message empty-state.action empty-state.second-message/i
     );
   });
 
