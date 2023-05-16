@@ -142,7 +142,7 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.secondary-action'),
+    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : currentDelegator ? undefined : handleRouteContacts,
@@ -150,12 +150,12 @@ const DesktopNotifications = ({
       ? undefined
       : currentDelegator 
         ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName }) 
-        : t('empty-state.message'),
+        : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: (filtersApplied || currentDelegator)
       ? undefined
       : {
-          emptyMessage: t('empty-state.secondary-message'),
+          emptyMessage: t('empty-state.second-message'),
         },
   };
 

@@ -188,16 +188,16 @@ const MobileNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.secondary-action'),
+    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
-    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
+    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined
       : {
-          emptyMessage: t('empty-state.secondary-message'),
+          emptyMessage: t('empty-state.second-message'),
         },
   };
 

@@ -34,9 +34,9 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
-    "secondary-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
-    "secondary-action": "I tuoi Recapiti"
+    "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
+    "action": "I tuoi recapiti",
+    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"
