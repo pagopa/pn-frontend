@@ -33,6 +33,11 @@
     "desc": "decrescente",
     "options": "Opzioni sort"
   },
+  "empty-state": {
+    "message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
+    "secondary-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "secondary-action": "I tuoi Recapiti"
+  },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"
   },
