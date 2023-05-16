@@ -113,9 +113,17 @@ const DesktopNotifications = ({
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(_: string, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus, {recipients: row.recipients as Array<string>}
+          row.notificationStatus as NotificationStatus,
+          { recipients: row.recipients as Array<string> }
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return (
+          <StatusTooltip
+            label={label}
+            tooltip={tooltip}
+            color={color}
+            eventTrackingCallback={handleEventTrackingTooltip}
+          ></StatusTooltip>
+        );
       },
       onClick(row: Item) {
         handleRowClick(row);
@@ -134,7 +142,7 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : 'I tuoi Recapiti',
+    emptyActionLabel: filtersApplied ? undefined : t('empty-state.secondary-action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : currentDelegator ? undefined : handleRouteContacts,
@@ -142,12 +150,12 @@ const DesktopNotifications = ({
       ? undefined
       : currentDelegator 
         ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName }) 
-        : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
+        : t('empty-state.message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: (filtersApplied || currentDelegator)
       ? undefined
       : {
-          emptyMessage: 'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
+          emptyMessage: t('empty-state.secondary-message'),
         },
   };
 
@@ -156,7 +164,9 @@ const DesktopNotifications = ({
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
+      navigate(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
+      );
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
