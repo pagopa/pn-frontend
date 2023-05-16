@@ -113,9 +113,17 @@ const DesktopNotifications = ({
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(_: string, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus, {recipients: row.recipients as Array<string>}
+          row.notificationStatus as NotificationStatus,
+          { recipients: row.recipients as Array<string> }
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return (
+          <StatusTooltip
+            label={label}
+            tooltip={tooltip}
+            color={color}
+            eventTrackingCallback={handleEventTrackingTooltip}
+          ></StatusTooltip>
+        );
       },
       onClick(row: Item) {
         handleRowClick(row);
@@ -138,15 +146,13 @@ const DesktopNotifications = ({
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
-    emptyMessage: filtersApplied
-      ? undefined
-      : t('empty-state.first-message'),
+    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined
       : {
-        emptyMessage: t('empty-state.second-message'),
-      },
+          emptyMessage: t('empty-state.second-message'),
+        },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -154,7 +160,9 @@ const DesktopNotifications = ({
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
+      navigate(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
+      );
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }

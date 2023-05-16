@@ -163,9 +163,7 @@ const DesktopNotifications = ({
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
-    emptyMessage: filtersApplied
-      ? undefined
-      : t('empty-state.first-message'),
+    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined

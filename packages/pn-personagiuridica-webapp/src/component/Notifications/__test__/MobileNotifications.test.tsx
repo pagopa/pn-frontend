@@ -1,7 +1,7 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
 
+import { render, fireEvent, waitFor } from '../../../__test__/test-utils';
 import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
-import { render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
@@ -18,24 +18,22 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   return {
     ...original,
     NotificationsCard: () => <div>Cards</div>,
-    MobileNotificationsSort: () => <div>Sort</div>
+    MobileNotificationsSort: () => <div>Sort</div>,
   };
 });
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('../FilterNotifications', () => {
   const { forwardRef, useImperativeHandle } = jest.requireActual('react');
   return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
     useImperativeHandle(ref, () => ({
-      filtersApplied: false
+      filtersApplied: false,
     }));
     if (!showFilters) {
       return <></>;
@@ -45,7 +43,6 @@ jest.mock('../FilterNotifications', () => {
 });
 
 describe('MobileNotifications Component', () => {
-
   it('renders MobileNotifications', () => {
     // render component
     const result = render(

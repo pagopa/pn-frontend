@@ -18,7 +18,7 @@ import {
   MobileNotificationsSort,
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
-import {ButtonNaked, Tag} from '@pagopa/mui-italia';
+import { ButtonNaked, Tag } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
@@ -50,12 +50,17 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const MobileNotifications = ({ notifications, sort, onChangeSorting, isDelegatedPage = false }: Props) => {
+const MobileNotifications = ({
+  notifications,
+  sort,
+  onChangeSorting,
+  isDelegatedPage = false,
+}: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({
     filtersApplied: false,
-    cleanFilters: () => void 0
+    cleanFilters: () => void 0,
   });
 
   const handleEventTrackingTooltip = () => {
@@ -137,12 +142,12 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, isDelegated
 
   if (isDelegatedPage) {
     const recipientField = {
-        id: 'group',
-        label: t('table.gruppi'),
-        getLabel(value: string) {
-          return <Tag value={value} data-testid={`groupChip-${value}`} />;
-        },
-      };
+      id: 'group',
+      label: t('table.gruppi'),
+      getLabel(value: string) {
+        return <Tag value={value} data-testid={`groupChip-${value}`} />;
+      },
+    };
 
     // eslint-disable-next-line functional/immutable-data
     cardBody.splice(3, 0, recipientField);
@@ -187,15 +192,13 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, isDelegated
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
-    emptyMessage: filtersApplied
-      ? undefined
-      : t('empty-state.first-message'),
+    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined
       : {
-        emptyMessage: t('empty-state.second-message'),
-      },
+          emptyMessage: t('empty-state.second-message'),
+        },
   };
 
   // Navigation handlers
@@ -229,10 +232,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, isDelegated
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          <FilterNotifications
-            ref={filterNotificationsRef}
-            showFilters={showFilters}
-          />
+          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {/**

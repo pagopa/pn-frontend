@@ -8,11 +8,6 @@
     "status": "Stato",
     "show-detail": "Vedi dettaglio"
   },
-  "empty-state": {
-    "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
-    "action": "I tuoi recapiti",
-    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
-  },
   "filters": {
     "iun": "Inserisci il Codice IUN",
     "data_da": "Da",
@@ -31,6 +26,11 @@
     "asc": "crescente",
     "desc": "decrescente",
     "options": "Opzioni sort"
+  },
+  "empty-state": {
+    "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
+    "action": "I tuoi recapiti",
+    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"
@@ -226,7 +226,8 @@
         "pec-receipt-not-delivered": "di mancata consegna PEC",
         "paper-receipt-delivered": "di consegna raccomandata",
         "paper-receipt-not-delivered": "di mancata consegna raccomandata",
-        "analog-failure-delivery": "Deposito di avvenuta ricezione"      },
+        "analog-failure-delivery": "Deposito di avvenuta ricezione"
+      },
       "registered-letter-kind": {
         "AR": "A/R",
         "890": "890",
