@@ -63,7 +63,7 @@ describe('delegation redux state tests', () => {
     const payload = action.payload;
 
     expect(action.type).toBe('acceptDelegation/rejected');
-    expect(payload).toEqual('error');
+    expect(payload).toStrictEqual({ response: { status: 500 } });
     const acceptModalState = store.getState().delegationsState.acceptModalState;
     expect(acceptModalState.error).toEqual(true);
   });
@@ -85,7 +85,7 @@ describe('delegation redux state tests', () => {
     const payload = action.payload;
 
     expect(action.type).toBe('rejectDelegation/rejected');
-    expect(payload).toEqual('error');
+    expect(payload).toStrictEqual({ response: { status: 500 } });
   });
 
   it('should revoke a delegation for a delegate', async () => {
@@ -105,7 +105,7 @@ describe('delegation redux state tests', () => {
     const payload = action.payload;
 
     expect(action.type).toBe('revokeDelegation/rejected');
-    expect(payload).toEqual('error');
+    expect(payload).toStrictEqual({ response: { status: 500 } });
   });
 
   it('sets the confirmation modal state to open and then to close', async () => {

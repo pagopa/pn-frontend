@@ -1,7 +1,7 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
 
+import { render, fireEvent, waitFor } from '../../../__test__/test-utils';
 import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
-import { render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
@@ -54,9 +54,9 @@ describe('MobileNotifications Component', () => {
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(/empty-notifications-contacts/i);
-    expect(result.container).toHaveTextContent(/empty-notifications-message/i);
-    expect(result.container).toHaveTextContent(/empty-notifications-secondary-message/i);
+    expect(result.container).toHaveTextContent(
+      /empty-state.first-message empty-state.action empty-state.second-message/i
+    );
   });
 
   it('clicks on go to detail action', async () => {
