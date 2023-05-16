@@ -87,64 +87,66 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
         avatar={<IllusEmailValidation />}
       >
-        <Box mt="20px">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              digitalElemRef.current.editContact();
-            }}
-          >
-            <Typography mb={1} sx={{ fontWeight: 'bold' }}>
-              {t('legal-contacts.pec-added', { ns: 'recapiti' })}
-            </Typography>
-            <DigitalContactElem
-              recipientId={recipientId}
-              senderId="default"
-              contactType={LegalChannelType.PEC}
-              isVerifyingAddress={(verifyingAddress != null)}
-              fields={[
-                {
-                  id: 'value',
-                  component: (
-                    <TextField
-                      id="pec"
-                      fullWidth
-                      name="pec"
-                      label="PEC"
-                      variant="outlined"
-                      size="small"
-                      value={formik.values.pec}
-                      onChange={handleChangeTouched}
-                      error={formik.touched.pec && Boolean(formik.errors.pec)}
-                      helperText={formik.touched.pec && formik.errors.pec}
-                    />
-                  ),
-                  isEditable: true,
-                  size: 'auto',
-                },
-              ]}
-              saveDisabled={!formik.isValid}
-              removeModalTitle={
-                legalAddresses.length > 1
-                  ? t('legal-contacts.block-remove-pec-title', { ns: 'recapiti' })
-                  : t('legal-contacts.remove-pec-title', { ns: 'recapiti' })
-              }
-              removeModalBody={
-                legalAddresses.length > 1
-                  ? t('legal-contacts.block-remove-pec-message', { ns: 'recapiti' })
-                  : t('legal-contacts.remove-pec-message', {
-                      value: formik.values.pec,
-                      ns: 'recapiti',
-                    })
-              }
-              value={formik.values.pec}
-              onConfirmClick={handleEditConfirm}
-              blockDelete={legalAddresses.length > 1}
-              resetModifyValue={() => handleEditConfirm('cancelled')}
-              ref={digitalElemRef}
-            />
-          </form>
-        </Box>
+        {!verifyingAddress && (
+          <Box mt="20px">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                digitalElemRef.current.editContact();
+              }}
+            >
+              <Typography mb={1} sx={{ fontWeight: 'bold' }}>
+                {t('legal-contacts.pec-added', { ns: 'recapiti' })}
+              </Typography>
+              <DigitalContactElem
+                recipientId={recipientId}
+                senderId="default"
+                contactType={LegalChannelType.PEC}
+                fields={[
+                  {
+                    id: 'value',
+                    component: (
+                      <TextField
+                        id="pec"
+                        fullWidth
+                        name="pec"
+                        label="PEC"
+                        variant="outlined"
+                        size="small"
+                        value={formik.values.pec}
+                        onChange={handleChangeTouched}
+                        error={formik.touched.pec && Boolean(formik.errors.pec)}
+                        helperText={formik.touched.pec && formik.errors.pec}
+                      />
+                    ),
+                    isEditable: true,
+                    size: 'auto',
+                  },
+                ]}
+                saveDisabled={!formik.isValid}
+                removeModalTitle={
+                  legalAddresses.length > 1
+                    ? t('legal-contacts.block-remove-pec-title', { ns: 'recapiti' })
+                    : t('legal-contacts.remove-pec-title', { ns: 'recapiti' })
+                }
+                removeModalBody={
+                  legalAddresses.length > 1
+                    ? t('legal-contacts.block-remove-pec-message', { ns: 'recapiti' })
+                    : t('legal-contacts.remove-pec-message', {
+                        value: formik.values.pec,
+                        ns: 'recapiti',
+                      })
+                }
+                value={formik.values.pec}
+                onConfirmClick={handleEditConfirm}
+                blockDelete={legalAddresses.length > 1}
+                resetModifyValue={() => handleEditConfirm('cancelled')}
+                ref={digitalElemRef}
+              />
+            </form>
+          </Box>
+        )}
+
         {verifyingAddress && (
           <Box display="flex" flexDirection="row" mt={2.5}>
             <Box display="flex" flexDirection="row" mr={1}>
@@ -154,7 +156,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               </Typography>
             </Box>
             <ButtonNaked color="primary" onClick={handlePecValidationCancel}>
-              {t('button.annulla')}
+              {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
             </ButtonNaked>
           </Box>
         )}

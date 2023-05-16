@@ -53,18 +53,7 @@ const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
 
 describe('DigitalContactElem Component', () => {
-
-  const ComponentProps = {
-    fields,
-    removeModalTitle:"mocked-title",
-    removeModalBody:"mocked-body",
-    recipientId:"mocked-recipientId",
-    senderId:"mocked-senderId",
-    value:"mocked-value",
-    contactType:LegalChannelType.PEC,
-    onConfirmClick:() => {},
-    resetModifyValue:mockResetModifyValue,
-  };
+  let result: RenderResult | undefined;
 
   beforeEach(() => {
     const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
@@ -80,46 +69,48 @@ describe('DigitalContactElem Component', () => {
     }));
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    // render component
+    result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <DigitalContactElem
+          fields={fields}
+          removeModalTitle="mocked-title"
+          removeModalBody="mocked-body"
+          recipientId="mocked-recipientId"
+          senderId="mocked-senderId"
+          value="mocked-value"
+          contactType={LegalChannelType.PEC}
+          onConfirmClick={() => {}}
+          resetModifyValue={mockResetModifyValue}
+        />
+      </DigitalContactsCodeVerificationProvider>
+    );
   });
 
   afterEach(() => {
+    result = undefined;
     createTrackEventSpy.mockClear();
     createTrackEventSpy.mockReset();
   });
 
   it('renders DigitalContactElem (no edit mode)', () => {
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          {...ComponentProps}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    );
-
-    expect(result.container).toHaveTextContent('Campo 1');
-    expect(result.container).toHaveTextContent('Campo 2');
-    const input = result.queryByTestId('field');
+    expect(result?.container).toHaveTextContent('Campo 1');
+    expect(result?.container).toHaveTextContent('Campo 2');
+    const input = result?.queryByTestId('field');
     expect(input).not.toBeInTheDocument();
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
     expect(buttons![0]).toHaveTextContent('button.modifica');
     expect(buttons![1]).toHaveTextContent('button.elimina');
   });
 
   it('renders DigitalContactElem (edit mode)', async () => {
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          {...ComponentProps}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    );
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     userEvent.click(buttons![0]);
     await waitFor(() => {
-      const input = result.queryByTestId('field');
+      const input = result?.queryByTestId('field');
       expect(input).toBeInTheDocument();
-      const newButtons = result.container.querySelectorAll('button');
+      const newButtons = result?.container.querySelectorAll('button');
       expect(newButtons).toHaveLength(2);
       expect(newButtons![0]).toHaveTextContent('button.salva');
       expect(newButtons![1]).toHaveTextContent('button.annulla');
@@ -128,32 +119,8 @@ describe('DigitalContactElem Component', () => {
     expect(mockResetModifyValue).toBeCalledTimes(1);
   });
 
-  it('renders DigitalContactElem (verification PEC mode)', async () => {
-    const result = await waitFor(() => render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          { ...ComponentProps }
-          isVerifyingAddress={true}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    ));
-    expect(result.container).toHaveTextContent('Campo 1');
-    expect(result.container).toHaveTextContent('Campo 2');
-    const input = result.queryByTestId('field');
-    expect(input).not.toBeInTheDocument();
-    const buttons = result.container.querySelectorAll('button');
-    expect(buttons).toHaveLength(0);
-  });
-
   it('shows remove modal', async () => {
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          {...ComponentProps}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    );
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     userEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
@@ -166,14 +133,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('closes remove modal (clicks on cancel)', async () => {
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          {...ComponentProps}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    );
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     userEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
@@ -185,14 +145,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('closes remove modal (clicks on confirm)', async () => {
-    const result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          {...ComponentProps}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    );
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result?.container.querySelectorAll('button');
     userEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
