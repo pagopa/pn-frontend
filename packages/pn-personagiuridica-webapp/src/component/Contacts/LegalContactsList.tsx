@@ -147,16 +147,21 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
           </Box>
         )}
         {verifyingAddress && (
-          <Box display="flex" flexDirection="row" mt={2.5}>
-            <Box display="flex" flexDirection="row" mr={1}>
-              <WatchLaterIcon fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" ml={1}>
-                {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
-              </Typography>
+          <Box mt="20px">
+            <Typography mb={1} sx={{ fontWeight: 'bold' }}>
+              {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
+            </Typography>
+            <Box display="flex" flexDirection="row" mt={2.5}>
+              <Box display="flex" flexDirection="row" mr={1}>
+                <WatchLaterIcon fontSize="small" />
+                <Typography fontWeight="bold" variant="body2" ml={1}>
+                  {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
+                </Typography>
+              </Box>
+              <ButtonNaked color="primary" onClick={handlePecValidationCancel}>
+                {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
+              </ButtonNaked>
             </Box>
-            <ButtonNaked color="primary" onClick={handlePecValidationCancel}>
-            {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
-            </ButtonNaked>
           </Box>
         )}
         <Alert
