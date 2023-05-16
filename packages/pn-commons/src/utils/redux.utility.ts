@@ -17,7 +17,9 @@ function parseError(e: any) {
       },
     };
   }
-  return e;
+  // if the error doesn't have the response object, the user interface doesn't react to the failing api
+  // so we set a generic error without data
+  return { response: { status: 500 } };
 }
 
 /**

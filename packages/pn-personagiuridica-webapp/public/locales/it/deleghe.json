@@ -78,7 +78,7 @@
     "createdTitle": "La richiesta di delega è stata creata con successo",
     "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la richiesta.",
     "title": "Aggiungi una delega",
-    "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle notifiche di {{organizationName}}",
+    "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle tue notifiche.",
     "form": {
       "personType": "Soggetto giuridico*:",
       "naturalPerson": "Persona fisica",
@@ -90,7 +90,7 @@
       "businessName": "Ragione Sociale*",
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
-      "onlySelected": "Solo gli enti selezionati",
+      "onlySelected": "Solo enti selezionati",
       "selectEntities": "Seleziona enti",
       "endDate": "Termine delega",
       "verificationCode": "Codice di verifica",

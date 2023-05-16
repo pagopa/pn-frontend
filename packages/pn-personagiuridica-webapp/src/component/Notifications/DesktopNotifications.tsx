@@ -159,19 +159,16 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : 'I tuoi Recapiti',
+    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
-    emptyMessage: filtersApplied
-      ? undefined
-      : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
+    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined
       : {
-          emptyMessage:
-            'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
+          emptyMessage: t('empty-state.second-message'),
         },
   };
 
