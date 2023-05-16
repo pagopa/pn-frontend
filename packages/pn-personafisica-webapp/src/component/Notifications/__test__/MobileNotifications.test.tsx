@@ -55,7 +55,7 @@ describe('MobileNotifications Component', () => {
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /empty-state.message empty-state.secondary-action empty-state.secondary-message/i
+      /empty-state.first-message empty-state.action empty-state.second-message/i
     );
   });
 
