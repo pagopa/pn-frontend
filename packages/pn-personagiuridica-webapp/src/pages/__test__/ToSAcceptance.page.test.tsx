@@ -1,9 +1,8 @@
 import { ConsentUser } from '@pagopa-pn/pn-commons';
 import React from 'react';
 import * as redux from 'react-redux';
-import { render } from '../../__test__/test-utils';
+import { fireEvent, render } from '../../__test__/test-utils';
 import ToSAcceptance from '../ToSAcceptance.page';
-import userEvent from "@testing-library/user-event";
 
 const mockNavigateFn = jest.fn();
 const mockDispatchFn = jest.fn();
@@ -78,10 +77,10 @@ describe('test Terms of Service page', () => {
 
     expect(acceptButton).toBeDisabled();
 
-    userEvent.click(switchElement);
+    fireEvent.click(switchElement);
     expect(acceptButton).toBeEnabled();
 
-    userEvent.click(acceptButton);
+    fireEvent.click(acceptButton);
     expect(mockDispatchFn).toBeCalledTimes(1);
   })
 });
