@@ -109,18 +109,12 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch the tos approval', async () => {
-    const tosMock = {
-      recipientId: 'mock-recipient-id',
-      consentType: ConsentType.TOS,
-      accepted: false,
-      isFirstAccept: true,
-    };
+    const tosErrorResponse = { response: { data: 'error-tos', status: 500 }};
     const apiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
-    apiSpy.mockRejectedValue(tosMock);
+    apiSpy.mockRejectedValue(tosErrorResponse);
     const action = await store.dispatch(getToSApproval());
-    const payload = action.payload as Consent;
     expect(action.type).toBe('getToSApproval/rejected');
-    expect(payload).toEqual(tosMock);
+    expect(action.payload).toEqual(tosErrorResponse);
     apiSpy.mockRestore();
   });
 
@@ -135,13 +129,12 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch tos acceptance', async () => {
-    const tosAcceptanceMock = 'error';
+    const tosErrorResponse = { response: { data: 'error-tos-acceptance', status: 500 }};
     const apiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
-    apiSpy.mockRejectedValue(tosAcceptanceMock);
+    apiSpy.mockRejectedValue(tosErrorResponse);
     const action = await store.dispatch(acceptToS('mock-version-1'));
-    const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/rejected');
-    expect(payload).toEqual(tosAcceptanceMock);
+    expect(action.payload).toEqual(tosErrorResponse);
   });
 
   it('Should be able to fetch the privacy approval', async () => {
@@ -162,18 +155,12 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch the privacy approval', async () => {
-    const tosMock = {
-      recipientId: 'mock-recipient-id',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: false,
-      isFirstAccept: true,
-    };
+    const tosErrorResponse = { response: { data: 'error-privacy-approval', status: 500 }};
     const apiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
-    apiSpy.mockRejectedValue(tosMock);
+    apiSpy.mockRejectedValue(tosErrorResponse);
     const action = await store.dispatch(getToSApproval());
-    const payload = action.payload as Consent;
     expect(action.type).toBe('getToSApproval/rejected');
-    expect(payload).toEqual(tosMock);
+    expect(action.payload).toEqual(tosErrorResponse);
     apiSpy.mockRestore();
   });
 
@@ -188,13 +175,12 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch privacy acceptance', async () => {
-    const tosAcceptanceMock = 'error';
+    const tosErrorResponse = { response: { data: 'error-privacy-acceptance', status: 500 }};
     const apiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
-    apiSpy.mockRejectedValue(tosAcceptanceMock);
+    apiSpy.mockRejectedValue(tosErrorResponse);
     const action = await store.dispatch(acceptToS('mock-version-1'));
-    const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/rejected');
-    expect(payload).toEqual(tosAcceptanceMock);
+    expect(action.payload).toEqual(tosErrorResponse);
   });
 
   it('Should be able to fetch the organization party', async () => {
