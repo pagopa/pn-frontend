@@ -212,33 +212,34 @@ const DigitalContactElem = forwardRef(
           {mappedChildren}
           <Grid item lg={12} xs={12} textAlign={'left'}>
             {!editMode ? (
-              <ButtonNaked
-                color="primary"
-                onClick={toggleEdit}
-                sx={{ marginRight: '10px' }}
-                disabled={editDisabled}
-              >
-                {t('button.modifica')}
-              </ButtonNaked>
+              <>
+                <ButtonNaked
+                  color="primary"
+                  onClick={toggleEdit}
+                  sx={{ marginRight: '10px' }}
+                  disabled={editDisabled}
+                >
+                  {t('button.modifica')}
+                </ButtonNaked>
+                <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
+                  {t('button.elimina')}
+                </ButtonNaked>
+              </>
             ) : (
-              <ButtonNaked
-                color="primary"
-                disabled={saveDisabled}
-                type="button"
-                onClick={editHandler}
-                sx={{ marginRight: '10px' }}
-              >
-                {t('button.salva')}
-              </ButtonNaked>
-            )}
-            {!editMode ? (
-              <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
-                {t('button.elimina')}
-              </ButtonNaked>
-            ) : (
-              <ButtonNaked color="primary" onClick={onCancel}>
-                {t('button.annulla')}
-              </ButtonNaked>
+              <>
+                <ButtonNaked
+                  color="primary"
+                  disabled={saveDisabled}
+                  type="button"
+                  onClick={editHandler}
+                  sx={{ marginRight: '10px' }}
+                >
+                  {t('button.salva')}
+                </ButtonNaked>
+                <ButtonNaked color="primary" onClick={onCancel}>
+                  {t('button.annulla')}
+                </ButtonNaked>
+              </>
             )}
           </Grid>
         </Grid>

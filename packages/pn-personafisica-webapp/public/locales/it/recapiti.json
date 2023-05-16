@@ -30,6 +30,8 @@
     "new-code-link": "generane uno nuovo",
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
+    "pec-validating": "Validazione PEC in corso",
+    "cancel-pec-validation": "Annulla validazione",
     "remove-pec-title": "Rimuovi PEC",
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
     "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
