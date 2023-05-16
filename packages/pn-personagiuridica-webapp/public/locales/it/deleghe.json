@@ -140,8 +140,8 @@
       "message": "Non è possibile delegare se stessi"
     },
     "invalid_verification_code": {
-      "title": "Codice non valido",
-      "message": "Il codice che hai inserito è sbagliato. Riprova."
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo"
     },
     "invalid_verification_code_ua": {
       "title": "Codice non valido",
