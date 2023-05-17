@@ -1,5 +1,5 @@
 import { ExitToApp } from '@mui/icons-material';
-import { ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
 
 import { SideMenuItem } from '../../types';
@@ -42,9 +42,7 @@ const SideMenuListItem = ({
   goOutside = false,
   handleLinkClick,
   onSelect,
-}: Props) => {
-  const theme = useTheme();
-  return (
+}: Props) => (
     <ListItemButton
       selected={selected}
       onClick={() => {
@@ -59,27 +57,22 @@ const SideMenuListItem = ({
       data-testid={`sideMenuItem-${item.label}`}
     >
       {item.icon && (
-        <ListItemIcon sx={{ color: selected ? `${theme.palette.primary.dark} !important` : '' }}>
+        <ListItemIcon>
           {item.dotBadge ? (
             <Badge color="primary" variant="dot">
-              <item.icon sx={{ color: selected ? `${theme.palette.primary.dark} !important` : '' }} />
+              <item.icon />
             </Badge>
           ) : (
             renderIcon(item.icon)
           )}
         </ListItemIcon>
       )}
-      <ListItemText
-        primary={item.label}
-        sx={{ color: selected ? `${theme.palette.primary.dark} !important` : '' }}
-        data-testid={`menu-item(${item.label.toLowerCase()})`}
-      />
+      <ListItemText primary={item.label} data-testid={`menu-item(${item.label.toLowerCase()})`} />
       {item.rightBadgeNotification && (
-        <NotificationBadge numberOfNotification={item.rightBadgeNotification}/>
+        <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
       )}
-      {goOutside && <ExitToApp color="action"/>}
+      {goOutside && <ExitToApp color="action" />}
     </ListItemButton>
   );
-};
 
 export default SideMenuListItem;

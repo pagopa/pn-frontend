@@ -164,7 +164,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           )}
           className={classes.root}
         >
-          {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
+          {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
               key={selfcareItem.label}
               item={selfcareItem}
