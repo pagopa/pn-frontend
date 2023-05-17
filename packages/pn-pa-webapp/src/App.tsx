@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import Router from './navigation/routes';
-import { AUTH_ACTIONS, getOrganizationParty, logout } from './redux/auth/actions';
+import { AUTH_ACTIONS, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState, store } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
@@ -49,7 +49,7 @@ const App = () => {
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = useAppSelector(
-    (state: RootState) => state.userState.organizationParty
+    (state: RootState) => state.userState.user.organization
   );
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
@@ -59,8 +59,8 @@ const App = () => {
   const { hasApiErrors } = useErrors();
 
   // TODO check if it can exist more than one role on user
-  const role = loggedUser.organization?.roles[0];
-  const idOrganization = loggedUser.organization?.id;
+  const role = loggedUserOrganizationParty?.roles[0];
+  const idOrganization = loggedUserOrganizationParty?.id;
   const sessionToken = loggedUser.sessionToken;
 
   const configuration = useMemo(() => getConfiguration(), []);
@@ -146,7 +146,7 @@ const App = () => {
     () => [
       {
         id: '0',
-        name: loggedUserOrganizationParty.name,
+        name: loggedUserOrganizationParty?.name,
         // productRole: role?.role,
         productRole: t(`roles.${role?.role}`),
         logoUrl: undefined,
@@ -168,12 +168,6 @@ const App = () => {
   }, []);
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
-
-  useEffect(() => {
-    if (idOrganization) {
-      void dispatch(getOrganizationParty(idOrganization));
-    }
-  }, [idOrganization]);
 
   useEffect(() => {
     if (sessionToken) {

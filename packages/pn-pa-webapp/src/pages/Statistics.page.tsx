@@ -9,12 +9,12 @@ import { RootState } from "../redux/store";
 const Statistics = () => {
   const { t } = useTranslation(['statistics']);
   const loggedUserOrganizationParty = useAppSelector(
-    (state: RootState) => state.userState.organizationParty
+    (state: RootState) => state.userState.user?.organization
   );
 
   const Subtitle = (
     <Grid item display="flex" flexDirection="row">
-      <Typography>{t('subtitle', { organization: loggedUserOrganizationParty.name })}</Typography>
+      <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
       <Button variant="outlined" endIcon={<Download />} sx={{whiteSpace:"nowrap"}}>{t('export_all')}</Button>
     </Grid>
   );
