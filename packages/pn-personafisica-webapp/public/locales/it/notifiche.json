@@ -61,11 +61,11 @@
     "show-less": "Vedi meno dettagli",
     "add_domicile_1": "Aggiungi PEC",
     "add_domicile_2": "Aggiungi cellulare",
-    "add_domicile_3": "Aggiungi email",
+    "add_domicile_3": "Aggiungi e-mail",
     "add_domicile_4": "Attiva il servizio",
     "domicile_1": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
     "domicile_2": "Aggiungi il tuo numero di cellulare: ti invieremo un messaggio ogni volta che ricevi una notifica.",
-    "domicile_3": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che ricevi una notifica.",
+    "domicile_3": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "domicile_4": "Hai l’app IO? Attiva il servizio \"Notifiche digitali\" per visualizzare e pagare le notifiche direttamente in app.",
     "payment": {
       "summary-pending": "Da pagare",

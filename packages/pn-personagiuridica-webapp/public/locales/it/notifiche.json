@@ -65,10 +65,10 @@
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
     "add_domicile_1": "Aggiungi cellulare",
-    "add_domicile_2": "Aggiungi email",
+    "add_domicile_2": "Aggiungi e-mail",
     "add_domicile_3": "Aggiungi PEC",
     "domicile_1": "Aggiungi il tuo numero di cellulare: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica.",
-    "domicile_2": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica.",
+    "domicile_2": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che l’impresa riceve una notifica.",
     "domicile_3": "Aggiungi l’indirizzo PEC dell’impresa.",
     "payment": {
       "summary-pending": "Da pagare",
