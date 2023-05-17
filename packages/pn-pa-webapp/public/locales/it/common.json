@@ -129,7 +129,7 @@
   "required-field": "Campo obbligatorio",
   "required": "obbligatorio",
   "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
-  "too-short-field-error": "Scrivi al minimo {{minLength}} caratteri",
+  "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
   "no-spaces-at-edges": "Spazi non validi all'inizio/fine",
   "invalid": "non valido",
   "upload-file": {
