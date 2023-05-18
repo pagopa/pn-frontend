@@ -26,11 +26,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('test Terms of Service page', () => {
-  beforeEach(() => {
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-  });
-
   const tosFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: true,
