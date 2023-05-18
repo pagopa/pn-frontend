@@ -1,13 +1,12 @@
-import { ConsentUser } from '@pagopa-pn/pn-commons';
 import React from 'react';
 import * as redux from 'react-redux';
-import { fireEvent, render } from '../../__test__/test-utils';
+
+import { ConsentUser } from '@pagopa-pn/pn-commons';
+import { fireEvent, mockApi, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { SET_CONSENTS } from '../../api/consents/consents.routes';
+import { ConsentActionType, ConsentType } from '../../models/consents';
 import ToSAcceptance from '../ToSAcceptance.page';
-import { mockApi } from "../../../../pn-personafisica-webapp/src/__test__/test-utils";
-import { apiClient } from "@pagopa-pn/pn-personafisica-webapp/src/api/apiClients";
-import { SET_CONSENTS } from "@pagopa-pn/pn-personafisica-webapp/src/api/consents/consents.routes";
-import { ConsentActionType, ConsentType } from "@pagopa-pn/pn-personafisica-webapp/src/models/consents";
-import { waitFor } from "@testing-library/react";
 
 const mockNavigateFn = jest.fn();
 const mockDispatchFn = jest.fn();
@@ -35,29 +34,31 @@ describe('test Terms of Service page', () => {
   const tosFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: true,
-    consentVersion: "mocked-version-1"
-  }
+    consentVersion: 'mocked-version-1',
+  };
 
   const privacyFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: true,
-    consentVersion: "mocked-version-1"
-  }
+    consentVersion: 'mocked-version-1',
+  };
 
   const tosNonFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: false,
-    consentVersion: "mocked-version-2"
-  }
+    consentVersion: 'mocked-version-2',
+  };
 
   const privacyNonFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: false,
-    consentVersion: "mocked-version-2"
-  }
+    consentVersion: 'mocked-version-2',
+  };
 
   it('checks the texts in the page - First ToS acceptance', () => {
-    const result = render(<ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />);
+    const result = render(
+      <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
+    );
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.body/i);
@@ -66,7 +67,12 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page - ToS has changed', () => {
-    const result = render(<ToSAcceptance tosConsent={tosNonFirstAcceptance} privacyConsent={privacyNonFirstAcceptance} />);
+    const result = render(
+      <ToSAcceptance
+        tosConsent={tosNonFirstAcceptance}
+        privacyConsent={privacyNonFirstAcceptance}
+      />
+    );
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.redo-body/i);
@@ -75,25 +81,13 @@ describe('test Terms of Service page', () => {
   });
 
   it('tests the switch and button', async () => {
-    const mock = mockApi(
-      apiClient,
-      'PUT',
-      SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'),
-      200,
-      {
-        action: ConsentActionType.ACCEPT,
-      }
-    );
+    const mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
+      action: ConsentActionType.ACCEPT,
+    });
 
-    mockApi(
-      mock,
-      'PUT',
-      SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'),
-      200,
-      {
-        action: ConsentActionType.ACCEPT,
-      }
-    );
+    mockApi(mock, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'), 200, {
+      action: ConsentActionType.ACCEPT,
+    });
 
     const result = render(
       <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
@@ -120,5 +114,5 @@ describe('test Terms of Service page', () => {
         SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1')
       );
     });
-  })
+  });
 });
