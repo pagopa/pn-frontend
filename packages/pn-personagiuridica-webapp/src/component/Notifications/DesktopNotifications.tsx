@@ -14,6 +14,8 @@ import {
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
 
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -40,6 +42,8 @@ const DesktopNotifications = ({
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
@@ -162,10 +166,12 @@ const DesktopNotifications = ({
     emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : handleRouteContacts,
-    emptyMessage: filtersApplied ? undefined : t('empty-state.first-message'),
+      : isDelegatedPage ? undefined : handleRouteContacts,
+    emptyMessage: filtersApplied 
+      ? undefined 
+      : isDelegatedPage ? t('empty-state.delegate', { name: organization.name }) : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: filtersApplied
+    secondaryMessage: (filtersApplied || isDelegatedPage)
       ? undefined
       : {
           emptyMessage: t('empty-state.second-message'),

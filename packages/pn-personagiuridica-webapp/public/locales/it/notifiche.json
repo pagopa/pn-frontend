@@ -36,7 +36,8 @@
   "empty-state": {
     "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
     "action": "Recapiti",
-    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
+    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere."
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"

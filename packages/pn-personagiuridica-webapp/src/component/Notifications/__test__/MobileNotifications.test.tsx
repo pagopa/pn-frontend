@@ -43,7 +43,7 @@ jest.mock('../FilterNotifications', () => {
 });
 
 describe('MobileNotifications Component', () => {
-  it('renders MobileNotifications', () => {
+  it('renders MobileNotifications - empty case - recipient access', () => {
     // render component
     const result = render(
       <MobileNotifications
@@ -56,6 +56,23 @@ describe('MobileNotifications Component', () => {
     expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
       /empty-state.first-message empty-state.action empty-state.second-message/i
+    );
+  });
+
+  it('renders MobileNotifications - empty case - delegate access', () => {
+    // render component
+    const result = render(
+      <MobileNotifications
+        notifications={[]}
+        sort={{ orderBy: 'sentAt', order: 'asc' }}
+        onChangeSorting={() => {}}
+        isDelegatedPage
+      />
+    );
+    expect(result.container).not.toHaveTextContent(/Filters/i);
+    expect(result.container).not.toHaveTextContent(/Sort/i);
+    expect(result.container).toHaveTextContent(
+      /empty-state.delegate/i
     );
   });
 
