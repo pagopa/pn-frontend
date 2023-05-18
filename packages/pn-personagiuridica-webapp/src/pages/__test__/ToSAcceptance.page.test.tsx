@@ -9,7 +9,6 @@ import { ConsentActionType, ConsentType } from '../../models/consents';
 import ToSAcceptance from '../ToSAcceptance.page';
 
 const mockNavigateFn = jest.fn();
-const mockDispatchFn = jest.fn();
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
