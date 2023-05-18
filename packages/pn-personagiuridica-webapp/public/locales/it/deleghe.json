@@ -92,6 +92,7 @@
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo enti selezionati",
       "selectEntities": "Seleziona enti",
+      "date-duration": "Periodo di validità della delega*",
       "endDate": "Termine delega",
       "verificationCode": "Codice di verifica",
       "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
