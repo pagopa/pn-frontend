@@ -1,5 +1,4 @@
 import React from 'react';
-import * as redux from 'react-redux';
 
 import { ConsentUser } from '@pagopa-pn/pn-commons';
 import { fireEvent, mockApi, render, waitFor } from '../../__test__/test-utils';
