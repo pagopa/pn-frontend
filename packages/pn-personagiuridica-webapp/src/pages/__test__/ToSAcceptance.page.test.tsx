@@ -3,6 +3,11 @@ import React from 'react';
 import * as redux from 'react-redux';
 import { fireEvent, render } from '../../__test__/test-utils';
 import ToSAcceptance from '../ToSAcceptance.page';
+import { mockApi } from "../../../../pn-personafisica-webapp/src/__test__/test-utils";
+import { apiClient } from "@pagopa-pn/pn-personafisica-webapp/src/api/apiClients";
+import { SET_CONSENTS } from "@pagopa-pn/pn-personafisica-webapp/src/api/consents/consents.routes";
+import { ConsentActionType, ConsentType } from "@pagopa-pn/pn-personafisica-webapp/src/models/consents";
+import { waitFor } from "@testing-library/react";
 
 const mockNavigateFn = jest.fn();
 const mockDispatchFn = jest.fn();
@@ -69,8 +74,30 @@ describe('test Terms of Service page', () => {
     expect(result.container).toHaveTextContent(/tos.button/i);
   });
 
-  it('tests the switch and button', () => {
-    const result = render(<ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />);
+  it('tests the switch and button', async () => {
+    const mock = mockApi(
+      apiClient,
+      'PUT',
+      SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'),
+      200,
+      {
+        action: ConsentActionType.ACCEPT,
+      }
+    );
+
+    mockApi(
+      mock,
+      'PUT',
+      SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'),
+      200,
+      {
+        action: ConsentActionType.ACCEPT,
+      }
+    );
+
+    const result = render(
+      <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
+    );
 
     const switchElement = result.getByRole('checkbox');
     const acceptButton = result.getByRole('button');
@@ -81,6 +108,17 @@ describe('test Terms of Service page', () => {
     expect(acceptButton).toBeEnabled();
 
     fireEvent.click(acceptButton);
-    expect(mockDispatchFn).toBeCalledTimes(1);
+
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(1);
+      expect(mock.history.put[0].url).toBe(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'));
+    });
+
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(2);
+      expect(mock.history.put[1].url).toBe(
+        SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1')
+      );
+    });
   })
 });

@@ -5,7 +5,7 @@ import ToSAcceptance from '../ToSAcceptance.page';
 import { apiClient } from "../../api/apiClients";
 import { SET_CONSENTS } from "../../api/consents/consents.routes";
 import { ConsentActionType, ConsentType } from "../../models/consents";
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 
 const mockNavigateFn = jest.fn();
 
@@ -103,13 +103,17 @@ describe('test Terms of Service page', () => {
     expect(acceptButton).toBeEnabled();
 
     fireEvent.click(acceptButton);
-    await waitFor(() => {
-      expect(mock.history.put).toHaveLength(2);
-    })
 
     await waitFor(() => {
+      expect(mock.history.put).toHaveLength(1);
       expect(mock.history.put[0].url).toBe(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'));
-      expect(mock.history.put[1].url).toBe(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'));
-    })
+    });
+
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(2);
+      expect(mock.history.put[1].url).toBe(
+        SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1')
+      );
+    });
   })
 });
