@@ -754,32 +754,42 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
 
 /**
  * Populate other documents array before send notification to fe.
- * @param  {Array<INotificationDetailTimeline>} timeline
+ * @param  {NotificationDetail} notificationDetail
  * @returns Array<NotificationDetailDocument>
  */
 const populateOtherDocuments = (
-  timeline: Array<INotificationDetailTimeline>
+  notificationDetail: NotificationDetail
 ): Array<NotificationDetailDocument> => {
-  const timelineFiltered = timeline.filter((t) => t.category === TimelineCategory.AAR_GENERATION);
+  const timelineFiltered = notificationDetail.timeline.filter(
+    (t) => t.category === TimelineCategory.AAR_GENERATION
+  );
   if (timelineFiltered.length > 0) {
-    return timelineFiltered.map((t) => ({
-      recIndex: t.details.recIndex,
-      documentId: (t.details as AarDetails).generatedAarUrl as string,
-      documentType: LegalFactType.AAR,
-      title: getLocalizedOrDefaultLabel(
+    const isMultiRecipient = timelineFiltered.length > 1;
+    return timelineFiltered.map((t, index) => {
+      const recipients = notificationDetail.recipients;
+      const recipientData = isMultiRecipient
+        ? ` - ${recipients[index].denomination} (${recipients[index].taxId})`
+        : '';
+      const title = `${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.aar-document',
         'Avviso di avvenuta ricezione'
-      ),
-      digests: {
-        sha256: '',
-      },
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-      contentType: '',
-    }));
+      )}${recipientData}`;
+      return {
+        recIndex: t.details.recIndex,
+        documentId: (t.details as AarDetails).generatedAarUrl as string,
+        documentType: LegalFactType.AAR,
+        title,
+        digests: {
+          sha256: '',
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
+        contentType: '',
+      };
+    });
   }
   return [];
 };
@@ -841,7 +851,7 @@ export function parseNotificationDetail(
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
-    otherDocuments: populateOtherDocuments(notificationDetail.timeline),
+    otherDocuments: populateOtherDocuments(notificationDetail),
     paymentHistory: populatePaymentHistory(
       notificationDetail.timeline,
       notificationDetail.recipients
