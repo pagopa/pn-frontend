@@ -1,11 +1,13 @@
-import { ConsentUser } from '@pagopa-pn/pn-commons';
 import React from 'react';
-import * as redux from 'react-redux';
-import { fireEvent, render } from '../../__test__/test-utils';
+import { ConsentUser } from '@pagopa-pn/pn-commons';
+import { fireEvent, mockApi, render } from '../../__test__/test-utils';
 import ToSAcceptance from '../ToSAcceptance.page';
+import { apiClient } from "../../api/apiClients";
+import { SET_CONSENTS } from "../../api/consents/consents.routes";
+import { ConsentActionType, ConsentType } from "../../models/consents";
+import {waitFor} from "@testing-library/react";
 
 const mockNavigateFn = jest.fn();
-const mockDispatchFn = jest.fn();
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -22,10 +24,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('test Terms of Service page', () => {
-  beforeEach(() => {
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-  });
 
   const tosFirstAcceptance: ConsentUser = {
     accepted: false,
@@ -61,7 +59,9 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page - ToS has changed', () => {
-    const result = render(<ToSAcceptance tosConsent={tosNonFirstAcceptance} privacyConsent={privacyNonFirstAcceptance} />);
+    const result = render(
+      <ToSAcceptance tosConsent={tosNonFirstAcceptance} privacyConsent={privacyNonFirstAcceptance} />
+    );
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.redo-body/i);
@@ -69,8 +69,30 @@ describe('test Terms of Service page', () => {
     expect(result.container).toHaveTextContent(/tos.button/i);
   });
 
-  it('tests the switch and button', () => {
-    const result = render(<ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />);
+  it('tests the switch and button', async () => {
+    const mock = mockApi(
+      apiClient,
+      'PUT',
+      SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'),
+      200,
+      {
+        action: ConsentActionType.ACCEPT,
+      }
+    );
+
+    mockApi(
+      mock,
+      'PUT',
+      SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'),
+      200,
+      {
+        action: ConsentActionType.ACCEPT,
+      }
+    );
+
+    const result = render(
+      <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
+    );
 
     const switchElement = result.getByRole('checkbox');
     const acceptButton = result.getByRole('button');
@@ -81,6 +103,13 @@ describe('test Terms of Service page', () => {
     expect(acceptButton).toBeEnabled();
 
     fireEvent.click(acceptButton);
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(2);
+    })
+
+    await waitFor(() => {
+      expect(mock.history.put[0].url).toBe(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'));
+      expect(mock.history.put[1].url).toBe(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'));
+    })
   })
 });
