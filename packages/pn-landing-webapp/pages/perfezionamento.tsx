@@ -1,7 +1,7 @@
 import { Infoblock } from "@pagopa/mui-italia";
 import { NextPage } from "next";
 import { useRef, useState } from "react";
-import { Box, Slide } from "@mui/material";
+import { Box, Fade } from "@mui/material";
 
 import {
   getCommonHeadingTitleData,
@@ -33,8 +33,7 @@ const Perfezionamento: NextPage = () => {
       <HeadingTitle {...headingTitleData} />
       <Tabs {...tabsData} onTabChange={handleTabChange} />
       <Box ref={containerRef}>
-        <Slide
-          direction="right"
+        <Fade
           in={currentTab.visible}
           timeout={transitionDuration}
         >
@@ -45,7 +44,7 @@ const Perfezionamento: NextPage = () => {
               )}
             />
           </Box>
-        </Slide>
+        </Fade>
       </Box>
     </>
   );
