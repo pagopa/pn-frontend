@@ -16,6 +16,7 @@ import {
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { PNRole } from '../../redux/auth/types';
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -44,6 +45,7 @@ const DesktopNotifications = ({
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const role = organization.roles[0].role;
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
@@ -166,16 +168,21 @@ const DesktopNotifications = ({
     emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : isDelegatedPage ? undefined : handleRouteContacts,
-    emptyMessage: filtersApplied 
-      ? undefined 
-      : isDelegatedPage ? t('empty-state.delegate', { name: organization.name }) : t('empty-state.first-message'),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: (filtersApplied || isDelegatedPage)
+      : isDelegatedPage || role !== PNRole.ADMIN
       ? undefined
-      : {
-          emptyMessage: t('empty-state.second-message'),
-        },
+      : handleRouteContacts,
+    emptyMessage: filtersApplied
+      ? undefined
+      : isDelegatedPage
+      ? t('empty-state.delegate', { name: organization.name })
+      : t('empty-state.first-message'),
+    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
+    secondaryMessage:
+      filtersApplied || isDelegatedPage || role !== PNRole.ADMIN
+        ? undefined
+        : {
+            emptyMessage: t('empty-state.second-message'),
+          },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
