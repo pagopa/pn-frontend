@@ -325,4 +325,14 @@ describe('parseNotificationDetail scenarios - single recipient', () => {
     expect(deliveredStatus.status).toEqual(NotificationStatus.DELIVERED);
     expect(deliveredStatus.deliveryMode).toBeUndefined();
   });
+
+  it('AAR documents should not contains denomination and tax id recipients in titles', () => {
+    const notificationBe = flexibleNotificationFromBE(
+      NotificationStatus.DELIVERED, sendRegisteredLetterBeStatusHistory(), sendRegisteredLetterBeTimeline()
+    );
+    const notificationFe = parseNotificationDetail(notificationBe);
+    for(const aar of notificationFe.otherDocuments!) {
+      expect(aar.title).toEqual('Avviso di avvenuta ricezione');
+    }
+  });
 });
