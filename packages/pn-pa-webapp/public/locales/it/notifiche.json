@@ -71,7 +71,7 @@
     },
     "acts": "Documenti allegati",
     "download-message-cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
-    "download-message-available": "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.",
+    "download-message-available": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
     "download-message-expired": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.",
     "download-files-link": "Quando si perfeziona una notifica?",
     "other-acts": "Altri documenti",
