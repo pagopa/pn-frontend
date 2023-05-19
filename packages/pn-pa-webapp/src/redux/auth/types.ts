@@ -12,4 +12,5 @@ export interface Organization {
   fiscal_code: string; // organization fiscal code
   groups?: Array<string>;
   hasGroups?: boolean;
+  name: string;
 }

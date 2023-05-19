@@ -48,7 +48,6 @@ const NewNotification = () => {
   );
   const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const organizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
   const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
@@ -124,11 +123,11 @@ const NewNotification = () => {
   useEffect(() => {
     dispatch(
       setSenderInfos({
-        senderDenomination: organizationParty.name,
+        senderDenomination: organization.name,
         senderTaxId: organization.fiscal_code,
       })
     );
-  }, [organization, organizationParty]);
+  }, [organization]);
 
   useEffect(() => () => void dispatch(resetState()), []);
 

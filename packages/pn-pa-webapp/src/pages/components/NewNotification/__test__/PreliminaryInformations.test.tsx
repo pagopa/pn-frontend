@@ -32,6 +32,22 @@ async function testRadio(form: HTMLFormElement, dataTestId: string, index: numbe
   });
 }
 
+const populateFormWithoutPayment = async (form: HTMLFormElement) => {
+  await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
+  await testInput(form!, 'subject', 'mocked-Subject');
+  await testInput(form!, 'taxonomyCode', '012345N');
+  await testSelect(
+    form!,
+    'group',
+    [
+      { label: 'Group1', value: '1' },
+      { label: 'Group2', value: '2' },
+    ],
+    1
+  );
+  await testRadio(form!, 'comunicationTypeRadio', 1);
+};
+
 const mockIsPaymentEnabledGetter = jest.fn();
 jest.mock('../../../../services/configuration.service', () => {
   return {
@@ -187,6 +203,26 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     const button = form?.querySelector('button');
     expect(button!).toBeDisabled();
   });
+
+  it('tests form validation (subject)', async () => {
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    expect(submitButton).toBeDisabled();
+    await populateFormWithoutPayment(form);
+    expect(submitButton).toBeEnabled();
+    await testInput(form, `subject`, 'five5');
+    expect(submitButton).toBeDisabled();
+    await testInput(form, `subject`, 'TwentyTwentyTwenty20');
+    expect(submitButton).toBeEnabled();
+    await testInput(form, 
+      `subject`, 
+      'oneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySix3456'
+    );
+    expect(submitButton).toBeDisabled();
+    await testInput(form, `subject`, 'FifteenFifteenX');
+    expect(submitButton).toBeEnabled();
+  }, 20000);
+
 
   it.skip('changes form values and clicks on confirm', async () => {
     const form = result.container.querySelector('form');

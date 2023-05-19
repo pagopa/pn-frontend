@@ -432,6 +432,12 @@ const NuovaDelega = () => {
                       </FormControl>
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
+                        <Typography
+                          fontWeight="bold"
+                          marginBottom={2}
+                        >
+                          {t("nuovaDelega.form.date-duration")}
+                        </Typography>
                         <FormControl fullWidth>
                           <LocalizationProvider
                             dateAdapter={AdapterDateFns}

@@ -60,7 +60,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
-    subject: requiredStringFieldValidation(tc, 134),
+    subject: requiredStringFieldValidation(tc, 134, 10),
     abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })).matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
