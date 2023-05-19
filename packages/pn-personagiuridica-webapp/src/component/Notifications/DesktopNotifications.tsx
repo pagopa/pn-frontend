@@ -42,7 +42,7 @@ const DesktopNotifications = ({
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
-
+  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const handleEventTrackingTooltip = () => {
@@ -162,16 +162,27 @@ const DesktopNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
+  const getEmptyStateFirstMessage = () => {
+    if (filtersApplied) {
+      return undefined;
+    }
+    if (isGroupAdmin) {
+      return t('empty-state.group-admin');
+    }
+    if (isDelegatedPage) {
+      return t('empty-state.delegate', { name: organization.name });
+    }
+    return t('empty-state.first-message');
+  };
+
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
+    emptyActionLabel: filtersApplied || isGroupAdmin ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : isDelegatedPage ? undefined : handleRouteContacts,
-    emptyMessage: filtersApplied 
-      ? undefined 
-      : isDelegatedPage ? t('empty-state.delegate', { name: organization.name }) : t('empty-state.first-message'),
+    emptyMessage: getEmptyStateFirstMessage(),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: (filtersApplied || isDelegatedPage)
+    secondaryMessage: (filtersApplied || isDelegatedPage || isGroupAdmin)
       ? undefined
       : {
           emptyMessage: t('empty-state.second-message'),
