@@ -94,7 +94,7 @@
     "address-type": "Tipo di ecapito",
     "pec": "Indirizzo PEC",
     "phone": "Cellulare",
-    "mail": "Indirizzo E-mail",
+    "mail": "Indirizzo e-mail",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "phone-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
