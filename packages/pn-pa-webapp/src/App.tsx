@@ -40,7 +40,6 @@ import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
 import { setUpInterceptor } from './api/interceptors';
 import { getConfiguration } from './services/configuration.service';
 
-
 const App = () => {
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -48,9 +47,7 @@ const App = () => {
   setUpInterceptor(store);
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const loggedUserOrganizationParty = useAppSelector(
-    (state: RootState) => state.userState.user.organization
-  );
+  const loggedUserOrganizationParty = loggedUser.organization;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
 
@@ -247,8 +244,10 @@ const App = () => {
         }
         showSideMenu={
           !!sessionToken &&
-          tosConsent && tosConsent.accepted &&
-          privacyConsent && privacyConsent.accepted &&
+          tosConsent &&
+          tosConsent.accepted &&
+          privacyConsent &&
+          privacyConsent.accepted &&
           !hasFetchOrganizationPartyError &&
           !isPrivacyPage
         }
