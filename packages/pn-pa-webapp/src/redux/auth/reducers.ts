@@ -7,10 +7,16 @@ import {
   basicUserDataMatcherContents,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
-import { Party } from '../../models/party';
 
 import { PartyRole, PNRole } from '../../models/user';
-import { exchangeToken, logout, getOrganizationParty, acceptToS, getToSApproval, acceptPrivacy, getPrivacyApproval } from './actions';
+import {
+  exchangeToken,
+  logout,
+  acceptToS,
+  getToSApproval,
+  acceptPrivacy,
+  getPrivacyApproval,
+} from './actions';
 import { User } from './types';
 
 const roleMatcher = yup.object({
@@ -60,10 +66,6 @@ const userSlice = createSlice({
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     fetchedTos: false,
     fetchedPrivacy: false,
-    organizationParty: {
-      id: '',
-      name: '',
-    } as Party,
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
     isClosedSession: false,
@@ -108,9 +110,6 @@ const userSlice = createSlice({
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
       state.isClosedSession = true;
-    });
-    builder.addCase(getOrganizationParty.fulfilled, (state, action) => {
-      state.organizationParty = action.payload;
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tosConsent = action.payload;

@@ -483,10 +483,21 @@ export function getNotificationTimelineStatusInfos(
     // but otherwise take all steps as related with the only recipient included in the API response.
     : recipients.length === 1 ? recipients[0] : recipients[step.details.recIndex];
 
+  // we show the multirecipient versions of the step descriptions
+  // only if the array of recipients include more than one "full" element
+  // (i.e. an element including the full data about the recipient, instead of being included
+  //  just to preserve the correlation with the recIndex in each step).
+  // We consider a recipient description to be "full" if it includes recipientType, taxId and denomination.
+  // -------------------------------------
+  // Carlos Lombardi, 2023.05.17
+  // cfr. PN-5911
+  // -------------------------------------
   return TimelineStepFactory.createTimelineStep(step).getTimelineStepInfo({
     step,
     recipient,
-    isMultiRecipient: recipients.length > 1,
+    isMultiRecipient: recipients
+      .filter(recDescription => recDescription.denomination && recDescription.taxId && recDescription.recipientType)
+      .length > 1,
     allStepsForThisStatus
   });
 }

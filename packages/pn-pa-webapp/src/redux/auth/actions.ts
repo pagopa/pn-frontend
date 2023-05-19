@@ -39,6 +39,9 @@ export const exchangeToken = createAsyncThunk<User, string>(
  *     ------------------------------
  *     Carlos Lombardi, 2022.07.27
  */
+/**
+ @deprecated since PN-5881
+ */
 export const getOrganizationParty = createAsyncThunk<Party, string>(
   AUTH_ACTIONS.GET_ORGANIZATION_PARTY,
   performThunkAction(async (organizationId: string) => {
