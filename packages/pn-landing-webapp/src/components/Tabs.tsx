@@ -90,7 +90,7 @@ const Tabs = ({
             open={dropdownOpen}
             anchorEl={anchorRef.current}
             transition
-            sx={{ zIndex: 9}}
+            sx={{ zIndex: 4 }}
             disablePortal>
             {({
               TransitionProps,
