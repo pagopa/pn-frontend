@@ -73,10 +73,6 @@ const reduxInitialState = (
       email: 'mocked-user@mocked-domain.com',
       sessionToken: 'mocked-token',
     },
-    organizationParty: {
-      id: '',
-      name: '',
-    } as Party,
     fetchedTos,
     fetchedPrivacy,
     tosConsent: {

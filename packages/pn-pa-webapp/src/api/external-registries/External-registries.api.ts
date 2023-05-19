@@ -13,6 +13,7 @@ export const ExternalRegistriesAPI = {
    *     I decided to encapsulate the array nature of the endpoint inside the api definition.
    *     ---------------
    *     Carlos Lombardi, 2022.07.27
+   @deprecated since PN-5881
    */
   getOrganizationParty: (organizationId: string): Promise<Party> =>
     apiClient
