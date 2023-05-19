@@ -54,7 +54,7 @@ function EmptyState({
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {emptyMessage}
       </Typography>
-      {emptyActionCallback && (
+      {emptyActionCallback && emptyActionLabel && (
         <>
           &nbsp;
           <ButtonNaked
