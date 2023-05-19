@@ -38,7 +38,7 @@ export default {
       },
     },
     courtesy: {
-      title: 'Email o SMS',
+      title: 'E-mail o numero di cellulare',
       subtitle:
         'Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a SEND per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
@@ -79,7 +79,7 @@ export default {
       senderPlaceholder: 'Ente',
       addrTypePlaceholder: 'Indirizzo PEC',
       pecPlaceholder: 'Indirizzo PEC*',
-      mailPlaceholder: 'Indirizzo mail*',
+      mailPlaceholder: 'Indirizzo email*',
       invalidPecMessage: 'Indirizzo PEC non valido',
       invalidPhoneMessage: 'Numero di cellulare non valido',
       confirmButton: 'Conferma',
