@@ -31,7 +31,6 @@
     "verification_code": "Codice di verifica",
     "table": {
       "name": "Nome",
-      "email": "Email",
       "delegationStart": "Inizio delega",
       "delegationEnd": "Fine delega",
       "permissions": "Permessi",
@@ -60,7 +59,6 @@
       "firstName": "Nome*",
       "lastName": "Cognome*",
       "fiscalCode": "Codice Fiscale*",
-      "email": "Email*",
       "businessName": "Ragione Sociale*",
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
@@ -78,10 +76,6 @@
       "fiscalCode": {
         "required": "Il Codice Fiscale è obbligatorio",
         "wrong": "Il Codice Fiscale inserito non è corretto"
-      },
-      "email": {
-        "wrong": "Email non formattata correttamente",
-        "required": "Email obbligatoria"
       },
       "name": {
         "required": "Il nome è obbligatorio"
