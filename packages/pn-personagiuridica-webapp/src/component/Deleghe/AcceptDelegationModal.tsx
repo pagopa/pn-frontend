@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -15,8 +15,9 @@ import {
   RadioGroup,
   TextField,
 } from '@mui/material';
-import { CodeModal, useIsMobile } from '@pagopa-pn/pn-commons';
+import { AppResponse, AppResponsePublisher, CodeModal, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import { ServerResponseErrorCode } from '../../utils/AppError/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
@@ -49,6 +50,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
   });
   const [groupInputValue, setGroupInputValue] = useState('');
   const [code, setCode] = useState<Array<string>>([]);
+  const [error, setError] = useState<{ title: string; content: string }>();
   const { t } = useTranslation(['deleghe']);
   const isMobile = useIsMobile();
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
@@ -65,6 +67,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
       setCode(code);
       return;
     }
+    setError(undefined);
     handleConfirm(code, []);
   };
 
@@ -92,6 +95,28 @@ const AcceptDelegationModal: React.FC<Props> = ({
     setStep(0);
   };
 
+  const handleAcceptanceError = useCallback((responseError: AppResponse) => {
+    // if code is invalid, pass the error to the AcceptModal and after to the CodeModal
+    const error = responseError.errors ? responseError.errors[0] : null;
+    if (error?.code === ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE) {
+      setError(error?.message);
+    }
+    return true;
+  }, []);
+
+  useEffect(() => {
+    // code validation is done only during acceptance and not during update
+    if (!isEditMode) {
+      AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptanceError);
+    }
+
+    return () => {
+      if (!isEditMode) {
+        AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptanceError);
+      }
+    };
+  }, [handleAcceptanceError]);
+
   if (step === 0) {
     return (
       <CodeModal
@@ -99,12 +124,14 @@ const AcceptDelegationModal: React.FC<Props> = ({
         subtitle={t('deleghe.accept_description', { name })}
         open={open}
         initialValues={code.length ? code : new Array(5).fill('')}
-        handleClose={handleClose}
         cancelCallback={handleClose}
         cancelLabel={t('button.annulla', { ns: 'common' })}
         confirmCallback={handleFirstStepConfirm}
         confirmLabel={t('deleghe.accept-delegation')}
         codeSectionTitle={t('deleghe.verification_code')}
+        errorTitle={error?.title}
+        errorMessage={error?.content}
+        hasError={Boolean(error)}
       ></CodeModal>
     );
   }

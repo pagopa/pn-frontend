@@ -12,7 +12,6 @@
     "accept_title": "Inserisci il codice di verifica",
     "accept_description": "Per accettare la delega, inserisci il codice che {{name}} ha condiviso con te.",
     "add": "Aggiungi una delega",
-    "invalid_code": "Codice di verifica non valido",
     "revoke": "Revoca",
     "reject": "Rifiuta",
     "accept": "Accetta",
@@ -110,8 +109,8 @@
       "message": "Non è possibile delegare se stessi"
     },
     "invalid_verification_code": {
-      "title": "Codice non valido",
-      "message": "Codice di verifica non valido"
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo"
     },
     "fiscal_code": {
       "title": "Codice fiscale non valido",

@@ -1,4 +1,5 @@
 import {
+  AppResponsePublisher,
   // momentarily commented for pn-5157
   // AppRouteType,
   appStateActions,
@@ -14,7 +15,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -31,6 +32,14 @@ const INITIALIZATION_SEQUENCE = [
 ];
 
 const inactivityTimer = 5 * 60 * 1000;
+
+const manageUnforbiddenError = (e: any) => {
+  if (e.status === 451) {
+    // error toast must not be shown
+    return false;
+  }
+  return true;
+};
 
 // Perché ci sono due componenti.
 // Il codice in SessionGuard implementa i steps necessari per determinare se c'è sessione, se è utente abilitato, se è sessione anonima, ecc..
@@ -141,6 +150,7 @@ const SessionGuard = () => {
       // ----------------------
       const spidToken = getTokenParam();
       if (spidToken) {
+        AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
         await dispatch(exchangeToken(spidToken));
       }
     };
@@ -175,10 +185,13 @@ const SessionGuard = () => {
           // ----------------------
           // Andrea Cimini, 2023.01.27
           // ----------------------
-          if(!isGroupAdmin) {
+          if (!isGroupAdmin) {
             navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
           } else {
-            navigate({ pathname: routes.NOTIFICHE_DELEGATO, search: location.search }, { replace: true });
+            navigate(
+              { pathname: routes.NOTIFICHE_DELEGATO, search: location.search },
+              { replace: true }
+            );
           }
         } else {
           const hashAsObject = new URLSearchParams(location.hash);
@@ -230,6 +243,11 @@ const SessionGuard = () => {
     if (!isInitialized && isFinished()) {
       dispatch(appStateActions.finishInitialization());
     }
+    return () => {
+      if (isInitialized) {
+        AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+      }
+    };
   }, [isInitialized, isFinished]);
 
   return <SessionGuardRender />;

@@ -21,7 +21,6 @@ type Props = {
   subtitle: ReactNode;
   open: boolean;
   initialValues: Array<string>;
-  handleClose: () => void;
   codeSectionTitle: string;
   codeSectionAdditional?: ReactNode;
   confirmLabel?: string;
@@ -40,7 +39,6 @@ type Props = {
  * @param subtitle subtitle to show
  * @param open flag to hide/show modal
  * @param initialValues initial code
- * @param handleClose function that is called when modal is closed
  * @param codeSectionTitle title of the section where is the code
  * @param codeSectionAdditional additional elments under the code
  * @param confirmLabel label of the confirm button
@@ -56,7 +54,6 @@ const CodeModal = memo(
     subtitle,
     open,
     initialValues,
-    handleClose,
     codeSectionTitle,
     codeSectionAdditional,
     confirmLabel,
@@ -87,10 +84,11 @@ const CodeModal = memo(
     return (
       <Dialog
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
         data-testid="codeDialog"
+        disableEscapeKeyDown
       >
         <DialogTitle id="dialog-title" sx={{ textAlign: textPosition }}>
           {title}
