@@ -34,7 +34,8 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
+    "first-message-continuing": "Non hai ricevuto nessuna notifica. Vai alla sezione",
+    "first-message-alone": "Non hai ricevuto nessuna notifica.",
     "action": "Recapiti",
     "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
     "delegate": "Non ci sono notifiche in delega a {{name}} da leggere."

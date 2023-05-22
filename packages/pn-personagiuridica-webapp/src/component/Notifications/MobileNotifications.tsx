@@ -22,7 +22,7 @@ import { ButtonNaked, Tag } from '@pagopa/mui-italia';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { PNRole } from '../../redux/auth/types';
+import { Organization, PNRole } from '../../redux/auth/types';
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -52,6 +52,17 @@ type Props = {
  * reference to IS_SORT_ENABLED
  */
 const IS_SORT_ENABLED = false;
+
+// to avoid cognitive complexity warning - PN-5323
+function mainEmptyMessage(filtersApplied: boolean, isDelegatedPage: boolean, organization: Organization, role: PNRole, t: any) {
+  return filtersApplied
+    ? undefined
+    : isDelegatedPage
+    ? t('empty-state.delegate', { name: organization.name })
+    : role !== PNRole.ADMIN 
+    ? t('empty-state.first-message-alone') 
+    : t('empty-state.first-message-continuing');
+}
 
 const MobileNotifications = ({
   notifications,
@@ -200,11 +211,7 @@ const MobileNotifications = ({
       : isDelegatedPage || role !== PNRole.ADMIN
       ? undefined
       : handleRouteContacts,
-    emptyMessage: filtersApplied
-      ? undefined
-      : isDelegatedPage
-      ? t('empty-state.delegate', { name: organization.name })
-      : t('empty-state.first-message'),
+    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, role, t),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage:
       filtersApplied || isDelegatedPage || role !== PNRole.ADMIN
