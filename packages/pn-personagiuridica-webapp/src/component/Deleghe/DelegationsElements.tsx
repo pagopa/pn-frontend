@@ -240,7 +240,6 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
           subtitle={t('deleghe.show_code_subtitle')}
           open={showCodeModal}
           initialValues={(row?.verificationCode as string).split('')}
-          handleClose={handleCloseShowCodeModal}
           cancelCallback={handleCloseShowCodeModal}
           cancelLabel={t('deleghe.close')}
           codeSectionTitle={t('deleghe.verification_code')}
