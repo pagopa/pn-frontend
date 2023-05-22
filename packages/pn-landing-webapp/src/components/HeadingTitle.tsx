@@ -7,7 +7,7 @@ const HeadingTitle = ({
   title?: string;
   subtitle?: string | JSX.Element;
 }) => (
-  <Box sx={{ textAlign: "center" }}>
+  <Box sx={{ textAlign: "center", px: 2 }}>
     <Typography variant="h4" sx={{ mb: 3 }}>
       {title}
     </Typography>

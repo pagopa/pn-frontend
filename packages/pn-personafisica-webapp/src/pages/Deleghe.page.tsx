@@ -103,7 +103,6 @@ const Deleghe = () => {
           subtitle={t('deleghe.accept_description', { name: acceptName })}
           open={acceptOpen}
           initialValues={new Array(5).fill('')}
-          handleClose={handleCloseAcceptModal}
           cancelCallback={handleCloseAcceptModal}
           cancelLabel={t('button.indietro', { ns: 'common' })}
           confirmCallback={handleAccept}

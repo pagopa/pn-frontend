@@ -38,17 +38,17 @@ export default {
       },
     },
     courtesy: {
-      title: 'Email o SMS',
+      title: 'E-mail o numero di cellulare',
       subtitle:
-        'Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a SEND per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
+        'Quando c’è una notifica per te, ti inviamo un’e-mail o un SMS. Accedi a SEND per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
         'Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.',
     },
     mail: {
-      inputPlaceholder: 'Il tuo indirizzo email',
-      inputInvalidMessage: 'Indirizzo email non valido',
-      confirmButton: 'Avvisami via email',
-      successMessage: 'Indirizzo email aggiunto correttamente',
+      inputPlaceholder: 'Il tuo indirizzo e-mail',
+      inputInvalidMessage: 'Indirizzo e-mail non valido',
+      confirmButton: 'Avvisami via e-mail',
+      successMessage: 'Indirizzo e-mail aggiunto correttamente',
       modalDescriptionValue: 'l’indirizzo e-mail',
       modalHelpValue: 'l’indirizzo e-mail',
       modal: {
@@ -79,7 +79,7 @@ export default {
       senderPlaceholder: 'Ente',
       addrTypePlaceholder: 'Indirizzo PEC',
       pecPlaceholder: 'Indirizzo PEC*',
-      mailPlaceholder: 'Indirizzo mail*',
+      mailPlaceholder: 'Indirizzo e-mail*',
       invalidPecMessage: 'Indirizzo PEC non valido',
       invalidPhoneMessage: 'Numero di cellulare non valido',
       confirmButton: 'Conferma',

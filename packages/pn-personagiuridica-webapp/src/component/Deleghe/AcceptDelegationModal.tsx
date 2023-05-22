@@ -99,7 +99,6 @@ const AcceptDelegationModal: React.FC<Props> = ({
         subtitle={t('deleghe.accept_description', { name })}
         open={open}
         initialValues={code.length ? code : new Array(5).fill('')}
-        handleClose={handleClose}
         cancelCallback={handleClose}
         cancelLabel={t('button.annulla', { ns: 'common' })}
         confirmCallback={handleFirstStepConfirm}

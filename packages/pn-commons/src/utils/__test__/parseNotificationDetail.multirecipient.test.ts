@@ -370,4 +370,16 @@ describe('parseNotificationDetail scenarios - multi recipient', () => {
     expect((deliveringStatus.steps && deliveringStatus.steps[8].details as any).responseStatus).toEqual("KO");
     expect(deliveringStatus.steps && deliveringStatus.steps[8].details.recIndex).toEqual(1);
   });  
+  
+  it('AAR documents titles should be with additional denomination and taxId recipients', () => {
+    const notificationBe = flexibleNotificationFromBE(
+      NotificationStatus.DELIVERED, multiHistory(false, true), multiTimeline(false, true), 2
+    );
+    const notificationFe = parseNotificationDetail(notificationBe);
+    const otherDocuments = notificationFe.otherDocuments!;
+    const recipients = notificationFe.recipients;
+    recipients.forEach((recipient, index) => {
+      expect(otherDocuments[index].title).toEqual(`Avviso di avvenuta ricezione - ${recipient.denomination} (${recipient.taxId})`);
+    });
+  });
 });

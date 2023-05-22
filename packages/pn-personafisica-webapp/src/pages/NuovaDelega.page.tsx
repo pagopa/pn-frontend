@@ -120,7 +120,7 @@ const NuovaDelega = () => {
   const validationSchema = yup.object({
     selectPersonaFisicaOrPersonaGiuridica: yup
       .string()
-      .required(t('nuovaDelega.validation.email.required')),
+      .required(t('required-field', { ns: 'common' })),
     codiceFiscale: yup
       .string()
       .required(t('nuovaDelega.validation.fiscalCode.required'))
