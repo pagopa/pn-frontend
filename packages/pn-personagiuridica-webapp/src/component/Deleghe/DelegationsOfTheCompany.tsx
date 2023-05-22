@@ -12,6 +12,7 @@ import {
   Grid,
   ListItemText,
   MenuItem,
+  Paper,
   TextField,
   Typography,
 } from '@mui/material';
@@ -394,6 +395,16 @@ const DelegationsOfTheCompany = () => {
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                   popupIcon={<SearchIcon />}
+                  PaperComponent={({ children }) => (
+                    <Paper
+                      style={{
+                        boxShadow:
+                          '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+                      }}
+                    >
+                      {children}
+                    </Paper>
+                  )}
                   sx={{
                     [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',
@@ -429,6 +440,17 @@ const DelegationsOfTheCompany = () => {
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                   popupIcon={<SearchIcon />}
+                  // eslint-disable-next-line sonarjs/no-identical-functions
+                  PaperComponent={({ children }) => (
+                    <Paper
+                      style={{
+                        boxShadow:
+                          '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+                      }}
+                    >
+                      {children}
+                    </Paper>
+                  )}
                   sx={{
                     [`& .MuiAutocomplete-popupIndicator`]: {
                       transform: 'none',

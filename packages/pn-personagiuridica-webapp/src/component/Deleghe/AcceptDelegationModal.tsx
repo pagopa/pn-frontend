@@ -11,6 +11,7 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
+  Paper,
   Radio,
   RadioGroup,
   TextField,
@@ -155,6 +156,16 @@ const AcceptDelegationModal: React.FC<Props> = ({
             getOptionLabel={getOptionLabel}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderOption={renderOption}
+            PaperComponent={({ children }) => (
+              <Paper
+                style={{
+                  boxShadow:
+                    '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+                }}
+              >
+                {children}
+              </Paper>
+            )}
             renderInput={(params) => (
               <TextField
                 {...params}
