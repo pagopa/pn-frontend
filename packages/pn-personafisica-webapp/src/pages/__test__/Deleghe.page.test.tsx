@@ -155,7 +155,7 @@ describe('Deleghe page', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     const setState = jest.fn();
-    // We affect the initial value of a state only if is ''. 
+    // We affect the initial value of a state only if is undefined. 
     // The aim is to set the value for the errorText state in Deleghe **only**.
     // If we changed useState without this restriction, then the test would fail because
     // also the state in the CodeModal component (in pn-commons) would be affected.
@@ -166,7 +166,7 @@ describe('Deleghe page', () => {
     // -----------------------------------------
     // Carlos Lombardi, 2022.12.13
     // -----------------------------------------
-    const setStateFn: any = (initialValue) => [initialValue === '' ? 'Accept mandate error' : initialValue, setState];
+    const setStateFn: any = (initialValue) => [initialValue === undefined ? { title: 'Error title', content: 'Accept mandate error'} : initialValue, setState];
     const useStateSpy = jest.spyOn(React, 'useState');
     useStateSpy.mockImplementation(setStateFn);
     await renderComponent(false, true, 'delegators', true);
