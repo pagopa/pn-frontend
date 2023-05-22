@@ -33,7 +33,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
 
   return (
     <Fragment>
-      <Grid container direction="column">
+      <Grid container direction="column" sx={{backgroundColor: "#FFF"}}>
         <Grid container direction="row" justifyContent="space-around" mt={3}>
           <Grid item xs={1}>
             <img src={SpidBig} />
