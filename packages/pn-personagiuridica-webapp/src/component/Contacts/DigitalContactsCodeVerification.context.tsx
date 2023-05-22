@@ -293,7 +293,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           }
           open={open}
           initialValues={new Array(5).fill('')}
-          handleClose={() => handleClose()}
           codeSectionTitle={t(`${modalProps.labelRoot}.insert-code`, { ns: 'recapiti' })}
           codeSectionAdditional={
             <Box>

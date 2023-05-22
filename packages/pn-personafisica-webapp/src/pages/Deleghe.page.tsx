@@ -43,7 +43,10 @@ const Deleghe = () => {
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const [pageReady, setPageReady] = useState(false);
 
-  const [errorText, setErrorText] = useState('');
+  const [errorMessage, setErrorMessage] = useState<{
+    title: string;
+    content: string;
+  }>();
 
   const dispatch = useAppDispatch();
 
@@ -85,7 +88,7 @@ const Deleghe = () => {
 
   const handleAcceptDelegationError = (errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
-    setErrorText(error?.message.content || '');
+    setErrorMessage(error?.message);
   };
 
   useEffect(() => {
@@ -103,15 +106,14 @@ const Deleghe = () => {
           subtitle={t('deleghe.accept_description', { name: acceptName })}
           open={acceptOpen}
           initialValues={new Array(5).fill('')}
-          handleClose={handleCloseAcceptModal}
           cancelCallback={handleCloseAcceptModal}
           cancelLabel={t('button.indietro', { ns: 'common' })}
           confirmCallback={handleAccept}
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
           hasError={acceptError}
-          // errorMessage={t('deleghe.invalid_code')}
-          errorMessage={errorText}
+          errorTitle={errorMessage?.title}
+          errorMessage={errorMessage?.content}
         />
         <ConfirmationModal
           open={open}
