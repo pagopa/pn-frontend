@@ -142,10 +142,6 @@
     "invalid_verification_code": {
       "title": "Il codice è sbagliato",
       "message": "Controllalo e inseriscilo di nuovo"
-    },
-    "invalid_verification_code_ua": {
-      "title": "Codice non valido",
-      "message": "Codice di verifica non valido"
     }
   }
 }

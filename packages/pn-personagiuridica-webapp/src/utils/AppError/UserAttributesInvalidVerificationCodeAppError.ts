@@ -13,11 +13,8 @@ export class UserAttributesInvalidVerificationCodeAppError extends AppError {
     switch (this.code) {
       case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
         return {
-          title: this.translateFunction('errors.invalid_verification_code_ua.title', 'recapiti'),
-          content: this.translateFunction(
-            'errors.invalid_verification_code_ua.message',
-            'recapiti'
-          ),
+          title: this.translateFunction('errors.invalid_verification_code.title', 'recapiti'),
+          content: this.translateFunction('errors.invalid_verification_code.message', 'recapiti'),
         };
       // subsequent calls to try to validate the pec will bring to the next case PN_USERATTRIBUTES_EXPIREDVERIFICATIONCODE
       case ServerResponseErrorCode.PN_USERATTRIBUTES_RETRYLIMITVERIFICATIONCODE:
