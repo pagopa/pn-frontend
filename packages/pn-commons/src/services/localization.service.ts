@@ -1,4 +1,4 @@
-type LocalizationNamespacesNames = 'common' | 'notifications' | 'appStatus';
+type LocalizationNamespacesNames = 'common' | 'notifications' | 'appStatus' | 'delegations';
 
 type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
@@ -11,6 +11,7 @@ let localizationNamespaces: LocalizationNamespaces = {
   common: 'common',
   notifications: 'notifiche',
   appStatus: 'appStatus',
+  delegations: 'deleghe',
 };
 
 /* eslint-disable-next-line functional/no-let */
