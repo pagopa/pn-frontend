@@ -3,15 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { CardElement, ItemsCard, Item, CodeModal, EmptyState, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import {
+  CardElement,
+  ItemsCard,
+  Item,
+  CodeModal,
+  EmptyState,
+  ApiErrorWrapper,
+} from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const MobileDelegates = () => {
@@ -34,8 +41,8 @@ const MobileDelegates = () => {
         return <Chip label={label} color={color} />;
       },
       gridProps: {
-        xs: 8
-      }
+        xs: 8,
+      },
     },
     {
       id: 'id',
@@ -52,8 +59,8 @@ const MobileDelegates = () => {
         );
       },
       gridProps: {
-        xs: 4
-      }
+        xs: 4,
+      },
     },
   ];
 
@@ -91,7 +98,7 @@ const MobileDelegates = () => {
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, {source});
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
@@ -105,7 +112,6 @@ const MobileDelegates = () => {
         subtitle={t('deleghe.show_code_subtitle')}
         open={showCodeModal.open}
         initialValues={showCodeModal.code.split('')}
-        handleClose={handleCloseShowCodeModal}
         cancelCallback={handleCloseShowCodeModal}
         cancelLabel={t('deleghe.close')}
         codeSectionTitle={t('deleghe.verification_code')}
@@ -116,17 +122,24 @@ const MobileDelegates = () => {
           {t('deleghe.delegatesTitle')}
         </Typography>
         <Box mb={2}>
-          <Button variant="outlined" onClick={(_e, source='default') => handleAddDelegationClick(source)} sx={{mb: 1}}>
+          <Button
+            variant="outlined"
+            onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+            sx={{ mb: 1 }}
+          >
             <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
             {t('deleghe.add')}
           </Button>
         </Box>
-        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
+        <ApiErrorWrapper
+          apiId={DELEGATION_ACTIONS.GET_DELEGATES}
+          reloadAction={() => dispatch(getDelegates())}
+        >
           {cardData.length ? (
             <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
           ) : (
             <EmptyState
-              emptyActionCallback={(_e, source='empty_state') => handleAddDelegationClick(source)}
+              emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
               emptyMessage={t('deleghe.no_delegates')}
               emptyActionLabel={t('deleghe.add')}
             />
