@@ -51,7 +51,7 @@ const SmartFilter = <FormValues extends object>({
   const classes = useStyles();
   const currentFilters = useRef<FormValues>(formValues);
   const isPreviousSearch = _.isEqual(formValues, currentFilters.current);
-  const filtersCount = filtersApplied(initialValues, currentFilters.current);
+  const filtersCount = filtersApplied(currentFilters.current, initialValues);
 
   const submitHandler = (e?: FormEvent<HTMLFormElement> | undefined) => {
     // eslint-disable-next-line functional/immutable-data

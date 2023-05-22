@@ -36,7 +36,6 @@ describe('Deleghe page', () => {
       moreResult: false,
     });
     mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
     const result = render(<Deleghe />);
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
@@ -56,7 +55,6 @@ describe('Deleghe page', () => {
       moreResult: false,
     });
     mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
     const result = render(<Deleghe />);
     const tab2 = result.getByTestId('tab2');
     fireEvent.click(tab2);
