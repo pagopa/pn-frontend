@@ -28,6 +28,7 @@ import {
   SmartFilter,
   SmartTable,
   SmartTableData,
+  dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
@@ -42,19 +43,18 @@ import {
   DelegationStatus,
   DelegatorsColumn,
   DelegatorsFormFilters,
-  DelegatorsNames,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const initialEmptyValues: {
-  mandateIds: Array<DelegatorsNames>;
+  taxId: string;
   groups: Array<{ id: string; name: string }>;
   status: Array<DelegationStatus>;
 } = {
-  mandateIds: [],
   groups: [],
   status: [],
+  taxId: '',
 };
 
 const DelegationsOfTheCompany = () => {
@@ -70,11 +70,9 @@ const DelegationsOfTheCompany = () => {
   );
   const pagination = useAppSelector((state: RootState) => state.delegationsState.pagination);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
-  const names = useAppSelector((state: RootState) => state.delegationsState.delegatorsNames);
   const statuses = (Object.keys(DelegationStatus) as Array<keyof typeof DelegationStatus>).map(
     (key) => ({ id: DelegationStatus[key], label: t(`deleghe.table.${DelegationStatus[key]}`) })
   );
-  const [nameInputValue, setNameInputValue] = useState('');
   const [groupInputValue, setGroupInputValue] = useState('');
   const rows: Array<Item> = delegationToItem(delegators);
   // back end return at most the next three pages
@@ -227,23 +225,19 @@ const DelegationsOfTheCompany = () => {
   );
 
   const initialValues: {
-    mandateIds: Array<DelegatorsNames>;
+    taxId: string;
     groups: Array<{ id: string; name: string }>;
     status: Array<DelegationStatus>;
   } = {
-    mandateIds: filters.mandateIds
-      ? names.filter(
-          (name) =>
-            filters.mandateIds &&
-            filters.mandateIds.findIndex((id) => name.mandateIds.includes(id)) > -1
-        )
-      : [],
+    taxId: filters.taxId || '',
     groups: filters.groups ? groups.filter((group) => filters.groups?.includes(group.id)) : [],
     status: filters.status || [],
   };
 
   const validationSchema = yup.object({
-    mandateIds: yup.array(),
+    taxId: yup
+      .string()
+      .matches(dataRegex.pIvaAndFiscalCode, t('deleghe.validation.pIvaAndFiscalCode.wrong')),
     groups: yup.array(),
     status: yup.array(),
   });
@@ -257,10 +251,7 @@ const DelegationsOfTheCompany = () => {
         size: filters.size,
         page: 0,
         status: values.status,
-        mandateIds: values.mandateIds.reduce(
-          (arr, d) => arr.concat(d.mandateIds),
-          [] as Array<string>
-        ),
+        taxId: values.taxId,
         groups: values.groups.map((d) => d.id),
       } as DelegatorsFormFilters;
       dispatch(setFilters(params));
@@ -329,7 +320,7 @@ const DelegationsOfTheCompany = () => {
     const delegatorsFilters = {
       size: filters.size,
       nextPageKey: filters.page ? pagination.nextPagesKey[filters.page - 1] : undefined,
-      mandateIds: filters.mandateIds,
+      taxId: filters.taxId || undefined,
       groups: filters.groups,
       status: filters.status,
     } as GetDelegatorsFilters;
@@ -383,38 +374,17 @@ const DelegationsOfTheCompany = () => {
               initialValues={initialEmptyValues}
             >
               <Grid item xs={12} lg>
-                <Autocomplete
-                  id="mandateIds"
+                <TextField
+                  id="taxId"
+                  value={formik.values.taxId}
+                  onChange={handleChangeTouched}
+                  label={t('deleghe.table.tax-id')}
+                  name="taxId"
+                  error={formik.touched.taxId && Boolean(formik.errors.taxId)}
+                  helperText={formik.touched.taxId && formik.errors.taxId}
                   size="small"
                   fullWidth
-                  options={names}
-                  disableCloseOnSelect
-                  multiple
-                  noOptionsText={t('deleghe.table.no-name-found')}
-                  getOptionLabel={getOptionLabel}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  popupIcon={<SearchIcon />}
-                  sx={{
-                    [`& .MuiAutocomplete-popupIndicator`]: {
-                      transform: 'none',
-                    },
-                    marginBottom: isMobile ? '20px' : '0',
-                  }}
-                  renderOption={renderOption}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('deleghe.table.name')}
-                      placeholder={t('deleghe.table.name')}
-                      name="mandateIds"
-                    />
-                  )}
-                  value={formik.values.mandateIds}
-                  onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
-                    handleChangeTouchedAutocomplete('mandateIds', newValue)
-                  }
-                  onInputChange={(_event, newInputValue) => setNameInputValue(newInputValue)}
-                  inputValue={nameInputValue}
+                  sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 />
               </Grid>
               <Grid item xs={12} lg={3}>

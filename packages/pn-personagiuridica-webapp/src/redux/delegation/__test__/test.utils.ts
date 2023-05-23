@@ -127,7 +127,6 @@ export const initialState = {
     nextPagesKey: [],
   },
   groups: [],
-  delegatorsNames: [],
   filters: {
     size: 10,
     page: 0,

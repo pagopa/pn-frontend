@@ -1,11 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import {
-  Delegation,
-  DelegationStatus,
-  DelegatorsFormFilters,
-  DelegatorsNames,
-} from '../../models/Deleghe';
+import { Delegation, DelegationStatus, DelegatorsFormFilters } from '../../models/Deleghe';
 import { Groups } from '../../models/groups';
 import {
   getDelegatesByCompany,
@@ -14,7 +9,6 @@ import {
   rejectDelegation,
   revokeDelegation,
   getGroups,
-  getDelegatorsNames,
   updateDelegation,
 } from './actions';
 
@@ -28,7 +22,6 @@ const initialState = {
     moreResult: false,
   },
   groups: [] as Array<Groups>,
-  delegatorsNames: [] as Array<DelegatorsNames>,
   filters: {
     size: 10,
     page: 0,
@@ -77,9 +70,6 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(getGroups.fulfilled, (state, action) => {
       state.groups = action.payload;
-    });
-    builder.addCase(getDelegatorsNames.fulfilled, (state, action) => {
-      state.delegatorsNames = action.payload;
     });
     builder.addCase(updateDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
