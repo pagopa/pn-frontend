@@ -99,7 +99,7 @@ const SessionGuard = () => {
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors } = useErrors();
-  const { WORK_IN_PROGESS } = getConfiguration();
+  const { WORK_IN_PROGRESS } = getConfiguration();
 
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
@@ -139,7 +139,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doInitalPageDetermination = () => {
-      if (isForbiddenUser || WORK_IN_PROGESS) {
+      if (isForbiddenUser || WORK_IN_PROGRESS) {
         // ----------------------
         // I'm not sure about this management of the redirects
         // Momentarily I have added the isForbiddenUser variable that is true if login returns 451 error code

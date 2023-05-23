@@ -18,7 +18,7 @@ interface PgConfigurationFromFile {
   LANDING_SITE_URL: string;
   // this will be removed when delegations to pg works correctly
   DELEGATIONS_TO_PG_ENABLED: boolean;
-  WORK_IN_PROGESS?: boolean;
+  WORK_IN_PROGRESS?: boolean;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -36,7 +36,7 @@ interface PgConfiguration extends PgConfigurationFromFile {
   VERSION: string;
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
-  WORK_IN_PROGESS: boolean;
+  WORK_IN_PROGRESS: boolean;
 }
 
 class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
@@ -53,7 +53,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('LANDING_SITE_URL').isString();
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
-    this.ruleFor('WORK_IN_PROGESS').isBoolean();
+    this.ruleFor('WORK_IN_PROGRESS').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PgConfigurationFromFile, string>): void {
@@ -81,7 +81,7 @@ export function getConfiguration(): PgConfiguration {
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
-    WORK_IN_PROGESS: Boolean(configurationFromFile.WORK_IN_PROGESS),
+    WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
   };
 }
 
