@@ -52,8 +52,8 @@
       "groups": "Gruppi",
       "group": "Gruppo",
       "no-group-found": "Nessun gruppo trovato",
-      "no-name-found": "Nessun nome trovato",
-      "menu-aria-label": "Menù azioni"
+      "menu-aria-label": "Menù azioni",
+      "tax-id": "Codice Fiscale/P. Iva"
     },
     "accept-delegation": "Accetta la delega",
     "associate-groups-title": "Vuoi assegnare la delega ad un gruppo?",
@@ -69,7 +69,12 @@
     "revoke-successfully": "Delega Revocata.",
     "reject-successfully": "Delega Rifiutata.",
     "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
-    "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova."
+    "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova.",
+    "validation": {
+      "pIvaAndFiscalCode": {
+        "wrong": "Il Codice Fiscale/P. Iva inserito non è corretto"
+      }
+    }
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
@@ -114,6 +119,9 @@
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",
         "wrong": "Data errata"
+      },
+      "pIvaAndFiscalCode": {
+        "wrong": "Il Codice Fiscale inserito non è corretto"
       }
     }
   },
