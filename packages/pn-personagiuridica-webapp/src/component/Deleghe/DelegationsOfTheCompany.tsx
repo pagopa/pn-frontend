@@ -320,7 +320,7 @@ const DelegationsOfTheCompany = () => {
     const delegatorsFilters = {
       size: filters.size,
       nextPageKey: filters.page ? pagination.nextPagesKey[filters.page - 1] : undefined,
-      taxId: filters.taxId,
+      taxId: filters.taxId || undefined,
       groups: filters.groups,
       status: filters.status,
     } as GetDelegatorsFilters;
