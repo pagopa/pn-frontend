@@ -1,6 +1,6 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from "@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator";
+import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
 interface PfConfigurationFromFile {
   API_BASE_URL: string;
@@ -18,6 +18,7 @@ interface PfConfigurationFromFile {
   LANDING_SITE_URL: string;
   // this will be removed when delegations to pg works correctly
   DELEGATIONS_TO_PG_ENABLED: boolean;
+  WORK_IN_PROGRESS?: boolean;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -36,22 +37,26 @@ interface PfConfiguration extends PfConfigurationFromFile {
   VERSION: string;
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
+  WORK_IN_PROGRESS: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
   constructor() {
     super();
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches((dataRegex.htmlPageUrl)));
+    this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('ONE_TRUST_PARTICIPATING_ENTITIES').isString().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('ONE_TRUST_PARTICIPATING_ENTITIES')
+      .isString()
+      .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('LANDING_SITE_URL').isString();
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
+    this.ruleFor('WORK_IN_PROGRESS').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {
@@ -79,7 +84,8 @@ export function getConfiguration(): PfConfiguration {
     URL_FE_LOGOUT: `${configurationFromFile.URL_FE_LOGIN}logout`,
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
-    DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED)
+    DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
+    WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
   };
 }
 
