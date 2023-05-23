@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {fireEvent, render} from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
+import { PNRole } from '../../../redux/auth/types';
 import DomicileBanner from '../DomicileBanner';
-import {DigitalAddress, LegalChannelType} from "../../../models/contacts";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -17,17 +17,35 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-const getReduxInitialState = (isGroupAdmin: boolean, domicileBannerOpened: boolean = true) => ({
+const getReduxInitialState = (
+  hasGroup: boolean,
+  isAdmin: boolean = true,
+  domicileBannerOpened: boolean = true
+) => ({
   userState: {
     user: {
-      isGroupAdmin
-    }
+      organization: {
+        groups: hasGroup
+          ? [
+              {
+                id: 'group-1',
+                name: 'Group 1',
+              },
+            ]
+          : [],
+        roles: [
+          {
+            role: isAdmin ? PNRole.ADMIN : PNRole.OPERATOR,
+          },
+        ],
+      },
+    },
   },
   generalInfoState: {
     pendingDelegators: 0,
     legalDomicile: [],
-    domicileBannerOpened
-  }
+    domicileBannerOpened,
+  },
 });
 
 describe('DomicileBanner component', () => {
@@ -57,18 +75,34 @@ describe('DomicileBanner component', () => {
     expect(dialog).toBeNull();
   });
 
-  it('banner is open with isGroupAdmin as false', () => {
+  it('banner is open if user has no groups and is admin', () => {
     const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(false) });
     expect(result.queryByTestId('CloseIcon')).toBeInTheDocument();
   });
 
-  it('banner is closed with isGroupAdmin as true', () => {
+  it('banner is closed if user has groups and is admin', () => {
     const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(true) });
     expect(result.queryByTestId('CloseIcon')).toBeNull();
   });
 
+  it('banner is closed if user has no groups and is operator', () => {
+    const result = render(<DomicileBanner />, {
+      preloadedState: getReduxInitialState(false, false),
+    });
+    expect(result.queryByTestId('CloseIcon')).toBeNull();
+  });
+
+  it('banner is closed if user has groups and is operator', () => {
+    const result = render(<DomicileBanner />, {
+      preloadedState: getReduxInitialState(true, false),
+    });
+    expect(result.queryByTestId('CloseIcon')).toBeNull();
+  });
+
   it('banner is closed with domicileBannerOpened as false', () => {
-    const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(false, false) });
+    const result = render(<DomicileBanner />, {
+      preloadedState: getReduxInitialState(false, false),
+    });
     expect(result.queryByTestId('CloseIcon')).toBeNull();
   });
 });

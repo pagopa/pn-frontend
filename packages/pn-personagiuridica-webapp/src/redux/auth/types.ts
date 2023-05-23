@@ -35,5 +35,4 @@ export interface User extends BasicUser {
   jti: string;
   organization: Organization;
   desired_exp: number;
-  isGroupAdmin?: boolean;
 }

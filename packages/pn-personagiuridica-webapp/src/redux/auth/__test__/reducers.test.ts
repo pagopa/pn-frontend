@@ -48,7 +48,6 @@ describe('Auth redux state tests', () => {
         jti: '',
         aud: '',
         desired_exp: 0,
-        isGroupAdmin: false,
         organization: {
           fiscal_code: '',
           id: '',
