@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
-
-import { TitleBox, TabPanel, useHasPermissions } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
+import { Box, Tab, Tabs } from '@mui/material';
+import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState } from '../redux/delegation/reducers';
 import {
@@ -11,8 +11,7 @@ import {
   getDelegatesByCompany,
   getDelegatorsNames,
 } from '../redux/delegation/actions';
-import { rolesAndHasGroup } from '../redux/auth/reducers';
-import { PNRole } from '../redux/auth/types';
+import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
@@ -23,11 +22,7 @@ const Deleghe = () => {
   const [pageReady, setPageReady] = useState(false);
   const [value, setValue] = useState(0);
   const dispatch = useAppDispatch();
-  const { hasGroup: userHasGroup, roles } = useAppSelector(rolesAndHasGroup);
-
-  const userHasAdminPermissions = useHasPermissions(roles[0] ? [roles[0].role] : [], [
-    PNRole.ADMIN,
-  ]);
+  const { hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -35,8 +30,8 @@ const Deleghe = () => {
   };
 
   const retrieveData = useCallback(() => {
-    // operators and groups administrator cannot see the delegates by the company
-    if (userHasAdminPermissions && !userHasGroup) {
+    // groups administrator cannot see the delegates by the company
+    if (!hasGroup) {
       void dispatch(getDelegatesByCompany());
     }
     if (DELEGATIONS_TO_PG_ENABLED) {
@@ -67,7 +62,7 @@ const Deleghe = () => {
             {t('deleghe.description')}
           </TitleBox>
         </Box>
-        {userHasAdminPermissions && !userHasGroup && (
+        {!hasGroup && (
           <>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
               <Tabs
@@ -89,7 +84,7 @@ const Deleghe = () => {
             </TabPanel>
           </>
         )}
-        {userHasAdminPermissions && userHasGroup && (
+        {hasGroup && (
           <Box sx={{ mx: 3 }}>
             <DelegationsOfTheCompany />
           </Box>

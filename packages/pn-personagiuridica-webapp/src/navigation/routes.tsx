@@ -2,9 +2,9 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-pn/pn-commons';
 
+import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import { PNRole } from '../redux/auth/types';
-import { rolesAndHasGroup } from '../redux/auth/reducers';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 import { getConfiguration } from '../services/configuration.service';
@@ -31,9 +31,9 @@ const handleAssistanceClick = () => {
 };
 
 function Router() {
-  const { hasGroup: userHasGroup, roles } = useAppSelector(rolesAndHasGroup);
-  const currentRoles = roles.map((role) => role.role);
-
+  const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
+  const currentRoles =
+    organization && organization.roles ? organization.roles.map((role) => role.role) : [];
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -48,7 +48,7 @@ function Router() {
                     <PrivateRoute
                       currentRoles={[]}
                       requiredRoles={[]}
-                      additionalCondition={!userHasGroup}
+                      additionalCondition={!hasGroup}
                       redirectTo={<NotFound />}
                     >
                       <Notifiche />
@@ -62,7 +62,7 @@ function Router() {
                     <PrivateRoute
                       currentRoles={[]}
                       requiredRoles={[]}
-                      additionalCondition={!userHasGroup}
+                      additionalCondition={!hasGroup}
                       redirectTo={<NotFound />}
                     >
                       <NotificationDetail />
@@ -89,7 +89,7 @@ function Router() {
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
                       redirectTo={<NotFound />}
-                      additionalCondition={!userHasGroup}
+                      additionalCondition={!hasGroup}
                     >
                       <NuovaDelega />
                     </PrivateRoute>
@@ -101,7 +101,7 @@ function Router() {
                     <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
-                      additionalCondition={!userHasGroup}
+                      additionalCondition={!hasGroup}
                       redirectTo={<NotFound />}
                     >
                       <Contacts />

@@ -15,7 +15,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { rolesAndHasGroup } from '../redux/auth/reducers';
 import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
@@ -110,13 +109,14 @@ const SessionGuardRender = () => {
 const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
-  const { sessionToken, desired_exp: expDate } = useAppSelector(
-    (state: RootState) => state.userState.user
-  );
+  const {
+    sessionToken,
+    desired_exp: expDate,
+    hasGroup,
+  } = useAppSelector((state: RootState) => state.userState.user);
   const { isClosedSession, isForbiddenUser } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const { hasGroup: userHasGroup } = useAppSelector(rolesAndHasGroup);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
@@ -186,7 +186,7 @@ const SessionGuard = () => {
           // ----------------------
           // Andrea Cimini, 2023.01.27
           // ----------------------
-          if (!userHasGroup) {
+          if (!hasGroup) {
             navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
           } else {
             navigate(

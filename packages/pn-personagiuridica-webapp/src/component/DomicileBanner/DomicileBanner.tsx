@@ -2,16 +2,13 @@ import { Alert, Box, Link, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useHasPermissions } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
-import { rolesAndHasGroup } from '../../redux/auth/reducers';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { PNRole } from '../../redux/auth/types';
 
 const messageIndex = Math.floor(Math.random() * 3) + 1;
 // const messages = [
@@ -26,11 +23,6 @@ const DomicileBanner = () => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);
-  const { hasGroup: userHasGroup, roles } = useAppSelector(rolesAndHasGroup);
-
-  const userHasAdminPermissions = useHasPermissions(roles[0] ? [roles[0].role] : [], [
-    PNRole.ADMIN,
-  ]);
   const path = pathname.split('/');
   const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
@@ -44,10 +36,10 @@ const DomicileBanner = () => {
   };
 
   useEffect(() => {
-    if ((legalDomicile && legalDomicile.length > 0) || !userHasAdminPermissions || userHasGroup) {
+    if (legalDomicile && legalDomicile.length > 0) {
       dispatch(closeDomicileBanner());
     }
-  }, [legalDomicile, userHasGroup, userHasAdminPermissions]);
+  }, [legalDomicile]);
 
   return open ? (
     <Box mb={2.5}>

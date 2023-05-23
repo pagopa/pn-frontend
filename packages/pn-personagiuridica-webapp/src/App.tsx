@@ -37,7 +37,6 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState, store } from './redux/store';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { PNRole } from './redux/auth/types';
-import { rolesAndHasGroup } from './redux/auth/reducers';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -60,7 +59,6 @@ const App = () => {
     (state: RootState) => state.generalInfoState.pendingDelegators
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { hasGroup: userHasGroup, roles } = useAppSelector(rolesAndHasGroup);
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
@@ -78,7 +76,7 @@ const App = () => {
 
   const isPrivacyPage = path[1] === 'privacy-tos';
   const organization = loggedUser.organization;
-  const role = roles[0] || null;
+  const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   // TODO: get products list from be (?)
@@ -118,7 +116,7 @@ const App = () => {
       if (userHasAdminPermissions) {
         void dispatch(getSidemenuInformation());
       }
-      if (userHasAdminPermissions && !userHasGroup) {
+      if (userHasAdminPermissions && !loggedUser.hasGroup) {
         void dispatch(getDomicileInfo());
       }
 
@@ -129,7 +127,7 @@ const App = () => {
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
     // if the current user is not a groupAdmin can also see own PG notifications,
     // else it sees only delegated notifications and we return undefined
-    if (!userHasGroup) {
+    if (!loggedUser.hasGroup) {
       return [
         {
           label: t('menu.notifiche-impresa'),
@@ -150,9 +148,9 @@ const App = () => {
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
     {
-      label: !userHasGroup ? t('menu.notifiche') : t('menu.notifiche-delegato'),
+      label: !loggedUser.hasGroup ? t('menu.notifiche') : t('menu.notifiche-delegato'),
       icon: MailOutlineIcon,
-      route: !userHasGroup ? routes.NOTIFICHE : routes.NOTIFICHE_DELEGATO,
+      route: !loggedUser.hasGroup ? routes.NOTIFICHE : routes.NOTIFICHE_DELEGATO,
       children: notificationMenuItems,
       notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
     },
@@ -183,7 +181,7 @@ const App = () => {
     });
   }
 
-  if (userHasAdminPermissions && !userHasGroup) {
+  if (userHasAdminPermissions && !loggedUser.hasGroup) {
     /* eslint-disable-next-line functional/immutable-data */
     menuItems.splice(2, 0, {
       label: t('menu.contacts'),

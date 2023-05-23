@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
-import { PNRole } from '../../../redux/auth/types';
 import DomicileBanner from '../DomicileBanner';
 
 jest.mock('react-i18next', () => ({
@@ -17,30 +16,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-const getReduxInitialState = (
-  hasGroup: boolean,
-  isAdmin: boolean = true,
-  domicileBannerOpened: boolean = true
-) => ({
-  userState: {
-    user: {
-      organization: {
-        groups: hasGroup
-          ? [
-              {
-                id: 'group-1',
-                name: 'Group 1',
-              },
-            ]
-          : [],
-        roles: [
-          {
-            role: isAdmin ? PNRole.ADMIN : PNRole.OPERATOR,
-          },
-        ],
-      },
-    },
-  },
+const getReduxInitialState = (domicileBannerOpened: boolean = true) => ({
   generalInfoState: {
     pendingDelegators: 0,
     legalDomicile: [],
@@ -52,7 +28,6 @@ describe('DomicileBanner component', () => {
   it('renders the component', () => {
     const result = render(<DomicileBanner />);
     const dialog = result.getByTestId('addDomicileBanner');
-
     expect(dialog).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/detail.add_domicile/i);
   });
@@ -60,48 +35,21 @@ describe('DomicileBanner component', () => {
   it('clicks on the link to add a domicile', () => {
     const result = render(<DomicileBanner />);
     const link = result.getByRole('button', { name: /detail.add_domicile/ });
-
     fireEvent.click(link);
-
     expect(mockNavigateFn).toBeCalled();
   });
 
   it('clicks on the close button', () => {
     const result = render(<DomicileBanner />);
     const closeButton = result.getByTestId('CloseIcon');
-
     fireEvent.click(closeButton);
     const dialog = result.queryByTestId('addDomicileBanner');
     expect(dialog).toBeNull();
   });
 
-  it('banner is open if user has no groups and is admin', () => {
-    const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(false) });
-    expect(result.queryByTestId('CloseIcon')).toBeInTheDocument();
-  });
-
-  it('banner is closed if user has groups and is admin', () => {
-    const result = render(<DomicileBanner />, { preloadedState: getReduxInitialState(true) });
-    expect(result.queryByTestId('CloseIcon')).toBeNull();
-  });
-
-  it('banner is closed if user has no groups and is operator', () => {
-    const result = render(<DomicileBanner />, {
-      preloadedState: getReduxInitialState(false, false),
-    });
-    expect(result.queryByTestId('CloseIcon')).toBeNull();
-  });
-
-  it('banner is closed if user has groups and is operator', () => {
-    const result = render(<DomicileBanner />, {
-      preloadedState: getReduxInitialState(true, false),
-    });
-    expect(result.queryByTestId('CloseIcon')).toBeNull();
-  });
-
   it('banner is closed with domicileBannerOpened as false', () => {
     const result = render(<DomicileBanner />, {
-      preloadedState: getReduxInitialState(false, false),
+      preloadedState: getReduxInitialState(false),
     });
     expect(result.queryByTestId('CloseIcon')).toBeNull();
   });

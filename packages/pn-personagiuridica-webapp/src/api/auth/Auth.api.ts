@@ -22,5 +22,10 @@ export const AuthApi = {
         jti: response.data.jti,
         organization: response.data.organization,
         desired_exp: response.data.desired_exp,
+        hasGroup: Boolean(
+          response.data.organization &&
+            response.data.organization.groups &&
+            response.data.organization.groups.length > 0
+        ),
       })),
 };

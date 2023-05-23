@@ -8,7 +8,6 @@ import {
 import { createSlice } from '@reduxjs/toolkit';
 import * as yup from 'yup';
 
-import { RootState } from '../store';
 import {
   acceptToS,
   acceptPrivacy,
@@ -44,6 +43,7 @@ const userDataMatcher = yup
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     organization: organizationMatcher,
     desired_exp: yup.number(),
+    hasGroup: yup.boolean(),
   })
   .noUnknown(true);
 
@@ -67,6 +67,7 @@ const noLoggedUserData = {
     fiscal_code: '',
   },
   desired_exp: 0,
+  hasGroup: false,
 } as User;
 
 const emptyUnauthorizedMessage = { title: '', message: '' };
@@ -157,20 +158,5 @@ const userSlice = createSlice({
     });
   },
 });
-
-const rolesAndHasGroup = (state: RootState) => ({
-  roles:
-    state.userState.user.organization &&
-    state.userState.user.organization.roles &&
-    state.userState.user.organization.roles.length
-      ? state.userState.user.organization.roles
-      : [],
-  hasGroup:
-    state.userState.user.organization &&
-    state.userState.user.organization.groups &&
-    state.userState.user.organization.groups.length > 0,
-});
-
-export { rolesAndHasGroup };
 
 export default userSlice;
