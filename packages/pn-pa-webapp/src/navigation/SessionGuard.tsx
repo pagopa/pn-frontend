@@ -1,4 +1,5 @@
 import {
+  AppResponsePublisher,
   appStateActions,
   InactivityHandler,
   SessionModal,
@@ -30,6 +31,14 @@ const INITIALIZATION_SEQUENCE = [
 ];
 
 const inactivityTimer = 5 * 60 * 1000;
+
+const manageUnforbiddenError = (e: any) => {
+  if (e.status === 451) {
+    // error toast must not be shown
+    return false;
+  }
+  return true;
+};
 
 // riguardo alla definizione di due componenti separati,
 // cfr. il commento in merito nel file SessionGuard.tsx in pn-personafisica-webapp
@@ -127,6 +136,7 @@ const SessionGuard = () => {
       // ----------------------
       const spidToken = getTokenParam();
       if (spidToken) {
+        AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
         await dispatch(exchangeToken(spidToken));
       }
     };
@@ -169,6 +179,11 @@ const SessionGuard = () => {
     if (!isInitialized && isFinished()) {
       dispatch(appStateActions.finishInitialization());
     }
+    return () => {
+      if (isInitialized) {
+        AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+      }
+    };
   }, [isInitialized, isFinished]);
 
   return <SessionGuardRender />;

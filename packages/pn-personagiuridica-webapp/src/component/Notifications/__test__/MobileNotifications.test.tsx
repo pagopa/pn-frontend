@@ -4,6 +4,8 @@ import { render, fireEvent, waitFor } from '../../../__test__/test-utils';
 import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
+import { basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
+import { PNRole, PartyRole } from '../../../redux/auth/types';
 
 const mockNavigateFn = jest.fn();
 
@@ -43,19 +45,44 @@ jest.mock('../FilterNotifications', () => {
 });
 
 describe('MobileNotifications Component', () => {
-  it('renders MobileNotifications - empty case - recipient access', () => {
+  it('renders MobileNotifications - empty case - recipient access - admin', () => {
     // render component
     const result = render(
       <MobileNotifications
         notifications={[]}
         sort={{ orderBy: 'sentAt', order: 'asc' }}
         onChangeSorting={() => {}}
-      />
+      />, 
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /empty-state.first-message empty-state.action empty-state.second-message/i
+      /empty-state.first-message-continuing empty-state.action empty-state.second-message/i
+    );
+  });
+
+  it('renders MobileNotifications - empty case - recipient access - not admin', () => {
+    // render component
+    const result = render(
+      <MobileNotifications
+        notifications={[]}
+        sort={{ orderBy: 'sentAt', order: 'asc' }}
+        onChangeSorting={() => {}}
+      />, 
+      { preloadedState: {userState: {user: {...basicNoLoggedUserData, organization: {
+        id: '',
+        roles: [
+          {
+            role: PNRole.OPERATOR,
+            partyRole: PartyRole.OPERATOR,
+          },
+        ],
+      }}}}}
+    );
+    expect(result.container).not.toHaveTextContent(/Filters/i);
+    expect(result.container).not.toHaveTextContent(/Sort/i);
+    expect(result.container).toHaveTextContent(
+      /empty-state.first-message-alone/i
     );
   });
 

@@ -1,4 +1,5 @@
-import { track } from "mixpanel-browser";
+// leave default import for mixpanel, using named once it won't work
+import mixpanel from "mixpanel-browser";
 import { AnyAction, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { EventsType } from "../types/MixpanelEvents";
 
@@ -16,7 +17,7 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
     console.log(event_name, properties);
   } else {
     try {
-      track(event_name, properties);
+      mixpanel.track(event_name, properties);
     } catch (_) {
       // eslint-disable-next-line no-console
       console.log(event_name, properties);
