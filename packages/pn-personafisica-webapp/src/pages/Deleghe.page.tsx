@@ -87,15 +87,18 @@ const Deleghe = () => {
   }, []);
 
   const handleAcceptDelegationError = (errorResponse: AppResponse) => {
+    console.log('---------------------------------');
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
+    console.log(error);
     setErrorMessage(error?.message);
   };
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptDelegationError);
 
-    return () =>
+    return () => {
       AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptDelegationError);
+    };
   }, []);
 
   return (
