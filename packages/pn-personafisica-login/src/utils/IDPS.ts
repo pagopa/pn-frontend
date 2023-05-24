@@ -50,12 +50,6 @@ export const getIDPS =
             imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-spiditalia.png',
           },
           {
-            identifier: 'IntesaID',
-            entityId: 'intesaid',
-            name: 'Intesa',
-            imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-intesaid.png',
-          },
-          {
             identifier: 'Sielte',
             entityId: 'sielteid',
             name: 'Sielte id',
@@ -86,10 +80,16 @@ export const getIDPS =
             imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-teamsystemid.png',
           },
           {
-            identifier: 'Etna',
+            identifier: 'EtnaHitech',
             entityId: 'ehtid',
-            name: 'EtnaID',
+            name: 'Etna Hitech S.C.p.A.',
             imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-etnaid.png',
+          },
+          {
+            identifier: 'InfoCamere',
+            entityId: 'infocamereid',
+            name: 'InfoCamere S.C.p.A.',
+            imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-infocamereid.png',
           },
           ...(testEnabled ? [testProvider] : []),
           ...(validatorEnabled ? [validatorProvider] : []),

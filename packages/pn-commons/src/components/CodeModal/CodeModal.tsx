@@ -12,8 +12,10 @@ import {
   Alert,
   AlertTitle,
 } from '@mui/material';
+import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import CodeInput from './CodeInput';
 
 type Props = {
@@ -108,6 +110,18 @@ const CodeModal = memo(
               hasError={hasError}
               onChange={changeHandler}
             />
+            {isReadOnly && (
+              <CopyToClipboardButton
+                id="copy-code-button"
+                sx={{ mt: 1.5 }}
+                value={initialValues.join('')}
+                tooltipTitle={getLocalizedOrDefaultLabel(
+                  'delegations',
+                  'code_copied',
+                  'Codice copiato'
+                )}
+              />
+            )}
           </Box>
           <Box sx={{ marginTop: '10px', textAlign: textPosition }}>{codeSectionAdditional}</Box>
           <Divider sx={{ margin: '20px 0' }} />

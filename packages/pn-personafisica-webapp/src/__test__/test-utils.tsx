@@ -40,7 +40,7 @@ const axe = configureAxe({
 expect.extend(toHaveNoViolations);
 
 type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY';
-type MockCodes = 200 | 204 | 500 | 401 | 400;
+type MockCodes = 200 | 204 | 500 | 401 | 400 | 403 | 451;
 
 /**
  * Utility function to mock api response
