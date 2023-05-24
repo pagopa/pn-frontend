@@ -2,7 +2,7 @@
     "SPID_TEST_ENV_ENABLED": true,
     "SPID_VALIDATOR_ENV_ENABLED": true,
     "SPID_CIE_ENTITY_ID": "xx_servizicie_test",
-    "URL_API_LOGIN": " https://hub-login.spid.notifichedigitali.it",
+    "URL_API_LOGIN": "https://hub-login.spid.notifichedigitali.it",
     "PF_URL": "https://portale.hotfix.pn.pagopa.it",
     "PG_URL": "https://pnpg.dev.selfcare.pagopa.it/auth/login/success",
     "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
