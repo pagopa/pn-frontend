@@ -21,6 +21,7 @@ import {
   RecipientType,
   dataRegex,
   SectionHeading,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/reducers';
@@ -81,6 +82,7 @@ const Recipient = ({
   forwardedRef,
 }: Props) => {
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
@@ -104,41 +106,39 @@ const Recipient = ({
       recipientType: yup.string(),
       // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
       // la lunghezza non può superare i 80 caratteri
-      firstName: requiredStringFieldValidation(tc)
-        .test({
+      firstName: requiredStringFieldValidation(tc).test({
+        name: 'denominationLengthAndCharacters',
+        test(value?: string) {
+          const error = denominationLengthAndCharacters(value, this.parent.lastName);
+          if (error) {
+            return this.createError({
+              message:
+                error.messageKey === 'too-long-field-error'
+                  ? tc(error.messageKey, error.data)
+                  : t(error.messageKey, error.data),
+              path: this.path,
+            });
+          }
+          return true;
+        },
+      }),
+      // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
+      // non viene richiesto
+      lastName: yup.string().when('recipientType', {
+        is: (value: string) => value !== RecipientType.PG,
+        then: requiredStringFieldValidation(tc).test({
           name: 'denominationLengthAndCharacters',
           test(value?: string) {
-            const error = denominationLengthAndCharacters(value, this.parent.lastName);
+            const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
             if (error) {
               return this.createError({
-                message:
-                  error.messageKey === 'too-long-field-error'
-                    ? tc(error.messageKey, error.data)
-                    : t(error.messageKey, error.data),
+                message: ' ',
                 path: this.path,
               });
             }
             return true;
           },
         }),
-      // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
-      // non viene richiesto
-      lastName: yup.string().when('recipientType', {
-        is: (value: string) => value !== RecipientType.PG,
-        then: requiredStringFieldValidation(tc)
-          .test({
-            name: 'denominationLengthAndCharacters',
-            test(value?: string) {
-              const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
-              if (error) {
-                return this.createError({
-                  message: ' ',
-                  path: this.path,
-                });
-              }
-              return true;
-            },
-          }),
       }),
       taxId: yup
         .string()
@@ -172,7 +172,10 @@ const Recipient = ({
       }),
       municipalityDetails: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: yup.string().max(256, tc('too-long-field-error', { maxLength: 256 })).matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
+        then: yup
+          .string()
+          .max(256, tc('too-long-field-error', { maxLength: 256 }))
+          .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
       }),
       municipality: yup.string().when('showPhysicalAddress', {
         is: true,
@@ -364,6 +367,14 @@ const Recipient = ({
     },
   }));
 
+  /**
+   * @param mobileValue value used in mobile mode
+   * @param desktopValue value used in desktop mode
+   * @returns It returns desktopValue or mobileValue, depending on device width.
+   */
+  const setValueByDevice = (mobileValue: number, desktopValue: number): number =>
+    isMobile ? mobileValue : desktopValue;
+
   return (
     <Formik
       initialValues={initialValues}
@@ -438,12 +449,18 @@ const Recipient = ({
                         }
                       >
                         <Grid container spacing={2}>
-                          <Grid item xs={4}>
+                          <Grid item xs={setValueByDevice(12, 4)}>
                             <FormControlLabel
                               value={RecipientType.PF}
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('physical-person')}
+                            />
+                            <FormControlLabel
+                              value={RecipientType.PG}
+                              control={<Radio />}
+                              name={`recipients[${index}].recipientType`}
+                              label={t('legal-person')}
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PF && (
@@ -456,7 +473,7 @@ const Recipient = ({
                                 errors={errors}
                                 setFieldValue={setFieldValue}
                                 handleBlur={handleBlur}
-                                width={4}
+                                width={setValueByDevice(12, 4)}
                               />
                               <FormTextField
                                 keyName={`recipients[${index}].lastName`}
@@ -466,20 +483,10 @@ const Recipient = ({
                                 errors={errors}
                                 setFieldValue={setFieldValue}
                                 handleBlur={handleBlur}
-                                width={4}
+                                width={setValueByDevice(12, 4)}
                               />
                             </>
                           )}
-                        </Grid>
-                        <Grid container sx={{ width: '100%' }}>
-                          <Grid item xs={4}>
-                            <FormControlLabel
-                              value={RecipientType.PG}
-                              control={<Radio />}
-                              name={`recipients[${index}].recipientType`}
-                              label={t('legal-person')}
-                            />
-                          </Grid>
                           {values.recipients[index].recipientType === RecipientType.PG && (
                             <FormTextField
                               keyName={`recipients[${index}].firstName`}
@@ -489,17 +496,20 @@ const Recipient = ({
                               errors={errors}
                               setFieldValue={setFieldValue}
                               handleBlur={handleBlur}
-                              width={8}
+                              width={setValueByDevice(12, 8)}
+                              sx={{ mt: setValueByDevice(0, 6) }}
                             />
                           )}
                         </Grid>
                       </RadioGroup>
                     </FormControl>
-                    <Grid container spacing={2} mt={2}>
+                    <Grid container spacing={2} mt={setValueByDevice(0, 2)}>
                       <FormTextField
                         keyName={`recipients[${index}].taxId`}
                         label={`${t(
-                          values.recipients[index].recipientType === RecipientType.PG ? 'recipient-organization-tax-id' : 'recipient-citizen-tax-id'
+                          values.recipients[index].recipientType === RecipientType.PG
+                            ? 'recipient-organization-tax-id'
+                            : 'recipient-citizen-tax-id'
                         )}*`}
                         values={values}
                         touched={touched}
@@ -534,7 +544,7 @@ const Recipient = ({
                       )}
                       <Grid
                         item
-                        xs={6}
+                        xs={setValueByDevice(12, 6)}
                         data-testid="DigitalDomicileCheckbox"
                         onClick={(e) => {
                           setFieldValue(
@@ -571,7 +581,7 @@ const Recipient = ({
                           errors={errors}
                           setFieldValue={setFieldValue}
                           handleBlur={handleBlur}
-                          width={6}
+                          width={setValueByDevice(12, 6)}
                         />
                       )}
                     </Grid>
