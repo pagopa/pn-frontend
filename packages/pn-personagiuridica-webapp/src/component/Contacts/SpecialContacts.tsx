@@ -8,6 +8,7 @@ import {
   Grid,
   InputAdornment,
   MenuItem,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -26,7 +27,7 @@ import {
   dataRegex,
   SpecialContactsProvider,
   searchStringLimitReachedText,
-  useSearchStringChangeInput,  
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -210,10 +211,12 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const getOptionLabel = (option: Party) => option.name || '';
 
   // handling of search string for sender
-  const entitySearchLabel = (searchString: string): string => 
-    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(searchString)}`
-  ;
-  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
+  const entitySearchLabel = (searchString: string): string =>
+    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(
+      searchString
+    )}`;
+  const handleChangeInput = (newInputValue: string) =>
+    handleSearchStringChangeInput(newInputValue, setSenderInputValue);
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
@@ -338,6 +341,16 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
+                PaperComponent={({ children }) => (
+                  <Paper
+                    style={{
+                      boxShadow:
+                        '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+                    }}
+                  >
+                    {children}
+                  </Paper>
+                )}
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
                 filterOptions={(e) => e}
                 renderOption={renderOption}
