@@ -211,6 +211,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     return menuItems;
   };
 
+  const name = (row?.name as string) || '';
+
   return (
     <>
       <ConfirmationModal
@@ -227,7 +229,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         groups.length > 0 && (
           <AcceptDelegationModal
             isEditMode
-            name={(row?.name as string) || ''}
+            name={name}
             open={showUpdateModal}
             currentGroups={row?.groups as Array<{ id: string; name: string }>}
             handleCloseAcceptModal={handleCloseAcceptModal}

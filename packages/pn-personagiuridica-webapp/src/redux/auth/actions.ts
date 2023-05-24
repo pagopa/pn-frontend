@@ -7,7 +7,7 @@ import { PartyRole, PNRole, User } from './types';
 
 export enum AUTH_ACTIONS {
   GET_TOS_APPROVAL = 'getToSApproval',
-  GET_PRIVACY_APPROVAL = 'getPrivacyApproval'
+  GET_PRIVACY_APPROVAL = 'getPrivacyApproval',
 }
 
 /**

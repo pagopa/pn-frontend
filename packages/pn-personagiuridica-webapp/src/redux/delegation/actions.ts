@@ -5,7 +5,6 @@ import { ExternalRegistriesAPI } from '../../api/external-registries/External-re
 import {
   AcceptDelegationResponse,
   Delegation,
-  DelegatorsNames,
   GetDelegatorsFilters,
   GetDelegatorsResponse,
 } from '../../models/Deleghe';
@@ -14,7 +13,6 @@ import { Groups } from '../../models/groups';
 export enum DELEGATION_ACTIONS {
   GET_DELEGATES_BY_COMPANY = 'getDelegatesByCompany',
   GET_DELEGATORS = 'getDelegators',
-  GET_DELEGATORS_NAMES = 'getDelegatorsNames',
 }
 
 export const getDelegatesByCompany = createAsyncThunk<Array<Delegation>>(
@@ -54,11 +52,6 @@ export const acceptDelegation = createAsyncThunk<
 export const getGroups = createAsyncThunk<Array<Groups>>(
   'getGroups',
   performThunkAction(() => ExternalRegistriesAPI.getGroups())
-);
-
-export const getDelegatorsNames = createAsyncThunk<Array<DelegatorsNames>>(
-  DELEGATION_ACTIONS.GET_DELEGATORS_NAMES,
-  performThunkAction(() => DelegationsApi.getDelegatorsNames())
 );
 
 export const updateDelegation = createAsyncThunk<

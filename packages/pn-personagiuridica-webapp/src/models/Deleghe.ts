@@ -114,7 +114,7 @@ export interface GetDelegatorsParams {
 }
 
 export interface GetDelegatorsRequest {
-  mandateIds?: Array<string>;
+  taxId?: string;
   groups?: Array<string>;
   status?: Array<DelegationStatus>;
 }
@@ -129,6 +129,9 @@ export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
 
 export type DelegatorsFormFilters = Exclude<GetDelegatorsFilters, 'nextPageKey'> & { page: number };
 
+/**
+ * @deprecated since pn-5795
+ */
 export interface DelegatorsNames {
   id: string;
   name: string;

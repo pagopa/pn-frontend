@@ -5,12 +5,7 @@ import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState } from '../redux/delegation/reducers';
-import {
-  getDelegators,
-  getGroups,
-  getDelegatesByCompany,
-  getDelegatorsNames,
-} from '../redux/delegation/actions';
+import { getDelegators, getGroups, getDelegatesByCompany } from '../redux/delegation/actions';
 import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
@@ -37,7 +32,6 @@ const Deleghe = () => {
     if (DELEGATIONS_TO_PG_ENABLED) {
       void dispatch(getDelegators({ size: 10 }));
       void dispatch(getGroups());
-      void dispatch(getDelegatorsNames());
     }
     setPageReady(true);
   }, []);

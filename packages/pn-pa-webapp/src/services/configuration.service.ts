@@ -13,6 +13,7 @@ interface PaConfigurationFromFile {
   DISABLE_INACTIVITY_HANDLER?: boolean;
   IS_PAYMENT_ENABLED?: boolean;
   MIXPANEL_TOKEN?: string;
+  WORK_IN_PROGRESS?: boolean;
 }
 
 export interface PaConfiguration extends PaConfigurationFromFile {
@@ -27,13 +28,16 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   DISABLE_INACTIVITY_HANDLER: boolean;
   IS_PAYMENT_ENABLED: boolean;
   MIXPANEL_TOKEN: string;
+  WORK_IN_PROGRESS: boolean;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
   constructor() {
     super();
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.token);
-    this.makeRequired(this.ruleFor('SELFCARE_URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl));
+    this.makeRequired(
+      this.ruleFor('SELFCARE_URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl)
+    );
     this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
@@ -43,6 +47,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('DISABLE_INACTIVITY_HANDLER').isBoolean();
     this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
+    this.ruleFor('WORK_IN_PROGRESS').isBoolean();
   }
 
   makeRequired(rule: any): void {
@@ -67,6 +72,7 @@ export function getConfiguration(): PaConfiguration {
     DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER ?? true,
     IS_PAYMENT_ENABLED: Boolean(configurationFromFile.IS_PAYMENT_ENABLED),
     MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
+    WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
   };
 }
 

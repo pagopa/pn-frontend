@@ -69,7 +69,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
                   textAlign={i % 2 === 0 ? 'right' : 'left'}
                   sx={{ minWidth: '100px' }}
                 >
-                  <Button onClick={() => getSPID(IDP)} sx={{ width: '100px', padding: '0' }}>
+                  <Button id={`spid-select-${IDP.entityId}`} onClick={() => getSPID(IDP)} sx={{ width: '100px', padding: '0' }}>
                     <Icon sx={{ width: '100px', height: '48px' }}>
                       <img width="100px" src={IDP.imageUrl} alt={IDP.name} />
                     </Icon>

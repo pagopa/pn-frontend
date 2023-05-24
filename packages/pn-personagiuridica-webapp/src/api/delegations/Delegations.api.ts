@@ -61,7 +61,7 @@ export const DelegationsApi = {
     apiClient
       .post<GetDelegatorsResponse>(
         DELEGATIONS_BY_DELEGATE({ size: params.size, nextPageKey: params.nextPageKey }),
-        { mandateIds: params.mandateIds, groups: params.groups, status: params.status }
+        { taxId: params.taxId, groups: params.groups, status: params.status }
       )
       .then((response: AxiosResponse<GetDelegatorsResponse>) => ({
         ...response.data,
@@ -146,6 +146,7 @@ export const DelegationsApi = {
    * Get all the delegators names for the authenticated user
    * @param {GetDelegatorsFilters} params
    * @return {Promise<GetDelegatorsResponse>}
+   * @deprecated since pn-5795
    */
   getDelegatorsNames: (): Promise<Array<DelegatorsNames>> =>
     apiClient

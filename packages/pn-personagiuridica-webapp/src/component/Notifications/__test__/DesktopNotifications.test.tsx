@@ -41,7 +41,7 @@ describe('DesktopNotifications Component', () => {
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
-      /empty-state.first-message empty-state.action empty-state.second-message/i
+      /empty-state.first-message-continuing empty-state.action empty-state.second-message/i
     );
   });
 

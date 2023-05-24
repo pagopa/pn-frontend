@@ -28,6 +28,7 @@
     "show_code_title": "Codice di verifica per la delega a {{name}}",
     "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",
+    "code_copied": "Codice copiato",
     "table": {
       "name": "Nome",
       "delegationStart": "Inizio delega",
