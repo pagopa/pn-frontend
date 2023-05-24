@@ -1,7 +1,16 @@
 import React from 'react';
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
-import { mockApi, render, act, fireEvent, RenderResult, waitFor } from '../../__test__/test-utils';
+import {
+  mockApi,
+  render,
+  act,
+  fireEvent,
+  RenderResult,
+  waitFor,
+  prettyDOM,
+  within,
+} from '../../__test__/test-utils';
 import { initialState } from '../../redux/delegation/__test__/test.utils';
 import { apiClient } from '../../api/apiClients';
 import {
@@ -50,8 +59,7 @@ describe('Deleghe page', () => {
   const renderComponent = async (
     openConfirmationModal: boolean,
     openCodeModal: boolean,
-    type: 'delegates' | 'delegators',
-    error: boolean = false
+    type: 'delegates' | 'delegators'
   ) => {
     await act(async () => {
       result = render(<Deleghe />, {
@@ -67,7 +75,7 @@ describe('Deleghe page', () => {
               id: '1',
               open: openCodeModal,
               name: 'Nome',
-              error,
+              error: false,
             },
           },
         },
@@ -173,23 +181,24 @@ describe('Deleghe page', () => {
     mock.restore();
   });
 
-  it.only('checks the accept modal error state', async () => {
+  it('checks the accept modal error state', async () => {
     const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     mockApi(mock, 'PATCH', ACCEPT_DELEGATION('1'), 500, { verificationCode: '11111' });
     useIsMobileSpy.mockReturnValue(false);
-    await renderComponent(false, true, 'delegators', true);
-    const codeInput = result.queryAllByPlaceholderText('-');
-    const confirmAcceptButton = result.getByText('deleghe.accept');
+    await renderComponent(false, true, 'delegators');
+    const dialog = result.queryByTestId('codeDialog');
+    expect(dialog).toBeInTheDocument();
+    const codeInput = within(dialog!).queryAllByPlaceholderText('-');
+    const confirmAcceptButton = within(dialog!).getByText('deleghe.accept');
     expect(codeInput).toHaveLength(5);
     codeInput.forEach((input) => {
       fireEvent.change(input, { target: { value: '1' } });
     });
     fireEvent.click(confirmAcceptButton);
-    expect(mock.history.patch).toHaveLength(1);
-    await waitFor(() => {
-      // expect(result.baseElement).toHaveTextContent('Accept mandate error');
-    });
+    await waitFor(() => expect(mock.history.patch).toHaveLength(1));
+    const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
+    expect(error).toBeInTheDocument();
     mock.reset();
     mock.restore();
   });
