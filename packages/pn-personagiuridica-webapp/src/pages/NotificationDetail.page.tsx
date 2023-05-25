@@ -171,14 +171,18 @@ const NotificationDetail = () => {
     }
   };
 
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
   // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
   const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
     if ((legalFact as LegalFactId).key) {
       dispatch(resetLegalFactState());
       void dispatch(
-        getReceivedNotificationLegalfact({ iun: notification.iun, legalFact: legalFact as LegalFactId, mandateId })
+        getReceivedNotificationLegalfact({
+          iun: notification.iun,
+          legalFact: legalFact as LegalFactId,
+          mandateId,
+        })
       );
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
@@ -312,7 +316,7 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
-                {userHasAdminPermissions && <DomicileBanner />}
+                {userHasAdminPermissions && !currentUser.hasGroup && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

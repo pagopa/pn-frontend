@@ -7,6 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 import * as yup from 'yup';
+
 import {
   acceptToS,
   acceptPrivacy,
@@ -42,7 +43,7 @@ const userDataMatcher = yup
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     organization: organizationMatcher,
     desired_exp: yup.number(),
-    isGroupAdmin: yup.boolean(),
+    hasGroup: yup.boolean(),
   })
   .noUnknown(true);
 
@@ -66,7 +67,7 @@ const noLoggedUserData = {
     fiscal_code: '',
   },
   desired_exp: 0,
-  isGroupAdmin: false,
+  hasGroup: false,
 } as User;
 
 const emptyUnauthorizedMessage = { title: '', message: '' };
