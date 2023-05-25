@@ -1,34 +1,24 @@
 import { NotificationDetail, parseNotificationDetail } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
-import { Delegator } from '../models/Deleghe';
-
-function fiscalNumberDaDelegator(
-  delegatorsFromStore: Array<Delegator>,
-  mandateId: string
-): string | undefined {
-  const currentDelegatorFromStore = delegatorsFromStore
-    ? delegatorsFromStore.find((delegatorFromStore) => delegatorFromStore.mandateId === mandateId)
-    : null;
-  return currentDelegatorFromStore ? currentDelegatorFromStore.delegator?.fiscalCode : undefined;
-}
 
 export function parseNotificationDetailForRecipient(
   notification: NotificationDetail,
-  currentUserTaxId: string,
-  delegatorsFromStore: Array<Delegator>,
-  mandateId?: string
 ): NotificationDetailForRecipient {
   // determine current recipient
-  const fiscalNumberForNotification = mandateId
-    ? fiscalNumberDaDelegator(delegatorsFromStore, mandateId)
-    : currentUserTaxId;
-  const candidateCurrentRecipientIndex = notification.recipients.findIndex(
-    (recipient) => recipient.taxId === fiscalNumberForNotification
+  // ----------------------------------------------
+  // PN-6104 - we chose to trust the notification detail API, the recipients in its response must be
+  // an array with exactly one "complete" record, and all the others being just a placeholder with recipientType only.
+  // The alternative of searching the whole set of delegators of the logged user/company to find the one corresponding
+  // with the mandateId included in the notification detail, would be too onerous 
+  // (since a PG user/company can be delegator of many different entities)
+  // and useless
+  // ----------------------------------------------
+  const properRecipientIndexes = notification.recipients.reduce(
+    (indexes, recipient, currentIndex) => recipient.taxId && recipient.denomination ? [...indexes, currentIndex] : indexes, 
+    [] as Array<number>
   );
-  // if the algorithm does not find the right recipient, it yields the first one
-  const currentRecipientIndex =
-    candidateCurrentRecipientIndex > -1 ? candidateCurrentRecipientIndex : 0;
+  const currentRecipientIndex = properRecipientIndexes.length === 1 ? properRecipientIndexes[0] : -1;
   const currentRecipient = notification.recipients[currentRecipientIndex];
 
   // do the changes common to the pa and pf
@@ -43,3 +33,4 @@ export function parseNotificationDetailForRecipient(
     currentRecipientIndex,
   };
 }
+

@@ -14,7 +14,39 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { parseNotificationDetailForRecipient } from '../../../utils/notification.utility';
 
+// beware!!
+// the *order* of these recipients is relevant, there are test on the *index* of a given recipient.
 const recipients: Array<NotificationDetailRecipient> = [
+  {
+    recipientType: RecipientType.PF,
+    taxId: 'TTTUUU29J84Z600X',
+    denomination: 'Totito',
+    digitalDomicile: {
+      type: DigitalDomicileType.PEC,
+      address: 'letotito@pnpagopa.postecert.local',
+    },
+    physicalAddress: {
+      address: 'Via del mistero, 48',
+      zip: '40200',
+      municipality: 'Arcore',
+      province: 'MI',
+      foreignState: 'ITALIA',
+    },
+    payment: {
+      noticeCode: '302011657724564978',
+      creditorTaxId: '77777777778',
+      pagoPaForm: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-0001-EWWX-RM6Q-MKZM-VMCV',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
   {
     recipientType: RecipientType.PF,
     taxId: 'CGNNMO80A03H501U',
@@ -123,10 +155,6 @@ const timeline: Array<INotificationDetailTimeline> = [
       },
       digitalAddressSource: AddressSource.GENERAL,
       retryNumber: 1,
-      downstreamId: {
-        systemId: '',
-        messageId: '',
-      },
     },
   },
   {
@@ -140,10 +168,6 @@ const timeline: Array<INotificationDetailTimeline> = [
       },
       digitalAddressSource: AddressSource.GENERAL,
       retryNumber: 1,
-      downstreamId: {
-        systemId: '',
-        messageId: '',
-      },
     },
   },
   {
@@ -163,10 +187,6 @@ const timeline: Array<INotificationDetailTimeline> = [
       },
       digitalAddressSource: AddressSource.GENERAL,
       retryNumber: 1,
-      downstreamId: {
-        systemId: '',
-        messageId: '',
-      },
       errors: ['OK'],
     },
   },
@@ -192,8 +212,6 @@ const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
-export const fixedMandateId = 'ALFA-BETA-GAMMA';
-
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',
   paProtocolNumber: '220220221119',
@@ -206,7 +224,7 @@ export const notificationFromBe: NotificationDetail = {
   documentsAvailable: true,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
   senderPaId: 'mocked-senderPaId',
-  recipients,
+  recipients: [recipients[0]],
   documents: [
     {
       digests: {
@@ -226,101 +244,59 @@ export const notificationFromBe: NotificationDetail = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
 };
 
-const notificationFromBeTwoRecipients: NotificationDetail = {
-  ...notificationFromBe,
-  notificationStatusHistory: [
-    statusHistory[0],
-    {
-      ...statusHistory[1],
-      relatedTimelineElements: [...statusHistory[1].relatedTimelineElements, 'c_b429-202203021814_send_courtesy_rec1']
-    }
-  ],
-  timeline: [...notificationFromBe.timeline, {
-    elementId: 'c_b429-202203021814_send_courtesy_rec1',
-    timestamp: '2022-03-02T17:57:06.819Z',
-    category: TimelineCategory.NOTIFICATION_VIEWED,
-    details: {
-      recIndex: 1,
-    },
-    legalFactsIds: [
+function notificationFromBeTwoRecipients(
+  userFiscalNumber: string,
+  delegatorFiscalNumber?: string,
+  isDelegate?: boolean
+): NotificationDetail {
+  const actualRecipient = isDelegate ? delegatorFiscalNumber : userFiscalNumber;
+  let notificationRecipients: Array<NotificationDetailRecipient | {recipientType: RecipientType}>;
+  if (actualRecipient === recipients[0].taxId) {
+    notificationRecipients = [recipients[0], { recipientType: RecipientType.PF }];
+  } else if (actualRecipient === recipients[1].taxId) {
+    notificationRecipients = [{ recipientType: RecipientType.PF }, recipients[1]];
+  } else {
+    throw new Error('bad input data - recipient taxId should be known');
+  }
+
+  return {
+    ...notificationFromBe,
+    notificationStatusHistory: [
+      statusHistory[0],
       {
-        key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-        category: LegalFactType.DIGITAL_DELIVERY,
-      },
+        ...statusHistory[1],
+        relatedTimelineElements: [...statusHistory[1].relatedTimelineElements, 'c_b429-202203021814_send_courtesy_rec1']
+      }
     ],
-  }],
-  recipients: [
-    {
-      recipientType: RecipientType.PF,
-      taxId: 'TTTUUU29J84Z600X',
-      denomination: 'Totito',
-      digitalDomicile: {
-        type: DigitalDomicileType.PEC,
-        address: 'letotito@pnpagopa.postecert.local',
+    timeline: [...notificationFromBe.timeline, {
+      elementId: 'c_b429-202203021814_send_courtesy_rec1',
+      timestamp: '2022-03-02T17:57:06.819Z',
+      category: TimelineCategory.NOTIFICATION_VIEWED,
+      details: {
+        recIndex: 1,
       },
-      physicalAddress: {
-        address: 'Via del mistero, 48',
-        zip: '40200',
-        municipality: 'Arcore',
-        province: 'MI',
-        foreignState: 'ITALIA',
-      },
-      payment: {
-        noticeCode: '302011657724564978',
-        creditorTaxId: '77777777778',
-        pagoPaForm: {
-          digests: {
-            sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-          },
-          contentType: 'application/pdf',
-          ref: {
-            key: 'PN_NOTIFICATION_ATTACHMENTS-0001-EWWX-RM6Q-MKZM-VMCV',
-            versionToken: 'v1',
-          },
+      legalFactsIds: [
+        {
+          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
+          category: LegalFactType.DIGITAL_DELIVERY,
         },
-      },
-    },
-    ...notificationFromBe.recipients,
-  ],
+      ],
+    }],
+    recipients: notificationRecipients as any,
+  }
 };
 
 export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
   const notification = { ...notificationFromBe, ...overrideObj };
-  return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
+  return parseNotificationDetailForRecipient(notification);
 };
 
-export const notificationToFe = parseNotificationDetailForRecipient(
-  notificationFromBe,
-  'CGNNMO80A03H501U',
-  []
-);
+export const notificationToFe = parseNotificationDetailForRecipient(notificationFromBe);
 
 export const notificationToFeTwoRecipients = (
   userFiscalNumber: string,
   delegatorFiscalNumber?: string,
   isDelegate?: boolean
 ) => {
-  return parseNotificationDetailForRecipient(
-    notificationFromBeTwoRecipients,
-    userFiscalNumber,
-    delegatorFiscalNumber && isDelegate
-      ? [
-          {
-            mandateId: fixedMandateId,
-            delegator: {
-              fiscalCode: delegatorFiscalNumber,
-              firstName: 'Mario',
-              lastName: 'Rossi',
-              person: true,
-            },
-            status: 'active',
-            visibilityIds: [],
-            verificationCode: '',
-            datefrom: '',
-            dateto: '',
-          },
-        ]
-      : [],
-    isDelegate ? fixedMandateId : undefined
-  );
+  return parseNotificationDetailForRecipient(notificationFromBeTwoRecipients(userFiscalNumber, delegatorFiscalNumber, isDelegate));
 };

@@ -32,8 +32,6 @@ export const getReceivedNotification = createAsyncThunk<
   performThunkAction((params: GetReceivedNotificationParams) =>
     NotificationsApi.getReceivedNotification(
       params.iun,
-      params.currentUserTaxId,
-      params.delegatorsFromStore,
       params.mandateId
     )
   )
