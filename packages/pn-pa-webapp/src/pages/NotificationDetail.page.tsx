@@ -38,7 +38,9 @@ import {
   useDownloadDocument,
   NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams, NotificationPaidDetail, dataRegex,
+  GetNotificationDowntimeEventsParams,
+  NotificationPaidDetail,
+  dataRegex,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -239,16 +241,16 @@ const NotificationDetail = () => {
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
     if (_.isObject(document)) {
-      const otherDocument = document as NotificationDetailOtherDocument;
-      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+      void dispatch(
+        getSentNotificationOtherDocument({ iun: notification.iun, otherDocument: document })
+      );
     } else {
       const documentIndex = document as string;
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
 
-
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
   // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
   const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
@@ -263,13 +265,13 @@ const NotificationDetail = () => {
             category: legalFactAsLegalFact.category,
           },
         })
-        );
+      );
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
     }
   };
-  
+
   const handleCancelNotification = () => {
     dispatch(setCancelledIun(notification.iun));
     navigate(routes.NUOVA_NOTIFICA);
@@ -279,15 +281,22 @@ const NotificationDetail = () => {
 
   const hasDocumentsAvailable = !(isCancelled || !notification.documentsAvailable);
 
-  const getDownloadFilesMessage = useCallback((): string => {
-    if (isCancelled) {
-      return t('detail.download-message-cancelled', { ns: 'notifiche' });
-    }
-    if (hasDocumentsAvailable) {
-      return t('detail.download-message-available', { ns: 'notifiche' });
-    }
-    return t('detail.download-message-expired', { ns: 'notifiche' });
-  }, [isCancelled, hasDocumentsAvailable]);
+  const getDownloadFilesMessage = useCallback(
+    (type: 'aar' | 'attachments'): string => {
+      if (isCancelled) {
+        return t('detail.download-message-cancelled', { ns: 'notifiche' });
+      }
+      if (hasDocumentsAvailable) {
+        return type === 'aar'
+          ? t('detail.download-aar-available', { ns: 'notifiche' })
+          : t('detail.download-message-available', { ns: 'notifiche' });
+      }
+      return type === 'aar'
+        ? t('detail.download-aar-expired', { ns: 'notifiche' })
+        : t('detail.download-message-expired', { ns: 'notifiche' });
+    },
+    [isCancelled, hasDocumentsAvailable]
+  );
 
   // PN-1714
   /*
@@ -441,29 +450,24 @@ const NotificationDetail = () => {
       {!hasNotificationSentApiError && (
         <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
-          <Grid
-            container
-            direction={direction}
-            spacing={spacing}
-          >
+          <Grid container direction={direction} spacing={spacing}>
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
-                  <Paper sx={{p: 3, mb: 3}} className="paperContainer">
-                    <Typography variant="h5">{t("payment.title", { ns: 'notifiche' })}</Typography>
+                  <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                    <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
                     {notification.paymentHistory.length === 1 && (
-                      <Typography>
-                        {t("payment.subtitle-single", { ns: 'notifiche' })}
-                      </Typography>
+                      <Typography>{t('payment.subtitle-single', { ns: 'notifiche' })}</Typography>
                     )}
                     {notification.paymentHistory.length > 1 && (
-                      <Typography>
-                        {t("payment.subtitle-multiple", { ns: 'notifiche' })}
-                      </Typography>
+                      <Typography>{t('payment.subtitle-multiple', { ns: 'notifiche' })}</Typography>
                     )}
-                    <NotificationPaidDetail paymentDetailsList={notification.paymentHistory} isSender />
+                    <NotificationPaidDetail
+                      paymentDetailsList={notification.paymentHistory}
+                      isSender
+                    />
                   </Paper>
                 )}
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
@@ -472,17 +476,17 @@ const NotificationDetail = () => {
                     documents={notification.documents}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
-                    title={t('detail.other-acts', { ns: 'notifiche' })}
+                    title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>

@@ -1,26 +1,26 @@
+import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
-const handleCloseMock = jest.fn();
 const cancelButtonMock = jest.fn();
 const confirmButtonMock = jest.fn();
 
-const openedModalComponent = (open: boolean, hasError: boolean = false) => (
+const openedModalComponent = (open: boolean, hasError: boolean = false, readonly: boolean = false, initialValues: string[] = new Array(5).fill('') ) => (
   <CodeModal
     title="mocked-title"
     subtitle="mocked-subtitle"
     open={open}
-    initialValues={new Array(5).fill('')}
+    initialValues={initialValues}
     codeSectionTitle="mocked-section-title"
-    handleClose={handleCloseMock}
     cancelLabel="mocked-cancel"
     cancelCallback={cancelButtonMock}
     confirmLabel="mocked-confirm"
     confirmCallback={confirmButtonMock}
     hasError={hasError}
-    errorMessage='mocked-errorMessage'
+    errorMessage="mocked-errorMessage"
+    isReadOnly={readonly}
   />
 );
 
@@ -53,6 +53,26 @@ describe('CodeModal Component', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons![0]).toHaveTextContent('mocked-cancel');
     expect(buttons![1]).toHaveTextContent('mocked-confirm');
+  });
+
+  it('renders CodeModal (read only)', () => {
+    // render component
+    render(openedModalComponent(true, false, true, ['0', '1', '2', '3', '4']));
+
+    const dialog = screen.queryByTestId('codeDialog');
+    expect(dialog).toBeInTheDocument();
+    const title = dialog?.querySelector('#dialog-title');
+    expect(title).toHaveTextContent('mocked-title');
+    const subtitle = dialog?.querySelector('#dialog-description');
+    expect(subtitle).toHaveTextContent('mocked-subtitle');
+    expect(dialog).toHaveTextContent('mocked-section-title');
+    const codeInputs = dialog?.querySelectorAll('input');
+    expect(codeInputs).toHaveLength(5);
+    codeInputs?.forEach((input, index) => {
+      expect(input).toHaveValue(index.toString());
+    });
+    const button = dialog?.querySelector('#copy-code-button');
+    expect(button).toBeInTheDocument();
   });
 
   it('clicks on cancel', async () => {

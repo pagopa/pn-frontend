@@ -1,7 +1,7 @@
-import { Validator } from "@pagopa-pn/pn-validator";
-import { fetchConfiguration } from "./fetch.configuration.service";
+import { Validator } from '@pagopa-pn/pn-validator';
+import { fetchConfiguration } from './fetch.configuration.service';
 
-export class ConfigurationError extends Error { }
+class ConfigurationError extends Error {}
 
 export class Configuration {
   private static storedConfiguration: any = null;
@@ -18,7 +18,9 @@ export class Configuration {
    */
   static get<T>(): T {
     if (!this.configurationLoadingExecuted) {
-      throw new ConfigurationError('loadConfiguration must be called before any call to getConfiguration');
+      throw new ConfigurationError(
+        'loadConfiguration must be called before any call to getConfiguration'
+      );
     } else if (this.storedConfiguration == null) {
       throw new ConfigurationError('error detected when loading configuration');
     }

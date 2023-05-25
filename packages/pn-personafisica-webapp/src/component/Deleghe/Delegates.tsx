@@ -3,7 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import {
+  Column,
+  ItemsTable as Table,
+  Item,
+  CodeModal,
+  Sort,
+  EmptyState,
+  ApiErrorWrapper,
+} from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -12,8 +20,8 @@ import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 import { DelegatesColumn } from '../../models/Deleghe';
 
 import { Menu, OrganizationsList } from './DelegationsElements';
@@ -95,7 +103,7 @@ const Delegates = () => {
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, {source});
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
@@ -113,7 +121,6 @@ const Delegates = () => {
         subtitle={t('deleghe.show_code_subtitle')}
         open={showCodeModal.open}
         initialValues={showCodeModal.code.split('')}
-        handleClose={handleCloseShowCodeModal}
         cancelCallback={handleCloseShowCodeModal}
         cancelLabel={t('deleghe.close')}
         codeSectionTitle={t('deleghe.verification_code')}

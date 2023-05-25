@@ -1,4 +1,4 @@
-import { Alert, Snackbar, IconButton } from '@mui/material';
+import { Alert, Snackbar, IconButton, AlertTitle } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -9,6 +9,8 @@ type Props = {
   open: boolean;
   /** message type (error, success, info, warning) */
   type: MessageType;
+  /** title to be shown */
+  title?: React.ReactNode;
   /** message to be shown */
   message: React.ReactNode;
   /** A closing delay: if specified the sneakbar would close itself */
@@ -18,7 +20,15 @@ type Props = {
   variant?: 'outlined' | 'standard' | 'filled';
 };
 
-const SnackBar = ({ message, open, type, closingDelay, onClose, variant = 'outlined' }: Props) => {
+const SnackBar = ({
+  title,
+  message,
+  open,
+  type,
+  closingDelay,
+  onClose,
+  variant = 'outlined',
+}: Props) => {
   const [openStatus, setOpenStatus] = useState(open);
   const isMobile = useIsMobile();
 
@@ -29,7 +39,7 @@ const SnackBar = ({ message, open, type, closingDelay, onClose, variant = 'outli
     }
   };
 
-  //create timer for closing snackbar after *closingDelay* milliseconds
+  // create timer for closing snackbar after *closingDelay* milliseconds
   useEffect(() => {
     if (closingDelay && openStatus) {
       const timer = setTimeout(() => {
@@ -76,6 +86,7 @@ const SnackBar = ({ message, open, type, closingDelay, onClose, variant = 'outli
               }}
               variant={variant}
             >
+              {title && <AlertTitle>{title}</AlertTitle>}
               {message}
             </Alert>
           </Snackbar>

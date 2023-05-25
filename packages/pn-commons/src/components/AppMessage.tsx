@@ -37,15 +37,18 @@ const AppMessage = () => {
 
   const enqueueMessages = (messages: Array<IAppMessage>, type: 'success' | 'error') => {
     const newQueue: Array<EnqueuedMessage> = messages
-      .filter((message: IAppMessage) => 
-        // The messages keep in the appState Redux store slice until the same action is re-invoked.
-        // Hence, the messages already shown, being shown, or already in the about-to-show queue, 
-        // musn't be added to the queue again 
-        // (those already or currently shown have entered and then left the queue)
-        // ------------------------------
-        // Carlos Lombardi, 2022.12.16
-        // ------------------------------
-        !message.alreadyShown && message.id !== currentMessage?.message.id && !isMessageEnqueued(message)
+      .filter(
+        (message: IAppMessage) =>
+          // The messages keep in the appState Redux store slice until the same action is re-invoked.
+          // Hence, the messages already shown, being shown, or already in the about-to-show queue,
+          // musn't be added to the queue again
+          // (those already or currently shown have entered and then left the queue)
+          // ------------------------------
+          // Carlos Lombardi, 2022.12.16
+          // ------------------------------
+          !message.alreadyShown &&
+          message.id !== currentMessage?.message.id &&
+          !isMessageEnqueued(message)
       )
       .map((message: IAppMessage) => ({
         type,
@@ -74,6 +77,7 @@ const AppMessage = () => {
       {currentMessage && (
         <SnackBar
           key={currentMessage.message.id}
+          title={currentMessage.message.title}
           message={currentMessage.message.message}
           open
           type={currentMessage.type === MessageType.ERROR ? MessageType.ERROR : MessageType.SUCCESS}

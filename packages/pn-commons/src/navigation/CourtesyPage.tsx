@@ -33,7 +33,7 @@ const CourtesyPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) =
             </Typography>
         )}
         {onClick && (
-            <Button sx={{ marginTop: '24px' }} variant="contained" onClick={onClick}>
+            <Button id="courtesy-page-button" sx={{ marginTop: '24px' }} variant="contained" onClick={onClick}>
                 {onClickLabel}
             </Button>
         )}

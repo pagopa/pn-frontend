@@ -1,4 +1,5 @@
 import {
+  AppResponsePublisher,
   appStateActions,
   InactivityHandler,
   SessionModal,
@@ -30,6 +31,14 @@ const INITIALIZATION_SEQUENCE = [
 ];
 
 const inactivityTimer = 5 * 60 * 1000;
+
+const manageUnforbiddenError = (e: any) => {
+  if (e.status === 451) {
+    // error toast must not be shown
+    return false;
+  }
+  return true;
+};
 
 // riguardo alla definizione di due componenti separati,
 // cfr. il commento in merito nel file SessionGuard.tsx in pn-personafisica-webapp
@@ -99,6 +108,7 @@ const SessionGuard = () => {
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors } = useErrors();
+  const { WORK_IN_PROGRESS } = getConfiguration();
 
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
@@ -127,6 +137,7 @@ const SessionGuard = () => {
       // ----------------------
       const spidToken = getTokenParam();
       if (spidToken) {
+        AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
         await dispatch(exchangeToken(spidToken));
       }
     };
@@ -138,7 +149,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doInitalPageDetermination = () => {
-      if (isForbiddenUser) {
+      if (isForbiddenUser || WORK_IN_PROGRESS) {
         // ----------------------
         // I'm not sure about this management of the redirects
         // Momentarily I have added the isForbiddenUser variable that is true if login returns 451 error code
@@ -169,6 +180,11 @@ const SessionGuard = () => {
     if (!isInitialized && isFinished()) {
       dispatch(appStateActions.finishInitialization());
     }
+    return () => {
+      if (isInitialized) {
+        AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+      }
+    };
   }, [isInitialized, isFinished]);
 
   return <SessionGuardRender />;

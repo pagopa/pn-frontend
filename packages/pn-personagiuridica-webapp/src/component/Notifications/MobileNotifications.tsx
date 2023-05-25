@@ -18,10 +18,11 @@ import {
   MobileNotificationsSort,
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, Tag } from '@pagopa/mui-italia';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { Organization, PNRole } from '../../redux/auth/types';
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -52,6 +53,23 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
+// to avoid cognitive complexity warning - PN-5323
+function mainEmptyMessage(
+  filtersApplied: boolean,
+  isDelegatedPage: boolean,
+  organization: Organization,
+  role: PNRole,
+  t: any
+) {
+  return filtersApplied
+    ? undefined
+    : isDelegatedPage
+    ? t('empty-state.delegate', { name: organization.name })
+    : role !== PNRole.ADMIN
+    ? t('empty-state.first-message-alone')
+    : t('empty-state.first-message-continuing');
+}
+
 const MobileNotifications = ({
   notifications,
   sort,
@@ -66,6 +84,7 @@ const MobileNotifications = ({
   });
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const role = organization.roles[0].role;
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
@@ -146,10 +165,14 @@ const MobileNotifications = ({
 
   if (isDelegatedPage) {
     const recipientField = {
-      id: 'group',
-      label: t('table.gruppi'),
-      getLabel(value: string) {
-        return <Tag value={value} data-testid={`groupChip-${value}`} />;
+      id: 'recipients',
+      label: t('table.destinatario'),
+      getLabel(value: Array<string>) {
+        return value.map((v) => (
+          <Typography key={v} variant="body2">
+            {v}
+          </Typography>
+        ));
       },
     };
 
@@ -195,16 +218,17 @@ const MobileNotifications = ({
     emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : isDelegatedPage ? undefined : handleRouteContacts,
-    emptyMessage: filtersApplied 
-      ? undefined 
-      : isDelegatedPage ? t('empty-state.delegate', { name: organization.name }) : t('empty-state.first-message'),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: (filtersApplied || isDelegatedPage)
+      : isDelegatedPage || role !== PNRole.ADMIN
       ? undefined
-      : {
-          emptyMessage: t('empty-state.second-message'),
-        },
+      : handleRouteContacts,
+    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, role, t),
+    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
+    secondaryMessage:
+      filtersApplied || isDelegatedPage || role !== PNRole.ADMIN
+        ? undefined
+        : {
+            emptyMessage: t('empty-state.second-message'),
+          },
   };
 
   // Navigation handlers

@@ -25,7 +25,7 @@ const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: 
   return (
     <Stack direction="column" alignItems="center" my={4} sx={{ minHeight: '50vh' }}>
       <Box mt={4}>
-        <Typography align="center" color="text.primary" variant="h4">
+        <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
           {finalMessage}
         </Typography>
       </Box>
@@ -37,6 +37,7 @@ const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: 
 
       <Box my={4}>
         <Button
+          id="login-button"
           variant="contained"
           onClick={() => {
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions

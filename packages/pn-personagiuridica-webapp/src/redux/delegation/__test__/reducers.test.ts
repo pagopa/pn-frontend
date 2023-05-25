@@ -4,7 +4,6 @@ import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
-  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
   UPDATE_DELEGATION,
@@ -18,7 +17,6 @@ import {
   acceptDelegation,
   getDelegatesByCompany,
   getDelegators,
-  getDelegatorsNames,
   getGroups,
   rejectDelegation,
   revokeDelegation,
@@ -148,29 +146,6 @@ describe('delegation redux state tests', () => {
         status: GroupStatus.ACTIVE,
       },
     ]);
-    mock.reset();
-    mock.restore();
-  });
-
-  it('should get delegators names', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_NAME_BY_DELEGATE(),
-      200,
-      undefined,
-      arrayOfDelegators
-    );
-    const action = await store.dispatch(getDelegatorsNames());
-    const payload = action.payload as any;
-    expect(action.type).toBe('getDelegatorsNames/fulfilled');
-    expect(payload).toEqual(
-      arrayOfDelegators.map((delegator) => ({
-        id: delegator.delegator.fiscalCode,
-        name: delegator.delegator.displayName,
-        mandateIds: [delegator.mandateId],
-      }))
-    );
     mock.reset();
     mock.restore();
   });

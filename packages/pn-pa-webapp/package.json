@@ -13,7 +13,7 @@
     "@mui/system": "5.10.8",
     "@mui/x-date-pickers": "5.0.13",
     "@pagopa-pn/pn-commons": "^1.5.4",
-    "@pagopa/mui-italia": "^0.9.4",
+    "@pagopa/mui-italia": "^0.9.7",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
