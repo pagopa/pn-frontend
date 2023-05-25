@@ -18,7 +18,6 @@ import {
   MenuItem,
   Stack,
   Paper,
-  Autocomplete,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { IllusCompleted } from '@pagopa/mui-italia';
@@ -37,6 +36,7 @@ import {
   searchStringLimitReachedText,
   useSearchStringChangeInput,
   RecipientType,
+  PnAutocomplete,
 } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
@@ -373,7 +373,7 @@ const NuovaDelega = () => {
 
                             {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                               <FormControl fullWidth>
-                                <Autocomplete
+                                <PnAutocomplete
                                   id="enti-select"
                                   data-testid="enti-select"
                                   multiple
@@ -394,16 +394,6 @@ const NuovaDelega = () => {
                                   }
                                   filterOptions={(e) => e}
                                   renderOption={renderOption}
-                                  PaperComponent={({ children }) => (
-                                    <Paper
-                                      style={{
-                                        boxShadow:
-                                          '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
-                                      }}
-                                    >
-                                      {children}
-                                    </Paper>
-                                  )}
                                   renderInput={(params) => (
                                     <TextField
                                       name="enti-select"

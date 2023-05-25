@@ -2,13 +2,11 @@ import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
-  Autocomplete,
   Card,
   CardContent,
   Grid,
   InputAdornment,
   MenuItem,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -28,6 +26,7 @@ import {
   SpecialContactsProvider,
   searchStringLimitReachedText,
   useSearchStringChangeInput,
+  PnAutocomplete,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -330,7 +329,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
-              <Autocomplete
+              <PnAutocomplete
                 id="sender"
                 size="small"
                 options={parties}
@@ -341,16 +340,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
-                PaperComponent={({ children }) => (
-                  <Paper
-                    style={{
-                      boxShadow:
-                        '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
-                    }}
-                  >
-                    {children}
-                  </Paper>
-                )}
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
                 filterOptions={(e) => e}
                 renderOption={renderOption}

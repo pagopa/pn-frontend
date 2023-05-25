@@ -1,13 +1,12 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { useIsMobile, Prompt, PnBreadcrumb, TitleBox } from '@pagopa-pn/pn-commons';
+import { useIsMobile, Prompt, PnBreadcrumb, TitleBox, PnAutocomplete } from '@pagopa-pn/pn-commons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
   Box,
   Typography,
   TextField,
-  Autocomplete,
   Paper,
   Grid,
   Button,
@@ -148,7 +147,7 @@ const NewApiKey = () => {
                         <Typography fontWeight="bold" mb={2}>
                           {t('form-label-groups')}
                         </Typography>
-                        <Autocomplete
+                        <PnAutocomplete
                           disableCloseOnSelect
                           multiple
                           noOptionsText={t('no-groups')}
@@ -157,16 +156,6 @@ const NewApiKey = () => {
                           id="groups"
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
-                          PaperComponent={({ children }) => (
-                            <Paper
-                              style={{
-                                boxShadow:
-                                  '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
-                              }}
-                            >
-                              {children}
-                            </Paper>
-                          )}
                           renderOption={(props, option) => (
                             <MenuItem {...props}>
                               <ListItemIcon>
