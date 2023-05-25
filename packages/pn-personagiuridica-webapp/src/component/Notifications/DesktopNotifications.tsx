@@ -14,6 +14,7 @@ import {
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
 
+import { Typography } from '@mui/material';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { Organization, PNRole } from '../../redux/auth/types';
@@ -152,8 +153,12 @@ const DesktopNotifications = ({
       label: t('table.destinatario'),
       width: '15%',
       sortable: false,
-      getCellLabel(value: string) {
-        return value;
+      getCellLabel(value: Array<string>) {
+        return value.map((v) => (
+          <Typography key={v} variant="body2">
+            {v}
+          </Typography>
+        ));
       },
       onClick(row: Item) {
         handleRowClick(row);

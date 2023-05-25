@@ -23,7 +23,6 @@ const DomicileBanner = () => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);
-  const { isGroupAdmin } = useAppSelector((state: RootState) => state.userState.user);
   const path = pathname.split('/');
   const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
@@ -37,10 +36,10 @@ const DomicileBanner = () => {
   };
 
   useEffect(() => {
-    if ((legalDomicile && legalDomicile.length > 0) || isGroupAdmin ) {
+    if (legalDomicile && legalDomicile.length > 0) {
       dispatch(closeDomicileBanner());
     }
-  }, [legalDomicile, isGroupAdmin]);
+  }, [legalDomicile]);
 
   return open ? (
     <Box mb={2.5}>
@@ -59,10 +58,17 @@ const DomicileBanner = () => {
           Cfr. PN-5528.
         */}
         <Stack direction="row">
-          <Typography variant="body2" sx={{overflow: 'hidden'}}>
+          <Typography variant="body2" sx={{ overflow: 'hidden' }}>
             {t(`detail.domicile_${messageIndex}`)}
           </Typography>
-          <Link component="button" variant='body2' fontWeight={'bold'} onClick={handleAddDomicile} tabIndex={0} sx={{marginLeft: "4px"}}>
+          <Link
+            component="button"
+            variant="body2"
+            fontWeight={'bold'}
+            onClick={handleAddDomicile}
+            tabIndex={0}
+            sx={{ marginLeft: '4px' }}
+          >
             {t(`detail.add_domicile_${messageIndex}`)}
           </Link>
         </Stack>

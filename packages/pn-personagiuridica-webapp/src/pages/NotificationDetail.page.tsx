@@ -159,9 +159,12 @@ const NotificationDetail = () => {
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
     if (_.isObject(document)) {
-      const otherDocument = document as NotificationDetailOtherDocument;
       void dispatch(
-        getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId })
+        getReceivedNotificationOtherDocument({
+          iun: notification.iun,
+          otherDocument: document,
+          mandateId,
+        })
       );
     } else {
       const documentIndex = document as string;
@@ -171,14 +174,18 @@ const NotificationDetail = () => {
     }
   };
 
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
   // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
   const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
     if ((legalFact as LegalFactId).key) {
       dispatch(resetLegalFactState());
       void dispatch(
-        getReceivedNotificationLegalfact({ iun: notification.iun, legalFact: legalFact as LegalFactId, mandateId })
+        getReceivedNotificationLegalfact({
+          iun: notification.iun,
+          legalFact: legalFact as LegalFactId,
+          mandateId,
+        })
       );
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
@@ -196,15 +203,22 @@ const NotificationDetail = () => {
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
   );
 
-  const getDownloadFilesMessage = useCallback((): string => {
-    if (isCancelled) {
-      return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
-    } else if (hasDocumentsAvailable) {
-      return t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
-    } else {
-      return t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
-    }
-  }, [isCancelled, hasDocumentsAvailable]);
+  const getDownloadFilesMessage = useCallback(
+    (type: 'aar' | 'attachments'): string => {
+      if (isCancelled) {
+        return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
+      } else if (hasDocumentsAvailable) {
+        return type === 'aar'
+          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
+      } else {
+        return type === 'aar'
+          ? t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+      }
+    },
+    [isCancelled, hasDocumentsAvailable]
+  );
 
   const fetchReceivedNotification = useCallback(() => {
     if (id) {
@@ -312,24 +326,24 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
-                {userHasAdminPermissions && <DomicileBanner />}
+                {userHasAdminPermissions && !currentUser.hasGroup && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={isCancelled ? [] : notification.documents}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
-                    title={t('detail.other-acts', { ns: 'notifiche' })}
+                    title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
                 </Paper>

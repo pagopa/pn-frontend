@@ -26,5 +26,5 @@ export const userResponse: User = {
     ],
     fiscal_code: '12345678910',
   },
-  isGroupAdmin: false,
+  hasGroup: false,
 };
