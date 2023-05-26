@@ -1,22 +1,7 @@
-import { List, ListItem, SvgIcon, Typography } from "@mui/material";
+import { List, ListItem, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { IMAGES_PATH } from "@utils/constants";
 import { IHeadingTitlesData, IInfoblockData, ITabsData } from "model";
-
-const IconInfo = () => (
-  <SvgIcon
-    width="20"
-    height="19"
-    viewBox="0 0 20 19"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M9.08398 4.91658H10.9173V6.74992H9.08398V4.91658ZM9.08398 8.58325H10.9173V14.0833H9.08398V8.58325ZM10.0007 0.333252C4.94065 0.333252 0.833984 4.43992 0.833984 9.49992C0.833984 14.5599 4.94065 18.6666 10.0007 18.6666C15.0607 18.6666 19.1673 14.5599 19.1673 9.49992C19.1673 4.43992 15.0607 0.333252 10.0007 0.333252ZM10.0007 16.8333C5.95815 16.8333 2.66732 13.5424 2.66732 9.49992C2.66732 5.45742 5.95815 2.16659 10.0007 2.16659C14.0431 2.16659 17.334 5.45742 17.334 9.49992C17.334 13.5424 14.0431 16.8333 10.0007 16.8333Z"
-      fill="#6BCFFB"
-    />
-  </SvgIcon>
-);
 
 const headingTitles: Array<IHeadingTitlesData> = [
   {
@@ -58,14 +43,14 @@ const infoblocks: Array<IInfoblockData> = [
           </Typography>
           <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
             <List sx={{ listStyleType: "disc", pl: 4 }}>
-              <ListItem sx={{ display: "list-item", pl: 0 }}>
+              <ListItem sx={{ display: "list-item", pl: 0, pt: 0, pb: 0.5 }}>
                 <Typography variant="body2">
                   <b>Se hai ricevuto la PEC</b>, si perfeziona 7 giorni dopo la
                   data di consegna. Se l'hai ricevuta dalle 21:00 in poi, conta
                   a partire dal giorno dopo.
                 </Typography>
               </ListItem>
-              <ListItem sx={{ display: "list-item", pl: 0 }}>
+              <ListItem sx={{ display: "list-item", pl: 0, pt: 0, pb: 0.5 }}>
                 <Typography variant="body2">
                   <b>Se la PEC è satura, non valida o inattiva</b>, si
                   perfeziona 15 giorni dopo la data di emissione dell'avviso di
@@ -94,13 +79,13 @@ const infoblocks: Array<IInfoblockData> = [
           </Typography>
           <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
             <List sx={{ listStyleType: "disc", pl: 4 }}>
-              <ListItem sx={{ display: "list-item", pl: 0 }}>
+              <ListItem sx={{ display: "list-item", pl: 0, pt: 0, pb: 0.5 }}>
                 <Typography variant="body2">
                   <b>Se hai ricevuto la raccomandata</b>, si perfeziona 10
                   giorni dopo la data di ricezione;
                 </Typography>
               </ListItem>
-              <ListItem sx={{ display: "list-item", pl: 0 }}>
+              <ListItem sx={{ display: "list-item", pl: 0, pt: 0, pb: 0.5 }}>
                 <Typography variant="body2">
                   <b>
                     Se hai ricevuto un avviso di giacenza e ritiri la
@@ -110,7 +95,7 @@ const infoblocks: Array<IInfoblockData> = [
                   ritiro;
                 </Typography>
               </ListItem>
-              <ListItem sx={{ display: "list-item", pl: 0 }}>
+              <ListItem sx={{ display: "list-item", pl: 0, pt: 0, pb: 0.5 }}>
                 <Typography variant="body2">
                   <b>
                     Se hai ricevuto un avviso di giacenza e non ritiri la
