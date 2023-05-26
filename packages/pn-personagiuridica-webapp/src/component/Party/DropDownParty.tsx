@@ -12,7 +12,7 @@ const DropDownPartyMenuItem: React.FC<DropDownPartyProps> = ({ name }) => (
         <AccountBalanceIcon sx={{ color: '#A2ADB8' }} />
       </Avatar>
     </Grid>
-    <Grid item xs={10} sx={{ whiteSpace: 'wrap' }}>
+    <Grid item xl={10} lg={8} xs={10}>
       <Typography fontWeight={600}>{name}</Typography>
     </Grid>
   </Grid>
