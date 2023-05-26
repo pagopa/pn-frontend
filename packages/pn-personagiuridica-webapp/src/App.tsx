@@ -1,4 +1,4 @@
-import { ErrorInfo, useEffect, useMemo } from 'react';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -46,7 +46,29 @@ import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { getConfiguration } from './services/configuration.service';
 
+// Cfr. PN-6096
+// --------------------
+// The i18n initialization must execute before the *first* time anything is actually rendered.
+// Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
+// --------------------
 const App = () => {
+  const { t } = useTranslation(['common', 'notifiche']);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      setIsInitialized(true);
+      // init localization
+      initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      // eslint-disable-next-line functional/immutable-data
+      errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
+    }
+  }, [isInitialized]);
+
+  return isInitialized ? <ActualApp /> : <div/>;
+};
+
+const ActualApp = () => {
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
   setUpInterceptor(store);
   const dispatch = useAppDispatch();
@@ -103,13 +125,6 @@ const App = () => {
   });
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
-
-  useEffect(() => {
-    // init localization
-    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-    // eslint-disable-next-line functional/immutable-data
-    errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
-  }, []);
 
   useEffect(() => {
     if (sessionToken !== '') {

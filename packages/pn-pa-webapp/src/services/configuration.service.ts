@@ -6,6 +6,7 @@ interface PaConfigurationFromFile {
   SELFCARE_URL_FE_LOGIN: string;
   SELFCARE_BASE_URL: string;
   API_BASE_URL: string;
+  LANDING_SITE_URL: string;
   ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
@@ -40,6 +41,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     );
     this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
+    this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.token);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.token);

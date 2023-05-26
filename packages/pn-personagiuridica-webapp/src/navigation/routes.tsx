@@ -5,6 +5,7 @@ import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-p
 import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import { PNRole } from '../redux/auth/types';
+import { getConfiguration } from "../services/configuration.service";
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -22,7 +23,7 @@ const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = `https://notifichedigitali.pagopa.it/`;
+  window.location.href = getConfiguration().LANDING_SITE_URL;
 };
 
 function Router() {

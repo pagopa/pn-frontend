@@ -11,6 +11,7 @@ import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
 import { PNRole } from '../models/user';
 import AppStatus from '../pages/AppStatus.page';
+import { getConfiguration } from "../services/configuration.service";
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -18,7 +19,7 @@ import ToSGuard from './ToSGuard';
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = `https://notifichedigitali.pagopa.it/`;
+  window.location.href = getConfiguration().LANDING_SITE_URL;
 };
 
 function Router() {

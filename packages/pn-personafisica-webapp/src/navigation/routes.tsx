@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AppNotAccessible, LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
+import { getConfiguration } from "../services/configuration.service";
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -21,7 +22,7 @@ const ParticipatingEntitiesPage = React.lazy(() => import('../pages/Participatin
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = `https://notifichedigitali.pagopa.it/`;
+  window.location.href = getConfiguration().LANDING_SITE_URL;
 };
 
 function Router() {

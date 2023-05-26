@@ -1,4 +1,4 @@
-import { ErrorInfo, useEffect, useMemo } from 'react';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -56,7 +56,40 @@ const productsList: Array<ProductSwitchItem> = [
   },
 ];
 
+// Cfr. PN-6096
+// --------------------
+// The i18n initialization must execute before the *first* time anything is actually rendered.
+// Otherwise, if a component is rendered before the i18n initialization is actually executed,
+// won't be able to access to the actual translations.
+// E.g. if a user types the URL with the path /non-accessbile, the App component runs just once.
+// In "normal" cases, the SessionGuard initialization forces App to render more than one
+// and therefore to make i18n to be initialized by the time something actually renders.
+// 
+// In turn, adding the ternary operator in the return statement provokes 
+// the "too high computational complexity" warning to appear
+// (in fact it jumps to <= 15 to 30!!).
+// The only way I found to prevent it is to split the initialization in a separate React component.
+// ----------------------------------------
+// Carlos Lombardi, 2023.05.26
+// ----------------------------------------
 const App = () => {
+  const { t } = useTranslation(['common', 'notifiche']);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      setIsInitialized(true);
+      // init localization
+      initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      // eslint-disable-next-line functional/immutable-data
+      errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
+    }
+  }, [isInitialized]);
+
+  return isInitialized ? <ActualApp /> : <div/>;
+};
+
+const ActualApp = () => {
   setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -113,13 +146,6 @@ const App = () => {
   });
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
-
-  useEffect(() => {
-    // init localization
-    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-    // eslint-disable-next-line functional/immutable-data
-    errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
-  }, []);
 
   useEffect(() => {
     if (sessionToken !== '') {
