@@ -52,6 +52,7 @@ import CustomTagGroup from './CustomTagGroup/CustomTagGroup';
 import TabPanel from './TabPanel';
 import SmartTable from './Data/SmartTable';
 import SmartFilter from './Data/SmartFilter';
+import PnAutocomplete from './PnAutocomplete';
 
 export {
   LoadingOverlay,
@@ -106,6 +107,7 @@ export {
   CustomTagGroup,
   SmartTable,
   SmartFilter,
+  PnAutocomplete,
 };
 
 export type { DowntimeLogColumn };

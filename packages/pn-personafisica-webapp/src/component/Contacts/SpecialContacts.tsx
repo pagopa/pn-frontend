@@ -2,7 +2,6 @@ import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
-  Autocomplete,
   Card,
   CardContent,
   Grid,
@@ -27,6 +26,7 @@ import {
   SpecialContactsProvider,
   searchStringLimitReachedText,
   useSearchStringChangeInput,
+  PnAutocomplete,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -330,7 +330,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
-              <Autocomplete
+              <PnAutocomplete
                 id="sender"
                 size="small"
                 options={parties}

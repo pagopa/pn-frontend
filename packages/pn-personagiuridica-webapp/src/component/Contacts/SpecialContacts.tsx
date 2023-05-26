@@ -2,7 +2,6 @@ import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
-  Autocomplete,
   Card,
   CardContent,
   Grid,
@@ -26,7 +25,8 @@ import {
   dataRegex,
   SpecialContactsProvider,
   searchStringLimitReachedText,
-  useSearchStringChangeInput,  
+  useSearchStringChangeInput,
+  PnAutocomplete,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -210,10 +210,12 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const getOptionLabel = (option: Party) => option.name || '';
 
   // handling of search string for sender
-  const entitySearchLabel = (searchString: string): string => 
-    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(searchString)}`
-  ;
-  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
+  const entitySearchLabel = (searchString: string): string =>
+    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(
+      searchString
+    )}`;
+  const handleChangeInput = (newInputValue: string) =>
+    handleSearchStringChangeInput(newInputValue, setSenderInputValue);
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
@@ -327,7 +329,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
-              <Autocomplete
+              <PnAutocomplete
                 id="sender"
                 size="small"
                 options={parties}
