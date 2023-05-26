@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Stack } from '@mui/material';
 import {
   AppResponse,
@@ -68,8 +68,7 @@ const Deleghe = () => {
 
   const handleAccept = async (code: Array<string>) => {
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
-    void dispatch(getDelegators());
-    void dispatch(getSidemenuInformation);
+    void dispatch(getSidemenuInformation());
     trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
@@ -86,16 +85,17 @@ const Deleghe = () => {
     };
   }, []);
 
-  const handleAcceptDelegationError = (errorResponse: AppResponse) => {
+  const handleAcceptDelegationError = useCallback((errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
     setErrorMessage(error?.message);
-  };
+  }, []);
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptDelegationError);
 
-    return () =>
+    return () => {
       AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptDelegationError);
+    };
   }, []);
 
   return (

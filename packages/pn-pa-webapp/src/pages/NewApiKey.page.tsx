@@ -1,13 +1,12 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { useIsMobile, Prompt, PnBreadcrumb, TitleBox } from '@pagopa-pn/pn-commons';
+import { useIsMobile, Prompt, PnBreadcrumb, TitleBox, PnAutocomplete } from '@pagopa-pn/pn-commons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
   Box,
   Typography,
   TextField,
-  Autocomplete,
   Paper,
   Grid,
   Button,
@@ -148,7 +147,7 @@ const NewApiKey = () => {
                         <Typography fontWeight="bold" mb={2}>
                           {t('form-label-groups')}
                         </Typography>
-                        <Autocomplete
+                        <PnAutocomplete
                           disableCloseOnSelect
                           multiple
                           noOptionsText={t('no-groups')}

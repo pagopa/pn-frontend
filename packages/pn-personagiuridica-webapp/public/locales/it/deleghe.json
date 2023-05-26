@@ -31,6 +31,7 @@
     "show_code_title": "Codice di verifica per la delega a {{name}}",
     "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",
+    "code_copied": "Codice copiato",
     "tab_aria_label": "Tab deleghe",
     "tab_delegati": "Delegati dall'impresa",
     "tab_deleghe": "Deleghe a carico dell'impresa",

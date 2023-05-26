@@ -18,7 +18,7 @@ import {
   MobileNotificationsSort,
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, Tag } from '@pagopa/mui-italia';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -54,13 +54,19 @@ type Props = {
 const IS_SORT_ENABLED = false;
 
 // to avoid cognitive complexity warning - PN-5323
-function mainEmptyMessage(filtersApplied: boolean, isDelegatedPage: boolean, organization: Organization, role: PNRole, t: any) {
+function mainEmptyMessage(
+  filtersApplied: boolean,
+  isDelegatedPage: boolean,
+  organization: Organization,
+  role: PNRole,
+  t: any
+) {
   return filtersApplied
     ? undefined
     : isDelegatedPage
     ? t('empty-state.delegate', { name: organization.name })
-    : role !== PNRole.ADMIN 
-    ? t('empty-state.first-message-alone') 
+    : role !== PNRole.ADMIN
+    ? t('empty-state.first-message-alone')
     : t('empty-state.first-message-continuing');
 }
 
@@ -159,10 +165,14 @@ const MobileNotifications = ({
 
   if (isDelegatedPage) {
     const recipientField = {
-      id: 'group',
-      label: t('table.gruppi'),
-      getLabel(value: string) {
-        return <Tag value={value} data-testid={`groupChip-${value}`} />;
+      id: 'recipients',
+      label: t('table.destinatario'),
+      getLabel(value: Array<string>) {
+        return value.map((v) => (
+          <Typography key={v} variant="body2">
+            {v}
+          </Typography>
+        ));
       },
     };
 
