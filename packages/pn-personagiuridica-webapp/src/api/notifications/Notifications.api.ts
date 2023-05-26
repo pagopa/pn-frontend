@@ -14,7 +14,6 @@ import { AxiosResponse } from 'axios';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
-import { Delegator } from '../../models/Deleghe';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
@@ -75,18 +74,11 @@ export const NotificationsApi = {
    */
   getReceivedNotification: (
     iun: string,
-    currentUserTaxId: string,
-    delegatorsFromStore: Array<Delegator>,
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
       if (response.data) {
-        return parseNotificationDetailForRecipient(
-          response.data,
-          currentUserTaxId,
-          delegatorsFromStore,
-          mandateId
-        );
+        return parseNotificationDetailForRecipient(response.data);
       } else {
         return {} as NotificationDetailForRecipient;
       }

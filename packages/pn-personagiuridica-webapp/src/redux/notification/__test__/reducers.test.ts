@@ -73,8 +73,6 @@ describe('Notification detail redux state tests', () => {
     const action = await store.dispatch(
       getReceivedNotification({
         iun: 'mocked-iun',
-        currentUserTaxId: 'CGNNMO80A03H501U',
-        delegatorsFromStore: [],
       })
     );
     const payload = action.payload as NotificationDetail;

@@ -11,7 +11,6 @@ import * as routes from '../../navigation/routes.const';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import {
-  fixedMandateId,
   notificationToFe,
   notificationToFeTwoRecipients,
   overrideNotificationMock
@@ -19,6 +18,7 @@ import {
 import NotificationDetail from '../NotificationDetail.page';
 import { mockDispatchAndActions, renderComponentBase } from './NotificationDetail.page.test-utils';
 
+const fixedMandateId = 'ALFA-BETA-GAMMA';
 
 /* eslint-disable functional/no-let */
 let mockUseParamsFn;
@@ -98,8 +98,6 @@ describe('NotificationDetail Page', () => {
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       iun: 'mocked-id',
-      currentUserTaxId: mockedUserInStore.fiscal_number,
-      delegatorsFromStore: [],
       mandateId: undefined,
     });
   });
@@ -117,8 +115,6 @@ describe('NotificationDetail Page', () => {
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       iun: 'mocked-id',
-      currentUserTaxId: mockedUserInStore.fiscal_number,
-      delegatorsFromStore: [],
       mandateId: undefined,
     });
   });
@@ -136,8 +132,6 @@ describe('NotificationDetail Page', () => {
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       iun: 'mocked-id',
-      currentUserTaxId: mockedUserInStore.fiscal_number,
-      delegatorsFromStore: [],
       mandateId: undefined,
     });
   });
@@ -155,8 +149,6 @@ describe('NotificationDetail Page', () => {
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       iun: 'mocked-id',
-      currentUserTaxId: mockedUserInStore.fiscal_number,
-      delegatorsFromStore: [],
       mandateId: undefined,
     });
   });
@@ -174,8 +166,6 @@ describe('NotificationDetail Page', () => {
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       iun: 'mocked-id',
-      currentUserTaxId: mockedUserInStore.fiscal_number,
-      delegatorsFromStore: [],
       mandateId: undefined,
     });
   });

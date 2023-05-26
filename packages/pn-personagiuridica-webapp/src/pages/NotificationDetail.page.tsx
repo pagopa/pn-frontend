@@ -225,8 +225,6 @@ const NotificationDetail = () => {
       void dispatch(
         getReceivedNotification({
           iun: id,
-          currentUserTaxId: currentUser.fiscal_number,
-          delegatorsFromStore: [],
           mandateId,
         })
       ).then(() => setPageReady(true));
