@@ -1,8 +1,8 @@
 {
-    "SPID_TEST_ENV_ENABLED": true,
-    "SPID_VALIDATOR_ENV_ENABLED": true,
-    "SPID_CIE_ENTITY_ID": "xx_servizicie_test",
-    "URL_API_LOGIN": "https://hub-login.spid.pn.pagopa.it",
+    "SPID_TEST_ENV_ENABLED": false,
+    "SPID_VALIDATOR_ENV_ENABLED": false,
+    "SPID_CIE_ENTITY_ID": "xx_servizicie",
+    "URL_API_LOGIN": "https://hub-login.spid.notifichedigitali.it/",
     "PF_URL": "https://cittadini.notifichedigitali.it",
     "PG_URL": "https://imprese.notifichedigitali.it/auth/login",
     "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
