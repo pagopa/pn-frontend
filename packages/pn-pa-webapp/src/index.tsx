@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { theme } from "@pagopa/mui-italia";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { initStore, store } from './redux/store';
-import './i18n.ts';
+import './i18n';
 import App from './App';
 import { initOneTrust } from './utils/onetrust';
 import { loadPaConfiguration } from './services/configuration.service';
