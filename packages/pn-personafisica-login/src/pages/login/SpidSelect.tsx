@@ -29,7 +29,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   };
 
   return (
-    <Grid container direction="column" sx={{ backgroundColor: '#FFF', height: '100vh' }}>
+    <Grid container direction="column" sx={{ backgroundColor: '#FFF', 'minHeight': '100vh' }}>
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
           <img src={SpidBig} />

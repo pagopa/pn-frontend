@@ -4,7 +4,6 @@ import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Autocomplete,
   AutocompleteRenderOptionState,
   Box,
   Checkbox,
@@ -25,6 +24,7 @@ import {
   Item,
   KnownSentiment,
   PaginationData,
+  PnAutocomplete,
   SmartFilter,
   SmartTable,
   SmartTableData,
@@ -388,7 +388,7 @@ const DelegationsOfTheCompany = () => {
                 />
               </Grid>
               <Grid item xs={12} lg={3}>
-                <Autocomplete
+                <PnAutocomplete
                   id="groups"
                   size="small"
                   fullWidth

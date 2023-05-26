@@ -18,7 +18,6 @@ import {
   MenuItem,
   Stack,
   Paper,
-  Autocomplete,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { IllusCompleted } from '@pagopa/mui-italia';
@@ -37,6 +36,7 @@ import {
   searchStringLimitReachedText,
   useSearchStringChangeInput,
   RecipientType,
+  PnAutocomplete,
 } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
@@ -373,7 +373,7 @@ const NuovaDelega = () => {
 
                             {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                               <FormControl fullWidth>
-                                <Autocomplete
+                                <PnAutocomplete
                                   id="enti-select"
                                   data-testid="enti-select"
                                   multiple
@@ -408,11 +408,8 @@ const NuovaDelega = () => {
                         </Stack>
                       </FormControl>
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
-                        <Typography
-                          fontWeight="bold"
-                          marginBottom={2}
-                        >
-                          {t("nuovaDelega.form.date-duration")}
+                        <Typography fontWeight="bold" marginBottom={2}>
+                          {t('nuovaDelega.form.date-duration')}
                         </Typography>
                         <FormControl fullWidth>
                           <LocalizationProvider
