@@ -46,6 +46,7 @@ describe('Notifications api tests', () => {
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
+      isDelegatedPage: false,
     });
     expect(res).toStrictEqual(notificationsToFe);
     mock.reset();
@@ -56,7 +57,7 @@ describe('Notifications api tests', () => {
     const iun = 'mocked-iun';
     const mock = new MockAdapter(apiClient);
     mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
-    const res = await NotificationsApi.getReceivedNotification(iun, 'CGNNMO80A03H501U', []);
+    const res = await NotificationsApi.getReceivedNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
     mock.restore();
