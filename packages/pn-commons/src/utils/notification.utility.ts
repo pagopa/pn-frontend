@@ -539,7 +539,7 @@ const AnalogFlowAllowedCodes = [
   'RECAG008C',
   'RECRI003C',
   'RECRI004C',
-  'RECRI005C',
+  'RECRI005',
   // new batch - PN-6079 / PN-6080 / PN-6081
   'RECRN011',
   'PNRN012',
