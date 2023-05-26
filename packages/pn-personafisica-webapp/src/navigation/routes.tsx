@@ -2,9 +2,6 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AppNotAccessible, LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
-import { getConfiguration } from "../services/configuration.service";
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -23,10 +20,8 @@ const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
 const ParticipatingEntitiesPage = React.lazy(() => import('../pages/ParticipatingEntities.page'));
 
 const handleAssistanceClick = () => {
-  const { PAGOPA_HELP_EMAIL } = getConfiguration();
-  trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  window.location.href = `https://notifichedigitali.pagopa.it/`;
 };
 
 function Router() {
