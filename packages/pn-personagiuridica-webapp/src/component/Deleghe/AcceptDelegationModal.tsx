@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -15,7 +14,13 @@ import {
   RadioGroup,
   TextField,
 } from '@mui/material';
-import { AppResponse, AppResponsePublisher, CodeModal, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  PnAutocomplete,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
 import { useAppSelector } from '../../redux/hooks';
@@ -171,7 +176,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
           </RadioGroup>
         </FormControl>
         {associateGroup && (
-          <Autocomplete
+          <PnAutocomplete
             id="groups"
             size="small"
             fullWidth
