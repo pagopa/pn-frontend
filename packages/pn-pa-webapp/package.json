@@ -98,5 +98,18 @@
     "sonarqube-scanner": "^3.0.0",
     "wait-on": "^7.0.1",
     "webpack": "^5"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "src/i18n.ts",
+      "src/index.tsx",
+      "src/utils/onetrust.ts",
+      "src/reportWebVitals.ts",
+      "src/api/interceptors.ts",
+      "src/services/configuration.service.ts",
+      "src/navigation/OrganizationPartyGuard.tsx",
+      "src/__test__/test-utils.tsx",
+      ".a11y.test.(ts|tsx)$"
+    ]
   }
 }
