@@ -21,7 +21,7 @@ import {
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
-import { ErrorInfo, useEffect, useMemo } from 'react';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -40,7 +40,30 @@ import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
 import { setUpInterceptor } from './api/interceptors';
 import { getConfiguration } from './services/configuration.service';
 
+
+// Cfr. PN-6096
+// --------------------
+// The i18n initialization must execute before the *first* time anything is actually rendered.
+// Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
+// --------------------
 const App = () => {
+  const { t } = useTranslation(['common', 'notifiche']);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      setIsInitialized(true);
+      // init localization
+      initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      // eslint-disable-next-line functional/immutable-data
+      errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => t(path, { ns }));
+    }
+  }, [isInitialized]);
+
+  return isInitialized ? <ActualApp /> : <div/>;
+};
+
+const ActualApp = () => {
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
@@ -156,13 +179,6 @@ const App = () => {
     ],
     [role, loggedUserOrganizationParty]
   );
-
-  useEffect(() => {
-    // init localization
-    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-    // eslint-disable-next-line functional/immutable-data
-    errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => t(path, { ns }));
-  }, []);
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 

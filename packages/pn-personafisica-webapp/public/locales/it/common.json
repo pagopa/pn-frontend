@@ -73,8 +73,8 @@
   },
   "not-accessible": {
     "title": "Non è possibile accedere alla piattaforma",
-    "description": "Riprova tra qualche ora. Se hai bisogno di assistenza",
-    "action": "scrivici"
+    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Per maggiori informazioni sull’iniziativa,",
+    "action": "visita il sito dedicato"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi a SEND",

@@ -5,9 +5,7 @@ import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-p
 import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import { PNRole } from '../redux/auth/types';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
-import { getConfiguration } from '../services/configuration.service';
+import { getConfiguration } from "../services/configuration.service";
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -24,10 +22,8 @@ const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page')
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
 
 const handleAssistanceClick = () => {
-  const { PAGOPA_HELP_EMAIL } = getConfiguration();
-  trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  window.location.href = getConfiguration().LANDING_SITE_URL;
 };
 
 function Router() {

@@ -51,7 +51,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
-    this.ruleFor('LANDING_SITE_URL').isString();
+    this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
   }
