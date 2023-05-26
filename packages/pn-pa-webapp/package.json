@@ -101,6 +101,8 @@
   },
   "jest": {
     "coveragePathIgnorePatterns": [
+      "src/i18n.ts",
+      "src/index.tsx",
       "src/utils/onetrust.ts",
       "src/reportWebVitals.ts",
       "src/api/interceptors.ts",

@@ -19,7 +19,9 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-describe("OrganizationPartyGuard component", () => {
+// OrganizationPartyGuard is deprecated. Describe is set to skip
+
+describe.skip("OrganizationPartyGuard component", () => {
   it('no API error in call for organization party data - shows the content', async () => {
     const mockReduxState = {
       userState: { user: { 

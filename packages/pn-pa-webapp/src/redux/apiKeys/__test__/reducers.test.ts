@@ -1,9 +1,9 @@
 import { ApiKeysApi } from '../../../api/apiKeys/ApiKeys.api';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { ApiKey } from '../../../models/ApiKeys';
+import { ApiKey, ApiKeySetStatus } from '../../../models/ApiKeys';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
-import { getApiKeys } from '../actions';
+import { deleteApiKey, getApiKeys, setApiKeyStatus } from '../actions';
 import { resetState } from  '../reducers';
 import { mockApiKeysForFE, mockApiKeysFromBE, mockGroups } from './test-utils';
 
@@ -42,4 +42,19 @@ describe('api keys page redux state test', () => {
     expect(state).toEqual(initialState);
   });
 
+  it('Should be able to set a status apikey', async () => {
+    const apiSpyApiKey = jest.spyOn(ApiKeysApi, 'setApiKeyStatus');
+    apiSpyApiKey.mockResolvedValue('mock-status');
+    const action = await store.dispatch(setApiKeyStatus({apiKey: 'mocked-api-key', status: ApiKeySetStatus.BLOCK}));
+    const payload = action.payload;
+    expect(payload).toBe('mock-status');
+  });
+
+  it('Should be able to delete apikey', async () => {
+    const apiSpyApiKey = jest.spyOn(ApiKeysApi, 'deleteApiKey');
+    apiSpyApiKey.mockResolvedValue('mock-deleted-status');
+    const action = await store.dispatch(deleteApiKey('mocked-api-key'));
+    const payload = action.payload;
+    expect(payload).toBe('mock-deleted-status');
+  });
 });

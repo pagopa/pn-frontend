@@ -1,8 +1,9 @@
-import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
+import { AppError, ServerResponseError, UnknownAppError } from '@pagopa-pn/pn-commons';
 
 import { PAAppErrorFactory } from '../PAAppErrorFactory';
 import { ServerResponseErrorCode } from '../types';
 import { GenericInvalidParameterAppError } from '../GenericInvalidParameterAppError';
+import { GenericInvalidParameterDuplicateAppError } from '../GenericInvalidParameterDuplicateAppError';
 
 class PAAppErrorFactoryForTest extends PAAppErrorFactory {
   constructor(translateFunction: (path: string, ns: string) => string) {
@@ -23,5 +24,19 @@ describe('Test PFAppErrorFactory', () => {
       code: ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER,
     });
     expect(errorClass).toBeInstanceOf(GenericInvalidParameterAppError);
+  });
+
+  it('Should return Duplicated parameter error', () => {
+    const errorClass = errorFactory.getCustomErrorForTest({
+      code: ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER_DUPLICATED,
+    });
+    expect(errorClass).toBeInstanceOf(GenericInvalidParameterDuplicateAppError);
+  });
+
+  it('Should return Uknown error', () => {
+    const errorClass = errorFactory.getCustomErrorForTest({
+      code: 'mocked-unknown-error',
+    });
+    expect(errorClass).toBeInstanceOf(UnknownAppError);
   });
 });

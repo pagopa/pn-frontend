@@ -1,6 +1,5 @@
 import { getConfiguration } from '../../services/configuration.service';
 import { goToSelfcareLogin } from '../navigation.utility';
-
 const exitFn = jest.fn();
 
 describe('Tests notification.utility', () => {

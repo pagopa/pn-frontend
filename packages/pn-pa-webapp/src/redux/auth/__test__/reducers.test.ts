@@ -2,7 +2,7 @@ import { ConsentsApi } from '../../../api/consents/Consents.api';
 import { Consent, ConsentType } from '../../../models/consents';
 import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
-import { acceptToS, getOrganizationParty } from '../actions';
+import { acceptToS } from '../actions';
 import { getToSApproval } from '../actions';
 import { User } from '../types';
 import { mockLogin, mockLogout, userResponse } from './test-utils';
