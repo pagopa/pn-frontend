@@ -158,6 +158,20 @@
       "send-analog-flow-RECRI004C-description-multirecipient": "La raccomandata A/R internazionale numero {{registeredLetterNumber}} per {{name}} {{taxId}} non è stata consegnata.",
       "send-analog-flow-RECRI005C-description": "Il tentativo di consegna della raccomandata A/R internazionale numero {{registeredLetterNumber}} non è andato a buon fine {{deliveryFailureCause}}.",
       "send-analog-flow-RECRI005C-description-multirecipient": "Il tentativo di consegna della raccomandata A/R internazionale numero {{registeredLetterNumber}} per {{name}} {{taxId}} non è andato a buon fine {{deliveryFailureCause}}.",
+      "send-analog-flow-RECRN011-description": "La giacenza della raccomandata A/R {{registeredLetterNumber}} è iniziata.",
+      "send-analog-flow-RECRN011-description-multirecipient": "La giacenza della raccomandata A/R {{registeredLetterNumber}} per {{name}} {{taxId}} è iniziata.",
+      "send-analog-flow-PNRN012-description": "Il destinatario non ha ritirato la raccomandata A/R numero {{registeredLetterNumber}} presso il punto di giacenza entro 10 giorni.",
+      "send-analog-flow-PNRN012-description-multirecipient": "{{name}} {{taxId}} non ha ritirato la raccomandata A/R numero {{registeredLetterNumber}} presso il punto di giacenza entro 10 giorni.",
+      "send-analog-flow-RECRN013-description": "La raccomandata A/R numero {{registeredLetterNumber}} non è rendicontabile.",
+      "send-analog-flow-RECRN013-description-multirecipient": "La raccomandata A/R numero {{registeredLetterNumber}} per {{name}} {{taxId}} non è rendicontabile.",
+      "send-analog-flow-RECRN015-description": "La raccomandata A/R numero {{registeredLetterNumber}} non è momentaneamente rendicontabile.",
+      "send-analog-flow-RECRN015-description-multirecipient": "La raccomandata A/R numero {{registeredLetterNumber}} per {{name}} {{taxId}} non è momentaneamente rendicontabile.",
+      "send-analog-flow-RECAG011A-description": "La giacenza della raccomandata 890 {{registeredLetterNumber}} è iniziata.",
+      "send-analog-flow-RECAG011A-description-multirecipient": "La giacenza della raccomandata 890 {{registeredLetterNumber}} per {{name}} {{taxId}} è iniziata.",
+      "send-analog-flow-RECAG013-description": "La raccomandata 890 numero {{registeredLetterNumber}} non è rendicontabile.",
+      "send-analog-flow-RECAG013-description-multirecipient": "La raccomandata 890 numero {{registeredLetterNumber}} per {{name}} {{taxId}} non è rendicontabile.",
+      "send-analog-flow-RECAG015-description": "La raccomandata 890 numero {{registeredLetterNumber}} non è momentaneamente rendicontabile.",
+      "send-analog-flow-RECAG015-description-multirecipient": "La raccomandata 890 numero {{registeredLetterNumber}} per {{name}} {{taxId}} non è momentaneamente rendicontabile.",
       "send-analog-flow-RECRN001B-description": "C'è un nuovo documento allegato.",
       "send-analog-flow-RECRN001B-description-multirecipient": "C'è un nuovo documento allegato.",
       "send-analog-flow-RECRN002B-description": "C'è un nuovo documento allegato.",
@@ -231,9 +245,11 @@
         "M06": "perché l'indirizzo è inesatto",
         "M07": "perché l'indirizzo è inesistente",
         "M08": "perché l'indirizzo è insufficiente",
+        "M09": "per altre motivazioni",
         "F01": "per furto della busta",
         "F02": "per smarrimento della busta",
-        "F03": "per deterioramento della busta"
+        "F03": "per deterioramento della busta",
+        "F04": "per rapina della busta"
       }
     },
     "downtimes": {

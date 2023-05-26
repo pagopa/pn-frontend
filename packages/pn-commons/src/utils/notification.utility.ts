@@ -539,7 +539,15 @@ const AnalogFlowAllowedCodes = [
   'RECAG008C',
   'RECRI003C',
   'RECRI004C',
-  'RECRI005',
+  'RECRI005C',
+  // new batch - PN-6079 / PN-6080 / PN-6081
+  'RECRN011',
+  'PNRN012',
+  'RECRN013',
+  'RECRN015',
+  'RECAG011A',
+  'RECAG013',
+  'RECAG015',
   // only to include the legal fact reference at the right point in the timeline
   'RECRN001B',
   'RECRN002B',
