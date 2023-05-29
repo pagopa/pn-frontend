@@ -784,10 +784,11 @@ const populateOtherDocuments = (
   );
   if (timelineFiltered.length > 0) {
     const isMultiRecipient = timelineFiltered.length > 1;
-    return timelineFiltered.map((t, index) => {
+    return timelineFiltered.map((t) => {
+      const recIndex = t.details.recIndex;
       const recipients = notificationDetail.recipients;
-      const recipientData = isMultiRecipient
-        ? ` - ${recipients[index].denomination} (${recipients[index].taxId})`
+      const recipientData = (isMultiRecipient && recIndex != null)
+        ? ` - ${recipients[recIndex].denomination} (${recipients[recIndex].taxId})`
         : '';
       const title = `${getLocalizedOrDefaultLabel(
         'notifications',
