@@ -17,19 +17,22 @@ const basicMenuItems: Array<SideMenuItem> = [
   { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
 ];
 
-
 test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
   // define SelfCareItems inside the test since it cannot be static code (as it accesses configuration)
   // and it is used in this test only
   const SelfCareItems: Array<SideMenuItem> = [
     { label: 'menu.users', icon: People, route: routes.USERS(mockedIdOrganization) },
-    { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(mockedIdOrganization) },
+    {
+      label: 'menu.groups',
+      icon: SupervisedUserCircle,
+      route: routes.GROUPS(mockedIdOrganization),
+    },
   ];
   const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.ADMIN);
   expect(items).toEqual({
     menuItems: [
       ...basicMenuItems,
-      { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE },
+      // { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE },
     ],
     selfCareItems: SelfCareItems,
   });

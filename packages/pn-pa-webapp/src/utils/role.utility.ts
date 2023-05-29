@@ -1,11 +1,11 @@
-import { People, ShowChart, SupervisedUserCircle } from '@mui/icons-material';
+import { People, /*  ShowChart */ SupervisedUserCircle } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { PNRole } from '../models/user';
 import { getConfiguration } from '../services/configuration.service';
 
-const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
+// const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
@@ -30,14 +30,14 @@ export function getMenuItems(
 } {
   if (getConfiguration().IS_DEVELOP) {
     return {
-      menuItems: [...basicMenuItems, statisticsMenuItem],
+      menuItems: [...basicMenuItems],
       selfCareItems: selfcareMenuItems(idOrganization),
     };
   }
   switch (role) {
     case PNRole.ADMIN:
       return {
-        menuItems: [...basicMenuItems, statisticsMenuItem],
+        menuItems: [...basicMenuItems],
         selfCareItems: selfcareMenuItems(idOrganization),
       };
     case PNRole.OPERATOR:
