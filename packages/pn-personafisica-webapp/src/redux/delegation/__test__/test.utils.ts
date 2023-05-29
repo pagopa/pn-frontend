@@ -41,7 +41,7 @@ export const arrayOfDelegates = [
     ],
     verificationCode: '123456',
     datefrom: '2021-12-15',
-    dateto: '2022-04-16',
+    dateto: '2022-04-17',
   },
   {
     mandateId: '2',
