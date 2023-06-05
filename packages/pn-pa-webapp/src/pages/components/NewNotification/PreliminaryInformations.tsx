@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useCallback, useMemo } from 'react';
+import { ChangeEvent, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
   MenuItem,
+  Tooltip,
 } from '@mui/material';
 import {
   PhysicalCommunicationType,
@@ -19,6 +20,7 @@ import {
   dataRegex,
 } from '@pagopa-pn/pn-commons';
 
+import { InfoOutlined } from '@mui/icons-material';
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { getConfiguration } from '../../../services/configuration.service';
@@ -109,6 +111,12 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     fetchGroups();
   }, [fetchGroups]);
 
+  const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
+    <Tooltip arrow={true} title={tooltip}>
+      <InfoOutlined />
+    </Tooltip>
+  );
+
   return (
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
@@ -156,7 +164,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
           <CustomDropdown
             id="group"
-            label={`${t('group')}${(hasGroups) ? '*' : ''}`}
+            label={`${t('group')}${hasGroups ? '*' : ''}`}
             fullWidth
             name="group"
             size="small"
@@ -184,6 +192,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
             size="small"
             margin="normal"
+            InputProps={{
+              endAdornment: <InfoTooltip tooltip={t('taxonomy-tooltip')} />,
+            }}
           />
           <FormControl margin="normal" fullWidth>
             <FormLabel id="comunication-type-label">
