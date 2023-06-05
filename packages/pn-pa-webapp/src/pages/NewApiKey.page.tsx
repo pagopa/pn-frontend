@@ -128,7 +128,9 @@ const NewApiKey = () => {
                   </Typography>
                   <Box>
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
-                      <Typography variant="h5">Altre informazioni</Typography>
+                      <Typography component="h3" variant="h6">
+                        {t('other-info')}
+                      </Typography>
                       <Box sx={{ marginTop: '20px' }}>
                         <Typography fontWeight="bold">{t('form-label-name')}*</Typography>
                         <TextField
@@ -142,11 +144,9 @@ const NewApiKey = () => {
                           helperText={formik.touched.name && formik.errors.name}
                           size="small"
                           margin="normal"
-                          sx={{ mb: 3 }}
+                          sx={{ mb: 3, mt: '10px' }}
                         />
-                        <Typography fontWeight="bold" mb={2}>
-                          {t('form-label-groups')}
-                        </Typography>
+                        <Typography fontWeight="bold">{t('form-label-groups')}</Typography>
                         <PnAutocomplete
                           disableCloseOnSelect
                           multiple
@@ -169,6 +169,7 @@ const NewApiKey = () => {
                           renderInput={(params) => (
                             <TextField {...params} label={t('form-placeholder-groups')} />
                           )}
+                          sx={{ mt: '10px' }}
                         />
                       </Box>
                     </Paper>
