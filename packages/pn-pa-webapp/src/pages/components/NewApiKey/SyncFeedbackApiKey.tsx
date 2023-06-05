@@ -22,7 +22,6 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
         </Typography>
         <Box sx={{ mt: 3, mb: 5 }}>
           <TextField
-            size="small"
             id="apiKeyId"
             value={newApiKeyId}
             name="apiKeyId"
@@ -55,7 +54,7 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
           sx={{ marginTop: '30px' }}
           onClick={() => navigate(routes.API_KEYS)}
         >
-          { t('go-to-api-keys') }
+          {t('go-to-api-keys')}
         </Button>
       </Box>
     </Box>
