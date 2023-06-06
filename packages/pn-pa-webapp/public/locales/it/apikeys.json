@@ -80,6 +80,7 @@
     "page-title": "Genera una API Key",
     "cancel-prompt": "Annullare l'operazione?",
     "page-description": "SEND ha generato il codice della API Key. Ora, inserisci un nome identificativo e assegnala a uno o più gruppi.",
+    "other-info": "Altre informazioni",
     "form-label-name": "Dai un nome alla tua API Key",
     "form-placeholder-name": "Inserisci un nome",
     "form-error-name": "Definire un nome per l'API Key",
