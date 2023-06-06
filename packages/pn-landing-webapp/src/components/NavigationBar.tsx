@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import { Box, Chip, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { INavigationBarProps } from "model";
 
-const NavigationBar = ({ title, chip, pa, faq }: INavigationBarProps) => {
+const NavigationBar = ({ title, chip, pf, pa, faq }: INavigationBarProps) => {
   const { pathname } = useRouter();
   const [index, setIndex] = useState<number | undefined>();
 
-  // const pfPath = "/cittadini";
+  const pfPath = "/cittadini";
   const paPath = "/pubbliche-amministrazioni";
   const faqPath = "/faq";
 
@@ -19,27 +19,15 @@ const NavigationBar = ({ title, chip, pa, faq }: INavigationBarProps) => {
     };
   }
 
-  // useEffect(() => {
-  //   // if (pathname === pfPath) {
-  //   //   setIndex(0);
-  //   // }
-  //   if (pathname === paPath) {
-  //     setIndex(1);
-  //   }
-  //   if (pathname === faqPath) {
-  //     setIndex(2);
-  //   }
-  // }, [pathname]);
-
   useEffect(() => {
-    // if (pathname === pfPath) {
-    //   setIndex(0);
-    // }
-    if (pathname === paPath) {
+    if (pathname === pfPath) {
       setIndex(0);
     }
-    if (pathname === faqPath) {
+    if (pathname === paPath) {
       setIndex(1);
+    }
+    if (pathname === faqPath) {
+      setIndex(2);
     }
   }, [pathname]);
 
@@ -53,7 +41,7 @@ const NavigationBar = ({ title, chip, pa, faq }: INavigationBarProps) => {
           <Chip label={chip} size="small" color="primary" />
         </Stack>
         <Tabs value={index} component="nav">
-          {/* <Tab
+          <Tab
             sx={{ paddingTop: 4, paddingBottom: 3 }}
             component="a"
             onClick={(
@@ -67,7 +55,7 @@ const NavigationBar = ({ title, chip, pa, faq }: INavigationBarProps) => {
             label={pf}
             href={pfPath}
             {...a11yProps(0)}
-          /> */}
+          />
           <Tab
             sx={{ paddingTop: 4, paddingBottom: 3 }}
             component="a"
