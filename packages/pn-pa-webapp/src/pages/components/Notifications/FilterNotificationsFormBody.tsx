@@ -202,7 +202,6 @@ const FilterNotificationsFormBody = ({
         sx={{
           marginBottom: isMobile ? '20px' : '0',
           '& .MuiInputBase-root': {
-            pr: 4,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           },
