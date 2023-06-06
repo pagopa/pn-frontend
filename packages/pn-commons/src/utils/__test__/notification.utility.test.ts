@@ -375,7 +375,7 @@ describe('notification status texts', () => {
       },
       ['single-recipient'],
       'status.viewed',
-      'info',
+      'success',
       'status.viewed-tooltip',
       'status.viewed-description',
       { subject: 'status.recipient' }
@@ -392,7 +392,7 @@ describe('notification status texts', () => {
       },
       ['single-recipient'],
       'status.viewed',
-      'info',
+      'success',
       'status.viewed-tooltip',
       'status.viewed-description',
       { subject: 'status.delegate.Mario Rossi' }
@@ -408,7 +408,7 @@ describe('notification status texts', () => {
       },
       ['recipient-1', 'recipient-2'],
       'status.viewed-multirecipient',
-      'info',
+      'success',
       'status.viewed-tooltip-multirecipient',
       'status.viewed-description-multirecipient',
       { subject: 'status.recipient' }
