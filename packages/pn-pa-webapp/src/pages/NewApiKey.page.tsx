@@ -1,6 +1,13 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { useIsMobile, Prompt, PnBreadcrumb, TitleBox, PnAutocomplete } from '@pagopa-pn/pn-commons';
+import {
+  useIsMobile,
+  Prompt,
+  PnBreadcrumb,
+  TitleBox,
+  PnAutocomplete,
+  SectionHeading,
+} from '@pagopa-pn/pn-commons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -128,9 +135,7 @@ const NewApiKey = () => {
                   </Typography>
                   <Box>
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
-                      <Typography component="h3" variant="h6">
-                        {t('other-info')}
-                      </Typography>
+                      <SectionHeading>{t('other-info')}</SectionHeading>
                       <Box sx={{ marginTop: '20px' }}>
                         <Typography fontWeight="bold">{t('form-label-name')}*</Typography>
                         <TextField
