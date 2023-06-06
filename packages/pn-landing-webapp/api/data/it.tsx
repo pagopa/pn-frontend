@@ -9,6 +9,22 @@ import {
 } from "@pagopa/mui-italia";
 
 import {
+  IAppData,
+  IInfoblockData,
+  ILinkData,
+  INavigationBarProps,
+  IShowcaseData,
+} from "model";
+
+import {
+  IMAGES_PATH,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PN_PF_URL,
+  MANUALE_URL,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+} from "@utils/constants";
+import {
   CheckmarkIcon,
   CloudIcon,
   DelegationIcon,
@@ -28,22 +44,6 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import {
-  IAppData,
-  IInfoblockData,
-  ILinkData,
-  INavigationBarProps,
-  IShowcaseData,
-} from "model";
-
-import {
-  IMAGES_PATH,
-  PAGOPA_HELP_EMAIL,
-  PAGOPA_HOME,
-  PN_PF_URL,
-  MANUALE_URL,
-  PARTNER_AND_INTERMEDIARIES_PATH,
-} from "@utils/constants";
 
 const assistanceLink = {
   label: "Assistenza",
@@ -78,8 +78,7 @@ const heroCta = !!PN_PF_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. Piattaforma Notifiche digitalizza la gestione delle comunicazioni a valore legale, 
-    semplificando il processo per tutti: chi le invia, e chi le riceve.`,
+  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come Piattaforma Notifiche Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -134,15 +133,14 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalizza e semplifica la gestione delle
-            comunicazioni a valore legale. Gli enti mittenti non devono che
-            depositare l’atto da notificare: sarà la piattaforma a occuparsi
-            dell’invio, per via digitale o analogica.
+            SEND digitalizza e semplifica la gestione delle comunicazioni a
+            valore legale. Gli enti mittenti devono solo depositare l’atto da
+            notificare: sarà la piattaforma a occuparsi dell’invio, per via
+            digitale o analogica.
           </Typography>
           <Typography variant="body2">
-            Con Piattaforma Notifiche, diminuisce l’incertezza della
-            reperibilità dei destinatari e si riducono i tempi e i costi di
-            gestione.
+            Con SEND, diminuisce l’incertezza della reperibilità dei destinatari
+            e si riducono i tempi e i costi di gestione.
           </Typography>
         </>
       ),
@@ -159,11 +157,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche si integra con il protocollo degli enti e
-            offre sia API per l’invio automatico delle notifiche, sia la
-            possibilità di fare invii manuali. Una volta effettuato il
-            caricamento degli atti e dei moduli di pagamento, la piattaforma
-            genera lo IUN, un codice univoco identificativo della notifica.
+            SEND si integra con il protocollo degli enti e offre sia API per
+            l’invio automatico delle notifiche, sia la possibilità di fare invii
+            manuali. Una volta effettuato il caricamento degli atti e dei moduli
+            di pagamento, la piattaforma genera lo IUN, un codice univoco
+            identificativo della notifica.
           </Typography>
           <Typography variant="body2">
             Successivamente, cerca nei suoi archivi e nei registri pubblici una
@@ -219,15 +217,15 @@ const paInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             La procedura per avviare le attività tecniche e amministrative
-            necessarie per l’adesione e l’integrazione degli enti a Piattaforma
-            Notifiche, prevede le seguenti fasi:
+            necessarie per l’adesione e l’integrazione degli enti a SEND,
+            Servizio Notifiche Digitali, prevede le seguenti fasi:
           </Typography>
 
           <Typography variant="h6">01. Scegli come integrarti</Typography>
 
           <Typography variant="body2">
-            Ogni ente può decidere se integrarsi alla piattaforma direttamente
-            oppure tramite un fornitore. Nel secondo caso, è disponibile{" "}
+            Ogni ente può decidere se integrarsi a SEND direttamente oppure
+            tramite un fornitore. Nel secondo caso, è disponibile{" "}
             <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
               <a target="_blank" rel="noopener noreferrer">
                 la lista dei Partner e Intermediari tecnologici
@@ -238,10 +236,10 @@ const paInfoBlocks: Array<IInfoblockData> = [
             gestione degli aspetti tecnici.
           </Typography>
           <Typography variant="caption">
-            I soggetti che intendono integrarsi alla Piattaforma Notifiche in
-            qualità di Partner o Intermediari Tecnologici possono manifestare il
-            proprio interesse ad avviare la procedura ed essere inseriti nella
-            lista inviando una mail all’indirizzo account@pagopa.it.
+            I soggetti che intendono integrarsi a SEND in qualità di Partner o
+            Intermediari Tecnologici possono manifestare il proprio interesse ad
+            avviare la procedura ed essere inseriti nella lista inviando una
+            mail all’indirizzo account@pagopa.it.
           </Typography>
           <Typography variant="h6">
             02. Sottoscrivi l’accordo di adesione
@@ -321,7 +319,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <Typography variant="body2">
             Di seguito sono consultabili i materiali necessari per integrare i
-            sistemi dell’ente alla piattaforma:
+            sistemi dell’ente a SEND:
           </Typography>
 
           <List sx={{ listStyleType: "disc", pl: 4 }}>
@@ -584,19 +582,19 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "La piattaforma la prende in carico",
-      subtitle: `Piattaforma Notifiche verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
+      subtitle: `SEND verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
         stato, viene sempre generata la relativa attestazione opponibile a terzi.`,
     },
     {
       icon: <SendIcon color="primary" />,
       title: "La notifica viene inviata",
-      subtitle: `La piattaforma comunica al destinatario la presenza di una notifica tramite diversi possibili canali: 
+      subtitle: `SEND comunica al destinatario la presenza di una notifica tramite diversi possibili canali: 
         PEC, App IO, email, SMS. In alternativa, ricerca un indirizzo fisico e invia una raccomandata cartacea.`,
     },
     {
       icon: <DeliverIcon color="primary" />,
       title: "Il destinatario la riceve",
-      subtitle: `Il destinatario accede alla piattaforma. Lì, può scaricare gli i documenti notificati e pagare 
+      subtitle: `Il destinatario accede alla piattaforma. Lì, può scaricare i documenti notificati e pagare 
         contestualmente quanto dovuto, grazie all’integrazione con pagoPA. Se la riceve tramite IO, può fare 
         tutto direttamente in app.`,
     },
