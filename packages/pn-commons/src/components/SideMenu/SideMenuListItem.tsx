@@ -10,7 +10,7 @@ type Props = {
   selected?: boolean;
   style?: { [key: string]: string | number };
   goOutside?: boolean;
-  onSelect: () => void;
+  onSelect?: () => void;
   handleLinkClick: (item: SideMenuItem) => void;
 };
 
@@ -46,7 +46,9 @@ const SideMenuListItem = ({
     <ListItemButton
       selected={selected}
       onClick={() => {
-        onSelect();
+        if (onSelect) {
+          onSelect();
+        }
         if (goOutside) {
           window.open(item.route);
         } else {
