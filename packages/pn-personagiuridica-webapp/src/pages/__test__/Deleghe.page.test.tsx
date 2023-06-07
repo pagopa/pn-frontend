@@ -39,10 +39,10 @@ describe('Deleghe page', () => {
     const result = render(<Deleghe />);
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
-    expect(result.container).toHaveTextContent(/DelegatesByCompany/i);
+    expect(result.container).not.toHaveTextContent(/DelegatesByCompany/i);
     expect(result.container).toHaveTextContent(/deleghe.tab_delegati/i);
     expect(result.container).toHaveTextContent(/deleghe.tab_deleghe/i);
-    expect(result.container).not.toHaveTextContent(/DelegationsOfTheCompany/i);
+    expect(result.container).toHaveTextContent(/DelegationsOfTheCompany/i);
     mock.reset();
     mock.restore();
   });
