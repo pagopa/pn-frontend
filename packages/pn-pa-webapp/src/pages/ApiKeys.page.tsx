@@ -33,11 +33,17 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('subtitle.text1')}
-      <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/NewNotification/sendNewNotification">
+      <Link
+        target="_blank"
+        href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/NewNotification/sendNewNotification"
+      >
         {t('subtitle.text2')}
       </Link>
       {t('subtitle.text3')}
-      <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/SenderReadB2B/getNotificationRequestStatus">
+      <Link
+        target="_blank"
+        href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/SenderReadB2B/getNotificationRequestStatus"
+      >
         {t('subtitle.text4')}
       </Link>
       {t('subtitle.text5')}
