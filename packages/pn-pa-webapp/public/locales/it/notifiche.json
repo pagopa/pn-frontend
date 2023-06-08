@@ -208,6 +208,8 @@
       "send-analog-flow-RECRI004B-description-multirecipient": "C'è un nuovo documento allegato.",
       "send-analog-error": "Invio per via cartacea non andato a buon fine",
       "send-analog-success": "Invio per via cartacea andato a buon fine",
+      "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
+      "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
       "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
