@@ -56,9 +56,9 @@ describe('Deleghe page', () => {
     });
     mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
     const result = render(<Deleghe />);
-    const tab2 = result.getByTestId('tab2');
+    const tab2 = result.getByTestId('tab1');
     fireEvent.click(tab2);
-    expect(result.container).toHaveTextContent(/DelegationsOfTheCompany/i);
+    expect(result.container).toHaveTextContent(/DelegatesByCompany/i);
     mock.reset();
     mock.restore();
   });
