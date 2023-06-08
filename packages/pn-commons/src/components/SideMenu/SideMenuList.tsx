@@ -164,23 +164,11 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           )}
           className={classes.root}
         >
-          {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
+          {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
               key={selfcareItem.label}
               item={selfcareItem}
               handleLinkClick={handleLinkClick}
-              selected={
-                selectedIndex &&
-                sIndex === selectedIndex.index &&
-                selectedIndex.label === selfcareItem.label
-              }
-              onSelect={() =>
-                setSelectedIndex({
-                  label: selfcareItem.label,
-                  index: sIndex,
-                  route: selfcareItem.route || '',
-                })
-              }
               goOutside
             />
           ))}
