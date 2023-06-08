@@ -204,7 +204,7 @@ export function getNotificationStatusInfos(
         );
       }
       return {
-        color: 'info',
+        color: 'success',
         ...localizeStatus(
           'viewed',
           'Avvenuto accesso',
