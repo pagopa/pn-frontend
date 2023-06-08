@@ -60,6 +60,7 @@ const DomicileBanner = () => {
         <Box>
           <Typography variant="body2">
             {t(`detail.domicile_${messageIndex}`)}<Link
+            role="button"
             variant="body2"
             fontWeight={'bold'}
             onClick={handleAddDomicile}
@@ -69,7 +70,6 @@ const DomicileBanner = () => {
             {t(`detail.add_domicile_${messageIndex}`)}
           </Link>
           </Typography>
-          
         </Box>
       </Alert>
     </Box>
