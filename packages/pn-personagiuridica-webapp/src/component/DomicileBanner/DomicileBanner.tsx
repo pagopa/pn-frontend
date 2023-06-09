@@ -57,20 +57,21 @@ const DomicileBanner = () => {
           An explicit left margin had to be added to insert a slight separation between text and link.
           Cfr. PN-5528.
         */}
-        <Box display="flex" flex-direction="row" flexWrap="wrap">
-          <Typography variant="body2" sx={{ marginRight: '4px' }}>
-            {t(`detail.domicile_${messageIndex}`)}
+        <Box>
+          <Typography variant="body2">
+            {t(`detail.domicile_${messageIndex}`)}{' '}
+            <Link
+              role="button"
+              variant="body2"
+              fontWeight={'bold'}
+              onClick={handleAddDomicile}
+              tabIndex={0}
+              display="inline-block"
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`detail.add_domicile_${messageIndex}`)}
+            </Link>
           </Typography>
-          <Link
-            role="button"
-            variant="body2"
-            fontWeight={'bold'}
-            onClick={handleAddDomicile}
-            tabIndex={0}
-            sx={{ cursor: 'pointer', whiteSpace: 'no-wrap' }}
-          >
-            {t(`detail.add_domicile_${messageIndex}`)}
-          </Link>
         </Box>
       </Alert>
     </Box>
