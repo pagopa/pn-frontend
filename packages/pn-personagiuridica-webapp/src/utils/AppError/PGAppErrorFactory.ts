@@ -12,6 +12,7 @@ import { MandateInvalidVerificationCodeAppError } from './MandateInvalidVerifica
 import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
 import { MandateNotFoundAppError } from './MandateNotFoundAppError';
 import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
+import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
 
 export class PGAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;
@@ -41,6 +42,8 @@ export class PGAppErrorFactory extends AppErrorFactory {
       case ServerResponseErrorCode.PN_USERATTRIBUTES_RETRYLIMITVERIFICATIONCODE:
       case ServerResponseErrorCode.PN_USERATTRIBUTES_EXPIREDVERIFICATIONCODE:
         return new UserAttributesInvalidVerificationCodeAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_MANDATENOTFOUND:
+        return new DeliveryMandateNotFoundAppError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }
