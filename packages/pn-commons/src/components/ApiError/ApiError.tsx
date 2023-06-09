@@ -45,7 +45,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId })
       <Typography
         color="primary"
         fontWeight="bold"
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: 'pointer', textDecoration: 'underline' }}
         onClick={onClick || (() => window.location.reload())}
       >
         {actionLaunchText}

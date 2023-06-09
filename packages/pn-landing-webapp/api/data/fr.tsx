@@ -48,11 +48,12 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "SEND",
   chip: "Bêta",
   pf: "Citoyens",
   pa: "Entités",
   faq: 'FAQ',
+  image: `${IMAGES_PATH}/logo.svg`
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -68,7 +69,7 @@ const heroCta = !!PN_PF_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Envoyer des notifications ? Facile à dire.",
-  subtitle: `Et à faire également à partir d’aujourd’hui. Piattaforma Notifiche numérise la gestion des communications à valeur juridique, en simplifiant le processus pour tous : qui les envoie et qui les reçoit.`,
+  subtitle: `Et à faire également à partir d’aujourd’hui. SEND numérise la gestion des communications à valeur juridique, en simplifiant le processus pour tous : qui les envoie et qui les reçoit.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -78,7 +79,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Les notifications ? Elles sont à portée de main.",
-  subtitle: `Avec Piattaforma Notifiche, tu peux recevoir instantanément les communications à valeur juridique d’un organisme : 
+  subtitle: `Avec SEND, tu peux recevoir instantanément les communications à valeur juridique d’un organisme : 
     tu peux visualiser, gérer et payer directement en ligne ou dans l’application les courriers recommandés qui te sont généralement envoyés sur papier.`,
   ctaPrimary: heroCta,
   inverse: false,
@@ -104,12 +105,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche numérise et simplifie la gestion des communications à valeur juridique.
+            SEND numérise et simplifie la gestion des communications à valeur juridique.
             Les organismes émetteurs doivent seulement déposer l’acte à notifier : ce sera la plateforme
             qui s’occupera de l’envoi, par voie numérique ou analogique.
           </Typography>
           <Typography variant="body2">
-            Avec Piattaforma Notifiche, l’incertitude de la disponibilité des destinataires diminue et les
+            Avec SEND, l’incertitude de la disponibilité des destinataires diminue et les
             temps et les coûts de gestion sont réduits.
           </Typography>
         </>
@@ -127,7 +128,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche s’intègre au protocole des organismes et offre
+            SEND s’intègre au protocole des organismes et offre
             à la fois des API pour l’envoi automatique des notifications et la
             possibilité de faire des envois manuels. Une fois le chargement des
             actes et des formulaires de paiement effectué, la plateforme génère
@@ -185,7 +186,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Actuellement, les organisations peuvent démarrer les activités techniques nécessaires à l'intégration dans Piattaforma Notifiche.
+            Actuellement, les organisations peuvent démarrer les activités techniques nécessaires à l'intégration dans SEND.
           </Typography>
           <Typography variant="body2">
             Pendant ce temps, les organismes peuvent consulter le
@@ -243,7 +244,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             de procédures administratives engagées avec les Administrations publiques ou des
             remboursements, que tu as jusqu’à présent toujours reçus par courrier recommandé.
             À partir d’aujourd’hui, tu peux les recevoir et les consulter en numérique, en
-            accédant à Piattaforma Notifiche via SPID ou CIE ou directement sur l’application IO.
+            accédant à SEND via SPID ou CIE ou directement sur l’application IO.
           </Typography>
           <Typography variant="body2">
             Tu peux également payer les éventuels coûts grâce à l’intégration avec pagoPA,
@@ -265,7 +266,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Pour envoyer les communications à valeur juridique, Piattaforma Notifiche donne
+            Pour envoyer les communications à valeur juridique, SEND donne
             toujours la priorité aux coordonnées numériques du destinataire. Tu peux à tout
             moment te connecter à la plateforme avec SPID et CIE pour indiquer ou mettre à
             jour tes préférences entre l’adresse PEC, l’application IO, l’e-mail ou le SMS.
@@ -286,7 +287,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Actuellement, Piattaforma Notifiche est testée avec un nombre limité d’administrations.
+            Actuellement, SEND est testée avec un nombre limité d’administrations.
           </Typography>
           <Typography variant="body2">
             Progressivement, la plateforme sera adoptée par les Administrations publiques et utilisée
@@ -405,7 +406,7 @@ const pfShowcases: Array<IShowcaseData> = [
             <Typography variant="body2">
               Si tu as une adresse PEC, les notifications te seront légalement remises, sans plus de
               courriers recommandés papier. L’avis de réception qui te sera envoyé contient le lien
-              pour accéder au contenu sur Piattaforma Notifiche.
+              pour accéder au contenu sur SEND.
             </Typography>
           ),
         },
@@ -418,7 +419,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "Application IO",
           subtitle: (
             <Typography variant="body2">
-              Si tu actives le service « Notifications numériques » de Piattaforma Notifiche, tu peux
+              Si tu actives le service « Notifications numériques » de SEND, tu peux
               recevoir et gérer{" "}<strong>directement dans l’application</strong> les communications
               à valeur juridique. Si tu n’as pas de PEC et que tu lis immédiatement le message, tu ne
               recevras pas le courrier recommandé papier et la notification te sera légalement remise.
@@ -485,7 +486,7 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "La plateforme la prend en charge",
-      subtitle: `Piattaforma Notifiche vérifie l’exhaustivité et l’exactitude des informations. 
+      subtitle: `SEND vérifie l’exhaustivité et l’exactitude des informations. 
         À chaque changement d’état, l’attestation correspondante opposable à des tiers est 
         toujours générée.`,
     },
