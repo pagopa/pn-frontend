@@ -17,7 +17,7 @@ import {
 import { Typography } from '@mui/material';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Organization, PNRole } from '../../redux/auth/types';
+import { Organization } from '../../redux/auth/types';
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -36,14 +36,12 @@ type Props = {
 };
 
 // to avoid cognitive complexity warning - PN-5323
-function mainEmptyMessage(filtersApplied: boolean, isDelegatedPage: boolean, organization: Organization, role: PNRole, t: any) {
+function mainEmptyMessage(filtersApplied: boolean, isDelegatedPage: boolean, organization: Organization, t: any) {
   return filtersApplied
     ? undefined
     : isDelegatedPage
     ? t('empty-state.delegate', { name: organization.name })
-    : role !== PNRole.ADMIN 
-    ? t('empty-state.first-message-alone') 
-    : t('empty-state.first-message-continuing');
+    : t('empty-state.message', { name: organization.name });
 }
 
 const DesktopNotifications = ({
@@ -57,7 +55,6 @@ const DesktopNotifications = ({
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const role = organization.roles[0].role;
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
@@ -174,27 +171,14 @@ const DesktopNotifications = ({
     id: n.paProtocolNumber + i.toString(),
   }));
 
-  const handleRouteContacts = () => {
-    navigate(routes.RECAPITI);
-  };
-
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : isDelegatedPage || role !== PNRole.ADMIN
-      ? undefined
-      : handleRouteContacts,
-    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, role, t),
+      : undefined,
+    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage:
-      filtersApplied || isDelegatedPage || role !== PNRole.ADMIN
-        ? undefined
-        : {
-            emptyMessage: t('empty-state.second-message'),
-          },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;

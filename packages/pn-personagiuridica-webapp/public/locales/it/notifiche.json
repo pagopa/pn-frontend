@@ -15,11 +15,11 @@
     "group-selector-title": "Menu selezione gruppo"
   },
   "filters": {
-    "iun": "Inserisci il Codice IUN",
-    "data_da": "Da",
+    "iun": "Cerca per Codice IUN",
+    "data_da": "Dal",
     "data_da-aria-label": "Data inizio ricerca",
     "data_da-input-aria-label": "Inserisci la data iniziale della ricerca",
-    "data_a": "A",
+    "data_a": "Al",
     "data_a-aria-label": "Data fine ricerca",
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
@@ -34,10 +34,7 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "first-message-continuing": "Non hai ricevuto nessuna notifica. Vai alla sezione",
-    "first-message-alone": "Non hai ricevuto nessuna notifica.",
-    "action": "Recapiti",
-    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "message": "Non ci sono notifiche per {{name}}.",
     "delegate": "Non ci sono notifiche in delega a {{name}} da leggere."
   },
   "from-qrcode": {
