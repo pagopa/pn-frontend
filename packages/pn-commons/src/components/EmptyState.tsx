@@ -26,7 +26,7 @@ interface Message {
 
 function EmptyState({
   emptyActionCallback,
-  emptyMessage = 'Non abbiamo trovato risultati: prova con dei filtri diversi',
+  emptyMessage = 'Non abbiamo trovato risultati: prova con dei filtri diversi.',
   emptyActionLabel = 'Rimuovi filtri',
   sentimentIcon = KnownSentiment.DISSATISFIED,
   secondaryMessage = {
