@@ -400,7 +400,7 @@
         "back-to-attachments": "Torna a Allegati"
       },
       "sync-feedback": {
-        "title": "La notifica è stata correttamente creata",
+        "title": "La notifica è stata creata",
         "message": "Trovi gli aggiornamenti sul suo stato nella sezione \"Notifiche\"",
         "go-to-notifications": "Vai alle Notifiche"
       }
