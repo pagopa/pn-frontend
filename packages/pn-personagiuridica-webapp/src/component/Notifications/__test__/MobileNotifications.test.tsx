@@ -57,7 +57,7 @@ describe('MobileNotifications Component', () => {
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /empty-state.first-message-continuing empty-state.action empty-state.second-message/i
+      /empty-state.message/i
     );
   });
 
@@ -82,7 +82,7 @@ describe('MobileNotifications Component', () => {
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /empty-state.first-message-alone/i
+      /empty-state.message/i
     );
   });
 
