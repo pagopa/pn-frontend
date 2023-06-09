@@ -56,11 +56,12 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "SEND Servizio Notifiche Digitali",
   chip: "Beta",
   pf: "Cittadini",
   pa: "Enti",
   faq: "FAQ",
+  image: `${IMAGES_PATH}/logo.svg`
 };
 
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";

@@ -53,6 +53,7 @@ const navigation: INavigationBarProps = {
   pf: "Citoyens",
   pa: "Entités",
   faq: 'FAQ',
+  image: `${IMAGES_PATH}/logo.svg`
 };
 
 // eslint-disable-next-line no-extra-boolean-cast

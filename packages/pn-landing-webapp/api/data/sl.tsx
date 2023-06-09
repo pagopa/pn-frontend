@@ -52,6 +52,7 @@ const navigation: INavigationBarProps = {
   pf: "Državljani",
   pa: "Odvetnik",
   faq: 'FAQ',
+  image: `${IMAGES_PATH}/logo.svg`
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
