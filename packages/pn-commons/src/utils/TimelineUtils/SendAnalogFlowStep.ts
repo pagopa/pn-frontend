@@ -1,20 +1,45 @@
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { ResponseStatus, SendPaperDetails, TimelineCategory } from '../../types';
+import { SendPaperDetails, TimelineCategory } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
+
+const SEND_ANALOG_FEEDBACK_OK_DETAIL_CODES = [
+  'RECRN001C', 'RECRN003C', 'RECAG001C', 'RECAG002C', 'RECAG005C', 'RECAG006C', 'RECRI003C'
+];
+
+const SEND_ANALOG_FEEDBACK_KO_DETAIL_CODES = [
+  'RECRN002C', 'RECRN002F', 'PNRN012', 'RECRN004C', 'RECAG003C', 'RECAG003F', 'PNAG012', 'RECAG007C', 'RECRI004C'
+];
+
+function i18nLabelEntry(category: TimelineCategory, deliveryDetailCode: string | undefined) {
+  const sendAnalogFeedbackEntry = () => deliveryDetailCode 
+  ? (
+    SEND_ANALOG_FEEDBACK_OK_DETAIL_CODES.includes(deliveryDetailCode)
+    ? 'send-analog-success'
+    : SEND_ANALOG_FEEDBACK_KO_DETAIL_CODES.includes(deliveryDetailCode)
+    ? 'send-analog-error' : 'send-analog-outcome-unknown'
+  )
+  : 'send-analog-unknown';
+
+  return category === TimelineCategory.SEND_ANALOG_FEEDBACK 
+    ? sendAnalogFeedbackEntry()
+    : category === TimelineCategory.SEND_ANALOG_PROGRESS
+    ? 'send-analog-progress'
+    : category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS 
+    ? `simple-registered-letter-progess`
+    : 'send-analog-unknown';
+}
 
 export class SendAnalogFlowStep extends TimelineStep {
   getTimelineStepLabel(payload: TimelineStepPayload): string {
-    const responseStatus = (payload.step.details as SendPaperDetails).responseStatus; //  === ResponseStatus.KO
+    const typedDetails = payload.step.details as SendPaperDetails;
 
-    const labelEntry = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
-      ? 'send-analog-progress'
-      : payload.step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS ? `simple-registered-letter-progess`
-      : responseStatus === ResponseStatus.KO ? 'send-analog-error' : 'send-analog-success';
+    // to avoid cognitive complexity warning
+    const labelEntry = i18nLabelEntry(payload.step.category, typedDetails.deliveryDetailCode);
 
     const defaultLabel = payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
       ? `Aggiornamento sull'invio cartaceo`
       : payload.step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS ? `Aggiornamento dell'invio via raccomandata semplice`
-      : responseStatus === ResponseStatus.KO ? 'Invio per via cartacea non riuscito' : 'Invio per via cartacea riuscito';
+      : 'Invio cartaceo completato';
 
     return getLocalizedOrDefaultLabel(
       'notifications',
