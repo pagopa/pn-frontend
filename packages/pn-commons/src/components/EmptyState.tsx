@@ -46,6 +46,7 @@ function EmptyState({
         margin: '16px 0',
         padding: '16px',
         backgroundColor: 'background.paper',
+        borderRadius: '4px',
       }}
     >
       {FinalIcon && (
