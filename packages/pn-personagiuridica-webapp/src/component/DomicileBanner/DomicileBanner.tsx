@@ -1,4 +1,4 @@
-import { Alert, Box, Link, Stack, Typography } from '@mui/material';
+import { Alert, Box, Link, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -57,21 +57,21 @@ const DomicileBanner = () => {
           An explicit left margin had to be added to insert a slight separation between text and link.
           Cfr. PN-5528.
         */}
-        <Stack direction="row">
-          <Typography variant="body2" sx={{ overflow: 'hidden' }}>
+        <Box display="flex" flex-direction="row" flexWrap="wrap">
+          <Typography variant="body2" sx={{ marginRight: '4px' }}>
             {t(`detail.domicile_${messageIndex}`)}
           </Typography>
           <Link
-            component="button"
+            role="button"
             variant="body2"
             fontWeight={'bold'}
             onClick={handleAddDomicile}
             tabIndex={0}
-            sx={{ marginLeft: '4px' }}
+            sx={{ cursor: 'pointer', whiteSpace: 'no-wrap' }}
           >
             {t(`detail.add_domicile_${messageIndex}`)}
           </Link>
-        </Stack>
+        </Box>
       </Alert>
     </Box>
   ) : (
