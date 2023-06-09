@@ -156,7 +156,7 @@ const DelegatesByCompany = () => {
           justifyContent={'space-between'}
           alignItems={isMobile ? 'flex-start' : 'center'}
         >
-          <Typography variant="h5" mb={3}>
+          <Typography variant="h6" mb={3}>
             {t('deleghe.delegatesTitle')}
           </Typography>
           <Button
