@@ -5,10 +5,10 @@
   "filters": {
     "fiscal-code-tax-code": "Codice Fiscale o Partita Iva",
     "iun": "Codice IUN",
-    "data_da": "Da",
+    "data_da": "Dal",
     "data_da-aria-label": "Data inizio ricerca",
     "data_da-input-aria-label": "Inserisci la data iniziale della ricerca",
-    "data_a": "A",
+    "data_a": "Al",
     "data_a-aria-label": "Data fine ricerca",
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "status": "Stato",
@@ -400,7 +400,7 @@
         "back-to-attachments": "Torna a Allegati"
       },
       "sync-feedback": {
-        "title": "La notifica è stata correttamente creata",
+        "title": "La notifica è stata creata",
         "message": "Trovi gli aggiornamenti sul suo stato nella sezione \"Notifiche\"",
         "go-to-notifications": "Vai alle Notifiche"
       }
