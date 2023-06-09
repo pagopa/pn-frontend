@@ -40,11 +40,7 @@ import {
 } from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute, AppRouteType, AppRouteParams } from './routes.utility';
-import {
-  URL_DIGITAL_NOTIFICATIONS,
-  PRIVACY_LINK_RELATIVE_PATH,
-  TOS_LINK_RELATIVE_PATH,
-} from './costants';
+import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import {
   mockApiErrorWrapper,
   simpleMockForApiErrorWrapper,
@@ -94,7 +90,6 @@ export {
   basicUserDataMatcherContents,
   basicInitialUserData,
   adaptedTokenExchangeError,
-  URL_DIGITAL_NOTIFICATIONS,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
   mockApiErrorWrapper,
