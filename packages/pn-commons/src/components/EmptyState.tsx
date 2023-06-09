@@ -63,7 +63,12 @@ function EmptyState({
             onClick={emptyActionCallback}
             sx={{ verticalAlign: 'unset' }}
           >
-            <Typography color="primary" variant="body2" fontWeight={'bold'}>
+            <Typography
+              color="primary"
+              variant="body2"
+              fontWeight={'bold'}
+              sx={{ textDecoration: 'underline' }}
+            >
               {emptyActionLabel}
             </Typography>
           </ButtonNaked>
