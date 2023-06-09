@@ -79,7 +79,7 @@ const heroCta = !!PN_PF_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come Piattaforma Notifiche Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
+  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come SEND Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -108,7 +108,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
+  subtitle: `Con SEND puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
   ctaPrimary: heroCta,
   inverse: false,
@@ -407,7 +407,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Per inviare le comunicazioni a valore legale, Piattaforma Notifiche
+            Per inviare le comunicazioni a valore legale, SEND
             dà sempre la priorità ai recapiti digitali del destinatario. In ogni
             momento, puoi accedere alla piattaforma con SPID e CIE per indicare
             o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non
@@ -428,7 +428,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
+            Attualmente, SEND è oggetto di collaudo con un
             numero ristretto di amministrazioni.
           </Typography>
           <Typography variant="body2">
@@ -530,7 +530,7 @@ const pfShowcases: Array<IShowcaseData> = [
               Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente
               consegnate, senza più raccomandate cartacee. L’avviso di avvenuta
               ricezione che ti sarà inviato contiene il link per accedere al
-              contenuto su Piattaforma Notifiche.
+              contenuto su SEND.
             </Typography>
           ),
         },

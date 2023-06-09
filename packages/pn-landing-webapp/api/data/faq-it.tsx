@@ -14,7 +14,7 @@ import {
  * Cfr. comments for the FaqDescription type.
  */
 export const itFaqData: IFaqData = {
-  title: "Piattaforma Notifiche - FAQ",
+  title: "SEND - FAQ",
   sections: [
     {
       title: "Notifiche",
