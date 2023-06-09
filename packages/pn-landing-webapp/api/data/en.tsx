@@ -48,11 +48,12 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "SEND",
   chip: "Beta",
   pf: "The general public",
   pa: "Entities",
   faq: 'FAQ',
+  image: `${IMAGES_PATH}/logo.svg`
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -68,7 +69,7 @@ const heroCta = !!PN_PF_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Send notifications? Easily said.",
-  subtitle: `And, from today, easily done. Piattaforma Notifiche digitises the management of legal communications, 
+  subtitle: `And, from today, easily done. SEND digitises the management of legal communications, 
     simplifying the process for everyone: those who send them, and those who receive them.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
@@ -79,7 +80,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Notifications? At your fingertips.",
-  subtitle: `With Piattaforma Notifiche, you can instantly receive legal communications from an organisation: you 
+  subtitle: `With SEND, you can instantly receive legal communications from an organisation: you 
     can view, manage and pay for registered letters that are usually sent to you on paper directly online or through 
     the app.`,
   ctaPrimary: heroCta,
@@ -106,12 +107,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitises and simplifies the management of legal communications.
+            SEND digitises and simplifies the management of legal communications.
             The sending organisations only have to deposit the deed to be delivered: the platform
             will take care of the sending, either by digital or analogue means.
           </Typography>
           <Typography variant="body2">
-            With Piattaforma Notifiche, the uncertainty of recipient availability is minimised,
+            With SEND, the uncertainty of recipient availability is minimised,
             and management time and costs are reduced.
           </Typography>
         </>
@@ -129,7 +130,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integrates with the institutions’ protocol and offers both APIs
+            SEND integrates with the institutions’ protocol and offers both APIs
             for sending notifications automatically and the possibility of making manual submissions.
             Once the deeds and payment forms have been uploaded, the platform generates the IUN, a
             unique code identifying the notification.
@@ -183,7 +184,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Currently, organizations can start the technical activities necessary for integration into Piattaforma Notifiche.
+            Currently, organizations can start the technical activities necessary for integration into SEND.
           </Typography>
 
           <Typography variant="body2">
@@ -243,7 +244,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             Notifications are communications with legal value issued officially by an administration, such
             as fines, tax assessment notices, outcomes of administrative procedures initiated with public
             administrations or refunds, which until now, you have always received by registered mail. From
-            now on, you can receive and consult them digitally by accessing Piattaforma Notifiche via SPID
+            now on, you can receive and consult them digitally by accessing SEND via SPID
             or CIE or directly on the IO app.
           </Typography>
           <Typography variant="body2">
@@ -265,7 +266,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            To send legal communications, Piattaforma Notifiche always gives priority to the digital
+            To send legal communications, SEND always gives priority to the digital
             addresses of the recipient. At any time, you can access the platform with SPID and CIE to
             indicate or update your preferences between PEC, IO app, email or SMS. If you do not indicate
             any address or do not have access to the platform, you will continue to receive notifications
@@ -285,7 +286,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Currently, Piattaforma Notifiche is being tested with a small number of administrations.
+            Currently, SEND is being tested with a small number of administrations.
           </Typography>
           <Typography variant="body2">
             Progressively, the platform will be adopted by public administrations and used to send
@@ -404,7 +405,7 @@ const pfShowcases: Array<IShowcaseData> = [
             <Typography variant="body2">
               If you have a PEC address, notifications will be legally delivered to you, with no more
               registered paper mail. The acknowledgement of receipt that will be sent to you contains
-              the link to access the content on Piattaforma Notifiche.
+              the link to access the content on SEND.
             </Typography>
           ),
         },
@@ -417,7 +418,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "IO app",
           subtitle: (
             <Typography variant="body2">
-              If you activate the &quot;Digital Notifications&quot; service of Piattaforma Notifiche, you can
+              If you activate the &quot;Digital Notifications&quot; service of SEND, you can
               receive and manage legal communications <strong>directly in the app</strong>. If you
               do not have a PEC and read the message immediately, you will not receive the registered
               letter and the notification will be legally delivered.
@@ -483,7 +484,7 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "The platform takes care of it",
-      subtitle: `Piattaforma Notifiche verifies the completeness and correctness of the information. Each time there is 
+      subtitle: `SEND verifies the completeness and correctness of the information. Each time there is 
         a status change, the corresponding certificate enforceable against third parties is always generated.`,
     },
     {

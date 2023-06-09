@@ -21,7 +21,7 @@ const USER_TYPE = UserType.PF;
 const CittadiniPage: NextPage = () => (
   <>
     <Head>
-      <title>Piattaforma Notifiche - Cittadini</title>
+      <title>SEND - Cittadini</title>
       <meta name="description" content="Pagina dei cittadini" />
       <link rel="icon" href="/static/favicon.svg" />
     </Head>

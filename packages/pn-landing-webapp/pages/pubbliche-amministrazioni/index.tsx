@@ -6,20 +6,20 @@ import {
   Walkthrough,
   Hero,
 } from "@pagopa/mui-italia";
+import { UserType } from "model";
 import {
   getHeroData,
   getInfoblockData,
   getShowcaseData,
   getWalkthroughData,
 } from "../../api";
-import { UserType } from "model";
 
 const USER_TYPE = UserType.PA;
 
 const EntiPage: NextPage = () => (
   <>
     <Head>
-      <title>Piattaforma Notifiche - Pubbliche amministrazioni</title>
+      <title>SEND - Pubbliche amministrazioni</title>
       <meta name="description" content="Pagina per le pubbliche amministrazioni" />
       <link rel="icon" href="/static/favicon.svg" />
     </Head>
