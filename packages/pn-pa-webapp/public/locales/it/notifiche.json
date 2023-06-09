@@ -313,8 +313,8 @@
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Nuova notifica",
     "prompt": {
-      "title": "Vuoi davvero uscire?",
-      "message": "Se esci, i dati inseriti andranno persi."
+      "title": "Vuoi uscire?",
+      "message": "Se esci, perderai tutti i dati inseriti finora. Per inviare una nuova notifica, dovrai ricominciare da capo."
     },
     "back-to-notifications": "Torna alle notifiche",
     "drag-doc": "Trascina qui il documento",
