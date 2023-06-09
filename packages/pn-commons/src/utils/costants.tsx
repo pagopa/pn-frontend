@@ -9,10 +9,9 @@ export const LANGUAGES: Languages = {
   en: { it: 'Italian', en: 'English' },
 };
 
-export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
-const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/';
+const ACCESSIBILITY_LINK = 'https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/';
 
 const getFooterLinkLabels = (
   link: string,
@@ -204,7 +203,7 @@ export const preLoginLinks = (
       links: [
         {
           ...getFooterLinkLabels('accessibility', 'Accessibilità'),
-          href: `${URL_DIGITAL_NOTIFICATIONS}${ACCESSIBILITY_LINK_RELATIVE_PATH}`,
+          href: ACCESSIBILITY_LINK,
           linkType: 'external',
         },
       ],
@@ -246,7 +245,7 @@ export const postLoginLinks = (
   },
   {
     ...getFooterLinkLabels('accessibility', 'Accessibilità'),
-    href: `${URL_DIGITAL_NOTIFICATIONS}${ACCESSIBILITY_LINK_RELATIVE_PATH}`,
+    href: ACCESSIBILITY_LINK,
     linkType: 'external',
   },
 ];

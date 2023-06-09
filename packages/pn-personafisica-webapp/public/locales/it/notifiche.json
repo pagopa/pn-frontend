@@ -29,8 +29,8 @@
   },
   "empty-state": {
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
-    "action": "I tuoi recapiti",
+    "first-message": "Non hai ricevuto nessuna notifica.",
+    "action": "Vai ai tuoi recapiti",
     "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
   },
   "from-qrcode": {
