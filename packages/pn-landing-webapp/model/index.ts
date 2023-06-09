@@ -43,6 +43,7 @@ export interface INavigationBarProps {
   pf: string;
   pa: string;
   faq: string;
+  image: string;
 }
 
 /**

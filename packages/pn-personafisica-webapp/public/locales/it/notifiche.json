@@ -9,11 +9,11 @@
     "show-detail": "Vedi dettaglio"
   },
   "filters": {
-    "iun": "Inserisci il Codice IUN",
-    "data_da": "Da",
+    "iun": "Cerca per Codice IUN",
+    "data_da": "Dal",
     "data_da-aria-label": "Data inizio ricerca",
     "data_da-input-aria-label": "Inserisci la data iniziale della ricerca",
-    "data_a": "A",
+    "data_a": "Al",
     "data_a-aria-label": "Data fine ricerca",
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
@@ -29,8 +29,8 @@
   },
   "empty-state": {
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "first-message": "Non hai ricevuto nessuna notifica. Vai alla sezione",
-    "action": "I tuoi recapiti",
+    "first-message": "Non hai ricevuto nessuna notifica.",
+    "action": "Vai ai tuoi recapiti",
     "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
   },
   "from-qrcode": {

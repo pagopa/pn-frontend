@@ -1,19 +1,29 @@
-import {
-  Link,
-  List,
-  ListItem,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Link, List, ListItem, SvgIcon, Typography } from "@mui/material";
 
 import {
   FooterLinksType,
   HeroProps,
   HorizontalNavProps,
   PreLoginFooterLinksType,
-  WalkthroughProps
+  WalkthroughProps,
 } from "@pagopa/mui-italia";
 
+import {
+  IAppData,
+  IInfoblockData,
+  ILinkData,
+  INavigationBarProps,
+  IShowcaseData,
+} from "model";
+
+import {
+  IMAGES_PATH,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PN_PF_URL,
+  MANUALE_URL,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+} from "@utils/constants";
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -34,23 +44,6 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import {
-  IAppData,
-  IInfoblockData,
-  ILinkData,
-  INavigationBarProps,
-  IShowcaseData,
-} from "model";
-
-import {
-  IMAGES_PATH,
-  PAGOPA_HELP_EMAIL,
-  PAGOPA_HOME,
-  PN_PF_URL,
-  MANUALE_URL,
-  PARTNER_AND_INTERMEDIARIES_PATH
-} from "@utils/constants";
-
 
 const assistanceLink = {
   label: "Assistenza",
@@ -63,11 +56,12 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "SEND Servizio Notifiche Digitali",
   chip: "Beta",
   pf: "Cittadini",
   pa: "Enti",
-  faq: 'FAQ',
+  faq: "FAQ",
+  image: `${IMAGES_PATH}/logo.svg`
 };
 
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
@@ -75,18 +69,17 @@ const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_PF_URL
   ? {
-    label: "Leggi le tue notifiche",
-    title: "Leggi le tue notifiche",
-    onClick: onReadClick,
-  }
+      label: "Leggi le tue notifiche",
+      title: "Leggi le tue notifiche",
+      onClick: onReadClick,
+    }
   : undefined;
 
 /** Hero mocked data */
 const paHero: HeroProps = {
   type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. Piattaforma Notifiche digitalizza la gestione delle comunicazioni a valore legale, 
-    semplificando il processo per tutti: chi le invia, e chi le riceve.`,
+  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come SEND Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -96,26 +89,26 @@ const paHero: HeroProps = {
     title: "Scopri come aderire",
     /* Carlotta Dimatteo - workaround per gestire un anchor interno alla pagina richiesto dal team di comunicazione il 16/02/2023 */
     onClick: function onClick() {
-      var loc = document.location.toString().split('#')[0];
-      document.location = loc + '#start-integration';
+      var loc = document.location.toString().split("#")[0];
+      document.location = loc + "#start-integration";
       return false;
-    }
+    },
   },
   ctaSecondary: {
     label: "Accedi",
     title: "Accedi",
     /* Carlotta Dimatteo - aggiunta della CTA richiesta dal team di comunicazione il 17/02/2023 */
     onClick: function onClick() {
-      window.open(selfCareUrl, '_blank');
+      window.open(selfCareUrl, "_blank");
       return false;
-    }
-  }
+    },
+  },
 };
 
 const pfHero: HeroProps = {
   type: "image",
   title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
+  subtitle: `Con SEND puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
   ctaPrimary: heroCta,
   inverse: false,
@@ -141,15 +134,14 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalizza e semplifica la gestione delle
-            comunicazioni a valore legale. Gli enti mittenti non devono che
-            depositare l’atto da notificare: sarà la piattaforma a occuparsi
-            dell’invio, per via digitale o analogica.
+            SEND digitalizza e semplifica la gestione delle comunicazioni a
+            valore legale. Gli enti mittenti devono solo depositare l’atto da
+            notificare: sarà la piattaforma a occuparsi dell’invio, per via
+            digitale o analogica.
           </Typography>
           <Typography variant="body2">
-            Con Piattaforma Notifiche, diminuisce l’incertezza della
-            reperibilità dei destinatari e si riducono i tempi e i costi di
-            gestione.
+            Con SEND, diminuisce l’incertezza della reperibilità dei destinatari
+            e si riducono i tempi e i costi di gestione.
           </Typography>
         </>
       ),
@@ -166,11 +158,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche si integra con il protocollo degli enti e
-            offre sia API per l’invio automatico delle notifiche, sia la
-            possibilità di fare invii manuali. Una volta effettuato il
-            caricamento degli atti e dei moduli di pagamento, la piattaforma
-            genera lo IUN, un codice univoco identificativo della notifica.
+            SEND si integra con il protocollo degli enti e offre sia API per
+            l’invio automatico delle notifiche, sia la possibilità di fare invii
+            manuali. Una volta effettuato il caricamento degli atti e dei moduli
+            di pagamento, la piattaforma genera lo IUN, un codice univoco
+            identificativo della notifica.
           </Typography>
           <Typography variant="body2">
             Successivamente, cerca nei suoi archivi e nei registri pubblici una
@@ -198,7 +190,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       title: "E il destinatario?",
       content: (
         <>
-          <Typography variant="body2" >
+          <Typography variant="body2">
             Il destinatario accede alla piattaforma tramite SPID o CIE, dove può
             visionare e scaricare l’atto notificato. Grazie all’integrazione con
             pagoPA, può anche pagare contestualmente quanto dovuto. Se ha
@@ -225,61 +217,95 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a Piattaforma Notifiche, prevede le seguenti fasi:
+            La procedura per avviare le attività tecniche e amministrative
+            necessarie per l’adesione e l’integrazione degli enti a SEND,
+            Servizio Notifiche Digitali, prevede le seguenti fasi:
           </Typography>
 
           <Typography variant="h6">01. Scegli come integrarti</Typography>
 
           <Typography variant="body2">
-            Ogni ente può decidere se integrarsi alla piattaforma direttamente oppure tramite un fornitore.
-            Nel secondo caso, è disponibile <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
-              <a target="_blank" rel="noopener noreferrer">la lista dei Partner e Intermediari tecnologici</a>
-            </Link> che stanno implementando le attività di integrazione alla piattaforma
-            e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici.
+            Ogni ente può decidere se integrarsi a SEND direttamente oppure
+            tramite un fornitore. Nel secondo caso, è disponibile{" "}
+            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+              <a target="_blank" rel="noopener noreferrer">
+                la lista dei Partner e Intermediari tecnologici
+              </a>
+            </Link>{" "}
+            che stanno implementando le attività di integrazione alla
+            piattaforma e di cui è possibile avvalersi per un supporto nella
+            gestione degli aspetti tecnici.
           </Typography>
           <Typography variant="caption">
-            I soggetti che intendono integrarsi alla Piattaforma Notifiche in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
-            la procedura ed essere inseriti nella lista inviando una mail all’indirizzo account@pagopa.it.
+            I soggetti che intendono integrarsi a SEND in qualità di Partner o
+            Intermediari Tecnologici possono manifestare il proprio interesse ad
+            avviare la procedura ed essere inseriti nella lista inviando una
+            mail all’indirizzo account@pagopa.it.
           </Typography>
-          <Typography variant="h6">02. Sottoscrivi l’accordo di adesione</Typography>
+          <Typography variant="h6">
+            02. Sottoscrivi l’accordo di adesione
+          </Typography>
           <Typography variant="body2">
             Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
-            <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
-              <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
-            </Link>{" "}e seguire i passaggi descritti in{" "}
+            <Link
+              href={
+                "https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"
+              }
+            >
+              <a target="_blank" rel="noopener noreferrer">
+                Area Riservata
+              </a>
+            </Link>{" "}
+            e seguire i passaggi descritti in{" "}
             <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
-              <a target="_blank" rel="noopener noreferrer">questa guida.</a>
-            </Link><br></br>
-            Una volta sottoscritto l’accordo in digitale,
-            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.
-            Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati ove richiesto:
+              <a target="_blank" rel="noopener noreferrer">
+                questa guida.
+              </a>
+            </Link>
+            <br></br>
+            Una volta sottoscritto l’accordo in digitale, l’ente dovrà caricarlo
+            e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata. Inoltre, a
+            integrazione dell’accordo, dovranno essere inviati i seguenti moduli
+            debitamente compilati ove richiesto:
           </Typography>
-          <List sx={{ listStyleType: 'disc', pl: 4 }}>
-            <ListItem sx={{ display: 'list-item' }}>
+          <List sx={{ listStyleType: "disc", pl: 4 }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
-                <Link href={"https://docs.pagopa.it/allegato-1bis-al-contratto-di-adesione/"}>
-                  <a target="_blank" rel="noopener noreferrer">Allegato 1-Bis</a>
-                </Link>
-                {" "}al Contratto di Adesione
+                <Link
+                  href={
+                    "https://docs.pagopa.it/allegato-1bis-al-contratto-di-adesione/"
+                  }
+                >
+                  <a target="_blank" rel="noopener noreferrer">
+                    Allegato 1-Bis
+                  </a>
+                </Link>{" "}
+                al Contratto di Adesione
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
-                <Link href={"/static/documents/Modulo preventivo di fornitura.xlsx"}>
+                <Link
+                  href={"/static/documents/Modulo preventivo di fornitura.xlsx"}
+                >
                   Modulo di Profilazione
-                </Link>
-                {" "}necessario per l’avvio in esercizio
+                </Link>{" "}
+                necessario per l’avvio in esercizio
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
-                <Link href={"/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"}>
+                <Link
+                  href={
+                    "/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"
+                  }
+                >
                   Modulo Commessa
-                </Link>
-                {" "}necessario per la fatturazione
+                </Link>{" "}
+                necessario per la fatturazione
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
                 <Link href={"https://docs.pagopa.it/sla-di-servizio/"}>
                   <a target="_blank" rel="noopener noreferrer">
@@ -289,13 +315,16 @@ const paInfoBlocks: Array<IInfoblockData> = [
               </Typography>
             </ListItem>
           </List>
-          <Typography variant="h6">03. Avvia l’integrazione tecnologica</Typography>
+          <Typography variant="h6">
+            03. Avvia l’integrazione tecnologica
+          </Typography>
           <Typography variant="body2">
-            Di seguito sono consultabili i materiali necessari per integrare i sistemi dell’ente alla piattaforma:
+            Di seguito sono consultabili i materiali necessari per integrare i
+            sistemi dell’ente a SEND:
           </Typography>
 
-          <List sx={{ listStyleType: 'disc', pl: 4 }}>
-            <ListItem sx={{ display: 'list-item' }}>
+          <List sx={{ listStyleType: "disc", pl: 4 }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
                 <Link href={MANUALE_URL}>
                   <a target="_blank" rel="noopener noreferrer">
@@ -304,9 +333,8 @@ const paInfoBlocks: Array<IInfoblockData> = [
                 </Link>
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
-
                 <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-bundle.yaml">
                   <a target="_blank" rel="noopener noreferrer">
                     API b2b per le pubbliche amministrazioni
@@ -314,7 +342,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
                 </Link>
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
+            <ListItem sx={{ display: "list-item" }}>
               <Typography variant="body2">
                 <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-bundle.yaml">
                   <a target="_blank" rel="noopener noreferrer">
@@ -324,19 +352,22 @@ const paInfoBlocks: Array<IInfoblockData> = [
               </Typography>
             </ListItem>
           </List>
-          <Typography variant="body2">Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
+          <Typography variant="body2">
+            Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
             <Link href={"https://docs.pagopa.it/faq-enti/"}>
               <a target="_blank" rel="noopener noreferrer">
                 qui
               </a>
-            </Link> le principali FAQ. </Typography>
+            </Link>{" "}
+            le principali FAQ.{" "}
+          </Typography>
         </>
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false
+      imageShadow: false,
     },
   },
 ];
@@ -350,12 +381,11 @@ const pfInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             Le notifiche sono comunicazioni a valore legale emesse in via
-            ufficiale da un’amministrazione, come multe, avvisi di accertamento
-            di tributi, esiti di pratiche amministrative avviate con le
-            Pubbliche Amministrazioni o rimborsi, che fino ad ora hai sempre
-            ricevuto tramite raccomandata. Da oggi puoi riceverle e consultarle
-            in digitale, accedendo a Piattaforma Notifiche tramite SPID o CIE o
-            direttamente sull’app IO.
+            ufficiale da un’amministrazione pubblica, come multe, avvisi di
+            accertamento di tributi, esiti di pratiche amministrative o
+            rimborsi, che fino ad ora hai ricevuto tramite raccomandata. Da oggi
+            puoi riceverle e consultarle in digitale, accedendo a Piattaforma
+            Notifiche tramite SPID o CIE o direttamente sull’app IO.
           </Typography>
           <Typography variant="body2">
             Puoi anche pagare eventuali costi grazie all’integrazione con
@@ -377,7 +407,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Per inviare le comunicazioni a valore legale, Piattaforma Notifiche
+            Per inviare le comunicazioni a valore legale, SEND
             dà sempre la priorità ai recapiti digitali del destinatario. In ogni
             momento, puoi accedere alla piattaforma con SPID e CIE per indicare
             o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non
@@ -398,7 +428,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
+            Attualmente, SEND è oggetto di collaudo con un
             numero ristretto di amministrazioni.
           </Typography>
           <Typography variant="body2">
@@ -500,7 +530,7 @@ const pfShowcases: Array<IShowcaseData> = [
               Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente
               consegnate, senza più raccomandate cartacee. L’avviso di avvenuta
               ricezione che ti sarà inviato contiene il link per accedere al
-              contenuto su Piattaforma Notifiche.
+              contenuto su SEND.
             </Typography>
           ),
         },
@@ -513,7 +543,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "App IO",
           subtitle: (
             <Typography variant="body2">
-              Se attivi il servizio “Notifiche digitali” di Piattaforma
+              Se attivi il servizio “Avvisi di cortesia” di Piattaforma
               Notifiche, puoi ricevere e gestire{" "}
               <strong>direttamente in app</strong> le comunicazioni a valore
               legale. Se non hai la PEC e leggi subito il messaggio, non
@@ -553,19 +583,19 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "La piattaforma la prende in carico",
-      subtitle: `Piattaforma Notifiche verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
+      subtitle: `SEND verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
         stato, viene sempre generata la relativa attestazione opponibile a terzi.`,
     },
     {
       icon: <SendIcon color="primary" />,
       title: "La notifica viene inviata",
-      subtitle: `La piattaforma comunica al destinatario la presenza di una notifica tramite diversi possibili canali: 
+      subtitle: `SEND comunica al destinatario la presenza di una notifica tramite diversi possibili canali: 
         PEC, App IO, email, SMS. In alternativa, ricerca un indirizzo fisico e invia una raccomandata cartacea.`,
     },
     {
       icon: <DeliverIcon color="primary" />,
       title: "Il destinatario la riceve",
-      subtitle: `Il destinatario accede alla piattaforma. Lì, può scaricare gli i documenti notificati e pagare 
+      subtitle: `Il destinatario accede alla piattaforma. Lì, può scaricare i documenti notificati e pagare 
         contestualmente quanto dovuto, grazie all’integrazione con pagoPA. Se la riceve tramite IO, può fare 
         tutto direttamente in app.`,
     },
@@ -581,8 +611,8 @@ const pfWalkthrough: WalkthroughProps = {
       subtitle: `
         Per ogni notifica, la piattaforma  verifica che ci sia una PEC a te associata o da te indicata per 
         l’invio dell’avviso di avvenuta ricezione. Poi, invia un avviso di cortesia ai tuoi altri recapiti 
-        digitali (app IO, email e sms). Se non hai indicato alcun recapito digitale e non hai accesso alla 
-        piattaforma, riceverai una raccomandata cartacea.
+        digitali (app IO, email e SMS). Se non hai indicato alcun recapito digitale e non hai accesso alla 
+        notifica attraverso SEND, riceverai una raccomandata cartacea.
       `,
     },
     {
@@ -687,7 +717,7 @@ const pfHorizontalNav = {
 const pagoPALink: ILinkData = {
   label: "PagoPA S.p.A.",
   href: PAGOPA_HOME ?? "",
-  ariaLabel: "Link: vai al sito di PagoPA S.p.A."
+  ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
 };
 
 const companyLegalInfo = (
@@ -864,5 +894,5 @@ export const itAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  }
+  },
 };
