@@ -61,15 +61,11 @@ describe('CourtesyContactsList Component', () => {
     const textBoxes = await screen.findAllByRole('textbox');
     expect(textBoxes).toHaveLength(2);
 
-    const phoneTextBox = await screen.findByPlaceholderText(
-      /courtesy-contacts.link-phone-placeholder/
-    );
+    const phoneTextBox = await screen.findByTestId('courtesy-contact-phone');
     expect(phoneTextBox).toEqual(textBoxes[0]);
     expect(phoneTextBox).toHaveValue('');
 
-    const mailTextBox = await screen.findByPlaceholderText(
-      /courtesy-contacts.link-email-placeholder/
-    );
+    const mailTextBox = await screen.findByTestId('courtesy-contact-email');
     expect(mailTextBox).toEqual(textBoxes[1]);
     expect(mailTextBox).toHaveValue('');
 

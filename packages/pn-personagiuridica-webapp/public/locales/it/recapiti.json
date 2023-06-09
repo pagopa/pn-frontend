@@ -56,7 +56,7 @@
     "title": "",
     "subtitle": "E-mail o numero di cellulare",
     "description": "Quando c’è una notifica per l’impresa, viene inviato un messaggio a questi contatti. Per leggere la notifica e pagare eventuali spese è necessario accedere alla piattaforma.",
-    "link-phone-placeholder": "Cellulare",
+    "link-phone-placeholder": "",
     "link-email-placeholder": "E-mail",
     "phone-add": "Avvisami via SMS",
     "email-add": "Avvisami via e-mail",
