@@ -202,6 +202,9 @@ const MobileNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
+    emptyActionCallback: filtersApplied
+      ? filterNotificationsRef.current.cleanFilters
+      : undefined,
     emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
   };
