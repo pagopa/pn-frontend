@@ -248,13 +248,15 @@
       "registered-letter-kind": {
         "AR": "A/R",
         "890": "890",
-        "RIR": "internazionale A/R"
+        "RIR": "A/R internazionale",
+        "RS": "semplice",
+        "RIS": "internazionale semplice"
       },
       "analog-workflow-attachment-kind": {
+        "AR": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
-        "Indagine": "Scansione dell'analisi dell'indagine ",
-        "AR": "Ricevuta di ritorno",
-        "23L": "Ricevuta 23L",
+        "23L": "Avviso di ricevimento",
+        "Indagine": "Scansione dell'indagine",
         "generic": "Documento allegato"
       },
       "analog-workflow-failure-cause": {
