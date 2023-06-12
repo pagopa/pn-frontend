@@ -227,7 +227,7 @@
       "registered-letter-kind": {
         "AR": "A/R",
         "890": "890",
-        "RIR": "internazionale A/R",
+        "RIR": "A/R internazionale",
         "RS": "semplice",
         "RIS": "internazionale semplice"
       },
