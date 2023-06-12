@@ -79,7 +79,7 @@ const heroCta = !!PN_PF_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come SEND Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
+  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come Piattaforma Notifiche Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
