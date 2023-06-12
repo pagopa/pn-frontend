@@ -13,6 +13,7 @@ import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
 import { MandateNotFoundAppError } from './MandateNotFoundAppError';
 import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
 import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
+import { DeliveryMandateNotFoundAppError } from './DeliveryMandateNotFoundAppError';
 
 export class PFAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -44,6 +45,8 @@ export class PFAppErrorFactory extends AppErrorFactory {
         return new UserAttributesInvalidVerificationCodeAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER_PATTERN:
         return new GenericInvalidParameterPatternAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_MANDATENOTFOUND:
+        return new DeliveryMandateNotFoundAppError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }
