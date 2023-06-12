@@ -90,7 +90,7 @@
     "required-fields": "*Campi obbligatori",
     "associated": "Già associati",
     "sender": "Ente",
-    "address-type": "Tipo di ecapito",
+    "address-type": "Tipo di recapito",
     "pec": "Indirizzo PEC",
     "phone": "Cellulare",
     "mail": "Indirizzo e-mail",
