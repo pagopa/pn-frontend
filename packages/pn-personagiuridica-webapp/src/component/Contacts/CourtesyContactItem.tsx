@@ -209,10 +209,14 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}
             helperText={formik.touched[type] && formik.errors[type]}
-            inputProps={{ sx: { height: '14px' } }}
-            placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
-              ns: 'recapiti',
-            })}
+            inputProps={{ sx: { height: '14px' }, 'data-testid': `courtesy-contact-${type}` }}
+            placeholder={
+              type !== CourtesyFieldType.PHONE
+                ? t(`courtesy-contacts.link-${type}-placeholder`, {
+                    ns: 'recapiti',
+                  })
+                : ''
+            }
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
             InputProps={

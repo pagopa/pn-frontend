@@ -144,6 +144,6 @@
   },
   "roles": {
     "operator": "Referente operativo",
-    "admin": "Referente amministrativo"
+    "admin": "Amministratore"
   }
 }

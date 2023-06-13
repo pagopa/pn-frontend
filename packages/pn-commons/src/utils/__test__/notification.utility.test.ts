@@ -375,7 +375,7 @@ describe('notification status texts', () => {
       },
       ['single-recipient'],
       'status.viewed',
-      'info',
+      'success',
       'status.viewed-tooltip',
       'status.viewed-description',
       { subject: 'status.recipient' }
@@ -392,7 +392,7 @@ describe('notification status texts', () => {
       },
       ['single-recipient'],
       'status.viewed',
-      'info',
+      'success',
       'status.viewed-tooltip',
       'status.viewed-description',
       { subject: 'status.delegate.Mario Rossi' }
@@ -408,7 +408,7 @@ describe('notification status texts', () => {
       },
       ['recipient-1', 'recipient-2'],
       'status.viewed-multirecipient',
-      'info',
+      'success',
       'status.viewed-tooltip-multirecipient',
       'status.viewed-description-multirecipient',
       { subject: 'status.recipient' }
@@ -880,23 +880,20 @@ describe('timeline event description', () => {
   });
 
   it(`return timeline status infos - SEND_ANALOG_FEEDBACK - failure code - single recipient`, () => {
-    const mockDetailCode = 'mock-detail-code';
     const mockFailureCode = 'mock-failure-code';
     const mockLetterNumber = 'mock-letter-number';
     
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.KO;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails) = {
       ...(parsedNotificationCopy.timeline[0].details as SendPaperDetails),
-      deliveryDetailCode: mockDetailCode,
+      deliveryDetailCode: 'RECAG003C',
       deliveryFailureCause: mockFailureCode,
       registeredLetterCode: mockLetterNumber
     };
 
     testTimelineStatusInfosFnSingle(
       'send-analog-error',
-      `send-analog-flow-${mockDetailCode}-description`,
+      `send-analog-flow-RECAG003C-description`,
       {
         name: 'Nome Cognome',
         taxId: '(mocked-taxId)',
@@ -909,8 +906,6 @@ describe('timeline event description', () => {
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - failure - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.KO;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       address: 'Indirizzo fisico',
       zip: 'zip',
@@ -935,8 +930,6 @@ describe('timeline event description', () => {
     parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.KO;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress =
       {
         address: 'Indirizzo fisico',
@@ -961,17 +954,15 @@ describe('timeline event description', () => {
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - success - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.OK;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       address: 'Indirizzo fisico',
       zip: 'zip',
       municipality: 'municipality',
     };
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN003C';
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECAG001C';
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).deliveryFailureCause = '';
-    testTimelineStatusInfosFnSingle('send-analog-success', 'send-analog-flow-RECRN003C-description', 
+    testTimelineStatusInfosFnSingle('send-analog-success', 'send-analog-flow-RECAG001C-description', 
       {
         name: 'Nome Cognome',
         taxId: '(mocked-taxId)',
@@ -988,8 +979,6 @@ describe('timeline event description', () => {
     parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
     parsedNotificationTwoRecipientsCopy.timeline[0].category =
       TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).responseStatus =
-      ResponseStatus.OK;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress =
       {
         address: 'Indirizzo fisico',
@@ -997,11 +986,11 @@ describe('timeline event description', () => {
         municipality: 'municipality',
       };
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).sendRequestId = 'SEND_ANALOG_DOMICILE_0';
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN005C';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryDetailCode = 'RECRN003C';
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).deliveryFailureCause = '';
     testTimelineStatusInfosFnMulti1(
       'send-analog-success',
-      'send-analog-flow-RECRN005C-description-multirecipient',
+      'send-analog-flow-RECRN003C-description-multirecipient',
       { 
         name: `Catena Dall'Olio`, taxId: '(mocked-taxId2)',
         registeredLetterKind: ' detail.timeline.registered-letter-kind.AR',

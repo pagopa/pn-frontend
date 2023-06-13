@@ -26,7 +26,7 @@ interface Message {
 
 function EmptyState({
   emptyActionCallback,
-  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
+  emptyMessage = 'Non abbiamo trovato risultati: prova con dei filtri diversi.',
   emptyActionLabel = 'Rimuovi filtri',
   sentimentIcon = KnownSentiment.DISSATISFIED,
   secondaryMessage = {
@@ -46,6 +46,7 @@ function EmptyState({
         margin: '16px 0',
         padding: '16px',
         backgroundColor: 'background.paper',
+        borderRadius: '4px',
       }}
     >
       {FinalIcon && (
@@ -62,7 +63,12 @@ function EmptyState({
             onClick={emptyActionCallback}
             sx={{ verticalAlign: 'unset' }}
           >
-            <Typography color="primary" variant="body2" fontWeight={'bold'}>
+            <Typography
+              color="primary"
+              variant="body2"
+              fontWeight={'bold'}
+              sx={{ textDecoration: 'underline' }}
+            >
               {emptyActionLabel}
             </Typography>
           </ButtonNaked>
