@@ -136,7 +136,7 @@ const NewApiKey = () => {
                   <Box>
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
                       <SectionHeading>{t('other-info')}</SectionHeading>
-                      <Box sx={{ marginTop: '20px' }}>
+                      <Box sx={{ marginTop: '24px' }}>
                         <Typography fontWeight="bold">{t('form-label-name')}*</Typography>
                         <TextField
                           id="name"
@@ -149,7 +149,7 @@ const NewApiKey = () => {
                           helperText={formik.touched.name && formik.errors.name}
                           size="small"
                           margin="normal"
-                          sx={{ mb: 3, mt: '10px' }}
+                          sx={{ mb: '24px', mt: '8px' }}
                         />
                         <Typography fontWeight="bold">{t('form-label-groups')}</Typography>
                         <PnAutocomplete
@@ -174,7 +174,7 @@ const NewApiKey = () => {
                           renderInput={(params) => (
                             <TextField {...params} label={t('form-placeholder-groups')} />
                           )}
-                          sx={{ mt: '10px' }}
+                          sx={{ mt: '8px' }}
                         />
                       </Box>
                     </Paper>
