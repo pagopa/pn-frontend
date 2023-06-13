@@ -50,7 +50,15 @@ function EmptyState({
       }}
     >
       {FinalIcon && (
-        <FinalIcon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: '1.25rem' }} />
+        <FinalIcon
+          sx={{
+            verticalAlign: 'middle',
+            mr: '20px',
+            mb: '2px',
+            fontSize: '1.25rem',
+            color: 'action.active',
+          }}
+        />
       )}
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {emptyMessage}
