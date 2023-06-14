@@ -92,10 +92,10 @@ const CodeModal = memo(
         data-testid="codeDialog"
         disableEscapeKeyDown
       >
-        <DialogTitle id="dialog-title" sx={{ textAlign: textPosition }}>
+        <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: '32px', px: '32px' }}>
           {title}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ px: '32px' }}>
           <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
             {subtitle}
           </DialogContentText>
@@ -137,6 +137,8 @@ const CodeModal = memo(
           sx={{
             textAlign: textPosition,
             flexDirection: isMobile ? 'column' : 'row',
+            px: '32px',
+            pb: '32px',
           }}
         >
           {cancelLabel && cancelCallback && (
