@@ -67,10 +67,15 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     }, 25);
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
     const cursorPosition = (event.target as any).selectionStart;
     if (!isNaN(Number(event.key)) && currentValues[index]) {
       changeInputValue(event.key, index);
+    }
+    if (event.ctrlKey || event.metaKey) {
+      console.log('event.key :>> ', event.key);
+      onPaste(event);
     }
     if (
       !isNaN(Number(event.key)) ||
@@ -109,6 +114,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     changeInputValue((event.target as any).value, index);
   };
 
+  const onPaste = (event: any) => {
+    const arrayOfValue = event.clipboardData.getData('text/plain').split('');
+    arrayOfValue.forEach((element: string, index: number) => {
+      changeInputValue(element, index);
+    });
+  };
+
   useEffect(() => {
     onChange(currentValues);
   }, [currentValues]);
@@ -136,6 +148,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}
+          onPaste={(event) => onPaste(event)}
           value={currentValues[index]}
           // eslint-disable-next-line functional/immutable-data
           inputRef={(node) => (inputsRef.current[index] = node)}
