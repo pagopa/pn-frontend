@@ -1,11 +1,11 @@
-import { AccessDenied } from "@pagopa-pn/pn-commons";
-import { Outlet, useNavigate } from "react-router-dom";
+import { AccessDenied } from '@pagopa-pn/pn-commons';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-import { PNRole } from "../models/user";
-import { useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
-import { getHomePage } from "../utils/role.utility";
-import { goToSelfcareLogin } from "./navigation.utility";
+import { PNRole } from '../models/user';
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { getHomePage } from '../utils/role.utility';
+import { goToSelfcareLogin } from './navigation.utility';
 
 /**
  * The roles associated to the routes guarded by this Guard.
@@ -26,10 +26,11 @@ const RouteGuard = ({ roles }: Props) => {
     return (
       <AccessDenied
         isLogged={!!sessionToken}
-        goToHomePage={() => navigate(getHomePage(), {replace: true})}
+        goToHomePage={() => navigate(getHomePage(), { replace: true })}
         goToLogin={() => goToSelfcareLogin()}
       />
-    );}
+    );
+  }
 
   return <Outlet />;
 };
