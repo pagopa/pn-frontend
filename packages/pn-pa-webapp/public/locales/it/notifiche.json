@@ -1,9 +1,9 @@
 {
   "title": "Notifiche",
   "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale o Partita IVA, Codice IUN, data di invio e stato.",
-  "new-notification-button": "Invia una nuova notifica",
+  "new-notification-button": "Invia una notifica",
   "filters": {
-    "fiscal-code-tax-code": "Codice Fiscale o Partita Iva",
+    "fiscal-code-tax-code": "Codice Fiscale o Partita IVA",
     "iun": "Codice IUN",
     "data_da": "Dal",
     "data_da-aria-label": "Data inizio ricerca",
@@ -333,6 +333,7 @@
         "subject": "Oggetto della notifica",
         "abstract": "Descrizione",
         "group": "Gruppo",
+        "no-groups": "Non ci sono gruppi per questo prodotto",
         "taxonomy-id": "Codice tassonomico",
         "comunication-type": "Modalità di invio",
         "registered-letter-890": "Modello 890",
@@ -344,7 +345,7 @@
         "nothing": "Nessuno"
       },
       "recipient": {
-        "title": "Destinatario",
+        "title": "Destinatari",
         "fiscal-code-error": "Il valore inserito non è corretto",
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale / Partita IVA. Inseriscine uno diverso.",
         "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
@@ -379,8 +380,8 @@
       },
       "attachments": {
         "title": "Allegati",
-        "max-attachments": "E' possibile inserire fino a un massimo di 10 allegati oltre l'atto.",
-        "attach-for-recipients": "Allegati per tutti i destinatari",
+        "max-attachments": "Puoi caricare fino a 11 allegati, incluso il documento da notificare.",
+        "attach-for-recipients": "Allegati",
         "act-attachment": "Allega l'atto",
         "doc-attachment": "Allega un altro documento",
         "act-name": "Nome dell'atto",

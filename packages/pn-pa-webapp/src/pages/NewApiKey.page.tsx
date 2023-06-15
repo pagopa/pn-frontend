@@ -107,7 +107,7 @@ const NewApiKey = () => {
     <>
       {!apiKeySent && (
         <Prompt
-          title={t('page-title')}
+          title={t('cancel-title')}
           message={t('cancel-prompt')}
           eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
           eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
