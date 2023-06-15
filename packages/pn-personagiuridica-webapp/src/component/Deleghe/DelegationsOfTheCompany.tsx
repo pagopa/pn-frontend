@@ -393,7 +393,7 @@ const DelegationsOfTheCompany = () => {
                   id="groups"
                   size="small"
                   fullWidth
-                  options={groups.filter((group) => group.status !== GroupStatus.DELETED)}
+                  options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
                   disableCloseOnSelect
                   multiple
                   noOptionsText={t('deleghe.table.no-group-found')}
