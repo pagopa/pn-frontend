@@ -61,7 +61,7 @@ const navigation: INavigationBarProps = {
   pf: "Cittadini",
   pa: "Enti",
   faq: "FAQ",
-  image: `${IMAGES_PATH}/logo.svg`
+  image: `${IMAGES_PATH}/logo.svg`,
 };
 
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
@@ -108,8 +108,8 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con SEND puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
-    potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
+  subtitle: `Con SEND puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente. 
+    Potrai visualizzarle, gestirle e pagarle direttamente online sulla piattaforma dedicata o dall'app IO.`,
   ctaPrimary: heroCta,
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
@@ -381,17 +381,17 @@ const pfInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             Le notifiche sono comunicazioni a valore legale emesse in via
-            ufficiale da un’amministrazione pubblica, come multe, avvisi di
-            accertamento di tributi, esiti di pratiche amministrative o
-            rimborsi, che fino ad ora hai ricevuto tramite raccomandata. Da oggi
-            puoi riceverle e consultarle in digitale, accedendo a Piattaforma
-            Notifiche tramite SPID o CIE o direttamente sull’app IO.
+            ufficiale da un'amministrazione pubblica, come esiti di pratiche
+            amministrative o rimborsi, multe e avvisi di accertamento di
+            tributi. Da oggi puoi riceverle e consultarle in digitale, accedendo
+            online a SEND - Servizio Notifiche Digitali tramite SPID o CIE o
+            direttamente da app IO.
           </Typography>
           <Typography variant="body2">
             Puoi anche pagare eventuali costi grazie all’integrazione con
             pagoPA, visualizzare lo storico delle notifiche ricevute e gestirle
-            direttamente online. Inoltre, ti basta una delega per gestire anche
-            le raccomandate dei tuoi familiari.
+            direttamente online. Inoltre, ti basta accettare una delega per
+            accedere anche alle notifiche dei tuoi familiari.
           </Typography>
         </>
       ),
@@ -407,12 +407,14 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Per inviare le comunicazioni a valore legale, SEND
-            dà sempre la priorità ai recapiti digitali del destinatario. In ogni
-            momento, puoi accedere alla piattaforma con SPID e CIE per indicare
-            o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non
-            indichi alcun recapito o non hai accesso alla piattaforma,
-            continuerai a ricevere le notifiche tramite raccomandata cartacea.
+            Per inviare le comunicazioni a valore legale, SEND dà sempre la
+            priorità ai recapiti digitali del destinatario. In ogni momento,
+            puoi accedere online al Servizio Notifiche Digitali con SPID e CIE
+            per indicare o aggiornare le tue preferenze tra PEC, App IO, email
+            e/o numero di cellulare . Se non indichi alcun recapito o non accedi
+            alla notifica attraverso a SEND da canali diversi dalla PEC entro i
+            tempi di seguito indicati, continuerai a ricevere le notifiche
+            tramite raccomandata cartacea.
           </Typography>
         </>
       ),
@@ -428,13 +430,16 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, SEND è oggetto di collaudo con un
-            numero ristretto di amministrazioni.
+            <strong>SEND</strong> è a disposizione di tutte le Pubbliche
+            Amministrazioni che vorranno utilizzarlo per inviare notifiche ai
+            destinatari delle loro comunicazioni a valore legale.
           </Typography>
           <Typography variant="body2">
-            Progressivamente, la piattaforma verrà adottata dalle Pubbliche
-            Amministrazioni e utilizzata per inviare notifiche a tutti i
-            cittadini.
+            Il servizio sarà adottato dagli enti progressivamente e, per
+            favorirne la graduale diffusione tra i cittadini, in una prima fase
+            assicurerà l’invio anche della copia analogica conforme degli atti
+            notificati tramite raccomandata cartacea ai destinatari non dotati
+            di domicilio digitale.
           </Typography>
         </>
       ),
@@ -543,24 +548,26 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "App IO",
           subtitle: (
             <Typography variant="body2">
-              Se attivi il servizio “Avvisi di cortesia” di Piattaforma
-              Notifiche, puoi ricevere e gestire{" "}
-              <strong>direttamente in app</strong> le comunicazioni a valore
-              legale. Se non hai la PEC e leggi subito il messaggio, non
-              riceverai la raccomandata cartacea e la notifica ti risulterà
-              legalmente recapitata.
+              Se attivi il servizio “Avvisi di cortesia” di SEND, puoi ricevere
+              e gestire direttamente in app le comunicazioni a valore legale. Se
+              non hai la PEC ma accedi alla notifica attraverso SEND dall’app e
+              leggi la notifica entro 5 giorni (120 ore) dalla sua ricezione ,
+              questa ti risulterà legalmente recapitata e non riceverai alcuna
+              raccomandata cartacea.
             </Typography>
           ),
         },
         {
           icon: <MessageIcon />,
-          title: "Email o SMS",
+          title: "Email e SMS",
           subtitle: (
             <Typography variant="body2">
               In più, puoi anche scegliere di ricevere un avviso di cortesia al
-              tuo indirizzo email o tramite SMS. Se non hai la PEC e accedi alla
-              piattaforma dall’apposito link, non riceverai la raccomandata
-              cartacea e la notifica ti risulterà legalmente recapitata.
+              tuo indirizzo e-mail o tramite SMS. Se non hai la PEC ma accedi
+              alla notifica attraverso SEND dall’apposito link entro 5 giorni
+              (120 ore) dalla ricezione della notifica, questa ti risulterà
+              legalmente recapitata e non riceverai alcuna raccomandata
+              cartacea.
             </Typography>
           ),
         },
@@ -609,36 +616,36 @@ const pfWalkthrough: WalkthroughProps = {
       icon: <NotificationIcon color="primary" />,
       title: "Ricevi la notifica",
       subtitle: `
-        Per ogni notifica, la piattaforma  verifica che ci sia una PEC a te associata o da te indicata per 
-        l’invio dell’avviso di avvenuta ricezione. Poi, invia un avviso di cortesia ai tuoi altri recapiti 
-        digitali (app IO, email e SMS). Se non hai indicato alcun recapito digitale e non hai accesso alla 
-        notifica attraverso SEND, riceverai una raccomandata cartacea.
+      Per ogni notifica, SEND - verifica che ci sia una PEC a te associata o da te indicata per l’invio dell’avviso 
+      di avvenuta ricezione. Invia anche un avviso di cortesia agli altri tuoi recapiti digitali 
+      (app IO, e-mail e numero di cellulare), se li hai inseriti. Se non hai indicato alcun recapito digitale 
+      e non accedi online  alla notifica attraverso SEND, riceverai una raccomandata cartacea.
       `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
       title: "Leggi il contenuto",
       subtitle: `
-        Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
-        allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
-        equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
+      Dal messaggio ricevuto, puoi accedere online alla piattaforma per leggere la notifica e scaricare i relativi 
+      documenti allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
+      equivale alla firma della ricevuta di ritorno di una raccomandata tradizionale e al perfezionamento immediato della notifica.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
       title: "Paga le spese",
       subtitle: `
-        Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
-        dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
-        il modulo di pagamento ricevuto con la notifica.
+      Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online da SEND 
+      oppure direttamente da IO. Se preferisci recarti presso uno sportello, dovrai avere con te il modulo di pagamento 
+      allegato alla notifica.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
       title: "Puoi delegare o essere delegato",
       subtitle: `
-        Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
-        a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
+      Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online. 
+      Per farlo, accedi a SEND con SPID o CIE e inserisci nella sezione Deleghe i dati della persona che vuoi delegare.
       `,
       isSequential: false,
     },
