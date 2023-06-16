@@ -55,7 +55,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
         subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
         avatar={<IllusEmailValidation size={60} />}
       >
-        <Grid container spacing={2} direction="row" mt="24px">
+        <Grid container spacing={2} direction="row" mt={3}>
           <Grid item lg={4} sm={4} xs={12}>
             <TextField
               id="pec"

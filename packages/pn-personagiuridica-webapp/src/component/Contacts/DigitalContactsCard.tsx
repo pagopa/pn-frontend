@@ -13,7 +13,7 @@ type Props = {
 
 const DigitalContactsCard = memo(
   ({ sectionTitle, title, subtitle, avatar, children, actions }: Props) => (
-    <Card sx={{ padding: '24px' }}>
+    <Card sx={{ padding: 3 }}>
       {avatar && <CardHeader avatar={avatar} sx={{ padding: 0 }} />}
       <CardContent data-testid="DigitalContactsCardBody" sx={{ padding: 0 }}>
         {sectionTitle && (
