@@ -44,7 +44,7 @@ const DisclaimerModal = ({
       <DialogContent sx={{ p: 4 }}>
         {content && <Box>{content}</Box>}
         {checkboxLabel && (
-          <Box sx={{ mt: '16px', ml: '4px' }}>
+          <Box sx={{ mt: 2, ml: 0.5 }}>
             <FormControlLabel
               control={
                 <Checkbox
