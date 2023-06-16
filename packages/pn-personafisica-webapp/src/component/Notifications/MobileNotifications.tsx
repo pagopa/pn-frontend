@@ -81,7 +81,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         return <Typography variant="body2">{row.sentAt}</Typography>;
       },
       gridProps: {
-        xs: 12,
+        xs: 4,
         sm: 5,
       },
     },
@@ -103,7 +103,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         );
       },
       gridProps: {
-        xs: 12,
+        xs: 8,
         sm: 7,
       },
     },
@@ -171,18 +171,21 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : currentDelegator ? undefined : handleRouteContacts,
+      : currentDelegator
+      ? undefined
+      : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
-      : currentDelegator 
-        ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName }) 
-        : t('empty-state.first-message'),
+      : currentDelegator
+      ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName })
+      : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: (filtersApplied || currentDelegator)
-      ? undefined
-      : {
-          emptyMessage: t('empty-state.second-message'),
-        },
+    secondaryMessage:
+      filtersApplied || currentDelegator
+        ? undefined
+        : {
+            emptyMessage: t('empty-state.second-message'),
+          },
   };
 
   // Navigation handlers
@@ -246,7 +249,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
           cardData={cardData}
           cardActions={cardActions}
           headerGridProps={{
-            direction: { xs: 'column-reverse', sm: 'row' },
+            direction: { xs: 'row', sm: 'row' },
             alignItems: { xs: 'flex-start', sm: 'center' },
           }}
         />
