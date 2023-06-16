@@ -27,7 +27,7 @@ import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
-import { UserGroup } from '../models/user';
+import { GroupStatus, UserGroup } from '../models/user';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -70,9 +70,7 @@ const NewApiKey = () => {
   });
 
   useEffect(() => {
-    if (groups.length === 0) {
-      void dispatch(getApiKeyUserGroups());
-    }
+    void dispatch(getApiKeyUserGroups(GroupStatus.ACTIVE));
   }, []);
 
   const formik = useFormik({

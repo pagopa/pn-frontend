@@ -117,8 +117,8 @@ describe('AcceptDelegationModal', () => {
 
   it('selects groups - groupModal', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1' },
-      { id: 'group-2', name: 'Group 2' },
+      { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
+      { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
     ];
     render(
       <AcceptDelegationModal
@@ -228,8 +228,8 @@ describe('AcceptDelegationModal', () => {
 
   it('fills the code, go next step, choose groups and confirm', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1' },
-      { id: 'group-2', name: 'Group 2' },
+      { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
+      { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
     ];
     render(
       <AcceptDelegationModal
