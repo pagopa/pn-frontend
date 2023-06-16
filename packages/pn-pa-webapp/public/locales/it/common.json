@@ -67,7 +67,7 @@
   },
   "not-accessible": {
     "title": "Non è possibile accedere alla piattaforma",
-    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Se sei un Ente e hai completato l'adesione, riceverai aggiornamenti in merito alla data alla data di attivazione di SEND. Per maggiori informazioni sull’iniziativa,",
+    "description": "In questo momento Piattaforma Notifiche è in fase di collaudo e non è ancora disponibile. Se sei un Ente e hai completato l'adesione, riceverai aggiornamenti in merito alla data di attivazione della piattaforma. Per maggiori informazioni sull’iniziativa,",
     "action": "visita il sito dedicato"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
