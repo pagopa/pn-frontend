@@ -35,6 +35,7 @@ import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { GroupStatus } from '../../models/groups';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { setFilters } from '../../redux/delegation/reducers';
 import delegationToItem from '../../utils/delegation.utility';
@@ -392,7 +393,7 @@ const DelegationsOfTheCompany = () => {
                   id="groups"
                   size="small"
                   fullWidth
-                  options={groups}
+                  options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
                   disableCloseOnSelect
                   multiple
                   noOptionsText={t('deleghe.table.no-group-found')}

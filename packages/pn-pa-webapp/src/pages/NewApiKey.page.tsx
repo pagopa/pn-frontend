@@ -27,7 +27,7 @@ import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
-import { UserGroup } from '../models/user';
+import { GroupStatus, UserGroup } from '../models/user';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -70,9 +70,7 @@ const NewApiKey = () => {
   });
 
   useEffect(() => {
-    if (groups.length === 0) {
-      void dispatch(getApiKeyUserGroups());
-    }
+    void dispatch(getApiKeyUserGroups(GroupStatus.ACTIVE));
   }, []);
 
   const formik = useFormik({
@@ -107,7 +105,7 @@ const NewApiKey = () => {
     <>
       {!apiKeySent && (
         <Prompt
-          title={t('page-title')}
+          title={t('cancel-title')}
           message={t('cancel-prompt')}
           eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
           eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
@@ -136,7 +134,7 @@ const NewApiKey = () => {
                   <Box>
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
                       <SectionHeading>{t('other-info')}</SectionHeading>
-                      <Box sx={{ marginTop: '20px' }}>
+                      <Box sx={{ marginTop: '24px' }}>
                         <Typography fontWeight="bold">{t('form-label-name')}*</Typography>
                         <TextField
                           id="name"
@@ -149,7 +147,7 @@ const NewApiKey = () => {
                           helperText={formik.touched.name && formik.errors.name}
                           size="small"
                           margin="normal"
-                          sx={{ mb: 3, mt: '10px' }}
+                          sx={{ mb: '24px', mt: '8px' }}
                         />
                         <Typography fontWeight="bold">{t('form-label-groups')}</Typography>
                         <PnAutocomplete
@@ -174,7 +172,7 @@ const NewApiKey = () => {
                           renderInput={(params) => (
                             <TextField {...params} label={t('form-placeholder-groups')} />
                           )}
-                          sx={{ mt: '10px' }}
+                          sx={{ mt: '8px' }}
                         />
                       </Box>
                     </Paper>

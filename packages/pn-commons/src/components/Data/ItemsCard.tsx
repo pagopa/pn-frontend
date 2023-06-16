@@ -50,14 +50,16 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
       >
         {cardHeader[0].getLabel(item[cardHeader[0].id], item)}
       </Grid>
-      {cardHeader[1] && <Grid
-        item
-        sx={{ fontSize: '14px', fontWeight: 400, textAlign: 'right' }}
-        data-testid="cardHeaderRight"
-        {...cardHeader[1].gridProps}
-      >
-        {cardHeader[1].getLabel(item[cardHeader[1].id], item)}
-      </Grid>}
+      {cardHeader[1] && (
+        <Grid
+          item
+          sx={{ fontSize: '14px', fontWeight: 400, textAlign: 'right' }}
+          data-testid="cardHeaderRight"
+          {...cardHeader[1].gridProps}
+        >
+          {cardHeader[1].getLabel(item[cardHeader[1].id], item)}
+        </Grid>
+      )}
     </Grid>
   );
 
@@ -77,9 +79,14 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
           <CardContent sx={{ padding: 0, mt: 2, ':last-child': { padding: 0 } }}>
             {cardBody.map((body) => (
               <Box key={body.id} sx={{ mb: 2 }}>
-                {(!body.hideIfEmpty || (body.hideIfEmpty && body.getLabel(data[body.id], data))) && (
+                {(!body.hideIfEmpty ||
+                  (body.hideIfEmpty && body.getLabel(data[body.id], data))) && (
                   <Fragment>
-                    <Typography variant="caption" data-testid="cardBodyLabel">
+                    <Typography
+                      sx={{ fontWeight: 'bold' }}
+                      variant="caption"
+                      data-testid="cardBodyLabel"
+                    >
                       {body.label}
                     </Typography>
                     {!body.notWrappedInTypography && (
@@ -87,7 +94,9 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
                         {body.getLabel(data[body.id], data)}
                       </Typography>
                     )}
-                    {body.notWrappedInTypography && <div data-testid="cardBodyValue">{body.getLabel(data[body.id], data)}</div>}
+                    {body.notWrappedInTypography && (
+                      <div data-testid="cardBodyValue">{body.getLabel(data[body.id], data)}</div>
+                    )}
                   </Fragment>
                 )}
               </Box>

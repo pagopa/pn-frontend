@@ -54,7 +54,12 @@ type Props = {
 const IS_SORT_ENABLED = false;
 
 // to avoid cognitive complexity warning - PN-5323
-function mainEmptyMessage(filtersApplied: boolean, isDelegatedPage: boolean, organization: Organization, t: any) {
+function mainEmptyMessage(
+  filtersApplied: boolean,
+  isDelegatedPage: boolean,
+  organization: Organization,
+  t: any
+) {
   return filtersApplied
     ? undefined
     : isDelegatedPage
@@ -102,7 +107,7 @@ const MobileNotifications = ({
         return <Typography variant="body2">{row.sentAt}</Typography>;
       },
       gridProps: {
-        xs: 12,
+        xs: 4,
         sm: 5,
       },
     },
@@ -124,7 +129,7 @@ const MobileNotifications = ({
         );
       },
       gridProps: {
-        xs: 12,
+        xs: 8,
         sm: 7,
       },
     },
@@ -202,9 +207,7 @@ const MobileNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionCallback: filtersApplied
-      ? filterNotificationsRef.current.cleanFilters
-      : undefined,
+    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : undefined,
     emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
   };
@@ -266,7 +269,7 @@ const MobileNotifications = ({
           cardData={cardData}
           cardActions={cardActions}
           headerGridProps={{
-            direction: { xs: 'column-reverse', sm: 'row' },
+            direction: { xs: 'row', sm: 'row' },
             alignItems: { xs: 'flex-start', sm: 'center' },
           }}
         />
