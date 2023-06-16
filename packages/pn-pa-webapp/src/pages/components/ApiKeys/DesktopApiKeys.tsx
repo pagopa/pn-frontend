@@ -1,6 +1,6 @@
 import { Fragment, useState, MouseEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, Tag } from '@pagopa/mui-italia';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,6 @@ import {
   CustomTagGroup,
   CustomTooltip,
 } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
 import {
   ApiKeyColumn,
   ApiKey,
@@ -250,7 +249,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       id: 'status',
       label: t('table.status'),
       width: '10%',
-      align: 'center',
+      align: 'left',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string, row: Item) {
         const { label, tooltip, color } = getApiKeyStatusInfos(
@@ -260,8 +259,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
         return (
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
+              alignItems: 'left',
               width: '100%',
               justifyContent: 'center',
             }}
