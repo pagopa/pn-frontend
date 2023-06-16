@@ -27,7 +27,7 @@ describe('DigitalContactsCard Component', () => {
         {body}
       </DigitalContactsCard>
     );
-    const titleEl = result.container.querySelector('h4');
+    const titleEl = result.container.querySelector('h6');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent(title);
     expect(result.container).toHaveTextContent(subTitle);
