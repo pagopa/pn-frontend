@@ -22,7 +22,7 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       /**
        * Waiting for Mail icon to be available in mui-italia (<IllusSms /> as placeholder)
        * */
-      avatar={<IllusEmail />}
+      avatar={<IllusEmail size={60} />}
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
         <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
