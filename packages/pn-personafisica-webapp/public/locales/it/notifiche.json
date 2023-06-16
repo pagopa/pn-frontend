@@ -233,7 +233,7 @@
       "send-analog-flow-RECRI003B-description-multirecipient": "C'è un nuovo documento allegato.",
       "send-analog-flow-RECRI004B-description": "C'è un nuovo documento allegato.",
       "send-analog-flow-RECRI004B-description-multirecipient": "C'è un nuovo documento allegato.",
-      "send-analog-error": "Invio per via cartacea non andato a buon fine",
+      "send-analog-error": "L'invio per via cartacea non ha determinato la consegna",
       "send-analog-success": "Invio per via cartacea andato a buon fine",
       "send-analog-outcome-unknown": "Invio per via cartacea completato - esito non determinato",
       "send-analog-unknown": "Evento su spedizione raccomandata - non riconosciuto",
