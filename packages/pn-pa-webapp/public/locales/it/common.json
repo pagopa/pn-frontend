@@ -130,7 +130,7 @@
   "required": "obbligatorio",
   "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
   "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
-  "no-spaces-at-edges": "Spazi non validi all'inizio/fine",
+  "no-spaces-at-edges": "Elimina gli spazi all’inizio o alla fine",
   "invalid": "non valido",
   "upload-file": {
     "or": "oppure",

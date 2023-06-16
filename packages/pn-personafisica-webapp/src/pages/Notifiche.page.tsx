@@ -144,7 +144,7 @@ const Notifiche = () => {
                         height: '24px',
                       },
                     }
-                  : { padding: '0 10px' }
+                  : { padding: '0' }
               }
             />
           )}

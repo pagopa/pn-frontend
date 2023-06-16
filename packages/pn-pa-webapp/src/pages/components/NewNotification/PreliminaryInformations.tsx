@@ -40,7 +40,9 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
-  const hasGroups = useAppSelector((state: RootState) => state.userState.user.organization.hasGroups);
+  const hasGroups = useAppSelector(
+    (state: RootState) => state.userState.user.organization.hasGroups
+  );
 
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
@@ -48,23 +50,29 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const { t: tc } = useTranslation(['common']);
   const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
 
-  const initialValues = useCallback(() => ({
-    paProtocolNumber: notification.paProtocolNumber || '',
-    subject: notification.subject || '',
-    abstract: notification.abstract || '',
-    group: notification.group || '',
-    taxonomyCode: notification.taxonomyCode || '',
-    physicalCommunicationType: notification.physicalCommunicationType || '',
-    paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
-  }), [notification, IS_PAYMENT_ENABLED]);
+  const initialValues = useCallback(
+    () => ({
+      paProtocolNumber: notification.paProtocolNumber || '',
+      subject: notification.subject || '',
+      abstract: notification.abstract || '',
+      group: notification.group || '',
+      taxonomyCode: notification.taxonomyCode || '',
+      physicalCommunicationType: notification.physicalCommunicationType || '',
+      paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
+    }),
+    [notification, IS_PAYMENT_ENABLED]
+  );
 
   const validationSchema = yup.object({
     paProtocolNumber: requiredStringFieldValidation(tc, 256),
     subject: requiredStringFieldValidation(tc, 134, 10),
-    abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })).matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
+    abstract: yup
+      .string()
+      .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+      .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges')),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: (hasGroups) ? yup.string().required() : yup.string(),
+    group: hasGroups ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()
       .required(`${t('taxonomy-id')} ${tc('required')}`)
@@ -156,7 +164,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
           <CustomDropdown
             id="group"
-            label={`${t('group')}${(hasGroups) ? '*' : ''}`}
+            label={`${t('group')}${hasGroups ? '*' : ''}`}
             fullWidth
             name="group"
             size="small"
@@ -165,6 +173,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched.group && Boolean(formik.errors.group)}
             helperText={formik.touched.group && formik.errors.group}
+            emptyStateMessage={t('no-groups')}
           >
             {groups.length > 0 &&
               groups.map((group) => (

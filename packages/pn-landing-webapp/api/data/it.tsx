@@ -61,7 +61,7 @@ const navigation: INavigationBarProps = {
   pf: "Cittadini",
   pa: "Enti",
   faq: "FAQ",
-  image: `${IMAGES_PATH}/logo.svg`
+  image: `${IMAGES_PATH}/logo.svg`,
 };
 
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
@@ -79,7 +79,7 @@ const heroCta = !!PN_PF_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come Piattaforma Notifiche Digitali di cui all’art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
+  subtitle: `E da oggi anche a farsi. SEND, Servizio Notifiche Digitali (anche nota come Piattaforma Notifiche Digitali di cui all'art. 26 del decreto-legge 76/2020 s.m.i.)  digitalizza la gestione delle comunicazioni a valore legale, semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -108,8 +108,8 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con SEND puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
-    potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
+  subtitle: `Con SEND - Servizio Notifiche Digitali puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente. 
+    Potrai visualizzarle, gestirle e pagarle direttamente online sulla piattaforma dedicata o dall'app IO.`,
   ctaPrimary: heroCta,
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
@@ -135,12 +135,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             SEND digitalizza e semplifica la gestione delle comunicazioni a
-            valore legale. Gli enti mittenti devono solo depositare l’atto da
-            notificare: sarà la piattaforma a occuparsi dell’invio, per via
+            valore legale. Gli enti mittenti devono solo depositare l'atto da
+            notificare: sarà la piattaforma a occuparsi dell'invio, per via
             digitale o analogica.
           </Typography>
           <Typography variant="body2">
-            Con SEND, diminuisce l’incertezza della reperibilità dei destinatari
+            Con SEND, diminuisce l'incertezza della reperibilità dei destinatari
             e si riducono i tempi e i costi di gestione.
           </Typography>
         </>
@@ -154,12 +154,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Carica l’atto. Poi, dimenticatene",
+      title: "Carica l'atto. Poi, dimenticatene",
       content: (
         <>
           <Typography variant="body2">
             SEND si integra con il protocollo degli enti e offre sia API per
-            l’invio automatico delle notifiche, sia la possibilità di fare invii
+            l'invio automatico delle notifiche, sia la possibilità di fare invii
             manuali. Una volta effettuato il caricamento degli atti e dei moduli
             di pagamento, la piattaforma genera lo IUN, un codice univoco
             identificativo della notifica.
@@ -173,7 +173,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           <Typography variant="body2">
             Se il destinatario non ha indicato alcun recapito digitale e non ha
             accesso alla piattaforma, questa procede con la ricerca di un
-            indirizzo fisico, e quindi con l’invio tramite raccomandata
+            indirizzo fisico, e quindi con l'invio tramite raccomandata
             cartacea.
           </Typography>
         </>
@@ -192,13 +192,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             Il destinatario accede alla piattaforma tramite SPID o CIE, dove può
-            visionare e scaricare l’atto notificato. Grazie all’integrazione con
+            visionare e scaricare l'atto notificato. Grazie all'integrazione con
             pagoPA, può anche pagare contestualmente quanto dovuto. Se ha
             attivato il servizio su app IO, potrà fare tutto direttamente in
             app.
           </Typography>
           <Typography variant="body2">
-            Come l’ente, anche il destinatario ha accesso alla cronologia degli
+            Come l'ente, anche il destinatario ha accesso alla cronologia degli
             stati della notifica e alle attestazioni opponibili a terzi che ne
             danno prova.
           </Typography>
@@ -218,7 +218,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             La procedura per avviare le attività tecniche e amministrative
-            necessarie per l’adesione e l’integrazione degli enti a SEND,
+            necessarie per l'adesione e l'integrazione degli enti a SEND,
             Servizio Notifiche Digitali, prevede le seguenti fasi:
           </Typography>
 
@@ -240,10 +240,10 @@ const paInfoBlocks: Array<IInfoblockData> = [
             I soggetti che intendono integrarsi a SEND in qualità di Partner o
             Intermediari Tecnologici possono manifestare il proprio interesse ad
             avviare la procedura ed essere inseriti nella lista inviando una
-            mail all’indirizzo account@pagopa.it.
+            mail all'indirizzo account@pagopa.it.
           </Typography>
           <Typography variant="h6">
-            02. Sottoscrivi l’accordo di adesione
+            02. Sottoscrivi l'accordo di adesione
           </Typography>
           <Typography variant="body2">
             Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
@@ -263,9 +263,9 @@ const paInfoBlocks: Array<IInfoblockData> = [
               </a>
             </Link>
             <br></br>
-            Una volta sottoscritto l’accordo in digitale, l’ente dovrà caricarlo
-            e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata. Inoltre, a
-            integrazione dell’accordo, dovranno essere inviati i seguenti moduli
+            Una volta sottoscritto l'accordo in digitale, l'ente dovrà caricarlo
+            e inviarlo a PagoPA S.p.A. sempre dall'Area Riservata. Inoltre, a
+            integrazione dell'accordo, dovranno essere inviati i seguenti moduli
             debitamente compilati ove richiesto:
           </Typography>
           <List sx={{ listStyleType: "disc", pl: 4 }}>
@@ -290,7 +290,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
                 >
                   Modulo di Profilazione
                 </Link>{" "}
-                necessario per l’avvio in esercizio
+                necessario per l'avvio in esercizio
               </Typography>
             </ListItem>
             <ListItem sx={{ display: "list-item" }}>
@@ -316,11 +316,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
           </List>
           <Typography variant="h6">
-            03. Avvia l’integrazione tecnologica
+            03. Avvia l'integrazione tecnologica
           </Typography>
           <Typography variant="body2">
             Di seguito sono consultabili i materiali necessari per integrare i
-            sistemi dell’ente a SEND:
+            sistemi dell'ente a SEND:
           </Typography>
 
           <List sx={{ listStyleType: "disc", pl: 4 }}>
@@ -346,7 +346,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
               <Typography variant="body2">
                 <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-bundle.yaml">
                   <a target="_blank" rel="noopener noreferrer">
-                    API b2b per l’avanzamento delle notifiche
+                    API b2b per l'avanzamento delle notifiche
                   </a>
                 </Link>
               </Typography>
@@ -381,17 +381,17 @@ const pfInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             Le notifiche sono comunicazioni a valore legale emesse in via
-            ufficiale da un’amministrazione pubblica, come multe, avvisi di
-            accertamento di tributi, esiti di pratiche amministrative o
-            rimborsi, che fino ad ora hai ricevuto tramite raccomandata. Da oggi
-            puoi riceverle e consultarle in digitale, accedendo a Piattaforma
-            Notifiche tramite SPID o CIE o direttamente sull’app IO.
+            ufficiale da un'amministrazione pubblica, come esiti di pratiche
+            amministrative o rimborsi, multe e avvisi di accertamento di
+            tributi. Da oggi puoi riceverle e consultarle in digitale, accedendo
+            online a SEND - Servizio Notifiche Digitali tramite SPID o CIE o
+            direttamente da app IO.
           </Typography>
           <Typography variant="body2">
-            Puoi anche pagare eventuali costi grazie all’integrazione con
+            Puoi anche pagare eventuali costi grazie all'integrazione con
             pagoPA, visualizzare lo storico delle notifiche ricevute e gestirle
-            direttamente online. Inoltre, ti basta una delega per gestire anche
-            le raccomandate dei tuoi familiari.
+            direttamente online. Inoltre, ti basta accettare una delega per
+            accedere anche alle notifiche dei tuoi familiari.
           </Typography>
         </>
       ),
@@ -407,12 +407,14 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Per inviare le comunicazioni a valore legale, SEND
-            dà sempre la priorità ai recapiti digitali del destinatario. In ogni
-            momento, puoi accedere alla piattaforma con SPID e CIE per indicare
-            o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non
-            indichi alcun recapito o non hai accesso alla piattaforma,
-            continuerai a ricevere le notifiche tramite raccomandata cartacea.
+            Per inviare le comunicazioni a valore legale, SEND dà sempre la
+            priorità ai recapiti digitali del destinatario. In ogni momento,
+            puoi accedere online al Servizio Notifiche Digitali con SPID e CIE
+            per indicare o aggiornare le tue preferenze tra PEC, App IO, email
+            e/o numero di cellulare . Se non indichi alcun recapito o non accedi
+            alla notifica attraverso SEND da canali diversi dalla PEC entro i
+            tempi di seguito indicati, continuerai a ricevere le notifiche
+            tramite raccomandata cartacea.
           </Typography>
         </>
       ),
@@ -428,13 +430,16 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, SEND è oggetto di collaudo con un
-            numero ristretto di amministrazioni.
+            <strong>SEND</strong> è a disposizione di tutte le Pubbliche
+            Amministrazioni che vorranno utilizzarlo per inviare notifiche ai
+            destinatari delle loro comunicazioni a valore legale.
           </Typography>
           <Typography variant="body2">
-            Progressivamente, la piattaforma verrà adottata dalle Pubbliche
-            Amministrazioni e utilizzata per inviare notifiche a tutti i
-            cittadini.
+            Il servizio sarà adottato dagli enti progressivamente e, per
+            favorirne la graduale diffusione tra i cittadini, in una prima fase
+            assicurerà l'invio anche della copia analogica conforme degli atti
+            notificati tramite raccomandata cartacea ai destinatari non dotati
+            di domicilio digitale.
           </Typography>
         </>
       ),
@@ -465,7 +470,7 @@ const paShowcases: Array<IShowcaseData> = [
           icon: <FireworksIcon />,
           title: "Semplice",
           subtitle:
-            "Si possono caricare notifiche tramite API o manualmente: depositati i documenti, la piattaforma si occupa dell’invio e tiene traccia dei cambi di stato",
+            "Si possono caricare notifiche tramite API o manualmente: depositati i documenti, la piattaforma si occupa dell'invio e tiene traccia dei cambi di stato",
         },
         {
           icon: <EasyIcon />,
@@ -477,7 +482,7 @@ const paShowcases: Array<IShowcaseData> = [
           icon: <CheckmarkIcon />,
           title: "Certo",
           subtitle:
-            "Il processo di notificazione è normato  e c’è maggiore certezza di consegna al destinatario",
+            "Il processo di notificazione è normato  e c'è maggiore certezza di consegna al destinatario",
         },
       ],
     },
@@ -528,7 +533,7 @@ const pfShowcases: Array<IShowcaseData> = [
           subtitle: (
             <Typography variant="body2">
               Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente
-              consegnate, senza più raccomandate cartacee. L’avviso di avvenuta
+              consegnate, senza più raccomandate cartacee. L'avviso di avvenuta
               ricezione che ti sarà inviato contiene il link per accedere al
               contenuto su SEND.
             </Typography>
@@ -543,24 +548,26 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "App IO",
           subtitle: (
             <Typography variant="body2">
-              Se attivi il servizio “Avvisi di cortesia” di Piattaforma
-              Notifiche, puoi ricevere e gestire{" "}
-              <strong>direttamente in app</strong> le comunicazioni a valore
-              legale. Se non hai la PEC e leggi subito il messaggio, non
-              riceverai la raccomandata cartacea e la notifica ti risulterà
-              legalmente recapitata.
+              Se attivi il servizio “Avvisi di cortesia” di SEND, puoi ricevere
+              e gestire direttamente in app le comunicazioni a valore legale. Se
+              non hai la PEC ma accedi alla notifica attraverso SEND dall'app e
+              leggi la notifica entro 5 giorni (120 ore) dalla sua ricezione ,
+              questa ti risulterà legalmente recapitata e non riceverai alcuna
+              raccomandata cartacea.
             </Typography>
           ),
         },
         {
           icon: <MessageIcon />,
-          title: "Email o SMS",
+          title: "Email e SMS",
           subtitle: (
             <Typography variant="body2">
               In più, puoi anche scegliere di ricevere un avviso di cortesia al
-              tuo indirizzo email o tramite SMS. Se non hai la PEC e accedi alla
-              piattaforma dall’apposito link, non riceverai la raccomandata
-              cartacea e la notifica ti risulterà legalmente recapitata.
+              tuo indirizzo e-mail o tramite SMS. Se non hai la PEC ma accedi
+              alla notifica attraverso SEND dall'apposito link entro 5 giorni
+              (120 ore) dalla ricezione della notifica, questa ti risulterà
+              legalmente recapitata e non riceverai alcuna raccomandata
+              cartacea.
             </Typography>
           ),
         },
@@ -576,9 +583,9 @@ const paWalkthrough: WalkthroughProps = {
   items: [
     {
       icon: <UploadIcon color="primary" />,
-      title: "L’ente crea la richiesta di notifica",
+      title: "L'ente crea la richiesta di notifica",
       subtitle:
-        "Con l’uso di API Key o manualmente, l’ente crea la richiesta di notifica e carica gli allegati.",
+        "Con l'uso di API Key o manualmente, l'ente crea la richiesta di notifica e carica gli allegati.",
     },
     {
       icon: <SyncIcon color="primary" />,
@@ -596,7 +603,7 @@ const paWalkthrough: WalkthroughProps = {
       icon: <DeliverIcon color="primary" />,
       title: "Il destinatario la riceve",
       subtitle: `Il destinatario accede alla piattaforma. Lì, può scaricare i documenti notificati e pagare 
-        contestualmente quanto dovuto, grazie all’integrazione con pagoPA. Se la riceve tramite IO, può fare 
+        contestualmente quanto dovuto, grazie all'integrazione con pagoPA. Se la riceve tramite IO, può fare 
         tutto direttamente in app.`,
     },
   ],
@@ -609,36 +616,36 @@ const pfWalkthrough: WalkthroughProps = {
       icon: <NotificationIcon color="primary" />,
       title: "Ricevi la notifica",
       subtitle: `
-        Per ogni notifica, la piattaforma  verifica che ci sia una PEC a te associata o da te indicata per 
-        l’invio dell’avviso di avvenuta ricezione. Poi, invia un avviso di cortesia ai tuoi altri recapiti 
-        digitali (app IO, email e SMS). Se non hai indicato alcun recapito digitale e non hai accesso alla 
-        notifica attraverso SEND, riceverai una raccomandata cartacea.
+      Per ogni notifica, SEND verifica che ci sia una PEC a te associata o da te indicata per l'invio dell'avviso 
+      di avvenuta ricezione. Invia anche un avviso di cortesia agli altri tuoi recapiti digitali 
+      (app IO, e-mail e numero di cellulare), se li hai inseriti. Se non hai indicato alcun recapito digitale 
+      e non accedi online  alla notifica attraverso SEND, riceverai una raccomandata cartacea.
       `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
       title: "Leggi il contenuto",
       subtitle: `
-        Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
-        allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
-        equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
+      Dal messaggio ricevuto, puoi accedere online alla piattaforma per leggere la notifica e scaricare i relativi 
+      documenti allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
+      equivale alla firma della ricevuta di ritorno di una raccomandata tradizionale e al perfezionamento immediato della notifica.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
       title: "Paga le spese",
       subtitle: `
-        Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
-        dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
-        il modulo di pagamento ricevuto con la notifica.
+      Se c'è un importo da pagare, grazie all'integrazione con pagoPA, puoi procedere contestualmente online da SEND 
+      oppure direttamente da IO. Se preferisci recarti presso uno sportello, dovrai avere con te il modulo di pagamento 
+      allegato alla notifica.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
       title: "Puoi delegare o essere delegato",
       subtitle: `
-        Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
-        a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
+      Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online. 
+      Per farlo, accedi a SEND con SPID o CIE e inserisci nella sezione Deleghe i dati della persona che vuoi delegare.
       `,
       isSequential: false,
     },
@@ -657,7 +664,7 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-1.svg" />
         </SvgIcon>
       ),
-      title: "Rappresenti un’impresa?",
+      title: "Rappresenti un'impresa?",
       subtitle:
         "Gestisci le notifiche della tua impresa in un unico spazio, in collaborazione con i colleghi.",
       cta: {
@@ -674,7 +681,7 @@ const paHorizontalNav: HorizontalNavProps = {
       ),
       title: "Sei una cittadina o un cittadino?",
       subtitle:
-        "Attiva il servizio sull’app IO: così se accederai a XYZ entro 7 giorni dalla ricezione del messaggio in app, non riceverai il cartaceo e rispamierai tempo e denaro.",
+        "Attiva il servizio sull'app IO: così se accederai a XYZ entro 7 giorni dalla ricezione del messaggio in app, non riceverai il cartaceo e rispamierai tempo e denaro.",
       cta: {
         label: "Scopri i vantaggi per i cittadini",
         title: "CTA1",
