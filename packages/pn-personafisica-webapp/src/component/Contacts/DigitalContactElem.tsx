@@ -216,7 +216,7 @@ const DigitalContactElem = forwardRef(
                 <ButtonNaked
                   color="primary"
                   onClick={toggleEdit}
-                  sx={{ mr: '16px' }}
+                  sx={{ mr: 2 }}
                   disabled={editDisabled}
                 >
                   {t('button.modifica')}
@@ -232,7 +232,7 @@ const DigitalContactElem = forwardRef(
                   disabled={saveDisabled}
                   type="button"
                   onClick={editHandler}
-                  sx={{ mr: '16px' }}
+                  sx={{ mr: 2 }}
                 >
                   {t('button.salva')}
                 </ButtonNaked>
