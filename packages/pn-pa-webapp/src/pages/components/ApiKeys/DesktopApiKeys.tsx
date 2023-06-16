@@ -250,7 +250,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       id: 'status',
       label: t('table.status'),
       width: '10%',
-      align: 'center',
+      align: 'left',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string, row: Item) {
         const { label, tooltip, color } = getApiKeyStatusInfos(
@@ -261,7 +261,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               width: '100%',
               justifyContent: 'center',
             }}
