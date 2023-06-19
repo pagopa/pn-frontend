@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Tab, Tabs } from '@mui/material';
 import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
-
+import { useNavigate } from 'react-router-dom';
+import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState } from '../redux/delegation/reducers';
 import { getDelegators, getGroups, getDelegatesByCompany } from '../redux/delegation/actions';
@@ -12,16 +13,26 @@ import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
 import { getConfiguration } from '../services/configuration.service';
 
-const Deleghe = () => {
+type Props = {
+  indexOfTab: number;
+};
+
+const Deleghe = ({ indexOfTab = 0 }: Props) => {
   const { t } = useTranslation(['deleghe']);
   const [pageReady, setPageReady] = useState(false);
-  const [value, setValue] = useState(0);
+  // const [value, setValue] = useState(0);
+  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const { hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    if (newValue) {
+      navigate(routes.DELEGATI);
+    } else {
+      navigate(routes.DELEGHEACARICO);
+    }
   };
 
   const retrieveData = useCallback(() => {
@@ -60,7 +71,7 @@ const Deleghe = () => {
           <>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mx: 3 }}>
               <Tabs
-                value={value}
+                value={indexOfTab}
                 onChange={handleChange}
                 aria-label={t('deleghe.tab_aria_label')}
                 centered
@@ -70,10 +81,10 @@ const Deleghe = () => {
                 <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
               </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={indexOfTab} index={0}>
               <DelegationsOfTheCompany />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={indexOfTab} index={1}>
               <DelegatesByCompany />
             </TabPanel>
           </>

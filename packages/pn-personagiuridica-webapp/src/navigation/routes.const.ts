@@ -3,16 +3,18 @@ import {
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
   AppRouteParams,
 } from '@pagopa-pn/pn-commons';
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
 
 export const NOTIFICHE = '/notifiche';
 export const NOTIFICHE_DELEGATO = `${NOTIFICHE}-delegato`;
-export const DELEGHE = '/deleghe';
+export const DELEGHEACARICO = '/deleghe/carico';
+export const DELEGATI = '/deleghe/delegati';
+
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:mandateId/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = AppRouteParams.AAR;
-export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
+export const NUOVA_DELEGA = `${DELEGHEACARICO}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>
   `${NOTIFICHE_DELEGATO}/${mandateId}/${id}${NOTIFICA}`;

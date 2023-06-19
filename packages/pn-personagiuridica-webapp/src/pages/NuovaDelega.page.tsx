@@ -80,7 +80,7 @@ const NuovaDelega = () => {
   };
 
   const handleDelegationsClick = () => {
-    navigate(routes.DELEGHE);
+    navigate(routes.DELEGATI);
   };
 
   // Get tomorrow date
@@ -187,7 +187,7 @@ const NuovaDelega = () => {
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
-        linkRoute={routes.DELEGHE}
+        linkRoute={routes.DELEGHEACARICO}
         linkLabel={
           <Fragment>
             <PeopleIcon sx={{ mr: 0.5 }} />
