@@ -35,7 +35,7 @@ const Perfezionamento: NextPage = () => {
     <>
       <PageHead
         title="SEND - Perfezionamento"
-        description="Pagina di perfezionamento"
+        description="Come funziona il perfezionamento di una notifica"
       />
       <HeadingTitle {...headingTitleData} />
       <Tabs {...tabsData} onTabChange={handleTabChange} />

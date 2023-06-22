@@ -15,8 +15,8 @@ const USER_TYPE = UserType.PA;
 const EntiPage: NextPage = () => (
   <>
     <PageHead
-      title="SEND - Pubbliche amministrazioni"
-      description="Pagina per le pubbliche amministrazioni"
+      title="SEND - Enti"
+      description="Pagina per gli enti e le pubbliche amministrazioni"
     />
 
     <main>

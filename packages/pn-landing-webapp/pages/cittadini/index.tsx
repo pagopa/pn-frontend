@@ -15,7 +15,7 @@ const USER_TYPE = UserType.PF;
 
 const CittadiniPage: NextPage = () => (
   <>
-    <PageHead title="SEND - CITTADINI" description="Pagina dei cittadini" />
+    <PageHead title="SEND - Cittadini" description="Pagina dei cittadini" />
 
     <main>
       <Hero {...getHeroData(USER_TYPE)} />
