@@ -669,7 +669,6 @@ const pagoPALink: ILinkData = {
 const assistanceLink = {
   label: "Assistance",
   ariaLabel: "Assistance",
-  href: `mailto:${PAGOPA_HELP_EMAIL}`,
 };
 
 const companyLegalInfo = (
@@ -689,25 +688,25 @@ const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "À propos de nous",
-        href: `${pagoPALink.href}societa/chi-siamo`,
+        href: `${pagoPALink.href}/societa/chi-siamo`,
         ariaLabel: "Clique sur le lien: À propos de nous",
         linkType: "external",
       },
       {
         label: "PNRR",
-        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
+        href: `${pagoPALink.href}/opportunita/pnrr/progetti`,
         ariaLabel: "Clique sur le lien: PNRR",
         linkType: "external",
       },
       {
         label: "Media",
-        href: `${pagoPALink.href}media`,
+        href: `${pagoPALink.href}/media`,
         ariaLabel: "Clique sur le lien: Media",
         linkType: "external",
       },
       {
         label: "Travaille avec nous",
-        href: `${pagoPALink.href}lavora-con-noi`,
+        href: `${pagoPALink.href}/lavora-con-noi`,
         ariaLabel: "Clique sur le lien: Travaille avec nous",
         linkType: "external",
       },
@@ -725,13 +724,13 @@ const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Certifications",
-        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
+        href: "https://www.pagopa.it/it/certificazioni/",
         ariaLabel: "Clique sur le lien: Certifications",
         linkType: "internal",
       },
       {
         label: "Sécurité des informations",
-        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
+        href: "https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/",
         ariaLabel: "Clique sur le lien: Sécurité des informations",
         linkType: "internal",
       },
@@ -822,6 +821,8 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
+const productJson = "/static/product.json";
+
 /** Application Data Mock */
 export const frAppData: IAppData = {
   common: {
@@ -832,7 +833,8 @@ export const frAppData: IAppData = {
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
+    productJson
   },
   pa: {
     hero: paHero,
