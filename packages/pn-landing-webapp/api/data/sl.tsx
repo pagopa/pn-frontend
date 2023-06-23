@@ -654,7 +654,6 @@ const pagoPALink: ILinkData = {
 const assistanceLink = {
   label: "Podpora strankam",
   ariaLabel: "Podpora strankam",
-  href: `mailto:${PAGOPA_HELP_EMAIL}`,
 };
 
 const companyLegalInfo = (

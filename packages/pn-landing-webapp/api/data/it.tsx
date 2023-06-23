@@ -47,8 +47,7 @@ import {
 
 const assistanceLink = {
   label: "Assistenza",
-  ariaLabel: "assistenza",
-  href: `mailto:${PAGOPA_HELP_EMAIL}`,
+  ariaLabel: "assistenza"
 };
 
 const onReadClick = () => {

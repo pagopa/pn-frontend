@@ -16,7 +16,7 @@ export enum UserType {
 export interface ILinkData {
   label: string;
   ariaLabel: string;
-  href: string;
+  href?: string;
 }
 
 export interface ILandingComponents {
