@@ -674,25 +674,25 @@ const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Kdo smo",
-        href: `${pagoPALink.href}societa/chi-siamo`,
+        href: `${pagoPALink.href}/societa/chi-siamo`,
         ariaLabel: "Pojdi na povezavo: Kdo smo",
         linkType: "external",
       },
       {
         label: "PNRR",
-        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
+        href: `${pagoPALink.href}/opportunita/pnrr/progetti`,
         ariaLabel: "Pojdi na povezavo: PNRR",
         linkType: "external",
       },
       {
         label: "Media",
-        href: `${pagoPALink.href}media`,
+        href: `${pagoPALink.href}/media`,
         ariaLabel: "Pojdi na povezavo: Media",
         linkType: "external",
       },
       {
         label: "Sodeluj z nami",
-        href: `${pagoPALink.href}lavora-con-noi`,
+        href: `${pagoPALink.href}/lavora-con-noi`,
         ariaLabel: "Pojdi na povezavo: Sodeluj z nami",
         linkType: "external",
       },
@@ -710,13 +710,13 @@ const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Certifikati",
-        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
+        href: "https://www.pagopa.it/it/certificazioni/",
         ariaLabel: "Pojdi na povezavo: Certifikati",
         linkType: "internal",
       },
       {
         label: "Varnost podatkov",
-        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
+        href: "https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/",
         ariaLabel: "Pojdi na povezavo: Varnost podatkov",
         linkType: "internal",
       },
@@ -807,6 +807,8 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
+const productJson = "/static/product.json";
+
 /** Application Data Mock */
 export const slAppData: IAppData = {
   common: {
@@ -817,7 +819,8 @@ export const slAppData: IAppData = {
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
+    productJson
   },
   pa: {
     hero: paHero,

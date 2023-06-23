@@ -85,6 +85,7 @@ const LandingLayout = ({ children }: Props) => {
           currentLangCode={lang.selectedLanguage}
           onLanguageChanged={lang.changeLanguage}
           languages={LANGUAGES}
+          productsJsonUrl={appData.common.productJson}
         />
       </Stack>
     </Box>

@@ -140,7 +140,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             digitale o analogica.
           </Typography>
           <Typography variant="body2">
-            Con SEND, diminuisce l'incertezza della reperibilità dei destinatari
+            Con SEND diminuisce l'incertezza della reperibilità dei destinatari
             e si riducono i tempi e i costi di gestione.
           </Typography>
         </>
@@ -551,7 +551,7 @@ const pfShowcases: Array<IShowcaseData> = [
               Se attivi il servizio “Avvisi di cortesia” di SEND, puoi ricevere
               e gestire direttamente in app le comunicazioni a valore legale. Se
               non hai la PEC ma accedi alla notifica attraverso SEND dall'app e
-              leggi la notifica entro 5 giorni (120 ore) dalla sua ricezione ,
+              leggi la notifica entro 5 giorni (120 ore) dalla sua ricezione,
               questa ti risulterà legalmente recapitata e non riceverai alcuna
               raccomandata cartacea.
             </Typography>
@@ -745,25 +745,25 @@ const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Chi siamo",
-        href: `${pagoPALink.href}societa/chi-siamo`,
+        href: `${pagoPALink.href}/societa/chi-siamo`,
         ariaLabel: "Vai al link: Chi siamo",
         linkType: "external",
       },
       {
         label: "PNRR",
-        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
+        href: `${pagoPALink.href}/opportunita/pnrr/progetti`,
         ariaLabel: "Vai al link: PNRR",
         linkType: "external",
       },
       {
         label: "Media",
-        href: `${pagoPALink.href}media`,
+        href: `${pagoPALink.href}/media`,
         ariaLabel: "Vai al link: Media",
         linkType: "external",
       },
       {
         label: "Lavora con noi",
-        href: `${pagoPALink.href}lavora-con-noi`,
+        href: `${pagoPALink.href}/lavora-con-noi`,
         ariaLabel: "Vai al link: Lavora con noi",
         linkType: "external",
       },
@@ -781,13 +781,13 @@ const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Certificazioni",
-        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
+        href: "https://www.pagopa.it/it/certificazioni/",
         ariaLabel: "Vai al link: Certificazioni",
         linkType: "internal",
       },
       {
         label: "Sicurezza delle informazioni",
-        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
+        href: "https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/",
         ariaLabel: "Vai al link: Sicurezza delle informazioni",
         linkType: "internal",
       },
@@ -878,6 +878,8 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
+const productJson = "/static/product.json";
+
 /** Application Data Mock */
 export const itAppData: IAppData = {
   common: {
@@ -887,6 +889,7 @@ export const itAppData: IAppData = {
     companyLegalInfo,
     preLoginLinks,
     postLoginLinks,
+    productJson,
   },
   pa: {
     hero: paHero,

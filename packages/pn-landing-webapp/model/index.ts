@@ -90,6 +90,7 @@ export interface IAppData {
     companyLegalInfo: JSX.Element;
     preLoginLinks: PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
+    productJson: string;
   };
   pa: ILandingComponents;
   pf: ILandingComponents;

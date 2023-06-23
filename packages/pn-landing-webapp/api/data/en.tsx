@@ -679,25 +679,25 @@ const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "About us",
-        href: `${pagoPALink.href}societa/chi-siamo`,
+        href: `${pagoPALink.href}/societa/chi-siamo`,
         ariaLabel: "Go to link: About us",
         linkType: "external",
       },
       {
         label: "PNRR",
-        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
+        href: `${pagoPALink.href}/opportunita/pnrr/progetti`,
         ariaLabel: "Go to link: PNRR",
         linkType: "external",
       },
       {
         label: "Media",
-        href: `${pagoPALink.href}media`,
+        href: `${pagoPALink.href}/media`,
         ariaLabel: "Go to link: Media",
         linkType: "external",
       },
       {
         label: "Work with us",
-        href: `${pagoPALink.href}lavora-con-noi`,
+        href: `${pagoPALink.href}/lavora-con-noi`,
         ariaLabel: "Go to link: Work with us",
         linkType: "external",
       },
@@ -715,13 +715,13 @@ const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Certifications",
-        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
+        href: "https://www.pagopa.it/it/certificazioni/",
         ariaLabel: "Go to link: Certifications",
         linkType: "internal",
       },
       {
         label: "Information security",
-        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
+        href: "https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/",
         ariaLabel: "Go to link: Information security",
         linkType: "internal",
       },
@@ -812,6 +812,8 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
+const productJson = "/static/product.json";
+
 /** Application Data Mock */
 export const enAppData: IAppData = {
   common: {
@@ -820,7 +822,8 @@ export const enAppData: IAppData = {
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
+    productJson
   },
   pa: {
     hero: paHero,
