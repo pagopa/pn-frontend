@@ -1,5 +1,3 @@
-import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Card,
@@ -15,30 +13,31 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   ApiErrorWrapper,
-  useIsMobile,
   CustomDropdown,
-  dataRegex,
-  SpecialContactsProvider,
-  searchStringLimitReachedText,
-  useSearchStringChangeInput,
   PnAutocomplete,
+  SpecialContactsProvider,
+  dataRegex,
+  searchStringLimitReachedText,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
+import { useFormik } from 'formik';
+import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Party } from '../../models/party';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
-import SpecialContactElem from './SpecialContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import SpecialContactElem from './SpecialContactElem';
 
 type Props = {
   recipientId: string;
@@ -71,7 +70,6 @@ type AddressType = {
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
@@ -194,6 +192,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               // reset form
               formik.resetForm();
               await formik.validateForm();
+              setSenderInputValue('');
             }
           }
         );
@@ -210,21 +209,20 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const getOptionLabel = (option: Party) => option.name || '';
 
   // handling of search string for sender
-  const entitySearchLabel = (searchString: string): string =>
-    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(
-      searchString
-    )}`;
-  const handleChangeInput = (newInputValue: string) =>
-    handleSearchStringChangeInput(newInputValue, setSenderInputValue);
+  const entitySearchLabel: string = `${t('special-contacts.sender', {
+    ns: 'recapiti',
+  })}${searchStringLimitReachedText(senderInputValue)}`;
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const senderChangeHandler = async (e: any, newValue: Party | null) => {
+  const senderChangeHandler = async (_: any, newValue: Party | null) => {
+    await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', newValue);
-    formik.handleChange(e);
+    // formik.handleChange(e);
+    setSenderInputValue(newValue?.name || '');
     if (formik.values.addressType === LegalChannelType.PEC) {
       const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.pec) > -1;
       setAlreadyExistsMessage(
@@ -341,14 +339,22 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
-                onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
+                onInputChange={(_event, newInputValue, reason) => {
+                  if (reason === 'input') {
+                    setSenderInputValue(newInputValue);
+                  }
+                }}
                 filterOptions={(e) => e}
                 renderOption={renderOption}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     name="sender"
-                    label={entitySearchLabel(senderInputValue)}
+                    label={entitySearchLabel}
+                    error={senderInputValue.length > 80}
+                    helperText={
+                      senderInputValue.length > 80 && t('too-long-field-error', { maxLength: 80 })
+                    }
                   />
                 )}
               />
@@ -428,7 +434,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               <ButtonNaked
                 sx={{ marginLeft: 'auto', height: '40px' }}
                 type="submit"
-                disabled={!formik.isValid}
+                disabled={
+                  !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
+                }
                 color="primary"
                 data-testid="Special contact add button"
               >
