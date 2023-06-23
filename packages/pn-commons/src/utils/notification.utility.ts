@@ -504,6 +504,8 @@ export function getNotificationTimelineStatusInfos(
 
 const TimelineAllowedStatus = [
   TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
+  // PN-6902
+  TimelineCategory.ANALOG_FAILURE_WORKFLOW,
   TimelineCategory.SEND_DIGITAL_DOMICILE,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
