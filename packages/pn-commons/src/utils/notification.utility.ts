@@ -635,10 +635,18 @@ function populateMacroStep(
 }
 
 function fromLatestToEarliest(a: INotificationDetailTimeline, b: INotificationDetailTimeline) {
-  if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
+  const differenceInTimeline = new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+  const differenceInIndex = b.index && a.index ? b.index - a.index : 0;
+
+  if (differenceInTimeline > 0) {
     return 1;
+  } else if (differenceInTimeline < 0) {
+    return -1;
+  } else {
+    console.log('fromLatestToEarliest - same timestamp');
+    console.log({a,b,differenceInIndex});
+    return differenceInIndex > 0 ? 1 : (differenceInIndex < 0 ? -1 : 0);
   }
-  return -1;
 }
 
 function populateMacroSteps(parsedNotification: NotificationDetail) {
@@ -884,8 +892,9 @@ export function parseNotificationDetail(
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
   // set which elements are visible
-  parsedNotification.timeline = parsedNotification.timeline.map((t) => ({
+  parsedNotification.timeline = parsedNotification.timeline.map((t, index) => ({
     ...t,
+    index,
     hidden: !timelineElementMustBeShown(t),
   }));
   // populate notification macro steps with corresponding timeline micro steps
