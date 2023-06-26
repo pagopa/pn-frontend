@@ -36,6 +36,7 @@ type Props = {
     resetForm: (nextState?: Partial<FormikState<FormikValues>> | undefined) => void;
     touched: FormikTouched<FormikValues>;
     errors: FormikErrors<FormikValues>;
+    setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
   startDate: Date | null;
   endDate: Date | null;
@@ -57,6 +58,12 @@ const FilterNotificationsFormBody = ({
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
+      if (formikInstance.errors.iunMatch) {
+        const errors = { ...formikInstance.errors };
+        // eslint-disable-next-line
+        delete errors.iunMatch;
+        formikInstance.setErrors(errors);
+      }
       const originalEvent = e.target as HTMLInputElement;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
@@ -67,7 +74,7 @@ const FilterNotificationsFormBody = ({
           ? 1
           : 0);
 
-      await formikInstance.setFieldValue('iunMatch', newInput);
+      await formikInstance.setFieldValue('iunMatch', newInput, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
