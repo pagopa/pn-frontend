@@ -18,7 +18,6 @@ import {
 
 import {
   IMAGES_PATH,
-  PAGOPA_HELP_EMAIL,
   PAGOPA_HOME,
   PN_PF_URL,
   MANUALE_URL,
@@ -88,7 +87,7 @@ const paHero: HeroProps = {
     title: "Scopri come aderire",
     /* Carlotta Dimatteo - workaround per gestire un anchor interno alla pagina richiesto dal team di comunicazione il 16/02/2023 */
     onClick: function onClick() {
-      var loc = document.location.toString().split("#")[0];
+      let loc = document.location.toString().split("#")[0];
       document.location = loc + "#start-integration";
       return false;
     },
@@ -107,7 +106,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con SEND - Servizio Notifiche Digitali puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente. 
+  subtitle: `Con SEND - Servizio Notifiche Digitali (anche nota come Piattaforma Notifiche Digitali di cui all'art. 26 del decreto-legge 76/2020 s.m.i.) puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente. 
     Potrai visualizzarle, gestirle e pagarle direttamente online sulla piattaforma dedicata o dall'app IO.`,
   ctaPrimary: heroCta,
   inverse: false,
