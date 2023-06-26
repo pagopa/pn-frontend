@@ -37,7 +37,7 @@ export const itFaqData: IFaqData = {
           description: `Significa che l'invio e la ricezione di queste comunicazioni producono degli effetti
         giuridici sia nei confronti di chi le invia sia di chi le riceve. Per esempio, se ricevi
         una multa per violazione del codice stradale, la data in cui la ricevi incide
-        sull'importo che dovrai pagare o sulla tua facoltà di contestarla`,
+        sull'importo che dovrai pagare o sulla tua facoltà di contestarla.`,
         },
         {
           id: "notifiche-composizione",
@@ -59,7 +59,7 @@ export const itFaqData: IFaqData = {
           id: "send-cosa-e",
           title: `Cos'è SEND?`,
           description: `SEND - Servizio Notifiche Digitali (anche noto come Piattaforma Notifiche Digitali di cui all'art. 26 del
-           decreto-legge 76/2020 s.m.i.) è una piattaforma che digitalizza e semplifica la gestione delle notifiche: ti permette 
+           decreto-legge 76/2020 s.m.i.) è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette 
            infatti di riceverle, scaricare i documenti notificati e pagare eventuali spese direttamente online su SEND o nell'app IO.`,
         },
         {
