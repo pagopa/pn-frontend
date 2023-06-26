@@ -104,7 +104,7 @@ const Dashboard = () => {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" mb={isMobile ? 3 : undefined}>
+      <Typography variant="h4" mb={isMobile ? 3 : 2}>
         {t('title')}
       </Typography>
       <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
