@@ -155,10 +155,10 @@ export const parsedNotification: NotificationDetail = {
   paymentHistory: [],
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
-    { ...statusHistory[0], steps: [{ ...timeline[0], hidden: false }] },
-    { ...statusHistory[1], steps: [{ ...timeline[1], hidden: false }] },
+    { ...statusHistory[0], steps: [{ ...timeline[0], index: 0, hidden: false }] },
+    { ...statusHistory[1], steps: [{ ...timeline[1], index: 1, hidden: false }] },
   ],
-  timeline: timeline.map((t) => ({ ...t, hidden: false })),
+  timeline: timeline.map((t, index) => ({ ...t, index, hidden: false })),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
