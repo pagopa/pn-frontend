@@ -64,6 +64,27 @@ export const NotificationsApi = {
    */
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
+      if (response.data.iun === 'HGZK-XLJQ-ZTGL-202306-Z-1') {
+        const elementToModify = response.data.timeline.find(elem => elem.elementId === 'SEND_ANALOG_PROGRESS.IUN_HGZK-XLJQ-ZTGL-202306-Z-1.RECINDEX_0.ATTEMPT_1.IDX_1');
+        if (elementToModify) {
+          // eslint-disable-next-line functional/immutable-data
+          (elementToModify.details as any).deliveryDetailCode = 'PNALL001';
+        }
+      } else if (response.data.iun === 'YTJQ-TWTW-NLWH-202306-K-1') {
+        const elementToModify = response.data.timeline.find(elem => elem.elementId === 'SEND_ANALOG_PROGRESS.IUN_YTJQ-TWTW-NLWH-202306-K-1.RECINDEX_0.ATTEMPT_1.IDX_1');
+        if (elementToModify) {
+          // eslint-disable-next-line functional/immutable-data
+          (elementToModify.details as any).deliveryDetailCode = 'PNALL001';
+        }
+      }
+      if (response.data) {
+        return parseNotificationDetail(response.data);
+      }
+      return {} as NotificationDetail;
+    }),
+
+  getSentNotificationOK: (iun: string): Promise<NotificationDetail> =>
+    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
       if (response.data) {
         return parseNotificationDetail(response.data);
       }
