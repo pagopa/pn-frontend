@@ -83,7 +83,15 @@ const Contacts = () => {
         t('subtitle-link-2', { ns: 'recapiti' })
       )}
       {t('subtitle-text-3', { ns: 'recapiti' })}
-      <Link onClick={handleRedirectToProfilePage}>{t('subtitle-link-3', { ns: 'recapiti' })}</Link>
+      <Link
+        onClick={handleRedirectToProfilePage}
+        tabIndex={0}
+        aria-label={
+          t('subtitle-text-3', { ns: 'recapiti' }) + t('subtitle-link-3', { ns: 'recapiti' })
+        }
+      >
+        {t('subtitle-link-3', { ns: 'recapiti' })}
+      </Link>
       {t('subtitle-text-4', { ns: 'recapiti' })}
     </>
   );
