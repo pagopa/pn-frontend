@@ -63,7 +63,7 @@ const DelegationsOfTheCompany = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const firstUpdate = useRef(true);
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const { hasGroup, organization } = useAppSelector((state: RootState) => state.userState.user);
   const filters = useAppSelector((state: RootState) => state.delegationsState.filters);
 
   const delegators = useAppSelector(
@@ -188,7 +188,11 @@ const DelegationsOfTheCompany = () => {
         },
       },
     },
-    {
+  ];
+
+  if (!hasGroup) {
+    /* eslint-disable-next-line functional/immutable-data */
+    smartCfg.push({
       id: 'id',
       label: '',
       getValue(value: string, data: Item) {
@@ -203,8 +207,8 @@ const DelegationsOfTheCompany = () => {
           xs: 4,
         },
       },
-    },
-  ];
+    });
+  }
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;

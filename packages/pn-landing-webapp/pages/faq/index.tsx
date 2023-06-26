@@ -2,19 +2,30 @@
 import { useState, useEffect, useCallback } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import Head from "next/head";
 import { Hero } from "@pagopa/mui-italia";
-import { Box, Typography, Stack, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Box,
+  Typography,
+  Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { IMAGES_PATH } from "@utils/constants";
 import { getFaqData } from "api";
 import { FaqDescription, IFaqDataItem, IFaqDataSection } from "model";
+import PageHead from "src/components/PageHead";
 
+type SetActiveItemFunction = (
+  itemId: string
+) => (_: any, isExpanded: boolean) => void;
 
-type SetActiveItemFunction = (itemId: string) => (_: any, isExpanded: boolean) => void;
-
-type ActiveItemProps = { setActiveItem: SetActiveItemFunction; activeItem: string | null };
+type ActiveItemProps = {
+  setActiveItem: SetActiveItemFunction;
+  activeItem: string | null;
+};
 
 /**
  * A separate component to deal with the polymorphism allowed in the definition of a FAQ item description.
@@ -23,16 +34,26 @@ type ActiveItemProps = { setActiveItem: SetActiveItemFunction; activeItem: strin
 function FaqDescriptionBlock(props: { description: FaqDescription }) {
   const { description } = props;
 
-  if (typeof description === 'string') {
+  if (typeof description === "string") {
     return <Typography variant="body2">{description}</Typography>;
   } else if (Array.isArray(description)) {
     // in fact the wrapping Fragment is just to have JSX.Element as single return type for FaqDescriptionBlock
-    return <>
-      {description.map((text, ix) => {
-        const isLastChild = ix === description.length - 1;
-        return <Typography variant="body2" key={ix} sx={isLastChild ? {} : { mb: '12px' }}>{text}</Typography>;
-      })}
-    </>;
+    return (
+      <>
+        {description.map((text, ix) => {
+          const isLastChild = ix === description.length - 1;
+          return (
+            <Typography
+              variant="body2"
+              key={ix}
+              sx={isLastChild ? {} : { mb: "12px" }}
+            >
+              {text}
+            </Typography>
+          );
+        })}
+      </>
+    );
   } else {
     return description;
   }
@@ -44,29 +65,47 @@ function FaqDescriptionBlock(props: { description: FaqDescription }) {
 function FaqDataItemBlock(props: { item: IFaqDataItem } & ActiveItemProps) {
   const { item, setActiveItem, activeItem } = props;
 
-  return <Box id={item.id} sx={{ mb: '16px' }}>
-    <Accordion onChange={setActiveItem(item.id)} expanded={item.id === activeItem}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} >
-        <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Box sx={{ mr: 4, textAlign: 'justify' }}>
-          <FaqDescriptionBlock description={item.description} />
-        </Box>
-      </AccordionDetails>
-    </Accordion>
-  </Box>;
+  return (
+    <Box id={item.id} sx={{ mb: "16px" }}>
+      <Accordion
+        onChange={setActiveItem(item.id)}
+        expanded={item.id === activeItem}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            {item.title}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ mr: 4, textAlign: "justify" }}>
+            <FaqDescriptionBlock description={item.description} />
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    </Box>
+  );
 }
 
-export function FaqDataSectionBlock(props: { section: IFaqDataSection } & ActiveItemProps) {
+export function FaqDataSectionBlock(
+  props: { section: IFaqDataSection } & ActiveItemProps
+) {
   const { section, setActiveItem, activeItem } = props;
 
-  return <Box sx={{ pb: '64px' }}>
-    <Typography variant="h4" sx={{ pb: '48px' }}>{section.title}</Typography>
-    {section.items.map((item) =>
-      <FaqDataItemBlock item={item} setActiveItem={setActiveItem} key={item.id} activeItem={activeItem} />
-    )}
-  </Box>;
+  return (
+    <Box sx={{ pb: "64px" }}>
+      <Typography variant="h4" sx={{ pb: "48px" }}>
+        {section.title}
+      </Typography>
+      {section.items.map((item) => (
+        <FaqDataItemBlock
+          item={item}
+          setActiveItem={setActiveItem}
+          key={item.id}
+          activeItem={activeItem}
+        />
+      ))}
+    </Box>
+  );
 }
 
 const FaqPage: NextPage = () => {
@@ -84,26 +123,43 @@ const FaqPage: NextPage = () => {
     }
   }, [router.asPath]);
 
-  const setActiveItem = useCallback((itemId: string) => (_: any, isExpanded: boolean) => {
-    setCurrentItem(isExpanded ? itemId : null);
-  }, []);
+  const setActiveItem = useCallback(
+    (itemId: string) => (_: any, isExpanded: boolean) => {
+      setCurrentItem(isExpanded ? itemId : null);
+    },
+    []
+  );
 
-  return <>
-    <Head>
-      <title>{faqData.title}</title>
-      <meta name="description" content="Pagina di FAQ" />
-      <link rel="icon" href="/static/favicon.svg" />
-    </Head>
+  return (
+    <>
+      <PageHead title={faqData.title} description="Pagina di FAQ" />
 
-    <main>
-      <Hero title="FAQ" type="text" background={`${IMAGES_PATH}/hero-faq-background.png`} />
-      <Stack direction="column" sx={{ px: { xs: '30px', sm: '80px', md: '142px' }, pt: '100px', backgroundColor: '#FAFAFA' }}>
-        {faqData.sections.map((section, ix) =>
-          <FaqDataSectionBlock section={section} key={ix} setActiveItem={setActiveItem} activeItem={currentItem} />
-        )}
-      </Stack>
-    </main>
-  </>;
+      <main>
+        <Hero
+          title="FAQ"
+          type="text"
+          background={`${IMAGES_PATH}/hero-faq-background.png`}
+        />
+        <Stack
+          direction="column"
+          sx={{
+            px: { xs: "30px", sm: "80px", md: "142px" },
+            pt: "100px",
+            backgroundColor: "#FAFAFA",
+          }}
+        >
+          {faqData.sections.map((section, ix) => (
+            <FaqDataSectionBlock
+              section={section}
+              key={ix}
+              setActiveItem={setActiveItem}
+              activeItem={currentItem}
+            />
+          ))}
+        </Stack>
+      </main>
+    </>
+  );
 };
 
 export default FaqPage;
