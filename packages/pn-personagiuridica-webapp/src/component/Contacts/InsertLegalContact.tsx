@@ -62,13 +62,12 @@ const InsertLegalContact = ({ recipientId }: Props) => {
               placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
               fullWidth
               name="pec"
-              inputProps={{ sx: { height: '30px' } }}
+              inputProps={{ sx: { height: '14px' } }}
               value={formik.values.pec}
               onChange={handleChangeTouched}
               error={formik.touched.pec && Boolean(formik.errors.pec)}
               helperText={formik.touched.pec && formik.errors.pec}
               disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
-              size="small"
             />
           </Grid>
           <Grid item lg={2} sm={2} xs={12} alignItems="right">
