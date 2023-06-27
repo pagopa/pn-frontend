@@ -104,11 +104,16 @@ const Dashboard = () => {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" mb={isMobile ? 3 : undefined}>
+      <Typography tabIndex={0} aria-label={t('title')} variant="h4" mb={isMobile ? 3 : undefined}>
         {t('title')}
       </Typography>
       <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
-        <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography
+          tabIndex={0}
+          aria-label={t('subtitle')}
+          variant="body1"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
+        >
           {t('subtitle')}
         </Typography>
         <Button
