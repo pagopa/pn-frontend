@@ -67,7 +67,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
               error={formik.touched.pec && Boolean(formik.errors.pec)}
               helperText={formik.touched.pec && formik.errors.pec}
               disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
-              size="small"
+              inputProps={{ sx: { height: '14px' } }}
             />
           </Grid>
           <Grid item lg={4} sm={4} xs={12} alignItems="right">
