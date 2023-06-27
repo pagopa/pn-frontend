@@ -1130,6 +1130,56 @@ describe('parse notification & filters', () => {
     expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
   });
 
+  it('reverse status and events - simultaneous events', () => {
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    const timelineElementToBeClonedIndex = timeline.findIndex(elem => elem.elementId === 'digital_progress_0_PLATFORM');
+    if (timelineElementToBeClonedIndex === -1) {
+      fail('cannot build the test scenario');
+    }
+    const timelineElementToBeCloned = timeline[timelineElementToBeClonedIndex];
+    const newTimelineElement = {...timelineElementToBeCloned, elementId: 'digital_progress_1_PLATFORM'};
+    (newTimelineElement.details as SendDigitalDetails).deliveryDetailCode = 'C002';
+    newTimelineElement.timestamp = timeline[timelineElementToBeClonedIndex+1].timestamp;
+    timeline.splice(timelineElementToBeClonedIndex+1, 0, newTimelineElement);
+    sourceNotification.timeline = timeline;
+    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    const deliveringStatus = statusHistory.find(status => status.status === NotificationStatus.DELIVERING);
+    if (!deliveringStatus) {
+      fail('cannot build the test scenario');
+    }
+    const insertionIndex = deliveringStatus.relatedTimelineElements.findIndex(elem => elem === 'digital_progress_0_PLATFORM') + 1;
+    deliveringStatus?.relatedTimelineElements.splice(insertionIndex, 0, 'digital_progress_1_PLATFORM');
+    sourceNotification.notificationStatusHistory = statusHistory;
+
+    // parse
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // ----------- checks
+    // DELIVERING events -- FEEDBACK comes before both PROGRESS
+    let currentSteps = parsedNotification.notificationStatusHistory[1].steps;
+    expect(currentSteps && currentSteps[0].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_FEEDBACK
+    );
+    expect(currentSteps && currentSteps[1].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_PROGRESS
+    );
+    expect(currentSteps && currentSteps[1].elementId).toEqual(
+      'digital_progress_1_PLATFORM'
+    );
+    expect(currentSteps && currentSteps[1].timestamp).toEqual(
+      currentSteps && currentSteps[0].timestamp
+    );
+    expect(currentSteps && currentSteps[2].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_PROGRESS
+    );
+    expect(currentSteps && currentSteps[2].elementId).toEqual(
+      'digital_progress_0_PLATFORM'
+    );
+    expect(currentSteps && currentSteps[2].timestamp).not.toEqual(
+      currentSteps && currentSteps[0].timestamp
+    );
+  });
+
   it('duplicates ACCEPTED events - hidden copies', () => {
     sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
     sourceNotification.notificationStatusHistory =
