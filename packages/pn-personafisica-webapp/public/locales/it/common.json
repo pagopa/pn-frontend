@@ -132,6 +132,7 @@
   },
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
+  "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
   "validation": {
     "search-pattern-length-limit": "ricerca max {{maxLength}} caratteri",
     "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."

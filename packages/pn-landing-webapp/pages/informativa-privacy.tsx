@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-before-interactive-script-outside-document */
 import { useEffect } from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
 import Script from "next/script";
 
 import { ONE_TRUST_CDN } from "@utils/constants";
+import PageHead from "src/components/PageHead";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -26,14 +26,10 @@ const PrivacyPage: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>SEND</title>
-        <meta
-          name="description"
-          content="Informativa Privacy Servizio notifiche digitali"
-        />
-        <link rel="icon" href="/static/favicon.svg" />
-      </Head>
+      <PageHead
+        title="SEND"
+        description="Informativa Privacy Servizio notifiche digitali"
+      />
       <Script
         src="/onetrust/privacy-notice-scripts/otnotice-1.0.min.js"
         type="text/javascript"

@@ -16,7 +16,7 @@ export enum UserType {
 export interface ILinkData {
   label: string;
   ariaLabel: string;
-  href: string;
+  href?: string;
 }
 
 export interface ILandingComponents {
@@ -90,6 +90,7 @@ export interface IAppData {
     companyLegalInfo: JSX.Element;
     preLoginLinks: PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
+    productJson: string;
   };
   pa: ILandingComponents;
   pf: ILandingComponents;
