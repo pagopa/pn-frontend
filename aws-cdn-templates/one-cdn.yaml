@@ -47,14 +47,14 @@ Parameters:
   #    Description: The limit on requests per 5-minute period for a single originating IP address.
   #    Default: 1000
 
-  RequestsAlarmLimit:
+  RequestsAlarmMinimumLimit:
     Type: Number
-    Default: 50000
+    Default: 300000
     Description: The limit of requests on 5 minutes period to raise an alarm
 
-  ErrorRateAlarmLimit:
+  ErrorRateAlarmPercentageLimit:
     Type: Number
-    Default: 10
+    Default: 20
     Description: The limit of error rate percentage on 5 minutes period to raise an alarm
 
   AlarmSNSTopicArn:
@@ -553,7 +553,7 @@ Resources:
       DatapointsToAlarm: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      Threshold: !Ref RequestsAlarmLimit
+      Threshold: !Ref RequestsAlarmMinimumLimit
       TreatMissingData: notBreaching
       Namespace: "AWS/CloudFront"
       Period: 300
@@ -578,7 +578,7 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       Period: 300
-      Threshold: !Ref ErrorRateAlarmLimit
+      Threshold: !Ref ErrorRateAlarmPercentageLimit
       TreatMissingData: notBreaching
       Namespace: "AWS/CloudFront"
       MetricName: "TotalErrorRate"

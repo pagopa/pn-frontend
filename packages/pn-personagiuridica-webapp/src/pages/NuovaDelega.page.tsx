@@ -448,8 +448,8 @@ const NuovaDelega = () => {
                           </LocalizationProvider>
                         </FormControl>
                       </Box>
-                      <Divider sx={{ marginTop: '1rem' }} />
-                      <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
+                      <Divider sx={{ my: 3 }} />
+                      <Typography fontWeight={'bold'}>
                         {t('nuovaDelega.form.verificationCode')}
                       </Typography>
                       <Stack
@@ -462,12 +462,8 @@ const NuovaDelega = () => {
                         </Typography>
                         <VerificationCodeComponent code={values.verificationCode} />
                       </Stack>
-                      <Divider sx={{ marginTop: '1rem' }} />
-                      <Stack
-                        sx={{ mt: '1rem' }}
-                        alignItems="flex-start"
-                        justifyContent={'flex-start'}
-                      >
+                      <Divider sx={{ my: 3 }} />
+                      <Stack alignItems="flex-start" justifyContent={'flex-start'}>
                         <Stack>
                           <Button
                             sx={{ marginTop: '1rem', margin: 'auto' }}
