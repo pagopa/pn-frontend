@@ -220,11 +220,10 @@ describe('Filter Notifications Table Component', () => {
       ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('test form submission - iunMatch (invalid)', async () => {
@@ -245,10 +244,10 @@ describe('Filter Notifications Table Component', () => {
       '1234-5678-910A-BCDFGH-I-OL'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(submitButton).toBeDisabled();
   });
 
   it('valid date range', async () => {
@@ -290,7 +289,10 @@ describe('Filter Notifications Table Component', () => {
       ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test invalid date range - end in the future', async () => {
@@ -310,7 +312,10 @@ describe('Filter Notifications Table Component', () => {
       ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test form reset', async () => {
