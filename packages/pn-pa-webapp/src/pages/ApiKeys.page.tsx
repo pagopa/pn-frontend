@@ -147,7 +147,12 @@ const ApiKeys = () => {
           marginTop: isMobile ? 3 : 10,
         }}
       >
-        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography
+          tabIndex={0}
+          aria-label={t('generated-api-keys')}
+          variant="h5"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
+        >
           {t('generated-api-keys')}
         </Typography>
         <Button
