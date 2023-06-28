@@ -44,7 +44,7 @@ const DomicileBanner = () => {
   }, [legalDomicile]);
 
   return open ? (
-    <Box mb={2.5}>
+    <Box mb={5}>
       <Alert
         severity="info"
         variant="outlined"
