@@ -113,7 +113,6 @@ const DelegatesByCompany = () => {
       label: '',
       tableConfiguration: {
         width: '5%',
-        align: 'center',
       },
       getValue(value: string, data: Item) {
         return (
