@@ -124,7 +124,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
           title={pageTitle}
           subTitle={pageSubTitle}
           variantSubTitle={'body1'}
-          mbTitle={isMobile ? 3 : undefined}
+          mbTitle={isMobile ? 3 : 2}
           titleButton={
             isDelegatedPage &&
             organization.groups &&
