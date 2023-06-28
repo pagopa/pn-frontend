@@ -462,6 +462,35 @@ describe('timeline event description', () => {
     );
   });
 
+  it('return timeline status infos - ANALOG_FAILURE_WORKFLOW - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.ANALOG_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFnSingle(
+      'analog-failure-workflow',
+      'analog-failure-workflow-description',
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)' }
+    );
+  });
+
+  it('return timeline status infos - ANALOG_FAILURE_WORKFLOW - multirecipient - recipient 0', () => {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.ANALOG_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFnMulti0(
+      'analog-failure-workflow',
+      'analog-failure-workflow-description-multirecipient',
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)' }
+    );
+  });
+
+  it('return timeline status infos - ANALOG_FAILURE_WORKFLOW - multirecipient - recipient 1', () => {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.ANALOG_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFnMulti1(
+      'analog-failure-workflow',
+      'analog-failure-workflow-description-multirecipient',
+      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)' }
+    );
+  });
+
   it('return timeline status infos - SEND_COURTESY_MESSAGE - single recipient - email', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
     (parsedNotificationCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {

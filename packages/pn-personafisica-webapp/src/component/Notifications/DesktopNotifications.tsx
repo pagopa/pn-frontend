@@ -109,7 +109,6 @@ const DesktopNotifications = ({
       id: 'status',
       label: t('table.status'),
       width: '18%',
-      align: 'center',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(_: string, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
@@ -145,18 +144,21 @@ const DesktopNotifications = ({
     emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
-      : currentDelegator ? undefined : handleRouteContacts,
+      : currentDelegator
+      ? undefined
+      : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
-      : currentDelegator 
-        ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName }) 
-        : t('empty-state.first-message'),
+      : currentDelegator
+      ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName })
+      : t('empty-state.first-message'),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage: (filtersApplied || currentDelegator)
-      ? undefined
-      : {
-          emptyMessage: t('empty-state.second-message'),
-        },
+    secondaryMessage:
+      filtersApplied || currentDelegator
+        ? undefined
+        : {
+            emptyMessage: t('empty-state.second-message'),
+          },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
