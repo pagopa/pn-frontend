@@ -7,8 +7,9 @@ import { getConfiguration } from '../services/configuration.service';
 
 export const NOTIFICHE = '/notifiche';
 export const NOTIFICHE_DELEGATO = `${NOTIFICHE}-delegato`;
-export const DELEGHEACARICO = '/deleghe/carico';
-export const DELEGATI = '/deleghe/delegati';
+export const DELEGHE = `/deleghe`;
+export const DELEGHEACARICO = `${DELEGHE}/a-carico`;
+export const DELEGATI = `${DELEGHE}/delegati`;
 
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;

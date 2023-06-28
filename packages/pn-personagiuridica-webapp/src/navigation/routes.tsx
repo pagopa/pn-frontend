@@ -6,6 +6,8 @@ import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import { PNRole } from '../redux/auth/types';
 import { getConfiguration } from '../services/configuration.service';
+import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
+import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -67,29 +69,21 @@ function Router() {
                 />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route
-                  path={routes.DELEGHEACARICO}
+                  path={routes.DELEGHE}
                   element={
                     <PrivateRoute
                       currentRoles={currentRoles}
                       requiredRoles={[PNRole.ADMIN]}
                       redirectTo={<NotFound />}
                     >
-                      <Deleghe indexOfTab={0} />
+                      <Deleghe />
                     </PrivateRoute>
                   }
-                />
-                <Route
-                  path={routes.DELEGATI}
-                  element={
-                    <PrivateRoute
-                      currentRoles={currentRoles}
-                      requiredRoles={[PNRole.ADMIN]}
-                      redirectTo={<NotFound />}
-                    >
-                      <Deleghe indexOfTab={1} />
-                    </PrivateRoute>
-                  }
-                />
+                >
+                  <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+                  <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+                </Route>
+
                 <Route
                   path={routes.NUOVA_DELEGA}
                   element={

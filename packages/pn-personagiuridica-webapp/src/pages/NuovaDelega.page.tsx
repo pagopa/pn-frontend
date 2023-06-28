@@ -80,7 +80,7 @@ const NuovaDelega = () => {
   };
 
   const handleDelegationsClick = () => {
-    navigate(routes.DELEGATI);
+    navigate(-1);
   };
 
   // Get tomorrow date
