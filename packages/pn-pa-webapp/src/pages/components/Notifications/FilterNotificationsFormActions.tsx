@@ -32,7 +32,6 @@ type Props = {
 const FilterNotificationsFormActions = ({
   filtersApplied,
   cleanFilters,
-  formikInstance,
   isInDialog = false,
   isInitialSearch,
 }: Props) => {
@@ -46,9 +45,7 @@ const FilterNotificationsFormActions = ({
       type="submit"
       size="small"
       className={classes.searchButton}
-      disabled={
-        !formikInstance.isValid || (isInitialSearch && !filtersApplied)
-      }
+      disabled={isInitialSearch && !filtersApplied}
     >
       {t('button.filtra')}
     </Button>
