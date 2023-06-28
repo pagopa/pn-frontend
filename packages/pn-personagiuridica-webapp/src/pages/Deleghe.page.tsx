@@ -52,9 +52,12 @@ const Deleghe = () => {
         }}
       >
         <Box mb={2} p={3}>
-          <TitleBox title={t('deleghe.title')} variantTitle={'h4'}>
-            {t('deleghe.description')}
-          </TitleBox>
+          <TitleBox
+            title={t('deleghe.title')}
+            variantTitle={'h4'}
+            subTitle={t('deleghe.description')}
+            variantSubTitle="body1"
+          />
         </Box>
         {!hasGroup && (
           <>

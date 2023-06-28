@@ -179,7 +179,6 @@ const DelegationsOfTheCompany = () => {
       },
       tableConfiguration: {
         width: '20%',
-        align: 'center',
       },
       cardConfiguration: {
         position: 'header',

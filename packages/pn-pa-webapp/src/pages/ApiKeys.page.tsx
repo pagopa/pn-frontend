@@ -136,7 +136,6 @@ const ApiKeys = () => {
       <TitleBox
         variantTitle="h4"
         title={t('title')}
-        sx={{ pt: '20px' }}
         subTitle={<SubTitle />}
         variantSubTitle="body1"
       ></TitleBox>
