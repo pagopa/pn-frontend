@@ -84,8 +84,12 @@ const FilterNotificationsFormBody = ({
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, { target: e.target.id });
   };
 
-  const handleChangeNotificationStatus = (e: ChangeEvent) => {
-    formikInstance.handleChange(e);
+  const handleChangeNotificationStatus = async (e: ChangeEvent) => {
+    await formikInstance.setFieldValue(
+      (e.target as HTMLSelectElement).name,
+      (e.target as HTMLSelectElement).value,
+      false
+    );
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE);
   };
 
