@@ -10,6 +10,7 @@ import {
   formatToTimezoneString,
   getNextDay,
   ApiErrorWrapper,
+  TitleBox,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
 
@@ -104,23 +105,31 @@ const Dashboard = () => {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" mb={isMobile ? 3 : 2}>
-        {t('title')}
-      </Typography>
-      <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
-        <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-          {t('subtitle')}
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={handleRouteManualSend}
-          aria-label={t('new-notification-button')}
-          data-testid="newNotificationBtn"
-          sx={{ marginBottom: isMobile ? 3 : undefined }}
-        >
-          {t('new-notification-button')}
-        </Button>
-      </Box>
+      <TitleBox
+        title={t('title')}
+        variantTitle="h4"
+        mbTitle={isMobile ? 3 : 2}
+        subTitle={
+          <Box
+            display={isMobile ? 'block' : 'flex'}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+              {t('subtitle')}
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={handleRouteManualSend}
+              aria-label={t('new-notification-button')}
+              data-testid="newNotificationBtn"
+              sx={{ marginBottom: isMobile ? 3 : undefined }}
+            >
+              {t('new-notification-button')}
+            </Button>
+          </Box>
+        }
+      />
       <ApiErrorWrapper
         apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}
         reloadAction={() => fetchNotifications()}

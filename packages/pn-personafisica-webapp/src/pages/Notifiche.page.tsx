@@ -105,7 +105,7 @@ const Notifiche = () => {
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
         <DomicileBanner />
-        <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : 2} />
+        <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
