@@ -36,7 +36,12 @@ type Props = {
 };
 
 // to avoid cognitive complexity warning - PN-5323
-function mainEmptyMessage(filtersApplied: boolean, isDelegatedPage: boolean, organization: Organization, t: any) {
+function mainEmptyMessage(
+  filtersApplied: boolean,
+  isDelegatedPage: boolean,
+  organization: Organization,
+  t: any
+) {
   return filtersApplied
     ? undefined
     : isDelegatedPage
@@ -122,7 +127,6 @@ const DesktopNotifications = ({
       id: 'status',
       label: t('table.status'),
       width: '18%',
-      align: 'center',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(_: string, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
@@ -174,9 +178,7 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionCallback: filtersApplied
-      ? filterNotificationsRef.current.cleanFilters
-      : undefined,
+    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : undefined,
     emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
   };
