@@ -57,13 +57,14 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    if (formikInstance.errors) {
+      formikInstance.setErrors({
+        ...formikInstance.errors,
+        [e.target.id]: undefined,
+      });
+    }
+
     if (e.target.id === 'iunMatch') {
-      if (formikInstance.errors.iunMatch) {
-        const errors = { ...formikInstance.errors };
-        // eslint-disable-next-line
-        delete errors.iunMatch;
-        formikInstance.setErrors(errors);
-      }
       const originalEvent = e.target as HTMLInputElement;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
@@ -78,10 +79,9 @@ const FilterNotificationsFormBody = ({
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      formikInstance.handleChange(e);
+      await formikInstance.setFieldValue(e.target.id, (e.target as HTMLInputElement).value, false);
     }
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, { target: e.target.id });
-    await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
   const handleChangeNotificationStatus = (e: ChangeEvent) => {
