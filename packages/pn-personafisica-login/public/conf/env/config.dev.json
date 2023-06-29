@@ -5,7 +5,7 @@
     "URL_API_LOGIN": "https://hub-login.spid.dev.pn.pagopa.it",
     "PF_URL": "https://portale.dev.pn.pagopa.it",
     "PG_URL": "https://pnpg.dev.selfcare.pagopa.it/auth/login/success",
-    "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
+    "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
     "MIXPANEL_TOKEN": "ba1f5101fe34a61bb125cbfe587780d8",
     "ONE_TRUST_DRAFT_MODE": false,
     "ONE_TRUST_PP": "133242e7-ad9a-45e5-a417-b7a50c746899",
