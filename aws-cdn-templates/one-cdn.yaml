@@ -332,7 +332,35 @@ Resources:
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
               ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
               PathPattern: /onboarding*
-            - !Ref "AWS::NoValue"                        
+            - !Ref "AWS::NoValue"
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /assets*
+            - !Ref "AWS::NoValue"
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /microcomponents*
+            - !Ref "AWS::NoValue"                          
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -410,8 +438,8 @@ Resources:
               https://api-pnpg.selfcare.pagopa.it \
               https://api-pnpg.uat.selfcare.pagopa.it ; \
               style-src 'self' 'unsafe-inline' \
-              https://pnpg.uat.selfcare.pagopa.it/assets/ \
-              https://pnpg.selfcare.pagopa.it/assets/ \
+              https://pnpg.uat.selfcare.pagopa.it/ \
+              https://pnpg.selfcare.pagopa.it/ \
               https://privacyportalde-cdn.onetrust.com/ ; \
               worker-src 'none'; \ 
               font-src 'self'; \
