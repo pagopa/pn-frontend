@@ -1,5 +1,5 @@
 {
-    "PAGOPA_HELP_EMAIL": "enti-pn@assistenza.pagopa.it",
+    "PAGOPA_HELP_EMAIL": "enti-send@assistenza.pagopa.it",
     "SELFCARE_URL_FE_LOGIN": "https://selfcare.pagopa.it/auth/login",
     "SELFCARE_BASE_URL": "https://selfcare.pagopa.it",
     "API_BASE_URL": "https://webapi.notifichedigitali.it/",
@@ -11,6 +11,6 @@
     "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
     "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
     "IS_PAYMENT_ENABLED": false,
-    "WORK_IN_PROGRESS": true
+    "WORK_IN_PROGRESS": false
   }
   

@@ -6,7 +6,7 @@ batch:
       env:
         variables:
           BUILD_ID: dev
-          REACT_APP_PAGOPA_HELP_EMAIL: enti-pn@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: enti-send@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
@@ -23,7 +23,7 @@ batch:
       env:
         variables:
           BUILD_ID: svil
-          REACT_APP_PAGOPA_HELP_EMAIL: enti-pn@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: enti-send@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
@@ -40,7 +40,7 @@ batch:
       env:
         variables:
           BUILD_ID: coll
-          REACT_APP_PAGOPA_HELP_EMAIL: enti-pn@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: enti-send@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
@@ -56,7 +56,7 @@ batch:
       env:
         variables:
           BUILD_ID: cert
-          REACT_APP_PAGOPA_HELP_EMAIL: enti-pn@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: enti-send@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.cert.pn.pagopa.it/
@@ -72,7 +72,7 @@ batch:
       env:
         variables:
           BUILD_ID: hotfix
-          REACT_APP_PAGOPA_HELP_EMAIL: enti-pn@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: enti-send@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.hotfix.pn.pagopa.it/
@@ -88,7 +88,7 @@ batch:
     #   env:
     #     variables:
     #       BUILD_ID: prod
-    #       REACT_APP_PAGOPA_HELP_EMAIL: enti-pn@assistenza.pagopa.it
+    #       REACT_APP_PAGOPA_HELP_EMAIL: enti-send@assistenza.pagopa.it
     #       REACT_APP_URL_SELFCARE_LOGIN: https://selfcare.pagopa.it/auth/login
     #       REACT_APP_URL_SELFCARE_BASE: https://selfcare.pagopa.it
     #       REACT_APP_URL_API: https://webapi.pn.pagopa.it/

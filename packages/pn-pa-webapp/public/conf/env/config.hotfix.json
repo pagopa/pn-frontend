@@ -1,5 +1,5 @@
 {
-    "PAGOPA_HELP_EMAIL": "enti-pn@assistenza.pagopa.it",
+    "PAGOPA_HELP_EMAIL": "enti-send@assistenza.pagopa.it",
     "SELFCARE_URL_FE_LOGIN": "https://uat.selfcare.pagopa.it/auth/login",
     "SELFCARE_BASE_URL": "https://uat.selfcare.pagopa.it",
     "API_BASE_URL": "https://webapi.hotfix.pn.pagopa.it/",
