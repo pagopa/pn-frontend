@@ -9,12 +9,7 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 
-import {
-  render,
-  testFormElements,
-  testInput,
-  testSelect,
-} from '../../../../__test__/test-utils';
+import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 jest.mock('@pagopa-pn/pn-commons', () => {
@@ -225,11 +220,10 @@ describe('Filter Notifications Table Component', () => {
       ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('test form submission - iunMatch (invalid)', async () => {
@@ -250,11 +244,10 @@ describe('Filter Notifications Table Component', () => {
       '1234-5678-910A-BCDFGH-I-OL'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('valid date range', async () => {
@@ -267,7 +260,12 @@ describe('Filter Notifications Table Component', () => {
 
     // valid
     await setFormValues(
-      form!, nineYearsAgo, oneYearAgo, localizedNotificationStatus[2].value, 'RSSMRA80A01H501U',''
+      form!,
+      nineYearsAgo,
+      oneYearAgo,
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
@@ -283,10 +281,18 @@ describe('Filter Notifications Table Component', () => {
 
     // wrong since endDate is before startDate
     await setFormValues(
-      form!, oneYearAgo, nineYearsAgo, localizedNotificationStatus[2].value, 'RSSMRA80A01H501U',''
+      form!,
+      oneYearAgo,
+      nineYearsAgo,
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test invalid date range - end in the future', async () => {
@@ -298,10 +304,18 @@ describe('Filter Notifications Table Component', () => {
 
     // wrong since endDate is before startDate
     await setFormValues(
-      form!, todayM, oneMonthAhead, localizedNotificationStatus[2].value, 'RSSMRA80A01H501U',''
+      form!,
+      todayM,
+      oneMonthAhead,
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test form reset', async () => {

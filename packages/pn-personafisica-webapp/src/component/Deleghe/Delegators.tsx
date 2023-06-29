@@ -1,6 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, ItemsTable, Item, Sort, ApiErrorWrapper, EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
+import {
+  Column,
+  ItemsTable,
+  Item,
+  Sort,
+  ApiErrorWrapper,
+  EmptyState,
+  KnownSentiment,
+} from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -62,13 +70,12 @@ const Delegators = () => {
       id: 'status',
       label: t('deleghe.table.status'),
       width: '20%',
-      align: 'center' as const,
       getCellLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
         } else {
-          return <AcceptButton id={row.id} name={row.name as string}  />;
+          return <AcceptButton id={row.id} name={row.name as string} />;
         }
       },
     },
@@ -92,18 +99,24 @@ const Delegators = () => {
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
         </Stack>
-        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())} 
+        <ApiErrorWrapper
+          apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
+          reloadAction={() => dispatch(getDelegators())}
           mainText={t('deleghe.delegatorsApiErrorMessage')}
         >
-          { rows.length > 0 
-            ? <ItemsTable
+          {rows.length > 0 ? (
+            <ItemsTable
               columns={delegatorsColumns}
               rows={rows}
               sort={sortDelegators}
               onChangeSorting={handleChangeSorting}
             />
-            : <EmptyState sentimentIcon={KnownSentiment.NONE} emptyMessage={t('deleghe.no_delegators')} />
-          }
+          ) : (
+            <EmptyState
+              sentimentIcon={KnownSentiment.NONE}
+              emptyMessage={t('deleghe.no_delegators')}
+            />
+          )}
         </ApiErrorWrapper>
       </Box>
     </>

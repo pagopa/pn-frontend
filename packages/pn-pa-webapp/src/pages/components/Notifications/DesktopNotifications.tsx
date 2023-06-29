@@ -121,13 +121,19 @@ const DesktopNotifications = ({
       id: 'notificationStatus',
       label: t('table.status'),
       width: '18%',
-      align: 'center',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string, i: Item) {
-        const { label, tooltip, color } = getNotificationStatusInfos(
-          value as NotificationStatus, {recipients: i.recipients as Array<string>}
+        const { label, tooltip, color } = getNotificationStatusInfos(value as NotificationStatus, {
+          recipients: i.recipients as Array<string>,
+        });
+        return (
+          <StatusTooltip
+            label={label}
+            tooltip={tooltip}
+            color={color}
+            eventTrackingCallback={handleEventTrackingTooltip}
+          />
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip} />;
       },
       onClick(row: Item) {
         handleRowClick(row);
@@ -150,16 +156,18 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
     emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', { ns: 'common' }),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied ? undefined : {
-      emptyMessage: t('empty-state.secondary-message'),
-      emptyActionLabel: t('empty-state.secondary-action'),
-      emptyActionCallback: () => {
-        onManualSend();
-      },
-    },
+    secondaryMessage: filtersApplied
+      ? undefined
+      : {
+          emptyMessage: t('empty-state.secondary-message'),
+          emptyActionLabel: t('empty-state.secondary-action'),
+          emptyActionCallback: () => {
+            onManualSend();
+          },
+        },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -168,7 +176,7 @@ const DesktopNotifications = ({
     <Fragment>
       {notifications && (
         <Fragment>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
+          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
             <ItemsTable
               columns={columns}

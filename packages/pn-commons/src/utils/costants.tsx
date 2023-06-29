@@ -109,13 +109,13 @@ export const preLoginLinks = (
         },
         {
           ...getFooterLinkLabels('certifications', 'Certificazioni'),
-          href: 'https://www.pagopa.it/static/e1979a4c34b4756ec4e8ff9fe115b92a/Certificazine_ISO27001.pdf',
+          href: 'https://www.pagopa.it/it/certificazioni/',
           ariaLabel: 'Vai al link: Certificazioni',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('security', 'Sicurezza delle informazioni'),
-          href: 'https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf',
+          href: 'https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/',
           ariaLabel: 'Vai al link: Sicurezza delle informazioni',
           linkType: 'internal',
         },
