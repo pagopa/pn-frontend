@@ -558,6 +558,8 @@ const AnalogFlowAllowedCodes = [
   // new entries for international registered letter - PN-6636
   'RECRI001',
   'RECRI002',
+  // PN-6792
+  'PNALL001',
   // PN-7010
   'CON993',
   'CON995',
