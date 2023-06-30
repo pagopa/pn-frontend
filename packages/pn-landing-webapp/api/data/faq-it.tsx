@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { IFaqData } from "model";
 
-import { PERFEZIONAMENTO_PATH, PN_PF_URL, PN_PG_URL } from "@utils/constants";
+import { PERFEZIONAMENTO_PATH, PN_PF_URL, PN_PG_URL, SEND_PF_HELP_EMAIL } from "@utils/constants";
 import {
   FaqLink,
   FaqParagraph,
@@ -35,9 +35,9 @@ export const itFaqData: IFaqData = {
           id: "notifiche-valore-legale",
           title: 'Cosa significa che una comunicazione è "a valore legale"?',
           description: `Significa che l'invio e la ricezione di queste comunicazioni producono degli effetti
-        giuridici sia nei confronti di chi le invia che di chi le riceve. Per esempio, se ricevi
+        giuridici sia nei confronti di chi le invia sia di chi le riceve. Per esempio, se ricevi
         una multa per violazione del codice stradale, la data in cui la ricevi incide
-        sull'importo che dovrai pagare o sulla tua facoltà di contestarla`,
+        sull'importo che dovrai pagare o sulla tua facoltà di contestarla.`,
         },
         {
           id: "notifiche-composizione",
@@ -45,9 +45,9 @@ export const itFaqData: IFaqData = {
           description: [
             `Ogni notifica è composta da uno o più “atti”, cioè i documenti notificati, e da eventuali altri documenti. 
           Per esempio, una multa può essere composta da un verbale di contravvenzione (il documento notificato), 
-          da una fotografia dell’autovelox e da un bollettino per il pagamento (gli altri documenti).`,
+          da una fotografia dell'autovelox e da un bollettino per il pagamento (gli altri documenti).`,
             `Una notifica inviata per via digitale con SEND si concretizza in un avviso con le istruzioni per visualizzare 
-          online i documenti. Una notifica inviata tramite raccomandata cartacea, invece, contiene sia l’avviso che i documenti.`,
+          online i documenti. Una notifica inviata tramite raccomandata cartacea, invece, contiene sia l'avviso che i documenti.`,
           ],
         },
       ],
@@ -58,9 +58,9 @@ export const itFaqData: IFaqData = {
         {
           id: "send-cosa-e",
           title: `Cos'è SEND?`,
-          description: `È una piattaforma che digitalizza e semplifica la gestione delle notifiche: ti
-        permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali
-        spese nell'app IO o su SEND.`,
+          description: `SEND - Servizio Notifiche Digitali (anche noto come Piattaforma Notifiche Digitali di cui all'art. 26 del
+           decreto-legge 76/2020 s.m.i.) è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette 
+           infatti di riceverle, scaricare i documenti notificati e pagare eventuali spese direttamente online su SEND o nell'app IO.`,
         },
         {
           id: "send-a-chi-invia",
@@ -119,7 +119,7 @@ export const itFaqData: IFaqData = {
           description: (
             <Box>
               <Typography variant="body2" component="span" sx={{ mr: "4px" }}>
-                Per accedere a SEND e leggere le notifiche che ricevi cittadino
+                Per accedere a SEND e leggere le notifiche che ricevi come cittadino
                 o cittadina vai su
               </Typography>
               <Typography variant="body2" component="span">
@@ -161,11 +161,11 @@ export const itFaqData: IFaqData = {
             "Cosa succede se non inserisco nessun recapito digitale o se non posso accedere a SEND?",
           description: [
             `
-                Se nei registri pubblici c’è una PEC riconducibile a te,
-                riceverai l’avviso di avvenuta ricezione a quell’indirizzo. Per
+                Se nei registri pubblici c'è una PEC riconducibile a te,
+                riceverai l'avviso di avvenuta ricezione a quell'indirizzo. Per
                 ottenere i documenti notificati, dovrai accedere a SEND.`,
             `
-                Se nei registri pubblici non c’è una PEC riconducibile a te,
+                Se nei registri pubblici non c'è una PEC riconducibile a te,
                 riceverai la notifica, comprensiva dei documenti, tramite
                 raccomandata cartacea.`,
           ],
@@ -177,13 +177,13 @@ export const itFaqData: IFaqData = {
             `Se nella sezione "I tuoi recapiti" di SEND o in uno dei registri pubblici c'è una PEC
           a te riconducibile, riceverai l'avviso di avvenuta ricezione a quell'indirizzo. Per
           visualizzare i documenti notificati e pagare eventuali spese, dovrai accedere a
-          SEND con SPID o CIE.`,
+          SEND con SPID o CIE, seguendo le indicazioni riportate nell'avviso.`,
             `Se hai attivato il servizio "Notifiche digitali" di IO, quando c'è una notifica per te
           riceverai un messaggio in app. Potrai visualizzare i documenti notificati e pagare
           eventuali spese direttamente in IO, senza dover accedere a SEND con SPID o CIE.`,
             `Se hai inserito un'e-mail o un numero di cellulare, quando c'è una notifica per te
           riceverai un messaggio su questi canali. Per visualizzare i documenti notificati e
-          pagare eventuali spese, dovrai accedere a SEND con SPID o CIE.`,
+          pagare eventuali spese, dovrai accedere a SEND con SPID o CIE seguendo le indicazioni.`,
             `Se vuoi inserire o modificare i recapiti, accedi a SEND e vai alla sezione "I tuoi
           recapiti".`,
             `Se non hai inserito nessun recapito digitale riceverai la notifica, comprensiva dei documenti, tramite raccomandata cartacea.`,
@@ -245,7 +245,7 @@ export const itFaqData: IFaqData = {
         {
           id: "documenti-iun",
           title: `Cos'è il codice IUN?`,
-          description: `Lo IUN è un codice composto da lettere e numeri. Serve a identificare ogni notifica
+          description: `Lo IUN (Identificativo Unico di Notifica) è un codice composto da lettere e numeri. Serve a identificare ogni notifica
           in modo univoco.`,
         },
         {
@@ -410,5 +410,18 @@ export const itFaqData: IFaqData = {
         },
       ],
     },
+    {
+      title: "Accessibilità",
+      items: [
+        {
+          id: "accessibilita-segnalazioni",
+          title: `Dove posso effettuare segnalazioni relative all'accessibilità?`,
+          description: (<Box>
+            <FaqTextSection>{`Scrivici all'indirizzo e-mail`}</FaqTextSection>
+            <FaqLink href={`mailto:${SEND_PF_HELP_EMAIL}`}>{SEND_PF_HELP_EMAIL}</FaqLink>
+          </Box>)
+        },
+      ]
+    }
   ],
 };
