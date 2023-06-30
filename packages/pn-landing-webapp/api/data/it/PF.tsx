@@ -49,7 +49,8 @@ export const pfHero: HeroProps = {
   ctaPrimary: heroCta,
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
-  altText: "",
+  altText:
+    "Un computer portatile mostra il dettaglio di una notifica nella piattaforma SEND.",
   background: `${IMAGES_PATH}/hero-background.png`,
 };
 /* ************************************** */
@@ -103,6 +104,8 @@ export const pfInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pf-infoblock-1.png`,
+      altText:
+        "Una donna, in piedi nel salotto di casa, guarda lo schermo del suo smartphone.",
       imageShadow: false,
     },
   },
@@ -119,6 +122,8 @@ export const pfInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: true,
       image: `${IMAGES_PATH}/pf-infoblock-2.png`,
+      altText:
+        "Una mano regge uno smartphone. Lo schermo mostra il dettaglio di una notifica.",
       imageShadow: false,
     },
   },
@@ -140,6 +145,7 @@ export const pfInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pf-infoblock-3.png`,
+      altText: "Un uomo, con uno smartphone in mano, guarda in camera.",
       aspectRatio: "9/16",
       imageShadow: false,
     },

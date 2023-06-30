@@ -43,7 +43,8 @@ export const paHero: HeroProps = {
   ),
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
-  altText: "",
+  altText:
+    "Lo schermo di un computer portatile mostra la pagina principale della piattaforma SEND.",
   background: `${IMAGES_PATH}/hero-background.png`,
   ctaPrimary: {
     label: "Scopri come aderire",
@@ -113,7 +114,8 @@ export const paInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-1.png`,
-      altText: "",
+      altText:
+        "Un uomo lavora al computer, seduto alla scrivania di un ufficio.",
       imageShadow: true,
     },
   },
@@ -136,7 +138,8 @@ export const paInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: true,
       image: `${IMAGES_PATH}/pa-infoblock-2.png`,
-      altText: "",
+      altText:
+        "Un esempio della sezione “stato della notifica” della piattaforma SEND.",
       imageShadow: false,
     },
   },
@@ -156,7 +159,8 @@ export const paInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-3.png`,
-      altText: "",
+      altText:
+        "Le mani di una persona digitano sulla tastiera di un computer portatile. Lo schermo mostra una pagina della piattaforma SEND.",
       imageShadow: false,
     },
   },
@@ -380,7 +384,8 @@ export const paInfoBlocks: Array<IInfoblockData> = [
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
-      altText: "",
+      altText:
+        "Una donna lavora al computer, seduta alla scrivania di un ufficio.",
       aspectRatio: "9/16",
       imageShadow: false,
     },
