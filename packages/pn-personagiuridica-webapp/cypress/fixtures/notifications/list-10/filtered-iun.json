@@ -1,0 +1,16 @@
+{
+  "resultsPage": [
+    {
+      "iun": "MUKX-VEDN-ZTLW-202211-L-1",
+      "paProtocolNumber": "prot-0011",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-10-05T17:33:46.49935Z",
+      "subject": "Test 0011",
+      "notificationStatus": "UNREACHABLE",
+      "recipients": ["GRBGPP87L04L741X"],
+      "requestAcceptedAt": "2022-10-05T17:34:15.410182Z"
+    }
+  ],
+  "moreResult": false,
+  "nextPagesKey": []
+}

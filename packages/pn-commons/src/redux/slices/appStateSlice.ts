@@ -1,6 +1,8 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createAppError, createAppMessage } from '../../services/message.service';
+import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
+import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
+import { createAppResponseError, createAppResponseSuccess } from '../../utils/AppResponse';
 
 export interface AppStateState {
   loading: {
@@ -11,6 +13,11 @@ export interface AppStateState {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
   };
+  responseEvent: {
+    outcome: AppResponseOutcome;
+    name: string;
+    response: AppResponse;
+  } | null;
   isInitialized: boolean;
 }
 
@@ -23,6 +30,7 @@ const initialState: AppStateState = {
     errors: [],
     success: [],
   },
+  responseEvent: null,
   isInitialized: false,
 };
 
@@ -32,7 +40,7 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
-function doRemoveErrorsByAction(action: string, errors: IAppMessage[]) {
+function doRemoveErrorsByAction(action: string, errors: Array<IAppMessage>) {
   return errors.filter((e) => e.action !== action);
 }
 
@@ -41,6 +49,18 @@ export const appStateSlice = createSlice({
   name: 'appState',
   initialState,
   reducers: {
+    addError(
+      state,
+      action: PayloadAction<{ title: string; message: string; status?: number; action?: string }>
+    ) {
+      const message = createAppMessage(
+        action.payload.title,
+        action.payload.message,
+        action.payload.status,
+        action.payload.action
+      );
+      state.messages.errors.push(message);
+    },
     removeError(state, action: PayloadAction<string>) {
       state.messages.errors = state.messages.errors.filter((e) => e.id !== action.payload);
     },
@@ -53,10 +73,7 @@ export const appStateSlice = createSlice({
         error.alreadyShown = true;
       }
     },
-    addSuccess(
-      state,
-      action: PayloadAction<{ title: string; message: string; status?: number }>
-    ) {
+    addSuccess(state, action: PayloadAction<{ title: string; message: string; status?: number }>) {
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
@@ -67,29 +84,31 @@ export const appStateSlice = createSlice({
     removeSuccess(state, action: PayloadAction<string>) {
       state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
     },
-    finishInitialization(state, _: PayloadAction<void>) {
+    finishInitialization(state) {
       state.isInitialized = true;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
       .addMatcher(isLoading, (state, action) => {
-        if (!action.payload || !action.payload.blockLoading) {
+        if (!action.meta.arg || !action.meta.arg.blockLoading) {
           state.loading.result = true;
         }
       })
       .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
-        const actionBeingFulfilled = action.type.slice(0, action.type.indexOf("/"));
+        const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
+
+        const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
+        state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
-        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
+        const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
-        const error = createAppError(
-          {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });
-        state.messages.errors.push(error);
+        const response = createAppResponseError(actionBeingRejected, action.payload.response);
+        state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };
       });
   },
 });

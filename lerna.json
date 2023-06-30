@@ -2,12 +2,12 @@
   "packages": [
     "packages/*"
   ],
-  "version": "1.5.4",
+  "version": "2.0.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {
     "version": {
-      "allowBranch": "main"
+      "allowBranch": ["main", "release/*", "develop"]
     }
   }
 }

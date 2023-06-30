@@ -1,4 +1,4 @@
-export const isArray = <TValue, U extends TValue>(value: TValue): value is U => {
+export const isArray = (value: unknown): value is Array<unknown> => {
   if (value === null || value === undefined) {
     return false;
   }

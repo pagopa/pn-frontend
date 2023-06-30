@@ -1,0 +1,50 @@
+[
+  {
+      "mandateId": "6c969e5d-b3a0-4c11-a82a-3b8360d1436c",
+      "delegator": {
+          "displayName": null,
+          "firstName": null,
+          "lastName": null,
+          "companyName": null,
+          "fiscalCode": null,
+          "person": true
+      },
+      "delegate": {
+          "displayName": "Gaio Giulio Cesare",
+          "firstName": "Gaio Giulio",
+          "lastName": "Cesare",
+          "companyName": null,
+          "fiscalCode": null,
+          "person": true
+      },
+      "status": "pending",
+      "visibilityIds": [],
+      "verificationCode": "34007",
+      "datefrom": "2022-10-04",
+      "dateto": "2023-02-02"
+  },
+  {
+    "mandateId": "6c969e5d-b3a0-4c11-a82a-3b8360d1436e",
+    "delegator": {
+        "displayName": null,
+        "firstName": null,
+        "lastName": null,
+        "companyName": null,
+        "fiscalCode": null,
+        "person": true
+    },
+    "delegate": {
+        "displayName": "Cristoforo Colombo",
+        "firstName": "Cristoforo",
+        "lastName": "Colombo",
+        "companyName": null,
+        "fiscalCode": null,
+        "person": true
+    },
+    "status": "pending",
+    "visibilityIds": [],
+    "verificationCode": "34007",
+    "datefrom": "2022-10-04",
+    "dateto": "2023-02-02"
+}
+]

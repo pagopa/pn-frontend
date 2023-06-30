@@ -19,7 +19,7 @@ type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
   handleLinkClick: (item: SideMenuItem, flag?: boolean) => void;
-  selectedItem: { index: number; label: string; route: string };
+  selectedItem: { index: number; label: string; route: string; parent?: string };
 };
 
 const useStyles = makeStyles(() => ({
@@ -54,6 +54,12 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
 
   useEffect(() => {
     setSelectedIndex(selectedItem);
+    // open parent menù
+    setOpenId(selectedItem.parent || '');
+    setOpen(selectedItem.parent !== undefined);
+    /* eslint-disable functional/immutable-data */
+    prevOpenId.current = selectedItem.parent || '';
+    /* eslint-enalbe functional/immutable-data */
   }, [selectedItem]);
 
   return (
@@ -81,6 +87,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
               <ListItemButton
                 selected={
                   selectedIndex &&
+                  !item.notSelectable &&
                   index === selectedIndex.index &&
                   selectedIndex.label === item.label
                 }
@@ -91,13 +98,14 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                   handleLinkClick(item, true);
                   handleClick(item.label);
                 }}
+                data-testid={`sideMenuItem-${item.label}`}
               >
                 {item.icon && (
                   <ListItemIcon>
                     <item.icon />
                   </ListItemIcon>
                 )}
-                <ListItemText primary={item.label} data-cy="collapsible-menu" />
+                <ListItemText primary={item.label} data-testid="collapsible-menu" />
                 {openId === item.label && open ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse
@@ -106,7 +114,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                 unmountOnExit
                 data-testid={`collapse-${item.label}`}
               >
-                <List data-cy="collapsible-list">
+                <List data-testid="collapsible-list">
                   {item.children.map((child, childIndex) => (
                     <SideMenuListItem
                       key={child.label}
@@ -156,23 +164,11 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           )}
           className={classes.root}
         >
-          {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
+          {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
               key={selfcareItem.label}
               item={selfcareItem}
               handleLinkClick={handleLinkClick}
-              selected={
-                selectedIndex &&
-                sIndex === selectedIndex.index &&
-                selectedIndex.label === selfcareItem.label
-              }
-              onSelect={() =>
-                setSelectedIndex({
-                  label: selfcareItem.label,
-                  index: sIndex,
-                  route: selfcareItem.route || '',
-                })
-              }
               goOutside
             />
           ))}

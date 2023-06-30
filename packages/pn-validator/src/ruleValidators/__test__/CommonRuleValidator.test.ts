@@ -1,6 +1,7 @@
 import { IsEqual } from './../../rules/IsEqual';
 import { IsNull } from '../../rules/IsNull';
 import { IsUndefined } from '../../rules/IsUndefined';
+import { IsOneOf } from '../../rules/IsOneOf';
 import { CustomValidator } from '../../rules/CustomValidator';
 import { CommonRuleValidator } from '../CommonRuleValidator';
 
@@ -31,6 +32,12 @@ jest.mock('../../rules/CustomValidator', () => {
     return {
         CustomValidator: jest.fn()
     }
+});
+
+jest.mock('../../rules/IsOneOf', () => {
+  return {
+      IsOneOf: jest.fn()
+  }
 });
 
 describe('Test CommonRuleValidator', () => {
@@ -64,6 +71,14 @@ describe('Test CommonRuleValidator', () => {
     const result = dummyRuleValidator.isEqual('prova');
     expect(pushRuleMk).toBeCalledTimes(1);
     expect(pushRuleMk).toBeCalledWith(new IsEqual('prova'));
+    expect(result).toBeInstanceOf(DummyRuleValidator);
+  });
+
+  it('check if isOneOf rule is instantiated', () => {
+    const possibleValues = ['prova1', 'prova2'];
+    const result = dummyRuleValidator.isOneOf(possibleValues);
+    expect(pushRuleMk).toBeCalledTimes(1);
+    expect(pushRuleMk).toBeCalledWith(new IsOneOf(possibleValues));
     expect(result).toBeInstanceOf(DummyRuleValidator);
   });
 

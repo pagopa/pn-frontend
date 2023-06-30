@@ -7,6 +7,10 @@ import { AUTH_ACTIONS, getOrganizationParty } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
+
+/**
+ @deprecated since PN-5881
+ */
 const OrganizationPartyGuard = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const idOrganization = loggedUser.organization?.id;

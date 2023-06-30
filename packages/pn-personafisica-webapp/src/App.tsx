@@ -1,60 +1,111 @@
-import { ErrorInfo, useEffect, useMemo } from 'react';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import HelpIcon from '@mui/icons-material/Help';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { Box } from '@mui/material';
+
+import { ProductSwitchItem } from '@pagopa/mui-italia';
+
 import {
   AppMessage,
+  AppResponseMessage,
+  // momentarily commented for pn-5157
+  // AppRouteType,
   appStateActions,
+  errorFactoryManager,
   initLocalization,
   Layout,
+  ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
-import { RootState } from './redux/store';
+import { RootState, store } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import { goToLoginPortal } from "./navigation/navigation.utility";
+import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
+import { goToLoginPortal } from './navigation/navigation.utility';
+import { setUpInterceptor } from './api/interceptors';
+import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { getConfiguration } from "./services/configuration.service";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
   {
     id: '0',
-    title: `Piattaforma Notifiche`,
+    title: `SEND - Servizio Notifiche Digitali`,
     productUrl: '',
     linkType: 'internal',
   },
 ];
 
+// Cfr. PN-6096
+// --------------------
+// The i18n initialization must execute before the *first* time anything is actually rendered.
+// Otherwise, if a component is rendered before the i18n initialization is actually executed,
+// won't be able to access to the actual translations.
+// E.g. if a user types the URL with the path /non-accessbile, the App component runs just once.
+// In "normal" cases, the SessionGuard initialization forces App to render more than one
+// and therefore to make i18n to be initialized by the time something actually renders.
+// 
+// In turn, adding the ternary operator in the return statement provokes 
+// the "too high computational complexity" warning to appear
+// (in fact it jumps to <= 15 to 30!!).
+// The only way I found to prevent it is to split the initialization in a separate React component.
+// ----------------------------------------
+// Carlos Lombardi, 2023.05.26
+// ----------------------------------------
 const App = () => {
+  const { t } = useTranslation(['common', 'notifiche']);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      setIsInitialized(true);
+      // init localization
+      initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      // eslint-disable-next-line functional/immutable-data
+      errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
+    }
+  }, [isInitialized]);
+
+  return isInitialized ? <ActualApp /> : <div/>;
+};
+
+const ActualApp = () => {
+  setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -69,27 +120,26 @@ const App = () => {
 
   const isPrivacyPage = path[1] === 'privacy-tos';
 
-  const userActions = useMemo(
-    () => {
-      const profiloAction = {
-        id: 'profile',
-        label: t('menu.profilo'),
-        onClick: () => {
-          trackEventByType(TrackEventType.USER_VIEW_PROFILE);
-          navigate(routes.PROFILO);
-        },
-        icon: <SettingsIcon fontSize="small" color="inherit" />,
-      };
-      const logoutAction = {
-        id: 'logout',
-        label: t('header.logout'),
-        onClick: () => handleUserLogout(),
-        icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-      };
-      return tos ? [ profiloAction, logoutAction ] : [ logoutAction ];
-    },
-    [tos]
-  );
+  const userActions = useMemo(() => {
+    const profiloAction = {
+      id: 'profile',
+      label: t('menu.profilo'),
+      onClick: () => {
+        trackEventByType(TrackEventType.USER_VIEW_PROFILE);
+        navigate(routes.PROFILO);
+      },
+      icon: <SettingsIcon fontSize="small" color="inherit" />,
+    };
+    const logoutAction = {
+      id: 'logout',
+      label: t('header.logout'),
+      onClick: () => handleUserLogout(),
+      icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
+    };
+    return tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
+      ? [profiloAction, logoutAction]
+      : [logoutAction];
+  }, [tosConsent, privacyConsent]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -98,14 +148,10 @@ const App = () => {
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
-    // init localization
-    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-  }, []);
-
-  useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
       void dispatch(getSidemenuInformation());
+      void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
 
@@ -163,6 +209,21 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
+    {
+      label: t('menu.app-status'),
+      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+      icon: () =>
+        currentStatus ? (
+          currentStatus.appIsFullyOperative ? (
+            <CheckCircleIcon sx={{ color: 'success.main' }} />
+          ) : (
+            <ErrorIcon sx={{ color: 'error.main' }} />
+          )
+        ) : (
+          <HelpIcon />
+        ),
+      route: routes.APP_STATUS,
+    },
   ];
 
   const changeLanguageHandler = async (langCode: string) => {
@@ -202,12 +263,14 @@ const App = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
-
-    goToLoginPortal(window.location.origin);
+    // momentarily commented for pn-5157
+    // goToLoginPortal(AppRouteType.PF);
+    goToLoginPortal();
   };
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
@@ -224,8 +287,20 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
+        showSideMenu={
+          !!sessionToken &&
+          tosConsent &&
+          tosConsent.accepted &&
+          fetchedTos &&
+          privacyConsent &&
+          privacyConsent.accepted &&
+          fetchedPrivacy &&
+          !isPrivacyPage
+        }
         productsList={productsList}
+        showHeaderProduct={
+          tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
+        }
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
@@ -234,7 +309,9 @@ const App = () => {
         isLogged={!!sessionToken}
         hasTermsOfService={true}
       >
-        <AppMessage sessionRedirect={async () => await dispatch(logout())} />
+        {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
+        <AppMessage />
+        <AppResponseMessage />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

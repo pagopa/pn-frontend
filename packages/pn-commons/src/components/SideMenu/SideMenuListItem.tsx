@@ -10,9 +10,21 @@ type Props = {
   selected?: boolean;
   style?: { [key: string]: string | number };
   goOutside?: boolean;
-  onSelect: () => void;
+  onSelect?: () => void;
   handleLinkClick: (item: SideMenuItem) => void;
 };
+
+
+function renderIcon(Icon: any): JSX.Element | null {
+  if (typeof Icon === "object") {
+    return <Icon />;
+  } else if (typeof Icon === "function") {
+    return Icon();
+  } else {
+    return null;
+  }
+}
+
 
 /**
  * SideMenu List Item: rappresenta un item nel menu di navigazione laterale. Se goOutside è true al click viene aperta un'altra tab del browser.
@@ -34,14 +46,17 @@ const SideMenuListItem = ({
     <ListItemButton
       selected={selected}
       onClick={() => {
-        onSelect();
+        if (onSelect) {
+          onSelect();
+        }
         if (goOutside) {
-          window.open(item.route as string);
+          window.open(item.route);
         } else {
           handleLinkClick(item);
         }
       }}
       sx={style}
+      data-testid={`sideMenuItem-${item.label}`}
     >
       {item.icon && (
         <ListItemIcon>
@@ -50,11 +65,11 @@ const SideMenuListItem = ({
               <item.icon />
             </Badge>
           ) : (
-            <item.icon />
+            renderIcon(item.icon)
           )}
         </ListItemIcon>
       )}
-      <ListItemText primary={item.label} data-cy={`menu-item(${(item.label).toLowerCase()})`} />
+      <ListItemText primary={item.label} data-testid={`menu-item(${item.label.toLowerCase()})`} />
       {item.rightBadgeNotification && (
         <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
       )}

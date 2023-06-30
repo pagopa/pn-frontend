@@ -9,10 +9,10 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
-import { Party } from '../../models/party';
+import { FilterPartiesParams, Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
-export enum CONTACT_ACTIONS  {
+export enum CONTACT_ACTIONS {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
 }
@@ -31,15 +31,11 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
       params.recipientId,
       params.senderId,
       params.channelType as LegalChannelType,
-      { value: params.value, verificationCode: params.code }
+      { value: params.value, verificationCode: params.code },
+      params.senderName
     );
   } catch (e: any) {
-    if (e.response.status === 422) {
-      // { response: { status: 406 }, blockNotification: true }
-      return rejectWithValue({ response: e.response, blockNotification: true });
-    } else {
-      return rejectWithValue({ response: e.response });
-    }
+    return rejectWithValue(e);
   }
 });
 
@@ -68,15 +64,11 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
         params.recipientId,
         params.senderId,
         params.channelType as CourtesyChannelType,
-        { value: params.value, verificationCode: params.code }
+        { value: params.value, verificationCode: params.code },
+        params.senderName
       );
     } catch (e: any) {
-      if (e.response.status === 422) {
-        // { response: { status: 406 }, blockNotification: true }
-        return rejectWithValue({ response: e.response, blockNotification: true });
-      } else {
-        return rejectWithValue({ response: e.response });
-      }
+      return rejectWithValue(e);
     }
   }
 );
@@ -106,11 +98,7 @@ export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
         { value: 'APPIO', verificationCode: '00000' }
       );
     } catch (e: any) {
-      if (e.response.status === 422) {
-        return rejectWithValue({ response: e.response, blockNotification: true });
-      } else {
-        return rejectWithValue({ response: e.response });
-      }
+      return rejectWithValue(e);
     }
   }
 );
@@ -126,8 +114,13 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
-
-export const getAllActivatedParties = createAsyncThunk<Array<Party>,void>(
-  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
-  performThunkAction(() => ExternalRegistriesAPI.getAllActivatedParties())
+export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterPartiesParams | null>(
+  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );

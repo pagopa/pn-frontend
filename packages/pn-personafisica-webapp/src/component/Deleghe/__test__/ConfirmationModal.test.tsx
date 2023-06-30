@@ -1,11 +1,19 @@
-import { fireEvent } from '@testing-library/react';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import * as React from 'react';
-import { axe, render } from '../../../__test__/test-utils';
+import { fireEvent } from '@testing-library/react';
+import { render } from '../../../__test__/test-utils';
 
 import ConfirmationModal from '../ConfirmationModal';
 
-const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
+// eslint-disable-next-line functional/no-let
+let mockIsMobile: boolean;
+
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    useIsMobile: () => mockIsMobile,
+  };
+});
 
 const mockCancelFunction = jest.fn();
 const mockConfirmFunction = jest.fn();
@@ -30,28 +38,29 @@ const renderConfirmationModal = ({ open = true, onConfirm, onConfirmLabel, onClo
   );
 
 describe('ConfirmationModal Component', () => {
-  afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
+  beforeEach(() => {
+    mockIsMobile = false;
   });
 
-  it('renders the component', () => {
-    useIsMobileSpy.mockReturnValue(false);
+  it('renders the component in desktop version', () => {
     const result = renderConfirmationModal({
       onConfirm: mockConfirmFunction,
       onConfirmLabel: 'Conferma',
       onCloseLabel: 'Cancella',
     });
     const dialog = result.queryByRole('dialog');
+    const stack = result.queryByTestId('dialogStack');
 
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/Test Title/i);
     expect(dialog).toHaveTextContent(/Conferma/i);
     expect(dialog).toHaveTextContent(/Cancella/i);
+    // added this check to address explicitly that the desktop (i.e not mobile)
+    // version is rendered
+    expect(stack).toHaveStyle('flex-direction: row');
   });
 
   it('checks that the confirm and cancel functions are executed', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({ onConfirm: mockConfirmFunction });
     const confirm = result.queryAllByTestId('dialogAction')[1];
     const cancel = result.queryAllByTestId('dialogAction')[0];
@@ -64,7 +73,6 @@ describe('ConfirmationModal Component', () => {
   });
 
   it('renders the dialog with default labels', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({ onConfirm: mockConfirmFunction });
 
     const confirm = result.queryAllByTestId('dialogAction')[1];
@@ -74,7 +82,6 @@ describe('ConfirmationModal Component', () => {
   });
 
   it('renders the dialog with no confirm button', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({});
 
     const cancel = result.queryAllByTestId('dialogAction')[0];
@@ -82,7 +89,6 @@ describe('ConfirmationModal Component', () => {
   });
 
   it('renders the dialog closed', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({ open: false });
 
     const dialog = result.queryByRole('dialog');
@@ -91,7 +97,7 @@ describe('ConfirmationModal Component', () => {
   });
 
   it('renders the mobile view of the dialog', () => {
-    useIsMobileSpy.mockReturnValue(true);
+    mockIsMobile = true;
     const result = renderConfirmationModal({
       onConfirm: mockConfirmFunction,
       onConfirmLabel: 'Conferma',
@@ -104,16 +110,5 @@ describe('ConfirmationModal Component', () => {
     expect(dialog).toBeInTheDocument();
     expect(buttons).toHaveLength(2);
     expect(stack).toHaveStyle('flex-direction: column');
-  });
-
-  it.skip('is Confirmation Modal component accessible', async ()=>{
-    useIsMobileSpy.mockReturnValue(false);
-    const result = renderConfirmationModal({
-      onConfirm: mockConfirmFunction,
-      onConfirmLabel: 'Conferma',
-      onCloseLabel: 'Cancella',
-    });
-    const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
   });
 });

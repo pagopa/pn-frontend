@@ -1,4 +1,4 @@
-﻿## Piattaforma notifiche
+﻿## SEND - Servizio Notifiche Digitali
 
 ### Start
 
@@ -40,18 +40,18 @@ This project uses [lerna](https://github.com/lerna/lerna) and [craco](https://gi
 These tools allow to handle a monorepo with multiple webapps which share common components.
 The content of monorepo is:
 
-- packages/pn-commons component-library for Piattaforma Notifiche
+- packages/pn-commons component-library for SEND
 - packages/pn-validator utility library to perform validation tasks on custom schemas
 - packages/pn-pa-webapp app for public administration
 - packages/pn-personafisica-webapp app for citizens
 - packages/pn-personafisica-login login section for citizen app
-- packages/pn-landing-webapp landing site for Piattaforma Notifiche
+- packages/pn-landing-webapp landing site for SEND
 
 https://medium.com/geekculture/setting-up-monorepo-with-create-react-app-cb2cfa763b96
 
 
 ### Sonar
-You can run a task analysis with sonar-scanner using this script
+You can run a task analysis with sonar-scanner using this script in each package
 - `yarn sonar`
 To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
 The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)

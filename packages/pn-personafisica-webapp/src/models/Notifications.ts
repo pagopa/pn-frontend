@@ -8,3 +8,4 @@ export type NotificationColumn =
   | 'status'
   | '';
 
+export type NotificationId = { iun: string; mandateId?: string };

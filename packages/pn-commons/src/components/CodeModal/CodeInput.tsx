@@ -117,9 +117,10 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     <Fragment>
       {initialValues.map((_value, index) => (
         <TextField
+          data-testid={`codeInput(${index})`}
           autoComplete="off"
           key={index}
-          id="outlined-basic"
+          id={`code-input-${index}`}
           variant="outlined"
           placeholder="-"
           sx={inputStyle}

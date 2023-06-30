@@ -1,4 +1,4 @@
-export const isDate = <TValue, U extends TValue>(value: TValue): value is U => {
+export const isDate = (value: unknown): value is Date => {
   if (value === null || value === undefined) {
     return false;
   }

@@ -44,8 +44,8 @@ const cardActions: Array<CardAction> = [
   { id: 'action-1', component: <div>Mocked action</div>, onClick: clickActionMockFn },
 ];
 
-describe('Notifications Card Component', () => {
-  it('renders notifications card (with data)', () => {
+describe('Items Card Component', () => {
+  it('renders items card (with data)', () => {
     const result = render(
       <ItemsCard
         cardHeader={cardHeader}

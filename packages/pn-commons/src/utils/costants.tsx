@@ -1,16 +1,17 @@
-import { FooterLinksType, PreLoginFooterLinksType } from '@pagopa/mui-italia';
+import { FooterLinksType, Languages, PreLoginFooterLinksType } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
-export const LANGUAGES = {
+declare const OneTrust: any;
+
+export const LANGUAGES: Languages = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
 };
 
-export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
-const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/';
+const ACCESSIBILITY_LINK = 'https://form.agid.gov.it/view/ee21027b-0e20-4e57-98c1-b3652daa6ef5/';
 
 const getFooterLinkLabels = (
   link: string,
@@ -108,13 +109,13 @@ export const preLoginLinks = (
         },
         {
           ...getFooterLinkLabels('certifications', 'Certificazioni'),
-          href: 'https://www.pagopa.it/static/307f84e95cb44e962922833037b8ef2d/Certificazione-ISO-27001.pdf',
+          href: 'https://www.pagopa.it/it/certificazioni/',
           ariaLabel: 'Vai al link: Certificazioni',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('security', 'Sicurezza delle informazioni'),
-          href: 'https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf',
+          href: 'https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/',
           ariaLabel: 'Vai al link: Sicurezza delle informazioni',
           linkType: 'internal',
         },
@@ -127,7 +128,7 @@ export const preLoginLinks = (
         {
           ...getFooterLinkLabels('cookie', 'Preferenze Cookie'),
           ariaLabel: 'Vai al link: Preferenze Cookie',
-          href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
+          onClick: () => OneTrust.ToggleInfoDisplay(),
           linkType: 'internal',
         },
         {
@@ -143,10 +144,10 @@ export const preLoginLinks = (
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('321-model', 'Modello 321'),
+          ...getFooterLinkLabels('321-model', 'Modello 231'),
           href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls',
           linkType: 'internal',
-          ariaLabel: 'Vai al link: Modello 321',
+          ariaLabel: 'Vai al link: Modello 231',
         },
       ],
     },
@@ -202,7 +203,7 @@ export const preLoginLinks = (
       links: [
         {
           ...getFooterLinkLabels('accessibility', 'Accessibilità'),
-          href: `${URL_DIGITAL_NOTIFICATIONS}${ACCESSIBILITY_LINK_RELATIVE_PATH}`,
+          href: ACCESSIBILITY_LINK,
           linkType: 'external',
         },
       ],
@@ -244,7 +245,7 @@ export const postLoginLinks = (
   },
   {
     ...getFooterLinkLabels('accessibility', 'Accessibilità'),
-    href: `${URL_DIGITAL_NOTIFICATIONS}${ACCESSIBILITY_LINK_RELATIVE_PATH}`,
+    href: ACCESSIBILITY_LINK,
     linkType: 'external',
   },
 ];

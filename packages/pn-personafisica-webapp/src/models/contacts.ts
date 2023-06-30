@@ -17,9 +17,12 @@ export interface DigitalAddress {
   addressType: string;
   recipientId: string;
   senderId: string;
+  senderName?: string;
   channelType: LegalChannelType | CourtesyChannelType;
   value: string;
-  code: string;
+  requestId?: string;
+  pecValid?: boolean;
+  codeValid?: boolean;
 }
 
 export interface DigitalAddresses {

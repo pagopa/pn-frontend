@@ -14,23 +14,28 @@ import {
 } from '@pagopa/mui-italia';
 
 import {
-  getDay,
-  getMonthString,
-  getTime,
+  formatDay,
+  formatMonthString,
+  formatTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-  getNotificationTimelineStatusInfos } from '../../utils';
+  getNotificationTimelineStatusInfos,
+} from '../../utils';
 import {
   LegalFactId,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationStatusHistory,
+  NotificationDetailOtherDocument,
 } from '../../types';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  clickHandler: (legalFactId: LegalFactId) => void;
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
+  // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+  clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
   showLessButtonLabel?: string;
@@ -80,6 +85,7 @@ const timelineStepCmp = (
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
+ * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  */
 const NotificationDetailTimelineStep = ({
   timelineStep,
@@ -91,14 +97,15 @@ const NotificationDetailTimelineStep = ({
   showHistoryButton = false,
   historyButtonLabel,
   historyButtonClickHandler,
-  eventTrackingCallbackShowMore
+  eventTrackingCallbackShowMore,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
-  let legalFactsIds: Array<{ file: LegalFactId; step: INotificationDetailTimeline }> = [];
+  let legalFactsIds: Array<{ file: LegalFactId | NotificationDetailOtherDocument; step: INotificationDetailTimeline }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
-  const notificationStatusInfos = getNotificationStatusInfos(timelineStep.status);
+
+  const notificationStatusInfos = getNotificationStatusInfos(timelineStep, { recipients });
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
@@ -107,7 +114,7 @@ const NotificationDetailTimelineStep = ({
         return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
       }
       return arr;
-    }, [] as Array<{ file: LegalFactId; step: INotificationDetailTimeline }>);
+    }, [] as Array<{ file: LegalFactId | NotificationDetailOtherDocument; step: INotificationDetailTimeline }>);
 
     visibleSteps = timelineStep.steps.filter((s) => !s.hidden);
     /* eslint-enable functional/immutable-data */
@@ -117,16 +124,16 @@ const NotificationDetailTimelineStep = ({
     undefined,
     <Fragment>
       <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-        {getMonthString(timelineStep.activeFrom)}
+        {formatMonthString(timelineStep.activeFrom)}
       </Typography>
       <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
-        {getDay(timelineStep.activeFrom)}
+        {formatDay(timelineStep.activeFrom)}
       </Typography>
     </Fragment>,
     position === 'first' ? 'outlined' : undefined,
     <Fragment>
       <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-        {getTime(timelineStep.activeFrom)}
+        {formatTime(timelineStep.activeFrom)}
       </Typography>
       <Chip
         data-testid="itemStatus"
@@ -148,16 +155,18 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.primary" variant="caption">
             {notificationStatusInfos.description}
           </Typography>
-          {legalFactsIds && legalFactsIds.length > 0 &&
+          {legalFactsIds &&
+            legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
               <ButtonNaked
-                key={lf.file.key}
+                key={(lf.file as LegalFactId).key || (lf.file as NotificationDetailOtherDocument).documentId}
                 startIcon={<AttachFileIcon />}
                 onClick={() => clickHandler(lf.file)}
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
+                data-testid="download-legalfact"
               >
-                {getLegalFactLabel(lf.step, lf.file.category)}
+                {getLegalFactLabel(lf.step, (lf.file as LegalFactId).category || (lf.file as NotificationDetailOtherDocument).documentType, (lf.file as LegalFactId).key || '')}
               </ButtonNaked>
             ))}
         </Box>
@@ -188,7 +197,7 @@ const NotificationDetailTimelineStep = ({
   );
 
   const microStep = (s: INotificationDetailTimeline) => {
-    const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients);
+    const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients, timelineStep.steps);
     if (!timelineStatusInfos) {
       return null;
     }
@@ -196,16 +205,16 @@ const NotificationDetailTimelineStep = ({
       s.elementId,
       <Fragment>
         <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-          {getMonthString(s.timestamp)}
+          {formatMonthString(s.timestamp)}
         </Typography>
         <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
-          {getDay(s.timestamp)}
+          {formatDay(s.timestamp)}
         </Typography>
       </Fragment>,
       undefined,
       <Fragment>
         <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-          {getTime(s.timestamp)}
+          {formatTime(s.timestamp)}
         </Typography>
         <Typography
           color="text.primary"
@@ -219,28 +228,24 @@ const NotificationDetailTimelineStep = ({
         <Box sx={{ overflowWrap: 'anywhere' }}>
           <Typography color="text.primary" fontSize={14}>
             {timelineStatusInfos.description}&nbsp;
-            {s.legalFactsIds && s.legalFactsIds.length > 0 && (
-              s.legalFactsIds.map(lf => <Typography
-                fontSize={14}
-                display="inline"
-                variant="button"
-                color="primary"
-                sx={{ cursor: 'pointer' }}
-                onClick={() => s.legalFactsIds && clickHandler(lf)}
-                key={lf.key}
-              >
-                {getLegalFactLabel(s, lf.category)}
-              </Typography>
-            ))}
+            {s.legalFactsIds &&
+              s.legalFactsIds.length > 0 &&
+              s.legalFactsIds.map((lf) => (
+                <Typography
+                  fontSize={14}
+                  display="inline"
+                  variant="button"
+                  color="primary"
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => clickHandler(lf)}
+                  key={(lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId}
+                  data-testid="download-legalfact"
+                >
+                  {getLegalFactLabel(s, (lf as LegalFactId).category || (lf as NotificationDetailOtherDocument).documentType, (lf as LegalFactId).key || '')}
+                </Typography>
+              ))}
           </Typography>
         </Box>
-        {recipients.length > 1 && (
-          <Box>
-            <Typography fontSize={14} color="text.secondary">
-              {timelineStatusInfos.recipient}
-            </Typography>
-          </Box>
-        )}
       </Fragment>,
       'middle',
       'small'

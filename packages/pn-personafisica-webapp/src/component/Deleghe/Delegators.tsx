@@ -1,6 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, ItemsTable, Item, Sort, ApiErrorWrapper, EmptyState } from '@pagopa-pn/pn-commons';
+import {
+  Column,
+  ItemsTable,
+  Item,
+  Sort,
+  ApiErrorWrapper,
+  EmptyState,
+  KnownSentiment,
+} from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -55,18 +63,17 @@ const Delegators = () => {
       label: t('deleghe.table.permissions'),
       width: '18%',
       getCellLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} />;
+        return <OrganizationsList organizations={value} visibleItems={3} />;
       },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
       width: '20%',
-      align: 'center' as const,
       getCellLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={label} color={color} />;
+          return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
         } else {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }
@@ -88,22 +95,28 @@ const Delegators = () => {
 
   return (
     <>
-      <Box mb={8}>
+      <Box mb={8} data-testid="delegators-wrapper">
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
+          <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
         </Stack>
-        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())} 
+        <ApiErrorWrapper
+          apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
+          reloadAction={() => dispatch(getDelegators())}
           mainText={t('deleghe.delegatorsApiErrorMessage')}
         >
-          { rows.length > 0 
-            ? <ItemsTable
+          {rows.length > 0 ? (
+            <ItemsTable
               columns={delegatorsColumns}
               rows={rows}
               sort={sortDelegators}
               onChangeSorting={handleChangeSorting}
             />
-            : <EmptyState disableSentimentDissatisfied emptyMessage={t('deleghe.no_delegators')} />
-          }
+          ) : (
+            <EmptyState
+              sentimentIcon={KnownSentiment.NONE}
+              emptyMessage={t('deleghe.no_delegators')}
+            />
+          )}
         </ApiErrorWrapper>
       </Box>
     </>

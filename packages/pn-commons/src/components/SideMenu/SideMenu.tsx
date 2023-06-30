@@ -21,16 +21,19 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
   const isMobile = useIsMobile();
 
   const findMenuItemSelectedRecursive = (
-    items: Array<SideMenuItem>
-  ): { index: number; label: string; route: string } | null => {
+    items: Array<SideMenuItem>,
+    parent?: string
+  ): { index: number; label: string; route: string; parent?: string } | null => {
     // find if there is a menu item that matches current route
     // notSelectable flag indicates that the menu item is selectable
+    // eslint-disable-next-line functional/no-let
     let menuItemIndex = items.findIndex((m) => m.route === location.pathname && !m.notSelectable);
     if (menuItemIndex > -1) {
       return {
         index: menuItemIndex,
         label: items[menuItemIndex].label,
         route: items[menuItemIndex].route || '',
+        parent
       };
     }
     // find if there is a menu item that has route as a part of current one
@@ -45,12 +48,14 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
     });
     if (menuItemIndex > -1) {
       if (items[menuItemIndex].children && items[menuItemIndex].children?.length) {
-        return findMenuItemSelectedRecursive(items[menuItemIndex].children!);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return findMenuItemSelectedRecursive(items[menuItemIndex].children!, items[menuItemIndex].label);
       }
       return {
         index: menuItemIndex,
         label: items[menuItemIndex].label,
         route: items[menuItemIndex].route || '',
+        parent
       };
     }
     return null;
@@ -78,7 +83,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
 
   const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
     if (eventTrackingCallback) {
-      eventTrackingCallback(item.route)
+      eventTrackingCallback(item.route);
     }
     if (isMobile && !menuFlag) {
       setState(false);

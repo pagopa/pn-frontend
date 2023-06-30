@@ -1,13 +1,19 @@
+import React from 'react';
 import * as redux from 'react-redux';
 import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
+import {
+  apiOutcomeTestHelper,
+  AppResponseMessage,
+  ResponseEventDispatcher,
+} from '@pagopa-pn/pn-commons';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -17,18 +23,16 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
- jest.mock('@pagopa-pn/pn-commons', () => {
+jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
-
 
 jest.mock('../SpecialContactElem', () => () => <div>SpecialContactElem</div>);
 
@@ -64,13 +68,34 @@ async function testSelect(
   });
 }
 
+async function testAutocomplete(
+  form: HTMLFormElement,
+  elementName: string,
+  options: Array<{ label: string; value: string }>,
+  optToSelect: number
+) {
+  const selectInput = form.querySelector(`input[name="${elementName}"]`);
+  fireEvent.mouseDown(selectInput as Element);
+  const selectOptionsContainer = await screen.findByRole('presentation');
+  expect(selectOptionsContainer).toBeInTheDocument();
+  const selectOptionsListItems = await within(selectOptionsContainer).findAllByRole('option');
+  expect(selectOptionsListItems).toHaveLength(options.length);
+  selectOptionsListItems.forEach((opt, index) => {
+    expect(opt).toHaveTextContent(options[index].label);
+  });
+  await waitFor(() => {
+    fireEvent.click(selectOptionsListItems[optToSelect]);
+    expect(selectInput).toHaveValue(options[optToSelect].label);
+  });
+}
+
 async function testInvalidField(
   form: HTMLFormElement,
   elementName: string,
   value: string,
   errorMessageString: string
 ) {
-  await testSelect(
+  await testAutocomplete(
     form,
     'sender',
     [
@@ -85,12 +110,12 @@ async function testInvalidField(
   const errorMessage = form.querySelector(`#${elementName}-helper-text`);
   expect(errorMessage).toBeInTheDocument();
   expect(errorMessage).toHaveTextContent(errorMessageString);
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[data-testid="Special contact add button"]');
   expect(button).toBeDisabled();
 }
 
 async function testValidFiled(form: HTMLFormElement, elementName: string, value: string) {
-  await testSelect(
+  await testAutocomplete(
     form,
     'sender',
     [
@@ -104,7 +129,7 @@ async function testValidFiled(form: HTMLFormElement, elementName: string, value:
   await waitFor(() => expect(input!).toHaveValue(value));
   const errorMessage = form.querySelector(`#${elementName}-helper-text`);
   expect(errorMessage).not.toBeInTheDocument();
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[data-testid="Special contact add button"]');
   expect(button).toBeEnabled();
 }
 
@@ -123,7 +148,7 @@ async function testContactAddition(
     const actionSpy = jest.spyOn(actions, 'createOrUpdateCourtesyAddress');
     actionSpy.mockImplementation(mockActionFn as any);
   }
-  await testSelect(
+  await testAutocomplete(
     form,
     'sender',
     [
@@ -135,7 +160,7 @@ async function testContactAddition(
   const input = form.querySelector(`input[name="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => expect(input!).toHaveValue(value));
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[data-testid="Special contact add button"]');
   fireEvent.click(button!);
   mockDispatchFn.mockClear();
   await waitFor(() => {
@@ -144,11 +169,13 @@ async function testContactAddition(
     expect(mockActionFn).toBeCalledWith({
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
+      senderName: 'Comune di Milano',
       channelType,
       value: elementName === 's_phone' ? '+39' + value : value,
       code: undefined,
     });
   });
+
   const dialog = await waitFor(() => {
     const dialogEl = screen.queryByTestId('codeDialog');
     expect(dialogEl).toBeInTheDocument();
@@ -170,13 +197,14 @@ async function testContactAddition(
       unwrap: () => Promise.resolve({ code: 'verified' }),
     }))
   );
-  fireEvent.click(dialogButtons![1]);
+  fireEvent.click(dialogButtons![2]);
   await waitFor(() => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
+      senderName: 'Comune di Milano',
       channelType,
       value: elementName === 's_phone' ? '+39' + value : value,
       code: '01234',
@@ -210,51 +238,11 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
             recipientId="mocked-recipientId"
-            legalAddresses={[
-              {
-                addressType: '',
-                recipientId: 'mocked-recipientId',
-                senderId: 'default',
-                channelType: LegalChannelType.PEC,
-                value: 'mocked@mail.com',
-                code: '12345',
-              },
-            ]}
-            courtesyAddresses={[
-              {
-                addressType: '',
-                recipientId: 'mocked-recipientId',
-                senderId: 'default',
-                channelType: CourtesyChannelType.EMAIL,
-                value: 'mocked@mail.com',
-                code: '12345',
-              },
-              {
-                addressType: '',
-                recipientId: 'mocked-recipientId',
-                senderId: 'default',
-                channelType: CourtesyChannelType.SMS,
-                value: '12345678910',
-                code: '12345',
-              },
-            ]}
+            legalAddresses={legalAddresses}
+            courtesyAddresses={courtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>,
-        {
-          preloadedState: {
-            contactsState: {
-              loading: false,
-              digitalAddresses: {
-                legal: [],
-                courtesy: [],
-              },
-              parties: [
-                { name: 'Comune di Milano', id: 'comune-milano' },
-                { name: 'Tribunale di Milano', id: 'tribunale-milano' },
-              ],
-            },
-          },
-        }
+        { preloadedState: initialState }
       );
     });
   });
@@ -262,11 +250,11 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
   afterEach(() => {
     jest.resetAllMocks();
     jest.clearAllMocks();
-    // restore sembra di essere appunto necessario per restituire il comportamento originale 
+    // restore sembra di essere appunto necessario per restituire il comportamento originale
     // alle funzoni/oggetti moccati
     // ------------------
     // Carlos Lombardi, 2022.09.01
-    jest.restoreAllMocks();  
+    jest.restoreAllMocks();
   });
 
   it('renders SpecialContacts', () => {
@@ -275,14 +263,14 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     testFormElements(form!, 'sender', 'special-contacts.sender');
     testFormElements(form!, 'addressType', 'special-contacts.address-type');
     testFormElements(form!, 's_pec', 'special-contacts.pec');
-    const button = form?.querySelector('button');
+    const button = form?.querySelector('[data-testid="Special contact add button"]');
     expect(button).toHaveTextContent('button.associa');
     expect(button).toBeDisabled();
   });
 
   it('changes sender', async () => {
     const form = result.container.querySelector('form');
-    await testSelect(
+    await testAutocomplete(
       form!,
       'sender',
       [
@@ -310,14 +298,24 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     testFormElements(form!, 's_phone', 'special-contacts.phone');
   });
 
-  it('checks invalid pec', async () => {
+  it('checks invalid pec - 1', async () => {
     const form = result.container.querySelector('form');
     await testInvalidField(form!, 's_pec', 'mail-errata', 'legal-contacts.valid-pec');
   });
 
+  it('checks invalid pec - 2', async () => {
+    const form = result.container.querySelector('form');
+    await testInvalidField(
+      form!,
+      's_pec',
+      'non.va.bene@a1.a2.a3.a4.a5.a6.a7.a8.a9.a0.b1.b2.b3.b4',
+      'legal-contacts.valid-pec'
+    );
+  });
+
   it('checks valid pec', async () => {
     const form = result.container.querySelector('form');
-    await testValidFiled(form!, 's_pec', 'mail@valida.mail');
+    await testValidFiled(form!, 's_pec', 'mail-carino@valida.com');
   });
 
   it('checks invalid mail', async () => {
@@ -332,7 +330,12 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       ],
       2
     );
-    await testInvalidField(form!, 's_mail', 'mail-errata', 'courtesy-contacts.valid-email');
+    await testInvalidField(
+      form!,
+      's_mail',
+      'due__trattini_bassi_no@pagopa.it',
+      'courtesy-contacts.valid-email'
+    );
   });
 
   it('checks valid mail', async () => {
@@ -347,7 +350,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       ],
       2
     );
-    await testValidFiled(form!, 's_mail', 'mail@valida.mail');
+    await testValidFiled(form!, 's_mail', 'mail@valida.ar');
   });
 
   it('checks invalid phone', async () => {
@@ -385,7 +388,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     await testContactAddition(
       form!,
       's_pec',
-      'mail@valida.mail',
+      'mail@valida.ar',
       mockDispatchFn,
       mockActionFn,
       LegalChannelType.PEC
@@ -429,23 +432,13 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     await testContactAddition(
       form!,
       's_mail',
-      'mail@valida.mail',
+      'mail-trattino.punto_underscore.fine@val-ida.it',
       mockDispatchFn,
       mockActionFn,
       CourtesyChannelType.EMAIL
     );
   });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
-  }, 10000);
 });
-
 
 describe('Contacts Page - different contact API behaviors', () => {
   beforeEach(() => {
@@ -460,23 +453,36 @@ describe('Contacts Page - different contact API behaviors', () => {
   it('API error', async () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(async () => void render(        
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
-      </DigitalContactsCodeVerificationProvider>
-    ));
+    await act(
+      async () =>
+        void render(
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <DigitalContactsCodeVerificationProvider>
+              <SpecialContacts recipientId="toto" legalAddresses={[]} courtesyAddresses={[]} />
+            </DigitalContactsCodeVerificationProvider>
+          </>
+        )
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockResolvedValue([]);
-    await act(async () => void render(        
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
-      </DigitalContactsCodeVerificationProvider>
-    ));
+    await act(
+      async () =>
+        void render(
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <DigitalContactsCodeVerificationProvider>
+              <SpecialContacts recipientId="toto" legalAddresses={[]} courtesyAddresses={[]} />
+            </DigitalContactsCodeVerificationProvider>
+          </>
+        )
+    );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
-

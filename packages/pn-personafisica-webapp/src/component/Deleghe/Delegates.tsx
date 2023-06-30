@@ -3,7 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import {
+  Column,
+  ItemsTable as Table,
+  Item,
+  CodeModal,
+  Sort,
+  EmptyState,
+  ApiErrorWrapper,
+} from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -12,8 +20,8 @@ import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 import { DelegatesColumn } from '../../models/Deleghe';
 
 import { Menu, OrganizationsList } from './DelegationsElements';
@@ -62,17 +70,16 @@ const Delegates = () => {
       label: t('deleghe.table.permissions'),
       width: '14%',
       getCellLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} />;
+        return <OrganizationsList organizations={value} visibleItems={3} />;
       },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
       width: '18%',
-      align: 'center' as const,
       getCellLabel(value: string) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={label} color={color} />;
+        return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
       },
     },
     {
@@ -95,7 +102,7 @@ const Delegates = () => {
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, {source});
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
@@ -113,23 +120,29 @@ const Delegates = () => {
         subtitle={t('deleghe.show_code_subtitle')}
         open={showCodeModal.open}
         initialValues={showCodeModal.code.split('')}
-        handleClose={handleCloseShowCodeModal}
         cancelCallback={handleCloseShowCodeModal}
         cancelLabel={t('deleghe.close')}
         codeSectionTitle={t('deleghe.verification_code')}
         isReadOnly
       />
-      <Box mb={8}>
+      <Box mb={8} data-testid="delegates-wrapper">
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
+          <Typography variant="h5">{t('deleghe.delegatesTitle')}</Typography>
           <Box>
-            <Button variant="outlined" onClick={(_e, source='default') => handleAddDelegationClick(source)}>
+            <Button
+              variant="outlined"
+              onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+              data-testid="add-delegation"
+            >
               <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
               {t('deleghe.add')}
             </Button>
           </Box>
         </Stack>
-        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
+        <ApiErrorWrapper
+          apiId={DELEGATION_ACTIONS.GET_DELEGATES}
+          reloadAction={() => dispatch(getDelegates())}
+        >
           <>
             {rows.length > 0 ? (
               <Table
@@ -142,7 +155,9 @@ const Delegates = () => {
               <EmptyState
                 emptyActionLabel={t('deleghe.add') as string}
                 emptyMessage={t('deleghe.no_delegates') as string}
-                emptyActionCallback={(_e, source='empty_state') => handleAddDelegationClick(source)}
+                emptyActionCallback={(_e, source = 'empty_state') =>
+                  handleAddDelegationClick(source)
+                }
               />
             )}
           </>

@@ -1,49 +1,52 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { formatToSlicedISOString } from "@pagopa-pn/pn-commons/src/services/date.service";
+import { RecipientType, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
+import { DelegationParty } from '../../models/Deleghe';
+import { FilterPartiesParams, Party } from '../../models/party';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
   async (data, { rejectWithValue }) => {
     const payload = {
       delegate: {
-        firstName: data.nome,
-        lastName: data.cognome,
+        displayName:
+          data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF
+            ? `${data.nome} ${data.cognome}`
+            : data.ragioneSociale,
+        firstName: data.nome || undefined,
+        lastName: data.cognome || undefined,
         fiscalCode: data.codiceFiscale,
-        person: data.selectPersonaFisicaOrPersonaGiuridica === 'pf',
+        companyName: data.ragioneSociale || undefined,
+        person: data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
       },
-      visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : [data.enteSelect],
+      visibilityIds:
+        data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
+          ? []
+          : data.enti.map(function (ente) {
+              return {
+                uniqueIdentifier: ente.id,
+                name: ente.name,
+              } as DelegationParty;
+            }),
       verificationCode: data.verificationCode,
-        dateto: formatToSlicedISOString(data.expirationDate),
+      dateto: formatToSlicedISOString(data.expirationDate),
     };
     try {
       return await DelegationsApi.createDelegation(payload);
     } catch (e: any) {
-      if (e.response.status === 409 && e.response.data.title === "Delega già presente") {
-        const message = e.response.data.errors[0]?.code  === "PN_MANDATE_DELEGATEHIMSELF" ? "Non è possibile delegare se stessi" : "La persona che hai indicato ha già una delega per questo ente.";
-        return rejectWithValue({
-          response: {
-            ...e.response,
-            customMessage: {
-              title: "Delega già presente",
-              message
-            }
-          }
-        });
-      }
       return rejectWithValue(e);
     }
   }
 );
 
-export const getAllEntities = createAsyncThunk(
+export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams | null>(
   'getAllEntities',
-  async (_, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties();
+      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
     } catch (e) {
       return rejectWithValue(e);
     }

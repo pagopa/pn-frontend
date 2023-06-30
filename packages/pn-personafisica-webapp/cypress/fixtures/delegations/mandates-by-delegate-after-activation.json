@@ -1,0 +1,50 @@
+[
+  {
+      "mandateId": "af02d543-c67e-4c64-8259-4f7ac12249fd",
+      "delegator": {
+          "displayName": "Giuseppe Maria Garibaldi",
+          "firstName": null,
+          "lastName": null,
+          "companyName": null,
+          "fiscalCode": "GRBGPP87L04L741X",
+          "person": true
+      },
+      "delegate": {
+          "displayName": null,
+          "firstName": null,
+          "lastName": null,
+          "companyName": null,
+          "fiscalCode": null,
+          "person": true
+      },
+      "status": "active",
+      "visibilityIds": [],
+      "verificationCode": null,
+      "datefrom": "2022-10-04",
+      "dateto": "2023-02-02"
+  },
+  {
+      "mandateId": "a25c9139-b15b-496c-bef6-1723d0b8bc5f",
+      "delegator": {
+          "displayName": "Ettore Fieramosca",
+          "firstName": null,
+          "lastName": null,
+          "companyName": null,
+          "fiscalCode": "FRMTTR76M06B715E",
+          "person": true
+      },
+      "delegate": {
+          "displayName": null,
+          "firstName": null,
+          "lastName": null,
+          "companyName": null,
+          "fiscalCode": null,
+          "person": true
+      },
+      "status": "active",
+      "visibilityIds": [],
+      "verificationCode": null,
+      "datefrom": "2022-10-04",
+      "dateto": "2023-02-02"
+  }
+]

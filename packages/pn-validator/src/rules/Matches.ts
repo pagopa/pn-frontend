@@ -16,7 +16,7 @@ export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
     if (!isDefined(value)) {
       return null;
     }
-    if (!isString<unknown, String>(value)) {
+    if (!isString(value)) {
       throw new TypeError('A non-string value was passed to the matches rule');
     }
     const stringValue = value instanceof String ? value.valueOf() : value;

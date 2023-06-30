@@ -6,7 +6,7 @@ import { Item } from './ItemsTable';
 export interface CardElement {
   id: string;
   label: string;
-  getLabel(value: string | number | Array<string>, row?: Item): ReactNode;
+  getLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
   notWrappedInTypography?: boolean;
   hideIfEmpty?: boolean;
   gridProps?: GridProps;

@@ -4,7 +4,7 @@ import { FormikErrors, FormikState, FormikTouched, FormikValues } from 'formik';
 import currentLocale from 'date-fns/locale/it';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MenuItem, TextField } from '@mui/material';
+import { ListItemText, MenuItem, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DatePickerTypes,
@@ -36,6 +36,7 @@ type Props = {
     resetForm: (nextState?: Partial<FormikState<FormikValues>> | undefined) => void;
     touched: FormikTouched<FormikValues>;
     errors: FormikErrors<FormikValues>;
+    setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
   startDate: Date | null;
   endDate: Date | null;
@@ -56,24 +57,39 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    if (formikInstance.errors) {
+      formikInstance.setErrors({
+        ...formikInstance.errors,
+        [e.target.id]: undefined,
+      });
+    }
+
     if (e.target.id === 'iunMatch') {
       const originalEvent = e.target as HTMLInputElement;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
-      const newCursorPosition = cursorPosition + (originalEvent.value.length !== newInput?.length && cursorPosition >= originalEvent.value.length ? 1 : 0);
+      const newCursorPosition =
+        cursorPosition +
+        (originalEvent.value.length !== newInput?.length &&
+        cursorPosition >= originalEvent.value.length
+          ? 1
+          : 0);
 
-      await formikInstance.setFieldValue('iunMatch', newInput);
+      await formikInstance.setFieldValue('iunMatch', newInput, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      formikInstance.handleChange(e);
+      await formikInstance.setFieldValue(e.target.id, (e.target as HTMLInputElement).value, false);
     }
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, { target: e.target.id });
-    await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeNotificationStatus = (e: ChangeEvent) => {
-    formikInstance.handleChange(e);
+  const handleChangeNotificationStatus = async (e: ChangeEvent) => {
+    await formikInstance.setFieldValue(
+      (e.target as HTMLSelectElement).name,
+      (e.target as HTMLSelectElement).value,
+      false
+    );
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE);
   };
 
@@ -83,7 +99,7 @@ const FilterNotificationsFormBody = ({
         id="recipientId"
         value={formikInstance.values.recipientId}
         onChange={handleChangeTouched}
-        label={t('filters.fiscal-code')}
+        label={t('filters.fiscal-code-tax-code')}
         name="recipientId"
         error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
         helperText={formikInstance.touched.recipientId && formikInstance.errors.recipientId}
@@ -140,6 +156,7 @@ const FilterNotificationsFormBody = ({
             />
           )}
           disableFuture={true}
+          minDate={tenYearsAgo}
           maxDate={endDate ? endDate : undefined}
         />
       </LocalizationProvider>
@@ -180,11 +197,12 @@ const FilterNotificationsFormBody = ({
             />
           )}
           disableFuture={true}
-          minDate={startDate ? startDate : undefined}
+          minDate={startDate ? startDate : tenYearsAgo}
         />
       </LocalizationProvider>
       <TextField
         id="status"
+        data-testid="notificationStatus"
         name="status"
         label={t('filters.status')}
         select
@@ -192,11 +210,17 @@ const FilterNotificationsFormBody = ({
         value={formikInstance.values.status}
         size="small"
         fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        sx={{
+          marginBottom: isMobile ? '20px' : '0',
+          '& .MuiInputBase-root': {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          },
+        }}
       >
         {localizedNotificationStatus.map((status) => (
           <MenuItem key={status.value} value={status.value}>
-            {status.label}
+            <ListItemText>{status.label}</ListItemText>
           </MenuItem>
         ))}
       </TextField>

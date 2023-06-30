@@ -1,11 +1,10 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo } from 'react';
 import { Typography, Box, Button, SxProps } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
-  children: ReactNode;
   sx?: SxProps;
   printError?: boolean;
   eventTrackingCallback?: (error: Error, errorInfo: ErrorInfo) => void;
@@ -54,11 +53,7 @@ class ErrorBoundary extends Component<Props, State> {
               )}
             </Typography>
             <Button variant="contained" sx={{ marginTop: '30px' }} onClick={this.handleRefreshPage}>
-              {getLocalizedOrDefaultLabel(
-                'common',
-                'error-boundary.action',
-                'Ricarica la pagina'
-              )}
+              {getLocalizedOrDefaultLabel('common', 'error-boundary.action', 'Ricarica la pagina')}
             </Button>
           </Box>
         </Box>

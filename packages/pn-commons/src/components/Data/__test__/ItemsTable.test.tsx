@@ -22,6 +22,7 @@ const columns: Array<Column> = [
     width: '50%',
     getCellLabel: (value: string) => value,
     onClick: handleColumnClick,
+    disableAccessibility: true,
   },
 ];
 
@@ -48,9 +49,8 @@ function testNotificationTableHead() {
   return table;
 }
 
-describe('Notifications Table Component', () => {
-
-  it('renders notifications table (with rows)', () => {
+describe('Items Table Component', () => {
+  it('renders items table (with rows)', () => {
     render(<ItemsTable columns={columns} rows={rows} />);
     const table = testNotificationTableHead();
     const tableBody = table.querySelector('tbody');
@@ -66,14 +66,7 @@ describe('Notifications Table Component', () => {
   });
 
   it('sorts a column', () => {
-    render(
-      <ItemsTable
-        columns={columns}
-        rows={rows}
-        sort={sort}
-        onChangeSorting={handleSort}
-      />
-    );
+    render(<ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleSort} />);
     const table = screen.getByRole('table');
     const tableHead = table.querySelector('thead');
     const firstColumn = tableHead!.querySelector('th');
@@ -85,19 +78,23 @@ describe('Notifications Table Component', () => {
   });
 
   it('click on a column', () => {
-    render(
-      <ItemsTable
-        columns={columns}
-        rows={rows}
-        sort={sort}
-      />
-    );
+    render(<ItemsTable columns={columns} rows={rows} sort={sort} />);
     const table = screen.getByRole('table');
     const tableBody = table.querySelector('tbody');
     const firstRow = tableBody!.querySelector('tr');
     const tableColumns = firstRow!.querySelectorAll('td');
-    fireEvent.click(tableColumns[2]);
+    fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
     expect(handleColumnClick).toBeCalledTimes(1);
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
+  });
+
+  it('disable accessibility navigation on a column', () => {
+    render(<ItemsTable columns={columns} rows={rows} sort={sort} />);
+    const table = screen.getByRole('table');
+    const tableBody = table.querySelector('tbody');
+    const firstRow = tableBody!.querySelector('tr');
+    const tableColumns = firstRow!.querySelectorAll('td');
+    const button = tableColumns[2].querySelectorAll('button')[0];
+    expect(button).toHaveAttribute('tabIndex', '-1');
   });
 });

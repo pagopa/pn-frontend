@@ -17,6 +17,8 @@ type Props = {
   showSideMenu?: boolean;
   /** List of available products */
   productsList: Array<ProductEntity>;
+  /** Show Header Product */
+  showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
   /** List of available parties */
@@ -52,6 +54,7 @@ export default function Layout({
   sideMenu,
   showSideMenu = true,
   productsList,
+  showHeaderProduct,
   productId,
   partyList,
   loggedUser,
@@ -65,7 +68,7 @@ export default function Layout({
   isLogged,
   showHeader = true,
   showFooter = true,
-  hasTermsOfService
+  hasTermsOfService,
 }: Props) {
   return (
     <ErrorBoundary
@@ -82,6 +85,7 @@ export default function Layout({
             <Header
               onExitAction={onExitAction}
               productsList={productsList}
+              showHeaderProduct={showHeaderProduct}
               productId={productId}
               partyList={partyList}
               loggedUser={loggedUser}
@@ -98,7 +102,10 @@ export default function Layout({
                 {sideMenu}
               </Box>
             )}
-            <Box sx={{ flexGrow: 1, position: 'relative' }} component="main">
+            <Box
+              sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
+              component="main"
+            >
               <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
                 {children}
               </ErrorBoundary>
@@ -110,8 +117,9 @@ export default function Layout({
               onLanguageChanged={onLanguageChanged}
               eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
               hasTermsOfService={hasTermsOfService}
-            />)}
-          </>
+            />
+          )}
+        </>
       </Stack>
     </ErrorBoundary>
   );

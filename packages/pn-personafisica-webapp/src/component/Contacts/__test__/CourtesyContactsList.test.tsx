@@ -1,10 +1,10 @@
-import { fail } from 'assert';
+import * as React from 'react';
+import { act, RenderResult, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { act, screen, RenderResult } from "@testing-library/react";
-import { render, axe } from "../../../__test__/test-utils";
-import CourtesyContactsList from "../CourtesyContactsList";
-import * as hooks from '../../../redux/hooks';
 import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
+import * as hooks from '../../../redux/hooks';
+import { render } from '../../../__test__/test-utils';
+import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 // import * as actions from '../../../redux/contact/actions';
 
@@ -17,29 +17,29 @@ jest.mock('react-i18next', () => ({
 
 const emptyMockedStore = {
   legal: [],
-  courtesy: []
+  courtesy: [],
 };
 
-const mockedStore: Array<DigitalAddress> = [{
-  addressType: 'courtesy',
-  recipientId: 'recipient1',
-  senderId: 'default',
-  channelType: CourtesyChannelType.SMS,
-  value: '3331234567',
-  code: '12345',
-}, {
-  addressType: 'courtesy',
-  recipientId: 'recipient1',
-  senderId: 'default',
-  channelType: CourtesyChannelType.EMAIL,
-  value: 'test@test.com',
-  code: '54321',
-},
+const mockedStore: Array<DigitalAddress> = [
+  {
+    addressType: 'courtesy',
+    recipientId: 'recipient1',
+    senderId: 'default',
+    channelType: CourtesyChannelType.SMS,
+    value: '3331234567',
+    code: '12345',
+  },
+  {
+    addressType: 'courtesy',
+    recipientId: 'recipient1',
+    senderId: 'default',
+    channelType: CourtesyChannelType.EMAIL,
+    value: 'test@test.com',
+    code: '54321',
+  },
 ];
 
 describe('CourtesyContactsList Component', () => {
-  // eslint-disable-next-line functional/no-let
-  let result: RenderResult | undefined;
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
   const mockDispatchFn = jest.fn(() => ({
     unwrap: () => Promise.resolve(),
@@ -61,11 +61,15 @@ describe('CourtesyContactsList Component', () => {
     const textBoxes = await screen.findAllByRole('textbox');
     expect(textBoxes).toHaveLength(2);
 
-    const phoneTextBox = await screen.findByPlaceholderText(/courtesy-contacts.link-phone-placeholder/);
+    const phoneTextBox = await screen.findByPlaceholderText(
+      /courtesy-contacts.link-phone-placeholder/
+    );
     expect(phoneTextBox).toEqual(textBoxes[0]);
     expect(phoneTextBox).toHaveValue('');
 
-    const mailTextBox = await screen.findByPlaceholderText(/courtesy-contacts.link-email-placeholder/);
+    const mailTextBox = await screen.findByPlaceholderText(
+      /courtesy-contacts.link-email-placeholder/
+    );
     expect(mailTextBox).toEqual(textBoxes[1]);
     expect(mailTextBox).toHaveValue('');
 
@@ -75,7 +79,6 @@ describe('CourtesyContactsList Component', () => {
     expect(buttons[0].textContent).toMatch('courtesy-contacts.phone-add');
     expect(buttons[1].textContent).toMatch('courtesy-contacts.email-add');
   });
-
 
   it('renders correctly with data in store', async () => {
     mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
@@ -97,42 +100,6 @@ describe('CourtesyContactsList Component', () => {
     expect(buttons[0]).toBeEnabled();
     expect(buttons[1]).toBeEnabled();
     expect(buttons[0].textContent).toMatch('button.modifica');
-    expect(buttons[1].textContent).toMatch('button.rimuovi');
-  });
-
-  it.skip('does not have basic accessibility issues (empty store)', async () => {
-    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce([]);
-    await act(async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-    });
-
-    if(result){
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
-  });
-
-  it.skip('does not have basic accessibility issues (data in store)', async () => {
-    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
-    await act(async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedStore} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-    });
-
-    if(result){
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
+    expect(buttons[1].textContent).toMatch('button.elimina');
   });
 });

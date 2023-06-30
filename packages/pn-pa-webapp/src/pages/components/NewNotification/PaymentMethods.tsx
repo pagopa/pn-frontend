@@ -1,10 +1,9 @@
-import { Fragment, useMemo } from 'react';
+import { ForwardedRef, forwardRef, Fragment, useImperativeHandle, useMemo } from 'react';
 import _ from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { Link, Paper, Typography } from '@mui/material';
-import { FileUpload } from '@pagopa-pn/pn-commons';
+import { SectionHeading, FileUpload } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -60,6 +59,7 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep?: (step?: number) => void;
   isCompleted: boolean;
+  forwardedRef: ForwardedRef<unknown>;
 };
 
 const emptyFileData = {
@@ -81,7 +81,13 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
   },
 });
 
-const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }: Props) => {
+const PaymentMethods = ({
+  notification,
+  onConfirm,
+  isCompleted,
+  onPreviousStep,
+  forwardedRef,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.payment-methods',
@@ -125,9 +131,17 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
       const formikPagoPaForm = formik.values[r.taxId].pagoPaForm;
       const formikF24flatRate = formik.values[r.taxId].f24flatRate;
       const formikF24standard = formik.values[r.taxId].f24standard;
+      // I avoid including empty file object into the result
+      // hence I check for any file object that it actually points to a file
+      // (this is the condition XXX.file.uint8Array)
+      // and then I don't add the payment info for a recipient if it doesn't include any actual file pointer
+      // (this is the Object.keys(paymentsForThisRecipient).length > 0 condition below)
+      // ---------------------------------------------
+      // Carlos Lombardi, 2023.01.10
+      const paymentsForThisRecipient: any = {};
       /* eslint-disable functional/immutable-data */
-      obj[r.taxId] = {
-        pagoPaForm: {
+      if (formikPagoPaForm.file.uint8Array) {
+        paymentsForThisRecipient.pagoPaForm = {
           ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
           file: {
             uint8Array: formikPagoPaForm.file.uint8Array,
@@ -142,10 +156,10 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
             key: formikPagoPaForm.ref.key,
             versionToken: formikPagoPaForm.ref.versionToken,
           },
-        },
-      };
-      if (formikF24flatRate) {
-        obj[r.taxId].f24flatRate = {
+        };
+      }
+      if (formikF24flatRate && formikF24flatRate.file.uint8Array) {
+        paymentsForThisRecipient.f24flatRate = {
           ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
           file: {
             uint8Array: formikF24flatRate.file.uint8Array,
@@ -162,8 +176,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
           },
         };
       }
-      if (formikF24standard) {
-        obj[r.taxId].f24standard = {
+      if (formikF24standard && formikF24standard.file.uint8Array) {
+        paymentsForThisRecipient.f24standard = {
           ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
           file: {
             uint8Array: formikF24standard.file.uint8Array,
@@ -180,6 +194,9 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
           },
         };
       }
+      if (Object.keys(paymentsForThisRecipient).length > 0) {
+        obj[r.taxId] = paymentsForThisRecipient;
+      }
       /* eslint-enable functional/immutable-data */
       return obj;
     }, {});
@@ -191,48 +208,12 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     }
   };
 
-  const paymentDocumentSchema = yup.object({
-    name: yup.string().required(),
-    file: yup.object({
-      size: yup.number().required(),
-      name: yup.string().required(),
-      uint8Array: yup
-        .mixed()
-        .test((input) => input instanceof Uint8Array)
-        .required(),
-      sha256: yup
-        .object({
-          hashBase64: yup.string().required(),
-          hashHex: yup.string().required(),
-        })
-        .required(),
-    }),
-  });
-
-  const getValidationSchemaParameters = () => {
-    // eslint-disable-next-line functional/no-let
-    let parameters = {};
-
-    if (notification.paymentMode !== PaymentModel.NOTHING) {
-      parameters = { pagoPaForm: paymentDocumentSchema.required() };
-
-      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
-        parameters = { ...parameters, f24standard: paymentDocumentSchema.required() };
-      } else if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
-        parameters = { ...parameters, f24flatRate: paymentDocumentSchema.required() };
-      }
-    }
-    return parameters;
-  };
-
-  const validationSchema = yup.lazy((obj) =>
-    yup.object(_.mapValues(obj, () => yup.object(getValidationSchemaParameters())))
-  );
-
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
     // set ref
     for (const [taxId, payment] of Object.entries(paymentPayload)) {
-      await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      if (payment.pagoPaForm) {
+        await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      }
       if (payment.f24standard) {
         await formik.setFieldValue(`${taxId}.f24standard.ref`, payment.f24standard.ref, false);
       }
@@ -242,23 +223,58 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     }
   };
 
+  const formIsEmpty = (values: any) => {
+    // eslint-disable-next-line functional/no-let
+    let isEmpty = true;
+    notification.recipients.forEach((recipient) => {
+      const currentDocument = values[recipient.taxId];
+      if (currentDocument.pagoPaForm && currentDocument.pagoPaForm.file.name !== '') {
+        isEmpty = false;
+      }
+      if (currentDocument.f24flatRate && currentDocument.f24flatRate.file.name !== '') {
+        isEmpty = false;
+      }
+      if (currentDocument.f24standard && currentDocument.f24standard.file.name !== '') {
+        isEmpty = false;
+      }
+    });
+    return isEmpty;
+  };
+
   const formik = useFormik({
     initialValues,
-    validationSchema: notification.paymentMode !== PaymentModel.NOTHING ? validationSchema : null,
     validateOnMount: true,
     onSubmit: async (values) => {
+      const emptyForm = formIsEmpty(values);
       if (isCompleted) {
         onConfirm();
-        return;
-      }
-      if (notification.paymentMode !== PaymentModel.NOTHING) {
-        const paymentData = await dispatch(uploadNotificationPaymentDocument(values));
+      } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
+        // Maybe now the form is empty, but in the previous time the user went back
+        // from the payments step the form wasn't empty.
+        // Just in case, we clean the payment info from the Redux store
+        dispatch(setPaymentDocuments({ paymentDocuments: {} }));
+        dispatch(setIsCompleted());
+      } else {
+        // Beware! -
+        // Recall that the taxId is the key for the payment document info in the Redux storage.
+        // If the user changes the taxId of a recipient and/or deletes a recipient
+        // after having attached payment documents,
+        // the information related to the "old" taxIds is kept in the Redux store
+        // until the user returns to the payment document step.
+        // Fortunately, the formatPaymentDocuments function "sanitizes" the payment document info,
+        // since it includes the information related to current taxIds only.
+        // If the call to formatPaymentDocuments were omitted, then we would probably risk sending
+        // garbage to the API call.
+        // Please take this note into consideration in case of refactoring of this part.
+        // --------------------------------------
+        // Carlos Lombardi, 2023.01.19
+        const paymentData = await dispatch(
+          uploadNotificationPaymentDocument(formatPaymentDocuments())
+        );
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
           await updateRefAfterUpload(paymentPayload);
         }
-      } else {
-        dispatch(setIsCompleted());
       }
     },
   });
@@ -272,14 +288,18 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldValue(id, {
-      ...formik.values[taxId][paymentType],
-      file: { size, uint8Array: file, sha256, name },
-      ref: {
-        key: '',
-        versionToken: '',
+    await formik.setFieldValue(
+      id,
+      {
+        ...formik.values[taxId][paymentType],
+        file: { size, uint8Array: file, sha256, name },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
-    }, false);
+      false
+    );
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
@@ -298,6 +318,12 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     });
   };
 
+  useImperativeHandle(forwardedRef, () => ({
+    confirm() {
+      dispatch(setPaymentDocuments({ paymentDocuments: formatPaymentDocuments() }));
+    },
+  }));
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <NewNotificationCard
@@ -314,23 +340,33 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               sx={{ padding: '24px', marginTop: '40px' }}
               className="paperContainer"
             >
-              <Typography variant="h6">
+              <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
-              </Typography>
+              </SectionHeading>
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
-                title={`${t('attach-pagopa-notice')}*`}
+                title={`${t('attach-pagopa-notice')}`}
                 onFileUploaded={(id, file, sha256, name, size) =>
-                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)}
+                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)
+                }
                 onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
                 fileUploaded={formik.values[recipient.taxId].pagoPaForm}
               />
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24flatRate`}
-                  title={`${t('attach-f24-flatrate')}*`}
+                  title={`${t('attach-f24-flatrate')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
-                    fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256, name, size)}
+                    fileUploadedHandler(
+                      recipient.taxId,
+                      'f24flatRate',
+                      id,
+                      file,
+                      sha256,
+                      name,
+                      size
+                    )
+                  }
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
                   fileUploaded={formik.values[recipient.taxId].f24flatRate}
                 />
@@ -338,9 +374,18 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24standard`}
-                  title={`${t('attach-f24')}*`}
+                  title={`${t('attach-f24')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
-                    fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256, name, size)}
+                    fileUploadedHandler(
+                      recipient.taxId,
+                      'f24standard',
+                      id,
+                      file,
+                      sha256,
+                      name,
+                      size
+                    )
+                  }
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
                   fileUploaded={formik.values[recipient.taxId].f24standard}
                 />
@@ -388,4 +433,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
   );
 };
 
-export default PaymentMethods;
+// This is a workaorund to prevent cognitive complexity warning
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
+  <PaymentMethods {...props} forwardedRef={ref} />
+));

@@ -16,9 +16,7 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     // la data arriva nel formato YYYY-MM-DDZ rimuovere slice in caso di rimozione di Z
     startDate: formatDate(delegation.datefrom.slice(0, 10)),
     endDate: formatDate(delegation.dateto),
-    visibilityIds: delegation.visibilityIds.map(
-      (entity: { name: string; uniqueIdentifier: string }) => entity.name
-    ),
+    visibilityIds: delegation.visibilityIds.map((entity) => entity.name),
     status: delegation.status,
     verificationCode: delegation.verificationCode,
   }));
@@ -59,7 +57,7 @@ export function sortDelegations(order: string, sortAttr: string, values: Array<D
 
 function compareOrderAttribute(person: Person, orderAttr: string) {
   return orderAttr === 'name'
-    ? person.firstName.toLowerCase()
+    ? person.displayName.toLowerCase()
     : person[orderAttr as keyof Person] || '';
 }
 

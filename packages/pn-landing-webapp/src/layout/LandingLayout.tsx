@@ -1,19 +1,17 @@
-import { Alert, Box, Stack } from "@mui/material";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
 
-import LangContext from "../../provider/lang-context";
+import { Box, Stack } from "@mui/material";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { Footer, ButtonNaked } from "@pagopa/mui-italia";
+
 import NavigationBar from "../components/NavigationBar";
-import { getAppData } from "../../api";
-import {
-  companyLegalInfo,
-  LANGUAGES,
-  pagoPALink,
-  postLoginLinks,
-  preLoginLinks,
-} from "./footer.constants";
-import { PAGOPA_HOME } from "@utils/constants";
+import { LANGUAGES } from "./constants";
+import LangContext from "provider/lang-context";
+import { getAppData } from "api";
+import { useRouter } from "next/router";
+import { SEND_PF_HELP_EMAIL, PAGOPA_HELP_EMAIL } from "@utils/constants";
+
 
 interface Props {
   children?: ReactNode;
@@ -21,13 +19,9 @@ interface Props {
 
 const LandingLayout = ({ children }: Props) => {
   const lang = useContext(LangContext);
-
-  const homeLink = {
-    label: "PagoPA S.p.A.",
-    href: PAGOPA_HOME ?? "",
-    ariaLabel: "Titolo",
-    title: "PagoPa S.p.A.",
-  };
+  const { pathname } = useRouter();
+  const appData = getAppData();
+  const assistanceEmail = pathname !== "/pubbliche-amministrazioni" ? SEND_PF_HELP_EMAIL : PAGOPA_HELP_EMAIL;
 
   return (
     <Box sx={{ height: "100vh" }}>
@@ -53,48 +47,48 @@ const LandingLayout = ({ children }: Props) => {
                 fontWeight: "bold",
               }}
               size="small"
-              aria-label={homeLink.ariaLabel}
-              href={homeLink.href}
+              aria-label={appData.common.pagoPALink.ariaLabel}
+              href={appData.common.pagoPALink.href}
               color="text"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               disableRipple
               disableTouchRipple
             >
-              {homeLink.label}
+              {appData.common.pagoPALink.label}
             </ButtonNaked>
             <ButtonNaked
               size="small"
-              aria-label={getAppData().common.assistance.ariaLabel}
-              href={getAppData().common.assistance.href}
+              aria-label={appData.common.assistance.ariaLabel}
+              href={`mailto:${assistanceEmail}`}
               color="text"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               disableRipple
               disableTouchRipple
               startIcon={<HelpOutlineOutlinedIcon fontSize="inherit" />}
             >
-              {getAppData().common.assistance.label}
+              {appData.common.assistance.label}
             </ButtonNaked>
           </Stack>
         </Stack>
-        <NavigationBar />
-        <Alert severity="info">{getAppData().common.alert}</Alert>
+        <NavigationBar {...appData.common.navigation} />
         <Box sx={{ flexGrow: 1 }} component="main">
           {children}
         </Box>
         <Footer
           loggedUser={false}
           companyLink={{
-            ...pagoPALink,
-            onClick: () => window.open(pagoPALink.href, "_blank"),
+            ...appData.common.pagoPALink,
+            onClick: () => window.open(appData.common.pagoPALink.href, "_blank"),
           }}
-          legalInfo={companyLegalInfo}
-          postLoginLinks={postLoginLinks}
-          preLoginLinks={preLoginLinks()}
+          legalInfo={appData.common.companyLegalInfo}
+          postLoginLinks={appData.common.postLoginLinks}
+          preLoginLinks={appData.common.preLoginLinks}
           currentLangCode={lang.selectedLanguage}
           onLanguageChanged={lang.changeLanguage}
           languages={LANGUAGES}
+          productsJsonUrl={appData.common.productJson}
         />
       </Stack>
     </Box>

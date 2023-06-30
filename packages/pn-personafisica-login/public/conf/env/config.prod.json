@@ -1,0 +1,13 @@
+{
+    "SPID_TEST_ENV_ENABLED": false,
+    "SPID_VALIDATOR_ENV_ENABLED": false,
+    "SPID_CIE_ENTITY_ID": "xx_servizicie",
+    "URL_API_LOGIN": "https://hub-login.spid.notifichedigitali.it/",
+    "PF_URL": "https://cittadini.notifichedigitali.it",
+    "PG_URL": "https://imprese.notifichedigitali.it/auth/login",
+    "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
+    "MIXPANEL_TOKEN": "7d625dcb1a96835ac6600c00f1ec9f2d",
+    "ONE_TRUST_DRAFT_MODE": false,
+    "ONE_TRUST_PP": "133242e7-ad9a-45e5-a417-b7a50c746899",
+    "OT_DOMAIN_ID": "ff3d2b72-7a44-43c2-b3bb-49e22f78edb9"
+}

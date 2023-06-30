@@ -1,0 +1,54 @@
+{
+  "legal": [
+    {
+      "addressType": "LEGAL",
+      "recipientId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+      "senderId": "16dabc75-f12e-42c4-aa0c-be9c22e9c89e",
+      "channelType": "PEC",
+      "value": "test-pec@cypress.pagopa.it",
+      "code": null
+    },
+    {
+      "addressType": "LEGAL",
+      "recipientId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+      "senderId": "default",
+      "channelType": "PEC",
+      "value": "test-pec-default@cypress.pagopa.it",
+      "code": null
+    }
+  ],
+  "courtesy": [
+    {
+      "addressType": "COURTESY",
+      "recipientId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+      "senderId": "default",
+      "channelType": "EMAIL",
+      "value": "test-email-1@cypress.pagopa.it",
+      "code": null
+    },
+    {
+      "addressType": "COURTESY",
+      "recipientId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+      "senderId": "16dabc75-f12e-42c4-aa0c-be9c22e9c89e",
+      "channelType": "EMAIL",
+      "value": "test-email-2@cypress.pagopa.it",
+      "code": null
+    },
+    {
+      "addressType": "COURTESY",
+      "recipientId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+      "senderId": "default",
+      "channelType": "SMS",
+      "value": "+393210123456",
+      "code": null
+    },
+    {
+      "addressType": "COURTESY",
+      "recipientId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+      "senderId": "default",
+      "channelType": "APPIO",
+      "value": "DISABLED",
+      "code": null
+    }
+  ]
+}

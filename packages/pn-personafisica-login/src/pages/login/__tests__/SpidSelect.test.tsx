@@ -1,10 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { IDPS } from '../../../utils/IDPS';
+import { getIDPS } from '../../../utils/IDPS';
 import SpidSelect from '../SpidSelect';
-import { ENV } from '../../../utils/env';
+import { getConfiguration } from "../../../services/configuration.service";
 
 const oldWindowLocation = global.window.location;
-const idps = IDPS.identityProviders;
+const idps = getIDPS(false, false).identityProviders;
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -31,7 +31,7 @@ test('go to the spid url', () => {
     fireEvent.click(spidButton!);
     const id = element.entityId;
     expect(global.window.location.assign).toBeCalledWith(
-      ENV.URL_API.LOGIN + '/login?entityID=' + id + '&authLevel=SpidL2'
+      getConfiguration().URL_API_LOGIN + '/login?entityID=' + id + '&authLevel=SpidL2'
     );
   });
 });

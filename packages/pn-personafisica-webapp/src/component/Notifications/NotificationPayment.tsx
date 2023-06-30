@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import _ from 'lodash';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
   Divider,
   Grid,
@@ -13,37 +17,42 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
   ApiErrorWrapper,
+  appStateActions,
   CopyToClipboard,
   formatEurocentToCurrency,
   NotificationDetailPayment,
+  NotificationPaidDetail,
   PaymentAttachmentSName,
+  PaymentHistory,
   PaymentInfoDetail,
   PaymentStatus,
+  useDownloadDocument,
   useIsMobile,
-  appStateActions,
 } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNotificationPaymentInfo, getPaymentAttachment, NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
+import {
+  getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
+  getPaymentAttachment,
+  NOTIFICATION_ACTIONS,
+} from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { PAGOPA_HELP_EMAIL,
-  // PN-2029
-  // PAYMENT_DISCLAIMER_URL
-} from '../../utils/constants';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
+import { getConfiguration } from "../../services/configuration.service";
 
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
-  onDocumentDownload: (url: string) => void;
+  subject: string;
   mandateId?: string;
+  paymentHistory?: Array<PaymentHistory>;
+  senderDenomination?: string;
 }
 
 interface PrimaryAction {
@@ -66,18 +75,47 @@ interface PaymentMessageData {
 interface PaymentData {
   title: string;
   amount?: string;
-  disclaimer?: JSX.Element;
   message?: PaymentMessageData;
   action?: PrimaryAction;
 }
 
+const ReloadPaymentInfoButton: React.FC<{ fetchPaymentInfo: () => void }> = ({
+  children,
+  fetchPaymentInfo,
+}) => (
+  <Link
+    key="reload-payment-button"
+    sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+    color="primary"
+    onClick={fetchPaymentInfo}
+  >
+    {children}
+  </Link>
+);
+
+const SupportButton: React.FC<{ contactSupportClick: () => void }> = ({
+  children,
+  contactSupportClick,
+}) => (
+  <Link
+    key="support-button"
+    sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+    onClick={contactSupportClick}
+  >
+    {children}
+  </Link>
+);
+
 const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
-  onDocumentDownload,
   mandateId,
+  paymentHistory,
+  senderDenomination,
+  subject,
 }) => {
   const { t } = useTranslation(['notifiche']);
+  const { PAGOPA_HELP_EMAIL } = getConfiguration();
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
@@ -89,7 +127,7 @@ const NotificationPayment: React.FC<Props> = ({
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
 
-  const alertButtonStyle: SxProps<Theme> = useIsMobile()
+  const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
 
@@ -97,20 +135,15 @@ const NotificationPayment: React.FC<Props> = ({
     fetchPaymentInfo();
   }, []);
 
-  useEffect(() => {
-    if (pagopaAttachmentUrl) {
-      onDocumentDownload(pagopaAttachmentUrl);
-    }
-  }, [pagopaAttachmentUrl]);
-
-  useEffect(() => {
-    if (f24AttachmentUrl) {
-      onDocumentDownload(f24AttachmentUrl);
-    }
-  }, [f24AttachmentUrl]);
+  useDownloadDocument({ url: pagopaAttachmentUrl });
+  useDownloadDocument({ url: f24AttachmentUrl });
 
   const fetchPaymentInfo = () => {
-    if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
+    if (
+      (!paymentHistory || paymentHistory.length === 0) &&
+      notificationPayment.noticeCode &&
+      notificationPayment.creditorTaxId
+    ) {
       void dispatch(
         getNotificationPaymentInfo({
           noticeCode: notificationPayment.noticeCode,
@@ -119,7 +152,7 @@ const NotificationPayment: React.FC<Props> = ({
       )
         // PN-1942 - gestione generica di disservizio API
         // si toglie la gestione ad-hoc che veniva fatta in questo componente, perciò il catch che era
-        // presente non c'è più. 
+        // presente non c'è più.
         // Di conseguenza, questo unwrap infatti non è necessario per il funzionamento dell'app.
         // Però lascio sia unwrap sia un catch vuoto, perché se l'unwrap viene tolto, falliscono tutti i test di NotificationPayment,
         // e se c'è unwrap allora si deve fare un catch.
@@ -130,21 +163,40 @@ const NotificationPayment: React.FC<Props> = ({
           setLoading(() => false);
         })
         .catch(() => {});
+    } else if (paymentHistory && paymentHistory.length > 0) {
+      setLoading(() => false);
     } else {
       setLoading(() => false);
-      dispatch(appStateActions.removeErrorsByAction(NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO));
+      dispatch(
+        appStateActions.removeErrorsByAction(NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO)
+      );
     }
   };
 
   const onPayClick = () => {
-    const paymentUrl = paymentInfo.url;
-    if (paymentUrl && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
-      window.open(
-        `${paymentUrl}/${notificationPayment.creditorTaxId}${notificationPayment.noticeCode}`
-      );
-    } else if (paymentUrl) {
-      // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
-      window.open(paymentUrl);
+    if (
+      notificationPayment.noticeCode &&
+      notificationPayment.creditorTaxId &&
+      paymentInfo.amount &&
+      senderDenomination
+    ) {
+      dispatch(
+        getNotificationPaymentUrl({
+          paymentNotice: {
+            noticeNumber: notificationPayment.noticeCode,
+            fiscalCode: notificationPayment.creditorTaxId,
+            amount: paymentInfo.amount,
+            companyName: senderDenomination,
+            description: subject,
+          },
+          returnUrl: window.location.href,
+        })
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
     }
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };
@@ -174,17 +226,11 @@ const NotificationPayment: React.FC<Props> = ({
     );
   };
 
-  /*
-    PN-2029
-    const onDisclaimerClick = () => {
-      window.open(PAYMENT_DISCLAIMER_URL);
-    };
-  */
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
 
-    if (paymentInfo?.status === PaymentStatus.REQUIRED) {
+    if (paymentInfo.status === PaymentStatus.REQUIRED) {
       const pagopaDoc = notificationPayment.pagoPaForm;
       const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
@@ -209,42 +255,27 @@ const NotificationPayment: React.FC<Props> = ({
 
   /** composes Payment Data to be rendered */
   const composePaymentData = (): PaymentData => {
-    const title =
-      paymentInfo?.status !== PaymentStatus.SUCCEEDED
-        ? t('detail.payment.summary-pending', { ns: 'notifiche' })
-        : t('detail.payment.summary-succeeded', { ns: 'notifiche' });
-
-    const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
-
-    const disclaimer = amount ? getDisclaimer() : undefined;
-
+    /* eslint-disable-next-line functional/no-let */
+    let title = t('detail.payment.summary-pending', { ns: 'notifiche' });
+    if (
+      paymentInfo.status === PaymentStatus.SUCCEEDED ||
+      (paymentHistory && paymentHistory.length > 0)
+    ) {
+      title = t('detail.payment.summary-succeeded', { ns: 'notifiche' });
+    } else if (paymentInfo.status === PaymentStatus.INPROGRESS) {
+      title = t('detail.payment.summary-in-progress', { ns: 'notifiche' });
+    }
+    const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
     const message = getMessageData();
-
     const action = getActionData(amount);
 
     return {
       title,
       amount,
-      disclaimer,
       message,
       action,
     };
   };
-
-  /** returns disclaimer JSX */
-  const getDisclaimer = (): JSX.Element => (
-    <>
-      {t('detail.payment.disclaimer', { ns: 'notifiche' })}
-      &nbsp;
-      {
-        /* PN-2029
-        <Link href="#" onClick={onDisclaimerClick}>
-          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-        </Link>
-        */
-      }
-    </>
-  );
 
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
@@ -255,7 +286,7 @@ const NotificationPayment: React.FC<Props> = ({
       };
     }
 
-    if (paymentInfo) {
+    if (!_.isEmpty(paymentInfo)) {
       switch (paymentInfo.status) {
         case PaymentStatus.SUCCEEDED:
           return {
@@ -265,12 +296,41 @@ const NotificationPayment: React.FC<Props> = ({
         case PaymentStatus.INPROGRESS:
           return {
             type: 'info',
-            body: t('detail.payment.message-in-progress', { ns: 'notifiche' }),
-            action: MessageActionType.CONTACT_SUPPORT,
+            body: (
+              <Trans
+                ns={'notifiche'}
+                i18nKey={'detail.payment.message-in-progress'}
+                components={[
+                  <ReloadPaymentInfoButton
+                    key={'reload-payment-button'}
+                    fetchPaymentInfo={fetchPaymentInfo}
+                  />,
+                  <SupportButton
+                    key={'support-button'}
+                    contactSupportClick={contactSupportClick}
+                  />,
+                ]}
+              >
+                Il pagamento è in corso:{' '}
+                <ReloadPaymentInfoButton fetchPaymentInfo={fetchPaymentInfo}>
+                  ricarica la pagina
+                </ReloadPaymentInfoButton>{' '}
+                tra qualche ora per verificarne lo stato. Se risulta ancora in corso,{' '}
+                <SupportButton contactSupportClick={contactSupportClick}>
+                  contatta l’assistenza
+                </SupportButton>
+                .
+              </Trans>
+            ),
           };
         case PaymentStatus.FAILED:
           return getFailedMessageData();
       }
+    } else if (paymentHistory && paymentHistory.length > 0) {
+      return {
+        type: 'success',
+        body: t('detail.payment.message-completed', { ns: 'notifiche' }),
+      };
     }
     return undefined;
   };
@@ -326,7 +386,7 @@ const NotificationPayment: React.FC<Props> = ({
 
   /** returns action data used to render the main button */
   const getActionData = (amount: string): PrimaryAction | undefined => {
-    switch (paymentInfo?.status) {
+    switch (paymentInfo.status) {
       case PaymentStatus.REQUIRED:
         return {
           text: t('detail.payment.submit', { ns: 'notifiche' }) + (amount ? ' ' + amount : ''),
@@ -390,20 +450,21 @@ const NotificationPayment: React.FC<Props> = ({
   const attachments = getAttachmentsData();
 
   return (
-    <ApiErrorWrapper 
-      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO} reloadAction={fetchPaymentInfo} 
+    <ApiErrorWrapper
+      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
+      reloadAction={fetchPaymentInfo}
       mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
     >
       <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8}>
-            <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
+            <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
               {data.title}
             </Typography>
           </Grid>
           <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
             <Typography
-              variant="h6"
+              variant="h5"
               aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
               display="inline"
               fontWeight={600}
@@ -420,11 +481,6 @@ const NotificationPayment: React.FC<Props> = ({
               ) : (
                 data.amount
               )}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-            <Typography variant="body2" display="inline">
-              {data.amount && data.disclaimer}
             </Typography>
           </Grid>
           <Stack spacing={2} width="100%">
@@ -485,6 +541,9 @@ const NotificationPayment: React.FC<Props> = ({
                   ))}
                 </Stack>
               </>
+            )}
+            {!loading && paymentHistory && paymentHistory.length > 0 && (
+              <NotificationPaidDetail paymentDetailsList={paymentHistory} />
             )}
           </Stack>
         </Grid>

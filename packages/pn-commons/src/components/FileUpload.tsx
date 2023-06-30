@@ -13,7 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import CustomTooltip from './CustomTooltip';
@@ -23,7 +23,12 @@ type Props = {
   vertical?: boolean;
   accept: string;
   uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
-  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }, name?: string, size?: number) => void;
+  onFileUploaded: (
+    file: any,
+    sha256?: { hashBase64: string; hashHex: string },
+    name?: string,
+    size?: number
+  ) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
@@ -72,7 +77,14 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         sha256: '',
       };
     case 'FILE_PREVIOUSLY_UPLOADED':
-      return { ...state, ...action.payload, status: UploadStatus.UPLOADED, error: '', sha256: action.payload.file.sha256.hashHex, name: action.payload.name ? action.payload.name : '' };
+      return {
+        ...state,
+        ...action.payload,
+        status: UploadStatus.UPLOADED,
+        error: '',
+        sha256: action.payload.file.sha256.hashHex,
+        name: action.payload.name ? action.payload.name : '',
+      };
     case 'FILE_UPLOADED':
       return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
     case 'REMOVE_FILE':
@@ -132,7 +144,8 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists = (fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null);
+  const attachmentExists =
+    fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null;
 
   const containerStyle = useMemo(() => {
     if (data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) {
@@ -207,6 +220,7 @@ const FileUpload = ({
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    // eslint-disable-next-line functional/immutable-data
     e.dataTransfer.dropEffect = 'copy';
   };
 
@@ -246,20 +260,15 @@ const FileUpload = ({
             {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
             &nbsp;
           </Typography>
-          <Typography
-            display="inline"
-            variant="body2"
-            color="primary"
-            sx={{ cursor: 'pointer' }}
-            onClick={chooseFileHandler}
-            data-testid="loadFromPc"
-          >
-            {getLocalizedOrDefaultLabel(
-              'common',
-              'upload-file.select-from-pc',
-              'selezionalo dal tuo computer'
-            )}
-          </Typography>
+          <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
+            <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
+              {getLocalizedOrDefaultLabel(
+                'common',
+                'upload-file.select-from-pc',
+                'selezionalo dal tuo computer'
+              )}
+            </Typography>
+          </ButtonNaked>
           <Input
             type="file"
             sx={{ display: 'none' }}
@@ -286,7 +295,7 @@ const FileUpload = ({
           </Typography>
         </OrientedBox>
       )}
-      {(data.status === UploadStatus.UPLOADED) && (
+      {data.status === UploadStatus.UPLOADED && (
         <Fragment>
           <Box
             display="flex"
@@ -301,7 +310,14 @@ const FileUpload = ({
                 {(data.file.size / 1024).toFixed(2)}&nbsp;KB
               </Typography>
             </Box>
-            <IconButton onClick={removeFileHandler}>
+            <IconButton
+              onClick={removeFileHandler}
+              aria-label={getLocalizedOrDefaultLabel(
+                'notifiche',
+                'new-notification.steps.attachments.remove-attachment',
+                'Rimuovi allegato'
+              )}
+            >
               <CloseIcon />
             </IconButton>
           </Box>

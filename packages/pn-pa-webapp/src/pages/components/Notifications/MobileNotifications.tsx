@@ -1,7 +1,7 @@
 import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   Sort,
@@ -16,8 +16,10 @@ import {
   CardAction,
   MobileNotificationsSort,
   CardSort,
+  KnownSentiment,
+  CustomTagGroup,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, Tag } from '@pagopa/mui-italia';
 
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
@@ -47,7 +49,7 @@ const MobileNotifications = ({
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche', 'common']);
-  
+
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
@@ -57,10 +59,10 @@ const MobileNotifications = ({
       id: 'sentAt',
       label: t('table.date'),
       getLabel(value: string) {
-        return value;
+        return <Typography>{value}</Typography>;
       },
       gridProps: {
-        xs: 12,
+        xs: 4,
         sm: 5,
       },
     },
@@ -69,12 +71,20 @@ const MobileNotifications = ({
       label: t('table.status'),
       getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus
+          row.notificationStatus as NotificationStatus,
+          { recipients: row.recipients as Array<string> }
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return (
+          <StatusTooltip
+            label={label}
+            tooltip={tooltip}
+            color={color}
+            eventTrackingCallback={handleEventTrackingTooltip}
+          ></StatusTooltip>
+        );
       },
       gridProps: {
-        xs: 12,
+        xs: 8,
         sm: 7,
       },
     },
@@ -110,8 +120,16 @@ const MobileNotifications = ({
     {
       id: 'group',
       label: t('table.groups'),
-      getLabel(value: string) {
-        return value;
+      getLabel(value: string, row: Item) {
+        return (
+          <CustomTagGroup visibleItems={1}>
+            {[
+              <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={row.id}>
+                <Tag value={value} />
+              </Box>,
+            ]}
+          </CustomTagGroup>
+        );
       },
       hideIfEmpty: true,
     },
@@ -168,16 +186,18 @@ const MobileNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
     emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
-    disableSentimentDissatisfied: !filtersApplied,
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', { ns: 'common' }),
+    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied ? undefined : {
-      emptyMessage: t('empty-state.secondary-message'),
-      emptyActionLabel: t('empty-state.secondary-action'),
-      emptyActionCallback: () => {
-        onManualSend();
-      },
-    },
+    secondaryMessage: filtersApplied
+      ? undefined
+      : {
+          emptyMessage: t('empty-state.secondary-message'),
+          emptyActionLabel: t('empty-state.secondary-action'),
+          emptyActionCallback: () => {
+            onManualSend();
+          },
+        },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -186,7 +206,7 @@ const MobileNotifications = ({
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
+          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (
@@ -208,7 +228,7 @@ const MobileNotifications = ({
           cardBody={cardBody}
           cardActions={cardActions}
           headerGridProps={{
-            direction: { xs: 'column-reverse', sm: 'row' },
+            direction: { xs: 'row', sm: 'row' },
             alignItems: { xs: 'flex-start', sm: 'center' },
           }}
         />

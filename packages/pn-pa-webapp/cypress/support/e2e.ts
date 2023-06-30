@@ -12,9 +12,23 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
+import { PNRole } from "../../src/models/user";
 
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(): void;
+      logout(): void;
+      setRole(role: PNRole): void;
+      loginWithTokenExchange(role?: PNRole): void;
+      fillRecipient(recipient: RecipientFormData): void;
+      stubConsents(): void;
+    }
+  }
+}
 // Import commands.js using ES2015 syntax:
 import './commands'
+import {RecipientFormData} from "../global";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

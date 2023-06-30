@@ -1,6 +1,4 @@
-import {
-  compileRoute,
-} from '@pagopa-pn/pn-commons';
+import { compileRoute } from '@pagopa-pn/pn-commons';
 
 import { LegalChannelType, CourtesyChannelType } from '../../models/contacts';
 
@@ -26,18 +24,17 @@ const API_CONTACTS_COURTESY_PATH = `${API_VERSION_SEGMENT}/${API_CONTACTS_BASE}/
 export function CONTACTS_LIST() {
   return compileRoute({
     prefix: API_CONTACTS_PREFIX,
-    path: API_CONTACTS_BASE_PATH
+    path: API_CONTACTS_BASE_PATH,
   });
 }
-
 export function LEGAL_CONTACT(senderId: string, channelType: LegalChannelType) {
   return compileRoute({
     prefix: API_CONTACTS_PREFIX,
     path: API_CONTACTS_LEGAL_PATH,
     params: {
       [API_CONTACTS_SENDER_ID_PARAMETER]: senderId,
-      [API_CONTACTS_CHANNEL_TYPE_PARAMETER]: channelType
-    }
+      [API_CONTACTS_CHANNEL_TYPE_PARAMETER]: channelType,
+    },
   });
 }
 
@@ -47,8 +44,7 @@ export function COURTESY_CONTACT(senderId: string, channelType: CourtesyChannelT
     path: API_CONTACTS_COURTESY_PATH,
     params: {
       [API_CONTACTS_SENDER_ID_PARAMETER]: senderId,
-      [API_CONTACTS_CHANNEL_TYPE_PARAMETER]: channelType
-    }
+      [API_CONTACTS_CHANNEL_TYPE_PARAMETER]: channelType,
+    },
   });
 }
-

@@ -8,7 +8,7 @@ import {
   formatToTimezoneString,
   getNextDay,
 } from '@pagopa-pn/pn-commons';
-import { apiClient } from '../../axios';
+import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   notificationsFromBe,
@@ -19,13 +19,17 @@ import {
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { mockApi } from '../../../__test__/test-utils';
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_PAYMENT_URL,
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
@@ -73,6 +77,22 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
+  it('getReceivedNotificationOtherDocument', async () => {
+    const iun = 'mocked-iun';
+    const otherDocument = {
+      documentId: 'mocked-id',
+      documentType: 'mocked-type',
+    };
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
+      .reply(200, { url: 'http://mocked-url.com' });
+    const res = await NotificationsApi.getReceivedNotificationOtherDocument(iun, otherDocument);
+    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
+    mock.reset();
+    mock.restore();
+  });
+
   it('getReceivedNotificationLegalfact', async () => {
     const iun = 'mocked-iun';
     const legalFact: LegalFactId = {
@@ -106,15 +126,74 @@ describe('Notifications api tests', () => {
   it('getNotificationPaymentInfo', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_INFO(taxId, noticeCode),
+      200,
+      null,
+      {
+        status: 'SUCCEEDED',
+        amount: 10,
+      }
+    );
     const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
     expect(res).toStrictEqual({
       status: 'SUCCEEDED',
       amount: 10,
+    });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('getNotificationPaymentUrl', async () => {
+    const taxId = 'mocked-taxId';
+    const noticeCode = 'mocked-noticeCode';
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice: {
+          noticeNumber: noticeCode,
+          fiscalCode: taxId,
+          amount: 0,
+          companyName: 'Mocked Company',
+          description: 'Mocked title',
+        },
+        returnUrl: 'mocked-return-url',
+      })
+      .reply(200, {
+        checkoutUrl: 'mocked-url',
+      });
+    const res = await NotificationsApi.getNotificationPaymentUrl(
+      {
+        noticeNumber: noticeCode,
+        fiscalCode: taxId,
+        amount: 0,
+        companyName: 'Mocked Company',
+        description: 'Mocked title',
+      },
+      'mocked-return-url'
+    );
+    expect(res).toStrictEqual({
+      checkoutUrl: 'mocked-url',
+    });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('exchangeNotificationQrCode', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr1' }).reply(200, {
+      iun: 'mock-notification-1',
+      mandateId: 'mock-mandate-1',
+    });
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr2' }).reply(200, {
+      iun: 'mock-notification-2',
+    });
+    const res = await NotificationsApi.exchangeNotificationQrCode('qr1');
+    expect(res).toStrictEqual({
+      iun: 'mock-notification-1',
+      mandateId: 'mock-mandate-1',
     });
     mock.reset();
     mock.restore();

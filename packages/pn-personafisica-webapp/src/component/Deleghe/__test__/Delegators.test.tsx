@@ -1,5 +1,5 @@
 import { act, screen } from '@testing-library/react';
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import * as hooks from '../../../redux/hooks';
 import Delegators from '../Delegators';
@@ -45,14 +45,6 @@ describe('Delegators Component - assuming delegators API works properly', () => 
     expect(result.container).toHaveTextContent(/marco verdi/i);
     expect(result.container).toHaveTextContent(/davide legato/i);
     expect(result.container).not.toHaveTextContent(/luca blu/i);
-  });
-
-  it.skip('is Delegator component accessible', async ()=>{
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
-    const result = render(<Delegators />);
-    const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
   });
 });
 

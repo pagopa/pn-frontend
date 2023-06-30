@@ -9,7 +9,7 @@ import { PersonValidator } from './PersonValidator';
 class CreateDelegationValidator extends Validator<CreateDelegationProps> {
   constructor() {
     super();
-    this.ruleFor('delegate').setValidator(new PersonValidator());
+    this.ruleFor('delegate').isObject().setValidator(new PersonValidator());
   }
 }
 

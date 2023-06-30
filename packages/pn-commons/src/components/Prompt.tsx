@@ -41,11 +41,11 @@ const Prompt = ({
   return (
     <Fragment>
       <Dialog onClose={cancelNavigation} open={showPrompt} maxWidth={'xs'} fullWidth>
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
+        <DialogTitle sx={{ pt: 4, pl: 4, pb: 2, pr: 4 }}>{title}</DialogTitle>
+        <DialogContent sx={{ px: 4, py: 0 }}>
           <DialogContentText>{message}</DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ p: 4 }}>
           <Button variant="outlined" onClick={cancelNavigation}>
             {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
           </Button>

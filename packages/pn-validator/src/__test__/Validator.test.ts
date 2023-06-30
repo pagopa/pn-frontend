@@ -13,8 +13,8 @@ class DummyClass {
 class SubDummyValidator extends Validator<DummySubClass> {
   constructor() {
     super();
-    this.ruleFor('propertyOne').isEqual('valueOne');
-    this.ruleFor('propertyTwo').isEqual('valueTwo');
+    this.ruleFor('propertyOne').isString().isEqual('valueOne');
+    this.ruleFor('propertyTwo').isString().isEqual('valueTwo');
   }
 }
 
@@ -22,11 +22,13 @@ class DummyValidator extends Validator<DummyClass> {
   constructor() {
     super();
 
-    this.ruleFor('property').isEqual('value');
+    this.ruleFor('property').isString().isEqual('value');
     this.ruleFor('subProperty')
-      .isEmpty(true)
+      .isArray()
+      .not()
+      .isEmpty()
       .forEachElement((rules) => {
-        rules.setValidator(new SubDummyValidator());
+        rules.isObject().setValidator(new SubDummyValidator());
       });
   }
 }
@@ -55,9 +57,12 @@ describe('Test Validator', () => {
     const results = dummyValidator.validate(dummyObject);
     expect(results).toStrictEqual({
       property: 'Value must be equal to value',
-      subProperty: [null, {
-        propertyOne: 'Value must be equal to valueOne'
-      }],
+      subProperty: [
+        null,
+        {
+          propertyOne: 'Value must be equal to valueOne',
+        },
+      ],
     });
   });
 

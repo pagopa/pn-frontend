@@ -1,6 +1,8 @@
-import { act, RenderResult } from '@testing-library/react';
+import React from 'react';
+import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
+import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
@@ -13,33 +15,29 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('SpecialContactElem Component', () => {
-  // eslint-disable-next-line functional/no-let
-  let result: RenderResult | undefined;
+  it('renders SpecialContactElem', async () => {
+    // eslint-disable-next-line functional/no-let
+    let result: RenderResult | undefined;
 
-  beforeEach(async () => {
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContactElem
-            address={{
-              senderId: 'mocked-senderId',
-              mail: 'mocked@mail.it',
-              pec: 'mocked@pec.it',
-            }}
-            senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
-            recipientId="mocked-recipientId"
-          />
+          <SpecialContactsProvider>
+            <SpecialContactElem
+              address={{
+                senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
+                mail: 'mocked@mail.it',
+                pec: 'mocked@pec.it',
+              }}
+              recipientId="mocked-recipientId"
+            />
+          </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
     });
-  });
 
-  afterEach(() => {
-    result = undefined;
-  });
-
-  it('renders SpecialContactElem', () => {
     expect(result?.container).toHaveTextContent('Mocked Sender');
     const specialContactForms = result?.queryAllByTestId('specialContactForm');
     expect(specialContactForms).toHaveLength(2);
@@ -49,19 +47,92 @@ describe('SpecialContactElem Component', () => {
     const firstFormButtons = specialContactForms![0].querySelectorAll('button');
     expect(firstFormButtons).toHaveLength(2);
     expect(firstFormButtons[0]).toHaveTextContent('button.modifica');
-    expect(firstFormButtons[1]).toHaveTextContent('button.rimuovi');
+    expect(firstFormButtons[1]).toHaveTextContent('button.elimina');
     const secondFormButtons = specialContactForms![1].querySelectorAll('button');
     expect(secondFormButtons).toHaveLength(2);
     expect(secondFormButtons[0]).toHaveTextContent('button.modifica');
-    expect(secondFormButtons[1]).toHaveTextContent('button.rimuovi');
+    expect(secondFormButtons[1]).toHaveTextContent('button.elimina');
   });
 
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
+  it('changes a mail - new value valid', async () => {
+    // eslint-disable-next-line functional/no-let
+    let result: RenderResult | undefined;
+
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <SpecialContactsProvider>
+            <SpecialContactElem
+              address={{
+                senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
+                mail: 'mocked@mail.it',
+                pec: 'mocked@pec.it',
+              }}
+              recipientId="mocked-recipientId"
+            />
+          </SpecialContactsProvider>
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    expect(result?.container).toHaveTextContent('Mocked Sender');
+    const specialContactForms = result?.queryAllByTestId('specialContactForm');
+    const firstFormButtons = specialContactForms![0].querySelectorAll('button');
+    fireEvent.click(firstFormButtons[0]);
+    const input = await waitFor(() => {
+      return specialContactForms![0].querySelector('input');
+    });
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('mocked@pec.it');
+    const newButtons = specialContactForms![0].querySelectorAll('button');
+    expect(newButtons!).toHaveLength(2);
+    expect(newButtons![0]).toHaveTextContent('button.salva');
+    expect(newButtons![0]).toBeEnabled();
+    fireEvent.change(input!, { target: { value: 'new.long-mail-123@456.it' } });
+    await waitFor(() => expect(input!).toHaveValue('new.long-mail-123@456.it'));
+    expect(newButtons![0]).toBeEnabled();
+  });
+
+  it('changes a mail - new value invalid', async () => {
+    // eslint-disable-next-line functional/no-let
+    let result: RenderResult | undefined;
+
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <SpecialContactsProvider>
+            <SpecialContactElem
+              address={{
+                senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
+                mail: 'mocked@mail.it',
+                pec: 'mocked@pec.it',
+              }}
+              recipientId="mocked-recipientId"
+            />
+          </SpecialContactsProvider>
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    expect(result?.container).toHaveTextContent('Mocked Sender');
+    const specialContactForms = result?.queryAllByTestId('specialContactForm');
+    const firstFormButtons = specialContactForms![0].querySelectorAll('button');
+    fireEvent.click(firstFormButtons[0]);
+    const input = await waitFor(() => {
+      return specialContactForms![0].querySelector('input');
+    });
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('mocked@pec.it');
+    const newButtons = specialContactForms![0].querySelectorAll('button');
+    expect(newButtons!).toHaveLength(2);
+    expect(newButtons![0]).toHaveTextContent('button.salva');
+    expect(newButtons![0]).toBeEnabled();
+    fireEvent.change(input!, { target: { value: 'new.bad.-mail-123@456.it' } });
+    await waitFor(() => expect(input!).toHaveValue('new.bad.-mail-123@456.it'));
+    expect(newButtons![0]).toBeDisabled();
   });
 });

@@ -1,4 +1,11 @@
-import { ChangeEvent, Fragment, useMemo } from 'react';
+import {
+  ChangeEvent,
+  forwardRef,
+  Fragment,
+  useMemo,
+  ForwardedRef,
+  useImperativeHandle,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
 import * as yup from 'yup';
@@ -11,8 +18,10 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
+import { getConfiguration } from '../../../services/configuration.service';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
+import { requiredStringFieldValidation } from './validation.utility';
 
 type AttachmentBoxProps = {
   id: string;
@@ -35,6 +44,8 @@ type AttachmentBoxProps = {
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
 };
+
+const MAX_NUMBER_OF_ATTACHMENTS = 10;
 
 const AttachmentBox = ({
   id,
@@ -64,7 +75,13 @@ const AttachmentBox = ({
       >
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
-          <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />
+          <ButtonNaked
+            onClick={onDelete}
+            data-testid="deletebutton"
+            aria-label={t('new-notification.steps.remove-document')}
+          >
+            <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
+          </ButtonNaked>
         )}
       </Box>
       <FileUpload
@@ -98,6 +115,8 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep?: () => void;
   attachmentsData?: Array<NewNotificationDocument>;
+  forwardedRef: ForwardedRef<unknown>;
+  isCompleted: boolean;
 };
 
 const emptyFileData = {
@@ -119,12 +138,20 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
+const Attachments = ({
+  onConfirm,
+  onPreviousStep,
+  attachmentsData,
+  forwardedRef,
+  isCompleted,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
   });
   const { t: tc } = useTranslation(['common']);
+  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
+
   const validationSchema = yup.object({
     documents: yup.array().of(
       yup.object({
@@ -144,7 +171,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
               .required(),
           })
           .required(),
-        name: yup.string().required(`${t('act-name')} ${tc('common:required')}`),
+        name: requiredStringFieldValidation(tc),
       })
     ),
   });
@@ -168,22 +195,25 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     validateOnMount: true,
     onSubmit: (values) => {
       if (formik.isValid) {
-        // store attachments
-        dispatch(
-          setAttachments({
-            documents: values.documents.map((v) => ({
-              ...v,
-              id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-            })),
-          })
-        );
-        // upload attachments
-        dispatch(uploadNotificationAttachment(values.documents))
-          .unwrap()
-          .then(() => {
-            onConfirm();
-          })
-          .catch(() => undefined);
+        if (!IS_PAYMENT_ENABLED && isCompleted) {
+          onConfirm();
+        } else {
+          dispatch(
+            setAttachments({
+              documents: values.documents.map((v) => ({
+                ...v,
+                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+              })),
+            })
+          );
+          // upload attachments
+          dispatch(uploadNotificationAttachment(values.documents))
+            .unwrap()
+            .then(() => {
+              onConfirm();
+            })
+            .catch(() => undefined);
+        }
       }
     },
   });
@@ -201,19 +231,23 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldValue(id, {
-      ...formik.values.documents[index],
-      file: {
-        size,
-        uint8Array: file,
-        sha256,
-        name,
+    await formik.setFieldValue(
+      id,
+      {
+        ...formik.values.documents[index],
+        file: {
+          size,
+          uint8Array: file,
+          sha256,
+          name,
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-    }, false);
+      false
+    );
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
@@ -268,11 +302,26 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     }
   };
 
+  useImperativeHandle(forwardedRef, () => ({
+    confirm() {
+      dispatch(
+        setAttachments({
+          documents: formik.values.documents.map((v) => ({
+            ...v,
+            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+          })),
+        })
+      );
+    },
+  }));
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
+        subtitle={t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
+        submitLabel={IS_PAYMENT_ENABLED ? tc('button.continue') : tc('button.send')}
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
@@ -304,17 +353,23 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
         ))}
-        <ButtonNaked
-          onClick={addDocumentHandler}
-          color="primary"
-          startIcon={<AddIcon />}
-          sx={{ marginTop: '30px' }}
-        >
-          {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
-        </ButtonNaked>
+        {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
+          <ButtonNaked
+            onClick={addDocumentHandler}
+            color="primary"
+            startIcon={<AddIcon />}
+            sx={{ marginTop: '30px' }}
+            data-testid="add-another-doc"
+          >
+            {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
+          </ButtonNaked>
+        )}
       </NewNotificationCard>
     </form>
   );
 };
 
-export default Attachments;
+// This is a workaorund to prevent cognitive complexity warning
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
+  <Attachments {...props} forwardedRef={ref} />
+));

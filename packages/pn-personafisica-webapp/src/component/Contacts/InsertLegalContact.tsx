@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Alert, Button, Grid, TextField, Typography } from '@mui/material';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -24,7 +25,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-        .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+        .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
   });
 
@@ -52,9 +53,9 @@ const InsertLegalContact = ({ recipientId }: Props) => {
         sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
         title={t('legal-contacts.subtitle', { ns: 'recapiti' })}
         subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
-        avatar={<IllusEmailValidation />}
+        avatar={<IllusEmailValidation size={60} />}
       >
-        <Grid container spacing={2} direction="row" mt={4}>
+        <Grid container spacing={2} direction="row" mt={3}>
           <Grid item lg={8} sm={8} xs={12}>
             <TextField
               id="pec"
@@ -66,18 +67,34 @@ const InsertLegalContact = ({ recipientId }: Props) => {
               error={formik.touched.pec && Boolean(formik.errors.pec)}
               helperText={formik.touched.pec && formik.errors.pec}
               disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
-              size="small"
+              inputProps={{ sx: { height: '14px' } }}
             />
           </Grid>
           <Grid item lg={4} sm={4} xs={12} alignItems="right">
-            <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
+            <Button
+              variant="outlined"
+              disabled={!formik.isValid}
+              fullWidth
+              type="submit"
+              data-testid="add contact"
+            >
               {t('button.conferma')}
               {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
             </Button>
           </Grid>
         </Grid>
-        <Alert sx={{ mt: 4 }} severity="info">
-          <Typography component="span" variant="body1">
+        <Alert
+          tabIndex={0}
+          aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
+          sx={{ mt: 4 }}
+          severity="info"
+        >
+          <Typography
+            role="banner"
+            component="span"
+            variant="body1"
+            data-testid="legal contact disclaimer"
+          >
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
           {/** 

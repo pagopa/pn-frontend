@@ -73,13 +73,14 @@ describe('PaymentMethods Component', () => {
       const fileInput = paymentBox.parentNode?.querySelector('[data-testid="fileInput"]');
       expect(fileInput).toBeInTheDocument();
     });
-    const buttons = form?.querySelectorAll('button');
-    expect(buttons).toHaveLength(2);
+    const buttonSubmit = result.getByTestId('step-submit');
+    const buttonPrevious = result.getByTestId('previous-step');
+    expect(buttonSubmit).toBeInTheDocument();
+    expect(buttonPrevious).toBeInTheDocument();
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![0]).toBeDisabled();
-    expect(result.container).toHaveTextContent(/back-to-attachments/i);
+    expect(buttonPrevious).toHaveTextContent(/back-to-attachments/i);
   });
 
   it('adds first and second pagoPa documents (confirm disabled)', async () => {
@@ -91,7 +92,6 @@ describe('PaymentMethods Component', () => {
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![0]).toBeDisabled();
   });
 
   it('adds all payment documents and clicks on confirm', async () => {

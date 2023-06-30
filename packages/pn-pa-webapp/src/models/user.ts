@@ -12,7 +12,8 @@ export enum PartyRole {
 
 export enum GroupStatus {
   ACTIVE = 'ACTIVE',
-  SUSPENDED = 'SUSPENDED'
+  SUSPENDED = 'SUSPENDED',
+  DELETED = 'DELETED',
 }
 
 export interface UserGroup {
@@ -23,6 +24,6 @@ export interface UserGroup {
 }
 
 export enum PNRole {
-  ADMIN = 'admin',
-  OPERATOR = 'operator',
+  ADMIN = 'admin', // ref amministrativo
+  OPERATOR = 'operator', // ref tecnico
 }

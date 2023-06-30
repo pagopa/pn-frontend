@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-
 import * as redux from 'react-redux';
 import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 function formatDate(date: Date): string {
@@ -136,10 +136,11 @@ describe('Filter Notifications Table Component', () => {
     // NOTE: iunMatch field is automatically formatted at input
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
-    todayM.setHours(0, 0, 0, 0);
+    const oneMonthAgo = new Date(new Date().setMonth(todayM.getMonth() - 1));
     oneYearAgo.setHours(0, 0, 0, 0);
+    oneMonthAgo.setHours(0, 0, 0, 0);
 
-    await setFormValues(form!, oneYearAgo, getNextDay(todayM), 'ABCD-EFGH-ILMN-123456-A-1');
+    await setFormValues(form!, oneYearAgo, oneMonthAgo, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -149,7 +150,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
-        endDate: formatToTimezoneString(getNextDay(todayM)),
+        endDate: formatToTimezoneString(oneMonthAgo),
         mandateId: undefined,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       },
@@ -174,13 +175,53 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
+  it('valid date range', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    todayM.setHours(0, 0, 0, 0);
+    nineYearsAgo.setHours(0, 0, 0, 0);
+
+    // valid
+    await setFormValues(form!, nineYearsAgo, todayM, 'ABCD-EFGH-ILMN-123456-A-1');
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeEnabled();
+  });
+
+  it('test invalid date range - end before start', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    todayM.setHours(0, 0, 0, 0);
+    nineYearsAgo.setHours(0, 0, 0, 0);
+
+    // wrong since endDate is before startDate
+    await setFormValues(form!, todayM, nineYearsAgo, 'ABCD-EFGH-ILMN-123456-A-1');
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeDisabled();
+  });
+
+  it('test invalid date range - end in the future', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+    const todayM = new Date();
+    const oneMonthAhead = new Date(new Date().setMonth(todayM.getMonth() + 1));
+    todayM.setHours(0, 0, 0, 0);
+    oneMonthAhead.setHours(0, 0, 0, 0);
+
+    // wrong since endDate is before startDate
+    await setFormValues(form!, todayM, oneMonthAhead, 'ABCD-EFGH-ILMN-123456-A-1');
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeDisabled();
+  });
+
   it('test form reset', async () => {
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
-    todayM.setHours(0, 0, 0, 0);
+    const oneMonthAgo = new Date(new Date().setMonth(todayM.getMonth() - 1));
     oneYearAgo.setHours(0, 0, 0, 0);
+    oneMonthAgo.setHours(0, 0, 0, 0);
 
-    await setFormValues(form!, oneYearAgo, getNextDay(todayM), 'ABCD-EFGH-ILMN-123456-A-1');
+    await setFormValues(form!, oneYearAgo, oneMonthAgo, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
@@ -197,14 +238,5 @@ describe('Filter Notifications Table Component', () => {
         type: 'dashboardSlice/setNotificationFilters',
       });
     });
-  });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
   });
 });

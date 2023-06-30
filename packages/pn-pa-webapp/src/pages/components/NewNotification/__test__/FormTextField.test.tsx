@@ -39,6 +39,22 @@ describe('FormTextField Component', () => {
     expect(result.container).toHaveTextContent(/error/i);
   });
 
+  it('renders the component with an error - not touched but with value', () => {
+    const result = render(
+      <FormTextField
+        keyName={'testKey'}
+        label={'testLabel'}
+        values={formTestValues}
+        touched={{}}
+        errors={formTestErrors}
+        setFieldValue={mockSetValue}
+        handleBlur={mockBlur}
+      />
+    );
+
+    expect(result.container).toHaveTextContent(/error/i);
+  });
+
   it('tests the onChange function', async () => {
     const result = render(
       <FormTextField

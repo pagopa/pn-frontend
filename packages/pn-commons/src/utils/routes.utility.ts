@@ -63,3 +63,13 @@ export function compileRoute(route: Route) {
   }
   return result;
 }
+
+export enum AppRouteType {
+  PG = 'PG',
+  PF = 'PF',
+}
+
+export enum AppRouteParams {
+  TYPE = 'type',
+  AAR = 'aar',
+}

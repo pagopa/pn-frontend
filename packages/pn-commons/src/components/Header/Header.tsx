@@ -15,6 +15,8 @@ import { pagoPALink } from '../../utils/costants';
 type HeaderProps = {
   /** List of available products */
   productsList: Array<ProductEntity>;
+  /** Show Header Product */
+  showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
   /** List of available parties */
@@ -44,6 +46,7 @@ const pagoPAHeaderLink: RootLinkType = {
 const Header = ({
   onExitAction = () => window.location.assign(''),
   productsList,
+  showHeaderProduct = true,
   productId,
   partyList,
   loggedUser,
@@ -74,6 +77,7 @@ const Header = ({
   };
 
   const enableHeaderProduct =
+    showHeaderProduct &&
     (isLogged || isLogged === undefined) &&
     ((productsList && productsList.length > 0) || (partyList && partyList.length > 0));
 

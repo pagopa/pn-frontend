@@ -1,15 +1,17 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { createNewNotification } from '../redux/newNotification/actions';
 import { setSenderInfos, resetState } from '../redux/newNotification/reducers';
+import { getConfiguration } from '../services/configuration.service';
 import * as routes from '../navigation/routes.const';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
@@ -32,11 +34,7 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
-      {t('menu.api-key')}
-      {/*
-        PN-2028
-        <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>.
-      */}
+      <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>
     </Fragment>
   );
 };
@@ -50,22 +48,29 @@ const NewNotification = () => {
   );
   const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const organizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
+  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const steps = [
     t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
     t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
     t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
-    t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }),
   ];
+
+  const childRef = useRef<{ confirm: () => void }>();
 
   const eventStep = [
     TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
     TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
     TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
-    TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES,
   ];
+
+  if (IS_PAYMENT_ENABLED) {
+    // eslint-disable-next-line functional/immutable-data
+    eventStep.push(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES);
+    // eslint-disable-next-line functional/immutable-data
+    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
+  }
 
   const stepType = ['preliminary info', 'recipient', 'attachments', 'payment modes'];
 
@@ -87,20 +92,24 @@ const NewNotification = () => {
 
   const goToNextStep = () => {
     trackEventByType(eventStep[activeStep]);
+
     setActiveStep((previousStep) => previousStep + 1);
   };
 
   const goToPreviousStep = (selectedStep?: number) => {
     if (selectedStep !== undefined && selectedStep >= 0 && selectedStep < activeStep) {
-      setActiveStep(selectedStep);
+      // navigation event from stepper
+      if (childRef.current) {
+        childRef.current.confirm();
+        setActiveStep(selectedStep);
+      }
     } else {
       setActiveStep(activeStep - 1);
     }
   };
 
   const createNotification = () => {
-    // if it is last step, save notification
-    if (activeStep === 3 && isCompleted) {
+    if (activeStep === steps.length - 1 && isCompleted) {
       void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1));
@@ -114,15 +123,15 @@ const NewNotification = () => {
   useEffect(() => {
     dispatch(
       setSenderInfos({
-        senderDenomination: organizationParty.name,
+        senderDenomination: organization.name,
         senderTaxId: organization.fiscal_code,
       })
     );
-  }, [organization, organizationParty]);
+  }, [organization]);
 
   useEffect(() => () => void dispatch(resetState()), []);
 
-  if (activeStep === 4) {
+  if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
 
@@ -153,6 +162,20 @@ const NewNotification = () => {
             <Typography sx={{ marginTop: '10px' }} variant="body2">
               {t('required-fields')}
             </Typography>
+            {!IS_PAYMENT_ENABLED && (
+              <Alert
+                tabIndex={0}
+                aria-label={t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
+                data-testid="alert"
+                sx={{ mt: 4 }}
+                severity={'warning'}
+              >
+                <Typography component="span" variant="body1">
+                  {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
+                </Typography>
+              </Alert>
+            )}
+
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
               {steps.map((label, index) => (
                 <Step
@@ -164,6 +187,7 @@ const NewNotification = () => {
                 </Step>
               ))}
             </Stepper>
+
             {activeStep === 0 && (
               <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
             )}
@@ -173,13 +197,16 @@ const NewNotification = () => {
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
                 paymentMode={notification.paymentMode}
+                ref={childRef}
               />
             )}
             {activeStep === 2 && (
               <Attachments
-                onConfirm={goToNextStep}
+                onConfirm={IS_PAYMENT_ENABLED ? goToNextStep : createNotification}
                 onPreviousStep={goToPreviousStep}
+                isCompleted={isCompleted}
                 attachmentsData={notification.documents}
+                ref={childRef}
               />
             )}
             {activeStep === 3 && (
@@ -188,6 +215,7 @@ const NewNotification = () => {
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
+                ref={childRef}
               />
             )}
           </Grid>

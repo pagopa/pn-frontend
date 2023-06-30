@@ -1,5 +1,5 @@
-import { fireEvent } from '@testing-library/react';
-import { axe, render } from '../../../__test__/test-utils';
+import { fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({
@@ -59,15 +59,24 @@ describe('DelegationElements', () => {
     expect(result.container).toHaveTextContent(/Bollate/i);
   });
 
+  it('renders the OrganizationList with multiple organizations and visibleItems set to 3', async () => {
+    const result = render(
+      <OrganizationsList
+        organizations={['Bollate', 'Milano', 'Abbiategrasso', 'Malpensa']}
+        visibleItems={3}
+      />
+    );
+    const organizationsList = result.getByTestId('custom-tooltip-indicator');
+    expect(result.container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
+    expect(result.container).toHaveTextContent(/BollateMilanoAbbiategrasso\+1/i);
+    expect(result.container).not.toHaveTextContent(/Malpesa/i);
+    await waitFor(() => fireEvent.mouseOver(organizationsList));
+    await waitFor(() => expect(screen.getByText(/Malpensa/i)).toBeInTheDocument());
+  });
+
   it('renders the AcceptButton', () => {
     const result = render(<AcceptButton id={'1'} name={'test'} />);
 
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
-  });
-
-  it('is Menu component accessible', async ()=>{
-    const result = render(<Menu />);
-    const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
   });
 });

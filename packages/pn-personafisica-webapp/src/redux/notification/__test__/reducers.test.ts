@@ -1,15 +1,27 @@
-import { LegalFactType, NotificationDetail, PaymentAttachmentSName, PaymentStatus, RecipientType } from '@pagopa-pn/pn-commons';
+import {
+  LegalFactType,
+  NotificationDetail,
+  PaymentAttachmentSName,
+  PaymentStatus,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
+import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import { store } from '../../store';
 import {
+  getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
   getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
+  getReceivedNotificationOtherDocument,
 } from '../actions';
-import { resetState } from '../reducers';
+import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
 
 const initialState = {
@@ -21,6 +33,7 @@ const initialState = {
     senderDenomination: '',
     paymentExpirationDate: '',
     documents: [],
+    otherDocuments: [],
     notificationFeePolicy: '',
     physicalCommunicationType: '',
     senderPaId: '',
@@ -37,10 +50,14 @@ const initialState = {
     currentRecipientIndex: 0,
   },
   documentDownloadUrl: '',
+  otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {},
+  downtimeLegalFactUrl: '',
+  downtimeEvents: [],
 };
 
 describe('Notification detail redux state tests', () => {
@@ -57,8 +74,8 @@ describe('Notification detail redux state tests', () => {
     const action = await store.dispatch(
       getReceivedNotification({
         iun: 'mocked-iun',
-        currentUserTaxId: 'CGNNMO80A03H501U' ,
-        delegatorsFromStore: []
+        currentUserTaxId: 'CGNNMO80A03H501U',
+        delegatorsFromStore: [],
       })
     );
     const payload = action.payload as NotificationDetail;
@@ -74,6 +91,20 @@ describe('Notification detail redux state tests', () => {
     );
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
+    expect(payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
+  it('Should be able to fetch the notification other document', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationOtherDocument');
+    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
+    const action = await store.dispatch(
+      getReceivedNotificationOtherDocument({
+        iun: 'mocked-iun',
+        otherDocument: { documentId: 'mocked-id', documentType: 'mocked-type' },
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getReceivedNotificationOtherDocument/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
   });
 
@@ -98,6 +129,16 @@ describe('Notification detail redux state tests', () => {
     expect(payload).toEqual(undefined);
     const state = store.getState().notificationState;
     expect(state).toEqual(initialState);
+  });
+
+  it('Should be able to reset legalfact state', () => {
+    const action = store.dispatch(resetLegalFactState());
+    const payload = action.payload;
+    expect(action.type).toBe('notificationSlice/resetLegalFactState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().notificationState;
+    expect(state.legalFactDownloadRetryAfter).toEqual(0);
+    expect(state.legalFactDownloadUrl).toEqual('');
   });
 
   it('Should be able to fetch the pagopa document', async () => {
@@ -130,15 +171,69 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch payment info', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' });
     const action = await store.dispatch(
       getNotificationPaymentInfo({ noticeCode: 'mocked-notice-code', taxId: 'mocked-tax-id' })
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' });
 
     const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+    expect(state.paymentInfo).toEqual({
+      status: PaymentStatus.REQUIRED,
+      amount: 1200,
+      url: 'mocked-url',
+    });
+  });
+
+  it('Should be able to fetch payment url', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentUrl');
+    apiSpy.mockResolvedValue({ checkoutUrl: 'mocked-url' });
+    const action = await store.dispatch(
+      getNotificationPaymentUrl({
+        paymentNotice: {
+          noticeNumber: 'mocked-noticeCode',
+          fiscalCode: 'mocked-taxId',
+          amount: 0,
+          companyName: 'Mocked Company',
+          description: 'Mocked title',
+        },
+        returnUrl: 'mocked-return-url',
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationPaymentUrl/fulfilled');
+    expect(payload).toEqual({ checkoutUrl: 'mocked-url' });
+  });
+
+  it('Should be able to fetch the downtimes events', async () => {
+    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
+    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
+    const action = await store.dispatch(
+      getDowntimeEvents({
+        startDate: '2022-10-23T15:50:04Z',
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getDowntimeEvents/fulfilled');
+    expect(payload).toEqual(simpleDowntimeLogPage);
+  });
+
+  it('Should be able to fetch the downtimes legal fact details', async () => {
+    const apiSpy = jest.spyOn(AppStatusApi, 'getLegalFactDetails');
+    apiSpy.mockResolvedValue({
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    });
+    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails('mocked-iun'));
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
+    expect(payload).toEqual({
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    });
   });
 });

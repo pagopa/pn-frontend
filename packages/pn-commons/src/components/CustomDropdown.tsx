@@ -1,9 +1,7 @@
-import { ReactNode } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { TextField, SxProps, MenuItem } from '@mui/material';
 
 type Props = {
-  /** children wrapper */
-  children?: ReactNode;
   /** id */
   id: string;
   /** value */
@@ -19,9 +17,9 @@ type Props = {
   /** style costumization */
   sx?: SxProps;
   /** size option */
-  size?: "small" | "medium";
+  size?: 'small' | 'medium';
   /** margin option */
-  margin?: "none" | "dense" | "normal";
+  margin?: 'none' | 'dense' | 'normal';
   /** empty message when no items are available */
   emptyStateMessage?: string;
   /** error status toggle */
@@ -38,7 +36,7 @@ type Props = {
   emptyItemLabel?: string;
 };
 
-const CustomDropdown = ({
+const CustomDropdown: React.FC<Props> = ({
   children,
   id,
   value,
@@ -56,43 +54,61 @@ const CustomDropdown = ({
   emptyItemKey = '',
   emptyItemValue = '',
   emptyItemLabel = '------',
-}: Props) => (
-  <>
-    {children ? (
-      <TextField
-        id={id}
-        value={value}
-        name={name}
-        label={label}
-        fullWidth={fullWidth}
-        onChange={onChange}
-        sx={sx}
-        select
-        size={size}
-        margin={margin}
-        error={error}
-        helperText={helperText}
-      >
-        {!required && (
-          <MenuItem key={emptyItemKey} value={emptyItemValue}>
-            {emptyItemLabel}
-          </MenuItem>
-        )}
-        {children}
-      </TextField>
-    ) : (
-      <TextField
-        id={id}
-        name={name}
-        disabled
-        placeholder={emptyStateMessage}
-        InputLabelProps={{ shrink: true }}
-        size="small"
-        margin="normal"
-        label={label}
-        fullWidth={fullWidth}
-      />
-    )}
-  </>
-);
+}) => {
+  const [innerValue, setInnerValue] = useState(value);
+
+  const changeHandler = (event: ChangeEvent) => {
+    setInnerValue((event.target as any).value);
+    if (onChange) {
+      onChange(event);
+    }
+  };
+
+  useEffect(() => {
+    if (value !== innerValue) {
+      setInnerValue(value);
+    }
+  }, [value]);
+
+  return (
+    <>
+      {children ? (
+        <TextField
+          id={id}
+          value={innerValue}
+          name={name}
+          label={label}
+          fullWidth={fullWidth}
+          onChange={changeHandler}
+          sx={sx}
+          select
+          size={size}
+          margin={margin}
+          error={error}
+          helperText={helperText}
+        >
+          {!required && (
+            <MenuItem key={emptyItemKey} value={emptyItemValue}>
+              {emptyItemLabel}
+            </MenuItem>
+          )}
+          {children}
+        </TextField>
+      ) : (
+        <TextField
+          id={id}
+          name={name}
+          disabled
+          placeholder={emptyStateMessage}
+          InputLabelProps={{ shrink: true }}
+          size="small"
+          margin="normal"
+          label={label}
+          fullWidth={fullWidth}
+        />
+      )}
+    </>
+  );
+};
+
 export default CustomDropdown;

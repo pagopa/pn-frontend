@@ -1,16 +1,22 @@
 {
   "title": "I tuoi recapiti",
-  "subtitle-1": "Qui puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale. Se stai cercando i tuoi dati personali, ",
-  "subtitle-2": ".",
-  "subtitle-link": "li trovi qui",
+  "subtitle-text-1": "Qui puoi indicare e modificare i recapiti digitali a cui riceverai gli ",
+  "subtitle-link-1": "avvisi di avvenuta ricezione",
+  "subtitle-text-2": " e ",
+  "subtitle-link-2": "di cortesia",
+  "subtitle-text-3": " delle tue notifiche. Se stai cercando i tuoi dati personali, ",
+  "subtitle-link-3": "li trovi qui",
+  "subtitle-text-4": ".",
   "general-contacts-title": "Recapiti generali",
   "special-contacts-title": "Altri recapiti",
+  "alert-dialog-EMAIL": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'e-mail, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+  "alert-dialog-SMS": "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "legal-contacts": {
     "title": "",
-    "subtitle": "PEC",
+    "subtitle": "Recapito legale",
     "subtitle-2": "Recapito legale",
-    "description": "Quando c’è una notifica per te, ti inviamo qui l’avviso di avvenuta di ricezione. Accedi a Piattaforma Notifiche per leggerla e pagare eventuali spese.",
-    "description-2": "Ricevi gli avvisi di avvenuta di ricezione delle notifiche nella tua PEC. Accedi a Piattaforma Notifiche per leggerle e pagare eventuali spese.",
+    "description": "Quando c’è una notifica per te, ti inviamo qui l’avviso di avvenuta di ricezione. Accedi a SEND per leggerla e pagare eventuali spese.",
+    "description-2": "Ricevi gli avvisi di avvenuta di ricezione delle notifiche nella tua PEC. Accedi a SEND per leggerle e pagare eventuali spese.",
     "link-aar": "Cos’è un avviso di avvenuta ricezione?",
     "link-pec": "Associa PEC",
     "link-pec-placeholder": "Il tuo indirizzo PEC",
@@ -22,34 +28,53 @@
     "insert-code": "Inserisci codice",
     "pec-new-code": "Non l’hai ricevuto? Controlla che l’indirizzo PEC sia corretto o",
     "new-code-link": "generane uno nuovo",
-    "wrong-code": "Il codice inserito non è corretto",
-    "wrong-code-message": "Prova a reinserirlo, oppure genera un nuovo codice.",
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
+    "pec-validating": "Validazione PEC in corso",
+    "cancel-pec-validation": "Annulla validazione",
     "remove-pec-title": "Rimuovi PEC",
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
     "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
-    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
+    "validation-cancel-title": "Vuoi annullare la verifica?",
+    "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
+    "validation-in-progress": "Verifica in corso",
+    "validation-progress-title": "Grazie!",
+    "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore."
   },
   "io-contact": {
     "title": "",
     "subtitle": "App IO",
-    "description": "Quando c’è una notifica per te, ti inviamo un messaggio su IO.  Puoi leggerla e pagare eventuali spese direttamente in app. Qui ricevi anche eventuali comunicazioni importanti.",
+    "description": "Attiva il servizio “Notifiche digitali”: quando c’è una notifica per te, ti inviamo un messaggio in app, dove puoi leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.",
     "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più",
     "switch-label": "Avvisami con un messaggio su IO",
-    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo"
+    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di SEND sia attivo.",
+    "enabled": "Attivo",
+    "disabled": "Non attivo",
+    "enable-modal": {
+      "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "Ho capito",
+      "confirm": "Attiva servizio",
+      "content": "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
+    },
+    "disable-modal": {
+      "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "",
+      "confirm": "Disattiva servizio",
+      "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
+    }
   },
   "courtesy-contacts": {
     "title": "",
-    "subtitle": "Email o SMS",
-    "description": "Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a Piattaforma Notifiche per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.",
+    "subtitle": "E-mail o numero di cellulare",
+    "description": "Quando c’è una notifica per te, ti inviamo un’e-mail o un SMS. Accedi a SEND per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.",
     "link-phone-placeholder": "Il tuo cellulare",
-    "link-email-placeholder": "Il tuo indirizzo email",
+    "link-email-placeholder": "Il tuo indirizzo e-mail",
     "phone-add": "Avvisami via SMS",
-    "email-add": "Avvisami via email",
+    "email-add": "Avvisami via e-mail",
     "email-verify": "Abbiamo inviato un codice a",
     "email-verify-descr": "Inseriscilo qui sotto per confermare l’indirizzo e-mail. Il codice è valido per <strong>10 minuti</strong>.",
     "phone-verify": "Abbiamo inviato un codice a",
@@ -58,20 +83,18 @@
     "email-new-code": "Non l’hai ricevuto? Controlla che l’indirizzo e-mail sia corretto o",
     "phone-new-code": "Non l’hai ricevuto? Controlla che il numero di cellulare sia corretto o",
     "new-code-link": "generane uno nuovo",
-    "wrong-code": "Il codice inserito non è corretto",
-    "wrong-code-message": "Prova a reinserirlo, oppure genera un nuovo codice.",
-    "email-added": "Indirizzo email",
+    "email-added": "Indirizzo e-mail",
     "phone-added": "Numero di cellulare",
-    "valid-email": "Indirizzo email non valido",
+    "valid-email": "Indirizzo e-mail non valido",
     "valid-phone": "Numero di cellulare non valido",
-    "email-added-successfully": "Indirizzo email aggiunto correttamente",
+    "email-added-successfully": "Indirizzo e-mail aggiunto correttamente",
     "phone-added-successfully": "Numero di cellulare aggiunto correttamente",
-    "remove-email-title": "Rimuovi email",
-    "remove-email-message": "Confermi di voler rimuovere l'indirizzo email {{value}}?",
+    "remove-email-title": "Rimuovi e-mail",
+    "remove-email-message": "Confermi di voler rimuovere l'indirizzo e-mail {{value}}?",
     "remove-phone-title": "Rimuovi cellulare",
     "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?",
-    "block-remove-email-title": "Non puoi eliminare l'email",
-    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Altri recapiti”.",
+    "block-remove-email-title": "Non puoi eliminare l'e-mail",
+    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi e-mail che hai indicato alla voce “Altri recapiti”.",
     "block-remove-phone-title": "Non puoi eliminare il numero di telefono",
     "block-remove-phone-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”.",
     "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
@@ -85,14 +108,29 @@
     "address-type": "Recapito",
     "pec": "Indirizzo PEC",
     "phone": "Cellulare",
-    "mail": "Indirizzo mail",
+    "mail": "Indirizzo e-mail",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "phone-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "email-already-exists": "Questo ente è già associato a un indirizzo email. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
-    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?"
+    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?",
+    "enti-not-found": "Nessun ente trovato"
+  },
+  "errors": {
+    "invalid_verification_code": {
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo, oppure generane un altro."
+    },
+    "retry_limit_code": {
+      "title": "Hai fatto troppi tentativi",
+      "message": "Hai inserito troppe volte un codice sbagliato. Per riprovare premi “Annulla”, assicurati che il contatto sia corretto e inserisci il nuovo codice."
+    },
+    "expired_verification_code": {
+      "title": "Il codice è scaduto",
+      "message": "Generane uno nuovo e inseriscilo."
+    }
   }
 }

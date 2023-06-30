@@ -1,6 +1,6 @@
 import { Box, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { CardElement, ItemsCard, Item, ApiErrorWrapper, EmptyState } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemsCard, Item, ApiErrorWrapper, EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -56,13 +56,6 @@ const MobileDelegators = () => {
       },
     },
     {
-      id: 'email',
-      label: t('deleghe.table.email'),
-      getLabel(value: string) {
-        return value;
-      },
-    },
-    {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
       getLabel(value: string) {
@@ -80,7 +73,7 @@ const MobileDelegators = () => {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} textVariant="body2" />;
+        return <OrganizationsList organizations={value} textVariant="body2" visibleItems={3} />;
       },
       notWrappedInTypography: true,
     },
@@ -95,7 +88,7 @@ const MobileDelegators = () => {
         <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())}>
           { delegators.length > 0 
             ? <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
-            : <EmptyState disableSentimentDissatisfied emptyMessage={t('deleghe.no_delegators')} />
+            : <EmptyState sentimentIcon={KnownSentiment.NONE} emptyMessage={t('deleghe.no_delegators')} />
           }
         </ApiErrorWrapper>
       </Box>

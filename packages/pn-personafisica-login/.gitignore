@@ -7,6 +7,10 @@
 
 # testing
 /coverage
+test-report.xml
+
+# sonar
+/.scannerwork
 
 # production
 /build
@@ -21,3 +25,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# config
+public/conf/config.json

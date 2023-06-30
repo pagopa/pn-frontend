@@ -1,0 +1,511 @@
+{
+  "resultsPage": [
+    {
+      "iun": "LDXT-NMPT-VLZA-202211-Z-1",
+      "paProtocolNumber": "302211668517476061",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:04:36.428565Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:05:03.592857Z"
+    },
+    {
+      "iun": "QLDZ-YKUL-WZNZ-202211-K-1",
+      "paProtocolNumber": "302211668517432780",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:03:53.217272Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:04:24.273353Z"
+    },
+    {
+      "iun": "GMUZ-KTMR-VQVZ-202211-G-1",
+      "paProtocolNumber": "302211668517393806",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:03:13.993873Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:03:39.582099Z"
+    },
+    {
+      "iun": "WXVW-YRYM-NWNT-202211-L-1",
+      "paProtocolNumber": "302211668517347337",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:02:32.339567Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:03:01.779352Z"
+    },
+    {
+      "iun": "ELNZ-UPMV-UQPK-202211-J-1",
+      "paProtocolNumber": "302011668515917233",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T12:38:37.567321Z",
+      "subject": "invio notifica con cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T12:39:01.806611Z"
+    },
+    {
+      "iun": "MQGE-LWPH-UDLE-202211-J-1",
+      "paProtocolNumber": "302011668515792722",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T12:36:33.113635Z",
+      "subject": "invio notifica con cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T12:36:56.851727Z"
+    },
+    {
+      "iun": "ENLX-XUXZ-JWVM-202211-K-1",
+      "paProtocolNumber": "302161668512343696",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:39:04.047988Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "UNREACHABLE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:39:26.633677Z"
+    },
+    {
+      "iun": "JQNT-VNMX-VZDQ-202211-T-1",
+      "paProtocolNumber": "302161668512263208",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:37:43.646174Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:38:00.831576Z"
+    },
+    {
+      "iun": "PWLG-HJWZ-LDWL-202211-Q-1",
+      "paProtocolNumber": "302151668510648395",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:10:48.802511Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:11:18.579036Z"
+    },
+    {
+      "iun": "KHVA-JZRG-LNPJ-202211-V-1",
+      "paProtocolNumber": "302181668510417182",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:06:57.583669Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "UNREACHABLE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:07:17.923064Z"
+    },
+    {
+      "iun": "WTRY-DLMW-GNZG-202211-J-1",
+      "paProtocolNumber": "302181668510383513",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:06:23.866397Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:06:45.24273Z"
+    },
+    {
+      "iun": "YGZY-LJRK-LYGL-202211-G-1",
+      "paProtocolNumber": "302181668510341399",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:05:41.586564Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:06:12.954848Z"
+    },
+    {
+      "iun": "KANA-UWRA-AKJE-202211-P-1",
+      "paProtocolNumber": "prot-12555514",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-15T11:05:26.649601Z",
+      "subject": "Test multidestinatario (2632)",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-11-15T11:05:55.374648Z",
+      "group": ""
+    },
+    {
+      "iun": "HTPY-YHDZ-MPZH-202211-M-1",
+      "paProtocolNumber": "302181668510294091",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:04:56.697297Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:05:28.883321Z"
+    },
+    {
+      "iun": "JAJK-UJKE-HWLR-202211-E-1",
+      "paProtocolNumber": "302171668509548661",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:52:29.267324Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "UNREACHABLE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:52:58.534118Z"
+    },
+    {
+      "iun": "HUQT-UPTV-TEHX-202211-P-1",
+      "paProtocolNumber": "302171668509442598",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:50:43.363281Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:51:15.411942Z"
+    },
+    {
+      "iun": "JDWM-VYZN-MDQE-202211-T-1",
+      "paProtocolNumber": "302161668507837973",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:23:59.085648Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:24:28.958095Z"
+    },
+    {
+      "iun": "ZJHJ-HPLH-KPNZ-202211-E-1",
+      "paProtocolNumber": "302201668507603606",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:20:04.129253Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "UNREACHABLE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:20:28.955291Z"
+    },
+    {
+      "iun": "EYRX-XMQN-VTVJ-202211-E-1",
+      "paProtocolNumber": "302201668507555315",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:19:15.94017Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:19:49.61607Z"
+    },
+    {
+      "iun": "QUJH-WXAP-LQXV-202211-L-1",
+      "paProtocolNumber": "302201668507521796",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:18:42.075973Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:19:04.014555Z"
+    },
+    {
+      "iun": "KGXU-TQHR-KTXK-202211-E-1",
+      "paProtocolNumber": "302201668507469472",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:17:52.093656Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:18:29.911847Z"
+    },
+    {
+      "iun": "MUQX-HDNV-UJVJ-202211-Y-1",
+      "paProtocolNumber": "302161668506348238",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:59:08.578741Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:59:33.221877Z"
+    },
+    {
+      "iun": "GJEW-WRJN-WUYM-202211-H-1",
+      "paProtocolNumber": "302161668506237613",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:57:18.201311Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:57:43.691553Z"
+    },
+    {
+      "iun": "PHPL-UEZG-RHZU-202211-Y-1",
+      "paProtocolNumber": "302201668505258256",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:40:58.715039Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:41:23.076762Z"
+    },
+    {
+      "iun": "TGPY-NQTD-PVAK-202211-N-1",
+      "paProtocolNumber": "302201668505222594",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:40:23.127355Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:40:43.915812Z"
+    },
+    {
+      "iun": "DJAK-WYTH-EJDG-202211-U-1",
+      "paProtocolNumber": "302201668505189247",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:39:49.403416Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:40:10.987995Z"
+    },
+    {
+      "iun": "TUEJ-PTNR-DRPE-202211-G-1",
+      "paProtocolNumber": "302201668505143472",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:39:05.584972Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:39:35.586674Z"
+    },
+    {
+      "iun": "ATVD-WTWQ-MLXL-202211-H-1",
+      "paProtocolNumber": "302161668503561876",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:12:42.591019Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:13:09.819881Z"
+    },
+    {
+      "iun": "VZDK-JZAW-YNMQ-202211-L-1",
+      "paProtocolNumber": "302191668503324039",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:08:44.483441Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:09:10.918343Z"
+    },
+    {
+      "iun": "JXVJ-DQVK-XRHP-202211-Y-1",
+      "paProtocolNumber": "302151668503294280",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:08:14.589723Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:08:34.238498Z"
+    },
+    {
+      "iun": "LVJN-NTEX-NKGH-202211-Z-1",
+      "paProtocolNumber": "302191668503288969",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:08:09.44012Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:08:29.898134Z"
+    },
+    {
+      "iun": "HJDW-UDJD-ADLY-202211-T-1",
+      "paProtocolNumber": "302191668503249147",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:07:29.348745Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:07:57.468989Z"
+    },
+    {
+      "iun": "XHMN-HZVQ-XKPH-202211-H-1",
+      "paProtocolNumber": "302191668503212393",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:06:53.052844Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:07:17.197118Z"
+    },
+    {
+      "iun": "VKWV-WZHK-WXQR-202211-T-1",
+      "paProtocolNumber": "302211668503073037",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:04:33.415864Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:04:50.256876Z"
+    },
+    {
+      "iun": "EDTU-MLGY-NWQK-202211-M-1",
+      "paProtocolNumber": "302211668503035945",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:03:56.329973Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:04:20.324313Z"
+    },
+    {
+      "iun": "YMPE-MNWD-DALJ-202211-J-1",
+      "paProtocolNumber": "302211668502986528",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:03:06.760621Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:03:43.615493Z"
+    },
+    {
+      "iun": "ZVEW-HRTR-YRZP-202211-R-1",
+      "paProtocolNumber": "302211668502953490",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:02:34.395468Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:02:56.015422Z"
+    },
+    {
+      "iun": "KPVA-ERPU-XKMP-202211-P-1",
+      "paProtocolNumber": "302161668502931194",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:02:12.336591Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:02:38.120877Z"
+    },
+    {
+      "iun": "URZA-RHQG-GNLQ-202211-J-1",
+      "paProtocolNumber": "302201668502692496",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:58:12.846154Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:58:37.67427Z"
+    },
+    {
+      "iun": "PJVK-LAGW-ALRJ-202211-K-1",
+      "paProtocolNumber": "302201668502650381",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:57:30.948481Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:57:57.653624Z"
+    },
+    {
+      "iun": "WQTV-UTYW-YTVG-202211-J-1",
+      "paProtocolNumber": "302201668502613628",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:56:53.742118Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:57:19.411803Z"
+    },
+    {
+      "iun": "NJNE-WMNX-YENX-202211-D-1",
+      "paProtocolNumber": "302201668502565084",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:56:07.449585Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:56:41.831728Z"
+    },
+    {
+      "iun": "LEPZ-HYQN-PDYW-202211-J-1",
+      "paProtocolNumber": "302161668500485009",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:21:25.624076Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:21:53.601224Z"
+    },
+    {
+      "iun": "QZXT-XAYN-GNEP-202211-M-1",
+      "paProtocolNumber": "302191668500250197",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:17:30.570183Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:17:54.338377Z"
+    },
+    {
+      "iun": "NYDE-TZUK-XWZG-202211-X-1",
+      "paProtocolNumber": "302191668500201930",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:16:42.379148Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:17:15.538126Z"
+    },
+    {
+      "iun": "RMDA-HQAN-LZXA-202211-M-1",
+      "paProtocolNumber": "302191668500168560",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:16:08.614671Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:16:30.938372Z"
+    },
+    {
+      "iun": "YJUR-NPWP-QHAZ-202211-M-1",
+      "paProtocolNumber": "302191668500119591",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T08:15:23.32466Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T08:15:56.179603Z"
+    },
+    {
+      "iun": "QEZX-NUHU-ADVP-202211-W-1",
+      "paProtocolNumber": "302151668496100836",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T07:08:21.797984Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T07:08:47.017929Z"
+    },
+    {
+      "iun": "HMRZ-TVPA-AHTJ-202211-G-1",
+      "paProtocolNumber": "302211668495870400",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T07:04:30.755704Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T07:04:53.059465Z"
+    },
+    {
+      "iun": "HGXE-AEND-RPDR-202211-T-1",
+      "paProtocolNumber": "302211668495833738",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T07:03:54.12545Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T07:04:18.315059Z"
+    }
+  ],
+  "moreResult": true,
+  "nextPagesKey": [
+    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiSEdYRS1BRU5ELVJQRFItMjAyMjExLVQtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNVQwNzowMzo1NC4xMjU0NTBaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19",
+    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiTUROUi1YTllXLUhVR1UtMjAyMjExLUotMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNFQxMDo0MjozNS40OTY5OTBaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19",
+    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiVkdYWS1WWU1ZLVBXSkgtMjAyMjExLUwtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xMVQxOTowMzoyNy4zNDUwODZaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19"
+  ]
+}

@@ -11,6 +11,7 @@ type Props = {
 
 const CourtesyPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) => (
     <Box
+        data-testid="courtesy-page"
         sx={{
             maxWidth: '480px',
             minHeight: '400px',
@@ -32,7 +33,7 @@ const CourtesyPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) =
             </Typography>
         )}
         {onClick && (
-            <Button sx={{ marginTop: '24px' }} variant="contained" onClick={onClick}>
+            <Button id="courtesy-page-button" sx={{ marginTop: '24px' }} variant="contained" onClick={onClick}>
                 {onClickLabel}
             </Button>
         )}

@@ -4,58 +4,85 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
-import { apiClient } from '../axios';
+import { apiClient } from '../apiClients';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
 
 export const ContactsApi = {
   /**
    * Gets current user digital addresses
-   * @param  {string} recipientId
    * @returns Promise
    */
-  getDigitalAddresses: (): Promise<DigitalAddresses> => 
+  getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-        legal: response.data.legal ? response.data.legal : [],
-        courtesy: response.data.courtesy ? response.data.courtesy : [],
-      })
-    ),
+      legal: response.data.legal
+        ? response.data.legal.filter((address) => address.codeValid !== false)
+        : [],
+      courtesy: response.data.courtesy ? response.data.courtesy : [],
+    })),
 
   /**
    * Create or update a digital address with legal value
    * @param  {string} recipientId
+   * @param  {string} senderId
+   * @param  {LegalChannelType} channelType
+   * @param  {object} body
+   * @param  {string} senderName
    * @returns Promise
    */
   createOrUpdateLegalAddress: (
     recipientId: string,
     senderId: string,
     channelType: LegalChannelType,
-    body: { value: string; verificationCode?: string }
+    body: { value: string; verificationCode?: string },
+    senderName?: string
   ): Promise<void | DigitalAddress> =>
-    apiClient.post<void>(LEGAL_CONTACT(senderId, channelType), body).then((response) => {
-      if (response.status !== 204) {
-        // user must verify email
-        return;
-      }
-      // email already verified
-      return {
-        addressType: 'legal',
-        recipientId,
-        senderId,
-        channelType,
-        value: body.value,
-        code: 'verified',
-      };
-    }),
+    apiClient
+      .post<void | { result: string }>(LEGAL_CONTACT(senderId, channelType), body)
+      .then((response) => {
+        if (response.status === 204) {
+          // email already verified
+          return {
+            addressType: 'legal',
+            recipientId,
+            senderId,
+            senderName,
+            channelType,
+            value: body.value,
+            pecValid: true,
+          };
+        }
+
+        // PEC_VALIDATION_REQUIRED is received when the code has been inserted and is valid, but the pec validation is
+        // still in progress
+        if (response.data?.result === 'PEC_VALIDATION_REQUIRED') {
+          return {
+            addressType: 'legal',
+            recipientId,
+            senderId,
+            senderName,
+            channelType,
+            value: '',
+            pecValid: false,
+          };
+        } else {
+          return;
+        }
+      }),
   /**
    * Create or update a courtesy address
    * @param  {string} recipientId
+   * @param  {string} senderId
+   * @param  {CourtesyChannelType} channelType
+   * @param  {object} body
+   * @param  {string} senderName
    * @returns Promise
    */
   createOrUpdateCourtesyAddress: (
     recipientId: string,
     senderId: string,
     channelType: CourtesyChannelType,
-    body: { value: string; verificationCode?: string }
+    body: { value: string; verificationCode?: string },
+    senderName?: string
   ): Promise<void | DigitalAddress> =>
     apiClient.post<void>(COURTESY_CONTACT(senderId, channelType), body).then((response) => {
       if (response.status !== 204) {
@@ -67,9 +94,9 @@ export const ContactsApi = {
         addressType: 'courtesy',
         recipientId,
         senderId,
+        senderName,
         channelType,
         value: body.value,
-        code: 'verified',
       };
     }),
   /*

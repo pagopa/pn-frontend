@@ -17,11 +17,7 @@ describe('Test greater than rule', () => {
 
   it('value not a number', () => {
     const rule = new GreaterThan<any, String>(5);
-    try {
-      rule.valueValidator('prova');
-    } catch (e) {
-      expect(e.message).toBe('A value with wrong type was passed to the greaterThan rule');
-    }
+    expect(() => rule.valueValidator('prova')).toThrow('A value with wrong type was passed to the greaterThan rule');
   });
 
   it('value greater than (number - not equal)', () => {

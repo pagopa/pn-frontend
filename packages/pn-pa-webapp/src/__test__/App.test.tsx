@@ -4,10 +4,11 @@ import { theme } from '@pagopa/mui-italia';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 /* eslint-disable import/order */
-import { render, axe } from './test-utils';
+import { render } from './test-utils';
 import App from '../App';
 import { Party } from '../models/party';
 import { AUTH_ACTIONS } from '../redux/auth/actions';
+import React from 'react';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -30,6 +31,24 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
+jest.mock('../api/appStatus/AppStatus.api', () => {
+  const original = jest.requireActual('../api/consents/Consents.api');
+  return {
+    ...original,
+    AppStatusApi: {
+      getCurrentStatus: () => Promise.resolve({
+        appIsFullyOperative: true,
+        statusByFunctionality: [],  
+        lastCheckTimestamp: '2022-11-01T14:15:28Z',
+      }),
+      getDowntimeLogPage: () => Promise.resolve({
+        downtimes: [],
+        statusByFunctionality: [],     
+      }),
+    },
+  };
+});
+
 // mocko SessionGuard perché produce problemi nel test
 jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
 jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
@@ -40,12 +59,12 @@ const Component = () => (
   </ThemeProvider>
 );
 
-
-/* eslint-disable functional/no-let */
-let mockFetchedTosStatus = false;
-let mockTosStatus = false;
-
-const reduxInitialState = () => ({
+const reduxInitialState = (
+  fetchedTos: boolean,
+  fetchedPrivacy: boolean,
+  acceptedTos: boolean,
+  acceptedPrivacy: boolean
+) => ({
   userState: {
     user: {
       fiscal_number: 'mocked-fiscal-number',
@@ -54,40 +73,36 @@ const reduxInitialState = () => ({
       email: 'mocked-user@mocked-domain.com',
       sessionToken: 'mocked-token',
     },
-    organizationParty: {
-      id: '',
-      name: '',
-    } as Party,
-    fetchedTos: mockFetchedTosStatus,
-    tos: mockTosStatus,
+    fetchedTos,
+    fetchedPrivacy,
+    tosConsent: {
+      accepted: acceptedTos,
+      isFirstAccept: false,
+      currentVersion: 'mocked-version-1'
+    },
+    privacyConsent: {
+      accepted: acceptedPrivacy,
+      isFirstAccept: false,
+      currentVersion: 'mocked-version-1'
+    }
   },
 });
 
 describe('App', () => {
   beforeEach(() => {
     mockLayout = false;
-    mockFetchedTosStatus = false;
-    mockTosStatus = false;
   });
 
-  it('Piattaforma notifiche', () => {
-    render(<Component/>, { preloadedState: reduxInitialState() });
+  it('SEND', () => {
+    render(<Component/>, { preloadedState: reduxInitialState(false, false, false, false) });
     const welcomeElement = screen.getByText(/header.notification-platform/i);
     expect(welcomeElement).toBeInTheDocument();
   });
 
-  it.skip('Test if automatic accessibility tests passes', async () => {
-    const { container } = render(<Component/>);
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
-  });
-
   it('Sidemenu not included if error in API call to fetch organization', async () => {
     mockLayout = true;
-    mockFetchedTosStatus = true;
-    mockTosStatus = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState(),
+      ...reduxInitialState(true, true, false, false),
       appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY)
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
@@ -98,7 +113,7 @@ describe('App', () => {
   it('Sidemenu not included if error in API call to fetch TOS', async () => {
     mockLayout = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState(),
+      ...reduxInitialState(true, true, false, false),
       appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_TOS_APPROVAL)
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
@@ -106,20 +121,27 @@ describe('App', () => {
     expect(sidemenuComponent).toBeNull();
   });
 
-  it('Sidemenu not included if user has not accepted the TOS', async () => {
+  it('Sidemenu not included if error in API call to fetch PRIVACY', async () => {
     mockLayout = true;
-    mockFetchedTosStatus = true;
-    mockTosStatus = false;
-    await act(async () => void render(<Component />, { preloadedState: reduxInitialState() }));
+    const mockReduxStateWithApiError = {
+      ...reduxInitialState(true, true, false, false),
+      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_PRIVACY_APPROVAL)
+    };
+    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
     const sidemenuComponent = screen.queryByText("sidemenu");
     expect(sidemenuComponent).toBeNull();
   });
 
-  it('Sidemenu included if user has accepted the TOS', async () => {
+  it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mockLayout = true;
-    mockFetchedTosStatus = true;
-    mockTosStatus = true;
-    await act(async () => void render(<Component />, { preloadedState: reduxInitialState() }));
+    await act(async () => void render(<Component />, { preloadedState: reduxInitialState(true, true, false, false) }));
+    const sidemenuComponent = screen.queryByText("sidemenu");
+    expect(sidemenuComponent).toBeNull();
+  });
+
+  it('Sidemenu included if user has accepted the TOS and PRIVACY', async () => {
+    mockLayout = true;
+    await act(async () => void render(<Component />, { preloadedState: reduxInitialState(true, true, true, true) }));
     const sidemenuComponent = screen.queryByText("sidemenu");
     expect(sidemenuComponent).toBeTruthy();
   });

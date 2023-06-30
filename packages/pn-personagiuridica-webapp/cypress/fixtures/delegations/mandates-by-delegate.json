@@ -1,0 +1,26 @@
+[
+  {
+    "mandateId": "c9f83fee-930c-444b-b5fe-ce9b57b41f13",
+    "delegator": {
+      "displayName": "Giuseppe Maria Garibaldi",
+      "firstName": "Giuseppe Maria",
+      "lastName": "Garibaldi",
+      "companyName": null,
+      "fiscalCode": "GRBGPP87L04L741X",
+      "person": true
+    },
+    "delegate": {
+      "displayName": null,
+      "firstName": null,
+      "lastName": null,
+      "companyName": null,
+      "fiscalCode": null,
+      "person": true
+    },
+    "status": "active",
+    "visibilityIds": [],
+    "verificationCode": null,
+    "datefrom": "2022-01-01",
+    "dateto": "2099-12-31"
+  }
+]

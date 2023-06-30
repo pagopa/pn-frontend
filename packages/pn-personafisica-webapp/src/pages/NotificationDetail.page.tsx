@@ -1,7 +1,8 @@
-import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import _ from 'lodash';
+import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -17,18 +18,30 @@ import {
   NotificationStatus,
   useErrors,
   ApiError,
+  TimedMessage,
+  useDownloadDocument,
+  NotificationDetailOtherDocument,
+  NotificationRelatedDowntimes,
+  GetNotificationDowntimeEventsParams,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
+  getDowntimeEvents,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
+  getReceivedNotificationOtherDocument,
+  getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { resetState } from '../redux/notification/reducers';
+import {
+  resetLegalFactState,
+  resetState,
+  clearDowntimeLegalFactData,
+} from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
@@ -43,31 +56,58 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// state for the invocations to this component
+// (to include in navigation or Link to the route/s arriving to it)
+type LocationState = {
+  fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
+};
+
 const NotificationDetail = () => {
   const classes = useStyles();
   const { id, mandateId } = useParams();
+  const location = useLocation();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common', 'notifiche']);
+
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
+  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const downtimeEvents = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeEvents
+  );
+  const downtimeLegalFactUrl = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeLegalFactUrl
+  );
 
   const currentRecipient = notification && notification.currentRecipient;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
-
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
+  const otherDocumentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
+  );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
+  );
+  const legalFactDownloadRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -113,32 +153,47 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const documentDowloadHandler = (documentIndex: string | undefined) => {
-    if (documentIndex) {
+  const documentDowloadHandler = (
+    document: string | NotificationDetailOtherDocument | undefined
+  ) => {
+    if (_.isObject(document)) {
+      void dispatch(
+        getReceivedNotificationOtherDocument({
+          iun: notification.iun,
+          otherDocument: document,
+          mandateId,
+        })
+      );
+    } else {
+      const documentIndex = document as string;
       void dispatch(
         getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId })
       );
     }
   };
 
-  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    void dispatch(
-      getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId })
-    );
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
+  // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
+  // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
+  const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
+    if ((legalFact as LegalFactId).key) {
+      dispatch(resetLegalFactState());
+      void dispatch(
+        getReceivedNotificationLegalfact({
+          iun: notification.iun,
+          legalFact: legalFact as LegalFactId,
+          mandateId,
+        })
+      );
+    } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
+      const otherDocument = legalFact as NotificationDetailOtherDocument;
+      void dispatch(
+        getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId })
+      );
+    }
   };
 
-  const dowloadDocument = (url: string) => {
-    /* eslint-disable functional/immutable-data */
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noreferrer';
-    link.click();
-    /* eslint-enable functional/immutable-data */
-  };
-
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
@@ -146,15 +201,22 @@ const NotificationDetail = () => {
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
   );
 
-  const getDownloadFilesMessage = useCallback((): string => {
-    if (isCancelled) {
-      return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
-    } else if (hasDocumentsAvailable) {
-      return t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
-    } else {
-      return t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
-    }
-  }, [isCancelled, hasDocumentsAvailable]);
+  const getDownloadFilesMessage = useCallback(
+    (type: 'aar' | 'attachments'): string => {
+      if (isCancelled) {
+        return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
+      } else if (hasDocumentsAvailable) {
+        return type === 'aar'
+          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
+      } else {
+        return type === 'aar'
+          ? t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+      }
+    },
+    [isCancelled, hasDocumentsAvailable]
+  );
 
   const fetchReceivedNotification = useCallback(() => {
     if (id) {
@@ -174,31 +236,49 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  useEffect(() => {
-    if (documentDownloadUrl) {
-      dowloadDocument(documentDownloadUrl);
-    }
-  }, [documentDownloadUrl]);
+  /* function which loads relevant information about donwtimes */
+  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
+    const fetchParams: GetNotificationDowntimeEventsParams = {
+      startDate: fromDate,
+      endDate: toDate,
+    };
+    void dispatch(getDowntimeEvents(fetchParams));
+  }, []);
 
-  useEffect(() => {
-    if (legalFactDownloadUrl) {
-      dowloadDocument(legalFactDownloadUrl);
-    }
-  }, [legalFactDownloadUrl]);
-
-  const properBreadcrumb = (
-    <PnBreadcrumb
-      goBackLabel={t('button.indietro', { ns: 'common' })}
-      linkRoute={routes.NOTIFICHE}
-      linkLabel={
-        <Fragment>
-          <EmailIcon sx={{ mr: 0.5 }} />
-          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        </Fragment>
-      }
-      currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
-    />
+  const fetchDowntimeLegalFactDocumentDetails = useCallback(
+    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
+    []
   );
+
+  useDownloadDocument({ url: documentDownloadUrl });
+  useDownloadDocument({ url: legalFactDownloadUrl });
+  useDownloadDocument({ url: otherDocumentDownloadUrl });
+
+  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+
+  const fromQrCode = useMemo(
+    () => !!(location.state && (location.state as LocationState).fromQrCode),
+    [location]
+  );
+
+  const properBreadcrumb = useMemo(() => {
+    const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+    return (
+      <PnBreadcrumb
+        showBackAction={!fromQrCode}
+        linkRoute={backRoute}
+        linkLabel={
+          <Fragment>
+            <EmailIcon sx={{ mr: 0.5 }} />
+            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
+          </Fragment>
+        }
+        currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
+        goBackAction={() => navigate(backRoute)}
+      />
+    );
+  }, [fromQrCode]);
+
   const breadcrumb = (
     <Fragment>
       {properBreadcrumb}
@@ -237,8 +317,10 @@ const NotificationDetail = () => {
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
                     iun={notification.iun}
+                    paymentHistory={notification.paymentHistory}
+                    senderDenomination={notification.senderDenomination}
+                    subject={notification.subject}
                     notificationPayment={currentRecipient.payment}
-                    onDocumentDownload={dowloadDocument}
                     mandateId={mandateId}
                   />
                 )}
@@ -249,10 +331,29 @@ const NotificationDetail = () => {
                     documents={isCancelled ? [] : notification.documents}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
                 </Paper>
+                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                  <NotificationDetailDocuments
+                    title={t('detail.aar-acts', { ns: 'notifiche' })}
+                    documents={notification.otherDocuments ?? []}
+                    clickHandler={documentDowloadHandler}
+                    documentsAvailable={hasDocumentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage('aar')}
+                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                  />
+                </Paper>
+                <NotificationRelatedDowntimes
+                  downtimeEvents={downtimeEvents}
+                  fetchDowntimeEvents={fetchDowntimeEvents}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                  downtimeLegalFactUrl={downtimeLegalFactUrl}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
               <HelpNotificationDetails 
@@ -269,6 +370,14 @@ const NotificationDetail = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+                <TimedMessage
+                  timeout={timeoutMessage}
+                  message={
+                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  }
+                />
                 <NotificationDetailTimeline
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}

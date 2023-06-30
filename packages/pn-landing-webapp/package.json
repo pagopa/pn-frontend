@@ -1,11 +1,11 @@
 {
   "name": "@pagopa-pn/pn-landing-webapp",
-  "version": "1.5.4",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "open-browser": "open http://localhost:3000",
-    "build": "next build && next export",
+    "build": "next build && next export -o build/",
     "start": "next start",
     "lint": "next lint"
   },
@@ -16,8 +16,8 @@
     "@mui/lab": "5.0.0-alpha.100",
     "@mui/material": "^5.8.6",
     "@mui/system": "^5.4.1",
-    "@pagopa-pn/pn-commons": "^1.5.4",
-    "@pagopa/mui-italia": "^0.8.1",
+    "@pagopa-pn/pn-commons": "^2.0.0",
+    "@pagopa/mui-italia": "0.8.12",
     "next": "12.1.6",
     "next-i18next": "^11.0.0",
     "next-language-detector": "^1.0.2",

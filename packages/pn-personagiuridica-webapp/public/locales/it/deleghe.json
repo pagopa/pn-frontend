@@ -1,0 +1,151 @@
+{
+  "deleghe": {
+    "title": "Deleghe",
+    "close": "Chiudi",
+    "description": "Qui si possono gestire i delegati dell’impresa e le deleghe a suo carico. I primi sono quelli che l’impresa delega alla lettura delle sue notifiche. Le seconde sono le deleghe affidate all’impresa.",
+    "delegatesTitle": "Delegati dall'impresa",
+    "delegatorsTitle": "Deleghe a carico dell'impresa",
+    "delegatorsApiErrorMessage": "Non siamo riusciti a recuperare i dati in merito alle deleghe a tuo carico.",
+    "delegationStart": "Inizio delega",
+    "delegationEnd": "Fine delega",
+    "accept_title": "Inserisci il codice di verifica",
+    "accept_description": "Per accettare la delega, inserisci il codice che {{name}} ha condiviso con te.",
+    "add": "Aggiungi una delega",
+    "revoke": "Revoca",
+    "reject": "Rifiuta",
+    "accept": "Accetta",
+    "update": "Modifica",
+    "show": "Mostra codice",
+    "revocation_question": "Vuoi revocare la delega a {{delegate}}? ",
+    "rejection_question": "Vuoi rifiutare la delega di {{delegator}}?",
+    "confirm_revocation": "Revoca la delega",
+    "confirm_rejection": "Rifiuta la delega",
+    "subtitle_rejection": "Se la rifiuti, non potrai leggere le notifiche di {{delegator}}.",
+    "subtitle_revocation": "Non potrà più leggere le notifiche di {{recipient}}.",
+    "error_title": "Spiacenti, qualcosa è andato storto",
+    "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
+    "error_button": "Ricarica la pagina",
+    "no_delegates": "{{organizationName}} non ha delegato nessuno alla lettura delle sue notifiche.",
+    "no_delegators": "Non c'è nessuna delega a carico di {{organizationName}}.",
+    "no_delegators_after_filters": "I filtri che hai aggiunto non hanno dato nessun risultato.",
+    "show_code_title": "Codice di verifica per la delega a {{name}}",
+    "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
+    "verification_code": "Codice di verifica",
+    "code_copied": "Codice copiato",
+    "tab_aria_label": "Tab deleghe",
+    "tab_delegati": "Delegati dall'impresa",
+    "tab_deleghe": "Deleghe a carico dell'impresa",
+    "table": {
+      "name": "Nome",
+      "delegationStart": "Inizio delega",
+      "delegationEnd": "Fine delega",
+      "permissions": "Permessi",
+      "status": "Stato",
+      "showCode": "Mostra codice",
+      "revoke": "Revoca",
+      "reject": "Rifiuta",
+      "accept": "Accetta",
+      "notificationsFrom": "Notifiche da:",
+      "allNotifications": "Tutte le notifiche",
+      "active": "Attiva",
+      "pending": "In attesa di conferma",
+      "rejected": "Rifiutata",
+      "groups": "Gruppi",
+      "group": "Gruppo",
+      "no-group-found": "Nessun gruppo trovato",
+      "menu-aria-label": "Menù azioni",
+      "tax-id": "Codice Fiscale/P. Iva"
+    },
+    "accept-delegation": "Accetta la delega",
+    "associate-groups-title": "Vuoi assegnare la delega ad un gruppo?",
+    "edit-groups-title": "Modifica il gruppo assegnato a questa delega",
+    "associate-groups-subtitle": "L’amministratore del gruppo potrà gestire la delega. Gli utenti del gruppo potranno leggere solo le notifiche relative a quella delega.",
+    "no-group": "Non assegnare ad un gruppo",
+    "associate-group": "Assegna ad un gruppo",
+    "select-group": "Seleziona un gruppo*",
+    "accepted-successfully": "La delega è stata accettata",
+    "accepted-error": "A causa di un errore, la delega non è stata accettata. Premi Annulla e riprova.",
+    "updated-successfully": "Gruppo modificato",
+    "updated-error": "Si è verificato un errore e il gruppo non è stato modificato. Riprova.",
+    "revoke-successfully": "Delega Revocata.",
+    "reject-successfully": "Delega Rifiutata.",
+    "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
+    "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova.",
+    "validation": {
+      "pIvaAndFiscalCode": {
+        "wrong": "Il Codice Fiscale/P. Iva inserito non è corretto"
+      }
+    }
+  },
+  "nuovaDelega": {
+    "breadcrumb": "Nuova delega",
+    "backToDelegations": "Torna alle deleghe",
+    "createdTitle": "La richiesta di delega è stata creata con successo",
+    "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la richiesta.",
+    "title": "Aggiungi una delega",
+    "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle tue notifiche.",
+    "form": {
+      "personType": "Soggetto giuridico*:",
+      "naturalPerson": "Persona fisica",
+      "legalPerson": "Persona giuridica",
+      "firstName": "Nome*",
+      "lastName": "Cognome*",
+      "fiscalCode": "Codice Fiscale*",
+      "businessName": "Ragione Sociale*",
+      "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
+      "allEntities": "Tutti gli enti",
+      "onlySelected": "Solo enti selezionati",
+      "selectEntities": "Seleziona enti",
+      "date-duration": "Periodo di validità della delega*",
+      "endDate": "Termine delega",
+      "verificationCode": "Codice di verifica",
+      "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
+      "submit": "Invia la richiesta",
+      "mandatoryField": "Campi obbligatori*"
+    },
+    "validation": {
+      "fiscalCode": {
+        "required": "Il Codice Fiscale è obbligatorio",
+        "wrong": "Il Codice Fiscale inserito non è corretto"
+      },
+      "name": {
+        "required": "Il nome è obbligatorio"
+      },
+      "surname": {
+        "required": "Il cognome è obbligatorio"
+      },
+      "businessName": {
+        "required": "La ragione sociale è obbligatoria"
+      },
+      "expirationDate": {
+        "required": "La data di termine delega è obbligatoria",
+        "wrong": "Data errata"
+      },
+      "pIvaAndFiscalCode": {
+        "wrong": "Il Codice Fiscale inserito non è corretto"
+      }
+    }
+  },
+  "errors": {
+    "not_found": {
+      "title": "Errore",
+      "message": "Delega non trovata"
+    },
+    "already_exists": {
+      "title": "Delega già presente",
+      "message": "La persona che hai indicato ha già una delega per questo ente."
+    },
+    "not_acceptable": {
+      "title": "Delega non valida",
+      "message": "La delega inserita non è valida"
+    },
+    "delegate_himself": {
+      "title": "Errore inserimento delega",
+      "message": "Non è possibile delegare se stessi"
+    },
+    "invalid_verification_code": {
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo"
+    }
+  }
+}

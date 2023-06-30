@@ -4,15 +4,15 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
-import { SpidIcon } from '@pagopa/mui-italia/dist/icons';
+import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from 'react-router-dom';
 
-import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageOriginOps } from '../../utils/storage';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { storageTypeOps, storageSpidSelectedOps, storageAarOps } from '../../utils/storage';
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
+import { getConfiguration } from "../../services/configuration.service";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -28,27 +28,28 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
-  const origin = params.get('origin');
+  const type = params.get(AppRouteParams.TYPE);
+  const aar = params.get(AppRouteParams.AAR);
+  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL } = getConfiguration();
 
-  if (origin !== null && origin !== '') {
-    storageOriginOps.write(origin);
+  if (type !== null && type !== '' && (type === AppRouteType.PF || type === AppRouteType.PG)) {
+    storageTypeOps.write(type);
   }
 
-  // PN-2195 hide CIE button
-  /* const goCIE = () => {
-    storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
-    // () =>
+  if (aar !== null && aar !== '') {
+    storageAarOps.write(aar);
+  }
+
+  const goCIE = () => {
+    storageSpidSelectedOps.write(SPID_CIE_ENTITY_ID);
     window.location.assign(
-      `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+      `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
-    trackEventByType(
-      TrackEventType.LOGIN_IDP_SELECTED,
-      {
-        SPID_IDP_NAME: 'CIE',
-        SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
-      },
-    );
-  }; */
+    trackEventByType(TrackEventType.LOGIN_IDP_SELECTED, {
+      SPID_IDP_NAME: 'CIE',
+      SPID_IDP_ID: SPID_CIE_ENTITY_ID,
+    });
+  };
 
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
@@ -60,7 +61,7 @@ const Login = () => {
 
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
-    /* eslint-disable-next-line functional/immutable-data */
+    // eslint-disable-next-line functional/immutable-data
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
@@ -81,6 +82,7 @@ const Login = () => {
         <Grid container item justifyContent="center">
           <Grid item>
             <Typography
+              id="login-mode-page-title"
               component="h2"
               variant="h3"
               px={0}
@@ -137,9 +139,9 @@ const Login = () => {
                 </LoginButton>
               </Box>
 
-              {/* PN-2195 hide CIE button
               <Box display="flex" justifyContent="center" alignItems="center">
                 <LoginButton
+                  id="cieButton"
                   sx={{
                     borderRadius: '4px',
                     width: '90%',
@@ -152,7 +154,7 @@ const Login = () => {
                 >
                   {t('loginPage.loginBox.cieLogin')}
                 </LoginButton>
-              </Box> */}
+              </Box>
             </Box>
           </Grid>
         </Grid>

@@ -7,8 +7,9 @@ import { TypeRules } from './types/TypeRules';
 export class Validator<TModel> {
   private validatorBuilders: ValidatorBuilders<TModel> = {};
 
-  public validate = (model: TModel): ValidationError<TModel> | null => {
+  public readonly validate = (model: TModel): ValidationError<TModel> | null => {
     let errors: ValidationError<TModel> | null = null;
+    
     // loop over all validators
     for (const propertyName of Object.keys(this.validatorBuilders)) {
       const validatorBuilder = this.validatorBuilders[propertyName as keyof TModel];
@@ -18,6 +19,7 @@ export class Validator<TModel> {
         // check errors
         if (hasError(result)) {
           if (!errors) {
+
             errors = {};
           }
           errors[propertyName as keyof TModel] = result;
@@ -31,7 +33,7 @@ export class Validator<TModel> {
    * Add rule for a specific property
    * @param  {TPropertyName} propertyName property name
    */
-  protected ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
+  public readonly ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
     propertyName: TPropertyName
   ): TypeRules<TModel, TValue> => {
     const validatorBuilder = new ValidatorBuilder<TModel, TValue>();

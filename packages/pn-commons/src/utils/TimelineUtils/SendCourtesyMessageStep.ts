@@ -19,15 +19,12 @@ export class SendCourtesyMessageStep extends TimelineStep {
     }
     return {
       ...this.localizeTimelineStatus(
-        'send-courtesy-message',
+        `send-courtesy-message`,
+        payload.isMultiRecipient,
         'Invio del messaggio di cortesia',
         `È in corso l'invio del messaggio di cortesia a ${payload.recipient?.denomination} tramite ${type}`,
-        {
-          name: payload.recipient?.denomination,
-          type,
-        }
+        { ...this.nameAndTaxId(payload), type, }
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

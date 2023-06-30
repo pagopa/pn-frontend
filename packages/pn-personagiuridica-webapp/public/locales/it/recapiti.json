@@ -1,0 +1,121 @@
+{
+  "title": "Recapiti",
+  "subtitle-1": "Qui si possono indicare e modificare i recapiti digitali a cui {{recipient}} riceverà le notifiche. Se stai cercando i dati dell’impresa ",
+  "subtitle-2": ".",
+  "subtitle-link": "li trovi qui",
+  "general-contacts-title": "Recapiti generali",
+  "special-contacts-title": "Altri recapiti",
+  "alert-dialog-EMAIL": "Se l’impresa non ha una PEC e un suo utente accede alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'e-mail, non verrà inviato l'avviso di avvenuta ricezione tramite raccomandata.",
+  "alert-dialog-SMS": "Se l’impresa non ha una PEC e un suo utente accede alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell’SMS, non verrà inviato l’avviso di avvenuta ricezione tramite raccomandata.",
+  "legal-contacts": {
+    "title": "",
+    "subtitle": "Recapito legale",
+    "subtitle-2": "Recapito legale",
+    "description": "Quando c’è una notifica per l’impresa, l’avviso di avvenuta ricezione viene inviato a questo indirizzo. Per leggere la notifica e pagare eventuali spese è necessario accedere alla piattaforma.",
+    "description-2": "Ricevi gli avvisi di avvenuta di ricezione delle notifiche nella tua PEC. Accedi a SEND per leggerle e pagare eventuali spese.",
+    "link-aar": "Cos’è un avviso di avvenuta ricezione?",
+    "link-pec": "Associa PEC",
+    "link-pec-placeholder": "Indirizzo PEC",
+    "valid-pec": "Indirizzo PEC non valido",
+    "pec-verify": "Verifica PEC",
+    "pec-verify-descr": "Abbiamo inviato un codice all’indirizzo PEC indicato. Il codice è valido per <strong>10 minuti</strong>.",
+    "insert-code": "Inserisci codice",
+    "pec-new-code": "Non l’hai ricevuto? Controlla di aver inserito la PEC corretta o",
+    "new-code-link": "generane uno nuovo",
+    "pec-added-successfully": "PEC associata correttamente",
+    "pec-added": "PEC associata",
+    "pec-validating": "Validazione PEC in corso",
+    "cancel-pec-validation": "Annulla validazione",
+    "remove-pec-title": "Rimuovi PEC",
+    "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
+    "disclaimer-message": "Questo è l’indirizzo principale a cui l’impresa riceverà gli avvisi di avvenuta ricezione. Inserendolo, non riceverà più raccomandate.",
+    "disclaimer-link": "Scopri di più",
+    "block-remove-pec-title": "Non puoi eliminare la PEC",
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”.",
+    "validation-cancel-title": "Vuoi annullare la verifica?",
+    "validation-cancel-content": "Se annulli la verifica, dovrai inserire una nuova PEC e ricominciare il processo.",
+    "validation-in-progress": "Verifica in corso",
+    "validation-progress-title": "Grazie!",
+    "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una e-mail con l’esito entro 24 ore.",
+    "enabled": "Attivo",
+    "disabled": "Non attivo",
+    "enable-modal": {
+      "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "Ho capito",
+      "confirm": "Attiva servizio",
+      "content": "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
+    },
+    "disable-modal": {
+      "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "",
+      "confirm": "Disattiva servizio",
+      "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
+    }
+  },
+  "courtesy-contacts": {
+    "title": "",
+    "subtitle": "E-mail o numero di cellulare",
+    "description": "Quando c’è una notifica per l’impresa, viene inviato un messaggio a questi contatti. Per leggere la notifica e pagare eventuali spese è necessario accedere alla piattaforma.",
+    "link-phone-placeholder": "",
+    "link-email-placeholder": "E-mail",
+    "phone-add": "Avvisami via SMS",
+    "email-add": "Avvisami via e-mail",
+    "email-verify": "Verifica e-mail",
+    "email-verify-descr": "Abbiamo inviato un codice all’indirizzo e-mail indicato. Il codice è valido per <strong>10 minuti</strong>.",
+    "phone-verify": "Verifica numero",
+    "phone-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è valido per <strong>10 minuti</strong>.",
+    "insert-code": "Inserisci codice",
+    "email-new-code": "Non l’hai ricevuto? Controlla di aver inserito l’e-mail corretta o",
+    "phone-new-code": "Non l’hai ricevuto? Controlla di aver inserito il numero di cellulare corretto o",
+    "new-code-link": "generane uno nuovo",
+    "email-added": "Indirizzo e-mail",
+    "phone-added": "Numero di cellulare",
+    "valid-email": "Indirizzo e-mail non valido",
+    "valid-phone": "Numero di cellulare non valido",
+    "email-added-successfully": "Indirizzo e-mail aggiunto correttamente",
+    "phone-added-successfully": "Numero di cellulare aggiunto correttamente",
+    "remove-email-title": "Rimuovi e-mail",
+    "remove-email-message": "Confermi di voler rimuovere l'indirizzo e-mail {{value}}?",
+    "remove-phone-title": "Rimuovi cellulare",
+    "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?",
+    "block-remove-email-title": "Non puoi eliminare l'e-mail",
+    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi e-mail che hai indicato alla voce “Altri recapiti”.",
+    "block-remove-phone-title": "Non puoi eliminare il numero di telefono",
+    "block-remove-phone-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”.",
+    "disclaimer-message": "Se l’impresa non è raggiungibile tramite PEC e un suo utente legge subito la notifica, non riceverà l’avviso di avvenuta ricezione tramite raccomandata.",
+    "disclaimer-link": "Scopri di più"
+  },
+  "special-contacts": {
+    "subtitle": "Se si desidera che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi è possibile indicarli qui, in sostituzione di quelli principali.",
+    "required-fields": "*Campi obbligatori",
+    "associated": "Già associati",
+    "sender": "Ente",
+    "address-type": "Tipo di recapito",
+    "pec": "Indirizzo PEC",
+    "phone": "Cellulare",
+    "mail": "Indirizzo e-mail",
+    "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "phone-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "email-already-exists": "Questo ente è già associato a un indirizzo e-mail. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito."
+  },
+  "common": {
+    "duplicate-contact-title": "Recapito già presente",
+    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?",
+    "enti-not-found": "Nessun ente trovato"
+  },
+  "errors": {
+    "invalid_verification_code": {
+      "title": "Il codice è sbagliato",
+      "message": "Controllalo e inseriscilo di nuovo, oppure generane un altro."
+    },
+    "retry_limit_code": {
+      "title": "Hai fatto troppi tentativi",
+      "message": "Hai inserito troppe volte un codice sbagliato. Per riprovare premi “Annulla”, assicurati che il contatto sia corretto e inserisci il nuovo codice."
+    },
+    "expired_verification_code": {
+      "title": "Il codice è scaduto",
+      "message": "Generane uno nuovo e inseriscilo."
+    }
+  }
+}

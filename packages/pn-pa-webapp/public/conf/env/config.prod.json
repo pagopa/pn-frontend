@@ -1,0 +1,16 @@
+{
+    "PAGOPA_HELP_EMAIL": "enti-send@assistenza.pagopa.it",
+    "SELFCARE_URL_FE_LOGIN": "https://selfcare.pagopa.it/auth/login",
+    "SELFCARE_BASE_URL": "https://selfcare.pagopa.it",
+    "API_BASE_URL": "https://webapi.notifichedigitali.it/",
+    "LANDING_SITE_URL": "https://notifichedigitali.pagopa.it/",
+    "DISABLE_INACTIVITY_HANDLER": false,
+    "OT_DOMAIN_ID": "62ebb6a0-1a65-48a4-8ca0-837de03b1199",
+    "MIXPANEL_TOKEN": "e860a58bfce634272eca1e0ce288f33a",
+    "ONE_TRUST_DRAFT_MODE": false,
+    "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
+    "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
+    "IS_PAYMENT_ENABLED": false,
+    "WORK_IN_PROGRESS": false
+  }
+  

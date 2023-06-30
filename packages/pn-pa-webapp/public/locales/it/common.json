@@ -9,13 +9,15 @@
     "continue": "Continua",
     "send": "Invia",
     "go-to-home": "Torna alla home page",
-    "go-to-login": "Procedi al login"
+    "go-to-login": "Accedi"
   },
   "menu": {
     "notifications": "Notifiche",
-    "roles": "Ruoli",
+    "users": "Utenti",
     "groups": "Gruppi",
-    "api-key": "Chiavi API",
+    "api-key": "API Key",
+    "statistics": "Statistiche",
+    "app-status": "Stato della piattaforma",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione mittente"
   },
@@ -23,11 +25,10 @@
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A.",
     "reserved-area": "Area Riservata",
-    "notification-platform": "Piattaforma Notifiche"
+    "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
-    "title": "Piattaforma Notifiche",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
+    "title": "SEND - Servizio Notifiche Digitali",
     "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
     "button": "Accedi"
   },
@@ -55,24 +56,33 @@
     "select-date": "Scegli data",
     "date-selected": "Scegli data, la data selezionata è {{date}}"
   },
+  "date-time": {
+    "today-uppercase-initial": "Oggi",
+    "hour-of-day": "ore"
+  },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
     "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "action": "Ricarica la pagina"
   },
+  "not-accessible": {
+    "title": "Non è possibile accedere alla piattaforma",
+    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Se sei un Ente e hai completato l'adesione, riceverai aggiornamenti in merito alla data di attivazione della piattaforma. Per maggiori informazioni sull'iniziativa,",
+    "action": "visita il sito dedicato"
+  },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi all'Area Riservata",
-  "not-logged-subtitle": "Per usare Piattaforma Notifiche, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
+  "not-logged-subtitle": "Per usare SEND, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
   },
   "leaving-app": {
-    "title": "Stai uscendo da Piattaforma Notifiche",
+    "title": "Stai uscendo da SEND",
     "message": "Verrai reindirizzato"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problemi nell'accesso in Piattaforma Notifiche",
+    "title": "Problemi nell'accesso in SEND",
     "message": "Riprova più tardi"
   },
   "messages": {
@@ -82,6 +92,8 @@
     "403-message": "Entra e accedi con SPID o CIE.",
     "401-title": "Utente non autorizzato",
     "401-message": "L'utente corrente non ha le autorizzazioni",
+    "451-title": "Piattaforma non accessibile",
+    "451-message": "Non è possibile accedere alla piattaforma",
     "500-title": "Il servizio non è disponibile",
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
@@ -105,7 +117,7 @@
     "terms-conditions": "Termini e Condizioni",
     "company": "Società trasparente",
     "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Modello 321",
+    "321-model": "Modello 231",
     "accessibility": "Accessibilità",
     "social": "Link: vai al sito {{social}} di PagoPA S.p.A.",
     "resources": "Risorse",
@@ -116,6 +128,9 @@
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
   "required": "obbligatorio",
+  "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
+  "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
   "invalid": "non valido",
   "upload-file": {
     "or": "oppure",
@@ -129,6 +144,6 @@
   },
   "roles": {
     "operator": "Referente operativo",
-    "admin": "Referente amministrativo"
+    "admin": "Amministratore"
   }
 }

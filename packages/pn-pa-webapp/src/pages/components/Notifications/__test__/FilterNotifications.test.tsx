@@ -9,13 +9,7 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 
-import {
-  render,
-  testFormElements,
-  testInput,
-  testSelect,
-  axe,
-} from '../../../../__test__/test-utils';
+import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 jest.mock('@pagopa-pn/pn-commons', () => {
@@ -103,7 +97,7 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'recipientId', 'filters.fiscal-code');
+    testFormElements(form!, 'recipientId', 'filters.fiscal-code-tax-code');
     testFormElements(form!, 'startDate', 'filters.data_da');
     testFormElements(form!, 'endDate', 'filters.data_a');
     testFormElements(form!, 'status', 'filters.status');
@@ -154,7 +148,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       oneYearAgo,
-      getNextDay(todayM),
+      todayM,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
@@ -168,7 +162,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
-        endDate: formatToTimezoneString(getNextDay(todayM)),
+        endDate: formatToTimezoneString(todayM),
         recipientId: 'RSSMRA80A01H501U',
         status: localizedNotificationStatus[2].value,
         iunMatch: '',
@@ -187,7 +181,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       oneYearAgo,
-      getNextDay(todayM),
+      todayM,
       localizedNotificationStatus[2].value,
       '',
       'ABCD-EFGH-ILMN-123456-A-1'
@@ -201,7 +195,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
-        endDate: formatToTimezoneString(getNextDay(todayM)),
+        endDate: formatToTimezoneString(todayM),
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         recipientId: '',
@@ -220,17 +214,16 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       nineYearsAgo,
-      getNextDay(todayM),
+      todayM,
       localizedNotificationStatus[2].value,
       'mocked-wrongId',
       ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('test form submission - iunMatch (invalid)', async () => {
@@ -245,29 +238,97 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       nineYearsAgo,
-      getNextDay(todayM),
+      todayM,
       localizedNotificationStatus[2].value,
       '',
       '1234-5678-910A-BCDFGH-I-OL'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(mockDispatchFn).toBeCalledTimes(0);
+  });
+
+  it('valid date range', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    nineYearsAgo.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
+
+    // valid
+    await setFormValues(
+      form!,
+      nineYearsAgo,
+      oneYearAgo,
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
+    );
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeEnabled();
+  });
+
+  it('test invalid date range - end before start', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    nineYearsAgo.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
+
+    // wrong since endDate is before startDate
+    await setFormValues(
+      form!,
+      oneYearAgo,
+      nineYearsAgo,
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
+    );
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
+  });
+
+  it('test invalid date range - end in the future', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+    const todayM = new Date();
+    const oneMonthAhead = new Date(new Date().setMonth(todayM.getMonth() + 1));
+    todayM.setHours(0, 0, 0, 0);
+    oneMonthAhead.setHours(0, 0, 0, 0);
+
+    // wrong since endDate is before startDate
+    await setFormValues(
+      form!,
+      todayM,
+      oneMonthAhead,
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
+    );
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test form reset', async () => {
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
-    todayM.setHours(0, 0, 0, 0);
+    const oneMonthAgo = new Date(new Date().setMonth(todayM.getMonth() - 1));
     oneYearAgo.setHours(0, 0, 0, 0);
+    oneMonthAgo.setHours(0, 0, 0, 0);
 
     await setFormValues(
       form!,
       oneYearAgo,
-      getNextDay(todayM),
+      oneMonthAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
@@ -291,11 +352,4 @@ describe('Filter Notifications Table Component', () => {
       });
     });
   });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  }, 15000);
 });

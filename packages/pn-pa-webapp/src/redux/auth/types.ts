@@ -11,4 +11,6 @@ export interface Organization {
   roles: Array<Role>;
   fiscal_code: string; // organization fiscal code
   groups?: Array<string>;
+  hasGroups?: boolean;
+  name: string;
 }

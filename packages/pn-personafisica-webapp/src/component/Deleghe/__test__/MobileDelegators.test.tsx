@@ -1,10 +1,11 @@
 import { act, screen } from '@testing-library/react';
-import { axe, render } from '../../../__test__/test-utils';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
-import * as hooks from '../../../redux/hooks';
-import MobileDelegators from '../MobileDelegators';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+
+import { render } from '../../../__test__/test-utils';
+import * as hooks from '../../../redux/hooks';
+import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+import MobileDelegators from '../MobileDelegators';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -45,14 +46,6 @@ describe('MobileDelegators Component - assuming delegators API works properly', 
     expect(result.container).toHaveTextContent(/marco verdi/i);
     expect(result.container).toHaveTextContent(/davide legato/i);
     expect(result.container).not.toHaveTextContent(/luca blu/i);
-  });
-
-  it.skip('is Mobile Delegators component accessible', async()=>{
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
-    const result = render(<MobileDelegators />);
-    const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
   });
 });
 

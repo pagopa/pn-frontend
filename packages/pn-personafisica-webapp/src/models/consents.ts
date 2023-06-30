@@ -17,4 +17,6 @@ export interface Consent {
   recipientId: string;
   consentType: ConsentType;
   accepted: boolean;
+  isFirstAccept: boolean;
+  consentVersion: string;
 }

@@ -3,20 +3,27 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Link, Switch, Typography } from '@mui/material';
 import { TOSAgreement } from '@pagopa/mui-italia';
-import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
+import {
+  PRIVACY_LINK_RELATIVE_PATH,
+  TOS_LINK_RELATIVE_PATH,
+  ConsentUser,
+} from '@pagopa-pn/pn-commons';
 
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { acceptToS } from '../redux/auth/actions';
+import { useAppDispatch } from '../redux/hooks';
+import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
-const TermsOfService = () => {
+type TermsOfServiceProps = {
+  tosConsent: ConsentUser;
+  privacyConsent: ConsentUser;
+};
+
+const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const [accepted, setAccepted] = useState(false);
-  const tos = useAppSelector((state: RootState) => state.userState.tos);
 
   const redirectPrivacyLink = () => navigate(`${PRIVACY_LINK_RELATIVE_PATH}`);
   const redirectToSLink = () => navigate(`${TOS_LINK_RELATIVE_PATH}`);
@@ -42,38 +49,46 @@ const TermsOfService = () => {
     </Link>
   );
 
-  const handleAccept = () => {
-    void dispatch(acceptToS())
-      .unwrap()
-      .then(() => {
-        navigate(routes.NOTIFICHE);
-      })
-      .catch((_) => {
-        console.error(_);
-      });
+  const handleAccept = async () => {
+    try {
+      if (!tosConsent.accepted) {
+        await dispatch(acceptToS(tosConsent.consentVersion)).unwrap();
+      }
+      if (!privacyConsent.accepted) {
+        await dispatch(acceptPrivacy(privacyConsent.consentVersion)).unwrap();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
-    if (tos) {
+    if (tosConsent.accepted && privacyConsent.accepted) {
       navigate(routes.NOTIFICHE);
     }
-  }, [tos]);
+  }, [tosConsent, privacyConsent]);
 
   return (
     <LoadingPageWrapper isInitialized>
-      <Grid container justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
-        <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
+      <Grid
+        container
+        sx={{ backgroundColor: '#FAFAFA', height: '100%' }}
+        justifyContent="center"
+        alignContent="center"
+      >
+        <Grid item xs={10} sm={8} md={6}>
           <TOSAgreement
-            productName={t('tos.title', 'Piattaforma Notifiche')}
+            productName={t('tos.title', 'SEND - Servizio Notifiche Digitali')}
             description={t(
-              'tos.body',
-              'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.'
+              tosConsent.isFirstAccept && privacyConsent.isFirstAccept
+                ? 'tos.body'
+                : 'tos.redo-body'
             )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
             confirmBtnDisabled={!accepted}
           >
-            <Box display="flex" alignItems="center" mt={8}>
+            <Box display="flex" alignItems="center">
               <Switch
                 value={accepted}
                 onClick={() => setAccepted(!accepted)}
@@ -85,8 +100,8 @@ const TermsOfService = () => {
                   i18nKey={'tos.switch-label'}
                   components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
                 >
-                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i{' '}
-                  <TosLink>Termini e condizioni d’uso</TosLink> di Piattaforma Notifiche.
+                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i
+                  <TosLink>Termini e condizioni d’uso </TosLink> di SEND.
                 </Trans>
               </Typography>
             </Box>

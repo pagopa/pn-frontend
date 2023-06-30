@@ -1,12 +1,13 @@
 import * as redux from 'react-redux';
 import { fireEvent, waitFor } from '@testing-library/react';
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
 import * as actions from '../../redux/newDelegation/actions';
 import * as trackingFunctions from '../../utils/mixpanel';
-import {TrackEventType} from "../../utils/events";
+import { TrackEventType } from '../../utils/events';
 
 jest.mock('../../component/Deleghe/VerificationCodeComponent', () => ({
   __esModule: true,
@@ -33,15 +34,12 @@ jest.mock('react-router-dom', () => ({
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 // mock action
-const entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
 const mockEntitiesActionFn = jest.fn();
-const createActionSpy = jest.spyOn(actions, 'createDelegation');
 const mockCreateActionFn = jest.fn();
 // mock tracking
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
 // mock dispatch
-const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
@@ -53,17 +51,25 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
 }
 
 describe('NuovaDelega page', () => {
+  let createActionSpy;
+  // mock action
+  let entitiesActionSpy;
+  // mock dispatch
+  let useDispatchSpy;
 
   const initialState = (created: boolean) => ({
     preloadedState: {
       newDelegationState: {
         created,
-        entities: []
-      }      
-    }
+        entities: [],
+      },
+    },
   });
 
   beforeEach(() => {
+    createActionSpy = jest.spyOn(actions, 'createDelegation');
+    entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
+    useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     createActionSpy.mockImplementation(mockCreateActionFn);
     entitiesActionSpy.mockImplementation(mockEntitiesActionFn);
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
@@ -112,7 +118,7 @@ describe('NuovaDelega page', () => {
   it('navigates to Deleghe page before creation', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
-    const backButton = result.getByText('button.indietro');
+    const backButton = result.getByTestId('breadcrumb-indietro-button');
 
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalled();
@@ -151,14 +157,15 @@ describe('NuovaDelega page', () => {
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockCreateActionFn).toBeCalledTimes(1);
       expect(mockCreateActionFn).toBeCalledWith({
-        selectPersonaFisicaOrPersonaGiuridica: 'pf',
+        selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
         codiceFiscale: 'RSSMRA01A01A111A',
         nome: 'Mario',
         cognome: 'Rossi',
         selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
         expirationDate: new Date('01/01/2122'),
-        enteSelect: { name: '', uniqueIdentifier: '' },
+        enti: [],
         verificationCode: 'verification code',
+        ragioneSociale: '',
       });
     });
   });

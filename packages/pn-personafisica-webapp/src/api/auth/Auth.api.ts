@@ -1,5 +1,5 @@
 import { User } from "../../redux/auth/types";
-import { authClient } from "../axios";
+import { authClient } from "../apiClients";
 import { AUTH_TOKEN_EXCHANGE } from "./auth.routes";
 
 export const AuthApi = {

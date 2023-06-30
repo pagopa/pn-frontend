@@ -13,11 +13,7 @@ describe('Test matches rule', () => {
 
   it('value not a string', () => {
     const rule = new Matches<any, Number>(regexp);
-    try {
-      rule.valueValidator(1);
-    } catch (e) {
-      expect(e.message).toBe('A non-string value was passed to the matches rule');
-    }
+    expect(() => rule.valueValidator(1)).toThrow('A non-string value was passed to the matches rule');
   });
 
   it('value matches regexp', () => {

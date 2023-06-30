@@ -18,6 +18,7 @@ import {
   formatToTimezoneString,
   getValidValue,
   GetNotificationsParams,
+  dateIsDefined,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -71,6 +72,7 @@ const initialValues = (
   };
 };
 
+
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -89,8 +91,12 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
-    startDate: yup.date().min(tenYearsAgo),
-    endDate: yup.date().min(tenYearsAgo),
+    // the formik validations for dates (which control the enable status of the "filtra" button)
+    // must coincide with the input field validations (which control the color of the frame around each field)
+    startDate: yup.date().min(tenYearsAgo).max(today),
+    endDate: yup.date()
+      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
+      .max(today)
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);

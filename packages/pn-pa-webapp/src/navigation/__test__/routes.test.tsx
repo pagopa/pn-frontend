@@ -46,7 +46,10 @@ jest.mock('../../pages/Dashboard.page', () =>
 );
 
 
-describe("router", () => {
+/*
+  OrganizationPartyGuard is deprecated, describe is set to skip.
+*/
+describe.skip("router", () => {
   beforeEach(() => {
     mockTosValue = true;
   });

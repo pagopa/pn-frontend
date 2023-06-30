@@ -1,5 +1,4 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
 
 import { render } from '../../../test-utils';
 import * as hooks from '../../../hooks/useIsMobile';
@@ -37,13 +36,5 @@ describe('SideMenu', () => {
     expect(drawer).toBeInTheDocument();
     const buttons = await within(drawer!).findAllByRole('button');
     expect(buttons).toHaveLength(sideMenuItems.length);
-  });
-
-  expect.extend(toHaveNoViolations);
-
-  it.skip('sidemenu accesibility', async () => {
-    const { container } = render(<SideMenu menuItems={sideMenuItems} />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
   });
 });

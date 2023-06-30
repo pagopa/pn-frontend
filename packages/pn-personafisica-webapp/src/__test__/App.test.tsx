@@ -97,23 +97,16 @@ describe('App', () => {
   /**
    * Tests che usano Component e inizializzazione "semplice" di i18n.
    */
-  describe("tests che non analizzano dettagli (test solo di accessibilità e renderizzazione)", () => {
+  describe("tests che non analizzano dettagli (test solo di renderizzazione)", () => {
     beforeEach(() => {
       void i18n.init();
     });
 
-    it('Renders Piattaforma notifiche', () => {
+    it('Renders SEND', () => {
       render(<Component />);
       const loading = screen.getByText(/loading.../i);
       expect(loading).toBeInTheDocument();
-    });
-  
-    it.skip('Test if automatic accessibility tests passes', async () => {
-      const { container } = render(<Component />);
-      const result = await axe(container);
-      expect(result).toHaveNoViolations();
-    });
-    
+    });    
   });
 
 
@@ -132,7 +125,7 @@ describe('App', () => {
     it('Dispatches proper actions when session token is not empty', async () => {
       await act(async () => void render(<App />, initialState('mocked-session-token')));
 
-      expect(mockUseDispatchFn).toBeCalledTimes(2);
+      expect(mockUseDispatchFn).toBeCalledTimes(3);
       expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
       expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
     });

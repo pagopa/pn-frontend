@@ -6,7 +6,7 @@ import {
   DigitalAddress,
   CourtesyChannelType,
   IOAllowedValues,
-} from './../../models/contacts';
+} from '../../models/contacts';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
@@ -33,6 +33,12 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
+    // we remove the default legal address only interface side, with the goal of letting the user know that needs to add
+    // a new email to modify the verifying pec address
+    resetPecValidation: (state) => {
+      state.digitalAddresses.legal = state
+        .digitalAddresses.legal.filter((address) => address.senderId !== 'default');
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
@@ -90,7 +96,7 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      if (addressIndex > 0) {
+      if (addressIndex > -1) {
         state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
       }
     });
@@ -98,7 +104,7 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      if (addressIndex > 0) {
+      if (addressIndex > -1) {
         state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
       }
     });
@@ -108,6 +114,6 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { resetState } = contactsSlice.actions;
+export const { resetState, resetPecValidation } = contactsSlice.actions;
 
 export default contactsSlice;

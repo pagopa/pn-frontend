@@ -1,0 +1,15 @@
+[
+  { "id": "4db741cf-17e1-4751-9b7b-7675ccca472b", "name": "Agenzia delle Entrate" },
+  { "id": "16dabc75-f12e-42c4-aa0c-be9c22e9c89e", "name": "Comune di Agrigento" },
+  { "id": "79e9ab1c-2f25-4dc9-8e59-843f7dc8c5a7", "name": "Comune di Figline e Incisa Valdarno" },
+  { "id": "614b68f2-f80f-4ebc-be30-2ad87e88aa10", "name": "Comune di Mantova" },
+  { "id": "026e8c72-7944-4dcd-8668-f596447fec6d", "name": "Comune di Milano" },
+  { "id": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce", "name": "Comune di Palermo" },
+  { "id": "b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2", "name": "Comune di Valsamoggia" },
+  { "id": "7b2fff42-d3c1-44f0-b53a-bf9089a37c73", "name": "Comunita' Montana Monte Cervino" },
+  {
+    "id": "88d30379-9249-443d-82f5-084fb7a81daf",
+    "name": "Istituto Nazionale per l'Assicurazione contro gli Infortuni sul Lavoro - INAIL"
+  },
+  { "id": "9115f90b-1dc9-4ba8-8645-b38bda016b8f", "name": "Unione Dei Comuni del Golfo Paradiso" }
+]

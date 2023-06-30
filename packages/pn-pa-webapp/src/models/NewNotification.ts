@@ -36,6 +36,7 @@ export interface NewNotificationDTO extends BaseNewNotification {
 
 // New Notification
 export interface NewNotificationRecipient {
+  id: string;
   idx: number;
   recipientType: RecipientType;
   taxId: string;

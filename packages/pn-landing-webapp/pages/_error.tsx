@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material";
 import { NextApiResponse } from "next";
+
+import { Typography } from "@mui/material";
 
 export default function Error({ statusCode }: { statusCode: string }) {
   return (

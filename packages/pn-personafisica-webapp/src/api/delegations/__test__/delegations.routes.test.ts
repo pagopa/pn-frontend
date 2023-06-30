@@ -4,7 +4,7 @@ import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
   REJECT_DELEGATION,
-  REOVKE_DELEGATION,
+  REVOKE_DELEGATION,
 } from '../delegations.routes';
 
 describe('Delegations routes', () => {
@@ -23,8 +23,8 @@ describe('Delegations routes', () => {
     expect(route).toEqual(`/mandate/api/v1/mandate`);
   });
 
-  it('should compile REOVKE_DELEGATION', () => {
-    const route = REOVKE_DELEGATION('mocked-id');
+  it('should compile REVOKE_DELEGATION', () => {
+    const route = REVOKE_DELEGATION('mocked-id');
     expect(route).toEqual(`/mandate/api/v1/mandate/mocked-id/revoke`);
   });
 
