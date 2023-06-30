@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { IFaqData } from "model";
 
-import { PERFEZIONAMENTO_PATH, PN_PF_URL, PN_PG_URL } from "@utils/constants";
+import { PERFEZIONAMENTO_PATH, PN_PF_URL, PN_PG_URL, SEND_PF_HELP_EMAIL } from "@utils/constants";
 import {
   FaqLink,
   FaqParagraph,
@@ -410,5 +410,18 @@ export const itFaqData: IFaqData = {
         },
       ],
     },
+    {
+      title: "Accessibilità",
+      items: [
+        {
+          id: "accessibilita-segnalazioni",
+          title: `Dove posso effettuare segnalazioni relative all'accessibilità?`,
+          description: (<Box>
+            <FaqTextSection>{`Scrivici all'indirizzo e-mail`}</FaqTextSection>
+            <FaqLink href={`mailto:${SEND_PF_HELP_EMAIL}`}>{SEND_PF_HELP_EMAIL}</FaqLink>
+          </Box>)
+        },
+      ]
+    }
   ],
 };

@@ -136,7 +136,6 @@ const ApiKeys = () => {
       <TitleBox
         variantTitle="h4"
         title={t('title')}
-        sx={{ pt: '20px' }}
         subTitle={<SubTitle />}
         variantSubTitle="body1"
       ></TitleBox>
@@ -148,7 +147,12 @@ const ApiKeys = () => {
           marginTop: isMobile ? 3 : 10,
         }}
       >
-        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography
+          tabIndex={0}
+          aria-label={t('generated-api-keys')}
+          variant="h5"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
+        >
           {t('generated-api-keys')}
         </Typography>
         <Button
