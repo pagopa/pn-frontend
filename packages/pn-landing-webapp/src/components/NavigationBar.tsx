@@ -4,7 +4,14 @@ import { useRouter } from "next/router";
 import { Box, Chip, Stack, Tab, Tabs } from "@mui/material";
 import { INavigationBarProps } from "model";
 
-const NavigationBar = ({ title, chip, pf, pa, faq, image }: INavigationBarProps) => {
+const NavigationBar = ({
+  title,
+  chip,
+  pf,
+  pa,
+  faq,
+  image,
+}: INavigationBarProps) => {
   const { pathname } = useRouter();
   const [index, setIndex] = useState<number | undefined>();
 

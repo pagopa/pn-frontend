@@ -1,5 +1,5 @@
 import { PreLoginFooterLinksType, FooterLinksType } from "@pagopa/mui-italia";
-import { IMAGES_PATH, PAGOPA_HOME } from "@utils/constants";
+import { ACCESSIBILITY_PARTICULAR_LINK, IMAGES_PATH, PAGOPA_HOME } from "@utils/constants";
 import { ILinkData, INavigationBarProps } from "model";
 
 export const assistanceLink = {
@@ -38,7 +38,7 @@ export const companyLegalInfo = (
   </>
 );
 
-export const preLoginLinks: PreLoginFooterLinksType = {
+export const preLoginLinks: (windowURL?: string) => PreLoginFooterLinksType = (windowURL) => ({
   // First column
   aboutUs: {
     title: undefined,
@@ -155,13 +155,15 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Accessibilità",
-        href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
+        href: windowURL && ACCESSIBILITY_PARTICULAR_LINK.LANDING_URL_PATTERN && windowURL.includes(ACCESSIBILITY_PARTICULAR_LINK.LANDING_URL_PATTERN)
+          ? ACCESSIBILITY_PARTICULAR_LINK.PARTICULAR_ACCESSIBILITY_URL
+          : "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
         ariaLabel: "Vai al link: Accessibilità",
         linkType: "internal",
       },
     ],
   },
-};
+});
 
 export const postLoginLinks: Array<FooterLinksType> = [
   {

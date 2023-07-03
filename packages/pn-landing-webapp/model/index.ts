@@ -88,7 +88,7 @@ export interface IAppData {
     assistance: ILinkData;
     pagoPALink: ILinkData;
     companyLegalInfo: JSX.Element;
-    preLoginLinks: PreLoginFooterLinksType;
+    preLoginLinks: (windowURL?: string) => PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
     productJson: string;
   };

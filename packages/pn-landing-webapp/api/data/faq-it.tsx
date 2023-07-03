@@ -1,7 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { IFaqData } from "model";
 
-import { PERFEZIONAMENTO_PATH, PN_PF_URL, PN_PG_URL, SEND_PF_HELP_EMAIL } from "@utils/constants";
+import {
+  PERFEZIONAMENTO_PATH,
+  PN_PF_URL,
+  PN_PG_URL,
+  SEND_PF_HELP_EMAIL,
+} from "@utils/constants";
 import {
   FaqLink,
   FaqParagraph,
@@ -67,18 +72,28 @@ export const itFaqData: IFaqData = {
           title: "A chi invia notifiche?",
           description: (
             <Box>
-              <FaqParagraph>
+              <FaqParagraph
+                ariaLabel={`SEND può inviare notifiche per conto degli enti sia ai cittadini, cioè le "persone
+            fisiche", che alle imprese, cioè le "persone giuridiche".`}
+              >
                 {`SEND può inviare notifiche per conto degli enti sia ai cittadini, cioè le "persone
             fisiche", che alle imprese, cioè le "persone giuridiche".`}
               </FaqParagraph>
-              <FaqTextSection>
+              <FaqTextSection
+                ariaLabel="Per accedere a SEND e leggere le notifiche che ricevi come
+                cittadino o cittadina vai su"
+              >
                 Per accedere a SEND e leggere le notifiche che ricevi come
                 cittadino o cittadina vai su
               </FaqTextSection>
               <FaqLink href={PN_PF_URL} noSpaceAfter>
                 cittadini.notifichedigitali.it
               </FaqLink>
-              <FaqTextSection>
+              <FaqTextSection
+                ariaLabel={`. 
+            Se sei Legale Rappresentante di un'impresa o hai i
+            permessi per leggere le sue notifiche, vai su`}
+              >
                 {`. 
             Se sei Legale Rappresentante di un'impresa o hai i
             permessi per leggere le sue notifiche, vai su`}
@@ -86,7 +101,9 @@ export const itFaqData: IFaqData = {
               <FaqLink href={PN_PG_URL} noSpaceAfter>
                 imprese.notifichedigitali.it
               </FaqLink>
-              <FaqTextSection noSpaceAfter>.</FaqTextSection>
+              <FaqTextSection noSpaceAfter ariaLabel="">
+                .
+              </FaqTextSection>
             </Box>
           ),
         },
@@ -119,8 +136,8 @@ export const itFaqData: IFaqData = {
           description: (
             <Box>
               <Typography variant="body2" component="span" sx={{ mr: "4px" }}>
-                Per accedere a SEND e leggere le notifiche che ricevi come cittadino
-                o cittadina vai su
+                Per accedere a SEND e leggere le notifiche che ricevi come
+                cittadino o cittadina vai su
               </Typography>
               <Typography variant="body2" component="span">
                 <a href={PN_PF_URL}>cittadini.notifichedigitali.it</a>
@@ -214,27 +231,44 @@ export const itFaqData: IFaqData = {
           title: `Cos'è un avviso di avvenuta ricezione?`,
           description: (
             <Box>
-              <FaqParagraph flat>
+              <FaqParagraph
+                flat
+                ariaLabel={`È il documento che ricevi via PEC o tramite raccomandata quando c’è una notifica per te. 
+                L'invio di questo documento ha di per sé valore legale perché contiene le informazioni 
+                essenziali della notifica, ossia:`}
+              >
                 {`È il documento che ricevi via PEC o tramite raccomandata quando c’è una notifica per te. 
                 L'invio di questo documento ha di per sé valore legale perché contiene le informazioni 
                 essenziali della notifica, ossia:`}
               </FaqParagraph>
               <ul style={{ marginTop: 0 }}>
                 <li>
-                  <FaqTextSection noSpaceAfter>
+                  <FaqTextSection
+                    noSpaceAfter
+                    ariaLabel={`l'ente che te l'ha inviata;`}
+                  >
                     {`l'ente che te l'ha inviata;`}
                   </FaqTextSection>
                 </li>
                 <li>
-                  <FaqTextSection noSpaceAfter>
+                  <FaqTextSection
+                    noSpaceAfter
+                    ariaLabel={`il codice identificativo (IUN);`}
+                  >
                     {`il codice identificativo (IUN);`}
                   </FaqTextSection>
                 </li>
                 <li>
-                  <FaqTextSection noSpaceAfter>{`l'oggetto;`}</FaqTextSection>
+                  <FaqTextSection
+                    noSpaceAfter
+                    ariaLabel={`l'oggetto;`}
+                  >{`l'oggetto;`}</FaqTextSection>
                 </li>
                 <li>
-                  <FaqTextSection noSpaceAfter>
+                  <FaqTextSection
+                    noSpaceAfter
+                    ariaLabel={`le indicazioni per ottenere i documenti notificati e gli eventuali allegati.`}
+                  >
                     {`le indicazioni per ottenere i documenti notificati e gli eventuali allegati.`}
                   </FaqTextSection>
                 </li>
@@ -388,14 +422,23 @@ export const itFaqData: IFaqData = {
           title: `Quando si perfeziona una notifica?`,
           description: (
             <Box>
-              <FaqTextSection>
+              <FaqTextSection
+                ariaLabel={`Una notifica si perfeziona in momenti diversi per l'ente che la invia e per il
+            destinatario che la riceve. Per chi la invia, si perfeziona nella data in cui il
+            documento da notificare è reso disponibile in piattaforma. Per chi la riceve, il
+            perfezionamento dipende da come riceve o legge la notifica.`}
+              >
                 {`Una notifica si perfeziona in momenti diversi per l'ente che la invia e per il
             destinatario che la riceve. Per chi la invia, si perfeziona nella data in cui il
             documento da notificare è reso disponibile in piattaforma. Per chi la riceve, il
             perfezionamento dipende da come riceve o legge la notifica.`}
               </FaqTextSection>
               <FaqLink href={PERFEZIONAMENTO_PATH}>Vai qui</FaqLink>
-              <FaqTextSection noSpaceAfter>
+              <FaqTextSection
+                noSpaceAfter
+                ariaLabel={`per conoscere i tempi di perfezionamento di una notifica a seconda del canale 
+            con cui la si è ricevuta o visualizzata.`}
+              >
                 {`per conoscere i tempi di perfezionamento di una notifica a seconda del canale 
             con cui la si è ricevuta o visualizzata.`}
               </FaqTextSection>
@@ -416,12 +459,18 @@ export const itFaqData: IFaqData = {
         {
           id: "accessibilita-segnalazioni",
           title: `Dove posso effettuare segnalazioni relative all'accessibilità?`,
-          description: (<Box>
-            <FaqTextSection>{`Scrivici all'indirizzo e-mail`}</FaqTextSection>
-            <FaqLink href={`mailto:${SEND_PF_HELP_EMAIL}`}>{SEND_PF_HELP_EMAIL}</FaqLink>
-          </Box>)
+          description: (
+            <Box>
+              <FaqTextSection
+                ariaLabel={`Scrivici all'indirizzo e-mail`}
+              >{`Scrivici all'indirizzo e-mail`}</FaqTextSection>
+              <FaqLink href={`mailto:${SEND_PF_HELP_EMAIL}`}>
+                {SEND_PF_HELP_EMAIL}
+              </FaqLink>
+            </Box>
+          ),
         },
-      ]
-    }
+      ],
+    },
   ],
 };
