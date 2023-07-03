@@ -28,12 +28,6 @@ const LandingLayout = ({ children }: Props) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowURL(window.location.origin);
-      // console.log('asserting window.location.origin');
-      // if (window.location.origin.includes('localhost')) {
-      //   console.log(`we're in localhost`);
-      // } else {
-      //   console.log(`we're not in localhost`);
-      // }
     }
   }, []);
 
