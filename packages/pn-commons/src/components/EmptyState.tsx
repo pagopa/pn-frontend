@@ -61,7 +61,6 @@ function EmptyState({
         />
       )}
       <Typography
-        component="p"
         tabIndex={0}
         aria-label={secondaryMessage.emptyActionLabel}
         variant="body2"
