@@ -51,7 +51,7 @@ export const paHero: HeroProps = {
     title: "Scopri come aderire",
     /* Carlotta Dimatteo - workaround per gestire un anchor interno alla pagina richiesto dal team di comunicazione il 16/02/2023 */
     onClick: function onClick() {
-      let loc = document.location.toString().split("#")[0];
+      const loc = document.location.toString().split("#")[0];
       document.location = loc + "#start-integration";
       return false;
     },
