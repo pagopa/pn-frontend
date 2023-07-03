@@ -7,7 +7,7 @@ import {
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -130,11 +130,12 @@ const Deleghe = () => {
           }
         />
         <Box mb={8}>
-          <TitleBox title={t('deleghe.title')} variantTitle={'h4'}>
-            <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
-              deleghe.description
-            </Trans>
-          </TitleBox>
+          <TitleBox
+            title={t('deleghe.title')}
+            variantTitle={'h4'}
+            subTitle={t('deleghe.description')}
+            variantSubTitle="body1"
+          />
         </Box>
         {isMobile ? (
           <Stack direction="column" spacing={8}>
