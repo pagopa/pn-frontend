@@ -558,6 +558,8 @@ const AnalogFlowAllowedCodes = [
   // new entries for international registered letter - PN-6636
   'RECRI001',
   'RECRI002',
+  // PN-6792
+  'PNALL001',
   // only to include the legal fact reference at the right point in the timeline
   'RECRN001B',
   'RECRN002B',
