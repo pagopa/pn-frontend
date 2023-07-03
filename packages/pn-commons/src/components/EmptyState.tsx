@@ -60,7 +60,12 @@ function EmptyState({
           }}
         />
       )}
-      <Typography variant="body2" sx={{ display: 'inline' }}>
+      <Typography
+        tabIndex={0}
+        aria-label={secondaryMessage.emptyActionLabel}
+        variant="body2"
+        sx={{ display: 'inline' }}
+      >
         {emptyMessage}
       </Typography>
       {emptyActionCallback && (
@@ -74,6 +79,8 @@ function EmptyState({
             <Typography
               color="primary"
               variant="body2"
+              tabIndex={0}
+              aria-label={secondaryMessage.emptyActionLabel}
               fontWeight={'bold'}
               sx={{ textDecoration: 'underline' }}
             >
@@ -85,7 +92,12 @@ function EmptyState({
       {secondaryMessage.emptyMessage && (
         <>
           &nbsp;
-          <Typography variant="body2" sx={{ display: 'inline' }}>
+          <Typography
+            variant="body2"
+            tabIndex={0}
+            aria-label={secondaryMessage.emptyActionLabel}
+            sx={{ display: 'inline' }}
+          >
             {secondaryMessage.emptyMessage}
           </Typography>
         </>
@@ -97,6 +109,8 @@ function EmptyState({
             color="primary"
             variant="body2"
             fontWeight={'bold'}
+            tabIndex={0}
+            aria-label={secondaryMessage.emptyActionLabel}
             data-testid="callToActionSecond"
             sx={{
               cursor: 'pointer',
