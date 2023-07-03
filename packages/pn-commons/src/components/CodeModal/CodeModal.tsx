@@ -136,7 +136,7 @@ const CodeModal = memo(
           disableSpacing={isMobile}
           sx={{
             textAlign: textPosition,
-            flexDirection: isMobile ? 'column' : 'row',
+            flexDirection: isMobile ? 'column-reverse' : 'row',
             px: 4,
             pb: 4,
           }}
@@ -147,6 +147,7 @@ const CodeModal = memo(
               onClick={cancelCallback}
               fullWidth={isMobile}
               data-testid="codeCancelButton"
+              sx={{ marginTop: isMobile ? '10px' : 0 }}
             >
               {cancelLabel}
             </Button>
@@ -158,7 +159,6 @@ const CodeModal = memo(
               onClick={confirmHandler}
               disabled={!codeIsValid}
               fullWidth={isMobile}
-              sx={{ marginTop: isMobile ? '10px' : 0 }}
             >
               {confirmLabel}
             </Button>
