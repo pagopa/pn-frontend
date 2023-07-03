@@ -509,6 +509,8 @@ export function getNotificationTimelineStatusInfos(
 
 const TimelineAllowedStatus = [
   TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
+  // PN-6902
+  TimelineCategory.ANALOG_FAILURE_WORKFLOW,
   TimelineCategory.SEND_DIGITAL_DOMICILE,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
@@ -556,6 +558,8 @@ const AnalogFlowAllowedCodes = [
   // new entries for international registered letter - PN-6636
   'RECRI001',
   'RECRI002',
+  // PN-6792
+  'PNALL001',
   // only to include the legal fact reference at the right point in the timeline
   'RECRN001B',
   'RECRN002B',
