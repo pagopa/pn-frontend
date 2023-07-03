@@ -36,7 +36,7 @@ export const companyLegalInfo = (
   </>
 );
 
-export const preLoginLinks: PreLoginFooterLinksType = {
+export const preLoginLinks: (windowURL?: string) => PreLoginFooterLinksType = () => ({
   // First column
   aboutUs: {
     title: undefined,
@@ -159,7 +159,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
     ],
   },
-};
+});
 
 export const postLoginLinks: Array<FooterLinksType> = [
   {
