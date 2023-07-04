@@ -91,11 +91,6 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
             <Box display="flex" alignItems="center">
               <Switch
                 value={accepted}
-                sx={{
-                  '& .MuiSwitch-thumb': {
-                    boxShadow: '0px 0px 10px #888888',
-                  },
-                }}
                 onClick={() => setAccepted(!accepted)}
                 data-testid="tosSwitch"
               />
