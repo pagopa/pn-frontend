@@ -12,7 +12,8 @@ export enum PartyRole {
 
 export enum GroupStatus {
   ACTIVE = 'ACTIVE',
-  SUSPENDED = 'SUSPENDED'
+  SUSPENDED = 'SUSPENDED',
+  DELETED = 'DELETED',
 }
 
 export interface UserGroup {

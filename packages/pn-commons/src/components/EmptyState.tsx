@@ -26,7 +26,7 @@ interface Message {
 
 function EmptyState({
   emptyActionCallback,
-  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
+  emptyMessage = 'Non abbiamo trovato risultati: prova con dei filtri diversi.',
   emptyActionLabel = 'Rimuovi filtri',
   sentimentIcon = KnownSentiment.DISSATISFIED,
   secondaryMessage = {
@@ -46,12 +46,26 @@ function EmptyState({
         margin: '16px 0',
         padding: '16px',
         backgroundColor: 'background.paper',
+        borderRadius: '4px',
       }}
     >
       {FinalIcon && (
-        <FinalIcon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: '1.25rem' }} />
+        <FinalIcon
+          sx={{
+            verticalAlign: 'middle',
+            mr: '20px',
+            mb: '2px',
+            fontSize: '1.25rem',
+            color: 'action.active',
+          }}
+        />
       )}
-      <Typography variant="body2" sx={{ display: 'inline' }}>
+      <Typography
+        tabIndex={0}
+        aria-label={secondaryMessage.emptyActionLabel}
+        variant="body2"
+        sx={{ display: 'inline' }}
+      >
         {emptyMessage}
       </Typography>
       {emptyActionCallback && (
@@ -62,7 +76,14 @@ function EmptyState({
             onClick={emptyActionCallback}
             sx={{ verticalAlign: 'unset' }}
           >
-            <Typography color="primary" variant="body2" fontWeight={'bold'}>
+            <Typography
+              color="primary"
+              variant="body2"
+              tabIndex={0}
+              aria-label={secondaryMessage.emptyActionLabel}
+              fontWeight={'bold'}
+              sx={{ textDecoration: 'underline' }}
+            >
               {emptyActionLabel}
             </Typography>
           </ButtonNaked>
@@ -71,7 +92,12 @@ function EmptyState({
       {secondaryMessage.emptyMessage && (
         <>
           &nbsp;
-          <Typography variant="body2" sx={{ display: 'inline' }}>
+          <Typography
+            variant="body2"
+            tabIndex={0}
+            aria-label={secondaryMessage.emptyActionLabel}
+            sx={{ display: 'inline' }}
+          >
             {secondaryMessage.emptyMessage}
           </Typography>
         </>
@@ -83,6 +109,8 @@ function EmptyState({
             color="primary"
             variant="body2"
             fontWeight={'bold'}
+            tabIndex={0}
+            aria-label={secondaryMessage.emptyActionLabel}
             data-testid="callToActionSecond"
             sx={{
               cursor: 'pointer',

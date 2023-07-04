@@ -47,14 +47,14 @@ Parameters:
   #    Description: The limit on requests per 5-minute period for a single originating IP address.
   #    Default: 1000
 
-  RequestsAlarmLimit:
+  RequestsAlarmMinimumLimit:
     Type: Number
-    Default: 50000
+    Default: 300000
     Description: The limit of requests on 5 minutes period to raise an alarm
 
-  ErrorRateAlarmLimit:
+  ErrorRateAlarmPercentageLimit:
     Type: Number
-    Default: 10
+    Default: 20
     Description: The limit of error rate percentage on 5 minutes period to raise an alarm
 
   AlarmSNSTopicArn:
@@ -332,7 +332,35 @@ Resources:
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
               ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
               PathPattern: /onboarding*
-            - !Ref "AWS::NoValue"                        
+            - !Ref "AWS::NoValue"
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /assets*
+            - !Ref "AWS::NoValue"
+          - Fn::If:
+            - IsPortalePg
+            - AllowedMethods:
+                - GET
+                - HEAD
+              CachedMethods:
+                - GET
+                - HEAD
+              TargetOriginId: pn-SelfCare-PG
+              ViewerProtocolPolicy: redirect-to-https
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+              PathPattern: /microcomponents*
+            - !Ref "AWS::NoValue"                          
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -410,13 +438,13 @@ Resources:
               https://api-pnpg.selfcare.pagopa.it \
               https://api-pnpg.uat.selfcare.pagopa.it ; \
               style-src 'self' 'unsafe-inline' \
-              https://pnpg.uat.selfcare.pagopa.it/assets/ \
-              https://pnpg.selfcare.pagopa.it/assets/ \
+              https://pnpg.uat.selfcare.pagopa.it/ \
+              https://pnpg.selfcare.pagopa.it/ \
               https://privacyportalde-cdn.onetrust.com/ ; \
               worker-src 'none'; \ 
               font-src 'self'; \
               frame-ancestors 'self' ; \
-              img-src 'self' https://assets.cdn.io.italia.it/ data:"
+              img-src 'self' https://assets.cdn.io.italia.it/ https://selcpweupnpgcheckoutsa.z6.web.core.windows.net/ https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ data:"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
           ContentTypeOptions:
@@ -553,7 +581,7 @@ Resources:
       DatapointsToAlarm: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      Threshold: !Ref RequestsAlarmLimit
+      Threshold: !Ref RequestsAlarmMinimumLimit
       TreatMissingData: notBreaching
       Namespace: "AWS/CloudFront"
       Period: 300
@@ -578,7 +606,7 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       Period: 300
-      Threshold: !Ref ErrorRateAlarmLimit
+      Threshold: !Ref ErrorRateAlarmPercentageLimit
       TreatMissingData: notBreaching
       Namespace: "AWS/CloudFront"
       MetricName: "TotalErrorRate"

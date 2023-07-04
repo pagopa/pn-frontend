@@ -73,7 +73,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
       : t('deleghe.rejection_question', { delegator: row?.name });
   const subtitleModal =
     menuType === 'delegates'
-      ? t('deleghe.subtitle_revocation', { recipient: userLogged?.name })
+      ? t('deleghe.subtitle_revocation', { recipient: userLogged?.organization.name })
       : t('deleghe.subtitle_rejection', { delegator: row?.name });
   const confirmLabel =
     menuType === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection');

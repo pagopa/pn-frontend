@@ -34,7 +34,7 @@ describe('CourtesyContactItem component', () => {
       const inputs = await result.findAllByRole('textbox');
       expect(inputs![0]).toBeInTheDocument();
       expect(inputs).toHaveLength(1);
-      const input = result.getByPlaceholderText('courtesy-contacts.link-phone-placeholder');
+      const input = result.getByTestId('courtesy-contact-phone');
       expect(inputs![0]).toEqual(input);
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
@@ -282,7 +282,7 @@ describe('CourtesyContactItem component', () => {
       const inputs = await result.findAllByRole('textbox');
       expect(inputs![0]).toBeInTheDocument();
       expect(inputs).toHaveLength(1);
-      const input = result.getByPlaceholderText('courtesy-contacts.link-email-placeholder');
+      const input = result.getByTestId('courtesy-contact-email');
       expect(inputs![0]).toEqual(input);
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL));

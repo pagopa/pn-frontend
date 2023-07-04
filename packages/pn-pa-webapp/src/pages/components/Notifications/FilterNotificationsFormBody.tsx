@@ -36,6 +36,7 @@ type Props = {
     resetForm: (nextState?: Partial<FormikState<FormikValues>> | undefined) => void;
     touched: FormikTouched<FormikValues>;
     errors: FormikErrors<FormikValues>;
+    setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
   startDate: Date | null;
   endDate: Date | null;
@@ -56,6 +57,13 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    if (formikInstance.errors) {
+      formikInstance.setErrors({
+        ...formikInstance.errors,
+        [e.target.id]: undefined,
+      });
+    }
+
     if (e.target.id === 'iunMatch') {
       const originalEvent = e.target as HTMLInputElement;
       const cursorPosition = originalEvent.selectionStart || 0;
@@ -67,18 +75,21 @@ const FilterNotificationsFormBody = ({
           ? 1
           : 0);
 
-      await formikInstance.setFieldValue('iunMatch', newInput);
+      await formikInstance.setFieldValue('iunMatch', newInput, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      formikInstance.handleChange(e);
+      await formikInstance.setFieldValue(e.target.id, (e.target as HTMLInputElement).value, false);
     }
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, { target: e.target.id });
-    await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeNotificationStatus = (e: ChangeEvent) => {
-    formikInstance.handleChange(e);
+  const handleChangeNotificationStatus = async (e: ChangeEvent) => {
+    await formikInstance.setFieldValue(
+      (e.target as HTMLSelectElement).name,
+      (e.target as HTMLSelectElement).value,
+      false
+    );
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE);
   };
 
@@ -202,7 +213,6 @@ const FilterNotificationsFormBody = ({
         sx={{
           marginBottom: isMobile ? '20px' : '0',
           '& .MuiInputBase-root': {
-            pr: 4,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           },

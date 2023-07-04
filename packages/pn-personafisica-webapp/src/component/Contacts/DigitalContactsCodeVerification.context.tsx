@@ -286,10 +286,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             ` ${modalProps.value}`
           }
           subtitle={
-            <Trans
-              i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
-              ns="recapiti"
-            />
+            <Typography variant="body1">
+              <Trans
+                i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+                ns="recapiti"
+              />
+            </Typography>
           }
           open={open}
           initialValues={new Array(5).fill('')}
@@ -304,7 +306,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 onClick={() => handleCodeVerification(undefined, true)}
                 sx={{ verticalAlign: 'unset' }}
               >
-                <Typography color="primary">
+                <Typography color="primary" variant="body2" sx={{ textDecoration: 'underline' }}>
                   {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
                 </Typography>
               </ButtonNaked>

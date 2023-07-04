@@ -1,0 +1,32 @@
+[
+    {
+      "label": "App IO",
+      "href": "https://www.pagopa.it/it/prodotti-e-servizi/app-io",
+      "ariaLabel": "Vai al link: App IO",
+      "linkType": "internal"
+    },
+    {
+      "label": "Piattaforma pagoPA",
+      "href": "https://www.pagopa.it/it/prodotti-e-servizi/piattaforma-pagopa",
+      "ariaLabel": "Vai al link: Piattaforma pagoPA",
+      "linkType": "internal"
+    },
+    {
+      "label": "Centro stella",
+      "href": "https://www.pagopa.it/it/prodotti-e-servizi/centro-stella-pagamenti-elettronici",
+      "ariaLabel": "Vai al link: Centro stella",
+      "linkType": "internal"
+    },
+    {
+      "label": "Check IBAN",
+      "href": "https://www.pagopa.it/it/prodotti-e-servizi/check-iban",
+      "ariaLabel": "Vai al link: Check IBAN",
+      "linkType": "internal"
+    },
+    {
+      "label": "Piattaforma Digitale Nazionale Dati",
+      "href": "https://www.pagopa.it/it/prodotti-e-servizi/piattaforma-digitale-nazionale-dati/",
+      "ariaLabel": "Vai al link: Piattaforma Digitale Nazionale Dati",
+      "linkType": "internal"
+    }
+  ]

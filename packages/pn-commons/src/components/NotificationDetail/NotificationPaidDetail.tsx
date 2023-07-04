@@ -76,13 +76,13 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
             dataTestId="paymentObject"
           />
         )}
-        {paymentDetails.amount && (
+        {paymentDetails.amount && paymentDetails.amount !== 0 ? (
           <CustomTableRow
             label={getLocalizedOrDefaultLabel('notifiche', 'detail.payment.amount', 'Importo')}
             value={formatEurocentToCurrency(paymentDetails.amount)}
             dataTestId="amount"
           />
-        )}
+        ) : null}
         <CustomTableRow
           label={getLocalizedOrDefaultLabel(
             'notifiche',

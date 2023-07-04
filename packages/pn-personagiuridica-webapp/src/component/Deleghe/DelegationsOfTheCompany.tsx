@@ -35,6 +35,7 @@ import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { GroupStatus } from '../../models/groups';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { setFilters } from '../../redux/delegation/reducers';
 import delegationToItem from '../../utils/delegation.utility';
@@ -62,7 +63,7 @@ const DelegationsOfTheCompany = () => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const firstUpdate = useRef(true);
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const { hasGroup, organization } = useAppSelector((state: RootState) => state.userState.user);
   const filters = useAppSelector((state: RootState) => state.delegationsState.filters);
 
   const delegators = useAppSelector(
@@ -178,7 +179,6 @@ const DelegationsOfTheCompany = () => {
       },
       tableConfiguration: {
         width: '20%',
-        align: 'center',
       },
       cardConfiguration: {
         position: 'header',
@@ -187,7 +187,11 @@ const DelegationsOfTheCompany = () => {
         },
       },
     },
-    {
+  ];
+
+  if (!hasGroup) {
+    /* eslint-disable-next-line functional/immutable-data */
+    smartCfg.push({
       id: 'id',
       label: '',
       getValue(value: string, data: Item) {
@@ -202,8 +206,8 @@ const DelegationsOfTheCompany = () => {
           xs: 4,
         },
       },
-    },
-  ];
+    });
+  }
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -392,7 +396,7 @@ const DelegationsOfTheCompany = () => {
                   id="groups"
                   size="small"
                   fullWidth
-                  options={groups}
+                  options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
                   disableCloseOnSelect
                   multiple
                   noOptionsText={t('deleghe.table.no-group-found')}

@@ -117,8 +117,8 @@ describe('DelegationElements', () => {
 
   it('renders the AcceptButton - accept the delegation', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1' },
-      { id: 'group-2', name: 'Group 2' },
+      { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
+      { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
     ];
     const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('4'), 204);
     const result = render(<AcceptButton id="4" name="test" onAccept={actionCbk} />, {
@@ -326,9 +326,9 @@ describe('DelegationElements', () => {
 
   it('update groups - delegator', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1' },
-      { id: 'group-2', name: 'Group 2' },
-      { id: 'group-3', name: 'Group 3' },
+      { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
+      { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
+      { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
     ];
     const mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('4'), 204);
     const result = render(

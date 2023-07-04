@@ -43,7 +43,6 @@ const DelegatesByCompany = () => {
       tableConfiguration: {
         width: '13%',
         sortable: true,
-        align: 'center',
       },
       getValue(value) {
         return <Typography fontWeight={'bold'}>{value}</Typography>;
@@ -58,7 +57,6 @@ const DelegatesByCompany = () => {
       label: t('deleghe.table.delegationStart'),
       tableConfiguration: {
         width: '11%',
-        align: 'center',
       },
       getValue(value) {
         return value;
@@ -73,7 +71,6 @@ const DelegatesByCompany = () => {
       tableConfiguration: {
         width: '11%',
         sortable: true,
-        align: 'center',
       },
       getValue(value) {
         return value;
@@ -87,7 +84,6 @@ const DelegatesByCompany = () => {
       label: t('deleghe.table.permissions'),
       tableConfiguration: {
         width: '11%',
-        align: 'center',
       },
       getValue(value: Array<string>) {
         return <OrganizationsList organizations={value} visibleItems={3} />;
@@ -102,7 +98,6 @@ const DelegatesByCompany = () => {
       label: t('deleghe.table.status'),
       tableConfiguration: {
         width: '18%',
-        align: 'center',
       },
       getValue(value: string) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
@@ -118,7 +113,6 @@ const DelegatesByCompany = () => {
       label: '',
       tableConfiguration: {
         width: '5%',
-        align: 'center',
       },
       getValue(value: string, data: Item) {
         return (
@@ -156,7 +150,7 @@ const DelegatesByCompany = () => {
           justifyContent={'space-between'}
           alignItems={isMobile ? 'flex-start' : 'center'}
         >
-          <Typography variant="h5" mb={3}>
+          <Typography variant="h6" mb={3}>
             {t('deleghe.delegatesTitle')}
           </Typography>
           <Button

@@ -34,7 +34,7 @@
   "header": {
     "product": {
       "organization-dashboard": "La tua impresa",
-      "notification-platform": "Notifiche digitali"
+      "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
@@ -81,7 +81,7 @@
   },
   "not-accessible": {
     "title": "Non è possibile accedere alla piattaforma",
-    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Per maggiori informazioni sull’iniziativa,",
+    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Per maggiori informazioni sull'iniziativa,",
     "action": "visita il sito dedicato"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
@@ -139,6 +139,7 @@
     "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009"
   },
   "required-fields": "*Campi obbligatori",
+  "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
   "validation": {
     "search-pattern-length-limit": "ricerca max {{maxLength}} caratteri",
     "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
@@ -179,7 +180,7 @@
   },
   "roles": {
     "pg-operator": "Referente operativo",
-    "pg-admin": "Referente amministrativo"
+    "pg-admin": "Amministratore"
   },
   "required-field": "Campo obbligatorio"
 }

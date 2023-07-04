@@ -10,6 +10,7 @@ import {
   formatToTimezoneString,
   getNextDay,
   ApiErrorWrapper,
+  TitleBox,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
 
@@ -79,17 +80,19 @@ const Dashboard = () => {
     navigate(routes.API_KEYS);
   };
 
-  const fetchNotifications = useCallback( () => {
+  const fetchNotifications = useCallback(() => {
     const params = {
       ...filters,
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-    void dispatch(getSentNotifications({
-      ...params,
-      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
-    }));
+    void dispatch(
+      getSentNotifications({
+        ...params,
+        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
+      })
+    );
   }, [filters, pagination.size, pagination.page, sort]);
 
   useEffect(() => {
@@ -97,29 +100,41 @@ const Dashboard = () => {
   }, [fetchNotifications]);
 
   const handleEventTrackingCallbackPageSize = (pageSize: number) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, {pageSize});
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
   return (
     <Box p={3}>
-      <Typography variant="h4" mb={isMobile ? 3 : undefined}>
-        {t('title')}
-      </Typography>
-      <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
-        <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-        {t('subtitle')}
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={handleRouteManualSend}
-          aria-label={t('new-notification-button')}
-          data-testid="newNotificationBtn"
-          sx={{ marginBottom: isMobile ? 3 : undefined }}
-        >
-          {t('new-notification-button')}
-        </Button>
-      </Box>
-      <ApiErrorWrapper apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS} reloadAction={() => fetchNotifications()} mt={3}>
+      <TitleBox
+        title={t('title')}
+        variantTitle="h4"
+        mbTitle={isMobile ? 3 : 2}
+        subTitle={
+          <Box
+            display={isMobile ? 'block' : 'flex'}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+              {t('subtitle')}
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={handleRouteManualSend}
+              aria-label={t('new-notification-button')}
+              data-testid="newNotificationBtn"
+              sx={{ marginBottom: isMobile ? 3 : undefined }}
+            >
+              {t('new-notification-button')}
+            </Button>
+          </Box>
+        }
+      />
+      <ApiErrorWrapper
+        apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}
+        reloadAction={() => fetchNotifications()}
+        mt={3}
+      >
         {isMobile ? (
           <MobileNotifications
             notifications={notifications}
@@ -145,7 +160,6 @@ const Dashboard = () => {
             onPageRequest={handleChangePage}
             eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
             pagesToShow={pagesToShow}
-            sx={{ padding: '0 10px' }}
           />
         )}
       </ApiErrorWrapper>

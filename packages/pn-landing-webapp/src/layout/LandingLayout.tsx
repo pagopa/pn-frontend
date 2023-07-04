@@ -1,14 +1,16 @@
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 
 import { Box, Stack } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 
-import NavigationBar from "../components/NavigationBar";
-import { LANGUAGES } from "./constants";
 import LangContext from "provider/lang-context";
 import { getAppData } from "api";
+import { useRouter } from "next/router";
+import { SEND_PF_HELP_EMAIL, PAGOPA_HELP_EMAIL } from "@utils/constants";
+import NavigationBar from "../components/NavigationBar";
+import { LANGUAGES } from "./constants";
 
 
 interface Props {
@@ -17,8 +19,17 @@ interface Props {
 
 const LandingLayout = ({ children }: Props) => {
   const lang = useContext(LangContext);
-
+  const { pathname } = useRouter();
   const appData = getAppData();
+  const assistanceEmail = pathname !== "/pubbliche-amministrazioni" ? SEND_PF_HELP_EMAIL : PAGOPA_HELP_EMAIL;
+  const [windowURL, setWindowURL] = useState<string>();
+
+  // 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowURL(window.location.origin);
+    }
+  }, []);
 
   return (
     <Box sx={{ height: "100vh" }}>
@@ -57,7 +68,7 @@ const LandingLayout = ({ children }: Props) => {
             <ButtonNaked
               size="small"
               aria-label={appData.common.assistance.ariaLabel}
-              href={appData.common.assistance.href}
+              href={`mailto:${assistanceEmail}`}
               color="text"
               target="_blank"
               rel="noopener noreferrer"
@@ -81,10 +92,11 @@ const LandingLayout = ({ children }: Props) => {
           }}
           legalInfo={appData.common.companyLegalInfo}
           postLoginLinks={appData.common.postLoginLinks}
-          preLoginLinks={appData.common.preLoginLinks}
+          preLoginLinks={appData.common.preLoginLinks(windowURL)}
           currentLangCode={lang.selectedLanguage}
           onLanguageChanged={lang.changeLanguage}
           languages={LANGUAGES}
+          productsJsonUrl={appData.common.productJson}
         />
       </Stack>
     </Box>

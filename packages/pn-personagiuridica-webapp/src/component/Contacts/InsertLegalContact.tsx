@@ -53,22 +53,21 @@ const InsertLegalContact = ({ recipientId }: Props) => {
         sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
         title={t('legal-contacts.subtitle', { ns: 'recapiti' })}
         subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
-        avatar={<IllusEmailValidation />}
+        avatar={<IllusEmailValidation size={60} />}
       >
-        <Grid container spacing={2} direction="row" mt={4}>
+        <Grid container spacing={2} direction="row" mt={3}>
           <Grid item lg={4} sm={4} xs={12}>
             <TextField
               id="pec"
               placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
               fullWidth
               name="pec"
-              inputProps={{ sx: { height: '30px' } }}
+              inputProps={{ sx: { height: '14px' } }}
               value={formik.values.pec}
               onChange={handleChangeTouched}
               error={formik.touched.pec && Boolean(formik.errors.pec)}
               helperText={formik.touched.pec && formik.errors.pec}
               disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
-              size="small"
             />
           </Grid>
           <Grid item lg={2} sm={2} xs={12} alignItems="right">

@@ -214,7 +214,7 @@ const SessionGuard = () => {
             { replace: true }
           );
         }
-      } else if (isForbiddenUser || WORK_IN_PROGRESS) {
+      } else if (isForbiddenUser || (!sessionToken && WORK_IN_PROGRESS)) {
         // ----------------------
         // I'm not sure about this management of the redirects
         // Momentarily I have added the isForbiddenUser variable that is true if login returns 451 error code

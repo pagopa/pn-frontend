@@ -1,12 +1,6 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 
-import {
-  Infoblock,
-  Showcase,
-  Walkthrough,
-  Hero,
-} from "@pagopa/mui-italia";
+import { Infoblock, Showcase, Walkthrough, Hero } from "@pagopa/mui-italia";
 
 import {
   getHeroData,
@@ -15,16 +9,13 @@ import {
   getWalkthroughData,
 } from "api";
 import { UserType } from "model";
+import PageHead from "src/components/PageHead";
 
 const USER_TYPE = UserType.PF;
 
 const CittadiniPage: NextPage = () => (
   <>
-    <Head>
-      <title>Piattaforma Notifiche - Cittadini</title>
-      <meta name="description" content="Pagina dei cittadini" />
-      <link rel="icon" href="/static/favicon.svg" />
-    </Head>
+    <PageHead title="SEND - Cittadini" description="Pagina dei cittadini" />
 
     <main>
       <Hero {...getHeroData(USER_TYPE)} />

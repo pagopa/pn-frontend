@@ -44,8 +44,8 @@ export abstract class TimelineStep {
     };
   }
 
-  completePhysicalAddress(payload: TimelineStepPayload) {
-    const physicalAddress = (payload.step.details as AnalogWorkflowDetails).physicalAddress;
+  completePhysicalAddress(step: INotificationDetailTimeline) {
+    const physicalAddress = (step.details as AnalogWorkflowDetails).physicalAddress;
     const zip = physicalAddress && physicalAddress.zip ? ` (${physicalAddress.zip})` : '';
     const city = physicalAddress && physicalAddress?.municipality ? ` - ${physicalAddress.municipality}` : '';
     const country = physicalAddress && physicalAddress.foreignState ? ` ${physicalAddress.foreignState}` : '';

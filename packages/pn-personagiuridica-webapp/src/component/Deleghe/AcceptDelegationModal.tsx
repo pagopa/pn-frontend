@@ -25,6 +25,7 @@ import {
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { GroupStatus } from '../../models/groups';
 
 type Props = {
   isEditMode: boolean;
@@ -180,7 +181,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
             id="groups"
             size="small"
             fullWidth
-            options={groups}
+            options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
             disableCloseOnSelect
             multiple
             noOptionsText={t('deleghe.table.no-group-found')}

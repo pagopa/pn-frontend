@@ -30,7 +30,7 @@
   "rotate-warning2": "Dopo che hai inserito la nuova API Key nella piattaforma dell’ente, blocca ed elimina la versione ruotata.",
   "enable-warning": "Se attivi l'API Key <strong>{{apiKeyName}}</strong>, questa potrà essere nuovamente utilizzata. Puoi bloccarla di nuovo in qualsiasi momento.",
   "delete-warning": "Se elimini definitivamente l'API Key <strong>{{apiKeyName}}</strong>, questa non potrà essere nuovamente attivata e utilizzata.",
-  "copy-api-key-info": "Copia il codice e inseriscilo nella piattaforma dell'ente",
+  "copy-api-key-info": "Copia il codice e inseriscilo nella piattaforma dell'ente.",
   "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
   "empty-action-label": "Genera API Key",
   "api-key-copied": "API Key copiata",
@@ -51,8 +51,8 @@
     "block": "Blocca",
     "rotate": "Ruota",
     "delete": "Elimina",
-    "view": "Visualizza",
-    "view-groups-id": "Visualizza ID dei gruppi"
+    "view": "Visualizza codice",
+    "view-groups-id": "Visualizza Group ID"
   },
   "status": {
     "enabled": "Attiva",
@@ -78,8 +78,10 @@
   },
   "new-api-key": {
     "page-title": "Genera una API Key",
-    "cancel-prompt": "Annullare l'operazione?",
+    "cancel-title": "Vuoi uscire?",
+    "cancel-prompt": "Se esci, perderai tutti i dati inseriti finora. Per generare una nuova API Key, dovrai ricominciare da capo.",
     "page-description": "SEND ha generato il codice della API Key. Ora, inserisci un nome identificativo e assegnala a uno o più gruppi.",
+    "other-info": "Altre informazioni",
     "form-label-name": "Dai un nome alla tua API Key",
     "form-placeholder-name": "Inserisci un nome",
     "form-error-name": "Definire un nome per l'API Key",

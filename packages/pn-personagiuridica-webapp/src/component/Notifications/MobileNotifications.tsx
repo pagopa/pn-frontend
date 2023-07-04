@@ -22,7 +22,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Organization, PNRole } from '../../redux/auth/types';
+import { Organization } from '../../redux/auth/types';
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -58,16 +58,13 @@ function mainEmptyMessage(
   filtersApplied: boolean,
   isDelegatedPage: boolean,
   organization: Organization,
-  role: PNRole,
   t: any
 ) {
   return filtersApplied
     ? undefined
     : isDelegatedPage
     ? t('empty-state.delegate', { name: organization.name })
-    : role !== PNRole.ADMIN
-    ? t('empty-state.first-message-alone')
-    : t('empty-state.first-message-continuing');
+    : t('empty-state.message', { name: organization.name });
 }
 
 const MobileNotifications = ({
@@ -84,7 +81,6 @@ const MobileNotifications = ({
   });
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const role = organization.roles[0].role;
 
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
@@ -111,7 +107,7 @@ const MobileNotifications = ({
         return <Typography variant="body2">{row.sentAt}</Typography>;
       },
       gridProps: {
-        xs: 12,
+        xs: 4,
         sm: 5,
       },
     },
@@ -133,7 +129,7 @@ const MobileNotifications = ({
         );
       },
       gridProps: {
-        xs: 12,
+        xs: 8,
         sm: 7,
       },
     },
@@ -208,27 +204,12 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort<NotificationColumn>>);
 
-  const handleRouteContacts = () => {
-    navigate(routes.RECAPITI);
-  };
-
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
-    emptyActionCallback: filtersApplied
-      ? filterNotificationsRef.current.cleanFilters
-      : isDelegatedPage || role !== PNRole.ADMIN
-      ? undefined
-      : handleRouteContacts,
-    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, role, t),
+    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : undefined,
+    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage:
-      filtersApplied || isDelegatedPage || role !== PNRole.ADMIN
-        ? undefined
-        : {
-            emptyMessage: t('empty-state.second-message'),
-          },
   };
 
   // Navigation handlers
@@ -288,7 +269,7 @@ const MobileNotifications = ({
           cardData={cardData}
           cardActions={cardActions}
           headerGridProps={{
-            direction: { xs: 'column-reverse', sm: 'row' },
+            direction: { xs: 'row', sm: 'row' },
             alignItems: { xs: 'flex-start', sm: 'center' },
           }}
         />

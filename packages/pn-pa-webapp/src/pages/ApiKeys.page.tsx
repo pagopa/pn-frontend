@@ -33,11 +33,11 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('subtitle.text1')}
-      <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/NewNotification/sendNewNotification">
+      <Link target="_blank" href={process.env.REACT_APP_OPEN_API_SEND_NEW_NOTIFICATION_URL}>
         {t('subtitle.text2')}
       </Link>
       {t('subtitle.text3')}
-      <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/SenderReadB2B/getNotificationRequestStatus">
+      <Link target="_blank" href={process.env.REACT_APP_OPEN_API_GET_NOTIFICATION_INFO_URL}>
         {t('subtitle.text4')}
       </Link>
       {t('subtitle.text5')}
@@ -136,7 +136,6 @@ const ApiKeys = () => {
       <TitleBox
         variantTitle="h4"
         title={t('title')}
-        sx={{ pt: '20px' }}
         subTitle={<SubTitle />}
         variantSubTitle="body1"
       ></TitleBox>
@@ -148,7 +147,12 @@ const ApiKeys = () => {
           marginTop: isMobile ? 3 : 10,
         }}
       >
-        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Typography
+          tabIndex={0}
+          aria-label={t('generated-api-keys')}
+          variant="h5"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
+        >
           {t('generated-api-keys')}
         </Typography>
         <Button
@@ -176,7 +180,7 @@ const ApiKeys = () => {
         >
           <Box
             sx={{
-              padding: 3,
+              padding: 4,
               minWidth: isMobile ? '0' : '600px',
             }}
           >

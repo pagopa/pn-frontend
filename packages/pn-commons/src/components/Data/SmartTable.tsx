@@ -187,7 +187,7 @@ const SmartTable = <ColumnId extends string>({
                       height: '24px',
                     },
                   }
-                : { padding: '0 10px' }
+                : { padding: '0' }
             }
           />
         )}
@@ -231,7 +231,7 @@ const SmartTable = <ColumnId extends string>({
                     height: '24px',
                   },
                 }
-              : { padding: '0 10px' }
+              : { padding: '0' }
           }
         />
       )}
