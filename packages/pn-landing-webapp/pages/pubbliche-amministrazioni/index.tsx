@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import { Infoblock, Showcase, Walkthrough, Hero } from "@pagopa/mui-italia";
 
-import { UserType } from "model";
-import PageHead from "src/components/PageHead";
+import { UserType } from "../../model";
+import PageHead from "../../src/components/PageHead";
 import {
   getHeroData,
   getInfoblockData,
