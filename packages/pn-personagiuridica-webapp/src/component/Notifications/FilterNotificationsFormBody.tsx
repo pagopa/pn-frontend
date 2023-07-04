@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import currentLocale from 'date-fns/locale/it';
 import { Grid, TextField, TextFieldProps } from '@mui/material';
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   CustomDatePicker,
   DatePickerTypes,
@@ -12,7 +12,7 @@ import {
   tenYearsAgo,
   today,
   useIsMobile,
-  formatIun
+  formatIun,
 } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -31,6 +31,7 @@ type Props = {
     handleChange: (e: ChangeEvent<any>) => void;
     touched: FormikTouched<FormikValues>;
     errors: FormikErrors<FormikValues>;
+    setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
   startDate: Date | null;
   endDate: Date | null;
@@ -49,17 +50,29 @@ const FilterNotificationsFormBody = ({
   const isMobile = useIsMobile();
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    if (formikInstance.errors) {
+      formikInstance.setErrors({
+        ...formikInstance.errors,
+        [e.target.id]: undefined,
+      });
+    }
+
     if (e.target.id === 'iunMatch') {
       const originalEvent = e.target as HTMLInputElement;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
-      const newCursorPosition = cursorPosition + (originalEvent.value.length !== newInput?.length && cursorPosition >= originalEvent.value.length ? 1 : 0);
+      const newCursorPosition =
+        cursorPosition +
+        (originalEvent.value.length !== newInput?.length &&
+        cursorPosition >= originalEvent.value.length
+          ? 1
+          : 0);
 
-      await formikInstance.setFieldValue('iunMatch', newInput);
+      await formikInstance.setFieldValue('iunMatch', newInput, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      formikInstance.handleChange(e);
+      await formikInstance.setFieldValue(e.target.id, (e.target as HTMLInputElement).value, false);
     }
     await formikInstance.setFieldTouched(e.target.id, true, false);
   };
@@ -115,7 +128,7 @@ const FilterNotificationsFormBody = ({
                   'aria-label': t('filters.data_da-input-aria-label'),
                   type: 'text',
                   placeholder: 'gg/mm/aaaa',
-                  'data-testid': "input(start date)",
+                  'data-testid': 'input(start date)',
                 }}
               />
             )}
@@ -159,7 +172,7 @@ const FilterNotificationsFormBody = ({
                   'aria-label': t('filters.data_a-input-aria-label'),
                   type: 'text',
                   placeholder: 'gg/mm/aaaa',
-                  'data-testid': "input(end date)",
+                  'data-testid': 'input(end date)',
                 }}
               />
             )}
