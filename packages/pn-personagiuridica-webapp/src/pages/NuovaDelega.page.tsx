@@ -419,9 +419,11 @@ const NuovaDelega = () => {
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
-                              value={new Date(values.expirationDate)}
+                              value={values.expirationDate && new Date(values.expirationDate)}
                               minDate={tomorrow}
                               onChange={(value: DatePickerTypes) => {
+                                console.log('changing date');
+                                console.log(value);
                                 setFieldTouched('expirationDate', true, false);
                                 setFieldValue('expirationDate', value);
                               }}
