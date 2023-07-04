@@ -422,8 +422,6 @@ const NuovaDelega = () => {
                               value={values.expirationDate && new Date(values.expirationDate)}
                               minDate={tomorrow}
                               onChange={(value: DatePickerTypes) => {
-                                console.log('changing date');
-                                console.log(value);
                                 setFieldTouched('expirationDate', true, false);
                                 setFieldValue('expirationDate', value);
                               }}
