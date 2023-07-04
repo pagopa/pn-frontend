@@ -130,12 +130,17 @@ function ItemsTable<ColumnId extends string>({
                       align={column.align}
                       onClick={() => column.onClick && column.onClick(row, column)}
                     >
-                      <ButtonNaked
-                        tabIndex={column.disableAccessibility ? -1 : 0}
-                        sx={buttonNakedInheritStyle}
-                      >
-                        {cellValue}
-                      </ButtonNaked>
+                      {column.onClick && (
+                        <ButtonNaked
+                          tabIndex={column.disableAccessibility ? -1 : 0}
+                          sx={buttonNakedInheritStyle}
+                        >
+                          {cellValue}
+                        </ButtonNaked>
+                      )}
+                      {!column.onClick && (
+                        <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>
+                      )}
                     </TableCell>
                   );
                 })}
