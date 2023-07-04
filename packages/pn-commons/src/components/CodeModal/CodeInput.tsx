@@ -46,16 +46,20 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       return;
     }
     if (index > initialValues.length - 1) {
+      // the variable is to prevent test fail
+      const input = inputsRef.current[index - 1];
       setTimeout(() => {
-        inputsRef.current[index - 1].blur();
+        input.blur();
       }, 25);
       return;
     }
+    // the variable is to prevent test fail
+    const input = inputsRef.current[index];
     setTimeout(() => {
       // focus input
-      inputsRef.current[index].focus();
+      input.focus();
       // select input
-      inputsRef.current[index].select();
+      input.select();
     }, 25);
   };
 
@@ -94,6 +98,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     // removed value - i.e. backspace or canc clicked
     if (value === '' && currentValues[index] !== '') {
       changeInputValue(value, index);
+      return;
     }
     // remove non numeric char from value
     value = value.replace(/[^\d]/g, '');
