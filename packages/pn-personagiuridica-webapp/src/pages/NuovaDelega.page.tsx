@@ -129,7 +129,7 @@ const NuovaDelega = () => {
       is: RecipientType.PG,
       then: yup.string().required(t('nuovaDelega.validation.businessName.required')),
     }),
-    enti: yup.array().required(),
+    enti: yup.array().min(1, t('nuovaDelega.validation.entiSelected.required')),
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
@@ -374,7 +374,7 @@ const NuovaDelega = () => {
                             {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                               <FormControl fullWidth>
                                 <PnAutocomplete
-                                  id="enti-select"
+                                  id="enti"
                                   data-testid="enti-select"
                                   multiple
                                   options={entities}
@@ -396,9 +396,19 @@ const NuovaDelega = () => {
                                   renderOption={renderOption}
                                   renderInput={(params) => (
                                     <TextField
-                                      name="enti-select"
+                                      name="enti"
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
+                                      error={Boolean(
+                                        getError(
+                                          touched.enti?.length === 0,
+                                          errors.enti?.toString()
+                                        )
+                                      )}
+                                      helperText={getError(
+                                        touched.enti?.length === 0,
+                                        errors.enti?.toString()
+                                      )}
                                     />
                                   )}
                                 />
