@@ -93,7 +93,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('reload - session token already present - with hash', async () => {
-    mockLocationPath = routes.DELEGHE;
+    mockLocationPath = routes.DELEGHEACARICO;
     mockLocationHash = '#greet=hola';
     const mockReduxState = {
       userState: { user: { sessionToken: 'mocked-token' } },
@@ -106,7 +106,7 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.DELEGHE, search: '', hash: mockLocationHash },
+      { pathname: routes.DELEGHEACARICO, search: '', hash: mockLocationHash },
       { replace: true }
     );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
@@ -156,13 +156,13 @@ describe('SessionGuard Component', () => {
       userResponse
     );
     mockLocationHash = '#selfCareToken=200_token';
-    mockLocationPath = routes.DELEGHE;
+    mockLocationPath = routes.DELEGHEACARICO;
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.DELEGHE, search: '', hash: '' },
+      { pathname: routes.DELEGHEACARICO, search: '', hash: '' },
       { replace: true }
     );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
@@ -180,13 +180,13 @@ describe('SessionGuard Component', () => {
       userResponse
     );
     mockLocationHash = '#selfCareToken=200_token&#greet=hola';
-    mockLocationPath = routes.DELEGHE;
+    mockLocationPath = routes.DELEGHEACARICO;
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.DELEGHE, search: '', hash: '#greet=hola' },
+      { pathname: routes.DELEGHEACARICO, search: '', hash: '#greet=hola' },
       { replace: true }
     );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
