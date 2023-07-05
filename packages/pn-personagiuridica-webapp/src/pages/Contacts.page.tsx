@@ -51,6 +51,7 @@ const Contacts = () => {
         fontWeight={'bold'}
         onClick={handleRedirectToProfilePage}
         sx={{ cursor: 'pointer' }}
+        aria-label={t('subtitle-link', { ns: 'recapiti' })}
       >
         {t('subtitle-link', { ns: 'recapiti' })}
       </Link>
