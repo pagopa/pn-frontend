@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { disableFormatDetection } from '@pagopa-pn/pn-commons/src/utils/genericFunctions.utility';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
@@ -96,7 +97,9 @@ const DeleteDialog: React.FC<DialogProps> = ({
     >
       <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
+        <DialogContentText id="dialog-description">
+          {disableFormatDetection(removeModalBody)}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>{deleteModalActions}</DialogActions>
     </Dialog>
