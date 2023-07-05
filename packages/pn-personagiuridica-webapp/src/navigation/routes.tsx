@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../redux/store';
@@ -82,6 +82,7 @@ function Router() {
                 >
                   <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
                   <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+                  <Route path="" element={<Navigate to={routes.DELEGHEACARICO} />} />
                 </Route>
 
                 <Route
