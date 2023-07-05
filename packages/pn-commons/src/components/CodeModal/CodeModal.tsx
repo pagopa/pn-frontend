@@ -103,7 +103,7 @@ const CodeModal = memo(
           <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ marginTop: '10px', textAlign: textPosition }}>
+          <Box sx={{ mt:2, textAlign: textPosition }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -147,7 +147,7 @@ const CodeModal = memo(
               onClick={cancelCallback}
               fullWidth={isMobile}
               data-testid="codeCancelButton"
-              sx={{ marginTop: isMobile ? '10px' : 0 }}
+              sx={{ marginTop: isMobile ? "10px" : 0 }}
             >
               {cancelLabel}
             </Button>
