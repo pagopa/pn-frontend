@@ -61,7 +61,6 @@ function EmptyState({
         />
       )}
       <Typography
-        component="p"
         tabIndex={0}
         aria-label={secondaryMessage.emptyActionLabel}
         variant="body2"
@@ -80,7 +79,6 @@ function EmptyState({
             <Typography
               color="primary"
               variant="body2"
-              component="p"
               tabIndex={0}
               aria-label={secondaryMessage.emptyActionLabel}
               fontWeight={'bold'}
@@ -96,7 +94,6 @@ function EmptyState({
           &nbsp;
           <Typography
             variant="body2"
-            component="p"
             tabIndex={0}
             aria-label={secondaryMessage.emptyActionLabel}
             sx={{ display: 'inline' }}
@@ -112,7 +109,6 @@ function EmptyState({
             color="primary"
             variant="body2"
             fontWeight={'bold'}
-            component="p"
             tabIndex={0}
             aria-label={secondaryMessage.emptyActionLabel}
             data-testid="callToActionSecond"
