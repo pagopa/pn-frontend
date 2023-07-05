@@ -68,7 +68,11 @@ const Contacts = () => {
     <>
       {t('subtitle-text-1', { ns: 'recapiti' })}
       {faqWhatIsAarCompleteLink ? (
-        <Link href={faqWhatIsAarCompleteLink} target="_blank">
+        <Link
+          href={faqWhatIsAarCompleteLink}
+          target="_blank"
+          aria-label={t('subtitle-link-1', { ns: 'recapiti' })}
+        >
           {t('subtitle-link-1', { ns: 'recapiti' })}
         </Link>
       ) : (
@@ -76,7 +80,11 @@ const Contacts = () => {
       )}
       {t('subtitle-text-2', { ns: 'recapiti' })}
       {faqWhatIsCourtesyMessageCompleteLink ? (
-        <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
+        <Link
+          href={faqWhatIsCourtesyMessageCompleteLink}
+          target="_blank"
+          aria-label={t('subtitle-link-2', { ns: 'recapiti' })}
+        >
           {t('subtitle-link-2', { ns: 'recapiti' })}
         </Link>
       ) : (
@@ -86,9 +94,7 @@ const Contacts = () => {
       <Link
         onClick={handleRedirectToProfilePage}
         tabIndex={0}
-        aria-label={
-          t('subtitle-text-3', { ns: 'recapiti' }) + t('subtitle-link-3', { ns: 'recapiti' })
-        }
+        aria-label={t('subtitle-link-3', { ns: 'recapiti' })}
       >
         {t('subtitle-link-3', { ns: 'recapiti' })}
       </Link>
