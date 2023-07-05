@@ -1,4 +1,3 @@
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   Table,
   TableBody,
@@ -12,9 +11,8 @@ import {
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 
-import { Column, Item, Sort, Notification } from '../../types';
+import { Column, Item, Sort } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { buttonNakedInheritStyle } from '../../utils';
 
 type Props<ColumnId> = {
   /** Table columns */
@@ -117,7 +115,7 @@ function ItemsTable<ColumnId extends string>({
                 aria-rowindex={index + 1}
               >
                 {columns.map((column) => {
-                  const cellValue = column.getCellLabel(row[column.id as keyof Notification], row);
+                  const cellValue = column.getCellLabel(row[column.id as keyof Item], row);
                   return (
                     <TableCell
                       key={column.id}
@@ -130,17 +128,7 @@ function ItemsTable<ColumnId extends string>({
                       align={column.align}
                       onClick={() => column.onClick && column.onClick(row, column)}
                     >
-                      {column.onClick && (
-                        <ButtonNaked
-                          tabIndex={column.disableAccessibility ? -1 : 0}
-                          sx={buttonNakedInheritStyle}
-                        >
-                          {cellValue}
-                        </ButtonNaked>
-                      )}
-                      {!column.onClick && (
-                        <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>
-                      )}
+                      <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>
                     </TableCell>
                   );
                 })}
