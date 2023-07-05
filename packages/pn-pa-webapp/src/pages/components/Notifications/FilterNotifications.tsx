@@ -70,7 +70,6 @@ function isFilterapplied(filtersCount: number): boolean {
 
 const getValidStatus = (status: string) => (status === 'All' ? '' : status);
 
-
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -82,17 +81,15 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const validationSchema = yup.object({
     recipientId: yup
       .string()
-      .matches(
-        dataRegex.pIvaAndFiscalCode,
-        t('filters.errors.fiscal-code', { ns: 'notifiche' })
-      ),
+      .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup.date()
+    endDate: yup
+      .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today)
+      .max(today),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
@@ -187,7 +184,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
-              formikInstance={formik}
               cleanFilters={cancelSearch}
               filtersApplied={isFilterapplied(filtersCount)}
               isInitialSearch={isInitialSearch}
@@ -217,7 +213,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
             setEndDate={(value) => setEndDate(value)}
           />
           <FilterNotificationsFormActions
-            formikInstance={formik}
             cleanFilters={cancelSearch}
             filtersApplied={isFilterapplied(filtersCount)}
             isInitialSearch={isInitialSearch}

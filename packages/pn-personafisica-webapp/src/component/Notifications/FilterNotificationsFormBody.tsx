@@ -18,11 +18,6 @@ import {
 type Props = {
   formikInstance: {
     values: FormikValues;
-    setFieldTouched: (
-      field: string,
-      touched?: boolean,
-      shouldValidate?: boolean | undefined
-    ) => Promise<FormikErrors<FormikValues>> | Promise<void>;
     setFieldValue: (
       field: string,
       value: any,
@@ -74,7 +69,6 @@ const FilterNotificationsFormBody = ({
     } else {
       await formikInstance.setFieldValue(e.target.id, (e.target as HTMLInputElement).value, false);
     }
-    await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
   return (
