@@ -81,7 +81,19 @@ function Router() {
                   }
                 >
                   <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
-                  <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+                  <Route
+                    path={routes.DELEGATI}
+                    element={
+                      <PrivateRoute
+                        currentRoles={[]}
+                        requiredRoles={[]}
+                        additionalCondition={!hasGroup}
+                        redirectTo={<NotFound />}
+                      >
+                        <DelegatesByCompany />
+                      </PrivateRoute>
+                    }
+                  />
                   <Route path="" element={<Navigate to={routes.DELEGHEACARICO} />} />
                 </Route>
 
