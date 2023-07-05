@@ -1,13 +1,16 @@
 import React from 'react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
-import { render, fireEvent, mockApi } from '../../__test__/test-utils';
+import { render, fireEvent, mockApi, waitFor, prettyDOM } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import * as routes from '../../navigation/routes.const';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
-  DELEGATIONS_NAME_BY_DELEGATE,
 } from '../../api/delegations/delegations.routes';
 import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
+import DelegatesByCompany from '../../component/Deleghe/DelegatesByCompany';
+import DelegationsOfTheCompany from '../../component/Deleghe/DelegationsOfTheCompany';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
@@ -36,7 +39,17 @@ describe('Deleghe page', () => {
       moreResult: false,
     });
     mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    const result = render(<Deleghe />);
+    const result = render(
+      <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
+        <Routes>
+          <Route element={<Deleghe />}>
+            <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+            <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
+      { navigationRouter: 'none' }
+    );
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
     expect(result.container).not.toHaveTextContent(/DelegatesByCompany/i);
@@ -55,14 +68,21 @@ describe('Deleghe page', () => {
       moreResult: false,
     });
     mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    const result = render(<Deleghe />);
+    const result = render(
+      <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
+        <Routes>
+          <Route element={<Deleghe />}>
+            <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+            <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
+      { navigationRouter: 'none' }
+    );
     const tab2 = result.getByTestId('tab1');
     fireEvent.click(tab2);
-    expect(result.container).toHaveTextContent(/DelegatesByCompany/i);
+    await waitFor(() => expect(result.container).toHaveTextContent(/DelegatesByCompany/i));
     mock.reset();
     mock.restore();
   });
-
-  //TODO
-  it.skip('test see modal to revoke and confirm revoking delegates', async () => {});
 });
