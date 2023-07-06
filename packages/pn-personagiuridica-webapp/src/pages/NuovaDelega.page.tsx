@@ -380,7 +380,7 @@ const NuovaDelega = () => {
                               <FormControl fullWidth>
                                 <PnAutocomplete
                                   id="enti"
-                                  data-testid="enti-select"
+                                  data-testid="enti"
                                   multiple
                                   options={entities}
                                   fullWidth
