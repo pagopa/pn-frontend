@@ -34,6 +34,21 @@ const delegationsSlice = createSlice({
   initialState,
   reducers: {
     setFilters: (state, action: PayloadAction<DelegatorsFormFilters>) => {
+      // reset pagination data
+      // pagination data must be resetted always except when user change page
+      const filtersDif = (Object.keys(state.filters) as Array<keyof DelegatorsFormFilters>).reduce(
+        (acc, elem) => {
+          if (action.payload[elem] !== state.filters[elem]) {
+            acc.push(elem);
+          }
+          return acc;
+        },
+        [] as Array<keyof DelegatorsFormFilters>
+      );
+      if (filtersDif.length !== 1 || !filtersDif.includes('page')) {
+        state.pagination.moreResult = false;
+        state.pagination.nextPagesKey = [];
+      }
       state.filters = action.payload;
     },
     resetState: () => initialState,
@@ -44,8 +59,15 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload.resultsPage;
-      state.pagination.nextPagesKey = action.payload.nextPagesKey;
       state.pagination.moreResult = action.payload.moreResult;
+      // because we can jump from a page to another and nextPagesKey returns only the next three pages, we have to check if that pages already exists
+      if (action.payload.nextPagesKey) {
+        for (const pageKey of action.payload.nextPagesKey) {
+          if (state.pagination.nextPagesKey.indexOf(pageKey) === -1) {
+            state.pagination.nextPagesKey.push(pageKey);
+          }
+        }
+      }
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
