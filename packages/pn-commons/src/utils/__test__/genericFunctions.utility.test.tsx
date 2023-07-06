@@ -85,7 +85,7 @@ describe('disableFormatDetection function', () => {
     const mockText = 'mocked text with a phone number +393200000000';
     expect(disableFormatDetection(mockText)).toStrictEqual(
       <a
-        href="javascript:void(0);"
+        href="javascript:() => {};"
         style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
       >
         mocked text with a phone number +393200000000
