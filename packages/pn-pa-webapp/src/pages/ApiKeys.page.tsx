@@ -1,15 +1,6 @@
 import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Button,
-  Link,
-  Dialog,
-  TextField,
-  InputAdornment,
-  // Divider,
-} from '@mui/material';
+import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useIsMobile, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
@@ -72,7 +63,6 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
                 <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
               </Box>
             </Box>
-            {/* i < groups.length - 1 && <Divider /> */}
           </Fragment>
         ))}
     </Box>
