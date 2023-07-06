@@ -2,7 +2,7 @@ import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikTouched, FormikErrors } from 'formik';
 import * as yup from 'yup';
 import {
   Box,
@@ -61,8 +61,10 @@ const renderOption = (props: any, option: Party) => (
 
 const getOptionLabel = (option: Party) => option.name || '';
 
-const getError = (fieldTouched: boolean | undefined, fieldError: string | undefined) =>
-  fieldTouched && fieldError;
+const getError = <TTouch, TError>(
+  fieldTouched: FormikTouched<TTouch> | boolean | undefined,
+  fieldError: undefined | string | FormikErrors<TError> | Array<string>
+) => fieldTouched && fieldError;
 
 const NuovaDelega = () => {
   const { t } = useTranslation(['deleghe', 'common']);
@@ -129,7 +131,10 @@ const NuovaDelega = () => {
       is: RecipientType.PG,
       then: yup.string().required(t('nuovaDelega.validation.businessName.required')),
     }),
-    enti: yup.array().required(),
+    enti: yup.array().when('selectTuttiEntiOrSelezionati', {
+      is: 'entiSelezionati',
+      then: yup.array().min(1, t('nuovaDelega.validation.entiSelected.required')),
+    }),
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
@@ -332,8 +337,8 @@ const NuovaDelega = () => {
                         }}
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
-                        error={touched.codiceFiscale && Boolean(errors.codiceFiscale)}
-                        helperText={touched.codiceFiscale && errors.codiceFiscale}
+                        error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
+                        helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
                       <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
@@ -374,8 +379,8 @@ const NuovaDelega = () => {
                             {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                               <FormControl fullWidth>
                                 <PnAutocomplete
-                                  id="enti-select"
-                                  data-testid="enti-select"
+                                  id="enti"
+                                  data-testid="enti"
                                   multiple
                                   options={entities}
                                   fullWidth
@@ -396,9 +401,11 @@ const NuovaDelega = () => {
                                   renderOption={renderOption}
                                   renderInput={(params) => (
                                     <TextField
-                                      name="enti-select"
+                                      name="enti"
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
+                                      error={Boolean(getError(touched.enti, errors.enti))}
+                                      helperText={getError(touched.enti, errors.enti)}
                                     />
                                   )}
                                 />
@@ -439,8 +446,13 @@ const NuovaDelega = () => {
                                     'aria-label': 'Inserisci la data di termine della delega',
                                     type: 'text',
                                   }}
-                                  error={touched.expirationDate && Boolean(errors.expirationDate)}
-                                  helperText={touched.expirationDate && errors.expirationDate}
+                                  error={Boolean(
+                                    getError(touched.expirationDate, errors.expirationDate)
+                                  )}
+                                  helperText={getError(
+                                    touched.expirationDate,
+                                    errors.expirationDate
+                                  )}
                                 />
                               )}
                               disablePast={true}
