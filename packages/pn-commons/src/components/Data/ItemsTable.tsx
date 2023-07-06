@@ -1,3 +1,4 @@
+import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import { visuallyHidden } from '@mui/utils';
 
 import { Column, Item, Sort } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { buttonNakedInheritStyle } from '../../utils';
 
 type Props<ColumnId> = {
   /** Table columns */
@@ -128,7 +130,21 @@ function ItemsTable<ColumnId extends string>({
                       align={column.align}
                       onClick={() => column.onClick && column.onClick(row, column)}
                     >
-                      <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>
+                      {column.onClick && (
+                        <>
+                          {/* Even there is a onClick function on the TableCell, leave ButtonNaked below as is.
+                          This makes spacebar key with accessibility to trigger the onClick function. */}
+                          <ButtonNaked
+                            tabIndex={column.disableAccessibility ? -1 : 0}
+                            sx={buttonNakedInheritStyle}
+                          >
+                            {cellValue}
+                          </ButtonNaked>
+                        </>
+                      )}
+                      {!column.onClick && (
+                        <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>
+                      )}
                     </TableCell>
                   );
                 })}
