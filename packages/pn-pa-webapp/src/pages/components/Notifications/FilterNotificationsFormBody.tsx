@@ -22,11 +22,6 @@ import { TrackEventType } from '../../../utils/events';
 type Props = {
   formikInstance: {
     values: FormikValues;
-    setFieldTouched: (
-      field: string,
-      touched?: boolean,
-      shouldValidate?: boolean | undefined
-    ) => Promise<FormikErrors<FormikValues>> | Promise<void>;
     setFieldValue: (
       field: string,
       value: any,

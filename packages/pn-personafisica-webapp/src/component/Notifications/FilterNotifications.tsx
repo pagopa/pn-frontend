@@ -72,7 +72,6 @@ const initialValues = (
   };
 };
 
-
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -94,9 +93,10 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup.date()
+    endDate: yup
+      .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today)
+      .max(today),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
@@ -191,7 +191,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
-              formikInstance={formik}
               cleanFilters={cleanFilters}
               filtersApplied={isFilterApplied(filtersCount)}
               isInitialSearch={isInitialSearch}
@@ -213,7 +212,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             setEndDate={(value) => setEndDate(value)}
           />
           <FilterNotificationsFormActions
-            formikInstance={formik}
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
             isInitialSearch={isInitialSearch}

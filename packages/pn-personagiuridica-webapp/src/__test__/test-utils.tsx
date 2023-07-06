@@ -9,25 +9,49 @@ import { configureAxe, toHaveNoViolations } from 'jest-axe';
 
 import { appReducers } from '../redux/store';
 
-const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
-  <BrowserRouter>
-    <Provider store={testStore}>{children}</Provider>
-  </BrowserRouter>
-);
+type NavigationRouter = 'default' | 'none';
+
+const AllTheProviders = ({
+  children,
+  testStore,
+  navigationRouter,
+}: {
+  children: ReactNode;
+  testStore: Store;
+  navigationRouter: NavigationRouter;
+}) => {
+  if (navigationRouter === 'default') {
+    return (
+      <BrowserRouter>
+        <Provider store={testStore}>{children}</Provider>
+      </BrowserRouter>
+    );
+  }
+  return <Provider store={testStore}>{children}</Provider>;
+};
 
 const customRender = (
   ui: ReactElement,
   {
     preloadedState,
     renderOptions,
-  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+    navigationRouter = 'default',
+  }: {
+    preloadedState?: any;
+    renderOptions?: Omit<RenderOptions, 'wrapper'>;
+    navigationRouter?: NavigationRouter;
+  } = {}
 ) => {
   const testStore = configureStore({
     reducer: appReducers,
     preloadedState,
   });
   return render(ui, {
-    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
+    wrapper: ({ children }) => (
+      <AllTheProviders navigationRouter={navigationRouter} testStore={testStore}>
+        {children}
+      </AllTheProviders>
+    ),
     ...renderOptions,
   });
 };
