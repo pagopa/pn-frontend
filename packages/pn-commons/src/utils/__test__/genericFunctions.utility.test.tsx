@@ -1,4 +1,5 @@
-import { filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
+import React from 'react';
+import { disableFormatDetection, filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
 
 describe('getValidValue function', () => {
   it('return A value', () => {
@@ -17,7 +18,9 @@ describe('getValidValue function', () => {
     const valueB = undefined;
     expect(getValidValue(valueA, valueB)).toBe('');
   });
+});
 
+describe('filtersApplied function', () => {
   it('return filters count (no filters)', () => {
     const count = filtersApplied(
       {
@@ -45,7 +48,9 @@ describe('getValidValue function', () => {
     );
     expect(count).toEqual(2);
   });
+});
 
+describe('sortArray function', () => {
   it('sorts array - number', () => {
     const arrayToSort = [{ number: 1 }, { number: 2 }, { number: 3 }];
     let sortedArray = sortArray('asc', 'number', arrayToSort);
@@ -72,5 +77,19 @@ describe('getValidValue function', () => {
       { date: '21/10/2023' },
       { date: '11/03/2022' },
     ]);
+  });
+});
+
+describe('disableFormatDetection function', () => {
+  it('linkable text', () => {
+    const mockText = 'mocked text with a phone number +393200000000';
+    expect(disableFormatDetection(mockText)).toStrictEqual(
+      <a
+        href="javascript:void(0);"
+        style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
+      >
+        mocked text with a phone number +393200000000
+      </a>
+    );
   });
 });
