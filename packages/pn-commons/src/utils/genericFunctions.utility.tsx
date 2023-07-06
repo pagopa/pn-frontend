@@ -55,14 +55,15 @@ export function sortArray<TArray>(
  */
 export function disableFormatDetection<ReactNode>(param: string | ReactNode) {
   /*
-    Using href="#" makes the browser to reload the webapp, so we are using href="javascript:void(0);" instead.
+    Using href="#" makes the browser to reload the webapp, so we are using href="javascript:() => {};" instead.
   */
- return (
-   <a
-     href="javascript:void(0);"
-     style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
-   >
-     {param}
-   </a>
- );
+
+  return (
+    <a
+      href="javascript:() => {};"
+      style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
+    >
+      {param}
+    </a>
+  );
 }
