@@ -80,7 +80,7 @@ const NuovaDelega = () => {
   };
 
   const handleDelegationsClick = () => {
-    navigate(routes.DELEGHE);
+    navigate(-1);
   };
 
   // Get tomorrow date
@@ -187,7 +187,7 @@ const NuovaDelega = () => {
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
-        linkRoute={routes.DELEGHE}
+        linkRoute={routes.DELEGHEACARICO}
         linkLabel={
           <Fragment>
             <PeopleIcon sx={{ mr: 0.5 }} />
@@ -419,7 +419,7 @@ const NuovaDelega = () => {
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
-                              value={new Date(values.expirationDate)}
+                              value={values.expirationDate && new Date(values.expirationDate)}
                               minDate={tomorrow}
                               onChange={(value: DatePickerTypes) => {
                                 setFieldTouched('expirationDate', true, false);
