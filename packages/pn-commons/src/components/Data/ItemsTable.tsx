@@ -133,7 +133,8 @@ function ItemsTable<ColumnId extends string>({
                       {column.onClick && (
                         <>
                           {/* Even there is a onClick function on the TableCell, leave ButtonNaked below as is.
-                          This makes spacebar key with accessibility to trigger the onClick function. */}
+                          This makes spacebar key with accessibility to trigger the onClick function.
+                          The ButtonNaked "inherits" the onClick action from the outer TableCell, so that is not necessary to replicate it. */}
                           <ButtonNaked
                             tabIndex={column.disableAccessibility ? -1 : 0}
                             sx={buttonNakedInheritStyle}
