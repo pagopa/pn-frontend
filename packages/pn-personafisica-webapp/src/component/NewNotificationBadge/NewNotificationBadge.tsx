@@ -25,7 +25,7 @@ export function getNewNotificationBadge(value: string): ReactNode {
       data-testid="new-notification-badge"
       color="primary"
       variant="dot"
-      sx={{ marginRight: '0px' }}
+      sx={{ ml: 0.5 }}
     />
   ) : null;
 }
