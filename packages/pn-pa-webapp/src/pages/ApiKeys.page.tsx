@@ -8,7 +8,7 @@ import {
   Dialog,
   TextField,
   InputAdornment,
-  Divider,
+  // Divider,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useIsMobile, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
@@ -50,9 +50,18 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
   return (
     <Box sx={{ my: 3 }}>
       {groups &&
-        groups.map((group, i) => (
+        groups.map((group) => (
           <Fragment key={group.name}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', p: 3 }}>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                p: 2,
+                border: '1px solid rgba(0,0,0,0.23)',
+                borderRadius: 1,
+              }}
+            >
               <Box sx={{ width: '90%' }}>
                 <Typography variant="body2">
                   <strong>{group.name}</strong>
@@ -63,7 +72,7 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
                 <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
               </Box>
             </Box>
-            {i < groups.length - 1 && <Divider />}
+            {/* i < groups.length - 1 && <Divider /> */}
           </Fragment>
         ))}
     </Box>
