@@ -46,14 +46,14 @@ export default function ConfirmationModal({
           </Grid>
 
           <Stack
-            direction={isMobile ? 'column' : 'row'}
+            direction={isMobile ? 'column-reverse' : 'row'}
             justifyContent={'flex-end'}
             alignItems={'center'}
             ml={'auto'}
             pb={isMobile ? 4 : 0}
             data-testid="dialogStack"
           >
-            <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4} mr={isMobile ? 0 : 1}>
+            <Grid item sx={{ width: isMobile ? '100%' : null }} mt={isMobile ? 2 : 4} mr={isMobile ? 0 : 1}>
               <Button
                 sx={{ width: isMobile ? '100%' : null }}
                 onClick={handleClose}
