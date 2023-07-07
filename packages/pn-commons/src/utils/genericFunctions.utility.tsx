@@ -1,5 +1,7 @@
 import _ from 'lodash';
+import React from 'react';
 import { formatFromString } from './date.utility';
+import { dataRegex } from './string.utility';
 
 export function getValidValue(a: string | number | undefined, b?: string | number): any {
   return a || (b ? b : '');
@@ -50,20 +52,32 @@ export function sortArray<TArray>(
 }
 
 /**
- This function overrides format detection of Safari in iOS such automatic conversion of numbers in telephone link numbers.
+ This component overrides format detection of Safari in iOS such automatic conversion of numbers in telephone link numbers.
  This because the old meta tag name="format-detection" content="telephone=no" does not works anymore.
  */
-export function disableFormatDetection<ReactNode>(param: string | ReactNode) {
-  /*
-    Using href="#" makes the browser to reload the webapp, so we are using href="javascript:() => {};" instead.
-  */
+
+export function DisableFormatDetection({ param }: { param: string }) {
+  const matchString = param.match(dataRegex.phoneNumberAsSearch);
+  if (matchString == null) {
+    return <React.Fragment>{param}</React.Fragment>;
+  }
+
+  const numberMatch = matchString[0];
+  const startMatch = param.indexOf(numberMatch);
+  const endMatch = startMatch + numberMatch.length;
+  const outputNumber = (
+    <React.Fragment>
+      {numberMatch.split('').map((s, i) => (
+        <span key={`number_disabled_formatter_${i}`}>{s}</span>
+      ))}
+    </React.Fragment>
+  );
 
   return (
-    <a
-      href="javascript:() => {};"
-      style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
-    >
-      {param}
-    </a>
+    <React.Fragment>
+      {param.substring(0, startMatch)}
+      {outputNumber}
+      {param.substring(endMatch)}
+    </React.Fragment>
   );
 }

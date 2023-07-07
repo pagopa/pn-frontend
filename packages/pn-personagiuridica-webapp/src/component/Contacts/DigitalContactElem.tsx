@@ -24,7 +24,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { disableFormatDetection } from '@pagopa-pn/pn-commons/src/utils/genericFunctions.utility';
+import { DisableFormatDetection } from '@pagopa-pn/pn-commons/src/utils/genericFunctions.utility';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
@@ -105,7 +105,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
     >
       <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>{removeModalTitle}</DialogTitle>
       <DialogContent sx={{ px: 4 }}>
-        <DialogContentText id="dialog-description">{disableFormatDetection(removeModalBody)}</DialogContentText>
+      <DialogContentText id="dialog-description"><DisableFormatDetection param={removeModalBody}/></DialogContentText>
       </DialogContent>
       <DialogActions
         disableSpacing={isMobile}

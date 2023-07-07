@@ -1,5 +1,6 @@
 import React from 'react';
-import { disableFormatDetection, filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
+import { DisableFormatDetection, filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
+import { render } from '../../../../pn-pa-webapp/src/__test__/test-utils';
 
 describe('getValidValue function', () => {
   it('return A value', () => {
@@ -82,14 +83,8 @@ describe('sortArray function', () => {
 
 describe('disableFormatDetection function', () => {
   it('linkable text', () => {
-    const mockText = 'mocked text with a phone number +393200000000';
-    expect(disableFormatDetection(mockText)).toStrictEqual(
-      <a
-        href="javascript:() => {};"
-        style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
-      >
-        mocked text with a phone number +393200000000
-      </a>
-    );
+    const mockText = 'mocked text +393200000000?';
+    const result = render(<DisableFormatDetection param={mockText}/>);
+    expect(result.container.innerHTML.toString()).toStrictEqual("mocked text <span>+</span><span>3</span><span>9</span><span>3</span><span>2</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span>?");
   });
 });
