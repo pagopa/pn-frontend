@@ -339,7 +339,7 @@ const NotificationDetail = () => {
   const properBreadcrumb = (
     <PnBreadcrumb
       linkRoute={routes.DASHBOARD}
-      linkLabel={<Fragment>{t('detail.breadcrumb-root', { ns: 'notifiche' })}</Fragment>}
+      linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
       currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       goBackLabel={t('button.indietro', { ns: 'common' })}
     />

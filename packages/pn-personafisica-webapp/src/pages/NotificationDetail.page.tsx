@@ -266,7 +266,7 @@ const NotificationDetail = () => {
       <PnBreadcrumb
         showBackAction={!fromQrCode}
         linkRoute={backRoute}
-        linkLabel={<Fragment>{t('detail.breadcrumb-root', { ns: 'notifiche' })}</Fragment>}
+        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
         currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
         goBackAction={() => navigate(backRoute)}
       />
