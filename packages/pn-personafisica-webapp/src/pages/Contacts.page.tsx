@@ -102,6 +102,15 @@ const Contacts = () => {
     </>
   );
 
+  const courtesyContactsNotEmpty = () => {
+    const courtesy = digitalAddresses.courtesy;
+    return (
+      (courtesy.length === 1 &&
+        courtesy[0].channelType === CourtesyChannelType.IOMSG &&
+        courtesy[0].value === 'ENABLED') ||
+      courtesy.length > 0);
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <DigitalContactsCodeVerificationProvider>
@@ -137,7 +146,7 @@ const Contacts = () => {
                 </Stack>
                 <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
               </Stack>
-              {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
+              {(digitalAddresses.legal.length > 0 || courtesyContactsNotEmpty()) && (
                 <Stack spacing={2}>
                   <Typography variant="h5" fontWeight={600} fontSize={28}>
                     {t('special-contacts-title')}
