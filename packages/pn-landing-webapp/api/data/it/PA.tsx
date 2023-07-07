@@ -189,7 +189,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={0}
                 aria-label="la lista dei Partner e Intermediari tecnologici"
               >
                 la lista dei Partner e Intermediari tecnologici
@@ -220,7 +219,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={0}
                 aria-label="Area Riservata"
               >
                 Area Riservata
@@ -231,7 +229,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={0}
                 aria-label="questa guida"
               >
                 questa guida.
