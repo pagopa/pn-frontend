@@ -1,5 +1,5 @@
 export const initialState = {
   pendingDelegators: 0,
-  specialAddresses: [],
+  defaultAddresses: [],
   domicileBannerOpened: true,
 };
