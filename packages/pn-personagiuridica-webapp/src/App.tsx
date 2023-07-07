@@ -65,7 +65,7 @@ const App = () => {
     }
   }, [isInitialized]);
 
-  return isInitialized ? <ActualApp /> : <div/>;
+  return isInitialized ? <ActualApp /> : <div />;
 };
 
 const ActualApp = () => {
@@ -191,7 +191,7 @@ const ActualApp = () => {
     menuItems.splice(1, 0, {
       label: t('menu.deleghe'),
       icon: () => <AltRouteIcon />,
-      route: routes.DELEGHE,
+      route: routes.DELEGHEACARICO,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
   }

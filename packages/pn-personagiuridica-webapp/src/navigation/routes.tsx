@@ -1,11 +1,13 @@
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import { PNRole } from '../redux/auth/types';
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
+import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
+import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -77,7 +79,24 @@ function Router() {
                       <Deleghe />
                     </PrivateRoute>
                   }
-                />
+                >
+                  <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+                  <Route
+                    path={routes.DELEGATI}
+                    element={
+                      <PrivateRoute
+                        currentRoles={[]}
+                        requiredRoles={[]}
+                        additionalCondition={!hasGroup}
+                        redirectTo={<NotFound />}
+                      >
+                        <DelegatesByCompany />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route path="" element={<Navigate to={routes.DELEGHEACARICO} />} />
+                </Route>
+
                 <Route
                   path={routes.NUOVA_DELEGA}
                   element={

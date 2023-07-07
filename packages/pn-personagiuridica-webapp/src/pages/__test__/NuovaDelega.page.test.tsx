@@ -86,7 +86,7 @@ describe('NuovaDelega page', () => {
     expect(radioSelectedEntities).toBeInTheDocument();
     const radioEntities = radioSelectedEntities.querySelector('[type="radio"]');
     expect(radioEntities).not.toBeChecked();
-    const entiSelect = form.querySelector('[data-testid="enti-select"]');
+    const entiSelect = form.querySelector('[data-testid="enti"]');
     expect(entiSelect).not.toBeInTheDocument();
     const expirationDate = form.querySelector('[data-testid="expirationDate"]') as Element;
     expect(expirationDate).toBeInTheDocument();
@@ -148,15 +148,15 @@ describe('NuovaDelega page', () => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
     });
-    await testAutocomplete(form, 'enti-select', entitiesList, true);
-    await testInput(form, 'enti-select', 'filter');
+    await testAutocomplete(form, 'enti', entitiesList, true);
+    await testInput(form, 'enti', 'filter');
     await waitFor(() => {
       expect(mock.history.get.length).toBe(2);
       expect(mock.history.get[1].url).toContain(
         'ext-registry/pa/v1/activated-on-pn?paNameFilter=filter'
       );
     });
-    await testAutocomplete(form, 'enti-select', [entitiesList[2]], false);
+    await testAutocomplete(form, 'enti', [entitiesList[2]], false);
     mock.reset();
     mock.restore();
   });
@@ -258,8 +258,8 @@ describe('NuovaDelega page', () => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
     });
-    await testAutocomplete(form, 'enti-select', entitiesList, true, 0, true);
-    await testAutocomplete(form, 'enti-select', entitiesList, true, 2, true);
+    await testAutocomplete(form, 'enti', entitiesList, true, 0, true);
+    await testAutocomplete(form, 'enti', entitiesList, true, 2, true);
     const button = result.queryByTestId('createButton') as Element;
     fireEvent.click(button);
     await waitFor(() => {

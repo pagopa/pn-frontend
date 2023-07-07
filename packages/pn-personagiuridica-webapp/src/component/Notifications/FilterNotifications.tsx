@@ -191,7 +191,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
-              formikInstance={formik}
               cleanFilters={cleanFilters}
               filtersApplied={isFilterApplied(filtersCount)}
               isInitialSearch={isInitialSearch}
@@ -213,7 +212,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             setEndDate={(value) => setEndDate(value)}
           />
           <FilterNotificationsFormActions
-            formikInstance={formik}
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
             isInitialSearch={isInitialSearch}
