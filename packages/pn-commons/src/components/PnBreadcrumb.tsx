@@ -41,12 +41,7 @@ const PnBreadcrumb = ({
     goBackLabel || getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro');
 
   return (
-    <Stack
-      direction={{ xs: 'column', sm: 'row' }}
-      alignItems={{ xs: 'start', sm: 'center' }}
-      justifyContent="start"
-      spacing={3}
-    >
+    <Stack direction="row" alignItems="center" justifyContent="start" spacing={3}>
       {showBackAction && (
         <ButtonNaked
           color="primary"

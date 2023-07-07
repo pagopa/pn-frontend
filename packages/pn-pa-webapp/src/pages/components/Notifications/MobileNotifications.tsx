@@ -121,7 +121,7 @@ const MobileNotifications = ({
       id: 'group',
       label: t('table.groups'),
       getLabel(value: string, row: Item) {
-        return (
+        return value ? (
           <CustomTagGroup visibleItems={1}>
             {[
               <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={row.id}>
@@ -129,7 +129,7 @@ const MobileNotifications = ({
               </Box>,
             ]}
           </CustomTagGroup>
-        );
+        ) : null;
       },
       hideIfEmpty: true,
     },

@@ -12,7 +12,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 
-import { Column, Item, Sort, Notification } from '../../types';
+import { Column, Item, Sort } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { buttonNakedInheritStyle } from '../../utils';
 
@@ -117,7 +117,7 @@ function ItemsTable<ColumnId extends string>({
                 aria-rowindex={index + 1}
               >
                 {columns.map((column) => {
-                  const cellValue = column.getCellLabel(row[column.id as keyof Notification], row);
+                  const cellValue = column.getCellLabel(row[column.id as keyof Item], row);
                   return (
                     <TableCell
                       key={column.id}
@@ -128,17 +128,22 @@ function ItemsTable<ColumnId extends string>({
                         cursor: column.onClick ? 'pointer' : 'auto',
                       }}
                       align={column.align}
+                      onClick={() => column.onClick && column.onClick(row, column)}
                     >
-                      {cellValue && column.onClick && (
-                        <ButtonNaked
-                          tabIndex={column.disableAccessibility ? -1 : 0}
-                          sx={buttonNakedInheritStyle}
-                          onClick={() => column.onClick && column.onClick(row, column)}
-                        >
-                          {cellValue}
-                        </ButtonNaked>
+                      {column.onClick && (
+                        <>
+                          {/* Even there is a onClick function on the TableCell, leave ButtonNaked below as is.
+                          This makes spacebar key with accessibility to trigger the onClick function.
+                          The ButtonNaked "inherits" the onClick action from the outer TableCell, so that is not necessary to replicate it. */}
+                          <ButtonNaked
+                            tabIndex={column.disableAccessibility ? -1 : 0}
+                            sx={buttonNakedInheritStyle}
+                          >
+                            {cellValue}
+                          </ButtonNaked>
+                        </>
                       )}
-                      {cellValue && !column.onClick && (
+                      {!column.onClick && (
                         <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>
                       )}
                     </TableCell>

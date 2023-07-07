@@ -17,7 +17,6 @@ import {
   Alert,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import EmailIcon from '@mui/icons-material/Email';
 import {
   // PN-1714
   // NotificationStatus,
@@ -340,12 +339,7 @@ const NotificationDetail = () => {
   const properBreadcrumb = (
     <PnBreadcrumb
       linkRoute={routes.DASHBOARD}
-      linkLabel={
-        <Fragment>
-          <EmailIcon sx={{ mr: 0.5 }} />
-          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        </Fragment>
-      }
+      linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
       currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       goBackLabel={t('button.indietro', { ns: 'common' })}
     />

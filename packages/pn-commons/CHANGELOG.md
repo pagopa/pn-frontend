@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.0.0-RC.6...v2.0.1-RC.0) (2023-07-05)
+
+
+### Bug Fixes
+
+* **pn-6969:** add a11y ([#858](https://github.com/pagopa/pn-frontend/issues/858)) ([2b6e071](https://github.com/pagopa/pn-frontend/commit/2b6e0715016f8a58e25aa56dea1596075e847fc8))
+* **pn-6971:** fix a11y in emptystate ([#861](https://github.com/pagopa/pn-frontend/issues/861)) ([f75f8a3](https://github.com/pagopa/pn-frontend/commit/f75f8a38dff8202444af52820ec24e7e8a984f41))
+* **pn-7042:** validation mode of notifications filter ([#884](https://github.com/pagopa/pn-frontend/issues/884)) ([5d51671](https://github.com/pagopa/pn-frontend/commit/5d516713b3b4d368fd1810a080647ac628d954fb))
+
+
+### Features
+
+* **pn-6792:**  analog progress event PNALL001 ([#872](https://github.com/pagopa/pn-frontend/issues/872)) ([fbf14bb](https://github.com/pagopa/pn-frontend/commit/fbf14bb2ca625d49ab72d844af1c72bcfaf842ff))
+* **pn-6828:** allowed particular accessibility link for one URL pattern / disabled languages other than Italian ([#877](https://github.com/pagopa/pn-frontend/issues/877)) ([d6e5249](https://github.com/pagopa/pn-frontend/commit/d6e524909aca4b85c275254989ce7531dadde4c9))
+
+
+
+
+
 ## [1.5.4](https://github.com/pagopa/pn-frontend/compare/v1.5.3...v1.5.4) (2022-12-23)
 
 

@@ -6,6 +6,7 @@ import {
   ReactChild,
   SetStateAction,
   useImperativeHandle,
+  useMemo,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +23,8 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { disableFormatDetection } from '@pagopa-pn/pn-commons/src/utils/genericFunctions.utility';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
@@ -72,17 +75,23 @@ const DeleteDialog: React.FC<DialogProps> = ({
   confirmHandler,
 }) => {
   const { t } = useTranslation(['common']);
-
+  const isMobile = useIsMobile();
+  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
+  
   const deleteModalActions = blockDelete ? (
-    <Button onClick={handleModalClose} variant="outlined">
+    <Button onClick={handleModalClose} variant="outlined" sx={{ width: isMobile ? '100%' : null }}>
       {t('button.close')}
     </Button>
   ) : (
     <>
-      <Button onClick={handleModalClose} variant="outlined">
+      <Button
+        onClick={handleModalClose}
+        variant="outlined"
+        sx={isMobile ? { width: '100%', mt: 2 } : null}
+      >
         {t('button.annulla')}
       </Button>
-      <Button onClick={confirmHandler} variant="contained">
+      <Button onClick={confirmHandler} variant="contained" sx={{ width: isMobile ? '100%' : null }}>
         {t('button.conferma')}
       </Button>
     </>
@@ -94,11 +103,23 @@ const DeleteDialog: React.FC<DialogProps> = ({
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
+      <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
+        {removeModalTitle}
+      </DialogTitle>
+      <DialogContent sx={{ px: 4 }}>
+        <DialogContentText id="dialog-description">{disableFormatDetection(removeModalBody)}</DialogContentText>
       </DialogContent>
-      <DialogActions>{deleteModalActions}</DialogActions>
+      <DialogActions
+        disableSpacing={isMobile}
+        sx={{
+          textAlign: textPosition,
+          flexDirection: isMobile ? 'column-reverse' : 'row',
+          px: 4,
+          pb: 4,
+        }}
+      >
+        {deleteModalActions}
+      </DialogActions>
     </Dialog>
   );
 };
