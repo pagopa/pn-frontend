@@ -502,7 +502,7 @@ const NotificationDetail = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
-              <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: 0 }}>
+              <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}>
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={

@@ -371,7 +371,7 @@ const NotificationDetail = () => {
             <Grid item lg={5} xs={12}>
               <Box
                 component="section"
-                sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: 0 }}
+                sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
               >
                 <TimedMessage
                   timeout={timeoutMessage}
