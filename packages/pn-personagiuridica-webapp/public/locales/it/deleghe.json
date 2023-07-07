@@ -95,7 +95,7 @@
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo enti selezionati",
-      "selectEntities": "Seleziona enti",
+      "selectEntities": "Seleziona enti*",
       "date-duration": "Periodo di validità della delega*",
       "endDate": "Termine delega",
       "verificationCode": "Codice di verifica",
@@ -117,6 +117,7 @@
       "businessName": {
         "required": "La ragione sociale è obbligatoria"
       },
+      "entiSelected": { "required": "Seleziona almeno un ente" },
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",
         "wrong": "Data errata"
