@@ -222,7 +222,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         onConfirm={handleConfirmClick}
         onConfirmLabel={confirmLabel}
         onClose={onCloseModal}
-        onCloseLabel={t('button.annulla', { ns: 'common' })}
+        onCloseLabel={t('button.indietro', { ns: 'common' })}
       />
       {menuType === 'delegators' &&
         row?.status === DelegationStatus.ACTIVE &&
