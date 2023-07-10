@@ -1,4 +1,4 @@
-import {ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { CustomMobileDialogProvider } from './CustomMobileDialog.context';
 
 type Props = {
@@ -8,14 +8,8 @@ type Props = {
 /**
  * Container for mobile version of the dialog
  */
-const CustomMobileDialog = ({
-  children
-}: Props) => {
-  return (
-    <CustomMobileDialogProvider>
-      {children}
-    </CustomMobileDialogProvider>
-  );
-};
+const CustomMobileDialog = ({ children }: Props) => (
+  <CustomMobileDialogProvider>{children}</CustomMobileDialogProvider>
+);
 
 export default CustomMobileDialog;

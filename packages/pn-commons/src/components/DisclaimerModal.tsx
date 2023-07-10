@@ -62,7 +62,7 @@ const DisclaimerModal = ({
         disableSpacing={isMobile}
         sx={{
           textAlign: textPosition,
-          flexDirection: isMobile ? 'column' : 'row',
+          flexDirection: isMobile ? 'column-reverse' : 'row',
           p: 4,
           pt: 0,
         }}
@@ -72,7 +72,6 @@ const DisclaimerModal = ({
           onClick={onCancel}
           fullWidth={isMobile}
           data-testid="disclaimer-cancel-button"
-          sx={{ mb: isMobile ? 2 : 0 }}
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </Button>
@@ -82,6 +81,7 @@ const DisclaimerModal = ({
           disabled={disabledConfirm}
           fullWidth={isMobile}
           data-testid="disclaimer-confirm-button"
+          sx={{ mb: isMobile ? 2 : 0 }}
         >
           {confirmLabel}
         </Button>

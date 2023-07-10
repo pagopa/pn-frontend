@@ -168,11 +168,10 @@ describe('Filter Notifications Table Component', () => {
     // wrong id and wrong start date
     await setFormValues(form!, nineYearsAgo, getNextDay(todayM), '1234-5678-910A-BCDFGH-I-OL');
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
     await waitFor(() => {
-      fireEvent.click(submitButton!);
+      expect(mockDispatchFn).toBeCalledTimes(0);
     });
-    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('valid date range', async () => {
@@ -198,7 +197,10 @@ describe('Filter Notifications Table Component', () => {
     // wrong since endDate is before startDate
     await setFormValues(form!, todayM, nineYearsAgo, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test invalid date range - end in the future', async () => {
@@ -211,7 +213,10 @@ describe('Filter Notifications Table Component', () => {
     // wrong since endDate is before startDate
     await setFormValues(form!, todayM, oneMonthAhead, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    expect(submitButton).toBeDisabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(0);
+    });
   });
 
   it('test form reset', async () => {
