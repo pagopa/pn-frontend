@@ -68,7 +68,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       event.key === 'Enter' ||
       (event.key === 'Tab' && !event.shiftKey) ||
       event.key === 'ArrowRight' ||
-      event.key === 'Delete'
+      event.key === 'Delete' ||
+      event.key === currentValues[index]
     ) {
       // focus next element
       focusInput(index + 1);
@@ -130,8 +131,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
           placeholder="-"
           sx={inputStyle}
           inputProps={{
-            // the value 2 is when we focus on one input (not the last one) and the value is not selected, but the cursor is shown
-            maxLength: initialValues.length === index + 1 ? 1 : 2,
+            // the value 2 is when we focus on one input and the value is not selected, but the cursor is shown
+            maxLength: 2,
             sx: { padding: '16.5px 10px', textAlign: 'center' },
             readOnly: isReadOnly,
             pattern: '^[0-9]{1}$',
