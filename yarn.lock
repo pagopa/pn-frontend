@@ -4710,10 +4710,10 @@
     fp-ts "^2.12.3"
     io-ts "^2.2.18"
 
-"@pagopa/mui-italia@^0.9.7":
-  version "0.9.7"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.9.7.tgz#ca9248dea90ae7b2411f04f2727722561089493d"
-  integrity sha512-dUl7zDO1qnRnOz1gfVrpLS4dyjZcTvwcW6ZriieGkUU5Weo2F5CwjfmUafgLuJCcJiSSt9/3Yl97hMn7yU4v7w==
+"@pagopa/mui-italia@^0.9.10":
+  version "0.9.10"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.9.10.tgz#61f1af9b62a6f0478f613700f66b5e66f5b42037"
+  integrity sha512-l29RUNILS14FpsQhO7Iq4dwO6Bhz4E3tSF8HP41wJ3MDlAE8t4amt/d+qUtTOewI+F1+P6u/2t/0LRJg4usPpQ==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
