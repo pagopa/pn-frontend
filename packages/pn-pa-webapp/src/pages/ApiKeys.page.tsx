@@ -43,23 +43,26 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
       {groups &&
         groups.map((group) => (
           <Fragment key={group.name}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              <strong>{group.name}</strong>
+            </Typography>
+
             <Box
               sx={{
                 width: '100%',
                 display: 'flex',
                 alignItems: 'center',
-                p: 2,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 border: '1px solid rgba(0,0,0,0.23)',
                 borderRadius: 1,
+                mb: 3,
               }}
             >
-              <Box sx={{ width: '90%' }}>
-                <Typography variant="body2">
-                  <strong>{group.name}</strong>
-                </Typography>
+              <Box>
                 <Typography variant="body2">Group ID: {group.id}</Typography>
               </Box>
-              <Box sx={{ width: '10%' }}>
+              <Box>
                 <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
               </Box>
             </Box>
