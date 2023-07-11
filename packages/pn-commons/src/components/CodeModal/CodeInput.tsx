@@ -46,54 +46,43 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       return;
     }
     if (index > initialValues.length - 1) {
+      // the variable is to prevent test fail
+      const input = inputsRef.current[index - 1];
       setTimeout(() => {
-        inputsRef.current[index - 1].blur();
+        input.blur();
       }, 25);
       return;
     }
+    // the variable is to prevent test fail
+    const input = inputsRef.current[index];
     setTimeout(() => {
       // focus input
-      inputsRef.current[index].focus();
-      // set cursor position
-      if (inputsRef.current[index].setSelectionRange) {
-        inputsRef.current[index].setSelectionRange(1, 1);
-      } else if (inputsRef.current[index].createTextRange) {
-        const t = inputsRef.current[index].createTextRange();
-        t.collapse(true);
-        t.moveEnd('character', 1);
-        t.moveStart('character', 1);
-        t.select();
-      }
+      input.focus();
+      // select input
+      input.select();
     }, 25);
   };
 
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
-    const cursorPosition = (event.target as any).selectionStart;
-    if (!isNaN(Number(event.key)) && currentValues[index]) {
-      changeInputValue(event.key, index);
-    }
     if (
-      !isNaN(Number(event.key)) ||
       event.key === 'Enter' ||
       (event.key === 'Tab' && !event.shiftKey) ||
-      (event.key === 'ArrowRight' && cursorPosition === 1)
+      event.key === 'ArrowRight' ||
+      event.key === 'Delete' ||
+      event.key === currentValues[index]
     ) {
       // focus next element
       focusInput(index + 1);
-      return;
     } else if (
       event.key === 'Backspace' ||
       (event.key === 'Tab' && event.shiftKey) ||
-      (event.key === 'ArrowLeft' && cursorPosition === 0)
+      event.key === 'ArrowLeft'
     ) {
       // focus previous element
       focusInput(index - 1);
-      return;
-    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Delete') {
-      return;
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
     }
-    // prevent all values that aren't numbers
-    event.preventDefault();
   };
 
   const changeInputValue = (value: string, index: number) => {
@@ -106,7 +95,24 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   };
 
   const changeHandler = (event: ChangeEvent, index: number) => {
-    changeInputValue((event.target as any).value, index);
+    let value = String((event.target as HTMLInputElement).value);
+    // removed value - i.e. backspace or canc clicked
+    if (value === '' && currentValues[index] !== '') {
+      changeInputValue(value, index);
+      return;
+    }
+    // remove non numeric char from value
+    value = value.replace(/[^\d]/g, '');
+    if (value !== '') {
+      // case maxLength 2
+      if (value.length > 1) {
+        const cursorPosition = (event.target as HTMLInputElement).selectionStart;
+        value = value.charAt(cursorPosition === 1 ? 0 : 1);
+      }
+      changeInputValue(value, index);
+      // focus next element
+      focusInput(index + 1);
+    }
   };
 
   useEffect(() => {
@@ -125,17 +131,16 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
           placeholder="-"
           sx={inputStyle}
           inputProps={{
-            maxLength: 1,
+            // the value 2 is when we focus on one input and the value is not selected, but the cursor is shown
+            maxLength: 2,
             sx: { padding: '16.5px 10px', textAlign: 'center' },
             readOnly: isReadOnly,
-            onClick: (e) =>
-              e.currentTarget.setSelectionRange(
-                e.currentTarget.value.length,
-                e.currentTarget.value.length
-              ),
+            pattern: '^[0-9]{1}$',
+            inputMode: 'numeric',
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}
+          onFocus={(event) => event.target.select()}
           value={currentValues[index]}
           // eslint-disable-next-line functional/immutable-data
           inputRef={(node) => (inputsRef.current[index] = node)}
