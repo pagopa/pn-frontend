@@ -10,6 +10,7 @@ import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { apiClient } from '../../api/apiClients';
 import Contacts from '../Contacts.page';
 import { PROFILO } from '../../navigation/routes.const';
+import { contactsCourtesyOnly, contactsFull, contactsLegalOnly, contactsAppIoOnly, contactsCourtesyOnlyWithAppIo } from './Contacts.page.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -38,8 +39,10 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 });
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
+jest.mock('../../component/Contacts/LegalContactsList', () => () => <div>LegalContactsList</div>);
 jest.mock('../../component/Contacts/CourtesyContacts', () => () => <div>CourtesyContacts</div>);
 jest.mock('../../component/Contacts/IOContact', () => () => <div>IOContact</div>);
+jest.mock('../../component/Contacts/SpecialContacts', () => () => <div>SpecialContacts</div>);
 
 const initialState = {
   preloadedState: {
@@ -75,10 +78,71 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(result.container).toHaveTextContent(/subtitle/i);
     expect(result.container).toHaveTextContent(/InsertLegalContact/i);
     expect(result.container).toHaveTextContent(/CourtesyContacts/i);
+    expect(result.container).not.toHaveTextContent(/SpecialContacts/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/address-book/v1/digital-address');
     mock.reset();
     mock.restore();
+  });
+
+  it('renders Contacts (no contacts - only AppIO)', async () => {
+    let result;
+    await act(async () => {
+      result = await render(<Contacts />, contactsAppIoOnly);
+    });
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/subtitle/i);
+    expect(result.container).toHaveTextContent(/InsertLegalContact/i);
+    expect(result.container).toHaveTextContent(/CourtesyContacts/i);
+    expect(result.container).not.toHaveTextContent(/SpecialContacts/i);
+  });
+
+  it('renders Contacts (legal contacts only)', async () => {
+    let result;
+    await act(async () => {
+      result = await render(<Contacts />, contactsLegalOnly);
+    });
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/subtitle/i);
+    expect(result.container).toHaveTextContent(/LegalContactsList/i);
+    expect(result.container).toHaveTextContent(/CourtesyContacts/i);
+    expect(result.container).toHaveTextContent(/SpecialContacts/i);
+  });
+
+  it('renders Contacts (courtesy contacts only - no AppIO)', async () => {
+    let result;
+    await act(async () => {
+      result = await render(<Contacts />, contactsCourtesyOnly);
+    });
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/subtitle/i);
+    expect(result.container).toHaveTextContent(/InsertLegalContact/i);
+    expect(result.container).toHaveTextContent(/CourtesyContacts/i);
+    expect(result.container).toHaveTextContent(/SpecialContacts/i);
+  });
+
+  it('renders Contacts (courtesy contacts only - with AppIO)', async () => {
+    let result;
+    await act(async () => {
+      result = await render(<Contacts />, contactsCourtesyOnlyWithAppIo);
+    });
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/subtitle/i);
+    expect(result.container).toHaveTextContent(/InsertLegalContact/i);
+    expect(result.container).toHaveTextContent(/CourtesyContacts/i);
+    expect(result.container).toHaveTextContent(/SpecialContacts/i);
+  });
+
+  it('renders Contacts (courtesy and legal contacts filled)', async () => {
+    let result;
+    await act(async () => {
+      result = await render(<Contacts />, contactsFull);
+    });
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/subtitle/i);
+    expect(result.container).toHaveTextContent(/LegalContactsList/i);
+    expect(result.container).toHaveTextContent(/CourtesyContacts/i);
+    expect(result.container).toHaveTextContent(/SpecialContacts/i);
   });
 
   it('subtitle link properly redirects to profile page', async () => {
