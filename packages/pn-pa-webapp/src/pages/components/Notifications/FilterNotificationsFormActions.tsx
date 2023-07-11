@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormikValues } from 'formik';
 import { Button } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 import { makeStyles } from '@mui/styles';
@@ -21,11 +20,6 @@ type Props = {
   filtersApplied: boolean;
   isInitialSearch: boolean;
   cleanFilters: () => void;
-  formikInstance: {
-    isValid: boolean;
-    values: FormikValues;
-    initialValues: FormikValues;
-  };
   isInDialog?: boolean;
 };
 

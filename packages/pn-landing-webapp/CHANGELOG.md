@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.0.0-RC.6...v2.0.1-RC.0) (2023-07-05)
+
+
+### Bug Fixes
+
+* **pn-6970:** a11y of landing page ([#867](https://github.com/pagopa/pn-frontend/issues/867)) ([a345b3f](https://github.com/pagopa/pn-frontend/commit/a345b3f56cb28f0a5c8805f93ab5e0f00bc33489))
+
+
+### Features
+
+* **pn-6828:** allowed particular accessibility link for one URL pattern / disabled languages other than Italian ([#877](https://github.com/pagopa/pn-frontend/issues/877)) ([d6e5249](https://github.com/pagopa/pn-frontend/commit/d6e524909aca4b85c275254989ce7531dadde4c9))
+
+
+
+
+
 ## [1.5.4](https://github.com/pagopa/pn-frontend/compare/v1.5.3...v1.5.4) (2022-12-23)
 
 
