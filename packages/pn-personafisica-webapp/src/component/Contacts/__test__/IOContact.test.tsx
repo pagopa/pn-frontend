@@ -84,7 +84,7 @@ describe('IOContact component', () => {
       const ioCheckbox = result?.queryByRole('checkbox', { name: 'io-contact.switch-label' });
       expect(ioCheckbox).not.toBeInTheDocument();
 
-      const alert = result?.queryByRole('alert');
+      const alert = result?.queryByTestId('appIO-contact-disclaimer');
       expect(alert).not.toBeInTheDocument();
 
       const link = result?.container.querySelector('a');
@@ -106,7 +106,7 @@ describe('IOContact component', () => {
       const ioCheckbox = result?.queryByRole('checkbox', { name: 'io-contact.switch-label' });
       expect(ioCheckbox).not.toBeInTheDocument();
 
-      const alert = result?.getByRole('alert');
+      const alert = result?.getByTestId('appIO-contact-disclaimer');
       expect(alert).toBeInTheDocument();
       expect(alert).toHaveTextContent('io-contact.disclaimer-message-unavailable');
 
@@ -137,7 +137,7 @@ describe('IOContact component', () => {
       expect(enableBtn).toBeInTheDocument();
       expect(enableBtn).toBeEnabled();
 
-      const alert = result?.getByRole('alert');
+      const alert = result?.getByTestId('appIO-contact-disclaimer');
       expect(alert).toBeInTheDocument();
       expect(alert).toHaveTextContent('io-contact.disclaimer-message');
 
@@ -184,7 +184,7 @@ describe('IOContact component', () => {
       expect(enableBtn).toBeInTheDocument();
       expect(enableBtn).toBeEnabled();
 
-      const alert = result?.getByRole('alert');
+      const alert = result?.getByTestId('appIO-contact-disclaimer');
       expect(alert).toBeInTheDocument();
       expect(alert).toHaveTextContent('io-contact.disclaimer-message');
 
