@@ -16,7 +16,7 @@ import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILO } from '../navigation/routes.const';
-import { CourtesyChannelType } from '../models/contacts';
+import { CourtesyChannelType, DigitalAddress } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { getConfiguration } from '../services/configuration.service';
 
@@ -103,12 +103,9 @@ const Contacts = () => {
   );
 
   const courtesyContactsNotEmpty = () => {
-    const courtesy = digitalAddresses.courtesy;
-    return (
-      (courtesy.length === 1 &&
-        courtesy[0].channelType === CourtesyChannelType.IOMSG &&
-        courtesy[0].value === 'ENABLED') ||
-      courtesy.length > 0);
+    const isIrrilevant = (address: DigitalAddress) =>
+      address.channelType === CourtesyChannelType.IOMSG;
+    return digitalAddresses.courtesy.some((addr) => !isIrrilevant(addr));
   };
 
   return (
