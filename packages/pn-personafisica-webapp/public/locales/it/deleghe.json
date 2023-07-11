@@ -48,7 +48,7 @@
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
     "backToDelegations": "Torna alle deleghe",
-    "createdTitle": "La tua richiesta di delega è stata creata con successo",
+    "createdTitle": "Richiesta di delega creata",
     "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la tua richiesta.",
     "title": "Aggiungi una delega",
     "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle tue notifiche.",
