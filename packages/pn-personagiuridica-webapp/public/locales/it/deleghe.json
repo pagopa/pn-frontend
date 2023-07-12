@@ -68,7 +68,7 @@
     "updated-successfully": "Gruppo modificato",
     "updated-error": "Si è verificato un errore e il gruppo non è stato modificato. Riprova.",
     "revoke-successfully": "Delega Revocata.",
-    "reject-successfully": "Delega Rifiutata.",
+    "reject-successfully": "La delega è stata rifiutata.",
     "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
     "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova.",
     "validation": {
