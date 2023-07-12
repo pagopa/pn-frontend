@@ -16,7 +16,7 @@ import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILO } from '../navigation/routes.const';
-import { CourtesyChannelType } from '../models/contacts';
+import { CourtesyChannelType, DigitalAddress } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { getConfiguration } from '../services/configuration.service';
 
@@ -102,6 +102,12 @@ const Contacts = () => {
     </>
   );
 
+  const courtesyContactsNotEmpty = () => {
+    const isIrrilevant = (address: DigitalAddress) =>
+      address.channelType === CourtesyChannelType.IOMSG;
+    return digitalAddresses.courtesy.some((addr) => !isIrrilevant(addr));
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <DigitalContactsCodeVerificationProvider>
@@ -137,7 +143,7 @@ const Contacts = () => {
                 </Stack>
                 <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
               </Stack>
-              {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
+              {(digitalAddresses.legal.length > 0 || courtesyContactsNotEmpty()) && (
                 <Stack spacing={2}>
                   <Typography variant="h5" fontWeight={600} fontSize={28}>
                     {t('special-contacts-title')}

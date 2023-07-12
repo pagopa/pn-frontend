@@ -95,6 +95,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
       return (
         <Alert
           tabIndex={0}
+          role="banner"
           sx={{ mt: 4 }}
           aria-label={
             status === IOContactStatus.UNAVAILABLE

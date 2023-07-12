@@ -29,6 +29,7 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       </Box>
       <Alert
         tabIndex={0}
+        role="banner"
         aria-label={t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}
         sx={{ mt: 4 }}
         severity="info"

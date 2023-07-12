@@ -1,15 +1,6 @@
 import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Button,
-  Link,
-  Dialog,
-  TextField,
-  InputAdornment,
-  Divider,
-} from '@mui/material';
+import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useIsMobile, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
@@ -50,20 +41,37 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
   return (
     <Box sx={{ my: 3 }}>
       {groups &&
-        groups.map((group, i) => (
+        groups.map((group) => (
           <Fragment key={group.name}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', p: 3 }}>
-              <Box sx={{ width: '90%' }}>
-                <Typography variant="body2">
-                  <strong>{group.name}</strong>
-                </Typography>
-                <Typography variant="body2">Group ID: {group.id}</Typography>
-              </Box>
-              <Box sx={{ width: '10%' }}>
-                <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
-              </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignContent: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                <strong>{group.name}</strong>
+              </Typography>
+              <TextField
+                label={t('group-id')}
+                defaultValue={group.id}
+                fullWidth
+                sx={{
+                  mb: 3,
+                }}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <CopyToClipboardButton
+                      value={() => group.id}
+                      tooltipTitle={t('group-id-copied')}
+                    />
+                  ),
+                }}
+              ></TextField>
             </Box>
-            {i < groups.length - 1 && <Divider />}
           </Fragment>
         ))}
     </Box>
