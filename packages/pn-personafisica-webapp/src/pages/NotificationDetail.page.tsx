@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import EmailIcon from '@mui/icons-material/Email';
 import {
   LegalFactId,
   NotificationDetailDocuments,
@@ -267,12 +266,7 @@ const NotificationDetail = () => {
       <PnBreadcrumb
         showBackAction={!fromQrCode}
         linkRoute={backRoute}
-        linkLabel={
-          <Fragment>
-            <EmailIcon sx={{ mr: 0.5 }} />
-            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-          </Fragment>
-        }
+        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
         currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
         goBackAction={() => navigate(backRoute)}
       />
@@ -324,7 +318,7 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
-                <DomicileBanner />
+                {!mandateId && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
@@ -369,7 +363,10 @@ const NotificationDetail = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
-              <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+              <Box
+                component="section"
+                sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
+              >
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={

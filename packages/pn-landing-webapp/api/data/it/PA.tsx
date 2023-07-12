@@ -189,7 +189,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={0}
                 aria-label="la lista dei Partner e Intermediari tecnologici"
               >
                 la lista dei Partner e Intermediari tecnologici
@@ -202,6 +201,7 @@ export const paInfoBlocks: Array<IInfoblockData> = [
           <Typography variant="caption" tabIndex={0} aria-label={infoblock4_3}>
             {infoblock4_3}
           </Typography>
+
           <Typography
             variant="h6"
             tabIndex={0}
@@ -219,7 +219,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={0}
                 aria-label="Area Riservata"
               >
                 Area Riservata
@@ -230,7 +229,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={0}
                 aria-label="questa guida"
               >
                 questa guida.
@@ -244,26 +242,116 @@ export const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <List sx={{ listStyleType: "disc", pl: 4 }}>
             <ListItem sx={{ display: "list-item" }}>
-              <Typography
-                variant="body2"
-                tabIndex={0}
-                aria-label="Allegato 1-Bis al Contratto di Adesione"
-              >
+              <Typography variant="body2">
                 <Link
                   href={
-                    "https://docs.pagopa.it/allegato-1bis-al-contratto-di-adesione/"
+                    "https://docs.pagopa.it/documento-1-termini-condizioni-di-adesione-e-uso/"
                   }
                 >
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    tabIndex={0}
-                    aria-label="Allegato 1-Bis"
+                    aria-label="Documento 1 - Termini e Condizioni di adesione e uso"
                   >
-                    Allegato 1-Bis
+                    Documento 1 - Termini e Condizioni di adesione e uso
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: "list-item" }}>
+              <Typography variant="body2">
+                <Link href="https://docs.pagopa.it/doc.2-atto-di-nomina-a-responsabile-trattamento-da/">
+                  <a
+                    aria-label="Documento 2 - Atto di Nomina a Responsabile Trattamento Dati
+                    Personali"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Documento 2 - Atto di Nomina a Responsabile Trattamento Dati
+                    Personali
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: "list-item" }}>
+              <Typography
+                variant="body2"
+                tabIndex={0}
+                aria-label="Documento 3 - Documentazione tecnica per l’integrazione tecnologica dei sistemi dell'ente a SEND
+                sono:"
+              >
+                <Link
+                  href={
+                    "https://docs.pagopa.it/documento-3-documentazione-tecnica/"
+                  }
+                >
+                  <a
+                    aria-label="Documento 3 - Documentazione tecnica"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Documento 3 - Documentazione tecnica
                   </a>
                 </Link>{" "}
-                al Contratto di Adesione
+                per l’integrazione tecnologica dei sistemi dell'ente a SEND
+                sono:
+              </Typography>
+
+              <List sx={{ listStyleType: "circle", pl: 4 }}>
+                <ListItem sx={{ display: "list-item" }}>
+                  <Typography variant="body2">
+                    <Link href={MANUALE_URL}>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Manuale operativo"
+                      >
+                        manuale operativo
+                      </a>
+                    </Link>
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                  <Typography variant="body2">
+                    <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-bundle.yaml">
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="API b2b per le pubbliche amministrazioni"
+                      >
+                        API b2b per le pubbliche amministrazioni
+                      </a>
+                    </Link>
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                  <Typography variant="body2">
+                    <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-bundle.yaml">
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="API b2b per l'avanzamento delle notifiche"
+                      >
+                        API b2b per l'avanzamento delle notifiche
+                      </a>
+                    </Link>
+                  </Typography>
+                </ListItem>
+              </List>
+            </ListItem>
+            <ListItem sx={{ display: "list-item" }}>
+              <Typography variant="body2">
+                <Link
+                  href={"https://docs.pagopa.it/documento-4-ciclo-attivo-pn"}
+                >
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Documento 4 - Ciclo attivo"
+                  >
+                    Documento 4 - Ciclo attivo
+                  </a>
+                </Link>
               </Typography>
             </ListItem>
             <ListItem sx={{ display: "list-item" }}>
@@ -274,7 +362,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               >
                 <Link
                   href={"/static/documents/Modulo preventivo di fornitura.xlsx"}
-                  tabIndex={0}
                   aria-label="Modulo di Profilazione"
                 >
                   Modulo di Profilazione
@@ -292,7 +379,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
                   href={
                     "/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"
                   }
-                  tabIndex={0}
                   aria-label="Modulo Commessa"
                 >
                   Modulo Commessa
@@ -306,7 +392,6 @@ export const paInfoBlocks: Array<IInfoblockData> = [
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    tabIndex={0}
                     aria-label="SLA di servizio"
                   >
                     SLA di servizio
@@ -315,70 +400,14 @@ export const paInfoBlocks: Array<IInfoblockData> = [
               </Typography>
             </ListItem>
           </List>
-          <Typography
-            variant="h6"
-            tabIndex={0}
-            aria-label={"03. Avvia l'integrazione tecnologica"}
-          >
-            03. Avvia l'integrazione tecnologica
-          </Typography>
-          <Typography variant="body2" tabIndex={0} aria-label={infoblock4_5}>
-            Di seguito sono consultabili i materiali necessari per integrare i
-            sistemi dell'ente a SEND:
-          </Typography>
-
-          <List sx={{ listStyleType: "disc", pl: 4 }}>
-            <ListItem sx={{ display: "list-item" }}>
-              <Typography variant="body2">
-                <Link href={MANUALE_URL}>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    tabIndex={0}
-                    aria-label="Manuale operativo"
-                  >
-                    manuale operativo
-                  </a>
-                </Link>
-              </Typography>
-            </ListItem>
-            <ListItem sx={{ display: "list-item" }}>
-              <Typography variant="body2">
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-bundle.yaml">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    tabIndex={0}
-                    aria-label="API b2b per le pubbliche amministrazioni"
-                  >
-                    API b2b per le pubbliche amministrazioni
-                  </a>
-                </Link>
-              </Typography>
-            </ListItem>
-            <ListItem sx={{ display: "list-item" }}>
-              <Typography variant="body2">
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-bundle.yaml">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    tabIndex={0}
-                    aria-label="API b2b per l'avanzamento delle notifiche"
-                  >
-                    API b2b per l'avanzamento delle notifiche
-                  </a>
-                </Link>
-              </Typography>
-            </ListItem>
-          </List>
           <Typography variant="body2" tabIndex={0} aria-label={infoblock4_6}>
             Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
-            <Link href={"https://docs.pagopa.it/faq-enti/"}>
-              <a target="_blank" rel="noopener noreferrer">
+            <Link href="https://docs.pagopa.it/faq-enti">
+              <a target="_blank" rel="noopener noreferrer" aria-label="qui">
                 qui
               </a>
             </Link>{" "}
-            le principali FAQ.{" "}
+            le principali FAQ.
           </Typography>
         </>
       ),

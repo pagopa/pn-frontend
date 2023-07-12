@@ -44,7 +44,7 @@ import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { getConfiguration } from "./services/configuration.service";
+import { getConfiguration } from './services/configuration.service';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -64,8 +64,8 @@ const productsList: Array<ProductSwitchItem> = [
 // E.g. if a user types the URL with the path /non-accessbile, the App component runs just once.
 // In "normal" cases, the SessionGuard initialization forces App to render more than one
 // and therefore to make i18n to be initialized by the time something actually renders.
-// 
-// In turn, adding the ternary operator in the return statement provokes 
+//
+// In turn, adding the ternary operator in the return statement provokes
 // the "too high computational complexity" warning to appear
 // (in fact it jumps to <= 15 to 30!!).
 // The only way I found to prevent it is to split the initialization in a separate React component.
@@ -86,7 +86,7 @@ const App = () => {
     }
   }, [isInitialized]);
 
-  return isInitialized ? <ActualApp /> : <div/>;
+  return isInitialized ? <ActualApp /> : <div />;
 };
 
 const ActualApp = () => {

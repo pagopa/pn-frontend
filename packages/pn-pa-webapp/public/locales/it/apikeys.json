@@ -33,6 +33,7 @@
   "copy-api-key-info": "Copia il codice e inseriscilo nella piattaforma dell'ente.",
   "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
   "empty-action-label": "Genera API Key",
+  "group-id": "Group ID",
   "api-key-copied": "API Key copiata",
   "group-id-copied": "Group ID copiato",
   "groups-id-copied": "Group ID copiati",

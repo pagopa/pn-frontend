@@ -132,6 +132,7 @@ const MobileNotifications = ({
         ) : null;
       },
       hideIfEmpty: true,
+      notWrappedInTypography: true,
     },
   ];
 
