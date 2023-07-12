@@ -28,7 +28,9 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   'getDomicileInfo',
   performThunkAction(async () => {
     const isDefaultAddress = (address: DigitalAddress) => 
-      address.senderId === 'default' || (address.channelType === CourtesyChannelType.IOMSG && address.value !== IOAllowedValues.DISABLED);
+      (address.channelType !== CourtesyChannelType.IOMSG && address.senderId === 'default') 
+      || 
+      (address.channelType === CourtesyChannelType.IOMSG && address.value !== IOAllowedValues.DISABLED);
     const allAddresses = await ContactsApi.getDigitalAddresses();
     return [...allAddresses.legal.filter(isDefaultAddress), ...allAddresses.courtesy.filter(isDefaultAddress)];
   }
