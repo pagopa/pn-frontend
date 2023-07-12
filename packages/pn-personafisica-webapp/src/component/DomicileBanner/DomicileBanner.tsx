@@ -10,12 +10,11 @@ import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
-const messageIndex = Math.floor(Math.random() * 4) + 1;
+const messageIndex = Math.floor(Math.random() * 3) + 1;
 // const messages = [
 //   'detail.domicile_1',
 //   'detail.domicile_2',
 //   'detail.domicile_3',
-//   'detail.domicile_4',
 // ];
 
 const DomicileBanner = () => {
@@ -50,7 +49,7 @@ const DomicileBanner = () => {
         variant="outlined"
         onClose={handleClose}
         data-testid="addDomicileBanner"
-        sx={{ padding: '16px' }}
+        sx={{ padding: 2 }}
       >
         {/* 
           The link has the attribute component="button" since this allows it to be launched by pressing the Enter key,

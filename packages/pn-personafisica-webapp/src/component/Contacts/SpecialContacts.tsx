@@ -87,17 +87,17 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         ),
       },
       {
-        id: CourtesyChannelType.SMS,
-        value: t('special-contacts.phone', { ns: 'recapiti' }),
-        show: courtesyAddresses.some(
-          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
-        ),
-      },
-      {
         id: CourtesyChannelType.EMAIL,
         value: t('special-contacts.mail', { ns: 'recapiti' }),
         show: courtesyAddresses.some(
           (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
+        ),
+      },
+      {
+        id: CourtesyChannelType.SMS,
+        value: t('special-contacts.phone', { ns: 'recapiti' }),
+        show: courtesyAddresses.some(
+          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
         ),
       },
     ],
