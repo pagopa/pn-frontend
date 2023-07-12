@@ -288,6 +288,8 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const visibleDomicileBanner = () => (userHasAdminPermissions && !currentUser.hasGroup && !mandateId);
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -318,7 +320,7 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
-                {userHasAdminPermissions && !currentUser.hasGroup && <DomicileBanner />}
+                {visibleDomicileBanner() && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

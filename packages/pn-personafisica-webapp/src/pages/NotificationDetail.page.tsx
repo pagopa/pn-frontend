@@ -318,7 +318,7 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
-                <DomicileBanner />
+                {!mandateId && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
