@@ -21,9 +21,6 @@ export const dataRegex = {
   // ------------------------------------
   // Carlos Lombardi, 2023.01.23
 
-  phoneNumberAsSearch: /\+\d{8,12}/g,
-  // The only difference with phoneNumber regex is that there is no starting string requirement
-
   name: /^[A-Za-zÀ-ÿ\-'" 0-9\.]+$/,
   lettersAndNumbers: /^[A-Za-z0-9]+$/,
   // this for string that have numbers, characters, - and _
@@ -142,5 +139,5 @@ export function sanitizeString(srt: string): string {
   // remove malicious attributes
   clean(html);
   // return sanitized string
-  return html.body.innerHTML;
+  return html.body.textContent ?? '';
 }

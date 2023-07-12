@@ -19,6 +19,6 @@ describe('String utility', () => {
     const thirdPartyURL = `javascript:alert('Another XSS Attack')`;
     const htmlStr = `<p>${thirdPartyString}</p><p><a href="${thirdPartyURL}">View My Profile</a></p>`;
     const result = sanitizeString(htmlStr);
-    expect(result).toStrictEqual('<p><img src="x"></p><p><a>View My Profile</a></p>');
+    expect(result).toStrictEqual('View My Profile');
   });
 });
