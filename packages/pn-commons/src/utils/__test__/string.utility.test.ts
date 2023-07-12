@@ -17,8 +17,14 @@ describe('String utility', () => {
     // Malicious third-party code
     const thirdPartyString = `<img src=x onerror="alert('XSS Attack')">`;
     const thirdPartyURL = `javascript:alert('Another XSS Attack')`;
-    const htmlStr = `<p>${thirdPartyString}</p><p><a href="${thirdPartyURL}">View My Profile</a></p>`;
+    const htmlStr = `<script>alert("I'm a malicious code")</script><p>Hey! ${thirdPartyString}</p><p><a href="${thirdPartyURL}">View My Profile</a></p>`;
     const result = sanitizeString(htmlStr);
-    expect(result).toStrictEqual('View My Profile');
+    expect(result).toStrictEqual('Hey! View My Profile');
+  });
+
+  it('unescape - special chars', () => {
+    const srt = "Giovanna D'Arco & C.O.";
+    const result = sanitizeString(srt);
+    expect(result).toStrictEqual("Giovanna D'Arco & C.O.");
   });
 });

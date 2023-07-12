@@ -12,8 +12,11 @@ void i18next
     debug: process.env.NODE_ENV === 'development',
     ns: ['common'],
     interpolation: {
-      escape: (srt: string): string => sanitizeString(srt)
-    }
+      // the escape function is called only when we have a dynamic piece of string
+      // i.e Hello my name is {{name}}
+      // this customization is needed to fix pn-2838
+      escape: (srt: string): string => sanitizeString(srt),
+    },
   });
 
 export default i18next;
