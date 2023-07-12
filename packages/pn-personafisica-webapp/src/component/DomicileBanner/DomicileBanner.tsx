@@ -1,5 +1,5 @@
 import { Alert, Box, Link, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,14 +9,8 @@ import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
+import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 
-const messageIndex = Math.floor(Math.random() * 4) + 1;
-// const messages = [
-//   'detail.domicile_1',
-//   'detail.domicile_2',
-//   'detail.domicile_3',
-//   'detail.domicile_4',
-// ];
 
 const DomicileBanner = () => {
   const { t } = useTranslation(['notifiche']);
@@ -24,24 +18,33 @@ const DomicileBanner = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
-  const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);
+  const defaultAddresses = useAppSelector((state: RootState) => state.generalInfoState.defaultAddresses);
   const path = pathname.split('/');
   const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     trackEventByType(TrackEventType.DIGITAL_DOMICILE_BANNER_CLOSE, { source });
     dispatch(closeDomicileBanner());
-  };
-  const handleAddDomicile = () => {
+  }, [closeDomicileBanner]);
+
+  const handleAddDomicile = useCallback(() => {
     trackEventByType(TrackEventType.DIGITAL_DOMICILE_LINK);
     navigate(routes.RECAPITI);
-  };
+  }, []);
+
+  const lackingAddressTypes = useMemo(() => 
+    [LegalChannelType.PEC, CourtesyChannelType.EMAIL, CourtesyChannelType.IOMSG, CourtesyChannelType.SMS]
+    .filter(type => !defaultAddresses.some(address => address.channelType === type))
+  , [defaultAddresses]);
 
   useEffect(() => {
-    if (legalDomicile && legalDomicile.length > 0) {
+    if (lackingAddressTypes.length === 0) {
       dispatch(closeDomicileBanner());
     }
-  }, [legalDomicile]);
+  }, [lackingAddressTypes]);
+
+  const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
+  const messageType = lackingAddressTypes[messageIndex] as string;
 
   return open ? (
     <Box mb={5}>
@@ -55,15 +58,14 @@ const DomicileBanner = () => {
         {/* 
           The link has the attribute component="button" since this allows it to be launched by pressing the Enter key,
           otherwise it is launched through the mouse only.
-          As the Typography renders as a <p> element, I added the stack to let the link be next (and not below) the text.
-          An explicit left margin had to be added to insert a slight separation between text and link.
           Cfr. PN-5528.
         */}
         <Box>
           <Typography variant="body2">
-            {t(`detail.domicile_${messageIndex}`)}{' '}
+            {t(`detail.domicile_${messageType}`)}{' '}
             <Link
               role="button"
+              component="button"
               variant="body2"
               fontWeight={'bold'}
               onClick={handleAddDomicile}
@@ -71,7 +73,7 @@ const DomicileBanner = () => {
               display="inline-block"
               sx={{ cursor: 'pointer' }}
             >
-              {t(`detail.add_domicile_${messageIndex}`)}
+              {t(`detail.add_domicile_${messageType}`)}
             </Link>
           </Typography>
         </Box>

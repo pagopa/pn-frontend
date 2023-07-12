@@ -9,7 +9,7 @@ const generalInfoSlice = createSlice({
   name: 'generalInfoSlice',
   initialState: {
     pendingDelegators: 0,
-    legalDomicile: [] as Array<DigitalAddress>,
+    defaultAddresses: [] as Array<DigitalAddress>,
     domicileBannerOpened: true,
   },
   reducers: {
@@ -22,7 +22,7 @@ const generalInfoSlice = createSlice({
       state.pendingDelegators = action.payload;
     });
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
-      state.legalDomicile = action.payload;
+      state.defaultAddresses = action.payload;
     });
     builder.addMatcher(isAnyOf(acceptDelegation.fulfilled, rejectDelegation.fulfilled), (state) => {
       if (state.pendingDelegators > 0) {
