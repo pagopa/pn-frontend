@@ -1,5 +1,4 @@
-import React from 'react';
-import { disableFormatDetection, filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
+import { filtersApplied, getValidValue, sortArray } from '../genericFunctions.utility';
 
 describe('getValidValue function', () => {
   it('return A value', () => {
@@ -77,19 +76,5 @@ describe('sortArray function', () => {
       { date: '21/10/2023' },
       { date: '11/03/2022' },
     ]);
-  });
-});
-
-describe('disableFormatDetection function', () => {
-  it('linkable text', () => {
-    const mockText = 'mocked text with a phone number +393200000000';
-    expect(disableFormatDetection(mockText)).toStrictEqual(
-      <a
-        href="javascript:() => {};"
-        style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
-      >
-        mocked text with a phone number +393200000000
-      </a>
-    );
   });
 });

@@ -48,22 +48,3 @@ export function sortArray<TArray>(
   });
   /* eslint-enable functional/immutable-data */
 }
-
-/**
- This function overrides format detection of Safari in iOS such automatic conversion of numbers in telephone link numbers.
- This because the old meta tag name="format-detection" content="telephone=no" does not works anymore.
- */
-export function disableFormatDetection<ReactNode>(param: string | ReactNode) {
-  /*
-    Using href="#" makes the browser to reload the webapp, so we are using href="javascript:() => {};" instead.
-  */
-
-  return (
-    <a
-      href="javascript:() => {};"
-      style={{ color: 'inherit', textDecoration: 'inherit', cursor: 'inherit' }}
-    >
-      {param}
-    </a>
-  );
-}
