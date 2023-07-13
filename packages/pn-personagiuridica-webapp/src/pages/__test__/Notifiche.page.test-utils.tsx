@@ -47,7 +47,7 @@ export async function doPrepareTestScenario(isDelegatedPage: boolean = false): P
       },
     })
     .mockReturnValueOnce({ delegators: [] })
-    .mockReturnValueOnce({ legalDomicile: [] });
+    .mockReturnValueOnce({ defaultAddresses: [] });
   // mock action
   const actionSpy = jest.spyOn(actions, 'getReceivedNotifications');
   actionSpy.mockImplementation(mockActionFn);
