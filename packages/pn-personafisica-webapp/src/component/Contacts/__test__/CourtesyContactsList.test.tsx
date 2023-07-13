@@ -61,23 +61,23 @@ describe('CourtesyContactsList Component', () => {
     const textBoxes = await screen.findAllByRole('textbox');
     expect(textBoxes).toHaveLength(2);
 
-    const phoneTextBox = await screen.findByPlaceholderText(
-      /courtesy-contacts.link-phone-placeholder/
-    );
-    expect(phoneTextBox).toEqual(textBoxes[0]);
-    expect(phoneTextBox).toHaveValue('');
-
     const mailTextBox = await screen.findByPlaceholderText(
       /courtesy-contacts.link-email-placeholder/
     );
-    expect(mailTextBox).toEqual(textBoxes[1]);
+    expect(mailTextBox).toEqual(textBoxes[0]);
     expect(mailTextBox).toHaveValue('');
+
+    const phoneTextBox = await screen.findByPlaceholderText(
+      /courtesy-contacts.link-phone-placeholder/
+    );
+    expect(phoneTextBox).toEqual(textBoxes[1]);
+    expect(phoneTextBox).toHaveValue('');
 
     const buttons = await screen.findAllByRole('button');
     expect(buttons[0]).toBeDisabled();
     expect(buttons[1]).toBeDisabled();
-    expect(buttons[0].textContent).toMatch('courtesy-contacts.phone-add');
-    expect(buttons[1].textContent).toMatch('courtesy-contacts.email-add');
+    expect(buttons[0].textContent).toMatch('courtesy-contacts.email-add');
+    expect(buttons[1].textContent).toMatch('courtesy-contacts.phone-add');
   });
 
   it('renders correctly with data in store', async () => {
