@@ -126,7 +126,7 @@ const NotificationDetailTimeline = ({
           timelineComponent
         )}
       </TimelineNotification>
-      <CustomDrawer anchor="left" open={state} onClose={toggleHistoryDrawer}>
+      <CustomDrawer anchor="bottom" open={state} onClose={toggleHistoryDrawer}>
         <Grid
           container
           direction="row"
