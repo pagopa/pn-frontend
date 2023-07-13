@@ -32,7 +32,7 @@ const DomicileBanner = () => {
   }, []);
 
   const lackingAddressTypes = useMemo(() => 
-    [LegalChannelType.PEC, CourtesyChannelType.EMAIL, CourtesyChannelType.SMS]
+    [LegalChannelType.PEC, CourtesyChannelType.EMAIL]
     .filter(type => !defaultAddresses.some(address => address.channelType === type))
   , [defaultAddresses]);
 
@@ -52,7 +52,7 @@ const DomicileBanner = () => {
         variant="outlined"
         onClose={handleClose}
         data-testid="addDomicileBanner"
-        sx={{ padding: '16px' }}
+        sx={{ padding: 2 }}
       >
         {/* 
           The link has the attribute component="button" since this allows it to be launched by pressing the Enter key,
