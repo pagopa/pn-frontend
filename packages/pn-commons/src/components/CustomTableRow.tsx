@@ -8,7 +8,7 @@ type Props = {
 
 const CustomTableRow = ({ label, value, dataTestId }: Props) => (
   <TableRow sx={{
-    paddingBottom: { xs: '1rem' },
+    paddingBottom: { xs: 2 },
     '& td': { border: 'none' },
     verticalAlign: 'top',
     display: { xs: 'flex', lg: 'table-row' },

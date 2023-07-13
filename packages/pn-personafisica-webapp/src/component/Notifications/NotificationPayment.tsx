@@ -457,7 +457,7 @@ const NotificationPayment: React.FC<Props> = ({
     >
       <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
         <Grid container direction="row" justifyContent="space-between">
-          <Grid item xs={8} lg={8} sx={{ marginBottom: '1rem' }}>
+          <Grid item xs={8} lg={8} mb={2}>
             <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
               {data.title}
             </Typography>
