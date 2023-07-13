@@ -288,10 +288,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     const pecInput = form?.querySelector(`input[name="s_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
@@ -325,10 +325,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      2
+      1
     );
     await testInvalidField(
       form!,
@@ -345,10 +345,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      2
+      1
     );
     await testValidFiled(form!, 's_mail', 'mail@valida.ar');
   });
@@ -360,10 +360,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     await testInvalidField(form!, 's_phone', 'telefono-errato', 'courtesy-contacts.valid-phone');
   });
@@ -375,10 +375,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     await testValidFiled(form!, 's_phone', '3494568016');
   });
@@ -402,10 +402,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     await testContactAddition(
       form!,
@@ -424,10 +424,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      2
+      1
     );
     await testContactAddition(
       form!,
