@@ -23,7 +23,7 @@ const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: 
   );
 
   return (
-    <Stack direction="column" alignItems="center" my={4} sx={{ minHeight: '50vh' }}>
+    <Stack direction="column" alignItems="center" my={4} px={4} sx={{ minHeight: '50vh' }}>
       <Box mt={4}>
         <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
           {finalMessage}
