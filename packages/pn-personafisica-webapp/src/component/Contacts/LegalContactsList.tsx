@@ -167,6 +167,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         )}
         <Alert
           tabIndex={0}
+          role="banner"
           aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
           sx={{ mt: 4 }}
           severity="info"

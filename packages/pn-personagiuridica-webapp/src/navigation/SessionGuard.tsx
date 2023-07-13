@@ -4,12 +4,13 @@ import {
   // AppRouteType,
   appStateActions,
   InactivityHandler,
+  LoadingPage,
   SessionModal,
   useErrors,
   useProcess,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
-import { Fragment, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
@@ -100,7 +101,7 @@ const SessionGuardRender = () => {
       </InactivityHandler>
     );
 
-  return isInitialized ? renderIfInitialized() : <Fragment></Fragment>;
+  return isInitialized ? renderIfInitialized() : <LoadingPage renderType="whole" />;
 };
 
 /**
