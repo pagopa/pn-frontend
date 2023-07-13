@@ -19,7 +19,7 @@ jest.mock('react-router-dom', () => ({
 const getReduxInitialState = (domicileBannerOpened: boolean = true) => ({
   generalInfoState: {
     pendingDelegators: 0,
-    legalDomicile: [],
+    defaultAddresses: [],
     domicileBannerOpened,
   },
 });
