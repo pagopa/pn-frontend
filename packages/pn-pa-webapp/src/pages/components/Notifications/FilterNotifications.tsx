@@ -130,6 +130,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     }
   };
 
+  const isOneRegexValid: boolean = IUN_regex.test(formik.values.iunMatch) || dataRegex.pIvaAndFiscalCode.test(formik.values.recipientId);
+  
+
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -155,6 +158,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   if (!showFilters) {
     return <></>;
   }
+
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
@@ -184,6 +188,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
+              isValid={isOneRegexValid}
               cleanFilters={cancelSearch}
               filtersApplied={isFilterapplied(filtersCount)}
               isInitialSearch={isInitialSearch}

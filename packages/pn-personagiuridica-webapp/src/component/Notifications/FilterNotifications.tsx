@@ -136,6 +136,8 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     }
   };
 
+  const isRegexValid: boolean = IUN_regex.test(formik.values.iunMatch);
+
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -191,6 +193,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
+              isValid={isRegexValid}
               cleanFilters={cleanFilters}
               filtersApplied={isFilterApplied(filtersCount)}
               isInitialSearch={isInitialSearch}

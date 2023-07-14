@@ -162,6 +162,8 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     return <></>;
   }
 
+  const isRegexValid = IUN_regex.test(formik.values.iunMatch);
+
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
@@ -191,6 +193,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
+              isValid={isRegexValid}
               cleanFilters={cleanFilters}
               filtersApplied={isFilterApplied(filtersCount)}
               isInitialSearch={isInitialSearch}
