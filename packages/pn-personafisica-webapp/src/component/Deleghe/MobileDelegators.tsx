@@ -24,9 +24,9 @@ const MobileDelegators = () => {
       id: 'status',
       label: t('deleghe.table.status'),
       getLabel(value: string, row: Item) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        const { color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={label} color={color} />;
+          return <Chip label={t(`deleghe.table.${value}`)} color={color} />;
         } else {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }

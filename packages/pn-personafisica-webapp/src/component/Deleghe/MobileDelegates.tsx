@@ -37,8 +37,8 @@ const MobileDelegates = () => {
       id: 'status',
       label: t('deleghe.table.status'),
       getLabel(value: string) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={label} color={color} />;
+        const { color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        return <Chip label={t(`deleghe.table.${value}`)} color={color} />;
       },
       gridProps: {
         xs: 8,

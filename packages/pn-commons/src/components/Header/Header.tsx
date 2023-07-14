@@ -37,12 +37,6 @@ type HeaderProps = {
   isLogged?: boolean;
 };
 
-const pagoPAHeaderLink: RootLinkType = {
-  ...pagoPALink(),
-  label: 'PagoPA S.p.A.',
-  title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
-};
-
 const Header = ({
   onExitAction = () => window.location.assign(''),
   productsList,
@@ -56,6 +50,13 @@ const Header = ({
   eventTrackingCallbackProductSwitch,
   isLogged,
 }: HeaderProps) => {
+  
+  const pagoPAHeaderLink: RootLinkType = {
+    ...pagoPALink(),
+    label: 'PagoPA S.p.A.',
+    title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
+  };
+
   const handleProductSelection = (product: ProductEntity) => {
     if (eventTrackingCallbackProductSwitch) {
       eventTrackingCallbackProductSwitch(product.productUrl);

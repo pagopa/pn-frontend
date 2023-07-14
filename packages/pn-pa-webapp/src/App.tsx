@@ -132,7 +132,7 @@ const ActualApp = () => {
       items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
     }
     return items;
-  }, [role, idOrganization, currentStatus]);
+  }, [role, idOrganization, currentStatus, i18n.language]);
 
   const jwtUser = useMemo(
     () => ({
@@ -159,7 +159,7 @@ const ActualApp = () => {
         linkType: 'internal',
       },
     ],
-    [idOrganization]
+    [idOrganization, i18n.language]
   );
 
   const partyList: Array<PartyEntity> = useMemo(
@@ -177,7 +177,7 @@ const ActualApp = () => {
         // logoUrl: <AccountBalanceIcon />
       },
     ],
-    [role, loggedUserOrganizationParty]
+    [role, loggedUserOrganizationParty, i18n.language]
   );
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);

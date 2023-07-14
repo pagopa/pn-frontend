@@ -100,8 +100,8 @@ const DelegatesByCompany = () => {
         width: '18%',
       },
       getValue(value: string) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={label} color={color} />;
+        const { color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        return <Chip label={t(`deleghe.table.${value}`)} color={color} />;
       },
       cardConfiguration: {
         position: 'header',

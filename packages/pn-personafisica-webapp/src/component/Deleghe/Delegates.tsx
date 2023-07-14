@@ -78,8 +78,8 @@ const Delegates = () => {
       label: t('deleghe.table.status'),
       width: '18%',
       getCellLabel(value: string) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
+        const { color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        return <Chip label={t(`deleghe.table.${value}`)} color={color} />;
       },
     },
     {

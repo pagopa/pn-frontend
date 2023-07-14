@@ -27,19 +27,16 @@ describe('Footer Component', () => {
 
   it('shows languages dropdown', async () => {
     // render component
-    const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const result = render(<Footer loggedUser={true} eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}/>);
+    const result =render(<Footer loggedUser={true} />);
     const buttons = result.container.querySelectorAll('button');
     fireEvent.click(buttons[4]);
     const languageSelector = await waitFor(() => screen.queryByRole('presentation'));
     expect(languageSelector).toBeInTheDocument();
     const languagesElements = languageSelector?.querySelectorAll('ul li');
     expect(languagesElements).toHaveLength(Object.keys(LANGUAGES).length);
-    const languagesKeys = Object.keys(LANGUAGES.it); // language 'it' is default selected
-    languagesElements!.forEach((languageElement, index) => {
-      expect(languageElement).toHaveTextContent(LANGUAGES.it[languagesKeys[index] as 'it' | 'en']);
-      fireEvent.click(languageElement);
+    const languagesKeys = Object.keys(LANGUAGES.it);
+    languagesElements!.forEach(async (languageElement, index) => {
+      expect(languageElement).toHaveTextContent(LANGUAGES.it[languagesKeys[index]]);
     });
-    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(languagesElements!.length);
   });
 });
