@@ -8,7 +8,6 @@ type Props = {
   isInitialSearch: boolean;
   cleanFilters: () => void;
   isInDialog?: boolean;
-  isValid?: boolean;
 };
 
 const FilterNotificationsFormActions = ({
@@ -16,7 +15,6 @@ const FilterNotificationsFormActions = ({
   cleanFilters,
   isInDialog = false,
   isInitialSearch,
-  isValid = true,
 }: Props) => {
   const { t } = useTranslation(['common']);
 
@@ -50,7 +48,7 @@ const FilterNotificationsFormActions = ({
   return (
     <Fragment>
       {isInDialog ? (
-        <CustomMobileDialogAction closeOnClick={isValid}>{confirmAction}</CustomMobileDialogAction>
+        <CustomMobileDialogAction>{confirmAction}</CustomMobileDialogAction>
       ) : (
         confirmAction
       )}
