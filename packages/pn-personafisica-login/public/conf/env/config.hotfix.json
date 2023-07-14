@@ -2,7 +2,7 @@
     "SPID_TEST_ENV_ENABLED": true,
     "SPID_VALIDATOR_ENV_ENABLED": false,
     "SPID_CIE_ENTITY_ID": "xx_servizicie_test",
-    "URL_API_LOGIN": "https://hub-login.spid.hotfix.pn.pagopa.it",
+    "URL_API_LOGIN": "https://hub-login.spid.hotfix.notifichedigitali.it",
     "PF_URL": "https://cittadini.hotfix.notifichedigitali.it",
     "PG_URL": "https://imprese.hotfix.notifichedigitali.it/auth/login",
     "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
