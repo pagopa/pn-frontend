@@ -107,7 +107,7 @@ export default function Layout({
               component="main"
             >
               <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-                {"PROVA MIME TYPE 1"}
+                {"PROVA MIME TYPE 2"}
                 {children}
               </ErrorBoundary>
             </Box>
