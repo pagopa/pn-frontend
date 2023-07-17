@@ -69,7 +69,7 @@ const Delegators = () => {
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      width: '19%',
+      width: '18%',
       getCellLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
