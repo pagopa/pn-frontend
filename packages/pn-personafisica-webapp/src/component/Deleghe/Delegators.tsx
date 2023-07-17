@@ -35,7 +35,7 @@ const Delegators = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
-      width: '18%',
+      width: '13%',
       sortable: true,
       getCellLabel(value: string) {
         return <Typography fontWeight="bold">{value}</Typography>;
@@ -44,7 +44,7 @@ const Delegators = () => {
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
-      width: '13%',
+      width: '11%',
       getCellLabel(value: string) {
         return value;
       },
@@ -52,7 +52,7 @@ const Delegators = () => {
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
-      width: '13%',
+      width: '11%',
       getCellLabel(value: string) {
         return value;
       },
@@ -61,7 +61,7 @@ const Delegators = () => {
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      width: '18%',
+      width: '13%',
       getCellLabel(value: Array<string>) {
         return <OrganizationsList organizations={value} visibleItems={3} />;
       },
@@ -69,7 +69,7 @@ const Delegators = () => {
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      width: '20%',
+      width: '18%',
       getCellLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
