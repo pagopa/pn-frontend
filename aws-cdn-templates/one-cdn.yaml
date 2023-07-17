@@ -444,7 +444,7 @@ Resources:
               worker-src 'none'; \ 
               font-src 'self'; \
               frame-ancestors 'self' ; \
-              img-src 'self' https://assets.cdn.io.italia.it/ https://selcpweupnpgcheckoutsa.z6.web.core.windows.net/ https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ data:"
+              img-src 'self' https://assets.cdn.io.italia.it/ https://selcpweupnpgcheckoutsa.z6.web.core.windows.net/ https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ https://imprese.uat.notifichedigitali.it/ data:"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
           ContentTypeOptions:
