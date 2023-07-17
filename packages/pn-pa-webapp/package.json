@@ -49,8 +49,6 @@
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
-    "cy-open": "cypress open",
-    "cy-run": "cypress run",
     "sonar": "node sonarqube-scanner.js"
   },
   "browserslist": {
@@ -68,7 +66,6 @@
   "devDependencies": {
     "@babel/core": "^7.0.1",
     "@babel/preset-env": "^7.0.0",
-    "@cypress/webpack-preprocessor": "^5.15.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -79,10 +76,8 @@
     "@typescript-eslint/parser": "^5.0.0",
     "axios-mock-adapter": "^1.20.0",
     "babel-loader": "^8.0.2",
-    "cypress": "^10.10.0",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-functional": "^3.7.2",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-react": "^7.26.1",
