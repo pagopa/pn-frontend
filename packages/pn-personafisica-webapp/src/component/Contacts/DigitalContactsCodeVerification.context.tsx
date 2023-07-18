@@ -12,7 +12,6 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
-
 import {
   appStateActions,
   CodeModal,
@@ -21,7 +20,6 @@ import {
   ErrorMessage,
   DisclaimerModal,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { RootState } from '../../redux/store';
@@ -302,14 +300,20 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
                 &nbsp;
               </Typography>
-              <ButtonNaked
+              <Box
                 onClick={() => handleCodeVerification(undefined, true)}
-                sx={{ verticalAlign: 'unset' }}
+                display="inline"
+                sx={{ verticalAlign: 'unset', cursor: 'pointer' }}
               >
-                <Typography color="primary" variant="body2" sx={{ textDecoration: 'underline' }}>
+                <Typography
+                  display="inline"
+                  color="primary"
+                  variant="body2"
+                  sx={{ textDecoration: 'underline' }}
+                >
                   {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
                 </Typography>
-              </ButtonNaked>
+              </Box>
             </Box>
           }
           cancelLabel={t('button.annulla')}
