@@ -82,7 +82,7 @@ const Header = ({
     ((productsList && productsList.length > 0) || (partyList && partyList.length > 0));
 
   return (
-    <AppBar sx={{ boxShadow: (theme) => theme.shadows[0], color: 'inherit' }} position="relative">
+    <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
