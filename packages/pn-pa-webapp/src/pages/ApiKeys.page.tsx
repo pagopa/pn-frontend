@@ -187,14 +187,10 @@ const ApiKeys = () => {
           aria-modal="true"
         >
           <Box
-            sx={{
-              padding: 4,
-              minWidth: isMobile ? '0' : '600px',
-            }}
+            sx={{ minWidth: isMobile ? '0' : '600px' }}
           >
             {modal.view === ModalApiKeyView.VIEW && (
               <ApiKeyModal
-                titleSx={{ marginBottom: isMobile ? 3 : undefined }}
                 title={`API Key ${modal.apiKey?.name}`}
                 subTitle={t('copy-api-key-info')}
                 content={
@@ -220,7 +216,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.BLOCK && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('block-api-key')}
                 subTitle={
                   <Trans i18nKey="block-warning1" values={{ apiKeyName: modal.apiKey?.name }}>
@@ -236,7 +231,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.ENABLE && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('enable-api-key')}
                 subTitle={<Trans>{t('enable-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
                 closeButtonLabel={t('cancel-button')}
@@ -247,7 +241,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.ROTATE && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('rotate-api-key')}
                 subTitle={<Trans>{t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}</Trans>}
                 content={<Typography>{t('rotate-warning2')}</Typography>}
@@ -259,7 +252,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.DELETE && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('delete-api-key')}
                 subTitle={<Trans>{t('delete-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
                 closeButtonLabel={t('cancel-button')}
@@ -270,7 +262,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.VIEW_GROUPS_ID && (
               <ApiKeyModal
-                titleSx={{ marginBottom: isMobile ? 3 : undefined }}
                 title={t('view-groups-id', { apikey: modal.apiKey?.name })}
                 subTitle={t('view-groups-id-message')}
                 subTitleAtBottom

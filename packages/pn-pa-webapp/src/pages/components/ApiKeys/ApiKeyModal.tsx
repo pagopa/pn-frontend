@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
-import { Button, Grid, SxProps, Typography } from '@mui/material';
+import { ReactNode, useMemo } from 'react';
+import { Button, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 export type ApiKeyModalProps = {
-  titleSx: SxProps;
   title: string;
   subTitle?: ReactNode;
   subTitleAtBottom?: boolean;
@@ -14,7 +14,6 @@ export type ApiKeyModalProps = {
 };
 
 const ApiKeyModal = ({
-  titleSx,
   title,
   subTitle,
   subTitleAtBottom = false,
@@ -23,38 +22,60 @@ const ApiKeyModal = ({
   closeModalHandler,
   actionButtonLabel,
   actionHandler,
-}: ApiKeyModalProps) => (
-  <>
-    <Typography variant="h5" sx={titleSx}>
-      {title}
-    </Typography>
-    {subTitle && !subTitleAtBottom && (
-      <Typography data-testid="subtitle-top" variant="body1" sx={{ marginBottom: 3 }}>
-        {subTitle}
-      </Typography>
-    )}
-    {content}
-    {subTitle && subTitleAtBottom && (
-      <Typography data-testid="subtitle-bottom" variant="body1" sx={{ my: 3 }}>
-        {subTitle}
-      </Typography>
-    )}
-    <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-      <Button
-        data-testid="close-modal-button"
-        variant="outlined"
-        onClick={closeModalHandler}
-        sx={{ mr: actionButtonLabel ? 2 : 0 }}
-      >
-        {closeButtonLabel}
-      </Button>
-      {actionButtonLabel && (
-        <Button data-testid="action-modal-button" variant="contained" onClick={actionHandler}>
-          {actionButtonLabel}
-        </Button>
+}: ApiKeyModalProps) => {
+  const isMobile = useIsMobile();
+  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
+  return (
+    <>
+      {title && (
+        <DialogTitle sx={{ p: 4, pb: 2, textAlign: textPosition }}>
+          {title}
+        </DialogTitle>
       )}
-    </Grid>
-  </>
-);
+      <DialogContent sx={{ p: 4, textAlign: textPosition }}>
+        {subTitle && !subTitleAtBottom && (
+          <Typography data-testid="subtitle-top" variant="body1" sx={{ marginBottom: 3 }}>
+            {subTitle}
+          </Typography>
+        )}
+        {content}
+        {subTitle && subTitleAtBottom && (
+          <Typography data-testid="subtitle-bottom" variant="body1" sx={{ my: 3 }}>
+            {subTitle}
+          </Typography>
+        )}
+      </DialogContent>
+      <DialogActions
+        disableSpacing={isMobile}
+        sx={{
+          textAlign: textPosition,
+          flexDirection: isMobile ? 'column-reverse' : 'row',
+          p: 4,
+          pt: 0,
+        }}
+      >
+        <Button
+          data-testid="close-modal-button"
+          variant="outlined"
+          onClick={closeModalHandler}
+          fullWidth={isMobile}
+        >
+          {closeButtonLabel}
+        </Button>
+        {actionButtonLabel && (
+          <Button
+            sx={{ mb: isMobile ? 2 : 0 }}
+            data-testid="action-modal-button"
+            variant="contained"
+            onClick={actionHandler}
+            fullWidth={isMobile}
+          >
+            {actionButtonLabel}
+          </Button>
+        )}
+      </DialogActions>
+    </>
+  );
+};
 
 export default ApiKeyModal;
