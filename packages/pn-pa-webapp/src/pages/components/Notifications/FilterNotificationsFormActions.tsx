@@ -28,6 +28,7 @@ const FilterNotificationsFormActions = ({
   cleanFilters,
   isInDialog = false,
   isInitialSearch,
+
 }: Props) => {
   const classes = useStyles();
   const { t } = useTranslation(['common']);
@@ -60,7 +61,7 @@ const FilterNotificationsFormActions = ({
   return (
     <Fragment>
       {isInDialog ? (
-        <CustomMobileDialogAction closeOnClick>{confirmAction}</CustomMobileDialogAction>
+        <CustomMobileDialogAction >{confirmAction}</CustomMobileDialogAction>
       ) : (
         confirmAction
       )}

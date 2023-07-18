@@ -1,4 +1,4 @@
-import { useEffect, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, Fragment, useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
@@ -77,6 +77,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'notifiche']);
+  const dialogRef = useRef<{toggleOpen: () => void}>(null);
+
 
   const validationSchema = yup.object({
     recipientId: yup
@@ -113,6 +115,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
+      dialogRef.current?.toggleOpen();
     },
   });
 
@@ -128,7 +131,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
       setEndDate(formik.values.endDate);
     }
-  };
+  };  
 
   useEffect(() => {
     void formik.validateForm();
@@ -155,7 +158,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   if (!showFilters) {
     return <></>;
   }
+
+
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
@@ -171,7 +177,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('button.filtra')}>
+      <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody
