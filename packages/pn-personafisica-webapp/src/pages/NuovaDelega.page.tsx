@@ -21,7 +21,6 @@ import {
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { IllusCompleted } from '@pagopa/mui-italia';
-import { makeStyles } from '@mui/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
@@ -54,40 +53,12 @@ import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
 import { getConfiguration } from '../services/configuration.service';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    '& .paperContainer': {
-      boxShadow: 'none',
-    },
-  },
-  direction: {
-    ['@media only screen and (max-width: 576px)']: {
-      direction: 'column',
-    },
-    ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
-      direction: 'row',
-    },
-  },
-  margin: {
-    ['@media only screen and (max-width: 576px)']: {
-      margin: 0,
-    },
-    ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
-      direction: 'auto',
-    },
-  },
-  spaceBetween: {
-    justifyContent: 'space-between',
-  },
-}));
-
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
   fieldError: undefined | string | FormikErrors<TError> | Array<string>
 ) => fieldTouched && fieldError;
 
 const NuovaDelega = () => {
-  const classes = useStyles();
   const { t } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -244,12 +215,12 @@ const NuovaDelega = () => {
   return (
     <LoadingPageWrapper isInitialized>
       {!created && (
-        <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
+        <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumbs}
           <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
             <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
-              <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+              <Paper sx={{ padding: '24px', marginBottom: '20px' }} elevation={0}>
                 <Typography sx={{ fontWeight: 'bold' }}>
                   {t('nuovaDelega.form.personType')}
                 </Typography>

@@ -335,11 +335,7 @@ const PaymentMethods = ({
       >
         {notification.paymentMode !== PaymentModel.NOTHING &&
           notification.recipients.map((recipient) => (
-            <Paper
-              key={recipient.taxId}
-              sx={{ padding: '24px', marginTop: '40px' }}
-              className="paperContainer"
-            >
+            <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
               <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
               </SectionHeading>
@@ -393,7 +389,7 @@ const PaymentMethods = ({
             </Paper>
           ))}
         {notification.paymentMode === PaymentModel.NOTHING && (
-          <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+          <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
             <Trans
               i18nKey="nothing"
               components={[

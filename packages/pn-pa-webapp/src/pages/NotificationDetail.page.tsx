@@ -16,7 +16,6 @@ import {
   Stack,
   Alert,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import {
   // PN-1714
   // NotificationStatus,
@@ -64,16 +63,7 @@ import {
   clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    '& .paperContainer': {
-      boxShadow: 'none',
-    },
-  },
-}));
-
 const NotificationDetail = () => {
-  const classes = useStyles();
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -436,13 +426,13 @@ const NotificationDetail = () => {
   return (
     <>
       {hasNotificationSentApiError && (
-        <Box className={classes.root} sx={{ p: 3 }}>
+        <Box sx={{ p: 3 }}>
           {properBreadcrumb}
           <ApiError onClick={() => fetchSentNotification()} mt={3} />
         </Box>
       )}
       {!hasNotificationSentApiError && (
-        <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
+        <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
           <Grid container direction={direction} spacing={spacing}>
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
@@ -450,7 +440,7 @@ const NotificationDetail = () => {
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
-                  <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                  <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
                     {notification.paymentHistory.length === 1 && (
                       <Typography>{t('payment.subtitle-single', { ns: 'notifiche' })}</Typography>
@@ -464,7 +454,7 @@ const NotificationDetail = () => {
                     />
                   </Paper>
                 )}
-                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={notification.documents}
@@ -474,7 +464,7 @@ const NotificationDetail = () => {
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments}
