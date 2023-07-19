@@ -6,7 +6,7 @@ const setResponseError = (response: number) => (response === 200 ? 'success' : '
 
 export const ApiKeysApi = {
   getApiKeys: (): Promise<Array<ApiKeyDTO>> =>
-    apiClient.get<GetApiKeysResponse>(APIKEY_LIST(), {params: {showVirtualKey: true}}).then((response) => {
+    apiClient.get<GetApiKeysResponse>(APIKEY_LIST(), {params: {showVirtualKey: true, limit: 10, lastKey: "4a52d4d1-6d3c-4c0b-ac10-f9daa7e4b04e"}}).then((response) => {
       if (response.data && response.data.items) {
         return response.data.items;
       }

@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import { useIsMobile, TitleBox, ApiErrorWrapper, CustomPagination, PaginationData, calculatePages } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import * as routes from '../navigation/routes.const';
@@ -16,6 +16,9 @@ import {
 } from '../redux/apiKeys/actions';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import { UserGroup } from '../models/user';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+import { setPagination } from '../redux/apiKeys/reducers';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
@@ -85,6 +88,20 @@ const ApiKeys = () => {
   const { t } = useTranslation(['apikeys']);
 
   const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
+  const pagination = useAppSelector((state: RootState) => state.apiKeysState.pagination);
+
+  const totalElements =
+    pagination.size *
+    (pagination.moreResult
+      ? pagination.nextPagesKey.length + 5
+      : pagination.nextPagesKey.length + 1);
+
+  const pagesToShow: Array<number> = calculatePages(
+    pagination.size,
+    totalElements,
+    Math.min(pagination.nextPagesKey.length + 1, 3),
+    pagination.page + 1
+  );
 
   const fetchApiKeys = useCallback(() => {
     void dispatch(getApiKeys());
@@ -139,6 +156,16 @@ const ApiKeys = () => {
     void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys()));
   };
 
+  // Pagination handlers
+  const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
+    dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
+  };
+
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
+  };
+
   return (
     <Box p={3}>
       <TitleBox
@@ -180,6 +207,18 @@ const ApiKeys = () => {
         mt={3}
       >
         <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
+        {apiKeys.length > 0 && (
+          <CustomPagination
+            paginationData={{
+              size: 5,
+              page: 3,
+              totalElements: apiKeys.length,
+            }}
+            onPageRequest={handleChangePage}
+            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+            pagesToShow={pagesToShow}
+          />
+        )}
 
         <Dialog
           open={modal.view !== ModalApiKeyView.NONE}
