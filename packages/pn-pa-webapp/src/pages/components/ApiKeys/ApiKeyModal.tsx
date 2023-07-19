@@ -28,11 +28,11 @@ const ApiKeyModal = ({
   return (
     <>
       {title && (
-        <DialogTitle sx={{ p: 4, pb: 2, textAlign: textPosition }}>
+        <DialogTitle sx={{ p: isMobile ? 3 : 4, pb: 2, textAlign: textPosition }}>
           {title}
         </DialogTitle>
       )}
-      <DialogContent sx={{ p: 4, textAlign: textPosition }}>
+      <DialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
         {subTitle && !subTitleAtBottom && (
           <Typography data-testid="subtitle-top" variant="body1" sx={{ marginBottom: 3 }}>
             {subTitle}
@@ -50,7 +50,7 @@ const ApiKeyModal = ({
         sx={{
           textAlign: textPosition,
           flexDirection: isMobile ? 'column-reverse' : 'row',
-          p: 4,
+          p: isMobile ? 3 : 4,
           pt: 0,
         }}
       >
