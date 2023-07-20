@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import {
   useIsMobile,
   Prompt,
@@ -29,14 +28,6 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import { GroupStatus, UserGroup } from '../models/user';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
-
-const useStyles = makeStyles(() => ({
-  root: {
-    '& .paperContainer': {
-      boxShadow: 'none',
-    },
-  },
-}));
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
@@ -89,8 +80,6 @@ const NewApiKey = () => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const classes = useStyles();
-
   const handleGroupClick = async (_event: any, value: Array<UserGroup>) => {
     await formik.setFieldValue('groups', value);
     await formik.setFieldTouched('groups', true, false);
@@ -107,7 +96,7 @@ const NewApiKey = () => {
           eventTrackingCallbackConfirm={() => {}} // impostare eventi tracking previsti
         >
           <Box p={3}>
-            <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
+            <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
               <Grid item xs={12} lg={8}>
                 <PnBreadcrumb
                   linkRoute={routes.API_KEYS}
@@ -127,7 +116,7 @@ const NewApiKey = () => {
                     * {tkp('required-fields')}
                   </Typography>
                   <Box>
-                    <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+                    <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
                       <SectionHeading>{tkp('other-info')}</SectionHeading>
                       <Box sx={{ marginTop: '24px' }}>
                         <Typography fontWeight="bold">{tkp('form-label-name')}*</Typography>

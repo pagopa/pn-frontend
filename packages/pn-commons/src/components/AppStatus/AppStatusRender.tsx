@@ -148,7 +148,12 @@ export const AppStatusRender = (props: Props) => {
           {currentStatus && <AppStatusBar status={currentStatus} />}
           {currentStatus && (
             <Stack direction="row" justifyContent="center" data-testid="appStatus-lastCheck">
-              <Typography variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
+              <Typography
+                variant="caption"
+                sx={{ mt: 2, color: 'text.secondary' }}
+                tabIndex={0}
+                aria-label={lastCheckLegend}
+              >
                 {lastCheckLegend}
               </Typography>
             </Stack>
@@ -156,7 +161,12 @@ export const AppStatusRender = (props: Props) => {
         </ApiErrorWrapper>
 
         {/* Titolo elenco di downtime */}
-        <Typography variant="h6" sx={{ mt: '36px', mb: 2 }}>
+        <Typography
+          variant="h6"
+          sx={{ mt: '36px', mb: 2 }}
+          tabIndex={0}
+          aria-label={downtimeListTitle}
+        >
           {downtimeListTitle}
         </Typography>
 

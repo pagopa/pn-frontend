@@ -29,7 +29,7 @@ const NewNotificationCard = ({
   return (
     <Fragment>
       {!noPaper && (
-        <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+        <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
           {title && <SectionHeading>{title}</SectionHeading>}
           {subtitle && <Typography variant="body1">{subtitle}</Typography>}
           <Box sx={{ marginTop: '20px' }}>{children}</Box>

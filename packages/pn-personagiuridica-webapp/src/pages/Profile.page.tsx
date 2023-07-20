@@ -17,8 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { RECAPITI } from '../navigation/routes.const';
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Profile = () => {
 
       <Grid container direction="row" spacing={2}>
         <Grid item lg={8} xs={12}>
-          <Paper sx={{ padding: '24px', marginTop: '20px' }} className="paperContainer">
+          <Paper sx={{ padding: '24px', marginTop: '20px' }} elevation={0}>
             <Grid container direction="row">
               <Grid item lg={2} xs={5}>
                 <Typography variant="body2">{t('profile.name', { ns: 'profilo' })}</Typography>
