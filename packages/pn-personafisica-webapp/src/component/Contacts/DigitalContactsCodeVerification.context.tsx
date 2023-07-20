@@ -20,6 +20,7 @@ import {
   ErrorMessage,
   DisclaimerModal,
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { RootState } from '../../redux/store';
@@ -300,10 +301,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
                 &nbsp;
               </Typography>
-              <Box
+              <ButtonNaked
+                component={Box}
                 onClick={() => handleCodeVerification(undefined, true)}
-                display="inline"
-                sx={{ verticalAlign: 'unset', cursor: 'pointer' }}
+                sx={{ verticalAlign: 'unset', cursor: 'pointer', display: 'inline' }}
               >
                 <Typography
                   display="inline"
@@ -313,7 +314,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 >
                   {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
                 </Typography>
-              </Box>
+              </ButtonNaked>
             </Box>
           }
           cancelLabel={t('button.annulla')}
