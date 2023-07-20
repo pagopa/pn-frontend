@@ -10,7 +10,7 @@ const initialState = {
     size: 10,
     page: 0,
     moreResult: false,
-  }
+  },
 };
 
 /* eslint-disable functional/immutable-data */
@@ -27,11 +27,11 @@ const apiKeysSlice = createSlice({
       }
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getApiKeys.fulfilled, (state, action) => {
-      state.apiKeys = action.payload;
+      state.apiKeys = action.payload.items;
     });
   },
 });

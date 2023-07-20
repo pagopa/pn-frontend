@@ -2,7 +2,14 @@ import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, TitleBox, ApiErrorWrapper, CustomPagination, PaginationData, calculatePages } from '@pagopa-pn/pn-commons';
+import {
+  useIsMobile,
+  TitleBox,
+  ApiErrorWrapper,
+  CustomPagination,
+  PaginationData,
+  calculatePages,
+} from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import * as routes from '../navigation/routes.const';
@@ -104,7 +111,7 @@ const ApiKeys = () => {
   );
 
   const fetchApiKeys = useCallback(() => {
-    void dispatch(getApiKeys());
+    void dispatch(getApiKeys({ limit: 10 }));
   }, []);
 
   type modalType = {
@@ -133,27 +140,27 @@ const ApiKeys = () => {
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
-      () => void dispatch(getApiKeys())
+      () => void dispatch(getApiKeys({ limit: 10 }))
     );
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
-      () => void dispatch(getApiKeys())
+      () => void dispatch(getApiKeys({ limit: 10 }))
     );
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
-      () => void dispatch(getApiKeys())
+      () => void dispatch(getApiKeys({ limit: 10 }))
     );
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys()));
+    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys({ limit: 10 })));
   };
 
   // Pagination handlers

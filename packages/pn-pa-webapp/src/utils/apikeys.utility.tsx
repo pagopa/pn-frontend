@@ -2,7 +2,13 @@ import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiKey, ApiKeyDTO, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
+import {
+  ApiKey,
+  ApiKeyStatus,
+  ApiKeyStatusHistory,
+  ApiKeys,
+  ApiKeysResponse,
+} from '../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../models/user';
 
 function LocalizeStatus(
@@ -95,35 +101,35 @@ export function getApiKeyStatusInfos(
   }
 }
 
-export const apikeysMapper = (
-  apikeys: Array<ApiKeyDTO>,
-  groups: Array<UserGroup>
-): Array<ApiKey> => {
+export const apikeysMapper = (apikeys: ApiKeysResponse, groups: Array<UserGroup>): ApiKeys => {
   const getGroup = (group: string): UserGroup =>
     groups.filter((g: UserGroup) => g.name === group)[0];
 
-  const apikeysMapped: Array<ApiKey> = [];
+  const apikeysMapped: ApiKeys = { ...apikeys, items: [] };
 
-  apikeys.forEach((apikey) => {
-    const mappedGroups = apikey.groups.map(
-      (g): UserGroup => ({
-        ...(getGroup(g)
-          ? getGroup(g)
-          : {
-              id: 'no-id',
-              name: g,
-              description: g,
-              status: GroupStatus.SUSPENDED,
-            }),
-      })
-    );
+  if (apikeys?.items) {
+    apikeys.items.forEach((apikey) => {
+      const mappedGroups = apikey.groups.map(
+        (g): UserGroup => ({
+          ...(getGroup(g)
+            ? getGroup(g)
+            : {
+                id: 'no-id',
+                name: g,
+                description: g,
+                status: GroupStatus.SUSPENDED,
+              }),
+        })
+      );
 
-    const mappedApikey: ApiKey = {
-      ...apikey,
-      groups: mappedGroups,
-    };
-    // eslint-disable-next-line functional/immutable-data
-    apikeysMapped.push(mappedApikey);
-  });
+      const mappedApikey: ApiKey = {
+        ...apikey,
+        groups: mappedGroups,
+      };
+      // eslint-disable-next-line functional/immutable-data
+      apikeysMapped.items.push(mappedApikey);
+    });
+  }
+
   return apikeysMapped;
 };
