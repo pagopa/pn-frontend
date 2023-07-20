@@ -44,7 +44,7 @@ import {
 import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import { getConfiguration } from "../../services/configuration.service";
+import { getConfiguration } from '../../services/configuration.service';
 
 interface Props {
   iun: string;
@@ -162,7 +162,7 @@ const NotificationPayment: React.FC<Props> = ({
         .then(() => {
           setLoading(() => false);
         })
-        .catch(() => { });
+        .catch(() => {});
     } else if (paymentHistory && paymentHistory.length > 0) {
       setLoading(() => false);
     } else {
@@ -455,7 +455,7 @@ const NotificationPayment: React.FC<Props> = ({
       reloadAction={fetchPaymentInfo}
       mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
     >
-      <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
+      <Paper sx={{ p: 3, mb: '1rem' }} elevation={0}>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8} mb={2}>
             <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>

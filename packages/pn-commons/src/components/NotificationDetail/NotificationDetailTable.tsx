@@ -12,7 +12,7 @@ type Props = {
  * @param rows data to show
  */
 const NotificationDetailTable = ({ rows }: Props) => (
-  <TableContainer component={Paper} sx={{ px: 3, py: { xs: 3, lg: 2 } }} className="paperContainer">
+  <TableContainer component={Paper} sx={{ px: 3, py: { xs: 3, lg: 2 } }} elevation={0}>
     <Table
       aria-label={getLocalizedOrDefaultLabel(
         'notifications',

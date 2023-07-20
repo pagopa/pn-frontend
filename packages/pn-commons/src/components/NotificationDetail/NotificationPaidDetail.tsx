@@ -30,9 +30,9 @@ type PaymentTableProps = {
 const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) => (
   <TableContainer
     component={Paper}
-    className="paperContainer"
     sx={{ backgroundColor: 'background.default', p: 3 }}
     data-testid="paymentTable"
+    elevation={0}
   >
     <Table
       aria-label={getLocalizedOrDefaultLabel(

@@ -48,7 +48,7 @@ const FilterNotificationsFormActions = ({
   return (
     <Fragment>
       {isInDialog ? (
-        <CustomMobileDialogAction closeOnClick>{confirmAction}</CustomMobileDialogAction>
+        <CustomMobileDialogAction>{confirmAction}</CustomMobileDialogAction>
       ) : (
         confirmAction
       )}

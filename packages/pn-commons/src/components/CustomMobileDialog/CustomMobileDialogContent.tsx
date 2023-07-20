@@ -1,4 +1,4 @@
-import { forwardRef, ReactElement, ReactNode, Ref } from "react";
+import { forwardRef, ReactElement, ReactNode, Ref, useImperativeHandle } from "react";
 import { Dialog, DialogTitle, Grid, Slide, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { TransitionProps } from "@mui/material/transitions";
@@ -51,12 +51,16 @@ const Transition = forwardRef(function Transition(
  * @param children the react component for the body and the actions
  * @param title title to show in the dialog header
  */
-const CustomMobileDialogContent = ({children, title}: Props) => {
+const CustomMobileDialogContent = forwardRef<{ toggleOpen: () => void }, Props>(({ children, title }: Props, ref) => {
   const { open, toggleOpen } = useCustomMobileDialogContext();
 
   const handleClose = () => {
     toggleOpen();
   }
+
+  useImperativeHandle(ref, () => ({
+    toggleOpen,
+  }));
 
   return (
     <MobileDialog
@@ -93,6 +97,6 @@ const CustomMobileDialogContent = ({children, title}: Props) => {
       {children}
     </MobileDialog>
   );
-};
+});
 
 export default CustomMobileDialogContent;

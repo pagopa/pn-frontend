@@ -3,7 +3,6 @@ import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from '
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import {
   LegalFactId,
   NotificationDetailDocuments,
@@ -49,14 +48,6 @@ import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    '& .paperContainer': {
-      boxShadow: 'none',
-    },
-  },
-}));
-
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
 type LocationState = {
@@ -64,7 +55,6 @@ type LocationState = {
 };
 
 const NotificationDetail = () => {
-  const classes = useStyles();
   const { id, mandateId } = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -288,18 +278,19 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
-  const visibleDomicileBanner = () => (userHasAdminPermissions && !currentUser.hasGroup && !mandateId);
+  const visibleDomicileBanner = () =>
+    userHasAdminPermissions && !currentUser.hasGroup && !mandateId;
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
-        <Box className={classes.root} sx={{ p: 3 }}>
+        <Box sx={{ p: 3 }}>
           {properBreadcrumb}
           <ApiError onClick={fetchReceivedNotification} mt={3} />
         </Box>
       )}
       {!hasNotificationReceivedApiError && (
-        <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
+        <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
           <Grid
             container
@@ -321,7 +312,7 @@ const NotificationDetail = () => {
                   />
                 )}
                 {visibleDomicileBanner() && <DomicileBanner />}
-                <Paper sx={{ p: 3 }} className="paperContainer">
+                <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={isCancelled ? [] : notification.documents}
@@ -331,7 +322,7 @@ const NotificationDetail = () => {
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
                 </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
@@ -351,7 +342,7 @@ const NotificationDetail = () => {
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
                 />
                 {/* TODO decommentare con pn-841
-            <Paper sx={{ p: 3 }} className="paperContainer">
+            <Paper sx={{ p: 3 }} elevation={0}>
               <HelpNotificationDetails 
                 title="Hai bisogno di aiuto?"
                 subtitle="Se hai domande relative al contenuto della notifica, contatta il"

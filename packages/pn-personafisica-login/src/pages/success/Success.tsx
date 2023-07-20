@@ -14,7 +14,7 @@ import {
 import { storageAarOps, storageTypeOps } from '../../utils/storage';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import { getConfiguration } from "../../services/configuration.service";
+import { getConfiguration } from '../../services/configuration.service';
 
 type DisambiguationAccountProps = {
   type: AppRouteType;
@@ -45,8 +45,7 @@ const DisambiguationAccount: React.FC<DisambiguationAccountProps> = ({
       <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
         <Box
           sx={{
-            boxShadow:
-              '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+            boxShadow: (theme) => theme.shadows[8],
             borderRadius: '16px',
             p: 4,
             backgroundColor: boxBackgroundColor,

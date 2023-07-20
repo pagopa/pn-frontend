@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -80,6 +80,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const classes = useStyles();
+  const dialogRef = useRef<{toggleOpen: () => void}>(null);
 
   const emptyValues = {
     startDate: formatToTimezoneString(tenYearsAgo),
@@ -119,6 +120,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       }
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
+      dialogRef.current?.toggleOpen();
     },
   });
 
@@ -178,7 +180,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('button.filtra')}>
+      <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody

@@ -24,7 +24,7 @@ const legalAddresses: Array<DigitalAddress> = [
     senderId: 'default',
     channelType: LegalChannelType.PEC,
     value: 'mocked@mail.it',
-    pecValid: true
+    pecValid: true,
   },
 ];
 
@@ -185,7 +185,7 @@ describe('LegalContactsList Component', () => {
         unwrap: () => Promise.resolve({ code: 'verified' }),
       }))
     );
-    fireEvent.click(dialogButtons![2]);
+    fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);

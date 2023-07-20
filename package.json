@@ -28,11 +28,7 @@
     "clean:nx": "rm -rf node_modules **/**/node_modules",
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
-    "version-preid": "lerna version --no-push --conventional-commits --preid RC",
-    "cy-open:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn cypress open",
-    "cy-run:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn cypress run",
-    "cy-open:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn cypress open",
-    "cy-run:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn cypress run"
+    "version-preid": "lerna version --no-push --conventional-commits --preid RC"
   },
   "workspaces": {
     "packages": [
