@@ -53,6 +53,7 @@ export enum ModalApiKeyView {
 
 export interface GetApiKeysResponse {
   items: Array<ApiKeyDTO>;
+  total: number;
 }
 
 export interface GetNewApiKeyResponse {
@@ -68,4 +69,17 @@ export interface NewApiKeyBE {
 export interface ApiKeyStatusBE {
   apiKey: string;
   status: ApiKeySetStatus;
+}
+export interface ApiKeyParam {
+  limit?: number;
+  lastKey?: string;
+  lastUpdate?: string;
+}
+
+export interface ApiKeyFull<T> {
+  items: Array<T>;
+  limit?: number;
+  lastKey?: string;
+  lastUpdate?: string;
+  total: number;
 }

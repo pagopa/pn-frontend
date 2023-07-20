@@ -87,9 +87,9 @@ const ApiKeys = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['apikeys']);
 
-  const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
+  const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys.items);
   const pagination = useAppSelector((state: RootState) => state.apiKeysState.pagination);
-
+  
   const totalElements =
     pagination.size *
     (pagination.moreResult

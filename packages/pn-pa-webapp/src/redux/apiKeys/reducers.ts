@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ApiKey } from '../../models/ApiKeys';
+import { ApiKey, ApiKeyFull } from '../../models/ApiKeys';
 import { getApiKeys } from './actions';
 
 const initialState = {
   loading: false,
-  apiKeys: [] as Array<ApiKey>,
+  apiKeys: {} as ApiKeyFull<ApiKey>,
   pagination: {
     nextPagesKey: [] as Array<string>,
     size: 10,
