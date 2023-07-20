@@ -4,11 +4,14 @@ import { getApiKeys } from './actions';
 
 const initialState = {
   loading: false,
-  apiKeys: {} as ApiKeyFull<ApiKey>,
+  apiKeys: {
+    items: [] as Array<ApiKey>,
+    total: 0 as number,
+  } as ApiKeyFull<ApiKey>,
   pagination: {
     nextPagesKey: [] as Array<string>,
-    size: 10,
-    page: 0,
+    size: 10 as number,
+    page: 0 as number,
     moreResult: false,
   }
 };
@@ -31,7 +34,8 @@ const apiKeysSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getApiKeys.fulfilled, (state, action) => {
-      state.apiKeys = action.payload;
+      state.apiKeys = action.payload; 
+      state.pagination.size = action.payload.limit || 10;
     });
   },
 });
