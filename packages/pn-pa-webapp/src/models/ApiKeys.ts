@@ -20,13 +20,6 @@ export interface ApiKey {
   statusHistory: Array<ApiKeyStatusHistory>;
 }
 
-export interface ApiKeys {
-  items: Array<ApiKey>;
-  total?: number;
-  lastKey?: string;
-  lastUpdate?: string;
-}
-
 export interface ApiKeyStatusHistory {
   status: ApiKeyStatus;
   changedByDenomination: string;
