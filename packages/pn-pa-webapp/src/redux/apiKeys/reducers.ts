@@ -16,7 +16,6 @@ const initialState = {
     }>,
     size: 10,
     page: 0,
-    moreResult: false,
   },
 };
 
@@ -30,7 +29,6 @@ const apiKeysSlice = createSlice({
       if (state.pagination.size !== action.payload.size) {
         // reset pagination
         state.pagination.nextPagesKey = [];
-        state.pagination.moreResult = false;
       }
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
@@ -42,12 +40,16 @@ const apiKeysSlice = createSlice({
       if (action.payload.lastKey && action.payload.lastUpdate) {
         const pageKey = {
           lastKey: action.payload.lastKey,
-          lastUpdate: action.payload.lastUpdate
+          lastUpdate: action.payload.lastUpdate,
         };
-        if (!state.pagination.nextPagesKey.includes(pageKey)) {
+        if (
+          state.pagination.nextPagesKey.findIndex(
+            (el) => el.lastKey !== pageKey.lastKey && el.lastUpdate !== pageKey.lastUpdate
+          ) === -1
+        ) {
           state.pagination.nextPagesKey.push(pageKey);
-        };
-      };
+        }
+      }
     });
   },
 });

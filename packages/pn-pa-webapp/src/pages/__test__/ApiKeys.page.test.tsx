@@ -1,7 +1,8 @@
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import React from 'react';
 import * as redux from 'react-redux';
-import { ApiKey } from '../../models/ApiKeys';
+import { ApiKeys as ApiKeysModel } from '../../models/ApiKeys';
+import { UserGroup } from '../../models/user';
 import { mockApiKeysForFE } from '../../redux/apiKeys/__test__/test-utils';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/apiKeys/actions';
@@ -36,12 +37,17 @@ describe('ApiKeys Page', () => {
 
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
-  
-  const initialState = (apiKeys: Array<ApiKey>) => ({
+
+  const initialState = (apiKeys: ApiKeysModel<UserGroup>) => ({
     preloadedState: {
       apiKeysState: {
         loading: false,
         apiKeys,
+        pagination: {
+          size: 10,
+          page: 0,
+          nextPagesKey: [],
+        },
       },
     },
   });
@@ -63,7 +69,7 @@ describe('ApiKeys Page', () => {
 
   it('renders the page', async () => {
     await act(async () => {
-      result = render(<ApiKeys />, initialState([]));
+      result = render(<ApiKeys />, initialState({ items: [], total: 0 }));
     });
     expect(result?.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
   });
@@ -77,7 +83,7 @@ describe('ApiKeys Page', () => {
 
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith();
+    expect(mockActionFn).toBeCalledWith({ limit: 10 });
 
     const button = result?.queryByTestId('generateApiKey');
     expect(button).toBeInTheDocument();

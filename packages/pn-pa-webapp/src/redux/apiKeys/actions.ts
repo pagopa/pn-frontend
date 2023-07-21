@@ -17,7 +17,7 @@ export const getApiKeys = createAsyncThunk<ApiKeys<UserGroup>, ApiKeyParam | und
   performThunkAction(async (param?: ApiKeyParam) => {
     const apikeys = await ApiKeysApi.getApiKeys(param);
     const groups = await NotificationsApi.getUserGroups();
-    return { ...apikeys, item: apikeysMapper(apikeys.items, groups) };
+    return { ...apikeys, items: apikeysMapper(apikeys.items, groups) };
   })
 );
 
