@@ -1,12 +1,5 @@
 import { UserGroup } from './user';
 
-export interface ApiKeysResponse {
-  items: Array<ApiKeyDTO>;
-  total?: number;
-  lastKey?: string;
-  lastUpdate?: string;
-}
-
 export interface ApiKeyDTO {
   id: string;
   name: string;

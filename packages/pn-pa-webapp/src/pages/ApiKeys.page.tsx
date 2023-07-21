@@ -146,27 +146,27 @@ const ApiKeys = () => {
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
-      () => void dispatch(getApiKeys({ limit: 10 }))
+      () => void dispatch(getApiKeys())
     );
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
-      () => void dispatch(getApiKeys({ limit: 10 }))
+      () => void dispatch(getApiKeys())
     );
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
-      () => void dispatch(getApiKeys({ limit: 10 }))
+      () => void dispatch(getApiKeys())
     );
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys({ limit: 10 })));
+    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys()));
   };
 
   // Pagination handlers
