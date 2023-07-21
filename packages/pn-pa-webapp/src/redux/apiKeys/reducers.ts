@@ -6,12 +6,13 @@ const initialState = {
   loading: false,
   apiKeys: {
     items: [] as Array<ApiKey>,
-    total: 0 as number,
+    total: 0,
   } as ApiKeyFull<ApiKey>,
   pagination: {
     nextPagesKey: [] as Array<string>,
-    size: 10 as number,
-    page: 0 as number,
+    lastUpdate: [] as Array <string>,
+    size: 10,
+    page: 0,
     moreResult: false,
   }
 };
@@ -26,6 +27,7 @@ const apiKeysSlice = createSlice({
       if (state.pagination.size !== action.payload.size) {
         // reset pagination
         state.pagination.nextPagesKey = [];
+        state.pagination.lastUpdate = [];
         state.pagination.moreResult = false;
       }
       state.pagination.size = action.payload.size;
@@ -34,8 +36,11 @@ const apiKeysSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getApiKeys.fulfilled, (state, action) => {
-      state.apiKeys = action.payload; 
-      state.pagination.size = action.payload.limit || 10;
+      state.apiKeys = action.payload;
+      if (action.payload.lastKey && action.payload.lastUpdate) {
+        state.pagination.nextPagesKey.push(action.payload.lastKey);
+        state.pagination.lastUpdate.push(action.payload.lastUpdate);
+      };
     });
   },
 });

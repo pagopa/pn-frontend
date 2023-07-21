@@ -87,15 +87,14 @@ const ApiKeys = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['apikeys']);
 
-  const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys.items);
+  const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
   const pagination = useAppSelector((state: RootState) => state.apiKeysState.pagination);
-  
+
   const totalElements =
     pagination.size *
     (pagination.moreResult
       ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
-
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
@@ -104,8 +103,15 @@ const ApiKeys = () => {
   );
 
   const fetchApiKeys = useCallback(() => {
-    void dispatch(getApiKeys());
-  }, []);
+    const params = {
+      limit: pagination.size,
+      lastKey:
+        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
+      lastUpdate:
+        pagination.page === 0 ? undefined : pagination.lastUpdate[pagination.page - 1]
+    };
+    void dispatch(getApiKeys(params));
+  }, [pagination.size, pagination.page]);
 
   type modalType = {
     view: ModalApiKeyView;
@@ -119,7 +125,7 @@ const ApiKeys = () => {
   };
 
   const handleModalClick = (view: ModalApiKeyView, apiKeyId: number) => {
-    setModal({ view, apiKey: apiKeys[apiKeyId] });
+    setModal({ view, apiKey: apiKeys.items[apiKeyId] });
   };
 
   const handleNewApiKeyClick = () => {
@@ -206,13 +212,13 @@ const ApiKeys = () => {
         mainText={t('error-fecth-api-keys')}
         mt={3}
       >
-        <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
-        {apiKeys.length > 0 && (
+        <DesktopApiKeys apiKeys={apiKeys.items} handleModalClick={handleModalClick} />
+        {apiKeys.items.length > 0 && (
           <CustomPagination
             paginationData={{
-              size: 5,
-              page: 3,
-              totalElements: apiKeys.length,
+              size: pagination.size,
+              page: pagination.page,
+              totalElements,
             }}
             onPageRequest={handleChangePage}
             eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
