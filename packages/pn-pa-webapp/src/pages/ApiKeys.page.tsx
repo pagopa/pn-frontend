@@ -97,11 +97,7 @@ const ApiKeys = () => {
   const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
   const pagination = useAppSelector((state: RootState) => state.apiKeysState.pagination);
 
-  const totalElements =
-    pagination.size *
-    (pagination.moreResult
-      ? pagination.nextPagesKey.length + 5
-      : pagination.nextPagesKey.length + 1);
+  const totalElements = apiKeys.total;
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
