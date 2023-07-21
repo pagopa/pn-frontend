@@ -46,6 +46,8 @@ export enum TrackEventType {
   USER_NAV_ITEM = 'USER_NAV_ITEM',
   FOOTER_ACCESSIBILITY = 'FOOTER_ACCESSIBILITY',
   FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH',
+  APIKEYS_TABLE_PAGINATION = 'APIKEYS_TABLE_PAGINATION',
+  APIKEYS_TABLE_SIZE = 'APIKEYS_TABLE_SIZE'
 }
 
 export const events: EventsType = {
@@ -229,4 +231,12 @@ export const events: EventsType = {
     category: 'footer',
     action: 'click on app language option',
   },
+  [TrackEventType.APIKEYS_TABLE_PAGINATION]: {
+    category: 'apikeys',
+    action: 'table pagination'
+  },
+  [TrackEventType.APIKEYS_TABLE_SIZE]: {
+    category: 'apikeys',
+    action: 'table rows per page',
+  }
 };

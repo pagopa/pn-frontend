@@ -8,7 +8,6 @@ import { newApiKeyForBE } from '../../../redux/NewApiKey/__test__/test-utils';
 import { ApiKeySetStatus } from '../../../models/ApiKeys';
 
 describe('Api keys api tests', () => {
-
   // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
@@ -27,7 +26,7 @@ describe('Api keys api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysFromBE);
     const res = await ApiKeysApi.getApiKeys();
-    expect(res).toStrictEqual(mockApiKeysFromBE.items);
+    expect(res).toStrictEqual(mockApiKeysFromBE);
   });
 
   it('createNewApiKey', async () => {

@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiKey, ApiKeyDTO, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
+import { ApiKey, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../models/user';
 
 function LocalizeStatus(
@@ -96,13 +96,13 @@ export function getApiKeyStatusInfos(
 }
 
 export const apikeysMapper = (
-  apikeys: Array<ApiKeyDTO>,
+  apikeys: Array<ApiKey<string>>,
   groups: Array<UserGroup>
-): Array<ApiKey> => {
+): Array<ApiKey<UserGroup>> => {
   const getGroup = (group: string): UserGroup =>
     groups.filter((g: UserGroup) => g.name === group)[0];
 
-  const apikeysMapped: Array<ApiKey> = [];
+  const apikeysMapped: Array<ApiKey<UserGroup>> = [];
 
   apikeys.forEach((apikey) => {
     const mappedGroups = apikey.groups.map(
@@ -118,7 +118,7 @@ export const apikeysMapper = (
       })
     );
 
-    const mappedApikey: ApiKey = {
+    const mappedApikey: ApiKey<UserGroup> = {
       ...apikey,
       groups: mappedGroups,
     };
