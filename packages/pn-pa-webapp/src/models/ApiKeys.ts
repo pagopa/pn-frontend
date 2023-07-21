@@ -10,7 +10,7 @@ export interface ApiKey<T> {
 
 export interface ApiKeys<T> {
   items: Array<ApiKey<T>>;
-  total?: number;
+  total: number;
   lastKey?: string;
   lastUpdate?: string;
 }
