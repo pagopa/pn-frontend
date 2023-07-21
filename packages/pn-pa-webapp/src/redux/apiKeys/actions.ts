@@ -1,7 +1,8 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiKeysApi } from '../../api/apiKeys/ApiKeys.api';
-import { ApiKey, ApiKeyFull, ApiKeyParam, ApiKeyStatusBE } from '../../models/ApiKeys';
+import { ApiKeyParam, ApiKeyStatusBE, ApiKeys } from '../../models/ApiKeys';
+import { UserGroup } from '../../models/user';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { apikeysMapper } from '../../utils/apikeys.utility';
 
@@ -11,12 +12,12 @@ export enum API_KEYS_ACTIONS {
   DELETE_API_KEY = 'deleteApiKey',
 }
 
-export const getApiKeys = createAsyncThunk<ApiKeyFull<ApiKey>, ApiKeyParam | undefined>(
+export const getApiKeys = createAsyncThunk<ApiKeys<UserGroup>, ApiKeyParam | undefined>(
   API_KEYS_ACTIONS.GET_API_KEYS,
   performThunkAction(async (param?: ApiKeyParam) => {
     const apikeys = await ApiKeysApi.getApiKeys(param);
     const groups = await NotificationsApi.getUserGroups();
-    return {...apikeys, item: apikeysMapper(apikeys.items, groups)};
+    return { ...apikeys, item: apikeysMapper(apikeys.items, groups) };
   })
 );
 
