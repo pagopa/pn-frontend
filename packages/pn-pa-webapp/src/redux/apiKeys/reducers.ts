@@ -10,8 +10,10 @@ const initialState = {
     total: 0,
   } as ApiKeys<UserGroup>,
   pagination: {
-    nextPagesKey: [] as Array<string>,
-    lastUpdate: [] as Array<string>,
+    nextPagesKey: [] as Array<{
+      lastKey: string;
+      lastUpdate: string;
+    }>,
     size: 10,
     page: 0,
     moreResult: false,
@@ -28,7 +30,6 @@ const apiKeysSlice = createSlice({
       if (state.pagination.size !== action.payload.size) {
         // reset pagination
         state.pagination.nextPagesKey = [];
-        state.pagination.lastUpdate = [];
         state.pagination.moreResult = false;
       }
       state.pagination.size = action.payload.size;
@@ -39,9 +40,14 @@ const apiKeysSlice = createSlice({
     builder.addCase(getApiKeys.fulfilled, (state, action) => {
       state.apiKeys = action.payload;
       if (action.payload.lastKey && action.payload.lastUpdate) {
-        state.pagination.nextPagesKey.push(action.payload.lastKey);
-        state.pagination.lastUpdate.push(action.payload.lastUpdate);
-      }
+        const pageKey = {
+          lastKey: action.payload.lastKey,
+          lastUpdate: action.payload.lastUpdate
+        };
+        if (!state.pagination.nextPagesKey.includes(pageKey)) {
+          state.pagination.nextPagesKey.push(pageKey);
+        };
+      };
     });
   },
 });

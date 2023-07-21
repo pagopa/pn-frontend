@@ -108,8 +108,7 @@ const ApiKeys = () => {
   const fetchApiKeys = useCallback(() => {
     const params = {
       limit: pagination.size,
-      lastKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-      lastUpdate: pagination.page === 0 ? undefined : pagination.lastUpdate[pagination.page - 1],
+      ...pagination.nextPagesKey[pagination.page - 1]
     };
     void dispatch(getApiKeys(params));
   }, [pagination.size, pagination.page]);
@@ -165,12 +164,12 @@ const ApiKeys = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
+    trackEventByType(TrackEventType.APIKEYS_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   const handleEventTrackingCallbackPageSize = (pageSize: number) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
+    trackEventByType(TrackEventType.APIKEYS_TABLE_SIZE, { pageSize });
   };
 
   return (
