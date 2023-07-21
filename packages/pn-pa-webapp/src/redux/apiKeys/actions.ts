@@ -9,7 +9,7 @@ export enum API_KEYS_ACTIONS {
   GET_API_KEYS = 'getApiKeys',
   SET_API_KEY_STATUS = 'setApiKeyStatus',
   DELETE_API_KEY = 'deleteApiKey',
-};
+}
 
 export const getApiKeys = createAsyncThunk<ApiKeyFull<ApiKey>, ApiKeyParam | undefined>(
   API_KEYS_ACTIONS.GET_API_KEYS,
