@@ -112,17 +112,15 @@ const ApiKeys = () => {
   const fetchApiKeys = useCallback(() => {
     const params = {
       limit: pagination.size,
-      lastKey:
-        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-      lastUpdate:
-        pagination.page === 0 ? undefined : pagination.lastUpdate[pagination.page - 1]
+      lastKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
+      lastUpdate: pagination.page === 0 ? undefined : pagination.lastUpdate[pagination.page - 1],
     };
     void dispatch(getApiKeys(params));
   }, [pagination.size, pagination.page]);
 
   type modalType = {
     view: ModalApiKeyView;
-    apiKey?: ApiKey;
+    apiKey?: ApiKey<UserGroup>;
   };
 
   const [modal, setModal] = useState<modalType>({ view: ModalApiKeyView.NONE });

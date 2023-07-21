@@ -1,16 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ApiKey, ApiKeyFull } from '../../models/ApiKeys';
+import { ApiKeys } from '../../models/ApiKeys';
+import { UserGroup } from '../../models/user';
 import { getApiKeys } from './actions';
 
 const initialState = {
   loading: false,
   apiKeys: {
-    items: [] as Array<ApiKey>,
+    items: [],
     total: 0,
-  } as ApiKeyFull<ApiKey>,
+  } as ApiKeys<UserGroup>,
   pagination: {
     nextPagesKey: [] as Array<string>,
-    lastUpdate: [] as Array <string>,
+    lastUpdate: [] as Array<string>,
     size: 10,
     page: 0,
     moreResult: false,
@@ -40,7 +41,7 @@ const apiKeysSlice = createSlice({
       if (action.payload.lastKey && action.payload.lastUpdate) {
         state.pagination.nextPagesKey.push(action.payload.lastKey);
         state.pagination.lastUpdate.push(action.payload.lastUpdate);
-      };
+      }
     });
   },
 });
