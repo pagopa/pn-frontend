@@ -3,25 +3,25 @@ export enum DelegationStatus {
   PENDING = 'pending',
 }
 
-export function getDelegationStatusLabelAndColor(status: 'active' | 'pending'): {
+export function getDelegationStatusKeyAndColor(status: 'active' | 'pending'): {
   color: 'warning' | 'success' | 'info' | undefined;
-  label: string;
+  key: string;
 } {
   switch (status) {
     case DelegationStatus.ACTIVE:
       return {
         color: 'success',
-        label: 'Attiva',
+        key: `deleghe.table.${DelegationStatus.ACTIVE}`,
       };
     case DelegationStatus.PENDING:
       return {
         color: 'warning',
-        label: 'In attesa di conferma',
+        key: `deleghe.table.${DelegationStatus.PENDING}`,
       };
     default:
       return {
         color: 'info',
-        label: 'Non definito',
+        key: '',
       };
   }
 }

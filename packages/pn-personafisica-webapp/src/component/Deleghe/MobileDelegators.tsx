@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
@@ -24,9 +24,9 @@ const MobileDelegators = () => {
       id: 'status',
       label: t('deleghe.table.status'),
       getLabel(value: string, row: Item) {
-        const { color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={t(`deleghe.table.${value}`)} color={color} />;
+          return <Chip label={t(key)} color={color} />;
         } else {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }

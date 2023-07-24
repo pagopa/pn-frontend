@@ -34,12 +34,12 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   );
   const defaultAddress = useMemo(
     () => legalAddresses.find((a) => a.senderId === 'default' && a.pecValid === true),
-    [legalAddresses, i18n.language]
+    [legalAddresses]
   );
 
   const verifyingAddress = useMemo(
     () => legalAddresses.find((a) => a.senderId === 'default' && a.pecValid === false),
-    [legalAddresses, i18n.language]
+    [legalAddresses]
   );
 
   const validationSchema = yup.object({

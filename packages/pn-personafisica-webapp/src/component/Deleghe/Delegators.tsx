@@ -13,7 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { setDelegatorsSorting } from '../../redux/delegation/reducers';
 import { DelegatorsColumn } from '../../models/Deleghe';
@@ -71,9 +71,9 @@ const Delegators = () => {
       label: t('deleghe.table.status'),
       width: '18%',
       getCellLabel(value: string, row: Item) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={t(`deleghe.table.${value}`)} color={color} data-testid={`statusChip-${label}`} />;
+          return <Chip label={t(key)} color={color} />;
         } else {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }

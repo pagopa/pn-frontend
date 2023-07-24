@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
 import { trackEventByType } from '../../utils/mixpanel';
@@ -78,8 +78,8 @@ const Delegates = () => {
       label: t('deleghe.table.status'),
       width: '18%',
       getCellLabel(value: string) {
-        const { color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={t(`deleghe.table.${value}`)} color={color} />;
+        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
+        return <Chip label={t(key)} color={color} />;
       },
     },
     {
