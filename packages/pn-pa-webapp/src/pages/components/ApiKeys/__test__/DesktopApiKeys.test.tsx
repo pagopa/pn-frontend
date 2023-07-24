@@ -15,7 +15,7 @@ const mockHandleModalClick = jest.fn();
 
 const defaultProps = {
   handleModalClick: mockHandleModalClick,
-  apiKeys: mockApiKeysForFE,
+  apiKeys: mockApiKeysForFE.items,
 };
 
 describe('DesktopApiKeys component', () => {

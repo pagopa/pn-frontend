@@ -1,6 +1,10 @@
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../../models/ApiKeys';
 import { TooltipApiKey, apikeysMapper, getApiKeyStatusInfos } from '../apikeys.utility';
-import { mockGroups, mockApiKeysForFE, mockApiKeysFromBE } from '../../redux/apiKeys/__test__/test-utils';
+import {
+  mockGroups,
+  mockApiKeysForFE,
+  mockApiKeysFromBE,
+} from '../../redux/apiKeys/__test__/test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -9,7 +13,6 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
 
 describe('test apikeys utilities', () => {
   const statusHistory: Array<ApiKeyStatusHistory> = [
@@ -37,11 +40,11 @@ describe('test apikeys utilities', () => {
       label: 'status.enabled',
       description: 'status.enabled-description',
       tooltip: TooltipApiKey(statusHistory),
-    })
+    });
   });
 
   it('test apikeysMapper', () => {
     const mappedApikeys = apikeysMapper(mockApiKeysFromBE.items, mockGroups);
-    expect(mappedApikeys).toStrictEqual(mockApiKeysForFE);
+    expect(mappedApikeys).toStrictEqual(mockApiKeysForFE.items);
   });
 });

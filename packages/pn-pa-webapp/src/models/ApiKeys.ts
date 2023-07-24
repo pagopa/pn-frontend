@@ -1,23 +1,18 @@
-import { UserGroup } from "./user";
-
-export interface ApiKeyDTO {
+export interface ApiKey<T> {
   id: string;
   name: string;
   value: string;
   lastUpdate: string;
-  groups: Array<string>;
+  groups: Array<T>;
   status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
 
-export interface ApiKey {
-  id: string;
-  name: string;
-  value: string;
-  lastUpdate: string;
-  groups: Array<UserGroup>;
-  status: ApiKeyStatus;
-  statusHistory: Array<ApiKeyStatusHistory>;
+export interface ApiKeys<T> {
+  items: Array<ApiKey<T>>;
+  total: number;
+  lastKey?: string;
+  lastUpdate?: string;
 }
 
 export interface ApiKeyStatusHistory {
@@ -26,7 +21,14 @@ export interface ApiKeyStatusHistory {
   date: string;
 }
 
-export type ApiKeyColumn = 'name' | 'value' | 'lastUpdate' | 'groups' | 'status' | 'history' | 'contextMenu';
+export type ApiKeyColumn =
+  | 'name'
+  | 'value'
+  | 'lastUpdate'
+  | 'groups'
+  | 'status'
+  | 'history'
+  | 'contextMenu';
 
 export enum ApiKeySetStatus {
   BLOCK = 'BLOCK',
@@ -51,10 +53,6 @@ export enum ModalApiKeyView {
   VIEW_GROUPS_ID = 'VIEW_GROUPS_ID',
 }
 
-export interface GetApiKeysResponse {
-  items: Array<ApiKeyDTO>;
-}
-
 export interface GetNewApiKeyResponse {
   id: string;
   apiKey: string;
@@ -68,4 +66,10 @@ export interface NewApiKeyBE {
 export interface ApiKeyStatusBE {
   apiKey: string;
   status: ApiKeySetStatus;
+}
+
+export interface ApiKeyParam {
+  limit?: number;
+  lastKey?: string;
+  lastUpdate?: string;
 }
