@@ -101,56 +101,44 @@ export const preLoginLinks = (
       title: getLocalizedOrDefaultLabel('common', 'footer.resources', 'Risorse'),
       links: [
         {
-          label: 'Informativa Privacy',
+          ...getFooterLinkLabels('privacy-info', 'Informativa Privacy'),
           href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
-          ariaLabel: `${getLocalizedOrDefaultLabel(
-            'common',
-            'footer.go-to',
-            'Vai al link'
-          )}: Informativa Privacy`,
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('certifications', 'Certificazioni'),
           href: 'https://www.pagopa.it/it/certificazioni/',
-          ariaLabel: 'Vai al link: Certificazioni',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('security', 'Sicurezza delle informazioni'),
           href: 'https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/',
-          ariaLabel: 'Vai al link: Sicurezza delle informazioni',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('personal-data', 'Diritto alla protezione dei dati personali'),
           href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
-          ariaLabel: 'Vai al link: Diritto alla protezione dei dati personali',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('cookie', 'Preferenze Cookie'),
-          ariaLabel: 'Vai al link: Preferenze Cookie',
           onClick: () => OneTrust.ToggleInfoDisplay(),
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('company', 'Società trasparente'),
           href: 'https://pagopa.portaleamministrazionetrasparente.it',
-          ariaLabel: 'Vai al link: Società trasparente',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('disclosure', 'Responsible Disclosure Policy'),
           href: 'https://www.pagopa.it/it/responsible-disclosure-policy/',
-          ariaLabel: 'Vai al link: Responsible Disclosure Policy',
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('321-model', 'Modello 231'),
           href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls',
           linkType: 'internal',
-          ariaLabel: 'Vai al link: Modello 231',
         },
       ],
     },
