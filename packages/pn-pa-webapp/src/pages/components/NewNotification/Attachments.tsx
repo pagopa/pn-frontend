@@ -36,10 +36,8 @@ type AttachmentBoxProps = {
   onFieldTouched: (e: ChangeEvent) => void;
   onFileUploaded: (
     id: string,
-    file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
+    file?: File,
+    sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
@@ -88,10 +86,9 @@ const AttachmentBox = ({
         key={`${new Date()}`}
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, name, size) => onFileUploaded(id, file, sha256, name, size)}
+        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
-        fileFormat="uint8Array"
         calcSha256
         fileUploaded={fileUploaded}
       />
@@ -120,10 +117,8 @@ type Props = {
 };
 
 const emptyFileData = {
-  uint8Array: undefined,
+  data: undefined,
   sha256: { hashBase64: '', hashHex: '' },
-  name: '',
-  size: 0,
 };
 
 const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument => ({
@@ -157,11 +152,9 @@ const Attachments = ({
       yup.object({
         file: yup
           .object({
-            size: yup.number().required(),
-            name: yup.string().required(),
-            uint8Array: yup
+            data: yup
               .mixed()
-              .test((input) => input instanceof Uint8Array)
+              .test((input) => input instanceof File)
               .required(),
             sha256: yup
               .object({
@@ -189,6 +182,20 @@ const Attachments = ({
     []
   );
 
+  const storeAttachments = (documents: Array<NewNotificationDocument>) => {
+    dispatch(
+      setAttachments({
+        documents: documents.map((v) => ({
+          ...v,
+          file: {
+            ...v.file,
+          },
+          id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+        })),
+      })
+    );
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -198,14 +205,7 @@ const Attachments = ({
         if (!IS_PAYMENT_ENABLED && isCompleted) {
           onConfirm();
         } else {
-          dispatch(
-            setAttachments({
-              documents: values.documents.map((v) => ({
-                ...v,
-                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-              })),
-            })
-          );
+          storeAttachments(values.documents);
           // upload attachments
           dispatch(uploadNotificationAttachment(values.documents))
             .unwrap()
@@ -226,20 +226,16 @@ const Attachments = ({
   const fileUploadedHandler = async (
     index: number,
     id: string,
-    file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
+    file?: File,
+    sha256?: { hashBase64: string; hashHex: string }
   ) => {
     await formik.setFieldValue(
       id,
       {
         ...formik.values.documents[index],
         file: {
-          size,
-          uint8Array: file,
+          data: file,
           sha256,
-          name,
         },
         ref: {
           key: '',
@@ -290,28 +286,14 @@ const Attachments = ({
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
-      dispatch(
-        setAttachments({
-          documents: formik.values.documents.map((v) => ({
-            ...v,
-            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-          })),
-        })
-      );
+      storeAttachments(formik.values.documents);
       onPreviousStep();
     }
   };
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      dispatch(
-        setAttachments({
-          documents: formik.values.documents.map((v) => ({
-            ...v,
-            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-          })),
-        })
-      );
+      storeAttachments(formik.values.documents);
     },
   }));
 
@@ -346,9 +328,7 @@ const Attachments = ({
                 : undefined
             }
             onFieldTouched={handleChangeTouched}
-            onFileUploaded={(id, file, sha256, name, size) =>
-              fileUploadedHandler(i, id, file, sha256, name, size)
-            }
+            onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
             onRemoveFile={(id) => removeFileHandler(id, i)}
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />

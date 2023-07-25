@@ -15,6 +15,7 @@ import {
 
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
+    id: '0',
     idx: 0,
     taxId: 'MRARSS90P08H501Q',
     firstName: 'Mario',
@@ -32,6 +33,7 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     foreignState: 'foreignState',
   },
   {
+    id: '1',
     idx: 1,
     taxId: 'SRAGLL00P48H501U',
     firstName: 'Sara',
@@ -56,7 +58,7 @@ const newNotificationDocument: NewNotificationDocument = {
   name: 'mocked-name',
   contentType: 'text/plain',
   file: {
-    uint8Array: new Uint8Array(),
+    data: new File([''], 'mocked-name', { type: 'text/plain' }),
     sha256: {
       hashBase64: 'mocked-sha256',
       hashHex: '',
@@ -74,7 +76,7 @@ const newNotificationPagoPa: NewNotificationDocument = {
   name: 'mocked-name',
   contentType: 'text/plain',
   file: {
-    uint8Array: new Uint8Array(),
+    data: new File([''], 'mocked-name', { type: 'text/plain' }),
     sha256: {
       hashBase64: 'mocked-pa-sha256',
       hashHex: '',
@@ -92,7 +94,7 @@ const newNotificationF24Standard: NewNotificationDocument = {
   name: 'mocked-name',
   contentType: 'text/plain',
   file: {
-    uint8Array: new Uint8Array(),
+    data: new File([''], 'mocked-name', { type: 'text/plain' }),
     sha256: {
       hashBase64: 'mocked-f24standard-sha256',
       hashHex: '',
@@ -111,12 +113,12 @@ export const newNotification: NewNotification = {
   recipients: newNotificationRecipients,
   documents: [newNotificationDocument],
   payment: {
-    'MRARSS90P08H501Q': {
-      pagoPaForm: {...newNotificationPagoPa},
+    MRARSS90P08H501Q: {
+      pagoPaForm: { ...newNotificationPagoPa },
     },
-    'SRAGLL00P48H501U': {
-      pagoPaForm: {...newNotificationPagoPa},
-      f24standard: {...newNotificationF24Standard},
+    SRAGLL00P48H501U: {
+      pagoPaForm: { ...newNotificationPagoPa },
+      f24standard: { ...newNotificationF24Standard },
     },
   },
   physicalCommunicationType: '' as PhysicalCommunicationType,
@@ -173,15 +175,15 @@ export const newNotificationDTO: NewNotificationDTO = {
         type: DigitalDomicileType.PEC,
         address: 'mocked@mail.it',
       },
-      physicalAddress:  {
-         address: "address 2",
-         addressDetails: undefined,
-         at: undefined,
-         foreignState: "foreignState",
-         municipality: "municipality",
-         municipalityDetails: undefined,
-         province: "province",
-         zip: "zip",
+      physicalAddress: {
+        address: 'address 2',
+        addressDetails: undefined,
+        at: undefined,
+        foreignState: 'foreignState',
+        municipality: 'municipality',
+        municipalityDetails: undefined,
+        province: 'province',
+        zip: 'zip',
       },
       payment: {
         creditorTaxId: '12345678910',
@@ -207,7 +209,7 @@ export const newNotificationDTO: NewNotificationDTO = {
             key: '',
             versionToken: '',
           },
-        }
+        },
       },
     },
   ],
@@ -222,7 +224,7 @@ export const newNotificationDTO: NewNotificationDTO = {
         key: '',
         versionToken: '',
       },
-    }
+    },
   ],
   physicalCommunicationType: '' as PhysicalCommunicationType,
   group: '',
@@ -232,23 +234,26 @@ export const newNotificationDTO: NewNotificationDTO = {
 
 export const newNotificationWithEmptyAddress: NewNotification = {
   ...newNotification,
-  recipients: [{
-    idx: 0,
-    taxId: 'MRARSS90P08H501Q',
-    firstName: 'Mario',
-    lastName: 'Rossi',
-    recipientType: RecipientType.PF,
-    creditorTaxId: '12345678910',
-    noticeCode: '123456789123456788',
-    type: DigitalDomicileType.PEC,
-    digitalDomicile: 'mocked@mail.it',
-    address: '',
-    houseNumber: '',
-    zip: 'zip',
-    municipality: 'municipality',
-    province: 'province',
-    foreignState: 'foreignState',
-  }],
+  recipients: [
+    {
+      id: '0',
+      idx: 0,
+      taxId: 'MRARSS90P08H501Q',
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      recipientType: RecipientType.PF,
+      creditorTaxId: '12345678910',
+      noticeCode: '123456789123456788',
+      type: DigitalDomicileType.PEC,
+      digitalDomicile: 'mocked@mail.it',
+      address: '',
+      houseNumber: '',
+      zip: 'zip',
+      municipality: 'municipality',
+      province: 'province',
+      foreignState: 'foreignState',
+    },
+  ],
 };
 
 export const newNotificationDTOWithUndefinedAddress: NewNotificationDTO = {
@@ -278,6 +283,6 @@ export const newNotificationDTOWithUndefinedAddress: NewNotificationDTO = {
           },
         },
       },
-    }
+    },
   ],
 };

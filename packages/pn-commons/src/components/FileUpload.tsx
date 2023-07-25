@@ -14,7 +14,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
+import { calcSha256String } from '../utils/file.utility';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import CustomTooltip from './CustomTooltip';
 
@@ -22,19 +22,13 @@ type Props = {
   uploadText: string;
   vertical?: boolean;
   accept: string;
-  uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
-  onFileUploaded: (
-    file: any,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
-  ) => void;
+  uploadFn?: (file: File, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
+  onFileUploaded: (file: File, sha256?: { hashBase64: string; hashHex: string }) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
   calcSha256?: boolean;
-  fileFormat?: 'base64' | 'uint8Array';
-  fileUploaded?: any;
+  fileUploaded?: { file: { data?: File; sha256?: { hashBase64: string; hashHex: string } } };
 };
 
 enum UploadStatus {
@@ -45,7 +39,7 @@ enum UploadStatus {
 }
 
 type UploadState = {
-  file: any;
+  file: File;
   status: UploadStatus;
   error: string;
   sha256: string;
@@ -83,7 +77,7 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         status: UploadStatus.UPLOADED,
         error: '',
         sha256: action.payload.file.sha256.hashHex,
-        name: action.payload.name ? action.payload.name : '',
+        file: action.payload.file.data,
       };
     case 'FILE_UPLOADED':
       return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
@@ -119,7 +113,6 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param isSending flag for sending status
  * @param sx style to be addded to the component
  * @param calcSha256 flag to calculate the sha256
- * @param fileFormat format of the file after loading
  * @param fileUploaded file previously uploaded
  * @returns
  */
@@ -133,10 +126,9 @@ const FileUpload = ({
   isSending,
   sx,
   calcSha256 = false,
-  fileFormat,
   fileUploaded,
 }: Props) => {
-  const [data, dispatch] = useReducer(reducer, {
+  const [fileData, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
     file: null,
     error: '',
@@ -144,18 +136,17 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists =
-    fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null;
+  const attachmentExists = fileUploaded?.file && fileUploaded?.file.data;
 
   const containerStyle = useMemo(() => {
-    if (data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) {
+    if (fileData.status === UploadStatus.IN_PROGRESS || fileData.status === UploadStatus.SENDING) {
       return {
         backgroundColor: 'white',
         '& > div': {
           height: '24px',
         },
       };
-    } else if (data.status === UploadStatus.UPLOADED) {
+    } else if (fileData.status === UploadStatus.UPLOADED) {
       return {
         border: '1px solid',
         borderColor: 'primary.main',
@@ -167,29 +158,23 @@ const FileUpload = ({
       borderColor: 'primary.main',
       backgroundColor: 'primaryAction.selected',
     };
-  }, [data.status]);
+  }, [fileData.status]);
 
   const chooseFileHandler = () => {
     (uploadInputRef.current as any).click();
   };
 
-  const uploadFile = async (file: any) => {
-    if (file && file.type && accept.indexOf(file.type) > -1) {
+  const uploadFile = async (file: File) => {
+    if (file?.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
       try {
         /* eslint-disable-next-line functional/no-let */
-        let fileFormatted = file;
-        if (fileFormat === 'base64') {
-          fileFormatted = await calcBase64String(file);
-        } else if (fileFormat === 'uint8Array') {
-          fileFormatted = await calcUnit8Array(file);
-        }
         const sha256 = calcSha256 ? await calcSha256String(file) : undefined;
         if (uploadFn) {
-          await uploadFn(fileFormatted, sha256);
+          await uploadFn(file, sha256);
         }
         dispatch({ type: 'FILE_UPLOADED', payload: sha256?.hashHex });
-        onFileUploaded(fileFormatted, sha256, file.name, file.size);
+        onFileUploaded(file, sha256);
       } catch {
         dispatch({ type: 'UPLOAD_IN_ERROR' });
       }
@@ -232,14 +217,14 @@ const FileUpload = ({
   };
 
   useEffect(() => {
-    if (data.status !== UploadStatus.UPLOADED && data.status !== UploadStatus.SENDING) {
+    if (fileData.status !== UploadStatus.UPLOADED && fileData.status !== UploadStatus.SENDING) {
       return;
     }
     dispatch(isSending ? { type: 'IS_SENDING' } : { type: 'FILE_UPLOADED' });
   }, [isSending]);
 
   useEffect(() => {
-    if (attachmentExists && data.status !== UploadStatus.UPLOADED) {
+    if (attachmentExists && fileData.status !== UploadStatus.UPLOADED) {
       dispatch({ type: 'FILE_PREVIOUSLY_UPLOADED', payload: fileUploaded });
     }
   }, [attachmentExists]);
@@ -253,7 +238,7 @@ const FileUpload = ({
       onDragLeave={handleDragLeave}
       component="div"
     >
-      {data.status === UploadStatus.TO_UPLOAD && (
+      {fileData.status === UploadStatus.TO_UPLOAD && (
         <OrientedBox vertical={vertical}>
           <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
           <Typography display="inline" variant="body2">
@@ -279,10 +264,11 @@ const FileUpload = ({
           />
         </OrientedBox>
       )}
-      {(data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) && (
+      {(fileData.status === UploadStatus.IN_PROGRESS ||
+        fileData.status === UploadStatus.SENDING) && (
         <OrientedBox vertical={vertical}>
           <Typography display="inline" variant="body2">
-            {data.status === UploadStatus.IN_PROGRESS
+            {fileData.status === UploadStatus.IN_PROGRESS
               ? getLocalizedOrDefaultLabel(
                   'common',
                   'upload-file.loading',
@@ -295,7 +281,7 @@ const FileUpload = ({
           </Typography>
         </OrientedBox>
       )}
-      {data.status === UploadStatus.UPLOADED && (
+      {fileData.status === UploadStatus.UPLOADED && (
         <Fragment>
           <Box
             display="flex"
@@ -305,29 +291,29 @@ const FileUpload = ({
           >
             <Box display="flex" justifyContent="center" alignItems="center">
               <AttachFileIcon color="primary" />
-              <Typography color="primary">{data.file.name}</Typography>
+              <Typography color="primary">{fileData.file.name}</Typography>
               <Typography fontWeight={600} sx={{ marginLeft: '30px' }}>
-                {(data.file.size / 1024).toFixed(2)}&nbsp;KB
+                {(fileData.file.size / 1024).toFixed(2)}&nbsp;KB
               </Typography>
             </Box>
             <IconButton
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
-                'notifiche',
-                'new-notification.steps.attachments.remove-attachment',
-                'Rimuovi allegato'
+                'common',
+                'attachments.remove-attachment',
+                'Elimina allegato'
               )}
             >
               <CloseIcon />
             </IconButton>
           </Box>
-          {data.sha256 && (
+          {fileData.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
               <Typography display="inline" fontWeight={700}>
                 {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
               </Typography>
               <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
-                {data.sha256}
+                {fileData.sha256}
               </Typography>
               <CustomTooltip
                 openOnClick
@@ -346,9 +332,9 @@ const FileUpload = ({
           )}
         </Fragment>
       )}
-      {data.error && (
+      {fileData.error && (
         <Alert severity="error" sx={{ marginTop: '10px' }}>
-          {data.error}
+          {fileData.error}
         </Alert>
       )}
     </Box>

@@ -17,8 +17,7 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const file = new Blob(['mocked content'], { type: 'application/pdf' });
-(file as any).name = 'Mocked file';
+const file = new File(['mocked content'], 'Mocked file', { type: 'application/pdf' });
 
 function uploadDocument(elem: ParentNode) {
   const fileInput = elem.querySelector('[data-testid="fileInput"]');
@@ -45,7 +44,7 @@ describe('PaymentMethods Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // render component
     await act(async () => {
-      const notification = {...newNotification, payment: undefined};
+      const notification = { ...newNotification, payment: undefined };
       result = render(
         <PaymentMethods
           notification={notification}
@@ -110,49 +109,48 @@ describe('PaymentMethods Component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(newNotification.recipients.reduce((obj: { [key: string]: PaymentObject }, r, index) => {
-        obj[r.taxId] = {
-          pagoPaForm: {
-            id: index === 0 ? 'MRARSS90P08H501Q-pagoPaDoc' : 'SRAGLL00P48H501U-pagoPaDoc',
-            idx: 0,
-            name: 'pagopa-notice',
-            file: {
-              name: 'Mocked file',
-              sha256: {
-                hashBase64: 'mocked-hasBase64',
-                hashHex: 'mocked-hashHex'
+      expect(mockActionFn).toBeCalledWith(
+        newNotification.recipients.reduce((obj: { [key: string]: PaymentObject }, r, index) => {
+          obj[r.taxId] = {
+            pagoPaForm: {
+              id: index === 0 ? 'MRARSS90P08H501Q-pagoPaDoc' : 'SRAGLL00P48H501U-pagoPaDoc',
+              idx: 0,
+              name: 'pagopa-notice',
+              file: {
+                sha256: {
+                  hashBase64: 'mocked-hasBase64',
+                  hashHex: 'mocked-hashHex',
+                },
+                data: file,
               },
-              size: 14,
-              uint8Array: new Uint8Array()
-            },
-            contentType: 'application/pdf',
-            ref: {
-              key: '',
-              versionToken: ''
-            }
-          },
-          f24standard: {
-            id: index === 0 ? 'MRARSS90P08H501Q-f24standardDoc' : 'SRAGLL00P48H501U-f24standardDoc',
-            idx: 0,
-            name: 'pagopa-notice-f24',
-            file: {
-              name: 'Mocked file',
-              sha256: {
-                hashBase64: 'mocked-hasBase64',
-                hashHex: 'mocked-hashHex'
+              contentType: 'application/pdf',
+              ref: {
+                key: '',
+                versionToken: '',
               },
-              size: 14,
-              uint8Array: new Uint8Array()
             },
-            contentType: 'application/pdf',
-            ref: {
-              key: '',
-              versionToken: ''
-            }
-          },
-        };
-        return obj;
-      }, {}));
+            f24standard: {
+              id:
+                index === 0 ? 'MRARSS90P08H501Q-f24standardDoc' : 'SRAGLL00P48H501U-f24standardDoc',
+              idx: 0,
+              name: 'pagopa-notice-f24',
+              file: {
+                sha256: {
+                  hashBase64: 'mocked-hasBase64',
+                  hashHex: 'mocked-hashHex',
+                },
+                data: file,
+              },
+              contentType: 'application/pdf',
+              ref: {
+                key: '',
+                versionToken: '',
+              },
+            },
+          };
+          return obj;
+        }, {})
+      );
     });
   });
 });

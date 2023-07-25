@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { performThunkAction, calcUnit8Array } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
@@ -14,20 +14,25 @@ import { newNotificationMapper } from '../../utils/notification.utility';
 import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export enum NEW_NOTIFICATION_ACTIONS {
-  GET_USER_GROUPS = 'getUserGroups'
+  GET_USER_GROUPS = 'getUserGroups',
 }
 export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
   NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS,
   performThunkAction((status: GroupStatus | undefined) => NotificationsApi.getUserGroups(status))
 );
 
-const createPayloadToUpload = (item: NewNotificationDocument): UploadDocumentParams => ({
-  id: item.id,
-  key: item.name,
-  contentType: item.contentType,
-  file: item.file.uint8Array,
-  sha256: item.file.sha256.hashBase64,
-});
+const createPayloadToUpload = async (
+  item: NewNotificationDocument
+): Promise<UploadDocumentParams> => {
+  const unit8Array = await calcUnit8Array(item.file.data);
+  return {
+    id: item.id,
+    key: item.name,
+    contentType: item.contentType,
+    file: unit8Array,
+    sha256: item.file.sha256.hashBase64,
+  };
+};
 
 const uploadNotificationDocumentCbk = async (
   items: Array<UploadDocumentParams>
@@ -75,9 +80,13 @@ export const uploadNotificationAttachment = createAsyncThunk<
   async (items: Array<NewNotificationDocument>, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
-      const itemsToUpload = items
-        .filter((item) => !item.ref.key && !item.ref.versionToken)
-        .map((item) => createPayloadToUpload(item));
+      const itemsToUpload = [];
+      const filteredItems = items.filter((item) => !item.ref.key && !item.ref.versionToken);
+      for (const item of filteredItems) {
+        const payload = await createPayloadToUpload(item);
+        // eslint-disable-next-line functional/immutable-data
+        itemsToUpload.push(payload);
+      }
       if (itemsToUpload.length === 0) {
         return items;
       }
@@ -100,23 +109,25 @@ export const uploadNotificationAttachment = createAsyncThunk<
   }
 );
 
-const getPaymentDocumentsToUpload = (items: {
+const getPaymentDocumentsToUpload = async (items: {
   [key: string]: PaymentObject;
-}): Array<UploadDocumentParams> =>
-  Object.values(items).reduce((arr, item) => {
+}): Promise<Array<UploadDocumentParams>> => {
+  const documentsArr: Array<UploadDocumentParams> = [];
+  for (const item of Object.values(items)) {
     /* eslint-disable functional/immutable-data */
     if (item.pagoPaForm && !item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
-      arr.push(createPayloadToUpload(item.pagoPaForm));
+      documentsArr.push(await createPayloadToUpload(item.pagoPaForm));
     }
     if (item.f24flatRate && !item.f24flatRate.ref.key && !item.f24flatRate.ref.versionToken) {
-      arr.push(createPayloadToUpload(item.f24flatRate));
+      documentsArr.push(await createPayloadToUpload(item.f24flatRate));
     }
     if (item.f24standard && !item.f24standard.ref.key && !item.f24standard.ref.versionToken) {
-      arr.push(createPayloadToUpload(item.f24standard));
+      documentsArr.push(await createPayloadToUpload(item.f24standard));
     }
     /* eslint-enable functional/immutable-data */
-    return arr;
-  }, [] as Array<UploadDocumentParams>);
+  }
+  return documentsArr;
+};
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
   { [key: string]: PaymentObject },
@@ -126,7 +137,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
   async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
-      const documentsToUpload = getPaymentDocumentsToUpload(items);
+      const documentsToUpload = await getPaymentDocumentsToUpload(items);
       if (documentsToUpload.length === 0) {
         return items;
       }

@@ -50,6 +50,7 @@ import { performThunkAction } from './redux.utility';
 import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
 import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
 import { buttonNakedInheritStyle } from './styles.utility';
+import { calcUnit8Array } from './file.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -106,4 +107,5 @@ export {
   compileOneTrustPath,
   buttonNakedInheritStyle,
   sortArray,
+  calcUnit8Array,
 };
