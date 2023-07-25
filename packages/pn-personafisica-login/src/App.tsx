@@ -14,7 +14,7 @@ const App = () => {
     callback: () => console.log(`v${VERSION}`),
   });
 
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t } = useTranslation(['common']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
