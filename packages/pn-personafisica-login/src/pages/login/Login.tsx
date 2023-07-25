@@ -25,7 +25,7 @@ const LoginButton = styled(Button)(() => ({
 
 const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
-  const { t, i18n } = useTranslation(['login', 'notifiche']);
+  const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const type = params.get(AppRouteParams.TYPE);
