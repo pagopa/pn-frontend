@@ -1,0 +1,147 @@
+{
+  "deleghe": {
+    "title": "Vollmachten",
+    "close": "Schließen",
+    "description": "Hier können die Bevollmächtigten der Firma und dessen Vollmachten verwaltet werden. Die ersten sind diejenigen, die von der Firma bevollmächtigt sind, die Bescheide zu lesen. Die zweiten sind die der Firma übertragenen Vollmachten.",
+    "delegatesTitle": "Bevollmächtigte der Firma",
+    "delegatorsTitle": "Vollmachten der Firma",
+    "delegatorsApiErrorMessage": "Es ist uns nicht gelungen, die Daten über deine Vollmachten wiederherzustellen.",
+    "delegationStart": "Beginn Vollmacht",
+    "delegationEnd": "Ende Vollmacht",
+    "accept_title": "Bestätigungscode eingeben",
+    "accept_description": "Um die Vollmacht zu akzeptieren, gib den Code ein, den {{name}} mit dir geteilt hat.",
+    "add": "Vollmacht hinzufügen",
+    "revoke": "Widerrufen",
+    "reject": "Ablehnen",
+    "accept": "Zustimmen",
+    "show": "Code anzeigen",
+    "revocation_question": "Möchtest du die Vollmacht an {{delegate}} widerrufen? ",
+    "rejection_question": "Möchtest du die Vollmacht von {{delegator}} ablehnen?",
+    "confirm_revocation": "Vollmacht widerrufen",
+    "confirm_rejection": "Vollmacht ablehnen",
+    "subtitle_rejection": "Wenn du ablehnst, kannst du die Bescheide von {{delegator}} nicht lesen.",
+    "subtitle_revocation": "Du kannst die Bescheide von {{recipient}} nicht mehr lesen.",
+    "error_title": "Es ist leider ein Fehler aufgetreten",
+    "error_subtitle": "Die Seite konnte nicht geladen werden. Lade sie neu oder versuche es später noch einmal.",
+    "error_button": "Seite erneut laden",
+    "no_delegates": "{{organizationName}} hat niemanden dazu bevollmächtigt, Bescheide zu lesen.",
+    "no_delegators": "Keine Vollmacht für {{organizationName}} vorhanden.",
+    "no_delegators_after_filters": "Die hinzugefügten Filter lieferten keine Ergebnisse.",
+    "show_code_title": "Bestätigungscode für Vollmacht an {{name}}",
+    "show_code_subtitle": "Teile dem Bevollmächtigten diesen Code mit: Dieser muss den Code bei der Annahme der Vollmacht eingeben.",
+    "verification_code": "Verifizierungscode",
+    "tab_aria_label": "Tab Vollmachten",
+    "tab_delegati": "Bevollmächtigte der Firma",
+    "tab_deleghe": "Vollmachten der Firma",
+    "table": {
+      "name": "Vorname",
+      "email": "E-Mail-Adresse",
+      "delegationStart": "Beginn Vollmacht",
+      "delegationEnd": "Ende Vollmacht",
+      "permissions": "Genehmigungen",
+      "status": "Status",
+      "showCode": "Code anzeigen",
+      "revoke": "Widerrufen",
+      "reject": "Ablehnen",
+      "accept": "Zustimmen",
+      "notificationsFrom": "Bescheide von:",
+      "allNotifications": "Alle Bescheide",
+      "active": "Aktivieren",
+      "pending": "Wartet auf Bestätigung",
+      "rejected": "Abgelehnt",
+      "groups": "Gruppen",
+      "group": "Gruppe",
+      "no-group-found": "Keine Gruppe gefunden",
+      "no-name-found": "Keine Namen gefunden",
+      "menu-aria-label": "Menü Aktionen"
+    },
+    "accept-delegation": "Vollmacht annehmen",
+    "associate-groups-title": "Möchtest du die Vollmacht einer Gruppe zuweisen?",
+    "associate-groups-subtitle": "Der Gruppenadministrator kann die Vollmacht verwalten. Die Benutzer der Gruppe können nur die Bescheide lesen, für die eine Vollmacht vorhanden ist.",
+    "no-group": "Keiner Gruppe zuordnen",
+    "associate-group": "Einer Gruppe zuordnen",
+    "select-group": "Gruppe wählen*",
+    "accepted-successfully": "Die Vollmacht wurde angenommen",
+    "accepted-error": "Aufgrund eines Fehlers wurde die Vollmacht nicht angenommen. Abbrechen klicken und erneut versuchen.",
+    "revoke-successfully": "Vollmacht wurde widerrufen.",
+    "reject-successfully": "Vollmacht wurde abgelehnt.",
+    "revoke-error": "Es ist ein Fehler aufgetreten und die Vollmacht wurde nicht widerrufen. Erneut versuchen.",
+    "reject-error": "Es ist ein Fehler aufgetreten und die Vollmacht wurde nicht abgelehnt. Erneut versuchen."
+  },
+  "nuovaDelega": {
+    "breadcrumb": "Neue Vollmacht",
+    "backToDelegations": "Zurück zu den Vollmachten",
+    "createdTitle": "Die Anfrage zur Vollmacht wurde erfolgreich erstellt",
+    "createdDescription": "Teile dem Bevollmächtigten den Bestätigungscode mit: Dieser muss ihn beim ersten Zugriff auf SEND eingeben und die Anfrage annehmen.",
+    "title": "Vollmacht hinzufügen",
+    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht für Bescheide von {{organizationName}} erteilen möchtest",
+    "form": {
+      "personType": "Juristische Person*:",
+      "naturalPerson": "Natürliche Person",
+      "legalPerson": "Juristische Person",
+      "firstName": "Vorname*",
+      "lastName": "Nachname*",
+      "fiscalCode": "Steuernummer*",
+      "email": "E-Mail*",
+      "businessName": "Firmenbezeichnung*",
+      "viewFrom": "Kann Bescheide einsehen von*:",
+      "allEntities": "Alle Körperschaften",
+      "onlySelected": "Nur ausgewählte Körperschaften",
+      "selectEntities": "Körperschaften wählen",
+      "endDate": "Ende Vollmacht",
+      "verificationCode": "Verifizierungscode",
+      "verificationCodeDescr": "Teile dem Bevollmächtigten diesen Code mit: Dieser muss den Code bei der Annahme der Vollmacht eingeben.",
+      "submit": "Anfrage senden",
+      "mandatoryField": "Pflichtfelder*"
+    },
+    "validation": {
+      "fiscalCode": {
+        "required": "Die Steuernummer ist erforderlich",
+        "wrong": "Der eingegebene Code ist falsch"
+      },
+      "email": {
+        "wrong": "E-Mail nicht korrekt formatiert",
+        "required": "E-Mail-Adresse erforderlich"
+      },
+      "name": {
+        "required": "Der Name ist erforderlich"
+      },
+      "surname": {
+        "required": "Der Nachname ist erforderlich"
+      },
+      "businessName": {
+        "required": "Die Firmenbezeichnung ist erforderlich"
+      },
+      "expirationDate": {
+        "required": "Das Ablaufdatum der Vollmacht ist erforderlich",
+        "wrong": "Falsches Datum"
+      }
+    }
+  },
+  "errors": {
+    "not_found": {
+      "title": "Fehler",
+      "message": "Vollmacht nicht gefunden"
+    },
+    "already_exists": {
+      "title": "Vollmacht bereits vorhanden",
+      "message": "Die angegebene Person hat bereits eine Vollmacht für diese Körperschaft."
+    },
+    "not_acceptable": {
+      "title": "Vollmacht ungültig",
+      "message": "Die eingegebene Vollmacht ist ungültig"
+    },
+    "delegate_himself": {
+      "title": "Fehler bei der Eingabe der Vollmacht",
+      "message": "Du kannst dich nicht selbst bevollmächtigen"
+    },
+    "invalid_verification_code": {
+      "title": "Code ungültig",
+      "message": "Der eingegebene Code ist falsch. Erneut versuchen."
+    },
+    "invalid_verification_code_ua": {
+      "title": "Code ungültig",
+      "message": "Ungültiger Verifizierungscode"
+    }
+  }
+}

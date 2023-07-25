@@ -18,7 +18,7 @@ type Props = {
 };
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t, i18n } = useTranslation(['common', 'recapiti']);
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
@@ -30,7 +30,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         </Grid>
       </Grid>
     ),
-    []
+    [i18n.language]
   );
   const defaultAddress = useMemo(
     () => legalAddresses.find((a) => a.senderId === 'default' && a.pecValid === true),

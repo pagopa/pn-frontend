@@ -139,7 +139,7 @@ const ActualApp = () => {
     return tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
       ? [profiloAction, logoutAction]
       : [logoutAction];
-  }, [tosConsent, privacyConsent]);
+  }, [tosConsent, privacyConsent, i18n.language]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);

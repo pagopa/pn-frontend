@@ -1,27 +1,21 @@
 import { initReactI18next } from 'react-i18next';
-import i18n from 'i18next';
-import login from './it/login.json';
+import HttpApi from 'i18next-http-backend';
+import i18next from 'i18next';
 
-const resources = {
-  it: {
-    login,
-  },
-};
-
-void i18n
+void i18next
   .use(initReactI18next)
+  .use(HttpApi)
   .init({
-    resources,
     lng: 'it',
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     interpolation: {
       escapeValue: false,
     },
-    ns: ['login'],
+    ns: ['common'],
   })
   .catch((err: any) => {
     throw new Error(err);
   });
 
-export default i18n;
+export default i18next;

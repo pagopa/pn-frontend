@@ -1,0 +1,173 @@
+{
+  "button": {
+    "filtra": "Filtriraj",
+    "annulla filtro": "Odstrani filtre",
+    "indietro": "Nazaj",
+    "associa": "Poveži",
+    "capito": "Razumem",
+    "conferma": "Potrdi",
+    "annulla": "Prekliči",
+    "modifica": "Uredi",
+    "salva": "Shrani",
+    "elimina": "Izbriši",
+    "enter": "Vstop",
+    "exit": "Izhod",
+    "close": "Zapri",
+    "enable": "Aktiviraj",
+    "disable": "Deaktiviraj",
+    "go-to-home": "Pojdi na domačo stran",
+    "go-to-login": "Dostopaj"
+  },
+  "menu": {
+    "notifiche": "Obvestila",
+    "deleghe": "Pooblastila",
+    "profilo": "Vaši podatki",
+    "contacts": "Vaši kontaktni podatki",
+    "app-status": "Stanje platforme",
+    "aria-label": "glavna navigacija na plataformi za obvestila",
+    "aria-label-inner": "navigacija prejemnika na platformi za obvestila"
+  },
+  "header": {
+    "logout": "Izhod",
+    "pago-pa-link": "Spletna stran PagoPA S.p.A."
+  },
+  "tos": {
+    "title": "SEND – storitev digitalnih obvestil",
+    "body": "Za dostop preberite in sprejmite pravilnik o zasebnosti ter pogoje in določila uporabe.",
+    "redo-body": "Izjava o zasebnosti ter pogoji in določila uporabe so se spremenili. Za dostop preberite in sprejmite novo različico.",
+    "switch-label": "Strinjam se z <0>Izjavo o zasebnosti</0> in <1>Pogoji in določili uporabe</1> na SEND",
+    "button": "Dostopaj"
+  },
+  "table": {
+    "aria-label": "Tabela artiklov"
+  },
+  "paginator": {
+    "aria-label": "Meni s stranmi",
+    "first": "prvi element",
+    "last": "zadnji element",
+    "page": "stran",
+    "next": "Pojdi na naslednjo stran",
+    "previous": "Pojdi na prejšnjo stran",
+    "selected": "izbrani element",
+    "rows-per-page": "Vrstice na stran"
+  },
+  "toast": {
+    "aria-label": "Ikona toast ključavnice"
+  },
+  "date-picker": {
+    "left-arrow": "Pojdi na prejšnji mesec",
+    "right-arrow": "Pojdi na naslednji mesec",
+    "switch-to-year": "način koledarja aktiven, preklopite na način izbire leta",
+    "switch-to-calendar": "način izbire leta aktiven, preklopite na koledarski način",
+    "select-date": "Izberite datum",
+    "date-selected": "Izberite datum, izbrani datum je {{date}}"
+  },
+  "date-time": {
+    "today-uppercase-initial": "Danes",
+    "hour-of-day": "ure"
+  },
+  "error-boundary": {
+    "title": "Nekaj je šlo narobe",
+    "description": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova kasneje.",
+    "action": "Znova naloži stran"
+  },
+  "not-accessible": {
+    "title": "Dostop do platforme ni mogoč",
+    "description": "Poskusite znova čez nekaj ur. Če potrebujete pomoč,",
+    "action": "nam pišite"
+  },
+  "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
+  "not-logged": "Dostopaj do SEND",
+  "not-logged-subtitle": "Če si želite ogledati vaša obvestila in jih upravljati, dostopajte s SPID ali CIE.",
+  "not-found": {
+    "title": "404: Stran, ki jo iščete, ne obstaja",
+    "descpription": "Tukaj ste pomotoma, poskusite uporabiti navigacijo."
+  },
+  "leaving-app": {
+    "title": "Zapuščate SEND",
+    "message": "Preusmerjeni boste"
+  },
+  "error-when-fetching-tos-status": {
+    "title": "Težave pri dostopu do SEND",
+    "message": "Poskusite znova kasneje"
+  },
+  "messages": {
+    "404-title": "Vira ni bilo mogoče najti",
+    "404-message": "Prišlo je do napake. Poskusite znova kasneje",
+    "403-title": "Seja je potekla",
+    "403-message": "Vstopite s SPID ali CIE.",
+    "401-title": "Nepooblaščen uporabnik",
+    "401-message": "Trenutni uporabnik nima dovoljenj",
+    "451-title": "Platforma ni dostopna",
+    "451-message": "Dostop do platforme ni mogoč",
+    "500-title": "Storitev ni na voljo",
+    "500-message": "Zaradi začasne težave s storitvijo vaša zahteva ni bila poslana. Poskusite znova kasneje.",
+    "lacking-grants-for-app-title": "Nimate dovoljenja za dostop",
+    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave – neveljaven žeton",
+    "generic-token-exchange-problem": "Dostopa ni bilo mogoče dokončati",
+    "generic-title": "Generična napaka",
+    "generic-message": "Prišlo je do napake. Poskusite znova kasneje",
+    "generic-api-error-main-text": "Teh podatkov ni bilo mogoče pridobiti.",
+    "generic-api-error-action-text": "Znova naloži"
+  },
+  "footer": {
+    "go-to-pagopa": "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A.",
+    "go-to": "Pojdi na povezavo",
+    "privacy-info": "Informaativa Privacy",
+    "who": "Kdo smo",
+    "work": "Sodeluj z nami",
+    "certifications": "Certifikati",
+    "security": "Varnost podatkov",
+    "personal-data": "Pravica do varstva osebnih podatkov",
+    "cookie": "Nastavitve piškotkov",
+    "terms-conditions": "Pogoji in določila",
+    "company": "Pregledna družba",
+    "disclosure": "Politika odgovornega razkritja",
+    "321-model": "Model 231",
+    "accessibility": "Dostopnost",
+    "social": "Povezava: pojdi na spletno mesto {{social}} družbe PagoPA S.p.A.",
+    "resources": "Viri",
+    "follow": "Sledi nam na",
+    "legal-part-1": "delniška družba z enim družbenikom – v celoti vplačan osnovni kapital 1.000.000 EUR – sedež v Rimu, Piazza Colonna 370",
+    "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009"
+  },
+  "required-fields": "*Obvezna polja",
+  "validation": {
+    "search-pattern-length-limit": "iskanje največ {{maxLength}} znakov",
+    "invalid-characters-not-inserted": "Neveljavni znaki niso bili vneseni."
+  },
+  "errors": {
+    "bad_request": {
+      "title": "Napaka pri pošiljanju podatkov",
+      "message": "Neveljavna oblika zahteve."
+    },
+    "unauthorized": {
+      "title": "Nepooblaščen uporabnik",
+      "message": "Trenutni uporabnik nima dovoljenj."
+    },
+    "unavailable_legal_reasons": {
+      "title": "Platforma ni dostopna",
+      "message": "Dostop do platforme ni mogoč"
+    },
+    "forbidden": {
+      "title": "Seja je potekla",
+      "message": "Vstopite s SPID ali CIE."
+    },
+    "not_found": {
+      "title": "Vira ni bilo mogoče najti",
+      "message": "Prišlo je do napake. Prosimo, poskusite znova kasneje."
+    },
+    "internal_server": {
+      "title": "Storitev ni na voljo",
+      "message": "Zaradi začasne težave s storitvijo vaša zahteva ni bila poslana. Poskusite znova kasneje."
+    },
+    "unhandled": {
+      "title": "Generična napaka",
+      "message": "Prišlo je do napake. Prosimo, poskusite znova kasneje."
+    },
+    "unknown": {
+      "title": "Napaka",
+      "message": "Nepričakovana napaka"
+    }
+  }
+}

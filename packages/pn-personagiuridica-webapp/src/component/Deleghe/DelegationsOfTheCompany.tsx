@@ -39,7 +39,7 @@ import { GroupStatus } from '../../models/groups';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { setFilters } from '../../redux/delegation/reducers';
 import delegationToItem from '../../utils/delegation.utility';
-import { getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import {
   DelegationStatus,
   DelegatorsColumn,
@@ -170,9 +170,9 @@ const DelegationsOfTheCompany = () => {
       id: 'status',
       label: t('deleghe.table.status'),
       getValue(value: string, row: Item) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={label} color={color} data-testid={`statusChip-${label}`} />;
+          return <Chip label={t(key)} color={color} />;
         } else {
           return <AcceptButton id={row.id} name={row.name as string} onAccept={handleAccept} />;
         }
