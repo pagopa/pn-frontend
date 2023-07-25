@@ -1,4 +1,4 @@
-import { Validator } from '../Validator';
+import { Validator, ValidatorOptions } from '../Validator';
 
 class DummySubClass {
   propertyOne: string;
@@ -8,6 +8,7 @@ class DummySubClass {
 class DummyClass {
   property: string;
   subProperty: DummySubClass[];
+  fooProperty: string;
 }
 
 class SubDummyValidator extends Validator<DummySubClass> {
@@ -19,8 +20,8 @@ class SubDummyValidator extends Validator<DummySubClass> {
 }
 
 class DummyValidator extends Validator<DummyClass> {
-  constructor() {
-    super();
+  constructor(options: ValidatorOptions = {}) {
+    super(options);
 
     this.ruleFor('property').isString().isEqual('value');
     this.ruleFor('subProperty')
@@ -53,6 +54,7 @@ describe('Test Validator', () => {
           propertyTwo: 'valueTwo',
         },
       ],
+      fooProperty: 'foo'
     };
     const results = dummyValidator.validate(dummyObject);
     expect(results).toStrictEqual({
@@ -79,8 +81,52 @@ describe('Test Validator', () => {
           propertyTwo: 'valueTwo',
         },
       ],
+      fooProperty: 'foo'
     };
     const results = dummyValidator.validate(dummyObject);
+    expect(results).toBeNull();
+  });
+});
+
+const validatorWithOptions = new DummyValidator({ strict: true });
+
+describe('Test Validator with strict mode enabled', () => {
+  it('check if validation works with strict mode (rule missing)', () => {
+    const dummyObject: DummyClass = {
+      property: 'value',
+      subProperty: [
+        {
+          propertyOne: 'valueOne',
+          propertyTwo: 'valueTwo',
+        },
+      ],
+      fooProperty: 'foo'
+    };
+    // Since a rule for 'fooProperty' is missing, an error is expected
+    expect(() => validatorWithOptions.validate(dummyObject)).toThrowError(
+      'Validation Error: Missing rules for keys: fooProperty'
+    );
+  });
+
+  const validatorWithNoOptions = new DummyValidator();
+
+  it('check if validation works with strict mode (valid)', () => {
+    const dummyObject: DummyClass = {
+      property: 'value',
+      subProperty: [
+        {
+          propertyOne: 'valueOne',
+          propertyTwo: 'valueTwo',
+        },
+        {
+          propertyOne: 'valueOne',
+          propertyTwo: 'valueTwo',
+        },
+      ],
+      fooProperty: 'foo'
+    };
+    // With all rules defined correctly, there are expected to be no errors
+    const results = validatorWithNoOptions.validate(dummyObject);
     expect(results).toBeNull();
   });
 });
