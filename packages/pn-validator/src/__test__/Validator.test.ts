@@ -1,9 +1,10 @@
-import { Validator, ValidatorOptions } from '../Validator';
+import { Validator } from '../Validator';
+import { ValidatorOptions } from '../types/ValidatorOptions';
 
 class DummySubClass {
-  propertyOne: string;
-  propertyTwo: string;
-}
+    propertyOne: string;
+    propertyTwo: string;
+  }
 
 class DummyClass {
   property: string;
@@ -104,7 +105,7 @@ describe('Test Validator with strict mode enabled', () => {
     };
     // Since a rule for 'fooProperty' is missing, an error is expected
     expect(() => validatorWithOptions.validate(dummyObject)).toThrowError(
-      'Validation Error: Missing rules for keys: fooProperty'
+      'Validation Error: Missing rules for keys: subProperty.0.propertyOne, subProperty.0.propertyTwo, fooProperty'
     );
   });
 

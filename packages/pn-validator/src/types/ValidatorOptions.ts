@@ -5,7 +5,7 @@
  * const options: ValidatorOptions = { strict: true };
  * const validator = new Validator<MyModel>(options);
  */
-interface ValidatorOptions {
+export interface ValidatorOptions {
     /**
      * Enable strict mode for validation.
      * If set to true, the validator will check if all the keys in the model object have a corresponding rule.
