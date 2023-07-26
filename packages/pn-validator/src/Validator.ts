@@ -4,14 +4,6 @@ import { ValidatorBuilder } from './ValidatorBuilder';
 import { hasError } from './HasError';
 import { TypeRules } from './types/TypeRules';
 
-/**
- * Validator options that include the strict mode but in the future you can add any other
- * options.
- */
-export interface ValidatorOptions { 
-  strict?: boolean;
-}
-
 export class Validator<TModel> {
   private validatorBuilders: ValidatorBuilders<TModel> = {};
   private strict: boolean; // strict mode
