@@ -35,6 +35,7 @@ type Props = {
   calcSha256?: boolean;
   fileFormat?: 'base64' | 'uint8Array';
   fileUploaded?: any;
+  fileSizeLimit?: number;
 };
 
 enum UploadStatus {
@@ -64,6 +65,15 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
           'Estensione file non supportata. Riprovare con un altro file.'
         ),
       };
+    case 'FILE_SIZE_EXCEEDED':
+        return {
+          ...state,
+          error: getLocalizedOrDefaultLabel(
+            'common',
+            'upload-file.file-size-exceeded',
+            'Il file selezionato supera la dimensione massima di 200MB.'
+          ),
+        };
     case 'UPLOAD_IN_ERROR':
       return {
         ...state,
@@ -121,6 +131,7 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param calcSha256 flag to calculate the sha256
  * @param fileFormat format of the file after loading
  * @param fileUploaded file previously uploaded
+ * @param fileSizeLimit max file size limit - default is 209715200 (200MB)
  * @returns
  */
 const FileUpload = ({
@@ -135,6 +146,7 @@ const FileUpload = ({
   calcSha256 = false,
   fileFormat,
   fileUploaded,
+  fileSizeLimit = 209715200,
 }: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -174,6 +186,10 @@ const FileUpload = ({
   };
 
   const uploadFile = async (file: any) => {
+    if (file && file.size > fileSizeLimit) {
+      dispatch({ type: 'FILE_SIZE_EXCEEDED' });
+      return;
+    };
     if (file && file.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
       try {
