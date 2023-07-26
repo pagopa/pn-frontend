@@ -264,106 +264,104 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
 
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
-      <>
-        {children}
-        {disclaimerOpen && (
-          <DisclaimerModal
-            onConfirm={() => {
-              setDisclaimerOpen(false);
-              handleCodeVerification();
-              setOpen(true);
-            }}
-            onCancel={() => setDisclaimerOpen(false)}
-            confirmLabel={t('button.conferma')}
-            checkboxLabel={t('button.capito')}
-            content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
-          />
-        )}
-        {!_.isEqual(modalProps, initialProps) && (
-          <CodeModal
-            title={
-              t(`${modalProps.labelRoot}.${modalProps.labelType}-verify`, { ns: 'recapiti' }) +
-              ` ${modalProps.value}`
-            }
-            subtitle={
-              <Typography variant="body1">
-                <Trans
-                  i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
-                  ns="recapiti"
-                />
+      {children}
+      {disclaimerOpen && (
+        <DisclaimerModal
+          onConfirm={() => {
+            setDisclaimerOpen(false);
+            handleCodeVerification();
+            setOpen(true);
+          }}
+          onCancel={() => setDisclaimerOpen(false)}
+          confirmLabel={t('button.conferma')}
+          checkboxLabel={t('button.capito')}
+          content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
+        />
+      )}
+      {!_.isEqual(modalProps, initialProps) && (
+        <CodeModal
+          title={
+            t(`${modalProps.labelRoot}.${modalProps.labelType}-verify`, { ns: 'recapiti' }) +
+            ` ${modalProps.value}`
+          }
+          subtitle={
+            <Typography variant="body1">
+              <Trans
+                i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+                ns="recapiti"
+              />
+            </Typography>
+          }
+          open={open}
+          initialValues={new Array(5).fill('')}
+          codeSectionTitle={t(`${modalProps.labelRoot}.insert-code`, { ns: 'recapiti' })}
+          codeSectionAdditional={
+            <>
+              <Typography variant="body2" display="inline">
+                {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
+                &nbsp;
               </Typography>
-            }
-            open={open}
-            initialValues={new Array(5).fill('')}
-            codeSectionTitle={t(`${modalProps.labelRoot}.insert-code`, { ns: 'recapiti' })}
-            codeSectionAdditional={
-              <>
-                <Typography variant="body2" display="inline">
-                  {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
-                  &nbsp;
-                </Typography>
-                <ButtonNaked
-                  component={Box}
-                  onClick={() => handleCodeVerification(undefined, true)}
-                  sx={{ verticalAlign: 'unset', display: 'inline' }}
+              <ButtonNaked
+                component={Box}
+                onClick={() => handleCodeVerification(undefined, true)}
+                sx={{ verticalAlign: 'unset', display: 'inline' }}
+              >
+                <Typography
+                  display="inline"
+                  color="primary"
+                  variant="body2"
+                  sx={{ textDecoration: 'underline' }}
                 >
-                  <Typography
-                    display="inline"
-                    color="primary"
-                    variant="body2"
-                    sx={{ textDecoration: 'underline' }}
-                  >
-                    {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
-                  </Typography>
-                </ButtonNaked>
-              </>
-            }
-            cancelLabel={t('button.annulla')}
-            confirmLabel={t('button.conferma')}
-            cancelCallback={() => handleClose('cancelled')}
-            confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-            hasError={codeNotValid}
-            errorTitle={errorMessage?.title}
-            errorMessage={errorMessage?.content}
-          />
-        )}
-        <Dialog
-          open={isConfirmationModalVisible}
-          onClose={handleDiscard}
-          aria-labelledby="dialog-title"
-          aria-describedby="dialog-description"
-        >
-          <DialogTitle id="dialog-title">
-            {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="dialog-description">
-              {t(`common.duplicate-contact-descr`, { value: modalProps.value, ns: 'recapiti' })}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDiscard} variant="outlined">
-              {t('button.annulla')}
-            </Button>
-            <Button onClick={handleConfirm} variant="contained">
-              {t('button.conferma')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={pecValidationOpen} data-testid="validationDialog">
-          <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
-            {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
-          </DialogTitle>
-          <DialogContent sx={{ px: 4 }}>
-            {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
-          </DialogContent>
-          <DialogActions sx={{ pb: 4, px: 4 }}>
-            <Button onClick={() => setPecValidationOpen(false)} variant="contained">
-              {t('button.conferma')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
+                  {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+                </Typography>
+              </ButtonNaked>
+            </>
+          }
+          cancelLabel={t('button.annulla')}
+          confirmLabel={t('button.conferma')}
+          cancelCallback={() => handleClose('cancelled')}
+          confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+          hasError={codeNotValid}
+          errorTitle={errorMessage?.title}
+          errorMessage={errorMessage?.content}
+        />
+      )}
+      <Dialog
+        open={isConfirmationModalVisible}
+        onClose={handleDiscard}
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+      >
+        <DialogTitle id="dialog-title">
+          {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="dialog-description">
+            {t(`common.duplicate-contact-descr`, { value: modalProps.value, ns: 'recapiti' })}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDiscard} variant="outlined">
+            {t('button.annulla')}
+          </Button>
+          <Button onClick={handleConfirm} variant="contained">
+            {t('button.conferma')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={pecValidationOpen} data-testid="validationDialog">
+        <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
+          {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
+        </DialogTitle>
+        <DialogContent sx={{ px: 4 }}>
+          {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+        </DialogContent>
+        <DialogActions sx={{ pb: 4, px: 4 }}>
+          <Button onClick={() => setPecValidationOpen(false)} variant="contained">
+            {t('button.conferma')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };
