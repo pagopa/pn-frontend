@@ -5,8 +5,7 @@ import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
 
 import { storageAarOps, storageTypeOps } from '../../../utils/storage';
 import Login from '../Login';
-import '../../../locales/i18n';
-import { getConfiguration } from "../../../services/configuration.service";
+import { getConfiguration } from '../../../services/configuration.service';
 
 const oldWindowLocation = global.window.location;
 
@@ -17,6 +16,15 @@ function mockCreateMockedSearchParams() {
   mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
   return mockedSearchParams;
 }
+
+// mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+}));
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -40,7 +48,7 @@ describe('test login page', () => {
         <Login />
       </BrowserRouter>
     );
-    expect(result.container).toHaveTextContent(/Come vuoi accedere/i);
+    expect(result.container).toHaveTextContent(/loginPage.title/i);
   });
 
   test('renders button Entra con Spid', () => {

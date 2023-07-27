@@ -10,8 +10,14 @@ describe('FileUpload Component', () => {
 
   const mockUploadFileHandler = jest.fn();
   const mockRemoveFileHandler = jest.fn();
+
   const file = new Blob(['mocked content'], { type: 'text/plain' });
+  const bigFile = new Blob(['mocked content big'], { type: 'text/plain' });
+  const wrongTypeFile = new Blob(['mocked content'], { type: 'application/pdf' });
+
   (file as any).name = 'Mocked file';
+  (bigFile as any).name ='Mocked big file';
+  (wrongTypeFile as any).name ='Mocked big file';
 
   async function testFileUploading() {
     const fileInput = result.queryByTestId('fileInput');
@@ -36,6 +42,7 @@ describe('FileUpload Component', () => {
         uploadFn={mockUploadFn}
         onFileUploaded={mockUploadFileHandler}
         onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
       />
     );
   });
@@ -55,11 +62,25 @@ describe('FileUpload Component', () => {
     await testFileUploading();
   });
 
+  it('uploads file (file too big)', async () => {
+    const fileInput = result.queryByTestId('fileInput');
+    expect(fileInput).toBeInTheDocument();
+    const input = fileInput?.querySelector('input');
+    fireEvent.change(input!, { target: { files: [bigFile] } });
+    await waitFor(() => {
+      expect(mockUploadFn).not.toBeCalled();
+      expect(result.container).toHaveTextContent(/Mocked upload text/i);
+      expect(result.container).toHaveTextContent(
+        /Il file selezionato supera la dimensione massima di 14 Bytes./i
+      );
+    });
+  });
+
   it('uploads file (wrong format)', async () => {
     const fileInput = result.queryByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
     const input = fileInput?.querySelector('input');
-    fireEvent.change(input!, { target: { files: [new Blob(['mocked content'], { type: 'application/pdf' })] } });
+    fireEvent.change(input!, { target: { files: [wrongTypeFile] } });
     await waitFor(() => {
       expect(mockUploadFn).not.toBeCalled();
       expect(result.container).toHaveTextContent(/Mocked upload text/i);

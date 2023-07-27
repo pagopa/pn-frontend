@@ -67,3 +67,18 @@ export const calcSha256String = (file: any): Promise<{ hashHex: string; hashBase
     /* eslint-enable functional/immutable-data */
   });
 };
+
+/**
+ * Returs the size of a file in format KB, MB or GB
+ * @param size size in bytes
+ */
+export const parseFileSize = (size: number, decimals = 2): string => {
+  if (!size) {
+    return '0 Bytes';
+  }
+  const unit = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(size) / Math.log(unit));
+  return `${parseFloat((size / Math.pow(unit, i)).toFixed(dm))} ${sizes[i]}`;
+};

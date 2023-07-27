@@ -39,8 +39,6 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
-const localizedNotificationStatus = getNotificationAllowedStatus();
-
 const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
@@ -50,6 +48,7 @@ const FilterNotificationsFormBody = ({
 }: Props) => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
+  const localizedNotificationStatus = getNotificationAllowedStatus();
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (formikInstance.errors) {

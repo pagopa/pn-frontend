@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { theme } from '@pagopa/mui-italia';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import './locales/i18n.ts';
+import './i18n';
 import './index.css';
 import App from './App';
 import { loadLoginConfiguration } from "./services/configuration.service";

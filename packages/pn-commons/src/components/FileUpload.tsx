@@ -14,7 +14,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { calcSha256String } from '../utils/file.utility';
+import { calcSha256String, parseFileSize } from '../utils/file.utility';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import CustomTooltip from './CustomTooltip';
 
@@ -29,6 +29,7 @@ type Props = {
   sx?: SxProps;
   calcSha256?: boolean;
   fileUploaded?: { file: { data?: File; sha256?: { hashBase64: string; hashHex: string } } };
+  fileSizeLimit?: number;
 };
 
 enum UploadStatus {
@@ -56,6 +57,19 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
           'common',
           'upload-file.ext-not-supported',
           'Estensione file non supportata. Riprovare con un altro file.'
+        ),
+      };
+    case 'FILE_SIZE_EXCEEDED':
+      return {
+        ...state,
+        ...action.payload,
+        error: getLocalizedOrDefaultLabel(
+          'common',
+          'upload-file.file-size-exceeded',
+          `Il file selezionato supera la dimensione massima di ${action.payload}.`,
+          {
+            limit: action.payload,
+          }
         ),
       };
     case 'UPLOAD_IN_ERROR':
@@ -114,6 +128,7 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param sx style to be addded to the component
  * @param calcSha256 flag to calculate the sha256
  * @param fileUploaded file previously uploaded
+ * @param fileSizeLimit max file size limit - default is 209715200 (200MB)
  * @returns
  */
 const FileUpload = ({
@@ -127,6 +142,7 @@ const FileUpload = ({
   sx,
   calcSha256 = false,
   fileUploaded,
+  fileSizeLimit = 209715200,
 }: Props) => {
   const [fileData, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -165,6 +181,10 @@ const FileUpload = ({
   };
 
   const uploadFile = async (file: File) => {
+    if (file?.size > fileSizeLimit) {
+      dispatch({ type: 'FILE_SIZE_EXCEEDED', payload: parseFileSize(fileSizeLimit) });
+      return;
+    }
     if (file?.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
       try {
@@ -293,7 +313,7 @@ const FileUpload = ({
               <AttachFileIcon color="primary" />
               <Typography color="primary">{fileData.file.name}</Typography>
               <Typography fontWeight={600} sx={{ marginLeft: '30px' }}>
-                {(fileData.file.size / 1024).toFixed(2)}&nbsp;KB
+                {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
             <IconButton

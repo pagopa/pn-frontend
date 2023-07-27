@@ -9,8 +9,6 @@ import {
   preLoginLinks,
 } from '../../utils/costants';
 
-const localizedPagoPALink = pagoPALink();
-
 type Props = {
   onLanguageChanged?: (langCode: string) => void;
   loggedUser?: boolean;
@@ -22,7 +20,7 @@ type Props = {
 
 const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage, hasTermsOfService }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
-
+  const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {
     if (eventTrackingCallbackChangeLanguage) {
       eventTrackingCallbackChangeLanguage();
