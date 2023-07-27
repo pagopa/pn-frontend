@@ -14,7 +14,12 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
+import {
+  calcUnit8Array,
+  calcSha256String,
+  calcBase64String,
+  parseFileSize,
+} from '../utils/file.utility';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import CustomTooltip from './CustomTooltip';
 
@@ -66,14 +71,14 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         ),
       };
     case 'FILE_SIZE_EXCEEDED':
-        return {
-          ...state,
-          error: getLocalizedOrDefaultLabel(
-            'common',
-            'upload-file.file-size-exceeded',
-            'Il file selezionato supera la dimensione massima di 200MB.'
-          ),
-        };
+      return {
+        ...state,
+        error: getLocalizedOrDefaultLabel(
+          'common',
+          'upload-file.file-size-exceeded',
+          'Il file selezionato supera la dimensione massima di 200MB.'
+        ),
+      };
     case 'UPLOAD_IN_ERROR':
       return {
         ...state,
@@ -189,7 +194,7 @@ const FileUpload = ({
     if (file && file.size > fileSizeLimit) {
       dispatch({ type: 'FILE_SIZE_EXCEEDED' });
       return;
-    };
+    }
     if (file && file.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
       try {
@@ -323,7 +328,7 @@ const FileUpload = ({
               <AttachFileIcon color="primary" />
               <Typography color="primary">{data.file.name}</Typography>
               <Typography fontWeight={600} sx={{ marginLeft: '30px' }}>
-                {(data.file.size / 1024).toFixed(2)}&nbsp;KB
+                {parseFileSize(data.file.size)}
               </Typography>
             </Box>
             <IconButton
