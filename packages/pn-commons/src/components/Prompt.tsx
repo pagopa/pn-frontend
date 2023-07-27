@@ -10,6 +10,7 @@ import {
 
 import { usePrompt } from '../hooks/usePrompt';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { useIsMobile } from '../hooks';
 
 const Prompt = ({
   title,
@@ -32,6 +33,9 @@ const Prompt = ({
     eventTrackingCallbackConfirm
   );
 
+  const isMobile = useIsMobile();
+  const textPosition = isMobile ? 'center' : 'left';
+
   useEffect(() => {
     if (showPrompt) {
       eventTrackingCallbackPromptOpened();
@@ -41,15 +45,31 @@ const Prompt = ({
   return (
     <Fragment>
       <Dialog onClose={cancelNavigation} open={showPrompt} maxWidth={'xs'} fullWidth>
-        <DialogTitle sx={{ pt: 4, pl: 4, pb: 2, pr: 4 }}>{title}</DialogTitle>
-        <DialogContent sx={{ px: 4, py: 0 }}>
+        <DialogTitle sx={{ p: isMobile ? 3 : 4, pb: 2, textAlign: textPosition }}>
+          {title}
+        </DialogTitle>
+        <DialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
           <DialogContentText>{message}</DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ p: 4 }}>
-          <Button variant="outlined" onClick={cancelNavigation}>
+        <DialogActions
+          disableSpacing={isMobile}
+          sx={{
+            textAlign: textPosition,
+            flexDirection: isMobile ? 'column-reverse' : 'row',
+            p: isMobile ? 3 : 4,
+            pt: 0,
+          }}
+        >
+          <Button variant="outlined" onClick={cancelNavigation} fullWidth={isMobile}>
             {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
           </Button>
-          <Button variant="contained" onClick={confirmNavigation} autoFocus>
+          <Button
+            variant="contained"
+            onClick={confirmNavigation}
+            autoFocus
+            sx={{ mb: isMobile ? 2 : 0 }}
+            fullWidth={isMobile}
+          >
             {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
           </Button>
         </DialogActions>
