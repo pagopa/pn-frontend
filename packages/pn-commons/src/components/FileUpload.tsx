@@ -73,10 +73,14 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
     case 'FILE_SIZE_EXCEEDED':
       return {
         ...state,
+        ...action.payload,
         error: getLocalizedOrDefaultLabel(
           'common',
           'upload-file.file-size-exceeded',
-          'Il file selezionato supera la dimensione massima di 200MB.'
+          `Il file selezionato supera la dimensione massima di ${action.payload}.`,
+          {
+            limit: action.payload,
+          },
         ),
       };
     case 'UPLOAD_IN_ERROR':
@@ -192,7 +196,7 @@ const FileUpload = ({
 
   const uploadFile = async (file: any) => {
     if (file && file.size > fileSizeLimit) {
-      dispatch({ type: 'FILE_SIZE_EXCEEDED' });
+      dispatch({ type: 'FILE_SIZE_EXCEEDED', payload: parseFileSize(fileSizeLimit) });
       return;
     }
     if (file && file.type && accept.indexOf(file.type) > -1) {

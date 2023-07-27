@@ -71,7 +71,7 @@ describe('FileUpload Component', () => {
       expect(mockUploadFn).not.toBeCalled();
       expect(result.container).toHaveTextContent(/Mocked upload text/i);
       expect(result.container).toHaveTextContent(
-        /Il file selezionato supera la dimensione massima di 200MB./i
+        /Il file selezionato supera la dimensione massima di 14 Bytes./i
       );
     });
   });
