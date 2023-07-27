@@ -202,14 +202,10 @@ export interface RecipientPaymentFullDetails {
   payments: Array<PaymentFullDetails>;
 }
 
-export interface PaymentFullDetails {
-  creditorTaxId?: string;
-  noticeCode?: string;
-  paAttachment?: NotificationDetailDocument;
-  f24PaymentDetails?: F24PaymentDetails;
-  applyCostFlg: boolean;
-  status?: PaymentStatus;
-  recipientType?: RecipientType;
+export interface ExtRegistriesPaymentDetails {
+  creditorTaxId: string;
+  noticeCode: string;
+  status: PaymentStatus;
   amount?: number;
   causaleVersamento?: string;
   dueDate?: string;
@@ -217,6 +213,14 @@ export interface PaymentFullDetails {
   detail_v2?: string;
   errorCode?: string;
   url?: string;
+}
+
+export interface PaymentFullDetails extends Partial<ExtRegistriesPaymentDetails> {
+  paAttachment?: NotificationDetailDocument;
+  f24PaymentDetails?: F24PaymentDetails;
+  applyCostFlg: boolean;
+  recipientType?: RecipientType;
+  causaleVersamento?: string;
 }
 
 export interface PaidDetails {
@@ -241,7 +245,7 @@ export interface NotificationDetailRecipient {
   denomination: string;
   digitalDomicile?: DigitalAddress;
   physicalAddress?: PhysicalAddress;
-  payments: Array<NotificationDetailPayment>;
+  payments?: Array<NotificationDetailPayment>;
 }
 
 export interface NotificationDetailDocument {
@@ -299,19 +303,6 @@ export enum PaymentInfoDetail {
   PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
   PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
   GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
-}
-
-export interface ExtRegistriesPaymentDetails {
-  creditorTaxId: string;
-  noticeCode: string;
-  status: PaymentStatus;
-  amount?: number;
-  causaleVersamento?: string;
-  dueDate?: string;
-  detail?: PaymentInfoDetail;
-  detail_v2?: string;
-  errorCode?: string;
-  url?: string;
 }
 
 export interface PaymentNotice {
