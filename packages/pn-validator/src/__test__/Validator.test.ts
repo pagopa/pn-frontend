@@ -1,10 +1,11 @@
 import { Validator } from '../Validator';
+import { ValidationError } from '../types/ValidationError';
 import { ValidatorOptions } from '../types/ValidatorOptions';
 
 class DummySubClass {
-    propertyOne: string;
-    propertyTwo: string;
-  }
+  propertyOne: string;
+  propertyTwo: string;
+}
 
 class DummyClass {
   property: string;
@@ -32,6 +33,17 @@ class DummyValidator extends Validator<DummyClass> {
       .forEachElement((rules) => {
         rules.isObject().setValidator(new SubDummyValidator());
       });
+  }
+}
+
+class DummyFooValidator extends Validator<DummyClass> {
+  constructor(options: ValidatorOptions = {}) {
+    super(options);
+    this.ruleFor('property').isString().isEqual('value');
+    this.ruleFor('subProperty')
+      .isArray()
+      .not()
+      .isEmpty();
   }
 }
 
@@ -89,43 +101,36 @@ describe('Test Validator', () => {
   });
 });
 
-const validatorWithOptions = new DummyValidator({ strict: true });
-
 describe('Test Validator with strict mode enabled', () => {
-  it('check if validation works with strict mode (rule missing)', () => {
-    const dummyObject: DummyClass = {
-      property: 'value',
+  const dummyObject: DummyClass = {
+    property: 'value',
+    subProperty: [
+      {
+        propertyOne: 'valueOne',
+        propertyTwo: 'valueTwo',
+      },
+    ],
+    fooProperty: 'foo',
+  };
+
+  it('should throw validation error for missing rules (strict: true)', () => {
+    const validatorWithOptions = new DummyFooValidator({ strict: true });
+    // Since a rule for 'fooProperty' is missing, an error is expected
+    const expectedError = {
       subProperty: [
         {
-          propertyOne: 'valueOne',
-          propertyTwo: 'valueTwo',
+          propertyOne: 'Rule is missing',
+          propertyTwo: 'Rule is missing',
         },
       ],
-      fooProperty: 'foo'
+      fooProperty: 'Rule is missing',
     };
-    // Since a rule for 'fooProperty' is missing, an error is expected
-    expect(() => validatorWithOptions.validate(dummyObject)).toThrowError(
-      'Validation Error: Missing rules for keys: subProperty.0.propertyOne, subProperty.0.propertyTwo, fooProperty'
-    );
+    const results = validatorWithOptions.validate(dummyObject);
+    expect(results).toStrictEqual(results);
   });
 
-  const validatorWithNoOptions = new DummyValidator();
-
-  it('check if validation works with strict mode (valid)', () => {
-    const dummyObject: DummyClass = {
-      property: 'value',
-      subProperty: [
-        {
-          propertyOne: 'valueOne',
-          propertyTwo: 'valueTwo',
-        },
-        {
-          propertyOne: 'valueOne',
-          propertyTwo: 'valueTwo',
-        },
-      ],
-      fooProperty: 'foo'
-    };
+  it('should not throw validation error for missing rules (strict: false)', () => {
+    const validatorWithNoOptions = new DummyValidator();
     // With all rules defined correctly, there are expected to be no errors
     const results = validatorWithNoOptions.validate(dummyObject);
     expect(results).toBeNull();
