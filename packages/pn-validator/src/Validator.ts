@@ -8,7 +8,7 @@ import { TypeRules } from './types/TypeRules';
  * Validator options that include the strict mode but in the future you can add any other
  * options.
  */
-export interface ValidatorOptions { 
+export interface ValidatorOptions {
   strict?: boolean;
 }
 
@@ -21,7 +21,6 @@ export class Validator<TModel> {
   }
 
   public readonly validate = (model: TModel): ValidationError<TModel> | null => {
-
     // check if the number of rule keys are equals to the number of model keys.
     if (this.strict) {
       if (typeof model === 'object' && model !== null) {
@@ -35,6 +34,7 @@ export class Validator<TModel> {
       }
     }
 
+    // eslint-disable-next-line functional/no-let
     let errors: ValidationError<TModel> | null = null;
 
     // loop over all validators
@@ -46,9 +46,9 @@ export class Validator<TModel> {
         // check errors
         if (hasError(result)) {
           if (!errors) {
-
             errors = {};
           }
+          // eslint-disable-next-line functional/immutable-data
           errors[propertyName as keyof TModel] = result;
         }
       }
@@ -60,12 +60,13 @@ export class Validator<TModel> {
    * Add rule for a specific property
    * @param  {TPropertyName} propertyName property name
    */
-  public readonly ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
+  public readonly ruleFor = <TPropertyName extends keyof TModel>(
     propertyName: TPropertyName
-  ): TypeRules<TModel, TValue> => {
-    const validatorBuilder = new ValidatorBuilder<TModel, TValue>();
-    this.validatorBuilders[propertyName] = validatorBuilder as any;
+  ): TypeRules<TModel, TModel[TPropertyName]> => {
+    const validatorBuilder = new ValidatorBuilder<TModel, TModel[TPropertyName]>();
+    // eslint-disable-next-line functional/immutable-data
+    this.validatorBuilders[propertyName] = validatorBuilder;
 
-    return validatorBuilder.getTypeRules() as unknown as TypeRules<TModel, TValue>;
+    return validatorBuilder.getTypeRules() as TypeRules<TModel, TModel[TPropertyName]>;
   };
 }

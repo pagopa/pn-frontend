@@ -31,7 +31,11 @@ export abstract class CommonRuleValidator<TModel, TValue> {
     return this;
   };
 
-  private addIsOneOfRule = (possibleValues: TValue[], not: boolean, customErrorMessage?: string) => {
+  private addIsOneOfRule = (
+    possibleValues: Array<TValue>,
+    not: boolean,
+    customErrorMessage?: string
+  ) => {
     this.pushRule(new IsOneOf<TModel, TValue>(possibleValues, not, customErrorMessage));
     return this;
   };
@@ -40,35 +44,31 @@ export abstract class CommonRuleValidator<TModel, TValue> {
    * Check if value is null
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  public readonly isNull = (customErrorMessage?: string) => {
-    return this.addIsNullRule(false, customErrorMessage);
-  };
+  public readonly isNull = (customErrorMessage?: string) =>
+    this.addIsNullRule(false, customErrorMessage);
 
   /**
    * Check if value is undefined
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  public readonly isUndefined = (customErrorMessage?: string) => {
-    return this.addIsUndefinedRule(false, customErrorMessage);
-  };
+  public readonly isUndefined = (customErrorMessage?: string) =>
+    this.addIsUndefinedRule(false, customErrorMessage);
 
   /**
    * Check if value is equal to one provided
    * @param {boolean} value value to compare
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  public readonly isEqual = (value: TValue, customErrorMessage?: string) => {
-    return this.addIsEqualRule(value, false, customErrorMessage);
-  };
+  public readonly isEqual = (value: TValue, customErrorMessage?: string) =>
+    this.addIsEqualRule(value, false, customErrorMessage);
 
   /**
    * Check if value is in (not in) the set provided
    * @param {TValue[]} value value to compare
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  public readonly isOneOf = (possibleValues: TValue[], customErrorMessage?: string) => {
-    return this.addIsOneOfRule(possibleValues, false, customErrorMessage);
-  };
+  public readonly isOneOf = (possibleValues: Array<TValue>, customErrorMessage?: string) =>
+    this.addIsOneOfRule(possibleValues, false, customErrorMessage);
 
   /**
    * Run custom validator
@@ -84,19 +84,14 @@ export abstract class CommonRuleValidator<TModel, TValue> {
   /**
    * Negate next rule
    */
-  protected readonly _not = (): NotRuleValidator<TModel, TValue> =>
+  protected readonly commonNot = (): NotRuleValidator<TModel, TValue> =>
     ({
-      isNull: (customErrorMessage?: string) => {
-        return this.addIsNullRule(true, customErrorMessage);
-      },
-      isUndefined: (customErrorMessage?: string) => {
-        return this.addIsUndefinedRule(true, customErrorMessage);
-      },
-      isEqual: (value: TValue, customErrorMessage?: string) => {
-        return this.addIsEqualRule(value, true, customErrorMessage);
-      },
-      isOneOf: (possibleValues: TValue[], customErrorMessage?: string) => {
-        return this.addIsOneOfRule(possibleValues, true, customErrorMessage);
-      },
+      isNull: (customErrorMessage?: string) => this.addIsNullRule(true, customErrorMessage),
+      isUndefined: (customErrorMessage?: string) =>
+        this.addIsUndefinedRule(true, customErrorMessage),
+      isEqual: (value: TValue, customErrorMessage?: string) =>
+        this.addIsEqualRule(value, true, customErrorMessage),
+      isOneOf: (possibleValues: Array<TValue>, customErrorMessage?: string) =>
+        this.addIsOneOfRule(possibleValues, true, customErrorMessage),
     } as unknown as NotRuleValidator<TModel, TValue>);
 }
