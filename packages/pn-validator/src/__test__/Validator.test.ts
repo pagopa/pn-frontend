@@ -115,7 +115,8 @@ describe('Test Validator with strict mode enabled', () => {
 
   it('should throw validation error for missing rules (strict: true)', () => {
     const validatorWithOptions = new DummyFooValidator({ strict: true });
-    // Since a rule for 'fooProperty' is missing, an error is expected
+    // Since a rule for 'fooProperty' and the properties of 'subProperty' (propertyOne and propertyTwo)
+    // are missing, an error is expected
     const expectedError = {
       subProperty: [
         {
