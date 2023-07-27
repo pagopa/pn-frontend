@@ -187,9 +187,6 @@ const Attachments = ({
       setAttachments({
         documents: documents.map((v) => ({
           ...v,
-          file: {
-            ...v.file,
-          },
           id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
         })),
       })
@@ -209,7 +206,9 @@ const Attachments = ({
           // upload attachments
           dispatch(uploadNotificationAttachment(values.documents))
             .unwrap()
-            .then(() => {
+            .then((docs) => {
+              // update formik
+              void formik.setFieldValue('documents', docs, false);
               onConfirm();
             })
             .catch(() => undefined);

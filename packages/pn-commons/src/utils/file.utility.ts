@@ -1,3 +1,6 @@
+// this function is not used anymore, but for this moment I leave it
+// in the future it can be useful
+// Andrea Cimini, 2023.07.27
 export const calcBase64String = (file: any): Promise<string> => {
   // this is because test fails due to resolve in onload function
   if (process.env.NODE_ENV === 'test') {

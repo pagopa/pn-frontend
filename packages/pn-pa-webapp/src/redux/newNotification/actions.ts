@@ -80,13 +80,8 @@ export const uploadNotificationAttachment = createAsyncThunk<
   async (items: Array<NewNotificationDocument>, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
-      const itemsToUpload = [];
       const filteredItems = items.filter((item) => !item.ref.key && !item.ref.versionToken);
-      for (const item of filteredItems) {
-        const payload = await createPayloadToUpload(item);
-        // eslint-disable-next-line functional/immutable-data
-        itemsToUpload.push(payload);
-      }
+      const itemsToUpload = await Promise.all(filteredItems.map(createPayloadToUpload));
       if (itemsToUpload.length === 0) {
         return items;
       }
@@ -109,20 +104,20 @@ export const uploadNotificationAttachment = createAsyncThunk<
   }
 );
 
-const getPaymentDocumentsToUpload = async (items: {
+const getPaymentDocumentsToUpload = (items: {
   [key: string]: PaymentObject;
-}): Promise<Array<UploadDocumentParams>> => {
-  const documentsArr: Array<UploadDocumentParams> = [];
+}): Array<Promise<UploadDocumentParams>> => {
+  const documentsArr: Array<Promise<UploadDocumentParams>> = [];
   for (const item of Object.values(items)) {
     /* eslint-disable functional/immutable-data */
     if (item.pagoPaForm && !item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
-      documentsArr.push(await createPayloadToUpload(item.pagoPaForm));
+      documentsArr.push(createPayloadToUpload(item.pagoPaForm));
     }
     if (item.f24flatRate && !item.f24flatRate.ref.key && !item.f24flatRate.ref.versionToken) {
-      documentsArr.push(await createPayloadToUpload(item.f24flatRate));
+      documentsArr.push(createPayloadToUpload(item.f24flatRate));
     }
     if (item.f24standard && !item.f24standard.ref.key && !item.f24standard.ref.versionToken) {
-      documentsArr.push(await createPayloadToUpload(item.f24standard));
+      documentsArr.push(createPayloadToUpload(item.f24standard));
     }
     /* eslint-enable functional/immutable-data */
   }
@@ -137,7 +132,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
   async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
     try {
       // before upload, filter out documents already uploaded
-      const documentsToUpload = await getPaymentDocumentsToUpload(items);
+      const documentsToUpload = await Promise.all(getPaymentDocumentsToUpload(items));
       if (documentsToUpload.length === 0) {
         return items;
       }
