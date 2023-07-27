@@ -59,12 +59,12 @@ export interface INotificationDetailTimeline {
   // PN-5484
   // ------------------------------------------------
   // The link to the AAR (i.e. details.generatedAarUrl) included to ANALOG_FAILURE_WORKFLOW timeline elements
-  // must be handled analogously to legal facts, 
+  // must be handled analogously to legal facts,
   // i.e. a link must be shown inside the graphic timeline.
   // To achieve this, we add the NotificationDetailOtherDocument object corresponding to such links
   // to the legalFactsIds array for the ANALOG_FAILURE_WORKFLOW timeline elements.
-  // Consequently, each element of legalFactsIds can be either 
-  // - a LegalFactId object coming from legalFactsIds in the API response, or 
+  // Consequently, each element of legalFactsIds can be either
+  // - a LegalFactId object coming from legalFactsIds in the API response, or
   // - a NotificationDetailOtherDocument coming from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements
   // ------------------------------------------------
   // Carlos Lombardi, 2023.05.02
@@ -195,13 +195,37 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
 }
 
-export interface PaidDetails extends BaseDetails {
+export interface RecipientPaymentFullDetails {
+  recIndex: number;
+  recipientDenomination: string;
+  recipientTaxId: string;
+  payments: Array<PaymentFullDetails>;
+}
+
+export interface PaymentFullDetails {
+  creditorTaxId?: string;
+  noticeCode?: string;
+  paAttachment?: NotificationDetailDocument;
+  f24PaymentDetails?: F24PaymentDetails;
+  applyCostFlg: boolean;
+  status?: PaymentStatus;
+  recipientType?: RecipientType;
+  amount?: number;
+  causaleVersamento?: string;
+  dueDate?: string;
+  detail?: PaymentInfoDetail;
+  detail_v2?: string;
+  errorCode?: string;
+  url?: string;
+}
+
+export interface PaidDetails {
+  recIndex: number;
   paymentSourceChannel: string;
   recipientType: RecipientType;
   amount?: number;
-  creditorTaxId?: string;
-  idF24?: string;
-  noticeCode?: string;
+  creditorTaxId: string;
+  noticeCode: string;
   paymentObject?: string;
 }
 
@@ -217,7 +241,7 @@ export interface NotificationDetailRecipient {
   denomination: string;
   digitalDomicile?: DigitalAddress;
   physicalAddress?: PhysicalAddress;
-  payment?: NotificationDetailPayment;
+  payments: Array<NotificationDetailPayment>;
 }
 
 export interface NotificationDetailDocument {
@@ -242,13 +266,21 @@ export enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
-export interface NotificationDetailPayment {
-  noticeCode?: string;
-  noticeCodeAlternative?: string;
+export interface PagoPAPaymentDetails {
   creditorTaxId: string;
-  pagoPaForm?: NotificationDetailDocument;
-  f24flatRate?: NotificationDetailDocument;
-  f24standard?: NotificationDetailDocument;
+  noticeCode: string;
+  attachment?: NotificationDetailDocument;
+  applyCostFlg: boolean;
+}
+
+export interface F24PaymentDetails {
+  description: string;
+  metadata: any;
+}
+
+export interface NotificationDetailPayment {
+  pagoPA?: PagoPAPaymentDetails;
+  f24Data?: F24PaymentDetails;
 }
 
 export enum PaymentStatus {
@@ -269,13 +301,17 @@ export enum PaymentInfoDetail {
   GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
 }
 
-export interface PaymentInfo {
+export interface ExtRegistriesPaymentDetails {
+  creditorTaxId: string;
+  noticeCode: string;
   status: PaymentStatus;
+  amount?: number;
+  causaleVersamento?: string;
+  dueDate?: string;
   detail?: PaymentInfoDetail;
   detail_v2?: string;
   errorCode?: string;
-  amount?: number;
-  url: string;
+  url?: string;
 }
 
 export interface PaymentNotice {
@@ -377,8 +413,8 @@ enum DeliveryMode {
 // PN-4484 - only the messages of the SENT_COURTESY kind are meaningful to the user
 export enum AppIoCourtesyMessageEventType {
   // message effettively sent
-  SENT_COURTESY = 'SENT_COURTESY',    
-  // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN" 
+  SENT_COURTESY = 'SENT_COURTESY',
+  // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN"
   SENT_OPTIN = 'SENT_OPTIN',
   // another event related to "OPTIN" internal messages
   NOT_SENT_OPTIN_ALREADY_SENT = 'NOT_SENT_OPTIN_ALREADY_SENT',
@@ -395,7 +431,7 @@ export enum LegalFactType {
   SENDER_ACK = 'SENDER_ACK',
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
-  ANALOG_FAILURE_DELIVERY = 'ANALOG_FAILURE_DELIVERY',  
+  ANALOG_FAILURE_DELIVERY = 'ANALOG_FAILURE_DELIVERY',
   RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
   PEC_RECEIPT = 'PEC_RECEIPT', // PN-2107
 }

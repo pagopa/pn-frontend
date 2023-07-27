@@ -5,10 +5,13 @@ import {
   LegalFactDocumentDetails,
   LegalFactId,
   PaymentAttachmentNameType,
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
-import { NotificationDetailOtherDocument, PaymentNotice } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
+import {
+  NotificationDetailOtherDocument,
+  PaymentNotice,
+} from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 
@@ -21,7 +24,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
   GET_DOWNTIME_EVENTS = 'getDowntimeEvents',
-  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',  
+  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -30,10 +33,7 @@ export const getReceivedNotification = createAsyncThunk<
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
   performThunkAction((params: GetReceivedNotificationParams) =>
-    NotificationsApi.getReceivedNotification(
-      params.iun,
-      params.mandateId
-    )
+    NotificationsApi.getReceivedNotification(params.iun, params.mandateId)
   )
 );
 
@@ -77,7 +77,7 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
   { noticeCode: string; taxId: string }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
@@ -96,34 +96,48 @@ export const getNotificationPaymentUrl = createAsyncThunk<
   )
 );
 
-export const getReceivedNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string}>(
+export const getReceivedNotificationOtherDocument = createAsyncThunk<
+  { url: string },
+  { iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string }
+>(
   'getReceivedNotificationOtherDocument',
-  async (params: {
-    iun: string;
-    mandateId?: string;
-    otherDocument: {
-      documentId: string;
-      documentType: string;
-    };
-  }, { rejectWithValue }) => {
+  async (
+    params: {
+      iun: string;
+      mandateId?: string;
+      otherDocument: {
+        documentId: string;
+        documentType: string;
+      };
+    },
+    { rejectWithValue }
+  ) => {
     try {
-      return await NotificationsApi.getReceivedNotificationOtherDocument(params.iun, params.otherDocument, params.mandateId);
+      return await NotificationsApi.getReceivedNotificationOtherDocument(
+        params.iun,
+        params.otherDocument,
+        params.mandateId
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
 
-export const getDowntimeEvents = createAsyncThunk<DowntimeLogPage, GetNotificationDowntimeEventsParams>(
+export const getDowntimeEvents = createAsyncThunk<
+  DowntimeLogPage,
+  GetNotificationDowntimeEventsParams
+>(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS,
   performThunkAction((params: GetNotificationDowntimeEventsParams) => {
-    const completeParams = {...params,
+    const completeParams = {
+      ...params,
       functionality: [
         KnownFunctionality.NotificationCreate,
         KnownFunctionality.NotificationVisualization,
         KnownFunctionality.NotificationWorkflow,
       ],
-      // size and page parameters are not needed since we are interested in all downtimes 
+      // size and page parameters are not needed since we are interested in all downtimes
       // within the given time range
     };
     return AppStatusApi.getDowntimeLogPage(completeParams);
@@ -131,7 +145,10 @@ export const getDowntimeEvents = createAsyncThunk<DowntimeLogPage, GetNotificati
 );
 
 // copy of the action having same name in the appStatus slice!!
-export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<LegalFactDocumentDetails, string>(
+export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
+  LegalFactDocumentDetails,
+  string
+>(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
   performThunkAction((legalFactId: string) => AppStatusApi.getLegalFactDetails(legalFactId))
 );

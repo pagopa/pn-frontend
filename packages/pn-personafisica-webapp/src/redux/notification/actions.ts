@@ -5,7 +5,7 @@ import {
   LegalFactDocumentDetails,
   LegalFactId,
   PaymentAttachmentNameType,
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
 import {
@@ -82,7 +82,7 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
   { noticeCode: string; taxId: string }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
@@ -123,16 +123,20 @@ export const getReceivedNotificationOtherDocument = createAsyncThunk<
   )
 );
 
-export const getDowntimeEvents = createAsyncThunk<DowntimeLogPage, GetNotificationDowntimeEventsParams>(
+export const getDowntimeEvents = createAsyncThunk<
+  DowntimeLogPage,
+  GetNotificationDowntimeEventsParams
+>(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS,
   performThunkAction((params: GetNotificationDowntimeEventsParams) => {
-    const completeParams = {...params,
+    const completeParams = {
+      ...params,
       functionality: [
         KnownFunctionality.NotificationCreate,
         KnownFunctionality.NotificationVisualization,
         KnownFunctionality.NotificationWorkflow,
       ],
-      // size and page parameters are not needed since we are interested in all downtimes 
+      // size and page parameters are not needed since we are interested in all downtimes
       // within the given time range
     };
     return AppStatusApi.getDowntimeLogPage(completeParams);
@@ -140,8 +144,10 @@ export const getDowntimeEvents = createAsyncThunk<DowntimeLogPage, GetNotificati
 );
 
 // copy of the action having same name in the appStatus slice!!
-export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<LegalFactDocumentDetails, string>(
+export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
+  LegalFactDocumentDetails,
+  string
+>(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
   performThunkAction((legalFactId: string) => AppStatusApi.getLegalFactDetails(legalFactId))
 );
-

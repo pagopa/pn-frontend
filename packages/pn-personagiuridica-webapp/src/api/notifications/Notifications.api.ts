@@ -6,7 +6,7 @@ import {
   NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
@@ -41,12 +41,14 @@ export const NotificationsApi = {
    *
    * @returns Promise
    */
-  getReceivedNotifications:
-    (params: GetNotificationsParams & { isDelegatedPage: boolean }): Promise<GetNotificationsResponse> => {
-      const { isDelegatedPage, ...payload } = params;
-      return apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage)).then((response) => {
+  getReceivedNotifications: (
+    params: GetNotificationsParams & { isDelegatedPage: boolean }
+  ): Promise<GetNotificationsResponse> => {
+    const { isDelegatedPage, ...payload } = params;
+    return apiClient
+      .get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage))
+      .then((response) => {
         if (response.data && response.data.resultsPage) {
-
           const notifications = response.data.resultsPage.map((d) => ({
             ...d,
             sentAt: formatDate(d.sentAt),
@@ -83,7 +85,6 @@ export const NotificationsApi = {
         return {} as NotificationDetailForRecipient;
       }
     }),
-
 
   /**
    * Get notification iun and mandate id from aar link
@@ -168,9 +169,12 @@ export const NotificationsApi = {
    * @param  {string} taxId
    * @returns Promise
    */
-  getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
+  getNotificationPaymentInfo: (
+    noticeCode: string,
+    taxId: string
+  ): Promise<ExtRegistriesPaymentDetails> =>
     apiClient
-      .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .get<ExtRegistriesPaymentDetails>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
       .then((response) => response.data),
 
   /**
