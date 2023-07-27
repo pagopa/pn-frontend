@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect, useMemo } from 'react';
+import { Fragment, ReactNode, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -34,7 +34,7 @@ const Prompt = ({
   );
 
   const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
+  const textPosition = isMobile ? 'center' : 'left';
 
   useEffect(() => {
     if (showPrompt) {
