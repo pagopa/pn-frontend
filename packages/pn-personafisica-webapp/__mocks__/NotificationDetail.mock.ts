@@ -198,7 +198,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
-export const PF_NOTIFICATION_FROM_BE: NotificationDetail = {
+export const PF_NOTIFICATION_DTO: NotificationDetail = {
   iun: 'AGZY-LZEZ-HDJW-202307-Z-1',
   paProtocolNumber: '302011689142547177',
   subject: 'Mock notification',
@@ -228,7 +228,7 @@ export const PF_NOTIFICATION_FROM_BE: NotificationDetail = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
 };
 
-export const notificationToFe = parseNotificationDetail(PF_NOTIFICATION_FROM_BE);
+export const notificationToFe = parseNotificationDetail(PF_NOTIFICATION_DTO);
 
 export const EXTERNAL_REGISTRIES_MOCK: ExtRegistriesPaymentDetails = {
   creditorTaxId: 'string',

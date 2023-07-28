@@ -12,9 +12,187 @@ import {
   ExtRegistriesPaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
+  INotificationDetailTimeline,
+  NotificationStatusHistory,
+  NotificationDetailDocument,
+  NotificationDetailRecipient,
 } from '@pagopa-pn/pn-commons';
 
-export const PA_NOTIFICATION_FROM_BE: NotificationDetail = {
+const timeline: Array<INotificationDetailTimeline> = [
+  {
+    elementId: 'c_b429-202203021814_start',
+    timestamp: '2022-03-02T17:56:46.668Z',
+    category: TimelineCategory.REQUEST_ACCEPTED,
+    details: {},
+    legalFactsIds: [
+      {
+        key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
+        category: LegalFactType.SENDER_ACK,
+      },
+    ],
+  },
+  {
+    elementId: 'c_b429-202203021814_deliveryMode_rec0',
+    timestamp: '2022-03-02T17:56:50.303Z',
+    category: TimelineCategory.SEND_ANALOG_DOMICILE,
+    details: {
+      physicalAddress: {
+        at: '',
+        address: '',
+        addressDetails: '',
+        zip: '',
+        municipality: '',
+        province: '',
+        foreignState: '',
+      },
+    },
+  },
+  {
+    elementId: 'c_b429-202203021814_send_pec_rec0_PLATFORM_n1',
+    timestamp: '2022-03-02T17:56:53.636Z',
+    category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+    details: {
+      digitalAddress: {
+        type: DigitalDomicileType.EMAIL,
+        address: 'mocked@email.it',
+      },
+      digitalAddressSource: AddressSource.GENERAL,
+      retryNumber: 1,
+    },
+  },
+  {
+    elementId: 'c_b429-202203021814_send_pec_rec0_SPECIAL_n1',
+    timestamp: '2022-03-02T17:56:56.856Z',
+    category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+    details: {
+      digitalAddress: {
+        type: DigitalDomicileType.PEC,
+        address: 'nome.cognome@works.demo.it',
+      },
+      digitalAddressSource: AddressSource.GENERAL,
+      retryNumber: 1,
+    },
+  },
+  {
+    elementId: 'c_b429-202203021814_recipient_timeout_rec0',
+    timestamp: '2022-03-02T17:59:10.029Z',
+    category: TimelineCategory.REFINEMENT,
+    details: {},
+  },
+  {
+    elementId: 'c_b4239-202203021814_recipient_timeout_rec0',
+    timestamp: '2022-03-02T17:59:10.029Z',
+    category: TimelineCategory.PAYMENT,
+    details: {
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
+      recipientType: RecipientType.PF,
+      recIndex: 0,
+    },
+  },
+];
+
+const notificationStatusHistory: Array<NotificationStatusHistory> = [
+  {
+    status: NotificationStatus.DELIVERED,
+    activeFrom: '2022-02-22T10:19:33.440Z',
+    relatedTimelineElements: [],
+  },
+];
+
+const documents: Array<NotificationDetailDocument> = [
+  {
+    digests: {
+      sha256: '3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659',
+    },
+    contentType: 'application/pdf',
+    title: 'Mocked document',
+    ref: {
+      key: 'Doc1',
+      versionToken: 'mocked-versionToken',
+    },
+    docIdx: '0',
+  },
+];
+
+const recipients: Array<NotificationDetailRecipient> = [
+  {
+    recipientType: RecipientType.PF,
+    taxId: 'CGNNMO80A03H501U',
+    denomination: 'Analogico Ok',
+    digitalDomicile: {
+      address: 'mail@pec.it',
+      type: DigitalDomicileType.PEC,
+    },
+    physicalAddress: {
+      at: 'Presso qualcuno',
+      address: 'In via del tutto eccezionale',
+      addressDetails: 'scala A',
+      zip: '00100',
+      municipality: 'Comune',
+      province: 'PROV',
+      foreignState: '',
+    },
+    payments: [
+      {
+        pagoPA: {
+          creditorTaxId: '302011689142547191',
+          noticeCode: '77777777777',
+          applyCostFlg: true,
+          attachment: {
+            digests: {
+              sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+            },
+            contentType: 'application/pdf',
+            ref: {
+              key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
+              versionToken: 'v1',
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
+    recipientType: RecipientType.PG,
+    taxId: 'CCRMCT06A03A433H',
+    denomination: 'Totito',
+    digitalDomicile: {
+      type: DigitalDomicileType.PEC,
+      address: 'totito@pec.pagopa.it',
+    },
+    physicalAddress: {
+      at: 'Presso',
+      address: 'VIA SENZA NOME',
+      addressDetails: 'SCALA B',
+      zip: '87100',
+      municipality: 'MILANO',
+      municipalityDetails: 'MILANO',
+      province: 'MI',
+      foreignState: 'ITALIA',
+    },
+    payments: [
+      {
+        pagoPA: {
+          creditorTaxId: '302011689142547191',
+          noticeCode: '77777777777',
+          applyCostFlg: true,
+          attachment: {
+            digests: {
+              sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+            },
+            contentType: 'application/pdf',
+            ref: {
+              key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
+              versionToken: 'v1',
+            },
+          },
+        },
+      },
+    ],
+  },
+];
+
+export const PA_NOTIFICATION_DTO: NotificationDetail = {
   iun: 'c_b963-220220221119',
   paProtocolNumber: '220220221119',
   subject: 'Prova - status',
@@ -25,324 +203,24 @@ export const PA_NOTIFICATION_FROM_BE: NotificationDetail = {
   documentsAvailable: true,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
   senderPaId: 'mocked-senderPaId',
-  recipients: [
-    {
-      recipientType: RecipientType.PF,
-      taxId: 'CGNNMO80A03H501U',
-      denomination: 'Analogico Ok',
-      digitalDomicile: {
-        address: 'mail@pec.it',
-        type: DigitalDomicileType.PEC,
-      },
-      physicalAddress: {
-        at: 'Presso qualcuno',
-        address: 'In via del tutto eccezionale',
-        addressDetails: 'scala A',
-        zip: '00100',
-        municipality: 'Comune',
-        province: 'PROV',
-        foreignState: '',
-      },
-      payments: [
-        {
-          pagoPA: {
-            creditorTaxId: '302011689142547191',
-            noticeCode: '77777777777',
-            applyCostFlg: true,
-            attachment: {
-              digests: {
-                sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-              },
-              contentType: 'application/pdf',
-              ref: {
-                key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
-                versionToken: 'v1',
-              },
-            },
-          },
-        },
-      ],
-    },
-  ],
-  documents: [
-    {
-      digests: {
-        sha256: '3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659',
-      },
-      contentType: 'application/pdf',
-      title: 'Mocked document',
-      ref: {
-        key: 'Doc1',
-        versionToken: 'mocked-versionToken',
-      },
-      docIdx: '0',
-    },
-  ],
+  recipients: [recipients[0]],
+  documents,
   notificationStatus: NotificationStatus.DELIVERED,
-  notificationStatusHistory: [
-    {
-      status: NotificationStatus.DELIVERED,
-      activeFrom: '2022-02-22T10:19:33.440Z',
-      relatedTimelineElements: [],
-    },
-  ],
-  timeline: [
-    {
-      elementId: 'c_b429-202203021814_start',
-      timestamp: '2022-03-02T17:56:46.668Z',
-      category: TimelineCategory.REQUEST_ACCEPTED,
-      details: {},
-      legalFactsIds: [
-        {
-          key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
-          category: LegalFactType.SENDER_ACK,
-        },
-      ],
-    },
-    {
-      elementId: 'c_b429-202203021814_deliveryMode_rec0',
-      timestamp: '2022-03-02T17:56:50.303Z',
-      category: TimelineCategory.SEND_ANALOG_DOMICILE,
-      details: {
-        physicalAddress: {
-          at: '',
-          address: '',
-          addressDetails: '',
-          zip: '',
-          municipality: '',
-          province: '',
-          foreignState: '',
-        },
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_pec_rec0_PLATFORM_n1',
-      timestamp: '2022-03-02T17:56:53.636Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.EMAIL,
-          address: 'mocked@email.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_pec_rec0_SPECIAL_n1',
-      timestamp: '2022-03-02T17:56:56.856Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_recipient_timeout_rec0',
-      timestamp: '2022-03-02T17:59:10.029Z',
-      category: TimelineCategory.REFINEMENT,
-      details: {},
-    },
-    {
-      elementId: 'c_b4239-202203021814_recipient_timeout_rec0',
-      timestamp: '2022-03-02T17:59:10.029Z',
-      category: TimelineCategory.PAYMENT,
-      details: {
-        paymentSourceChannel: 'EXTERNAL_REGISTRY',
-        recipientType: RecipientType.PF,
-        recIndex: 0,
-      },
-    },
-  ],
+  notificationStatusHistory,
+  timeline,
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   amount: 130,
 };
 
-export const notificationToFe = parseNotificationDetail(PA_NOTIFICATION_FROM_BE);
+export const notificationToFe = parseNotificationDetail(PA_NOTIFICATION_DTO);
 
-export const PA_NOTIFICATION_FROM_BE_MULTI_RECIPIENT: NotificationDetail = {
-  iun: 'c_b963-220220221119',
-  paProtocolNumber: '220220221119',
-  subject: 'Prova - status',
-  abstract: 'mocked-abstract',
-  sentAt: '2022-02-21T10:19:33.440Z',
-  cancelledIun: 'mocked-cancelledIun',
-  cancelledByIun: 'mocked-cancelledByIun',
-  documentsAvailable: true,
-  senderPaId: 'mocked-senderPaId',
-  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-  recipients: [
-    {
-      recipientType: RecipientType.PF,
-      taxId: 'CGNNMO80A03H501U',
-      denomination: 'Analogico Ok',
-      digitalDomicile: {
-        address: 'mail@pec.it',
-        type: DigitalDomicileType.PEC,
-      },
-      physicalAddress: {
-        at: 'Presso qualcuno',
-        address: 'In via del tutto eccezionale',
-        addressDetails: 'scala A',
-        zip: '00100',
-        municipality: 'Comune',
-        province: 'PROV',
-        foreignState: '',
-      },
-      payments: [
-        {
-          pagoPA: {
-            creditorTaxId: '302011689142547191',
-            noticeCode: '77777777777',
-            applyCostFlg: true,
-            attachment: {
-              digests: {
-                sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-              },
-              contentType: 'application/pdf',
-              ref: {
-                key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
-                versionToken: 'v1',
-              },
-            },
-          },
-        },
-      ],
-    },
-    {
-      recipientType: RecipientType.PF,
-      taxId: 'CGNNMO80A03H501V',
-      denomination: 'Altro Ok',
-      digitalDomicile: {
-        address: 'mail2@pec.it',
-        type: DigitalDomicileType.PEC,
-      },
-      physicalAddress: {
-        at: 'Presso qualcuno',
-        address: 'In via del tutto eccezionale',
-        addressDetails: 'scala A',
-        zip: '00100',
-        municipality: 'Comune',
-        province: 'PROV',
-        foreignState: '',
-      },
-      payments: [
-        {
-          pagoPA: {
-            creditorTaxId: '302011689142547191',
-            noticeCode: '77777777777',
-            applyCostFlg: true,
-            attachment: {
-              digests: {
-                sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-              },
-              contentType: 'application/pdf',
-              ref: {
-                key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
-                versionToken: 'v1',
-              },
-            },
-          },
-        },
-      ],
-    },
-  ],
-  documents: [
-    {
-      digests: {
-        sha256: '3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659',
-      },
-      contentType: 'application/pdf',
-      title: 'Mocked document',
-      ref: {
-        key: 'Doc1',
-        versionToken: 'mocked-versionToken',
-      },
-      docIdx: '0',
-    },
-  ],
-  notificationStatus: NotificationStatus.DELIVERED,
-  notificationStatusHistory: [
-    {
-      status: NotificationStatus.DELIVERED,
-      activeFrom: '2022-02-22T10:19:33.440Z',
-      relatedTimelineElements: [],
-    },
-  ],
-  timeline: [
-    {
-      elementId: 'c_b429-202203021814_start',
-      timestamp: '2022-03-02T17:56:46.668Z',
-      category: TimelineCategory.REQUEST_ACCEPTED,
-      details: {},
-      legalFactsIds: [
-        {
-          key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
-          category: LegalFactType.SENDER_ACK,
-        },
-      ],
-    },
-    {
-      elementId: 'c_b429-202203021814_deliveryMode_rec0',
-      timestamp: '2022-03-02T17:56:50.303Z',
-      category: TimelineCategory.SEND_ANALOG_DOMICILE,
-      details: {
-        physicalAddress: {
-          at: '',
-          address: '',
-          addressDetails: '',
-          zip: '',
-          municipality: '',
-          province: '',
-          foreignState: '',
-        },
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_pec_rec0_PLATFORM_n1',
-      timestamp: '2022-03-02T17:56:53.636Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.EMAIL,
-          address: 'mocked@email.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_pec_rec0_SPECIAL_n1',
-      timestamp: '2022-03-02T17:56:56.856Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_recipient_timeout_rec0',
-      timestamp: '2022-03-02T17:59:10.029Z',
-      category: TimelineCategory.REFINEMENT,
-      details: {
-        recIndex: 0,
-      },
-    },
-  ],
-  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  amount: 200,
+export const PA_NOTIFICATION_DTO_MULTI_RECIPIENT: NotificationDetail = {
+  ...PA_NOTIFICATION_DTO,
+  recipients,
 };
 
 export const notificationToFeMultiRecipient = parseNotificationDetail(
-  PA_NOTIFICATION_FROM_BE_MULTI_RECIPIENT
+  PA_NOTIFICATION_DTO_MULTI_RECIPIENT
 );
 
 export const EXTERNAL_REGISTRIES_MOCK: ExtRegistriesPaymentDetails = {
