@@ -9,7 +9,6 @@ class DummySubClass {
 class DummyClass {
   property: string;
   subProperty: DummySubClass[];
-  fooProperty: string;
 }
 
 class SubDummyValidator extends Validator<DummySubClass> {
@@ -21,7 +20,7 @@ class SubDummyValidator extends Validator<DummySubClass> {
 }
 
 class DummyValidator extends Validator<DummyClass> {
-  constructor(options: ValidatorOptions = {}) {
+  constructor(options: ValidatorOptions = {}, subOptions: ValidatorOptions = {}) {
     super(options);
 
     this.ruleFor('property').isString().isEqual('value');
@@ -30,20 +29,14 @@ class DummyValidator extends Validator<DummyClass> {
       .not()
       .isEmpty()
       .forEachElement((rules) => {
-        rules.isObject().setValidator(new SubDummyValidator());
+        rules.isObject().setValidator(new SubDummyValidator(subOptions));
       });
   }
 }
 
-class DummyFooValidator extends Validator<DummyClass> {
-  constructor(options: ValidatorOptions = {}) {
-    super(options);
-    this.ruleFor('property').isString().isEqual('value');
-    this.ruleFor('fooProperty').isString().isEqual('foo');
-  }
-}
-
 const dummyValidator = new DummyValidator();
+const rootStrictDummyValidator = new DummyValidator({ strict: true });
+const rootAndChildStrictDummyValidator = new DummyValidator({ strict: true }, { strict: true });
 
 describe('Test Validator', () => {
   it('check if methods exist', () => {
@@ -63,7 +56,6 @@ describe('Test Validator', () => {
           propertyTwo: 'valueTwo',
         },
       ],
-      fooProperty: 'foo'
     };
     const results = dummyValidator.validate(dummyObject);
     expect(results).toStrictEqual({
@@ -90,36 +82,66 @@ describe('Test Validator', () => {
           propertyTwo: 'valueTwo',
         },
       ],
-      fooProperty: 'foo'
     };
     const results = dummyValidator.validate(dummyObject);
     expect(results).toBeNull();
   });
-});
 
-describe('Test Validator with strict mode enabled', () => {
-  const dummyObject: DummyClass = {
-    property: 'value',
-    subProperty: [
-      {
-        propertyOne: 'valueOne',
-        propertyTwo: 'valueTwo',
-      },
-    ],
-    fooProperty: 'foo',
-  };
-
-  it('should throw validation error for missing rules (strict: true)', () => {
-    const validatorWithOptions = new DummyFooValidator({ strict: true });
+  it('should throw validation error for missing rules (strict on root validator)', () => {
+    const dummyObject = {
+      property: 'value',
+      subProperty: [
+        {
+          propertyOne: 'valueOne',
+          propertyTwo: 'valueTwo',
+          propertyThree: 'valueThree',
+        },
+      ],
+      fooProperty: 'foo',
+    };
     // Since a rule for 'subProperty' is missing, an error is expected
     const expectedError = {
-      subProperty: 'Rule is missing'
+      fooProperty: 'Rule is missing',
     };
-    const results = validatorWithOptions.validate(dummyObject);
+    const results = rootStrictDummyValidator.validate(dummyObject);
     expect(results).toStrictEqual(expectedError);
   });
 
-  it('should not throw validation error for missing rules (strict: false)', () => {
+  it('should throw validation error for missing rules (strict on root and child validator)', () => {
+    const dummyObject = {
+      property: 'value',
+      subProperty: [
+        {
+          propertyOne: 'valueOne',
+          propertyTwo: 'valueTwo',
+          propertyThree: 'valueThree',
+        },
+      ],
+    };
+    // Since a rule for 'subProperty' is missing, an error is expected
+    const expectedError = {
+      subProperty: [
+        {
+          propertyThree: 'Rule is missing',
+        },
+      ],
+    };
+    const results = rootAndChildStrictDummyValidator.validate(dummyObject);
+    expect(results).toStrictEqual(expectedError);
+  });
+
+  it('should not throw validation error for missing rules (no strict)', () => {
+    const dummyObject = {
+      property: 'value',
+      subProperty: [
+        {
+          propertyOne: 'valueOne',
+          propertyTwo: 'valueTwo',
+          propertyThree: 'valueThree',
+        },
+      ],
+      fooProperty: 'foo',
+    };
     const validatorWithNoOptions = new DummyValidator();
     // With all rules defined correctly, there are expected to be no errors
     const results = validatorWithNoOptions.validate(dummyObject);
