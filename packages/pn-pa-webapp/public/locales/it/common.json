@@ -146,5 +146,8 @@
   "roles": {
     "operator": "Referente operativo",
     "admin": "Amministratore"
+  },
+  "attachments": {
+    "remove-attachment": "Elimina allegato"
   }
 }

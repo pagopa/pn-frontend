@@ -404,7 +404,6 @@
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
         "back-to-recipient": "Torna a Destinatario",
-        "remove-attachment": "Elimina allegato",
         "remove-document": "Rimuovi documento"
       },
       "payment-methods": {
