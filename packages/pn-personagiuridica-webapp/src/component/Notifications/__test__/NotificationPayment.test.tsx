@@ -7,7 +7,7 @@ import {
   PaymentStatus,
   PaymentInfoDetail,
   RecipientType,
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -126,7 +126,7 @@ const mocked_payments_detail = {
 describe('NotificationPayment component', () => {
   let mock: MockAdapter;
 
-  function mockPaymentApi(responseBody: PaymentInfo) {
+  function mockPaymentApi(responseBody: ExtRegistriesPaymentDetails) {
     mock = mockApi(
       apiClient,
       'GET',

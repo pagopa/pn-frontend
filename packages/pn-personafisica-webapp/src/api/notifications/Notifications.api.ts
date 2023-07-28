@@ -6,7 +6,7 @@ import {
   NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
-  PaymentInfo,
+  ExtRegistriesPaymentDetails,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
@@ -28,14 +28,12 @@ import {
   NOTIFICATION_PAYMENT_URL,
 } from './notifications.routes';
 
-
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
   }
   return { url: '' };
 };
-
 
 export const NotificationsApi = {
   /**
@@ -173,9 +171,12 @@ export const NotificationsApi = {
    * @param  {string} taxId
    * @returns Promise
    */
-  getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
+  getNotificationPaymentInfo: (
+    noticeCode: string,
+    taxId: string
+  ): Promise<ExtRegistriesPaymentDetails> =>
     apiClient
-      .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .get<ExtRegistriesPaymentDetails>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
       .then((response) => response.data),
 
   /**
