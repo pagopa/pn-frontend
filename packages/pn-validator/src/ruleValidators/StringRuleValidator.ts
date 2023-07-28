@@ -70,7 +70,7 @@ export class StringRuleValidator<TModel, TValue>
    */
   public readonly not = (): NotStringRuleValidator<TModel, TValue> =>
     ({
-      ...this._not(),
+      ...this.commonNot(),
       isEmpty: (customErrorMessage?: string) => {
         return this.addIsEmptyRule(true, customErrorMessage);
       },
