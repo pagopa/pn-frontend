@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { NotificationStatus } from './NotificationStatus';
 
+/** Notification Detail */
 export interface NotificationDetail {
   idempotenceToken?: string;
   paProtocolNumber: string;
@@ -195,34 +196,6 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
 }
 
-export interface RecipientPaymentFullDetails {
-  recIndex: number;
-  recipientDenomination: string;
-  recipientTaxId: string;
-  payments: Array<PaymentFullDetails>;
-}
-
-export interface ExtRegistriesPaymentDetails {
-  creditorTaxId: string;
-  noticeCode: string;
-  status: PaymentStatus;
-  amount?: number;
-  causaleVersamento?: string;
-  dueDate?: string;
-  detail?: PaymentInfoDetail;
-  detail_v2?: string;
-  errorCode?: string;
-  url?: string;
-}
-
-export interface PaymentFullDetails extends Partial<ExtRegistriesPaymentDetails> {
-  paAttachment?: NotificationDetailDocument;
-  f24PaymentDetails?: F24PaymentDetails;
-  applyCostFlg: boolean;
-  recipientType?: RecipientType;
-  causaleVersamento?: string;
-}
-
 export interface PaidDetails {
   recIndex: number;
   paymentSourceChannel: string;
@@ -285,24 +258,6 @@ export interface F24PaymentDetails {
 export interface NotificationDetailPayment {
   pagoPA?: PagoPAPaymentDetails;
   f24Data?: F24PaymentDetails;
-}
-
-export enum PaymentStatus {
-  REQUIRED = 'REQUIRED',
-  SUCCEEDED = 'SUCCEEDED',
-  INPROGRESS = 'IN_PROGRESS',
-  FAILED = 'FAILURE',
-}
-
-export enum PaymentInfoDetail {
-  PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
-  PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
-  DOMAIN_UNKNOWN = 'DOMAIN_UNKNOWN', // Creditor institution error
-  PAYMENT_ONGOING = 'PAYMENT_ONGOING', // Payment on going
-  PAYMENT_EXPIRED = 'PAYMENT_EXPIRED', // Payment expired
-  PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
-  PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
-  GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
 }
 
 export interface PaymentNotice {
@@ -459,3 +414,35 @@ export type AnalogDetails =
   | SendPaperDetails
   | AnalogWorkflowDetails
   | PublicRegistryResponseDetails;
+
+/** External Registries  */
+export enum PaymentInfoDetail {
+  PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
+  PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
+  DOMAIN_UNKNOWN = 'DOMAIN_UNKNOWN', // Creditor institution error
+  PAYMENT_ONGOING = 'PAYMENT_ONGOING', // Payment on going
+  PAYMENT_EXPIRED = 'PAYMENT_EXPIRED', // Payment expired
+  PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
+  PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
+  GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
+}
+
+export enum PaymentStatus {
+  REQUIRED = 'REQUIRED',
+  SUCCEEDED = 'SUCCEEDED',
+  INPROGRESS = 'IN_PROGRESS',
+  FAILED = 'FAILURE',
+}
+
+export interface ExtRegistriesPaymentDetails {
+  creditorTaxId: string;
+  noticeCode: string;
+  status: PaymentStatus;
+  amount?: number;
+  causaleVersamento?: string;
+  dueDate?: string;
+  detail?: PaymentInfoDetail;
+  detail_v2?: string;
+  errorCode?: string;
+  url?: string;
+}
