@@ -15,20 +15,22 @@ export class Validator<TModel> {
   }
 
   public readonly validate = (model: TModel): ValidationError<TModel> | null => {
+    // eslint-disable-next-line functional/no-let
+    let errors: ValidationError<TModel> | null = null;
+
     // check if the number of rule keys are equals to the number of model keys.
     if (this.strict) {
       const missingKeys = isMissingRules(model, this.validatorBuilders);
       if (missingKeys.length > 0) {
-        const validationError: ValidationError<TModel> = {};
         missingKeys.forEach((key) => {
-          validationError[key] = 'Rule is missing';
+          if (!errors) {
+            errors = {};
+          }
+          errors[key] = 'Rule is missing'; // Build the validation error object
         });
-        return validationError;
+        return errors;
       }
     }
-
-    // eslint-disable-next-line functional/no-let
-    let errors: ValidationError<TModel> | null = null;
 
     // loop over all validators
     for (const propertyName of Object.keys(this.validatorBuilders)) {
