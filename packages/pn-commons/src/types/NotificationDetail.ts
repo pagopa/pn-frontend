@@ -196,8 +196,7 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
 }
 
-export interface PaidDetails {
-  recIndex: number;
+export interface PaidDetails extends BaseDetails {
   paymentSourceChannel: string;
   recipientType: RecipientType;
   amount?: number;
