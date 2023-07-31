@@ -70,7 +70,7 @@ const recipient: NotificationDetailRecipient = {
     province: 'MI',
     foreignState: 'ITALIA',
   },
-  payments,
+  payments: paymentsPagoPA,
 };
 
 const notificationStatusHistory: Array<NotificationStatusHistory> = [
