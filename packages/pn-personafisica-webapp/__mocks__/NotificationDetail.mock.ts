@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   AddressSource,
   AnalogWorkflowDetails,
@@ -12,10 +13,10 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
 
-const paymentsPagoPA: Array<NotificationDetailPayment> = [
+const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '302011686772695132',
@@ -56,7 +57,7 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
   },
 ];
 
-const recipient: NotificationDetailRecipient = {
+export const recipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PF,
   taxId: 'LVLDAA85T50G702B',
   denomination: 'FAIL-Giacenza-lte10_890',
@@ -322,7 +323,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
-export const PF_NOTIFICATION_DTO: NotificationDetail = {
+export const notificationDTO: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302011686772695119',
   subject: 'notifica analogica con cucumber',
@@ -354,4 +355,8 @@ export const PF_NOTIFICATION_DTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(PF_NOTIFICATION_DTO);
+export const notificationToFe = parseNotificationDetailForRecipient(
+  _.cloneDeep(notificationDTO),
+  recipient.taxId,
+  []
+);
