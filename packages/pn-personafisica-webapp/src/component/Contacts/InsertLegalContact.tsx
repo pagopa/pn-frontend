@@ -85,6 +85,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
         </Grid>
         <Alert
           tabIndex={0}
+          role="banner"
           aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
           sx={{ mt: 4 }}
           severity="info"

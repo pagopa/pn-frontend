@@ -1,0 +1,29 @@
+{
+  "loginPage": {
+    "title": "How do you want to log in?",
+    "description": "Select the mode you prefer.",
+    "loginBox": {
+      "title": "Login",
+      "spidLogin": "Log in with SPID",
+      "cieLogin": "Log in with CIE"
+    },
+    "hintText": "Don't have a SPID? <1>Learn more</1>",
+    "privacyAndCondition": "By authenticating you declare that you have read and understood the <0>Privacy Policy </0> and the <1>Terms and Conditions of Use</1> of the Area Riservata."
+  },
+  "spidSelect": {
+    "title": "Choose your SPID",
+    "hintText": "Don't have a SPID?<1> Learn more</1>",
+    "cancelButton": "Cancel"
+  },
+  "loginError": {
+    "title": "Sorry, something went wrong. ",
+    "message": "Due to a system error, the procedure cannot be completed.<1 />Please try again later."
+  },
+  "disambiguationPage": {
+    "title": "Which profile do you want to log in with?",
+    "subTitle": "We will redirect you according to your choice.",
+    "pf": "Private citizen",
+    "pg": "Legal person",
+    "button": "Login"
+  }
+}

@@ -26,20 +26,28 @@ describe('Footer Component', () => {
   });
 
   it('shows languages dropdown', async () => {
-    // render component
     const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const result = render(<Footer loggedUser={true} eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}/>);
+    const result = render(<Footer loggedUser={true} eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage} />);
     const buttons = result.container.querySelectorAll('button');
-    fireEvent.click(buttons[4]);
-    const languageSelector = await waitFor(() => screen.queryByRole('presentation'));
-    expect(languageSelector).toBeInTheDocument();
-    const languagesElements = languageSelector?.querySelectorAll('ul li');
-    expect(languagesElements).toHaveLength(Object.keys(LANGUAGES).length);
-    const languagesKeys = Object.keys(LANGUAGES.it); // language 'it' is default selected
-    languagesElements!.forEach((languageElement, index) => {
-      expect(languageElement).toHaveTextContent(LANGUAGES.it[languagesKeys[index] as 'it' | 'en']);
-      fireEvent.click(languageElement);
+    const dropdownLanguageButton = buttons[4];
+    const languageKeys = Object.keys(LANGUAGES);
+
+    // This array represents how the options labels should sequentially change when you click the option.
+    const expectedLanguagesLabels = new Array();
+    for (var i = 0; i < languageKeys.length; i++) {
+      expectedLanguagesLabels.push(LANGUAGES[languageKeys[(i - 1 < 0) ? 0 : i - 1]][languageKeys[i]]);
+    }
+
+    languageKeys.forEach((currentDropdownLanguage, index) => {
+      fireEvent.click(dropdownLanguageButton);
+      const languageSelector = screen.queryByRole('presentation');
+      expect(languageSelector).toBeInTheDocument();
+      const languageOptions = languageSelector?.querySelectorAll('ul li');
+      expect(languageOptions).toHaveLength(Object.keys(LANGUAGES[currentDropdownLanguage]).length);
+      const languageOptionsArray = Array.from(languageOptions!);
+      expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
+      fireEvent.click(languageOptionsArray[index]);
     });
-    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(languagesElements!.length);
+    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(languageKeys.length);
   });
 });

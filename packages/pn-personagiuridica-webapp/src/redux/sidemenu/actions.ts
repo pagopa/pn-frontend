@@ -23,5 +23,9 @@ export const getSidemenuInformation = createAsyncThunk<number>(
 
 export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   'getDomicileInfo',
-  performThunkAction(async () => (await ContactsApi.getDigitalAddresses()).legal)
-);
+  performThunkAction(async () => {
+    const isDefaultAddress = (address: DigitalAddress) => address.senderId === 'default';
+    const allAddresses = await ContactsApi.getDigitalAddresses();
+    return [...allAddresses.legal.filter(isDefaultAddress), ...allAddresses.courtesy.filter(isDefaultAddress)];
+  }
+));

@@ -3,7 +3,6 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
@@ -21,14 +20,6 @@ import Attachments from './components/NewNotification/Attachments';
 import PaymentMethods from './components/NewNotification/PaymentMethods';
 import SyncFeedback from './components/NewNotification/SyncFeedback';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    '& .paperContainer': {
-      boxShadow: 'none',
-    },
-  },
-}));
-
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   return (
@@ -40,7 +31,6 @@ const SubTitle = () => {
 };
 
 const NewNotification = () => {
-  const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const isMobile = useIsMobile();
   const notification = useAppSelector(
@@ -144,7 +134,7 @@ const NewNotification = () => {
       eventTrackingCallbackConfirm={handleEventTrackingCallbackConfirm}
     >
       <Box p={3}>
-        <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
+        <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
             <PnBreadcrumb
               linkRoute={routes.DASHBOARD}

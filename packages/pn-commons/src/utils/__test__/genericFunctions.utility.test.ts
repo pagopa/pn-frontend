@@ -17,7 +17,9 @@ describe('getValidValue function', () => {
     const valueB = undefined;
     expect(getValidValue(valueA, valueB)).toBe('');
   });
+});
 
+describe('filtersApplied function', () => {
   it('return filters count (no filters)', () => {
     const count = filtersApplied(
       {
@@ -45,7 +47,9 @@ describe('getValidValue function', () => {
     );
     expect(count).toEqual(2);
   });
+});
 
+describe('sortArray function', () => {
   it('sorts array - number', () => {
     const arrayToSort = [{ number: 1 }, { number: 2 }, { number: 3 }];
     let sortedArray = sortArray('asc', 'number', arrayToSort);

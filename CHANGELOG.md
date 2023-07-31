@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.0.1-RC.3...v2.0.1-RC.4) (2023-07-31)
+
+
+### Bug Fixes
+
+* **pn-6134:** removed css override on paper component ([#921](https://github.com/pagopa/pn-frontend/issues/921)) ([cd3be7c](https://github.com/pagopa/pn-frontend/commit/cd3be7cb8316ef13b7e455a2cdea484d828f6764))
+* **pn-6720:** fixed inline link of digital contacts code verification modal ([#922](https://github.com/pagopa/pn-frontend/issues/922)) ([1738524](https://github.com/pagopa/pn-frontend/commit/1738524d779b1151d0fcdcd42c1f10899b3fa13e))
+* **pn-6724:** columns size in delegators list ([#917](https://github.com/pagopa/pn-frontend/issues/917)) ([cbac32a](https://github.com/pagopa/pn-frontend/commit/cbac32a4a5f6e1a3593c6341f9a666c087ac1a1e))
+* **pn-6728:** alignment of chip in AppStatus ([#918](https://github.com/pagopa/pn-frontend/issues/918)) ([b0cdd7c](https://github.com/pagopa/pn-frontend/commit/b0cdd7c645085fa510a5296e15c177667eafb746))
+* **pn-7078:** prevent index.html caching to avoid MIME type error ([#924](https://github.com/pagopa/pn-frontend/issues/924)) ([d52814c](https://github.com/pagopa/pn-frontend/commit/d52814c6c9397a1fad3fe0ad05e7908a191cc6f2))
+* **pn-7120:** mobile filter dialog closes even if filters are invalid ([#914](https://github.com/pagopa/pn-frontend/issues/914)) ([299c8f7](https://github.com/pagopa/pn-frontend/commit/299c8f7dd2c244be30679dc146ff79cb77fa4685))
+* **pn-7124:** fixed UI of the api-keys dialogs ([#923](https://github.com/pagopa/pn-frontend/issues/923)) ([5c3f759](https://github.com/pagopa/pn-frontend/commit/5c3f759db66502dd03b19c393baa8e58579c49de))
+* **pn-7126:** accessibility of AppStatus page ([#915](https://github.com/pagopa/pn-frontend/issues/915)) ([77f2f37](https://github.com/pagopa/pn-frontend/commit/77f2f372a0f3483c8dbad6ee94143692e2267b4a))
+* **pn-7195:** added pnpg path to csp ([#920](https://github.com/pagopa/pn-frontend/issues/920)) ([6bbedaa](https://github.com/pagopa/pn-frontend/commit/6bbedaa21b54720d61144d5cc2baaea3af12a69a))
+* **pn-7211:** added pagination for api-keys list ([#926](https://github.com/pagopa/pn-frontend/issues/926)) ([928e732](https://github.com/pagopa/pn-frontend/commit/928e732abde8074acf0f946354b1068a066627cc))
+
+
+### Features
+
+* **pn-4267:** removed Cypress from webapps ([#919](https://github.com/pagopa/pn-frontend/issues/919)) ([1e1d4b5](https://github.com/pagopa/pn-frontend/commit/1e1d4b506a3d1328d697ab23a217107caf21beb4))
+* **pn-6205:** added localization for others languages ([#916](https://github.com/pagopa/pn-frontend/issues/916)) ([dc8ae08](https://github.com/pagopa/pn-frontend/commit/dc8ae08458fc6adb3fc69d3876ead3ee16e2158d))
+
+
+
+
+
+## [2.0.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.0.0-RC.6...v2.0.1-RC.0) (2023-07-05)
+
+
+### Bug Fixes
+
+* **pn-6114:** removed trailing slash in prod config ([#886](https://github.com/pagopa/pn-frontend/issues/886)) ([bad786b](https://github.com/pagopa/pn-frontend/commit/bad786b6127829ad043a75237fb9fcd556b2f89c))
+* **pn-6780:** fix collide tab in deleghe ([#842](https://github.com/pagopa/pn-frontend/issues/842)) ([414105b](https://github.com/pagopa/pn-frontend/commit/414105b0e3590d59ec3e3e5bb21fb36be8d2d0ce))
+* **pn-6969:** add a11y ([#858](https://github.com/pagopa/pn-frontend/issues/858)) ([2b6e071](https://github.com/pagopa/pn-frontend/commit/2b6e0715016f8a58e25aa56dea1596075e847fc8))
+* **pn-6970:** a11y of landing page ([#867](https://github.com/pagopa/pn-frontend/issues/867)) ([a345b3f](https://github.com/pagopa/pn-frontend/commit/a345b3f56cb28f0a5c8805f93ab5e0f00bc33489))
+* **pn-6971:** fix a11y in emptystate ([#861](https://github.com/pagopa/pn-frontend/issues/861)) ([f75f8a3](https://github.com/pagopa/pn-frontend/commit/f75f8a38dff8202444af52820ec24e7e8a984f41))
+* **pn-7042:** validation mode of notifications filter ([#884](https://github.com/pagopa/pn-frontend/issues/884)) ([5d51671](https://github.com/pagopa/pn-frontend/commit/5d516713b3b4d368fd1810a080647ac628d954fb))
+* **pn-7063:** date in new delegation clears when user deletes the content ([#882](https://github.com/pagopa/pn-frontend/issues/882)) ([9c39215](https://github.com/pagopa/pn-frontend/commit/9c3921583bfba2d7dff77307134d4fe2455e7b81))
+
+
+### Features
+
+* **pn-6792:**  analog progress event PNALL001 ([#872](https://github.com/pagopa/pn-frontend/issues/872)) ([fbf14bb](https://github.com/pagopa/pn-frontend/commit/fbf14bb2ca625d49ab72d844af1c72bcfaf842ff))
+* **pn-6828:** allowed particular accessibility link for one URL pattern / disabled languages other than Italian ([#877](https://github.com/pagopa/pn-frontend/issues/877)) ([d6e5249](https://github.com/pagopa/pn-frontend/commit/d6e524909aca4b85c275254989ce7531dadde4c9))
+
+
+### Reverts
+
+* Revert "fix: add shadow in switch of TOS" ([aaeded8](https://github.com/pagopa/pn-frontend/commit/aaeded845ebb45824a696f7f9e7f56b348a10097))
+
+
+
+
+
 ## [1.5.4](https://github.com/pagopa/pn-frontend/compare/v1.5.3...v1.5.4) (2022-12-23)
 
 

@@ -1,0 +1,29 @@
+{
+  "loginPage": {
+    "title": "Comment souhaitez-vous vous connecter ?",
+    "description": "Sélectionner le mode que vous préférez.",
+    "loginBox": {
+      "title": "Se connecter",
+      "spidLogin": "Se connecter avec SPID",
+      "cieLogin": "Se connecter avec CIE"
+    },
+    "hintText": "Vous ne disposez pas de SPID ? <1>En savoir plus</1>",
+    "privacyAndCondition": "En vous authentifiant, vous déclarez avoir lu et compris la <0>Politique sur le respect de la vie privée</0> et les <1>Conditions d’utilisation</1> de l'Espace réservé."
+  },
+  "spidSelect": {
+    "title": "Choisir votre SPID",
+    "hintText": "Vous ne disposez pas de SPID ? <1>En savoir plus</1>",
+    "cancelButton": "Annuler"
+  },
+  "loginError": {
+    "title": "Désolé, une erreur s'est produite. ",
+    "message": "En raison d'une erreur du système, il n'a pas été possible de terminer la procédure.<1 />Nous vous demandons de bien vouloir réessayer plus tard."
+  },
+  "disambiguationPage": {
+    "title": "Avec quel profil souhaitez-vous vous connecter ?",
+    "subTitle": "Nous vous redirigerons en fonction de votre choix.",
+    "pf": "Particulier",
+    "pg": "Personne morale",
+    "button": "Se connecter"
+  }
+}

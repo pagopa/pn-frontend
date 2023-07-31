@@ -67,7 +67,7 @@ describe('NewApiKey component', () => {
 
   test('clicks on the breadcrumb button', async () => {
     const links = result?.getAllByRole('link');
-    expect(links![0]).toHaveTextContent(/page-title/i);
+    expect(links![0]).toHaveTextContent(/title/i);
     expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
   });
 

@@ -16,7 +16,7 @@ const handleError = (queryParams: string) => {
 
 const LoginError = () => {
   const { ROUTE_LOGIN } = getConfiguration();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['login']);
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const errorCode = urlSearchParams.has('errorCode') ? urlSearchParams.get('errorCode') : null;
@@ -59,7 +59,9 @@ const LoginError = () => {
   const title = t('loginError.title');
   const message = (
     <Fragment>
-      <Trans i18nKey="message">{getErrorMessage()}</Trans>
+      <Trans i18nKey="loginError.message" ns="login">
+        {getErrorMessage()}
+      </Trans>
     </Fragment>
   );
 

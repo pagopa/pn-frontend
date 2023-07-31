@@ -1,0 +1,14 @@
+{
+  "title": "Informations vous concernant",
+  "subtitle": "Ces informations sont extraites de votre SPID ou CIE et ne sont pas modifiables.",
+  "profile": {
+    "name": "Prénom",
+    "family_name": "Nom",
+    "fiscal_number": "Code d'identification fiscale"
+  },
+  "alert-redirect-to-contacts": {
+    "title": "Souhaitez-vous gérer vos coordonnées ?",
+    "message": "Saisissez, affichez ou modifiez les coordonnées auxquelles vous souhaitez recevoir les notifications et communications de SEND.",
+    "action-text": "Cliquez sur vos coordonnées"
+  }
+}

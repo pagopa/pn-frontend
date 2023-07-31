@@ -1,0 +1,29 @@
+{
+  "loginPage": {
+    "title": "Wie möchtest du zugreifen?",
+    "description": "Wähle deinen bevorzugten Modus aus.",
+    "loginBox": {
+      "title": "Zugriff",
+      "spidLogin": "Zugriff mit SPID",
+      "cieLogin": "Zugriff mit CIE"
+    },
+    "hintText": "Du hast kein SPID? <1>Mehr erfahren</1>",
+    "privacyAndCondition": "Mit der Authentifizierung erklärst du, die <0>Datenschutzerklärung</0> und die <1>Allgemeinen Geschäftsbedingungen</1> der Area Riservata gelesen und verstanden zu haben."
+  },
+  "spidSelect": {
+    "title": "Wähle deinen SPID-Anbieter",
+    "hintText": "Du hast kein SPID?<1> Mehr erfahren</1>",
+    "cancelButton": "Abbrechen"
+  },
+  "loginError": {
+    "title": "Es ist leider ein Fehler aufgetreten.",
+    "message": "Aufgrund eines Systemfehlers ist es nicht möglich, den Vorgang abzuschließen.<1 />Bitte versuche es später erneut."
+  },
+  "disambiguationPage": {
+    "title": "Mit welchem Profil möchtest du zugreifen?",
+    "subTitle": "Wir werden dich entsprechend deiner Wahl umleiten.",
+    "pf": "Privatperson",
+    "pg": "Juristische Person",
+    "button": "Zugriff"
+  }
+}

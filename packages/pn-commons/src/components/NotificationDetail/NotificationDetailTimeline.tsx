@@ -17,7 +17,7 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   title: string;
-  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument 
+  // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
   // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
   clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
@@ -56,7 +56,7 @@ const NotificationDetailTimeline = ({
   historyButtonLabel,
   showMoreButtonLabel,
   showLessButtonLabel,
-  eventTrackingCallbackShowMore
+  eventTrackingCallbackShowMore,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -85,7 +85,7 @@ const NotificationDetailTimeline = ({
       recipients={recipients}
       position={getPosition(i)}
       clickHandler={clickHandler}
-      key={'timeline_sep_' + i}
+      key={`timeline_sep_${i}`}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
@@ -121,13 +121,19 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
-            />
+          />
         ) : (
           timelineComponent
         )}
       </TimelineNotification>
-      <CustomDrawer anchor="left" open={state} onClose={toggleHistoryDrawer}>
-        <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 3 }}>
+      <CustomDrawer anchor="bottom" open={state} onClose={toggleHistoryDrawer}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ p: 3 }}
+        >
           <Grid item>
             <Typography
               color="text.primary"

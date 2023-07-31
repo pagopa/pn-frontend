@@ -1,0 +1,148 @@
+{
+  "button": {
+    "filtra": "Filtriraj",
+    "annulla filtro": "Odstrani filtre",
+    "indietro": "Nazaj",
+    "annulla": "Prekliči",
+    "enter": "Vstop",
+    "exit": "Izhod",
+    "continue": "Nadaljuj",
+    "send": "Pošlji",
+    "go-to-home": "Nazaj na domačo stran",
+    "go-to-login": "Dostopaj"
+  },
+  "menu": {
+    "notifications": "Obvestila",
+    "users": "Uporabniki",
+    "groups": "Skupine",
+    "api-key": "Ključ API",
+    "statistics": "Statistični podatki",
+    "app-status": "Stanje platforme",
+    "aria-label": "glavna navigacija na plataformi za obvestila",
+    "aria-label-inner": "navigacija pošiljatelja na platformi za obvestila"
+  },
+  "header": {
+    "logout": "Izhod",
+    "pago-pa-link": "Spletna stran PagoPA S.p.A.",
+    "reserved-area": "Area Riservata",
+    "notification-platform": "SEND - Servizio Notifiche Digitali"
+  },
+  "tos": {
+    "title": "SEND - Servizio Notifiche Digitali",
+    "switch-label": "Z dostopom se strinjate s <0>Pogoji in določili uporabe</0> storitve in potrjujete, da ste prebrali <1>Izjavo o zasebnosti</1>.",
+    "button": "Dostopaj"
+  },
+  "table": {
+    "aria-label": "Tabela artiklov"
+  },
+  "paginator": {
+    "aria-label": "Meni s stranmi",
+    "first": "prvi element",
+    "last": "zadnji element",
+    "page": "stran",
+    "next": "Pojdi na naslednjo stran",
+    "previous": "Pojdi na prejšnjo stran",
+    "selected": "izbrani element",
+    "rows-per-page": "Vrstice na stran"
+  },
+  "toast": {
+    "aria-label": "Ikona toast ključavnice"
+  },
+  "date-picker": {
+    "left-arrow": "Pojdi na prejšnji mesec",
+    "right-arrow": "Pojdi na naslednji mesec",
+    "switch-to-year": "način koledarja aktiven, preklopite na način izbire leta",
+    "switch-to-calendar": "način izbire leta aktiven, preklopite na koledarski način",
+    "select-date": "Izberite datum",
+    "date-selected": "Izberite datum, izbrani datum je {{date}}"
+  },
+  "date-time": {
+    "today-uppercase-initial": "Danes",
+    "hour-of-day": "ure"
+  },
+  "error-boundary": {
+    "title": "Nekaj je šlo narobe",
+    "description": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova kasneje.",
+    "action": "Znova naloži stran"
+  },
+  "not-accessible": {
+    "title": "Dostop do platforme ni mogoč",
+    "description": "Poskusite znova čez nekaj ur. Če potrebujete pomoč,",
+    "action": "nam pišite"
+  },
+  "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
+  "not-logged": "Dostopaj do rezerviranega območja",
+  "not-logged-subtitle": "Če želite uporabljati SEND, se prijavite v rezervirano območje s SPID ali CIE. Nato pritisnite \"Upravljanje\" na ustrezni kartici.",
+  "not-found": {
+    "title": "404: Stran, ki jo iščete, ne obstaja",
+    "descpription": "Tukaj ste pomotoma, poskusite uporabiti navigacijo."
+  },
+  "leaving-app": {
+    "title": "Zapuščate SEND",
+    "message": "Preusmerjeni boste"
+  },
+  "error-when-fetching-tos-status": {
+    "title": "Težave pri dostopu do SEND",
+    "message": "Poskusite znova kasneje"
+  },
+  "messages": {
+    "404-title": "Vira ni bilo mogoče najti",
+    "404-message": "Prišlo je do napake. Poskusite znova kasneje",
+    "403-title": "Seja je potekla",
+    "403-message": "Vstopite s SPID ali CIE.",
+    "401-title": "Nepooblaščen uporabnik",
+    "401-message": "Trenutni uporabnik nima dovoljenj",
+    "451-title": "Platforma ni dostopna",
+    "451-message": "Dostop do platforme ni mogoč",
+    "500-title": "Storitev ni na voljo",
+    "500-message": "Zaradi začasne težave s storitvijo vaša zahteva ni bila poslana. Poskusite znova kasneje.",
+    "lacking-grants-for-app-title": "Nimate dovoljenja za dostop",
+    "generic-token-exchange-problem": "Dostopa ni bilo mogoče dokončati",
+    "error-in-initial-info-loading": "Podatkov, potrebnih za zagon aplikacije, ni bilo mogoče pridobiti",
+    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave – neveljaven žeton",
+    "generic-title": "Generična napaka",
+    "generic-message": "Prišlo je do napake. Poskusite znova kasneje",
+    "generic-api-error-main-text": "Teh podatkov ni bilo mogoče pridobiti.",
+    "generic-api-error-action-text": "Znova naloži"
+  },
+  "footer": {
+    "go-to-pagopa": "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A.",
+    "go-to": "Pojdi na povezavo",
+    "who": "Kdo smo",
+    "work": "Sodeluj z nami",
+    "certifications": "Certifikati",
+    "security": "Varnost podatkov",
+    "personal-data": "Pravica do varstva osebnih podatkov",
+    "cookie": "Nastavitve piškotkov",
+    "terms-conditions": "Pogoji in določila",
+    "company": "Pregledna družba",
+    "disclosure": "Politika odgovornega razkritja",
+    "321-model": "Model 231",
+    "accessibility": "Dostopnost",
+    "social": "Povezava: pojdi na spletno mesto {{social}} družbe PagoPA S.p.A.",
+    "resources": "Viri",
+    "follow": "Sledi nam na",
+    "legal-part-1": "delniška družba z enim družbenikom – v celoti vplačan osnovni kapital 1.000.000 EUR – sedež v Rimu, Piazza Colonna 370",
+    "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009"
+  },
+  "required-fields": "*Obvezna polja",
+  "required-field": "Obvezno polje",
+  "required": "obvezno",
+  "too-long-field-error": "Napišite največ {{maxLength}} znakov",
+  "no-spaces-at-edges": "Neveljavni presledki na začetku/koncu",
+  "invalid": "neveljavno",
+  "upload-file": {
+    "or": "ali",
+    "select-from-pc": "izberite ga iz vašega računalnika",
+    "loading": "Nalaganje v teku...",
+    "sending": "Pošiljanje v teku...",
+    "hash-code": "Hash koda",
+    "hash-code-descr": "Hash koda je edinstvena alfanumerična koda, ki se uporablja za identifikacijo določene datoteke",
+    "ext-not-supported": "Nepodprta končnica datoteke. Poskusite znova z drugo datoteko.",
+    "loading-error": "Pri nalaganju datoteke je prišlo do napake. Prosimo, poskusite znota."
+  },
+  "roles": {
+    "operator": "Operativna kontaktna oseba",
+    "admin": "Upravna kontaktna oseba"
+  }
+}

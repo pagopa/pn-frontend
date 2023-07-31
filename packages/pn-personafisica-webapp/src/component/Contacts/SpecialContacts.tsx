@@ -68,7 +68,7 @@ type AddressType = {
 };
 
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t, i18n } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
@@ -87,21 +87,21 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         ),
       },
       {
-        id: CourtesyChannelType.SMS,
-        value: t('special-contacts.phone', { ns: 'recapiti' }),
-        show: courtesyAddresses.some(
-          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
-        ),
-      },
-      {
         id: CourtesyChannelType.EMAIL,
         value: t('special-contacts.mail', { ns: 'recapiti' }),
         show: courtesyAddresses.some(
           (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
         ),
       },
+      {
+        id: CourtesyChannelType.SMS,
+        value: t('special-contacts.phone', { ns: 'recapiti' }),
+        show: courtesyAddresses.some(
+          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
+        ),
+      },
     ],
-    [legalAddresses, courtesyAddresses]
+    [legalAddresses, courtesyAddresses, i18n.language]
   );
 
   const listHeaders = useMemo(
@@ -123,7 +123,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         label: t('special-contacts.mail', { ns: 'recapiti' }),
       },
     ],
-    []
+    [i18n.language]
   );
 
   const fetchAllActivatedParties = useCallback(() => {

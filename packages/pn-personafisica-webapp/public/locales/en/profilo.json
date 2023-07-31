@@ -1,0 +1,14 @@
+{
+  "title": "Your data",
+  "subtitle": "This data is taken from your SPID or CIE and cannot be modified.",
+  "profile": {
+    "name": "Name",
+    "family_name": "Surname",
+    "fiscal_number": "Tax code"
+  },
+  "alert-redirect-to-contacts": {
+    "title": "Do you want to manage your contact details?",
+    "message": "Enter, view or change the contact details to which you want to receive notifications and communications from SEND.",
+    "action-text": "Go to your contact details"
+  }
+}

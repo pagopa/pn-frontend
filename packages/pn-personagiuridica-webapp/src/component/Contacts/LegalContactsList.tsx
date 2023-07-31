@@ -18,7 +18,7 @@ type Props = {
 };
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t, i18n } = useTranslation(['common', 'recapiti']);
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
@@ -30,7 +30,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         </Grid>
       </Grid>
     ),
-    []
+    [i18n.language]
   );
   const defaultAddress = useMemo(
     () => legalAddresses.find((a) => a.senderId === 'default' && a.pecValid === true),
@@ -165,6 +165,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
           </Box>
         )}
         <Alert
+          role="banner"
           tabIndex={0}
           aria-label={t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}
           sx={{ mt: 4 }}

@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -72,7 +72,6 @@ const initialValues = (
   };
 };
 
-
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -81,6 +80,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const classes = useStyles();
+  const dialogRef = useRef<{toggleOpen: () => void}>(null);
 
   const emptyValues = {
     startDate: formatToTimezoneString(tenYearsAgo),
@@ -94,9 +94,10 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup.date()
+    endDate: yup
+      .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today)
+      .max(today),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
@@ -119,6 +120,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       }
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
+      dialogRef.current?.toggleOpen();
     },
   });
 
@@ -178,7 +180,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('button.filtra')}>
+      <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody
@@ -191,7 +193,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
-              formikInstance={formik}
               cleanFilters={cleanFilters}
               filtersApplied={isFilterApplied(filtersCount)}
               isInitialSearch={isInitialSearch}
@@ -213,7 +214,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             setEndDate={(value) => setEndDate(value)}
           />
           <FilterNotificationsFormActions
-            formikInstance={formik}
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
             isInitialSearch={isInitialSearch}

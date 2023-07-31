@@ -82,6 +82,8 @@ export class SendAnalogFlowStep extends TimelineStep {
         deliveryFailureCauseCode, deliveryFailureCauseText });
     }
 
+    const physicalAddress = originatingStep ? this.completePhysicalAddress(originatingStep) : {};
+
     // eslint-disable-next-line functional/no-let
     let description = getLocalizedOrDefaultLabel(
       'notifications',
@@ -89,6 +91,7 @@ export class SendAnalogFlowStep extends TimelineStep {
       '',
       { 
         ...this.nameAndTaxId(payload), 
+        ...physicalAddress,
         registeredLetterKind: registeredLetterKindText, 
         deliveryFailureCause: deliveryFailureCauseText,
         registeredLetterNumber

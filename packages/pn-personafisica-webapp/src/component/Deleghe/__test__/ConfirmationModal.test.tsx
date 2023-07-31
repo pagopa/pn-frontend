@@ -109,6 +109,6 @@ describe('ConfirmationModal Component', () => {
 
     expect(dialog).toBeInTheDocument();
     expect(buttons).toHaveLength(2);
-    expect(stack).toHaveStyle('flex-direction: column');
+    expect(stack).toHaveStyle('flex-direction: column-reverse');
   });
 });

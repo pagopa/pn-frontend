@@ -22,11 +22,6 @@ import { TrackEventType } from '../../../utils/events';
 type Props = {
   formikInstance: {
     values: FormikValues;
-    setFieldTouched: (
-      field: string,
-      touched?: boolean,
-      shouldValidate?: boolean | undefined
-    ) => Promise<FormikErrors<FormikValues>> | Promise<void>;
     setFieldValue: (
       field: string,
       value: any,
@@ -44,8 +39,6 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
-const localizedNotificationStatus = getNotificationAllowedStatus();
-
 const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
@@ -55,6 +48,7 @@ const FilterNotificationsFormBody = ({
 }: Props) => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
+  const localizedNotificationStatus = getNotificationAllowedStatus();
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (formikInstance.errors) {

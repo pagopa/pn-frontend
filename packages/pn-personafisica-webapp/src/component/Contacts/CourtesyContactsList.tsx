@@ -43,15 +43,15 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
     <Stack spacing={3} mt={3}>
       <CourtesyContactItem
         recipientId={recipientId}
-        type={CourtesyFieldType.PHONE}
-        value={phoneContact && phoneContact.value ? phoneContact.value : ''}
-        blockDelete={phoneContactsQuantity > 1}
-      />
-      <CourtesyContactItem
-        recipientId={recipientId}
         type={CourtesyFieldType.EMAIL}
         value={emailContact && emailContact.value ? emailContact.value : ''}
         blockDelete={emailContactsQuantity > 1}
+      />
+      <CourtesyContactItem
+        recipientId={recipientId}
+        type={CourtesyFieldType.PHONE}
+        value={phoneContact && phoneContact.value ? phoneContact.value : ''}
+        blockDelete={phoneContactsQuantity > 1}
       />
     </Stack>
   );

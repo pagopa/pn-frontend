@@ -35,7 +35,11 @@ function FaqDescriptionBlock(props: { description: FaqDescription }) {
   const { description } = props;
 
   if (typeof description === "string") {
-    return <Typography variant="body2">{description}</Typography>;
+    return (
+      <Typography variant="body2" tabIndex={0} aria-label={description}>
+        {description}
+      </Typography>
+    );
   } else if (Array.isArray(description)) {
     // in fact the wrapping Fragment is just to have JSX.Element as single return type for FaqDescriptionBlock
     return (
@@ -47,6 +51,8 @@ function FaqDescriptionBlock(props: { description: FaqDescription }) {
               variant="body2"
               key={ix}
               sx={isLastChild ? {} : { mb: "12px" }}
+              tabIndex={0}
+              aria-label={text}
             >
               {text}
             </Typography>
@@ -93,7 +99,13 @@ export function FaqDataSectionBlock(
 
   return (
     <Box sx={{ pb: "64px" }}>
-      <Typography variant="h4" sx={{ pb: "48px" }}>
+      <Typography
+        variant="h4"
+        sx={{ pb: "48px" }}
+        tabIndex={0}
+        component="h4"
+        aria-label={section.title}
+      >
         {section.title}
       </Typography>
       {section.items.map((item) => (

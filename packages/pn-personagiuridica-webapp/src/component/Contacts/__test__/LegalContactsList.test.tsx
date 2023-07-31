@@ -12,6 +12,7 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -23,7 +24,7 @@ const legalAddresses: Array<DigitalAddress> = [
     senderId: 'default',
     channelType: LegalChannelType.PEC,
     value: 'mocked@mail.it',
-    pecValid: true
+    pecValid: true,
   },
 ];
 
@@ -184,7 +185,7 @@ describe('LegalContactsList Component', () => {
         unwrap: () => Promise.resolve({ code: 'verified' }),
       }))
     );
-    fireEvent.click(dialogButtons![2]);
+    fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);

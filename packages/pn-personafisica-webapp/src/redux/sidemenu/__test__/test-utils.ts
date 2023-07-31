@@ -4,7 +4,7 @@ import { Delegator } from "../../delegation/types";
 export const initialState = {
   pendingDelegators: 0,
   delegators: [],
-  legalDomicile: [],
+  defaultAddresses: [],
   domicileBannerOpened: true
 };
 
