@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.0.1-RC.3...v2.0.1-RC.4) (2023-07-31)
+
+
+### Bug Fixes
+
+* **pn-6134:** removed css override on paper component ([#921](https://github.com/pagopa/pn-frontend/issues/921)) ([cd3be7c](https://github.com/pagopa/pn-frontend/commit/cd3be7cb8316ef13b7e455a2cdea484d828f6764))
+* **pn-6720:** fixed inline link of digital contacts code verification modal ([#922](https://github.com/pagopa/pn-frontend/issues/922)) ([1738524](https://github.com/pagopa/pn-frontend/commit/1738524d779b1151d0fcdcd42c1f10899b3fa13e))
+* **pn-7078:** prevent index.html caching to avoid MIME type error ([#924](https://github.com/pagopa/pn-frontend/issues/924)) ([d52814c](https://github.com/pagopa/pn-frontend/commit/d52814c6c9397a1fad3fe0ad05e7908a191cc6f2))
+* **pn-7120:** mobile filter dialog closes even if filters are invalid ([#914](https://github.com/pagopa/pn-frontend/issues/914)) ([299c8f7](https://github.com/pagopa/pn-frontend/commit/299c8f7dd2c244be30679dc146ff79cb77fa4685))
+
+
+### Features
+
+* **pn-4267:** removed Cypress from webapps ([#919](https://github.com/pagopa/pn-frontend/issues/919)) ([1e1d4b5](https://github.com/pagopa/pn-frontend/commit/1e1d4b506a3d1328d697ab23a217107caf21beb4))
+* **pn-6205:** added localization for others languages ([#916](https://github.com/pagopa/pn-frontend/issues/916)) ([dc8ae08](https://github.com/pagopa/pn-frontend/commit/dc8ae08458fc6adb3fc69d3876ead3ee16e2158d))
+
+
+
+
+
 ## [2.0.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.0.0-RC.6...v2.0.1-RC.0) (2023-07-05)
 
 
