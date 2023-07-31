@@ -8,6 +8,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -18,7 +19,7 @@ describe('Notifications routes', () => {
       endDate: 'end-date',
       recipientId: 'recipient-id',
       iunMatch: 'iun-match',
-      status: '', 
+      status: '',
     });
     expect(route).toEqual(
       '/delivery/notifications/sent?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
@@ -27,7 +28,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/notifications/sent/mocked-iun');
+    expect(route).toEqual('/delivery/v2/notifications/sent/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
@@ -36,7 +37,10 @@ describe('Notifications routes', () => {
   });
 
   it('should compile NOTIFICATION_DETAIL_OTHER_DOCUMENTS', () => {
-    const route = NOTIFICATION_DETAIL_OTHER_DOCUMENTS('mocked-iun', { documentId: 'mocked-doc-id', documentType: 'mocked-doc-type'});
+    const route = NOTIFICATION_DETAIL_OTHER_DOCUMENTS('mocked-iun', {
+      documentId: 'mocked-doc-id',
+      documentType: 'mocked-doc-type',
+    });
     expect(route).toEqual('/delivery-push/mocked-iun/document/mocked-doc-type');
   });
 
@@ -51,6 +55,11 @@ describe('Notifications routes', () => {
   it('should compile GET_USER_GROUPS', () => {
     const route = GET_USER_GROUPS();
     expect(route).toEqual('/ext-registry/pa/v1/groups');
+  });
+
+  it('should compile NOTIFICATION_PAYMENT_INFO', () => {
+    const route = NOTIFICATION_PAYMENT_INFO();
+    expect(route).toEqual('/ext-registry/pagopa/v2/paymentinfo');
   });
 
   it('should compile NOTIFICATION_PRELOAD_DOCUMENT', () => {
