@@ -74,6 +74,8 @@ type MockCodes = 200 | 204 | 500 | 401 | 400 | 403 | 451;
  * @param code the response code
  * @param request body request
  * @param response response
+ * @param requestHeader request header
+ * @param responseHeader response header
  * @returns the mock instance
  */
 function mockApi(
@@ -82,27 +84,29 @@ function mockApi(
   path: string,
   code: MockCodes,
   request?: any,
-  response?: any
+  response?: any,
+  requestHeader?: any,
+  responseHeader?: any
 ): MockAdapter {
   const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
   switch (method) {
     case 'GET':
-      mock.onGet(path, request).reply(code, response);
+      mock.onGet(path, request, requestHeader).reply(code, response, responseHeader);
       break;
     case 'POST':
-      mock.onPost(path, request).reply(code, response);
+      mock.onPost(path, request, requestHeader).reply(code, response, responseHeader);
       break;
     case 'PUT':
-      mock.onPut(path, request).reply(code, response);
+      mock.onPut(path, request, requestHeader).reply(code, response, responseHeader);
       break;
     case 'DELETE':
-      mock.onDelete(path, request).reply(code, response);
+      mock.onDelete(path, request, requestHeader).reply(code, response, responseHeader);
       break;
     case 'PATCH':
-      mock.onPatch(path, request).reply(code, response);
+      mock.onPatch(path, request, requestHeader).reply(code, response, responseHeader);
       break;
     case 'ANY':
-      mock.onAny(path, request).reply(code, response);
+      mock.onAny(path, request, requestHeader).reply(code, response, responseHeader);
     default:
       break;
   }
