@@ -15,8 +15,8 @@ export const EXTERNAL_REGISTRIES_MOCK: Array<ExtRegistriesPaymentDetails> = [
     dueDate: '2025-07-31',
   },
   {
-    creditorTaxId: 'string',
-    noticeCode: 'string',
+    creditorTaxId: '77777777777',
+    noticeCode: '302011686772695133',
     status: PaymentStatus.REQUIRED,
     detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
     detail_v2: 'PPT_PSP_SCONOSCIUTO',

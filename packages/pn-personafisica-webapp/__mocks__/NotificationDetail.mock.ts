@@ -71,7 +71,7 @@ export const recipient: NotificationDetailRecipient = {
     province: 'MI',
     foreignState: 'ITALIA',
   },
-  payments: paymentsPagoPA,
+  payments,
 };
 
 const notificationStatusHistory: Array<NotificationStatusHistory> = [

@@ -5,6 +5,7 @@ import {
   LegalFactType,
   NotificationDetail,
   NotificationDetailDocument,
+  NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationFeePolicy,
   NotificationStatus,
@@ -374,6 +375,50 @@ const documents: Array<NotificationDetailDocument> = [
   },
 ];
 
+const paymentsPagoPa: Array<NotificationDetailPayment> = [
+  {
+    pagoPA: {
+      creditorTaxId: '302011689142547191',
+      noticeCode: '77777777777',
+      applyCostFlg: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+];
+
+const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
+  {
+    pagoPA: {
+      creditorTaxId: '302011686772695133',
+      noticeCode: '77777777777',
+      applyCostFlg: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+    f24Data: {
+      metadata: 'metadata-mocked',
+      description: 'F24 seconda rata TARI',
+    },
+  },
+];
+
 const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
@@ -393,25 +438,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MI',
       foreignState: 'ITALIA',
     },
-    payments: [
-      {
-        pagoPA: {
-          creditorTaxId: '302011689142547191',
-          noticeCode: '77777777777',
-          applyCostFlg: true,
-          attachment: {
-            digests: {
-              sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-            },
-            contentType: 'application/pdf',
-            ref: {
-              key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
-              versionToken: 'v1',
-            },
-          },
-        },
-      },
-    ],
+    payments: paymentsPagoPa,
   },
   {
     recipientType: RecipientType.PG,
@@ -431,25 +458,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MI',
       foreignState: 'ITALIA',
     },
-    payments: [
-      {
-        pagoPA: {
-          creditorTaxId: '302011689142547191',
-          noticeCode: '77777777777',
-          applyCostFlg: true,
-          attachment: {
-            digests: {
-              sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-            },
-            contentType: 'application/pdf',
-            ref: {
-              key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee0.pdf',
-              versionToken: 'v1',
-            },
-          },
-        },
-      },
-    ],
+    payments: paymentsPagoPaF24,
   },
 ];
 
@@ -457,7 +466,7 @@ export const PA_NOTIFICATION_DTO: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302221689929085089',
   subject: 'invio notifica GA cucumber',
-  recipients: [recipients[0]],
+  recipients: recipients,
   documents,
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
@@ -474,12 +483,3 @@ export const PA_NOTIFICATION_DTO: NotificationDetail = {
 };
 
 export const notificationToFe = parseNotificationDetail(PA_NOTIFICATION_DTO);
-
-export const PA_NOTIFICATION_DTO_MULTI_RECIPIENT: NotificationDetail = {
-  ...PA_NOTIFICATION_DTO,
-  recipients,
-};
-
-export const notificationToFeMultiRecipient = parseNotificationDetail(
-  PA_NOTIFICATION_DTO_MULTI_RECIPIENT
-);
