@@ -15,7 +15,7 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-const payments: Array<NotificationDetailPayment> = [
+const paymentsPagoPA: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '302011686772695132',
@@ -31,6 +31,27 @@ const payments: Array<NotificationDetailPayment> = [
           versionToken: 'v1',
         },
       },
+    },
+  },
+  {
+    pagoPA: {
+      creditorTaxId: '302011686772695133',
+      noticeCode: '77777777777',
+      applyCostFlg: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+    f24Data: {
+      metadata: 'metadata-mocked',
+      description: 'F24 seconda rata TARI',
     },
   },
 ];
