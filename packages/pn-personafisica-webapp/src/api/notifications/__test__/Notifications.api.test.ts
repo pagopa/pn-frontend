@@ -12,6 +12,7 @@ import {
   notificationToFe,
   recipient,
 } from '../../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 import {
   notificationsFromBe,
   notificationsToFe,
@@ -144,24 +145,20 @@ describe('Notifications api tests', () => {
   });
 
   it('getNotificationPaymentInfo', async () => {
-    const taxId = 'mocked-taxId';
-    const noticeCode = 'mocked-noticeCode';
+    const paymentInfoRequest = paymentInfo.map((payment) => ({
+      creditorTaxId: payment.creditorTaxId,
+      noticeCode: payment.noticeCode,
+    }));
     const mock = mockApi(
       apiClient,
-      'GET',
-      NOTIFICATION_PAYMENT_INFO(taxId, noticeCode),
+      'POST',
+      NOTIFICATION_PAYMENT_INFO(),
       200,
-      null,
-      {
-        status: 'SUCCEEDED',
-        amount: 10,
-      }
+      paymentInfoRequest,
+      paymentInfo
     );
-    const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
-    expect(res).toStrictEqual({
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    const res = await NotificationsApi.getNotificationPaymentInfo(paymentInfoRequest);
+    expect(res).toStrictEqual(paymentInfo);
     mock.reset();
     mock.restore();
   });

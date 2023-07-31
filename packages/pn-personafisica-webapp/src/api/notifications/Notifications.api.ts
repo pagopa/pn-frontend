@@ -167,16 +167,13 @@ export const NotificationsApi = {
 
   /**
    * Gets current user's notification payment info
-   * @param  {string} noticeCode
-   * @param  {string} taxId
    * @returns Promise
    */
   getNotificationPaymentInfo: (
-    noticeCode: string,
-    taxId: string
-  ): Promise<ExtRegistriesPaymentDetails> =>
+    params: Array<{ noticeCode: string; creditorTaxId: string }>
+  ): Promise<Array<ExtRegistriesPaymentDetails>> =>
     apiClient
-      .get<ExtRegistriesPaymentDetails>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .post<Array<ExtRegistriesPaymentDetails>>(NOTIFICATION_PAYMENT_INFO(), params)
       .then((response) => response.data),
 
   /**
