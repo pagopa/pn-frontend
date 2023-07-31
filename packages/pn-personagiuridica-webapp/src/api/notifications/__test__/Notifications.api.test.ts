@@ -29,6 +29,7 @@ import {
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../notifications.routes';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -107,18 +108,15 @@ describe('Notifications api tests', () => {
   });
 
   it('getNotificationPaymentInfo', async () => {
-    const taxId = 'mocked-taxId';
-    const noticeCode = 'mocked-noticeCode';
+    const paymentInfoRequest = paymentInfo.map((payment) => ({
+      creditorTaxId: payment.creditorTaxId,
+      noticeCode: payment.noticeCode,
+    }));
+
     const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
-    const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
-    expect(res).toStrictEqual({
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO()).reply(200, paymentInfo);
+    const res = await NotificationsApi.getNotificationPaymentInfo(paymentInfoRequest);
+    expect(res).toStrictEqual(paymentInfo);
     mock.reset();
     mock.restore();
   });

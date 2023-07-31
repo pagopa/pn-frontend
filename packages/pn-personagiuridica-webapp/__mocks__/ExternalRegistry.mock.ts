@@ -4,7 +4,7 @@ import {
   PaymentStatus,
 } from '@pagopa-pn/pn-commons';
 
-export const EXTERNAL_REGISTRIES_MOCK: Array<ExtRegistriesPaymentDetails> = [
+export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [
   {
     creditorTaxId: '77777777777',
     noticeCode: '302011686772695132',

@@ -363,13 +363,12 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
 const documents: Array<NotificationDetailDocument> = [
   {
     digests: {
-      sha256: '3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659',
+      sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
     },
     contentType: 'application/pdf',
-    title: 'Mocked document',
     ref: {
-      key: 'Doc1',
-      versionToken: 'mocked-versionToken',
+      key: 'PN_NOTIFICATION_ATTACHMENTS-2396e00fd41f435d97fcab45edd394f2.pdf',
+      versionToken: 'v1',
     },
     docIdx: '0',
   },
@@ -462,7 +461,7 @@ const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
-export const PA_NOTIFICATION_DTO: NotificationDetail = {
+export const notificationDTO: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302221689929085089',
   subject: 'invio notifica GA cucumber',
@@ -482,4 +481,4 @@ export const PA_NOTIFICATION_DTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(PA_NOTIFICATION_DTO);
+export const notificationToFe = parseNotificationDetail(notificationDTO);

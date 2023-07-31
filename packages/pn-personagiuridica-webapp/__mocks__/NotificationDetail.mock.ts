@@ -284,7 +284,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
-export const PG_NOTIFICATION_DTO: NotificationDetail = {
+export const notificationDTO: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302011683623745936',
   subject: 'invio notifica con cucumber',
@@ -316,4 +316,4 @@ export const PG_NOTIFICATION_DTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(PG_NOTIFICATION_DTO);
+export const notificationToFe = parseNotificationDetail(notificationDTO);
