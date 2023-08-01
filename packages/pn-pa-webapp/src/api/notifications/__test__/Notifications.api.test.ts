@@ -29,8 +29,10 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -150,6 +152,26 @@ describe('Notifications api tests', () => {
     expect(res).toStrictEqual([
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
     ]);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('getNotificationPaymentInfo', async () => {
+    const paymentInfoRequest = paymentInfo.map((payment) => ({
+      creditorTaxId: payment.creditorTaxId,
+      noticeCode: payment.noticeCode,
+    }));
+
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      NOTIFICATION_PAYMENT_INFO(),
+      200,
+      paymentInfoRequest,
+      paymentInfo
+    );
+    const res = await NotificationsApi.getNotificationPaymentInfo(paymentInfoRequest);
+    expect(res).toStrictEqual(paymentInfo);
     mock.reset();
     mock.restore();
   });

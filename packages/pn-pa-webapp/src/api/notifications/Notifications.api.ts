@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import {
+  ExtRegistriesPaymentDetails,
   formatDate,
   GetNotificationsParams,
   GetNotificationsResponse,
@@ -21,8 +22,8 @@ import {
   NOTIFICATION_PRELOAD_DOCUMENT,
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
-
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
@@ -82,14 +83,19 @@ export const NotificationsApi = {
       .then((response) => getDownloadUrl(response)),
 
   /**
-   * 
+   *
    * @param  {string} iun
-   * @param  {NotificationDetailOtherDocument} otherDocument 
+   * @param  {NotificationDetailOtherDocument} otherDocument
    * @returns Promise
    */
-  getSentNotificationOtherDocument: (iun: string, otherDocument: NotificationDetailOtherDocument): Promise<{ url: string }> =>
+  getSentNotificationOtherDocument: (
+    iun: string,
+    otherDocument: NotificationDetailOtherDocument
+  ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {params: {documentId: otherDocument.documentId}})
+      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+        params: { documentId: otherDocument.documentId },
+      })
       .then((response) => getDownloadUrl(response)),
 
   /**
@@ -165,5 +171,16 @@ export const NotificationsApi = {
   createNewNotification: (notification: NewNotificationDTO): Promise<NewNotificationResponse> =>
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
+      .then((response) => response.data),
+
+  /**
+   * Gets current user's notification payment info
+   * @returns Promise
+   */
+  getNotificationPaymentInfo: (
+    params: Array<{ noticeCode: string; creditorTaxId: string }>
+  ): Promise<Array<ExtRegistriesPaymentDetails>> =>
+    apiClient
+      .post<Array<ExtRegistriesPaymentDetails>>(NOTIFICATION_PAYMENT_INFO(), params)
       .then((response) => response.data),
 };
