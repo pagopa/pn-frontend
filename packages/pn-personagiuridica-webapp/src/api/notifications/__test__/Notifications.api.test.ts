@@ -1,15 +1,16 @@
-import MockAdapter from 'axios-mock-adapter';
 import {
-  tenYearsAgo,
-  today,
   LegalFactId,
   LegalFactType,
   PaymentAttachmentNameType,
   formatToTimezoneString,
   getNextDay,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
-import { apiClient } from '../../apiClients';
-import { NotificationsApi } from '../Notifications.api';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+import { notificationDTO } from '../../../../__mocks__/NotificationDetail.mock';
+import { mockApi } from '../../../__test__/test-utils';
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   notificationsFromBe,
   notificationsToFe,
@@ -18,7 +19,8 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { apiClient } from '../../apiClients';
+import { NotificationsApi } from '../Notifications.api';
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
@@ -34,15 +36,17 @@ describe('Notifications api tests', () => {
   mockAuthentication();
 
   it('getReceivedNotifications', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
-        })
-      )
-      .reply(200, notificationsFromBe);
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATIONS_LIST({
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
+      }),
+      200,
+      undefined,
+      notificationsFromBe
+    );
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
@@ -55,8 +59,14 @@ describe('Notifications api tests', () => {
 
   it('getReceivedNotification', async () => {
     const iun = 'mocked-iun';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL(iun),
+      200,
+      undefined,
+      notificationFromBe
+    );
     const res = await NotificationsApi.getReceivedNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
@@ -64,12 +74,16 @@ describe('Notifications api tests', () => {
   });
 
   it('getReceivedNotificationDocument', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const documentIndex = '0';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: 'http://mocked-url.com' });
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' }
+    );
     const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
     mock.reset();
@@ -77,13 +91,19 @@ describe('Notifications api tests', () => {
   });
 
   it('getReceivedNotificationLegalfact', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const legalFact: LegalFactId = {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact),
+      200,
+      undefined,
+      undefined
+    );
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
     mock.reset();
@@ -91,12 +111,16 @@ describe('Notifications api tests', () => {
   });
 
   it('getPaymentAttachment', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const attachmentName = 'mocked-attachmentName';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
-      .reply(200, { url: 'http://mocked-url.com' });
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' }
+    );
     const res = await NotificationsApi.getPaymentAttachment(
       iun,
       attachmentName as PaymentAttachmentNameType
@@ -107,18 +131,20 @@ describe('Notifications api tests', () => {
   });
 
   it('getNotificationPaymentInfo', async () => {
-    const taxId = 'mocked-taxId';
-    const noticeCode = 'mocked-noticeCode';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
-    const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
-    expect(res).toStrictEqual({
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    const paymentInfoRequest = paymentInfo.map((payment) => ({
+      creditorTaxId: payment.creditorTaxId,
+      noticeCode: payment.noticeCode,
+    }));
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      NOTIFICATION_PAYMENT_INFO(),
+      200,
+      paymentInfoRequest,
+      paymentInfo
+    );
+    const res = await NotificationsApi.getNotificationPaymentInfo(paymentInfoRequest);
+    expect(res).toStrictEqual(paymentInfo);
     mock.reset();
     mock.restore();
   });
@@ -126,9 +152,12 @@ describe('Notifications api tests', () => {
   it('getNotificationPaymentUrl', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onPost(NOTIFICATION_PAYMENT_URL(), {
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      NOTIFICATION_PAYMENT_URL(),
+      200,
+      {
         paymentNotice: {
           noticeNumber: noticeCode,
           fiscalCode: taxId,
@@ -137,10 +166,11 @@ describe('Notifications api tests', () => {
           description: 'Mocked title',
         },
         returnUrl: 'mocked-return-url',
-      })
-      .reply(200, {
+      },
+      {
         checkoutUrl: 'mocked-url',
-      });
+      }
+    );
     const res = await NotificationsApi.getNotificationPaymentUrl(
       {
         noticeNumber: noticeCode,
@@ -159,14 +189,18 @@ describe('Notifications api tests', () => {
   });
 
   it('exchangeNotificationQrCode', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr1' }).reply(200, {
-      iun: 'mock-notification-1',
-      mandateId: 'mock-mandate-1',
-    });
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr2' }).reply(200, {
-      iun: 'mock-notification-2',
-    });
+    const mock = mockApi(
+      apiClient,
+      'POST',
+      NOTIFICATION_ID_FROM_QRCODE(),
+      200,
+      { aarQrCodeValue: 'qr1' },
+      {
+        iun: 'mock-notification-1',
+        mandateId: 'mock-mandate-1',
+      }
+    );
+
     const res = await NotificationsApi.exchangeNotificationQrCode('qr1');
     expect(res).toStrictEqual({
       iun: 'mock-notification-1',
