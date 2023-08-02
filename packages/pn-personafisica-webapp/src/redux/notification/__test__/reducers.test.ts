@@ -55,7 +55,7 @@ const initialState = {
   legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
-  paymentInfo: {},
+  paymentInfo: [],
   downtimeLegalFactUrl: '',
   downtimeEvents: [],
 };
@@ -171,13 +171,24 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch payment info', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' });
+    apiSpy.mockResolvedValue([
+      {
+        status: PaymentStatus.REQUIRED,
+        amount: 1200,
+        url: 'mocked-url',
+        creditorTaxId: 'mocked-tax-id',
+        noticeCode: 'mocked-notice-code',
+      },
+    ]);
     const action = await store.dispatch(
-      getNotificationPaymentInfo({ noticeCode: 'mocked-notice-code', taxId: 'mocked-tax-id' })
+      getNotificationPaymentInfo({
+        taxId: 'mocked-taxId',
+        paymentInfoRequest: [{ noticeCode: 'mocked-notice-code', creditorTaxId: 'mocked-tax-id' }],
+      })
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' });
+    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' }); // TODO come dovrebbe essere la response?
 
     const state = store.getState().notificationState;
     expect(state.paymentInfo).toEqual({

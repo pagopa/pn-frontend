@@ -5,18 +5,19 @@ import {
   LegalFactDocumentDetails,
   LegalFactId,
   PaymentAttachmentNameType,
-  ExtRegistriesPaymentDetails,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
+  PaymentHistory,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { populatePaymentHistory } from '@pagopa-pn/pn-commons/src/utils/notification.utility';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
-
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+import { RootState } from '../store';
 import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
@@ -82,13 +83,33 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  ExtRegistriesPaymentDetails,
-  { noticeCode: string; taxId: string }
+  Array<PaymentHistory>,
+  { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
+  { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
-  performThunkAction((params: { noticeCode: string; taxId: string }) =>
-    NotificationsApi.getNotificationPaymentInfo(params.noticeCode, params.taxId)
-  )
+  async (
+    params: {
+      taxId: string;
+      paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
+    },
+    { rejectWithValue, getState }
+  ) => {
+    try {
+      const { notificationState } = getState();
+      const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
+        params.paymentInfoRequest
+      );
+      return populatePaymentHistory(
+        params.taxId,
+        notificationState.notification.timeline,
+        notificationState.notification.recipients,
+        paymentInfo
+      );
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );
 
 export const getNotificationPaymentUrl = createAsyncThunk<
