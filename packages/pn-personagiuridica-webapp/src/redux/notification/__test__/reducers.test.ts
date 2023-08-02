@@ -277,6 +277,7 @@ describe('Notification detail redux state tests', () => {
     expect(payload).toEqual(paymentUrlResponse);
   });
 
+  // TODO: convert to new logic
   it('Should be able to fetch the downtimes events', async () => {
     const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
     apiSpy.mockResolvedValue(simpleDowntimeLogPage);
@@ -290,6 +291,7 @@ describe('Notification detail redux state tests', () => {
     expect(payload).toEqual(simpleDowntimeLogPage);
   });
 
+  // TODO: convert to new logic
   it('Should be able to fetch the downtimes legal fact details', async () => {
     const apiSpy = jest.spyOn(AppStatusApi, 'getLegalFactDetails');
     apiSpy.mockResolvedValue({

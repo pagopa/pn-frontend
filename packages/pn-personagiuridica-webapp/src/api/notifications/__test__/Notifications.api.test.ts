@@ -62,8 +62,6 @@ describe('Notifications api tests', () => {
       notificationDTO
     );
     const res = await NotificationsApi.getReceivedNotification(iun);
-    console.log('RES', res);
-    console.log('NOTIFICATION', notificationToFe);
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
     mock.restore();

@@ -12,9 +12,9 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
+import _ from 'lodash';
 
 const paymentsPagoPA: Array<NotificationDetailPayment> = [
   {
@@ -127,7 +127,12 @@ const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'REQUEST_ACCEPTED.IUN_AVEJ-AUAT-JUQE-202305-J-1',
     timestamp: '2023-05-09T09:17:30.022877699Z',
-    legalFactsIds: [],
+    legalFactsIds: [
+      {
+        key: 'safestorage://PN_LEGAL_FACTS-e94b748e1774763a4c56f139491eb8d.pdf',
+        category: LegalFactType.SENDER_ACK,
+      },
+    ],
     category: TimelineCategory.REQUEST_ACCEPTED,
     details: {},
   },
@@ -312,4 +317,4 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetailForRecipient(notificationDTO);
+export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
