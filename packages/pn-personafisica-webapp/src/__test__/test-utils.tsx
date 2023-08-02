@@ -85,20 +85,10 @@ function mockApi(
   return mock;
 }
 
-/**
- * Utility function to cleanup a Mock
- * @param client Axios client or Mock Adapter instance
- */
-function cleanupMock(client: AxiosInstance | MockAdapter) {
-  const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
-  mock.reset();
-  mock.restore();
-};
-
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
 export { customRender as render };
 export { axe };
 // utility functions
-export { mockApi, cleanupMock };
+export { mockApi };
