@@ -12,7 +12,11 @@ import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
-import { notificationsToFe } from './test-utils';
+import { notificationsFromBe, notificationsToFe } from './test-utils';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
+import { notificationFromBe } from '../../notification/__test__/test-utils';
 
 describe('Dashboard redux state tests', () => {
   mockAuthentication();
@@ -43,16 +47,19 @@ describe('Dashboard redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotifications');
-    apiSpy.mockResolvedValue(notificationsToFe);
+
+    const mockRequest = {
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
+      status: '',
+      recipientId: '',
+      iunMatch: '',
+    };
+
+    mockApi(apiClient, 'GET', NOTIFICATIONS_LIST(mockRequest), 200, undefined, notificationsFromBe);
+
     const action = await store.dispatch(
-      getSentNotifications({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-        status: '',
-        recipientId: '',
-        iunMatch: '',
-      })
+      getSentNotifications(mockRequest)
     );
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');

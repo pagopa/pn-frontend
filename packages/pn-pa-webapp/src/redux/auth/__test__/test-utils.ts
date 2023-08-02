@@ -1,12 +1,20 @@
-import { AuthApi } from '../../../api/auth/Auth.api';
+import { mockApi } from '../../../__test__/test-utils';
+import { authClient } from '../../../api/apiClients';
+import { AUTH_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
 import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
 
 export const mockLogin = async (): Promise<any> => {
-  const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
-  apiSpy.mockResolvedValue(userResponse);
+  mockApi(
+    authClient,
+    'POST',
+    AUTH_TOKEN_EXCHANGE(),
+    200,
+    undefined,
+    userResponse
+  );
   return store.dispatch(exchangeToken('mocked-token'));
 };
 

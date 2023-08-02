@@ -1,4 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
 import {
   tenYearsAgo,
   today,
@@ -31,23 +30,35 @@ import {
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
+import { mockApi } from '../../../__test__/test-utils';
+import MockAdapter from 'axios-mock-adapter';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
 
+  let mock: MockAdapter;
+
+  afterEach(() => {
+    mock.reset();
+    mock.restore();
+  });
+
   it('getSentNotifications', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
-          iunMatch: '',
-          recipientId: '',
-          status: '',
-        })
-      )
-      .reply(200, notificationsFromBe);
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATIONS_LIST({
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
+        iunMatch: '',
+        recipientId: '',
+        status: '',
+      }),
+      200,
+      undefined,
+      notificationsFromBe
+    );
+
     const res = await NotificationsApi.getSentNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
@@ -56,31 +67,41 @@ describe('Notifications api tests', () => {
       status: '',
     });
     expect(res).toStrictEqual(notificationsToFe);
-    mock.reset();
-    mock.restore();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/sent');
   });
 
-  it('getSentNotification', async () => {
+  it('getSentNotification filtered by iun', async () => {
     const iun = 'mocked-iun';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL(iun),
+      200,
+      undefined,
+      notificationFromBe
+    );
     const res = await NotificationsApi.getSentNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
-    mock.reset();
-    mock.restore();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/sent');
   });
 
   it('getSentNotificationDocument', async () => {
     const iun = 'mocked-iun';
     const documentIndex = '0';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: 'http://mocked-url.com' });
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' }
+    );
     const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-    mock.reset();
-    mock.restore();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/sent');
   });
 
   it('getSentNotificationOtherDocument', async () => {
@@ -89,17 +110,20 @@ describe('Notifications api tests', () => {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
     };
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument),
+      200,
+      {
         documentId: otherDocument.documentId,
         documentType: otherDocument.documentType,
-      })
-      .reply(200, undefined);
+      }
+    );
     const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
     expect(res).toStrictEqual({ url: '' });
-    mock.reset();
-    mock.restore();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/delivery-push/mocked-iun/document/mocked-type');
   });
 
   it('getSentNotificationLegalfact', async () => {
@@ -108,48 +132,51 @@ describe('Notifications api tests', () => {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact),
+      200);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
-    mock.reset();
-    mock.restore();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/delivery-push/mocked-iun/legal-facts/ANALOG_DELIVERY/mocked-key');
   });
 
   it('getUserGroups', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(GET_USER_GROUPS())
-      .reply(200, [{ id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' }]);
+    mock = mockApi(apiClient, 'GET', GET_USER_GROUPS(), 200, undefined, [
+      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
+    ]);
     const res = await NotificationsApi.getUserGroups();
     expect(res).toStrictEqual([
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
     ]);
-    mock.reset();
-    mock.restore();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups');
   });
 
   it('preloadNotificationDocument', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
-        { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
-      ])
-      .reply(200, [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
+    mock = mockApi(
+      apiClient,
+      'POST',
+      NOTIFICATION_PRELOAD_DOCUMENT(),
+      200,
+      [{ key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' }],
+      [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]
+    );
     const res = await NotificationsApi.preloadNotificationDocument([
       { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
     ]);
     expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
-    mock.reset();
-    mock.restore();
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toContain('/delivery/attachments/preload');
   });
 
   it('uploadNotificationAttachment', async () => {
     const file = new Uint8Array();
-    const mock = new MockAdapter(externalClient);
-    mock
-      .onPut(`https://mocked-url.com`)
-      .reply(200, void 0, { 'x-amz-version-id': 'mocked-versionToken' });
+    mock = mockApi(externalClient, 'PUT', `https://mocked-url.com`, 200, undefined, void 0, undefined, {
+      'x-amz-version-id': 'mocked-versionToken',
+    });
     const res = await NotificationsApi.uploadNotificationAttachment(
       'https://mocked-url.com',
       'mocked-sha256',
@@ -158,28 +185,27 @@ describe('Notifications api tests', () => {
       'PUT'
     );
     expect(res).toStrictEqual('mocked-versionToken');
-    mock.reset();
-    mock.restore();
+    expect(mock.history.put).toHaveLength(1);
+    expect(mock.history.put[0].url).toContain('https://mocked-url.com');
   });
 
   it('createNewNotification', async () => {
-    const mock = new MockAdapter(apiClient);
-    // TODO: capire perchè è stato necessario rimuovere il body
-    // per qualche motivo la libreria di mock considera diversi il body passato
-    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
-    // nonostante siano la stessa identica cosa
-    mock.onPost(CREATE_NOTIFICATION()).reply(200, {
+    mock = mockApi(apiClient, 'POST', CREATE_NOTIFICATION(), 200, undefined, {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+    // TODO: capire perchè è stato necessario rimuovere il body
+    // per qualche motivo la libreria di mock considera diversi il body passato
+    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
+    // nonostante siano la stessa identica cosa
     const res = await NotificationsApi.createNewNotification(newNotificationDTO);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-    mock.reset();
-    mock.restore();
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toContain('/delivery/requests');
   });
 });
