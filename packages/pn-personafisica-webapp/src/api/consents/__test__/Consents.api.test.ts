@@ -5,25 +5,36 @@ import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { apiClient } from '../../apiClients';
 import { ConsentsApi } from '../Consents.api';
 import { GET_CONSENTS, SET_CONSENTS } from '../consents.routes';
+import { cleanupMock, mockApi } from '../../../__test__/test-utils';
 
 describe('Consents api tests', () => {
   mockAuthentication();
 
   it('getConsentByType', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {recipientId: 'mocked-recipientId', consentType: ConsentType.TOS, accepted: false});
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      GET_CONSENTS(ConsentType.TOS),
+      200,
+      undefined,
+      { recipientId: 'mocked-recipientId', consentType: ConsentType.TOS, accepted: false },
+    );
     const res = await ConsentsApi.getConsentByType(ConsentType.TOS);
-    expect(res).toStrictEqual({recipientId: 'mocked-recipientId', consentType: ConsentType.TOS, accepted: false});
-    mock.reset();
-    mock.restore();
+    expect(res).toStrictEqual({ recipientId: 'mocked-recipientId', consentType: ConsentType.TOS, accepted: false });
+    cleanupMock(mock);
   });
 
   it('setConsentByType', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), {action: ConsentActionType.ACCEPT}).reply(200);
-    const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', {action: ConsentActionType.ACCEPT});
+    const mock = mockApi(
+      apiClient,
+      'PUT',
+      SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'),
+      200,
+      undefined,
+      { action: ConsentActionType.ACCEPT },
+    );
+    const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', { action: ConsentActionType.ACCEPT });
     expect(res).toStrictEqual('success');
-    mock.reset();
-    mock.restore();
+    cleanupMock(mock);
   });
 });
