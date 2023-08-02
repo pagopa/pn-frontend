@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   AddressSource,
   DigitalDomicileType,
@@ -12,8 +13,8 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
 
 const paymentsPagoPA: Array<NotificationDetailPayment> = [
   {
@@ -56,7 +57,7 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
   },
 ];
 
-const recipient: NotificationDetailRecipient = {
+export const recipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PG,
   taxId: 'LELPTR04A01C352E',
   denomination: 'Le Epistolae srl',
@@ -316,4 +317,4 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(notificationDTO);
+export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));

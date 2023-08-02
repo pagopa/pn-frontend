@@ -2,23 +2,17 @@ import {
   LegalFactId,
   LegalFactType,
   PaymentAttachmentNameType,
+  PaymentAttachmentSName,
   formatToTimezoneString,
   getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
+import { notificationsDTO, notificationsToFe } from '../../../../__mocks__/Notifications.mock';
+import { notificationDTO, notificationToFe } from '../../../../__mocks__/NotificationDetail.mock';
 import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
-import { notificationDTO } from '../../../../__mocks__/NotificationDetail.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import {
-  notificationsFromBe,
-  notificationsToFe,
-} from '../../../redux/dashboard/__test__/test-utils';
-import {
-  notificationFromBe,
-  notificationToFe,
-} from '../../../redux/notification/__test__/test-utils';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -45,7 +39,7 @@ describe('Notifications api tests', () => {
       }),
       200,
       undefined,
-      notificationsFromBe
+      notificationsDTO
     );
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
@@ -58,14 +52,14 @@ describe('Notifications api tests', () => {
   });
 
   it('getReceivedNotification', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const mock = mockApi(
       apiClient,
       'GET',
       NOTIFICATION_DETAIL(iun),
       200,
       undefined,
-      notificationFromBe
+      notificationDTO
     );
     const res = await NotificationsApi.getReceivedNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
@@ -112,7 +106,7 @@ describe('Notifications api tests', () => {
 
   it('getPaymentAttachment', async () => {
     const iun = notificationDTO.iun;
-    const attachmentName = 'mocked-attachmentName';
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
     const mock = mockApi(
       apiClient,
       'GET',

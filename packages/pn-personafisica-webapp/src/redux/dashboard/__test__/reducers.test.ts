@@ -6,13 +6,12 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
-import { notificationsToFe } from './test-utils';
 
 describe('Dashbaord redux state tests', () => {
   mockAuthentication();
@@ -25,7 +24,7 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(today),
-        iunMatch: ''
+        iunMatch: '',
       },
       pagination: {
         nextPagesKey: [],

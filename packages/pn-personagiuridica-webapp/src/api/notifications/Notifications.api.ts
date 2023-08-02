@@ -69,8 +69,6 @@ export const NotificationsApi = {
   /**
    * Gets current user notification detail
    * @param  {string} iun
-   * @param  {string} currentUserTaxId
-   * @param  {Array<Delegator>} delegatorsFromStore
    * @param  {string} mandateId
    * @returns Promise
    */
