@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   AddressSource,
   DigitalDomicileType,
@@ -14,7 +15,6 @@ import {
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
-import _ from 'lodash';
 
 const paymentsPagoPA: Array<NotificationDetailPayment> = [
   {
