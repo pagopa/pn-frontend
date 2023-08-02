@@ -323,7 +323,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
-export const notificationDTO: NotificationDetail = {
+export const notificationToFe: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302011686772695119',
   subject: 'notifica analogica con cucumber',
@@ -354,5 +354,3 @@ export const notificationDTO: NotificationDetail = {
   notificationStatusHistory,
   timeline,
 };
-
-export const notificationToFe = notificationDTO;
