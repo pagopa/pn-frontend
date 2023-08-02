@@ -1,34 +1,38 @@
 import _ from 'lodash';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
+import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  DigitalWorkflowDetails,
+  INotificationDetailTimeline,
   LegalFactType,
   NotHandledDetails,
+  NotificationDeliveryMode,
+  NotificationDetail,
+  NotificationDetailRecipient,
+  NotificationStatus,
+  NotificationStatusHistory,
   PhysicalCommunicationType,
+  RecipientType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  NotificationStatus,
-  NotificationStatusHistory,
-  NotificationDetailRecipient,
-  NotificationDetail,
-  NotificationDeliveryMode,
-  ResponseStatus,
-  INotificationDetailTimeline,
-  DigitalWorkflowDetails,
-  RecipientType,
 } from '../../types';
 import {
   AppIoCourtesyMessageEventType,
   NotificationDetailOtherDocument,
+  PaidDetails,
+  PaymentHistory,
+  PaymentStatus,
 } from '../../types/NotificationDetail';
-import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   parseNotificationDetail,
+  populatePaymentHistory,
 } from '../notification.utility';
 import {
   acceptedDeliveringDeliveredTimeline,
@@ -1768,5 +1772,122 @@ describe('timeline legal fact link text', () => {
       LegalFactType.RECIPIENT_ACCESS
     );
     expect(label).toBe('detail.legalfact: detail.timeline.legalfact.recipient-access');
+  });
+});
+
+describe('Populate payment history', () => {
+  it('return empty array if user payments is undefined', () => {
+    const recipients = [
+      {
+        ...recipient,
+        payments: undefined,
+      },
+    ];
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      recipients,
+      paymentInfo
+    );
+
+    expect(mappedPayments).toStrictEqual([]);
+  });
+
+  it('return empty array if user payments is an empty array', () => {
+    const recipients = [
+      {
+        ...recipient,
+        payments: [],
+      },
+    ];
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      recipients,
+      paymentInfo
+    );
+
+    expect(mappedPayments).toStrictEqual([]);
+  });
+
+  it('With empty timeline it should return the mapped array with only external registry info', () => {
+    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+      return {
+        pagoPA: { ...item.pagoPA, ...paymentInfo[index] },
+        f24Data: item.f24Data,
+      } as PaymentHistory;
+    });
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      [],
+      notificationToFe.recipients,
+      paymentInfo
+    );
+
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
+    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+      const checkoutSucceded =
+        paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+
+      const timelineEvent = notificationToFe.timeline.find(
+        (item) =>
+          item.category === TimelineCategory.PAYMENT &&
+          (item.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+          (item.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+      )?.details;
+
+      return {
+        pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
+        f24Data: item.f24Data,
+      } as PaymentHistory;
+    });
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      notificationToFe.recipients,
+      paymentInfo
+    );
+
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('If timeline has some undefined keys it should return the mapped array with the ext registry values of the undefined timeline keys', () => {
+    const timeline: INotificationDetailTimeline[] = notificationToFe.timeline.map((item) => ({
+      ...item,
+      amount: undefined,
+    }));
+
+    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+      const checkoutSucceded =
+        paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+
+      const timelineEvent = notificationToFe.timeline.find(
+        (item) =>
+          item.category === TimelineCategory.PAYMENT &&
+          (item.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+          (item.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+      )?.details;
+
+      return {
+        pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
+        f24Data: item.f24Data,
+      } as PaymentHistory;
+    });
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      timeline,
+      notificationToFe.recipients,
+      paymentInfo
+    );
+
+    expect(mappedPayments).toStrictEqual(res);
   });
 });

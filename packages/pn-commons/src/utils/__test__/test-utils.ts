@@ -152,7 +152,6 @@ export const parsedNotification: NotificationDetail = {
   documentsAvailable: true,
   documents: [],
   otherDocuments: [],
-  paymentHistory: [],
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
     { ...statusHistory[0], steps: [{ ...timeline[0], index: 0, hidden: false }] },
@@ -310,12 +309,12 @@ export function analogFailureTimeline(): Array<INotificationDetailTimeline> {
       details: {
         recIndex: 0,
         serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        physicalAddress: { 
+        physicalAddress: {
           address: 'Via Umberto, 34',
           municipality: 'Graniti',
-          zip: '98036'
+          zip: '98036',
         },
-        sentAttemptMade: 0
+        sentAttemptMade: 0,
       } as NotificationDetailTimelineDetails,
     },
     {
@@ -325,7 +324,7 @@ export function analogFailureTimeline(): Array<INotificationDetailTimeline> {
       details: {
         recIndex: 0,
         deliveryDetailCode: 'RECRN002B',
-        registeredLetterCode: 'IT348344A42'
+        registeredLetterCode: 'IT348344A42',
       } as NotificationDetailTimelineDetails,
     },
     {
@@ -335,10 +334,10 @@ export function analogFailureTimeline(): Array<INotificationDetailTimeline> {
       details: {
         recIndex: 0,
         serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-        physicalAddress: { 
+        physicalAddress: {
           address: 'Via Umberto, 34',
           municipality: 'Graniti',
-          zip: '98036'
+          zip: '98036',
         },
         sentAttemptMade: 0,
         responseStatus: ResponseStatus.KO,
@@ -361,8 +360,8 @@ export function analogFailureTimeline(): Array<INotificationDetailTimeline> {
       category: TimelineCategory.COMPLETELY_UNREACHABLE,
       details: { recIndex: 0 } as NotificationDetailTimelineDetails,
     },
-  ]
-};
+  ];
+}
 
 export function analogFailureStatusHistory(): Array<NotificationStatusHistory> {
   return [
@@ -382,6 +381,5 @@ export function analogFailureStatusHistory(): Array<NotificationStatusHistory> {
       activeFrom: '2023-01-26T14:17:16.525827086Z',
       relatedTimelineElements: ['completely_unreachable_0'],
     },
-
-  ]
+  ];
 }

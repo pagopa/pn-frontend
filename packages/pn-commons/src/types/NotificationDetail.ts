@@ -27,13 +27,12 @@ export interface NotificationDetail {
   amount?: number;
   // only fe
   otherDocuments?: Array<NotificationDetailDocument>;
-  paymentHistory?: Array<PaymentHistory>;
 }
 
-export type PaymentHistory = PaidDetails & {
-  recipientDenomination: string;
-  recipientTaxId: string;
-};
+export interface PaymentHistory {
+  pagoPA?: PagoPAPaymentDetails | PaidDetails | ExtRegistriesPaymentDetails;
+  f24Data?: F24PaymentDetails;
+}
 
 export type NotificationDetailTimelineDetails =
   | BaseDetails
@@ -202,7 +201,6 @@ export interface PaidDetails extends BaseDetails {
   amount?: number;
   creditorTaxId: string;
   noticeCode: string;
-  paymentObject?: string;
 }
 
 // PN-1647
