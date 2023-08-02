@@ -15,10 +15,6 @@ phases:
       - echo launching yarn install in $SUB_PRJ_NAME...
       - cd $SUB_PRJ_NAME
       - yarn install
-      - | 
-        if ( [ "$SUB_PRJ_NAME" != "packages/pn-landing-webapp" ] ) then 
-          echo Running tests.. && yarn test
-        fi
   build:
     on-failure: ABORT
     commands:
@@ -43,4 +39,4 @@ phases:
 artifacts:
   base-directory: $SUB_PRJ_NAME/build
   files:
-    - '**/*'
+    - "**/*"

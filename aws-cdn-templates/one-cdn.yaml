@@ -63,16 +63,10 @@ Parameters:
 
   S3LogsBucket:
     Type: String
-    Default: '-'
+    Default: "-"
     Description: Access Log bucket name
 
 Conditions:
-  # Is landing site if name startsWith 'web-landing-cdn-'
-  IsLanding:
-    Fn::And:
-      - !Not [!Equals [!Ref Name, ""]]
-      - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
-
   # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
   IsPortalePg:
     Fn::And:
@@ -83,7 +77,7 @@ Conditions:
   IsPortalePgProd:
     Fn::And:
       - !Not [!Equals [!Ref Name, ""]]
-      - !Equals [ webapp-pg-cdn-prod, !Ref Name ]
+      - !Equals [webapp-pg-cdn-prod, !Ref Name]
 
   # If domain is used in certificate, add this domain to CloudFront
   CreateDNSname: !Equals
@@ -91,7 +85,7 @@ Conditions:
     - "true"
 
   # If domain is used in certificate, add this domain to CloudFront
-  HasLogsBucket: !Not [!Equals [!Ref S3LogsBucket, "-" ]]
+  HasLogsBucket: !Not [!Equals [!Ref S3LogsBucket, "-"]]
 
   # If alternate domain is provided and is used in certificate, add this domain to CloudFront
   CreateAlternateDNSname:
@@ -292,75 +286,75 @@ Resources:
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
             PathPattern: /icons*
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /auth*
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /auth*
+              - !Ref "AWS::NoValue"
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /dashboard*
-            - !Ref "AWS::NoValue"  
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /dashboard*
+              - !Ref "AWS::NoValue"
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /onboarding*
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /onboarding*
+              - !Ref "AWS::NoValue"
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /assets*
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /assets*
+              - !Ref "AWS::NoValue"
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /microcomponents*
-            - !Ref "AWS::NoValue"                          
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /microcomponents*
+              - !Ref "AWS::NoValue"
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -398,14 +392,19 @@ Resources:
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
           - Fn::If:
-            - IsPortalePg
-            - DomainName: !If [ IsPortalePgProd, 'pnpg.selfcare.pagopa.it', 'pnpg.uat.selfcare.pagopa.it' ]
-              Id: "pn-SelfCare-PG"
-              CustomOriginConfig:
-                OriginProtocolPolicy: 'https-only'
-                OriginSSLProtocols:
-                  - TLSv1.2
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - DomainName:
+                  !If [
+                    IsPortalePgProd,
+                    "pnpg.selfcare.pagopa.it",
+                    "pnpg.uat.selfcare.pagopa.it",
+                  ]
+                Id: "pn-SelfCare-PG"
+                CustomOriginConfig:
+                  OriginProtocolPolicy: "https-only"
+                  OriginSSLProtocols:
+                    - TLSv1.2
+              - !Ref "AWS::NoValue"
         Logging:
           Fn::If:
             - HasLogsBucket
@@ -428,7 +427,7 @@ Resources:
           # add_header Content-Security-Policy
           ContentSecurityPolicy:
             ContentSecurityPolicy:
-              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \ 
+              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \
               connect-src 'self' https://api-eu.mixpanel.com/track/ \
               https://uat.selfcare.pagopa.it/assets/ \
               https://selfcare.pagopa.it/assets/ \
@@ -441,7 +440,7 @@ Resources:
               https://pnpg.uat.selfcare.pagopa.it/ \
               https://pnpg.selfcare.pagopa.it/ \
               https://privacyportalde-cdn.onetrust.com/ ; \
-              worker-src 'none'; \ 
+              worker-src 'none'; \
               font-src 'self'; \
               frame-ancestors 'self' ; \
               img-src 'self' https://assets.cdn.io.italia.it/ https://selcpweupnpgcheckoutsa.z6.web.core.windows.net/ https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ https://imprese.uat.notifichedigitali.it/ https://imprese.notifichedigitali.it/ data:"
@@ -686,7 +685,7 @@ Outputs:
   DistributionId:
     Description: Cloudfront distribution ID
     Value: !Ref WebsiteCDN
-    
+
   TooManyErrorsAlarmArn:
     Value: !GetAtt TooManyErrorsAlarm.Arn
     Description: ARN of distribution too many errors alarm
