@@ -24,6 +24,20 @@ describe('Consents api tests', () => {
     cleanupMock(mock);
   });
 
+  it('getConsentByType with status code 400', async () => {
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      GET_CONSENTS(ConsentType.TOS),
+      400,
+      undefined,
+      { error: 'Invalid request' },
+    );
+    await expect(ConsentsApi.getConsentByType(ConsentType.TOS))
+    .rejects.toThrow("Request failed with status code 400");
+    cleanupMock(mock);
+  });
+
   it('setConsentByType', async () => {
     const mock = mockApi(
       apiClient,
@@ -35,6 +49,24 @@ describe('Consents api tests', () => {
     );
     const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', { action: ConsentActionType.ACCEPT });
     expect(res).toStrictEqual('success');
+    cleanupMock(mock);
+  });
+
+  it('setConsentByType with status code 400', async () => {
+    const mock = mockApi(
+      apiClient,
+      'PUT',
+      SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'),
+      400,
+      undefined,
+      { error: 'Invalid request' },
+    );
+    await expect(
+      ConsentsApi.setConsentByType(
+        ConsentType.TOS,
+        'mocked-version-1',
+        { action: ConsentActionType.ACCEPT }))
+      .rejects.toThrow("Request failed with status code 400");
     cleanupMock(mock);
   });
 });
