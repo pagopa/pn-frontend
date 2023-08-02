@@ -12,6 +12,7 @@ import {
   parseNotificationDetail,
   getLegalFactLabel,
   getNotificationTimelineStatusInfos,
+  populatePaymentHistory,
 } from './notification.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { compileOneTrustPath } from './onetrust.utility';
@@ -106,4 +107,5 @@ export {
   compileOneTrustPath,
   buttonNakedInheritStyle,
   sortArray,
+  populatePaymentHistory,
 };

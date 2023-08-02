@@ -6,17 +6,15 @@ import {
   PaymentAttachmentNameType,
   formatToTimezoneString,
   getNextDay,
+  PaymentAttachmentSName,
 } from '@pagopa-pn/pn-commons';
 import {
   notificationDTO,
   notificationToFe,
   recipient,
 } from '../../../../__mocks__/NotificationDetail.mock';
+import { notificationsDTO, notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
-import {
-  notificationsFromBe,
-  notificationsToFe,
-} from '../../../redux/dashboard/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../apiClients';
@@ -46,7 +44,7 @@ describe('Notifications api tests', () => {
       }),
       200,
       undefined,
-      notificationsFromBe
+      notificationsDTO
     );
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
@@ -125,7 +123,7 @@ describe('Notifications api tests', () => {
 
   it('getPaymentAttachment', async () => {
     const iun = notificationDTO.iun;
-    const attachmentName = 'mocked-attachmentName';
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
     const mock = mockApi(
       apiClient,
       'GET',

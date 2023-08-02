@@ -6,6 +6,7 @@ import {
   LegalFactId,
   PaymentAttachmentNameType,
   performThunkAction,
+  populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
@@ -13,7 +14,6 @@ import {
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { populatePaymentHistory } from '@pagopa-pn/pn-commons/src/utils/notification.utility';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
