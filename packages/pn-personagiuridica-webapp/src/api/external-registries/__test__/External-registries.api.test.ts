@@ -8,19 +8,24 @@ import { ExternalRegistriesAPI } from '../External-registries.api';
 import { GET_ALL_ACTIVATED_PARTIES, GET_GROUPS } from '../external-registries-routes';
 
 describe('ExternalRegistries API tests', () => {
+  let mock: MockAdapter;
   mockAuthentication();
 
-  test('getAllActivatedParties 200', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, []);
-    const res = await ExternalRegistriesAPI.getAllActivatedParties();
-    expect(res).toStrictEqual([]);
-    mock.reset();
-    mock.restore();
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
   });
 
-  test('getGroups 200', async () => {
-    const mock = mockApi(apiClient, 'GET', GET_GROUPS(), 200, undefined, [
+  it('getAllActivatedParties 200', async () => {
+    mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 200, undefined, []);
+    const res = await ExternalRegistriesAPI.getAllActivatedParties();
+    expect(res).toStrictEqual([]);
+  })
+
+  it('getGroups 200', async () => {
+    mockApi(apiClient, 'GET', GET_GROUPS(), 200, undefined, [
       {
         id: 'group-1',
         name: 'Group 1',
@@ -37,7 +42,5 @@ describe('ExternalRegistries API tests', () => {
         status: GroupStatus.ACTIVE,
       },
     ]);
-    mock.reset();
-    mock.restore();
   });
 });

@@ -29,51 +29,55 @@ import {
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../notifications.routes';
+import { mockApi } from '../../../../../pn-personafisica-webapp/src/__test__/test-utils';
 
 describe('Notifications api tests', () => {
+  let mock: MockAdapter;
   mockAuthentication();
 
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
+
   it('getReceivedNotifications', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(
-        NOTIFICATIONS_LIST({
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
-        })
-      )
-      .reply(200, notificationsFromBe);
+    mockApi(apiClient, 'GET', NOTIFICATIONS_LIST({
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
+    }), 200, undefined, notificationsFromBe);
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
       isDelegatedPage: false,
     });
     expect(res).toStrictEqual(notificationsToFe);
-    mock.reset();
-    mock.restore();
   });
 
   it('getReceivedNotification', async () => {
     const iun = 'mocked-iun';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
+    mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL(iun),
+      200,
+      undefined,
+      notificationFromBe);
     const res = await NotificationsApi.getReceivedNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
-    mock.reset();
-    mock.restore();
   });
 
   it('getReceivedNotificationDocument', async () => {
     const iun = 'mocked-iun';
     const documentIndex = '0';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: 'http://mocked-url.com' });
+    mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-    mock.reset();
-    mock.restore();
   });
 
   it('getReceivedNotificationLegalfact', async () => {
@@ -82,53 +86,59 @@ describe('Notifications api tests', () => {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
+    mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact),
+      200,
+      undefined,
+      undefined);
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
-    mock.reset();
-    mock.restore();
   });
 
   it('getPaymentAttachment', async () => {
     const iun = 'mocked-iun';
     const attachmentName = 'mocked-attachmentName';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
-      .reply(200, { url: 'http://mocked-url.com' });
+    mockApi(apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getPaymentAttachment(
       iun,
       attachmentName as PaymentAttachmentNameType
     );
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-    mock.reset();
-    mock.restore();
   });
 
   it('getNotificationPaymentInfo', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    mockApi(apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_INFO(taxId, noticeCode),
+      200,
+      undefined,
+      {
+        status: 'SUCCEEDED',
+        amount: 10,
+      });
     const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
     expect(res).toStrictEqual({
       status: 'SUCCEEDED',
       amount: 10,
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('getNotificationPaymentUrl', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    const mock = new MockAdapter(apiClient);
-    mock
-      .onPost(NOTIFICATION_PAYMENT_URL(), {
+    mockApi(apiClient,
+      'POST',
+      NOTIFICATION_PAYMENT_URL(),
+      200,
+      {
         paymentNotice: {
           noticeNumber: noticeCode,
           fiscalCode: taxId,
@@ -137,8 +147,8 @@ describe('Notifications api tests', () => {
           description: 'Mocked title',
         },
         returnUrl: 'mocked-return-url',
-      })
-      .reply(200, {
+      },
+      {
         checkoutUrl: 'mocked-url',
       });
     const res = await NotificationsApi.getNotificationPaymentUrl(
@@ -154,25 +164,22 @@ describe('Notifications api tests', () => {
     expect(res).toStrictEqual({
       checkoutUrl: 'mocked-url',
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('exchangeNotificationQrCode', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr1' }).reply(200, {
-      iun: 'mock-notification-1',
-      mandateId: 'mock-mandate-1',
-    });
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr2' }).reply(200, {
-      iun: 'mock-notification-2',
-    });
+    mockApi(apiClient,
+      'POST',
+      NOTIFICATION_ID_FROM_QRCODE(),
+      200,
+      { aarQrCodeValue: 'qr1' },
+      {
+        iun: 'mock-notification-1',
+        mandateId: 'mock-mandate-1',
+      });
     const res = await NotificationsApi.exchangeNotificationQrCode('qr1');
     expect(res).toStrictEqual({
       iun: 'mock-notification-1',
-      mandateId: 'mock-mandate-1',
+      mandateId: 'mock-mandate-1'
     });
-    mock.reset();
-    mock.restore();
   });
 });
