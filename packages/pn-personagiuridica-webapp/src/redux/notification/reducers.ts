@@ -8,11 +8,12 @@ import {
   PhysicalCommunicationType,
   NotificationFeePolicy,
   PaymentAttachmentSName,
-  ExtRegistriesPaymentDetails,
   RecipientType,
   PaymentStatus,
   PaymentInfoDetail,
   Downtime,
+  PaymentHistory,
+  ExtRegistriesPaymentDetails,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
@@ -62,7 +63,7 @@ const initialState = {
   f24AttachmentUrl: '',
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
-  paymentInfo: {} as ExtRegistriesPaymentDetails,
+  paymentInfo: [] as Array<PaymentHistory>,
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -117,12 +118,25 @@ const notificationSlice = createSlice({
         state.paymentInfo = action.payload;
       }
     });
-    builder.addCase(getNotificationPaymentUrl.rejected, (state) => {
-      state.paymentInfo = {
-        ...state.paymentInfo,
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.GENERIC_ERROR,
+    builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
+      const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
+      const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
+      const paymentInfo = state.paymentInfo.find(
+        (payment) =>
+          payment.pagoPA?.creditorTaxId === creditorTaxId &&
+          payment.pagoPA?.noticeCode === noticeCode
+      );
+
+      const updatedPaymentInfo = {
+        ...paymentInfo?.f24Data,
+        pagoPA: {
+          ...paymentInfo?.pagoPA,
+          status: PaymentStatus.FAILED,
+          detail: PaymentInfoDetail.GENERIC_ERROR,
+        } as ExtRegistriesPaymentDetails,
       };
+
+      state.paymentInfo = [...state.paymentInfo, updatedPaymentInfo];
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.downtimes;

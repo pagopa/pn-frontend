@@ -14,6 +14,7 @@ import {
   TimelineCategory,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
 
 const paymentsPagoPA: Array<NotificationDetailPayment> = [
   {
@@ -56,7 +57,7 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
   },
 ];
 
-const recipient: NotificationDetailRecipient = {
+export const recipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PG,
   taxId: 'LELPTR04A01C352E',
   denomination: 'Le Epistolae srl',
@@ -126,12 +127,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'REQUEST_ACCEPTED.IUN_AVEJ-AUAT-JUQE-202305-J-1',
     timestamp: '2023-05-09T09:17:30.022877699Z',
-    legalFactsIds: [
-      {
-        key: 'safestorage://PN_LEGAL_FACTS-e94b748e1774763a4c56f139491eb8d.pdf',
-        category: LegalFactType.SENDER_ACK,
-      },
-    ],
+    legalFactsIds: [],
     category: TimelineCategory.REQUEST_ACCEPTED,
     details: {},
   },
@@ -316,4 +312,4 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(notificationDTO);
+export const notificationToFe = parseNotificationDetailForRecipient(notificationDTO);
