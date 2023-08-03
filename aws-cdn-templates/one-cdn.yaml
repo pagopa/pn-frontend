@@ -67,6 +67,12 @@ Parameters:
     Description: Access Log bucket name
 
 Conditions:
+ # Is landing site if name startsWith 'web-landing-cdn-'
+  IsLanding:    
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
+
   # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
   IsPortalePg:
     Fn::And:
@@ -373,15 +379,15 @@ Resources:
                   FunctionARN: !GetAtt RewriteFunction.FunctionMetadata.FunctionARN
               - !Ref "AWS::NoValue"
         DefaultRootObject:
-          !If [IsLanding, "pubbliche-amministrazioni/index.html", "index.html"]
+          !If [IsLanding, "index.html", "index.html"]
         # DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html']
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: !If [IsLanding, "/404/index.html", "/index.html"]
+            ResponsePagePath: !If [IsLanding, "index.html", "/index.html"]
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: !If [IsLanding, "/404/index.html", "/index.html"]
+            ResponsePagePath: !If [IsLanding, "index.html", "/index.html"]
         Origins:
           - DomainName: !Sub "${S3BucketForWebsiteContent.RegionalDomainName}"
             Id: !Sub "S3-${S3BucketForWebsiteContent}"
@@ -478,7 +484,7 @@ Resources:
                 - - "default-src 'self';"
                   - !If [
                       IsLanding,
-                      "object-src 'self' https://www.notifichedigitali.pagopa.it/ https://notifichedigitali.pagopa.it ;",
+                      "object-src 'none';"
                       "object-src 'none';",
                     ]
                   - !Sub " connect-src 'self' https://api-eu.mixpanel.com/track/  \
