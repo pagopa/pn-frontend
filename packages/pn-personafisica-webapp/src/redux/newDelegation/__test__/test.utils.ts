@@ -12,11 +12,13 @@ export const createDelegationPayload = {
   email: 'test@email.com',
   nome: 'nome',
   cognome: 'cognome',
+  ragioneSociale: 'Foo SAS di Anonimo',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
   expirationDate: new Date(),
   enti: [{ name: '', id: '' }],
   verificationCode: '00000',
 };
+
 
 export const createDelegationSelectedPayload = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
@@ -24,6 +26,7 @@ export const createDelegationSelectedPayload = {
   email: 'test@email.com',
   nome: 'nome',
   cognome: 'cognome',
+  ragioneSociale: 'Foo SAS di Anonimo',
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
   expirationDate: new Date(),
   enti: [{ name: 'test', id: 'test' }],
@@ -36,8 +39,9 @@ export const createDelegationResponse = {
   delegate: {
     firstName: 'nome',
     lastName: 'cognome',
+    displayName: 'nome cognome',
     fiscalCode: 'fiscalCode',
-    companyName: null,
+    companyName: 'companyName',
     person: true,
     email: 'email@test.com',
   },

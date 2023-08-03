@@ -1,3 +1,4 @@
+import MockAdapter from 'axios-mock-adapter';
 import {
   LegalFactType,
   NotificationDetail,
@@ -22,7 +23,10 @@ import {
   getReceivedNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
-import { notificationToFe } from './test-utils';
+import { notificationFromBe, notificationToFe } from './test-utils';
+import { NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_DETAIL_OTHER_DOCUMENTS, NOTIFICATION_PAYMENT_ATTACHMENT, NOTIFICATION_PAYMENT_INFO, NOTIFICATION_PAYMENT_URL } from '../../../api/notifications/notifications.routes';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 
 const initialState = {
   loading: false,
@@ -61,7 +65,14 @@ const initialState = {
 };
 
 describe('Notification detail redux state tests', () => {
+  let mock: MockAdapter;
   mockAuthentication();
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
 
   it('Initial state', () => {
     const state = store.getState().notificationState;
@@ -69,8 +80,12 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotification');
-    apiSpy.mockResolvedValue(notificationToFe);
+    mock = mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL('mocked-iun'),
+      200,
+      undefined,
+      notificationFromBe);
     const action = await store.dispatch(
       getReceivedNotification({
         iun: 'mocked-iun',
@@ -84,10 +99,16 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationDocument');
-    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
+    const iun = 'mocked-iun';
+    const documentIndex = '0';
+    mock = mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getReceivedNotificationDocument({ iun: 'mocked-iun', documentIndex: '0' })
+      getReceivedNotificationDocument({ iun, documentIndex })
     );
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
@@ -95,13 +116,19 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification other document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationOtherDocument');
-    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
+    const iun = 'mocked-iun';
+    const otherDocument = {
+      documentId: 'mocked-id',
+      documentType: 'mocked-type',
+    };
+    mock = mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getReceivedNotificationOtherDocument({
-        iun: 'mocked-iun',
-        otherDocument: { documentId: 'mocked-id', documentType: 'mocked-type' },
-      })
+      getReceivedNotificationOtherDocument({ iun, otherDocument })
     );
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationOtherDocument/fulfilled');
@@ -109,13 +136,19 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationLegalfact');
-    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
+    const iun = 'mocked-iun';
+    const legalFact = {
+      key: 'mocked-key',
+      category: LegalFactType.ANALOG_DELIVERY,
+    };
+    mock = mockApi(apiClient,
+      'GET',
+      NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getReceivedNotificationLegalfact({
-        iun: 'mocked-iun',
-        legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
-      })
+      getReceivedNotificationLegalfact({ iun, legalFact })
     );
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
@@ -142,10 +175,16 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the pagopa document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getPaymentAttachment');
-    apiSpy.mockResolvedValue({ url: 'http://pagopa-mocked-url.com' });
+    const iun = 'mocked-iun';
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
+    mock = mockApi(apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
+      200,
+      undefined,
+      { url: 'http://pagopa-mocked-url.com' });
     const action = await store.dispatch(
-      getPaymentAttachment({ iun: 'mocked-iun', attachmentName: PaymentAttachmentSName.PAGOPA })
+      getPaymentAttachment({ iun, attachmentName })
     );
     const payload = action.payload;
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
@@ -156,10 +195,16 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the f24 document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getPaymentAttachment');
-    apiSpy.mockResolvedValue({ url: 'http://f24-mocked-url.com' });
+    const iun = 'mocked-iun';
+    const attachmentName = PaymentAttachmentSName.F24;
+    mock = mockApi(apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
+      200,
+      undefined,
+      { url: 'http://f24-mocked-url.com' });
     const action = await store.dispatch(
-      getPaymentAttachment({ iun: 'mocked-iun', attachmentName: PaymentAttachmentSName.F24 })
+      getPaymentAttachment({ iun, attachmentName })
     );
     const payload = action.payload;
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
@@ -170,10 +215,17 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch payment info', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' });
+    const taxId = 'mocked-taxId';
+    const noticeCode = 'mocked-noticeCode';
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_INFO(taxId, noticeCode),
+      200,
+      null,
+      { status: PaymentStatus.REQUIRED, amount: 1200, url: 'mocked-url' });
     const action = await store.dispatch(
-      getNotificationPaymentInfo({ noticeCode: 'mocked-notice-code', taxId: 'mocked-tax-id' })
+      getNotificationPaymentInfo({ noticeCode, taxId })
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
@@ -188,13 +240,23 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch payment url', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentUrl');
-    apiSpy.mockResolvedValue({ checkoutUrl: 'mocked-url' });
+    const taxId = 'mocked-taxId';
+    const noticeCode = 'mocked-noticeCode';
+    mock = mockApi(
+      apiClient,
+      'POST',
+      NOTIFICATION_PAYMENT_URL(),
+      200,
+      undefined,
+      {
+        checkoutUrl: 'mocked-url',
+      }
+    );
     const action = await store.dispatch(
       getNotificationPaymentUrl({
         paymentNotice: {
-          noticeNumber: 'mocked-noticeCode',
-          fiscalCode: 'mocked-taxId',
+          noticeNumber: noticeCode,
+          fiscalCode: taxId,
           amount: 0,
           companyName: 'Mocked Company',
           description: 'Mocked title',

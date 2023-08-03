@@ -1,3 +1,4 @@
+import MockAdapter from 'axios-mock-adapter';
 import {
   formatToTimezoneString,
   getNextDay,
@@ -6,16 +7,26 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
-import { notificationsToFe } from './test-utils';
+import { notificationsFromBe, notificationsToFe } from './test-utils';
+import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
+
 
 describe('Dashbaord redux state tests', () => {
+  let mock: MockAdapter;
   mockAuthentication();
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
 
   it('Initial state', () => {
     const state = store.getState().dashboardState;
@@ -41,8 +52,10 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
-    apiSpy.mockResolvedValue(notificationsToFe);
+    mock = mockApi(apiClient, 'GET', NOTIFICATIONS_LIST({
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
+    }), 200, undefined, notificationsFromBe);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),

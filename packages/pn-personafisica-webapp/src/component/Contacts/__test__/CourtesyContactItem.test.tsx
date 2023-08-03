@@ -76,7 +76,7 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('save a new phone number', async () => {
-      const mock = mockApi(
+      mock = mockApi(
         apiClient,
         'POST',
         COURTESY_CONTACT('default', CourtesyChannelType.SMS),
@@ -136,8 +136,6 @@ describe('CourtesyContactItem component', () => {
         });
       });
       expect(dialog).not.toBeInTheDocument();
-      mock.reset();
-      mock.restore();
     });
 
     it('type in an invalid number while in "edit mode"', async () => {
@@ -165,7 +163,7 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('override an existing phone number with a new one', async () => {
-      const mock = mockApi(
+      mock = mockApi(
         apiClient,
         'POST',
         COURTESY_CONTACT('default', CourtesyChannelType.SMS),
@@ -227,12 +225,10 @@ describe('CourtesyContactItem component', () => {
         });
       });
       expect(dialog).not.toBeInTheDocument();
-      mock.reset();
-      mock.restore();
     });
 
     it('delete phone number', async () => {
-      const mock = mockApi(
+      mock = mockApi(
         apiClient,
         'DELETE',
         COURTESY_CONTACT('default', CourtesyChannelType.SMS),
@@ -267,8 +263,6 @@ describe('CourtesyContactItem component', () => {
         expect(dialogBox).not.toBeVisible();
         expect(mock.history.delete).toHaveLength(1);
       });
-      mock.reset();
-      mock.restore();
     });
   });
 
@@ -332,7 +326,7 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('add a new email', async () => {
-      const mock = mockApi(
+      mock = mockApi(
         apiClient,
         'POST',
         COURTESY_CONTACT('default', CourtesyChannelType.EMAIL),
@@ -390,8 +384,6 @@ describe('CourtesyContactItem component', () => {
         });
       });
       expect(dialog).not.toBeInTheDocument();
-      mock.reset();
-      mock.restore();
     });
 
     it('type in an invalid email while in "edit mode"', async () => {
@@ -419,7 +411,7 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('override an existing email with a new one', async () => {
-      const mock = mockApi(
+      mock = mockApi(
         apiClient,
         'POST',
         COURTESY_CONTACT('default', CourtesyChannelType.EMAIL),
@@ -478,13 +470,11 @@ describe('CourtesyContactItem component', () => {
           verificationCode: '01234',
         });
       });
-      expect(dialog).not.toBeInTheDocument();
-      mock.reset();
-      mock.restore();
+      expect(dialog).not.toBeInTheDocument();;
     });
 
     it('delete email', async () => {
-      const mock = mockApi(
+      mock = mockApi(
         apiClient,
         'DELETE',
         COURTESY_CONTACT('default', CourtesyChannelType.EMAIL),
@@ -519,8 +509,6 @@ describe('CourtesyContactItem component', () => {
         expect(dialogBox).not.toBeVisible();
         expect(mock.history.delete).toHaveLength(1);
       });
-      mock.reset();
-      mock.restore();
     });
   });
 });

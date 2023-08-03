@@ -1,7 +1,7 @@
+import MockAdapter from 'axios-mock-adapter';
 import { Delegation } from '../types';
 import { store } from '../../store';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
-import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import {
   acceptDelegation,
   getDelegates,
@@ -18,9 +18,19 @@ import {
   setDelegatorsSorting,
 } from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { ACCEPT_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 
 describe('delegation redux state tests', () => {
+  let mock: MockAdapter;
   mockAuthentication();
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
 
   it('checks the initial state', () => {
     const state = store.getState().delegationsState;
@@ -28,8 +38,12 @@ describe('delegation redux state tests', () => {
   });
 
   it('should be able to fetch the delegates', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'getDelegates');
-    apiSpy.mockResolvedValue(arrayOfDelegates);
+    mock = mockApi(apiClient,
+      'GET',
+      DELEGATIONS_BY_DELEGATOR(),
+      200,
+      undefined,
+      arrayOfDelegates);
     const action = await store.dispatch(getDelegates());
     const payload = action.payload as Array<Delegation>;
     expect(action.type).toBe('getDelegates/fulfilled');
@@ -37,8 +51,12 @@ describe('delegation redux state tests', () => {
   });
 
   it('should be able to fetch the delegators', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'getDelegators');
-    apiSpy.mockResolvedValue(arrayOfDelegators);
+    mock = mockApi(apiClient,
+      'GET',
+      DELEGATIONS_BY_DELEGATE(),
+      200,
+      undefined,
+      arrayOfDelegators);
     const action = await store.dispatch(getDelegators());
     const payload = action.payload as Array<Delegation>;
 
@@ -47,8 +65,12 @@ describe('delegation redux state tests', () => {
   });
 
   it('should accept a delegation request', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'acceptDelegation');
-    apiSpy.mockResolvedValue({ id: '1' });
+    mock = mockApi(apiClient,
+      'PATCH',
+      ACCEPT_DELEGATION('1'),
+      204,
+      undefined,
+      { id: '1' });
     const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345' }));
     const payload = action.payload;
 
@@ -57,20 +79,28 @@ describe('delegation redux state tests', () => {
   });
 
   it('should set the accept modal state to error', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'acceptDelegation');
-    apiSpy.mockRejectedValue('error');
+    mock = mockApi(apiClient,
+      'PATCH',
+      ACCEPT_DELEGATION('1'),
+      500,
+      undefined,
+      'error');
     const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345' }));
     const payload = action.payload;
 
     expect(action.type).toBe('acceptDelegation/rejected');
-    expect(payload).toStrictEqual({ response: { status: 500 } });
+    expect(payload).toStrictEqual({ response: { status: 500, data: 'error' } });
     const acceptModalState = store.getState().delegationsState.acceptModalState;
     expect(acceptModalState.error).toEqual(true);
   });
 
   it('should reject a delegation from a delegator', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'rejectDelegation');
-    apiSpy.mockResolvedValue({ id: '2' });
+    mock = mockApi(apiClient,
+      'PATCH',
+      REJECT_DELEGATION('2'),
+      204,
+      undefined,
+      { id: '2' });
     const action = await store.dispatch(rejectDelegation('2'));
     const payload = action.payload;
 
@@ -79,18 +109,26 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to reject a delegation', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'rejectDelegation');
-    apiSpy.mockRejectedValue('error');
+    mock = mockApi(apiClient,
+      'PATCH',
+      REJECT_DELEGATION('2'),
+      500,
+      undefined,
+      'error');
     const action = await store.dispatch(rejectDelegation('2'));
     const payload = action.payload;
 
     expect(action.type).toBe('rejectDelegation/rejected');
-    expect(payload).toStrictEqual({ response: { status: 500 } });
+    expect(payload).toStrictEqual({ response: { status: 500, data: 'error' } });
   });
 
   it('should revoke a delegation for a delegate', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'revokeDelegation');
-    apiSpy.mockResolvedValue({ id: '2' });
+    mock = mockApi(apiClient,
+      'PATCH',
+      REVOKE_DELEGATION('2'),
+      204,
+      undefined,
+      { id: '2' });
     const action = await store.dispatch(revokeDelegation('2'));
     const payload = action.payload;
 
@@ -99,13 +137,17 @@ describe('delegation redux state tests', () => {
   });
 
   it('should throw an error trying to revoke a delegation', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'revokeDelegation');
-    apiSpy.mockRejectedValue('error');
+    mock = mockApi(apiClient,
+      'PATCH',
+      REVOKE_DELEGATION('2'),
+      500,
+      undefined,
+      'error');
     const action = await store.dispatch(revokeDelegation('2'));
     const payload = action.payload;
 
     expect(action.type).toBe('revokeDelegation/rejected');
-    expect(payload).toStrictEqual({ response: { status: 500 } });
+    expect(payload).toStrictEqual({ response: { status: 500, data: 'error' } });
   });
 
   it('sets the confirmation modal state to open and then to close', async () => {
