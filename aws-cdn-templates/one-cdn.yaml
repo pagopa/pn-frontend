@@ -367,13 +367,8 @@ Resources:
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
           FunctionAssociations:
-            Fn::If:
-              - IsLanding
-              - - EventType: viewer-request
-                  FunctionARN: !GetAtt RewriteFunction.FunctionMetadata.FunctionARN
-              - !Ref "AWS::NoValue"
+            - !Ref "AWS::NoValue"
         DefaultRootObject: "index.html"
-        # DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html']
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
