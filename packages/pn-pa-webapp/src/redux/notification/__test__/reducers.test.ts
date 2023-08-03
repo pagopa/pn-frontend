@@ -6,6 +6,7 @@ import {
   populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 import {
   notificationDTO,
   notificationToFe,
@@ -34,7 +35,6 @@ import {
   getSentNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 
 const initialState = {
   loading: false,
