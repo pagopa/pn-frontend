@@ -67,12 +67,6 @@ Parameters:
     Description: Access Log bucket name
 
 Conditions:
-  # Is landing site if name startsWith 'web-landing-cdn-'
-  IsLanding:
-    Fn::And:
-      - !Not [!Equals [!Ref Name, ""]]
-      - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
-
   # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
   IsPortalePg:
     Fn::And:
