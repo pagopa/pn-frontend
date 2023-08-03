@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   AddressSource,
   DigitalDomicileType,
@@ -418,7 +419,7 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
   },
 ];
 
-const recipients: Array<NotificationDetailRecipient> = [
+export const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
     taxId: 'CLMCST42R12D969Z',
@@ -481,4 +482,4 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(notificationDTO);
+export const notificationToFe = parseNotificationDetail(_.cloneDeep(notificationDTO));
