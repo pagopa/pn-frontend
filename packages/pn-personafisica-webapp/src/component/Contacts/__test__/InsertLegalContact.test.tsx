@@ -1,5 +1,5 @@
 import React from 'react';
-
+import MockAdapter from 'axios-mock-adapter';
 import { render, fireEvent, waitFor, screen, mockApi } from '../../../__test__/test-utils';
 import { LegalChannelType } from '../../../models/contacts';
 import { apiClient } from '../../../api/apiClients';
@@ -16,6 +16,15 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('InsertLegalContact component', () => {
+  let mock: MockAdapter;
+
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
+
   it('renders InsertLegalContact', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import MockAdapter from 'axios-mock-adapter';
 import { render, fireEvent, screen, waitFor, mockApi } from '../../../__test__/test-utils';
 import { CourtesyChannelType } from '../../../models/contacts';
 import { apiClient } from '../../../api/apiClients';
@@ -17,9 +17,17 @@ jest.mock('react-i18next', () => ({
 
 describe('CourtesyContactItem component', () => {
   describe('test component having type "phone"', () => {
+    let mock: MockAdapter;
     const INPUT_VALID_PHONE = '3331234567';
     const INPUT_INVALID_PHONE = '33312345';
     const INPUT_VALID_PHONE_UPDATE = '+393337654321';
+
+    afterEach(() => {
+      if (mock) {
+        mock.restore();
+        mock.reset();
+      }
+    });
 
     it('type in an invalid number', async () => {
       const result = render(
@@ -265,9 +273,17 @@ describe('CourtesyContactItem component', () => {
   });
 
   describe('testing component having type "email"', () => {
+    let mock: MockAdapter;
     const VALID_EMAIL = 'prova@pagopa.it';
     const VALID_EMAIL_UPDATE = 'prova-nuova@pagopa.it';
     const INVALID_EMAIL = 'testpagopa.it';
+
+    afterEach(() => {
+      if (mock) {
+        mock.restore();
+        mock.reset();
+      }
+    });
 
     it('type in an invalid email', async () => {
       const result = render(
