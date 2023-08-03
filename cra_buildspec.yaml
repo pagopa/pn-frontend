@@ -15,6 +15,8 @@ phases:
       - echo launching yarn install in $SUB_PRJ_NAME...
       - cd $SUB_PRJ_NAME
       - yarn install
+      - echo Running tests
+      - yarn test
   build:
     on-failure: ABORT
     commands:
