@@ -6,13 +6,12 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
-import { notificationsToFe } from './test-utils';
 
 describe('Dashboard redux state tests', () => {
   mockAuthentication();

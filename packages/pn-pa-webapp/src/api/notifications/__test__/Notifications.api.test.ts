@@ -7,18 +7,12 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-
 import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import {
-  notificationsFromBe,
-  notificationsToFe,
-} from '../../../redux/dashboard/__test__/test-utils';
 import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
-import {
-  notificationFromBe,
-  notificationToFe,
-} from '../../../redux/notification/__test__/test-utils';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+import { notificationDTO, notificationToFe } from '../../../../__mocks__/NotificationDetail.mock';
+import { notificationsDTO, notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -32,7 +26,6 @@ import {
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -50,7 +43,7 @@ describe('Notifications api tests', () => {
       }),
       200,
       undefined,
-      notificationsFromBe
+      notificationsDTO
     );
 
     const res = await NotificationsApi.getSentNotifications({
@@ -73,7 +66,7 @@ describe('Notifications api tests', () => {
       NOTIFICATION_DETAIL(iun),
       200,
       undefined,
-      notificationFromBe
+      notificationDTO
     );
     const res = await NotificationsApi.getSentNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
