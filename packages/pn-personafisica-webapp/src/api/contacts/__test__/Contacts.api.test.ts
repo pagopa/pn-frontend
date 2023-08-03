@@ -1,15 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
+
+import { mockApi } from '../../../__test__/test-utils';
+import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { digitalAddresses } from '../../../redux/contact/__test__/test-utils';
-import { LegalChannelType, CourtesyChannelType } from '../../../models/contacts';
-import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../apiClients';
 import { ContactsApi } from '../Contacts.api';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from '../contacts.routes';
 
 describe('Contacts api tests', () => {
   let mock: MockAdapter;
+
   mockAuthentication();
+
   afterEach(() => {
     if (mock) {
       mock.restore();
@@ -18,14 +21,14 @@ describe('Contacts api tests', () => {
   });
 
   it('getDigitalAddresses', async () => {
-    mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, digitalAddresses);
+    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, digitalAddresses);
     const res = await ContactsApi.getDigitalAddresses();
     expect(res).toStrictEqual(digitalAddresses);
   });
 
   it('createOrUpdateDigitalAddress (email to verify)', async () => {
     const body = { value: 'a@a.it' };
-    mockApi(
+    mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
@@ -43,7 +46,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateDigitalAddress (email to validate)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    mockApi(
+    mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
@@ -70,7 +73,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateDigitalAddress (email verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    mockApi(
+    mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
@@ -95,7 +98,7 @@ describe('Contacts api tests', () => {
   });
 
   it('deleteLegalAddress', async () => {
-    mockApi(
+    mock = mockApi(
       apiClient,
       'DELETE',
       LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
@@ -107,7 +110,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateCourtesyAddress (email to verify)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    mockApi(
+    mock = mockApi(
       apiClient,
       'POST',
       COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL),
@@ -125,7 +128,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateCourtesyAddress (email verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    mockApi(
+    mock = mockApi(
       apiClient,
       'POST',
       COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL),
@@ -149,7 +152,7 @@ describe('Contacts api tests', () => {
   });
 
   it('deleteCourtesyAddress', async () => {
-    mockApi(
+    mock = mockApi(
       apiClient,
       'DELETE',
       COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL),
