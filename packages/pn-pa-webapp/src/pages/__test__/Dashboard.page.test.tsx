@@ -1,20 +1,19 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import {
-  formatToTimezoneString,
-  getNextDay,
-  tenYearsAgo,
-  today,
-  Notification,
+    formatToTimezoneString, getNextDay, Notification, tenYearsAgo, today
 } from '@pagopa-pn/pn-commons';
+import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 
 import { mockApi, render } from '../../__test__/test-utils';
-import { emptyNotificationsFromBe, notificationsFromBe, notificationsFromBe2rows, notificationsFromBePage2 } from '../../redux/dashboard/__test__/test-utils';
-import Dashboard from '../Dashboard.page';
 import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
-import MockAdapter from 'axios-mock-adapter';
+import {
+    emptyNotificationsFromBe, notificationsFromBe, notificationsFromBe2rows,
+    notificationsFromBePage2
+} from '../../redux/dashboard/__test__/test-utils';
+import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = jest.fn();
 
@@ -223,6 +222,7 @@ describe('Dashboard Page', () => {
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(getNextDay(today)),
         size: 1,
+        nextPagesKey: 'mocked-page-key-1'
       }),
       200,
       undefined,
@@ -236,9 +236,20 @@ describe('Dashboard Page', () => {
     const pageSelectorBtn = result?.container.querySelector(
       '[data-testid="pageSelector"] li:nth-child(3) > button'
     );
-    fireEvent.click(pageSelectorBtn!);
+
+    let notificationsTable = result?.container.querySelector('table');
+    expect(notificationsTable).toBeInTheDocument();
+    expect(notificationsTable).toHaveTextContent('mocked-iun-1');
+    await act(async () => {
+      fireEvent.click(pageSelectorBtn!);
+    });
+
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[1].url).toContain('/notifications/sent');
+
+    notificationsTable = result?.container.querySelector('table');
+    expect(notificationsTable).toBeInTheDocument();
+    expect(notificationsTable).toHaveTextContent('mocked-iun-2');
   });
 
   it('clicks on new notification', async () => {

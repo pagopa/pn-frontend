@@ -1,15 +1,27 @@
+import MockAdapter from 'axios-mock-adapter';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.routes';
 import { Consent, ConsentActionType, ConsentType } from '../../../models/consents';
 import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
-import { acceptPrivacy, acceptToS, getOrganizationParty, getPrivacyApproval } from '../actions';
-import { getToSApproval } from '../actions';
+import {
+    acceptPrivacy, acceptToS, getOrganizationParty, getPrivacyApproval, getToSApproval
+} from '../actions';
 import { User } from '../types';
 import { mockLogin, mockLogout, userResponse } from './test-utils';
+import { ConsentsApi } from '../../../api/consents/Consents.api';
 
 describe('Auth redux state tests', () => {
+  let mock: MockAdapter;
+
+  afterEach(() => {
+    if (mock) {
+      mock.reset();
+      mock.restore();
+    }
+  });
+
   it('Initial state', () => {
     const state = store.getState().userState;
     expect(state).toEqual({
@@ -100,6 +112,9 @@ describe('Auth redux state tests', () => {
     const payload = action.payload as Consent;
     expect(action.type).toBe('getToSApproval/fulfilled');
     expect(payload).toEqual(tosMock);
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(true);
+    expect(store.getState().userState.tosConsent.isFirstAccept).toStrictEqual(true);
+    expect(store.getState().userState.fetchedTos).toStrictEqual(true);
   });
 
   it('Should NOT be able to fetch the tos approval', async () => {
@@ -108,27 +123,31 @@ describe('Auth redux state tests', () => {
     const action = await store.dispatch(getToSApproval());
     expect(action.type).toBe('getToSApproval/rejected');
     expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(false);
+    expect(store.getState().userState.tosConsent.isFirstAccept).toStrictEqual(true);
+    expect(store.getState().userState.fetchedTos).toStrictEqual(true);
   });
 
   it('Should be able to fetch tos acceptance', async () => {
-    const tosAcceptanceMock = 'success';
-    mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mock-version-1'), 200, {
+    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mock-version-1'), 200, {
       action: ConsentActionType.ACCEPT,
     }, 'success');
     const action = await store.dispatch(acceptToS('mock-version-1'));
     const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/fulfilled');
-    expect(payload).toEqual(tosAcceptanceMock);
+    expect(payload).toEqual('success');
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(true);
   });
 
   it('Should NOT be able to fetch tos acceptance', async () => {
-    const tosErrorResponse = { response: { data: 'error-tos-acceptance', status: 500 } };
-    mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mock-version-1'), 500, {
+    const tosErrorResponse = { response: { data: undefined, status: 500 }};
+    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mock-version-1'), 500, {
       action: ConsentActionType.ACCEPT,
-    }, 'error-tos-acceptance');
+    });
     const action = await store.dispatch(acceptToS('mock-version-1'));
     expect(action.type).toBe('acceptToS/rejected');
     expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(false);
   });
 
   it('Should be able to fetch the privacy approval', async () => {
@@ -144,6 +163,9 @@ describe('Auth redux state tests', () => {
     const payload = action.payload as Consent;
     expect(action.type).toBe('getPrivacyApproval/fulfilled');
     expect(payload).toEqual(tosMock);
+    expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(true);
+    expect(store.getState().userState.privacyConsent.isFirstAccept).toStrictEqual(true);
+    expect(store.getState().userState.fetchedPrivacy).toStrictEqual(true);
   });
 
   it('Should NOT be able to fetch the privacy approval', async () => {
@@ -152,26 +174,30 @@ describe('Auth redux state tests', () => {
     const action = await store.dispatch(getPrivacyApproval());
     expect(action.type).toBe('getPrivacyApproval/rejected');
     expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(false);
+    expect(store.getState().userState.privacyConsent.isFirstAccept).toStrictEqual(true);
+    expect(store.getState().userState.fetchedPrivacy).toStrictEqual(true);
   });
 
   it('Should be able to fetch privacy acceptance', async () => {
-    const privacyAcceptanceMock = 'success';
-    mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'), 200, {
+    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'), 200, {
       action: ConsentActionType.ACCEPT,
-    }, 'success');
+    });
     const action = await store.dispatch(acceptPrivacy('mock-version-1'));
     const payload = action.payload as string;
     expect(action.type).toBe('acceptPrivacy/fulfilled');
-    expect(payload).toEqual(privacyAcceptanceMock);
+    expect(payload).toEqual('success');
+    expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(true);
   });
 
   it('Should NOT be able to fetch privacy acceptance', async () => {
-    const privacyErrorResponse = { response: { data: 'error-privacy-acceptance', status: 500 }};
-    mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'), 500, {
+    const privacyErrorResponse = { response: { data: undefined, status: 500 }};
+    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'), 500, {
       action: ConsentActionType.ACCEPT,
-    }, 'error-privacy-acceptance');
+    });
     const action = await store.dispatch(acceptPrivacy('mock-version-1'));
     expect(action.type).toBe('acceptPrivacy/rejected');
     expect(action.payload).toEqual(privacyErrorResponse);
+    expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(false);
   });
 });

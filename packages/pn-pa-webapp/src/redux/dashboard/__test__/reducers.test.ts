@@ -1,22 +1,16 @@
 import {
-  formatToTimezoneString,
-  getNextDay,
-  GetNotificationsResponse,
-  NotificationStatus,
-  tenYearsAgo,
-  today,
+    formatToTimezoneString, getNextDay, GetNotificationsResponse, NotificationStatus, tenYearsAgo,
+    today
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 import { notificationsFromBe, notificationsToFe } from './test-utils';
-import { mockApi } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
-import { notificationFromBe } from '../../notification/__test__/test-utils';
 
 describe('Dashboard redux state tests', () => {
   mockAuthentication();
@@ -64,6 +58,7 @@ describe('Dashboard redux state tests', () => {
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');
     expect(payload).toEqual(notificationsToFe);
+    expect(store.getState().dashboardState.notifications).toStrictEqual(notificationsToFe.resultsPage);
   });
 
   it('Should be able to change pagination', () => {

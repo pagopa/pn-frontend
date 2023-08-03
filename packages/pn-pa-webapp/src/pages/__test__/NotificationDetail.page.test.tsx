@@ -1,13 +1,17 @@
 import React from 'react';
-import * as redux from 'react-redux';
-import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
+import { act } from 'react-dom/test-utils';
+
+import { LegalFactId, NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
-import { render } from '../../__test__/test-utils';
-import * as actions from '../../redux/notification/actions';
+import { mockApi, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
-  notificationToFe,
-  notificationToFeMultiRecipient,
+    NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT
+} from '../../api/notifications/notifications.routes';
+import {
+    notificationFromBe, notificationFromBeMultiRecipient, notificationToFe,
+    notificationToFeMultiRecipient
 } from '../../redux/notification/__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -16,7 +20,7 @@ const mockNavigateFn = jest.fn();
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ id: 'mocked-id' }),
+  useParams: () => ({ id: 'c_b963-220220221119' }),
   useNavigate: () => mockNavigateFn,
 }));
 
@@ -26,6 +30,11 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
+
+const mockLegalIds = {
+  key: 'mocked-key',
+  category: 'mocked-category',
+}
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
@@ -56,7 +65,7 @@ jest.mock('@pagopa-pn/pn-commons', () => ({
   }) => (
     <div
       data-testid="legalFactButton"
-      onClick={() => clickHandler({ key: 'mocked-key', category: 'mocked-category' })}
+      onClick={() => clickHandler(mockLegalIds)}
     >
       Timeline
     </div>
@@ -65,39 +74,12 @@ jest.mock('@pagopa-pn/pn-commons', () => ({
 
 describe('NotificationDetail Page (one recipient)', () => {
   let result: RenderResult;
-  const mockDispatchFn = jest.fn();
-  const mockActionFn = jest.fn();
 
-  beforeEach(async () => {
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getSentNotification');
-    actionSpy.mockImplementation(mockActionFn);
-    // render component
-    result = render(<NotificationDetail />, {
-      preloadedState: {
-        notificationState: {
-          notification: notificationToFe,
-          documentDownloadUrl: 'mocked-download-url',
-          legalFactDownloadUrl: 'mocked-legal-fact-url',
-        },
-        userState: { user: { organization: { id: 'mocked-sender' } } },
-      },
+  test('renders NotificationDetail page', async () => {
+    const mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL(notificationFromBe.iun), 200, undefined, notificationFromBe);
+    await act(async () => {
+      result = render(<NotificationDetail />) 
     });
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-    mockDispatchFn.mockClear();
-    mockDispatchFn.mockReset();
-    mockActionFn.mockClear();
-    mockActionFn.mockReset();
-  });
-
-  test('renders NotificationDetail page', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
@@ -108,27 +90,51 @@ describe('NotificationDetail Page (one recipient)', () => {
     );
     expect(result.container).toHaveTextContent(/Documents/i);
     expect(result.container).toHaveTextContent(/Timeline/i);
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
     // check payment history box
     const paymentTable = result.getByTestId('paymentTable');
     const paymentRecipient = result.getByTestId('paymentRecipient');
     expect(paymentTable).toBeInTheDocument();
     expect(paymentRecipient).toBeInTheDocument();
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    mock.reset();
+    mock.restore();
   });
 
   test('executes the document and legal fact download handler', async () => {
+    const mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL(notificationFromBe.iun), 200, undefined, notificationFromBe);
+    const mockDocument = mockApi(mock, 'GET', NOTIFICATION_DETAIL_DOCUMENTS(notificationToFe.iun, '0'), 200, undefined, {
+      filename: notificationToFe.documents[0].ref.key,
+      contentType: notificationToFe.documents[0].contentType,
+      contentLength: 3028,
+      sha256: notificationToFe.documents[0].digests.sha256,
+      url: 'https://mocked-url.com',
+    });    
+    mockApi(mockDocument, 'GET', NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds as LegalFactId), 200, undefined, {
+      filename: 'mocked-filename',
+      contentLength: 1000,
+      retryAfter: null,
+      url: 'https://mocked-url-com',
+    });
+    await act(async () => {
+      result = render(<NotificationDetail />) 
+    });
     const documentButton = result.getAllByTestId('documentButton');
     const legalFactButton = result.getByTestId('legalFactButton');
-    expect(mockDispatchFn).toBeCalledTimes(1);
     fireEvent.click(documentButton[0]);
-    expect(mockDispatchFn).toBeCalledTimes(2);
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get[1].url).toContain(`/delivery/notifications/sent/${notificationToFe.iun}/attachments/documents/0`);
     fireEvent.click(legalFactButton);
-    expect(mockDispatchFn).toBeCalledTimes(4);
+    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get[2].url).toContain(`/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`);
+    mock.reset();
+    mock.restore();
   });
 
-  test('clicks on the back button', () => {
+  test('clicks on the back button', async () => {
+    await act(async () => {
+      result = render(<NotificationDetail />) 
+    });
     const backButton = result.getByRole('button', { name: /indietro/i });
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalledTimes(1);
@@ -164,39 +170,12 @@ describe('NotificationDetail Page (one recipient)', () => {
 
 describe('NotificationDetail Page (multi recipient)', () => {
   let result: RenderResult;
-  const mockDispatchFn = jest.fn();
-  const mockActionFn = jest.fn();
 
-  beforeEach(async () => {
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getSentNotification');
-    actionSpy.mockImplementation(mockActionFn);
-    // render component
-    result = render(<NotificationDetail />, {
-      preloadedState: {
-        notificationState: {
-          notification: notificationToFeMultiRecipient,
-          documentDownloadUrl: 'mocked-download-url',
-          legalFactDownloadUrl: 'mocked-legal-fact-url',
-        },
-        userState: { user: { organization: { id: 'mocked-sender' } } },
-      },
+  test('renders NotificationDetail page', async () => {
+    const mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL(notificationFromBeMultiRecipient.iun), 200, undefined, notificationToFeMultiRecipient);
+    await act(async () => {
+      result = render(<NotificationDetail />) 
     });
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-    mockDispatchFn.mockClear();
-    mockDispatchFn.mockReset();
-    mockActionFn.mockClear();
-    mockActionFn.mockReset();
-  });
-
-  test('renders NotificationDetail page', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(
       notificationToFeMultiRecipient.subject
@@ -211,8 +190,9 @@ describe('NotificationDetail Page (multi recipient)', () => {
     }
     expect(result.container).toHaveTextContent(/Documents/i);
     expect(result.container).toHaveTextContent(/Timeline/i);
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/sent');
+    mock.reset();
+    mock.restore();
   });
 });

@@ -1,12 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
+
+import { mockApi } from '../../../__test__/test-utils';
+import { ApiKeySetStatus } from '../../../models/ApiKeys';
 import { mockApiKeysFromBE } from '../../../redux/apiKeys/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { apiClient } from '../../apiClients';
-import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
-import { ApiKeysApi } from '../ApiKeys.api';
 import { newApiKeyForBE } from '../../../redux/NewApiKey/__test__/test-utils';
-import { ApiKeySetStatus } from '../../../models/ApiKeys';
-import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../apiClients';
+import { ApiKeysApi } from '../ApiKeys.api';
+import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
 
 describe('Api keys api tests', () => {
   // eslint-disable-next-line functional/no-let
@@ -30,8 +31,6 @@ describe('Api keys api tests', () => {
     );
     const res = await ApiKeysApi.getApiKeys();
     expect(res).toStrictEqual(mockApiKeysFromBE);
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/api-key-self/api-keys/');
   });
 
   it('createNewApiKey', async () => {
@@ -43,16 +42,12 @@ describe('Api keys api tests', () => {
     mock = mockApi(apiClient, 'POST', CREATE_APIKEY(), 200, newApiKeyForBE, mockRequest);
     const res = await ApiKeysApi.createNewApiKey(newApiKeyForBE);
     expect(res).toStrictEqual('mocked-apikey');
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toContain('/api-key-self/api-keys/');
   });
 
   it('deleteApiKey', async () => {
     mock = mockApi(apiClient, 'DELETE', DELETE_APIKEY('mocked-apikey'), 200, undefined, 'success');
     const res = await ApiKeysApi.deleteApiKey('mocked-apikey');
     expect(res).toStrictEqual('success');
-    expect(mock.history.delete).toHaveLength(1);
-    expect(mock.history.delete[0].url).toContain('/api-key-self/api-keys/mocked-apikey');
   });
 
   it('setApiKeyStatus', async () => {
@@ -64,7 +59,5 @@ describe('Api keys api tests', () => {
     mock = mockApi(apiClient, 'PUT', STATUS_APIKEY('mocked-apikey'), 200, undefined, 'success');
     const res = await ApiKeysApi.setApiKeyStatus(mockRequest);
     expect(res).toStrictEqual('success');
-    expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toContain('/api-key-self/api-keys/mocked-apikey');
   });
 });

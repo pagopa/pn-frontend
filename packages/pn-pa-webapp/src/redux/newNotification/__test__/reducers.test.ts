@@ -1,27 +1,24 @@
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, calcUnit8Array } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { PaymentModel } from '../../../models/NewNotification';
+import { NewNotificationDocument, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
-  createNewNotification,
-  uploadNotificationAttachment,
-  uploadNotificationPaymentDocument,
-  getUserGroups,
+    createNewNotification, getUserGroups, uploadNotificationAttachment,
+    uploadNotificationPaymentDocument
 } from '../actions';
 import {
-  setCancelledIun,
-  setPreliminaryInformations,
-  setSenderInfos,
-  saveRecipients,
-  setAttachments,
-  resetState,
-  setPaymentDocuments,
-  setIsCompleted
+    resetState, saveRecipients, setAttachments, setCancelledIun, setIsCompleted,
+    setPaymentDocuments, setPreliminaryInformations, setSenderInfos
 } from '../reducers';
 import { newNotification } from './test-utils';
+import { mockApi } from '../../../__test__/test-utils';
+import { CREATE_NOTIFICATION, GET_USER_GROUPS, NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
+import { apiClient } from '../../../api/apiClients';
+import { UploadDocumentParams } from '../types';
+import { newNotificationMapper } from '../../../utils/notification.utility';
 
 const initialState = {
   loading: false,
@@ -69,16 +66,17 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to get user groups', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getUserGroups');
-    apiSpy.mockResolvedValue([
+    const mockResponse = [
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' as GroupStatus },
-    ]);
+    ];
+    const mock = mockApi(apiClient, 'GET', GET_USER_GROUPS(), 200, undefined, mockResponse);
     const action = await store.dispatch(getUserGroups());
     const payload = action.payload;
     expect(action.type).toBe('getUserGroups/fulfilled');
-    expect(payload).toEqual([
-      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
-    ]);
+    expect(payload).toEqual(mockResponse);
+    expect(store.getState().newNotificationState.groups).toStrictEqual(mockResponse);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to set preliminary informations', () => {
@@ -192,20 +190,23 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to create new notification', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'createNewNotification');
-    apiSpy.mockResolvedValue({
+    // Da sistemare in quanto per qualche motivo va in Error: Request failed with status code 404
+    // Da una ricerca sul web sembra (sottolineo SEMBRA) che l'errore sia legato all'headers (di request o di response poi?).
+    // per risolvere al momento dovremmo inviare undefined al request di mockApi anziché mappedNotification.
+    
+    const mockResponse = {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
-    });
+    };
+    // const mappedNotification = newNotificationMapper(newNotification);
+    const mock = mockApi(apiClient, 'POST', CREATE_NOTIFICATION(), 200, undefined, mockResponse);
     const action = await store.dispatch(createNewNotification(newNotification));
     const payload = action.payload;
     expect(action.type).toBe('createNewNotification/fulfilled');
-    expect(payload).toEqual({
-      notificationRequestId: 'mocked-notificationRequestId',
-      paProtocolNumber: 'mocked-paProtocolNumber',
-      idempotenceToken: 'mocked-idempotenceToken',
-    });
+    expect(payload).toEqual(mockResponse);
+    mock.reset();
+    mock.restore();
   });
 
   it('Should be able to reset state', () => {

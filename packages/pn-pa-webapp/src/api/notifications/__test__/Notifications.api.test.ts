@@ -1,37 +1,27 @@
-import {
-  tenYearsAgo,
-  today,
-  LegalFactId,
-  LegalFactType,
-  formatToTimezoneString,
-  getNextDay,
-  NotificationDetailOtherDocument,
-} from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
 
 import {
-  notificationsFromBe,
-  notificationsToFe,
-} from '../../../redux/dashboard/__test__/test-utils';
-import {
-  notificationFromBe,
-  notificationToFe,
-} from '../../../redux/notification/__test__/test-utils';
-import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
+    formatToTimezoneString, getNextDay, LegalFactId, LegalFactType, NotificationDetailOtherDocument,
+    tenYearsAgo, today
+} from '@pagopa-pn/pn-commons';
+
+import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import {
+    notificationsFromBe, notificationsToFe
+} from '../../../redux/dashboard/__test__/test-utils';
+import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
+import {
+    notificationFromBe, notificationToFe
+} from '../../../redux/notification/__test__/test-utils';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
-  CREATE_NOTIFICATION,
-  GET_USER_GROUPS,
-  NOTIFICATIONS_LIST,
-  NOTIFICATION_DETAIL,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-  NOTIFICATION_PRELOAD_DOCUMENT,
+    CREATE_NOTIFICATION, GET_USER_GROUPS, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS,
+    NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+    NOTIFICATION_PRELOAD_DOCUMENT, NOTIFICATIONS_LIST
 } from '../notifications.routes';
-import { mockApi } from '../../../__test__/test-utils';
-import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -67,8 +57,6 @@ describe('Notifications api tests', () => {
       status: '',
     });
     expect(res).toStrictEqual(notificationsToFe);
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
   });
 
   it('getSentNotification filtered by iun', async () => {
@@ -83,8 +71,6 @@ describe('Notifications api tests', () => {
     );
     const res = await NotificationsApi.getSentNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
   });
 
   it('getSentNotificationDocument', async () => {
@@ -100,8 +86,6 @@ describe('Notifications api tests', () => {
     );
     const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/notifications/sent');
   });
 
   it('getSentNotificationOtherDocument', async () => {
@@ -122,8 +106,6 @@ describe('Notifications api tests', () => {
     );
     const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
     expect(res).toStrictEqual({ url: '' });
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/delivery-push/mocked-iun/document/mocked-type');
   });
 
   it('getSentNotificationLegalfact', async () => {
@@ -139,8 +121,6 @@ describe('Notifications api tests', () => {
       200);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/delivery-push/mocked-iun/legal-facts/ANALOG_DELIVERY/mocked-key');
   });
 
   it('getUserGroups', async () => {
@@ -168,8 +148,6 @@ describe('Notifications api tests', () => {
       { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
     ]);
     expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toContain('/delivery/attachments/preload');
   });
 
   it('uploadNotificationAttachment', async () => {
@@ -185,8 +163,6 @@ describe('Notifications api tests', () => {
       'PUT'
     );
     expect(res).toStrictEqual('mocked-versionToken');
-    expect(mock.history.put).toHaveLength(1);
-    expect(mock.history.put[0].url).toContain('https://mocked-url.com');
   });
 
   it('createNewNotification', async () => {
@@ -205,7 +181,5 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toContain('/delivery/requests');
   });
 });

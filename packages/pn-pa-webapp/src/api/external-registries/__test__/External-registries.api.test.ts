@@ -1,5 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
-
+import { mockApi } from '../../../__test__/test-utils';
 import { Party } from '../../../models/party';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient } from '../../apiClients';
@@ -12,8 +11,7 @@ describe('External registries api tests', () => {
   it('getOrganizationParty', async () => {
     const partyMock: Party = { id: 'id-toto', name: 'Totito' };
 
-    const axiosMock = new MockAdapter(apiClient);
-    axiosMock.onGet(GET_PARTY_FOR_ORGANIZATION('id-toto')).reply(200, [partyMock]);
+    const axiosMock = mockApi(apiClient, 'GET', GET_PARTY_FOR_ORGANIZATION('id-toto'), 200, undefined, [partyMock]);
     const res = await ExternalRegistriesAPI.getOrganizationParty('id-toto');
     expect(res).toStrictEqual(partyMock);
     axiosMock.reset();
