@@ -67,8 +67,8 @@ Parameters:
     Description: Access Log bucket name
 
 Conditions:
- # Is landing site if name startsWith 'web-landing-cdn-'
-  IsLanding:    
+  # Is landing site if name startsWith 'web-landing-cdn-'
+  IsLanding:
     Fn::And:
       - !Not [!Equals [!Ref Name, ""]]
       - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
@@ -378,16 +378,15 @@ Resources:
               - - EventType: viewer-request
                   FunctionARN: !GetAtt RewriteFunction.FunctionMetadata.FunctionARN
               - !Ref "AWS::NoValue"
-        DefaultRootObject:
-          !If [IsLanding, "index.html", "index.html"]
+        DefaultRootObject: "index.html"
         # DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html']
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: !If [IsLanding, "index.html", "/index.html"]
+            ResponsePagePath: "index.html"
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: !If [IsLanding, "index.html", "/index.html"]
+            ResponsePagePath: "/index.html"
         Origins:
           - DomainName: !Sub "${S3BucketForWebsiteContent.RegionalDomainName}"
             Id: !Sub "S3-${S3BucketForWebsiteContent}"
@@ -482,11 +481,7 @@ Resources:
               Fn::Join:
                 - " "
                 - - "default-src 'self';"
-                  - !If [
-                      IsLanding,
-                      "object-src 'none';"
-                      "object-src 'none';",
-                    ]
+                  - "object-src 'none';"
                   - !Sub " connect-src 'self' https://api-eu.mixpanel.com/track/  \
                     https://selfcare.pagopa.it/assets/ \
                     https://privacyportalde-cdn.onetrust.com/ \
