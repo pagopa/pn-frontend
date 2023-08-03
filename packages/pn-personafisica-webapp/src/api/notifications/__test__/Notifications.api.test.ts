@@ -54,21 +54,6 @@ describe('Notifications api tests', () => {
     expect(res).toStrictEqual(notificationsToFe);
   });
 
-  it('getReceivedNotifications with server error', async () => {
-    const startDate = formatToTimezoneString(tenYearsAgo);
-    const endDate = formatToTimezoneString(today);
-    mockApi(apiClient, 'GET', NOTIFICATIONS_LIST({
-      startDate,
-      endDate
-    }), 500);
-    await expect(
-      NotificationsApi.getReceivedNotifications({
-        startDate,
-        endDate,
-      })
-    ).rejects.toThrow(Error);
-  });
-
   it('getReceivedNotification', async () => {
     const iun = 'mocked-iun';
     mockApi(

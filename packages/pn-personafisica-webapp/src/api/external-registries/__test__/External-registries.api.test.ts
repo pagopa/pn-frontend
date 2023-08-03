@@ -17,7 +17,7 @@ describe('ExternalRegistries API tests', () => {
   });
 
   it('getAllActivatedParties 200', async () => {
-    mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 200, undefined, []);
+    const mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 200, undefined, []);
     const res = await ExternalRegistriesAPI.getAllActivatedParties();
     expect(res).toStrictEqual([]);
   });

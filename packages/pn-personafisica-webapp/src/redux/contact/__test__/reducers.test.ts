@@ -52,7 +52,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to fetch the digital addresses list', async () => {
-    mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, digitalAddresses);
+    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, digitalAddresses);
     const action = await store.dispatch(getDigitalAddresses('mocked-recipientId'));
     const payload = action.payload as DigitalAddresses;
     expect(action.type).toBe('getDigitalAddresses/fulfilled');
@@ -61,7 +61,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with legal value (email to verify)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
@@ -83,7 +83,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with legal value (email to validate)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
@@ -110,7 +110,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with legal value (email verified)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
@@ -131,7 +131,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to remove the digital address with legal value', async () => {
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'DELETE',
       LEGAL_CONTACT(digitalAddresses.legal[0].senderId, LegalChannelType.PEC),
@@ -151,7 +151,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL),
@@ -173,7 +173,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
     const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL),
@@ -194,7 +194,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to remove the digital address with courtesy value', async () => {
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'DELETE',
       COURTESY_CONTACT(digitalAddresses.courtesy[0].senderId, CourtesyChannelType.EMAIL),
@@ -214,7 +214,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to enable App IO', async () => {
     const ioAddress = { ...digitalAddresses.courtesy[1], value: IOAllowedValues.ENABLED };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       COURTESY_CONTACT(ioAddress.senderId, CourtesyChannelType.IOMSG),
@@ -230,7 +230,7 @@ describe('Contacts redux state tests', () => {
 
   it('Should be able to disable App IO', async () => {
     const ioAddress = digitalAddresses.courtesy[1];
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'DELETE',
       COURTESY_CONTACT(ioAddress.senderId, CourtesyChannelType.IOMSG),
@@ -257,7 +257,7 @@ describe('Contacts redux state tests', () => {
       value: 'mario.rossi@mail.it',
       senderId: 'default',
     };
-    mockApi(
+    const mock = mockApi(
       apiClient,
       'POST',
       LEGAL_CONTACT(updatedDigitalAddress.senderId, LegalChannelType.PEC),
