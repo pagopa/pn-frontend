@@ -1,0 +1,82 @@
+version: 0.2
+batch:
+  build-list:
+    - identifier: pn_landing_dev_build
+      env:
+        variables:
+          BUILD_ID: dev
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.dev.pn.pagopa.it/"
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
+          NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
+    - identifier: pn_landing_svil_build
+      env:
+        variables:
+          BUILD_ID: svil
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.svil.pn.pagopa.it/"
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
+          NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
+    - identifier: pn_landing_coll_build
+      env:
+        variables:
+          BUILD_ID: coll
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.coll.pn.pagopa.it/"
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
+          NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
+    - identifier: pn_landing_preview_build
+      env:
+        variables:
+          BUILD_ID: preview
+          NEXT_PUBLIC_ONE_TRUST_PORTAL_CDN: "https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/b5c8e1dc-89df-4ec2-a02d-1c0f55fac052.json"
+    - identifier: pn_landing_cert_build
+      env:
+        variables:
+          BUILD_ID: cert
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.cert.pn.pagopa.it/"
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
+          NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
+    - identifier: pn_landing_hotfix_build
+      env:
+        variables:
+          BUILD_ID: hotfix
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.hotfix.pn.pagopa.it/"
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
+          NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      #install yarn
+      - echo installing yarn
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt install --no-install-recommends yarn
+  pre_build:
+    commands:
+      - echo launching yarn install in $SUB_PRJ_NAME...
+      - cd $SUB_PRJ_NAME
+      - echo Installing..
+      - yarn install
+  build:
+    commands:
+      - echo building the solution...
+      - yarn build
+  post_build:
+    commands:
+      - echo Saving commit id to file
+      - cd ../..
+      - export COMMIT_ID=$(git rev-parse --verify HEAD)
+      - echo $COMMIT_ID > $SUB_PRJ_NAME/out/commit_id.txt
+      - echo gzipping and pushing artifact to s3
+      - cd $SUB_PRJ_NAME/out
+      - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/commits/${COMMIT_ID}/${PACKAGE_NAME}_${BUILD_ID}.tar.gz"
+      - |
+        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
+        EVENT_DETAIL="{ \"event_type\": \"BUILD_DONE\", \"project_branch\":\"${BRANCH_NAME}\",\"project_type\":\"FRONTEND\", \"project\":\"pn-frontend\", \"commit_id\": \"${CODEBUILD_RESOLVED_SOURCE_VERSION}\" }"
+        echo $EVENT_DETAIL | jq -R -s '[{ "DetailType": "CiEvent","EventBusName": "CiEventBus", "Source":"Builder", "Detail": . }]' > ci_event.json
+        cat ci_event.json
+        aws events put-events --entries file://ci_event.json
+artifacts:
+  base-directory: out
+  files:
+    - '**/*'
