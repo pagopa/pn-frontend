@@ -1,18 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
-import {
-  DigitalAddress,
-  DigitalAddresses,
-  LegalChannelType,
-  CourtesyChannelType,
-  IOAllowedValues,
-} from '../../../models/contacts';
+import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
   CONTACTS_LIST,
   COURTESY_CONTACT,
   LEGAL_CONTACT,
 } from '../../../api/contacts/contacts.routes';
-import { mockApi } from '../../../__test__/test-utils';
+import {
+  CourtesyChannelType,
+  DigitalAddress,
+  DigitalAddresses,
+  IOAllowedValues,
+  LegalChannelType,
+} from '../../../models/contacts';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {

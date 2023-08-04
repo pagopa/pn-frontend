@@ -1,4 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
 import {
   formatToTimezoneString,
   getNextDay,
@@ -7,15 +6,15 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
 import { notificationsFromBe, notificationsToFe } from './test-utils';
-import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 
 
 describe('Dashbaord redux state tests', () => {

@@ -1,9 +1,9 @@
-import React from 'react';
 import MockAdapter from 'axios-mock-adapter';
-import { render, fireEvent, waitFor, screen, mockApi } from '../../../__test__/test-utils';
-import { LegalChannelType } from '../../../models/contacts';
+import React from 'react';
+import { fireEvent, mockApi, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
+import { LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 
@@ -92,7 +92,7 @@ describe('InsertLegalContact component', () => {
   });
 
   it('adds pec - validation required', async () => {
-    const mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
+    mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
       value: 'mail@valida.com',
     });
     mockApi(
@@ -142,12 +142,10 @@ describe('InsertLegalContact component', () => {
     expect(dialog).not.toBeInTheDocument();
     const validationDialog = await waitFor(() => screen.queryByTestId('validationDialog'));
     expect(validationDialog).toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 
   it('adds pec - validation not required', async () => {
-    const mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
+    mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
       value: 'mail@valida.com',
     });
     mockApi(mock, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 204, {
@@ -190,7 +188,5 @@ describe('InsertLegalContact component', () => {
     expect(dialog).not.toBeInTheDocument();
     const validationDialog = await waitFor(() => screen.queryByTestId('validationDialog'));
     expect(validationDialog).not.toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 });

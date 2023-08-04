@@ -1,4 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
 import {
   LegalFactType,
   NotificationDetail,
@@ -6,10 +5,13 @@ import {
   PaymentStatus,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_DETAIL_OTHER_DOCUMENTS, NOTIFICATION_PAYMENT_ATTACHMENT, NOTIFICATION_PAYMENT_INFO, NOTIFICATION_PAYMENT_URL } from '../../../api/notifications/notifications.routes';
 import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   getDowntimeEvents,
@@ -24,9 +26,6 @@ import {
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
 import { notificationFromBe, notificationToFe } from './test-utils';
-import { NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_DETAIL_OTHER_DOCUMENTS, NOTIFICATION_PAYMENT_ATTACHMENT, NOTIFICATION_PAYMENT_INFO, NOTIFICATION_PAYMENT_URL } from '../../../api/notifications/notifications.routes';
-import { mockApi } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
 
 const initialState = {
   loading: false,

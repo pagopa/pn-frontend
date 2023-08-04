@@ -1,7 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
-import { store } from '../../store';
-import { DelegationsApi } from '../../../api/delegations/Delegations.api';
+import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { DelegationsApi } from '../../../api/delegations/Delegations.api';
+import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
+import { store } from '../../store';
 import { createDelegation } from '../actions';
 import { resetNewDelegation } from '../reducers';
 import {
@@ -12,8 +14,6 @@ import {
   createDelegationSelectedPayload,
   initialState,
 } from './test.utils';
-import { mockApi } from '../../../__test__/test-utils';
-import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
 
 
 describe('delegation redux state tests', () => {

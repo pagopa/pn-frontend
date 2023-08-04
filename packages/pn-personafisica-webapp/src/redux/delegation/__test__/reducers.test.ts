@@ -1,7 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
-import { Delegation } from '../types';
-import { store } from '../../store';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { ACCEPT_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { store } from '../../store';
 import {
   acceptDelegation,
   getDelegates,
@@ -17,10 +19,8 @@ import {
   setDelegatesSorting,
   setDelegatorsSorting,
 } from '../reducers';
+import { Delegation } from '../types';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
-import { mockApi } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import { ACCEPT_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 
 describe('delegation redux state tests', () => {
   let mock: MockAdapter;
