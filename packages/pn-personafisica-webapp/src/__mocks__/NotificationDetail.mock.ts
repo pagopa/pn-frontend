@@ -14,13 +14,13 @@ import {
   RecipientType,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
-import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
+import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
 const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
-      creditorTaxId: '302011686772695132',
-      noticeCode: '77777777777',
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695132',
       applyCostFlg: true,
       attachment: {
         digests: {
@@ -36,8 +36,8 @@ const payments: Array<NotificationDetailPayment> = [
   },
   {
     pagoPA: {
-      creditorTaxId: '302011686772695133',
-      noticeCode: '77777777777',
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695133',
       applyCostFlg: true,
       attachment: {
         digests: {

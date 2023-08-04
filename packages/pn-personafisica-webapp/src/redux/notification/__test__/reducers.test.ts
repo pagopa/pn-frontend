@@ -12,8 +12,8 @@ import {
   notificationDTO,
   notificationToFe,
   recipient,
-} from '../../../../__mocks__/NotificationDetail.mock';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+} from '../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import {
   NOTIFICATION_DETAIL,
