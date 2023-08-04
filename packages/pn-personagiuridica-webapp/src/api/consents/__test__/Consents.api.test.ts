@@ -1,29 +1,43 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { mockApi } from '../../../__test__/test-utils';
 import { ConsentActionType, ConsentType } from '../../../models/consents';
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient } from '../../apiClients';
 import { ConsentsApi } from '../Consents.api';
 import { GET_CONSENTS, SET_CONSENTS } from '../consents.routes';
 
 describe('Consents api tests', () => {
+  let mock: MockAdapter;
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
   mockAuthentication();
 
   it('getConsentByType', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {recipientId: 'mocked-recipientId', consentType: ConsentType.TOS, accepted: false});
+    mock = mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.TOS), 200, undefined, {
+      recipientId: 'mocked-recipientId',
+      consentType: ConsentType.TOS,
+      accepted: false,
+    });
     const res = await ConsentsApi.getConsentByType(ConsentType.TOS);
-    expect(res).toStrictEqual({recipientId: 'mocked-recipientId', consentType: ConsentType.TOS, accepted: false});
-    mock.reset();
-    mock.restore();
+    expect(res).toStrictEqual({
+      recipientId: 'mocked-recipientId',
+      consentType: ConsentType.TOS,
+      accepted: false,
+    });
   });
 
   it('setConsentByType', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), {action: ConsentActionType.ACCEPT}).reply(200);
-    const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', {action: ConsentActionType.ACCEPT});
+    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
+      action: ConsentActionType.ACCEPT,
+    });
+    const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', {
+      action: ConsentActionType.ACCEPT,
+    });
     expect(res).toStrictEqual('success');
-    mock.reset();
-    mock.restore();
   });
 });
