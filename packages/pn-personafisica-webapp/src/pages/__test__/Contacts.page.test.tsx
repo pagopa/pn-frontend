@@ -1,16 +1,24 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   ResponseEventDispatcher,
+  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
 
-import { render, act, fireEvent, screen, mockApi } from '../../__test__/test-utils';
-import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
+import { act, fireEvent, mockApi, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import Contacts from '../Contacts.page';
+import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILO } from '../../navigation/routes.const';
-import { contactsCourtesyOnly, contactsFull, contactsLegalOnly, contactsAppIoOnly, contactsCourtesyOnlyWithAppIo } from './Contacts.page.test-utils';
+import Contacts from '../Contacts.page';
+import {
+  contactsAppIoOnly,
+  contactsCourtesyOnly,
+  contactsCourtesyOnlyWithAppIo,
+  contactsFull,
+  contactsLegalOnly,
+} from './Contacts.page.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -64,12 +72,21 @@ const initialState = {
 };
 
 describe('Contacts page - assuming contact API works properly', () => {
+  let mock: MockAdapter;
+
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
+
   afterAll(() => {
     jest.resetAllMocks();
   });
 
   it('renders Contacts (no contacts)', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
     let result;
     await act(async () => {
       result = await render(<Contacts />, initialState);
@@ -81,8 +98,6 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(result.container).not.toHaveTextContent(/SpecialContacts/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/address-book/v1/digital-address');
-    mock.reset();
-    mock.restore();
   });
 
   it('renders Contacts (no contacts - only AppIO)', async () => {
@@ -146,7 +161,7 @@ describe('Contacts page - assuming contact API works properly', () => {
   });
 
   it('subtitle link properly redirects to profile page', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
     let result;
     await act(async () => {
       result = await render(<Contacts />, initialState);
@@ -156,22 +171,26 @@ describe('Contacts page - assuming contact API works properly', () => {
     fireEvent.click(subtitleLink);
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(PROFILO);
-    mock.reset();
-    mock.restore();
   });
 });
 
 describe('Contacts Page - different contact API behaviors', () => {
+  let mock: MockAdapter;
+
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
     apiOutcomeTestHelper.clearMock();
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
   });
 
   it('API error', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 500);
+    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 500);
     await act(
       async () =>
         void render(
@@ -183,12 +202,10 @@ describe('Contacts Page - different contact API behaviors', () => {
         )
     );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
-    mock.reset();
-    mock.restore();
   });
 
   it('API OK', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
     await act(
       async () =>
         void render(
@@ -200,7 +217,5 @@ describe('Contacts Page - different contact API behaviors', () => {
         )
     );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
-    mock.reset();
-    mock.restore();
   });
 });

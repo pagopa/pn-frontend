@@ -1,18 +1,20 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import {
+  AppResponseMessage,
+  ResponseEventDispatcher,
+  apiOutcomeTestHelper,
   formatToTimezoneString,
   getNextDay,
-  apiOutcomeTestHelper,
   tenYearsAgo,
   today,
-  ResponseEventDispatcher,
-  AppResponseMessage,
 } from '@pagopa-pn/pn-commons';
+import { RenderResult, act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { render } from '../../__test__/test-utils';
+import { mockApi, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import Notifiche from '../Notifiche.page';
 import { doPrepareTestScenario } from './Notifiche.page.test-utils';
 
@@ -116,17 +118,37 @@ describe('Notifiche Page - with notifications', () => {
 });
 
 describe('Notifiche Page - query for notification API outcome', () => {
+  let mock: MockAdapter;
+
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
     apiOutcomeTestHelper.clearMock();
   });
 
   it('API error', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
-    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATIONS_LIST({
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
+        recipientId: '',
+        status: '',
+        subjectRegExp: '',
+        size: 10,
+      }),
+      500,
+      undefined,
+      { response: { status: 500 } }
+    );
+
     await act(
       async () =>
         void render(
@@ -141,8 +163,22 @@ describe('Notifiche Page - query for notification API outcome', () => {
   });
 
   it('API OK', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
-    apiSpy.mockResolvedValue({ resultsPage: [], moreResult: false, nextPagesKey: [] });
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATIONS_LIST({
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
+        recipientId: '',
+        status: '',
+        subjectRegExp: '',
+        size: 10,
+      }),
+      200,
+      undefined,
+      { resultsPage: [], moreResult: false, nextPagesKey: [] }
+    );
+
     await act(
       async () =>
         void render(

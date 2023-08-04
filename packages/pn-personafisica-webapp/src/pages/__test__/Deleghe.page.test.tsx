@@ -1,17 +1,17 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
 import {
-  mockApi,
-  render,
+  RenderResult,
   act,
   fireEvent,
-  RenderResult,
+  mockApi,
+  render,
   waitFor,
-  prettyDOM,
   within,
 } from '../../__test__/test-utils';
-import { initialState } from '../../redux/delegation/__test__/test.utils';
 import { apiClient } from '../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
@@ -20,6 +20,7 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../api/delegations/delegations.routes';
+import { initialState } from '../../redux/delegation/__test__/test.utils';
 import Deleghe from '../Deleghe.page';
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
@@ -55,6 +56,14 @@ jest.mock('../../component/Deleghe/MobileDelegators', () => ({
 describe('Deleghe page', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult;
+  let mock: MockAdapter;
+
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
 
   const renderComponent = async (
     openConfirmationModal: boolean,
@@ -89,7 +98,7 @@ describe('Deleghe page', () => {
   });
 
   it('renders the desktop view of the deleghe page', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, false, 'delegates');
@@ -98,12 +107,10 @@ describe('Deleghe page', () => {
     expect(result.container).toHaveTextContent(/delegates/i);
     expect(result.container).toHaveTextContent(/delegators/i);
     expect(mock.history.get).toHaveLength(2);
-    mock.reset();
-    mock.restore();
   });
 
   it('renders the mobile view of the deleghe page', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     useIsMobileSpy.mockReturnValue(true);
     await renderComponent(false, false, 'delegates');
@@ -112,12 +119,10 @@ describe('Deleghe page', () => {
     expect(result.container).toHaveTextContent(/mobile delegates/i);
     expect(result.container).toHaveTextContent(/mobile delegators/i);
     expect(mock.history.get).toHaveLength(2);
-    mock.reset();
-    mock.restore();
   });
 
   it('checks the revocation modal open', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     mockApi(mock, 'PATCH', REVOKE_DELEGATION('1'), 204);
     useIsMobileSpy.mockReturnValue(false);
@@ -133,12 +138,10 @@ describe('Deleghe page', () => {
     await waitFor(() =>
       expect(result.baseElement).not.toHaveTextContent(/deleghe.revocation_question/i)
     );
-    mock.reset();
-    mock.restore();
   });
 
   it('checks the rejection modal open', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     mockApi(mock, 'PATCH', REJECT_DELEGATION('1'), 204);
     useIsMobileSpy.mockReturnValue(false);
@@ -154,12 +157,10 @@ describe('Deleghe page', () => {
     await waitFor(() =>
       expect(result.baseElement).not.toHaveTextContent(/deleghe.rejection_question/i)
     );
-    mock.reset();
-    mock.restore();
   });
 
   it('checks the accept modal open', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     mockApi(mock, 'PATCH', ACCEPT_DELEGATION('1'), 204, { verificationCode: '11111' });
     useIsMobileSpy.mockReturnValue(false);
@@ -177,12 +178,10 @@ describe('Deleghe page', () => {
     expect(mock.history.patch).toHaveLength(1);
     fireEvent.click(closeButton);
     await waitFor(() => expect(result.baseElement).not.toHaveTextContent(/deleghe.accept_title/i));
-    mock.reset();
-    mock.restore();
   });
 
   it('checks the accept modal error state', async () => {
-    const mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     mockApi(mock, 'PATCH', ACCEPT_DELEGATION('1'), 500, { verificationCode: '11111' });
     useIsMobileSpy.mockReturnValue(false);
@@ -199,7 +198,5 @@ describe('Deleghe page', () => {
     await waitFor(() => expect(mock.history.patch).toHaveLength(1));
     const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
     expect(error).toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 });

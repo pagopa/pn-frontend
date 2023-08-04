@@ -1,25 +1,28 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 import * as redux from 'react-redux';
-import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
+
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   ResponseEventDispatcher,
+  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
+import { RenderResult, act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { render } from '../../../__test__/test-utils';
-import * as actions from '../../../redux/contact/actions';
+import { mockApi, render } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import * as actions from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
-import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
-import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
+import { courtesyAddresses, initialState, legalAddresses } from './SpecialContacts.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
-    i18n: { language: 'it' }
+    i18n: { language: 'it' },
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -442,18 +445,25 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
 });
 
 describe('Contacts Page - different contact API behaviors', () => {
+  let mock: MockAdapter;
+
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
     apiOutcomeTestHelper.clearMock();
     jest.restoreAllMocks();
   });
 
   it('API error', async () => {
-    const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
-    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 500, undefined, {
+      response: { status: 500 },
+    });
     await act(
       async () =>
         void render(
@@ -470,8 +480,7 @@ describe('Contacts Page - different contact API behaviors', () => {
   });
 
   it('API OK', async () => {
-    const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
-    apiSpy.mockResolvedValue([]);
+    mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 200, undefined, []);
     await act(
       async () =>
         void render(

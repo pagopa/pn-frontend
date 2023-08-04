@@ -1,4 +1,6 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import { ConsentUser } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, mockApi, render, waitFor } from '../../__test__/test-utils';
@@ -24,6 +26,15 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('test Terms of Service page', () => {
+  let mock: MockAdapter;
+
+  afterEach(() => {
+    if (mock) {
+      mock.restore();
+      mock.reset();
+    }
+  });
+
   const tosFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: true,
@@ -74,7 +85,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('tests the switch and button', async () => {
-    const mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
+    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
       action: ConsentActionType.ACCEPT,
     });
 
