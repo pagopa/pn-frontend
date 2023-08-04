@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
-  formatToTimezoneString,
-  getNextDay,
   LegalFactId,
   LegalFactType,
   PaymentAttachmentNameType,
+  formatToTimezoneString,
+  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -23,6 +23,7 @@ import {
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
+  NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
@@ -31,7 +32,6 @@ import {
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
-  NOTIFICATIONS_LIST,
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
