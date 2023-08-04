@@ -35,14 +35,6 @@ Parameters:
     Type: String
     Description: ARN of distribution too many requests alarm
 
-  LandingTooManyErrorsAlarmArn:
-    Type: String
-    Description: ARN of distribution too many errors alarm
-
-  LandingTooManyRequestsAlarmArn:
-    Type: String
-    Description: ARN of distribution too many requests alarm
-
   PGTooManyErrorsAlarmArn:
     Type: String
     Default: ''
@@ -79,8 +71,6 @@ Resources:
             - !Ref PFTooManyRequestsAlarmArn
             - !Ref PFLoginTooManyErrorsAlarmArn
             - !Ref PFLoginTooManyRequestsAlarmArn
-            - !Ref LandingTooManyErrorsAlarmArn
-            - !Ref LandingTooManyRequestsAlarmArn
             - !Ref PGTooManyErrorsAlarmArn
             - !Ref PGTooManyRequestsAlarmArn
             - !Ref StatusTooManyErrorsAlarmArn
