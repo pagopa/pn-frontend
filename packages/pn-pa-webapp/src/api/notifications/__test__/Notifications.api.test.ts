@@ -1,27 +1,38 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
-    formatToTimezoneString, getNextDay, LegalFactId, LegalFactType, NotificationDetailOtherDocument,
-    tenYearsAgo, today
+  formatToTimezoneString,
+  getNextDay,
+  LegalFactId,
+  LegalFactType,
+  NotificationDetailOtherDocument,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 
 import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
-    notificationsFromBe, notificationsToFe
+  notificationsFromBe,
+  notificationsToFe,
 } from '../../../redux/dashboard/__test__/test-utils';
 import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
 import {
-    notificationFromBe, notificationToFe
+  notificationFromBe,
+  notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
-    CREATE_NOTIFICATION, GET_USER_GROUPS, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS,
-    NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-    NOTIFICATION_PRELOAD_DOCUMENT, NOTIFICATIONS_LIST
+  CREATE_NOTIFICATION,
+  GET_USER_GROUPS,
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PRELOAD_DOCUMENT,
+  NOTIFICATIONS_LIST,
 } from '../notifications.routes';
-import axios from 'axios';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -61,14 +72,7 @@ describe('Notifications api tests', () => {
 
   it('getSentNotification filtered by iun', async () => {
     const iun = 'mocked-iun';
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL(iun),
-      200,
-      undefined,
-      notificationFromBe
-    );
+    mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL(iun), 200, undefined, notificationFromBe);
     const res = await NotificationsApi.getSentNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
   });
@@ -94,16 +98,10 @@ describe('Notifications api tests', () => {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument),
-      200,
-      {
-        documentId: otherDocument.documentId,
-        documentType: otherDocument.documentType,
-      }
-    );
+    mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), 200, {
+      documentId: otherDocument.documentId,
+      documentType: otherDocument.documentType,
+    });
     const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
     expect(res).toStrictEqual({ url: '' });
   });
@@ -114,11 +112,7 @@ describe('Notifications api tests', () => {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact),
-      200);
+    mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact), 200);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
   });
@@ -131,8 +125,6 @@ describe('Notifications api tests', () => {
     expect(res).toStrictEqual([
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
     ]);
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups');
   });
 
   it('preloadNotificationDocument', async () => {
@@ -152,9 +144,18 @@ describe('Notifications api tests', () => {
 
   it('uploadNotificationAttachment', async () => {
     const file = new Uint8Array();
-    mock = mockApi(externalClient, 'PUT', `https://mocked-url.com`, 200, undefined, void 0, undefined, {
-      'x-amz-version-id': 'mocked-versionToken',
-    });
+    mock = mockApi(
+      externalClient,
+      'PUT',
+      `https://mocked-url.com`,
+      200,
+      undefined,
+      void 0,
+      undefined,
+      {
+        'x-amz-version-id': 'mocked-versionToken',
+      }
+    );
     const res = await NotificationsApi.uploadNotificationAttachment(
       'https://mocked-url.com',
       'mocked-sha256',

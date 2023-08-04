@@ -1,24 +1,33 @@
-import { PhysicalCommunicationType, calcUnit8Array } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { NewNotificationDocument, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
-    createNewNotification, getUserGroups, uploadNotificationAttachment,
-    uploadNotificationPaymentDocument
+  createNewNotification,
+  getUserGroups,
+  uploadNotificationAttachment,
+  uploadNotificationPaymentDocument,
 } from '../actions';
 import {
-    resetState, saveRecipients, setAttachments, setCancelledIun, setIsCompleted,
-    setPaymentDocuments, setPreliminaryInformations, setSenderInfos
+  resetState,
+  saveRecipients,
+  setAttachments,
+  setCancelledIun,
+  setIsCompleted,
+  setPaymentDocuments,
+  setPreliminaryInformations,
+  setSenderInfos,
 } from '../reducers';
 import { newNotification } from './test-utils';
 import { mockApi } from '../../../__test__/test-utils';
-import { CREATE_NOTIFICATION, GET_USER_GROUPS, NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
+import {
+  CREATE_NOTIFICATION,
+  GET_USER_GROUPS,
+} from '../../../api/notifications/notifications.routes';
 import { apiClient } from '../../../api/apiClients';
-import { UploadDocumentParams } from '../types';
-import { newNotificationMapper } from '../../../utils/notification.utility';
+import { PaymentModel } from '../../../models/NewNotification';
 
 const initialState = {
   loading: false,

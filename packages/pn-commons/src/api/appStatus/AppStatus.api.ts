@@ -1,5 +1,20 @@
 import { AxiosInstance } from 'axios';
-import { AppCurrentStatus, DowntimeLogPageDTOValidator, AppStatusDTOValidator, FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, isKnownFunctionality, KnownFunctionality, LegalFactDocumentDetails, AppStatusDTO, DowntimeLogPageDTO, DowntimeDTO } from '../../models';
+import {
+  AppCurrentStatus,
+  DowntimeLogPageDTOValidator,
+  AppStatusDTOValidator,
+  FunctionalityStatus,
+  GetDowntimeHistoryParams,
+  Downtime,
+  DowntimeLogPage,
+  DowntimeStatus,
+  isKnownFunctionality,
+  KnownFunctionality,
+  LegalFactDocumentDetails,
+  AppStatusDTO,
+  DowntimeLogPageDTO,
+  DowntimeDTO,
+} from '../../models';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from './appStatus.routes';
 
 export class BadApiDataException extends Error {
@@ -7,7 +22,6 @@ export class BadApiDataException extends Error {
     super(message);
   }
 }
-
 
 /* ------------------------------------------------------------------------
    the API
@@ -18,50 +32,62 @@ export function createAppStatusApi(apiClientProvider: () => AxiosInstance) {
     getCurrentStatus: async (): Promise<AppCurrentStatus> => {
       /* eslint-disable functional/no-let */
       let apiResponse: AppStatusDTO;
-  
+
       const realApiResponse = await apiClientProvider().get<AppStatusDTO>(DOWNTIME_STATUS());
       apiResponse = realApiResponse.data;
-  
+
       // pn-validator validation
       const validationResult = new AppStatusDTOValidator().validate(apiResponse);
       if (validationResult != null) {
         throw new BadApiDataException('Wrong-formed data', validationResult);
       }
-  
+
       // extra validation: open incident with end date
-      if (apiResponse.openIncidents.some(downtime => downtime.endDate)) {
-        throw new BadApiDataException('Wrong data - a finished downtime is reported as open incident', {});
+      if (apiResponse.openIncidents.some((downtime) => downtime.endDate)) {
+        throw new BadApiDataException(
+          'Wrong data - a finished downtime is reported as open incident',
+          {}
+        );
       }
-  
+
       // finally the response
       return beAppStatusToFeAppStatus(apiResponse);
     },
-  
+
     getDowntimeLogPage: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {
       /* eslint-disable functional/no-let */
       let apiResponse: DowntimeLogPageDTO;
-  
-      const realApiResponse = await apiClientProvider().get<DowntimeLogPageDTO>(DOWNTIME_HISTORY(params));
+
+      const realApiResponse = await apiClientProvider().get<DowntimeLogPageDTO>(
+        DOWNTIME_HISTORY(params)
+      );
       apiResponse = realApiResponse.data;
-  
+
       // pn-validator validation
       const validationResult = new DowntimeLogPageDTOValidator().validate(apiResponse);
       if (validationResult != null) {
+        console.log('Wrong-formed data');
         throw new BadApiDataException('Wrong-formed data', validationResult);
       }
-  
+
       // extra validation: downtime with fileAvailable but without legalFactId
-      if (apiResponse.result.some(downtime => downtime.fileAvailable && !downtime.legalFactId)) {
-        throw new BadApiDataException('Wrong data - a downtime marked as fileAvailable must indicate a legalFactId', {});
+      if (apiResponse.result.some((downtime) => downtime.fileAvailable && !downtime.legalFactId)) {
+        console.log('Wrong data - a downtime marked as fileAvailable must indicate a legalFactId');
+        throw new BadApiDataException(
+          'Wrong data - a downtime marked as fileAvailable must indicate a legalFactId',
+          {}
+        );
       }
-  
+
       // finally the response
       return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
     },
-  
+
     /* eslint-disable-next-line arrow-body-style */
-    getLegalFactDetails: async(legalFactId: string): Promise<LegalFactDocumentDetails> => {
-      const realApiResponse = await apiClientProvider().get<LegalFactDocumentDetails>(DOWNTIME_LEGAL_FACT_DETAILS(legalFactId));
+    getLegalFactDetails: async (legalFactId: string): Promise<LegalFactDocumentDetails> => {
+      const realApiResponse = await apiClientProvider().get<LegalFactDocumentDetails>(
+        DOWNTIME_LEGAL_FACT_DETAILS(legalFactId)
+      );
 
       // validation: the response must include an actual value for url
       if (!realApiResponse.data.url) {
@@ -71,9 +97,7 @@ export function createAppStatusApi(apiClientProvider: () => AxiosInstance) {
       return realApiResponse.data;
     },
   };
-};
-
-
+}
 
 /* ------------------------------------------------------------------------
    BE-FE transformations
@@ -91,7 +115,7 @@ function beDowntimeToFeDowntime(downtime: DowntimeDTO): Downtime {
     /* eslint-disable-next-line no-extra-boolean-cast */
     status: !!downtime.endDate ? DowntimeStatus.OK : DowntimeStatus.KO,
   };
-     
+
   if (isKnownFunctionality(downtime.functionality)) {
     // cfr. https://github.com/microsoft/TypeScript/issues/33200#issuecomment-527670779
     result.knownFunctionality = downtime.functionality as KnownFunctionality;
@@ -105,9 +129,9 @@ function beDowntimeToFeDowntime(downtime: DowntimeDTO): Downtime {
 
   // The attribute fileAvailable is *not* redundant, though it could seem so because it could be derived from the presence or not of legalFactId.
   // In fact, the value for legalFactId is set *before* the file is actually available,
-  // since the BE process regarding the file involves two steps, 
+  // since the BE process regarding the file involves two steps,
   // - first the storage is requested to AWS, which gives the name in the response
-  // - later AWS reports that the file is indeed available through a message to a queue in the BE 
+  // - later AWS reports that the file is indeed available through a message to a queue in the BE
   //   linked to the filename indicated in the previous steps;
   //   when such message is processed, the fileAvailable signal is set to true for the referenced file.
   // -------------
@@ -118,8 +142,13 @@ function beDowntimeToFeDowntime(downtime: DowntimeDTO): Downtime {
   return result;
 }
 
-function beDowntimeStatusToFunctionalityCurrentStatus(functionality: KnownFunctionality, appStatusDTO: AppStatusDTO): FunctionalityStatus {
-  const currentIncident = appStatusDTO.openIncidents.find(downtime => downtime.functionality === functionality);
+function beDowntimeStatusToFunctionalityCurrentStatus(
+  functionality: KnownFunctionality,
+  appStatusDTO: AppStatusDTO
+): FunctionalityStatus {
+  const currentIncident = appStatusDTO.openIncidents.find(
+    (downtime) => downtime.functionality === functionality
+  );
   if (currentIncident) {
     return {
       rawFunctionality: functionality as string,
@@ -146,10 +175,12 @@ function unknownDowntimeToFunctionalityCurrentStatus(downtime: DowntimeDTO): Fun
 
 function beAppStatusToFeAppStatus(appStatusDTO: AppStatusDTO): AppCurrentStatus {
   const statusByFunctionality = [
-    ...Object.values(KnownFunctionality).map(funct => beDowntimeStatusToFunctionalityCurrentStatus(funct, appStatusDTO)),
+    ...Object.values(KnownFunctionality).map((funct) =>
+      beDowntimeStatusToFunctionalityCurrentStatus(funct, appStatusDTO)
+    ),
     ...appStatusDTO.openIncidents
-      .filter(downtime => !isKnownFunctionality(downtime.functionality))
-      .map(downtime => unknownDowntimeToFunctionalityCurrentStatus(downtime))
+      .filter((downtime) => !isKnownFunctionality(downtime.functionality))
+      .map((downtime) => unknownDowntimeToFunctionalityCurrentStatus(downtime)),
   ];
 
   return {
@@ -159,11 +190,19 @@ function beAppStatusToFeAppStatus(appStatusDTO: AppStatusDTO): AppCurrentStatus 
     // I decided to include it in the response given by the API layer of the FE.
     // ----------------------
     // Carlos Lombardi, 2022.11.4
-    lastCheckTimestamp: new Date().toISOString(),
+
+    // I modified the above response of lastCheckTimestamp value to get rid of milliseconds.
+    // This is to avoid sync issues with tests.
+    // ----------------------
+    // Nicola Giornetta, 2023.8.4
+
+    lastCheckTimestamp: new Date().toISOString().slice(0, -5) + 'Z',
   };
 }
 
-function beDowntimeLogPageToFeDowntimeLogPage(downtimeLogPageDTO: DowntimeLogPageDTO): DowntimeLogPage {
+function beDowntimeLogPageToFeDowntimeLogPage(
+  downtimeLogPageDTO: DowntimeLogPageDTO
+): DowntimeLogPage {
   /* eslint-disable functional/immutable-data */
   const result: DowntimeLogPage = {
     downtimes: downtimeLogPageDTO.result.map(beDowntimeToFeDowntime),
@@ -173,4 +212,3 @@ function beDowntimeLogPageToFeDowntimeLogPage(downtimeLogPageDTO: DowntimeLogPag
   }
   return result;
 }
-

@@ -3,10 +3,14 @@ import React from 'react';
 import * as redux from 'react-redux';
 import { ApiKeys as ApiKeysModel } from '../../models/ApiKeys';
 import { UserGroup } from '../../models/user';
-import { mockApiKeysForFE } from '../../redux/apiKeys/__test__/test-utils';
-import { render } from '../../__test__/test-utils';
+import { mockApiKeysForFE, mockApiKeysFromBE, mockGroups } from '../../redux/apiKeys/__test__/test-utils';
+import { mockApi, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/apiKeys/actions';
 import ApiKeys from '../ApiKeys.page';
+import { apiClient } from '../../api/apiClients';
+import { APIKEY_LIST } from '../../api/apiKeys/apiKeys.routes';
+import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
+import MockAdapter from 'axios-mock-adapter';
 
 const mockNavigateFn = jest.fn();
 
@@ -34,15 +38,12 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 describe('ApiKeys Page', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
-
-  const mockDispatchFn = jest.fn();
-  const mockActionFn = jest.fn();
-
-  const initialState = (apiKeys: ApiKeysModel<UserGroup>) => ({
+  let mock: MockAdapter;
+  const initialState = () => ({
     preloadedState: {
       apiKeysState: {
         loading: false,
-        apiKeys,
+        apiKeys: { items: [], total: 0 },
         pagination: {
           size: 10,
           page: 0,
@@ -52,38 +53,30 @@ describe('ApiKeys Page', () => {
     },
   });
 
-  beforeEach(async () => {
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getApiKeys');
-    actionSpy.mockImplementation(mockActionFn);
-  });
-
   afterEach(() => {
     result = undefined;
-    jest.resetAllMocks();
-    jest.clearAllMocks();
+    if(mock) {
+      mock.reset();
+      mock.restore();
+    }
   });
 
   it('renders the page', async () => {
+    mock = mockApi(apiClient, 'GET', APIKEY_LIST(), 200, undefined, mockApiKeysFromBE);
     await act(async () => {
-      result = render(<ApiKeys />, initialState({ items: [], total: 0 }));
+      result = render(<ApiKeys />, initialState());
     });
     expect(result?.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
   });
 
   it('renders the page with apiKeys list and click Generate New Api Key button', async () => {
+    mock = mockApi(apiClient, 'GET', APIKEY_LIST(), 200, undefined, mockApiKeysFromBE);
+    const mock2 = mockApi(mock, 'GET', GET_USER_GROUPS(), 200, undefined, mockGroups);
     await act(async () => {
-      result = render(<ApiKeys />, initialState(mockApiKeysForFE));
+      result = render(<ApiKeys />, initialState());
     });
     const tableApiKeys = result?.container.querySelector('table');
     expect(tableApiKeys).toBeInTheDocument();
-
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ limit: 10 });
 
     const button = result?.queryByTestId('generateApiKey');
     expect(button).toBeInTheDocument();
@@ -92,5 +85,7 @@ describe('ApiKeys Page', () => {
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
     });
+    mock2.reset();
+    mock2.restore();
   });
 });

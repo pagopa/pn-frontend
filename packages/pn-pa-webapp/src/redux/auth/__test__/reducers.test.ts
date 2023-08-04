@@ -5,12 +5,9 @@ import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.route
 import { Consent, ConsentActionType, ConsentType } from '../../../models/consents';
 import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
-import {
-    acceptPrivacy, acceptToS, getOrganizationParty, getPrivacyApproval, getToSApproval
-} from '../actions';
+import { acceptPrivacy, acceptToS, getPrivacyApproval, getToSApproval } from '../actions';
 import { User } from '../types';
 import { mockLogin, mockLogout, userResponse } from './test-utils';
-import { ConsentsApi } from '../../../api/consents/Consents.api';
 
 describe('Auth redux state tests', () => {
   let mock: MockAdapter;
@@ -107,7 +104,7 @@ describe('Auth redux state tests', () => {
       isFirstAccept: true,
       consentVersion: 'mocked-version',
     };
-    mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.TOS), 200, undefined, tosMock);
+    mock = mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.TOS), 200, undefined, tosMock);
     const action = await store.dispatch(getToSApproval());
     const payload = action.payload as Consent;
     expect(action.type).toBe('getToSApproval/fulfilled');
@@ -119,7 +116,7 @@ describe('Auth redux state tests', () => {
 
   it('Should NOT be able to fetch the tos approval', async () => {
     const tosErrorResponse = { response: { data: 'error-tos', status: 500 } };
-    mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.TOS), 500, undefined, 'error-tos');
+    mock = mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.TOS), 500, undefined, 'error-tos');
     const action = await store.dispatch(getToSApproval());
     expect(action.type).toBe('getToSApproval/rejected');
     expect(action.payload).toEqual(tosErrorResponse);
@@ -129,9 +126,16 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch tos acceptance', async () => {
-    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mock-version-1'), 200, {
-      action: ConsentActionType.ACCEPT,
-    }, 'success');
+    mock = mockApi(
+      apiClient,
+      'PUT',
+      SET_CONSENTS(ConsentType.TOS, 'mock-version-1'),
+      200,
+      {
+        action: ConsentActionType.ACCEPT,
+      },
+      'success'
+    );
     const action = await store.dispatch(acceptToS('mock-version-1'));
     const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/fulfilled');
@@ -140,7 +144,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch tos acceptance', async () => {
-    const tosErrorResponse = { response: { data: undefined, status: 500 }};
+    const tosErrorResponse = { response: { data: undefined, status: 500 } };
     mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mock-version-1'), 500, {
       action: ConsentActionType.ACCEPT,
     });
@@ -158,7 +162,14 @@ describe('Auth redux state tests', () => {
       isFirstAccept: true,
       consentVersion: 'mocked-version',
     };
-    mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.DATAPRIVACY), 200, undefined, tosMock);
+    mock = mockApi(
+      apiClient,
+      'GET',
+      GET_CONSENTS(ConsentType.DATAPRIVACY),
+      200,
+      undefined,
+      tosMock
+    );
     const action = await store.dispatch(getPrivacyApproval());
     const payload = action.payload as Consent;
     expect(action.type).toBe('getPrivacyApproval/fulfilled');
@@ -169,8 +180,15 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch the privacy approval', async () => {
-    const tosErrorResponse = { response: { data: 'error-privacy-approval', status: 500 }};
-    mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.DATAPRIVACY), 500, undefined, 'error-privacy-approval');
+    const tosErrorResponse = { response: { data: 'error-privacy-approval', status: 500 } };
+    mock = mockApi(
+      apiClient,
+      'GET',
+      GET_CONSENTS(ConsentType.DATAPRIVACY),
+      500,
+      undefined,
+      'error-privacy-approval'
+    );
     const action = await store.dispatch(getPrivacyApproval());
     expect(action.type).toBe('getPrivacyApproval/rejected');
     expect(action.payload).toEqual(tosErrorResponse);
@@ -191,7 +209,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch privacy acceptance', async () => {
-    const privacyErrorResponse = { response: { data: undefined, status: 500 }};
+    const privacyErrorResponse = { response: { data: undefined, status: 500 } };
     mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'), 500, {
       action: ConsentActionType.ACCEPT,
     });
