@@ -1,10 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import { store } from '../../store';
-import { createDelegation } from '../actions';
+import { createDelegation, createDelegationMapper } from '../actions';
 import { resetNewDelegation } from '../reducers';
 import {
   createDelegationDuplicatedErrorResponse,
@@ -14,7 +14,6 @@ import {
   createDelegationSelectedPayload,
   initialState,
 } from './test.utils';
-
 
 describe('delegation redux state tests', () => {
   let mock: MockAdapter;
@@ -32,12 +31,14 @@ describe('delegation redux state tests', () => {
   });
 
   it('creates a new delegation with all organizations', async () => {
-    mock = mockApi(apiClient,
+    mock = mockApi(
+      apiClient,
       'POST',
       CREATE_DELEGATION(),
       200,
       undefined,
-      createDelegationResponse);
+      createDelegationResponse
+    );
     const action = await store.dispatch(createDelegation(createDelegationPayload));
 
     expect(action.type).toBe('createDelegation/fulfilled');
@@ -45,12 +46,14 @@ describe('delegation redux state tests', () => {
   });
 
   it('creates a new delegation with a single organization', async () => {
-    mock = mockApi(apiClient,
+    mock = mockApi(
+      apiClient,
       'POST',
       CREATE_DELEGATION(),
       200,
       undefined,
-      createDelegationResponse);
+      createDelegationResponse
+    );
     const action = await store.dispatch(createDelegation(createDelegationSelectedPayload));
 
     expect(action.type).toBe('createDelegation/fulfilled');
@@ -58,33 +61,31 @@ describe('delegation redux state tests', () => {
   });
 
   it("can't create a new delegation", async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'createDelegation');
-    apiSpy.mockRejectedValue(createDelegationGenericErrorResponse);
-    // mock = mockApi(apiClient,
-    //   'POST',
-    //   CREATE_DELEGATION(),
-    //   401,
-    //   undefined,
-    //   createDelegationGenericErrorResponse);
+    mock = mockApi(
+      apiClient,
+      'POST',
+      CREATE_DELEGATION(),
+      401,
+      createDelegationMapper(createDelegationPayload),
+      createDelegationGenericErrorResponse
+    );
     const action = await store.dispatch(createDelegation(createDelegationPayload));
-    
-
     expect(action.type).toBe('createDelegation/rejected');
-    expect(action.payload).toEqual(createDelegationGenericErrorResponse);
+    expect((action.payload as any).response.data).toEqual(createDelegationGenericErrorResponse);
   });
 
   it("can't create a new delegation (duplicated)", async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'createDelegation');
-    apiSpy.mockRejectedValue(createDelegationDuplicatedErrorResponse);
-    // mock = mockApi(apiClient,
-    //   'POST',
-    //   CREATE_DELEGATION(),
-    //   400,
-    //   undefined,
-    //   createDelegationDuplicatedErrorResponse);
+    mock = mockApi(
+      apiClient,
+      'POST',
+      CREATE_DELEGATION(),
+      400,
+      createDelegationMapper(createDelegationPayload),
+      createDelegationDuplicatedErrorResponse
+    );
     const action = await store.dispatch(createDelegation(createDelegationPayload));
     expect(action.type).toBe('createDelegation/rejected');
-    expect(action.payload).toEqual(createDelegationDuplicatedErrorResponse);
+    expect((action.payload as any).response.data).toEqual(createDelegationDuplicatedErrorResponse);
   });
 
   it('resets the newDelegation state', () => {
