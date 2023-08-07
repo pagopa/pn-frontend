@@ -110,7 +110,7 @@ const Contacts = () => {
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      PROVA CHUNK
+      PROVA CHUNK 2
       <DigitalContactsCodeVerificationProvider>
         <Box p={3}>
           <TitleBox
