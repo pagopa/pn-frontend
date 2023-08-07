@@ -329,7 +329,7 @@ const FileUpload = ({
           </Box>
           {fileData.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
-              <Typography display="inline" fontWeight={700}>
+              <Typography id="hash-code" display="inline" fontWeight={700}>
                 {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
               </Typography>
               <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
@@ -353,7 +353,7 @@ const FileUpload = ({
         </Fragment>
       )}
       {fileData.error && (
-        <Alert severity="error" sx={{ marginTop: '10px' }}>
+        <Alert id="upload-error" severity="error" sx={{ marginTop: '10px' }}>
           {fileData.error}
         </Alert>
       )}

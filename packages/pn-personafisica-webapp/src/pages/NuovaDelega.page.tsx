@@ -250,6 +250,7 @@ const NuovaDelega = () => {
                               }}
                             >
                               <FormControlLabel
+                                id="recipient-pf"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PF}
                                 control={<Radio />}
@@ -257,6 +258,7 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.naturalPerson')}
                               />
                               <FormControlLabel
+                                id="recipent-pg"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PG}
                                 control={<Radio />}
@@ -343,6 +345,7 @@ const NuovaDelega = () => {
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
                           <RadioGroup
+                            id="radio-buttons-group-enti"
                             aria-labelledby="radio-buttons-group-pf-pg"
                             defaultValue="tuttiGliEnti"
                             name="selectTuttiEntiOrSelezionati"

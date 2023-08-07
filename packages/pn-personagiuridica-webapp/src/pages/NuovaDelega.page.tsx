@@ -260,6 +260,7 @@ const NuovaDelega = () => {
                                 data-testid="selectPF"
                               />
                               <FormControlLabel
+                                id="select-pg"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PG}
                                 control={<Radio />}

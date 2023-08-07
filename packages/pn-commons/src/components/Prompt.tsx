@@ -64,6 +64,7 @@ const Prompt = ({
             {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
           </Button>
           <Button
+            id="button-exit"
             variant="contained"
             onClick={confirmNavigation}
             autoFocus

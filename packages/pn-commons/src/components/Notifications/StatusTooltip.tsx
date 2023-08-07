@@ -17,8 +17,18 @@ const StatusTooltip = ({
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} onOpen={eventTrackingCallback}>
-      <Chip label={label} color={color} sx={{ cursor: 'default' }} data-testid={`statusChip-${label}`} />
+    <CustomTooltip
+      openOnClick={false}
+      tooltipContent={tooltipContent}
+      onOpen={eventTrackingCallback}
+    >
+      <Chip
+        id="status-chip"
+        label={label}
+        color={color}
+        sx={{ cursor: 'default' }}
+        data-testid={`statusChip-${label}`}
+      />
     </CustomTooltip>
   );
 };

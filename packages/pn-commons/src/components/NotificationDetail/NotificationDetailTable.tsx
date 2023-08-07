@@ -12,7 +12,12 @@ type Props = {
  * @param rows data to show
  */
 const NotificationDetailTable = ({ rows }: Props) => (
-  <TableContainer component={Paper} sx={{ px: 3, py: { xs: 3, lg: 2 } }} elevation={0}>
+  <TableContainer
+    component={Paper}
+    sx={{ px: 3, py: { xs: 3, lg: 2 } }}
+    elevation={0}
+    id="notification-detail"
+  >
     <Table
       aria-label={getLocalizedOrDefaultLabel(
         'notifications',
@@ -31,7 +36,7 @@ const NotificationDetailTable = ({ rows }: Props) => (
               flexDirection: { xs: 'column', lg: 'row' },
             }}
           >
-            <TableCell padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
+            <TableCell id="row-label" padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
               {row.label}
             </TableCell>
             <TableCell padding="none" sx={{ pb: 1, pt: { xs: 0, lg: 1 } }}>
