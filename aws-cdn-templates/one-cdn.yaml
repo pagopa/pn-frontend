@@ -464,7 +464,7 @@ Resources:
             ContentSecurityPolicy:
               Fn::Join:
                 - " "
-                - - "default-src 'self'; "object-src 'none';"
+                - - "default-src 'self'; object-src 'none';"
                   - !Sub " connect-src 'self' https://api-eu.mixpanel.com/track/  \
                     https://selfcare.pagopa.it/assets/ \
                     https://privacyportalde-cdn.onetrust.com/ \
