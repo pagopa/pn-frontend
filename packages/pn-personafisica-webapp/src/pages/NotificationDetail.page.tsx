@@ -228,12 +228,15 @@ const NotificationDetail = () => {
   }, []);
 
   const fetchPaymentsInfo = useCallback(() => {
-    // mi genero l'array paymentInfoRequest escludendo gli F24, e se ho solo F24
-    const paymentInfoRequest = currentRecipient?.payments?.map((payment) => ({
-      // usare reduce
-      noticeCode: payment.pagoPA?.noticeCode,
-      creditorTaxId: payment.pagoPA?.creditorTaxId,
-    })) as Array<{ noticeCode: string; creditorTaxId: string }>;
+    const paymentInfoRequest = currentRecipient?.payments?.reduce((acc: any, payment) => {
+      if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
+        acc.push({
+          noticeCode: payment.pagoPA.noticeCode,
+          creditorTaxId: payment.pagoPA.creditorTaxId,
+        });
+      }
+      return acc;
+    }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
     // se solo F24 return dispatch(setF24Payments(curentRecipients.payments));
     if (paymentInfoRequest.length === 0) {
