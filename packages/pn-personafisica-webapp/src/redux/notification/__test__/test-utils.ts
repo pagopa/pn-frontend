@@ -232,23 +232,29 @@ const notificationFromBeTwoRecipients: NotificationDetail = {
     statusHistory[0],
     {
       ...statusHistory[1],
-      relatedTimelineElements: [...statusHistory[1].relatedTimelineElements, 'c_b429-202203021814_send_courtesy_rec1']
-    }
-  ],
-  timeline: [...notificationFromBe.timeline, {
-    elementId: 'c_b429-202203021814_send_courtesy_rec1',
-    timestamp: '2022-03-02T17:57:06.819Z',
-    category: TimelineCategory.NOTIFICATION_VIEWED,
-    details: {
-      recIndex: 1,
+      relatedTimelineElements: [
+        ...statusHistory[1].relatedTimelineElements,
+        'c_b429-202203021814_send_courtesy_rec1',
+      ],
     },
-    legalFactsIds: [
-      {
-        key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-        category: LegalFactType.DIGITAL_DELIVERY,
+  ],
+  timeline: [
+    ...notificationFromBe.timeline,
+    {
+      elementId: 'c_b429-202203021814_send_courtesy_rec1',
+      timestamp: '2022-03-02T17:57:06.819Z',
+      category: TimelineCategory.NOTIFICATION_VIEWED,
+      details: {
+        recIndex: 1,
       },
-    ],
-  }],
+      legalFactsIds: [
+        {
+          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
+          category: LegalFactType.DIGITAL_DELIVERY,
+        },
+      ],
+    },
+  ],
   recipients: [
     {
       recipientType: RecipientType.PF,
@@ -283,17 +289,6 @@ const notificationFromBeTwoRecipients: NotificationDetail = {
     ...notificationFromBe.recipients,
   ],
 };
-
-export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
-  const notification = { ...notificationFromBe, ...overrideObj };
-  return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
-};
-
-export const notificationToFe = parseNotificationDetailForRecipient(
-  notificationFromBe,
-  'CGNNMO80A03H501U',
-  []
-);
 
 export const notificationToFeTwoRecipients = (
   userFiscalNumber: string,

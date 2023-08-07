@@ -9,11 +9,11 @@ type Props = {
   payments: Array<PaymentHistory>;
 };
 
-const NotificationPaymentRecipient: React.FC<Props> = ({ loading }) => {
-  console.log(loading);
+const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) => {
+  console.log(payments, loading);
   return (
     <Fragment>
-      <Typography variant="h6">
+      <Typography variant="h6" data-testid="notification-payment-recipient-title">
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title', 'Pagamento')}
       </Typography>
       <Typography variant="body2" sx={{ mt: 2 }}>
@@ -21,14 +21,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading }) => {
           'notifications',
           'detail.payment.subtitle',
           'In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. Alcuni avvisi includono i costi di notifica.'
-        )}{' '}
+        )}
+        &nbsp;
         <Link href={void 0} target="_blank" fontWeight="bold" sx={{ cursor: 'pointer' }}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how', 'Come mai?')}
         </Link>
       </Typography>
 
       <Button fullWidth variant="contained" sx={{ mt: 2 }}>
-        Paga
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay', 'Paga')}
       </Button>
 
       <Button fullWidth variant="outlined" sx={{ mt: 2 }}>

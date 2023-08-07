@@ -330,6 +330,7 @@ export const notificationDTO: NotificationDetail = {
   recipients: [recipient],
   documents: [
     {
+      title: 'Documento 1',
       digests: {
         sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
       },
@@ -360,3 +361,37 @@ export const notificationToFe = parseNotificationDetailForRecipient(
   recipient.taxId,
   []
 );
+
+export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
+  const notification = { ...notificationDTO, ...overrideObj };
+  return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
+};
+
+// export const notificationToFeTwoRecipients = (
+//   userFiscalNumber: string,
+//   delegatorFiscalNumber?: string,
+//   isDelegate?: boolean
+// ) =>
+//   parseNotificationDetailForRecipient(
+//     notificationFromBeTwoRecipients,
+//     userFiscalNumber,
+//     delegatorFiscalNumber && isDelegate
+//       ? [
+//           {
+//             mandateId: fixedMandateId,
+//             delegator: {
+//               fiscalCode: delegatorFiscalNumber,
+//               firstName: 'Mario',
+//               lastName: 'Rossi',
+//               person: true,
+//             },
+//             status: 'active',
+//             visibilityIds: [],
+//             verificationCode: '',
+//             datefrom: '',
+//             dateto: '',
+//           },
+//         ]
+//       : [],
+//     isDelegate ? fixedMandateId : undefined
+//   );
