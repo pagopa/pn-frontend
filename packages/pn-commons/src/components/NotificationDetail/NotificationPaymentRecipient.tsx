@@ -22,16 +22,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading }) => {
           'detail.payment.subtitle',
           'In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. Alcuni avvisi includono i costi di notifica.'
         )}{' '}
-        <Link
-          role="button"
-          component="button"
-          variant="body2"
-          fontWeight={'bold'}
-          onClick={() => void 0}
-          tabIndex={0}
-          display="inline-block"
-          sx={{ cursor: 'pointer' }}
-        >
+        <Link href={void 0} target="_blank" fontWeight="bold" sx={{ cursor: 'pointer' }}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how', 'Come mai?')}
         </Link>
       </Typography>
