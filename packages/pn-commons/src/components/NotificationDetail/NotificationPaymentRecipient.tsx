@@ -16,7 +16,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) =>
       <Typography variant="h6" data-testid="notification-payment-recipient-title">
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title', 'Pagamento')}
       </Typography>
-      <Typography variant="body2" sx={{ mt: 2 }}>
+      <Typography
+        variant="body2"
+        sx={{ mt: 2 }}
+        data-testid="notification-payment-recipient-subtitle"
+      >
         {getLocalizedOrDefaultLabel(
           'notifications',
           'detail.payment.subtitle',
@@ -28,11 +32,16 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) =>
         </Link>
       </Typography>
 
-      <Button fullWidth variant="contained" sx={{ mt: 2 }}>
+      <Button fullWidth variant="contained" sx={{ mt: 2 }} data-testid="pay-button">
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay', 'Paga')}
       </Button>
 
-      <Button fullWidth variant="outlined" sx={{ mt: 2 }}>
+      <Button
+        fullWidth
+        variant="outlined"
+        sx={{ mt: 2 }}
+        data-testid="download-pagoPA-notice-button"
+      >
         <Download fontSize={'small'} sx={{ marginRight: 1 }} />
         {getLocalizedOrDefaultLabel(
           'notifications',
