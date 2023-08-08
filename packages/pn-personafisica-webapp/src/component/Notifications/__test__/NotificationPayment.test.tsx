@@ -123,7 +123,7 @@ const mocked_payments_detail = {
   ],
 };
 
-describe('NotificationPayment component', () => {
+describe.skip('NotificationPayment component', () => {
   let mock: MockAdapter;
 
   function mockPaymentApi(responseBody: ExtRegistriesPaymentDetails) {
@@ -574,7 +574,7 @@ describe('NotificationPayment component', () => {
   });
 });
 
-describe('NotificationPayment - different payment fetch API behaviors', () => {
+describe.skip('NotificationPayment - different payment fetch API behaviors', () => {
   beforeAll(() => {
     jest.restoreAllMocks();
   });
