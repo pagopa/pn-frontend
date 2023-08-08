@@ -184,7 +184,14 @@ export default function CustomPagination({
               ) {
                 return null;
               }
-              return <PaginationItem {...props2} sx={{ border: 'none' }} />;
+              return (
+                <PaginationItem
+                  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                  id={props2.type === 'page' ? props2.type + props2.page : props2.type}
+                  {...props2}
+                  sx={{ border: 'none' }}
+                />
+              );
             }}
             onChange={(_event: ChangeEvent<unknown>, value: number) =>
               onPageRequest({
