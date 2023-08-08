@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '../../../test-utils';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
-describe('NotificationDetailTimeline Component', () => {
+describe('NotificationPaymentRecipient Component', () => {
   it('should render component title and subtitle', () => {
     const result = render(<NotificationPaymentRecipient loading={false} payments={[]} />);
     const title = result.getByTestId('notification-payment-recipient-title');
