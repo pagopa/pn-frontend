@@ -24,12 +24,7 @@ const useStyles = makeStyles(() => ({
 function SectionHeading(props: SectionHeadingProps): JSX.Element {
   const classes = useStyles();
   return (
-    <Typography
-      id={props.children?.toString()}
-      component="h3"
-      variant="h6"
-      className={classes.root}
-    >
+    <Typography id="title-heading-section" component="h3" variant="h6" className={classes.root}>
       {props.children}
     </Typography>
   );

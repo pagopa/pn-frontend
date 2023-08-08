@@ -93,7 +93,7 @@ Props) => {
       >
         <Grid key={'detail-documents-title'} item sx={{ mb: 3 }}>
           <Typography
-            id="document-attached"
+            id="notification-detail-document-attached"
             color="text.primary"
             variant="overline"
             fontWeight={700}

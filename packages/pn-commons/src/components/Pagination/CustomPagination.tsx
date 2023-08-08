@@ -186,8 +186,11 @@ export default function CustomPagination({
               }
               return (
                 <PaginationItem
-                  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                  id={props2.type === 'page' ? props2.type + props2.page : props2.type}
+                  id={
+                    props2.type === 'page' && props2.page
+                      ? props2.type.concat(props2.page.toString())
+                      : props2.type
+                  }
                   {...props2}
                   sx={{ border: 'none' }}
                 />

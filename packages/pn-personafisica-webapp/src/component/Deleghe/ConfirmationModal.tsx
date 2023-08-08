@@ -40,7 +40,7 @@ export default function ConfirmationModal({
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <Typography
-                id="title-dialog"
+                id="confirmation-dialog-delegations"
                 variant="h5"
                 sx={{ fontSize: '18px', fontWeight: '600' }}
               >

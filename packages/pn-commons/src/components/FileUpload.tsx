@@ -353,7 +353,7 @@ const FileUpload = ({
         </Fragment>
       )}
       {fileData.error && (
-        <Alert id="upload-error" severity="error" sx={{ marginTop: '10px' }}>
+        <Alert id="file-upload-error" severity="error" sx={{ marginTop: '10px' }}>
           {fileData.error}
         </Alert>
       )}
