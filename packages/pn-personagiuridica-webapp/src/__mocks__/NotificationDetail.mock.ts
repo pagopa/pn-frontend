@@ -14,13 +14,13 @@ import {
   RecipientType,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
-import { parseNotificationDetailForRecipient } from '../src/utils/notification.utility';
+import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
 const paymentsPagoPA: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
-      creditorTaxId: '302011686772695132',
-      noticeCode: '77777777777',
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695132',
       applyCostFlg: true,
       attachment: {
         digests: {
@@ -36,8 +36,8 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
   },
   {
     pagoPA: {
-      creditorTaxId: '302011686772695133',
-      noticeCode: '77777777777',
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695133',
       applyCostFlg: true,
       attachment: {
         digests: {
@@ -283,6 +283,20 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
     },
   },
+  {
+    elementId:
+      'NOTIFICATION_PAID.IUN_AVEJ-AUAT-JUQE-202305-J-1.CODE_PPA30201168677269513277777777777',
+    timestamp: '2023-05-10T15:54:31.874Z',
+    legalFactsIds: [],
+    category: TimelineCategory.PAYMENT,
+    details: {
+      recIndex: 0,
+      recipientType: RecipientType.PG,
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695132',
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
+    },
+  },
 ];
 
 export const notificationDTO: NotificationDetail = {
@@ -292,6 +306,7 @@ export const notificationDTO: NotificationDetail = {
   recipients: [recipient],
   documents: [
     {
+      title: 'Documento 1',
       digests: {
         sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
       },
@@ -318,3 +333,8 @@ export const notificationDTO: NotificationDetail = {
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
+
+export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
+  const notification = { ...notificationDTO, ...overrideObj };
+  return parseNotificationDetailForRecipient(notification);
+};

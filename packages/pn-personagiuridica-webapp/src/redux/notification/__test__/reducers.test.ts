@@ -7,12 +7,12 @@ import {
   populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   notificationDTO,
   notificationToFe,
   recipient,
-} from '../../../../__mocks__/NotificationDetail.mock';
+} from '../../../__mocks__/NotificationDetail.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';

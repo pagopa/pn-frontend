@@ -250,7 +250,7 @@ function notificationFromBeTwoRecipients(
   isDelegate?: boolean
 ): NotificationDetail {
   const actualRecipient = isDelegate ? delegatorFiscalNumber : userFiscalNumber;
-  let notificationRecipients: Array<NotificationDetailRecipient | {recipientType: RecipientType}>;
+  let notificationRecipients: Array<NotificationDetailRecipient | { recipientType: RecipientType }>;
   if (actualRecipient === recipients[0].taxId) {
     notificationRecipients = [recipients[0], { recipientType: RecipientType.PF }];
   } else if (actualRecipient === recipients[1].taxId) {
@@ -265,31 +265,32 @@ function notificationFromBeTwoRecipients(
       statusHistory[0],
       {
         ...statusHistory[1],
-        relatedTimelineElements: [...statusHistory[1].relatedTimelineElements, 'c_b429-202203021814_send_courtesy_rec1']
-      }
-    ],
-    timeline: [...notificationFromBe.timeline, {
-      elementId: 'c_b429-202203021814_send_courtesy_rec1',
-      timestamp: '2022-03-02T17:57:06.819Z',
-      category: TimelineCategory.NOTIFICATION_VIEWED,
-      details: {
-        recIndex: 1,
+        relatedTimelineElements: [
+          ...statusHistory[1].relatedTimelineElements,
+          'c_b429-202203021814_send_courtesy_rec1',
+        ],
       },
-      legalFactsIds: [
-        {
-          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-          category: LegalFactType.DIGITAL_DELIVERY,
+    ],
+    timeline: [
+      ...notificationFromBe.timeline,
+      {
+        elementId: 'c_b429-202203021814_send_courtesy_rec1',
+        timestamp: '2022-03-02T17:57:06.819Z',
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        details: {
+          recIndex: 1,
         },
-      ],
-    }],
+        legalFactsIds: [
+          {
+            key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
+            category: LegalFactType.DIGITAL_DELIVERY,
+          },
+        ],
+      },
+    ],
     recipients: notificationRecipients as any,
-  }
-};
-
-export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
-  const notification = { ...notificationFromBe, ...overrideObj };
-  return parseNotificationDetailForRecipient(notification);
-};
+  };
+}
 
 export const notificationToFe = parseNotificationDetailForRecipient(notificationFromBe);
 
@@ -298,5 +299,7 @@ export const notificationToFeTwoRecipients = (
   delegatorFiscalNumber?: string,
   isDelegate?: boolean
 ) => {
-  return parseNotificationDetailForRecipient(notificationFromBeTwoRecipients(userFiscalNumber, delegatorFiscalNumber, isDelegate));
+  return parseNotificationDetailForRecipient(
+    notificationFromBeTwoRecipients(userFiscalNumber, delegatorFiscalNumber, isDelegate)
+  );
 };

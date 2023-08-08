@@ -238,7 +238,6 @@ const NotificationDetail = () => {
       return acc;
     }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
-    // se solo F24 return dispatch(setF24Payments(curentRecipients.payments));
     if (paymentInfoRequest.length === 0) {
       void dispatch(setF24Payments(currentRecipient?.payments));
       return;
