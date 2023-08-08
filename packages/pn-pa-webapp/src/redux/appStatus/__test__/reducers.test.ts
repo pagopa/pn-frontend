@@ -1,31 +1,37 @@
-import { AppCurrentStatus, DowntimeLogPage, KnownFunctionality } from '@pagopa-pn/pn-commons';
-import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
-import { store } from '../../store';
-import { getCurrentAppStatus, getDowntimeLogPage } from '../actions';
-import {
-  currentStatusFromBE,
-  currentStatusOk,
-  downtimesFromBe,
-  simpleDowntimeLogPage,
-} from './test-utils';
 import MockAdapter from 'axios-mock-adapter';
-import { mockApi } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { AppCurrentStatus, DowntimeLogPage } from '@pagopa-pn/pn-commons';
 import {
   DOWNTIME_HISTORY,
   DOWNTIME_STATUS,
 } from '@pagopa-pn/pn-commons/src/api/appStatus/appStatus.routes';
 
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import {
+  currentStatusDTO,
+  currentStatusOk,
+  downtimesDTO,
+  simpleDowntimeLogPage,
+} from '../../../__mocks__/AppStatus.mock';
+import { apiClient } from '../../../api/apiClients';
+import { store } from '../../store';
+import { getCurrentAppStatus, getDowntimeLogPage } from '../actions';
+
 describe('App Status redux state tests', () => {
-  mockAuthentication();
+  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
+  mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.reset();
-      mock.restore();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('Initial state', () => {
@@ -34,7 +40,7 @@ describe('App Status redux state tests', () => {
   });
 
   it('Should be able to fetch the current status', async () => {
-    mock = mockApi(apiClient, 'GET', DOWNTIME_STATUS(), 200, undefined, currentStatusFromBE);
+    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
     const action = await store.dispatch(getCurrentAppStatus());
     const payload = action.payload as AppCurrentStatus;
     expect(action.type).toBe('getCurrentAppStatus/fulfilled');
@@ -48,14 +54,7 @@ describe('App Status redux state tests', () => {
     const mockRequest = {
       startDate: '2022-10-23T15:50:04Z',
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      DOWNTIME_HISTORY(mockRequest),
-      200,
-      undefined,
-      downtimesFromBe
-    );
+    mock.onGet(DOWNTIME_HISTORY(mockRequest)).reply(200, downtimesDTO);
     const action = await store.dispatch(getDowntimeLogPage(mockRequest));
     const payload = action.payload as DowntimeLogPage;
     expect(action.type).toBe('getDowntimeLogPage/fulfilled');

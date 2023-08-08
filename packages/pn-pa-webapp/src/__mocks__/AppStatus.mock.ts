@@ -6,7 +6,7 @@ import {
   KnownFunctionality,
 } from '@pagopa-pn/pn-commons';
 
-export const currentStatusFromBE: AppStatusDTO = {
+export const currentStatusDTO: AppStatusDTO = {
   functionalities: ['NOTIFICATION_CREATE', 'NOTIFICATION_VISUALIZATION', 'NOTIFICATION_WORKFLOW'],
   openIncidents: [],
 };
@@ -33,7 +33,7 @@ export const currentStatusOk: AppCurrentStatus = {
   lastCheckTimestamp: new Date().toISOString().slice(0, -5) + 'Z',
 };
 
-export const downtimesFromBe = {
+export const downtimesDTO = {
   result: [
     {
       functionality: 'NOTIFICATION_CREATE',
@@ -54,6 +54,7 @@ export const downtimesFromBe = {
   ],
   nextPage: '1',
 };
+
 export const simpleDowntimeLogPage: DowntimeLogPage = {
   downtimes: [
     {

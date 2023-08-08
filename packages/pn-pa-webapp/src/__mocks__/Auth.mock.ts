@@ -1,33 +1,35 @@
-import { mockApi } from '../../../__test__/test-utils';
-import { authClient } from '../../../api/apiClients';
-import { AUTH_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
-import { PartyRole, PNRole } from '../../../models/user';
-import { store } from '../../store';
-import { exchangeToken, logout } from '../actions';
-import { User } from '../types';
+import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
+import { PNRole, PartyRole } from '../models/user';
+import { exchangeToken, logout } from '../redux/auth/actions';
+import { User } from '../redux/auth/types';
+import { store } from '../redux/store';
+import { authClient } from '../api/apiClients';
+import MockAdapter from 'axios-mock-adapter';
 
 export const mockLogin = async (): Promise<any> => {
-  mockApi(
-    authClient,
-    'POST',
-    AUTH_TOKEN_EXCHANGE(),
-    200,
-    undefined,
-    userResponse
-  );
-  return store.dispatch(exchangeToken('mocked-token'));
+  const mock = new MockAdapter(authClient);
+  mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
+  const action = store.dispatch(exchangeToken('mocked-token'));
+  mock.reset();
+  mock.restore();
+  return action;
 };
 
 export const mockLogout = async (): Promise<any> => store.dispatch(logout());
 
 export const mockAuthentication = () => {
+  let mock: MockAdapter;
+
   beforeAll(() => {
-    mockLogin();
+    mock = new MockAdapter(authClient);
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
+    store.dispatch(exchangeToken('mocked-token'));
   });
 
   afterAll(() => {
+    mock.reset();
+    mock.restore();
     mockLogout();
-    jest.resetAllMocks();
   });
 };
 
@@ -45,6 +47,7 @@ export const userResponse: User = {
   uid: '00000000-0000-0000-0000-000000000000',
   organization: {
     id: 'mocked-id',
+    name: 'Mocked Organization',
     roles: [
       {
         partyRole: PartyRole.MANAGER,

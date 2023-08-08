@@ -1,4 +1,4 @@
-import { formatDate, GetNotificationsResponse, NotificationStatus } from "@pagopa-pn/pn-commons";
+import { formatDate, GetNotificationsResponse, NotificationStatus } from '@pagopa-pn/pn-commons';
 
 export const notificationsFromBe2rows: GetNotificationsResponse = {
   resultsPage: [
@@ -9,7 +9,7 @@ export const notificationsFromBe2rows: GetNotificationsResponse = {
       sentAt: '2022-02-22T14:20:20.566Z',
       subject: 'mocked-subject-1',
       notificationStatus: NotificationStatus.DELIVERED,
-      recipients: ['mocked-recipientId-1']
+      recipients: ['mocked-recipientId-1'],
     },
     {
       iun: 'mocked-iun-2',
@@ -18,37 +18,33 @@ export const notificationsFromBe2rows: GetNotificationsResponse = {
       sentAt: '2022-02-22T14:20:20.566Z',
       subject: 'mocked-subject-2',
       notificationStatus: NotificationStatus.DELIVERED,
-      recipients: ['mocked-recipientId-2']
-    }
+      recipients: ['mocked-recipientId-2'],
+    },
   ],
   moreResult: false,
-  nextPagesKey: ['mocked-page-key-1']
-}
+  nextPagesKey: ['mocked-page-key-1'],
+};
 
-export const notificationsFromBe: GetNotificationsResponse = {
+export const notificationsDTO: GetNotificationsResponse = {
   ...notificationsFromBe2rows,
-  resultsPage: [
-    {...notificationsFromBe2rows.resultsPage[0]}
-  ]
-}
+  resultsPage: [{ ...notificationsFromBe2rows.resultsPage[0] }],
+};
 
 export const notificationsFromBePage2: GetNotificationsResponse = {
   ...notificationsFromBe2rows,
-  resultsPage: [
-    {...notificationsFromBe2rows.resultsPage[1]}
-  ]
-}
+  resultsPage: [{ ...notificationsFromBe2rows.resultsPage[1] }],
+};
 
 export const emptyNotificationsFromBe: GetNotificationsResponse = {
   resultsPage: [],
   moreResult: false,
-  nextPagesKey: []
-}
+  nextPagesKey: [],
+};
 
 export const notificationsToFe: GetNotificationsResponse = {
-  ...notificationsFromBe,
-  resultsPage: notificationsFromBe.resultsPage.map(r => ({
+  ...notificationsDTO,
+  resultsPage: notificationsDTO.resultsPage.map((r) => ({
     ...r,
-    sentAt: formatDate(r.sentAt)
-  }))
-}
+    sentAt: formatDate(r.sentAt),
+  })),
+};

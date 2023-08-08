@@ -11,7 +11,7 @@ import {
   PaymentModel,
   NewNotificationDocument,
   NewNotificationRecipient,
-} from '../../../models/NewNotification';
+} from '../models/NewNotification';
 
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
@@ -129,9 +129,8 @@ export const newNotification: NewNotification = {
 };
 
 export const newNotificationDTO: NewNotificationDTO = {
-  paProtocolNumber: '',
-  subject: '',
-  cancelledIun: '',
+  paProtocolNumber: '12345678910',
+  subject: 'Multone esagerato',
   recipients: [
     {
       taxId: 'MRARSS90P08H501Q',
@@ -161,8 +160,8 @@ export const newNotificationDTO: NewNotificationDTO = {
           },
           contentType: 'text/plain',
           ref: {
-            key: '',
-            versionToken: '',
+            key: 'mocked-key',
+            versionToken: 'mocked-versionToken',
           },
         },
       },
@@ -195,8 +194,8 @@ export const newNotificationDTO: NewNotificationDTO = {
           },
           contentType: 'text/plain',
           ref: {
-            key: '',
-            versionToken: '',
+            key: 'mocked-ref',
+            versionToken: 'mocked-versionToken',
           },
         },
         f24standard: {
@@ -206,8 +205,8 @@ export const newNotificationDTO: NewNotificationDTO = {
           },
           contentType: 'text/plain',
           ref: {
-            key: '',
-            versionToken: '',
+            key: 'mocked-ref',
+            versionToken: 'mocked-versionToken',
           },
         },
       },
@@ -221,15 +220,15 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
       contentType: 'text/plain',
       ref: {
-        key: '',
-        versionToken: '',
+        key: 'mocked-ref',
+        versionToken: 'mocked-versionToken',
       },
     },
   ],
-  physicalCommunicationType: '' as PhysicalCommunicationType,
-  group: '',
+  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+  group: 'GroupTest',
   taxonomyCode: '010801N',
-  notificationFeePolicy: '' as NotificationFeePolicy,
+  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
 };
 
 export const newNotificationWithEmptyAddress: NewNotification = {
