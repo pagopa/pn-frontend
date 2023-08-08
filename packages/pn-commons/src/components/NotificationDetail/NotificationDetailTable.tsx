@@ -36,7 +36,7 @@ const NotificationDetailTable = ({ rows }: Props) => (
               flexDirection: { xs: 'column', lg: 'row' },
             }}
           >
-            <TableCell id="row-label" padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
+            <TableCell id={`row-label-${row.id}`} padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
               {row.label}
             </TableCell>
             <TableCell padding="none" sx={{ pb: 1, pt: { xs: 0, lg: 1 } }}>

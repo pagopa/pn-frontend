@@ -198,7 +198,7 @@ const NotificationDetailTimelineStep = ({
     undefined,
     <Box data-testid="moreLessButton">
       <ButtonNaked
-        id="show-quantity"
+        id="more-less-timeline-step"
         startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
         onClick={handleShowMoreClick}
       >

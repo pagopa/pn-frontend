@@ -23,7 +23,7 @@ const StatusTooltip = ({
       onOpen={eventTrackingCallback}
     >
       <Chip
-        id="status-chip"
+        id="notification-status-tooltip"
         label={label}
         color={color}
         sx={{ cursor: 'default' }}

@@ -329,7 +329,7 @@ const FileUpload = ({
           </Box>
           {fileData.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
-              <Typography id="hash-code" display="inline" fontWeight={700}>
+              <Typography id="file-upload-hash-code" display="inline" fontWeight={700}>
                 {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
               </Typography>
               <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
