@@ -6,7 +6,6 @@ import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
 import {
   LegalFactId,
   NotificationDetailDocuments,
-  // HelpNotificationDetails,
   NotificationDetailTableRow,
   NotificationDetailTable,
   NotificationDetailTimeline,
@@ -22,6 +21,8 @@ import {
   NotificationRelatedDowntimes,
   GetNotificationDowntimeEventsParams,
   useHasPermissions,
+  NotificationPaymentRecipient,
+  ApiErrorWrapper,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -35,14 +36,15 @@ import {
   getReceivedNotificationOtherDocument,
   getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
+  getNotificationPaymentInfo,
 } from '../redux/notification/actions';
 import {
   resetLegalFactState,
   resetState,
   clearDowntimeLegalFactData,
+  setF24Payments,
 } from '../redux/notification/reducers';
 import { PNRole } from '../redux/auth/types';
-import NotificationPayment from '../component/Notifications/NotificationPayment';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { trackEventByType } from '../utils/mixpanel';
@@ -70,6 +72,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(true);
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -86,8 +89,6 @@ const NotificationDetail = () => {
 
   const currentRecipient = notification && notification.currentRecipient;
 
-  const noticeCode = currentRecipient?.payment?.noticeCode;
-  const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -100,6 +101,9 @@ const NotificationDetail = () => {
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
+
+  const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
+
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;
@@ -143,6 +147,9 @@ const NotificationDetail = () => {
       label: row.label,
       value: row.value,
     }));
+
+  const checkIfUserHasPayments: boolean =
+    !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
@@ -219,6 +226,36 @@ const NotificationDetail = () => {
       ).then(() => setPageReady(true));
     }
   }, []);
+
+  const fetchPaymentsInfo = useCallback(() => {
+    const paymentInfoRequest = currentRecipient?.payments?.reduce((acc: any, payment) => {
+      if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
+        acc.push({
+          noticeCode: payment.pagoPA.noticeCode,
+          creditorTaxId: payment.pagoPA.creditorTaxId,
+        });
+      }
+      return acc;
+    }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
+
+    if (paymentInfoRequest.length === 0) {
+      void dispatch(setF24Payments(currentRecipient?.payments));
+      return;
+    }
+
+    void dispatch(
+      getNotificationPaymentInfo({
+        taxId: currentRecipient.taxId,
+        paymentInfoRequest,
+      })
+    ).then(() => setPaymentLoading(false));
+  }, [currentRecipient.payments]);
+
+  useEffect(() => {
+    if (checkIfUserHasPayments) {
+      fetchPaymentsInfo();
+    }
+  }, [currentRecipient.payments]);
 
   useEffect(() => {
     fetchReceivedNotification();
@@ -301,16 +338,23 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
-                {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
-                  <NotificationPayment
-                    iun={notification.iun}
-                    paymentHistory={notification.paymentHistory}
-                    senderDenomination={notification.senderDenomination}
-                    subject={notification.subject}
-                    notificationPayment={currentRecipient.payment}
-                    mandateId={mandateId}
-                  />
+                {!isCancelled && checkIfUserHasPayments && (
+                  <Paper sx={{ p: 3 }} elevation={0}>
+                    <ApiErrorWrapper
+                      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
+                      reloadAction={fetchPaymentsInfo}
+                      mainText={t('detail.payment.message-error-fetch-payment', {
+                        ns: 'notifiche',
+                      })}
+                    >
+                      <NotificationPaymentRecipient
+                        loading={paymentLoading}
+                        payments={userPayments}
+                      />
+                    </ApiErrorWrapper>
+                  </Paper>
                 )}
+
                 {visibleDomicileBanner() && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments

@@ -12,9 +12,9 @@ import {
   notificationDTO,
   notificationToFe,
   recipient,
-} from '../../../../__mocks__/NotificationDetail.mock';
-import { notificationsDTO, notificationsToFe } from '../../../../__mocks__/Notifications.mock';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+} from '../../../__mocks__/NotificationDetail.mock';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../apiClients';

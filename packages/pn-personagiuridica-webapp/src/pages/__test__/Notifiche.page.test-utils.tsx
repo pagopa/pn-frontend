@@ -1,12 +1,12 @@
-import React from 'react';
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-import { act, RenderResult } from '@testing-library/react';
+import { RenderResult, act } from '@testing-library/react';
+import React from 'react';
 import * as redux from 'react-redux';
 
-import * as hooks from '../../redux/hooks';
-import * as actions from '../../redux/dashboard/actions';
-import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
+import { notificationsToFe } from '../../__mocks__/Notifications.mock';
 import { render } from '../../__test__/test-utils';
+import * as actions from '../../redux/dashboard/actions';
+import * as hooks from '../../redux/hooks';
 import Notifiche from '../Notifiche.page';
 
 export type TestScenario = {
@@ -15,9 +15,9 @@ export type TestScenario = {
   mockActionFn: jest.Mock;
 };
 
-
-
-export async function doPrepareTestScenario(isDelegatedPage: boolean = false): Promise<TestScenario> {
+export async function doPrepareTestScenario(
+  isDelegatedPage: boolean = false
+): Promise<TestScenario> {
   const mockDispatchFn = jest.fn(() => ({
     then: () => Promise.resolve(),
   }));
@@ -64,4 +64,3 @@ export async function doPrepareTestScenario(isDelegatedPage: boolean = false): P
 
   return { result, mockDispatchFn, mockActionFn };
 }
-

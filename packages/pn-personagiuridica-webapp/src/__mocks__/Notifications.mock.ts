@@ -3,7 +3,7 @@ import { formatDate, GetNotificationsResponse, NotificationStatus } from '@pagop
 export const notificationsDTO: GetNotificationsResponse = {
   resultsPage: [
     {
-      iun: 'XGPG-LXPA-YXRL-202308-M-1',
+      iun: 'AVEJ-AUAT-JUQE-202305-J-1',
       paProtocolNumber: '302271690965154541',
       sender: 'Comune di palermo',
       sentAt: '2023-08-02T08:32:36.450806949Z',

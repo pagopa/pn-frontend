@@ -32,6 +32,7 @@
   ],
   "exclude": [
     "__mocks__",
+    "src/__mocks__/*",
     "dist",
     "lib",
     "node_modules",
@@ -39,6 +40,6 @@
     "**/__test__/*",
     "src/test-utils.tsx",
     "src/setupTests.ts",
-    "Dangerfile.ts"
+    "Dangerfile.ts",
   ]
 }

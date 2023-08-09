@@ -8,9 +8,9 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import { notificationsDTO, notificationsToFe } from '../../../../__mocks__/Notifications.mock';
-import { notificationDTO, notificationToFe } from '../../../../__mocks__/NotificationDetail.mock';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient } from '../../apiClients';

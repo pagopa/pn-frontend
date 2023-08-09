@@ -80,6 +80,9 @@ const notificationSlice = createSlice({
     clearDowntimeLegalFactData: (state) => {
       state.downtimeLegalFactUrl = '';
     },
+    setF24Payments: (state, action) => {
+      state.paymentInfo = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
@@ -152,7 +155,7 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } =
+export const { resetState, resetLegalFactState, clearDowntimeLegalFactData, setF24Payments } =
   notificationSlice.actions;
 
 export default notificationSlice;

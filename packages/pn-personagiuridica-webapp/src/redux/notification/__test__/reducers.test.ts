@@ -7,12 +7,12 @@ import {
   populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   notificationDTO,
   notificationToFe,
   recipient,
-} from '../../../../__mocks__/NotificationDetail.mock';
+} from '../../../__mocks__/NotificationDetail.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
@@ -37,7 +37,7 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
 } from '../actions';
-import { resetLegalFactState, resetState } from '../reducers';
+import { resetLegalFactState, resetState, setF24Payments } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -165,6 +165,13 @@ describe('Notification detail redux state tests', () => {
     const state = store.getState().notificationState;
     expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
+  });
+
+  it('should be able to populate paymentInfo', () => {
+    const action = store.dispatch(setF24Payments(notificationToFe.recipients[0].payments));
+    const payload = action.payload;
+    expect(action.type).toBe('notificationSlice/setF24Payments');
+    expect(payload).toEqual(notificationToFe.recipients[0].payments);
   });
 
   it('Should be able to fetch the pagopa document', async () => {

@@ -1,19 +1,19 @@
 import {
-  formatDate,
+  ExtRegistriesPaymentDetails,
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
-  ExtRegistriesPaymentDetails,
   PaymentNotice,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
-import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
+import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
