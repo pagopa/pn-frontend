@@ -404,7 +404,7 @@ const NotificationDetail = () => {
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
         >
-          {t('new-notification-button', { ns: 'notifiche' })}
+          {t('detail.cancel-notification-modal.confirm-cancel-button', { ns: 'notifiche' })}
         </Button>
       </DialogActions>
     </Dialog>
