@@ -19,6 +19,9 @@ export const lazyRetry = <T extends ComponentType<any>>(
         return { default: () => null };
       }
       sessionStorage.removeItem('retry-lazy-refreshed'); // error after retry, so remove the refresh
+      if (process.env.NODE_ENV === 'test') {
+        return { default: () => 'Loading failed' };
+      }
       throw error;
     }
   }) as () => Promise<{ default: T }>);

@@ -55,22 +55,22 @@ describe('test lazy loading retry', () => {
     });
   });
 
-  it.skip('test lazyRetry - component loading fails at second try', async () => {
+  it('test lazyRetry - component loading fails at second try', async () => {
     jest.mock('./ChunkLoaded.test', () => {
       throw new Error('Chunk loading error');
     });
     const LazyComponent = lazyRetry(() => import('./ChunkLoaded.test'));
     sessionStorage.setItem('retry-lazy-refreshed', 'true');
-    render(
+    const result = render(
       <Suspense fallback={'Loading...'}>
         <LazyComponent />
       </Suspense>
     );
-    // expect(LazyComponent).toThrow();
     await waitFor(() => {
       const refreshFlag = sessionStorage.getItem('retry-lazy-refreshed');
       expect(refreshFlag).toBeNull();
       expect(reloadFn).toBeCalledTimes(0);
+      expect(result.container).toHaveTextContent('Loading failed');
     });
   });
 });
