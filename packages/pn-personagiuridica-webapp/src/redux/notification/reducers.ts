@@ -13,7 +13,6 @@ import {
   PaymentInfoDetail,
   Downtime,
   PaymentHistory,
-  ExtRegistriesPaymentDetails,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
@@ -130,16 +129,18 @@ const notificationSlice = createSlice({
           payment.pagoPA?.noticeCode === noticeCode
       );
 
-      const updatedPaymentInfo = {
-        ...paymentInfo?.f24Data,
-        pagoPA: {
-          ...paymentInfo?.pagoPA,
-          status: PaymentStatus.FAILED,
-          detail: PaymentInfoDetail.GENERIC_ERROR,
-        } as ExtRegistriesPaymentDetails,
-      };
+      if (paymentInfo && paymentInfo.pagoPA) {
+        const updatedPaymentInfo = {
+          ...paymentInfo?.f24Data,
+          pagoPA: {
+            ...paymentInfo?.pagoPA,
+            status: PaymentStatus.FAILED,
+            detail: PaymentInfoDetail.GENERIC_ERROR,
+          },
+        };
 
-      state.paymentInfo = [...state.paymentInfo, updatedPaymentInfo];
+        state.paymentInfo = [...state.paymentInfo, updatedPaymentInfo];
+      }
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.downtimes;

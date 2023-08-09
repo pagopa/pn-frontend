@@ -68,6 +68,13 @@
     "domicile_PEC": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
     "domicile_EMAIL": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "payment": {
+      "title": "Pagamento",
+      "subtitle": "In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. Alcuni avvisi includono i costi di notifica.",
+      "how": "Come mai?",
+      "download-pagoPA-notice": "Scarica avviso PagoPA",
+      "notice-code": "Codice avviso",
+      "due": "Scade il",
+      "included-costs": "Costi di notifica inclusi",
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
       "summary-in-progress": "Pagamento in corso",
@@ -92,7 +99,15 @@
       "error-canceled": "Spiacenti, l’Ente Creditore ha revocato questo avviso. Contatta l’Ente per maggiori informazioni.",
       "error-expired": "Spiacenti, l’avviso è scaduto e non è più possibile pagarlo. Contatta l’Ente per maggiori informazioni.",
       "object": "Oggetto del pagamento",
-      "type": "Tipologia di pagamento"
+      "type": "Tipologia di pagamento",
+      "status": {
+        "succeded": "Pagato",
+        "succeded-tooltip": "Il pagamento è stato inviato correttamente.",
+        "failed": "Scaduto",
+        "failed-tooltip": "L’avviso è scaduto e non è più possibile pagarlo. Per maggiori informazioni, contatta l’ente mittente.",
+        "inprogress": "In elaborazione",
+        "inprogress-tooltip": "Il pagamento è in corso. Ricarica la pagina tra qualche ora per verificarlo. Se dovesse risultare ancora in corso, contatta l’assistenza."
+      }
     },
     "acts_files": {
       "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",

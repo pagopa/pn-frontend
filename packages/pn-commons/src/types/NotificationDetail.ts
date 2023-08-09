@@ -30,7 +30,7 @@ export interface NotificationDetail {
 }
 
 export interface PaymentHistory {
-  pagoPA?: PagoPAPaymentDetails | PaidDetails | ExtRegistriesPaymentDetails;
+  pagoPA?: PagoPAPaymentDetails & PaidDetails & ExtRegistriesPaymentDetails;
   f24Data?: F24PaymentDetails;
 }
 
