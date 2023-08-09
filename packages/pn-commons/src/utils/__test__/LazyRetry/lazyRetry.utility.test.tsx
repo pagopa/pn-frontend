@@ -17,7 +17,7 @@ describe('test lazy loading retry', () => {
 
   afterEach(() => {
     reloadFn.mockRestore();
-    jest.restoreAllMocks();
+    jest.resetModules();
   });
 
   afterAll(() => {
@@ -25,7 +25,8 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loaded at first try', async () => {
-    const LazyComponent = lazyRetry(() => import('./ChunkLoaded.test'));
+    jest.mock('../../../components/EmptyState', () => () => <>Chunk loaded</>);
+    const LazyComponent = lazyRetry(() => import('../../../components/EmptyState'));
     const result = render(
       <Suspense fallback={'Loading...'}>
         <LazyComponent />
@@ -39,10 +40,10 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loading fails at first try', async () => {
-    jest.mock('./ChunkLoaded.test', () => {
+    jest.mock('../../../components/EmptyState', () => {
       throw new Error('Chunk loading error');
     });
-    const LazyComponent = lazyRetry(() => import('./ChunkLoaded.test'));
+    const LazyComponent = lazyRetry(() => import('../../../components/EmptyState'));
     render(
       <Suspense fallback={'Loading...'}>
         <LazyComponent />
@@ -56,10 +57,10 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loading fails at second try', async () => {
-    jest.mock('./ChunkLoaded.test', () => {
+    jest.mock('../../../components/EmptyState', () => {
       throw new Error('Chunk loading error');
     });
-    const LazyComponent = lazyRetry(() => import('./ChunkLoaded.test'));
+    const LazyComponent = lazyRetry(() => import('../../../components/EmptyState'));
     sessionStorage.setItem('retry-lazy-refreshed', 'true');
     const result = render(
       <Suspense fallback={'Loading...'}>
