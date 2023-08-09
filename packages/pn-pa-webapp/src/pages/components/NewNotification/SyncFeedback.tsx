@@ -22,6 +22,7 @@ const SyncFeedback = () => {
           {t('message')}
         </Typography>
         <Button
+          id="go-to-notifications"
           variant="contained"
           sx={{ marginTop: '30px' }}
           onClick={() => navigate(routes.DASHBOARD)}
