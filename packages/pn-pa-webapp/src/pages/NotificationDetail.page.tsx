@@ -107,6 +107,11 @@ const NotificationDetail = () => {
     filteredRecipients: Array<NotificationDetailRecipient>,
     alt: boolean = false
   ): ReactNode => {
+    const altValue = alt
+      ? filteredRecipients[0]?.payment?.noticeCodeAlternative
+      : filteredRecipients[0]?.payment?.noticeCode;
+    const creditorTaxId = filteredRecipients[0]?.payment?.creditorTaxId;
+
     if (filteredRecipients.length > 1) {
       return filteredRecipients.map((recipient, index) => (
         <Box key={index} fontWeight={600}>
@@ -115,12 +120,10 @@ const NotificationDetail = () => {
         </Box>
       ));
     }
+
     return (
       <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
-        {alt
-          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
-          : filteredRecipients[0]?.payment?.noticeCode}
+        {creditorTaxId} - {altValue}
       </Box>
     );
   };
@@ -287,13 +290,10 @@ const NotificationDetail = () => {
     [isCancelled, hasDocumentsAvailable]
   );
 
-  // PN-1714
-  /*
   const openModal = () => {
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
-  */
 
   const fetchSentNotification = useCallback(() => {
     if (id) {
@@ -319,6 +319,8 @@ const NotificationDetail = () => {
     (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
     []
   );
+
+  const viewMoreTimeline = () => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE);
 
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
@@ -347,34 +349,22 @@ const NotificationDetail = () => {
       <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
         {notification.abstract}
       </Typography>
-      {
-        // PN-1714
-        /*
-        <TitleBox variantTitle="h4" title={notification.subject} sx={{
+
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
           pt: 3,
-          mb: notification.notificationStatus !== NotificationStatus.PAID ? 2 : {
-            xs: 3,
-            md: 4,
-          },
+          mb:
+            notification.notificationStatus !== NotificationStatus.PAID
+              ? 2
+              : {
+                  xs: 3,
+                  md: 4,
+                },
         }}
-        mbTitle={0}></TitleBox>
-        notification.notificationStatus !== NotificationStatus.PAID && (
-        <Button
-          sx={{
-            mb: {
-              xs: 3,
-              md: 4,
-            },
-          }}
-          variant="outlined"
-          onClick={openModal}
-          data-testid="cancelNotificationBtn"
-        >
-          {t('detail.cancel-notification', { ns: 'notifiche' })}
-        </Button>
-        )
-        */
-      }
+        mbTitle={0}
+      ></TitleBox>
     </Fragment>
   );
 
@@ -423,14 +413,16 @@ const NotificationDetail = () => {
   const direction = isMobile ? 'column-reverse' : 'row';
   const spacing = isMobile ? 3 : 0;
 
+  const apiError = hasNotificationSentApiError && (
+    <Box sx={{ p: 3 }}>
+      {properBreadcrumb}
+      <ApiError onClick={() => fetchSentNotification()} mt={3} />
+    </Box>
+  );
+
   return (
     <>
-      {hasNotificationSentApiError && (
-        <Box sx={{ p: 3 }}>
-          {properBreadcrumb}
-          <ApiError onClick={() => fetchSentNotification()} mt={3} />
-        </Box>
-      )}
+      {apiError}
       {!hasNotificationSentApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
@@ -438,7 +430,13 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <NotificationDetailTable rows={detailTableRows} />
+                <NotificationDetailTable
+                  rows={detailTableRows}
+                  notificationStatusPaid={
+                    notification.notificationStatus !== NotificationStatus.PAID
+                  }
+                  openModal={openModal}
+                />
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
@@ -503,9 +501,7 @@ const NotificationDetail = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  eventTrackingCallbackShowMore={() =>
-                    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
-                  }
+                  eventTrackingCallbackShowMore={viewMoreTimeline}
                 />
               </Box>
             </Grid>
