@@ -198,7 +198,7 @@ describe('Notification detail redux state tests', () => {
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 
-  it.only('should be able to populate paymentInfo', () => {
+  it('should be able to populate paymentInfo', () => {
     const action = store.dispatch(setF24Payments(notificationToFe.recipients[0].payments));
     const payload = action.payload;
     expect(action.type).toBe('notificationSlice/setF24Payments');
