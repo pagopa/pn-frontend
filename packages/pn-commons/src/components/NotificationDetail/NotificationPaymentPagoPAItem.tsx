@@ -108,6 +108,7 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
                   fontWeight="600"
                   lineHeight="0.875rem"
                   color="text.secondary"
+                  data-testid="apply-costs-caption"
                 >
                   {getLocalizedOrDefaultLabel(
                     'notifications',
@@ -119,7 +120,7 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
             </Box>
 
             <Box display="flex" justifyContent="center">
-              <Radio value={JSON.stringify(pagoPAItem)} />
+              <Radio value={JSON.stringify(pagoPAItem)} data-testid="radio-button" />
             </Box>
           </Box>
         );
