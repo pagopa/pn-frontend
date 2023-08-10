@@ -17,30 +17,67 @@ interface Props {
   isSelected: boolean;
 }
 
-const SkeletonCard = () => (
-  <Box px={2} py={1} gap={1} display="flex" alignItems="center" sx={{ backgroundColor: '#FAFAFA' }}>
-    <Box display="flex" gap={0.5} flexDirection="column" flex="1 0 0">
-      <Skeleton variant="rounded" width="196px" height="23px" />
+const SkeletonCard = () => {
+  const isMobile = useIsMobile();
+  return (
+    <Box
+      px={2}
+      py={isMobile ? 2 : 1}
+      gap={1}
+      display="flex"
+      alignItems={isMobile ? 'flex-start' : 'center'}
+      flexDirection={isMobile ? 'column-reverse' : 'row'}
+      sx={{ backgroundColor: '#FAFAFA' }}
+    >
+      <Box display="flex" gap={1} flexDirection="column" flex="1 0 0">
+        <Skeleton
+          variant="rounded"
+          width="196px"
+          height="23px"
+          sx={{ ...(isMobile ? { my: 1 } : null), borderRadius: '8px' }}
+        />
 
-      <Box lineHeight="1.4rem" display="flex" flexDirection="row">
-        <Skeleton variant="rounded" width="79px" height="15px" sx={{ mr: 2 }} />
-        <Skeleton variant="rounded" width="160px" height="15px" />
+        <Box lineHeight="1.4rem" display="flex" flexDirection={isMobile ? 'column' : 'row'}>
+          <Skeleton
+            variant="rounded"
+            width="79px"
+            height="15px"
+            sx={{ ...(isMobile ? { my: 1 } : { mr: 2 }), borderRadius: '8px' }}
+          />
+          <Skeleton variant="rounded" width="160px" height="15px" sx={{ borderRadius: '8px' }} />
+        </Box>
+
+        <Box lineHeight="1.4rem">
+          <Skeleton variant="rounded" width="137px" height="15px" sx={{ borderRadius: '8px' }} />
+        </Box>
       </Box>
 
-      <Box lineHeight="1.4rem">
-        <Skeleton variant="rounded" width="137px" height="15px" />
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent={isMobile ? 'space-between' : 'flex-end'}
+        gap={1}
+        width={isMobile ? '100%' : 'auto'}
+      >
+        <Box
+          display="flex"
+          flexDirection="column"
+          gap={1}
+          justifyContent="center"
+          alignItems="flex-start"
+        >
+          <Skeleton variant="rounded" width="79px" height="23px" sx={{ borderRadius: '8px' }} />
+          <Skeleton variant="rounded" width="120px" height="15px" sx={{ borderRadius: '8px' }} />
+        </Box>
+
+        <Box display="flex" justifyContent="center">
+          <Skeleton variant="circular" width="22px" />
+        </Box>
       </Box>
     </Box>
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start">
-      <Skeleton variant="rounded" width="79px" height="23px" />
-      <Skeleton variant="rounded" width="120px" height="15px" />
-    </Box>
-
-    <Box display="flex" justifyContent="center">
-      <Skeleton variant="circular" width="22px" />
-    </Box>
-  </Box>
-);
+  );
+};
 
 const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Props) => {
   const isMobile = useIsMobile();
