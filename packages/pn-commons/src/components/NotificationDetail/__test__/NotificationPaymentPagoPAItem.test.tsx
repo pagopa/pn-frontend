@@ -100,4 +100,16 @@ describe('NotificationPaymentPagoPAItem Component', () => {
 
     expect(result.container).toHaveTextContent(/1.000,00 €/i); // TODO sostituire con variabile
   });
+
+  it('renders NotificationPaymentPagoPAItem - radio button should be checked if isSelected', () => {
+    const result = render(
+      <NotificationPaymentPagoPAItem pagoPAItem={pagopPAItem} loading={false} isSelected={true} />
+    );
+
+    const radioButton = result.container.querySelector(
+      '[data-testid="radio-button"] input'
+    ) as Element;
+
+    expect(radioButton).toBeChecked();
+  });
 });

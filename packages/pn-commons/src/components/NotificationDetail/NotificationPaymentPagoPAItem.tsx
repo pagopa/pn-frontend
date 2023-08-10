@@ -120,7 +120,11 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
             </Box>
 
             <Box display="flex" justifyContent="center">
-              <Radio value={JSON.stringify(pagoPAItem)} data-testid="radio-button" />
+              <Radio
+                value={JSON.stringify(pagoPAItem)}
+                data-testid="radio-button"
+                checked={isSelected}
+              />
             </Box>
           </Box>
         );
