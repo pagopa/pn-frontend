@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Radio, Skeleton, Typography } from '@mui/material';
+import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
@@ -49,7 +49,13 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
     switch (pagoPAItem.status) {
       case PaymentStatus.REQUIRED:
         return (
-          <>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent={isMobile ? 'space-between' : 'flex-end'}
+            gap={1}
+            width={isMobile ? '100%' : 'auto'}
+          >
             <Box
               display="flex"
               flexDirection="column"
@@ -76,14 +82,57 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
             </Box>
 
             <Box display="flex" justifyContent="center">
-              <FormControlLabel
-                value={JSON.stringify(pagoPAItem)}
-                control={<Radio />}
-                label={null}
-                sx={{ mr: 0 }}
-              />
+              <Radio value={JSON.stringify(pagoPAItem)} />
             </Box>
-          </>
+          </Box>
+        );
+
+      case PaymentStatus.SUCCEEDED:
+        return (
+          <Box display="flex" flexDirection="row">
+            {pagoPAItem.amount && (
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="flex-end"
+                sx={{ mr: 1 }}
+              >
+                <Typography variant="h6" color="primary.main">
+                  {formatCurrency(pagoPAItem.amount)}
+                </Typography>
+                {pagoPAItem.applyCostFlg && (
+                  <Typography
+                    fontSize="0.625rem"
+                    fontWeight="600"
+                    lineHeight="0.875rem"
+                    color="text.secondary"
+                  >
+                    {getLocalizedOrDefaultLabel(
+                      'notifications',
+                      'detail.payment.included-costs',
+                      'Costi di notifica inclusi'
+                    )}
+                  </Typography>
+                )}
+              </Box>
+            )}
+            <StatusTooltip
+              label={getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.payment.status.succeded',
+                'Pagato'
+              )}
+              color="success"
+              tooltip={getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.payment.status.succeded-tooltip',
+                'Il pagamento è stato inviato correttamente.'
+              )}
+              tooltipProps={{ placement: 'top' }}
+              chipProps={{ borderRadius: '6px' }}
+            />
+          </Box>
         );
 
       case PaymentStatus.FAILED:
@@ -99,25 +148,6 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
               'notifications',
               'detail.payment.status.failed-tooltip',
               'L’avviso è scaduto e non è più possibile pagarlo. Per maggiori informazioni, contatta l’ente mittente.'
-            )}
-            tooltipProps={{ placement: 'top' }}
-            chipProps={{ borderRadius: '6px' }}
-          />
-        );
-
-      case PaymentStatus.SUCCEEDED:
-        return (
-          <StatusTooltip
-            label={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.status.succeded',
-              'Pagato'
-            )}
-            color="success"
-            tooltip={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.status.succeded-tooltip',
-              'Il pagamento è stato inviato correttamente.'
             )}
             tooltipProps={{ placement: 'top' }}
             chipProps={{ borderRadius: '6px' }}
@@ -152,20 +182,28 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
   return (
     <Box
       px={2}
-      py={1}
+      py={isMobile ? 2 : 1}
       gap={1}
       display="flex"
-      alignItems="center"
+      alignItems={isMobile ? 'flex-start' : 'center'}
       flexDirection={isMobile ? 'column-reverse' : 'row'}
       sx={{
         backgroundColor: isSelected ? 'rgba(107, 207, 251, 0.08)' : 'grey.50',
         borderRadius: '6px',
       }}
     >
-      <Box display="flex" gap={0.5} flexDirection="column" flex="1 0 0">
-        <Typography variant="sidenav" color="text.primary">
-          {pagoPAItem.causaleVersamento}
-        </Typography>
+      <Box
+        display="flex"
+        justifyContent={isMobile ? 'flex-start' : 'inherit'}
+        gap={0.5}
+        flexDirection="column"
+        flex="1 0 0"
+      >
+        {pagoPAItem.causaleVersamento && (
+          <Typography variant="sidenav" color="text.primary">
+            {pagoPAItem.causaleVersamento}
+          </Typography>
+        )}
 
         <Box lineHeight="1.4rem">
           <Typography variant="caption" color="text.secondary" mr={0.5}>

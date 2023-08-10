@@ -9,7 +9,6 @@ export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [
     creditorTaxId: '77777777777',
     noticeCode: '302011686772695132',
     status: PaymentStatus.SUCCEEDED,
-    amount: 1200,
     url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',
     causaleVersamento: 'Prima rata TARI',
     dueDate: '2025-07-31',
