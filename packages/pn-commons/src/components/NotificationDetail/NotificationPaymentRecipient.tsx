@@ -1,5 +1,6 @@
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import React, { memo, useState } from 'react';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { PaymentHistory } from '../../types';
@@ -64,13 +65,35 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) =>
         data-testid="download-pagoPA-notice-button"
         disabled={!selectedPayment}
       >
-        <Download fontSize={'small'} sx={{ marginRight: 1 }} />
+        <Download fontSize="small" sx={{ mr: 1 }} />
         {getLocalizedOrDefaultLabel(
           'notifications',
           'detail.payment.download-pagoPA-notice',
           'Scarica avviso PagoPA'
         )}
       </Button>
+
+      {selectedPayment &&
+      payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
+        ?.f24Data ? (
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="body2">
+            {getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.payment.pay-with-f24',
+              'Se preferisci, puoi pagare tramite F24.'
+            )}
+          </Typography>
+          <ButtonNaked color="primary">
+            <Download fontSize="small" sx={{ mr: 1 }} />
+            {getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.payment.download-f24',
+              'Scarica F24'
+            )}
+          </ButtonNaked>
+        </Box>
+      ) : null}
     </Box>
   );
 };
