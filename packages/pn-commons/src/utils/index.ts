@@ -51,6 +51,7 @@ import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
 import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
 import { buttonNakedInheritStyle } from './styles.utility';
 import { calcUnit8Array } from './file.utility';
+import { lazyRetry } from './lazyRetry.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -108,4 +109,5 @@ export {
   buttonNakedInheritStyle,
   sortArray,
   calcUnit8Array,
+  lazyRetry,
 };
