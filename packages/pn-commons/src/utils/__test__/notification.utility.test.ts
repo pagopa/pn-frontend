@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
+import { notificationToFe, recipient } from '../../__mocks__/NotificationDetail.mock';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
