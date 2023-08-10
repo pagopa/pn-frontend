@@ -1,9 +1,10 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { notificationsToFe } from '../../../../redux/dashboard/__test__/test-utils';
 import { render } from '../../../../__test__/test-utils';
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import * as routes from '../../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
+import React from 'react';
 
 const mockNavigateFn = jest.fn();
 
@@ -25,7 +26,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   return {
     ...original,
     NotificationsCard: () => <div>Cards</div>,
-    MobileNotificationsSort: () => <div>Sort</div>
+    MobileNotificationsSort: () => <div>Sort</div>,
   };
 });
 
@@ -33,7 +34,7 @@ jest.mock('../FilterNotifications', () => {
   const { forwardRef, useImperativeHandle } = jest.requireActual('react');
   return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
     useImperativeHandle(ref, () => ({
-      filtersApplied: false
+      filtersApplied: false,
     }));
     if (!showFilters) {
       return <></>;
@@ -43,7 +44,6 @@ jest.mock('../FilterNotifications', () => {
 });
 
 describe('MobileNotifications Component', () => {
-
   it('renders MobileNotifications', () => {
     // render component
     const result = render(

@@ -3,15 +3,12 @@ import {
   LegalFactType,
   NotificationDetail,
   NotificationDetailOtherDocument,
-  populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
-import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
 import {
-  notificationDTO,
-  notificationToFe,
-  recipients,
-} from '../../../../__mocks__/NotificationDetail.mock';
+  notificationDTOMultiRecipient,
+  notificationToFeMultiRecipient,
+} from '../../../__mocks__/NotificationDetail.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
@@ -20,7 +17,6 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-  NOTIFICATION_PAYMENT_INFO,
 } from '../../../api/notifications/notifications.routes';
 import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
@@ -28,7 +24,6 @@ import { store } from '../../store';
 import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
-  getNotificationPaymentInfo,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
@@ -79,17 +74,24 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
-    const iun = notificationDTO.iun;
-    mock = mockApi(apiClient, 'GET', NOTIFICATION_DETAIL(iun), 200, undefined, notificationDTO);
-    const action = await store.dispatch(getSentNotification(notificationDTO.iun));
+    const iun = notificationDTOMultiRecipient.iun;
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_DETAIL(iun),
+      200,
+      undefined,
+      notificationDTOMultiRecipient
+    );
+    const action = await store.dispatch(getSentNotification(notificationDTOMultiRecipient.iun));
 
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getSentNotification/fulfilled');
-    expect(payload).toEqual(notificationToFe);
+    expect(payload).toEqual(notificationToFeMultiRecipient);
   });
 
   it('Should be able to fetch the notification document', async () => {
-    const iun = notificationDTO.iun;
+    const iun = notificationDTOMultiRecipient.iun;
     const documentIndex = '0';
     const url = 'http://mocked-url.com';
     mock = mockApi(
@@ -107,7 +109,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
-    const iun = notificationDTO.iun;
+    const iun = notificationDTOMultiRecipient.iun;
     const legalFact: LegalFactId = {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
@@ -135,7 +137,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification AAR document', async () => {
-    const iun = notificationDTO.iun;
+    const iun = notificationDTOMultiRecipient.iun;
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
@@ -160,39 +162,6 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
     expect(payload).toEqual({ url });
-  });
-
-  it('Should be able to fetch payment info', async () => {
-    const paymentInfoRequest = paymentInfo.map((payment) => ({
-      creditorTaxId: payment.creditorTaxId,
-      noticeCode: payment.noticeCode,
-    }));
-    mock = mockApi(
-      apiClient,
-      'POST',
-      NOTIFICATION_PAYMENT_INFO(),
-      200,
-      paymentInfoRequest,
-      paymentInfo
-    );
-    mockApi(mock, 'GET', NOTIFICATION_DETAIL(notificationDTO.iun), 200, undefined, notificationDTO);
-    // store notification
-    await store.dispatch(getSentNotification(notificationDTO.iun));
-    const notification = store.getState().notificationState.notification;
-    const paymentHistory = populatePaymentHistory(
-      recipients[0].taxId,
-      notification.timeline,
-      notification.recipients,
-      paymentInfo
-    );
-    const action = await store.dispatch(
-      getNotificationPaymentInfo({ taxId: recipients[0].taxId, paymentInfoRequest })
-    );
-    const payload = action.payload;
-    expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual(paymentHistory);
-    const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual(paymentHistory);
   });
 
   // TODO: convert to new logic

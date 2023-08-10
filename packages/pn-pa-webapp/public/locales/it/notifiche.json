@@ -19,8 +19,8 @@
   },
   "payment": {
     "title": "Pagamenti",
-    "subtitle-single": "Il destinatario ha effettuato un pagamento. Ecco i dettagli:",
-    "subtitle-multiple": "Questi destinatari hanno effettuato un pagamento:",
+    "subtitle-single": "Qui puoi monitorare lo stato di pagamento degli avvisi pagoPA allegati alla notifica.",
+    "subtitle-multiple": "Per vedere lo stato di pagamento degli avvisi pagoPA allegati alla notifica, seleziona un destinatario.",
     "show-more": "Mostra dettagli"
   },
   "table": {
@@ -60,7 +60,6 @@
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "notice-code": "Codice Avviso",
-    "secondary-notice-code": "Codice Avviso Alternativo",
     "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",

@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import {
-  ExtRegistriesPaymentDetails,
   formatDate,
   GetNotificationsParams,
   GetNotificationsResponse,
@@ -22,7 +21,6 @@ import {
   NOTIFICATION_PRELOAD_DOCUMENT,
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-  NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
@@ -171,16 +169,5 @@ export const NotificationsApi = {
   createNewNotification: (notification: NewNotificationDTO): Promise<NewNotificationResponse> =>
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
-      .then((response) => response.data),
-
-  /**
-   * Gets current user's notification payment info
-   * @returns Promise
-   */
-  getNotificationPaymentInfo: (
-    params: Array<{ noticeCode: string; creditorTaxId: string }>
-  ): Promise<Array<ExtRegistriesPaymentDetails>> =>
-    apiClient
-      .post<Array<ExtRegistriesPaymentDetails>>(NOTIFICATION_PAYMENT_INFO(), params)
       .then((response) => response.data),
 };

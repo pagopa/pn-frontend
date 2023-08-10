@@ -18,7 +18,6 @@ import {
   getSentNotificationOtherDocument,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
-  getNotificationPaymentInfo,
 } from './actions';
 
 const initialState = {
@@ -94,11 +93,6 @@ const notificationSlice = createSlice({
       // -----------------------
       // Carlos Lombardi, 2023.02.02
       state.downtimeLegalFactUrl = action.payload.url;
-    });
-    builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.paymentInfo = action.payload;
-      }
     });
   },
 });

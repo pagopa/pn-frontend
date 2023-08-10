@@ -231,9 +231,7 @@ const ApiKeys = () => {
           onClose={handleCloseModal}
           aria-modal="true"
         >
-          <Box
-            sx={{ minWidth: isMobile ? '0' : '600px' }}
-          >
+          <Box sx={{ minWidth: isMobile ? '0' : '600px' }}>
             {modal.view === ModalApiKeyView.VIEW && (
               <ApiKeyModal
                 title={`API Key ${modal.apiKey?.name}`}
