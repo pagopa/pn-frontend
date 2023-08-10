@@ -3,17 +3,31 @@ import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import React, { memo, useState } from 'react';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { PaymentHistory } from '../../types';
+import { PaymentAttachmentSName, PaymentHistory } from '../../types';
+import {
+  ExtRegistriesPaymentDetails,
+  PagoPAPaymentDetails,
+  PaidDetails,
+} from '../../types/NotificationDetail';
 import { formatCurrency } from '../../utils';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
 type Props = {
   loading: boolean;
   payments: Array<PaymentHistory>;
+  onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
+  handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
 };
 
-const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) => {
-  const [selectedPayment, setSelectedPayment] = useState<any>(null);
+const NotificationPaymentRecipient: React.FC<Props> = ({
+  loading,
+  payments,
+  onPayClick,
+  handleDownloadAttachamentPagoPA,
+}) => {
+  const [selectedPayment, setSelectedPayment] = useState<
+    (ExtRegistriesPaymentDetails & PagoPAPaymentDetails & PaidDetails) | null
+  >(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = (event.target as HTMLInputElement).value;
@@ -53,7 +67,19 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) =>
         </RadioGroup>
       </Box>
 
-      <Button fullWidth variant="contained" data-testid="pay-button" disabled={!selectedPayment}>
+      <Button
+        fullWidth
+        variant="contained"
+        data-testid="pay-button"
+        disabled={!selectedPayment}
+        onClick={() =>
+          onPayClick(
+            selectedPayment?.noticeCode,
+            selectedPayment?.creditorTaxId,
+            selectedPayment?.amount
+          )
+        }
+      >
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit', 'Paga')}
         &nbsp;
         {selectedPayment && selectedPayment.amount ? formatCurrency(selectedPayment.amount) : null}
@@ -64,6 +90,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({ loading, payments }) =>
         variant="outlined"
         data-testid="download-pagoPA-notice-button"
         disabled={!selectedPayment}
+        onClick={() => handleDownloadAttachamentPagoPA(PaymentAttachmentSName.PAGOPA)}
       >
         <Download fontSize="small" sx={{ mr: 1 }} />
         {getLocalizedOrDefaultLabel(

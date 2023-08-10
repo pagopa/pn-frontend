@@ -12,6 +12,7 @@ import {
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
   NotificationStatus,
+  PaymentAttachmentSName,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
@@ -33,6 +34,8 @@ import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
+  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -101,6 +104,12 @@ const NotificationDetail = () => {
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
+
+  const pagopaAttachmentUrl = useAppSelector(
+    (state: RootState) => state.notificationState.pagopaAttachmentUrl
+  );
+
+  useDownloadDocument({ url: pagopaAttachmentUrl });
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -187,6 +196,38 @@ const NotificationDetail = () => {
         getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId })
       );
     }
+  };
+
+  const handleDownloadAttachamentPagoPA = (name: PaymentAttachmentSName) => {
+    void dispatch(getPaymentAttachment({ iun: notification.iun, attachmentName: name, mandateId }));
+    trackEventByType(
+      name === PaymentAttachmentSName.PAGOPA
+        ? TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE
+        : TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE
+    );
+  };
+
+  const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
+    if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      dispatch(
+        getNotificationPaymentUrl({
+          paymentNotice: {
+            noticeNumber: noticeCode,
+            fiscalCode: creditorTaxId,
+            amount,
+            companyName: notification.senderDenomination,
+            description: notification.subject,
+          },
+          returnUrl: window.location.href,
+        })
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
+    }
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
@@ -347,6 +388,8 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         loading={paymentLoading}
                         payments={userPayments}
+                        onPayClick={onPayClick}
+                        handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
                       />
                     </ApiErrorWrapper>
                   </Paper>
