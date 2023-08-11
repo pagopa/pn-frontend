@@ -82,6 +82,7 @@
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
+    "show-all": "Vedi tutti",
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
       "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
@@ -279,7 +280,10 @@
       "datePrefix": "il ",
       "legalFactDownload": "Attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
-    }
+    },
+    "recipients-dialog-title": "Destinatari della notifica {{iun}}",
+    "physical-person": "Persona fisica",
+    "legal-person": "Persona giuridica"
   },
   "status": {
     "recipient": "destinatario",

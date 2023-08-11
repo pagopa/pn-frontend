@@ -61,6 +61,7 @@ import {
   clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
 import NotificationPaymentSender from './components/Notifications/NotificationPaymentSender';
+import NotificationRecipientsDetail from './components/Notifications/NotificationRecipientsDetail';
 
 const NotificationDetail = () => {
   const { id } = useParams();
@@ -124,17 +125,7 @@ const NotificationDetail = () => {
           ? t('detail.recipients', { ns: 'notifiche' })
           : t(getTaxIdLabel(recipients[0]?.taxId), { ns: 'notifiche' }),
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: (
-        <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
-              {recipients.length > 1
-                ? `${recipient.taxId} - ${recipient.denomination}`
-                : recipient.taxId}
-            </Box>
-          ))}
-        </>
-      ),
+      value: <NotificationRecipientsDetail recipients={recipients} iun={notification.iun} />,
     },
     {
       label: t('detail.date', { ns: 'notifiche' }),
