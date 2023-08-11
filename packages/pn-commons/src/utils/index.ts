@@ -21,6 +21,7 @@ import {
 import { calcUnit8Array } from './file.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { IUN_regex, formatIun } from './iun.utility';
+import { lazyRetry } from './lazyRetry.utility';
 import {
   getLegalFactLabel,
   getNotificationAllowedStatus,
@@ -45,11 +46,6 @@ import {
   mockApiErrorWrapper,
   simpleMockForApiErrorWrapper,
 } from './test.utility';
-import {
-  adaptedTokenExchangeError,
-  basicInitialUserData,
-  basicUserDataMatcherContents,
-} from './user.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -87,9 +83,6 @@ export {
   DATE_FORMAT,
   getLegalFactLabel,
   getNotificationTimelineStatusInfos,
-  basicUserDataMatcherContents,
-  basicInitialUserData,
-  adaptedTokenExchangeError,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
   mockApiErrorWrapper,
@@ -107,4 +100,5 @@ export {
   buttonNakedInheritStyle,
   sortArray,
   calcUnit8Array,
+  lazyRetry,
 };
