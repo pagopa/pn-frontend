@@ -1,4 +1,6 @@
+import { Error, Refresh } from '@mui/icons-material';
 import { Box, Radio, Skeleton, Typography } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
@@ -219,6 +221,59 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
 
   if (loading) {
     return <SkeletonCard />;
+  }
+
+  if (pagoPAItem.errorCode) {
+    return (
+      <Box
+        px={2}
+        py={isMobile ? 2 : 1}
+        gap={1}
+        display="flex"
+        alignItems={isMobile ? 'flex-start' : 'center'}
+        flexDirection={isMobile ? 'column-reverse' : 'row'}
+        sx={{
+          backgroundColor: 'grey.50',
+          borderRadius: '6px',
+        }}
+      >
+        <Box
+          display="flex"
+          justifyContent={isMobile ? 'flex-start' : 'inherit'}
+          gap={0.5}
+          flexDirection="column"
+          flex="1 0 0"
+        >
+          <Box lineHeight="1.4rem">
+            <Typography variant="caption" color="text.secondary" mr={0.5}>
+              {getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.payment.notice-code',
+                'Codice avviso'
+              )}
+            </Typography>
+            <Typography variant="caption-semibold" color="text.secondary">
+              {pagoPAItem.noticeCode}
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center" gap={0.5}>
+            <Error sx={{ color: 'error.dark' }} />
+            <Typography variant="caption-semibold" color="error.dark">
+              {getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.payment.detail-error',
+                'Impossibile recuperare i dettagli'
+              )}
+            </Typography>
+          </Box>
+        </Box>
+
+        <ButtonNaked color="primary">
+          <Refresh sx={{ width: '20px' }} />
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload', 'Ricarica')}
+        </ButtonNaked>
+      </Box>
+    );
   }
 
   return (

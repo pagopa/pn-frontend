@@ -84,6 +84,8 @@
       "download-pagopa-notification": "Scarica l'avviso pagoPA",
       "download-f24": "Scarica F24",
       "pay-with-f24": "Se preferisci, puoi pagare tramite F24.",
+      "reload": "Ricarica",
+      "detail-error": "Impossibile recuperare i dettagli",
       "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
       "message-completed": "Il pagamento è stato effettuato con successo.",
       "message-in-progress": "Il pagamento è in corso: <0>ricarica la pagina</0> tra qualche ora per verificarne lo stato. Se risulta ancora in corso, <1>contatta l’assistenza</1>.",
