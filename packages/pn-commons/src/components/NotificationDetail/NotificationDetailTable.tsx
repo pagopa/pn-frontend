@@ -13,7 +13,7 @@ import { NotificationDetailTableRow } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {
-  rows: Array<NotificationDetailTableRow>;
+  rows: NotificationDetailTableRow[];
   notificationStatusPaid: boolean;
   openModal: () => void;
 };

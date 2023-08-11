@@ -17,6 +17,7 @@ import {
   getSentNotificationOtherDocument,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
+  cancelNotification,
 } from './actions';
 
 const initialState = {
@@ -34,14 +35,14 @@ const initialState = {
     sentAt: '',
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
-    timeline: [] as Array<INotificationDetailTimeline>
+    timeline: [] as Array<INotificationDetailTimeline>,
   } as NotificationDetail,
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
-  downtimeLegalFactUrl: '',  // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
-                            // analogous for other URLs
+  downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
+  // analogous for other URLs
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -57,11 +58,14 @@ const notificationSlice = createSlice({
     },
     clearDowntimeLegalFactData: (state) => {
       state.downtimeLegalFactUrl = '';
-    },     
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
+    });
+    builder.addCase(cancelNotification.fulfilled, (state) => {
+      state.notification.notificationStatus = NotificationStatus.CANCELLED;
     });
     builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
@@ -85,16 +89,18 @@ const notificationSlice = createSlice({
       state.downtimeEvents = action.payload.downtimes;
     });
     builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
-      // by the moment we preserve only the URL. 
+      // by the moment we preserve only the URL.
       // if the need of showing the file size arises in the future,
       // we'll probably need to change this in order to keep the whole response from the API call
       // -----------------------
       // Carlos Lombardi, 2023.02.02
       state.downtimeLegalFactUrl = action.payload.url;
-    });    
+    });
+    // aggiungere i casi di stato della response
   },
 });
 
-export const {resetState, resetLegalFactState, clearDowntimeLegalFactData} = notificationSlice.actions;
+export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } =
+  notificationSlice.actions;
 
 export default notificationSlice;

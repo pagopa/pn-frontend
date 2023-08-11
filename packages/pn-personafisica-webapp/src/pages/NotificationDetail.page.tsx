@@ -134,6 +134,7 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
   ];
+
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
     .map((row, index) => ({

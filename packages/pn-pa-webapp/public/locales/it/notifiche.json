@@ -439,5 +439,17 @@
         "message": "Il numero di protocollo inserito è già esistente"
       }
     }
+  },
+  "cancelled-notification": {
+    "errors": {
+      "already_cancelled": {
+        "title": "",
+        "message": "La seguente notifica è già in procedura di annullamento"
+      },
+      "generic_error": {
+        "title": "",
+        "message": "Si è verificato un errore durante l’annullamento. Riprova."
+      }
+    }
   }
 }

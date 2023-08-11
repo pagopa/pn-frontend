@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams /* useNavigate */ } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
 import {
   Box,
@@ -55,8 +55,9 @@ import {
   getSentNotificationOtherDocument,
   getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
+  cancelNotification,
 } from '../redux/notification/actions';
-import { setCancelledIun } from '../redux/newNotification/reducers';
+// import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
   resetLegalFactState,
   resetState,
@@ -66,7 +67,7 @@ import {
 const NotificationDetail = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
@@ -265,8 +266,7 @@ const NotificationDetail = () => {
   };
 
   const handleCancelNotification = () => {
-    dispatch(setCancelledIun(notification.iun));
-    navigate(routes.NUOVA_NOTIFICA);
+    void dispatch(cancelNotification(notification.iun));
   };
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;

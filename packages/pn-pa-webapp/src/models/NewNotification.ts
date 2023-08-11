@@ -95,3 +95,7 @@ export interface NewNotificationResponse {
   paProtocolNumber: string;
   idempotenceToken: string;
 }
+
+export interface CancelNotification {
+  iun: string;
+}

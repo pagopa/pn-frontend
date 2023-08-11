@@ -9,7 +9,11 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
+import {
+  // CancelNotification,
+  NewNotificationDTO,
+  NewNotificationResponse,
+} from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
@@ -21,8 +25,9 @@ import {
   NOTIFICATION_PRELOAD_DOCUMENT,
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-} from './notifications.routes';
 
+  // CANCEL_NOTIFICATION,
+} from './notifications.routes';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
@@ -82,14 +87,19 @@ export const NotificationsApi = {
       .then((response) => getDownloadUrl(response)),
 
   /**
-   * 
+   *
    * @param  {string} iun
-   * @param  {NotificationDetailOtherDocument} otherDocument 
+   * @param  {NotificationDetailOtherDocument} otherDocument
    * @returns Promise
    */
-  getSentNotificationOtherDocument: (iun: string, otherDocument: NotificationDetailOtherDocument): Promise<{ url: string }> =>
+  getSentNotificationOtherDocument: (
+    iun: string,
+    otherDocument: NotificationDetailOtherDocument
+  ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {params: {documentId: otherDocument.documentId}})
+      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+        params: { documentId: otherDocument.documentId },
+      })
       .then((response) => getDownloadUrl(response)),
 
   /**
@@ -104,7 +114,7 @@ export const NotificationsApi = {
       .then((response) => getDownloadUrl(response)),
 
   /**
-   * get user groups
+   * Get user groups
    * @param  {GroupStatus} status
    * @returns Promise
    */
@@ -158,7 +168,7 @@ export const NotificationsApi = {
   },
 
   /**
-   * create new notification
+   * Create new notification
    * @param  {NewNotificationDTO} notification
    * @returns Promise
    */
@@ -166,4 +176,38 @@ export const NotificationsApi = {
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
       .then((response) => response.data),
+
+  /**
+   * Cancel notification
+   * @param  {string} iun
+   * @returns Promise
+   */
+  /* cancelNotification: (iun: string): Promise<CancelNotification> =>
+    apiClient.put<CancelNotification>(CANCEL_NOTIFICATION(iun)).then((response) => response.data), */
+  cancelNotification: (
+    iun: string
+  ): Promise<{
+    response: {
+      type: string;
+      status: number;
+      title: string;
+      detail: string;
+      traceId: string;
+      timestamp: string;
+      errors: Array<{ code: string; element: null; detail: string }>;
+    };
+  }> =>
+    Promise.reject({
+      response: {
+        status: 404,
+        data: {
+          type: 'PN_NOTIFICATION_ALREADY_CANCELLED',
+          title: iun,
+          detail: '',
+          traceId: '',
+          timestamp: 'string',
+          errors: [{ code: 'PN_NOTIFICATION_ALREADY_CANCELLED', element: null, detail: 'string' }],
+        },
+      },
+    }),
 };
