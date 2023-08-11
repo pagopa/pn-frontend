@@ -55,7 +55,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         <RadioGroup name="radio-buttons-group" onChange={handleChange}>
           {payments.map((payment, index) =>
             payment.pagoPA ? (
-              <Box mb={2} key={index}>
+              <Box mb={2} key={`payment-${index}`}>
                 <NotificationPaymentPagoPAItem
                   pagoPAItem={payment.pagoPA}
                   loading={loading}

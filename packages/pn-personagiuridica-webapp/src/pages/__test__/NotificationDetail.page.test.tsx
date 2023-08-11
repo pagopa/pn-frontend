@@ -4,7 +4,7 @@ import {
   NotificationStatus,
   apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
-import { RenderResult, screen } from '@testing-library/react';
+import { RenderResult, fireEvent, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 import {
@@ -258,6 +258,45 @@ describe('NotificationDetail Page', () => {
     result = await renderComponent(notificationToFe);
     const indietroButton = result.queryByTestId('breadcrumb-indietro-button');
     expect(indietroButton).not.toBeInTheDocument();
+  });
+
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    mockUseParamsFn.mockReturnValue({ id: notificationToFe.iun });
+    mockDispatchAndActions({ mockDispatchFn, mockActionFn });
+    result = await renderComponent(notificationToFe);
+
+    const paymentTitle = screen.getByTestId('notification-payment-recipient-title').textContent;
+    expect(result.container).toHaveTextContent(paymentTitle || '');
+
+    const payButton = screen.getByTestId('pay-button');
+    const radioButton = result.container.querySelector(
+      '[data-testid="radio-button"] input'
+    ) as HTMLInputElement;
+
+    if (!radioButton) return;
+
+    fireEvent.click(radioButton);
+    fireEvent.click(payButton);
+
+    const values = JSON.parse(radioButton.value);
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(2);
+      expect(mockActionFn).toBeCalledTimes(1);
+      expect(mockDispatchFn).toBeCalledWith({
+        payload: {
+          paymentNotice: {
+            noticeNumber: values.noticeCode,
+            fiscalCode: values.creditorTaxId,
+            amount: values.amount,
+            companyName: notificationToFe.senderDenomination,
+            description: notificationToFe.subject,
+          },
+          returnUrl: window.location.href,
+        },
+        type: 'getNotificationPaymentUrl',
+      });
+    });
   });
 
   // TODO next tests are skipped because we don't have a notification with multi-recipients

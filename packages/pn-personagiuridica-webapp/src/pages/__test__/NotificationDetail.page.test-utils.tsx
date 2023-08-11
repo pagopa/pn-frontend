@@ -1,9 +1,13 @@
-import React from 'react';
+import {
+  NotificationDetail as INotificationDetail,
+  populatePaymentHistory,
+} from '@pagopa-pn/pn-commons';
 import { RenderResult } from '@testing-library/react';
+import React from 'react';
 import { act } from 'react-dom/test-utils';
 import * as redux from 'react-redux';
-
-import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
+import { recipient } from '../../__mocks__/NotificationDetail.mock';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
@@ -49,6 +53,12 @@ export const renderComponentBase = async (
     userState: { user: mocks.mockedUserInStore },
     notificationState: {
       notification,
+      paymentInfo: populatePaymentHistory(
+        recipient.taxId,
+        notification.timeline,
+        notification.recipients,
+        paymentInfo
+      ),
       documentDownloadUrl: 'mocked-download-url',
       legalFactDownloadUrl: 'mocked-legal-fact-url',
       downtimeEvents: [],

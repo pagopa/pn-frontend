@@ -200,11 +200,7 @@ const NotificationDetail = () => {
 
   const handleDownloadAttachamentPagoPA = (name: PaymentAttachmentSName) => {
     void dispatch(getPaymentAttachment({ iun: notification.iun, attachmentName: name, mandateId }));
-    trackEventByType(
-      name === PaymentAttachmentSName.PAGOPA
-        ? TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE
-        : TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE
-    );
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
   };
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
