@@ -3,10 +3,12 @@ import {
   Accordion,
   AccordionSummary,
   Box,
+  /*
   Paper,
   Table,
   TableBody,
   TableContainer,
+  */
   Typography,
 } from '@mui/material';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
@@ -14,19 +16,24 @@ import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
 import { PaymentHistory } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+/*
 import { formatEurocentToCurrency, formatFiscalCode } from '../../utils';
 import CustomTableRow from '../CustomTableRow';
+*/
 
 type NotificationPaidDetailProps = {
   paymentDetailsList: Array<PaymentHistory> | undefined;
   isSender?: boolean;
 };
 
+/*
 type PaymentTableProps = {
   paymentDetails: PaymentHistory;
   showRecipientType?: boolean;
 };
+*/
 
+/*
 const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) => (
   <TableContainer
     component={Paper}
@@ -122,6 +129,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
     </Table>
   </TableContainer>
 );
+*/
 
 const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPaidDetailProps) => {
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -134,12 +142,14 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
     <>
       {paymentDetailsList && paymentDetailsList.length === 1 && (
         <Box mt={2}>
+          {/*
           {isSender && (
             <Typography fontSize="16px" fontWeight={600} data-testid="paymentRecipient" mb={2}>
               {paymentDetailsList[0].recipientDenomination} - {paymentDetailsList[0].recipientTaxId}
             </Typography>
           )}
           <PaymentTable paymentDetails={paymentDetailsList[0]} showRecipientType={isSender} />
+          */}
         </Box>
       )}
       {paymentDetailsList &&
@@ -170,8 +180,10 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
                   alignItems="center"
                 >
                   <Typography fontSize="16px" fontWeight="600" data-testid="recipient">
+                    {/*
                     {paymentEventDetails.recipientDenomination} -{' '}
                     {paymentEventDetails.recipientTaxId}
+                    */}
                   </Typography>
                   <Typography fontSize="14px" fontWeight="600" color="primary">
                     {getLocalizedOrDefaultLabel(
@@ -182,10 +194,10 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
                   </Typography>
                 </Box>
               </AccordionSummary>
-              <PaymentTable paymentDetails={paymentEventDetails} showRecipientType />
+              {/* <PaymentTable paymentDetails={paymentEventDetails} showRecipientType /> */}
             </Accordion>
           ) : (
-            <PaymentTable key={index} paymentDetails={paymentEventDetails} />
+            {/* <PaymentTable key={index} paymentDetails={paymentEventDetails} /> */}
           )
         )}
     </>
