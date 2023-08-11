@@ -154,7 +154,7 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
       )}
       {paymentDetailsList &&
         paymentDetailsList.length > 1 &&
-        paymentDetailsList.map((paymentEventDetails: PaymentHistory, index: number) =>
+        paymentDetailsList.map((_paymentEventDetails: PaymentHistory, index: number) =>
           isSender ? (
             <Accordion
               key={index}
