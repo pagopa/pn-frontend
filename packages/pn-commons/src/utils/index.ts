@@ -46,6 +46,11 @@ import {
   mockApiErrorWrapper,
   simpleMockForApiErrorWrapper,
 } from './test.utility';
+import {
+  adaptedTokenExchangeError,
+  basicInitialUserData,
+  basicUserDataMatcherContents,
+} from './user.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -83,6 +88,9 @@ export {
   DATE_FORMAT,
   getLegalFactLabel,
   getNotificationTimelineStatusInfos,
+  basicUserDataMatcherContents,
+  basicInitialUserData,
+  adaptedTokenExchangeError,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
   mockApiErrorWrapper,
