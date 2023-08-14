@@ -1,19 +1,19 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { theme } from "@pagopa/mui-italia";
+import { theme } from '@pagopa/mui-italia';
 
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { initStore, store } from './redux/store';
-import './i18n.ts';
 import App from './App';
-import { initOneTrust } from './utils/onetrust';
-import { loadPaConfiguration } from './services/configuration.service';
 import { initAxiosClients } from './api/apiClients';
-
+import './i18n';
+import './index.css';
+import { initStore, store } from './redux/store';
+import reportWebVitals from './reportWebVitals';
+import { loadPaConfiguration } from './services/configuration.service';
+import { initOneTrust } from './utils/onetrust';
 
 async function doTheRender() {
   try {
@@ -39,7 +39,7 @@ async function doTheRender() {
         </Provider>
       </React.StrictMode>,
       document.getElementById('root')
-    );  
+    );
 
     // If you want to start measuring performance in your app, pass a function
     // to log results (for example: reportWebVitals(console.log))
@@ -50,10 +50,12 @@ async function doTheRender() {
 
     ReactDOM.render(
       <React.StrictMode>
-        <div style={{fontSize: 20, marginLeft: '2rem'}}>Problems loading configuration - see console</div>
+        <div style={{ fontSize: 20, marginLeft: '2rem' }}>
+          Problems loading configuration - see console
+        </div>
       </React.StrictMode>,
       document.getElementById('root')
-    );  
+    );
   }
 }
 

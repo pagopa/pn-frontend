@@ -3,7 +3,6 @@ import { isObject } from '../utility/IsObject';
 import { Rule } from '../Rule';
 
 export class IsObject<TModel, TValue> extends Rule<TModel, TValue> {
-
   constructor(customErrorMessage?: string) {
     super(customErrorMessage);
   }
@@ -13,7 +12,7 @@ export class IsObject<TModel, TValue> extends Rule<TModel, TValue> {
       return null;
     }
     if (!isObject(value)) {
-        return 'Value must be of type object';
+      return 'Value must be of type object';
     }
     return null;
   };

@@ -11,7 +11,7 @@ export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
-  NOTHING = 'NOTHING'
+  NOTHING = 'NOTHING',
 }
 
 interface BaseNewNotification {
@@ -65,9 +65,7 @@ export interface NewNotificationDocument {
   name: string;
   contentType: string;
   file: {
-    size?: number;
-    name?: string;
-    uint8Array?: Uint8Array;
+    data?: File;
     sha256: {
       hashBase64: string;
       hashHex: string;

@@ -1,9 +1,9 @@
 {
   "title": "Notifiche",
-  "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale o Partita IVA, Codice IUN, data di invio e stato.",
+  "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
   "new-notification-button": "Invia una notifica",
   "filters": {
-    "fiscal-code-tax-code": "Codice Fiscale o Partita IVA",
+    "fiscal-code-tax-code": "Codice Fiscale",
     "iun": "Codice IUN",
     "data_da": "Dal",
     "data_da-aria-label": "Data inizio ricerca",
@@ -53,7 +53,7 @@
     "recipient": "Destinatario",
     "recipients": "Destinatari",
     "tax-id-citizen-recipient": "Codice Fiscale destinatario",
-    "tax-id-organization-recipient": "Partita IVA destinatario",
+    "tax-id-organization-recipient": "Codice Fiscale destinatario",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "amount": "Importo",
@@ -365,8 +365,8 @@
       "recipient": {
         "title": "Destinatari",
         "fiscal-code-error": "Il valore inserito non è corretto",
-        "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale / Partita IVA. Inseriscine uno diverso.",
-        "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
+        "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
+        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
@@ -376,9 +376,9 @@
         "surname": "Cognome",
         "legal-person": "Persona giuridica",
         "business-name": "Ragione sociale",
-        "recipient-citizen-tax-id": "Codice fiscale destinatario",
-        "recipient-organization-tax-id": "Partita IVA o Codice Fiscale destinatario",
-        "creditor-fiscal-code": "Codice fiscale ente creditore",
+        "recipient-citizen-tax-id": "Codice Fiscale destinatario",
+        "recipient-organization-tax-id": "Codice Fiscale destinatario",
+        "creditor-fiscal-code": "Codice Fiscale ente creditore",
         "notice-code": "Codice avviso",
         "add-digital-domicile": "Aggiungi un domicilio digitale",
         "back-to-preliminary-informations": "Torna a Informazioni preliminari",
@@ -407,7 +407,6 @@
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
         "back-to-recipient": "Torna a Destinatario",
-        "remove-attachment": "Elimina allegato",
         "remove-document": "Rimuovi documento"
       },
       "payment-methods": {

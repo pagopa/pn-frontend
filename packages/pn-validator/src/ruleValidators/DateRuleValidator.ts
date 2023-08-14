@@ -19,7 +19,7 @@ export class DateRuleValidator<TModel, TValue>
    * @param  {boolean} [equalTo] boolean for equality comparison
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-   public readonly lessThan = (
+  public readonly lessThan = (
     value: Date,
     equalTo?: boolean,
     customErrorMessage?: string
@@ -34,7 +34,7 @@ export class DateRuleValidator<TModel, TValue>
    * @param  {boolean} [equalTo] boolean for equality comparison
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-   public readonly greaterThan = (
+  public readonly greaterThan = (
     value: Date,
     equalTo?: boolean,
     customErrorMessage?: string
@@ -48,6 +48,6 @@ export class DateRuleValidator<TModel, TValue>
    */
   public readonly not = (): NotRuleValidator<TModel, TValue> =>
     ({
-      ...this._not(),
+      ...this.commonNot(),
     } as unknown as NotRuleValidator<TModel, TValue>);
 }
