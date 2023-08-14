@@ -5,6 +5,8 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { MessageType } from '../../types/MessageType';
 
 type Props = {
+  /** identification of snackbar */
+  id: string;
   /** whether the sneakbar should be open or not */
   open: boolean;
   /** message type (error, success, info, warning) */
@@ -21,6 +23,7 @@ type Props = {
 };
 
 const SnackBar = ({
+  id,
   title,
   message,
   open,
@@ -86,7 +89,7 @@ const SnackBar = ({
               }}
               variant={variant}
             >
-              {title && <AlertTitle>{title}</AlertTitle>}
+              {title && <AlertTitle id={`alert-${id}`}>{title}</AlertTitle>}
               {message}
             </Alert>
           </Snackbar>
