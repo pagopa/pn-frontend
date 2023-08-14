@@ -1,11 +1,11 @@
 import { AppBar } from '@mui/material';
 import {
   HeaderAccount,
-  RootLinkType,
   HeaderProduct,
-  ProductEntity,
-  PartyEntity,
   JwtUser,
+  PartyEntity,
+  ProductEntity,
+  RootLinkType,
   UserAction,
 } from '@pagopa/mui-italia';
 
@@ -50,7 +50,6 @@ const Header = ({
   eventTrackingCallbackProductSwitch,
   isLogged,
 }: HeaderProps) => {
-  
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
     label: 'PagoPA S.p.A.',

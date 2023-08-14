@@ -1,10 +1,11 @@
+import MockAdapter from 'axios-mock-adapter';
+
+import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
 import { PNRole, PartyRole } from '../models/user';
 import { exchangeToken, logout } from '../redux/auth/actions';
 import { User } from '../redux/auth/types';
 import { store } from '../redux/store';
-import { authClient } from '../api/apiClients';
-import MockAdapter from 'axios-mock-adapter';
 
 export const mockLogin = async (): Promise<any> => {
   const mock = new MockAdapter(authClient);
@@ -33,6 +34,12 @@ export const mockAuthentication = () => {
   });
 };
 
+function calcExpirationDate() {
+  const now = new Date();
+  // add 1 hour
+  return now.setTime(now.getTime() + 60 * 60 * 1000);
+}
+
 // For security reasons, we had a strict validation to user object.
 // This doesn't invalidate the tests, but generates some annoying logs during their execution if the mocked user doesn't respect the validation rules.
 // To avoid this, I updated the mocked user so as to comply with the validation rules.
@@ -40,21 +47,22 @@ export const mockAuthentication = () => {
 // Andrea Cimini, 2023.02.17
 export const userResponse: User = {
   sessionToken: 'mocked-session-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSMRA80A01H501U',
-  email: 'mocked-email@mail.com',
+  name: 'giuseppe',
+  family_name: 'rossini',
+  fiscal_number: 'RSSGPP80B02G273H',
+  email: 'giuseppe.rossini@gmail.com',
   uid: '00000000-0000-0000-0000-000000000000',
   organization: {
-    id: 'mocked-id',
-    name: 'Mocked Organization',
+    id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
+    name: 'Comune di Palermo',
     roles: [
       {
         partyRole: PartyRole.MANAGER,
         role: PNRole.ADMIN,
       },
     ],
-    fiscal_code: '12345678910',
+    fiscal_code: '80016350821',
+    hasGroups: false,
   },
-  desired_exp: 0,
+  desired_exp: calcExpirationDate(),
 };

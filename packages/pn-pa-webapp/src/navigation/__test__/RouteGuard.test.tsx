@@ -1,6 +1,8 @@
-import { act, screen } from '@testing-library/react';
+import React from 'react';
+
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { act, render, screen } from '../../__test__/test-utils';
 import { PNRole } from '../../models/user';
-import { render } from '../../__test__/test-utils';
 import RouteGuard from '../RouteGuard';
 
 jest.mock('react-router-dom', () => {
@@ -26,7 +28,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 
 const mockReduxState = {
   userState: {
-    user: { sessionToken: 'mocked-token', organization: { roles: [{ role: PNRole.OPERATOR }] } },
+    user: userResponse,
   },
 };
 

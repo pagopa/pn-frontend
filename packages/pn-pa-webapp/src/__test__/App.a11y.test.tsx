@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import App from '../App';
-import { render, axe } from './test-utils';
+import { axe, render } from './test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 

@@ -1,19 +1,20 @@
 import { AxiosInstance } from 'axios';
+
 import {
   AppCurrentStatus,
-  DowntimeLogPageDTOValidator,
+  AppStatusDTO,
   AppStatusDTOValidator,
+  Downtime,
+  DowntimeDTO,
+  DowntimeLogPage,
+  DowntimeLogPageDTO,
+  DowntimeLogPageDTOValidator,
+  DowntimeStatus,
   FunctionalityStatus,
   GetDowntimeHistoryParams,
-  Downtime,
-  DowntimeLogPage,
-  DowntimeStatus,
-  isKnownFunctionality,
   KnownFunctionality,
   LegalFactDocumentDetails,
-  AppStatusDTO,
-  DowntimeLogPageDTO,
-  DowntimeDTO,
+  isKnownFunctionality,
 } from '../../models';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from './appStatus.routes';
 
@@ -30,11 +31,8 @@ export class BadApiDataException extends Error {
 export function createAppStatusApi(apiClientProvider: () => AxiosInstance) {
   return {
     getCurrentStatus: async (): Promise<AppCurrentStatus> => {
-      /* eslint-disable functional/no-let */
-      let apiResponse: AppStatusDTO;
-
       const realApiResponse = await apiClientProvider().get<AppStatusDTO>(DOWNTIME_STATUS());
-      apiResponse = realApiResponse.data;
+      const apiResponse = realApiResponse.data;
 
       // pn-validator validation
       const validationResult = new AppStatusDTOValidator().validate(apiResponse);
@@ -55,13 +53,10 @@ export function createAppStatusApi(apiClientProvider: () => AxiosInstance) {
     },
 
     getDowntimeLogPage: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {
-      /* eslint-disable functional/no-let */
-      let apiResponse: DowntimeLogPageDTO;
-
       const realApiResponse = await apiClientProvider().get<DowntimeLogPageDTO>(
         DOWNTIME_HISTORY(params)
       );
-      apiResponse = realApiResponse.data;
+      const apiResponse = realApiResponse.data;
 
       // pn-validator validation
       const validationResult = new DowntimeLogPageDTOValidator().validate(apiResponse);

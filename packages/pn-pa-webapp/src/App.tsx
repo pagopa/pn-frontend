@@ -1,45 +1,44 @@
-import Email from '@mui/icons-material/Email';
-import VpnKey from '@mui/icons-material/VpnKey';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Email from '@mui/icons-material/Email';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
+import VpnKey from '@mui/icons-material/VpnKey';
 import { Box } from '@mui/material';
 import {
   AppMessage,
   AppResponseMessage,
-  appStateActions,
-  errorFactoryManager,
-  initLocalization,
   Layout,
   LoadingOverlay,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
+  appStateActions,
+  errorFactoryManager,
+  initLocalization,
   useErrors,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
-import { ErrorInfo, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 
+import { setUpInterceptor } from './api/interceptors';
 import Router from './navigation/routes';
+import * as routes from './navigation/routes.const';
+import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { AUTH_ACTIONS, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState, store } from './redux/store';
-import { getMenuItems } from './utils/role.utility';
-
-import * as routes from './navigation/routes.const';
-import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { getConfiguration } from './services/configuration.service';
+import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
-import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
-import { setUpInterceptor } from './api/interceptors';
-import { getConfiguration } from './services/configuration.service';
-
+import { getMenuItems } from './utils/role.utility';
 
 // Cfr. PN-6096
 // --------------------
@@ -60,7 +59,7 @@ const App = () => {
     }
   }, [isInitialized]);
 
-  return isInitialized ? <ActualApp /> : <div/>;
+  return isInitialized ? <ActualApp /> : <div />;
 };
 
 const ActualApp = () => {
@@ -149,7 +148,7 @@ const ActualApp = () => {
       {
         id: '1',
         title: t('header.reserved-area'),
-        productUrl: `${configuration.SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
+        productUrl: `${configuration.SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
         linkType: 'external',
       },
       {
