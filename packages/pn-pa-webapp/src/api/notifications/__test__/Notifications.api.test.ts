@@ -154,7 +154,7 @@ describe('Notifications api tests', () => {
     extMock.restore();
   });
 
-  it.only('createNewNotification', async () => {
+  it('createNewNotification', async () => {
     mock.onPost(CREATE_NOTIFICATION(), newNotificationDTO).reply(200, {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',

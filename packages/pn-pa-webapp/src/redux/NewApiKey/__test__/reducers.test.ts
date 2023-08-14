@@ -3,13 +3,12 @@ import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { GroupStatus, UserGroup } from '../../../models/user';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { getUserGroups } from '../../newNotification/actions';
 import { store } from '../../store';
 import { saveNewApiKey } from '../actions';
 import { resetState } from '../reducers';
-import { newApiKeyForBE, newApiKeyFromBE } from './test-utils';
 import { CREATE_APIKEY } from '../../../api/apiKeys/apiKeys.routes';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 
 const initialState = {
   loading: false,

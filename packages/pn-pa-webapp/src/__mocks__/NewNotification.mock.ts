@@ -142,11 +142,8 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
       physicalAddress: {
         address: 'address 1',
-        addressDetails: undefined,
-        at: undefined,
         zip: 'zip',
         municipality: 'municipality',
-        municipalityDetails: undefined,
         province: 'province',
         foreignState: 'foreignState',
       },
@@ -176,11 +173,8 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
       physicalAddress: {
         address: 'address 2',
-        addressDetails: undefined,
-        at: undefined,
         foreignState: 'foreignState',
         municipality: 'municipality',
-        municipalityDetails: undefined,
         province: 'province',
         zip: 'zip',
       },
