@@ -1,16 +1,16 @@
 import {
+  DigitalDomicileType,
+  NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
-  NotificationFeePolicy,
-  DigitalDomicileType,
 } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
   NewNotificationDTO,
-  PaymentModel,
   NewNotificationDocument,
   NewNotificationRecipient,
+  PaymentModel,
 } from '../models/NewNotification';
 
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
@@ -56,9 +56,9 @@ const newNotificationDocument: NewNotificationDocument = {
   id: 'mocked-id',
   idx: 0,
   name: 'mocked-name',
-  contentType: 'text/plain',
+  contentType: 'application/pdf',
   file: {
-    data: new File([''], 'mocked-name', { type: 'text/plain' }),
+    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
     sha256: {
       hashBase64: 'mocked-sha256',
       hashHex: '',
@@ -74,9 +74,9 @@ const newNotificationPagoPa: NewNotificationDocument = {
   id: 'mocked-pagopa-id',
   idx: 0,
   name: 'mocked-name',
-  contentType: 'text/plain',
+  contentType: 'application/pdf',
   file: {
-    data: new File([''], 'mocked-name', { type: 'text/plain' }),
+    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
     sha256: {
       hashBase64: 'mocked-pa-sha256',
       hashHex: '',
@@ -92,9 +92,9 @@ const newNotificationF24Standard: NewNotificationDocument = {
   id: 'mocked-f24standard-id',
   idx: 0,
   name: 'mocked-name',
-  contentType: 'text/plain',
+  contentType: 'application/pdf',
   file: {
-    data: new File([''], 'mocked-name', { type: 'text/plain' }),
+    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
     sha256: {
       hashBase64: 'mocked-f24standard-sha256',
       hashHex: '',
@@ -107,9 +107,8 @@ const newNotificationF24Standard: NewNotificationDocument = {
 };
 
 export const newNotification: NewNotification = {
-  paProtocolNumber: '',
-  subject: '',
-  cancelledIun: '',
+  paProtocolNumber: '12345678910',
+  subject: 'Multone esagerato',
   recipients: newNotificationRecipients,
   documents: [newNotificationDocument],
   payment: {
@@ -121,11 +120,11 @@ export const newNotification: NewNotification = {
       f24standard: { ...newNotificationF24Standard },
     },
   },
-  physicalCommunicationType: '' as PhysicalCommunicationType,
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
-  group: '',
+  group: 'GroupTest',
   taxonomyCode: '010801N',
-  notificationFeePolicy: '' as NotificationFeePolicy,
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
 
 export const newNotificationDTO: NewNotificationDTO = {
@@ -155,10 +154,10 @@ export const newNotificationDTO: NewNotificationDTO = {
           digests: {
             sha256: 'mocked-pa-sha256',
           },
-          contentType: 'text/plain',
+          contentType: 'application/pdf',
           ref: {
-            key: 'mocked-key',
-            versionToken: 'mocked-versionToken',
+            key: '',
+            versionToken: '',
           },
         },
       },
@@ -186,10 +185,10 @@ export const newNotificationDTO: NewNotificationDTO = {
           digests: {
             sha256: 'mocked-pa-sha256',
           },
-          contentType: 'text/plain',
+          contentType: 'application/pdf',
           ref: {
-            key: 'mocked-ref',
-            versionToken: 'mocked-versionToken',
+            key: '',
+            versionToken: '',
           },
         },
         f24standard: {
@@ -197,10 +196,10 @@ export const newNotificationDTO: NewNotificationDTO = {
           digests: {
             sha256: 'mocked-f24standard-sha256',
           },
-          contentType: 'text/plain',
+          contentType: 'application/pdf',
           ref: {
-            key: 'mocked-ref',
-            versionToken: 'mocked-versionToken',
+            key: '',
+            versionToken: '',
           },
         },
       },
@@ -212,70 +211,15 @@ export const newNotificationDTO: NewNotificationDTO = {
       digests: {
         sha256: 'mocked-sha256',
       },
-      contentType: 'text/plain',
+      contentType: 'application/pdf',
       ref: {
-        key: 'mocked-ref',
-        versionToken: 'mocked-versionToken',
+        key: '',
+        versionToken: '',
       },
     },
   ],
-  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   group: 'GroupTest',
   taxonomyCode: '010801N',
-  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-};
-
-export const newNotificationWithEmptyAddress: NewNotification = {
-  ...newNotification,
-  recipients: [
-    {
-      id: '0',
-      idx: 0,
-      taxId: 'MRARSS90P08H501Q',
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      recipientType: RecipientType.PF,
-      creditorTaxId: '12345678910',
-      noticeCode: '123456789123456788',
-      type: DigitalDomicileType.PEC,
-      digitalDomicile: 'mocked@mail.it',
-      address: '',
-      houseNumber: '',
-      zip: 'zip',
-      municipality: 'municipality',
-      province: 'province',
-      foreignState: 'foreignState',
-    },
-  ],
-};
-
-export const newNotificationDTOWithUndefinedAddress: NewNotificationDTO = {
-  ...newNotificationDTO,
-  recipients: [
-    {
-      taxId: 'MRARSS90P08H501Q',
-      denomination: 'Mario Rossi',
-      recipientType: RecipientType.PF,
-      digitalDomicile: {
-        type: DigitalDomicileType.PEC,
-        address: 'mocked@mail.it',
-      },
-      physicalAddress: undefined,
-      payment: {
-        creditorTaxId: '12345678910',
-        noticeCode: '123456789123456788',
-        pagoPaForm: {
-          title: 'mocked-name',
-          digests: {
-            sha256: 'mocked-pa-sha256',
-          },
-          contentType: 'text/plain',
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
-      },
-    },
-  ],
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };

@@ -1,32 +1,33 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import {
-  formatToTimezoneString,
-  getNextDay,
   LegalFactId,
   LegalFactType,
   NotificationDetailOtherDocument,
+  formatToTimezoneString,
+  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
 import {
-  notificationDTO,
+  notificationDTOMultiRecipient,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
+  NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
-  NOTIFICATIONS_LIST,
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
@@ -70,14 +71,14 @@ describe('Notifications api tests', () => {
   });
 
   it('getSentNotification filtered by iun', async () => {
-    const iun = notificationDTO.iun;
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTO);
+    const iun = notificationDTOMultiRecipient.iun;
+    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTOMultiRecipient);
     const res = await NotificationsApi.getSentNotification(iun);
     expect(res).toStrictEqual(notificationToFeMultiRecipient);
   });
 
   it('getSentNotificationDocument', async () => {
-    const iun = notificationDTO.iun;
+    const iun = notificationDTOMultiRecipient.iun;
     const documentIndex = '0';
     mock
       .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
@@ -87,7 +88,7 @@ describe('Notifications api tests', () => {
   });
 
   it('getSentNotificationOtherDocument', async () => {
-    const iun = notificationDTO.iun;
+    const iun = notificationDTOMultiRecipient.iun;
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
@@ -102,7 +103,7 @@ describe('Notifications api tests', () => {
   });
 
   it('getSentNotificationLegalfact', async () => {
-    const iun = notificationDTO.iun;
+    const iun = notificationDTOMultiRecipient.iun;
     const legalFact: LegalFactId = {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,

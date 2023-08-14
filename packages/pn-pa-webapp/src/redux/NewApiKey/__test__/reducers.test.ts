@@ -1,14 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
-import { mockApi } from '../../../__test__/test-utils';
+
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/NewApiKey.mock';
 import { apiClient } from '../../../api/apiClients';
+import { CREATE_APIKEY } from '../../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { GroupStatus, UserGroup } from '../../../models/user';
 import { getUserGroups } from '../../newNotification/actions';
 import { store } from '../../store';
 import { saveNewApiKey } from '../actions';
 import { resetState } from '../reducers';
-import { CREATE_APIKEY } from '../../../api/apiKeys/apiKeys.routes';
-import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 
 const initialState = {
   loading: false,
@@ -17,15 +18,21 @@ const initialState = {
 };
 
 describe('api keys page redux state test', () => {
-  mockAuthentication();
-
+  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
+  mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.reset();
-      mock.restore();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('Initial state', () => {
@@ -35,24 +42,22 @@ describe('api keys page redux state test', () => {
 
   it('Should be able to get user groups', async () => {
     const mockResponse = [
-      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' as GroupStatus },
+      { id: 'mocked-id', name: 'mocked-name', description: '', status: GroupStatus.ACTIVE },
     ];
-    mock = mockApi(apiClient, 'GET', GET_USER_GROUPS(), 200, undefined, mockResponse);
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
     const payload = action.payload;
     expect(action.type).toBe('getUserGroups/fulfilled');
     expect(payload).toEqual(mockResponse);
     expect(store.getState().newNotificationState.groups).toStrictEqual(mockResponse);
-    mock.reset();
-    mock.restore();
   });
 
   it('Should be able to create new API Key', async () => {
-    mock = mockApi(apiClient, 'POST', CREATE_APIKEY(), 200, newApiKeyForBE, newApiKeyFromBE);
-    const action = await store.dispatch(saveNewApiKey(newApiKeyForBE));
+    mock.onPost(CREATE_APIKEY(), newApiKeyDTO).reply(200, newApiKeyResponse);
+    const action = await store.dispatch(saveNewApiKey(newApiKeyDTO));
     const payload = action.payload;
     expect(action.type).toBe('saveNewApiKey/fulfilled');
-    expect(payload).toEqual(newApiKeyFromBE.apiKey);
+    expect(payload).toEqual(newApiKeyResponse.apiKey);
   });
 
   it('Should be able to reset state', () => {

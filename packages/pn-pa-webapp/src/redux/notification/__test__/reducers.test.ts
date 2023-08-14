@@ -1,8 +1,25 @@
-import { KnownFunctionality, LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
 
+import { KnownFunctionality, LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import {
+  DOWNTIME_HISTORY,
+  DOWNTIME_LEGAL_FACT_DETAILS,
+} from '@pagopa-pn/pn-commons/src/api/appStatus/appStatus.routes';
+
+import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import {
+  notificationDTOMultiRecipient,
+  notificationToFeMultiRecipient,
+} from '../../../__mocks__/NotificationDetail.mock';
+import { apiClient } from '../../../api/apiClients';
+import {
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+} from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
-import { downtimesFromBe, simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
@@ -12,20 +29,6 @@ import {
   getSentNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
-import { notificationFromBe, notificationToFe } from './test-utils';
-import { mockApi } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import {
-  NOTIFICATION_DETAIL,
-  NOTIFICATION_DETAIL_DOCUMENTS,
-  NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-} from '../../../api/notifications/notifications.routes';
-import {
-  DOWNTIME_HISTORY,
-  DOWNTIME_LEGAL_FACT_DETAILS,
-} from '@pagopa-pn/pn-commons/src/api/appStatus/appStatus.routes';
-import MockAdapter from 'axios-mock-adapter';
 
 const initialState = {
   loading: false,
@@ -53,15 +56,21 @@ const initialState = {
 };
 
 describe('Notification detail redux state tests', () => {
-  mockAuthentication();
-
+  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
+  mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.reset();
-      mock.restore();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('Initial state', () => {
@@ -70,35 +79,27 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL(notificationFromBe.iun),
-      200,
-      undefined,
-      notificationFromBe
-    );
-    const action = await store.dispatch(getSentNotification(notificationFromBe.iun));
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationToFeMultiRecipient.iun))
+      .reply(200, notificationDTOMultiRecipient);
+    const action = await store.dispatch(getSentNotification(notificationToFeMultiRecipient.iun));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getSentNotification/fulfilled');
-    expect(payload).toEqual(notificationToFe);
-    expect(store.getState().notificationState.notification).toStrictEqual(notificationToFe);
+    expect(payload).toEqual(notificationToFeMultiRecipient);
+    expect(store.getState().notificationState.notification).toStrictEqual(
+      notificationToFeMultiRecipient
+    );
   });
 
   it('Should be able to fetch the notification document', async () => {
     const mockRequest = {
-      iun: 'mocked-iun',
+      iun: notificationToFeMultiRecipient.iun,
       documentIndex: '0',
     };
     const mockResponse = { url: 'http://mocked-url.com' };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_DOCUMENTS(mockRequest.iun, mockRequest.documentIndex),
-      200,
-      undefined,
-      mockResponse
-    );
+    mock
+      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(mockRequest.iun, mockRequest.documentIndex))
+      .reply(200, mockResponse);
     const action = await store.dispatch(getSentNotificationDocument(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationDocument/fulfilled');
@@ -107,18 +108,13 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification legalfact', async () => {
     const mockRequest = {
-      iun: 'mocked-iun',
+      iun: notificationToFeMultiRecipient.iun,
       legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
     };
     const mockResponse = { url: 'http://mocked-url.com' };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_LEGALFACT(mockRequest.iun, mockRequest.legalFact),
-      200,
-      undefined,
-      mockResponse
-    );
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(mockRequest.iun, mockRequest.legalFact))
+      .reply(200, mockResponse);
     const action = await store.dispatch(getSentNotificationLegalfact(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
@@ -127,21 +123,16 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification AAR document', async () => {
     const mockRequest = {
-      iun: 'mocked-iun',
+      iun: notificationToFeMultiRecipient.iun,
       otherDocument: {
         documentId: 'mocked-document-id',
         documentType: 'mocked-document-type',
       },
     };
     const mockResponse = { url: 'http://mocked-url.com' };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_OTHER_DOCUMENTS(mockRequest.iun, mockRequest.otherDocument),
-      200,
-      undefined,
-      mockResponse
-    );
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(mockRequest.iun, mockRequest.otherDocument))
+      .reply(200, mockResponse);
     const action = await store.dispatch(getSentNotificationOtherDocument(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
@@ -152,21 +143,18 @@ describe('Notification detail redux state tests', () => {
     const mockRequest = {
       startDate: '2022-10-23T15:50:04Z',
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      DOWNTIME_HISTORY({
-        ...mockRequest,
-        functionality: [
-          KnownFunctionality.NotificationCreate,
-          KnownFunctionality.NotificationVisualization,
-          KnownFunctionality.NotificationWorkflow,
-        ],
-      }),
-      200,
-      undefined,
-      downtimesFromBe
-    );
+    mock
+      .onGet(
+        DOWNTIME_HISTORY({
+          ...mockRequest,
+          functionality: [
+            KnownFunctionality.NotificationCreate,
+            KnownFunctionality.NotificationVisualization,
+            KnownFunctionality.NotificationWorkflow,
+          ],
+        })
+      )
+      .reply(200, downtimesDTO);
     const action = await store.dispatch(getDowntimeEvents(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getDowntimeEvents/fulfilled');
@@ -182,15 +170,12 @@ describe('Notification detail redux state tests', () => {
       contentLength: 0,
       url: 'mocked-url',
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      DOWNTIME_LEGAL_FACT_DETAILS('mocked-iun'),
-      200,
-      undefined,
-      mockResponse
+    mock
+      .onGet(DOWNTIME_LEGAL_FACT_DETAILS(notificationToFeMultiRecipient.iun))
+      .reply(200, mockResponse);
+    const action = await store.dispatch(
+      getDowntimeLegalFactDocumentDetails(notificationToFeMultiRecipient.iun)
     );
-    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails('mocked-iun'));
     const payload = action.payload;
     expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
     expect(payload).toEqual(mockResponse);

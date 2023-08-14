@@ -1,11 +1,12 @@
 import _ from 'lodash';
+
 import {
-  NotificationStatus,
   AddressSource,
   DigitalDomicileType,
   LegalFactType,
   NotificationDetail,
   NotificationFeePolicy,
+  NotificationStatus,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
@@ -13,7 +14,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 function getOneRecipientNotification(): NotificationDetail {
-  const oneRecipientNotification = _.cloneDeep(notificationDTO);
+  const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
   oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
   oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
     (t) => t.details.recIndex === 0
@@ -21,7 +22,7 @@ function getOneRecipientNotification(): NotificationDetail {
   return oneRecipientNotification;
 }
 
-export const notificationDTO: NotificationDetail = {
+export const notificationDTOMultiRecipient: NotificationDetail = {
   iun: 'c_b963-220220221119',
   paProtocolNumber: '220220221119',
   subject: 'Prova - status',
@@ -170,10 +171,6 @@ export const notificationDTO: NotificationDetail = {
         },
         digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
       },
     },
     {
@@ -187,10 +184,6 @@ export const notificationDTO: NotificationDetail = {
         },
         digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
       },
     },
     {
@@ -205,6 +198,9 @@ export const notificationDTO: NotificationDetail = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   amount: 200,
 };
+export const notificationDTO = getOneRecipientNotification();
 
-export const notificationToFe = parseNotificationDetail(getOneRecipientNotification());
-export const notificationToFeMultiRecipient = parseNotificationDetail(notificationDTO);
+export const notificationToFe = parseNotificationDetail(notificationDTO);
+export const notificationToFeMultiRecipient = parseNotificationDetail(
+  notificationDTOMultiRecipient
+);
