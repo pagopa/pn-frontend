@@ -8,7 +8,6 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-  NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -55,11 +54,6 @@ describe('Notifications routes', () => {
   it('should compile GET_USER_GROUPS', () => {
     const route = GET_USER_GROUPS();
     expect(route).toEqual('/ext-registry/pa/v1/groups');
-  });
-
-  it('should compile NOTIFICATION_PAYMENT_INFO', () => {
-    const route = NOTIFICATION_PAYMENT_INFO();
-    expect(route).toEqual('/ext-registry/pagopa/v2/paymentinfo');
   });
 
   it('should compile NOTIFICATION_PRELOAD_DOCUMENT', () => {

@@ -3,8 +3,8 @@ import {
   formatFiscalCode,
   GetNotificationsParams,
   LegalFactId,
+  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
-import { NotificationDetailOtherDocument } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { GroupStatus } from './../../models/user';
 
 // Prefixes
@@ -19,8 +19,6 @@ const API_NOTIFICATIONS_DOCUMENTS = 'documents';
 const API_NOTIFICATIONS_DOCUMENT = 'document';
 const API_NOTIFICATIONS_LEGALFACTS = 'legal-facts';
 const API_NOTIFICATIONS_ATTACHMENTS = 'attachments';
-const API_NOTIFICATIONS_PAGOPA = 'pagopa';
-const API_NOTIFICATIONS_PAYMENTINFO = 'paymentinfo';
 const API_NOTIFICATIONS_PRELOAD = 'preload';
 const API_NOTIFICATIONS_REQUESTS = 'requests';
 const API_NOTIFICATIONS_PA = 'pa';
@@ -52,7 +50,6 @@ const API_NOTIFICATION_DETAIL_OTHER_DOCUMENT_PATH = `:${API_NOTIFICATIONS_IUN_PA
 const API_NOTIFICATION_DETAIL_LEGALFACT_PATH = `:${API_NOTIFICATIONS_IUN_PARAMETER}/${API_NOTIFICATIONS_LEGALFACTS}/:${API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER}/:${API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER}`;
 const API_NOTIFICATION_USER_GROUPS_PATH = `${API_NOTIFICATIONS_PA}/${API_VERSION_SEGMENT}/${API_NOTIFICATIONS_GROUPS}`;
 const API_NOTIFICATION_PRELOAD_DOCUMENT_PATH = `${API_NOTIFICATIONS_ATTACHMENTS}/${API_NOTIFICATIONS_PRELOAD}`;
-const API_NOTIFICATION_PAYMENT_INFO_PATH = `${API_NOTIFICATIONS_PAGOPA}/${API_VERSION_V2_SEGMENT}/${API_NOTIFICATIONS_PAYMENTINFO}`;
 
 // APIs
 export function NOTIFICATIONS_LIST(params: GetNotificationsParams) {
@@ -142,12 +139,5 @@ export function CREATE_NOTIFICATION() {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATIONS_REQUESTS,
-  });
-}
-
-export function NOTIFICATION_PAYMENT_INFO() {
-  return compileRoute({
-    prefix: API_EXTERNAL_REGISTRY_PREFIX,
-    path: API_NOTIFICATION_PAYMENT_INFO_PATH,
   });
 }

@@ -27,7 +27,6 @@ import {
   PnBreadcrumb,
   TitleBox,
   useIsMobile,
-  NotificationDetailRecipient,
   NotificationStatus,
   useErrors,
   ApiError,
@@ -37,7 +36,6 @@ import {
   NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
   GetNotificationDowntimeEventsParams,
-  NotificationPaidDetail,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
@@ -62,6 +60,8 @@ import {
   resetState,
   clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import NotificationPaymentSender from './components/Notifications/NotificationPaymentSender';
+import NotificationRecipientsDetail from './components/Notifications/NotificationRecipientsDetail';
 
 const NotificationDetail = () => {
   const { id } = useParams();
@@ -89,10 +89,6 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
   const { recipients } = notification;
-  const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-  const recipientsWithAltNoticeCode = recipients.filter(
-    (recipient) => recipient.payment?.noticeCodeAlternative
-  );
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
    * in pn-commons (hence cannot access the i18n files) used in this page
@@ -102,28 +98,6 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-
-  const getRecipientsNoticeCodeField = (
-    filteredRecipients: Array<NotificationDetailRecipient>,
-    alt: boolean = false
-  ): ReactNode => {
-    if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient, index) => (
-        <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
-          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
-        </Box>
-      ));
-    }
-    return (
-      <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
-        {alt
-          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
-          : filteredRecipients[0]?.payment?.noticeCode}
-      </Box>
-    );
-  };
 
   const getTaxIdLabel = (taxId: string): string => {
     const isCF11 = dataRegex.pIva.test(taxId);
@@ -151,17 +125,7 @@ const NotificationDetail = () => {
           ? t('detail.recipients', { ns: 'notifiche' })
           : t(getTaxIdLabel(recipients[0]?.taxId), { ns: 'notifiche' }),
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: (
-        <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
-              {recipients.length > 1
-                ? `${recipient.taxId} - ${recipient.denomination}`
-                : recipient.taxId}
-            </Box>
-          ))}
-        </>
-      ),
+      value: <NotificationRecipientsDetail recipients={recipients} iun={notification.iun} />,
     },
     {
       label: t('detail.date', { ns: 'notifiche' }),
@@ -197,16 +161,6 @@ const NotificationDetail = () => {
       label: t('detail.cancelled-iun', { ns: 'notifiche' }),
       rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
-      label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
-    },
-    {
-      label: t('detail.secondary-notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithAltNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
     },
     {
       label: t('detail.groups', { ns: 'notifiche' }),
@@ -439,21 +393,7 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
-                {notification.paymentHistory && notification.paymentHistory.length > 0 && (
-                  <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
-                    <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
-                    {notification.paymentHistory.length === 1 && (
-                      <Typography>{t('payment.subtitle-single', { ns: 'notifiche' })}</Typography>
-                    )}
-                    {notification.paymentHistory.length > 1 && (
-                      <Typography>{t('payment.subtitle-multiple', { ns: 'notifiche' })}</Typography>
-                    )}
-                    <NotificationPaidDetail
-                      paymentDetailsList={notification.paymentHistory}
-                      isSender
-                    />
-                  </Paper>
-                )}
+                <NotificationPaymentSender recipients={recipients} />
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

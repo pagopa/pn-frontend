@@ -19,8 +19,8 @@
   },
   "payment": {
     "title": "Pagamenti",
-    "subtitle-single": "Il destinatario ha effettuato un pagamento. Ecco i dettagli:",
-    "subtitle-multiple": "Questi destinatari hanno effettuato un pagamento:",
+    "subtitle-single": "Qui puoi monitorare lo stato di pagamento degli avvisi pagoPA allegati alla notifica.",
+    "subtitle-multiple": "Per vedere lo stato di pagamento degli avvisi pagoPA allegati alla notifica, seleziona un destinatario.",
     "show-more": "Mostra dettagli"
   },
   "table": {
@@ -60,7 +60,6 @@
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "notice-code": "Codice Avviso",
-    "secondary-notice-code": "Codice Avviso Alternativo",
     "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
@@ -83,6 +82,7 @@
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
+    "show-all": "Vedi tutti",
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
       "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
@@ -280,7 +280,10 @@
       "datePrefix": "il ",
       "legalFactDownload": "Attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
-    }
+    },
+    "recipients-dialog-title": "Destinatari della notifica {{iun}}",
+    "physical-person": "Persona fisica",
+    "legal-person": "Persona giuridica"
   },
   "status": {
     "recipient": "destinatario",

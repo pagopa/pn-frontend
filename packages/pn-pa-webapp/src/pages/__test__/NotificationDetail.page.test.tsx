@@ -8,7 +8,7 @@ import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
-} from '../../redux/notification/__test__/test-utils';
+} from '../../__mocks__/NotificationDetail.mock';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
@@ -82,6 +82,7 @@ describe('NotificationDetail Page (one recipient)', () => {
           notification: notificationToFe,
           documentDownloadUrl: 'mocked-download-url',
           legalFactDownloadUrl: 'mocked-legal-fact-url',
+          downtimeEvents: [],
         },
         userState: { user: { organization: { id: 'mocked-sender' } } },
       },
@@ -100,32 +101,26 @@ describe('NotificationDetail Page (one recipient)', () => {
   test('renders NotificationDetail page', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
-    expect(result.container).toHaveTextContent('mocked-abstract');
+    expect(result.container).toHaveTextContent(notificationToFe.abstract!);
     expect(result.container).toHaveTextContent(/Table/i);
-    expect(result.container).toHaveTextContent(/1,30 €/i);
-    expect(result.container).toHaveTextContent(
-      `${notificationToFe.recipients[0].payment?.creditorTaxId} - ${notificationToFe.recipients[0].payment?.noticeCode}`
-    );
     expect(result.container).toHaveTextContent(/Documents/i);
     expect(result.container).toHaveTextContent(/Timeline/i);
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(2);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
     // check payment history box
-    const paymentTable = result.getByTestId('paymentTable');
-    const paymentRecipient = result.getByTestId('paymentRecipient');
-    expect(paymentTable).toBeInTheDocument();
-    expect(paymentRecipient).toBeInTheDocument();
+    const paymentInfoBox = result.getByTestId('paymentInfoBox');
+    expect(paymentInfoBox).toBeInTheDocument();
   });
 
   test('executes the document and legal fact download handler', async () => {
     const documentButton = result.getAllByTestId('documentButton');
     const legalFactButton = result.getByTestId('legalFactButton');
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    fireEvent.click(documentButton[0]);
     expect(mockDispatchFn).toBeCalledTimes(2);
+    fireEvent.click(documentButton[0]);
+    expect(mockDispatchFn).toBeCalledTimes(3);
     fireEvent.click(legalFactButton);
-    expect(mockDispatchFn).toBeCalledTimes(4);
+    expect(mockDispatchFn).toBeCalledTimes(5);
   });
 
   test('clicks on the back button', () => {
@@ -181,6 +176,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
           notification: notificationToFeMultiRecipient,
           documentDownloadUrl: 'mocked-download-url',
           legalFactDownloadUrl: 'mocked-legal-fact-url',
+          downtimeEvents: [],
         },
         userState: { user: { organization: { id: 'mocked-sender' } } },
       },
@@ -201,17 +197,11 @@ describe('NotificationDetail Page (multi recipient)', () => {
     expect(result.container.querySelector('h4')).toHaveTextContent(
       notificationToFeMultiRecipient.subject
     );
-    expect(result.container).toHaveTextContent('mocked-abstract');
+    expect(result.container).toHaveTextContent(notificationToFeMultiRecipient.abstract!);
     expect(result.container).toHaveTextContent(/Table/i);
-    expect(result.container).toHaveTextContent(/2,00 €/i);
-    for (const recipient of notificationToFeMultiRecipient.recipients) {
-      expect(result.container).toHaveTextContent(
-        `${recipient.taxId} - ${recipient.payment?.creditorTaxId} - ${recipient.payment?.noticeCode}`
-      );
-    }
     expect(result.container).toHaveTextContent(/Documents/i);
     expect(result.container).toHaveTextContent(/Timeline/i);
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(2);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
   });

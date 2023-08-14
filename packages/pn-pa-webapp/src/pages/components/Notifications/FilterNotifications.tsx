@@ -77,8 +77,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'notifiche']);
-  const dialogRef = useRef<{toggleOpen: () => void}>(null);
-
+  const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const validationSchema = yup.object({
     recipientId: yup
@@ -131,7 +130,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
       setEndDate(formik.values.endDate);
     }
-  };  
+  };
 
   useEffect(() => {
     void formik.validateForm();
@@ -158,7 +157,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   if (!showFilters) {
     return <></>;
   }
-
 
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
 

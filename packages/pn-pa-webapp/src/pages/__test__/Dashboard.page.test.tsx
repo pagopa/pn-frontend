@@ -10,9 +10,9 @@ import {
   Notification,
 } from '@pagopa-pn/pn-commons';
 
+import { notificationsToFe } from '../../__mocks__/Notifications.mock';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
-import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = jest.fn();
@@ -181,5 +181,4 @@ describe('Dashboard Page', () => {
       expect(mockNavigateFn).toBeCalledTimes(1);
     });
   });
-
 });
