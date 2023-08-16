@@ -217,10 +217,20 @@ export function getNotificationStatusInfos(
       return {
         color: 'warning',
         ...localizeStatus(
-          'canceled',
+          'cancelled',
           'Annullata',
           "L'ente ha annullato l'invio della notifica",
           "L'ente ha annullato l'invio della notifica"
+        ),
+      };
+    case NotificationStatus.CANCELLATION_IN_PROGRESS:
+      return {
+        color: 'success',
+        ...localizeStatus(
+          'cancelled',
+          'Annullata',
+          'Annullamento in corso. Lo stato sarà aggiornato a breve.',
+          'Annullamento in corso. Lo stato sarà aggiornato a breve.'
         ),
       };
     default:
@@ -264,6 +274,10 @@ export const getNotificationAllowedStatus = () => [
   },
   {
     value: NotificationStatus.CANCELLED,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
+  },
+  {
+    value: NotificationStatus.CANCELLATION_IN_PROGRESS,
     label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
   },
   {
@@ -523,6 +537,8 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_PROGRESS,
   TimelineCategory.SEND_ANALOG_FEEDBACK,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
+  TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+  TimelineCategory.NOTIFICATION_CANCELLED,
 ];
 
 const AnalogFlowAllowedCodes = [
@@ -909,6 +925,8 @@ export function parseNotificationDetail(
     ),
     sentAt: formatDate(notificationDetail.sentAt),
   };
+  insertCancelledStatusInTimeline(notificationDetail);
+  console.log('notificationDetail. :>> ', notificationDetail.notificationStatusHistory);
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
   // set which elements are visible
@@ -930,3 +948,25 @@ export function parseNotificationDetail(
   /* eslint-enable functional/no-let */
   return parsedNotification;
 }
+
+/**
+ * Insert cancelled status n timeline.
+ * @param  {NotificationDetail} notificationDetail
+ */
+const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail) => {
+  const notificationStatusHistoryElement = {
+    status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+    activeFrom: notificationDetail.sentAt,
+    relatedTimelineElements: [],
+  };
+
+  notificationDetail.timeline.forEach((element) => {
+    if (
+      element.category === TimelineCategory.NOTIFICATION_CANCELLED &&
+      element.category !== TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
+    ) {
+      // eslint-disable-next-line functional/immutable-data
+      notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
+    }
+  });
+};
