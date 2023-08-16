@@ -22,6 +22,7 @@ import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
+  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -179,6 +180,16 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+    mock.reset();
+    mock.restore();
+  });
+
+  it.skip('cancelNotification', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    // capire se la put restituisce un data nel caso:
+    /* const res = await NotificationsApi.cancelNotification('mocked-iun');
+       expect(res).toStrictEqual() */
     mock.reset();
     mock.restore();
   });
