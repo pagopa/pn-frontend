@@ -52,46 +52,31 @@ import {
 } from '../redux/notification/reducers';
 import ConfirmCancellationDialog from './components/Notifications/ConfirmCancellationDialog';
 
-const NotificationDetail = () => {
-  const { id } = useParams();
-  const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
-  const { hasApiErrors } = useErrors();
-  const isMobile = useIsMobile();
+const AlertNotificationCancel = (notification: { notificationStatus: NotificationStatus }) => {
+  const { t } = useTranslation();
+  return notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
+    notification.notificationStatus === NotificationStatus.CANCELLED ? (
+    <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
+      <Typography component="span" variant="body1">
+        {notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
+          ? t('detail.alert-cancellation-in-progress', { ns: 'notifiche' })
+          : t('detail.alert-cancellation-confirmed', { ns: 'notifiche' })}
+      </Typography>
+    </Alert>
+  ) : (
+    <></>
+  );
+};
+
+const RenderNotificationDetailTable = (openModal: any) => {
+  const { t } = useTranslation();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const downtimeEvents = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeEvents
-  );
-  const downtimeLegalFactUrl = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeLegalFactUrl
-  );
-  const documentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.documentDownloadUrl
-  );
-  const otherDocumentDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
-  );
-  const legalFactDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadUrl
-  );
-  const legalFactDownloadRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
-  );
+
   const { recipients } = notification;
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
   const recipientsWithAltNoticeCode = recipients.filter(
     (recipient) => recipient.payment?.noticeCodeAlternative
   );
-  /*
-   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
-   * in pn-commons (hence cannot access the i18n files) used in this page
-   * ---------------------------------
-   * Carlos Lombardi, 2023.02.03
-   */
-  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
-
-  const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-
   const getRecipientsNoticeCodeField = (
     filteredRecipients: Array<NotificationDetailRecipient>,
     alt: boolean = false
@@ -117,10 +102,10 @@ const NotificationDetail = () => {
     );
   };
 
-  const getTaxIdLabel = (taxId: string): string => {
-    const isCF11 = dataRegex.pIva.test(taxId);
-    return isCF11 ? 'detail.tax-id-organization-recipient' : 'detail.tax-id-citizen-recipient';
-  };
+  const getTaxIdLabel = (taxId: string): string =>
+    dataRegex.pIva.test(taxId)
+      ? 'detail.tax-id-organization-recipient'
+      : 'detail.tax-id-citizen-recipient';
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -210,6 +195,7 @@ const NotificationDetail = () => {
       ),
     },
   ];
+
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
     .map((row, index) => ({
@@ -217,6 +203,70 @@ const NotificationDetail = () => {
       label: row.label,
       value: row.value,
     }));
+
+  return (
+    <NotificationDetailTable rows={detailTableRows}>
+      {notification.notificationStatus !== NotificationStatus.CANCELLATION_IN_PROGRESS &&
+      notification.notificationStatus !== NotificationStatus.CANCELLED ? (
+        <Button
+          variant="outlined"
+          sx={{
+            my: {
+              xs: 3,
+              md: 2,
+            },
+            borderColor: 'error.dark',
+            outlineColor: 'error.dark',
+            color: 'error.dark',
+          }}
+          onClick={openModal}
+          data-testid="cancelNotificationBtn"
+        >
+          {t('detail.cancel-notification', { ns: 'notifiche' })}
+        </Button>
+      ) : (
+        <></>
+      )}
+    </NotificationDetailTable>
+  );
+};
+
+const NotificationDetail = () => {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
+  // const navigate = useNavigate();
+  const { hasApiErrors } = useErrors();
+  const isMobile = useIsMobile();
+  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const downtimeEvents = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeEvents
+  );
+  const downtimeLegalFactUrl = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeLegalFactUrl
+  );
+  const documentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.documentDownloadUrl
+  );
+  const otherDocumentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
+  );
+  const legalFactDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadUrl
+  );
+  const legalFactDownloadRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
+  );
+  const { recipients } = notification;
+
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
+  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+
+  const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
 
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
@@ -266,11 +316,11 @@ const NotificationDetail = () => {
       if (isCancelled) {
         return t('detail.download-message-cancelled', { ns: 'notifiche' });
       }
-      if (hasDocumentsAvailable) {
+      /*  if (hasDocumentsAvailable) {
         return type === 'aar'
           ? t('detail.download-aar-available', { ns: 'notifiche' })
           : t('detail.download-message-available', { ns: 'notifiche' });
-      }
+      } */
       return type === 'aar'
         ? t('detail.download-aar-expired', { ns: 'notifiche' })
         : t('detail.download-message-expired', { ns: 'notifiche' });
@@ -371,24 +421,12 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <NotificationDetailTable rows={detailTableRows}>
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      my: {
-                        xs: 3,
-                        md: 2,
-                      },
-                      borderColor: '#D85757', // mettere nome di mui
-                      outlineColor: '#D85757',
-                      color: '#D85757',
-                    }}
-                    onClick={openModal}
-                    data-testid="cancelNotificationBtn"
-                  >
-                    {t('detail.cancel-notification', { ns: 'notifiche' })}
-                  </Button>
-                </NotificationDetailTable>
+                <AlertNotificationCancel
+                  notificationStatus={notification.notificationStatus}
+                ></AlertNotificationCancel>
+                <RenderNotificationDetailTable
+                  openModal={openModal}
+                ></RenderNotificationDetailTable>
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>

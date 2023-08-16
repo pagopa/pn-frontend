@@ -143,6 +143,9 @@ const NotificationDetailTimelineStep = ({
         label={notificationStatusInfos.label}
         color={position === 'first' ? notificationStatusInfos.color : 'default'}
         size={position === 'first' ? 'medium' : 'small'}
+        sx={{
+          opacity: notificationStatusInfos.tooltip.includes('corso') ? '0.5' : '1',
+        }}
       />
       {showHistoryButton && historyButtonLabel ? (
         <Button

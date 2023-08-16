@@ -6,6 +6,7 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  NotificationStatus,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
@@ -70,7 +71,30 @@ export const NotificationsApi = {
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
       if (response.data) {
-        return parseNotificationDetail(response.data);
+        const mockedNotification = {
+          ...response.data,
+          notificationStatus: NotificationStatus.CANCELLED,
+          notificationStatusHistory: [
+            ...response.data.notificationStatusHistory,
+            {
+              status: NotificationStatus.CANCELLED,
+              activeFrom: '2043-08-15T13:42:54.17675939Z',
+              relatedTimelineElements: [],
+            },
+          ],
+          timeline: [
+            ...response.data.timeline,
+            {
+              elementId: 'NOTIFICATION_CANCELLED.IUN_TRJT-LVLX-JMRK-202308-L-1',
+              timestamp: '2023-08-14T13:42:54.17675939Z',
+              legalFactsIds: [],
+              category: 'NOTIFICATION_CANCELLED',
+              details: {},
+            },
+          ],
+        } as NotificationDetail;
+
+        return parseNotificationDetail(mockedNotification);
       }
       return {} as NotificationDetail;
     }),

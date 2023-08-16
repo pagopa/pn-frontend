@@ -64,11 +64,15 @@
     "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
+    "alert-cancellation-in-progress": "L’ente mittente ha richiesto l’annullamento di questa notifica. Il suo stato sarà aggiornato al termine del processo di annullamento.",
+    "alert-cancellation-confirmed": "Questa notifica è stata annullata dall’ente mittente. I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi.",
     "cancel-notification": "Annulla notifica",
     "cancel-notification-modal": {
       "title": "Vuoi annullare la notifica?",
       "message": "I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi. L’operazione è irreversibile.",
-      "confirm-cancel-button": "Annulla notifica"
+      "confirm-cancel-button": "Annulla notifica",
+      "i-understand": "Ho capito",
+      "message-with-payment": "Annullando la notifica, dichiari di essere consapevole che ogni eventuale attività di rimborso in favore dei destinatari e rimane a carico dell'ente mittente."
     },
     "acts": "Documenti allegati",
     "download-message-cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
