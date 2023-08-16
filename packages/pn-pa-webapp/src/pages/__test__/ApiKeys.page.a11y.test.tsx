@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { act, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { render, axe } from '../../__test__/test-utils';
-import { mockApiKeysForFE } from '../../redux/apiKeys/__test__/test-utils';
+
+import { RenderResult, act } from '@testing-library/react';
+
+import { mockApiKeysForFE } from '../../__mocks__/ApiKeys.mock';
+import { axe, render } from '../../__test__/test-utils';
+import { ApiKey } from '../../models/ApiKeys';
 import * as actions from '../../redux/apiKeys/actions';
 import ApiKeys from '../ApiKeys.page';
-import { ApiKey } from '../../models/ApiKeys';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

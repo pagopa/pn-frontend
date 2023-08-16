@@ -1,17 +1,18 @@
 import { ReactNode, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Grid, Link, Typography } from '@mui/material';
 import {
   ConsentUser,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
-
 import { TOSAgreement } from '@pagopa/mui-italia';
-import { useAppDispatch } from '../redux/hooks';
-import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
+
 import * as routes from '../navigation/routes.const';
+import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
+import { useAppDispatch } from '../redux/hooks';
 
 type TermsOfServiceProps = {
   tosConsent: ConsentUser;
@@ -72,6 +73,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
       sx={{ backgroundColor: '#FAFAFA', height: '100%' }}
       justifyContent="center"
       alignContent="center"
+      data-testid="tos-acceptance-page"
     >
       <Grid item xs={10} sm={8} md={6}>
         <TOSAgreement

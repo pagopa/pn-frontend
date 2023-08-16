@@ -1,6 +1,6 @@
+import { ApiKeyStatus, ApiKeys } from '../models/ApiKeys';
+import { GroupStatus, UserGroup } from '../models/user';
 import { apikeysMapper } from '../utils/apikeys.utility';
-import { ApiKeys, ApiKeyStatus } from '../models/ApiKeys';
-import { UserGroup, GroupStatus } from '../models/user';
 
 export const mockGroups: Array<UserGroup> = [
   {
@@ -107,7 +107,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       ],
     },
   ],
-  total: 14,
+  total: 3,
   lastKey: '9e522ef5-a024-4dbd-8a59-3e090c637653',
   lastUpdate: '22/09/2022',
 };

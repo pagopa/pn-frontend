@@ -118,7 +118,6 @@ const SessionGuard = () => {
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
-    console.log(params.get('#selfCareToken'));
     return params.get('#selfCareToken');
   }, [location]);
 

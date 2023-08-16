@@ -1,37 +1,26 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
+import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { GET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentType } from '../../models/consents';
 import ToSGuard from '../ToSGuard';
 
-jest.mock('@pagopa-pn/pn-commons', () => ({
-  __esModule: true,
-  ...jest.requireActual('@pagopa-pn/pn-commons'),
-  LoadingPage: () => <div>loading page</div>,
+// mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
-
-jest.mock('../../pages/ToSAcceptance.page', () => ({
-  __esModule: true,
-  ...jest.requireActual('../../pages/ToSAcceptance.page'),
-  default: () => <div>tos acceptance page</div>,
-}));
-
-jest.mock('react-router-dom', () => {
-  const original = jest.requireActual('react-router-dom');
-  return {
-    ...original,
-    Outlet: () => <div>Generic Page</div>,
-  };
-});
 
 const reduxState = {
   userState: {
-    user: {
-      sessionToken: 'mockedToken',
-    },
+    user: userResponse,
     fetchedTos: false,
     fetchedPrivacy: false,
     tosConsent: {
@@ -46,6 +35,14 @@ const reduxState = {
     },
   },
 };
+
+const Guard = () => (
+  <Routes>
+    <Route path="/" element={<ToSGuard />}>
+      <Route path="/" element={<div>Generic Page</div>} />
+    </Route>
+  </Routes>
+);
 
 describe('Tests the ToSGuard component', () => {
   // eslint-disable-next-line functional/no-let
@@ -92,9 +89,9 @@ describe('Tests the ToSGuard component', () => {
         }, 2000);
       });
     });
-    await act(async () => void render(<ToSGuard />, { preloadedState: reduxState }));
-    const pageComponent = screen.queryByText('loading page');
-    const tosComponent = screen.queryByText('tos acceptance page');
+    await act(async () => void render(<Guard />, { preloadedState: reduxState }));
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     expect(tosComponent).toBeNull();
@@ -122,9 +119,11 @@ describe('Tests the ToSGuard component', () => {
         }, 2000);
       });
     });
-    await act(async () => void render(<ToSGuard />, { preloadedState: reduxState }));
-    const pageComponent = screen.queryByText('loading page');
-    const tosComponent = screen.queryByText('tos acceptance page');
+    await act(async () => {
+      render(<Guard />, { preloadedState: reduxState });
+    });
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     expect(tosComponent).toBeNull();
@@ -152,9 +151,11 @@ describe('Tests the ToSGuard component', () => {
         }, 2000);
       });
     });
-    await act(async () => void render(<ToSGuard />, { preloadedState: reduxState }));
-    const pageComponent = screen.queryByText('loading page');
-    const tosComponent = screen.queryByText('tos acceptance page');
+    await act(async () => {
+      render(<Guard />, { preloadedState: reduxState });
+    });
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     expect(tosComponent).toBeNull();
@@ -173,9 +174,11 @@ describe('Tests the ToSGuard component', () => {
       consentType: ConsentType.TOS,
       accepted: true,
     });
-    await act(async () => void render(<ToSGuard />, { preloadedState: reduxState }));
-    const pageComponent = screen.queryByText('loading page');
-    const tosComponent = screen.queryByText('tos acceptance page');
+    await act(async () => {
+      render(<Guard />, { preloadedState: reduxState });
+    });
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeTruthy();
@@ -194,9 +197,11 @@ describe('Tests the ToSGuard component', () => {
       consentType: ConsentType.TOS,
       accepted: false,
     });
-    await act(async () => void render(<ToSGuard />, { preloadedState: reduxState }));
-    const pageComponent = screen.queryByText('loading page');
-    const tosComponent = screen.queryByText('tos acceptance page');
+    await act(async () => {
+      render(<Guard />, { preloadedState: reduxState });
+    });
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeTruthy();
@@ -215,9 +220,11 @@ describe('Tests the ToSGuard component', () => {
       consentType: ConsentType.TOS,
       accepted: true,
     });
-    await act(async () => void render(<ToSGuard />, { preloadedState: reduxState }));
-    const pageComponent = screen.queryByText('loading page');
-    const tosComponent = screen.queryByText('tos acceptance page');
+    await act(async () => {
+      render(<Guard />, { preloadedState: reduxState });
+    });
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeNull();

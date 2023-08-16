@@ -1,33 +1,35 @@
-import { useState, useEffect, Fragment, useCallback } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
+
 import { Add } from '@mui/icons-material';
+import { Box, Button, Dialog, InputAdornment, Link, TextField, Typography } from '@mui/material';
 import {
-  useIsMobile,
-  TitleBox,
   ApiErrorWrapper,
   CustomPagination,
   PaginationData,
+  TitleBox,
   calculatePages,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { useTranslation, Trans } from 'react-i18next';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
-import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-  getApiKeys,
-  setApiKeyStatus,
-  deleteApiKey,
-  API_KEYS_ACTIONS,
-} from '../redux/apiKeys/actions';
+
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import { UserGroup } from '../models/user';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
+import * as routes from '../navigation/routes.const';
+import {
+  API_KEYS_ACTIONS,
+  deleteApiKey,
+  getApiKeys,
+  setApiKeyStatus,
+} from '../redux/apiKeys/actions';
 import { setPagination } from '../redux/apiKeys/reducers';
-import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
+import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const SubTitle = () => {
   const { t } = useTranslation(['apikeys']);
@@ -231,9 +233,7 @@ const ApiKeys = () => {
           onClose={handleCloseModal}
           aria-modal="true"
         >
-          <Box
-            sx={{ minWidth: isMobile ? '0' : '600px' }}
-          >
+          <Box sx={{ minWidth: isMobile ? '0' : '600px' }}>
             {modal.view === ModalApiKeyView.VIEW && (
               <ApiKeyModal
                 title={`API Key ${modal.apiKey?.name}`}

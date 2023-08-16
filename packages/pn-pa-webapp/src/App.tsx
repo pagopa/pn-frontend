@@ -19,7 +19,6 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
-  useErrors,
   useMultiEvent,
   useTracking,
   useUnload,
@@ -30,7 +29,7 @@ import { setUpInterceptor } from './api/interceptors';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { AUTH_ACTIONS, logout } from './redux/auth/actions';
+import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState, store } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -75,7 +74,6 @@ const ActualApp = () => {
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-  const { hasApiErrors } = useErrors();
 
   // TODO check if it can exist more than one role on user
   const role = loggedUserOrganizationParty?.roles[0];
@@ -192,8 +190,6 @@ const ActualApp = () => {
   const source = path[path.length - 1];
   const isPrivacyPage = path[1] === 'privacy-tos';
 
-  const hasFetchOrganizationPartyError = hasApiErrors(AUTH_ACTIONS.GET_ORGANIZATION_PARTY);
-
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
       route: source,
@@ -263,7 +259,6 @@ const ActualApp = () => {
           tosConsent.accepted &&
           privacyConsent &&
           privacyConsent.accepted &&
-          !hasFetchOrganizationPartyError &&
           !isPrivacyPage
         }
         productsList={productsList}
@@ -272,7 +267,7 @@ const ActualApp = () => {
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        isLogged={!!sessionToken && !hasFetchOrganizationPartyError}
+        isLogged={!!sessionToken}
       >
         <AppMessage />
         <AppResponseMessage />

@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
+import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../../__mocks__/apiKeys.mock';
 import { apiClient } from '../../../api/apiClients';
 import { APIKEY_LIST } from '../../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
