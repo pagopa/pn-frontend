@@ -11,8 +11,6 @@ import { SendDigitalProgressStep } from './SendDigitalProgressStep';
 import { SendSimpleRegisteredLetterStep } from './SendSimpleRegisteredLetterStep';
 import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
 import { NotHandledStep } from './NotHandledStep';
-/* import { CancelNotificationInProgressStep } from './CancelNotificationInProgressStep';
-import { NotificationCancelledStep } from './NotificationCancelledStep'; */
 
 export class TimelineStepFactory {
   static createTimelineStep(step: INotificationDetailTimeline): TimelineStep {
@@ -33,10 +31,6 @@ export class TimelineStepFactory {
         return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:
         return new SendAnalogDomicileStep();
-      /* case TimelineCategory.CANCELLATION_IN_PROGRESS:
-        return new CancelNotificationInProgressStep();
-      case TimelineCategory.CANCEL_NOTIFICATION:
-        return new NotificationCancelledStep(); */
       // analog flow events: all processed by the same class
       case TimelineCategory.SEND_ANALOG_FEEDBACK:
         return new SendAnalogFlowStep();

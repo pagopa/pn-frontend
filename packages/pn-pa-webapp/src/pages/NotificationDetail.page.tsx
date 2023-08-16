@@ -2,20 +2,7 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams /* useNavigate */ } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Typography,
-  DialogTitle,
-  Grid,
-  Paper,
-  Stack,
-  Alert,
-} from '@mui/material';
+import { Box, Button, Typography, Grid, Paper, Stack, Alert } from '@mui/material';
 import {
   // PN-1714
   // NotificationStatus,
@@ -63,6 +50,7 @@ import {
   resetState,
   clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import ConfirmCancellationDialog from './components/Notifications/ConfirmCancellationDialog';
 
 const NotificationDetail = () => {
   const { id } = useParams();
@@ -349,22 +337,6 @@ const NotificationDetail = () => {
       <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
         {notification.abstract}
       </Typography>
-
-      <TitleBox
-        variantTitle="h4"
-        title={notification.subject}
-        sx={{
-          pt: 3,
-          mb:
-            notification.notificationStatus !== NotificationStatus.PAID
-              ? 2
-              : {
-                  xs: 3,
-                  md: 4,
-                },
-        }}
-        mbTitle={0}
-      ></TitleBox>
     </Fragment>
   );
 
@@ -378,37 +350,6 @@ const NotificationDetail = () => {
     setShowModal(false);
     handleCancelNotification();
   };
-
-  const ModalAlert = () => (
-    <Dialog
-      open={showModal}
-      data-testid="modalId"
-      onClose={handleModalClose}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-    >
-      <DialogTitle id="dialog-title" sx={{ p: 4 }}>
-        {t('detail.cancel-notification-modal.title', { ns: 'notifiche' })}
-      </DialogTitle>
-      <DialogContent sx={{ px: 4, pb: 4 }}>
-        <DialogContentText id="dialog-description">
-          {t('detail.cancel-notification-modal.message', { ns: 'notifiche' })}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions sx={{ px: 4, pb: 4 }}>
-        <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
-          {t('button.indietro')}
-        </Button>
-        <Button
-          onClick={handleModalCloseAndProceed}
-          variant="contained"
-          data-testid="modalCloseAndProceedBtnId"
-        >
-          {t('detail.cancel-notification-modal.confirm-cancel-button', { ns: 'notifiche' })}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
 
   const direction = isMobile ? 'column-reverse' : 'row';
   const spacing = isMobile ? 3 : 0;
@@ -430,13 +371,24 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <NotificationDetailTable
-                  rows={detailTableRows}
-                  notificationStatusPaid={
-                    notification.notificationStatus !== NotificationStatus.PAID
-                  }
-                  openModal={openModal}
-                />
+                <NotificationDetailTable rows={detailTableRows}>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      my: {
+                        xs: 3,
+                        md: 2,
+                      },
+                      borderColor: '#D85757', // mettere nome di mui
+                      outlineColor: '#D85757',
+                      color: '#D85757',
+                    }}
+                    onClick={openModal}
+                    data-testid="cancelNotificationBtn"
+                  >
+                    {t('detail.cancel-notification', { ns: 'notifiche' })}
+                  </Button>
+                </NotificationDetailTable>
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
@@ -508,7 +460,12 @@ const NotificationDetail = () => {
           </Grid>
         </Box>
       )}
-      <ModalAlert />
+      <ConfirmCancellationDialog
+        onClose={handleModalClose}
+        onConfirm={handleModalCloseAndProceed}
+        payment={true}
+        showModal={showModal}
+      />
     </>
   );
 };
