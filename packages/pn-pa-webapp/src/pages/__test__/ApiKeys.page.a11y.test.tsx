@@ -1,12 +1,10 @@
 import * as React from 'react';
-import * as redux from 'react-redux';
 
-import { RenderResult, act } from '@testing-library/react';
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 import { mockApiKeysForFE } from '../../__mocks__/ApiKeys.mock';
-import { axe, render } from '../../__test__/test-utils';
-import { ApiKey } from '../../models/ApiKeys';
-import * as actions from '../../redux/apiKeys/actions';
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { API_KEYS_ACTIONS } from '../../redux/apiKeys/actions';
 import ApiKeys from '../ApiKeys.page';
 
 jest.mock('react-i18next', () => ({
@@ -16,36 +14,57 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const initialState = (param: Array<ApiKey>) => ({
-  preloadedState: {
-    apiKeysState: {
-      loading: false,
-      apiKeys: param,
+const reduxInitialState = {
+  apiKeysState: {
+    loading: false,
+    apiKeys: { items: [], total: 0 },
+    pagination: {
+      size: 10,
+      page: 0,
+      nextPagesKey: [],
     },
   },
-});
+};
 
 describe('ApiKeys Page - accessibility tests', () => {
-  it('does not have basic accessibility issues rendering the page', async () => {
-    const mockDispatchFn = jest.fn();
-    const mockActionFn = jest.fn();
-
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getApiKeys');
-    actionSpy.mockImplementation(mockActionFn);
-
-    // eslint-disable-next-line functional/no-let
+  it('empty list', async () => {
     let result: RenderResult | undefined;
 
     await act(async () => {
-      result = render(<ApiKeys />, initialState(mockApiKeysForFE));
+      result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  }, 15000);
+    const results = await axe(result!.container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('no empty list', async () => {
+    let result: RenderResult | undefined;
+
+    await act(async () => {
+      result = render(<ApiKeys />, {
+        preloadedState: {
+          apiKeysState: { ...reduxInitialState.apiKeysState, apiKeys: mockApiKeysForFE },
+        },
+      });
+    });
+    const results = await axe(result!.container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('api return error', async () => {
+    let result: RenderResult | undefined;
+
+    await act(async () => {
+      result = render(<ApiKeys />, {
+        preloadedState: {
+          apiKeysState: { ...reduxInitialState.apiKeysState, apiKeys: mockApiKeysForFE },
+          appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+            API_KEYS_ACTIONS.GET_API_KEYS
+          ),
+        },
+      });
+    });
+    const results = await axe(result!.container);
+    expect(results).toHaveNoViolations();
+  });
 });

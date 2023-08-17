@@ -1,11 +1,22 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
+import { AppMessage, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
-import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { APIKEY_LIST } from '../../api/apiKeys/apiKeys.routes';
+import { APIKEY_LIST, DELETE_APIKEY, STATUS_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
+import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
 
@@ -19,6 +30,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
     t: (str: string) => str,
   }),
@@ -35,6 +47,35 @@ const reduxInitialState = {
     },
   },
 };
+
+async function testApiKeyChangeStatus(
+  mock: MockAdapter,
+  apiKeyIndex: number,
+  statusRequested: ApiKeyStatus,
+  statusSetted: ApiKeySetStatus,
+  result: RenderResult,
+  buttonTestId: string
+) {
+  mock
+    .onPut(STATUS_APIKEY(mockApiKeysForFE.items[apiKeyIndex].id), { status: statusRequested })
+    .reply(200);
+  const contextMenuButton = result.getAllByTestId('contextMenuButton')[apiKeyIndex];
+  fireEvent.click(contextMenuButton);
+  const actionButton = await waitFor(() => screen.getByTestId(buttonTestId));
+  fireEvent.click(actionButton);
+  const dialog = await waitFor(() => screen.getByRole('dialog'));
+  const confirmButton = within(dialog).getByTestId('action-modal-button');
+  fireEvent.click(confirmButton);
+  await waitFor(() => {
+    expect(mock.history.put).toHaveLength(1);
+    expect(mock.history.put[0].url).toBe(STATUS_APIKEY(mockApiKeysForFE.items[apiKeyIndex].id));
+    expect(JSON.parse(mock.history.put[0].data)).toStrictEqual({ status: statusSetted });
+    expect(mock.history.get).toHaveLength(2);
+  });
+  await waitFor(() => {
+    expect(dialog).not.toBeInTheDocument();
+  });
+}
 
 describe('ApiKeys Page', () => {
   // eslint-disable-next-line functional/no-let
@@ -142,5 +183,92 @@ describe('ApiKeys Page', () => {
         expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);
       });
     });
+  });
+
+  it('block apiKey', async () => {
+    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    await act(async () => {
+      result = render(<ApiKeys />);
+    });
+    await testApiKeyChangeStatus(
+      mock,
+      0,
+      ApiKeyStatus.BLOCKED,
+      ApiKeySetStatus.BLOCK,
+      result!,
+      'buttonBlock'
+    );
+  });
+
+  it('enable apiKey', async () => {
+    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    await act(async () => {
+      result = render(<ApiKeys />);
+    });
+    await testApiKeyChangeStatus(
+      mock,
+      1,
+      ApiKeyStatus.ENABLED,
+      ApiKeySetStatus.ENABLE,
+      result!,
+      'buttonEnable'
+    );
+  });
+
+  it('rotate apiKey', async () => {
+    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    await act(async () => {
+      result = render(<ApiKeys />);
+    });
+    await testApiKeyChangeStatus(
+      mock,
+      0,
+      ApiKeyStatus.ROTATED,
+      ApiKeySetStatus.ROTATE,
+      result!,
+      'buttonRotate'
+    );
+  });
+
+  it('delete apiKey', async () => {
+    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    await act(async () => {
+      result = render(<ApiKeys />);
+    });
+    mock.onDelete(DELETE_APIKEY(mockApiKeysForFE.items[1].id)).reply(200);
+    const contextMenuButton = result!.getAllByTestId('contextMenuButton')[1];
+    fireEvent.click(contextMenuButton);
+    const actionButton = await waitFor(() => screen.getByTestId('buttonDelete'));
+    fireEvent.click(actionButton);
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    const confirmButton = within(dialog).getByTestId('action-modal-button');
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+      expect(mock.history.delete[0].url).toBe(DELETE_APIKEY(mockApiKeysForFE.items[1].id));
+      expect(mock.history.get).toHaveLength(2);
+    });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+  });
+
+  it('api return error', async () => {
+    mock.onGet(APIKEY_LIST()).reply(500);
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <ApiKeys />
+        </>
+      );
+    });
+    expect(result?.container).toHaveTextContent('error-fecth-api-keys');
   });
 });

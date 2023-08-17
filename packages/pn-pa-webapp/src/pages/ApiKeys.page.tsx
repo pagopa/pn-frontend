@@ -277,7 +277,7 @@ const ApiKeys = () => {
             {modal.view === ModalApiKeyView.ENABLE && (
               <ApiKeyModal
                 title={t('enable-api-key')}
-                subTitle={<Trans>{t('enable-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
+                subTitle={t('enable-warning', { apiKeyName: modal.apiKey?.name })}
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('enable-button')}
@@ -287,7 +287,7 @@ const ApiKeys = () => {
             {modal.view === ModalApiKeyView.ROTATE && (
               <ApiKeyModal
                 title={t('rotate-api-key')}
-                subTitle={<Trans>{t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}</Trans>}
+                subTitle={t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}
                 content={<Typography>{t('rotate-warning2')}</Typography>}
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
@@ -298,7 +298,7 @@ const ApiKeys = () => {
             {modal.view === ModalApiKeyView.DELETE && (
               <ApiKeyModal
                 title={t('delete-api-key')}
-                subTitle={<Trans>{t('delete-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
+                subTitle={t('delete-warning', { apiKeyName: modal.apiKey?.name })}
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('delete-button')}
