@@ -2,24 +2,29 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button,
   Checkbox,
   FormControl,
   FormControlLabel,
+  Typography,
 } from '@mui/material';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 
 type Props = {
   showModal: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
+  onClose: React.MouseEventHandler<HTMLButtonElement>;
+  onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   payment: boolean;
 };
 
-const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConfirm, payment }) => {
+export default function ConfirmCancellationDialog({
+  showModal,
+  onClose,
+  onConfirm,
+  payment,
+}: Props) {
   const [checked, setChecked] = useState(false);
   const handleChange = () => {
     setChecked(!checked);
@@ -28,26 +33,18 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
   useEffect(() => {
     setChecked(false);
   }, [onClose]);
+
   return (
-    <Dialog
-      open={showModal}
-      data-testid="modalId"
-      onClose={onClose}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-    >
+    <Dialog open={showModal} data-testid="modalId">
       <DialogTitle id="dialog-title" sx={{ p: 4 }}>
         {t('detail.cancel-notification-modal.title', { ns: 'notifiche' })}
       </DialogTitle>
       <DialogContent sx={{ px: 4, pb: 4 }}>
-        <DialogContentText id="dialog-description">
-          {t(
-            payment
-              ? 'detail.cancel-notification-modal.message-with-payment'
-              : 'detail.cancel-notification-modal.message',
-            { ns: 'notifiche' }
-          )}
-        </DialogContentText>
+        <Typography data-testid="dialogText" component="p">
+          {payment
+            ? t('detail.cancel-notification-modal.message-with-payment', { ns: 'notifiche' })
+            : t('detail.cancel-notification-modal.message', { ns: 'notifiche' })}
+        </Typography>
         {payment && (
           <FormControl>
             <FormControlLabel
@@ -57,7 +54,13 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
                   md: 3,
                 },
               }}
-              control={<Checkbox checked={checked} onChange={handleChange}></Checkbox>}
+              control={
+                <Checkbox
+                  data-testid="checkbox"
+                  checked={checked}
+                  onChange={handleChange}
+                ></Checkbox>
+              }
               label={t('detail.cancel-notification-modal.i-understand', { ns: 'notifiche' })}
               labelPlacement="end"
             />
@@ -79,6 +82,4 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
       </DialogActions>
     </Dialog>
   );
-};
-
-export default ConfirmCancellationDialog;
+}

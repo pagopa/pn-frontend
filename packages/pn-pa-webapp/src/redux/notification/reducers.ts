@@ -17,7 +17,6 @@ import {
   getSentNotificationOtherDocument,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
-  cancelNotification,
 } from './actions';
 
 const initialState = {
@@ -63,9 +62,6 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-    });
-    builder.addCase(cancelNotification.fulfilled, (state) => {
-      state.notification.notificationStatus = NotificationStatus.CANCELLED;
     });
     builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {

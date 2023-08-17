@@ -45,8 +45,8 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
           </TableRow>
         ))}
       </TableBody>
-      {children}
     </Table>
+    {children}
   </TableContainer>
 );
 

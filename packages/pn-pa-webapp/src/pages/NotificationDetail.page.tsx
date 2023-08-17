@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams /* useNavigate */ } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
+import React, { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
 import { Box, Button, Typography, Grid, Paper, Stack, Alert } from '@mui/material';
 import {
   // PN-1714
@@ -52,7 +52,9 @@ import {
 } from '../redux/notification/reducers';
 import ConfirmCancellationDialog from './components/Notifications/ConfirmCancellationDialog';
 
-const AlertNotificationCancel = (notification: { notificationStatus: NotificationStatus }) => {
+export const AlertNotificationCancel = (notification: {
+  notificationStatus: NotificationStatus;
+}) => {
   const { t } = useTranslation();
   return notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
     notification.notificationStatus === NotificationStatus.CANCELLED ? (
@@ -68,7 +70,11 @@ const AlertNotificationCancel = (notification: { notificationStatus: Notificatio
   );
 };
 
-const RenderNotificationDetailTable = (openModal: any) => {
+type Props = {
+  openModal: () => void;
+};
+
+export const RenderNotificationDetailTable = ({ openModal }: Props) => {
   const { t } = useTranslation();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
 
@@ -224,14 +230,12 @@ const RenderNotificationDetailTable = (openModal: any) => {
         >
           {t('detail.cancel-notification', { ns: 'notifiche' })}
         </Button>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </NotificationDetailTable>
   );
 };
 
-const NotificationDetail = () => {
+const NotificationDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   // const navigate = useNavigate();
@@ -329,6 +333,7 @@ const NotificationDetail = () => {
   );
 
   const openModal = () => {
+    console.log(' ciao ');
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };

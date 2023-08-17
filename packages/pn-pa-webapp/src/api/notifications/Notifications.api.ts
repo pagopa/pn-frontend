@@ -73,7 +73,7 @@ export const NotificationsApi = {
       if (response.data) {
         const mockedNotification = {
           ...response.data,
-          notificationStatus: NotificationStatus.CANCELLED,
+          notificationStatus: NotificationStatus.DELIVERED,
           notificationStatusHistory: [
             ...response.data.notificationStatusHistory,
             {

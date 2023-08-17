@@ -11,7 +11,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
-import { CancelNotification } from '../../models/NewNotification';
+import { CancelNotification } from '../../models/Notifications';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',

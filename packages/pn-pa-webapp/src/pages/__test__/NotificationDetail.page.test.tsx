@@ -1,7 +1,7 @@
 import React from 'react';
 import * as redux from 'react-redux';
-import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
-import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
+import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
@@ -9,7 +9,7 @@ import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../redux/notification/__test__/test-utils';
-import NotificationDetail from '../NotificationDetail.page';
+import NotificationDetail, { RenderNotificationDetailTable } from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
 
@@ -29,7 +29,7 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
-  NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => {
+  /* NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => {
     const amount = rows.find((r) => r.label === 'detail.amount');
     const noticeCodes = rows.find((r) => r.label === 'detail.notice-code');
     return (
@@ -39,7 +39,7 @@ jest.mock('@pagopa-pn/pn-commons', () => ({
         Table
       </div>
     );
-  },
+  }, */
   NotificationDetailDocuments: ({
     clickHandler,
   }: {
@@ -67,6 +67,7 @@ describe('NotificationDetail Page (one recipient)', () => {
   let result: RenderResult;
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
+  const openModal = jest.fn();
 
   beforeEach(async () => {
     // mock dispatch
@@ -75,18 +76,38 @@ describe('NotificationDetail Page (one recipient)', () => {
     // mock action
     const actionSpy = jest.spyOn(actions, 'getSentNotification');
     actionSpy.mockImplementation(mockActionFn);
+
     // render component
-    result = render(<NotificationDetail />, {
+    result = render(
+      <NotificationDetail>
+        <RenderNotificationDetailTable openModal={openModal}></RenderNotificationDetailTable>
+      </NotificationDetail>,
+      {
+        preloadedState: {
+          notificationState: {
+            notification: notificationToFe,
+            documentDownloadUrl: 'mocked-download-url',
+            legalFactDownloadUrl: 'mocked-legal-fact-url',
+          },
+          userState: { user: { organization: { id: 'mocked-sender' } } },
+        },
+      }
+    );
+  });
+
+  const changeStatus = (status: NotificationStatus) => {
+    result.unmount();
+    result = render(<NotificationDetail></NotificationDetail>, {
       preloadedState: {
         notificationState: {
-          notification: notificationToFe,
+          notification: { ...notificationToFe, notificationStatus: status },
           documentDownloadUrl: 'mocked-download-url',
           legalFactDownloadUrl: 'mocked-legal-fact-url',
         },
         userState: { user: { organization: { id: 'mocked-sender' } } },
       },
     });
-  });
+  };
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -136,7 +157,7 @@ describe('NotificationDetail Page (one recipient)', () => {
 
   // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
   // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
-  test.skip('clicks on the cancel button and on close modal', async () => {
+  test('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
     const modal = await waitFor(() => result.queryByTestId('modalId'));
@@ -146,9 +167,20 @@ describe('NotificationDetail Page (one recipient)', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
+  test('check alert on screen with change status', () => {
+    changeStatus(NotificationStatus.CANCELLED);
+    const alert = result.getByTestId('alert');
+    expect(alert).toBeInTheDocument();
+    expect(result.container).toHaveTextContent('detail.alert-cancellation-confirmed');
+    changeStatus(NotificationStatus.CANCELLATION_IN_PROGRESS);
+    expect(result.container).toHaveTextContent('detail.alert-cancellation-in-progress');
+    changeStatus(NotificationStatus.DELIVERED);
+    expect(alert).not.toBeInTheDocument();
+  });
+
   // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
   // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
-  test.skip('clicks on the cancel button and on confirm button', async () => {
+  test('clicks on the cancel button and on confirm button', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
     const modal = await waitFor(() => result.queryByTestId('modalId'));
