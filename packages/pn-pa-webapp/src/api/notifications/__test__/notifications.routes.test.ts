@@ -8,6 +8,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -64,5 +65,12 @@ describe('Notifications routes', () => {
   it('should compile CREATE_NOTIFICATION', () => {
     const route = CREATE_NOTIFICATION();
     expect(route).toEqual('/delivery/requests');
+  });
+
+  it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {
+    const route = NOTIFICATION_PAYMENT_ATTACHMENT('mocked-iun', 'mocked-attachmentName');
+    expect(route).toEqual(
+      '/delivery/notifications/sent/mocked-iun/attachments/payment/mocked-attachmentName'
+    );
   });
 });

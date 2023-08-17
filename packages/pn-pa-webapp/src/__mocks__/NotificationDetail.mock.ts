@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 import {
   AddressSource,
   DigitalDomicileType,
@@ -310,6 +311,17 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
     },
   },
+  {
+    elementId: 'PAYMENT.IUN_TJUN-ATLX-UNQN-202307-L-1.RECINDEX_0',
+    timestamp: '2023-07-21T14:58:29.886128718Z',
+    category: TimelineCategory.PAYMENT,
+    details: {
+      recIndex: 0,
+      recipientType: RecipientType.PF,
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547191',
+    },
+  },
 ];
 
 const notificationStatusHistory: Array<NotificationStatusHistory> = [
@@ -387,8 +399,8 @@ const documents: Array<NotificationDetailDocument> = [
 const paymentsPagoPa: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
-      creditorTaxId: '302011689142547191',
-      noticeCode: '77777777777',
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547191',
       applyCostFlg: true,
       attachment: {
         digests: {
@@ -402,13 +414,30 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
       },
     },
   },
+  {
+    pagoPA: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547192',
+      applyCostFlg: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee1.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
 ];
 
 const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
-      creditorTaxId: '302011686772695133',
-      noticeCode: '77777777777',
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695133',
       applyCostFlg: true,
       attachment: {
         digests: {
@@ -423,7 +452,19 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
     },
     f24Data: {
       metadata: 'metadata-mocked',
+      description: 'F24 prima rata TARI',
+    },
+  },
+  {
+    f24Data: {
+      metadata: 'metadata-mocked',
       description: 'F24 seconda rata TARI',
+    },
+  },
+  {
+    f24Data: {
+      metadata: 'metadata-mocked',
+      description: 'F24 terza rata TARI',
     },
   },
 ];

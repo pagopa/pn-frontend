@@ -1,21 +1,22 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  NotificationDetail,
-  LegalFactId,
-  performThunkAction,
-  NotificationDetailOtherDocument,
   DowntimeLogPage,
   GetNotificationDowntimeEventsParams,
   KnownFunctionality,
   LegalFactDocumentDetails,
+  LegalFactId,
+  NotificationDetail,
+  NotificationDetailOtherDocument,
+  PaymentAttachmentNameType,
+  performThunkAction,
 } from '@pagopa-pn/pn-commons';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
   GET_DOWNTIME_EVENTS = 'getDowntimeEvents',
-  GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
 }
 
@@ -99,4 +100,14 @@ export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
 >(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
   performThunkAction((legalFactId: string) => AppStatusApi.getLegalFactDetails(legalFactId))
+);
+
+export const getPaymentAttachment = createAsyncThunk<
+  { url: string },
+  { iun: string; attachmentName: PaymentAttachmentNameType }
+>(
+  'getPaymentAttachment',
+  performThunkAction((params: { iun: string; attachmentName: PaymentAttachmentNameType }) =>
+    NotificationsApi.getPaymentAttachment(params.iun, params.attachmentName)
+  )
 );

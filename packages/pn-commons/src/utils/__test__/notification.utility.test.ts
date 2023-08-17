@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
 import {
@@ -23,6 +24,7 @@ import {
 import {
   AppIoCourtesyMessageEventType,
   NotificationDetailOtherDocument,
+  PagoPAPaymentHistory,
   PaidDetails,
   PaymentHistory,
   PaymentStatus,
@@ -1830,16 +1832,46 @@ describe('Populate payment history', () => {
     expect(mappedPayments).toStrictEqual(res);
   });
 
+  it('With empty external registry it should return the mapped array with only timeline info', () => {
+    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+      const timelineEvent = notificationToFe.timeline.find(
+        (event) =>
+          event.category === TimelineCategory.PAYMENT &&
+          (event.details as PaidDetails).creditorTaxId === item.pagoPA?.creditorTaxId &&
+          (event.details as PaidDetails).noticeCode === item.pagoPA?.noticeCode
+      )?.details;
+
+      const pagoPAPayment = { ...item.pagoPA, ...timelineEvent } as PagoPAPaymentHistory;
+      if (timelineEvent) {
+        pagoPAPayment.status = PaymentStatus.SUCCEEDED;
+      }
+
+      return {
+        pagoPA: pagoPAPayment,
+        f24Data: item.f24Data,
+      } as PaymentHistory;
+    });
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      notificationToFe.recipients,
+      []
+    );
+
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
   it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
     const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
       const checkoutSucceded =
         paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
 
       const timelineEvent = notificationToFe.timeline.find(
-        (item) =>
-          item.category === TimelineCategory.PAYMENT &&
-          (item.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
-          (item.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+        (event) =>
+          event.category === TimelineCategory.PAYMENT &&
+          (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+          (event.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
       )?.details;
 
       return {
