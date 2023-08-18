@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { NotificationStatus } from './NotificationStatus';
 
 /** Notification Detail */
@@ -29,8 +30,10 @@ export interface NotificationDetail {
   otherDocuments?: Array<NotificationDetailDocument>;
 }
 
+export type PagoPAPaymentHistory = PagoPAPaymentDetails & PaidDetails & ExtRegistriesPaymentDetails;
+
 export interface PaymentHistory {
-  pagoPA?: PagoPAPaymentDetails & PaidDetails & ExtRegistriesPaymentDetails;
+  pagoPA?: PagoPAPaymentHistory;
   f24Data?: F24PaymentDetails;
 }
 

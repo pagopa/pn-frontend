@@ -1,11 +1,15 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import {
   LegalFactId,
   LegalFactType,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  PaymentAttachmentSName,
 } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
+
 import {
+  notificationDTO,
   notificationDTOMultiRecipient,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
@@ -17,6 +21,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
 } from '../../../api/notifications/notifications.routes';
 import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
@@ -24,6 +29,7 @@ import { store } from '../../store';
 import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
+  getPaymentAttachment,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
@@ -53,7 +59,6 @@ const initialState = {
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
   downtimeLegalFactUrl: '',
-  paymentInfo: [],
   downtimeEvents: [],
 };
 
@@ -161,6 +166,24 @@ describe('Notification detail redux state tests', () => {
     );
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
+    expect(payload).toEqual({ url });
+  });
+
+  it('Should be able to fetch the pagopa document', async () => {
+    const iun = notificationDTO.iun;
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const url = 'http://mocked-url.com';
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
+      200,
+      undefined,
+      { url }
+    );
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
+    const payload = action.payload;
+    expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(payload).toEqual({ url });
   });
 

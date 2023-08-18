@@ -1,14 +1,15 @@
 import React from 'react';
 import * as redux from 'react-redux';
-import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
-import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
-import { render } from '../../__test__/test-utils';
-import * as actions from '../../redux/notification/actions';
+import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
+
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
+import { render } from '../../__test__/test-utils';
+import * as actions from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
@@ -204,5 +205,8 @@ describe('NotificationDetail Page (multi recipient)', () => {
     expect(mockDispatchFn).toBeCalledTimes(2);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
+    // check payment history box
+    const paymentInfoBox = result.getByTestId('paymentInfoBox');
+    expect(paymentInfoBox).toBeInTheDocument();
   });
 });

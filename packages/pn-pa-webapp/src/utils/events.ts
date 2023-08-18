@@ -12,6 +12,7 @@ export enum TrackEventType {
   NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION = 'setCancelledIun/fulfilled',
   NOTIFICATION_DETAIL_ALL_ATTACHMENTS = 'NOTIFICATION_DETAIL_ALL_ATTACHMENTS',
   NOTIFICATION_DETAIL_SINGLE_ATTACHMENT = 'getSentNotificationDocument/fulfilled',
+  NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE = 'NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE',
   NOTIFICATION_SEND = 'NOTIFICATION_SEND',
   NOTIFICATION_SEND_DELIVERY_MODE = 'NOTIFICATION_SEND_DELIVERY_MODE',
   NOTIFICATION_SEND_PAYMENT_MODE = 'NOTIFICATION_SEND_PAYMENT_MODE',
@@ -47,7 +48,7 @@ export enum TrackEventType {
   FOOTER_ACCESSIBILITY = 'FOOTER_ACCESSIBILITY',
   FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH',
   APIKEYS_TABLE_PAGINATION = 'APIKEYS_TABLE_PAGINATION',
-  APIKEYS_TABLE_SIZE = 'APIKEYS_TABLE_SIZE'
+  APIKEYS_TABLE_SIZE = 'APIKEYS_TABLE_SIZE',
 }
 
 export const events: EventsType = {
@@ -94,6 +95,10 @@ export const events: EventsType = {
   [TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT]: {
     category: 'notifications',
     action: 'detail single attachment',
+  },
+  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE]: {
+    category: 'notification',
+    action: 'download the PagoPA file',
   },
   [TrackEventType.NOTIFICATION_SEND]: {
     category: 'notifications',
@@ -233,10 +238,10 @@ export const events: EventsType = {
   },
   [TrackEventType.APIKEYS_TABLE_PAGINATION]: {
     category: 'apikeys',
-    action: 'table pagination'
+    action: 'table pagination',
   },
   [TrackEventType.APIKEYS_TABLE_SIZE]: {
     category: 'apikeys',
     action: 'table rows per page',
-  }
+  },
 };

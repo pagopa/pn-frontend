@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { NotificationDetailPayment, NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
@@ -22,57 +24,111 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+async function selectRecipient(recipientToSelect: number) {
+  const recipientsSelect = document.querySelector('div[id="recipients-select"]');
+  const selectInput = document.querySelector(`input[name="recipients-select"]`);
+  fireEvent.mouseDown(recipientsSelect!);
+  const selectOptionsContainer = await waitFor(() => screen.queryByRole('presentation'));
+  expect(selectOptionsContainer).toBeInTheDocument();
+  const selectOptionsList = await within(selectOptionsContainer!).findByRole('listbox');
+  expect(selectOptionsList).toBeInTheDocument();
+  const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
+  expect(selectOptionsListItems).toHaveLength(notificationToFeMultiRecipient.recipients.length);
+  selectOptionsListItems.forEach((opt, index) => {
+    expect(opt).toHaveTextContent(
+      notificationToFeMultiRecipient.recipients[index].denomination +
+        ' - ' +
+        notificationToFeMultiRecipient.recipients[index].taxId
+    );
+  });
+  fireEvent.click(selectOptionsListItems[recipientToSelect]);
+  await waitFor(() => {
+    expect(selectInput).toHaveValue(
+      notificationToFeMultiRecipient.recipients[recipientToSelect].taxId
+    );
+  });
+}
+
+function getPaymentsCount(
+  recipientToSelect: number,
+  recipients: Array<NotificationDetailRecipient>,
+  key: keyof NotificationDetailPayment
+): number {
+  return (
+    recipients[recipientToSelect].payments?.reduce((count, item) => {
+      if (item[key]) {
+        count++;
+      }
+      return count;
+    }, 0) ?? 0
+  );
+}
+
 describe('NotificationPaymentSender Component', () => {
   it('renders component - one recipient', () => {
     // render component
-    const { container, queryByTestId } = render(
-      <NotificationPaymentSender recipients={notificationToFe.recipients} />
+    const { container, queryByTestId, getAllByTestId } = render(
+      <NotificationPaymentSender
+        iun={notificationToFe.iun}
+        recipients={notificationToFe.recipients}
+        timeline={notificationToFe.timeline}
+      />
     );
     expect(container).toHaveTextContent('payment.title');
     expect(container).toHaveTextContent('payment.subtitle-single');
     const recipientsSelect = queryByTestId('recipients-select');
     expect(recipientsSelect).not.toBeInTheDocument();
+    const paymentItems = getAllByTestId('payment-item');
+    expect(paymentItems).toHaveLength(getPaymentsCount(0, notificationToFe.recipients, 'pagoPA'));
   });
 
   it('renders component - multi recipient', () => {
     // render component
-    const { container, getByTestId } = render(
-      <NotificationPaymentSender recipients={notificationToFeMultiRecipient.recipients} />
+    const { container, getByTestId, queryAllByTestId } = render(
+      <NotificationPaymentSender
+        iun={notificationToFeMultiRecipient.iun}
+        recipients={notificationToFeMultiRecipient.recipients}
+        timeline={notificationToFeMultiRecipient.timeline}
+      />
     );
     expect(container).toHaveTextContent('payment.title');
     expect(container).toHaveTextContent('payment.subtitle-multiple');
     const recipientsSelect = getByTestId('recipients-select');
     expect(recipientsSelect).toBeInTheDocument();
+    const paymentItems = queryAllByTestId('payment-item');
+    expect(paymentItems).toHaveLength(0);
   });
 
   it('select a recipient', async () => {
-    let result: RenderResult;
+    let result: RenderResult | undefined;
     // render component
     await act(async () => {
       result = render(
-        <NotificationPaymentSender recipients={notificationToFeMultiRecipient.recipients} />
+        <NotificationPaymentSender
+          iun={notificationToFeMultiRecipient.iun}
+          recipients={notificationToFeMultiRecipient.recipients}
+          timeline={notificationToFeMultiRecipient.timeline}
+        />
       );
     });
     // select a recipient
-    const recipientsSelect = document.querySelector('div[id="recipients-select"]');
-    const selectInput = document.querySelector(`input[name="recipients-select"]`);
-    fireEvent.mouseDown(recipientsSelect!);
-    const selectOptionsContainer = await waitFor(() => screen.queryByRole('presentation'));
-    expect(selectOptionsContainer).toBeInTheDocument();
-    const selectOptionsList = await within(selectOptionsContainer!).findByRole('listbox');
-    expect(selectOptionsList).toBeInTheDocument();
-    const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
-    expect(selectOptionsListItems).toHaveLength(notificationToFeMultiRecipient.recipients.length);
-    selectOptionsListItems.forEach((opt, index) => {
-      expect(opt).toHaveTextContent(
-        notificationToFeMultiRecipient.recipients[index].denomination +
-          ' - ' +
-          notificationToFeMultiRecipient.recipients[index].taxId
-      );
-    });
-    fireEvent.click(selectOptionsListItems[1]);
-    await waitFor(() => {
-      expect(selectInput).toHaveValue(notificationToFeMultiRecipient.recipients[1].taxId);
-    });
+    await selectRecipient(0);
+    let paymentItems = result?.queryAllByTestId('payment-item');
+    let f24Items = result?.queryAllByTestId('f24');
+    expect(paymentItems).toHaveLength(
+      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'pagoPA')
+    );
+    expect(f24Items).toHaveLength(
+      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'f24Data')
+    );
+    await selectRecipient(1);
+    paymentItems = result?.queryAllByTestId('payment-item');
+    f24Items = result?.queryAllByTestId('f24');
+    expect(paymentItems).toHaveLength(
+      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPA')
+    );
+    expect(f24Items).toHaveLength(
+      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'f24Data')
+    );
   });
 });

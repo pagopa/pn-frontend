@@ -20,8 +20,14 @@
   "payment": {
     "title": "Pagamenti",
     "subtitle-single": "Qui puoi monitorare lo stato di pagamento degli avvisi pagoPA allegati alla notifica.",
+    "subtitle-single-f24": "Qui puoi vedere i modelli F24 allegati alla notifica.",
     "subtitle-multiple": "Per vedere lo stato di pagamento degli avvisi pagoPA allegati alla notifica, seleziona un destinatario.",
-    "show-more": "Mostra dettagli"
+    "subtitle-multiple-f24": "Per vedere i modelli F24 allegati alla notifica, seleziona un destinatario.",
+    "pagopa-notice": "Avviso pagoPA",
+    "paid": "Pagato",
+    "f24-attached": "Modelli F24 allegati",
+    "attachments": "allegati",
+    "f24-dialog-title": "Modelli F24 allegati alla notifica {{iun}}"
   },
   "table": {
     "title": "Tabella delle notifiche",

@@ -1,4 +1,17 @@
 import {
+  LegalFactId,
+  LegalFactType,
+  NotificationDetailOtherDocument,
+  PaymentAttachmentNameType,
+  PaymentAttachmentSName,
+  formatToTimezoneString,
+  getNextDay,
+  tenYearsAgo,
+  today,
+} from '@pagopa-pn/pn-commons';
+
+import {
+  notificationDTO,
   notificationDTOMultiRecipient,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
@@ -16,17 +29,9 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
-import {
-  LegalFactId,
-  LegalFactType,
-  NotificationDetailOtherDocument,
-  formatToTimezoneString,
-  getNextDay,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -208,6 +213,27 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('getPaymentAttachment', async () => {
+    const iun = notificationDTO.iun;
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
+      200,
+      undefined,
+      { url: 'http://mocked-url.com' }
+    );
+
+    const res = await NotificationsApi.getPaymentAttachment(
+      iun,
+      attachmentName as PaymentAttachmentNameType
+    );
+    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
     mock.reset();
     mock.restore();
   });
