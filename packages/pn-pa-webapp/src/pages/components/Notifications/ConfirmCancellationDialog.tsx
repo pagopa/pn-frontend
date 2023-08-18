@@ -9,8 +9,8 @@ import {
   FormControlLabel,
   Typography,
 } from '@mui/material';
-import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   showModal: boolean;
@@ -25,6 +25,8 @@ export default function ConfirmCancellationDialog({
   onConfirm,
   payment,
 }: Props) {
+  const { t } = useTranslation(['notifiche']);
+
   const [checked, setChecked] = useState(false);
   const handleChange = () => {
     setChecked(!checked);
@@ -37,13 +39,13 @@ export default function ConfirmCancellationDialog({
   return (
     <Dialog open={showModal} data-testid="modalId">
       <DialogTitle id="dialog-title" sx={{ p: 4 }}>
-        {t('detail.cancel-notification-modal.title', { ns: 'notifiche' })}
+        {t('detail.cancel-notification-modal.title')}
       </DialogTitle>
       <DialogContent sx={{ px: 4, pb: 4 }}>
         <Typography data-testid="dialogText" component="p">
           {payment
-            ? t('detail.cancel-notification-modal.message-with-payment', { ns: 'notifiche' })
-            : t('detail.cancel-notification-modal.message', { ns: 'notifiche' })}
+            ? t('detail.cancel-notification-modal.message-with-payment')
+            : t('detail.cancel-notification-modal.message')}
         </Typography>
         {payment && (
           <FormControl>
@@ -61,7 +63,7 @@ export default function ConfirmCancellationDialog({
                   onChange={handleChange}
                 ></Checkbox>
               }
-              label={t('detail.cancel-notification-modal.i-understand', { ns: 'notifiche' })}
+              label={t('detail.cancel-notification-modal.i-understand')}
               labelPlacement="end"
             />
           </FormControl>
@@ -69,15 +71,15 @@ export default function ConfirmCancellationDialog({
       </DialogContent>
       <DialogActions sx={{ px: 4, pb: 4 }}>
         <Button onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
-          {t('button.indietro')}
+          {t('button.indietro', { ns: 'common' })}
         </Button>
         <Button
           onClick={onConfirm}
-          disabled={!checked}
+          disabled={payment ? !checked : false}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
         >
-          {t('detail.cancel-notification-modal.confirm-cancel-button', { ns: 'notifiche' })}
+          {t('detail.cancel-notification-modal.confirm-cancel-button')}
         </Button>
       </DialogActions>
     </Dialog>

@@ -6,7 +6,7 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
-  NotificationStatus,
+  // NotificationStatus,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
@@ -73,24 +73,24 @@ export const NotificationsApi = {
       if (response.data) {
         const mockedNotification = {
           ...response.data,
-          notificationStatus: NotificationStatus.DELIVERED,
+          /*   notificationStatus: NotificationStatus.DELIVERED,
           notificationStatusHistory: [
             ...response.data.notificationStatusHistory,
             {
-              status: NotificationStatus.CANCELLED,
+              status: NotificationStatus.CANCELLATION_IN_PROGRESS,
               activeFrom: '2043-08-15T13:42:54.17675939Z',
               relatedTimelineElements: [],
             },
-          ],
+          ], */
           timeline: [
-            ...response.data.timeline,
             {
-              elementId: 'NOTIFICATION_CANCELLED.IUN_TRJT-LVLX-JMRK-202308-L-1',
-              timestamp: '2023-08-14T13:42:54.17675939Z',
+              elementId: 'NOTIFICATION_CANCELLATION_REQUEST.IUN_TRJT-LVLX-JMRK-202308-L-1',
+              timestamp: '2043-08-14T13:42:54.17675939Z',
               legalFactsIds: [],
-              category: 'NOTIFICATION_CANCELLED',
+              category: 'NOTIFICATION_CANCELLATION_REQUEST',
               details: {},
             },
+            ...response.data.timeline,
           ],
         } as NotificationDetail;
 

@@ -217,7 +217,7 @@ export function getNotificationStatusInfos(
       return {
         color: 'warning',
         ...localizeStatus(
-          'cancelled',
+          'canceled',
           'Annullata',
           "L'ente ha annullato l'invio della notifica",
           "L'ente ha annullato l'invio della notifica"
@@ -227,7 +227,7 @@ export function getNotificationStatusInfos(
       return {
         color: 'warning',
         ...localizeStatus(
-          'cancelled',
+          'canceled',
           'Annullata',
           'Annullamento in corso. Lo stato sarà aggiornato a breve.',
           'Annullamento in corso. Lo stato sarà aggiornato a breve.'

@@ -422,10 +422,10 @@ describe('notification status texts', () => {
     testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.CANCELLED,
       undefined,
-      'status.cancelled',
+      'status.canceled',
       'warning',
-      'status.cancelled-tooltip',
-      'status.cancelled-description'
+      'status.canceled-tooltip',
+      'status.canceled-description'
     );
   });
 });

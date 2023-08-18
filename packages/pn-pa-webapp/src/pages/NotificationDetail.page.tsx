@@ -26,6 +26,7 @@ import {
   GetNotificationDowntimeEventsParams,
   NotificationPaidDetail,
   dataRegex,
+  NotificationStatusHistory,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -312,7 +313,10 @@ const NotificationDetail: React.FC = () => {
   };
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
-
+  const withPayment =
+    notification.notificationStatusHistory.filter(
+      (el: NotificationStatusHistory) => el.status === NotificationStatus.PAID
+    ).length > 0;
   const hasDocumentsAvailable = !(isCancelled || !notification.documentsAvailable);
 
   const getDownloadFilesMessage = useCallback(
@@ -333,7 +337,6 @@ const NotificationDetail: React.FC = () => {
   );
 
   const openModal = () => {
-    console.log(' ciao ');
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
@@ -506,7 +509,7 @@ const NotificationDetail: React.FC = () => {
       <ConfirmCancellationDialog
         onClose={handleModalClose}
         onConfirm={handleModalCloseAndProceed}
-        payment={true}
+        payment={withPayment}
         showModal={showModal}
       />
     </>

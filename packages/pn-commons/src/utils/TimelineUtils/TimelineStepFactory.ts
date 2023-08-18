@@ -39,7 +39,6 @@ export class TimelineStepFactory {
       case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS:
         return new SendAnalogFlowStep();
       // -------------------------------------------
-
       case TimelineCategory.NOT_HANDLED:
         return new NotHandledStep();
       default:

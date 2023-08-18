@@ -27,7 +27,7 @@ describe('render dialog', () => {
     jest.clearAllMocks();
   });
 
-  test.only('check dialog text with not payment', async () => {
+  test('check dialog text with not payment', async () => {
     render(
       <ConfirmCancellationDialog
         showModal={true}
@@ -36,7 +36,6 @@ describe('render dialog', () => {
         payment={false}
       ></ConfirmCancellationDialog>
     );
-    screen.debug();
 
     const dialog = screen.getByTestId('dialogText');
     await waitFor(() => {
@@ -45,55 +44,57 @@ describe('render dialog', () => {
   });
 
   test('check dialog text with payment', async () => {
-    const result = renderConfirmCancellatioDialog({
-      showModal: true,
-      onConfirm,
-      onClose,
-      payment: true,
-    });
-
-    const dialog = result.getByTestId('dialogText');
+    render(
+      <ConfirmCancellationDialog
+        showModal={true}
+        onClose={onClose}
+        onConfirm={onConfirm}
+        payment={true}
+      ></ConfirmCancellationDialog>
+    );
+    const dialog = screen.getByTestId('dialogText');
     expect(dialog).toHaveTextContent('detail.cancel-notification-modal.message-with-payment');
   });
 
   it('checks that the confirm and cancel functions are executed', async () => {
-    const result = renderConfirmCancellatioDialog({
-      showModal: true,
-      onConfirm,
-      onClose,
-      payment: false,
-    });
-    const confirm = result.getByTestId('modalCloseBtnId');
-    const cancel = result.getByTestId('modalCloseAndProceedBtnId');
+    render(
+      <ConfirmCancellationDialog
+        showModal={true}
+        onClose={onClose}
+        onConfirm={onConfirm}
+        payment={false}
+      ></ConfirmCancellationDialog>
+    );
+
+    const confirm = screen.getByTestId('modalCloseAndProceedBtnId');
+    const cancel = screen.getByTestId('modalCloseBtnId');
 
     fireEvent.click(confirm);
-    await waitFor(() => {
-      expect(onConfirm).toBeCalledTimes(1);
-    });
+    expect(onConfirm).toBeCalledTimes(1);
 
     fireEvent.click(cancel);
-    await waitFor(() => {
-      expect(onClose).toBeCalledTimes(1);
-    });
+    expect(onClose).toBeCalledTimes(1);
   });
 
   it('checks that the confirm and cancel functions are executed with payment', async () => {
-    const result = renderConfirmCancellatioDialog({
-      showModal: true,
-      onConfirm,
-      onClose,
-      payment: true,
-    });
+    render(
+      <ConfirmCancellationDialog
+        showModal={true}
+        onClose={onClose}
+        onConfirm={onConfirm}
+        payment={true}
+      ></ConfirmCancellationDialog>
+    );
 
-    const confirm = result.getByTestId('modalCloseAndProceedBtnId');
+    const confirm = screen.getByTestId('modalCloseAndProceedBtnId');
     expect(confirm).toBeDisabled();
-    const checkbox = result.getByTestId('checkbox');
+    const checkbox = screen.getByTestId('checkbox');
     fireEvent.click(checkbox);
 
     await waitFor(() => {
       expect(confirm).not.toBeDisabled();
     });
-    const cancel = result.getByTestId('modalCloseBtnId');
+    const cancel = screen.getByTestId('modalCloseBtnId');
 
     fireEvent.click(confirm);
     await waitFor(() => {

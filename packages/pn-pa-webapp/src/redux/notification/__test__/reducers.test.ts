@@ -6,6 +6,7 @@ import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import {
+  cancelNotification,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
   getSentNotification,
@@ -147,5 +148,10 @@ describe('Notification detail redux state tests', () => {
     const state = store.getState().notificationState;
     expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
+  });
+
+  it('Should be able to cancel notification', async () => {
+    const action = await store.dispatch(cancelNotification('mocked-iun'));
+    expect(action.type).toBe('cancelNotification/rejected');
   });
 });
