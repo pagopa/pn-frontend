@@ -74,6 +74,16 @@
       "i-understand": "Ho capito",
       "message-with-payment": "Annullando la notifica, dichiari di essere consapevole che ogni eventuale attività di rimborso in favore dei destinatari e rimane a carico dell'ente mittente."
     },
+    "errors": {
+      "already_cancelled": {
+        "title": "",
+        "message": "La seguente notifica è già in procedura di annullamento"
+      },
+      "generic_error": {
+        "title": "",
+        "message": "Si è verificato un errore durante l’annullamento. Riprova."
+      }
+    },
     "acts": "Documenti allegati",
     "download-message-cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
     "download-message-available": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
@@ -441,18 +451,6 @@
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Dati non validi",
         "message": "Il numero di protocollo inserito è già esistente"
-      }
-    }
-  },
-  "cancelled-notification": {
-    "errors": {
-      "already_cancelled": {
-        "title": "",
-        "message": "La seguente notifica è già in procedura di annullamento"
-      },
-      "generic_error": {
-        "title": "",
-        "message": "Si è verificato un errore durante l’annullamento. Riprova."
       }
     }
   }

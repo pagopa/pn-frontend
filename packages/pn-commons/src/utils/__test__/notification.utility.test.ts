@@ -428,6 +428,17 @@ describe('notification status texts', () => {
       'status.canceled-description'
     );
   });
+
+  it('return notification status infos - CANCELLED - passing status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      NotificationStatus.CANCELLATION_IN_PROGRESS,
+      undefined,
+      'status.canceled',
+      'warning',
+      'status.canceled-tooltip',
+      'status.canceled-description'
+    );
+  });
 });
 
 describe('timeline event description', () => {

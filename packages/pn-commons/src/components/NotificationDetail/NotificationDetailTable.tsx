@@ -17,6 +17,7 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
     sx={{ px: 3, py: { xs: 3, lg: 2 } }}
     elevation={0}
     id="notification-detail"
+    data-testid="detailTable"
   >
     <Table
       aria-label={getLocalizedOrDefaultLabel(

@@ -11,10 +11,7 @@ export class NotificationAlreadyCancelledAppError extends AppError {
   getMessage() {
     return {
       title: this.translateFunction('', ''),
-      content: this.translateFunction(
-        'cancelled-notification.errors.already_cancelled.message',
-        'notifiche'
-      ),
+      content: this.translateFunction('detail.errors.already_cancelled.message', 'notifiche'),
     };
   }
 }

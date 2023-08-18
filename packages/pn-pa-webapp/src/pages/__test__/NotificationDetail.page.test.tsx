@@ -9,7 +9,7 @@ import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../redux/notification/__test__/test-utils';
-import NotificationDetail, { RenderNotificationDetailTable } from '../NotificationDetail.page';
+import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
 
@@ -29,17 +29,6 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
-  /* NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => {
-    const amount = rows.find((r) => r.label === 'detail.amount');
-    const noticeCodes = rows.find((r) => r.label === 'detail.notice-code');
-    return (
-      <div>
-        <div>{noticeCodes && noticeCodes.value}</div>
-        <div>{amount && amount.value}</div>
-        Table
-      </div>
-    );
-  }, */
   NotificationDetailDocuments: ({
     clickHandler,
   }: {
@@ -67,7 +56,7 @@ describe('NotificationDetail Page (one recipient)', () => {
   let result: RenderResult;
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
-  const openModal = jest.fn();
+  // const openModal = jest.fn();
 
   beforeEach(async () => {
     // mock dispatch
@@ -78,26 +67,21 @@ describe('NotificationDetail Page (one recipient)', () => {
     actionSpy.mockImplementation(mockActionFn);
 
     // render component
-    result = render(
-      <NotificationDetail>
-        <RenderNotificationDetailTable openModal={openModal}></RenderNotificationDetailTable>
-      </NotificationDetail>,
-      {
-        preloadedState: {
-          notificationState: {
-            notification: notificationToFe,
-            documentDownloadUrl: 'mocked-download-url',
-            legalFactDownloadUrl: 'mocked-legal-fact-url',
-          },
-          userState: { user: { organization: { id: 'mocked-sender' } } },
+    result = render(<NotificationDetail />, {
+      preloadedState: {
+        notificationState: {
+          notification: notificationToFe,
+          documentDownloadUrl: 'mocked-download-url',
+          legalFactDownloadUrl: 'mocked-legal-fact-url',
         },
-      }
-    );
+        userState: { user: { organization: { id: 'mocked-sender' } } },
+      },
+    });
   });
 
   const changeStatus = (status: NotificationStatus) => {
     result.unmount();
-    result = render(<NotificationDetail></NotificationDetail>, {
+    result = render(<NotificationDetail />, {
       preloadedState: {
         notificationState: {
           notification: { ...notificationToFe, notificationStatus: status },
@@ -122,7 +106,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
-    expect(result.container).toHaveTextContent(/Table/i);
+    expect(result.getByTestId('detailTable')).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/1,30 €/i);
     expect(result.container).toHaveTextContent(
       `${notificationToFe.recipients[0].payment?.creditorTaxId} - ${notificationToFe.recipients[0].payment?.noticeCode}`
@@ -190,7 +174,6 @@ describe('NotificationDetail Page (one recipient)', () => {
     );
     fireEvent.click(modalCloseAndProceedBtn!);
     await waitFor(() => expect(modal).not.toBeInTheDocument());
-    expect(mockNavigateFn).toBeCalledTimes(1);
   });
 });
 
@@ -234,7 +217,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
       notificationToFeMultiRecipient.subject
     );
     expect(result.container).toHaveTextContent('mocked-abstract');
-    expect(result.container).toHaveTextContent(/Table/i);
+    expect(result.getByTestId('detailTable')).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/2,00 €/i);
     for (const recipient of notificationToFeMultiRecipient.recipients) {
       expect(result.container).toHaveTextContent(

@@ -13,8 +13,6 @@ describe('Test NotificationAlreadyCancelledAppError', () => {
     const messege = appError.getMessage();
     // controllo fatto con uno spazio perchè considera anche da quale locales prendere il messaggio
     expect(messege.title).toBe(' ');
-    expect(messege.content).toBe(
-      'cancelled-notification.errors.already_cancelled.message notifiche'
-    );
+    expect(messege.content).toBe('detail.errors.already_cancelled.message notifiche');
   });
 });

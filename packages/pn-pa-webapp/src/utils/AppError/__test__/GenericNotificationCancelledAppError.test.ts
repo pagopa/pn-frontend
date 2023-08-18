@@ -13,6 +13,6 @@ describe('Test GenericNotificationCancelledAppError', () => {
     const messege = appError.getMessage();
     // controllo fatto con uno spazio perchè considera anche da quale locales prendere il messaggio
     expect(messege.title).toBe(' ');
-    expect(messege.content).toBe('cancelled-notification.errors.generic_error.message notifiche');
+    expect(messege.content).toBe('detail.errors.generic_error.message notifiche');
   });
 });

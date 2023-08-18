@@ -11,7 +11,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
-import { CancelNotification } from '../../models/Notifications';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
@@ -25,7 +24,8 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   performThunkAction((params: string) => NotificationsApi.getSentNotification(params))
 );
 
-export const cancelNotification = createAsyncThunk<CancelNotification, string>(
+// da cambiare il ritorno nel caso venga restituito qualcosa
+export const cancelNotification = createAsyncThunk<void, string>(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
   performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
 );

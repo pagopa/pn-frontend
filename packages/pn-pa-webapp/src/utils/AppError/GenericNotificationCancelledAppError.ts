@@ -11,10 +11,7 @@ export class GenericNotificationCancelledAppError extends AppError {
   getMessage() {
     return {
       title: this.translateFunction('', ''),
-      content: this.translateFunction(
-        'cancelled-notification.errors.generic_error.message',
-        'notifiche'
-      ),
+      content: this.translateFunction('detail.errors.generic_error.message', 'notifiche'),
     };
   }
 }

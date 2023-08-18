@@ -45,7 +45,6 @@ import {
   NOTIFICATION_ACTIONS,
   cancelNotification,
 } from '../redux/notification/actions';
-// import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
   resetLegalFactState,
   resetState,
@@ -53,9 +52,7 @@ import {
 } from '../redux/notification/reducers';
 import ConfirmCancellationDialog from './components/Notifications/ConfirmCancellationDialog';
 
-export const AlertNotificationCancel = (notification: {
-  notificationStatus: NotificationStatus;
-}) => {
+const AlertNotificationCancel = (notification: { notificationStatus: NotificationStatus }) => {
   const { t } = useTranslation();
   return notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
     notification.notificationStatus === NotificationStatus.CANCELLED ? (
@@ -75,7 +72,7 @@ type Props = {
   openModal: () => void;
 };
 
-export const RenderNotificationDetailTable = ({ openModal }: Props) => {
+const RenderNotificationDetailTable = ({ openModal }: Props) => {
   const { t } = useTranslation();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
 
@@ -312,28 +309,24 @@ const NotificationDetail: React.FC = () => {
     void dispatch(cancelNotification(notification.iun));
   };
 
-  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
   const withPayment =
     notification.notificationStatusHistory.filter(
       (el: NotificationStatusHistory) => el.status === NotificationStatus.PAID
     ).length > 0;
-  const hasDocumentsAvailable = !(isCancelled || !notification.documentsAvailable);
+  const hasDocumentsAvailable = !notification.documentsAvailable;
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelled) {
-        return t('detail.download-message-cancelled', { ns: 'notifiche' });
-      }
-      /*  if (hasDocumentsAvailable) {
+      if (hasDocumentsAvailable) {
         return type === 'aar'
           ? t('detail.download-aar-available', { ns: 'notifiche' })
           : t('detail.download-message-available', { ns: 'notifiche' });
-      } */
+      }
       return type === 'aar'
         ? t('detail.download-aar-expired', { ns: 'notifiche' })
         : t('detail.download-message-expired', { ns: 'notifiche' });
     },
-    [isCancelled, hasDocumentsAvailable]
+    [hasDocumentsAvailable]
   );
 
   const openModal = () => {
@@ -412,16 +405,14 @@ const NotificationDetail: React.FC = () => {
   const direction = isMobile ? 'column-reverse' : 'row';
   const spacing = isMobile ? 3 : 0;
 
-  const apiError = hasNotificationSentApiError && (
-    <Box sx={{ p: 3 }}>
-      {properBreadcrumb}
-      <ApiError onClick={() => fetchSentNotification()} mt={3} />
-    </Box>
-  );
-
   return (
     <>
-      {apiError}
+      {hasNotificationSentApiError && (
+        <Box sx={{ p: 3 }}>
+          {properBreadcrumb}
+          <ApiError onClick={() => fetchSentNotification()} mt={3} />
+        </Box>
+      )}
       {!hasNotificationSentApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
@@ -429,12 +420,8 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <AlertNotificationCancel
-                  notificationStatus={notification.notificationStatus}
-                ></AlertNotificationCancel>
-                <RenderNotificationDetailTable
-                  openModal={openModal}
-                ></RenderNotificationDetailTable>
+                <AlertNotificationCancel notificationStatus={notification.notificationStatus} />
+                <RenderNotificationDetailTable openModal={openModal} />
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
