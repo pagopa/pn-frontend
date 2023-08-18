@@ -40,7 +40,11 @@ describe('NotificationPaymentPagoPAItem Component', () => {
 
   it('renders NotificationPaymentPagoPAItem - should show caption if applyCostFlg is true', () => {
     const result = render(
-      <NotificationPaymentPagoPAItem pagoPAItem={pagopPAItem} loading={false} isSelected={false} />
+      <NotificationPaymentPagoPAItem
+        pagoPAItem={{ ...pagopPAItem, amount: 999 }}
+        loading={false}
+        isSelected={false}
+      />
     );
 
     const caption = result.getByTestId('apply-costs-caption');
@@ -53,7 +57,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
 
-    const chip = result.getByTestId('statusChip-Pagato');
+    const chip = result.getByTestId('statusChip-detail.payment.status.succeded');
     const radio = result.queryByTestId('radio-button');
 
     expect(radio).not.toBeInTheDocument();
@@ -66,7 +70,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
 
-    const chip = result.getByTestId('statusChip-Scaduto');
+    const chip = result.getByTestId('statusChip-detail.payment.status.failed');
     const radio = result.queryByTestId('radio-button');
 
     expect(radio).not.toBeInTheDocument();
@@ -79,7 +83,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
 
-    const chip = result.getByTestId('statusChip-In elaborazione');
+    const chip = result.getByTestId('statusChip-detail.payment.status.inprogress');
     const radio = result.queryByTestId('radio-button');
 
     expect(radio).not.toBeInTheDocument();

@@ -232,11 +232,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({ pagoPAItem, loading, i
         )}
         <Box lineHeight="1.4rem">
           <Typography variant="caption" color="text.secondary" mr={0.5}>
-            {getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.notice-code',
-              'Codice avviso'
-            )}
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
           </Typography>
           <Typography variant="caption-semibold" color="text.secondary">
             {pagoPAItem.noticeCode}
