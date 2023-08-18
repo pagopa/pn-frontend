@@ -1,17 +1,19 @@
 import MockAdapter from 'axios-mock-adapter';
-import { AppCurrentStatus, DowntimeLogPage } from '@pagopa-pn/pn-commons';
+
 import {
+  AppCurrentStatus,
   DOWNTIME_HISTORY,
   DOWNTIME_STATUS,
-} from '@pagopa-pn/pn-commons/src/api/appStatus/appStatus.routes';
+  DowntimeLogPage,
+} from '@pagopa-pn/pn-commons';
 
-import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
   currentStatusDTO,
   currentStatusOk,
   downtimesDTO,
   simpleDowntimeLogPage,
 } from '../../../__mocks__/AppStatus.mock';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
 import { getCurrentAppStatus, getDowntimeLogPage } from '../actions';

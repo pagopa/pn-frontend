@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { DowntimeLogPage } from '../../models';
 import { Column, Item } from '../../types';
 import ItemsTable from '../Data/ItemsTable';
@@ -47,7 +48,7 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
 
   const rows: Array<Item> = getRows(downtimeLog);
 
-  return <ItemsTable rows={rows} columns={columns} />;
+  return <ItemsTable rows={rows} columns={columns} testId="tableDowntimeLog" />;
 };
 
 export default DesktopDowntimeLog;
