@@ -1,20 +1,16 @@
 import { Error, Refresh } from '@mui/icons-material';
 import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import {
-  ExtRegistriesPaymentDetails,
-  PagoPAPaymentDetails,
-  PaidDetails,
-  PaymentStatus,
-} from '../../types/NotificationDetail';
+import { PagoPAPaymentHistory, PaymentStatus } from '../../types/NotificationDetail';
 import { formatCurrency } from '../../utils';
 import { formatDateString } from '../../utils/date.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
 interface Props {
-  pagoPAItem: ExtRegistriesPaymentDetails & PagoPAPaymentDetails & PaidDetails;
+  pagoPAItem: PagoPAPaymentHistory;
   loading: boolean;
   isSelected: boolean;
 }
@@ -81,143 +77,85 @@ const SkeletonCard = () => {
   );
 };
 
-const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Props) => {
+const NotificationPaymentPagoPAStatusElem: React.FC<{
+  pagoPAItem: PagoPAPaymentHistory;
+  isSelected: boolean;
+}> = ({ pagoPAItem, isSelected }) => {
   const isMobile = useIsMobile();
+  // eslint-disable-next-line functional/no-let
+  let color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' =
+    'default';
+  // eslint-disable-next-line functional/no-let
+  let tooltip = 'unknown';
 
-  const getPaymentStatus = () => {
-    switch (pagoPAItem.status) {
-      case PaymentStatus.REQUIRED:
-        return (
-          <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent={isMobile ? 'space-between' : 'flex-end'}
-            gap={1}
-            width={isMobile ? '100%' : 'auto'}
-          >
-            <Box
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="flex-end"
+  switch (pagoPAItem.status) {
+    case PaymentStatus.SUCCEEDED:
+      color = 'success';
+      tooltip = 'succeded';
+      break;
+    case PaymentStatus.FAILED:
+      color = 'error';
+      tooltip = 'failed';
+      break;
+    case PaymentStatus.INPROGRESS:
+      color = 'info';
+      tooltip = 'inprogress';
+  }
+  return (
+    <Box
+      display="flex"
+      flexDirection="row"
+      justifyContent={isMobile ? 'space-between' : 'flex-end'}
+      gap={1}
+      width={isMobile ? '100%' : 'auto'}
+    >
+      {pagoPAItem.amount && (
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="flex-end"
+          sx={{ mr: pagoPAItem.status === PaymentStatus.SUCCEEDED ? 1 : 0 }}
+        >
+          <Typography variant="h6" color="primary.main">
+            {formatCurrency(pagoPAItem.amount)}
+          </Typography>
+          {pagoPAItem.applyCostFlg && (
+            <Typography
+              fontSize="0.625rem"
+              fontWeight="600"
+              lineHeight="0.875rem"
+              color="text.secondary"
+              data-testid="apply-costs-caption"
             >
-              <Typography variant="h6" color="primary.main">
-                {pagoPAItem.amount && formatCurrency(pagoPAItem.amount)}
-              </Typography>
-              {pagoPAItem.applyCostFlg && (
-                <Typography
-                  fontSize="0.625rem"
-                  fontWeight="600"
-                  lineHeight="0.875rem"
-                  color="text.secondary"
-                  data-testid="apply-costs-caption"
-                >
-                  {getLocalizedOrDefaultLabel(
-                    'notifications',
-                    'detail.payment.included-costs',
-                    'Costi di notifica inclusi'
-                  )}
-                </Typography>
-              )}
-            </Box>
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.included-costs')}
+            </Typography>
+          )}
+        </Box>
+      )}
+      {pagoPAItem.status === PaymentStatus.REQUIRED && (
+        <Box display="flex" justifyContent="center">
+          <Radio value={pagoPAItem} data-testid="radio-button" checked={isSelected} />
+        </Box>
+      )}
+      {pagoPAItem.status !== PaymentStatus.REQUIRED && (
+        <StatusTooltip
+          label={getLocalizedOrDefaultLabel('notifications', `detail.payment.status.${tooltip}`)}
+          color={color}
+          tooltip={getLocalizedOrDefaultLabel(
+            'notifications',
+            `detail.payment.status.${tooltip}-tooltip`
+          )}
+          tooltipProps={{ placement: 'top' }}
+          chipProps={{ borderRadius: '6px' }}
+        />
+      )}
+    </Box>
+  );
+};
 
-            <Box display="flex" justifyContent="center">
-              <Radio
-                value={JSON.stringify(pagoPAItem)}
-                data-testid="radio-button"
-                checked={isSelected}
-              />
-            </Box>
-          </Box>
-        );
-
-      case PaymentStatus.SUCCEEDED:
-        return (
-          <Box display="flex" flexDirection="row">
-            {pagoPAItem.amount && (
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="flex-end"
-                sx={{ mr: 1 }}
-              >
-                <Typography variant="h6" color="primary.main">
-                  {formatCurrency(pagoPAItem.amount)}
-                </Typography>
-                {pagoPAItem.applyCostFlg && (
-                  <Typography
-                    fontSize="0.625rem"
-                    fontWeight="600"
-                    lineHeight="0.875rem"
-                    color="text.secondary"
-                  >
-                    {getLocalizedOrDefaultLabel(
-                      'notifications',
-                      'detail.payment.included-costs',
-                      'Costi di notifica inclusi'
-                    )}
-                  </Typography>
-                )}
-              </Box>
-            )}
-            <StatusTooltip
-              label={getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.payment.status.succeded',
-                'Pagato'
-              )}
-              color="success"
-              tooltip={getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.payment.status.succeded-tooltip',
-                'Il pagamento è stato inviato correttamente.'
-              )}
-              tooltipProps={{ placement: 'top' }}
-              chipProps={{ borderRadius: '6px' }}
-            />
-          </Box>
-        );
-
-      case PaymentStatus.FAILED:
-        return (
-          <StatusTooltip
-            label={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.status.failed',
-              'Scaduto'
-            )}
-            color="error"
-            tooltip={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.status.failed-tooltip',
-              'L’avviso è scaduto e non è più possibile pagarlo. Per maggiori informazioni, contatta l’ente mittente.'
-            )}
-            tooltipProps={{ placement: 'top' }}
-            chipProps={{ borderRadius: '6px' }}
-          />
-        );
-
-      case PaymentStatus.INPROGRESS:
-        return (
-          <StatusTooltip
-            label={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.status.inprogress',
-              'In elaborazione'
-            )}
-            color="info"
-            tooltip={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.status.inprogress-tooltip',
-              'Il pagamento è in corso. Ricarica la pagina tra qualche ora per verificarlo. Se dovesse risultare ancora in corso, contatta l’assistenza.'
-            )}
-            tooltipProps={{ placement: 'top' }}
-            chipProps={{ borderRadius: '6px' }}
-          />
-        );
-    }
-  };
+const NotificationPaymentPagoPAItem: React.FC<Props> = ({ pagoPAItem, loading, isSelected }) => {
+  const isMobile = useIsMobile();
 
   if (loading) {
     return <SkeletonCard />;
@@ -246,11 +184,7 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
         >
           <Box lineHeight="1.4rem">
             <Typography variant="caption" color="text.secondary" mr={0.5}>
-              {getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.payment.notice-code',
-                'Codice avviso'
-              )}
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
             </Typography>
             <Typography variant="caption-semibold" color="text.secondary">
               {pagoPAItem.noticeCode}
@@ -259,18 +193,13 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
           <Box display="flex" alignItems="center" gap={0.5}>
             <Error sx={{ color: 'error.dark' }} />
             <Typography variant="caption-semibold" color="error.dark">
-              {getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.payment.detail-error',
-                'Impossibile recuperare i dettagli'
-              )}
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.detail-error')}
             </Typography>
           </Box>
         </Box>
-
         <ButtonNaked color="primary">
           <Refresh sx={{ width: '20px' }} />
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload', 'Ricarica')}
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
         </ButtonNaked>
       </Box>
     );
@@ -301,7 +230,6 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
             {pagoPAItem.causaleVersamento}
           </Typography>
         )}
-
         <Box lineHeight="1.4rem">
           <Typography variant="caption" color="text.secondary" mr={0.5}>
             {getLocalizedOrDefaultLabel(
@@ -314,7 +242,6 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
             {pagoPAItem.noticeCode}
           </Typography>
         </Box>
-
         {pagoPAItem.dueDate && (
           <Box lineHeight="1.4rem">
             <Typography variant="caption" color="text.secondary" mr={0.5}>
@@ -326,8 +253,7 @@ const NotificationPaymentPagoPAItem = ({ pagoPAItem, loading, isSelected }: Prop
           </Box>
         )}
       </Box>
-
-      {getPaymentStatus()}
+      <NotificationPaymentPagoPAStatusElem pagoPAItem={pagoPAItem} isSelected={isSelected} />
     </Box>
   );
 };

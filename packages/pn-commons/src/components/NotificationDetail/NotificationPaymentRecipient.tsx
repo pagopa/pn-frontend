@@ -1,14 +1,11 @@
+import React, { ChangeEvent, memo, useState } from 'react';
+
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import React, { memo, useState } from 'react';
+
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { PaymentAttachmentSName, PaymentHistory } from '../../types';
-import {
-  ExtRegistriesPaymentDetails,
-  PagoPAPaymentDetails,
-  PaidDetails,
-} from '../../types/NotificationDetail';
+import { PagoPAPaymentHistory, PaymentAttachmentSName, PaymentHistory } from '../../types';
 import { formatCurrency } from '../../utils';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
@@ -25,13 +22,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   onPayClick,
   handleDownloadAttachamentPagoPA,
 }) => {
-  const [selectedPayment, setSelectedPayment] = useState<
-    (ExtRegistriesPaymentDetails & PagoPAPaymentDetails & PaidDetails) | null
-  >(null);
+  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const radioSelection = (event.target as HTMLInputElement).value;
-    setSelectedPayment(JSON.parse(radioSelection));
+    setSelectedPayment(radioSelection);
   };
 
   return (
@@ -50,7 +45,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how', 'Come mai?')}
         </Link>
       </Typography>
-
       <Box>
         <RadioGroup name="radio-buttons-group" onChange={handleChange}>
           {payments.map((payment, index) =>
@@ -66,7 +60,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           )}
         </RadioGroup>
       </Box>
-
       <Button
         fullWidth
         variant="contained"
@@ -84,7 +77,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         &nbsp;
         {selectedPayment && selectedPayment.amount ? formatCurrency(selectedPayment.amount) : null}
       </Button>
-
       <Button
         fullWidth
         variant="outlined"
@@ -99,7 +91,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           'Scarica avviso PagoPA'
         )}
       </Button>
-
       {selectedPayment &&
       payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
         ?.f24Data ? (

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
@@ -14,7 +15,7 @@ describe('NotificationPaymentRecipient Component', () => {
   );
 
   it('should render component title and subtitle', () => {
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentRecipient
         loading={false}
         payments={mappedPayments}
@@ -22,14 +23,14 @@ describe('NotificationPaymentRecipient Component', () => {
         onPayClick={() => void 0}
       />
     );
-    const title = result.getByTestId('notification-payment-recipient-title');
-    const subtitle = result.getByTestId('notification-payment-recipient-subtitle');
+    const title = getByTestId('notification-payment-recipient-title');
+    const subtitle = getByTestId('notification-payment-recipient-subtitle');
     expect(title).toBeInTheDocument();
     expect(subtitle).toBeInTheDocument();
   });
 
   it('should render component buttons and should be disabled', () => {
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentRecipient
         loading={false}
         payments={mappedPayments}
@@ -37,8 +38,8 @@ describe('NotificationPaymentRecipient Component', () => {
         onPayClick={() => void 0}
       />
     );
-    const downloadPagoPANotice = result.getByTestId('download-pagoPA-notice-button');
-    const payButton = result.getByTestId('pay-button');
+    const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
+    const payButton = getByTestId('pay-button');
     expect(downloadPagoPANotice).toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
     expect(downloadPagoPANotice).toBeDisabled();

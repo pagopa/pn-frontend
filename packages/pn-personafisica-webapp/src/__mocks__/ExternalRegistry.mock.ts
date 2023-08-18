@@ -25,7 +25,7 @@ export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [
   {
     creditorTaxId: '77777777777',
     noticeCode: '302011686772695134',
-    status: PaymentStatus.REQUIRED,
+    status: PaymentStatus.FAILED,
     detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
     detail_v2: 'PPT_PSP_SCONOSCIUTO',
     errorCode: 'PPT_AUTORIZZAZIONE',

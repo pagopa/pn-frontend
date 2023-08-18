@@ -888,8 +888,7 @@ export const populatePaymentHistory = (
     if (!userPayment.pagoPA) {
       paymentHistory.push({
         f24Data: userPayment.f24Data,
-      });
-      continue;
+      } as PaymentHistory);
     }
 
     // 4. Get payment by creditorTaxId and noticeCode from checkout

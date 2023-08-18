@@ -1,17 +1,12 @@
 import React from 'react';
-import {
-  ExtRegistriesPaymentDetails,
-  PaidDetails,
-  PaymentStatus,
-  RecipientType,
-} from '../../../types';
-import { RenderResult, render } from '@testing-library/react';
+
+import { render } from '@testing-library/react';
+
+import { PagoPAPaymentHistory, PaymentStatus, RecipientType } from '../../../types';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
-import { PagoPAPaymentDetails } from '../../../types/NotificationDetail';
-import { formatCurrency } from '../../../utils';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
-  const pagopPAItem: ExtRegistriesPaymentDetails & PagoPAPaymentDetails & PaidDetails = {
+  const pagopPAItem: PagoPAPaymentHistory = {
     creditorTaxId: '77777777777',
     noticeCode: '302011686772695132',
     applyCostFlg: true,

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 import {
   AddressSource,
   AnalogWorkflowDetails,
@@ -14,6 +15,7 @@ import {
   RecipientType,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
+
 import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
 const payments: Array<NotificationDetailPayment> = [
@@ -21,7 +23,7 @@ const payments: Array<NotificationDetailPayment> = [
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695132',
-      applyCostFlg: true,
+      applyCostFlg: false,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',

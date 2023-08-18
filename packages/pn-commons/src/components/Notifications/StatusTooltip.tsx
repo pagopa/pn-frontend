@@ -27,6 +27,7 @@ const StatusTooltip = ({
       openOnClick={false}
       tooltipContent={tooltipContent}
       onOpen={eventTrackingCallback}
+      tooltipProps={tooltipProps}
     >
       <Chip
         id="notification-status-tooltip"
