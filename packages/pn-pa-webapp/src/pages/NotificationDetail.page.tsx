@@ -1,65 +1,65 @@
 import _ from 'lodash';
+import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import {
+  Alert,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  Typography,
   DialogTitle,
   Grid,
   Paper,
   Stack,
-  Alert,
+  Typography,
 } from '@mui/material';
 import {
-  // PN-1714
+  ApiError,
+  GetNotificationDowntimeEventsParams, // PN-1714
   // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
+  NotificationDetailOtherDocument,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
-  PnBreadcrumb,
-  TitleBox,
-  useIsMobile,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  formatEurocentToCurrency,
-  TimedMessage,
-  useDownloadDocument,
-  NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
+  NotificationStatus,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
   dataRegex,
+  formatEurocentToCurrency,
+  useDownloadDocument,
+  useErrors,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
+  NOTIFICATION_ACTIONS,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 import NotificationPaymentSender from './components/Notifications/NotificationPaymentSender';
 import NotificationRecipientsDetail from './components/Notifications/NotificationRecipientsDetail';
 
@@ -393,7 +393,11 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
-                <NotificationPaymentSender recipients={recipients} />
+                <NotificationPaymentSender
+                  iun={notification.iun}
+                  recipients={recipients}
+                  timeline={notification.timeline}
+                />
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

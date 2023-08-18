@@ -1,11 +1,24 @@
 import { ChangeEvent, useState } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 
-import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material';
-import { NotificationDetailRecipient, RecipientType } from '@pagopa-pn/pn-commons';
+import { Box, Divider, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import {
+  F24PaymentDetails,
+  INotificationDetailTimeline,
+  NotificationDetailRecipient,
+  PagoPAPaymentHistory,
+  PaymentHistory,
+  RecipientType,
+  populatePaymentHistory,
+} from '@pagopa-pn/pn-commons';
+
+import NotificationPaymentF24 from './NotificationPaymentF24';
+import NotificationPaymentPagoPa from './NotificationPaymentPagoPa';
 
 type Props = {
+  iun: string;
   recipients: Array<NotificationDetailRecipient>;
+  timeline: Array<INotificationDetailTimeline>;
 };
 
 const renderRecipientMenuItem = (
@@ -38,25 +51,51 @@ const renderSelectValue = (
   return recipient ? `${recipient.denomination} - ${recipient.taxId}` : '';
 };
 
-const NotificationPaymentSender: React.FC<Props> = ({ recipients }) => {
+const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline }) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
+  const [paymentHistory, setPaymentHistory] = useState<Array<PaymentHistory>>(
+    recipients.length === 1
+      ? populatePaymentHistory(recipients[0].taxId, timeline, recipients, [])
+      : []
+  );
 
   const recipientSelectionHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setRecipientSelected(event.target.value);
+    setPaymentHistory(populatePaymentHistory(event.target.value, timeline, recipients, []));
   };
+
+  const pagoPAPaymentHistory = paymentHistory.reduce((arr, payment) => {
+    if (payment.pagoPA) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push(payment.pagoPA);
+    }
+    return arr;
+  }, [] as Array<PagoPAPaymentHistory>);
+
+  const f24PaymentHistory = paymentHistory.reduce((arr, payment) => {
+    if (payment.f24Data) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push(payment.f24Data);
+    }
+    return arr;
+  }, [] as Array<F24PaymentDetails>);
 
   return (
     <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="paymentInfoBox">
       <Typography variant="h6">{t('payment.title', { ns: 'notifiche' })}</Typography>
       {recipients.length === 1 && (
         <Typography variant="body2" my={2}>
-          {t('payment.subtitle-single', { ns: 'notifiche' })}
+          {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length === 0
+            ? t('payment.subtitle-single-f24', { ns: 'notifiche' })
+            : t('payment.subtitle-single', { ns: 'notifiche' })}
         </Typography>
       )}
       {recipients.length > 1 && (
         <Typography variant="body2" my={2}>
-          {t('payment.subtitle-multiple', { ns: 'notifiche' })}
+          {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length === 0 && recipientSelected
+            ? t('payment.subtitle-multiple-f24', { ns: 'notifiche' })
+            : t('payment.subtitle-multiple', { ns: 'notifiche' })}
         </Typography>
       )}
       {recipients.length > 1 && (
@@ -69,7 +108,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ recipients }) => {
           onChange={recipientSelectionHandler}
           label={`${t('detail.recipient')}*`}
           aria-label={`${t('detail.recipient')}*`}
-          sx={{ mt: 2 }}
+          sx={{ mb: 1 }}
           select
           SelectProps={{
             MenuProps: { MenuListProps: { sx: { py: 3, px: 0 } } },
@@ -79,6 +118,16 @@ const NotificationPaymentSender: React.FC<Props> = ({ recipients }) => {
         >
           {recipients.map((recipient, index) => renderRecipientMenuItem(index, recipient, t))}
         </TextField>
+      )}
+      {pagoPAPaymentHistory.length > 0 &&
+        pagoPAPaymentHistory.map((payment) => (
+          <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
+        ))}
+      {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length > 0 && (
+        <Divider sx={{ my: 2 }} />
+      )}
+      {f24PaymentHistory.length > 0 && (
+        <NotificationPaymentF24 iun={iun} payments={f24PaymentHistory} />
       )}
     </Paper>
   );

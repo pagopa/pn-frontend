@@ -1,34 +1,37 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+
 /* eslint-disable complexity */
+
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
-import { formatDate } from '../utils';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
+  AarDetails,
+  DigitalDomicileType,
   INotificationDetailTimeline,
-  TimelineCategory,
-  NotificationDetailRecipient,
+  LegalFactType,
+  NotificationDeliveryMode,
   NotificationDetail,
+  NotificationDetailDocument,
+  NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-  AarDetails,
-  LegalFactType,
-  NotificationDetailDocument,
-  SendDigitalDetails,
-  ViewedDetails,
-  SendPaperDetails,
-  NotificationDeliveryMode,
-  SendCourtesyMessageDetails,
-  DigitalDomicileType,
   PaidDetails,
   PaymentHistory,
+  SendCourtesyMessageDetails,
+  SendDigitalDetails,
+  SendPaperDetails,
+  TimelineCategory,
+  ViewedDetails,
 } from '../types';
 import {
   AppIoCourtesyMessageEventType,
   ExtRegistriesPaymentDetails,
   NotificationDetailTimelineDetails,
+  PaymentStatus,
 } from '../types/NotificationDetail';
+import { formatDate } from '../utils';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -881,46 +884,51 @@ export const populatePaymentHistory = (
   const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
 
   // populate payment history array with the informations from timeline and related recipients
-  if (checkoutPayments.length > 0) {
-    for (const userPayment of userPayments) {
-      if (!userPayment.pagoPA) {
-        paymentHistory.push({
-          f24Data: userPayment.f24Data,
-        });
-        continue;
-      }
-
-      // 4. Get payment by creditorTaxId and noticeCode from checkout
-      const checkoutPayment = checkoutPayments.find(
-        (p) =>
-          p.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
-          p.noticeCode === userPayment?.pagoPA?.noticeCode
-      );
-
-      const timelineEvent = paymentTimelineStep.find((item) => {
-        const paymentDetails = item.details as PaidDetails;
-
-        return (
-          paymentDetails.creditorTaxId === checkoutPayment?.creditorTaxId &&
-          paymentDetails.noticeCode === checkoutPayment?.noticeCode
-        );
-      })?.details;
-
-      if (timelineEvent) {
-        (Object.keys(timelineEvent) as Array<keyof NotificationDetailTimelineDetails>).forEach(
-          (key) => (timelineEvent[key] === undefined ? delete timelineEvent[key] : {})
-        );
-      }
-
+  for (const userPayment of userPayments) {
+    if (!userPayment.pagoPA) {
       paymentHistory.push({
-        pagoPA: {
-          ...userPayment.pagoPA,
-          ...checkoutPayment,
-          ...timelineEvent,
-        },
         f24Data: userPayment.f24Data,
       });
+      continue;
     }
+
+    // 4. Get payment by creditorTaxId and noticeCode from checkout
+    const checkoutPayment = checkoutPayments.find(
+      (p) =>
+        p.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
+        p.noticeCode === userPayment?.pagoPA?.noticeCode
+    );
+
+    const timelineEvent = paymentTimelineStep.find((item) => {
+      const paymentDetails = item.details as PaidDetails;
+
+      return (
+        paymentDetails.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
+        paymentDetails.noticeCode === userPayment?.pagoPA?.noticeCode
+      );
+    })?.details;
+
+    if (timelineEvent) {
+      (Object.keys(timelineEvent) as Array<keyof NotificationDetailTimelineDetails>).forEach(
+        (key) => (timelineEvent[key] === undefined ? delete timelineEvent[key] : {})
+      );
+    }
+
+    const pagoPAPayment = {
+      ...userPayment.pagoPA,
+      ...checkoutPayment,
+      ...timelineEvent,
+    };
+
+    if (timelineEvent && !checkoutPayment) {
+      // from timeline we have only succeded payments
+      pagoPAPayment.status = PaymentStatus.SUCCEEDED;
+    }
+
+    paymentHistory.push({
+      pagoPA: pagoPAPayment,
+      f24Data: userPayment.f24Data,
+    } as PaymentHistory);
   }
 
   return paymentHistory;

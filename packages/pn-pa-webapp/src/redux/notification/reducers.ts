@@ -1,23 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
 import {
-  NotificationStatus,
+  Downtime,
+  INotificationDetailTimeline,
   NotificationDetail,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  INotificationDetailTimeline,
+  NotificationFeePolicy,
+  NotificationStatus,
   NotificationStatusHistory,
   PhysicalCommunicationType,
-  NotificationFeePolicy,
-  Downtime,
-  PaymentHistory,
 } from '@pagopa-pn/pn-commons';
+import { createSlice } from '@reduxjs/toolkit';
+
 import {
+  getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
 } from './actions';
 
 const initialState = {
@@ -43,7 +43,6 @@ const initialState = {
   legalFactDownloadRetryAfter: 0,
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
-  paymentInfo: [] as Array<PaymentHistory>,
   downtimeEvents: [] as Array<Downtime>,
 };
 
