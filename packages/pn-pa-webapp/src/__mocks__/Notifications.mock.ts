@@ -1,6 +1,6 @@
-import { formatDate, GetNotificationsResponse, NotificationStatus } from '@pagopa-pn/pn-commons';
+import { GetNotificationsResponse, NotificationStatus, formatDate } from '@pagopa-pn/pn-commons';
 
-export const notificationsFromBe2rows: GetNotificationsResponse = {
+export const notificationsDTO: GetNotificationsResponse = {
   resultsPage: [
     {
       iun: 'mocked-iun-1',
@@ -23,16 +23,6 @@ export const notificationsFromBe2rows: GetNotificationsResponse = {
   ],
   moreResult: false,
   nextPagesKey: ['mocked-page-key-1'],
-};
-
-export const notificationsDTO: GetNotificationsResponse = {
-  ...notificationsFromBe2rows,
-  resultsPage: [{ ...notificationsFromBe2rows.resultsPage[0] }],
-};
-
-export const notificationsFromBePage2: GetNotificationsResponse = {
-  ...notificationsFromBe2rows,
-  resultsPage: [{ ...notificationsFromBe2rows.resultsPage[1] }],
 };
 
 export const emptyNotificationsFromBe: GetNotificationsResponse = {

@@ -1,7 +1,16 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
 
-import { render } from '../../../../__test__/test-utils';
-import { notificationsToFe } from '../../../../redux/dashboard/__test__/test-utils';
+import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../../__test__/test-utils';
 import * as routes from '../../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
@@ -20,49 +29,73 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../FilterNotifications', () => {
-  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
-  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
-    useImperativeHandle(ref, () => ({
-      filtersApplied: false
-    }));
-    if (!showFilters) {
-      return <></>;
-    }
-    return <div>Filters</div>;
-  });
-});
-
 describe('DesktopNotifications Component', () => {
-  it('renders DesktopNotifications', () => {
+  it('renders component - no notification', async () => {
     // render component
-    const result = render(
-      <DesktopNotifications
-        notifications={[]}
-        sort={{ orderBy: '', order: 'asc' }}
-        onManualSend={() => {}}
-        onApiKeys={() => {}}
-      />
-    );
-    expect(result.container).not.toHaveTextContent(/Filters/i);
-    expect(result.container).toHaveTextContent(
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <DesktopNotifications
+          notifications={[]}
+          sort={{ orderBy: '', order: 'asc' }}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />
+      );
+    });
+    expect(result!.container).not.toHaveTextContent(/Filters/i);
+    expect(result!.container).toHaveTextContent(
       /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
     );
   });
 
-  it('clicks on row', async () => {
-    const result = render(
-      <DesktopNotifications
-        notifications={notificationsToFe.resultsPage}
-        sort={{ orderBy: '', order: 'asc' }}
-        onManualSend={() => {}}
-        onApiKeys={() => {}}
-      />
+  it('renders component - no notification after filter', async () => {
+    // render component
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <DesktopNotifications
+          notifications={[]}
+          sort={{ orderBy: '', order: 'asc' }}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />,
+        {
+          preloadedState: {
+            dashboardState: {
+              filters: {
+                startDate: formatToTimezoneString(tenYearsAgo),
+                endDate: formatToTimezoneString(today),
+                iunMatch: 'wrong-iun',
+                mandateId: undefined,
+              },
+            },
+          },
+        }
+      );
+    });
+    expect(result!.container).toHaveTextContent(/Filters/i);
+    expect(result!.container).toHaveTextContent(
+      /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
     );
-    const notificationsTableCell = result.container.querySelector(
-      'table tr:first-child td:nth-child(2) button'
-    );
-    fireEvent.click(notificationsTableCell!);
+  });
+
+  it('go to notification detail', async () => {
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <DesktopNotifications
+          notifications={notificationsToFe.resultsPage}
+          sort={{ orderBy: '', order: 'asc' }}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />
+      );
+    });
+    const rows = result!.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(notificationsToFe.resultsPage.length);
+    const notificationsTableCell = within(rows[0]).getAllByRole('cell');
+    fireEvent.click(notificationsTableCell[0]);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
       expect(mockNavigateFn).toBeCalledWith(
@@ -70,5 +103,4 @@ describe('DesktopNotifications Component', () => {
       );
     });
   });
-
 });

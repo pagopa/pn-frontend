@@ -1,25 +1,26 @@
 import { Fragment, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import { Typography } from '@mui/material';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
 import {
   Column,
-  getNotificationStatusInfos,
+  EmptyState,
   Item,
   ItemsTable,
+  KnownSentiment,
+  Notification,
   NotificationStatus,
   Sort,
   StatusTooltip,
-  EmptyState,
-  Notification,
-  KnownSentiment,
+  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
 
-import { trackEventByType } from '../../../utils/mixpanel';
-import { TrackEventType } from '../../../utils/events';
-import * as routes from '../../../navigation/routes.const';
 import { NotificationColumn } from '../../../models/Notifications';
+import * as routes from '../../../navigation/routes.const';
+import { TrackEventType } from '../../../utils/events';
+import { trackEventByType } from '../../../utils/mixpanel';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -184,6 +185,7 @@ const DesktopNotifications = ({
               rows={rows}
               onChangeSorting={onChangeSorting}
               ariaTitle={t('table.title')}
+              testId="notificationsTable"
             />
           ) : (
             <EmptyState {...EmptyStateProps} />
