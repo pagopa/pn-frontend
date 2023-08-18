@@ -1,15 +1,19 @@
 /* eslint-disable functional/no-let */
-
 import _ from 'lodash';
-import { NotificationDetailRecipient, NotificationDetailDocument, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
-  NewNotificationRecipient,
-  NewNotificationDocument,
-  NewNotificationDTO,
+  NotificationDetailDocument,
+  NotificationDetailRecipient,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
+
+import {
   NewNotification,
+  NewNotificationDTO,
+  NewNotificationDocument,
+  NewNotificationRecipient,
+  PaymentModel,
   PaymentObject,
-  PaymentModel
 } from '../models/NewNotification';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
@@ -47,13 +51,19 @@ const newNotificationRecipientsMapper = (
         }
       : undefined;
     return {
-      denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
+      denomination:
+        recipient.recipientType === RecipientType.PG
+          ? recipient.firstName
+          : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      payment: paymentMethod === PaymentModel.NOTHING ? undefined : {
-        creditorTaxId: recipient.creditorTaxId,
-        noticeCode: recipient.noticeCode,
-      },
+      payment:
+        paymentMethod === PaymentModel.NOTHING
+          ? undefined
+          : {
+              creditorTaxId: recipient.creditorTaxId,
+              noticeCode: recipient.noticeCode,
+            },
       digitalDomicile,
       physicalAddress: checkPhysicalAddress(recipient),
     };
@@ -86,20 +96,39 @@ const newNotificationPaymentDocumentsMapper = (
       f24standard?: NotificationDetailDocument;
     } = {};
     /* eslint-disable functional/immutable-data */
-    if (paymentDocuments[r.taxId].pagoPaForm && paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== '') {
-      documents.pagoPaForm = newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm as NewNotificationDocument);
+    if (
+      paymentDocuments[r.taxId].pagoPaForm &&
+      paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== ''
+    ) {
+      documents.pagoPaForm = newNotificationDocumentMapper(
+        paymentDocuments[r.taxId].pagoPaForm as NewNotificationDocument
+      );
     }
-    if (paymentDocuments[r.taxId].f24flatRate && paymentDocuments[r.taxId].f24flatRate?.file.sha256.hashBase64 !== '') {
-      documents.f24flatRate = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument);
+    if (
+      paymentDocuments[r.taxId].f24flatRate &&
+      paymentDocuments[r.taxId].f24flatRate?.file.sha256.hashBase64 !== ''
+    ) {
+      documents.f24flatRate = newNotificationDocumentMapper(
+        paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument
+      );
     }
-    if (paymentDocuments[r.taxId].f24standard && paymentDocuments[r.taxId].f24standard?.file.sha256.hashBase64 !== '') {
-      documents.f24standard = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24standard as NewNotificationDocument);
+    if (
+      paymentDocuments[r.taxId].f24standard &&
+      paymentDocuments[r.taxId].f24standard?.file.sha256.hashBase64 !== ''
+    ) {
+      documents.f24standard = newNotificationDocumentMapper(
+        paymentDocuments[r.taxId].f24standard as NewNotificationDocument
+      );
     }
+    // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
+    // Andrea Cimini - 16/08/2023
+    /*
     r.payment = {
       ...documents,
       creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
       noticeCode: r.payment?.noticeCode,
     };
+    */
     /* eslint-enable functional/immutable-data */
     return r;
   });
@@ -116,7 +145,10 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
     documents: [],
   };
   // format recipients
-  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients, newNotification.paymentMode);
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(
+    newNotification.recipients,
+    newNotification.paymentMode
+  );
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   // format payments
@@ -130,7 +162,10 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   return newNotificationParsed;
 }
 
-export function getDuplicateValuesByKeys<T>(objectsList: Array<T>, keys: Array<keyof T>): Array<string> {
+export function getDuplicateValuesByKeys<T>(
+  objectsList: Array<T>,
+  keys: Array<keyof T>
+): Array<string> {
   const getValue = (item: T) => {
     let valueByKeys = '';
     for (let i = 0; i < keys.length; i++) {

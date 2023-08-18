@@ -1,9 +1,9 @@
 {
   "title": "Notifiche",
-  "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale o Partita IVA, Codice IUN, data di invio e stato.",
+  "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
   "new-notification-button": "Invia una notifica",
   "filters": {
-    "fiscal-code-tax-code": "Codice Fiscale o Partita IVA",
+    "fiscal-code-tax-code": "Codice Fiscale",
     "iun": "Codice IUN",
     "data_da": "Dal",
     "data_da-aria-label": "Data inizio ricerca",
@@ -19,8 +19,8 @@
   },
   "payment": {
     "title": "Pagamenti",
-    "subtitle-single": "Il destinatario ha effettuato un pagamento. Ecco i dettagli:",
-    "subtitle-multiple": "Questi destinatari hanno effettuato un pagamento:",
+    "subtitle-single": "Qui puoi monitorare lo stato di pagamento degli avvisi pagoPA allegati alla notifica.",
+    "subtitle-multiple": "Per vedere lo stato di pagamento degli avvisi pagoPA allegati alla notifica, seleziona un destinatario.",
     "show-more": "Mostra dettagli"
   },
   "table": {
@@ -53,14 +53,13 @@
     "recipient": "Destinatario",
     "recipients": "Destinatari",
     "tax-id-citizen-recipient": "Codice Fiscale destinatario",
-    "tax-id-organization-recipient": "Partita IVA destinatario",
+    "tax-id-organization-recipient": "Codice Fiscale destinatario",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "amount": "Importo",
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "notice-code": "Codice Avviso",
-    "secondary-notice-code": "Codice Avviso Alternativo",
     "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
@@ -83,6 +82,7 @@
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
+    "show-all": "Vedi tutti",
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
       "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
@@ -280,7 +280,10 @@
       "datePrefix": "il ",
       "legalFactDownload": "Attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
-    }
+    },
+    "recipients-dialog-title": "Destinatari della notifica {{iun}}",
+    "physical-person": "Persona fisica",
+    "legal-person": "Persona giuridica"
   },
   "status": {
     "recipient": "destinatario",
@@ -362,8 +365,8 @@
       "recipient": {
         "title": "Destinatari",
         "fiscal-code-error": "Il valore inserito non è corretto",
-        "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale / Partita IVA. Inseriscine uno diverso.",
-        "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
+        "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
+        "identical-notice-codes-error": "C'è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
@@ -373,9 +376,9 @@
         "surname": "Cognome",
         "legal-person": "Persona giuridica",
         "business-name": "Ragione sociale",
-        "recipient-citizen-tax-id": "Codice fiscale destinatario",
-        "recipient-organization-tax-id": "Partita IVA o Codice Fiscale destinatario",
-        "creditor-fiscal-code": "Codice fiscale ente creditore",
+        "recipient-citizen-tax-id": "Codice Fiscale destinatario",
+        "recipient-organization-tax-id": "Codice Fiscale destinatario",
+        "creditor-fiscal-code": "Codice Fiscale ente creditore",
         "notice-code": "Codice avviso",
         "add-digital-domicile": "Aggiungi un domicilio digitale",
         "back-to-preliminary-informations": "Torna a Informazioni preliminari",
@@ -404,7 +407,6 @@
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
         "back-to-recipient": "Torna a Destinatario",
-        "remove-attachment": "Elimina allegato",
         "remove-document": "Rimuovi documento"
       },
       "payment-methods": {

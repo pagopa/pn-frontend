@@ -9,7 +9,8 @@
     "continue": "Continua",
     "send": "Invia",
     "go-to-home": "Torna alla home page",
-    "go-to-login": "Accedi"
+    "go-to-login": "Accedi",
+    "close": "Chiudi"
   },
   "menu": {
     "notifications": "Notifiche",
@@ -146,5 +147,8 @@
   "roles": {
     "operator": "Referente operativo",
     "admin": "Amministratore"
+  },
+  "attachments": {
+    "remove-attachment": "Elimina allegato"
   }
 }

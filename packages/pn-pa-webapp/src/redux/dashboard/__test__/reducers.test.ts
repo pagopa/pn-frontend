@@ -6,7 +6,7 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
+import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';

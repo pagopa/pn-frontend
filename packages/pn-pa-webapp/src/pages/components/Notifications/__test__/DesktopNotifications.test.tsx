@@ -1,7 +1,8 @@
+import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../../../__test__/test-utils';
-import { notificationsToFe } from '../../../../redux/dashboard/__test__/test-utils';
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import * as routes from '../../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
@@ -24,7 +25,7 @@ jest.mock('../FilterNotifications', () => {
   const { forwardRef, useImperativeHandle } = jest.requireActual('react');
   return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
     useImperativeHandle(ref, () => ({
-      filtersApplied: false
+      filtersApplied: false,
     }));
     if (!showFilters) {
       return <></>;
@@ -70,5 +71,4 @@ describe('DesktopNotifications Component', () => {
       );
     });
   });
-
 });

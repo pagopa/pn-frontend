@@ -161,7 +161,12 @@ const NewApiKey = () => {
                       </Box>
                     </Paper>
                     <Box mt={3}>
-                      <Button variant="contained" type="submit" disabled={!formik.isValid}>
+                      <Button
+                        id="continue-button"
+                        variant="contained"
+                        type="submit"
+                        disabled={!formik.isValid}
+                      >
                         {tkp('continue-button')}
                       </Button>
                     </Box>

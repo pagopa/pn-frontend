@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { act, RenderResult } from '@testing-library/react';
 
-import { notificationsToFe } from '../../../../redux/dashboard/__test__/test-utils';
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import { axe, render } from '../../../../__test__/test-utils';
 import DesktopNotifications from '../DesktopNotifications';
-
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -12,7 +11,6 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
 
 describe('DesktopNotifications Component - accessibility tests', () => {
   it('does not have basic accessibility issues', async () => {
@@ -34,7 +32,7 @@ describe('DesktopNotifications Component - accessibility tests', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   }, 15000);
 
@@ -57,7 +55,7 @@ describe('DesktopNotifications Component - accessibility tests', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   }, 15000);
 });

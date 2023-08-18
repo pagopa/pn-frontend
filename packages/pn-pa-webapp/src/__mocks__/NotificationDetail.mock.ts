@@ -17,6 +17,15 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
+function getOneRecipientNotification(): NotificationDetail {
+  const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
+  oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
+  oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
+    (t) => t.details.recIndex === 0
+  );
+  return oneRecipientNotification;
+}
+
 const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'REQUEST_ACCEPTED.IUN_TJUN-ATLX-UNQN-202307-L-1',
@@ -462,11 +471,11 @@ export const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
-export const notificationDTO: NotificationDetail = {
+export const notificationDTOMultiRecipient: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302221689929085089',
   subject: 'invio notifica GA cucumber',
-  recipients: recipients,
+  recipients,
   documents,
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
@@ -482,4 +491,9 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetail(_.cloneDeep(notificationDTO));
+export const notificationDTO = getOneRecipientNotification();
+
+export const notificationToFe = parseNotificationDetail(notificationDTO);
+export const notificationToFeMultiRecipient = parseNotificationDetail(
+  _.cloneDeep(notificationDTOMultiRecipient)
+);

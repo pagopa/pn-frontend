@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personagiuridica-webapp",
   "description": "SEND per la persona giuridica",
-  "version": "2.0.1-RC.3",
+  "version": "2.0.1-RC.4",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -9,7 +9,7 @@
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.10.9",
     "@mui/x-date-pickers": "5.0.13",
-    "@pagopa-pn/pn-commons": "^2.0.1-RC.3",
+    "@pagopa-pn/pn-commons": "^2.0.1-RC.4",
     "@pagopa/mui-italia": "^0.9.10",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
@@ -71,6 +71,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/jest": "^28.0.0",
     "@types/mixpanel-browser": "^2.38.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -79,7 +80,6 @@
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-functional": "^3.7.2",
-    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sonarjs": "^0.10.0",

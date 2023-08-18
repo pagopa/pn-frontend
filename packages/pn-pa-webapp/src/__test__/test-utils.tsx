@@ -1,11 +1,12 @@
-import React, { ReactElement, ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { configureStore, Store } from '@reduxjs/toolkit';
-import { fireEvent, render, RenderOptions, waitFor, within, screen } from '@testing-library/react';
-import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import { AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { configureAxe, toHaveNoViolations } from 'jest-axe';
+import React, { ReactElement, ReactNode } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
+import { Store, configureStore } from '@reduxjs/toolkit';
+import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
 import { appReducers } from '../redux/store';
 
