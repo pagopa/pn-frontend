@@ -15,7 +15,7 @@ describe('NotificationPaymentRecipient Component', () => {
   );
 
   it('should render component title and subtitle', () => {
-    const { getByTestId } = render(
+    const { getByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         loading={false}
         payments={mappedPayments}
@@ -25,8 +25,15 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const title = getByTestId('notification-payment-recipient-title');
     const subtitle = getByTestId('notification-payment-recipient-subtitle');
+    const f24Download = queryByTestId('f24-download');
+    const pagoPABox = queryAllByTestId('pagopa-item');
+
     expect(title).toBeInTheDocument();
+    expect(title).toHaveTextContent('detail.payment.title');
     expect(subtitle).toBeInTheDocument();
+    expect(subtitle).toHaveTextContent('detail.payment.subtitle');
+    expect(f24Download).not.toBeInTheDocument();
+    expect(pagoPABox).toHaveLength(mappedPayments.filter((payment) => payment.pagoPA).length);
   });
 
   it('should render component buttons and should be disabled', () => {

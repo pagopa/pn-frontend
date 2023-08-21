@@ -26,30 +26,28 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const radioSelection = (event.target as HTMLInputElement).value;
-    setSelectedPayment(radioSelection);
+    setSelectedPayment(
+      payments.find((item) => item.pagoPA?.noticeCode === radioSelection)?.pagoPA || null
+    );
   };
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="h6" data-testid="notification-payment-recipient-title">
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title', 'Pagamento')}
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title')}
       </Typography>
       <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-        {getLocalizedOrDefaultLabel(
-          'notifications',
-          'detail.payment.subtitle',
-          'In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. Alcuni avvisi includono i costi di notifica.'
-        )}
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
         &nbsp;
         <Link href={void 0} target="_blank" fontWeight="bold" sx={{ cursor: 'pointer' }}>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how', 'Come mai?')}
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how')}
         </Link>
       </Typography>
       <Box>
-        <RadioGroup name="radio-buttons-group" onChange={handleChange}>
+        <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleChange}>
           {payments.map((payment, index) =>
             payment.pagoPA ? (
-              <Box mb={2} key={`payment-${index}`}>
+              <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
                 <NotificationPaymentPagoPAItem
                   pagoPAItem={payment.pagoPA}
                   loading={loading}
@@ -73,7 +71,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           )
         }
       >
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit', 'Paga')}
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
         &nbsp;
         {selectedPayment && selectedPayment.amount ? formatCurrency(selectedPayment.amount) : null}
       </Button>
@@ -85,30 +83,18 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         onClick={() => handleDownloadAttachamentPagoPA(PaymentAttachmentSName.PAGOPA)}
       >
         <Download fontSize="small" sx={{ mr: 1 }} />
-        {getLocalizedOrDefaultLabel(
-          'notifications',
-          'detail.payment.download-pagoPA-notice',
-          'Scarica avviso PagoPA'
-        )}
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
       </Button>
       {selectedPayment &&
       payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
         ?.f24Data ? (
-        <Box display="flex" justifyContent="space-between">
+        <Box display="flex" justifyContent="space-between" data-testid="f24-download">
           <Typography variant="body2">
-            {getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.pay-with-f24',
-              'Se preferisci, puoi pagare tramite F24.'
-            )}
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
           </Typography>
           <ButtonNaked color="primary">
             <Download fontSize="small" sx={{ mr: 1 }} />
-            {getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.payment.download-f24',
-              'Scarica F24'
-            )}
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
           </ButtonNaked>
         </Box>
       ) : null}

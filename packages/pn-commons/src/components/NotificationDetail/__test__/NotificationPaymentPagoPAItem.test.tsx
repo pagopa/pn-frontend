@@ -2,36 +2,26 @@ import React from 'react';
 
 import { render } from '@testing-library/react';
 
-import { PagoPAPaymentHistory, PaymentStatus, RecipientType } from '../../../types';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
+import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
+import { PagoPAPaymentHistory, PaymentHistory, PaymentStatus } from '../../../types';
+import { populatePaymentHistory } from '../../../utils';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
-  const pagopPAItem: PagoPAPaymentHistory = {
-    creditorTaxId: '77777777777',
-    noticeCode: '302011686772695132',
-    applyCostFlg: true,
-    attachment: {
-      digests: {
-        sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-      },
-      contentType: 'application/pdf',
-      ref: {
-        key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38c.pdf',
-        versionToken: 'v1',
-      },
-    },
-    status: PaymentStatus.REQUIRED,
-    url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',
-    causaleVersamento: 'Prima rata TARI',
-    dueDate: '2025-07-31',
-    recIndex: 0,
-    recipientType: RecipientType.PF,
-    paymentSourceChannel: 'EXTERNAL_REGISTRY',
-  };
+  const pagoPAItems: PaymentHistory[] = populatePaymentHistory(
+    recipient.taxId,
+    notificationToFe.timeline,
+    notificationToFe.recipients,
+    paymentInfo
+  );
+
+  const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentHistory;
 
   it('renders NotificationPaymentPagoPAItem - should show radio button when status is REQUIRED', () => {
+    const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
     const result = render(
-      <NotificationPaymentPagoPAItem pagoPAItem={pagopPAItem} loading={false} isSelected={false} />
+      <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
 
     const radioButton = result.getByTestId('radio-button');
@@ -41,7 +31,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   it('renders NotificationPaymentPagoPAItem - should show caption if applyCostFlg is true', () => {
     const result = render(
       <NotificationPaymentPagoPAItem
-        pagoPAItem={{ ...pagopPAItem, amount: 999 }}
+        pagoPAItem={{ ...pagoPAItem, amount: 999 }}
         loading={false}
         isSelected={false}
       />
@@ -52,7 +42,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   });
 
   it('renders NotificationPaymentPagoPAItem - should show badge when status is SUCCEEDED and not show radio', () => {
-    const item = { ...pagopPAItem, status: PaymentStatus.SUCCEEDED };
+    const item = { ...pagoPAItem, status: PaymentStatus.SUCCEEDED };
     const result = render(
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
@@ -65,7 +55,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   });
 
   it('renders NotificationPaymentPagoPAItem - should show badge when status is FAILED and not show radio', () => {
-    const item = { ...pagopPAItem, status: PaymentStatus.FAILED };
+    const item = { ...pagoPAItem, status: PaymentStatus.FAILED };
     const result = render(
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
@@ -78,7 +68,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   });
 
   it('renders NotificationPaymentPagoPAItem - should show badge when status is INPROGRESS and not show radio', () => {
-    const item = { ...pagopPAItem, status: PaymentStatus.INPROGRESS };
+    const item = { ...pagoPAItem, status: PaymentStatus.INPROGRESS };
     const result = render(
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
@@ -92,7 +82,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
 
   it('renders NotificationPaymentPagoPAItem - should show amount if present', () => {
     const amount = 1000;
-    const item = { ...pagopPAItem, amount };
+    const item = { ...pagoPAItem, amount };
     const result = render(
       <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={false} />
     );
@@ -101,8 +91,9 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   });
 
   it('renders NotificationPaymentPagoPAItem - radio button should be checked if isSelected', () => {
+    const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
     const result = render(
-      <NotificationPaymentPagoPAItem pagoPAItem={pagopPAItem} loading={false} isSelected={true} />
+      <NotificationPaymentPagoPAItem pagoPAItem={item} loading={false} isSelected={true} />
     );
 
     const radioButton = result.container.querySelector(

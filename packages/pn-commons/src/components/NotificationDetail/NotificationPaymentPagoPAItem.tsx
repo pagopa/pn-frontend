@@ -77,6 +77,51 @@ const SkeletonCard = () => {
   );
 };
 
+const ErrorCard: React.FC<{
+  isMobile: boolean;
+  noticeCode: string;
+}> = ({ isMobile, noticeCode }) => (
+  <Box
+    px={2}
+    py={isMobile ? 2 : 1}
+    gap={1}
+    display="flex"
+    alignItems={isMobile ? 'flex-start' : 'center'}
+    flexDirection={isMobile ? 'column-reverse' : 'row'}
+    sx={{
+      backgroundColor: 'grey.50',
+      borderRadius: '6px',
+    }}
+  >
+    <Box
+      display="flex"
+      justifyContent={isMobile ? 'flex-start' : 'inherit'}
+      gap={0.5}
+      flexDirection="column"
+      flex="1 0 0"
+    >
+      <Box lineHeight="1.4rem">
+        <Typography variant="caption" color="text.secondary" mr={0.5}>
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
+        </Typography>
+        <Typography variant="caption-semibold" color="text.secondary">
+          {noticeCode}
+        </Typography>
+      </Box>
+      <Box display="flex" alignItems="center" gap={0.5}>
+        <Error sx={{ color: 'error.dark' }} />
+        <Typography variant="caption-semibold" color="error.dark">
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.detail-error')}
+        </Typography>
+      </Box>
+    </Box>
+    <ButtonNaked color="primary">
+      <Refresh sx={{ width: '20px' }} />
+      {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
+    </ButtonNaked>
+  </Box>
+);
+
 const NotificationPaymentPagoPAStatusElem: React.FC<{
   pagoPAItem: PagoPAPaymentHistory;
   isSelected: boolean;
@@ -135,7 +180,7 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
       )}
       {pagoPAItem.status === PaymentStatus.REQUIRED && (
         <Box display="flex" justifyContent="center">
-          <Radio value={pagoPAItem} data-testid="radio-button" checked={isSelected} />
+          <Radio data-testid="radio-button" checked={isSelected} value={pagoPAItem.noticeCode} />
         </Box>
       )}
       {pagoPAItem.status !== PaymentStatus.REQUIRED && (
@@ -162,47 +207,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({ pagoPAItem, loading, i
   }
 
   if (pagoPAItem.errorCode) {
-    return (
-      <Box
-        px={2}
-        py={isMobile ? 2 : 1}
-        gap={1}
-        display="flex"
-        alignItems={isMobile ? 'flex-start' : 'center'}
-        flexDirection={isMobile ? 'column-reverse' : 'row'}
-        sx={{
-          backgroundColor: 'grey.50',
-          borderRadius: '6px',
-        }}
-      >
-        <Box
-          display="flex"
-          justifyContent={isMobile ? 'flex-start' : 'inherit'}
-          gap={0.5}
-          flexDirection="column"
-          flex="1 0 0"
-        >
-          <Box lineHeight="1.4rem">
-            <Typography variant="caption" color="text.secondary" mr={0.5}>
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
-            </Typography>
-            <Typography variant="caption-semibold" color="text.secondary">
-              {pagoPAItem.noticeCode}
-            </Typography>
-          </Box>
-          <Box display="flex" alignItems="center" gap={0.5}>
-            <Error sx={{ color: 'error.dark' }} />
-            <Typography variant="caption-semibold" color="error.dark">
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.detail-error')}
-            </Typography>
-          </Box>
-        </Box>
-        <ButtonNaked color="primary">
-          <Refresh sx={{ width: '20px' }} />
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
-        </ButtonNaked>
-      </Box>
-    );
+    return <ErrorCard isMobile={isMobile} noticeCode={pagoPAItem.noticeCode} />;
   }
 
   return (
