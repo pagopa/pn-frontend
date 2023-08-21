@@ -66,6 +66,7 @@
     "domicile_EMAIL": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "domicile_APPIO": "Hai l’app IO? Attiva il servizio \"Notifiche digitali\" per visualizzare e pagare le notifiche direttamente in app.",
     "payment": {
+      "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
       "summary-in-progress": "Pagamento in corso",

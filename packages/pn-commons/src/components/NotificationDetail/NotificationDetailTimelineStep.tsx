@@ -171,6 +171,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
+                /* disabled=  se c'è almeno un elemento con stato annullata */
               >
                 {getLegalFactLabel(
                   lf.step,

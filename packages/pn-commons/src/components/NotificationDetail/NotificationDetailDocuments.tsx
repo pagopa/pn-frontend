@@ -56,6 +56,7 @@ Props) => {
               color={'primary'}
               startIcon={<AttachFileIcon />}
               onClick={() => clickHandler(document.downloadHandler)}
+              // disabled = {variabile}
             >
               <Box
                 sx={{

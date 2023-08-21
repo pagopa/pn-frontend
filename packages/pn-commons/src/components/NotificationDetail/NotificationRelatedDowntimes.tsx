@@ -227,6 +227,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                             event.legalFactId as string
                           );
                         }}
+                        /* disabled se nell'history c'è un el con annullamento */
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',
