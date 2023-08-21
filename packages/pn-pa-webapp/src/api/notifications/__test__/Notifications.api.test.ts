@@ -1,24 +1,13 @@
-import MockAdapter from 'axios-mock-adapter';
-import {
-  tenYearsAgo,
-  today,
-  LegalFactId,
-  LegalFactType,
-  formatToTimezoneString,
-  getNextDay,
-  NotificationDetailOtherDocument,
-} from '@pagopa-pn/pn-commons';
-
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   notificationsFromBe,
   notificationsToFe,
 } from '../../../redux/dashboard/__test__/test-utils';
+import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
 import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -32,6 +21,16 @@ import {
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
+import {
+  tenYearsAgo,
+  today,
+  LegalFactId,
+  LegalFactType,
+  formatToTimezoneString,
+  getNextDay,
+  NotificationDetailOtherDocument,
+} from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -187,7 +186,6 @@ describe('Notifications api tests', () => {
   it('cancelNotification', async () => {
     const mock = new MockAdapter(apiClient);
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
-    // capire se la put restituisce un data nel caso:
     const res = await NotificationsApi.cancelNotification('mocked-iun');
     expect(res.response.status).toStrictEqual(200);
     mock.reset();

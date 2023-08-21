@@ -1,13 +1,11 @@
-import { LegalFactType, NotificationDetail, createAppStatusApi } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
-import axios from 'axios';
-import { store } from '../../store';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
 import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { store } from '../../store';
 import {
-  cancelNotification,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
   getSentNotification,
@@ -17,7 +15,8 @@ import {
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
-import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
+import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
 
 const initialState = {
   loading: false,
@@ -45,22 +44,18 @@ const initialState = {
 };
 
 describe('Notification detail redux state tests', () => {
-  const fakeApiClient = axios.create();
-  let mockApp: MockAdapter;
-  let mockNotification: MockAdapter;
-
-  let appStatusApi = createAppStatusApi(() => fakeApiClient);
+  let mock: MockAdapter;
 
   beforeEach(() => {
-    mockApp = new MockAdapter(fakeApiClient);
-    mockNotification = new MockAdapter(fakeApiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
-    mockApp.reset();
-    mockApp.restore();
-    mockNotification.reset();
-    mockNotification.restore();
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   mockAuthentication();
@@ -171,7 +166,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to cancel notification', async () => {
-    mockNotification.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
     const action = await NotificationsApi.cancelNotification('mocked-iun');
     expect(action.response.status).toStrictEqual(200);
   });
