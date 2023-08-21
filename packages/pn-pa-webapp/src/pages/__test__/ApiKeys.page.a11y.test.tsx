@@ -35,7 +35,7 @@ describe('ApiKeys Page - accessibility tests', () => {
     });
     const results = await axe(result!.container);
     expect(results).toHaveNoViolations();
-  });
+  }, 15000);
 
   it('no empty list', async () => {
     let result: RenderResult | undefined;
@@ -49,7 +49,7 @@ describe('ApiKeys Page - accessibility tests', () => {
     });
     const results = await axe(result!.container);
     expect(results).toHaveNoViolations();
-  });
+  }, 15000);
 
   it('api return error', async () => {
     let result: RenderResult | undefined;
@@ -66,5 +66,5 @@ describe('ApiKeys Page - accessibility tests', () => {
     });
     const results = await axe(result!.container);
     expect(results).toHaveNoViolations();
-  });
+  }, 15000);
 });

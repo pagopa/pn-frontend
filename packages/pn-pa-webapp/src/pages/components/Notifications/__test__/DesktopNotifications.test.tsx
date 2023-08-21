@@ -7,11 +7,12 @@ import {
   RenderResult,
   act,
   fireEvent,
+  prettyDOM,
   render,
   waitFor,
   within,
 } from '../../../../__test__/test-utils';
-import * as routes from '../../../../navigation/routes.const';
+import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
 const mockNavigateFn = jest.fn();
@@ -43,10 +44,32 @@ describe('DesktopNotifications Component', () => {
         />
       );
     });
-    expect(result!.container).not.toHaveTextContent(/Filters/i);
+    const filters = result!.queryByTestId('filter-form');
+    expect(filters).not.toBeInTheDocument();
+    const norificationTable = result!.queryByTestId('notificationsTable');
+    expect(norificationTable).not.toBeInTheDocument();
     expect(result!.container).toHaveTextContent(
       /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
     );
+  });
+
+  it('renders component - notification', async () => {
+    // render component
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <DesktopNotifications
+          notifications={notificationsToFe.resultsPage}
+          sort={{ orderBy: '', order: 'asc' }}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />
+      );
+    });
+    const filters = result!.getByTestId('filter-form');
+    expect(filters).toBeInTheDocument();
+    const norificationTableRows = result!.getAllByTestId('notificationsTable.row');
+    expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
   it('renders component - no notification after filter', async () => {
@@ -66,7 +89,7 @@ describe('DesktopNotifications Component', () => {
               filters: {
                 startDate: formatToTimezoneString(tenYearsAgo),
                 endDate: formatToTimezoneString(today),
-                iunMatch: 'wrong-iun',
+                iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
                 mandateId: undefined,
               },
             },
@@ -74,9 +97,19 @@ describe('DesktopNotifications Component', () => {
         }
       );
     });
-    expect(result!.container).toHaveTextContent(/Filters/i);
+    // the rerendering must be done to take the useRef updates
+    result!.rerender(
+      <DesktopNotifications
+        notifications={[]}
+        sort={{ orderBy: '', order: 'asc' }}
+        onManualSend={() => {}}
+        onApiKeys={() => {}}
+      />
+    );
+    const filters = await waitFor(() => result!.queryByTestId('filter-form'));
+    expect(filters).toBeInTheDocument();
     expect(result!.container).toHaveTextContent(
-      /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
+      /empty-state.filter-message empty-state.filter-action/i
     );
   });
 
@@ -93,13 +126,12 @@ describe('DesktopNotifications Component', () => {
       );
     });
     const rows = result!.getAllByTestId('notificationsTable.row');
-    expect(rows).toHaveLength(notificationsToFe.resultsPage.length);
     const notificationsTableCell = within(rows[0]).getAllByRole('cell');
     fireEvent.click(notificationsTableCell[0]);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
       expect(mockNavigateFn).toBeCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
+        GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });
   });

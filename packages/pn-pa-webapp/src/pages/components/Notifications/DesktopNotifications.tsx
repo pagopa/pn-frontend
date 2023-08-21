@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -156,8 +156,10 @@ const DesktopNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', { ns: 'common' }),
+    emptyMessage: filtersApplied ? t('empty-state.filter-message') : t('empty-state.message'),
+    emptyActionLabel: filtersApplied
+      ? t('empty-state.filter-action')
+      : t('menu.api-key', { ns: 'common' }),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied
@@ -174,9 +176,9 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   return (
-    <Fragment>
+    <>
       {notifications && (
-        <Fragment>
+        <>
           <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
             <ItemsTable
@@ -190,9 +192,9 @@ const DesktopNotifications = ({
           ) : (
             <EmptyState {...EmptyStateProps} />
           )}
-        </Fragment>
+        </>
       )}
-    </Fragment>
+    </>
   );
 };
 

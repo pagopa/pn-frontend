@@ -1,13 +1,16 @@
-import React, { ReactElement, ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { configureStore, Store } from '@reduxjs/toolkit';
-import { fireEvent, render, RenderOptions, waitFor, within, screen } from '@testing-library/react';
-import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import { AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { configureAxe, toHaveNoViolations } from 'jest-axe';
+import React, { ReactElement, ReactNode } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import { appReducers } from '../redux/store';
+import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
+import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+
+import { RootState, appReducers } from '../redux/store';
+
+let testStore: EnhancedStore<RootState>;
 
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
   <BrowserRouter>
@@ -22,29 +25,12 @@ const customRender = (
     renderOptions,
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
-  const testStore = configureStore({
+  testStore = configureStore({
     reducer: appReducers,
     preloadedState,
   });
   return render(ui, {
     wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
-    ...renderOptions,
-  });
-};
-
-const renderWithoutRouter = (
-  ui: ReactElement,
-  {
-    preloadedState,
-    renderOptions,
-  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
-) => {
-  const testStore = configureStore({
-    reducer: appReducers,
-    preloadedState,
-  });
-  return render(ui, {
-    wrapper: ({ children }) => <Provider store={testStore}>{children}</Provider>,
     ...renderOptions,
   });
 };
@@ -107,44 +93,63 @@ function mockApi(
 
 // utility functions
 /**
+ * Test the existence of a field, its label and optionally its value
  * @form form element
  * @elementName element name
  * @label element's label
- * @findById set true if a form component doesn't have "name" prop like Autocomplete component
+ * @value the expected value of the element
  */
 export function testFormElements(
   form: HTMLFormElement,
   elementName: string,
   label: string,
-  findById?: boolean
+  value?: string | number
 ) {
-  const formElement = form.querySelector(`input[${findById ? 'id' : 'name'}="${elementName}"]`);
+  const formElement = form.querySelector(
+    `input[id="${elementName}"], input[name="${elementName}"]`
+  );
   expect(formElement).toBeInTheDocument();
   const formElementLabel = form.querySelector(`label[for="${elementName}"]`);
   expect(formElementLabel).toBeInTheDocument();
   expect(formElementLabel).toHaveTextContent(label);
+  if (value !== undefined && value !== null) {
+    expect(formElement).toHaveValue(value);
+  }
 }
 
+/**
+ * Fire change event on an input and check its value
+ * @container container element
+ * @elementName element name
+ * @value the expected value of the element
+ */
 export async function testInput(
-  form: HTMLFormElement,
+  container: HTMLElement,
   elementName: string,
   value: string | number
 ) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
+  const input = container.querySelector(`input[name="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
     expect(input).toHaveValue(value);
   });
 }
 
+/**
+ * Test the options list of a select, fire change event and check its value
+ * @container container element
+ * @elementName element name
+ * @options the options list
+ * @optToSelect the option to select
+ */
 export async function testSelect(
-  form: HTMLFormElement,
+  container: HTMLElement,
   elementName: string,
   options: Array<{ label: string; value: string }>,
   optToSelect: number
 ) {
-  const selectInput = form.querySelector(`input[name="${elementName}"]`);
-  const selectButton = form.querySelector(`div[id="${elementName}"]`);
+  const selectInput = container.querySelector(`input[name="${elementName}"]`);
+  const selectButton = container.querySelector(`div[id="${elementName}"]`);
   fireEvent.mouseDown(selectButton!);
   const selectOptionsContainer = await screen.findByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();
@@ -164,8 +169,7 @@ export async function testSelect(
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
-export { customRender as render };
-export { renderWithoutRouter };
+export { customRender as render, testStore };
 export { axe };
 // utility functions
 export { mockApi };

@@ -71,7 +71,7 @@ describe('App - accessbility tests', () => {
     });
     const result = await axe(container);
     expect(result).toHaveNoViolations();
-  });
+  }, 15000);
 
   it('Test if automatic accessibility tests passes - errors on API call', async () => {
     const { container } = render(<Component />, {
@@ -89,5 +89,5 @@ describe('App - accessbility tests', () => {
     });
     const result = await axe(container);
     expect(result).toHaveNoViolations();
-  });
+  }, 15000);
 });

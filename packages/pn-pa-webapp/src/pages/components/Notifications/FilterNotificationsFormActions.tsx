@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Button } from '@mui/material';
-import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 import { makeStyles } from '@mui/styles';
+import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
 const useStyles = makeStyles({
   searchButton: {
@@ -28,7 +29,6 @@ const FilterNotificationsFormActions = ({
   cleanFilters,
   isInDialog = false,
   isInitialSearch,
-
 }: Props) => {
   const classes = useStyles();
   const { t } = useTranslation(['common']);
@@ -61,7 +61,7 @@ const FilterNotificationsFormActions = ({
   return (
     <Fragment>
       {isInDialog ? (
-        <CustomMobileDialogAction >{confirmAction}</CustomMobileDialogAction>
+        <CustomMobileDialogAction>{confirmAction}</CustomMobileDialogAction>
       ) : (
         confirmAction
       )}
