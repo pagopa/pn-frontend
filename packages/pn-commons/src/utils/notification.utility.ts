@@ -920,21 +920,19 @@ const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail)
     (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLED
   );
   if (!timelineCancelledElement) {
-    notificationDetail.timeline.forEach((element) => {
-      const timelineCancellationRequestElement = notificationDetail.timeline.find(
-        (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
-      );
+    const timelineCancellationRequestElement = notificationDetail.timeline.find(
+      (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
+    );
 
-      if (timelineCancellationRequestElement) {
-        const notificationStatusHistoryElement = {
-          status: NotificationStatus.CANCELLATION_IN_PROGRESS,
-          activeFrom: element.timestamp,
-          relatedTimelineElements: [],
-        };
-        // eslint-disable-next-line functional/immutable-data
-        notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
-      }
-    });
+    if (timelineCancellationRequestElement) {
+      const notificationStatusHistoryElement = {
+        status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+        activeFrom: timelineCancellationRequestElement.timestamp,
+        relatedTimelineElements: [],
+      };
+      // eslint-disable-next-line functional/immutable-data
+      notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
+    }
   }
 };
 

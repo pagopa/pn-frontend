@@ -150,7 +150,19 @@ describe('Notification detail redux state tests', () => {
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 
-  it.skip('Should be able to cancel notification', async () => {
+  it.only('Should be able to cancel notification', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'cancelNotification');
+    apiSpy.mockResolvedValue({
+      response: {
+        status: 200,
+        type: '',
+        title: '',
+        detail: '',
+        traceId: '',
+        timestamp: '',
+        errors: [],
+      },
+    });
     const action = await store.dispatch(cancelNotification('mocked-iun'));
     expect(action.type).toBe('cancelNotification/fulfilled');
   });
