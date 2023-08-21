@@ -911,6 +911,33 @@ function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
   return TimelineAllowedStatus.includes(t.category);
 }
 
+/**
+ * Insert cancelled status n timeline.
+ * @param  {NotificationDetail} notificationDetail
+ */
+const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail) => {
+  const timelineCancelledElement = notificationDetail.timeline.find(
+    (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLED
+  );
+  if (!timelineCancelledElement) {
+    notificationDetail.timeline.forEach((element) => {
+      const timelineCancellationRequestElement = notificationDetail.timeline.find(
+        (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
+      );
+
+      if (timelineCancellationRequestElement) {
+        const notificationStatusHistoryElement = {
+          status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+          activeFrom: element.timestamp,
+          relatedTimelineElements: [],
+        };
+        // eslint-disable-next-line functional/immutable-data
+        notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
+      }
+    });
+  }
+};
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
@@ -945,28 +972,3 @@ export function parseNotificationDetail(
   /* eslint-enable functional/no-let */
   return parsedNotification;
 }
-
-/**
- * Insert cancelled status n timeline.
- * @param  {NotificationDetail} notificationDetail
- */
-const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail) => {
-  const timelineCancelledElement = notificationDetail.timeline.find(
-    (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLED
-  );
-
-  notificationDetail.timeline.forEach((element) => {
-    if (
-      element.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST &&
-      !timelineCancelledElement
-    ) {
-      const notificationStatusHistoryElement = {
-        status: NotificationStatus.CANCELLATION_IN_PROGRESS,
-        activeFrom: element.timestamp,
-        relatedTimelineElements: [],
-      };
-      // eslint-disable-next-line functional/immutable-data
-      notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
-    }
-  });
-};

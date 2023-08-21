@@ -429,7 +429,7 @@ describe('notification status texts', () => {
     );
   });
 
-  it('return notification status infos - CANCELLED - passing status only', () => {
+  it('return notification status infos - CANCELLATION_IN_PROGRESS - passing status only', () => {
     testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.CANCELLATION_IN_PROGRESS,
       undefined,

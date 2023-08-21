@@ -56,7 +56,6 @@ describe('NotificationDetail Page (one recipient)', () => {
   let result: RenderResult;
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
-  // const openModal = jest.fn();
 
   beforeEach(async () => {
     // mock dispatch
