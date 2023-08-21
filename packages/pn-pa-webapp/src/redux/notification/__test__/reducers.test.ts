@@ -1,5 +1,6 @@
-import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
-
+import { LegalFactType, NotificationDetail, createAppStatusApi } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 import { store } from '../../store';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
@@ -16,6 +17,7 @@ import {
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
+import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
 
 const initialState = {
   loading: false,
@@ -43,6 +45,24 @@ const initialState = {
 };
 
 describe('Notification detail redux state tests', () => {
+  const fakeApiClient = axios.create();
+  let mockApp: MockAdapter;
+  let mockNotification: MockAdapter;
+
+  let appStatusApi = createAppStatusApi(() => fakeApiClient);
+
+  beforeEach(() => {
+    mockApp = new MockAdapter(fakeApiClient);
+    mockNotification = new MockAdapter(fakeApiClient);
+  });
+
+  afterEach(() => {
+    mockApp.reset();
+    mockApp.restore();
+    mockNotification.reset();
+    mockNotification.restore();
+  });
+
   mockAuthentication();
 
   it('Initial state', () => {
@@ -150,20 +170,9 @@ describe('Notification detail redux state tests', () => {
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 
-  it.only('Should be able to cancel notification', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'cancelNotification');
-    apiSpy.mockResolvedValue({
-      response: {
-        status: 200,
-        type: '',
-        title: '',
-        detail: '',
-        traceId: '',
-        timestamp: '',
-        errors: [],
-      },
-    });
-    const action = await store.dispatch(cancelNotification('mocked-iun'));
-    expect(action.type).toBe('cancelNotification/fulfilled');
+  it('Should be able to cancel notification', async () => {
+    mockNotification.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    const action = await NotificationsApi.cancelNotification('mocked-iun');
+    expect(action.response.status).toStrictEqual(200);
   });
 });
