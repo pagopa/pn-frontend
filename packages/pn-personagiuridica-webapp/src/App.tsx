@@ -65,7 +65,7 @@ const App = () => {
     }
   }, [isInitialized]);
 
-  return isInitialized ? <ActualApp /> : <div/>;
+  return isInitialized ? <ActualApp /> : <div />;
 };
 
 const ActualApp = () => {
@@ -117,7 +117,7 @@ const ActualApp = () => {
         linkType: 'internal',
       },
     ],
-    [t, organization?.id]
+    [t, organization?.id, i18n.language]
   );
 
   useUnload(() => {
@@ -191,7 +191,7 @@ const ActualApp = () => {
     menuItems.splice(1, 0, {
       label: t('menu.deleghe'),
       icon: () => <AltRouteIcon />,
-      route: routes.DELEGHE,
+      route: routes.DELEGHEACARICO,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
   }
@@ -225,7 +225,7 @@ const ActualApp = () => {
         // logoUrl: <AccountBalanceIcon />
       },
     ],
-    [role, organization]
+    [role, organization, i18n.language]
   );
 
   const changeLanguageHandler = async (langCode: string) => {

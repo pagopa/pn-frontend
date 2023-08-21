@@ -1,17 +1,15 @@
 import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Button,
-  Link,
-  Dialog,
-  TextField,
-  InputAdornment,
-  Divider,
-} from '@mui/material';
+import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import {
+  useIsMobile,
+  TitleBox,
+  ApiErrorWrapper,
+  CustomPagination,
+  PaginationData,
+  calculatePages,
+} from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import * as routes from '../navigation/routes.const';
@@ -25,6 +23,9 @@ import {
 } from '../redux/apiKeys/actions';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import { UserGroup } from '../models/user';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+import { setPagination } from '../redux/apiKeys/reducers';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
@@ -50,20 +51,37 @@ const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
   return (
     <Box sx={{ my: 3 }}>
       {groups &&
-        groups.map((group, i) => (
+        groups.map((group) => (
           <Fragment key={group.name}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', p: 3 }}>
-              <Box sx={{ width: '90%' }}>
-                <Typography variant="body2">
-                  <strong>{group.name}</strong>
-                </Typography>
-                <Typography variant="body2">Group ID: {group.id}</Typography>
-              </Box>
-              <Box sx={{ width: '10%' }}>
-                <CopyToClipboardButton value={() => group.id} tooltipTitle={t('group-id-copied')} />
-              </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignContent: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                <strong>{group.name}</strong>
+              </Typography>
+              <TextField
+                label={t('group-id')}
+                defaultValue={group.id}
+                fullWidth
+                sx={{
+                  mb: 3,
+                }}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <CopyToClipboardButton
+                      value={() => group.id}
+                      tooltipTitle={t('group-id-copied')}
+                    />
+                  ),
+                }}
+              ></TextField>
             </Box>
-            {i < groups.length - 1 && <Divider />}
           </Fragment>
         ))}
     </Box>
@@ -77,14 +95,27 @@ const ApiKeys = () => {
   const { t } = useTranslation(['apikeys']);
 
   const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
+  const pagination = useAppSelector((state: RootState) => state.apiKeysState.pagination);
+
+  const totalElements = apiKeys.total;
+  const pagesToShow: Array<number> = calculatePages(
+    pagination.size,
+    totalElements,
+    Math.min(pagination.nextPagesKey.length + 1, 3),
+    pagination.page + 1
+  );
 
   const fetchApiKeys = useCallback(() => {
-    void dispatch(getApiKeys());
-  }, []);
+    const params = {
+      limit: pagination.size,
+      ...pagination.nextPagesKey[pagination.page - 1],
+    };
+    void dispatch(getApiKeys(params));
+  }, [pagination.size, pagination.page]);
 
   type modalType = {
     view: ModalApiKeyView;
-    apiKey?: ApiKey;
+    apiKey?: ApiKey<UserGroup>;
   };
 
   const [modal, setModal] = useState<modalType>({ view: ModalApiKeyView.NONE });
@@ -94,7 +125,7 @@ const ApiKeys = () => {
   };
 
   const handleModalClick = (view: ModalApiKeyView, apiKeyId: number) => {
-    setModal({ view, apiKey: apiKeys[apiKeyId] });
+    setModal({ view, apiKey: apiKeys.items[apiKeyId] });
   };
 
   const handleNewApiKeyClick = () => {
@@ -108,27 +139,37 @@ const ApiKeys = () => {
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
-      () => void dispatch(getApiKeys())
+      fetchApiKeys
     );
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
-      () => void dispatch(getApiKeys())
+      fetchApiKeys
     );
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
-      () => void dispatch(getApiKeys())
+      fetchApiKeys
     );
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys()));
+    void dispatch(deleteApiKey(apiKeyId)).then(fetchApiKeys);
+  };
+
+  // Pagination handlers
+  const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.APIKEYS_TABLE_PAGINATION);
+    dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
+  };
+
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.APIKEYS_TABLE_SIZE, { pageSize });
   };
 
   return (
@@ -171,7 +212,19 @@ const ApiKeys = () => {
         mainText={t('error-fecth-api-keys')}
         mt={3}
       >
-        <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
+        <DesktopApiKeys apiKeys={apiKeys.items} handleModalClick={handleModalClick} />
+        {apiKeys.items.length > 0 && (
+          <CustomPagination
+            paginationData={{
+              size: pagination.size,
+              page: pagination.page,
+              totalElements,
+            }}
+            onPageRequest={handleChangePage}
+            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+            pagesToShow={pagesToShow}
+          />
+        )}
 
         <Dialog
           open={modal.view !== ModalApiKeyView.NONE}
@@ -179,14 +232,10 @@ const ApiKeys = () => {
           aria-modal="true"
         >
           <Box
-            sx={{
-              padding: 4,
-              minWidth: isMobile ? '0' : '600px',
-            }}
+            sx={{ minWidth: isMobile ? '0' : '600px' }}
           >
             {modal.view === ModalApiKeyView.VIEW && (
               <ApiKeyModal
-                titleSx={{ marginBottom: isMobile ? 3 : undefined }}
                 title={`API Key ${modal.apiKey?.name}`}
                 subTitle={t('copy-api-key-info')}
                 content={
@@ -212,7 +261,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.BLOCK && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('block-api-key')}
                 subTitle={
                   <Trans i18nKey="block-warning1" values={{ apiKeyName: modal.apiKey?.name }}>
@@ -228,7 +276,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.ENABLE && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('enable-api-key')}
                 subTitle={<Trans>{t('enable-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
                 closeButtonLabel={t('cancel-button')}
@@ -239,7 +286,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.ROTATE && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('rotate-api-key')}
                 subTitle={<Trans>{t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}</Trans>}
                 content={<Typography>{t('rotate-warning2')}</Typography>}
@@ -251,7 +297,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.DELETE && (
               <ApiKeyModal
-                titleSx={{ marginBottom: 2 }}
                 title={t('delete-api-key')}
                 subTitle={<Trans>{t('delete-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
                 closeButtonLabel={t('cancel-button')}
@@ -262,7 +307,6 @@ const ApiKeys = () => {
             )}
             {modal.view === ModalApiKeyView.VIEW_GROUPS_ID && (
               <ApiKeyModal
-                titleSx={{ marginBottom: isMobile ? 3 : undefined }}
                 title={t('view-groups-id', { apikey: modal.apiKey?.name })}
                 subTitle={t('view-groups-id-message')}
                 subTitleAtBottom

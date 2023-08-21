@@ -1,24 +1,24 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AppNotAccessible, LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
+import { AppNotAccessible, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
 import ToSGuard from './ToSGuard';
 import AARGuard from './AARGuard';
 
-const Profile = React.lazy(() => import('../pages/Profile.page'));
-const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
-const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
-const Contacts = React.lazy(() => import('../pages/Contacts.page'));
-const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
-const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
-const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
-const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
-const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
-const ParticipatingEntitiesPage = React.lazy(() => import('../pages/ParticipatingEntities.page'));
+const Profile = lazyRetry(() => import('../pages/Profile.page'));
+const Notifiche = lazyRetry(() => import('../pages/Notifiche.page'));
+const NotificationDetail = lazyRetry(() => import('../pages/NotificationDetail.page'));
+const Contacts = lazyRetry(() => import('../pages/Contacts.page'));
+const Deleghe = lazyRetry(() => import('../pages/Deleghe.page'));
+const NuovaDelega = lazyRetry(() => import('../pages/NuovaDelega.page'));
+const PrivacyPolicyPage = lazyRetry(() => import('../pages/PrivacyPolicy.page'));
+const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'));
+const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
+const ParticipatingEntitiesPage = lazyRetry(() => import('../pages/ParticipatingEntities.page'));
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */

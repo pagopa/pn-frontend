@@ -10,7 +10,7 @@ const generalInfoSlice = createSlice({
   initialState: {
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
-    legalDomicile: [] as Array<DigitalAddress>,
+    defaultAddresses: [] as Array<DigitalAddress>,
     domicileBannerOpened: true,
   },
   reducers: {
@@ -26,7 +26,7 @@ const generalInfoSlice = createSlice({
       state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
     });
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
-      state.legalDomicile = action.payload;
+      state.defaultAddresses = action.payload;
     });
     builder.addCase(acceptDelegation.fulfilled, (state) => {
       if (state.pendingDelegators > 0) {

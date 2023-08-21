@@ -21,10 +21,8 @@ type PaymentBoxProps = {
   title: string;
   onFileUploaded: (
     id: string,
-    file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
+    file?: File,
+    sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
@@ -41,12 +39,9 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: P
       <FileUpload
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, name, size) =>
-          onFileUploaded(id, file as Uint8Array, sha256, name, size)
-        }
+        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
-        fileFormat="uint8Array"
         calcSha256
         fileUploaded={fileUploaded}
       />
@@ -63,10 +58,8 @@ type Props = {
 };
 
 const emptyFileData = {
-  uint8Array: undefined,
+  data: undefined,
   sha256: { hashBase64: '', hashHex: '' },
-  name: '',
-  size: 0,
 };
 
 const newPaymentDocument = (id: string, name: string): NewNotificationDocument => ({
@@ -133,20 +126,18 @@ const PaymentMethods = ({
       const formikF24standard = formik.values[r.taxId].f24standard;
       // I avoid including empty file object into the result
       // hence I check for any file object that it actually points to a file
-      // (this is the condition XXX.file.uint8Array)
+      // (this is the condition XXX.file.data)
       // and then I don't add the payment info for a recipient if it doesn't include any actual file pointer
       // (this is the Object.keys(paymentsForThisRecipient).length > 0 condition below)
       // ---------------------------------------------
       // Carlos Lombardi, 2023.01.10
       const paymentsForThisRecipient: any = {};
       /* eslint-disable functional/immutable-data */
-      if (formikPagoPaForm.file.uint8Array) {
+      if (formikPagoPaForm.file.data) {
         paymentsForThisRecipient.pagoPaForm = {
           ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
           file: {
-            uint8Array: formikPagoPaForm.file.uint8Array,
-            size: formikPagoPaForm.file.size,
-            name: formikPagoPaForm.file.name,
+            data: formikPagoPaForm.file.data,
             sha256: {
               hashBase64: formikPagoPaForm.file.sha256.hashBase64,
               hashHex: formikPagoPaForm.file.sha256.hashHex,
@@ -158,13 +149,11 @@ const PaymentMethods = ({
           },
         };
       }
-      if (formikF24flatRate && formikF24flatRate.file.uint8Array) {
+      if (formikF24flatRate?.file.data) {
         paymentsForThisRecipient.f24flatRate = {
           ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
           file: {
-            uint8Array: formikF24flatRate.file.uint8Array,
-            size: formikF24flatRate.file.size,
-            name: formikF24flatRate.file.name,
+            data: formikF24flatRate.file.data,
             sha256: {
               hashBase64: formikF24flatRate.file.sha256.hashBase64,
               hashHex: formikF24flatRate.file.sha256.hashHex,
@@ -176,13 +165,11 @@ const PaymentMethods = ({
           },
         };
       }
-      if (formikF24standard && formikF24standard.file.uint8Array) {
+      if (formikF24standard?.file.data) {
         paymentsForThisRecipient.f24standard = {
           ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
           file: {
-            uint8Array: formikF24standard.file.uint8Array,
-            size: formikF24standard.file.size,
-            name: formikF24standard.file.name,
+            data: formikF24standard.file.data,
             sha256: {
               hashBase64: formikF24standard.file.sha256.hashBase64,
               hashHex: formikF24standard.file.sha256.hashHex,
@@ -283,16 +270,14 @@ const PaymentMethods = ({
     taxId: string,
     paymentType: 'pagoPaForm' | 'f24flatRate' | 'f24standard',
     id: string,
-    file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
+    file?: File,
+    sha256?: { hashBase64: string; hashHex: string }
   ) => {
     await formik.setFieldValue(
       id,
       {
         ...formik.values[taxId][paymentType],
-        file: { size, uint8Array: file, sha256, name },
+        file: { data: file, sha256 },
         ref: {
           key: '',
           versionToken: '',
@@ -335,19 +320,15 @@ const PaymentMethods = ({
       >
         {notification.paymentMode !== PaymentModel.NOTHING &&
           notification.recipients.map((recipient) => (
-            <Paper
-              key={recipient.taxId}
-              sx={{ padding: '24px', marginTop: '40px' }}
-              className="paperContainer"
-            >
+            <Paper key={recipient.taxId} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
               <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
               </SectionHeading>
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
                 title={`${t('attach-pagopa-notice')}`}
-                onFileUploaded={(id, file, sha256, name, size) =>
-                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)
+                onFileUploaded={(id, file, sha256) =>
+                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256)
                 }
                 onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
                 fileUploaded={formik.values[recipient.taxId].pagoPaForm}
@@ -356,16 +337,8 @@ const PaymentMethods = ({
                 <PaymentBox
                   id={`${recipient.taxId}.f24flatRate`}
                   title={`${t('attach-f24-flatrate')}`}
-                  onFileUploaded={(id, file, sha256, name, size) =>
-                    fileUploadedHandler(
-                      recipient.taxId,
-                      'f24flatRate',
-                      id,
-                      file,
-                      sha256,
-                      name,
-                      size
-                    )
+                  onFileUploaded={(id, file, sha256) =>
+                    fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256)
                   }
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
                   fileUploaded={formik.values[recipient.taxId].f24flatRate}
@@ -375,16 +348,8 @@ const PaymentMethods = ({
                 <PaymentBox
                   id={`${recipient.taxId}.f24standard`}
                   title={`${t('attach-f24')}`}
-                  onFileUploaded={(id, file, sha256, name, size) =>
-                    fileUploadedHandler(
-                      recipient.taxId,
-                      'f24standard',
-                      id,
-                      file,
-                      sha256,
-                      name,
-                      size
-                    )
+                  onFileUploaded={(id, file, sha256) =>
+                    fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256)
                   }
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
                   fileUploaded={formik.values[recipient.taxId].f24standard}
@@ -393,7 +358,7 @@ const PaymentMethods = ({
             </Paper>
           ))}
         {notification.paymentMode === PaymentModel.NOTHING && (
-          <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+          <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
             <Trans
               i18nKey="nothing"
               components={[

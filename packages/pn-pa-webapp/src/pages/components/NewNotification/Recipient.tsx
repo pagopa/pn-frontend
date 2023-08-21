@@ -403,11 +403,7 @@ const Recipient = ({
             previousStepOnClick={() => handlePreviousStep(values)}
           >
             {values.recipients.map((recipient, index) => (
-              <Paper
-                key={recipient.id}
-                sx={{ padding: '24px', marginTop: '40px' }}
-                className="paperContainer"
-              >
+              <Paper key={recipient.id} sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
                 <Stack
                   display="flex"
                   direction="row"

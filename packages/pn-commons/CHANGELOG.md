@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.0.1-RC.3...v2.0.1-RC.4) (2023-07-31)
+
+
+### Bug Fixes
+
+* **pn-6134:** removed css override on paper component ([#921](https://github.com/pagopa/pn-frontend/issues/921)) ([cd3be7c](https://github.com/pagopa/pn-frontend/commit/cd3be7cb8316ef13b7e455a2cdea484d828f6764))
+* **pn-6728:** alignment of chip in AppStatus ([#918](https://github.com/pagopa/pn-frontend/issues/918)) ([b0cdd7c](https://github.com/pagopa/pn-frontend/commit/b0cdd7c645085fa510a5296e15c177667eafb746))
+* **pn-7120:** mobile filter dialog closes even if filters are invalid ([#914](https://github.com/pagopa/pn-frontend/issues/914)) ([299c8f7](https://github.com/pagopa/pn-frontend/commit/299c8f7dd2c244be30679dc146ff79cb77fa4685))
+* **pn-7126:** accessibility of AppStatus page ([#915](https://github.com/pagopa/pn-frontend/issues/915)) ([77f2f37](https://github.com/pagopa/pn-frontend/commit/77f2f372a0f3483c8dbad6ee94143692e2267b4a))
+
+
+### Features
+
+* **pn-6205:** added localization for others languages ([#916](https://github.com/pagopa/pn-frontend/issues/916)) ([dc8ae08](https://github.com/pagopa/pn-frontend/commit/dc8ae08458fc6adb3fc69d3876ead3ee16e2158d))
+
+
+
+
+
+## [2.0.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.0.0-RC.6...v2.0.1-RC.0) (2023-07-05)
+
+
+### Bug Fixes
+
+* **pn-6969:** add a11y ([#858](https://github.com/pagopa/pn-frontend/issues/858)) ([2b6e071](https://github.com/pagopa/pn-frontend/commit/2b6e0715016f8a58e25aa56dea1596075e847fc8))
+* **pn-6971:** fix a11y in emptystate ([#861](https://github.com/pagopa/pn-frontend/issues/861)) ([f75f8a3](https://github.com/pagopa/pn-frontend/commit/f75f8a38dff8202444af52820ec24e7e8a984f41))
+* **pn-7042:** validation mode of notifications filter ([#884](https://github.com/pagopa/pn-frontend/issues/884)) ([5d51671](https://github.com/pagopa/pn-frontend/commit/5d516713b3b4d368fd1810a080647ac628d954fb))
+
+
+### Features
+
+* **pn-6792:**  analog progress event PNALL001 ([#872](https://github.com/pagopa/pn-frontend/issues/872)) ([fbf14bb](https://github.com/pagopa/pn-frontend/commit/fbf14bb2ca625d49ab72d844af1c72bcfaf842ff))
+* **pn-6828:** allowed particular accessibility link for one URL pattern / disabled languages other than Italian ([#877](https://github.com/pagopa/pn-frontend/issues/877)) ([d6e5249](https://github.com/pagopa/pn-frontend/commit/d6e524909aca4b85c275254989ce7531dadde4c9))
+
+
+
+
+
 ## [1.5.4](https://github.com/pagopa/pn-frontend/compare/v1.5.3...v1.5.4) (2022-12-23)
 
 

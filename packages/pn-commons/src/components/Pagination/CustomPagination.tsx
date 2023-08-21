@@ -184,7 +184,17 @@ export default function CustomPagination({
               ) {
                 return null;
               }
-              return <PaginationItem {...props2} sx={{ border: 'none' }} />;
+              return (
+                <PaginationItem
+                  id={
+                    props2.type === 'page' && props2.page
+                      ? props2.type.concat(props2.page.toString())
+                      : props2.type
+                  }
+                  {...props2}
+                  sx={{ border: 'none' }}
+                />
+              );
             }}
             onChange={(_event: ChangeEvent<unknown>, value: number) =>
               onPageRequest({

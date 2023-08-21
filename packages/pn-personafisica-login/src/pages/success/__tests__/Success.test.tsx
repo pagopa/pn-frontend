@@ -3,14 +3,21 @@ import { BrowserRouter } from 'react-router-dom';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { AppRouteType } from '@pagopa-pn/pn-commons';
 
-import '../../../locales/i18n';
 import { storageAarOps, storageTypeOps } from '../../../utils/storage';
 import SuccessPage from '../Success';
-import { getConfiguration } from "../../../services/configuration.service";
+import { getConfiguration } from '../../../services/configuration.service';
 
 const mockLocationAssign = jest.fn();
 
 const original = window.location;
+
+// mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
 
 describe('test login page', () => {
   beforeAll(() => {
@@ -73,7 +80,9 @@ describe('test login page', () => {
     );
 
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '?aar=aar-token#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(
+      getConfiguration().PF_URL + '?aar=aar-token#token=fake-token'
+    );
   });
 
   test('test redirect - aar with xss attack', () => {
@@ -86,7 +95,9 @@ describe('test login page', () => {
     );
 
     expect(mockLocationAssign).toBeCalled();
-    expect(mockLocationAssign).toBeCalledWith(getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token');
+    expect(mockLocationAssign).toBeCalledWith(
+      getConfiguration().PF_URL + '?aar=aar-malicious-token#token=fake-token'
+    );
   });
 
   // momentarily commented for pn-5157

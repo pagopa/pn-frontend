@@ -54,7 +54,7 @@
       "group": "Gruppo",
       "no-group-found": "Nessun gruppo trovato",
       "menu-aria-label": "Menù azioni",
-      "tax-id": "Codice Fiscale/P. Iva"
+      "tax-id": "Codice Fiscale"
     },
     "accept-delegation": "Accetta la delega",
     "associate-groups-title": "Vuoi assegnare la delega ad un gruppo?",
@@ -67,20 +67,20 @@
     "accepted-error": "A causa di un errore, la delega non è stata accettata. Premi Annulla e riprova.",
     "updated-successfully": "Gruppo modificato",
     "updated-error": "Si è verificato un errore e il gruppo non è stato modificato. Riprova.",
-    "revoke-successfully": "Delega Revocata.",
-    "reject-successfully": "Delega Rifiutata.",
+    "revoke-successfully": "La delega è stata revocata.",
+    "reject-successfully": "La delega è stata rifiutata.",
     "revoke-error": "Si è verificato un errore e la delega non è stata revocata. Riprova.",
     "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova.",
     "validation": {
       "pIvaAndFiscalCode": {
-        "wrong": "Il Codice Fiscale/P. Iva inserito non è corretto"
+        "wrong": "Il Codice Fiscale inserito non è corretto"
       }
     }
   },
   "nuovaDelega": {
     "breadcrumb": "Nuova delega",
     "backToDelegations": "Torna alle deleghe",
-    "createdTitle": "La richiesta di delega è stata creata con successo",
+    "createdTitle": "Richiesta di delega creata",
     "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a SEND e accettare la richiesta.",
     "title": "Aggiungi una delega",
     "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la lettura delle tue notifiche.",
@@ -95,7 +95,7 @@
       "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
       "allEntities": "Tutti gli enti",
       "onlySelected": "Solo enti selezionati",
-      "selectEntities": "Seleziona enti",
+      "selectEntities": "Seleziona enti*",
       "date-duration": "Periodo di validità della delega*",
       "endDate": "Termine delega",
       "verificationCode": "Codice di verifica",
@@ -117,6 +117,7 @@
       "businessName": {
         "required": "La ragione sociale è obbligatoria"
       },
+      "entiSelected": { "required": "Seleziona almeno un ente" },
       "expirationDate": {
         "required": "La data di termine delega è obbligatoria",
         "wrong": "Data errata"

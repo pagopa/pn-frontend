@@ -1,0 +1,14 @@
+{
+  "title": "Deine Daten",
+  "subtitle": "Diese Daten stammen von deinem SPID- oder CIE-Profil und können nicht geändert werden.",
+  "profile": {
+    "name": "Vorname",
+    "family_name": "Nachname",
+    "fiscal_number": "Steuernummer"
+  },
+  "alert-redirect-to-contacts": {
+    "title": "Möchtest du deine Anschriften verwalten?",
+    "message": "Anschriften eingeben, anzeigen oder bearbeiten, an die du Bescheide und Mitteilungen über SEND erhalten möchtest.",
+    "action-text": "Zu deinen Anschriften"
+  }
+}

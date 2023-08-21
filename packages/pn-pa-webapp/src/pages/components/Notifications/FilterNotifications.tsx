@@ -1,4 +1,4 @@
-import { useEffect, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, Fragment, useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
@@ -70,7 +70,6 @@ function isFilterapplied(filtersCount: number): boolean {
 
 const getValidStatus = (status: string) => (status === 'All' ? '' : status);
 
-
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -78,21 +77,21 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'notifiche']);
+  const dialogRef = useRef<{toggleOpen: () => void}>(null);
+
 
   const validationSchema = yup.object({
     recipientId: yup
       .string()
-      .matches(
-        dataRegex.pIvaAndFiscalCode,
-        t('filters.errors.fiscal-code', { ns: 'notifiche' })
-      ),
+      .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup.date()
+    endDate: yup
+      .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today)
+      .max(today),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
@@ -116,6 +115,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
+      dialogRef.current?.toggleOpen();
     },
   });
 
@@ -131,7 +131,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
       setEndDate(formik.values.endDate);
     }
-  };
+  };  
 
   useEffect(() => {
     void formik.validateForm();
@@ -158,7 +158,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   if (!showFilters) {
     return <></>;
   }
+
+
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
@@ -174,7 +177,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('button.filtra')}>
+      <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody
@@ -187,7 +190,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
-              formikInstance={formik}
               cleanFilters={cancelSearch}
               filtersApplied={isFilterapplied(filtersCount)}
               isInitialSearch={isInitialSearch}
@@ -217,7 +219,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
             setEndDate={(value) => setEndDate(value)}
           />
           <FilterNotificationsFormActions
-            formikInstance={formik}
             cleanFilters={cancelSearch}
             filtersApplied={isFilterapplied(filtersCount)}
             isInitialSearch={isInitialSearch}

@@ -1,5 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   useIsMobile,
   Prompt,
@@ -30,26 +29,13 @@ import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import { GroupStatus, UserGroup } from '../models/user';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    '& .paperContainer': {
-      boxShadow: 'none',
-    },
-  },
-}));
-
-const SubTitle = () => {
-  const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
-  return <Fragment>{t('page-description')}</Fragment>;
-};
-
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
   const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
   const isMobile = useIsMobile();
   const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
-  const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
-  const { t: tc } = useTranslation(['common']);
+  const { t } = useTranslation(['apikeys', 'common']);
+  const tkp = (key: string) => t(`new-api-key.${key}`);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
 
   const initialValues = () => ({
@@ -58,7 +44,7 @@ const NewApiKey = () => {
   });
 
   const validationSchema = yup.object({
-    name: yup.string().required(t('form-error-name')),
+    name: yup.string().required(tkp('form-error-name')),
     groups: yup.array().of(
       yup.object({
         id: yup.string(),
@@ -94,8 +80,6 @@ const NewApiKey = () => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const classes = useStyles();
-
   const handleGroupClick = async (_event: any, value: Array<UserGroup>) => {
     await formik.setFieldValue('groups', value);
     await formik.setFieldTouched('groups', true, false);
@@ -105,40 +89,40 @@ const NewApiKey = () => {
     <>
       {!apiKeySent && (
         <Prompt
-          title={t('cancel-title')}
-          message={t('cancel-prompt')}
+          title={tkp('cancel-title')}
+          message={tkp('cancel-prompt')}
           eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
           eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
           eventTrackingCallbackConfirm={() => {}} // impostare eventi tracking previsti
         >
           <Box p={3}>
-            <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
+            <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
               <Grid item xs={12} lg={8}>
                 <PnBreadcrumb
                   linkRoute={routes.API_KEYS}
-                  linkLabel={t('page-title')}
-                  currentLocationLabel={t('page-title')}
-                  goBackLabel={tc('button.indietro')}
+                  linkLabel={t('title')}
+                  currentLocationLabel={tkp('page-title')}
+                  goBackLabel={t('button.indietro', { ns: 'common' })}
                 />
                 <TitleBox
                   variantTitle="h4"
-                  title={t('page-title')}
+                  title={tkp('page-title')}
                   sx={{ pt: '20px', marginBottom: 4 }}
-                  subTitle={<SubTitle />}
+                  subTitle={tkp('page-description')}
                   variantSubTitle="body1"
                 ></TitleBox>
                 <form onSubmit={formik.handleSubmit}>
                   <Typography sx={{ marginTop: 4 }} variant="body2">
-                    * {t('required-fields')}
+                    * {tkp('required-fields')}
                   </Typography>
                   <Box>
-                    <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
-                      <SectionHeading>{t('other-info')}</SectionHeading>
+                    <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
+                      <SectionHeading>{tkp('other-info')}</SectionHeading>
                       <Box sx={{ marginTop: '24px' }}>
-                        <Typography fontWeight="bold">{t('form-label-name')}*</Typography>
+                        <Typography fontWeight="bold">{tkp('form-label-name')}*</Typography>
                         <TextField
                           id="name"
-                          label={t('form-placeholder-name')}
+                          label={tkp('form-placeholder-name')}
                           fullWidth
                           name="name"
                           value={formik.values.name}
@@ -149,11 +133,11 @@ const NewApiKey = () => {
                           margin="normal"
                           sx={{ mb: '24px', mt: '8px' }}
                         />
-                        <Typography fontWeight="bold">{t('form-label-groups')}</Typography>
+                        <Typography fontWeight="bold">{tkp('form-label-groups')}</Typography>
                         <PnAutocomplete
                           disableCloseOnSelect
                           multiple
-                          noOptionsText={t('no-groups')}
+                          noOptionsText={tkp('no-groups')}
                           value={formik.values.groups}
                           options={groups}
                           id="groups"
@@ -170,15 +154,20 @@ const NewApiKey = () => {
                             </MenuItem>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('form-placeholder-groups')} />
+                            <TextField {...params} label={tkp('form-placeholder-groups')} />
                           )}
                           sx={{ mt: '8px' }}
                         />
                       </Box>
                     </Paper>
                     <Box mt={3}>
-                      <Button variant="contained" type="submit" disabled={!formik.isValid}>
-                        {t('continue-button')}
+                      <Button
+                        id="continue-button"
+                        variant="contained"
+                        type="submit"
+                        disabled={!formik.isValid}
+                      >
+                        {tkp('continue-button')}
                       </Button>
                     </Box>
                   </Box>

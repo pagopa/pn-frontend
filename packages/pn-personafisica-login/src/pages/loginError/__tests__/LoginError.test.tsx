@@ -2,7 +2,6 @@ import { render, waitFor, screen, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import LoginError from '../LoginError';
-import '../../../locales/i18n';
 import { getConfiguration } from '../../../services/configuration.service';
 
 const mockNavigateFn = jest.fn();
@@ -16,6 +15,15 @@ function mockCreateMockedSearchParams() {
   mockedSearchParams.set('errorCode', spidErrorCode);
   return mockedSearchParams;
 }
+
+// mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+}));
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -31,7 +39,7 @@ test('login technical error - show transient error screen before redirecting to 
     </BrowserRouter>
   );
 
-  screen.getByText('A causa di un errore del sistema non è possibile completare la procedura.', {
+  screen.getByText('loginError.title', {
     exact: false,
   });
 
@@ -56,10 +64,10 @@ test('user cancelled the login - immediate redirect to login page', async () => 
     );
   });
 
-  screen.getByText('A causa di un errore del sistema non è possibile completare la procedura.', {
+  screen.getByText('loginError.title', {
     exact: false,
   });
-  screen.getByText('Hai annullato l’operazione di login: puoi riprovare quando vuoi.', {
+  screen.getByText('loginError.message', {
     exact: false,
   });
 

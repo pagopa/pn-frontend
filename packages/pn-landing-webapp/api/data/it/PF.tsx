@@ -134,9 +134,9 @@ export const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2" tabIndex={0} aria-label={infoblock3_1}>
-            <strong>SEND</strong> è a disposizione di tutte le Pubbliche
-            Amministrazioni che vorranno utilizzarlo per inviare notifiche ai
-            destinatari delle loro comunicazioni a valore legale.
+            SEND è a disposizione di tutte le Pubbliche Amministrazioni che
+            vorranno utilizzarlo per inviare notifiche ai destinatari delle loro
+            comunicazioni a valore legale.
           </Typography>
           <Typography variant="body2" tabIndex={0} aria-label={infoblock3_2}>
             {infoblock3_2}
@@ -167,8 +167,8 @@ const showcase2_1 = `Se hai un indirizzo PEC, le notifiche ti risulteranno legal
   consegnate, senza più raccomandate cartacee. L'avviso di avvenuta
   ricezione che ti sarà inviato contiene il link per accedere al
   contenuto su SEND.`;
-const showcase2_2 = `Se attivi il servizio “Avvisi di cortesia” di SEND, puoi ricevere
-  e gestire direttamente in app le comunicazioni a valore legale. Se
+const showcase2_2 = `Se attivi il servizio “Notifiche digitali” di SEND, puoi ricevere un avviso di cortesia e 
+  gestire direttamente in app le comunicazioni a valore legale. Se
   non hai la PEC ma accedi alla notifica attraverso SEND dall'app e
   leggi la notifica entro 5 giorni (120 ore) dalla sua ricezione,
   questa ti risulterà legalmente recapitata e non riceverai alcuna

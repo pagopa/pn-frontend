@@ -19,6 +19,7 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' }
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -197,7 +198,7 @@ async function testContactAddition(
       unwrap: () => Promise.resolve({ code: 'verified' }),
     }))
   );
-  fireEvent.click(dialogButtons![2]);
+  fireEvent.click(dialogButtons![1]);
   await waitFor(() => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
@@ -288,14 +289,14 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
       1
     );
     const pecInput = form?.querySelector(`input[name="s_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
-    testFormElements(form!, 's_phone', 'special-contacts.phone');
+    testFormElements(form!, 's_mail', 'special-contacts.mail');
   });
 
   it('checks invalid pec - 1', async () => {
@@ -325,10 +326,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      2
+      1
     );
     await testInvalidField(
       form!,
@@ -345,10 +346,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      2
+      1
     );
     await testValidFiled(form!, 's_mail', 'mail@valida.ar');
   });
@@ -360,10 +361,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     await testInvalidField(form!, 's_phone', 'telefono-errato', 'courtesy-contacts.valid-phone');
   });
@@ -375,10 +376,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     await testValidFiled(form!, 's_phone', '3494568016');
   });
@@ -402,10 +403,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      1
+      2
     );
     await testContactAddition(
       form!,
@@ -424,10 +425,10 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       'addressType',
       [
         { label: 'special-contacts.pec', value: LegalChannelType.PEC },
-        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
         { label: 'special-contacts.mail', value: CourtesyChannelType.EMAIL },
+        { label: 'special-contacts.phone', value: CourtesyChannelType.SMS },
       ],
-      2
+      1
     );
     await testContactAddition(
       form!,

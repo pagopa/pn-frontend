@@ -76,6 +76,6 @@ export class NumberRuleValidator<TModel, TValue>
    */
   public readonly not = (): NotRuleValidator<TModel, TValue> =>
     ({
-      ...this._not(),
+      ...this.commonNot(),
     } as unknown as NotRuleValidator<TModel, TValue>);
 }

@@ -1,55 +1,56 @@
-import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
+import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
+import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
+import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
+import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
+import {
+  DATE_FORMAT,
+  dateIsDefined,
+  formatDate,
+  formatDateTime,
+  formatDay,
+  formatMonthString,
+  formatTime,
+  formatToSlicedISOString,
+  formatToTimezoneString,
+  getNextDay,
+  isToday,
+  minutesBeforeNow,
+  tenYearsAgo,
+  today,
+} from './date.utility';
+import { calcUnit8Array } from './file.utility';
+import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
+import { IUN_regex, formatIun } from './iun.utility';
+import { lazyRetry } from './lazyRetry.utility';
+import {
+  getLegalFactLabel,
+  getNotificationAllowedStatus,
+  getNotificationStatusInfos,
+  getNotificationTimelineStatusInfos,
+  parseNotificationDetail,
+} from './notification.utility';
+import { compileOneTrustPath } from './onetrust.utility';
+import { calculatePages } from './pagination.utility';
+import { performThunkAction } from './redux.utility';
+import { AppRouteParams, AppRouteType, compileRoute } from './routes.utility';
 import {
   searchStringCleanDenomination,
   searchStringLimitReachedText,
   useSearchStringChangeInput,
 } from './searchString.utility';
-import { calculatePages } from './pagination.utility';
-
-import {
-  getNotificationStatusInfos,
-  getNotificationAllowedStatus,
-  parseNotificationDetail,
-  getLegalFactLabel,
-  getNotificationTimelineStatusInfos,
-} from './notification.utility';
-import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
-import { compileOneTrustPath } from './onetrust.utility';
-import {
-  formatMonthString,
-  formatDay,
-  formatTime,
-  today,
-  isToday,
-  tenYearsAgo,
-  DATE_FORMAT,
-  dateIsDefined,
-  getNextDay,
-  minutesBeforeNow,
-  formatToTimezoneString,
-  formatDate,
-  formatDateTime,
-  formatToSlicedISOString,
-} from './date.utility';
-import { IUN_regex, formatIun } from './iun.utility';
-import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
-import {
-  basicUserDataMatcherContents,
-  basicInitialUserData,
-  adaptedTokenExchangeError,
-} from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
-import { compileRoute, AppRouteType, AppRouteParams } from './routes.utility';
-import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
+import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
+import { buttonNakedInheritStyle } from './styles.utility';
 import {
+  apiOutcomeTestHelper,
   mockApiErrorWrapper,
   simpleMockForApiErrorWrapper,
-  apiOutcomeTestHelper,
 } from './test.utility';
-import { performThunkAction } from './redux.utility';
-import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
-import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
-import { buttonNakedInheritStyle } from './styles.utility';
+import {
+  adaptedTokenExchangeError,
+  basicInitialUserData,
+  basicUserDataMatcherContents,
+} from './user.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -106,4 +107,6 @@ export {
   compileOneTrustPath,
   buttonNakedInheritStyle,
   sortArray,
+  calcUnit8Array,
+  lazyRetry,
 };

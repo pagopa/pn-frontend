@@ -7,11 +7,17 @@ type Props = {
 };
 
 const CustomTableRow = ({ label, value, dataTestId }: Props) => (
-  <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }} data-testid={dataTestId}>
-    <TableCell padding="none" sx={{ py: 1 }} data-testid="label">
+  <TableRow sx={{
+    paddingBottom: { xs: 2 },
+    '& td': { border: 'none' },
+    verticalAlign: 'top',
+    display: { xs: 'flex', lg: 'table-row' },
+    flexDirection: { xs: 'column', lg: 'row' },
+  }} data-testid={dataTestId}>
+    <TableCell padding="none" sx={{ py: { lg: 1 } }} data-testid="label">
       {label}
     </TableCell>
-    <TableCell padding="none" sx={{ py: 1 }} data-testid="value">
+    <TableCell padding="none" sx={{ py: { lg: 1 } }} data-testid="value">
       <b>{value ?? '-'}</b>
     </TableCell>
   </TableRow>

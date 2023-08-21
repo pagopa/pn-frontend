@@ -119,7 +119,7 @@ describe('CourtesyContactItem component', () => {
         fireEvent.change(codeInput, { target: { value: index.toString() } });
       });
       const dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![2]);
+      fireEvent.click(dialogButtons![1]);
       await waitFor(() => {
         expect(mock.history.post).toHaveLength(2);
         expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
@@ -210,7 +210,7 @@ describe('CourtesyContactItem component', () => {
         fireEvent.change(codeInput, { target: { value: index.toString() } });
       });
       const dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![2]);
+      fireEvent.click(dialogButtons![1]);
       await waitFor(() => {
         expect(mock.history.post).toHaveLength(2);
         expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
@@ -365,7 +365,7 @@ describe('CourtesyContactItem component', () => {
         fireEvent.change(codeInput, { target: { value: index.toString() } });
       });
       const dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![2]);
+      fireEvent.click(dialogButtons![1]);
       await waitFor(() => {
         expect(mock.history.post).toHaveLength(2);
         expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
@@ -454,7 +454,7 @@ describe('CourtesyContactItem component', () => {
         fireEvent.change(codeInput, { target: { value: index.toString() } });
       });
       const dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![2]);
+      fireEvent.click(dialogButtons![1]);
       await waitFor(() => {
         expect(mock.history.post).toHaveLength(2);
         expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({

@@ -16,7 +16,7 @@ import { getConfiguration } from '../../services/configuration.service';
 
 const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   const { URL_API_LOGIN, SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED } = getConfiguration();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['login']);
   const IDPS = getIDPS(SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED);
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
@@ -90,9 +90,8 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
             }}
             component="div"
           >
-            <Trans i18nKey="spidSelect.hintText">
-              Non hai SPID?
-              <Link href={IDPS.richiediSpid}>{' Scopri di più'}</Link>
+            <Trans i18nKey="spidSelect.hintText" ns="login">
+              <Link href={IDPS.richiediSpid}>{'spidSelect.hintText'}</Link>
             </Trans>
           </Typography>
           <Button

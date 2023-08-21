@@ -1,0 +1,39 @@
+{
+  "appStatus": {
+    "title": "Stanje platforme",
+    "subtitle": "Preverite delovanje SEND, si oglejte zgodovino motenj in prenesite ustrezna potrdila, izvršljiva proti tretjim osebam. Vsako potrdilo potrjuje motnjo: lahko bi bilo za vas koristno, če bi to vključevalo obvestilo, namenjeno vam.",
+    "statusDescription": {
+      "ok": "Vse storitve SEND delujejo.",
+      "not-ok": "Dogaja se motnja. Za več podrobnosti glejte spodnjo tabelo."
+    },
+    "lastCheckLegend": "Nazadnje posodobljeno – {{ lastCheckTimestamp }}"
+  },
+  "downtimeList": {
+    "title": "Zgodovina storitev",
+    "columnHeader": {
+      "startDate": "Začetni datum",
+      "endDate": "Končni datum",
+      "functionality": "Vključena storitev",
+      "legalFactId": "Potrdila, izvršljiva proti tretjim osebam",
+      "status": "Stanje"
+    },
+    "emptyMessage": "Ni bilo zabeleženih motenj"
+  },
+  "legends": {
+    "knownFunctionality": {
+      "NOTIFICATION_CREATE": "Pošiljanje obvestil",
+      "NOTIFICATION_VISUALIZATION": "Ogled obvestil in prenos prilog",
+      "NOTIFICATION_WORKFLOW": "Sprememba stanja obvestil"
+    },
+    "unknownFunctionality": "Neznana storitev ({{functionality}})",
+    "status": {
+      "OK": "Rešeno",
+      "KO": "V teku"
+    },
+    "noFileAvailableByStatus": {
+      "OK": "Potrdilo bo kmalu na voljo",
+      "KO": "Potrdilo bo na voljo ob koncu motnje"
+    },
+    "legalFactDownload": "Prenesite potrdilo"
+  }
+}

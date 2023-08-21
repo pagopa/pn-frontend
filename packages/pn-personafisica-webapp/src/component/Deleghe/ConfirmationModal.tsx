@@ -39,21 +39,30 @@ export default function ConfirmationModal({
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
-              <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
+              <Typography
+                id="confirmation-dialog-delegations"
+                variant="h5"
+                sx={{ fontSize: '18px', fontWeight: '600' }}
+              >
                 {title}
               </Typography>
             </Grid>
           </Grid>
 
           <Stack
-            direction={isMobile ? 'column' : 'row'}
+            direction={isMobile ? 'column-reverse' : 'row'}
             justifyContent={'flex-end'}
             alignItems={'center'}
             ml={'auto'}
             pb={isMobile ? 4 : 0}
             data-testid="dialogStack"
           >
-            <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4} mr={isMobile ? 0 : 1}>
+            <Grid
+              item
+              sx={{ width: isMobile ? '100%' : null }}
+              mt={isMobile ? 2 : 4}
+              mr={isMobile ? 0 : 1}
+            >
               <Button
                 sx={{ width: isMobile ? '100%' : null }}
                 onClick={handleClose}

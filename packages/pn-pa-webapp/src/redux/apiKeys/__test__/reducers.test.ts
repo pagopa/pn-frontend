@@ -1,31 +1,40 @@
 import { ApiKeysApi } from '../../../api/apiKeys/ApiKeys.api';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { ApiKey } from '../../../models/ApiKeys';
+import { ApiKeys } from '../../../models/ApiKeys';
+import { UserGroup } from '../../../models/user';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getApiKeys } from '../actions';
-import { resetState } from  '../reducers';
+import { resetState } from '../reducers';
 import { mockApiKeysForFE, mockApiKeysFromBE, mockGroups } from './test-utils';
 
 const initialState = {
   loading: false,
-  apiKeys: [] as Array<ApiKey>,
+  apiKeys: {
+    items: [],
+    total: 0,
+  } as ApiKeys<UserGroup>,
+  pagination: {
+    nextPagesKey: [] as Array<{
+      lastKey: string;
+      lastUpdate: string;
+    }>,
+    size: 10,
+    page: 0,
+  },
 };
 
 describe('api keys page redux state test', () => {
   mockAuthentication();
   it('initial state', () => {
     const state = store.getState().apiKeysState;
-    expect(state).toEqual({
-      loading: false,
-      apiKeys: [] as Array<ApiKey>,
-    });
+    expect(state).toEqual(initialState);
   });
 
   it('Should be able to fetch the api keys list', async () => {
     const apiSpyApiKey = jest.spyOn(ApiKeysApi, 'getApiKeys');
-    const apiSpyNotification = jest.spyOn(NotificationsApi, 'getUserGroups')
-    apiSpyApiKey.mockResolvedValue(mockApiKeysFromBE.items);
+    const apiSpyNotification = jest.spyOn(NotificationsApi, 'getUserGroups');
+    apiSpyApiKey.mockResolvedValue(mockApiKeysFromBE);
     apiSpyNotification.mockResolvedValue(mockGroups);
     const action = await store.dispatch(getApiKeys());
     const payload = action.payload;
@@ -41,5 +50,4 @@ describe('api keys page redux state test', () => {
     const state = store.getState().apiKeysState;
     expect(state).toEqual(initialState);
   });
-
 });

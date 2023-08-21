@@ -37,7 +37,7 @@ export const dataRegex = {
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
   denomination: /^([\x20-\xFF]{1,80})$/,
-  denominationSearch: /([\x20-\xFF]*)/g, 
+  denominationSearch: /([\x20-\xFF]*)/g,
   noticeCode: /^\d{18}$/,
 
   email:
@@ -79,8 +79,11 @@ export function formatFiscalCode(fiscalCode: string): string {
  */
 function isPossiblyDangerous(name: string, value: string): boolean {
   const val = value.replace(/\s+/g, '').toLowerCase();
-  if (['src', 'href', 'xlink:href'].includes(name)) {
-    if (val.includes('javascript:') || val.includes('data:text/html')) return true;
+  if (
+    ['src', 'href', 'xlink:href'].includes(name) &&
+    (val.includes('javascript:') || val.includes('data:text/html'))
+  ) {
+    return true;
   }
   if (name.startsWith('on')) {
     return true;
@@ -97,7 +100,9 @@ function removeAttributes(elem: Element) {
   // If it's dangerous, remove it
   const atts = elem.attributes;
   for (const { name, value } of atts) {
-    if (!isPossiblyDangerous(name, value)) continue;
+    if (!isPossiblyDangerous(name, value)) {
+      continue;
+    }
     elem.removeAttribute(name);
   }
 }
@@ -139,5 +144,9 @@ export function sanitizeString(srt: string): string {
   // remove malicious attributes
   clean(html);
   // return sanitized string
-  return html.body.innerHTML;
+  // the textContent return only the text, so if we have a srt = "<p>Hello</p>"" the return value will be "Hello"
+  // i18next by default converts string like the previous one in "&lt;p&gt;Hello&lt&#x2F;p&gt", so is not possible to have a result string with html tags
+  // for this reason, this solution doesn't bring a loss of functionality, but instead it can increase the security against malicious code
+  // Andrea Cimini, 2023.07.12
+  return html.body.textContent ?? '';
 }

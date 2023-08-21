@@ -118,7 +118,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {userHasAdminPermissions && !organizationGroup && <DomicileBanner />}
+        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && <DomicileBanner />}
         <TitleBox
           variantTitle="h4"
           title={pageTitle}

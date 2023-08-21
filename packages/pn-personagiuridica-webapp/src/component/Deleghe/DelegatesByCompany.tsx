@@ -12,7 +12,7 @@ import { TrackEventType } from '../../utils/events';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
-import { getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const DelegatesByCompany = () => {
@@ -100,8 +100,8 @@ const DelegatesByCompany = () => {
         width: '18%',
       },
       getValue(value: string) {
-        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-        return <Chip label={label} color={color} />;
+        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
+        return <Chip label={t(key)} color={color} />;
       },
       cardConfiguration: {
         position: 'header',

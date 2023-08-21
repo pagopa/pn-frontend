@@ -26,39 +26,33 @@ jest.mock('../../../../services/configuration.service', () => {
   };
 });
 
+const file = new File(['mocked content'], 'Mocked file', { type: 'application/pdf' });
+let mockDispatchFn: jest.Mock;
+let mockActionFn: jest.Mock;
+const confirmHandlerMk = jest.fn();
+
+function uploadDocument(elem: ParentNode, index: number) {
+  const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
+  fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
+  const fileInput = elem.querySelector('[data-testid="fileInput"]');
+  const input = fileInput?.querySelector('input');
+  fireEvent.change(input!, { target: { files: [file] } });
+}
+
+async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
+  fireEvent.click(button);
+  await waitFor(() => {
+    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockActionFn).toBeCalledTimes(1);
+    expect(mockActionFn).toBeCalledWith(documents);
+    expect(confirmHandlerMk).toBeCalledTimes(1);
+  });
+}
 
 describe('Attachments Component with payment enabled', () => {
   let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
-
-  const file = new Blob(['mocked content'], { type: 'application/pdf' });
-  // eslint-disable-next-line functional/immutable-data
-  (file as any).name = 'Mocked file';
-
-  function uploadDocument(elem: ParentNode, index: number) {
-    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
-    fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
-    const fileInput = elem.querySelector('[data-testid="fileInput"]');
-    const input = fileInput?.querySelector('input');
-    fireEvent.change(input!, { target: { files: [file] } });
-  }
-
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
-    fireEvent.click(button);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(documents);
-      expect(confirmHandlerMk).toBeCalledTimes(1);
-    });
-  }
 
   beforeEach(async () => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-
     // mock action
     mockActionFn = jest.fn();
     const actionSpy = jest.spyOn(actions, 'uploadNotificationAttachment');
@@ -73,7 +67,7 @@ describe('Attachments Component with payment enabled', () => {
 
     // render component
     await act(async () => {
-      result = render(<Attachments onConfirm={confirmHandlerMk} />);
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
   });
 
@@ -110,7 +104,7 @@ describe('Attachments Component with payment enabled', () => {
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
     expect(buttons![1]).toBeEnabled();
-    void testConfirm(buttons![1], [
+    testConfirm(buttons![1], [
       {
         id: 'documents.0',
         key: 'Doc0',
@@ -140,7 +134,7 @@ describe('Attachments Component with payment enabled', () => {
     expect(deleteIcon).toBeInTheDocument();
     uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
     await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![2], [
+    testConfirm(buttons![2], [
       {
         id: 'documents.0',
         key: 'Doc0',
@@ -175,7 +169,7 @@ describe('Attachments Component with payment enabled', () => {
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
     await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![1], [
+    testConfirm(buttons![1], [
       {
         id: 'documents.0',
         key: 'Doc0',
@@ -200,35 +194,8 @@ describe('Attachments Component with payment enabled', () => {
 
 describe('Attachments Component without payment enabled', () => {
   let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
-
-  const file = new Blob(['mocked content'], { type: 'application/pdf' });
-  // eslint-disable-next-line functional/immutable-data
-  (file as any).name = 'Mocked file';
-
-  function uploadDocument(elem: ParentNode, index: number) {
-    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
-    fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
-    const fileInput = elem.querySelector('[data-testid="fileInput"]');
-    const input = fileInput?.querySelector('input');
-    fireEvent.change(input!, { target: { files: [file] } });
-  }
-
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
-    fireEvent.click(button);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(documents);
-      expect(confirmHandlerMk).toBeCalledTimes(1);
-    });
-  }
 
   beforeEach(async () => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
     // mock action
     mockActionFn = jest.fn();
     const actionSpy = jest.spyOn(actions, 'uploadNotificationAttachment');
@@ -243,7 +210,7 @@ describe('Attachments Component without payment enabled', () => {
 
     // render component
     await act(async () => {
-      result = render(<Attachments onConfirm={confirmHandlerMk} />);
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
   });
 
@@ -282,7 +249,7 @@ describe('Attachments Component without payment enabled', () => {
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
     expect(button).toBeEnabled();
-    void testConfirm(button as HTMLButtonElement, [
+    testConfirm(button as HTMLButtonElement, [
       {
         id: 'documents.0',
         key: 'Doc0',
@@ -312,7 +279,7 @@ describe('Attachments Component without payment enabled', () => {
     expect(deleteIcon).toBeInTheDocument();
     uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
     await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![2], [
+    testConfirm(buttons![2], [
       {
         id: 'documents.0',
         key: 'Doc0',
@@ -347,7 +314,7 @@ describe('Attachments Component without payment enabled', () => {
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
     await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![1], [
+    testConfirm(buttons![1], [
       {
         id: 'documents.0',
         key: 'Doc0',
