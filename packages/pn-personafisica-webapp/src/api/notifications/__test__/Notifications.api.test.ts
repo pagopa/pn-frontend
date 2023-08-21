@@ -1,5 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
-
 import {
   LegalFactId,
   LegalFactType,
@@ -9,7 +7,7 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-
+import MockAdapter from 'axios-mock-adapter';
 import { mockApi } from '../../../__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
@@ -39,11 +37,16 @@ describe('Notifications api tests', () => {
 
   mockAuthentication();
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('getReceivedNotifications', async () => {

@@ -1,6 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-
-import { mockApi } from '../../../__test__/test-utils';
 import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient } from '../../apiClients';
@@ -9,18 +7,23 @@ import { GET_CONSENTS, SET_CONSENTS } from '../consents.routes';
 
 describe('Consents api tests', () => {
   let mock: MockAdapter;
-
+  
   mockAuthentication();
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('getConsentByType', async () => {
-    mock = mockApi(apiClient, 'GET', GET_CONSENTS(ConsentType.TOS), 200, undefined, {
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
       recipientId: 'mocked-recipientId',
       consentType: ConsentType.TOS,
       accepted: false,
@@ -34,7 +37,7 @@ describe('Consents api tests', () => {
   });
 
   it('setConsentByType - 200', async () => {
-    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
+    mock.onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1')).reply(200, {
       action: ConsentActionType.ACCEPT,
     });
     const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', {
@@ -44,7 +47,7 @@ describe('Consents api tests', () => {
   });
 
   it('setConsentByType - 20x', async () => {
-    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 204, {
+    mock.onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1')).reply(204, {
       action: ConsentActionType.ACCEPT,
     });
     const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', {
