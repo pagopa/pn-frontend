@@ -221,17 +221,15 @@ export const NotificationsApi = {
       errors: Array<{ code: string; element: null; detail: string }>;
     };
   }> =>
-    Promise.reject({
+    Promise.resolve({
       response: {
-        status: 404,
-        data: {
-          type: 'PN_NOTIFICATION_ALREADY_CANCELLED',
-          title: iun,
-          detail: '',
-          traceId: '',
-          timestamp: 'string',
-          errors: [{ code: 'PN_NOTIFICATION_ALREADY_CANCELLED', element: null, detail: 'string' }],
-        },
+        status: 200,
+        type: 'PN_NOTIFICATION_ALREADY_CANCELLED',
+        title: iun,
+        detail: '',
+        traceId: '',
+        timestamp: 'string',
+        errors: [{ code: 'PN_NOTIFICATION_ALREADY_CANCELLED', element: null, detail: 'string' }],
       },
     }),
 };

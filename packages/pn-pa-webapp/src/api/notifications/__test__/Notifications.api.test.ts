@@ -184,12 +184,12 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
-  it.skip('cancelNotification', async () => {
+  it('cancelNotification', async () => {
     const mock = new MockAdapter(apiClient);
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
     // capire se la put restituisce un data nel caso:
-    /* const res = await NotificationsApi.cancelNotification('mocked-iun');
-       expect(res).toStrictEqual() */
+    const res = await NotificationsApi.cancelNotification('mocked-iun');
+    expect(res.response.status).toStrictEqual(200);
     mock.reset();
     mock.restore();
   });
