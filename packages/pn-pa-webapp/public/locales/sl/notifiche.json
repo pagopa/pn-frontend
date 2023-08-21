@@ -310,6 +310,7 @@
         "abstract": "Opis",
         "group": "Skupina",
         "taxonomy-id": "Taksonomska koda",
+        "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Način pošiljanja",
         "registered-letter-890": "Model 890",
         "simple-registered-letter": "Priporočeno pismo s povratnico",

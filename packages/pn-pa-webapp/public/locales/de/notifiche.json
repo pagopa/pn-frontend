@@ -310,6 +310,7 @@
         "abstract": "Beschreibung",
         "group": "Gruppe",
         "taxonomy-id": "Taxonomischer Code",
+        "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Sendemodus",
         "registered-letter-890": "Formular 890",
         "simple-registered-letter": "Einschreiben mit Rückschein",

@@ -310,6 +310,7 @@
         "abstract": "Description",
         "group": "Group",
         "taxonomy-id": "Taxonomic code",
+        "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Send mode",
         "registered-letter-890": "890 form",
         "simple-registered-letter": "AR registered mail",
