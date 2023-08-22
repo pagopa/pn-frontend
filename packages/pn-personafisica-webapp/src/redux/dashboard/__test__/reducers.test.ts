@@ -1,21 +1,20 @@
 import {
-  formatToTimezoneString,
-  getNextDay,
   GetNotificationsResponse,
   NotificationStatus,
+  formatToTimezoneString,
+  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { notificationsFromBe, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
-import { notificationsFromBe, notificationsToFe } from './test-utils';
-
 
 describe('Dashbaord redux state tests', () => {
   let mock: MockAdapter;
@@ -35,7 +34,7 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(today),
-        iunMatch: ''
+        iunMatch: '',
       },
       pagination: {
         nextPagesKey: [],
@@ -51,10 +50,17 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    mock = mockApi(apiClient, 'GET', NOTIFICATIONS_LIST({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
-    }), 200, undefined, notificationsFromBe);
+    mock = mockApi(
+      apiClient,
+      'GET',
+      NOTIFICATIONS_LIST({
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
+      }),
+      200,
+      undefined,
+      notificationsFromBe
+    );
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),

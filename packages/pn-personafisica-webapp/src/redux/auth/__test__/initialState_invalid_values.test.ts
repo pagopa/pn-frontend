@@ -1,4 +1,4 @@
-import { userResponse } from "./test-users";
+import { userResponse } from '../../../__mocks__/Auth.mock';
 
 describe('Initial auth redux state - session storage with invalid values in the JSONfile', () => {
   /* eslint-disable @typescript-eslint/no-var-requires */

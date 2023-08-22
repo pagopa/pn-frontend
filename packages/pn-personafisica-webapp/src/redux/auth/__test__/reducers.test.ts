@@ -1,11 +1,9 @@
-import { store } from '../../store';
-import { User } from '../types';
-import { userResponse } from './test-users';
-import { mockLogin, mockLogout } from './test-utils';
-
+import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
 import { ConsentsApi } from '../../../api/consents/Consents.api';
 import { ConsentType } from '../../../models/consents';
+import { store } from '../../store';
 import { acceptPrivacy, acceptToS, getPrivacyApproval, getToSApproval } from '../actions';
+import { User } from '../types';
 
 /**
  * The tests about how the initial state is set based on the values in sessionStorage

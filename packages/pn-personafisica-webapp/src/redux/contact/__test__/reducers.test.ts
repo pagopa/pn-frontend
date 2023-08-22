@@ -1,4 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { digitalAddresses } from '../../../__mocks__/DigitalAddreses.mock';
 import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
@@ -13,7 +15,6 @@ import {
   IOAllowedValues,
   LegalChannelType,
 } from '../../../models/contacts';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   createOrUpdateCourtesyAddress,
@@ -25,7 +26,6 @@ import {
   getDigitalAddresses,
 } from '../actions';
 import { resetPecValidation, resetState } from '../reducers';
-import { digitalAddresses } from './test-utils';
 
 const initialState = {
   loading: false,

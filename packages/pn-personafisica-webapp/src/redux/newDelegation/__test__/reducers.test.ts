@@ -1,11 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-
-import { mockApi } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
-import { store } from '../../store';
-import { createDelegation, createDelegationMapper } from '../actions';
-import { resetNewDelegation } from '../reducers';
 import {
   createDelegationDuplicatedErrorResponse,
   createDelegationGenericErrorResponse,
@@ -13,7 +6,13 @@ import {
   createDelegationResponse,
   createDelegationSelectedPayload,
   initialState,
-} from './test.utils';
+} from '../../../__mocks__/CreateDelegations.mock';
+import { mockApi } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
+import { store } from '../../store';
+import { createDelegation, createDelegationMapper } from '../actions';
+import { resetNewDelegation } from '../reducers';
 
 describe('delegation redux state tests', () => {
   let mock: MockAdapter;

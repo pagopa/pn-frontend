@@ -1,5 +1,6 @@
-import { userResponse } from './test-users';
 /* eslint-disable @typescript-eslint/no-var-requires */
+
+import { userResponse } from '../../../__mocks__/Auth.mock';
 
 describe('Initial auth redux state tests - session storage with correct JSON', () => {
   afterAll(() => {
