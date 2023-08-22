@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../apiClients';
 import { ExternalRegistriesAPI } from '../External-registries.api';
 import { GET_ALL_ACTIVATED_PARTIES } from '../external-registries-routes';

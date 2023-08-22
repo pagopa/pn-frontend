@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
   arrayOfDelegates,
   arrayOfDelegators,
   mockCreateDelegation,
 } from '../../../__mocks__/Delegations.mock';
 import { mockApi } from '../../../__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { Delegation } from '../../../redux/delegation/types';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
