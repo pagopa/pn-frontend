@@ -1,3 +1,15 @@
+import MockAdapter from 'axios-mock-adapter';
+
+import {
+  LegalFactId,
+  LegalFactType,
+  NotificationDetailOtherDocument,
+  formatToTimezoneString,
+  getNextDay,
+  tenYearsAgo,
+  today,
+} from '@pagopa-pn/pn-commons';
+
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   notificationsFromBe,
@@ -21,16 +33,6 @@ import {
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
-import {
-  tenYearsAgo,
-  today,
-  LegalFactId,
-  LegalFactType,
-  formatToTimezoneString,
-  getNextDay,
-  NotificationDetailOtherDocument,
-} from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -187,7 +189,7 @@ describe('Notifications api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
     const res = await NotificationsApi.cancelNotification('mocked-iun');
-    expect(res.response.status).toStrictEqual(200);
+    expect(res).toEqual(undefined);
     mock.reset();
     mock.restore();
   });

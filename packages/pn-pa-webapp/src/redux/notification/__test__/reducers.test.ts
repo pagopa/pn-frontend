@@ -1,3 +1,7 @@
+import MockAdapter from 'axios-mock-adapter';
+
+import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
@@ -6,6 +10,7 @@ import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
+  cancelNotification,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
   getSentNotification,
@@ -15,8 +20,6 @@ import {
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
-import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
 
 const initialState = {
   loading: false,
@@ -167,7 +170,8 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to cancel notification', async () => {
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
-    const action = await NotificationsApi.cancelNotification('mocked-iun');
-    expect(action).toStrictEqual(200);
+    const action = await store.dispatch(cancelNotification('mocked-iun'));
+    expect(action.type).toBe('cancelNotification/fulfilled');
+    expect(action.payload).toEqual(undefined);
   });
 });

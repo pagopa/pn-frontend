@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
+
 import {
-  formatDate,
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
-  // NotificationStatus,
+  formatDate, // NotificationStatus,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
@@ -18,17 +18,15 @@ import {
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
+  CANCEL_NOTIFICATION, // CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
+  GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
-  NOTIFICATION_PRELOAD_DOCUMENT,
-  GET_USER_GROUPS,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
-  CANCEL_NOTIFICATION,
-
-  // CANCEL_NOTIFICATION,
+  NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
@@ -47,7 +45,7 @@ export const NotificationsApi = {
    */
   getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
-      if (response.data && response.data.resultsPage) {
+      if (response.data?.resultsPage) {
         const notifications = response.data.resultsPage.map((d) => ({
           ...d,
           sentAt: formatDate(d.sentAt),
