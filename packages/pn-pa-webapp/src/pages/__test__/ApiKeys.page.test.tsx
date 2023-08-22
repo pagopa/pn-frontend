@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { AppMessage, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
 import {
@@ -78,9 +78,7 @@ async function testApiKeyChangeStatus(
 }
 
 describe('ApiKeys Page', () => {
-  // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   beforeAll(() => {
