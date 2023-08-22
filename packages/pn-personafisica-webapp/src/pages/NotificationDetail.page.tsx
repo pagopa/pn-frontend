@@ -288,6 +288,15 @@ const NotificationDetail = () => {
     ).then(() => setPaymentLoading(false));
   }, [currentRecipient.payments]);
 
+  const handleReloadPayment = (noticeCode: string, creditorTaxId: string) => {
+    void dispatch(
+      getNotificationPaymentInfo({
+        taxId: currentRecipient.taxId,
+        paymentInfoRequest: [{ noticeCode, creditorTaxId }],
+      })
+    );
+  };
+
   useEffect(() => {
     if (checkIfUserHasPayments) {
       fetchPaymentsInfo();
@@ -386,6 +395,7 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
+                        handleReloadPayment={handleReloadPayment}
                       />
                     </ApiErrorWrapper>
                   </Paper>

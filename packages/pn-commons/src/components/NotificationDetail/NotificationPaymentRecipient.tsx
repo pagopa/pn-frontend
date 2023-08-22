@@ -14,6 +14,7 @@ type Props = {
   payments: Array<PaymentHistory>;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
+  handleReloadPayment: (noticeCode: string, creditorTaxId: string) => void;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({

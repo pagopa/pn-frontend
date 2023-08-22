@@ -1,12 +1,17 @@
-import { Error, Refresh } from '@mui/icons-material';
+import { Refresh } from '@mui/icons-material';
 import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { PagoPAPaymentHistory, PaymentStatus } from '../../types/NotificationDetail';
+import {
+  PagoPAPaymentHistory,
+  PaymentInfoDetail,
+  PaymentStatus,
+} from '../../types/NotificationDetail';
 import { formatCurrency } from '../../utils';
 import { formatDateString } from '../../utils/date.utility';
+import CopyToClipboard from '../CopyToClipboard';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
 interface Props {
@@ -80,47 +85,80 @@ const SkeletonCard = () => {
 const ErrorCard: React.FC<{
   isMobile: boolean;
   noticeCode: string;
-}> = ({ isMobile, noticeCode }) => (
-  <Box
-    px={2}
-    py={isMobile ? 2 : 1}
-    gap={1}
-    display="flex"
-    alignItems={isMobile ? 'flex-start' : 'center'}
-    flexDirection={isMobile ? 'column-reverse' : 'row'}
-    sx={{
-      backgroundColor: 'grey.50',
-      borderRadius: '6px',
-    }}
-  >
+  detail: string;
+  errorCode: string;
+}> = ({ isMobile, noticeCode, detail, errorCode }) => {
+  const getErrorMessage = () => {
+    switch (detail) {
+      case PaymentInfoDetail.GENERIC_ERROR:
+        return (
+          <Typography variant="caption-semibold" color="error.dark">
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.generic-error')}
+          </Typography>
+        );
+      case PaymentInfoDetail.PAYMENT_UNAVAILABLE:
+      case PaymentInfoDetail.PAYMENT_UNKNOWN:
+      case PaymentInfoDetail.DOMAIN_UNKNOWN:
+        return (
+          <Box display="flex" flexDirection="column">
+            <Typography variant="caption-semibold" color="error.dark">
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.notice-error')}
+            </Typography>
+            <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
+              <Typography variant="caption-semibold" color="error.dark">
+                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.assistence')}
+                &nbsp;XXXX
+              </Typography>
+              <CopyToClipboard
+                getValue={() => errorCode}
+                tooltipMode={true}
+                iconProps={{ color: 'text.secondary', width: '16px' }}
+              />
+            </Box>
+          </Box>
+        );
+      default:
+        return undefined;
+    }
+  };
+
+  return (
     <Box
+      px={2}
+      py={isMobile ? 2 : 1}
+      gap={1}
       display="flex"
-      justifyContent={isMobile ? 'flex-start' : 'inherit'}
-      gap={0.5}
-      flexDirection="column"
-      flex="1 0 0"
+      alignItems={isMobile ? 'flex-start' : 'center'}
+      flexDirection={isMobile ? 'column-reverse' : 'row'}
+      sx={{
+        backgroundColor: 'grey.50',
+        borderRadius: '6px',
+      }}
     >
-      <Box lineHeight="1.4rem">
-        <Typography variant="caption" color="text.secondary" mr={0.5}>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
-        </Typography>
-        <Typography variant="caption-semibold" color="text.secondary">
-          {noticeCode}
-        </Typography>
+      <Box
+        display="flex"
+        justifyContent={isMobile ? 'flex-start' : 'inherit'}
+        gap={0.5}
+        flexDirection="column"
+        flex="1 0 0"
+      >
+        <Box lineHeight="1.4rem">
+          <Typography variant="caption" color="text.secondary" mr={0.5}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
+          </Typography>
+          <Typography variant="caption-semibold" color="text.secondary">
+            {noticeCode}
+          </Typography>
+        </Box>
+        {getErrorMessage()}
       </Box>
-      <Box display="flex" alignItems="center" gap={0.5}>
-        <Error sx={{ color: 'error.dark' }} />
-        <Typography variant="caption-semibold" color="error.dark">
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.detail-error')}
-        </Typography>
-      </Box>
+      <ButtonNaked color="primary">
+        <Refresh sx={{ width: '20px' }} />
+        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
+      </ButtonNaked>
     </Box>
-    <ButtonNaked color="primary">
-      <Refresh sx={{ width: '20px' }} />
-      {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
-    </ButtonNaked>
-  </Box>
-);
+  );
+};
 
 const NotificationPaymentPagoPAStatusElem: React.FC<{
   pagoPAItem: PagoPAPaymentHistory;
@@ -139,8 +177,13 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
       tooltip = 'succeded';
       break;
     case PaymentStatus.FAILED:
-      color = 'error';
-      tooltip = 'failed';
+      if (pagoPAItem.detail === PaymentInfoDetail.PAYMENT_CANCELED) {
+        color = 'warning';
+        tooltip = 'canceled';
+      } else {
+        color = 'error';
+        tooltip = 'failed';
+      }
       break;
     case PaymentStatus.INPROGRESS:
       color = 'info';
@@ -206,8 +249,21 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({ pagoPAItem, loading, i
     return <SkeletonCard />;
   }
 
-  if (pagoPAItem.errorCode) {
-    return <ErrorCard isMobile={isMobile} noticeCode={pagoPAItem.noticeCode} />;
+  if (
+    pagoPAItem.errorCode &&
+    pagoPAItem.detail &&
+    pagoPAItem.detail_v2 &&
+    pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
+    pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
+  ) {
+    return (
+      <ErrorCard
+        isMobile={isMobile}
+        noticeCode={pagoPAItem.noticeCode}
+        detail={pagoPAItem.detail}
+        errorCode={pagoPAItem.detail_v2}
+      />
+    );
   }
 
   return (

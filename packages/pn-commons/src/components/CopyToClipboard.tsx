@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useIsMobile } from '../hooks';
 interface Props {
   /** callback used to retrieve the text to be copied */
@@ -12,6 +12,7 @@ interface Props {
   tooltip?: string;
   tooltipBefore?: string;
   disabled?: boolean;
+  iconProps?: SxProps<Theme>;
 }
 
 const CopyToClipboard: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const CopyToClipboard: React.FC<Props> = ({
   tooltip = '',
   tooltipBefore = '',
   disabled = false,
+  iconProps,
 }) => {
   const padding = tooltipMode ? 0 : undefined;
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
@@ -61,10 +63,10 @@ const CopyToClipboard: React.FC<Props> = ({
     >
       {copied && (
         <Tooltip arrow={true} title={tooltip} placement="top">
-          <CheckIcon fontSize="small" sx={{ m: '5px' }} />
+          <CheckIcon fontSize="small" sx={{ ...iconProps, m: '5px' }} />
         </Tooltip>
       )}
-      {!copied && <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />}
+      {!copied && <ContentCopyIcon fontSize="small" sx={{ ...iconProps, m: '5px' }} />}
       {text}
     </Button>
   );
