@@ -6,15 +6,10 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
-  // NotificationStatus,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import {
-  // CancelNotification,
-  NewNotificationDTO,
-  NewNotificationResponse,
-} from '../../models/NewNotification';
+import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
@@ -27,8 +22,6 @@ import {
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   CANCEL_NOTIFICATION,
-
-  // CANCEL_NOTIFICATION,
 } from './notifications.routes';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {

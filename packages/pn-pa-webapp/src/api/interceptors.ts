@@ -1,5 +1,4 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
-// import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '@pagopa-pn/pn-commons';
 import { apiClient } from './apiClients';
 
@@ -59,6 +58,19 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         });
         return {
           data,
+          status: response.status,
+          statusText: '',
+          headers: response.headers,
+          config: response.config,
+          request: response.request,
+        };
+      } else if (
+        response.request?.responseURL ===
+        'https://webapi.dev.notifichedigitali.it/delivery-push/notifications/sent/cancel/TJRM-VGLP-JXHA-202308-K-1'
+      ) {
+        console.log('response :>> ', response);
+        return {
+          data: response.data,
           status: response.status,
           statusText: '',
           headers: response.headers,
