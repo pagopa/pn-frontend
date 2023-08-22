@@ -2,7 +2,7 @@ import React from 'react';
 import * as redux from 'react-redux';
 
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
-import { RenderResult, fireEvent, screen, waitFor } from '@testing-library/react';
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../__test__/test-utils';
 import {
