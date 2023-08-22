@@ -1,71 +1,81 @@
 import _ from 'lodash';
+import React, { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams /* useNavigate */ } from 'react-router-dom';
-import React, { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
-import { Box, Button, Typography, Grid, Paper, Stack, Alert } from '@mui/material';
 import {
-  // PN-1714
+  useParams,
+  /* useNavigate */
+} from 'react-router-dom';
+
+import { Alert, Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  ApiError,
+  GetNotificationDowntimeEventsParams, // PN-1714
   // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
+  NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
-  PnBreadcrumb,
-  TitleBox,
-  useIsMobile,
-  NotificationDetailRecipient,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  formatEurocentToCurrency,
-  TimedMessage,
-  useDownloadDocument,
-  NotificationDetailOtherDocument,
-  NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
   NotificationPaidDetail,
-  dataRegex,
+  NotificationRelatedDowntimes,
+  NotificationStatus,
   NotificationStatusHistory,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
+  dataRegex,
+  formatEurocentToCurrency,
+  useDownloadDocument,
+  useErrors,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
 import {
+  NOTIFICATION_ACTIONS,
+  cancelNotification,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
-  cancelNotification,
 } from '../redux/notification/actions';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 import ConfirmCancellationDialog from './components/Notifications/ConfirmCancellationDialog';
 
-const AlertNotificationCancel = (notification: { notificationStatus: NotificationStatus }) => {
-  const { t } = useTranslation();
-  return notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
-    notification.notificationStatus === NotificationStatus.CANCELLED ? (
-    <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
-      <Typography component="span" variant="body1">
-        {notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
-          ? t('detail.alert-cancellation-in-progress', { ns: 'notifiche' })
-          : t('detail.alert-cancellation-confirmed', { ns: 'notifiche' })}
-      </Typography>
-    </Alert>
-  ) : (
-    <></>
-  );
+const AlertNotificationCancel: React.FC<{ notificationStatus: NotificationStatus }> = (
+  notification
+) => {
+  const { t } = useTranslation(['notifiche']);
+
+  if (
+    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
+    notification.notificationStatus === NotificationStatus.CANCELLED
+  ) {
+    return (
+      <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
+        <Typography component="span" variant="body1">
+          {notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
+            ? t('detail.alert-cancellation-in-progress')
+            : t('detail.alert-cancellation-confirmed')}
+        </Typography>
+      </Alert>
+    );
+  }
+
+  return <></>;
 };
 
 type Props = {
@@ -85,14 +95,9 @@ const RenderNotificationDetailTable = ({ openModal }: Props) => {
     filteredRecipients: Array<NotificationDetailRecipient>,
     alt: boolean = false
   ): ReactNode => {
-    const altValue = alt
-      ? filteredRecipients[0]?.payment?.noticeCodeAlternative
-      : filteredRecipients[0]?.payment?.noticeCode;
-    const creditorTaxId = filteredRecipients[0]?.payment?.creditorTaxId;
-
     if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient, index) => (
-        <Box key={index} fontWeight={600}>
+      return filteredRecipients.map((recipient) => (
+        <Box key={recipient.taxId} fontWeight={600}>
           {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
           {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
@@ -101,7 +106,10 @@ const RenderNotificationDetailTable = ({ openModal }: Props) => {
 
     return (
       <Box fontWeight={600}>
-        {creditorTaxId} - {altValue}
+        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
+        {alt
+          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
+          : filteredRecipients[0]?.payment?.noticeCode}
       </Box>
     );
   };
@@ -211,24 +219,24 @@ const RenderNotificationDetailTable = ({ openModal }: Props) => {
   return (
     <NotificationDetailTable rows={detailTableRows}>
       {notification.notificationStatus !== NotificationStatus.CANCELLATION_IN_PROGRESS &&
-      notification.notificationStatus !== NotificationStatus.CANCELLED ? (
-        <Button
-          variant="outlined"
-          sx={{
-            my: {
-              xs: 3,
-              md: 2,
-            },
-            borderColor: 'error.dark',
-            outlineColor: 'error.dark',
-            color: 'error.dark',
-          }}
-          onClick={openModal}
-          data-testid="cancelNotificationBtn"
-        >
-          {t('detail.cancel-notification', { ns: 'notifiche' })}
-        </Button>
-      ) : null}
+        notification.notificationStatus !== NotificationStatus.CANCELLED && (
+          <Button
+            variant="outlined"
+            sx={{
+              my: {
+                xs: 3,
+                md: 2,
+              },
+              borderColor: 'error.dark',
+              outlineColor: 'error.dark',
+              color: 'error.dark',
+            }}
+            onClick={openModal}
+            data-testid="cancelNotificationBtn"
+          >
+            {t('detail.cancel-notification', { ns: 'notifiche' })}
+          </Button>
+        )}
     </NotificationDetailTable>
   );
 };
@@ -310,9 +318,9 @@ const NotificationDetail: React.FC = () => {
   };
 
   const withPayment =
-    notification.notificationStatusHistory.filter(
+    notification.notificationStatusHistory.findIndex(
       (el: NotificationStatusHistory) => el.status === NotificationStatus.PAID
-    ).length > 0;
+    ) > -1;
   const hasDocumentsAvailable = !notification.documentsAvailable;
 
   const getDownloadFilesMessage = useCallback(
