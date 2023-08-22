@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { act, RenderResult } from "@testing-library/react";
-import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
+import * as React from 'react';
+import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { axe, render } from '../../../__test__/test-utils';
 import MobileNotifications from '../MobileNotifications';
 

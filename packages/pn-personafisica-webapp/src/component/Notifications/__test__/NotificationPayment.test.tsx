@@ -1,6 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
-
 import {
   AppResponseMessage,
   NotificationDetailPayment,
@@ -11,8 +8,9 @@ import {
   ResponseEventDispatcher,
   apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
-
-import { act, mockApi, render, screen, waitFor } from '../../../__test__/test-utils';
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
+import { act, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATION_PAYMENT_INFO } from '../../../api/notifications/notifications.routes';
 import NotificationPayment from '../NotificationPayment';
@@ -125,26 +123,29 @@ const mocked_payments_detail = {
 
 describe('NotificationPayment component', () => {
   let mock: MockAdapter;
-
-  function mockPaymentApi(responseBody: PaymentInfo) {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_PAYMENT_INFO(
-        mockedNotificationDetailPayment.creditorTaxId,
-        mockedNotificationDetailPayment.noticeCode!
-      ),
-      200,
-      null,
-      responseBody
-    );
-  }
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
 
   afterEach(() => {
     mock.reset();
-    mock.restore();
     mock.resetHistory();
   });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  function mockPaymentApi(responseBody: PaymentInfo) {
+    mock
+      .onGet(
+        NOTIFICATION_PAYMENT_INFO(
+          mockedNotificationDetailPayment.creditorTaxId,
+          mockedNotificationDetailPayment.noticeCode!
+        )
+      )
+      .reply(200, responseBody);
+  }
 
   it('renders properly while loading payment info', async () => {
     mockPaymentApi({
@@ -576,8 +577,8 @@ describe('NotificationPayment component', () => {
 
 describe('NotificationPayment - different payment fetch API behaviors', () => {
   let mock: MockAdapter;
-
   beforeAll(() => {
+    mock = new MockAdapter(apiClient);
     jest.restoreAllMocks();
   });
 
@@ -586,19 +587,20 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
   });
 
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
     apiOutcomeTestHelper.clearMock();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('API error', async () => {
     const taxId = 'mocked-creditorTaxId';
     const noticeCode = 'mocked-noticeCode';
-    mock = mockApi(apiClient, 'GET', NOTIFICATION_PAYMENT_INFO(taxId, noticeCode), 500, null, {
-      response: { status: 500 },
-    });
+    mock
+      .onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .reply(500, { response: { status: 500 } });
     // const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
     // apiSpy.mockRejectedValue({ response: { status: 500 } });
     await act(
@@ -622,7 +624,7 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
   it('API OK', async () => {
     const taxId = 'mocked-creditorTaxId';
     const noticeCode = 'mocked-noticeCode';
-    mock = mockApi(apiClient, 'GET', NOTIFICATION_PAYMENT_INFO(taxId, noticeCode), 200, null, {
+    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
       status: PaymentStatus.SUCCEEDED,
       url: 'https://react.org',
     });

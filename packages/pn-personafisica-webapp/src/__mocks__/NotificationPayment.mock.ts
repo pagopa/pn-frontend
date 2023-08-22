@@ -1,30 +1,30 @@
+import { NotificationDetailPayment } from '@pagopa-pn/pn-commons';
 import * as redux from 'react-redux';
-import { NotificationDetailPayment } from "@pagopa-pn/pn-commons";
 
 export const mockedNotificationDetailPayment = {
   notificationFeePolicy: 'FLAT_RATE',
   noticeCode: 'mocked-noticeCode',
-  creditorTaxId: "mocked-creditorTaxId",
+  creditorTaxId: 'mocked-creditorTaxId',
   pagoPaForm: {
     digests: {
-      sha256: "mocked-pagopa-sha256"
+      sha256: 'mocked-pagopa-sha256',
     },
-    contentType: "application/pdf",
+    contentType: 'application/pdf',
     ref: {
-      key: "mocked-pagopa-key",
-      versionToken: "mockedVersionToken"
-    }
+      key: 'mocked-pagopa-key',
+      versionToken: 'mockedVersionToken',
+    },
   },
   f24flatRate: {
     digests: {
-      sha256: "mocked-f24-sha256"
+      sha256: 'mocked-f24-sha256',
     },
-    contentType: "application/pdf",
+    contentType: 'application/pdf',
     ref: {
-      key: "mocked-f24-key",
-      versionToken: "mockedVersionToken"
-    }
-  }
+      key: 'mocked-f24-key',
+      versionToken: 'mockedVersionToken',
+    },
+  },
 } as NotificationDetailPayment;
 
 export function doMockUseDispatch(): any {
