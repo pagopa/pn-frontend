@@ -1,29 +1,28 @@
 import _ from 'lodash';
+
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  DigitalWorkflowDetails,
+  INotificationDetailTimeline,
   LegalFactType,
   NotHandledDetails,
+  NotificationDeliveryMode,
+  NotificationDetail,
+  NotificationDetailRecipient,
+  NotificationStatus,
+  NotificationStatusHistory,
   PhysicalCommunicationType,
+  RecipientType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  NotificationStatus,
-  NotificationStatusHistory,
-  NotificationDetailRecipient,
-  NotificationDetail,
-  NotificationDeliveryMode,
-  ResponseStatus,
-  INotificationDetailTimeline,
-  DigitalWorkflowDetails,
-  RecipientType,
 } from '../../types';
 import {
   AppIoCourtesyMessageEventType,
   NotificationDetailOtherDocument,
 } from '../../types/NotificationDetail';
-import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,

@@ -1,14 +1,15 @@
 import React from 'react';
 import * as redux from 'react-redux';
+
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
-import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../__test__/test-utils';
-import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../redux/notification/__test__/test-utils';
+import * as actions from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
@@ -138,8 +139,6 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
-  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
-  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
@@ -161,8 +160,6 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(alert).not.toBeInTheDocument();
   });
 
-  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
-  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test('clicks on the cancel button and on confirm button', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
@@ -173,6 +170,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     );
     fireEvent.click(modalCloseAndProceedBtn!);
     await waitFor(() => expect(modal).not.toBeInTheDocument());
+    // EMANUELE: segui la guida per fare il test. va verificato che venga effettuata la chiamata all'api di annullamento
   });
 });
 

@@ -1,16 +1,17 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  NotificationDetail,
-  LegalFactId,
-  performThunkAction,
-  NotificationDetailOtherDocument,
   DowntimeLogPage,
   GetNotificationDowntimeEventsParams,
   KnownFunctionality,
   LegalFactDocumentDetails,
+  LegalFactId,
+  NotificationDetail,
+  NotificationDetailOtherDocument,
+  performThunkAction,
 } from '@pagopa-pn/pn-commons';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
@@ -25,7 +26,7 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
 );
 
 // da cambiare il ritorno nel caso venga restituito qualcosa
-export const cancelNotification = createAsyncThunk<void, string>(
+export const cancelNotification = createAsyncThunk<string, string>(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
   performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
 );
