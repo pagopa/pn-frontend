@@ -26,6 +26,7 @@ import {
   NOTIFICATION_PRELOAD_DOCUMENT,
   GET_USER_GROUPS,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  CANCEL_NOTIFICATION,
 
   // CANCEL_NOTIFICATION,
 } from './notifications.routes';
@@ -71,30 +72,7 @@ export const NotificationsApi = {
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
       if (response.data) {
-        const mockedNotification = {
-          ...response.data,
-          /*   notificationStatus: NotificationStatus.DELIVERED,
-          notificationStatusHistory: [
-            ...response.data.notificationStatusHistory,
-            {
-              status: NotificationStatus.CANCELLATION_IN_PROGRESS,
-              activeFrom: '2043-08-15T13:42:54.17675939Z',
-              relatedTimelineElements: [],
-            },
-          ], */
-          timeline: [
-            {
-              elementId: 'NOTIFICATION_CANCELLATION_REQUEST.IUN_TRJT-LVLX-JMRK-202308-L-1',
-              timestamp: '2043-08-14T13:42:54.17675939Z',
-              legalFactsIds: [],
-              category: 'NOTIFICATION_CANCELLATION_REQUEST',
-              details: {},
-            },
-            ...response.data.timeline,
-          ],
-        } as NotificationDetail;
-
-        return parseNotificationDetail(mockedNotification);
+        return parseNotificationDetail(response.data);
       }
       return {} as NotificationDetail;
     }),
@@ -206,30 +184,6 @@ export const NotificationsApi = {
    * @param  {string} iun
    * @returns Promise
    */
-  /* cancelNotification: (iun: string): Promise<CancelNotification> =>
-    apiClient.put<CancelNotification>(CANCEL_NOTIFICATION(iun)).then((response) => response.data), */
-  cancelNotification: (
-    iun: string
-  ): Promise<{
-    response: {
-      type: string;
-      status: number;
-      title: string;
-      detail: string;
-      traceId: string;
-      timestamp: string;
-      errors: Array<{ code: string; element: null; detail: string }>;
-    };
-  }> =>
-    Promise.resolve({
-      response: {
-        status: 200,
-        type: 'PN_NOTIFICATION_ALREADY_CANCELLED',
-        title: iun,
-        detail: '',
-        traceId: '',
-        timestamp: 'string',
-        errors: [{ code: 'PN_NOTIFICATION_ALREADY_CANCELLED', element: null, detail: 'string' }],
-      },
-    }),
+  cancelNotification: (iun: string): Promise<string> =>
+    apiClient.put<string>(CANCEL_NOTIFICATION(iun)).then((response) => response.data),
 };
