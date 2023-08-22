@@ -18,6 +18,7 @@ interface Props {
   pagoPAItem: PagoPAPaymentHistory;
   loading: boolean;
   isSelected: boolean;
+  handleReloadPayment: (noticeCode: string, creditorTaxId: string) => void;
 }
 
 const SkeletonCard = () => {
@@ -84,15 +85,19 @@ const SkeletonCard = () => {
 
 const ErrorCard: React.FC<{
   isMobile: boolean;
-  noticeCode: string;
-  detail: string;
-  errorCode: string;
-}> = ({ isMobile, noticeCode, detail, errorCode }) => {
+  pagoPAItem: PagoPAPaymentHistory;
+  handleReloadPayment: (noticeCode: string, creditorTaxId: string) => void;
+}> = ({ isMobile, pagoPAItem, handleReloadPayment }) => {
+  const { detail, detail_v2, noticeCode, creditorTaxId } = pagoPAItem;
   const getErrorMessage = () => {
     switch (detail) {
       case PaymentInfoDetail.GENERIC_ERROR:
         return (
-          <Typography variant="caption-semibold" color="error.dark">
+          <Typography
+            variant="caption-semibold"
+            color="error.dark"
+            data-testid="generic-error-message"
+          >
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.generic-error')}
           </Typography>
         );
@@ -100,17 +105,18 @@ const ErrorCard: React.FC<{
       case PaymentInfoDetail.PAYMENT_UNKNOWN:
       case PaymentInfoDetail.DOMAIN_UNKNOWN:
         return (
-          <Box display="flex" flexDirection="column">
+          <Box display="flex" flexDirection="column" data-testid="assistence-error-message">
             <Typography variant="caption-semibold" color="error.dark">
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.notice-error')}
             </Typography>
             <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
               <Typography variant="caption-semibold" color="error.dark">
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.assistence')}
-                &nbsp;XXXX
+                &nbsp;
+                {detail_v2}
               </Typography>
               <CopyToClipboard
-                getValue={() => errorCode}
+                getValue={() => detail_v2 || ''}
                 tooltipMode={true}
                 iconProps={{ color: 'text.secondary', width: '16px' }}
               />
@@ -152,7 +158,11 @@ const ErrorCard: React.FC<{
         </Box>
         {getErrorMessage()}
       </Box>
-      <ButtonNaked color="primary">
+      <ButtonNaked
+        color="primary"
+        data-testid="reload-button"
+        onClick={() => handleReloadPayment(noticeCode, creditorTaxId)}
+      >
         <Refresh sx={{ width: '20px' }} />
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
       </ButtonNaked>
@@ -242,26 +252,29 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
   );
 };
 
-const NotificationPaymentPagoPAItem: React.FC<Props> = ({ pagoPAItem, loading, isSelected }) => {
+const NotificationPaymentPagoPAItem: React.FC<Props> = ({
+  pagoPAItem,
+  loading,
+  isSelected,
+  handleReloadPayment,
+}) => {
   const isMobile = useIsMobile();
 
   if (loading) {
     return <SkeletonCard />;
   }
 
+  // TODO forse qui meglio fare un includes del detail in un array con i valori che dovrebbero mostrare la card di errore
   if (
     pagoPAItem.errorCode &&
-    pagoPAItem.detail &&
-    pagoPAItem.detail_v2 &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
   ) {
     return (
       <ErrorCard
         isMobile={isMobile}
-        noticeCode={pagoPAItem.noticeCode}
-        detail={pagoPAItem.detail}
-        errorCode={pagoPAItem.detail_v2}
+        pagoPAItem={pagoPAItem}
+        handleReloadPayment={handleReloadPayment}
       />
     );
   }

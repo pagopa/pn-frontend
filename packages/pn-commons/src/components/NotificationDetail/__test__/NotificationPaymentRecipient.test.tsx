@@ -21,6 +21,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
       />
     );
     const title = getByTestId('notification-payment-recipient-title');
@@ -43,6 +44,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
       />
     );
     const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
@@ -60,6 +62,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
       />
     );
     const downloadPagoPANotice = result.getByTestId('download-pagoPA-notice-button');
@@ -88,6 +91,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={payClickMk}
+        handleReloadPayment={() => void 0}
       />
     );
 
@@ -115,6 +119,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={downloadAttachmentMk}
         onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
       />
     );
 

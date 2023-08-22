@@ -22,6 +22,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   onPayClick,
   handleDownloadAttachamentPagoPA,
+  handleReloadPayment,
 }) => {
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
 
@@ -53,6 +54,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   pagoPAItem={payment.pagoPA}
                   loading={loading}
                   isSelected={payment.pagoPA.noticeCode === selectedPayment?.noticeCode}
+                  handleReloadPayment={handleReloadPayment}
                 />
               </Box>
             ) : null

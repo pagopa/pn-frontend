@@ -1,19 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
 import {
-  NotificationStatus,
+  Downtime,
+  INotificationDetailTimeline,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  INotificationDetailTimeline,
-  NotificationStatusHistory,
-  PhysicalCommunicationType,
   NotificationFeePolicy,
+  NotificationStatus,
+  NotificationStatusHistory,
   PaymentAttachmentSName,
-  RecipientType,
-  PaymentStatus,
-  PaymentInfoDetail,
-  Downtime,
   PaymentHistory,
+  PaymentInfoDetail,
+  PaymentStatus,
+  PhysicalCommunicationType,
+  RecipientType,
 } from '@pagopa-pn/pn-commons';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 
@@ -117,7 +117,17 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
-        state.paymentInfo = action.payload;
+        const paymentInfo = action.payload[0];
+        const paymentInfoIndex = state.paymentInfo.findIndex(
+          (payment) =>
+            payment.pagoPA?.creditorTaxId === paymentInfo.pagoPA?.creditorTaxId &&
+            payment.pagoPA?.noticeCode === paymentInfo.pagoPA?.noticeCode
+        );
+        if (paymentInfoIndex !== -1) {
+          state.paymentInfo[paymentInfoIndex] = paymentInfo;
+        } else {
+          state.paymentInfo = action.payload;
+        }
       }
     });
     builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
