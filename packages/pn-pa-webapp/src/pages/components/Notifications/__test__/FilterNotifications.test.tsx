@@ -6,6 +6,7 @@ import {
   formatToTimezoneString,
   getNotificationAllowedStatus,
   tenYearsAgo,
+  testSelect,
   today,
 } from '@pagopa-pn/pn-commons';
 
@@ -17,7 +18,6 @@ import {
   screen,
   testFormElements,
   testInput,
-  testSelect,
   testStore,
   waitFor,
   within,

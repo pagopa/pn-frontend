@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { RenderOptions, fireEvent, render, waitFor } from '@testing-library/react';
 
 import { RootState, appReducers } from '../redux/store';
 
@@ -99,7 +99,7 @@ function mockApi(
  * @label element's label
  * @value the expected value of the element
  */
-export function testFormElements(
+function testFormElements(
   form: HTMLFormElement,
   elementName: string,
   label: string,
@@ -123,46 +123,11 @@ export function testFormElements(
  * @elementName element name
  * @value the expected value of the element
  */
-export async function testInput(
-  container: HTMLElement,
-  elementName: string,
-  value: string | number
-) {
+async function testInput(container: HTMLElement, elementName: string, value: string | number) {
   const input = container.querySelector(`input[name="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
     expect(input).toHaveValue(value);
-  });
-}
-
-/**
- * Test the options list of a select, fire change event and check its value
- * @container container element
- * @elementName element name
- * @options the options list
- * @optToSelect the option to select
- */
-export async function testSelect(
-  container: HTMLElement,
-  elementName: string,
-  options: Array<{ label: string; value: string }>,
-  optToSelect: number
-) {
-  const selectInput = container.querySelector(`input[name="${elementName}"]`);
-  const selectButton = container.querySelector(`div[id="${elementName}"]`);
-  fireEvent.mouseDown(selectButton!);
-  const selectOptionsContainer = await screen.findByRole('presentation');
-  expect(selectOptionsContainer).toBeInTheDocument();
-  const selectOptionsList = await within(selectOptionsContainer).findByRole('listbox');
-  expect(selectOptionsList).toBeInTheDocument();
-  const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
-  expect(selectOptionsListItems).toHaveLength(options.length);
-  selectOptionsListItems.forEach((opt, index) => {
-    expect(opt).toHaveTextContent(options[index].label);
-  });
-  await waitFor(() => {
-    fireEvent.click(selectOptionsListItems[optToSelect]);
-    expect(selectInput).toHaveValue(options[optToSelect].value);
   });
 }
 
@@ -172,4 +137,4 @@ export * from '@testing-library/react';
 export { customRender as render, testStore };
 export { axe };
 // utility functions
-export { mockApi };
+export { mockApi, testInput, testFormElements };

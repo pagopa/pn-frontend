@@ -1,10 +1,11 @@
+import mediaQuery from 'css-mediaquery';
 import { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { render, RenderOptions, fireEvent, waitFor, within, screen } from '@testing-library/react';
-import { configureStore, Store } from '@reduxjs/toolkit';
-import { createTheme, ThemeProvider } from '@mui/material';
-import mediaQuery from 'css-mediaquery';
+
+import { ThemeProvider, createTheme } from '@mui/material';
+import { Store, configureStore } from '@reduxjs/toolkit';
+import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
 
@@ -36,18 +37,22 @@ const customRender = (
   });
 };
 
-export * from '@testing-library/react';
-export { customRender as render };
-
 // utility function
-export async function testSelect(
-  form: HTMLElement,
+/**
+ * Test the options list of a select, fire change event and check its value
+ * @container container element
+ * @elementName element name
+ * @options the options list
+ * @optToSelect the option to select
+ */
+async function testSelect(
+  container: HTMLElement,
   elementName: string,
   options: Array<{ label: string; value: string }>,
   optToSelect: number
 ) {
-  const selectInput = form.querySelector(`input[name="${elementName}"]`);
-  const selectButton = form.querySelector(`div[id="${elementName}"]`);
+  const selectInput = container.querySelector(`input[name="${elementName}"]`);
+  const selectButton = container.querySelector(`div[id="${elementName}"]`);
   fireEvent.mouseDown(selectButton!);
   const selectOptionsContainer = await screen.findByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();
@@ -63,8 +68,9 @@ export async function testSelect(
     expect(selectInput).toHaveValue(options[optToSelect].value);
   });
 }
+
 /** This function simulate media query and is useful to test differences between mobile and desktop view */
-export function createMatchMedia(width: number) {
+function createMatchMedia(width: number) {
   return (query: string): MediaQueryList => ({
     matches: mediaQuery.match(query, { width }) as boolean,
     media: '',
@@ -76,3 +82,8 @@ export function createMatchMedia(width: number) {
     dispatchEvent: () => true,
   });
 }
+
+export * from '@testing-library/react';
+export { customRender as render };
+// utility functions
+export { testSelect, createMatchMedia };

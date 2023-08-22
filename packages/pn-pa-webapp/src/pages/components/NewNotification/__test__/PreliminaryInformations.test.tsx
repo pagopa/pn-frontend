@@ -1,11 +1,11 @@
 /* eslint-disable functional/no-let */
-import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
-import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
+import { PhysicalCommunicationType, testSelect } from '@pagopa-pn/pn-commons';
+import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
+
 import { PaymentModel } from '../../../../models/NewNotification';
+import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import PreliminaryInformations from '../PreliminaryInformations';
 
 jest.mock('react-i18next', () => ({
@@ -214,15 +214,15 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     expect(submitButton).toBeDisabled();
     await testInput(form, `subject`, 'TwentyTwentyTwenty20');
     expect(submitButton).toBeEnabled();
-    await testInput(form, 
-      `subject`, 
+    await testInput(
+      form,
+      `subject`,
       'oneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySix3456'
     );
     expect(submitButton).toBeDisabled();
     await testInput(form, `subject`, 'FifteenFifteenX');
     expect(submitButton).toBeEnabled();
   }, 20000);
-
 
   it.skip('changes form values and clicks on confirm', async () => {
     const form = result.container.querySelector('form');
