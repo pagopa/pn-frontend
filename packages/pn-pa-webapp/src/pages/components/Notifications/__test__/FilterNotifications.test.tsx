@@ -80,6 +80,12 @@ describe('Filter Notifications Table Component', () => {
   let result: RenderResult | undefined;
   let form: HTMLFormElement | undefined;
 
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   it('renders filter notifications table - desktop', async () => {
     // render component
     await act(async () => {

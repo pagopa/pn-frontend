@@ -21,6 +21,12 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('Filter Notifications Table Component - accessibility tests', () => {
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   it('does not have basic accessibility issues - desktop', async () => {
     let result: RenderResult | undefined;
 

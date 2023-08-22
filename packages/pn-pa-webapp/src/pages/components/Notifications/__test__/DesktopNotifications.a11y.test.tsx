@@ -16,18 +16,15 @@ jest.mock('react-i18next', () => ({
 describe('DesktopNotifications Component - accessibility tests', () => {
   it('does not have basic accessibility issues', async () => {
     let result: RenderResult | undefined;
-
     await act(async () => {
       result = render(
         <DesktopNotifications
           notifications={notificationsToFe.resultsPage}
-          sort={{ orderBy: '', order: 'asc' }}
           onManualSend={() => {}}
           onApiKeys={() => {}}
         />
       );
     });
-
     if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
@@ -38,18 +35,11 @@ describe('DesktopNotifications Component - accessibility tests', () => {
 
   it('does not have basic accessibility issues (empty notifications)', async () => {
     let result: RenderResult | undefined;
-
     await act(async () => {
       result = render(
-        <DesktopNotifications
-          notifications={[]}
-          sort={{ orderBy: '', order: 'asc' }}
-          onManualSend={() => {}}
-          onApiKeys={() => {}}
-        />
+        <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
       );
     });
-
     if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
@@ -62,12 +52,7 @@ describe('DesktopNotifications Component - accessibility tests', () => {
     let result: RenderResult | undefined;
     await act(async () => {
       result = render(
-        <DesktopNotifications
-          notifications={[]}
-          sort={{ orderBy: '', order: 'asc' }}
-          onManualSend={() => {}}
-          onApiKeys={() => {}}
-        />,
+        <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />,
         {
           preloadedState: {
             dashboardState: {
@@ -84,12 +69,7 @@ describe('DesktopNotifications Component - accessibility tests', () => {
     });
     // the rerendering must be done to take the useRef updates
     result!.rerender(
-      <DesktopNotifications
-        notifications={[]}
-        sort={{ orderBy: '', order: 'asc' }}
-        onManualSend={() => {}}
-        onApiKeys={() => {}}
-      />
+      <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
     );
     if (result) {
       const res = await axe(result.container);

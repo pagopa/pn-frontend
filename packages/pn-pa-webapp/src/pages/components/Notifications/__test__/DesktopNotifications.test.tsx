@@ -36,12 +36,7 @@ describe('DesktopNotifications Component', () => {
     let result: RenderResult;
     await act(async () => {
       result = render(
-        <DesktopNotifications
-          notifications={[]}
-          sort={{ orderBy: '', order: 'asc' }}
-          onManualSend={() => {}}
-          onApiKeys={() => {}}
-        />
+        <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
       );
     });
     const filters = result!.queryByTestId('filter-form');
@@ -60,7 +55,6 @@ describe('DesktopNotifications Component', () => {
       result = render(
         <DesktopNotifications
           notifications={notificationsToFe.resultsPage}
-          sort={{ orderBy: '', order: 'asc' }}
           onManualSend={() => {}}
           onApiKeys={() => {}}
         />
@@ -77,12 +71,7 @@ describe('DesktopNotifications Component', () => {
     let result: RenderResult;
     await act(async () => {
       result = render(
-        <DesktopNotifications
-          notifications={[]}
-          sort={{ orderBy: '', order: 'asc' }}
-          onManualSend={() => {}}
-          onApiKeys={() => {}}
-        />,
+        <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />,
         {
           preloadedState: {
             dashboardState: {
@@ -119,7 +108,6 @@ describe('DesktopNotifications Component', () => {
       result = render(
         <DesktopNotifications
           notifications={notificationsToFe.resultsPage}
-          sort={{ orderBy: '', order: 'asc' }}
           onManualSend={() => {}}
           onApiKeys={() => {}}
         />

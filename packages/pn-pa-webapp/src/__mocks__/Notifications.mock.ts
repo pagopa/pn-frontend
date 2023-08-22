@@ -3,26 +3,30 @@ import { GetNotificationsResponse, NotificationStatus, formatDate } from '@pagop
 export const notificationsDTO: GetNotificationsResponse = {
   resultsPage: [
     {
-      iun: 'mocked-iun-1',
-      paProtocolNumber: 'mocked-paNotificationId-1',
-      sender: 'mocked-senderId-1',
-      sentAt: '2022-02-22T14:20:20.566Z',
-      subject: 'mocked-subject-1',
-      notificationStatus: NotificationStatus.DELIVERED,
-      recipients: ['mocked-recipientId-1'],
+      iun: 'NRJP-NZRW-LDTL-202308-L-1',
+      paProtocolNumber: 'protocol2107202216185501410',
+      sender: 'Comune di Palermo',
+      sentAt: '2023-08-22T08:47:39.655127013Z',
+      subject: 'multa55555',
+      notificationStatus: NotificationStatus.EFFECTIVE_DATE,
+      recipients: ['GRBGPP87L04L741X'],
+      group: '000',
     },
     {
-      iun: 'mocked-iun-2',
-      paProtocolNumber: 'mocked-paNotificationId-2',
-      sender: 'mocked-senderId-2',
-      sentAt: '2022-02-22T14:20:20.566Z',
-      subject: 'mocked-subject-2',
-      notificationStatus: NotificationStatus.DELIVERED,
-      recipients: ['mocked-recipientId-2'],
+      iun: 'HYTD-ERPH-WDUE-202308-H-1',
+      paProtocolNumber: 'protocol210720221618555451',
+      sender: 'Comune di Palermo',
+      sentAt: '2023-08-18T08:38:21.218280819Z',
+      subject: 'multa15100',
+      notificationStatus: NotificationStatus.ACCEPTED,
+      recipients: ['GRBGPP87L04L741X'],
+      group: '000',
     },
   ],
   moreResult: false,
-  nextPagesKey: ['mocked-page-key-1'],
+  nextPagesKey: [
+    'eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMzA4IiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiVVJLWS1YRFlHLVdVTkotMjAyMzA4LUEtMSMjUEYtMDc5ODlkZTItZjA3MS00ZGNkLWJlZWUtODUzYzQzNDQxMTdmIiwic2VudEF0IjoiMjAyMy0wOC0xNFQxMzo0MTozMS4xMTIxOTI3NTZaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMzA4In19',
+  ],
 };
 
 export const emptyNotificationsFromBe: GetNotificationsResponse = {

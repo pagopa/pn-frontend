@@ -1,8 +1,15 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
 
-import { notificationsToFe } from '../../../../redux/dashboard/__test__/test-utils';
-import { render } from '../../../../__test__/test-utils';
-import * as routes from '../../../../navigation/routes.const';
+import {
+  createMatchMedia,
+  formatToTimezoneString,
+  tenYearsAgo,
+  today,
+} from '@pagopa-pn/pn-commons';
+
+import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
 const mockNavigateFn = jest.fn();
@@ -20,64 +27,108 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    NotificationsCard: () => <div>Cards</div>,
-    MobileNotificationsSort: () => <div>Sort</div>
-  };
-});
-
-jest.mock('../FilterNotifications', () => {
-  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
-  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
-    useImperativeHandle(ref, () => ({
-      filtersApplied: false
-    }));
-    if (!showFilters) {
-      return <></>;
-    }
-    return <div>Filters</div>;
-  });
-});
-
 describe('MobileNotifications Component', () => {
+  const original = window.matchMedia;
 
-  it('renders MobileNotifications', () => {
+  beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
+  });
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
+  it('renders MobileNotifications - no notifications', async () => {
     // render component
-    const result = render(
-      <MobileNotifications
-        notifications={[]}
-        sort={{ orderBy: 'recipients', order: 'asc' }}
-        onChangeSorting={() => {}}
-        onManualSend={() => {}}
-        onApiKeys={() => {}}
-      />
-    );
-    expect(result.container).not.toHaveTextContent(/Filters/i);
-    expect(result.container).not.toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <MobileNotifications
+          notifications={[]}
+          onChangeSorting={() => {}}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />
+      );
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).not.toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    expect(norificationCards).toHaveLength(0);
+    expect(result!.container).toHaveTextContent(
       /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
+    );
+  });
+
+  it('renders MobileNotifications - notifications', async () => {
+    // render component
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <MobileNotifications
+          notifications={notificationsToFe.resultsPage}
+          onChangeSorting={() => {}}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />
+      );
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
+  });
+
+  it('renders component - no notification after filter', async () => {
+    // render component
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <MobileNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />,
+        {
+          preloadedState: {
+            dashboardState: {
+              filters: {
+                startDate: formatToTimezoneString(tenYearsAgo),
+                endDate: formatToTimezoneString(today),
+                iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
+                mandateId: undefined,
+              },
+            },
+          },
+        }
+      );
+    });
+    // the rerendering must be done to take the useRef updates
+    result!.rerender(
+      <MobileNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
+    );
+    const filters = await waitFor(() => result!.queryByTestId('dialogToggle'));
+    expect(filters).toBeInTheDocument();
+    expect(result!.container).toHaveTextContent(
+      /empty-state.filter-message empty-state.filter-action/i
     );
   });
 
   it('clicks on go to detail action', async () => {
     // render component
-    const result = render(
-      <MobileNotifications
-        notifications={notificationsToFe.resultsPage}
-        sort={{ orderBy: '', order: 'asc' }}
-        onManualSend={() => {}}
-        onApiKeys={() => {}}
-      />
-    );
-    const notificationsCardButton = result?.container.querySelector('button');
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <MobileNotifications
+          notifications={notificationsToFe.resultsPage}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+        />
+      );
+    });
+    const norificationCards = result!.getAllByTestId('itemCard');
+    const notificationsCardButton = norificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
       expect(mockNavigateFn).toBeCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
+        GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });
   });
