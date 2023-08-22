@@ -1,4 +1,4 @@
-import { CourtesyChannelType, LegalChannelType } from "../../../models/contacts";
+import { CourtesyChannelType, LegalChannelType } from '../models/contacts';
 
 export const legalAddresses = [
   {

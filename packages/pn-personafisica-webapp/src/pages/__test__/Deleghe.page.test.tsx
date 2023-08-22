@@ -1,8 +1,7 @@
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
-
+import { initialState } from '../../__mocks__/Delegations.mock';
 import {
   RenderResult,
   act,
@@ -20,7 +19,6 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../api/delegations/delegations.routes';
-import { initialState } from '../../redux/delegation/__test__/test.utils';
 import Deleghe from '../Deleghe.page';
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');

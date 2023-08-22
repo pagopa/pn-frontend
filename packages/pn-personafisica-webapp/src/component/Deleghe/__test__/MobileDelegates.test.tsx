@@ -1,10 +1,9 @@
-import { act, screen } from '@testing-library/react';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
+import { act, screen } from '@testing-library/react';
+import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
-import * as hooks from '../../../redux/hooks';
-import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+import * as hooks from '../../../redux/hooks';
 import MobileDelegates from '../MobileDelegates';
 
 jest.mock('react-i18next', () => ({
@@ -17,14 +16,13 @@ jest.mock('react-i18next', () => ({
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
- jest.mock('@pagopa-pn/pn-commons', () => {
+jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
-
 
 describe('MobileDelegates Component - assuming delegates API works properly', () => {
   it('renders the empty state', () => {
@@ -51,7 +49,6 @@ describe('MobileDelegates Component - assuming delegates API works properly', ()
   });
 });
 
-
 describe('MobileDelegates Component - different delegates API behaviors', () => {
   beforeAll(() => {
     jest.restoreAllMocks();
@@ -66,10 +63,16 @@ describe('MobileDelegates Component - different delegates API behaviors', () => 
   });
 
   it('API error', async () => {
-    await act(async () => void render(
-      <MobileDelegates />,
-      { preloadedState: { appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATES) } }
-    ));
+    await act(
+      async () =>
+        void render(<MobileDelegates />, {
+          preloadedState: {
+            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+              DELEGATION_ACTIONS.GET_DELEGATES
+            ),
+          },
+        })
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 

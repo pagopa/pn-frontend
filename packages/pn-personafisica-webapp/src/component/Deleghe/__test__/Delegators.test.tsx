@@ -1,10 +1,10 @@
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import { act, screen } from '@testing-library/react';
+import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
+import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import * as hooks from '../../../redux/hooks';
 import Delegators from '../Delegators';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

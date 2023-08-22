@@ -1,12 +1,12 @@
-import React from 'react';
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import React from 'react';
 
-import { render, act, screen, mockApi } from '../../__test__/test-utils';
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { act, mockApi, render, screen } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
-import { userResponse } from '../../redux/auth/__test__/test-users';
-import * as routes from '../routes.const';
 import SessionGuard from '../SessionGuard';
+import * as routes from '../routes.const';
 
 const SessionGuardWithErrorPublisher = () => (
   <>

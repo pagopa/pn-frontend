@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import { fireEvent, mockApi, render, screen, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
 import { LegalChannelType } from '../../../models/contacts';
@@ -18,11 +18,16 @@ jest.mock('react-i18next', () => ({
 describe('InsertLegalContact component', () => {
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('renders InsertLegalContact', async () => {
@@ -92,20 +97,17 @@ describe('InsertLegalContact component', () => {
   });
 
   it('adds pec - validation required', async () => {
-    mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
-      value: 'mail@valida.com',
-    });
-    mockApi(
-      mock,
-      'POST',
-      LEGAL_CONTACT('default', LegalChannelType.PEC),
-      200,
-      {
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+        value: 'mail@valida.com',
+      })
+      .reply(200);
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
         value: 'mail@valida.com',
         verificationCode: '01234',
-      },
-      { result: 'PEC_VALIDATION_REQUIRED' }
-    );
+      })
+      .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
     const result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
@@ -145,13 +147,18 @@ describe('InsertLegalContact component', () => {
   });
 
   it('adds pec - validation not required', async () => {
-    mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
-      value: 'mail@valida.com',
-    });
-    mockApi(mock, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 204, {
-      value: 'mail@valida.com',
-      verificationCode: '01234',
-    });
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+        value: 'mail@valida.com',
+      })
+      .reply(200);
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+        value: 'mail@valida.com',
+        verificationCode: '01234',
+      })
+      .reply(204);
+
     const result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />

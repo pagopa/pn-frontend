@@ -1,11 +1,14 @@
+import { RenderResult, act } from '@testing-library/react';
 import * as React from 'react';
 import * as redux from 'react-redux';
-import { act, RenderResult } from '@testing-library/react';
-
+import {
+  courtesyAddresses,
+  initialState,
+  legalAddresses,
+} from '../../../__mocks__/SpecialContacts.mock';
 import { axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
-import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -14,7 +17,6 @@ jest.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
-
 
 describe('SpecialContacts Component - accessibility tests', () => {
   it('does not have basic accessibility issues', async () => {
@@ -51,4 +53,3 @@ describe('SpecialContacts Component - accessibility tests', () => {
     }
   }, 10000);
 });
-

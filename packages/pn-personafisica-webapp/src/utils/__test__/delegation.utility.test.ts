@@ -1,7 +1,7 @@
 import crypto from 'crypto';
+import { arrayOfDelegates, arrayOfDelegators } from "../../__mocks__/Delegations.mock";
 import delegationToItem, { compareDelegationsStrings, generateVCode, sortDelegations } from '../delegation.utility';
 import { delegationArray, testItem } from './testObjects';
-import { arrayOfDelegators, arrayOfDelegates } from "../../redux/delegation/__test__/test.utils";
 
 test('Should convert an delegation array of delegate to an item array', () => {
   const item = delegationToItem(delegationArray);

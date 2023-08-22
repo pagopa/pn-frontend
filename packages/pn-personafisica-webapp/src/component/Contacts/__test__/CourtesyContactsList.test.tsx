@@ -1,11 +1,12 @@
+import { act, screen } from '@testing-library/react';
 import * as React from 'react';
-import { act, RenderResult, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
+import { render } from '../../../__test__/test-utils';
 import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
 import * as hooks from '../../../redux/hooks';
-import { render } from '../../../__test__/test-utils';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
+
 // import * as actions from '../../../redux/contact/actions';
 
 jest.mock('react-i18next', () => ({

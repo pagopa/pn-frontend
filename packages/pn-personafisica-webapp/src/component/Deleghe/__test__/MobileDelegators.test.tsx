@@ -1,10 +1,9 @@
-import { act, screen } from '@testing-library/react';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
+import { act, screen } from '@testing-library/react';
+import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { render } from '../../../__test__/test-utils';
-import * as hooks from '../../../redux/hooks';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+import * as hooks from '../../../redux/hooks';
 import MobileDelegators from '../MobileDelegators';
 
 jest.mock('react-i18next', () => ({
@@ -17,7 +16,7 @@ jest.mock('react-i18next', () => ({
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
- jest.mock('@pagopa-pn/pn-commons', () => {
+jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
@@ -63,12 +62,16 @@ describe('MobileDelegators Component - different delegators API behaviors', () =
   });
 
   it('API error', async () => {
-    await act(async () => void render(
-      <MobileDelegators />,
-      { preloadedState: { 
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATORS),
-      } }
-    ));
+    await act(
+      async () =>
+        void render(<MobileDelegators />, {
+          preloadedState: {
+            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+              DELEGATION_ACTIONS.GET_DELEGATORS
+            ),
+          },
+        })
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 

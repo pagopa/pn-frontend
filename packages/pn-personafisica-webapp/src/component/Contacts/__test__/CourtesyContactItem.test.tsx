@@ -1,9 +1,9 @@
-import React from 'react';
 import MockAdapter from 'axios-mock-adapter';
-import { render, fireEvent, screen, waitFor, mockApi } from '../../../__test__/test-utils';
-import { CourtesyChannelType } from '../../../models/contacts';
+import React from 'react';
+import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
+import { CourtesyChannelType } from '../../../models/contacts';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -22,11 +22,16 @@ describe('CourtesyContactItem component', () => {
     const INPUT_INVALID_PHONE = '33312345';
     const INPUT_VALID_PHONE_UPDATE = '+393337654321';
 
+    beforeAll(() => {
+      mock = new MockAdapter(apiClient);
+    });
+
     afterEach(() => {
-      if (mock) {
-        mock.restore();
-        mock.reset();
-      }
+      mock.reset();
+    });
+
+    afterAll(() => {
+      mock.restore();
     });
 
     it('type in an invalid number', async () => {
@@ -76,19 +81,17 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('save a new phone number', async () => {
-      mock = mockApi(
-        apiClient,
-        'POST',
-        COURTESY_CONTACT('default', CourtesyChannelType.SMS),
-        200,
-        {
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
           value: '+39' + INPUT_VALID_PHONE,
-        }
-      );
-      mockApi(mock, 'POST', COURTESY_CONTACT('default', CourtesyChannelType.SMS), 204, {
-        value: '+39' + INPUT_VALID_PHONE,
-        verificationCode: '01234',
-      });
+        })
+        .reply(200);
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
+          value: '+39' + INPUT_VALID_PHONE,
+          verificationCode: '01234',
+        })
+        .reply(204);
       const result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem
@@ -163,19 +166,17 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('override an existing phone number with a new one', async () => {
-      mock = mockApi(
-        apiClient,
-        'POST',
-        COURTESY_CONTACT('default', CourtesyChannelType.SMS),
-        200,
-        {
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
           value: INPUT_VALID_PHONE_UPDATE,
-        }
-      );
-      mockApi(mock, 'POST', COURTESY_CONTACT('default', CourtesyChannelType.SMS), 204, {
-        value: INPUT_VALID_PHONE_UPDATE,
-        verificationCode: '01234',
-      });
+        })
+        .reply(200);
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
+          value: INPUT_VALID_PHONE_UPDATE,
+          verificationCode: '01234',
+        })
+        .reply(204);
       const result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem
@@ -228,12 +229,7 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('delete phone number', async () => {
-      mock = mockApi(
-        apiClient,
-        'DELETE',
-        COURTESY_CONTACT('default', CourtesyChannelType.SMS),
-        204
-      );
+      mock.onDelete(COURTESY_CONTACT('default', CourtesyChannelType.SMS)).reply(204);
       const result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem
@@ -272,11 +268,16 @@ describe('CourtesyContactItem component', () => {
     const VALID_EMAIL_UPDATE = 'prova-nuova@pagopa.it';
     const INVALID_EMAIL = 'testpagopa.it';
 
+    beforeAll(() => {
+      mock = new MockAdapter(apiClient);
+    });
+
     afterEach(() => {
-      if (mock) {
-        mock.restore();
-        mock.reset();
-      }
+      mock.reset();
+    });
+
+    afterAll(() => {
+      mock.restore();
     });
 
     it('type in an invalid email', async () => {
@@ -326,19 +327,15 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('add a new email', async () => {
-      mock = mockApi(
-        apiClient,
-        'POST',
-        COURTESY_CONTACT('default', CourtesyChannelType.EMAIL),
-        200,
-        {
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), { value: VALID_EMAIL })
+        .reply(200);
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
           value: VALID_EMAIL,
-        }
-      );
-      mockApi(mock, 'POST', COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), 204, {
-        value: VALID_EMAIL,
-        verificationCode: '01234',
-      });
+          verificationCode: '01234',
+        })
+        .reply(204);
       const result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem
@@ -411,19 +408,17 @@ describe('CourtesyContactItem component', () => {
     });
 
     it('override an existing email with a new one', async () => {
-      mock = mockApi(
-        apiClient,
-        'POST',
-        COURTESY_CONTACT('default', CourtesyChannelType.EMAIL),
-        200,
-        {
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
           value: VALID_EMAIL_UPDATE,
-        }
-      );
-      mockApi(mock, 'POST', COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), 204, {
-        value: VALID_EMAIL_UPDATE,
-        verificationCode: '01234',
-      });
+        })
+        .reply(200);
+      mock
+        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
+          value: VALID_EMAIL_UPDATE,
+          verificationCode: '01234',
+        })
+        .reply(204);
       const result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem
@@ -470,16 +465,11 @@ describe('CourtesyContactItem component', () => {
           verificationCode: '01234',
         });
       });
-      expect(dialog).not.toBeInTheDocument();;
+      expect(dialog).not.toBeInTheDocument();
     });
 
     it('delete email', async () => {
-      mock = mockApi(
-        apiClient,
-        'DELETE',
-        COURTESY_CONTACT('default', CourtesyChannelType.EMAIL),
-        204
-      );
+      mock.onDelete(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL)).reply(204);
       const result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem

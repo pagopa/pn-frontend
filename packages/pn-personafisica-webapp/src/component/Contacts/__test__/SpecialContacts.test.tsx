@@ -1,22 +1,20 @@
-import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
-import * as redux from 'react-redux';
-
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
   apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
 import { RenderResult, act, fireEvent, screen, waitFor, within } from '@testing-library/react';
-
-import { mockApi, render } from '../../../__test__/test-utils';
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
+import * as redux from 'react-redux';
+import { courtesyAddresses, initialState, legalAddresses } from '../../../__mocks__/SpecialContacts.mock';
+import { render } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
-import { courtesyAddresses, initialState, legalAddresses } from './SpecialContacts.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -451,17 +449,22 @@ describe('Contacts Page - different contact API behaviors', () => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
     apiOutcomeTestHelper.clearMock();
     jest.restoreAllMocks();
   });
 
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('API error', async () => {
-    mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 500, undefined, {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(500, {
       response: { status: 500 },
     });
     await act(
@@ -480,7 +483,7 @@ describe('Contacts Page - different contact API behaviors', () => {
   });
 
   it('API OK', async () => {
-    mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(undefined), 200, undefined, []);
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, []);
     await act(
       async () =>
         void render(

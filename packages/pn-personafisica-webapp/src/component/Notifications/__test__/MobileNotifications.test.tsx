@@ -1,11 +1,10 @@
 import React from 'react';
-
-import { render, fireEvent, waitFor } from '../../../__test__/test-utils';
-import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
+import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = jest.fn(); 
 
 // mock imports
 jest.mock('react-router-dom', () => ({

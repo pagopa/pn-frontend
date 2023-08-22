@@ -1,6 +1,6 @@
-import { notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
+import { notificationToFeTwoRecipients } from '../../__mocks__/Notifications.mock';
 
-/**
+/**5
  * This test suite tests the parseNotificationDetailForRecipient function in a rather indirect mode:
  * it resorts to notificationToFeTwoRecipients which in turn calls parseNotificationDetailForRecipient.
  */
