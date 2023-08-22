@@ -25,7 +25,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         const data = response.data as NotificationDetail;
         data.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
         data.timeline.push({
-          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.NRJP-NZRW-LDTL-202308-L-1',
           timestamp: '2033-08-14T13:42:54.17675939Z',
           legalFactsIds: [],
           category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
@@ -72,5 +72,3 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (error) => error
   );
 };
-
-// scrivere in pr gli iun  e l'utente per farlo provare ad andre
