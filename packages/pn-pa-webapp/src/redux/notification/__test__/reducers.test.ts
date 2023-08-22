@@ -168,6 +168,6 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to cancel notification', async () => {
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
     const action = await NotificationsApi.cancelNotification('mocked-iun');
-    expect(action.response.status).toStrictEqual(200);
+    expect(action).toStrictEqual(200);
   });
 });
