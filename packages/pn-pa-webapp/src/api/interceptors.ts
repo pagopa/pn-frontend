@@ -1,10 +1,20 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { NotificationDetail, NotificationStatus, TimelineCategory } from '@pagopa-pn/pn-commons';
+import {
+  Notification,
+  NotificationDetail,
+  NotificationStatus,
+  TimelineCategory,
+} from '@pagopa-pn/pn-commons';
 import { apiClient } from './apiClients';
 
 export const setUpInterceptor = (store: EnhancedStore) => {
   apiClient.interceptors.request.use(
     (config) => {
+      /* if (config.url === '/delivery-push/notifications/sent/cancel/PELM-VYNK-XVGV-202308-R-1') {
+        return Promise.resolve({
+          iun: 'PELM-VYNK-XVGV-202308-R-1',
+        });
+      } */
       /* eslint-disable functional/immutable-data */
       const token: string = store.getState().userState.user.sessionToken;
       if (token && config.headers) {
@@ -66,11 +76,15 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         };
       } else if (
         response.request?.responseURL ===
-        'https://webapi.dev.notifichedigitali.it/delivery-push/notifications/sent/cancel/TJRM-VGLP-JXHA-202308-K-1'
+        'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent?startDate=2013-08-22T00%3A00%3A00.000Z&endDate=2023-08-23T00%3A00%3A00.000Z&size=10'
       ) {
-        console.log('response :>> ', response);
+        const data = response.data as { resultsPage: Array<Notification> };
+        const specificIun = data.resultsPage.filter(
+          (el: Notification) => el.iun === 'PELM-VYNK-XVGV-202308-R-1'
+        )[0];
+        specificIun.notificationStatus = NotificationStatus.CANCELLED;
         return {
-          data: response.data,
+          data,
           status: response.status,
           statusText: '',
           headers: response.headers,
@@ -81,6 +95,26 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         return response;
       }
     },
-    (error) => error
+    (error) =>
+      /* console.log('error :>> ', error);
+      if (error.iun === 'PELM-VYNK-XVGV-202308-R-1') {
+        return {
+          data: {
+            status: 200,
+            type: 'PN_NOTIFICATION_ALREADY_CANCELLED',
+            title: '',
+            detail: '',
+            traceId: '',
+            timestamp: 'string',
+            errors: [
+              { code: 'PN_NOTIFICATION_ALREADY_CANCELLED', element: null, detail: 'string' },
+            ],
+          },
+        };
+      } else {
+        return error;
+      }
+    } */
+      error
   );
 };
