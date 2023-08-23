@@ -310,7 +310,6 @@
         "abstract": "Description",
         "group": "Groupe",
         "taxonomy-id": "Code des impôts",
-        "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Modes d'envoi",
         "registered-letter-890": "Formulaire 890",
         "simple-registered-letter": "Courrier recommandé avec A/R",

@@ -1,36 +1,38 @@
-import { ChangeEvent, useEffect, useCallback, useMemo, ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+
+import { InfoOutlined } from '@mui/icons-material';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  InputAdornment,
+  MenuItem,
   Radio,
   RadioGroup,
   TextField,
-  Typography,
-  MenuItem,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import {
-  PhysicalCommunicationType,
-  CustomDropdown,
   ApiErrorWrapper,
+  CustomDropdown,
+  PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
 
-import { InfoOutlined } from '@mui/icons-material';
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
-import { getConfiguration } from '../../../services/configuration.service';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { NEW_NOTIFICATION_ACTIONS, getUserGroups } from '../../../redux/newNotification/actions';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
-import { getUserGroups, NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
 import { RootState } from '../../../redux/store';
-import { trackEventByType } from '../../../utils/mixpanel';
+import { getConfiguration } from '../../../services/configuration.service';
 import { TrackEventType } from '../../../utils/events';
+import { trackEventByType } from '../../../utils/mixpanel';
 import NewNotificationCard from './NewNotificationCard';
 import { requiredStringFieldValidation } from './validation.utility';
 
@@ -120,9 +122,11 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }, [fetchGroups]);
 
   const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
-    <Tooltip arrow={true} title={tooltip}>
-      <InfoOutlined />
-    </Tooltip>
+    <InputAdornment position="end">
+      <Tooltip arrow={true} title={tooltip}>
+        <InfoOutlined />
+      </Tooltip>
+    </InputAdornment>
   );
 
   return (
