@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import { testAutocomplete, within } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
@@ -52,13 +52,36 @@ describe('NewApiKey component', () => {
       result = render(<NewApiKey />);
     });
     expect(result?.container).toHaveTextContent(/page-title/i);
-    const form = result?.container.querySelector('form');
+    const form = result?.getByTestId('new-api-key-form') as HTMLFormElement;
     testFormElements(form!, 'name', 'form-placeholder-name');
     testFormElements(form!, 'groups', 'form-placeholder-groups');
-    const button = form?.querySelector('button[type="submit"]');
-    expect(button!).toBeDisabled();
+    const submitButton = within(form).getByTestId('submit-new-api-key');
+    expect(submitButton!).toBeDisabled();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
+  });
+
+  it('empty and invalid form', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
+    await act(async () => {
+      result = render(<NewApiKey />);
+    });
+    const form = result?.getByTestId('new-api-key-form') as HTMLFormElement;
+
+    // initial status: empty form, submit is disabled, no error message
+    const submitButton = within(form).getByTestId('submit-new-api-key');
+    expect(submitButton).toBeDisabled();
+    expect(result?.container).not.toHaveTextContent(/form-error-name/);
+
+    // fill api key name: valid form, submit is enabled, no error message
+    await testInput(form, 'name', newApiKeyDTO.name);
+    expect(submitButton).toBeEnabled();
+    expect(result?.container).not.toHaveTextContent(/form-error-name/);
+
+    // set back api key name to empty text field, submit is disabled, error message shown
+    await testInput(form, 'name', '');
+    expect(submitButton).toBeDisabled();
+    expect(result?.container).toHaveTextContent(/form-error-name/);
   });
 
   it('changes form values and clicks on confirm', async () => {
@@ -68,7 +91,7 @@ describe('NewApiKey component', () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    const form = result?.container.querySelector('form') as HTMLFormElement;
+    const form = result?.getByTestId('new-api-key-form') as HTMLFormElement;
     await testInput(form, 'name', newApiKeyDTO.name);
     await testAutocomplete(
       form,
@@ -77,10 +100,10 @@ describe('NewApiKey component', () => {
       true,
       0
     );
-    const button = form.querySelector('button[type="submit"]');
-    expect(button).toBeEnabled();
+    const submitButton = within(form).getByTestId('submit-new-api-key');
+    expect(submitButton).toBeEnabled();
     await act(async () => {
-      fireEvent.click(button!);
+      fireEvent.click(submitButton!);
     });
     expect(result?.container).toHaveTextContent(/api-key-succesfully-generated/);
     expect(mock.history.get).toHaveLength(1);
@@ -89,7 +112,7 @@ describe('NewApiKey component', () => {
     expect(mock.history.post[0].url).toContain('/api-key-self/api-keys/');
   });
 
-  test('clicks on the breadcrumb button', async () => {
+  it('clicks on the breadcrumb button', async () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });

@@ -100,16 +100,16 @@ async function testAutocomplete(
   optToSelect?: number,
   closeOnSelect?: boolean
 ) {
-  const autocomplete = within(container as HTMLElement).getByTestId(elementName) as Element;
+  const autocomplete = within(container as HTMLElement).getByTestId(elementName);
   if (mustBeOpened) {
-    const button = autocomplete.querySelector('button[title="Open"]') as Element;
+    const button = within(autocomplete).getByTitle('Open');
     fireEvent.click(button);
   }
   const dropdown = (await waitFor(() =>
     document.querySelector('[role="presentation"][class^="MuiAutocomplete-popper"')
   )) as HTMLElement;
   expect(dropdown).toBeInTheDocument();
-  const dropdownOptionsList = (within(dropdown).getByRole('listbox')) as HTMLElement;
+  const dropdownOptionsList = within(dropdown).getByRole('listbox') as HTMLElement;
   expect(dropdownOptionsList).toBeInTheDocument();
   const dropdownOptionsListItems = within(dropdownOptionsList).getAllByRole('option');
   expect(dropdownOptionsListItems).toHaveLength(options.length);
