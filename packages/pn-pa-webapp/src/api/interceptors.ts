@@ -8,8 +8,22 @@ import { EnhancedStore } from '@reduxjs/toolkit';
 
 import { apiClient } from './apiClients';
 
+// eslint-disable-next-line functional/no-let
+let axiosResponseInterceptor: number; // outer variable
+// eslint-disable-next-line functional/no-let
+let axiosRequestInterceptor: number; // outer variable
+
+const clearInterceptor = (interceptorInstance: number, method: 'request' | 'response') => {
+  if (interceptorInstance >= 0) {
+    apiClient.interceptors[method].eject(interceptorInstance);
+  }
+};
+
 export const setUpInterceptor = (store: EnhancedStore) => {
-  apiClient.interceptors.request.use(
+  clearInterceptor(axiosRequestInterceptor, 'request');
+  clearInterceptor(axiosResponseInterceptor, 'response');
+
+  axiosRequestInterceptor = apiClient.interceptors.request.use(
     (config) => {
       if (config.url === '/delivery-push/notifications/sent/cancel/PELM-VYNK-XVGV-202308-R-1') {
         return Promise.reject({ error: true, type: 'cancellation-200' });
@@ -30,12 +44,9 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (error) => Promise.reject(error)
   );
 
-  apiClient.interceptors.response.use(
+  axiosResponseInterceptor = apiClient.interceptors.response.use(
     (response) => {
-      if (
-        response.request?.responseURL ===
-        'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent/NRJP-NZRW-LDTL-202308-L-1'
-      ) {
+      if (response.config?.url === '/delivery/notifications/sent/NRJP-NZRW-LDTL-202308-L-1') {
         const data = response.data as NotificationDetail;
         data.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
         data.timeline.push({
@@ -54,8 +65,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           request: response.request,
         };
       } else if (
-        response.request?.responseURL ===
-        'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent/HYTD-ERPH-WDUE-202308-H-1'
+        response.config?.url === '/delivery/notifications/sent/HYTD-ERPH-WDUE-202308-H-1'
       ) {
         const data = response.data as NotificationDetail;
         data.notificationStatus = NotificationStatus.CANCELLED;
@@ -79,11 +89,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           config: response.config,
           request: response.request,
         };
-      } else if (
-        response.request?.responseURL.startsWith(
-          'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent?startDate'
-        )
-      ) {
+      } else if (response.config?.url?.startsWith('/delivery/notifications/sent?startDate')) {
         const data = response.data as { resultsPage: Array<Notification> };
         const specificIun = data.resultsPage.find(
           (el: Notification) => el.iun === 'HYTD-ERPH-WDUE-202308-H-1'

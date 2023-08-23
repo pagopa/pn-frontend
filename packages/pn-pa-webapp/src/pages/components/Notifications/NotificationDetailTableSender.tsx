@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Button } from '@mui/material';
 import {
+  INotificationDetailTimeline,
   NotificationDetail,
   NotificationDetailRecipient,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationStatus,
-  NotificationStatusHistory,
+  TimelineCategory,
   dataRegex,
   formatEurocentToCurrency,
 } from '@pagopa-pn/pn-commons';
@@ -33,8 +34,8 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
     (recipient) => recipient.payment?.noticeCodeAlternative
   );
   const withPayment =
-    notification.notificationStatusHistory.findIndex(
-      (el: NotificationStatusHistory) => el.status === NotificationStatus.PAID
+    notification.timeline.findIndex(
+      (el: INotificationDetailTimeline) => el.category === TimelineCategory.PAYMENT
     ) > -1;
 
   const openModal = () => {
