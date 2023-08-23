@@ -27,10 +27,6 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (config) => {
       if (config.url === '/delivery-push/notifications/sent/cancel/PELM-VYNK-XVGV-202308-R-1') {
         return Promise.reject({ error: true, type: 'cancellation-200' });
-      } else if (
-        config.url === '/delivery-push/notifications/sent/cancel/XJTU-DJLJ-MEGE-202308-N-1'
-      ) {
-        return Promise.reject({ error: true, type: 'cancellation-409' });
       } else if (config.url?.startsWith('/delivery-push/notifications/sent/cancel/')) {
         return Promise.reject({ error: true, type: 'cancellation-500' });
       }
@@ -111,21 +107,6 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (error) => {
       if (error.error && error.type === 'cancellation-200') {
         return { data: undefined };
-      } else if (error.error && error.type === 'cancellation-409') {
-        return Promise.reject({
-          response: {
-            status: 409,
-            data: {
-              errors: [
-                {
-                  code: 'PN_NOTIFICATION_ALREADY_CANCELLED',
-                  element: null,
-                  detail: 'string',
-                },
-              ],
-            },
-          },
-        });
       } else if (error.error && error.type === 'cancellation-500') {
         return Promise.reject({
           response: {
@@ -133,7 +114,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
             data: {
               errors: [
                 {
-                  code: 'PN_GENERIC_CANCELLED_NOTIFICATION_ERROR',
+                  code: 'PN_GENERIC_ERROR',
                   element: null,
                   detail: 'string',
                 },

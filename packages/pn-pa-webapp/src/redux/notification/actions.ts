@@ -26,9 +26,21 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
 );
 
 // da cambiare il ritorno nel caso venga restituito qualcosa
-export const cancelNotification = createAsyncThunk<string, string>(
+export const cancelNotification = createAsyncThunk<
+  string,
+  string,
+  { dispatch: <AnyAction>(action: AnyAction) => AnyAction }
+>(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
-  performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
+  async (params: string, { rejectWithValue, dispatch }) => {
+    try {
+      await NotificationsApi.cancelNotification(params);
+      dispatch(getSentNotification(params));
+      return '';
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );
 
 export const getSentNotificationLegalfact = createAsyncThunk<
