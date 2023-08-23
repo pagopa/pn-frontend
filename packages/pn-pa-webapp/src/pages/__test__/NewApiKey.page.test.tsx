@@ -1,7 +1,17 @@
 import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 
+import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { mockGroups } from '../../__mocks__/ApiKeys.mock';
+import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
 import {
-    act, fireEvent, mockApi, render, RenderResult, testFormElements, testInput
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  testFormElements,
+  testInput,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CREATE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
@@ -17,37 +27,34 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockGroups = [
-  { id: '1', name: 'mock-Group1', description: '', status: 'ACTIVE' },
-  { id: '2', name: 'mock-Group2', description: '', status: 'ACTIVE' },
-];
-
 describe('NewApiKey component', () => {
-  let result: RenderResult;
+  let result: RenderResult | undefined;
 
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
+    result = undefined;
     mock.reset();
+  });
+
+  afterAll(() => {
     mock.restore();
   });
 
   it('render NewApiKey', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      GET_USER_GROUPS(GroupStatus.ACTIVE),
-      200,
-      undefined,
-      mockGroups
-    );
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
+
     await act(async () => {
       result = render(<NewApiKey />);
     });
     expect(result?.container).toHaveTextContent(/page-title/i);
     const form = result?.container.querySelector('form');
     testFormElements(form!, 'name', 'form-placeholder-name');
-    testFormElements(form!, 'groups', 'form-placeholder-groups', true);
+    testFormElements(form!, 'groups', 'form-placeholder-groups');
     const button = form?.querySelector('button[type="submit"]');
     expect(button!).toBeDisabled();
     expect(mock.history.get).toHaveLength(1);
@@ -55,31 +62,21 @@ describe('NewApiKey component', () => {
   });
 
   it('changes form values and clicks on confirm', async () => {
-    const mockRequest = {
-      name: 'mock-name',
-      groups: [],
-    };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      GET_USER_GROUPS(GroupStatus.ACTIVE),
-      200,
-      undefined,
-      mockGroups
-    );
-    mockApi(
-      mock,
-      'POST',
-      CREATE_APIKEY(),
-      200,
-      mockRequest,
-      'mocked-api-key-result'
-    );
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
+    mock.onPost(CREATE_APIKEY(), newApiKeyDTO).reply(200, newApiKeyResponse);
+
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form, 'name', mockRequest.name);
+    const form = result?.container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'name', newApiKeyDTO.name);
+    await testAutocomplete(
+      form,
+      'groups',
+      mockGroups.map((g) => ({ id: g.id, name: g.name })),
+      true,
+      0
+    );
     const button = form.querySelector('button[type="submit"]');
     expect(button).toBeEnabled();
     await act(async () => {

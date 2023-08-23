@@ -83,7 +83,48 @@ function createMatchMedia(width: number) {
   });
 }
 
+/**
+ * Utility function to test autocomplete component
+ * @param form html element representing the form
+ * @param elementName data-testid of the autocomplete element
+ * @param options dropdown options
+ * @param mustBeOpened flag to set if dropdown must be opened
+ * @param optToSelect option to select
+ * @returns the mock instance
+ */
+async function testAutocomplete(
+  container: Element,
+  elementName: string,
+  options: Array<{ id: string; name: string }>,
+  mustBeOpened: boolean,
+  optToSelect?: number,
+  closeOnSelect?: boolean
+) {
+  const autocomplete = within(container as HTMLElement).getByTestId(elementName) as Element;
+  if (mustBeOpened) {
+    const button = autocomplete.querySelector('button[title="Open"]') as Element;
+    fireEvent.click(button);
+  }
+  const dropdown = (await waitFor(() =>
+    document.querySelector('[role="presentation"][class^="MuiAutocomplete-popper"')
+  )) as HTMLElement;
+  expect(dropdown).toBeInTheDocument();
+  const dropdownOptionsList = (within(dropdown).getByRole('listbox')) as HTMLElement;
+  expect(dropdownOptionsList).toBeInTheDocument();
+  const dropdownOptionsListItems = within(dropdownOptionsList).getAllByRole('option');
+  expect(dropdownOptionsListItems).toHaveLength(options.length);
+  dropdownOptionsListItems.forEach((opt, index) => {
+    expect(opt).toHaveTextContent(options[index].name);
+  });
+  if (optToSelect !== undefined) {
+    fireEvent.click(dropdownOptionsListItems[optToSelect]);
+    if (closeOnSelect) {
+      await waitFor(() => expect(dropdown).not.toBeInTheDocument());
+    }
+  }
+}
+
 export * from '@testing-library/react';
 export { customRender as render };
 // utility functions
-export { testSelect, createMatchMedia };
+export { testSelect, createMatchMedia, testAutocomplete };
