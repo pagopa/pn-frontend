@@ -227,7 +227,7 @@ export function getNotificationStatusInfos(
       return {
         color: 'warning',
         ...localizeStatus(
-          'canceled',
+          'cancellation-in-progress',
           'Annullata',
           'Annullamento in corso. Lo stato sarà aggiornato a breve.',
           'Annullamento in corso. Lo stato sarà aggiornato a breve.'
@@ -278,7 +278,11 @@ export const getNotificationAllowedStatus = () => [
   },
   {
     value: NotificationStatus.CANCELLATION_IN_PROGRESS,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.cancellation-in-progress',
+      'Annullata'
+    ),
   },
   {
     value: NotificationStatus.UNREACHABLE,

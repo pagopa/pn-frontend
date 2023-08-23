@@ -27,12 +27,10 @@ export class PAAppErrorFactory extends AppErrorFactory {
         return new GenericInvalidParameterAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER_DUPLICATED:
         return new GenericInvalidParameterDuplicateAppError(error, this.translateFunction);
-      // capire se devo aggiungere qui un nuovo tipo di errore per l'annullamento
-      // e creare un nuovo ts dove creo il messaggio di errore
       case ServerResponseErrorCode.PN_NOTIFICATION_ALREADY_CANCELLED:
         return new NotificationAlreadyCancelledAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_GENERIC_CANCELLED_NOTIFICATION_ERROR:
-        return new GenericNotificationCancelledAppError(error, this.translateFunction); // annullamento non possibile per notifica in fase di validazione
+        return new GenericNotificationCancelledAppError(error, this.translateFunction);
       default:
         return new UnknownAppError(error);
     }

@@ -432,10 +432,10 @@ describe('notification status texts', () => {
     testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.CANCELLATION_IN_PROGRESS,
       undefined,
-      'status.canceled',
+      'status.cancellation-in-progress',
       'warning',
-      'status.canceled-tooltip',
-      'status.canceled-description'
+      'status.cancellation-in-progress-tooltip',
+      'status.cancellation-in-progress-description'
     );
   });
 });
