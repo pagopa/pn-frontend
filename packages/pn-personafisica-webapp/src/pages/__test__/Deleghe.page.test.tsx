@@ -56,11 +56,18 @@ describe('Deleghe page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    useIsMobileSpy.mockClear();
+    useIsMobileSpy.mockReset();
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   const renderComponent = async (
@@ -90,14 +97,9 @@ describe('Deleghe page', () => {
     });
   };
 
-  afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
-  });
-
   it('renders the desktop view of the deleghe page', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, false, 'delegates');
     expect(result.container).toHaveTextContent(/deleghe.title/i);
@@ -108,7 +110,8 @@ describe('Deleghe page', () => {
   });
 
   it('renders the mobile view of the deleghe page', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     useIsMobileSpy.mockReturnValue(true);
     await renderComponent(false, false, 'delegates');
@@ -120,9 +123,9 @@ describe('Deleghe page', () => {
   });
 
   it('checks the revocation modal open', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
-    mockApi(mock, 'PATCH', REVOKE_DELEGATION('1'), 204);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
+    mock.onPatch(REVOKE_DELEGATION('1')).reply(204);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(true, false, 'delegates');
     const confirmRevocationButton = result.getByText(/deleghe.confirm_revocation/i);
@@ -139,9 +142,9 @@ describe('Deleghe page', () => {
   });
 
   it('checks the rejection modal open', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
-    mockApi(mock, 'PATCH', REJECT_DELEGATION('1'), 204);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
+    mock.onPatch(REJECT_DELEGATION('1')).reply(204);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(true, false, 'delegators');
     const confirmRejectionButton = result.getByText(/deleghe.confirm_rejection/i);
@@ -158,9 +161,9 @@ describe('Deleghe page', () => {
   });
 
   it('checks the accept modal open', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
-    mockApi(mock, 'PATCH', ACCEPT_DELEGATION('1'), 204, { verificationCode: '11111' });
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
+    mock.onPatch(ACCEPT_DELEGATION('1'), { verificationCode: '11111' }).reply(204);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, true, 'delegators');
     const codeInput = result.queryAllByPlaceholderText('-');
@@ -179,9 +182,9 @@ describe('Deleghe page', () => {
   });
 
   it('checks the accept modal error state', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
-    mockApi(mock, 'PATCH', ACCEPT_DELEGATION('1'), 500, { verificationCode: '11111' });
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
+    mock.onPatch(ACCEPT_DELEGATION('1'), { verificationCode: '11111' }).reply(500);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, true, 'delegators');
     const dialog = result.queryByTestId('codeDialog');

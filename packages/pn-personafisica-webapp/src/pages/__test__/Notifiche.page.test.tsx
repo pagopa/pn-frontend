@@ -1,6 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
-
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
@@ -11,8 +8,9 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 import { RenderResult, act, fireEvent, screen, waitFor, within } from '@testing-library/react';
-
-import { mockApi, render } from '../../__test__/test-utils';
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
+import { render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import Notifiche from '../Notifiche.page';
@@ -124,30 +122,33 @@ describe('Notifiche Page - query for notification API outcome', () => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
     apiOutcomeTestHelper.clearMock();
   });
 
+  afterAll(() => {
+    mock.restore();
+    jest.resetAllMocks();
+  });
+
   it('API error', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATIONS_LIST({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-        recipientId: '',
-        status: '',
-        subjectRegExp: '',
-        size: 10,
-      }),
-      500,
-      undefined,
-      { response: { status: 500 } }
-    );
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          recipientId: '',
+          status: '',
+          subjectRegExp: '',
+          size: 10,
+        })
+      )
+      .reply(500);
 
     await act(
       async () =>
@@ -163,21 +164,18 @@ describe('Notifiche Page - query for notification API outcome', () => {
   });
 
   it('API OK', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATIONS_LIST({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-        recipientId: '',
-        status: '',
-        subjectRegExp: '',
-        size: 10,
-      }),
-      200,
-      undefined,
-      { resultsPage: [], moreResult: false, nextPagesKey: [] }
-    );
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          recipientId: '',
+          status: '',
+          subjectRegExp: '',
+          size: 10,
+        })
+      )
+      .reply(200, { resultsPage: [], moreResult: false, nextPagesKey: [] });
 
     await act(
       async () =>

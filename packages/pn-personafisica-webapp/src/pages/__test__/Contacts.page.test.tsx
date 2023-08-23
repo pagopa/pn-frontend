@@ -5,7 +5,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import { act, fireEvent, mockApi, render, screen } from '../../__test__/test-utils';
+import { act, fireEvent, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILO } from '../../navigation/routes.const';
@@ -86,7 +86,7 @@ describe('Contacts page - assuming contact API works properly', () => {
   });
 
   it('renders Contacts (no contacts)', async () => {
-    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
     let result;
     await act(async () => {
       result = await render(<Contacts />, initialState);
@@ -161,7 +161,7 @@ describe('Contacts page - assuming contact API works properly', () => {
   });
 
   it('subtitle link properly redirects to profile page', async () => {
-    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
     let result;
     await act(async () => {
       result = await render(<Contacts />, initialState);
@@ -177,20 +177,25 @@ describe('Contacts page - assuming contact API works properly', () => {
 describe('Contacts Page - different contact API behaviors', () => {
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
     apiOutcomeTestHelper.clearMock();
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('API error', async () => {
-    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 500);
+    mock.onGet(CONTACTS_LIST()).reply(500);
     await act(
       async () =>
         void render(
@@ -205,7 +210,7 @@ describe('Contacts Page - different contact API behaviors', () => {
   });
 
   it('API OK', async () => {
-    mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
     await act(
       async () =>
         void render(
