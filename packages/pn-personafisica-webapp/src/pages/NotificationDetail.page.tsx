@@ -182,7 +182,9 @@ const NotificationDetail = () => {
     }
   };
 
-  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
+  const isCancelled =
+    notification.notificationStatus ===
+    NotificationStatus.CANCELLED; /* || notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS  */
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
@@ -297,6 +299,11 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
+                {isCancelled && (
+                  <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
+                    {t('cancelled-alert-text', { ns: 'notifiche' })}
+                  </Alert>
+                )}
                 <NotificationDetailTable rows={detailTableRows} />
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
@@ -306,6 +313,7 @@ const NotificationDetail = () => {
                     subject={notification.subject}
                     notificationPayment={currentRecipient.payment}
                     mandateId={mandateId}
+                    notificationIsCancelled={isCancelled}
                   />
                 )}
                 {!mandateId && <DomicileBanner />}
@@ -317,6 +325,7 @@ const NotificationDetail = () => {
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                    notificationIsCancelled={isCancelled}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
@@ -327,6 +336,7 @@ const NotificationDetail = () => {
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                    notificationIsCancelled={isCancelled}
                   />
                 </Paper>
                 <NotificationRelatedDowntimes

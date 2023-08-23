@@ -1,8 +1,9 @@
-import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import { fireEvent, waitFor, RenderResult, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { NotificationDetailDocument } from '../../../types';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
+import React from 'react';
 
 const documents: Array<NotificationDetailDocument> = [
   {
@@ -11,17 +12,19 @@ const documents: Array<NotificationDetailDocument> = [
     },
     ref: {
       key: 'mocked-doc-title',
-      versionToken: 'mocked-versionToken'
+      versionToken: 'mocked-versionToken',
     },
     contentType: 'mocked-contentType',
     title: 'mocked-doc-title',
-    docIdx: '0'
+    docIdx: '0',
   },
 ];
 
 describe('NotificationDetailDocuments Component', () => {
   let resultWithDownloadableFiles: RenderResult | undefined;
   let resultNotDownloadableFiles: RenderResult | undefined;
+  let resultDisabledFiles: RenderResult | undefined;
+
   let mockClickFn: jest.Mock;
 
   beforeEach(() => {
@@ -44,10 +47,21 @@ describe('NotificationDetailDocuments Component', () => {
         downloadFilesMessage="mocked"
       />
     );
+    resultDisabledFiles = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        notificationIsCancelled={true}
+      />
+    );
   });
+
   afterEach(() => {
     resultWithDownloadableFiles = undefined;
     resultNotDownloadableFiles = undefined;
+    resultDisabledFiles = undefined;
     jest.clearAllMocks();
   });
 
@@ -65,5 +79,11 @@ describe('NotificationDetailDocuments Component', () => {
       expect(mockClickFn).toBeCalledTimes(1);
       expect(mockClickFn).toBeCalledWith('0');
     });
+  });
+
+  it.only('renders documents with disabled our download', () => {
+    const documentsButtons = resultDisabledFiles?.getAllByTestId('documentButton');
+    screen.debug(documentsButtons![0]);
+    // expect(documentsButtons![0]).toBeDisabled();
   });
 });

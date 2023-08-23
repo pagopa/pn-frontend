@@ -75,6 +75,13 @@ const NotificationRelatedDowntimes = (props: Props) => {
 
   const [shouldFetchEvents, setShouldFetchEvents] = useState<boolean>(false);
 
+  const isCancelled =
+    props.notificationStatusHistory.filter(
+      (el) =>
+        el.status ===
+        NotificationStatus.CANCELLED /* || el.status === NotificationStatus.CANCELLATION_IN_PROGRESS */
+    ).length > 0;
+
   useDownloadDocument({
     url: props.downtimeLegalFactUrl,
     clearDownloadAction: props.clearDowntimeLegalFactData,
@@ -228,6 +235,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                           );
                         }}
                         /* disabled se nell'history c'è un el con annullamento */
+                        disabled={isCancelled}
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',

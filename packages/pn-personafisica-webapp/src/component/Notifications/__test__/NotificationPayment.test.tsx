@@ -146,6 +146,22 @@ describe('NotificationPayment component', () => {
     mock.resetHistory();
   });
 
+  it('render alert with notification cancelled', () => {
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+        notificationIsCancelled={true}
+      />,
+      { preloadedState: { notificationState: { paymentInfo: {} } } }
+    );
+
+    const alert = screen.getByTestId('cancelledAlertTextPayment');
+    expect(alert).toBeInTheDocument();
+  });
+
   it('renders properly while loading payment info', async () => {
     mockPaymentApi({
       status: PaymentStatus.SUCCEEDED,

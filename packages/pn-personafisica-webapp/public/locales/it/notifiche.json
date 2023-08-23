@@ -65,8 +65,10 @@
     "domicile_PEC": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
     "domicile_EMAIL": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "domicile_APPIO": "Hai l’app IO? Attiva il servizio \"Notifiche digitali\" per visualizzare e pagare le notifiche direttamente in app.",
+    "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
+    "disclaimer-link": "Scopri di più",
     "payment": {
-      "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
+      "cancelled-alert-text-payment": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Scopri di più",
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
       "summary-in-progress": "Pagamento in corso",

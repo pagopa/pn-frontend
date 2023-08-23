@@ -11,6 +11,7 @@ type Props = {
   documentsAvailable?: boolean;
   downloadFilesMessage?: string;
   downloadFilesLink?: string;
+  notificationIsCancelled?: boolean;
 };
 
 /**
@@ -21,6 +22,7 @@ type Props = {
  * @param documentsAvailable flag that allows download file or not (after 120 days)
  * @param downloadFilesMessage disclaimer to show about downloadable acts
  * @param downloadFilesLink text to bring to
+ * @param notificationIsCancelled if notification is cancelled button naked is disabled
  */
 
 const NotificationDetailDocuments = ({
@@ -29,6 +31,7 @@ const NotificationDetailDocuments = ({
   clickHandler,
   documentsAvailable = true,
   downloadFilesMessage,
+  notificationIsCancelled,
 }: // TODO: remove comment when link ready downloadFilesLink
 Props) => {
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
@@ -56,7 +59,7 @@ Props) => {
               color={'primary'}
               startIcon={<AttachFileIcon />}
               onClick={() => clickHandler(document.downloadHandler)}
-              // disabled = {variabile}
+              disabled={notificationIsCancelled}
             >
               <Box
                 sx={{

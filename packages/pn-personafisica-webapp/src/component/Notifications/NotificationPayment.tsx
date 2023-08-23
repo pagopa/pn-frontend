@@ -53,6 +53,7 @@ interface Props {
   mandateId?: string;
   paymentHistory?: Array<PaymentHistory>;
   senderDenomination?: string;
+  notificationIsCancelled?: boolean;
 }
 
 interface PrimaryAction {
@@ -113,6 +114,7 @@ const NotificationPayment: React.FC<Props> = ({
   paymentHistory,
   senderDenomination,
   subject,
+  notificationIsCancelled,
 }) => {
   const { t } = useTranslation(['notifiche']);
   const { PAGOPA_HELP_EMAIL } = getConfiguration();
@@ -458,6 +460,14 @@ const NotificationPayment: React.FC<Props> = ({
       <Paper sx={{ p: 3, mb: '1rem' }} elevation={0}>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8} mb={2}>
+            {notificationIsCancelled && (
+              <Alert tabIndex={0} data-testid="cancelledAlertTextPayment" severity="info">
+                {t('detail.payment.cancelled-alert-text-payment', { ns: 'notifiche' })}
+                <Link href="" target="_blank" variant="body1">
+                  {(t('detail.disclaimer-link'), { ns: 'notifiche' })}
+                </Link>
+              </Alert>
+            )}
             <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
               {data.title}
             </Typography>
