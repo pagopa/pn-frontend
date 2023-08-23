@@ -1,7 +1,7 @@
-import { Refresh } from '@mui/icons-material';
+import { InfoRounded, Refresh } from '@mui/icons-material';
 import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-
+import { Fragment } from 'react';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
@@ -83,93 +83,6 @@ const SkeletonCard = () => {
   );
 };
 
-const ErrorCard: React.FC<{
-  isMobile: boolean;
-  pagoPAItem: PagoPAPaymentHistory;
-  handleReloadPayment: (noticeCode: string, creditorTaxId: string) => void;
-}> = ({ isMobile, pagoPAItem, handleReloadPayment }) => {
-  const { detail, detail_v2, noticeCode, creditorTaxId } = pagoPAItem;
-  const getErrorMessage = () => {
-    switch (detail) {
-      case PaymentInfoDetail.GENERIC_ERROR:
-        return (
-          <Typography
-            variant="caption-semibold"
-            color="error.dark"
-            data-testid="generic-error-message"
-          >
-            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.generic-error')}
-          </Typography>
-        );
-      case PaymentInfoDetail.PAYMENT_UNAVAILABLE:
-      case PaymentInfoDetail.PAYMENT_UNKNOWN:
-      case PaymentInfoDetail.DOMAIN_UNKNOWN:
-        return (
-          <Box display="flex" flexDirection="column" data-testid="assistence-error-message">
-            <Typography variant="caption-semibold" color="error.dark">
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.notice-error')}
-            </Typography>
-            <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
-              <Typography variant="caption-semibold" color="error.dark">
-                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.assistence')}
-                &nbsp;
-                {detail_v2}
-              </Typography>
-              <CopyToClipboard
-                getValue={() => detail_v2 || ''}
-                tooltipMode={true}
-                iconProps={{ color: 'text.secondary', width: '16px' }}
-              />
-            </Box>
-          </Box>
-        );
-      default:
-        return undefined;
-    }
-  };
-
-  return (
-    <Box
-      px={2}
-      py={isMobile ? 2 : 1}
-      gap={1}
-      display="flex"
-      alignItems={isMobile ? 'flex-start' : 'center'}
-      flexDirection={isMobile ? 'column-reverse' : 'row'}
-      sx={{
-        backgroundColor: 'grey.50',
-        borderRadius: '6px',
-      }}
-    >
-      <Box
-        display="flex"
-        justifyContent={isMobile ? 'flex-start' : 'inherit'}
-        gap={0.5}
-        flexDirection="column"
-        flex="1 0 0"
-      >
-        <Box lineHeight="1.4rem">
-          <Typography variant="caption" color="text.secondary" mr={0.5}>
-            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
-          </Typography>
-          <Typography variant="caption-semibold" color="text.secondary">
-            {noticeCode}
-          </Typography>
-        </Box>
-        {getErrorMessage()}
-      </Box>
-      <ButtonNaked
-        color="primary"
-        data-testid="reload-button"
-        onClick={() => handleReloadPayment(noticeCode, creditorTaxId)}
-      >
-        <Refresh sx={{ width: '20px' }} />
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
-      </ButtonNaked>
-    </Box>
-  );
-};
-
 const NotificationPaymentPagoPAStatusElem: React.FC<{
   pagoPAItem: PagoPAPaymentHistory;
   isSelected: boolean;
@@ -231,12 +144,11 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           )}
         </Box>
       )}
-      {pagoPAItem.status === PaymentStatus.REQUIRED && (
+      {pagoPAItem.status === PaymentStatus.REQUIRED ? (
         <Box display="flex" justifyContent="center">
           <Radio data-testid="radio-button" checked={isSelected} value={pagoPAItem.noticeCode} />
         </Box>
-      )}
-      {pagoPAItem.status !== PaymentStatus.REQUIRED && (
+      ) : (
         <StatusTooltip
           label={getLocalizedOrDefaultLabel('notifications', `detail.payment.status.${tooltip}`)}
           color={color}
@@ -264,20 +176,73 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
     return <SkeletonCard />;
   }
 
-  // TODO forse qui meglio fare un includes del detail in un array con i valori che dovrebbero mostrare la card di errore
-  if (
+  const isError =
     pagoPAItem.errorCode &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
-    pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
-  ) {
-    return (
-      <ErrorCard
-        isMobile={isMobile}
-        pagoPAItem={pagoPAItem}
-        handleReloadPayment={handleReloadPayment}
-      />
-    );
-  }
+    pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED;
+
+  const getErrorMessage = () => {
+    switch (pagoPAItem.detail) {
+      case PaymentInfoDetail.GENERIC_ERROR:
+        return (
+          <Box display="flex" alignItems="center" gap={0.5}>
+            <InfoRounded sx={{ color: 'error.dark', width: '16px' }} />
+            <Typography
+              fontSize="12px"
+              lineHeight="12px"
+              fontWeight="600"
+              color="error.dark"
+              data-testid="generic-error-message"
+            >
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.generic-error')}
+            </Typography>
+          </Box>
+        );
+      case PaymentInfoDetail.PAYMENT_UNAVAILABLE:
+      case PaymentInfoDetail.PAYMENT_UNKNOWN:
+      case PaymentInfoDetail.DOMAIN_UNKNOWN:
+        return (
+          <Box display="flex" alignItems="flex-start" gap={0.25}>
+            <InfoRounded sx={{ color: 'error.dark', width: '16px', height: '16px' }} />
+            <Box display="flex" flexDirection="column" data-testid="assistence-error-message">
+              <Typography color="error.dark" fontSize="12px" lineHeight="12px" fontWeight="600">
+                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.notice-error')}
+              </Typography>
+              <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
+                <Typography color="error.dark" fontSize="12px" lineHeight="12px" fontWeight="600">
+                  {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.assistence')}
+                  &nbsp;
+                  {pagoPAItem.detail_v2}
+                </Typography>
+                <CopyToClipboard
+                  getValue={() => pagoPAItem.detail_v2 || ''}
+                  tooltipMode={true}
+                  iconProps={{ color: 'text.secondary', width: '16px' }}
+                  buttonProps={{ height: 'min-content' }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        );
+      case PaymentInfoDetail.PAYMENT_DUPLICATED:
+        return (
+          <Box display="flex" alignItems="center" gap={0.5}>
+            <InfoRounded sx={{ color: 'text.primary', width: '16px' }} />
+            <Typography
+              fontSize="12px"
+              lineHeight="12px"
+              fontWeight="600"
+              color="text-primary"
+              data-testid="payment-duplicated-message"
+            >
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.duplicated')}
+            </Typography>
+          </Box>
+        );
+      default:
+        return undefined;
+    }
+  };
 
   return (
     <Box
@@ -312,6 +277,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
             {pagoPAItem.noticeCode}
           </Typography>
         </Box>
+
         {pagoPAItem.dueDate && (
           <Box lineHeight="1.4rem">
             <Typography variant="caption" color="text.secondary" mr={0.5}>
@@ -322,8 +288,22 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
             </Typography>
           </Box>
         )}
+
+        {isError && <Fragment>{getErrorMessage()}</Fragment>}
       </Box>
-      <NotificationPaymentPagoPAStatusElem pagoPAItem={pagoPAItem} isSelected={isSelected} />
+
+      {isError ? (
+        <ButtonNaked
+          color="primary"
+          data-testid="reload-button"
+          onClick={() => handleReloadPayment(pagoPAItem.noticeCode, pagoPAItem.creditorTaxId)}
+        >
+          <Refresh sx={{ width: '20px' }} />
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
+        </ButtonNaked>
+      ) : (
+        <NotificationPaymentPagoPAStatusElem pagoPAItem={pagoPAItem} isSelected={isSelected} />
+      )}
     </Box>
   );
 };

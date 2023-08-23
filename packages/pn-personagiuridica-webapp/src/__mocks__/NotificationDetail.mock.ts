@@ -62,6 +62,13 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
       applyCostFlg: false,
     },
   },
+  {
+    pagoPA: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695135',
+      applyCostFlg: false,
+    },
+  },
 ];
 
 export const recipient: NotificationDetailRecipient = {

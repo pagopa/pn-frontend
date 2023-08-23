@@ -280,4 +280,27 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(errorMessage).toHaveTextContent('detail.payment.error.notice-error');
     expect(errorMessage).toHaveTextContent('detail.payment.error.assistence');
   });
+
+  it('should show error message for PAYMENT_DUPLICATED. Reload buttons should exist', () => {
+    const item = {
+      ...pagoPAItem,
+      status: PaymentStatus.FAILED,
+      errorCode: PaymentInfoDetail.PAYMENT_DUPLICATED,
+      detail: PaymentInfoDetail.PAYMENT_DUPLICATED,
+    };
+    const result = render(
+      <NotificationPaymentPagoPAItem
+        pagoPAItem={item}
+        loading={false}
+        isSelected={false}
+        handleReloadPayment={() => void 0}
+      />
+    );
+
+    const errorMessage = result.getByTestId('payment-duplicated-message');
+    const reloadButton = result.queryByTestId('reload-button');
+
+    expect(reloadButton).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('detail.payment.error.duplicated');
+  });
 });

@@ -279,10 +279,14 @@ describe('Notification detail redux state tests', () => {
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual(paymentHistory);
+    expect(payload).toStrictEqual(paymentHistory);
     const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual(paymentHistory);
+    expect(state.paymentInfo).toStrictEqual(paymentHistory);
   });
+
+  // TODO aggiungere test per il caso in cui la chiamata contiene un elemento diverso e lo sovrascrive
+
+  // TODO aggiungere test per il caso in cui la chiamata contiene un elemento uguale e quindi non lo sovrascrive
 
   it('Should be able to fetch payment url', async () => {
     const taxId = 'mocked-taxId';

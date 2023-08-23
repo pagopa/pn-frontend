@@ -117,16 +117,24 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
-        const paymentInfo = action.payload[0];
-        const paymentInfoIndex = state.paymentInfo.findIndex(
-          (payment) =>
-            payment.pagoPA?.creditorTaxId === paymentInfo.pagoPA?.creditorTaxId &&
-            payment.pagoPA?.noticeCode === paymentInfo.pagoPA?.noticeCode
-        );
-        if (paymentInfoIndex !== -1) {
-          state.paymentInfo[paymentInfoIndex] = paymentInfo;
-        } else {
+        // Not single payment reload
+        if (action.payload.length > 1) {
           state.paymentInfo = action.payload;
+          return;
+        }
+
+        if (action.payload.length === 1) {
+          const paymentInfo = action.payload[0];
+          const paymentInfoIndex = state.paymentInfo.findIndex(
+            (payment) =>
+              payment.pagoPA?.creditorTaxId === paymentInfo.pagoPA?.creditorTaxId &&
+              payment.pagoPA?.noticeCode === paymentInfo.pagoPA?.noticeCode
+          );
+          if (paymentInfoIndex !== -1) {
+            state.paymentInfo[paymentInfoIndex] = paymentInfo;
+          } else {
+            state.paymentInfo = action.payload;
+          }
         }
       }
     });

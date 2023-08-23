@@ -248,10 +248,9 @@ describe('Notification detail redux state tests', () => {
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual(paymentHistory);
-
+    expect(payload).toStrictEqual(paymentHistory);
     const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual(paymentHistory);
+    expect(state.paymentInfo).toStrictEqual(paymentHistory);
   });
 
   it('Should be able to fetch payment url', async () => {

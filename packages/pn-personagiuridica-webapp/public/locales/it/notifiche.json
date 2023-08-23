@@ -109,7 +109,15 @@
         "failed": "Scaduto",
         "failed-tooltip": "L’avviso è scaduto e non è più possibile pagarlo. Per maggiori informazioni, contatta l’ente mittente.",
         "inprogress": "In elaborazione",
-        "inprogress-tooltip": "Il pagamento è in corso. Ricarica la pagina tra qualche ora per verificarlo. Se dovesse risultare ancora in corso, contatta l’assistenza."
+        "inprogress-tooltip": "Il pagamento è in corso. Ricarica la pagina tra qualche ora per verificarlo. Se dovesse risultare ancora in corso, contatta l’assistenza.",
+        "canceled": "Revocato",
+        "canceled-tooltip": "L’avviso è stato revocato. Per maggiori informazioni, contatta l’ente mittente."
+      },
+      "error": {
+        "generic-error": "Impossibile recuperare i dettagli",
+        "notice-error": "Si è verificato un problema con questo avviso.",
+        "assistence": "Ricaricalo o contatta l’assistenza con il codice errore",
+        "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
       }
     },
     "acts_files": {
