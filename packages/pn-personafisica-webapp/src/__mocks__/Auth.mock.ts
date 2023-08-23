@@ -32,11 +32,6 @@ export const mockAuthentication = () => {
   });
 };
 
-function calcExpirationDate() {
-  const now = new Date();
-  return now.setTime(now.getTime() + 60 * 60 * 1000);
-}
-
 export const userResponse: User = {
   sessionToken: 'mocked-session-token',
   name: 'Mario',
@@ -49,7 +44,7 @@ export const userResponse: User = {
   aud: 'portale.dev.pn.pagopa.it',
   level: 'L2',
   iat: 1646394256,
-  exp: calcExpirationDate(),
+  exp: 1646394256,
   iss: 'https://spid-hub-test.dev.pn.pagopa.it',
   jti: 'mockedJTI004',
 };

@@ -1,5 +1,5 @@
 import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
-import { notificationToFe, overrideNotificationMock } from '../../redux/notification/__test__/test-utils';
+import { notificationToFe, overrideNotificationMock } from '../../__mocks__/Notifications.mock';
 import { axe } from '../../__test__/test-utils';
 import { renderComponentBase } from './NotificationDetail.page.test-utils';
 

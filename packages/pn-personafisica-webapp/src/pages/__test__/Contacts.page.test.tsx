@@ -1,12 +1,10 @@
-import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
-
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
   apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
-
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 import { act, fireEvent, mockApi, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
@@ -74,14 +72,16 @@ const initialState = {
 describe('Contacts page - assuming contact API works properly', () => {
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
   });
 
   afterAll(() => {
+    mock.restore();
     jest.resetAllMocks();
   });
 
