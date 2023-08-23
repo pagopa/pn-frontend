@@ -7,7 +7,6 @@ import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   GetNotificationDowntimeEventsParams, // PN-1714
-  // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -18,6 +17,7 @@ import {
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
+  appStateActions,
   useDownloadDocument,
   useErrors,
   useIsMobile,
@@ -140,7 +140,18 @@ const NotificationDetail: React.FC = () => {
   };
 
   const handleCancelNotification = () => {
-    void dispatch(cancelNotification(notification.iun));
+    void dispatch(cancelNotification(notification.iun))
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`detail.cancel-notification-modal.notification-cancelled-successfully`, {
+              ns: 'notifiche',
+            }),
+          })
+        );
+      });
   };
 
   const hasDocumentsAvailable = !notification.documentsAvailable;

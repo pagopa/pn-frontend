@@ -68,6 +68,7 @@
     "alert-cancellation-confirmed": "Questa notifica è stata annullata dall’ente mittente. I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi.",
     "cancel-notification": "Annulla notifica",
     "cancel-notification-modal": {
+      "notification-cancelled-successfully": "La richiesta di annullamento è stata accettata.",
       "title": "Vuoi annullare la notifica?",
       "message": "I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi. L’operazione è irreversibile.",
       "i-understand": "Ho capito",
