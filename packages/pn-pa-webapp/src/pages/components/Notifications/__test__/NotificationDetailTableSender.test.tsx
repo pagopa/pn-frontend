@@ -59,7 +59,7 @@ describe('NotificationDetailTableSender Component', () => {
     });
   });
 
-  /* it('clicks on the cancel button and on close modal', async () => {
+  it('clicks on the cancel button and on close modal', async () => {
     // render component
     const { getByTestId } = render(
       <NotificationDetailTableSender
@@ -91,7 +91,8 @@ describe('NotificationDetailTableSender Component', () => {
     const modalCloseAndProceedBtn = within(modal).getByTestId('modalCloseAndProceedBtnId');
     fireEvent.click(modalCloseAndProceedBtn!);
     await waitFor(() => {
+      expect(mockCancelHandler).toBeCalledTimes(1);
       expect(modal).not.toBeInTheDocument();
     });
-  }); */
+  });
 });

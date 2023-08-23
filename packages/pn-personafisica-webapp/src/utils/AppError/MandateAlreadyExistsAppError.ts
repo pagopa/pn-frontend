@@ -1,8 +1,8 @@
-import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
+import { AppError, ServerResponseError } from "@pagopa-pn/pn-commons";
 
-export class GenericNotificationCancelledAppError extends AppError {
+export class MandateAlreadyExistsAppError extends AppError {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;
-
+  
   constructor(error: ServerResponseError, translateFunction: (path: string, ns: string) => string) {
     super(error);
     this.translateFunction = translateFunction;
@@ -10,8 +10,8 @@ export class GenericNotificationCancelledAppError extends AppError {
 
   getMessage() {
     return {
-      title: this.translateFunction('', ''),
-      content: this.translateFunction('detail.errors.generic_error.message', 'notifiche'),
+      title: this.translateFunction('errors.already_exists.title', 'deleghe' ),
+      content: this.translateFunction('errors.already_exists.message', 'deleghe')
     };
   }
 }

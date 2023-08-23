@@ -6,6 +6,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { ServerResponseErrorCode } from './types';
+import { MandateAlreadyExistsAppError } from './MandateAlreadyExistsAppError';
 import { MandateDelegateHimselfAppError } from './MandateDelegateHimselfAppError';
 import { MandateInvalidVerificationCodeAppError } from './MandateInvalidVerificationCodeAppError';
 import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
@@ -28,6 +29,8 @@ export class PFAppErrorFactory extends AppErrorFactory {
     switch (error.code) {
       case ServerResponseErrorCode.PN_MANDATE_NOTFOUND:
         return new MandateNotFoundAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_MANDATE_ALREADYEXISTS:
+        return new MandateAlreadyExistsAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_MANDATE_NOTACCEPTABLE:
         return new MandateNotAcceptableAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_MANDATE_DELEGATEHIMSELF:
