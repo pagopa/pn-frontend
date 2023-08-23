@@ -3,7 +3,6 @@ import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
 import { PFAppErrorFactory } from '../PFAppErrorFactory';
 import { ServerResponseErrorCode } from '../types';
 import { GenericInvalidParameterPatternAppError } from '../GenericInvalidParameterPatternAppError';
-import { MandateAlreadyExistsAppError } from '../MandateAlreadyExistsAppError';
 import { MandateDelegateHimselfAppError } from '../MandateDelegateHimselfAppError';
 import { MandateInvalidVerificationCodeAppError } from '../MandateInvalidVerificationCodeAppError';
 import { MandateNotAcceptableAppError } from '../MandateNotAcceptableAppError';
@@ -29,13 +28,6 @@ describe('Test PFAppErrorFactory', () => {
       code: ServerResponseErrorCode.PN_MANDATE_NOTFOUND,
     });
     expect(errorClass).toBeInstanceOf(MandateNotFoundAppError);
-  });
-
-  it('Should return MandateAlreadyExistsAppError', () => {
-    const errorClass = errorFactory.getCustomErrorForTest({
-      code: ServerResponseErrorCode.PN_MANDATE_ALREADYEXISTS,
-    });
-    expect(errorClass).toBeInstanceOf(MandateAlreadyExistsAppError);
   });
 
   it('Should return MandateNotAcceptableAppError', () => {
