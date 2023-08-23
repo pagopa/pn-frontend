@@ -157,7 +157,7 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const checkIfUserHasPayments: boolean =
+  const checkIfUserHasPayments = (): boolean =>
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
   const documentDowloadHandler = (
@@ -298,7 +298,7 @@ const NotificationDetail = () => {
   };
 
   useEffect(() => {
-    if (checkIfUserHasPayments) {
+    if (checkIfUserHasPayments()) {
       fetchPaymentsInfo();
     }
   }, [currentRecipient.payments]);
@@ -384,7 +384,7 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
-                {!isCancelled && checkIfUserHasPayments && (
+                {!isCancelled && checkIfUserHasPayments() && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
                       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
