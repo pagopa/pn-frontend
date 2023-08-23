@@ -70,7 +70,6 @@
     "cancel-notification-modal": {
       "title": "Vuoi annullare la notifica?",
       "message": "I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi. L’operazione è irreversibile.",
-      "confirm-cancel-button": "Annulla notifica",
       "i-understand": "Ho capito",
       "message-with-payment": "Annullando la notifica, dichiari di essere consapevole che ogni eventuale attività di rimborso in favore dei destinatari e rimane a carico dell'ente mittente."
     },

@@ -1,20 +1,39 @@
-import { EnhancedStore } from '@reduxjs/toolkit';
 import {
   Notification,
   NotificationDetail,
   NotificationStatus,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
+import { EnhancedStore } from '@reduxjs/toolkit';
+
 import { apiClient } from './apiClients';
 
+// eslint-disable-next-line functional/no-let
+let axiosResponseInterceptor: number; // outer variable
+// eslint-disable-next-line functional/no-let
+let axiosRequestInterceptor: number; // outer variable
+
+const clearInterceptor = (interceptorInstance: number, method: 'request' | 'response') => {
+  if (interceptorInstance >= 0) {
+    apiClient.interceptors[method].eject(interceptorInstance);
+  }
+};
+
 export const setUpInterceptor = (store: EnhancedStore) => {
-  apiClient.interceptors.request.use(
+  clearInterceptor(axiosRequestInterceptor, 'request');
+  clearInterceptor(axiosResponseInterceptor, 'response');
+
+  axiosRequestInterceptor = apiClient.interceptors.request.use(
     (config) => {
-      /* if (config.url === '/delivery-push/notifications/sent/cancel/PELM-VYNK-XVGV-202308-R-1') {
-        return Promise.resolve({
-          iun: 'PELM-VYNK-XVGV-202308-R-1',
-        });
-      } */
+      if (config.url === '/delivery-push/notifications/sent/cancel/PELM-VYNK-XVGV-202308-R-1') {
+        return Promise.reject({ error: true, type: 'cancellation-200' });
+      } else if (
+        config.url === '/delivery-push/notifications/sent/cancel/XJTU-DJLJ-MEGE-202308-N-1'
+      ) {
+        return Promise.reject({ error: true, type: 'cancellation-409' });
+      } else if (config.url?.startsWith('/delivery-push/notifications/sent/cancel/')) {
+        return Promise.reject({ error: true, type: 'cancellation-500' });
+      }
       /* eslint-disable functional/immutable-data */
       const token: string = store.getState().userState.user.sessionToken;
       if (token && config.headers) {
@@ -25,12 +44,9 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (error) => Promise.reject(error)
   );
 
-  apiClient.interceptors.response.use(
+  axiosResponseInterceptor = apiClient.interceptors.response.use(
     (response) => {
-      if (
-        response.request?.responseURL ===
-        'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent/NRJP-NZRW-LDTL-202308-L-1'
-      ) {
+      if (response.config?.url === '/delivery/notifications/sent/NRJP-NZRW-LDTL-202308-L-1') {
         const data = response.data as NotificationDetail;
         data.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
         data.timeline.push({
@@ -49,8 +65,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           request: response.request,
         };
       } else if (
-        response.request?.responseURL ===
-        'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent/HYTD-ERPH-WDUE-202308-H-1'
+        response.config?.url === '/delivery/notifications/sent/HYTD-ERPH-WDUE-202308-H-1'
       ) {
         const data = response.data as NotificationDetail;
         data.notificationStatus = NotificationStatus.CANCELLED;
@@ -74,15 +89,14 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           config: response.config,
           request: response.request,
         };
-      } else if (
-        response.request?.responseURL ===
-        'https://webapi.dev.notifichedigitali.it/delivery/notifications/sent?startDate=2013-08-22T00%3A00%3A00.000Z&endDate=2023-08-23T00%3A00%3A00.000Z&size=10'
-      ) {
+      } else if (response.config?.url?.startsWith('/delivery/notifications/sent?startDate')) {
         const data = response.data as { resultsPage: Array<Notification> };
-        const specificIun = data.resultsPage.filter(
-          (el: Notification) => el.iun === 'PELM-VYNK-XVGV-202308-R-1'
-        )[0];
-        specificIun.notificationStatus = NotificationStatus.CANCELLED;
+        const specificIun = data.resultsPage.find(
+          (el: Notification) => el.iun === 'HYTD-ERPH-WDUE-202308-H-1'
+        );
+        if (specificIun) {
+          specificIun.notificationStatus = NotificationStatus.CANCELLED;
+        }
         return {
           data,
           status: response.status,
@@ -91,30 +105,44 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           config: response.config,
           request: response.request,
         };
-      } else {
-        return response;
       }
+      return response;
     },
-    (error) =>
-      /* console.log('error :>> ', error);
-      if (error.iun === 'PELM-VYNK-XVGV-202308-R-1') {
-        return {
-          data: {
-            status: 200,
-            type: 'PN_NOTIFICATION_ALREADY_CANCELLED',
-            title: '',
-            detail: '',
-            traceId: '',
-            timestamp: 'string',
-            errors: [
-              { code: 'PN_NOTIFICATION_ALREADY_CANCELLED', element: null, detail: 'string' },
-            ],
+    (error) => {
+      if (error.error && error.type === 'cancellation-200') {
+        return { data: undefined };
+      } else if (error.error && error.type === 'cancellation-409') {
+        return Promise.reject({
+          response: {
+            status: 409,
+            data: {
+              errors: [
+                {
+                  code: 'PN_NOTIFICATION_ALREADY_CANCELLED',
+                  element: null,
+                  detail: 'string',
+                },
+              ],
+            },
           },
-        };
-      } else {
-        return error;
+        });
+      } else if (error.error && error.type === 'cancellation-500') {
+        return Promise.reject({
+          response: {
+            status: 500,
+            data: {
+              errors: [
+                {
+                  code: 'PN_GENERIC_CANCELLED_NOTIFICATION_ERROR',
+                  element: null,
+                  detail: 'string',
+                },
+              ],
+            },
+          },
+        });
       }
-    } */
-      error
+      return Promise.reject(error);
+    }
   );
 };

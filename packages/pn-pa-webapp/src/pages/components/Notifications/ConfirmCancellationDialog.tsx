@@ -1,16 +1,17 @@
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   showModal: boolean;
@@ -79,7 +80,7 @@ export default function ConfirmCancellationDialog({
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
         >
-          {t('detail.cancel-notification-modal.confirm-cancel-button')}
+          {t('detail.cancel-notification')}
         </Button>
       </DialogActions>
     </Dialog>

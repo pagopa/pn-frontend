@@ -1,12 +1,9 @@
 import _ from 'lodash';
-import React, { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useParams,
-  /* useNavigate */
-} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { Alert, Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   GetNotificationDowntimeEventsParams, // PN-1714
@@ -14,24 +11,17 @@ import {
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
-  NotificationDetailRecipient,
-  NotificationDetailTable,
-  NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationPaidDetail,
   NotificationRelatedDowntimes,
   NotificationStatus,
-  NotificationStatusHistory,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
-  dataRegex,
-  formatEurocentToCurrency,
   useDownloadDocument,
   useErrors,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -53,7 +43,7 @@ import {
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
-import ConfirmCancellationDialog from './components/Notifications/ConfirmCancellationDialog';
+import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
 
 const AlertNotificationCancel: React.FC<{ notificationStatus: NotificationStatus }> = (
   notification
@@ -78,173 +68,9 @@ const AlertNotificationCancel: React.FC<{ notificationStatus: NotificationStatus
   return <></>;
 };
 
-type Props = {
-  openModal: () => void;
-};
-
-const RenderNotificationDetailTable = ({ openModal }: Props) => {
-  const { t } = useTranslation();
-  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-
-  const { recipients } = notification;
-  const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-  const recipientsWithAltNoticeCode = recipients.filter(
-    (recipient) => recipient.payment?.noticeCodeAlternative
-  );
-  const getRecipientsNoticeCodeField = (
-    filteredRecipients: Array<NotificationDetailRecipient>,
-    alt: boolean = false
-  ): ReactNode => {
-    if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient) => (
-        <Box key={recipient.taxId} fontWeight={600}>
-          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
-          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
-        </Box>
-      ));
-    }
-
-    return (
-      <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
-        {alt
-          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
-          : filteredRecipients[0]?.payment?.noticeCode}
-      </Box>
-    );
-  };
-
-  const getTaxIdLabel = (taxId: string): string =>
-    dataRegex.pIva.test(taxId)
-      ? 'detail.tax-id-organization-recipient'
-      : 'detail.tax-id-citizen-recipient';
-
-  const unfilteredDetailTableRows: Array<{
-    label: string;
-    rawValue: string | undefined;
-    value: ReactNode;
-  }> = [
-    {
-      label: t('detail.sender', { ns: 'notifiche' }),
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-    },
-    {
-      label: t('detail.recipient', { ns: 'notifiche' }),
-      rawValue: recipients.length > 1 ? '' : recipients[0]?.denomination,
-      value: <Box fontWeight={600}>{recipients[0]?.denomination}</Box>,
-    },
-    {
-      label:
-        recipients.length > 1
-          ? t('detail.recipients', { ns: 'notifiche' })
-          : t(getTaxIdLabel(recipients[0]?.taxId), { ns: 'notifiche' }),
-      rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: (
-        <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
-              {recipients.length > 1
-                ? `${recipient.taxId} - ${recipient.denomination}`
-                : recipient.taxId}
-            </Box>
-          ))}
-        </>
-      ),
-    },
-    {
-      label: t('detail.date', { ns: 'notifiche' }),
-      rawValue: notification.sentAt,
-      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
-    },
-    {
-      label: t('detail.payment-terms', { ns: 'notifiche' }),
-      rawValue: notification.paymentExpirationDate,
-      value: (
-        <Box fontWeight={600} display="inline">
-          {notification.paymentExpirationDate}
-        </Box>
-      ),
-    },
-    {
-      label: t('detail.amount', { ns: 'notifiche' }),
-      rawValue: notification.amount
-        ? formatEurocentToCurrency(notification.amount).toString()
-        : undefined,
-      value: (
-        <Box fontWeight={600}>
-          {notification.amount && formatEurocentToCurrency(notification.amount)}
-        </Box>
-      ),
-    },
-    {
-      label: t('detail.iun', { ns: 'notifiche' }),
-      rawValue: notification.iun,
-      value: <Box fontWeight={600}>{notification.iun}</Box>,
-    },
-    {
-      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
-      rawValue: notification.cancelledIun,
-      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
-      label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
-    },
-    {
-      label: t('detail.secondary-notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithAltNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
-    },
-    {
-      label: t('detail.groups', { ns: 'notifiche' }),
-      rawValue: notification.group,
-      value: notification.group && (
-        <TagGroup visibleItems={4}>
-          <Tag value={notification.group} />
-        </TagGroup>
-      ),
-    },
-  ];
-
-  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
-    .filter((row) => row.rawValue)
-    .map((row, index) => ({
-      id: index + 1,
-      label: row.label,
-      value: row.value,
-    }));
-
-  return (
-    <NotificationDetailTable rows={detailTableRows}>
-      {notification.notificationStatus !== NotificationStatus.CANCELLATION_IN_PROGRESS &&
-        notification.notificationStatus !== NotificationStatus.CANCELLED && (
-          <Button
-            variant="outlined"
-            sx={{
-              my: {
-                xs: 3,
-                md: 2,
-              },
-              borderColor: 'error.dark',
-              outlineColor: 'error.dark',
-              color: 'error.dark',
-            }}
-            onClick={openModal}
-            data-testid="cancelNotificationBtn"
-          >
-            {t('detail.cancel-notification', { ns: 'notifiche' })}
-          </Button>
-        )}
-    </NotificationDetailTable>
-  );
-};
-
 const NotificationDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
@@ -317,10 +143,6 @@ const NotificationDetail: React.FC = () => {
     void dispatch(cancelNotification(notification.iun));
   };
 
-  const withPayment =
-    notification.notificationStatusHistory.findIndex(
-      (el: NotificationStatusHistory) => el.status === NotificationStatus.PAID
-    ) > -1;
   const hasDocumentsAvailable = !notification.documentsAvailable;
 
   const getDownloadFilesMessage = useCallback(
@@ -336,11 +158,6 @@ const NotificationDetail: React.FC = () => {
     },
     [hasDocumentsAvailable]
   );
-
-  const openModal = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
-    setShowModal(true);
-  };
 
   const fetchSentNotification = useCallback(() => {
     if (id) {
@@ -399,17 +216,6 @@ const NotificationDetail: React.FC = () => {
     </Fragment>
   );
 
-  const [showModal, setShowModal] = useState(false);
-
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
-  const handleModalCloseAndProceed = () => {
-    setShowModal(false);
-    handleCancelNotification();
-  };
-
   const direction = isMobile ? 'column-reverse' : 'row';
   const spacing = isMobile ? 3 : 0;
 
@@ -429,7 +235,10 @@ const NotificationDetail: React.FC = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <AlertNotificationCancel notificationStatus={notification.notificationStatus} />
-                <RenderNotificationDetailTable openModal={openModal} />
+                <NotificationDetailTableSender
+                  notification={notification}
+                  onCancelNotification={handleCancelNotification}
+                />
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
@@ -501,12 +310,6 @@ const NotificationDetail: React.FC = () => {
           </Grid>
         </Box>
       )}
-      <ConfirmCancellationDialog
-        onClose={handleModalClose}
-        onConfirm={handleModalCloseAndProceed}
-        payment={withPayment}
-        showModal={showModal}
-      />
     </>
   );
 };
