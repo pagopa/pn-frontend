@@ -1,10 +1,7 @@
 import _ from 'lodash';
 import React, { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useParams,
-  /* useNavigate */
-} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Alert, Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
@@ -142,8 +139,8 @@ const RenderNotificationDetailTable = ({ openModal }: Props) => {
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
       value: (
         <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
+          {recipients.map((recipient) => (
+            <Box key={recipient.taxId} fontWeight={600}>
               {recipients.length > 1
                 ? `${recipient.taxId} - ${recipient.denomination}`
                 : recipient.taxId}
@@ -244,7 +241,6 @@ const RenderNotificationDetailTable = ({ openModal }: Props) => {
 const NotificationDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
