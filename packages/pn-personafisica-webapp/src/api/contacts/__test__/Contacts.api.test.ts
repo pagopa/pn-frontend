@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { digitalAddresses } from '../../../__mocks__/DigitalAddreses.mock';
+import { digitalAddresses, digitalAddressesInvalid } from '../../../__mocks__/Contacts.mock';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { apiClient } from '../../apiClients';
 import { ContactsApi } from '../Contacts.api';
@@ -24,12 +25,12 @@ describe('Contacts api tests', () => {
   });
 
   it('getDigitalAddresses', async () => {
-    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddressesInvalid);
     const res = await ContactsApi.getDigitalAddresses();
     expect(res).toStrictEqual(digitalAddresses);
   });
 
-  it('createOrUpdateDigitalAddress (email to verify)', async () => {
+  it('createOrUpdateDigitalAddress (pec to verify)', async () => {
     const body = { value: 'a@a.it' };
     mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(200, body);
     const res = await ContactsApi.createOrUpdateLegalAddress(
@@ -41,7 +42,7 @@ describe('Contacts api tests', () => {
     expect(res).toStrictEqual(undefined);
   });
 
-  it('createOrUpdateDigitalAddress (email to validate)', async () => {
+  it('createOrUpdateDigitalAddress (pec to validate)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock
       .onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), body)
@@ -63,7 +64,7 @@ describe('Contacts api tests', () => {
     });
   });
 
-  it('createOrUpdateDigitalAddress (email verified)', async () => {
+  it('createOrUpdateDigitalAddress (pec verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(204, body);
     const res = await ContactsApi.createOrUpdateLegalAddress(

@@ -1,5 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { parties } from '../../../__mocks__/Parties.mock';
 import { apiClient } from '../../apiClients';
 import { ExternalRegistriesAPI } from '../External-registries.api';
 import { GET_ALL_ACTIVATED_PARTIES } from '../external-registries-routes';
@@ -21,9 +23,9 @@ describe('ExternalRegistries API tests', () => {
     mock.restore();
   });
 
-  it('getAllActivatedParties 200', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, []);
+  it('getAllActivatedParties', async () => {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, parties);
     const res = await ExternalRegistriesAPI.getAllActivatedParties();
-    expect(res).toStrictEqual([]);
+    expect(res).toStrictEqual(parties);
   });
 });

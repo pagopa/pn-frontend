@@ -77,6 +77,7 @@
     "@types/mixpanel-browser": "^2.38.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "axios-mock-adapter": "^1.20.0",
     "babel-loader": "^8.0.2",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",

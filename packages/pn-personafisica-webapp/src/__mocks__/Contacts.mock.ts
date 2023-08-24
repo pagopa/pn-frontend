@@ -10,6 +10,13 @@ export const digitalAddresses: DigitalAddresses = {
     {
       addressType: 'legal',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
+      senderId: 'default',
+      channelType: LegalChannelType.PEC,
+      value: 'nome.utente@pec.it',
+    },
+    {
+      addressType: 'legal',
+      recipientId: '123e4567-e89b-12d3-a456-426614174000',
       senderId: 'cmbo',
       channelType: LegalChannelType.PEC,
       value: 'nome.utente@server.it',
@@ -27,8 +34,27 @@ export const digitalAddresses: DigitalAddresses = {
       addressType: 'courtesy',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
       senderId: 'default',
+      channelType: CourtesyChannelType.SMS,
+      value: '3333333333',
+    },
+    {
+      addressType: 'courtesy',
+      recipientId: '123e4567-e89b-12d3-a456-426614174000',
+      senderId: 'default',
       channelType: CourtesyChannelType.IOMSG,
       value: IOAllowedValues.DISABLED,
     },
   ],
+};
+
+export const digitalAddressesInvalid = {
+  ...digitalAddresses,
+  legal: digitalAddresses.legal.push({
+    addressType: 'legal',
+    recipientId: '123e4567-e89b-12d3-a456-426614174000',
+    senderId: 'cmp',
+    channelType: LegalChannelType.PEC,
+    value: 'nome.utente@server.it',
+    codeValid: false,
+  }),
 };

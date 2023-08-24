@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { apiClient } from '../../apiClients';
@@ -36,7 +37,7 @@ describe('Consents api tests', () => {
     });
   });
 
-  it('setConsentByType - 200', async () => {
+  it('setConsentByType', async () => {
     mock.onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1')).reply(200, {
       action: ConsentActionType.ACCEPT,
     });

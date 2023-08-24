@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
   arrayOfDelegates,
@@ -28,12 +29,6 @@ async function getDelegates(response: Array<Delegation> | null) {
 async function getDelegators(response: Array<Delegation> | null) {
   mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, response);
   const res = await DelegationsApi.getDelegators();
-  return res;
-}
-
-async function createDelegation() {
-  mock.onPost(CREATE_DELEGATION()).reply(200, mockCreateDelegation);
-  const res = await DelegationsApi.createDelegation(mockCreateDelegation);
   return res;
 }
 
@@ -103,7 +98,8 @@ describe('Delegations api tests', () => {
   });
 
   it('creates a new delegation', async () => {
-    const res = await createDelegation();
+    mock.onPost(CREATE_DELEGATION()).reply(200, mockCreateDelegation);
+    const res = await DelegationsApi.createDelegation(mockCreateDelegation);
     expect(res).toStrictEqual(mockCreateDelegation);
   });
 });
