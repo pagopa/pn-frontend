@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { TimelineCategory } from '@pagopa-pn/pn-commons';
+
 import { fireEvent, render, waitFor, within } from '../../../../__test__/test-utils';
 import {
   notificationToFe,
@@ -76,7 +78,34 @@ describe('NotificationDetailTableSender Component', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
-  it('clicks on the cancel button and on confirm button', async () => {
+  it('clicks on the cancel button and on confirm button - no payment', async () => {
+    // remove payment elem from timeline
+    const noPaymentNotification = {
+      ...notificationToFe,
+      timeline: [
+        ...notificationToFe.timeline.filter((elem) => elem.category !== TimelineCategory.PAYMENT),
+      ],
+    };
+    // render component
+    const { getByTestId } = render(
+      <NotificationDetailTableSender
+        notification={noPaymentNotification}
+        onCancelNotification={mockCancelHandler}
+      />
+    );
+    const cancelNotificationBtn = getByTestId('cancelNotificationBtn');
+    fireEvent.click(cancelNotificationBtn);
+    const modal = await waitFor(() => getByTestId('modalId'));
+    expect(modal).toBeInTheDocument();
+    const modalCloseAndProceedBtn = within(modal).getByTestId('modalCloseAndProceedBtnId');
+    fireEvent.click(modalCloseAndProceedBtn!);
+    await waitFor(() => {
+      expect(mockCancelHandler).toBeCalledTimes(1);
+      expect(modal).not.toBeInTheDocument();
+    });
+  });
+
+  it('clicks on the cancel button and on confirm button - payment', async () => {
     // render component
     const { getByTestId } = render(
       <NotificationDetailTableSender
@@ -88,6 +117,8 @@ describe('NotificationDetailTableSender Component', () => {
     fireEvent.click(cancelNotificationBtn);
     const modal = await waitFor(() => getByTestId('modalId'));
     expect(modal).toBeInTheDocument();
+    const checkbox = within(modal).getByTestId('checkbox');
+    fireEvent.click(checkbox);
     const modalCloseAndProceedBtn = within(modal).getByTestId('modalCloseAndProceedBtnId');
     fireEvent.click(modalCloseAndProceedBtn!);
     await waitFor(() => {

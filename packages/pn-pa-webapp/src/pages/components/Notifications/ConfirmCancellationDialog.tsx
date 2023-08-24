@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -15,27 +15,25 @@ import {
 
 type Props = {
   showModal: boolean;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
-  onConfirm: React.MouseEventHandler<HTMLButtonElement>;
+  onClose: MouseEventHandler<HTMLButtonElement>;
+  onConfirm: MouseEventHandler<HTMLButtonElement>;
   payment: boolean;
 };
 
-export default function ConfirmCancellationDialog({
-  showModal,
-  onClose,
-  onConfirm,
-  payment,
-}: Props) {
+const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConfirm, payment }) => {
   const { t } = useTranslation(['notifiche']);
 
   const [checked, setChecked] = useState(false);
+
   const handleChange = () => {
     setChecked(!checked);
   };
 
   useEffect(() => {
-    setChecked(false);
-  }, [onClose]);
+    if (!showModal && checked) {
+      setChecked(false);
+    }
+  }, [showModal]);
 
   return (
     <Dialog open={showModal} data-testid="modalId">
@@ -85,4 +83,6 @@ export default function ConfirmCancellationDialog({
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+export default ConfirmCancellationDialog;
