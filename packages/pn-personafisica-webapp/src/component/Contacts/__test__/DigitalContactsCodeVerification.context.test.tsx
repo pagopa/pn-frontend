@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
+import { fireEvent, RenderResult, screen, waitFor } from '../../../__test__/test-utils';
 
+import { render } from '../../../__test__/test-utils';
 import { LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import * as hooks from '../../../redux/hooks';
-import { render } from '../../../__test__/test-utils';
 import {
   Component,
   mockedStore,

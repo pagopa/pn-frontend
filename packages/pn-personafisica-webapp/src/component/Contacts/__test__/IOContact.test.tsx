@@ -1,13 +1,12 @@
 /* eslint-disable functional/no-let */
 import React from 'react';
-import { fireEvent, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { render, screen } from '../../../__test__/test-utils';
+import { fireEvent, render, RenderResult, screen } from '../../../__test__/test-utils';
 
+import userEvent from "@testing-library/user-event";
 import { CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import IOContact from '../IOContact';
-import userEvent from "@testing-library/user-event";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

@@ -7,10 +7,9 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import { RenderResult, act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import { render } from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import Notifiche from '../Notifiche.page';

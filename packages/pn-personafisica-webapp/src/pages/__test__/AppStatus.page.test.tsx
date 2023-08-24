@@ -1,15 +1,14 @@
-import React from 'react';
-import { act, screen } from '@testing-library/react';
 import {
   AppResponseMessage,
   DowntimeStatus,
-  formatDate,
   KnownFunctionality,
   ResponseEventDispatcher,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
-import { render } from '../../__test__/test-utils';
-import AppStatus from '../AppStatus.page';
+import React from 'react';
+import { act, render, screen } from '../../__test__/test-utils';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
+import AppStatus from '../AppStatus.page';
 
 const fakePalette = { success: { main: '#00FF00' }, error: { main: '#FF0000' } };
 

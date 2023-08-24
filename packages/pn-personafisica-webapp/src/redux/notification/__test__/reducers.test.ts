@@ -7,7 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { notificationFromBe, notificationToFe } from '../../../__mocks__/Notifications.mock';
+import { notificationFromBe, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import {

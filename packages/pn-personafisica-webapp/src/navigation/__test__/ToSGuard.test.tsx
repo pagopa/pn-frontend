@@ -1,7 +1,7 @@
 import { ConsentUser } from "@pagopa-pn/pn-commons";
-import { act, screen } from "@testing-library/react";
 import React from "react";
 import * as redux from "react-redux";
+import { act, screen } from "../../__test__/test-utils";
 
 import { render } from "../../__test__/test-utils";
 import ToSGuard from "../ToSGuard";

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { act, RenderResult } from '@testing-library/react';
+import { act, RenderResult } from '../../../__test__/test-utils';
 
-import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { axe, render } from '../../../__test__/test-utils';
+import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import LegalContactsList from '../LegalContactsList';
 

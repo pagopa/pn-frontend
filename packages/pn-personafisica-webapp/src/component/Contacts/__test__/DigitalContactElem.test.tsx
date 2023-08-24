@@ -1,17 +1,17 @@
-import React from 'react';
-import { fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
-import * as redux from 'react-redux';
 import { TextField } from '@mui/material';
+import React from 'react';
+import * as redux from 'react-redux';
+import { RenderResult, screen, waitFor } from '../../../__test__/test-utils';
 
+import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import userEvent from '@testing-library/user-event';
 import { render } from '../../../__test__/test-utils';
-import * as actions from '../../../redux/contact/actions';
 import { LegalChannelType } from '../../../models/contacts';
+import * as actions from '../../../redux/contact/actions';
+import { TrackEventType } from '../../../utils/events';
+import * as trackingFunctions from '../../../utils/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
-import * as trackingFunctions from '../../../utils/mixpanel';
-import { TrackEventType } from '../../../utils/events';
-import userEvent from '@testing-library/user-event';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

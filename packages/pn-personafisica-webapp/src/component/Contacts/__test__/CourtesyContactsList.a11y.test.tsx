@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { act, RenderResult } from "@testing-library/react";
 import { fail } from 'assert';
+import * as React from 'react';
+import { act, RenderResult } from "../../../__test__/test-utils";
 
-import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
 import { axe, render } from "../../../__test__/test-utils";
+import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
 import CourtesyContactsList from "../CourtesyContactsList";
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 

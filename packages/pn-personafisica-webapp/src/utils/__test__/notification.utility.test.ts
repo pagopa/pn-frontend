@@ -1,4 +1,4 @@
-import { notificationToFeTwoRecipients } from '../../__mocks__/Notifications.mock';
+import { notificationToFeTwoRecipients } from "../../__mocks__/NotificationDetail.mock";
 
 /**5
  * This test suite tests the parseNotificationDetailForRecipient function in a rather indirect mode:

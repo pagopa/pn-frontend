@@ -9,12 +9,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import {
-  notificationFromBe,
-  notificationToFe,
-  notificationsFromBe,
-  notificationsToFe,
-} from '../../../__mocks__/Notifications.mock';
+import { notificationFromBe, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -54,7 +50,7 @@ describe('Notifications api tests', () => {
           endDate: formatToTimezoneString(getNextDay(today)),
         })
       )
-      .reply(200, notificationsFromBe);
+      .reply(200, notificationsDTO);
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),

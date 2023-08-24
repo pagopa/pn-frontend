@@ -4,15 +4,14 @@ import {
   NotificationStatus,
   apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
-import { RenderResult, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import {
-  fixedMandateId,
   notificationToFe,
   notificationToFeTwoRecipients,
   overrideNotificationMock,
-} from '../../__mocks__/Notifications.mock';
-import { render } from '../../__test__/test-utils';
+} from '../../__mocks__/NotificationDetail.mock';
+import { fixedMandateId } from '../../__mocks__/Notifications.mock';
+import { RenderResult, render, screen } from '../../__test__/test-utils';
 import * as routes from '../../navigation/routes.const';
 import * as actions from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';

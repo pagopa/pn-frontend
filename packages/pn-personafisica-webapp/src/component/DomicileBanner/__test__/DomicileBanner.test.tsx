@@ -1,5 +1,4 @@
-import { fireEvent } from '@testing-library/react';
-import { render } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
 import DomicileBanner from '../DomicileBanner';
 
 jest.mock('react-i18next', () => ({

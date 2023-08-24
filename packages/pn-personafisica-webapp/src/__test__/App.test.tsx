@@ -1,26 +1,24 @@
 /* eslint-disable functional/no-let */
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { act, screen } from '@testing-library/react';
-import { Suspense } from 'react';
-import * as redux from 'react-redux';
-
-/* eslint-disable import/order */
-import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
 
+/* eslint-disable import/order */
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { Suspense } from 'react';
+import * as redux from 'react-redux';
+import { act, render, screen } from './test-utils';
 
-// mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch; 
+// mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch;
 // questo totale viene verificato in un test
 jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
 jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
 
 /**
- * Componente che mette App all'interno di un Suspense, 
- * necessario per il test che fa solo un render, 
- * usato anche nel automatic accessibility test. 
+ * Componente che mette App all'interno di un Suspense,
+ * necessario per il test che fa solo un render,
+ * usato anche nel automatic accessibility test.
  */
 const Component = () => (
   <Suspense fallback="loading...">
@@ -47,7 +45,6 @@ const initialState = (token: string) => ({
   },
 });
 
-
 /**
  * Questo test suite si separa in due describe diversi, di tests che hanno una differenza
  * nella inizializzazione di i18n.
@@ -57,7 +54,7 @@ const initialState = (token: string) => ({
  * - per i altri test, serve non passare nessun parametro. Se si fa lo stesso setting che per il
  *   caso precedente, appaiono messaggi "A future version of React will block javascript: URLs..."
  *   e "An update to ForwardRef inside a test was not wrapped in act(...)."
- * 
+ *
  * Lascio la inizializzazione comune nel describe principale.
  * ---------------------------------
  * Carlos, 2022.08.10
@@ -93,11 +90,10 @@ describe('App', () => {
     jest.restoreAllMocks();
   });
 
-
   /**
    * Tests che usano Component e inizializzazione "semplice" di i18n.
    */
-  describe("tests che non analizzano dettagli (test solo di renderizzazione)", () => {
+  describe('tests che non analizzano dettagli (test solo di renderizzazione)', () => {
     beforeEach(() => {
       void i18n.init();
     });
@@ -106,19 +102,18 @@ describe('App', () => {
       render(<Component />);
       const loading = screen.getByText(/loading.../i);
       expect(loading).toBeInTheDocument();
-    });    
+    });
   });
-
 
   /**
    * Tests che usano App e inizializzazione di i18n che include react.useSuspense = false.
    */
-  describe("tests che analizzano dettagli di comportamento (mock alle chiamate)", () => {
+  describe('tests che analizzano dettagli di comportamento (mock alle chiamate)', () => {
     beforeEach(() => {
       void i18n.init({
-        react: { 
-          useSuspense: false
-        }
+        react: {
+          useSuspense: false,
+        },
       });
     });
 
@@ -130,5 +125,4 @@ describe('App', () => {
       expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
     });
   });
-  
 });

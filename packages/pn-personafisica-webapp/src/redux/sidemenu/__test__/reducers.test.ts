@@ -1,6 +1,6 @@
 /* eslint-disable functional/no-let */
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { getMockedDelegators, initialState } from '../../../__mocks__/SideMenu.mock';
+import { getMockedDelegators } from '../../../__mocks__/Delegations.mock';
 import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import { acceptDelegation, rejectDelegation } from '../../delegation/actions';
 import { Delegator } from '../../delegation/types';
@@ -11,6 +11,12 @@ import { closeDomicileBanner } from '../reducers';
 describe('Sidemenu redux state tests', () => {
   mockAuthentication();
 
+  const initialState = {
+    pendingDelegators: 0,
+    delegators: [],
+    defaultAddresses: [],
+    domicileBannerOpened: true,
+  };
   const setInitialState = async (delegators: Array<Delegator>) => {
     // Get sidemenu information
     const getDelegatorsApiSpy = jest.spyOn(DelegationsApi, 'getDelegators');

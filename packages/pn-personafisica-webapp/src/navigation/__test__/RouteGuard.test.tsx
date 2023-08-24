@@ -1,6 +1,5 @@
 import React from 'react';
-import { act, screen } from '@testing-library/react';
-import { render } from '../../__test__/test-utils';
+import { act, render, screen } from '../../__test__/test-utils';
 import RouteGuard from '../RouteGuard';
 
 jest.mock('react-router-dom', () => {

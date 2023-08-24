@@ -8,7 +8,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { notificationsFromBe, notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
@@ -62,7 +62,7 @@ describe('Dashbaord redux state tests', () => {
           endDate: formatToTimezoneString(getNextDay(today)),
         })
       )
-      .reply(200, notificationsFromBe);
+      .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),

@@ -1,5 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react';
-import { render, screen } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({

@@ -1,7 +1,6 @@
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-import { act, screen } from '@testing-library/react';
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { render } from '../../../__test__/test-utils';
+import { act, render, screen } from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import * as hooks from '../../../redux/hooks';
 import Delegates from '../Delegates';
@@ -13,7 +12,6 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
@@ -24,7 +22,6 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
-
 
 describe('Delegates Component - assuming delegates API works properly', () => {
   afterEach(() => {
@@ -55,7 +52,6 @@ describe('Delegates Component - assuming delegates API works properly', () => {
   });
 });
 
-
 describe('Delegates Component - different delegates API behaviors', () => {
   beforeAll(() => {
     jest.restoreAllMocks();
@@ -70,10 +66,16 @@ describe('Delegates Component - different delegates API behaviors', () => {
   });
 
   it('API error', async () => {
-    await act(async () => void render(
-      <Delegates />,
-      { preloadedState: { appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATES) } }
-    ));
+    await act(
+      async () =>
+        void render(<Delegates />, {
+          preloadedState: {
+            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+              DELEGATION_ACTIONS.GET_DELEGATES
+            ),
+          },
+        })
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
@@ -82,4 +84,3 @@ describe('Delegates Component - different delegates API behaviors', () => {
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
-

@@ -1,7 +1,7 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import ParticipatingEntities from '../ParticipatingEntities.page';
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
+import React from 'react';
+import { render } from '../../__test__/test-utils';
+import ParticipatingEntities from '../ParticipatingEntities.page';
 
 describe('test the Participating Entities page', () => {
   const loadNoticesFn = jest.fn();

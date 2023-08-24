@@ -1,7 +1,6 @@
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-import { act, screen } from '@testing-library/react';
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { render } from '../../../__test__/test-utils';
+import { act, render, screen } from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import * as hooks from '../../../redux/hooks';
 import MobileDelegates from '../MobileDelegates';

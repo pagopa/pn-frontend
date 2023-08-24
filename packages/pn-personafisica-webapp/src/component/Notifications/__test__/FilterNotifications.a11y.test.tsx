@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RenderResult, act } from '@testing-library/react';
+import { RenderResult, act } from '../../../__test__/test-utils';
 
 import { axe, render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';

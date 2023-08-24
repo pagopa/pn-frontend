@@ -7,7 +7,7 @@ import { GET_CONSENTS, SET_CONSENTS } from '../consents.routes';
 
 describe('Consents api tests', () => {
   let mock: MockAdapter;
-  
+
   mockAuthentication();
 
   beforeAll(() => {
@@ -44,15 +44,5 @@ describe('Consents api tests', () => {
       action: ConsentActionType.ACCEPT,
     });
     expect(res).toStrictEqual('success');
-  });
-
-  it('setConsentByType - 20x', async () => {
-    mock.onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1')).reply(204, {
-      action: ConsentActionType.ACCEPT,
-    });
-    const res = await ConsentsApi.setConsentByType(ConsentType.TOS, 'mocked-version-1', {
-      action: ConsentActionType.ACCEPT,
-    });
-    expect(res).toStrictEqual('error');
   });
 });

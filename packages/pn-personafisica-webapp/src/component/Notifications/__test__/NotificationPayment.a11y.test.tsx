@@ -1,10 +1,9 @@
-import { RenderResult, act } from '@testing-library/react';
 import * as React from 'react';
 import {
   doMockUseDispatch,
   mockedNotificationDetailPayment,
 } from '../../../__mocks__/NotificationPayment.mock';
-import { axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import NotificationPayment from '../NotificationPayment';
 
 jest.mock('react-i18next', () => ({

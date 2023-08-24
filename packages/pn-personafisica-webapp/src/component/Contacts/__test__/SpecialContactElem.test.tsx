@@ -1,6 +1,6 @@
-import React from 'react';
-import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
+import React from 'react';
+import { act, fireEvent, RenderResult, waitFor } from '../../../__test__/test-utils';
 
 import { render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';

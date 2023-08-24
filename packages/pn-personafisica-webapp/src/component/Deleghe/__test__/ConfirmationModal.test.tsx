@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { fireEvent } from '@testing-library/react';
-import { render } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
 
 import ConfirmationModal from '../ConfirmationModal';
 

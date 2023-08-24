@@ -1,7 +1,6 @@
-import { act, RenderResult } from "@testing-library/react";
 import * as React from 'react';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { axe, render } from '../../../__test__/test-utils';
+import { act, axe, render, RenderResult } from "../../../__test__/test-utils";
 import DesktopNotifications from '../DesktopNotifications';
 
 jest.mock('react-i18next', () => ({

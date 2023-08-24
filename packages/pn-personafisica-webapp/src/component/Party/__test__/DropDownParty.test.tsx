@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render } from '../../../__test__/test-utils';
 import DropDownPartyMenuItem from '../DropDownParty';
 
 describe('DropDownParty Component', () => {

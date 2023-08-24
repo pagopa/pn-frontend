@@ -1,4 +1,3 @@
-import { RenderResult, act } from '@testing-library/react';
 import * as React from 'react';
 import * as redux from 'react-redux';
 import {
@@ -6,7 +5,7 @@ import {
   initialState,
   legalAddresses,
 } from '../../../__mocks__/SpecialContacts.mock';
-import { axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 

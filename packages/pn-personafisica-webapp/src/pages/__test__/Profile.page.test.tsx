@@ -1,8 +1,7 @@
-import { fireEvent, screen } from "@testing-library/react";
-import { render } from "../../__test__/test-utils";
-import Profile from "../Profile.page";
-import * as hooks from '../../redux/hooks';
+import { fireEvent, render, screen } from "../../__test__/test-utils";
 import { RECAPITI } from '../../navigation/routes.const';
+import * as hooks from '../../redux/hooks';
+import Profile from "../Profile.page";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

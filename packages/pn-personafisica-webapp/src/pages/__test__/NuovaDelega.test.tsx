@@ -1,13 +1,11 @@
-import * as redux from 'react-redux';
-import { fireEvent, waitFor } from '@testing-library/react';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import { RecipientType } from '@pagopa-pn/pn-commons';
-
-import { render } from '../../__test__/test-utils';
-import NuovaDelega from '../NuovaDelega.page';
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import * as redux from 'react-redux';
+import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import * as actions from '../../redux/newDelegation/actions';
-import * as trackingFunctions from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import * as trackingFunctions from '../../utils/mixpanel';
+import NuovaDelega from '../NuovaDelega.page';
 
 jest.mock('../../component/Deleghe/VerificationCodeComponent', () => ({
   __esModule: true,

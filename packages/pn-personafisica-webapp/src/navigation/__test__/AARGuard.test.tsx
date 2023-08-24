@@ -1,13 +1,13 @@
 import React from 'react';
-import { act, screen } from '@testing-library/react';
+import { act, screen } from '../../__test__/test-utils';
 
+import { render } from '../../__test__/test-utils';
+import AARGuard from '../AARGuard';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
-import { render } from '../../__test__/test-utils';
-import AARGuard from '../AARGuard';
 
 const mockNavigateFn = jest.fn(() => {});
 
