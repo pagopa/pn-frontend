@@ -9,6 +9,7 @@ import {
   NotificationStatusHistory,
   NotificationDetailRecipient,
   NotificationDetailOtherDocument,
+  NotificationStatus,
 } from '../../types';
 import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
@@ -60,7 +61,12 @@ const NotificationDetailTimeline = ({
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
-
+  const isCancelled =
+    statusHistory.filter(
+      (el) =>
+        el.status ===
+        NotificationStatus.CANCELLED /* || el.status === NotificationStatus.CANCELLLATION_IN_PROGRESS */
+    ).length > 0;
   if (!isMobile && state) {
     setState(false);
   }
@@ -89,6 +95,7 @@ const NotificationDetailTimeline = ({
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
+      notificationIsCancelled={isCancelled}
     />
   ));
 
@@ -122,6 +129,7 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
+            notificationIsCancelled={isCancelled}
           />
         ) : (
           timelineComponent

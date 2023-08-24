@@ -21,24 +21,13 @@ const documents: Array<NotificationDetailDocument> = [
 ];
 
 describe('NotificationDetailDocuments Component', () => {
-  let resultWithDownloadableFiles: RenderResult | undefined;
-  let resultNotDownloadableFiles: RenderResult | undefined;
-  let resultDisabledFiles: RenderResult | undefined;
-
   let mockClickFn: jest.Mock;
 
   beforeEach(() => {
     mockClickFn = jest.fn();
     // render component
-    resultWithDownloadableFiles = render(
-      <NotificationDetailDocuments
-        title="Mocked title"
-        documents={documents}
-        clickHandler={mockClickFn}
-        documentsAvailable
-      />
-    );
-    resultNotDownloadableFiles = render(
+
+    /*  resultNotDownloadableFiles = render(
       <NotificationDetailDocuments
         title="Mocked title"
         documents={documents}
@@ -46,26 +35,22 @@ describe('NotificationDetailDocuments Component', () => {
         documentsAvailable={false}
         downloadFilesMessage="mocked"
       />
-    );
-    resultDisabledFiles = render(
+    ); */
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders NotificationDetailDocuments', () => {
+    const resultWithDownloadableFiles = render(
       <NotificationDetailDocuments
         title="Mocked title"
         documents={documents}
         clickHandler={mockClickFn}
         documentsAvailable
-        notificationIsCancelled={true}
       />
     );
-  });
-
-  afterEach(() => {
-    resultWithDownloadableFiles = undefined;
-    resultNotDownloadableFiles = undefined;
-    resultDisabledFiles = undefined;
-    jest.clearAllMocks();
-  });
-
-  it('renders NotificationDetailDocuments', () => {
     expect(resultWithDownloadableFiles?.container).toHaveTextContent(/Mocked title/i);
     // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
     const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
@@ -73,6 +58,14 @@ describe('NotificationDetailDocuments Component', () => {
   });
 
   it('test click on document button', async () => {
+    const resultWithDownloadableFiles = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+      />
+    );
     const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
     fireEvent.click(documentsButtons![0]);
     await waitFor(() => {
@@ -81,9 +74,17 @@ describe('NotificationDetailDocuments Component', () => {
     });
   });
 
-  it.only('renders documents with disabled our download', () => {
+  it('renders documents with disabled our download', () => {
+    const resultDisabledFiles = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        notificationIsCancelled={true}
+      />
+    );
     const documentsButtons = resultDisabledFiles?.getAllByTestId('documentButton');
-    screen.debug(documentsButtons![0]);
-    // expect(documentsButtons![0]).toBeDisabled();
+    expect(documentsButtons![0]).toBeDisabled();
   });
 });

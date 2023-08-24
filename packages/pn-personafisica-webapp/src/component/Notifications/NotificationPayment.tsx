@@ -455,16 +455,16 @@ const NotificationPayment: React.FC<Props> = ({
     <ApiErrorWrapper
       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
       reloadAction={fetchPaymentInfo}
-      mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
+      mainText={t('detail.payment.message-error-fetch-payment')}
     >
       <Paper sx={{ p: 3, mb: '1rem' }} elevation={0}>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8} mb={2}>
             {notificationIsCancelled && (
               <Alert tabIndex={0} data-testid="cancelledAlertTextPayment" severity="info">
-                {t('detail.payment.cancelled-alert-text-payment', { ns: 'notifiche' })}
+                {t('detail.payment.cancelled-alert-text-payment')}
                 <Link href="" target="_blank" variant="body1">
-                  {(t('detail.disclaimer-link'), { ns: 'notifiche' })}
+                  {t('detail.disclaimer-link')}
                 </Link>
               </Alert>
             )}
@@ -475,7 +475,7 @@ const NotificationPayment: React.FC<Props> = ({
           <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
             <Typography
               variant="h5"
-              aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
+              aria-label={t('detail.payment.amount')}
               display="inline"
               fontWeight={600}
               fontSize={24}
@@ -521,7 +521,7 @@ const NotificationPayment: React.FC<Props> = ({
                   endIcon={<SendIcon />}
                   fullWidth
                 >
-                  {t('detail.payment.submit', { ns: 'notifiche' })}
+                  {t('detail.payment.submit')}
                 </LoadingButton>
               </Grid>
             )}
@@ -534,7 +534,7 @@ const NotificationPayment: React.FC<Props> = ({
                 </Grid>
                 {attachments.length > 0 && (
                   <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                    <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+                    <Divider>{t('detail.payment.divider-text')}</Divider>
                   </Grid>
                 )}
                 <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>

@@ -141,9 +141,9 @@ describe('NotificationPayment component', () => {
   }
 
   afterEach(() => {
-    mock.reset();
-    mock.restore();
-    mock.resetHistory();
+    mock?.reset();
+    mock?.restore();
+    mock?.resetHistory();
   });
 
   it('render alert with notification cancelled', () => {
