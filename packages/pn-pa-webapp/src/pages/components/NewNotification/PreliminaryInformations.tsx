@@ -41,6 +41,14 @@ type Props = {
   onConfirm: () => void;
 };
 
+const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
+  <InputAdornment position="end">
+    <Tooltip arrow={true} title={tooltip}>
+      <InfoOutlined />
+    </Tooltip>
+  </InputAdornment>
+);
+
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
@@ -120,14 +128,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   useEffect(() => {
     fetchGroups();
   }, [fetchGroups]);
-
-  const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
-    <InputAdornment position="end">
-      <Tooltip arrow={true} title={tooltip}>
-        <InfoOutlined />
-      </Tooltip>
-    </InputAdornment>
-  );
 
   return (
     <ApiErrorWrapper
