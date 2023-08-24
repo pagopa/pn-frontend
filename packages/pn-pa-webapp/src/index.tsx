@@ -6,14 +6,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 
-import App from './App';
 import { initAxiosClients } from './api/apiClients';
-import './i18n';
-import './index.css';
 import { initStore, store } from './redux/store';
-import reportWebVitals from './reportWebVitals';
 import { loadPaConfiguration } from './services/configuration.service';
 import { initOneTrust } from './utils/onetrust';
+import { setUpInterceptor } from './api/interceptors';
+import App from './App';
+import './i18n';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 
 async function doTheRender() {
   try {
@@ -24,6 +25,8 @@ async function doTheRender() {
     initOneTrust();
     initStore();
     initAxiosClients();
+    // move initialization of the Axios interceptor - PN-7557
+    setUpInterceptor(store);
 
     ReactDOM.render(
       <React.StrictMode>
