@@ -9,7 +9,6 @@ import {
 import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsFromBe, notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
@@ -19,11 +18,17 @@ import { setMandateId, setNotificationFilters, setPagination, setSorting } from 
 describe('Dashbaord redux state tests', () => {
   let mock: MockAdapter;
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('Initial state', () => {
@@ -50,17 +55,14 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATIONS_LIST({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-      }),
-      200,
-      undefined,
-      notificationsFromBe
-    );
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+        })
+      )
+      .reply(200, notificationsFromBe);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),

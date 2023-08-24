@@ -8,7 +8,6 @@ import {
 import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationFromBe, notificationToFe } from '../../../__mocks__/Notifications.mock';
-import { mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import {
@@ -74,11 +73,17 @@ const initialState = {
 describe('Notification detail redux state tests', () => {
   let mock: MockAdapter;
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('Initial state', () => {
@@ -87,14 +92,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL('mocked-iun'),
-      200,
-      undefined,
-      notificationFromBe
-    );
+    mock.onGet(NOTIFICATION_DETAIL('mocked-iun')).reply(200, notificationFromBe);
     const action = await store.dispatch(
       getReceivedNotification({
         iun: 'mocked-iun',
@@ -110,14 +108,9 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification document', async () => {
     const iun = 'mocked-iun';
     const documentIndex = '0';
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex),
-      200,
-      undefined,
-      { url: 'http://mocked-url.com' }
-    );
+    mock
+      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
+      .reply(200, { url: 'http://mocked-url.com' });
     const action = await store.dispatch(getReceivedNotificationDocument({ iun, documentIndex }));
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
@@ -130,14 +123,9 @@ describe('Notification detail redux state tests', () => {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument),
-      200,
-      undefined,
-      { url: 'http://mocked-url.com' }
-    );
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
+      .reply(200, { url: 'http://mocked-url.com' });
     const action = await store.dispatch(
       getReceivedNotificationOtherDocument({ iun, otherDocument })
     );
@@ -152,14 +140,9 @@ describe('Notification detail redux state tests', () => {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact),
-      200,
-      undefined,
-      { url: 'http://mocked-url.com' }
-    );
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
+      .reply(200, { url: 'http://mocked-url.com' });
     const action = await store.dispatch(getReceivedNotificationLegalfact({ iun, legalFact }));
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
@@ -188,14 +171,9 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the pagopa document', async () => {
     const iun = 'mocked-iun';
     const attachmentName = PaymentAttachmentSName.PAGOPA;
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
-      200,
-      undefined,
-      { url: 'http://pagopa-mocked-url.com' }
-    );
+    mock
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
+      .reply(200, { url: 'http://pagopa-mocked-url.com' });
     const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
     const payload = action.payload;
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
@@ -208,14 +186,9 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the f24 document', async () => {
     const iun = 'mocked-iun';
     const attachmentName = PaymentAttachmentSName.F24;
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName),
-      200,
-      undefined,
-      { url: 'http://f24-mocked-url.com' }
-    );
+    mock
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
+      .reply(200, { url: 'http://f24-mocked-url.com' });
     const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
     const payload = action.payload;
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
@@ -228,7 +201,7 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch payment info', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    mock = mockApi(apiClient, 'GET', NOTIFICATION_PAYMENT_INFO(taxId, noticeCode), 200, null, {
+    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
       status: PaymentStatus.REQUIRED,
       amount: 1200,
       url: 'mocked-url',
@@ -249,7 +222,7 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch payment url', async () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
-    mock = mockApi(apiClient, 'POST', NOTIFICATION_PAYMENT_URL(), 200, undefined, {
+    mock.onPost(NOTIFICATION_PAYMENT_URL()).reply(200, {
       checkoutUrl: 'mocked-url',
     });
     const action = await store.dispatch(

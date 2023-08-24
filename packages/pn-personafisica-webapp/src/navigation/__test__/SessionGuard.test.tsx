@@ -1,8 +1,8 @@
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { act, mockApi, render, screen } from '../../__test__/test-utils';
+import { act, render, screen } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import SessionGuard from '../SessionGuard';
@@ -62,12 +62,24 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 });
 
 describe('SessionGuard Component', () => {
+  let mock: MockAdapter;
+
   beforeEach(() => {
     mockLocationHash = '';
     mockLocationSearch = '';
   });
 
+  beforeAll(() => {
+    mock = new MockAdapter(authClient);
+  });
+
+  afterAll(() => {
+    mock.restore();
+    jest.resetAllMocks();
+  });
+
   afterEach(() => {
+    mock.reset();
     jest.clearAllMocks();
     jest.restoreAllMocks();
   });
@@ -123,14 +135,9 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - no path indicated', async () => {
-    const mock = mockApi(
-      authClient,
-      'POST',
-      AUTH_TOKEN_EXCHANGE(),
-      200,
-      { authorizationToken: '200_token' },
-      userResponse
-    );
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
+      .reply(200, userResponse);
     mockLocationHash = '#token=200_token';
     mockLocationPath = '/';
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -142,19 +149,12 @@ describe('SessionGuard Component', () => {
       { replace: true }
     );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
-    mock.reset();
-    mock.restore();
   });
 
   it('sound login - path indicated', async () => {
-    const mock = mockApi(
-      authClient,
-      'POST',
-      AUTH_TOKEN_EXCHANGE(),
-      200,
-      { authorizationToken: '200_token' },
-      userResponse
-    );
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
+      .reply(200, userResponse);
     mockLocationHash = '#token=200_token';
     mockLocationPath = routes.DELEGHE;
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -166,19 +166,12 @@ describe('SessionGuard Component', () => {
       { replace: true }
     );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
-    mock.reset();
-    mock.restore();
   });
 
   it('sound login - path indicated - with additional hash value', async () => {
-    const mock = mockApi(
-      authClient,
-      'POST',
-      AUTH_TOKEN_EXCHANGE(),
-      200,
-      { authorizationToken: '200_token' },
-      userResponse
-    );
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
+      .reply(200, userResponse);
     mockLocationHash = '#token=200_token&#greet=hola';
     mockLocationPath = routes.DELEGHE;
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -190,16 +183,16 @@ describe('SessionGuard Component', () => {
       { replace: true }
     );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
-    mock.reset();
-    mock.restore();
   });
 
   // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
   // (i.e. different than the logout message)
   it('bad SPID token (403)', async () => {
-    const mock = mockApi(authClient, 'POST', AUTH_TOKEN_EXCHANGE(), 403, {
-      authorizationToken: '403_token',
-    });
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), {
+        authorizationToken: '403_token',
+      })
+      .reply(403);
     mockLocationHash = '#token=403_token';
     mockLocationPath = '/';
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -209,16 +202,16 @@ describe('SessionGuard Component', () => {
     expect(logoutTitleComponent).toBeNull();
     expect(mockNavigateFn).toBeCalledTimes(0);
     expect(mockSessionCheckFn).toBeCalledTimes(0);
-    mock.reset();
-    mock.restore();
   });
 
   // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
   // (i.e. different than the logout message)
   it('bad SPID token (451)', async () => {
-    const mock = mockApi(authClient, 'POST', AUTH_TOKEN_EXCHANGE(), 451, {
-      authorizationToken: '451_token',
-    });
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), {
+        authorizationToken: '451_token',
+      })
+      .reply(451);
     mockLocationHash = '#token=451_token';
     mockLocationPath = '/';
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -228,8 +221,6 @@ describe('SessionGuard Component', () => {
     expect(logoutTitleComponent).toBeNull();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockSessionCheckFn).toBeCalledTimes(0);
-    mock.reset();
-    mock.restore();
   });
 
   // expected behavior: does not enter the app, does no navigate, message about logout

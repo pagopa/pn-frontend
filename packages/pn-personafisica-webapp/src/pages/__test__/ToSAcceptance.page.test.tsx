@@ -1,9 +1,7 @@
+import { ConsentUser } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-
-import { ConsentUser } from '@pagopa-pn/pn-commons';
-
-import { fireEvent, mockApi, render, waitFor } from '../../__test__/test-utils';
+import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
@@ -28,11 +26,16 @@ jest.mock('react-router-dom', () => ({
 describe('test Terms of Service page', () => {
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   const tosFirstAcceptance: ConsentUser = {
@@ -85,14 +88,16 @@ describe('test Terms of Service page', () => {
   });
 
   it('tests the switch and button', async () => {
-    mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
-      action: ConsentActionType.ACCEPT,
-    });
-
-    mockApi(mock, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'), 200, {
-      action: ConsentActionType.ACCEPT,
-    });
-
+    mock
+      .onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(200);
+    mock
+      .onPut(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(200);
     const result = render(
       <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
     );

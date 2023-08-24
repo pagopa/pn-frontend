@@ -5,7 +5,6 @@ import {
   arrayOfDelegators,
   mockCreateDelegation,
 } from '../../../__mocks__/Delegations.mock';
-import { mockApi } from '../../../__test__/test-utils';
 import { Delegation } from '../../../redux/delegation/types';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
@@ -21,19 +20,19 @@ import {
 let mock: MockAdapter;
 
 async function getDelegates(response: Array<Delegation> | null) {
-  mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, response);
+  mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, response);
   const res = await DelegationsApi.getDelegates();
   return res;
 }
 
 async function getDelegators(response: Array<Delegation> | null) {
-  mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, response);
+  mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, response);
   const res = await DelegationsApi.getDelegators();
   return res;
 }
 
 async function createDelegation() {
-  mock = mockApi(apiClient, 'POST', CREATE_DELEGATION(), 200, undefined, mockCreateDelegation);
+  mock.onPost(CREATE_DELEGATION()).reply(200, mockCreateDelegation);
   const res = await DelegationsApi.createDelegation(mockCreateDelegation);
   return res;
 }

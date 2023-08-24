@@ -6,10 +6,9 @@ import {
   RenderResult,
   act,
   fireEvent,
-  mockApi,
   render,
   waitFor,
-  within,
+  within
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
@@ -112,7 +111,6 @@ describe('Deleghe page', () => {
   it('renders the mobile view of the deleghe page', async () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    mockApi(mock, 'GET', DELEGATIONS_BY_DELEGATE(), 200, undefined, []);
     useIsMobileSpy.mockReturnValue(true);
     await renderComponent(false, false, 'delegates');
     expect(result.container).toHaveTextContent(/deleghe.title/i);
