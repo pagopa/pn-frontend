@@ -1,6 +1,6 @@
-import { makeStyles } from "@mui/styles";
-import Typography from "@mui/material/Typography";
-import { ReactNode } from "react";
+import { makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
+import { ReactNode } from 'react';
 
 interface SectionHeadingProps {
   children: ReactNode;
@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
   root: {
     fontSize: '1.5rem',
     fontWeight: 600,
-    marginTop: 0
+    marginTop: 0,
   },
 }));
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 function SectionHeading(props: SectionHeadingProps): JSX.Element {
   const classes = useStyles();
   return (
-    <Typography component="h3" variant="h6" className={classes.root}>
+    <Typography id="title-heading-section" component="h3" variant="h6" className={classes.root}>
       {props.children}
     </Typography>
   );

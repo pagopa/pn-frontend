@@ -54,7 +54,7 @@
       "group": "Gruppo",
       "no-group-found": "Nessun gruppo trovato",
       "menu-aria-label": "Menù azioni",
-      "tax-id": "Codice Fiscale/P. Iva"
+      "tax-id": "Codice Fiscale"
     },
     "accept-delegation": "Accetta la delega",
     "associate-groups-title": "Vuoi assegnare la delega ad un gruppo?",
@@ -73,7 +73,7 @@
     "reject-error": "Si è verificato un errore e la delega non è stata rifiutata. Riprova.",
     "validation": {
       "pIvaAndFiscalCode": {
-        "wrong": "Il Codice Fiscale/P. Iva inserito non è corretto"
+        "wrong": "Il Codice Fiscale inserito non è corretto"
       }
     }
   },

@@ -1,6 +1,12 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AppNotAccessible, LoadingPage, NotFound, PrivateRoute } from '@pagopa-pn/pn-commons';
+import {
+  AppNotAccessible,
+  LoadingPage,
+  NotFound,
+  PrivateRoute,
+  lazyRetry,
+} from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
@@ -14,14 +20,14 @@ import RouteGuard from './RouteGuard';
 import ToSGuard from './ToSGuard';
 import AARGuard from './AARGuard';
 
-const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
-const Contacts = React.lazy(() => import('../pages/Contacts.page'));
-const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
-const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
-const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
-const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
-const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
-const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
+const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
+const Contacts = lazyRetry(() => import('../pages/Contacts.page'));
+const Deleghe = lazyRetry(() => import('../pages/Deleghe.page'));
+const NuovaDelega = lazyRetry(() => import('../pages/NuovaDelega.page'));
+const NotificationDetail = lazyRetry(() => import('../pages/NotificationDetail.page'));
+const Notifiche = lazyRetry(() => import('../pages/Notifiche.page'));
+const PrivacyPolicyPage = lazyRetry(() => import('../pages/PrivacyPolicy.page'));
+const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'));
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */

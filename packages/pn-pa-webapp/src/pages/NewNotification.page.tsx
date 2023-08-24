@@ -169,6 +169,7 @@ const NewNotification = () => {
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
               {steps.map((label, index) => (
                 <Step
+                  id={label}
                   key={label}
                   onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
                   sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
