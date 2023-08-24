@@ -7,4 +7,4 @@ export * from './redux';
 export * from './services';
 export * from './types';
 export * from './utils';
-export { createMatchMedia, testSelect } from './test-utils';
+export { createMatchMedia, testSelect, testAutocomplete } from './test-utils';
