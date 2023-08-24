@@ -32,15 +32,7 @@ export const cancelNotification = createAsyncThunk<
   { dispatch: <AnyAction>(action: AnyAction) => AnyAction }
 >(
   NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
-  async (params: string, { rejectWithValue, dispatch }) => {
-    try {
-      await NotificationsApi.cancelNotification(params);
-      dispatch(getSentNotification(params));
-      return '';
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
 );
 
 export const getSentNotificationLegalfact = createAsyncThunk<

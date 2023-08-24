@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
+  AppResponse,
+  AppResponsePublisher,
   GetNotificationDowntimeEventsParams, // PN-1714
   LegalFactId,
   NotificationDetailDocuments,
@@ -41,6 +43,7 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { ServerResponseErrorCode } from '../utils/AppError/types';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
 import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
@@ -151,8 +154,32 @@ const NotificationDetail: React.FC = () => {
             }),
           })
         );
+        // reload notification detail
+        fetchSentNotification();
       });
   };
+
+  const handleCancellationError = useCallback((responseError: AppResponse) => {
+    if (Array.isArray(responseError.errors)) {
+      const managedErrors = (
+        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+      ).map((key) => ServerResponseErrorCode[key]);
+      const error = responseError.errors[0];
+      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t(`detail.errors.generic_error.message`, {
+              ns: 'notifiche',
+            }),
+          })
+        );
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }, []);
 
   const hasDocumentsAvailable = !notification.documentsAvailable;
 
@@ -180,6 +207,14 @@ const NotificationDetail: React.FC = () => {
     fetchSentNotification();
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('cancelNotification', handleCancellationError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('cancelNotification', handleCancellationError);
+    };
+  }, [handleCancellationError]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
