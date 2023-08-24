@@ -48,7 +48,7 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
- * @param disableDownloads for disable documents
+ * @param disableDownloads for disable downloads
  */
 const NotificationDetailTimeline = ({
   recipients,

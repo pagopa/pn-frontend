@@ -30,6 +30,9 @@ type Props = {
 
   // api id for ApiErrorWrapper
   apiId: string;
+
+  // for disabled downloads
+  disableDownloads?: boolean;
 };
 
 /*
@@ -74,12 +77,6 @@ const NotificationRelatedDowntimes = (props: Props) => {
   const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title', 'DISSERVIZI');
 
   const [shouldFetchEvents, setShouldFetchEvents] = useState<boolean>(false);
-
-  const isCancelled = !!props.notificationStatusHistory.find(
-    (el) =>
-      el.status === NotificationStatus.CANCELLED ||
-      el.status === NotificationStatus.CANCELLATION_IN_PROGRESS
-  );
 
   useDownloadDocument({
     url: props.downtimeLegalFactUrl,
@@ -233,7 +230,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                             event.legalFactId as string
                           );
                         }}
-                        disabled={isCancelled}
+                        disabled={props.disableDownloads}
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',

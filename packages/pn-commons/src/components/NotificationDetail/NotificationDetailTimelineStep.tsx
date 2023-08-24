@@ -44,7 +44,7 @@ type Props = {
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
   eventTrackingCallbackShowMore?: () => void;
-  notificationIsCancelled?: boolean;
+  disableDownloads?: boolean;
 };
 
 /**
@@ -88,7 +88,7 @@ const timelineStepCmp = (
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
- * @param notificationIsCancelled if notification is disabled
+ * @param disableDownloads if notification is disabled
  */
 
 const NotificationDetailTimelineStep = ({
@@ -102,7 +102,7 @@ const NotificationDetailTimelineStep = ({
   historyButtonLabel,
   historyButtonClickHandler,
   eventTrackingCallbackShowMore,
-  notificationIsCancelled,
+  disableDownloads,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -180,7 +180,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
-                disabled={notificationIsCancelled}
+                disabled={disableDownloads}
               >
                 {getLegalFactLabel(
                   lf.step,

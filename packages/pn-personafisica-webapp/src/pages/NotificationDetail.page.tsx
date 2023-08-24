@@ -83,7 +83,9 @@ const NotificationDetail = () => {
   );
 
   const currentRecipient = notification && notification.currentRecipient;
-  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
+  const isCancelled =
+    notification.notificationStatus === NotificationStatus.CANCELLED ||
+    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
@@ -352,6 +354,7 @@ const NotificationDetail = () => {
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                  disableDownloads={isCancelled}
                 />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} elevation={0}>
