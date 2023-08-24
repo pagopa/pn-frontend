@@ -1832,6 +1832,53 @@ describe('Populate payment history', () => {
     expect(mappedPayments).toStrictEqual(res);
   });
 
+  it('When populatePaymentHistory receive paymentsToEvaluate param, it should map only these payments', () => {
+    const paymentToEvaluate: Array<{ noticeCode: string; creditorTaxId: string }> = [
+      { creditorTaxId: paymentInfo[0].creditorTaxId, noticeCode: paymentInfo[0].noticeCode },
+    ];
+
+    let res: Array<PaymentHistory> = [];
+
+    recipient.payments!.forEach((item, index) => {
+      if (
+        paymentToEvaluate?.findIndex(
+          (payment) =>
+            payment.creditorTaxId === item.pagoPA?.creditorTaxId &&
+            payment.noticeCode === item.pagoPA?.noticeCode
+        ) !== -1
+      ) {
+        const checkoutSucceded =
+          paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+
+        const timelineEvent = notificationToFe.timeline.find(
+          (event) =>
+            event.category === TimelineCategory.PAYMENT &&
+            (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+            (event.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+        )?.details;
+
+        res = [
+          ...res,
+          {
+            pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
+            f24Data: item.f24Data,
+          } as PaymentHistory,
+        ];
+      }
+    });
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      notificationToFe.recipients,
+      paymentInfo,
+      paymentToEvaluate
+    );
+
+    expect(mappedPayments).toHaveLength(1);
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
   it('With empty external registry it should return the mapped array with only timeline info', () => {
     const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
       const timelineEvent = notificationToFe.timeline.find(

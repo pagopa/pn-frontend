@@ -68,8 +68,12 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(chip).toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show badge when status is FAILED and not show radio', () => {
-    const item = { ...pagoPAItem, status: PaymentStatus.FAILED };
+  it('renders NotificationPaymentPagoPAItem - should show badge when status is FAILED (expired) and not show radio', () => {
+    const item = {
+      ...pagoPAItem,
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.PAYMENT_EXPIRED,
+    };
     const result = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
@@ -142,7 +146,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.GENERIC_ERROR,
-      errorCode: PaymentInfoDetail.GENERIC_ERROR,
     };
     const handleReloadPaymentMk = jest.fn();
     const result = render(
@@ -190,7 +193,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
-      errorCode: PaymentInfoDetail.GENERIC_ERROR,
       detail: PaymentInfoDetail.GENERIC_ERROR,
     };
     const result = render(
@@ -213,7 +215,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
-      errorCode: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
       detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
     };
     const result = render(
@@ -237,7 +238,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
-      errorCode: PaymentInfoDetail.DOMAIN_UNKNOWN,
       detail: PaymentInfoDetail.DOMAIN_UNKNOWN,
     };
     const result = render(
@@ -261,7 +261,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
-      errorCode: PaymentInfoDetail.PAYMENT_UNKNOWN,
       detail: PaymentInfoDetail.PAYMENT_UNKNOWN,
     };
     const result = render(
@@ -285,7 +284,6 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
-      errorCode: PaymentInfoDetail.PAYMENT_DUPLICATED,
       detail: PaymentInfoDetail.PAYMENT_DUPLICATED,
     };
     const result = render(

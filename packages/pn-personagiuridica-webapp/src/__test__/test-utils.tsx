@@ -55,6 +55,11 @@ const customRender = (
     ...renderOptions,
   });
 };
+const createMockedStore = (preloadedState: any) =>
+  configureStore({
+    reducer: appReducers,
+    preloadedState,
+  });
 
 const axe = configureAxe({
   rules: {
@@ -160,4 +165,4 @@ export * from '@testing-library/react';
 export { customRender as render };
 export { axe };
 // utility functions
-export { mockApi };
+export { mockApi, createMockedStore };

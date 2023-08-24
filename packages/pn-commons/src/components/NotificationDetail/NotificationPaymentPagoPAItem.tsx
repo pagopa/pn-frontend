@@ -177,7 +177,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   }
 
   const isError =
-    pagoPAItem.errorCode &&
+    pagoPAItem.status === PaymentStatus.FAILED &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED;
 
