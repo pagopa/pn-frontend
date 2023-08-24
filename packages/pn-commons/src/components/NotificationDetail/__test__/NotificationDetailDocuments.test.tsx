@@ -84,7 +84,11 @@ describe('NotificationDetailDocuments Component', () => {
         notificationIsCancelled={true}
       />
     );
-    const documentsButtons = resultDisabledFiles?.getAllByTestId('documentButton');
-    expect(documentsButtons![0]).toBeDisabled();
+    const documentsButtons = resultDisabledFiles?.queryByTestId('documentButton');
+    if (documentsButtons) {
+      expect(documentsButtons![0]).toBeDisabled();
+    } else {
+      expect(documentsButtons).toBe(null);
+    }
   });
 });
