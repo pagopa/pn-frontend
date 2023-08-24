@@ -1,13 +1,11 @@
-/* eslint-disable functional/no-let */
-import App from '../App';
-import i18n from '../i18n';
-import * as sidemenuActions from '../redux/sidemenu/actions';
-
-/* eslint-disable import/order */
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
+
+import App from '../App';
+import i18n from '../i18n';
+import * as sidemenuActions from '../redux/sidemenu/actions';
 import { act, render, screen } from './test-utils';
 
 // mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch;

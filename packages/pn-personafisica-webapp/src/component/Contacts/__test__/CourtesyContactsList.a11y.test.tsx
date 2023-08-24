@@ -1,10 +1,9 @@
 import { fail } from 'assert';
 import * as React from 'react';
-import { act, RenderResult } from "../../../__test__/test-utils";
 
-import { axe, render } from "../../../__test__/test-utils";
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
-import CourtesyContactsList from "../CourtesyContactsList";
+import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
 jest.mock('react-i18next', () => ({
@@ -14,21 +13,23 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockedContacts: Array<DigitalAddress> = [{
-  addressType: 'courtesy',
-  recipientId: 'recipient1',
-  senderId: 'default',
-  channelType: CourtesyChannelType.SMS,
-  value: '3331234567',
-  code: '12345',
-}, {
-  addressType: 'courtesy',
-  recipientId: 'recipient1',
-  senderId: 'default',
-  channelType: CourtesyChannelType.EMAIL,
-  value: 'test@test.com',
-  code: '54321',
-},
+const mockedContacts: Array<DigitalAddress> = [
+  {
+    addressType: 'courtesy',
+    recipientId: 'recipient1',
+    senderId: 'default',
+    channelType: CourtesyChannelType.SMS,
+    value: '3331234567',
+    code: '12345',
+  },
+  {
+    addressType: 'courtesy',
+    recipientId: 'recipient1',
+    senderId: 'default',
+    channelType: CourtesyChannelType.EMAIL,
+    value: 'test@test.com',
+    code: '54321',
+  },
 ];
 
 describe('CourtesyContactsList Component', () => {
@@ -44,11 +45,11 @@ describe('CourtesyContactsList Component', () => {
       );
     });
 
-    if(result){
+    if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 
@@ -61,11 +62,11 @@ describe('CourtesyContactsList Component', () => {
       );
     });
 
-    if(result){
+    if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });

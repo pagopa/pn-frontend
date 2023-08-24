@@ -1,7 +1,11 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { act, render, screen } from '../../../__test__/test-utils';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+import { RenderResult, act, render } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { DELEGATIONS_BY_DELEGATOR } from '../../../api/delegations/delegations.routes';
 import * as hooks from '../../../redux/hooks';
 import MobileDelegates from '../MobileDelegates';
 
@@ -11,17 +15,6 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
-/**
- * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
- */
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-  };
-});
 
 describe('MobileDelegates Component - assuming delegates API works properly', () => {
   it('renders the empty state', () => {
@@ -49,34 +42,32 @@ describe('MobileDelegates Component - assuming delegates API works properly', ()
 });
 
 describe('MobileDelegates Component - different delegates API behaviors', () => {
-  beforeAll(() => {
-    jest.restoreAllMocks();
-  });
+  let result: RenderResult | undefined;
+  let mock: MockAdapter;
 
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+    jest.restoreAllMocks();
+  });
 
   afterEach(() => {
+    result = undefined;
+    mock.reset();
     apiOutcomeTestHelper.clearMock();
   });
 
-  it('API error', async () => {
-    await act(
-      async () =>
-        void render(<MobileDelegates />, {
-          preloadedState: {
-            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-              DELEGATION_ACTIONS.GET_DELEGATES
-            ),
-          },
-        })
-    );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
+  afterAll(() => {
+    mock.restore();
   });
 
-  it('API OK', async () => {
-    await act(async () => void render(<MobileDelegates />));
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
+  it('API error', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(500);
+    await act(async () => {
+      result = render(<MobileDelegates />);
+    });
+    expect(result?.container).toHaveTextContent('deleghe.no_delegates');
   });
 });
