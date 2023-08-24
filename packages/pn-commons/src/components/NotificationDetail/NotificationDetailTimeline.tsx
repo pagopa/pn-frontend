@@ -61,12 +61,12 @@ const NotificationDetailTimeline = ({
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
-  const isCancelled =
-    statusHistory.filter(
-      (el) =>
-        el.status ===
-        NotificationStatus.CANCELLED /* || el.status === NotificationStatus.CANCELLLATION_IN_PROGRESS */
-    ).length > 0;
+  const isCancelled = !!statusHistory.find(
+    (el) =>
+      el.status ===
+      NotificationStatus.CANCELLED /* || el.status === NotificationStatus.CANCELLLATION_IN_PROGRESS */
+  );
+
   if (!isMobile && state) {
     setState(false);
   }

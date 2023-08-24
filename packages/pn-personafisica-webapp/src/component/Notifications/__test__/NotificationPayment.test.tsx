@@ -187,6 +187,9 @@ describe('NotificationPayment component', () => {
     expect(loadingButton.querySelector('svg')).toBeInTheDocument();
     expect(loadingButton).toBeInTheDocument();
 
+    const alert = screen.queryByTestId('cancelledAlertTextPayment');
+    expect(alert).not.toBeInTheDocument();
+
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('mocked-creditorTaxId/mocked-noticeCode');

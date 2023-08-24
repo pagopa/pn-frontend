@@ -83,6 +83,9 @@ const NotificationDetail = () => {
   );
 
   const currentRecipient = notification && notification.currentRecipient;
+  const isCancelled =
+    notification.notificationStatus ===
+    NotificationStatus.CANCELLED; /* || notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS  */
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
@@ -145,6 +148,9 @@ const NotificationDetail = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
+    if (isCancelled) {
+      return;
+    }
     if (_.isObject(document)) {
       void dispatch(
         getReceivedNotificationOtherDocument({
@@ -165,6 +171,9 @@ const NotificationDetail = () => {
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
   // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
   const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
+    if (isCancelled) {
+      return;
+    }
     if ((legalFact as LegalFactId).key) {
       dispatch(resetLegalFactState());
       void dispatch(
@@ -181,10 +190,6 @@ const NotificationDetail = () => {
       );
     }
   };
-
-  const isCancelled =
-    notification.notificationStatus ===
-    NotificationStatus.CANCELLED; /* || notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS  */
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
@@ -305,7 +310,7 @@ const NotificationDetail = () => {
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
-                {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
+                {currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
                     iun={notification.iun}
                     paymentHistory={notification.paymentHistory}
