@@ -1,14 +1,14 @@
 import React from 'react';
 import * as redux from 'react-redux';
-import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
-import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
-import { render } from '../../__test__/test-utils';
-import * as actions from '../../redux/notification/actions';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
+import { RenderResult, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../redux/notification/__test__/test-utils';
+import * as actions from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
@@ -29,17 +29,6 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
-  NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => {
-    const amount = rows.find((r) => r.label === 'detail.amount');
-    const noticeCodes = rows.find((r) => r.label === 'detail.notice-code');
-    return (
-      <div>
-        <div>{noticeCodes && noticeCodes.value}</div>
-        <div>{amount && amount.value}</div>
-        Table
-      </div>
-    );
-  },
   NotificationDetailDocuments: ({
     clickHandler,
   }: {
@@ -65,6 +54,7 @@ jest.mock('@pagopa-pn/pn-commons', () => ({
 
 describe('NotificationDetail Page (one recipient)', () => {
   let result: RenderResult;
+
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
 
@@ -75,6 +65,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     // mock action
     const actionSpy = jest.spyOn(actions, 'getSentNotification');
     actionSpy.mockImplementation(mockActionFn);
+
     // render component
     result = render(<NotificationDetail />, {
       preloadedState: {
@@ -87,6 +78,20 @@ describe('NotificationDetail Page (one recipient)', () => {
       },
     });
   });
+
+  const changeStatus = (status: NotificationStatus) => {
+    result.unmount();
+    result = render(<NotificationDetail />, {
+      preloadedState: {
+        notificationState: {
+          notification: { ...notificationToFe, notificationStatus: status },
+          documentDownloadUrl: 'mocked-download-url',
+          legalFactDownloadUrl: 'mocked-legal-fact-url',
+        },
+        userState: { user: { organization: { id: 'mocked-sender' } } },
+      },
+    });
+  };
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -101,7 +106,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
-    expect(result.container).toHaveTextContent(/Table/i);
+    expect(result.getByTestId('detailTable')).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/1,30 €/i);
     expect(result.container).toHaveTextContent(
       `${notificationToFe.recipients[0].payment?.creditorTaxId} - ${notificationToFe.recipients[0].payment?.noticeCode}`
@@ -134,31 +139,27 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
-  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
-  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
-  test.skip('clicks on the cancel button and on close modal', async () => {
-    const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
-    fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => result.queryByTestId('modalId'));
-    expect(modal).toBeInTheDocument();
-    const closeModalBtn = modal?.querySelector('[data-testid="modalCloseBtnId"]');
-    fireEvent.click(closeModalBtn!);
-    await waitFor(() => expect(modal).not.toBeInTheDocument());
+  test('check alert on screen with change status', () => {
+    changeStatus(NotificationStatus.CANCELLED);
+    const alert = result.getByTestId('alert');
+    expect(alert).toBeInTheDocument();
+    expect(result.container).toHaveTextContent('detail.alert-cancellation-confirmed');
+    changeStatus(NotificationStatus.CANCELLATION_IN_PROGRESS);
+    expect(result.container).toHaveTextContent('detail.alert-cancellation-in-progress');
+    changeStatus(NotificationStatus.DELIVERED);
+    expect(alert).not.toBeInTheDocument();
   });
 
-  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
-  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test.skip('clicks on the cancel button and on confirm button', async () => {
+    // bisogna attendere che il rework sui test sia terminato per poter testare la chiamata all'api
+    // Andrea Cimini - 23/08/2023
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => result.queryByTestId('modalId'));
+    const modal = await waitFor(() => result.getByTestId('modalId'));
     expect(modal).toBeInTheDocument();
-    const modalCloseAndProceedBtn = modal?.querySelector(
-      '[data-testid="modalCloseAndProceedBtnId"]'
-    );
+    const modalCloseAndProceedBtn = within(modal).getByTestId('modalCloseAndProceedBtnId');
     fireEvent.click(modalCloseAndProceedBtn!);
     await waitFor(() => expect(modal).not.toBeInTheDocument());
-    expect(mockNavigateFn).toBeCalledTimes(1);
   });
 });
 
@@ -202,7 +203,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
       notificationToFeMultiRecipient.subject
     );
     expect(result.container).toHaveTextContent('mocked-abstract');
-    expect(result.container).toHaveTextContent(/Table/i);
+    expect(result.getByTestId('detailTable')).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/2,00 €/i);
     for (const recipient of notificationToFeMultiRecipient.recipients) {
       expect(result.container).toHaveTextContent(

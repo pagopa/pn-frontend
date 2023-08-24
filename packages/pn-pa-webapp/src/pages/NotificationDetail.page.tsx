@@ -1,72 +1,79 @@
 import _ from 'lodash';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Typography,
-  DialogTitle,
-  Grid,
-  Paper,
-  Stack,
-  Alert,
-} from '@mui/material';
-import {
-  // PN-1714
-  // NotificationStatus,
+  ApiError,
+  AppResponse,
+  AppResponsePublisher,
+  GetNotificationDowntimeEventsParams, // PN-1714
   LegalFactId,
   NotificationDetailDocuments,
-  NotificationDetailTable,
-  NotificationDetailTableRow,
-  NotificationDetailTimeline,
-  PnBreadcrumb,
-  TitleBox,
-  useIsMobile,
-  NotificationDetailRecipient,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  formatEurocentToCurrency,
-  TimedMessage,
-  useDownloadDocument,
   NotificationDetailOtherDocument,
-  NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
+  NotificationDetailTimeline,
   NotificationPaidDetail,
-  dataRegex,
+  NotificationRelatedDowntimes,
+  NotificationStatus,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
+  appStateActions,
+  useDownloadDocument,
+  useErrors,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
 import {
+  NOTIFICATION_ACTIONS,
+  cancelNotification,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import { RootState } from '../redux/store';
+import { ServerResponseErrorCode } from '../utils/AppError/types';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
+import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
 
-const NotificationDetail = () => {
+const AlertNotificationCancel: React.FC<{ notificationStatus: NotificationStatus }> = (
+  notification
+) => {
+  const { t } = useTranslation(['notifiche']);
+
+  if (
+    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
+    notification.notificationStatus === NotificationStatus.CANCELLED
+  ) {
+    return (
+      <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
+        <Typography component="span" variant="body1">
+          {notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
+            ? t('detail.alert-cancellation-in-progress')
+            : t('detail.alert-cancellation-confirmed')}
+        </Typography>
+      </Alert>
+    );
+  }
+
+  return <></>;
+};
+
+const NotificationDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
@@ -89,10 +96,7 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
   const { recipients } = notification;
-  const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-  const recipientsWithAltNoticeCode = recipients.filter(
-    (recipient) => recipient.payment?.noticeCodeAlternative
-  );
+
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
    * in pn-commons (hence cannot access the i18n files) used in this page
@@ -102,129 +106,6 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-
-  const getRecipientsNoticeCodeField = (
-    filteredRecipients: Array<NotificationDetailRecipient>,
-    alt: boolean = false
-  ): ReactNode => {
-    if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient, index) => (
-        <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
-          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
-        </Box>
-      ));
-    }
-    return (
-      <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
-        {alt
-          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
-          : filteredRecipients[0]?.payment?.noticeCode}
-      </Box>
-    );
-  };
-
-  const getTaxIdLabel = (taxId: string): string => {
-    const isCF11 = dataRegex.pIva.test(taxId);
-    return isCF11 ? 'detail.tax-id-organization-recipient' : 'detail.tax-id-citizen-recipient';
-  };
-
-  const unfilteredDetailTableRows: Array<{
-    label: string;
-    rawValue: string | undefined;
-    value: ReactNode;
-  }> = [
-    {
-      label: t('detail.sender', { ns: 'notifiche' }),
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-    },
-    {
-      label: t('detail.recipient', { ns: 'notifiche' }),
-      rawValue: recipients.length > 1 ? '' : recipients[0]?.denomination,
-      value: <Box fontWeight={600}>{recipients[0]?.denomination}</Box>,
-    },
-    {
-      label:
-        recipients.length > 1
-          ? t('detail.recipients', { ns: 'notifiche' })
-          : t(getTaxIdLabel(recipients[0]?.taxId), { ns: 'notifiche' }),
-      rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: (
-        <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
-              {recipients.length > 1
-                ? `${recipient.taxId} - ${recipient.denomination}`
-                : recipient.taxId}
-            </Box>
-          ))}
-        </>
-      ),
-    },
-    {
-      label: t('detail.date', { ns: 'notifiche' }),
-      rawValue: notification.sentAt,
-      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
-    },
-    {
-      label: t('detail.payment-terms', { ns: 'notifiche' }),
-      rawValue: notification.paymentExpirationDate,
-      value: (
-        <Box fontWeight={600} display="inline">
-          {notification.paymentExpirationDate}
-        </Box>
-      ),
-    },
-    {
-      label: t('detail.amount', { ns: 'notifiche' }),
-      rawValue: notification.amount
-        ? formatEurocentToCurrency(notification.amount).toString()
-        : undefined,
-      value: (
-        <Box fontWeight={600}>
-          {notification.amount && formatEurocentToCurrency(notification.amount)}
-        </Box>
-      ),
-    },
-    {
-      label: t('detail.iun', { ns: 'notifiche' }),
-      rawValue: notification.iun,
-      value: <Box fontWeight={600}>{notification.iun}</Box>,
-    },
-    {
-      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
-      rawValue: notification.cancelledIun,
-      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
-      label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
-    },
-    {
-      label: t('detail.secondary-notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithAltNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
-    },
-    {
-      label: t('detail.groups', { ns: 'notifiche' }),
-      rawValue: notification.group,
-      value: notification.group && (
-        <TagGroup visibleItems={4}>
-          <Tag value={notification.group} />
-        </TagGroup>
-      ),
-    },
-  ];
-  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
-    .filter((row) => row.rawValue)
-    .map((row, index) => ({
-      id: index + 1,
-      label: row.label,
-      value: row.value,
-    }));
 
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
@@ -262,19 +143,48 @@ const NotificationDetail = () => {
   };
 
   const handleCancelNotification = () => {
-    dispatch(setCancelledIun(notification.iun));
-    navigate(routes.NUOVA_NOTIFICA);
+    void dispatch(cancelNotification(notification.iun))
+      .unwrap()
+      .then(() => {
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t(`detail.cancel-notification-modal.notification-cancelled-successfully`, {
+              ns: 'notifiche',
+            }),
+          })
+        );
+        // reload notification detail
+        fetchSentNotification();
+      });
   };
 
-  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
+  const handleCancellationError = useCallback((responseError: AppResponse) => {
+    if (Array.isArray(responseError.errors)) {
+      const managedErrors = (
+        Object.keys(ServerResponseErrorCode) as Array<keyof typeof ServerResponseErrorCode>
+      ).map((key) => ServerResponseErrorCode[key]);
+      const error = responseError.errors[0];
+      if (!managedErrors.includes(error.code as ServerResponseErrorCode)) {
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t(`detail.errors.generic_error.message`, {
+              ns: 'notifiche',
+            }),
+          })
+        );
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }, []);
 
-  const hasDocumentsAvailable = !(isCancelled || !notification.documentsAvailable);
+  const hasDocumentsAvailable = !notification.documentsAvailable;
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelled) {
-        return t('detail.download-message-cancelled', { ns: 'notifiche' });
-      }
       if (hasDocumentsAvailable) {
         return type === 'aar'
           ? t('detail.download-aar-available', { ns: 'notifiche' })
@@ -284,16 +194,8 @@ const NotificationDetail = () => {
         ? t('detail.download-aar-expired', { ns: 'notifiche' })
         : t('detail.download-message-expired', { ns: 'notifiche' });
     },
-    [isCancelled, hasDocumentsAvailable]
+    [hasDocumentsAvailable]
   );
-
-  // PN-1714
-  /*
-  const openModal = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
-    setShowModal(true);
-  };
-  */
 
   const fetchSentNotification = useCallback(() => {
     if (id) {
@@ -305,6 +207,14 @@ const NotificationDetail = () => {
     fetchSentNotification();
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe('cancelNotification', handleCancellationError);
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('cancelNotification', handleCancellationError);
+    };
+  }, [handleCancellationError]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -319,6 +229,8 @@ const NotificationDetail = () => {
     (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
     []
   );
+
+  const viewMoreTimeline = () => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE);
 
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
@@ -347,77 +259,7 @@ const NotificationDetail = () => {
       <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
         {notification.abstract}
       </Typography>
-      {
-        // PN-1714
-        /*
-        <TitleBox variantTitle="h4" title={notification.subject} sx={{
-          pt: 3,
-          mb: notification.notificationStatus !== NotificationStatus.PAID ? 2 : {
-            xs: 3,
-            md: 4,
-          },
-        }}
-        mbTitle={0}></TitleBox>
-        notification.notificationStatus !== NotificationStatus.PAID && (
-        <Button
-          sx={{
-            mb: {
-              xs: 3,
-              md: 4,
-            },
-          }}
-          variant="outlined"
-          onClick={openModal}
-          data-testid="cancelNotificationBtn"
-        >
-          {t('detail.cancel-notification', { ns: 'notifiche' })}
-        </Button>
-        )
-        */
-      }
     </Fragment>
-  );
-
-  const [showModal, setShowModal] = useState(false);
-
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
-  const handleModalCloseAndProceed = () => {
-    setShowModal(false);
-    handleCancelNotification();
-  };
-
-  const ModalAlert = () => (
-    <Dialog
-      open={showModal}
-      data-testid="modalId"
-      onClose={handleModalClose}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-    >
-      <DialogTitle id="dialog-title" sx={{ p: 4 }}>
-        {t('detail.cancel-notification-modal.title', { ns: 'notifiche' })}
-      </DialogTitle>
-      <DialogContent sx={{ px: 4, pb: 4 }}>
-        <DialogContentText id="dialog-description">
-          {t('detail.cancel-notification-modal.message', { ns: 'notifiche' })}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions sx={{ px: 4, pb: 4 }}>
-        <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
-          {t('button.indietro')}
-        </Button>
-        <Button
-          onClick={handleModalCloseAndProceed}
-          variant="contained"
-          data-testid="modalCloseAndProceedBtnId"
-        >
-          {t('new-notification-button', { ns: 'notifiche' })}
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 
   const direction = isMobile ? 'column-reverse' : 'row';
@@ -438,7 +280,11 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <NotificationDetailTable rows={detailTableRows} />
+                <AlertNotificationCancel notificationStatus={notification.notificationStatus} />
+                <NotificationDetailTableSender
+                  notification={notification}
+                  onCancelNotification={handleCancelNotification}
+                />
                 {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                     <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
@@ -503,16 +349,13 @@ const NotificationDetail = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  eventTrackingCallbackShowMore={() =>
-                    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
-                  }
+                  eventTrackingCallbackShowMore={viewMoreTimeline}
                 />
               </Box>
             </Grid>
           </Grid>
         </Box>
       )}
-      <ModalAlert />
     </>
   );
 };

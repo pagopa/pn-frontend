@@ -1,11 +1,16 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 
-import { store } from '../../store';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
 import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { store } from '../../store';
 import {
+  cancelNotification,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
   getSentNotification,
@@ -42,6 +47,20 @@ const initialState = {
 };
 
 describe('Notification detail redux state tests', () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   mockAuthentication();
 
   it('Initial state', () => {
@@ -147,5 +166,12 @@ describe('Notification detail redux state tests', () => {
     const state = store.getState().notificationState;
     expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
+  });
+
+  it('Should be able to cancel notification', async () => {
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    const action = await store.dispatch(cancelNotification('mocked-iun'));
+    expect(action.type).toBe('cancelNotification/fulfilled');
+    expect(action.payload).toEqual(undefined);
   });
 });

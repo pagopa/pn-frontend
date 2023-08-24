@@ -1,27 +1,29 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import {
-  tenYearsAgo,
-  today,
   LegalFactId,
   LegalFactType,
+  NotificationDetailOtherDocument,
   formatToTimezoneString,
   getNextDay,
-  NotificationDetailOtherDocument,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   notificationsFromBe,
   notificationsToFe,
 } from '../../../redux/dashboard/__test__/test-utils';
+import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
 import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
+  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -179,6 +181,15 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('cancelNotification', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    const res = await NotificationsApi.cancelNotification('mocked-iun');
+    expect(res).toEqual(undefined);
     mock.reset();
     mock.restore();
   });

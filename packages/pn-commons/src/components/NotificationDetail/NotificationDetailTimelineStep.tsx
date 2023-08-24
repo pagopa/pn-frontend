@@ -27,6 +27,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatusHistory,
   NotificationDetailOtherDocument,
+  NotificationStatus,
 } from '../../types';
 
 type Props = {
@@ -147,6 +148,10 @@ const NotificationDetailTimelineStep = ({
         label={notificationStatusInfos.label}
         color={position === 'first' ? notificationStatusInfos.color : 'default'}
         size={position === 'first' ? 'medium' : 'small'}
+        sx={{
+          opacity:
+            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS ? '0.5' : '1',
+        }}
       />
       {showHistoryButton && historyButtonLabel ? (
         <Button
