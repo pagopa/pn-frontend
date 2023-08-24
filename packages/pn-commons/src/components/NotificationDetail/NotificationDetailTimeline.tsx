@@ -63,8 +63,8 @@ const NotificationDetailTimeline = ({
   const isMobile = useIsMobile();
   const isCancelled = !!statusHistory.find(
     (el) =>
-      el.status ===
-      NotificationStatus.CANCELLED /* || el.status === NotificationStatus.CANCELLLATION_IN_PROGRESS */
+      el.status === NotificationStatus.CANCELLED ||
+      el.status === NotificationStatus.CANCELLATION_IN_PROGRESS
   );
 
   if (!isMobile && state) {

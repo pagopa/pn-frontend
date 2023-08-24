@@ -77,8 +77,8 @@ const NotificationRelatedDowntimes = (props: Props) => {
 
   const isCancelled = !!props.notificationStatusHistory.find(
     (el) =>
-      el.status ===
-      NotificationStatus.CANCELLED /* || el.status === NotificationStatus.CANCELLATION_IN_PROGRESS */
+      el.status === NotificationStatus.CANCELLED ||
+      el.status === NotificationStatus.CANCELLATION_IN_PROGRESS
   );
 
   useDownloadDocument({

@@ -127,7 +127,7 @@ Props) => {
         </Stack>
       </Grid>
       <Grid key={'download-files-section'} item>
-        {documents && mapOtherDocuments(documents)}
+        {!notificationIsCancelled && documents ? mapOtherDocuments(documents) : []}
       </Grid>
     </Fragment>
   );

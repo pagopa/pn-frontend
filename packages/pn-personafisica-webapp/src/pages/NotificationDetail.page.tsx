@@ -84,8 +84,8 @@ const NotificationDetail = () => {
 
   const currentRecipient = notification && notification.currentRecipient;
   const isCancelled =
-    notification.notificationStatus ===
-    NotificationStatus.CANCELLED; /* || notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS  */
+    notification.notificationStatus === NotificationStatus.CANCELLED ||
+    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
@@ -242,10 +242,11 @@ const NotificationDetail = () => {
     void dispatch(getDowntimeEvents(fetchParams));
   }, []);
 
-  const fetchDowntimeLegalFactDocumentDetails = useCallback(
-    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    []
-  );
+  const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
+    if (!isCancelled) {
+      void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId));
+    }
+  }, []);
 
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
@@ -307,7 +308,7 @@ const NotificationDetail = () => {
               <Stack spacing={3}>
                 {isCancelled && (
                   <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
-                    {t('cancelled-alert-text', { ns: 'notifiche' })}
+                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
