@@ -1,6 +1,7 @@
 import { LegalFactType } from '@pagopa-pn/pn-commons';
 
 import {
+  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -18,7 +19,7 @@ describe('Notifications routes', () => {
       endDate: 'end-date',
       recipientId: 'recipient-id',
       iunMatch: 'iun-match',
-      status: '', 
+      status: '',
     });
     expect(route).toEqual(
       '/delivery/notifications/sent?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
@@ -36,7 +37,10 @@ describe('Notifications routes', () => {
   });
 
   it('should compile NOTIFICATION_DETAIL_OTHER_DOCUMENTS', () => {
-    const route = NOTIFICATION_DETAIL_OTHER_DOCUMENTS('mocked-iun', { documentId: 'mocked-doc-id', documentType: 'mocked-doc-type'});
+    const route = NOTIFICATION_DETAIL_OTHER_DOCUMENTS('mocked-iun', {
+      documentId: 'mocked-doc-id',
+      documentType: 'mocked-doc-type',
+    });
     expect(route).toEqual('/delivery-push/mocked-iun/document/mocked-doc-type');
   });
 
@@ -61,5 +65,10 @@ describe('Notifications routes', () => {
   it('should compile CREATE_NOTIFICATION', () => {
     const route = CREATE_NOTIFICATION();
     expect(route).toEqual('/delivery/requests');
+  });
+
+  it('should compile CANCEL_NOTIFICATION', () => {
+    const route = CANCEL_NOTIFICATION('mocked-iun');
+    expect(route).toEqual('/delivery-push/notifications/sent/cancel/mocked-iun');
   });
 });

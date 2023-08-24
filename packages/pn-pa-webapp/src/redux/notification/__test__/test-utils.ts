@@ -128,10 +128,6 @@ export const notificationFromBe: NotificationDetail = {
         },
         digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
       },
     },
     {
@@ -145,10 +141,6 @@ export const notificationFromBe: NotificationDetail = {
         },
         digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
       },
     },
     {
@@ -323,10 +315,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         },
         digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
       },
     },
     {
@@ -340,10 +328,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         },
         digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
       },
     },
     {
