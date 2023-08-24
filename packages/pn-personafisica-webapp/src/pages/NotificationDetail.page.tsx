@@ -83,9 +83,7 @@ const NotificationDetail = () => {
   );
 
   const currentRecipient = notification && notification.currentRecipient;
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ||
-    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
@@ -332,7 +330,7 @@ const NotificationDetail = () => {
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    notificationIsCancelled={isCancelled}
+                    disableDownloads={isCancelled}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
@@ -343,7 +341,7 @@ const NotificationDetail = () => {
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    notificationIsCancelled={isCancelled}
+                    disableDownloads={isCancelled}
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
@@ -393,6 +391,7 @@ const NotificationDetail = () => {
                   eventTrackingCallbackShowMore={() =>
                     trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
                   }
+                  disableDownloads={isCancelled}
                 />
               </Box>
             </Grid>

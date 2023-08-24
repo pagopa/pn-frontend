@@ -9,7 +9,6 @@ import {
   NotificationStatusHistory,
   NotificationDetailRecipient,
   NotificationDetailOtherDocument,
-  NotificationStatus,
 } from '../../types';
 import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
@@ -26,6 +25,7 @@ type Props = {
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
   eventTrackingCallbackShowMore?: () => void;
+  disableDownloads?: boolean;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -48,6 +48,7 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
+ * @param disableDownloads for disable documents
  */
 const NotificationDetailTimeline = ({
   recipients,
@@ -58,14 +59,10 @@ const NotificationDetailTimeline = ({
   showMoreButtonLabel,
   showLessButtonLabel,
   eventTrackingCallbackShowMore,
+  disableDownloads,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
-  const isCancelled = !!statusHistory.find(
-    (el) =>
-      el.status === NotificationStatus.CANCELLED ||
-      el.status === NotificationStatus.CANCELLATION_IN_PROGRESS
-  );
 
   if (!isMobile && state) {
     setState(false);
@@ -95,7 +92,7 @@ const NotificationDetailTimeline = ({
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
-      notificationIsCancelled={isCancelled}
+      disableDownloads={disableDownloads}
     />
   ));
 
@@ -129,7 +126,7 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
-            notificationIsCancelled={isCancelled}
+            disableDownloads={disableDownloads}
           />
         ) : (
           timelineComponent

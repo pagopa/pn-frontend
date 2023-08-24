@@ -81,7 +81,7 @@ describe('NotificationDetailDocuments Component', () => {
         documents={documents}
         clickHandler={mockClickFn}
         documentsAvailable
-        notificationIsCancelled={true}
+        disableDownloads={true}
       />
     );
     const documentsButtons = resultDisabledFiles?.queryByTestId('documentButton');
