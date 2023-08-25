@@ -1,16 +1,19 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import {
-  GetNotificationsResponse,
   NotificationStatus,
+  Sort,
   formatToTimezoneString,
   getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
+
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
+import { NotificationColumn } from '../../../models/Notifications';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
@@ -69,9 +72,8 @@ describe('Dashbaord redux state tests', () => {
         endDate: formatToTimezoneString(getNextDay(today)),
       })
     );
-    const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getReceivedNotifications/fulfilled');
-    expect(payload).toEqual(notificationsToFe);
+    expect(action.payload).toEqual(notificationsToFe);
   });
 
   it('Should be able to change pagination', () => {
@@ -81,54 +83,42 @@ describe('Dashbaord redux state tests', () => {
         size: 50,
       })
     );
-    const payload = action.payload as { page: number; size: number };
     expect(action.type).toBe('dashboardSlice/setPagination');
-    expect(payload).toEqual({
+    expect(action.payload).toEqual({
       page: 2,
       size: 50,
     });
   });
 
   it('Should be able to change sort', () => {
-    const action = store.dispatch(
-      setSorting({
-        orderBy: 'status',
-        order: 'desc',
-      })
-    );
-    const payload = action.payload as { orderBy: string; order: 'desc' | 'asc' };
+    const sort: Sort<NotificationColumn> = {
+      orderBy: 'status',
+      order: 'desc',
+    };
+    const action = store.dispatch(setSorting(sort));
     expect(action.type).toBe('dashboardSlice/setSorting');
-    expect(payload).toEqual({
+    expect(action.payload).toEqual({
       orderBy: 'status',
       order: 'desc',
     });
   });
 
   it('Should be able to change filters', () => {
-    const action = store.dispatch(
-      setNotificationFilters({
-        startDate: '2022-02-22T14:20:20.566Z',
-        endDate: '2022-02-27T14:20:20.566Z',
-        recipientId: 'mocked-recipientId',
-        status: NotificationStatus.PAID,
-        subjectRegExp: 'mocked-regexp',
-      })
-    );
-    const payload = action.payload;
-    expect(action.type).toBe('dashboardSlice/setNotificationFilters');
-    expect(payload).toEqual({
+    const filters = {
       startDate: '2022-02-22T14:20:20.566Z',
       endDate: '2022-02-27T14:20:20.566Z',
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
-    });
+    };
+    const action = store.dispatch(setNotificationFilters(filters));
+    expect(action.type).toBe('dashboardSlice/setNotificationFilters');
+    expect(action.payload).toEqual(filters);
   });
 
   it('Should be able to set mandate id', () => {
     const action = store.dispatch(setMandateId('mocked-mandate-id'));
-    const payload = action.payload;
     expect(action.type).toBe('dashboardSlice/setMandateId');
-    expect(payload).toEqual('mocked-mandate-id');
+    expect(action.payload).toEqual('mocked-mandate-id');
   });
 });

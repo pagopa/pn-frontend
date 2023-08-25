@@ -1,15 +1,10 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-export const initialState = {
-  created: false,
-  error: false,
-  entities: [],
-};
+import { CreateDelegationResponse, NewDelegationFormProps } from '../redux/delegation/types';
 
-export const createDelegationPayload = {
+export const createDelegationPayload: NewDelegationFormProps = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
   codiceFiscale: 'fiscalCode',
-  email: 'test@email.com',
   nome: 'nome',
   cognome: 'cognome',
   ragioneSociale: 'Foo SAS di Anonimo',
@@ -19,20 +14,13 @@ export const createDelegationPayload = {
   verificationCode: '00000',
 };
 
-export const createDelegationSelectedPayload = {
-  selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-  codiceFiscale: 'fiscalCode',
-  email: 'test@email.com',
-  nome: 'nome',
-  cognome: 'cognome',
-  ragioneSociale: 'Foo SAS di Anonimo',
+export const createDelegationSelectedPayload: NewDelegationFormProps = {
+  ...createDelegationPayload,
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
-  expirationDate: new Date(),
   enti: [{ name: 'test', id: 'test' }],
-  verificationCode: '00000',
 };
 
-export const createDelegationResponse = {
+export const createDelegationResponse: CreateDelegationResponse = {
   datefrom: '2022-01-01',
   dateto: '2022-01-02',
   delegate: {
@@ -42,7 +30,6 @@ export const createDelegationResponse = {
     fiscalCode: 'fiscalCode',
     companyName: 'companyName',
     person: true,
-    email: 'email@test.com',
   },
   delegator: null,
   mandateId: '1',
@@ -52,11 +39,7 @@ export const createDelegationResponse = {
 };
 
 export const createDelegationGenericErrorResponse = {
-  response: {
-    data: {
-      status: 401,
-    },
-  },
+  status: 401,
 };
 
 export const createDelegationDuplicatedErrorResponse = {

@@ -49,12 +49,15 @@ export const digitalAddresses: DigitalAddresses = {
 
 export const digitalAddressesInvalid = {
   ...digitalAddresses,
-  legal: digitalAddresses.legal.push({
-    addressType: 'legal',
-    recipientId: '123e4567-e89b-12d3-a456-426614174000',
-    senderId: 'cmp',
-    channelType: LegalChannelType.PEC,
-    value: 'nome.utente@server.it',
-    codeValid: false,
-  }),
+  legal: [
+    ...digitalAddresses.legal,
+    {
+      addressType: 'legal',
+      recipientId: '123e4567-e89b-12d3-a456-426614174000',
+      senderId: 'cmp',
+      channelType: LegalChannelType.PEC,
+      value: 'nome.utente@server.it',
+      codeValid: false,
+    },
+  ],
 };
