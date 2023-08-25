@@ -1,7 +1,7 @@
-import React from 'react';
 import { TextField } from '@mui/material';
+import React from 'react';
 
-import { fireEvent, prettyDOM, render, waitFor, within } from '../../test-utils';
+import { fireEvent, render, waitFor, within } from '../../test-utils';
 import PnAutocomplete from '../PnAutocomplete';
 
 describe('PnAutocomplete Component', () => {
@@ -14,7 +14,7 @@ describe('PnAutocomplete Component', () => {
       />
     );
     expect(result.container).toHaveTextContent(/Input label/i);
-    const button = result.queryByTitle('Open');
+    const button = result.queryByTitle('');
     fireEvent.click(button!);
     const dropdown = await waitFor(() =>
       result.baseElement.querySelector('[role="presentation"][class^="MuiAutocomplete-popper"')
