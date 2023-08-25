@@ -141,8 +141,6 @@ const NewApiKey = () => {
                           value={formik.values.groups}
                           options={groups}
                           id="groups"
-                          openText=""
-                          closeText=""
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
                           renderOption={(props, option) => (
