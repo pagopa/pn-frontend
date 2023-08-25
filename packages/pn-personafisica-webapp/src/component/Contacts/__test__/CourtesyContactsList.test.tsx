@@ -6,8 +6,6 @@ import * as hooks from '../../../redux/hooks';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-// import * as actions from '../../../redux/contact/actions';
-
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({

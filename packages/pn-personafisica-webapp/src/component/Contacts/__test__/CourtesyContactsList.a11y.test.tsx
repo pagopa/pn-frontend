@@ -1,8 +1,8 @@
 import { fail } from 'assert';
 import * as React from 'react';
 
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
-import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -13,27 +13,7 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockedContacts: Array<DigitalAddress> = [
-  {
-    addressType: 'courtesy',
-    recipientId: 'recipient1',
-    senderId: 'default',
-    channelType: CourtesyChannelType.SMS,
-    value: '3331234567',
-    code: '12345',
-  },
-  {
-    addressType: 'courtesy',
-    recipientId: 'recipient1',
-    senderId: 'default',
-    channelType: CourtesyChannelType.EMAIL,
-    value: 'test@test.com',
-    code: '54321',
-  },
-];
-
 describe('CourtesyContactsList Component', () => {
-  // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
   it('does not have basic accessibility issues (empty store)', async () => {
@@ -57,7 +37,7 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedContacts} />
+          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalAddresses.courtesy} />
         </DigitalContactsCodeVerificationProvider>
       );
     });

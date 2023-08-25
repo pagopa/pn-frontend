@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { act, RenderResult } from '../../../__test__/test-utils';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import LegalContactsList from '../LegalContactsList';
@@ -11,7 +10,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const legalAddresses: Array<DigitalAddress> = [
@@ -41,7 +40,7 @@ describe('LegalContactsList Component - accessibility tests', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });

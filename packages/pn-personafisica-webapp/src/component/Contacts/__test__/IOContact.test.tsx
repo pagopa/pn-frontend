@@ -1,9 +1,9 @@
-/* eslint-disable functional/no-let */
 import React from 'react';
 import * as redux from 'react-redux';
-import { fireEvent, render, RenderResult, screen } from '../../../__test__/test-utils';
 
-import userEvent from "@testing-library/user-event";
+import userEvent from '@testing-library/user-event';
+
+import { RenderResult, fireEvent, render, screen } from '../../../__test__/test-utils';
 import { CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import IOContact from '../IOContact';
@@ -150,7 +150,9 @@ describe('IOContact component', () => {
     it('should enable IO', async () => {
       const enableBtn = result.getByRole('button', { name: 'button.enable' });
       await userEvent.click(enableBtn);
-      const disclaimerCheckbox = result.getByRole('checkbox', { name: 'io-contact.enable-modal.checkbox' });
+      const disclaimerCheckbox = result.getByRole('checkbox', {
+        name: 'io-contact.enable-modal.checkbox',
+      });
       fireEvent.click(disclaimerCheckbox);
 
       const disclaimerConfirmButton = result.getByRole('button', {
@@ -198,7 +200,9 @@ describe('IOContact component', () => {
       const disableBtn = result.getByRole('button', { name: 'button.disable' });
       fireEvent.click(disableBtn!);
 
-      const disclaimerCheckbox = await screen.getByRole('checkbox', { name: 'io-contact.disable-modal.checkbox' });
+      const disclaimerCheckbox = await screen.getByRole('checkbox', {
+        name: 'io-contact.disable-modal.checkbox',
+      });
       fireEvent.click(disclaimerCheckbox);
       const disclaimerConfirmButton = screen.getByRole('button', {
         name: 'io-contact.disable-modal.confirm',

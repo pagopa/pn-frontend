@@ -1,7 +1,6 @@
 import React from 'react';
-import { act, screen } from '../../__test__/test-utils';
 
-import { render } from '../../__test__/test-utils';
+import { act, render, screen } from '../../__test__/test-utils';
 import AARGuard from '../AARGuard';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,

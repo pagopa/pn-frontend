@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { RenderResult, act } from '../../../__test__/test-utils';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 jest.mock('react-i18next', () => ({
@@ -25,7 +24,7 @@ describe('Filter Notifications Table Component - accessibility tests', () => {
     let result: RenderResult | undefined;
 
     await act(async () => {
-      result = render(<FilterNotifications showFilters/>);
+      result = render(<FilterNotifications showFilters />);
     });
 
     if (result) {

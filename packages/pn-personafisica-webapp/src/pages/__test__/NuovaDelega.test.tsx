@@ -1,6 +1,8 @@
+import * as redux from 'react-redux';
+
 import { RecipientType } from '@pagopa-pn/pn-commons';
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
-import * as redux from 'react-redux';
+
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import * as actions from '../../redux/newDelegation/actions';
 import { TrackEventType } from '../../utils/events';

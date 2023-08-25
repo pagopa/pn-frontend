@@ -1,10 +1,10 @@
-import { ConsentUser } from "@pagopa-pn/pn-commons";
-import React from "react";
-import * as redux from "react-redux";
-import { act, screen } from "../../__test__/test-utils";
+import React from 'react';
+import * as redux from 'react-redux';
 
-import { render } from "../../__test__/test-utils";
-import ToSGuard from "../ToSGuard";
+import { ConsentUser } from '@pagopa-pn/pn-commons';
+
+import { act, render, screen } from '../../__test__/test-utils';
+import ToSGuard from '../ToSGuard';
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   __esModule: true,
@@ -39,7 +39,7 @@ const paramsTosNotFetched = {
     isFirstAccept: false,
     consentVersion: 'mocked-version-1',
   },
-}
+};
 
 const paramsTosNotAccepted = {
   fetchedTos: true,
@@ -54,7 +54,7 @@ const paramsTosNotAccepted = {
     isFirstAccept: true,
     consentVersion: 'mocked-version-1',
   },
-}
+};
 
 const paramsPrivacyNotFetched = {
   fetchedTos: true,
@@ -69,7 +69,7 @@ const paramsPrivacyNotFetched = {
     isFirstAccept: false,
     consentVersion: 'mocked-version-1',
   },
-}
+};
 
 const paramsPrivacyNotAccepted = {
   fetchedTos: true,
@@ -84,15 +84,21 @@ const paramsPrivacyNotAccepted = {
     isFirstAccept: true,
     consentVersion: 'mocked-version-1',
   },
-}
+};
 
-const mockTosState = (params: {fetchedTos: boolean, fetchedPrivacy: boolean, tosConsent: ConsentUser, privacyConsent: ConsentUser}) => ({
+const mockTosState = (params: {
+  fetchedTos: boolean;
+  fetchedPrivacy: boolean;
+  tosConsent: ConsentUser;
+  privacyConsent: ConsentUser;
+}) => ({
   userState: {
     user: {
-      sessionToken: "mockedToken"
+      sessionToken: 'mockedToken',
     },
-    ...params
-  }});
+    ...params,
+  },
+});
 
 describe('Tests the ToSGuard component', () => {
   const mockDispatchFn = jest.fn();
@@ -136,7 +142,8 @@ describe('Tests the ToSGuard component', () => {
 
   it('renders the loading page component if privacy are not fetched', async () => {
     await act(
-      async () => void render(<ToSGuard />, { preloadedState: mockTosState(paramsPrivacyNotFetched) })
+      async () =>
+        void render(<ToSGuard />, { preloadedState: mockTosState(paramsPrivacyNotFetched) })
     );
 
     const pageComponent = screen.queryByText('loading page');
@@ -150,7 +157,8 @@ describe('Tests the ToSGuard component', () => {
 
   it('renders the loading page component if privacy are not accepted', async () => {
     await act(
-      async () => void render(<ToSGuard />, { preloadedState: mockTosState(paramsPrivacyNotAccepted) })
+      async () =>
+        void render(<ToSGuard />, { preloadedState: mockTosState(paramsPrivacyNotAccepted) })
     );
 
     const pageComponent = screen.queryByText('loading page');

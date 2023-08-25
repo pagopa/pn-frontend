@@ -1,11 +1,11 @@
-import { TextField } from '@mui/material';
 import React from 'react';
 import * as redux from 'react-redux';
-import { RenderResult, screen, waitFor } from '../../../__test__/test-utils';
 
+import { TextField } from '@mui/material';
 import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import userEvent from '@testing-library/user-event';
-import { render } from '../../../__test__/test-utils';
+
+import { RenderResult, render, screen, waitFor } from '../../../__test__/test-utils';
 import { LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import { TrackEventType } from '../../../utils/events';

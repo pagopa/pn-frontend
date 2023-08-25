@@ -1,8 +1,8 @@
-import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 import * as React from 'react';
-import { act, RenderResult } from '../../../__test__/test-utils';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
+
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
