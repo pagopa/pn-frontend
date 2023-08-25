@@ -38,7 +38,7 @@ export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [
     creditorTaxId: '77777777777',
     noticeCode: '302011686772695135',
     status: PaymentStatus.FAILED,
-    detail: PaymentInfoDetail.PAYMENT_DUPLICATED,
+    detail: PaymentInfoDetail.GENERIC_ERROR,
     detail_v2: 'GENERIC_ERROR',
     errorCode: 'GENERIC_ERROR',
     url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',

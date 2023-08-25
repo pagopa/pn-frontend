@@ -6,7 +6,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { PagoPAPaymentHistory, PaymentAttachmentSName, PaymentHistory } from '../../types';
-import { formatCurrency } from '../../utils';
+import { formatEurocentToCurrency } from '../../utils';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
   payments: Array<PaymentHistory>;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
-  handleReloadPayment: (noticeCode: string, creditorTaxId: string) => void;
+  handleReloadPayment: (payment: PagoPAPaymentHistory) => void;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -76,7 +76,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       >
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
         &nbsp;
-        {selectedPayment && selectedPayment.amount ? formatCurrency(selectedPayment.amount) : null}
+        {selectedPayment && selectedPayment.amount
+          ? formatEurocentToCurrency(selectedPayment.amount)
+          : null}
       </Button>
       <Button
         fullWidth

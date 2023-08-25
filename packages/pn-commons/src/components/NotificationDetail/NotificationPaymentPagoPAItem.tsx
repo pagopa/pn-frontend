@@ -9,8 +9,8 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../types/NotificationDetail';
-import { formatCurrency } from '../../utils';
-import { formatDateString } from '../../utils/date.utility';
+import { formatEurocentToCurrency } from '../../utils';
+import { formatDate } from '../../utils/date.utility';
 import CopyToClipboard from '../CopyToClipboard';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
@@ -18,7 +18,7 @@ interface Props {
   pagoPAItem: PagoPAPaymentHistory;
   loading: boolean;
   isSelected: boolean;
-  handleReloadPayment: (noticeCode: string, creditorTaxId: string) => void;
+  handleReloadPayment: (payment: PagoPAPaymentHistory) => void;
 }
 
 const SkeletonCard = () => {
@@ -128,8 +128,8 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           alignItems="flex-end"
           sx={{ mr: pagoPAItem.status === PaymentStatus.SUCCEEDED ? 1 : 0 }}
         >
-          <Typography variant="h6" color="primary.main">
-            {formatCurrency(pagoPAItem.amount)}
+          <Typography variant="h6" color="primary.main" data-testid="payment-amount">
+            {formatEurocentToCurrency(pagoPAItem.amount)}
           </Typography>
           {pagoPAItem.applyCostFlg && (
             <Typography
@@ -184,17 +184,26 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   const getErrorMessage = () => {
     switch (pagoPAItem.detail) {
       case PaymentInfoDetail.GENERIC_ERROR:
+      case PaymentInfoDetail.PAYMENT_DUPLICATED:
+        const isGenericError = pagoPAItem.detail === PaymentInfoDetail.GENERIC_ERROR;
         return (
           <Box display="flex" alignItems="center" gap={0.5}>
-            <InfoRounded sx={{ color: 'error.dark', width: '16px' }} />
+            <InfoRounded
+              sx={{
+                color: isGenericError ? 'error.dark' : 'text-primary',
+                width: '16px',
+              }}
+            />
             <Typography
               fontSize="12px"
               lineHeight="12px"
               fontWeight="600"
-              color="error.dark"
-              data-testid="generic-error-message"
+              color={isGenericError ? 'error.dark' : 'text-primary'}
+              data-testid={isGenericError ? 'generic-error-message' : 'payment-duplicated-message'}
             >
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.generic-error')}
+              {isGenericError
+                ? getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.generic-error')
+                : getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.duplicated')}
             </Typography>
           </Box>
         );
@@ -222,21 +231,6 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
                 />
               </Box>
             </Box>
-          </Box>
-        );
-      case PaymentInfoDetail.PAYMENT_DUPLICATED:
-        return (
-          <Box display="flex" alignItems="center" gap={0.5}>
-            <InfoRounded sx={{ color: 'text.primary', width: '16px' }} />
-            <Typography
-              fontSize="12px"
-              lineHeight="12px"
-              fontWeight="600"
-              color="text-primary"
-              data-testid="payment-duplicated-message"
-            >
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error.duplicated')}
-            </Typography>
           </Box>
         );
       default:
@@ -284,7 +278,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.due', 'Scade il')}
             </Typography>
             <Typography variant="caption-semibold" color="text.secondary">
-              {formatDateString(pagoPAItem.dueDate)}
+              {formatDate(pagoPAItem.dueDate, false)}
             </Typography>
           </Box>
         )}
@@ -296,7 +290,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
         <ButtonNaked
           color="primary"
           data-testid="reload-button"
-          onClick={() => handleReloadPayment(pagoPAItem.noticeCode, pagoPAItem.creditorTaxId)}
+          onClick={() => handleReloadPayment(pagoPAItem)}
         >
           <Refresh sx={{ width: '20px' }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}

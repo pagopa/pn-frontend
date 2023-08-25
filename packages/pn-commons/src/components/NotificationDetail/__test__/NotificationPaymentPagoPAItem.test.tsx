@@ -8,7 +8,7 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../../types';
-import { populatePaymentHistory } from '../../../utils';
+import { formatEurocentToCurrency, populatePaymentHistory } from '../../../utils';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
@@ -119,8 +119,10 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         handleReloadPayment={() => void 0}
       />
     );
-
-    expect(result.container).toHaveTextContent(/1.000,00 €/i); // TODO sostituire con variabile
+    const amountContainer = result.getByTestId('payment-amount');
+    expect(amountContainer).toHaveTextContent(
+      formatEurocentToCurrency(amount).replace(/\u00a0/g, ' ')
+    );
   });
 
   it('renders NotificationPaymentPagoPAItem - radio button should be checked if isSelected', () => {

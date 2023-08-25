@@ -132,9 +132,9 @@ const notificationSlice = createSlice({
           );
           if (paymentInfoIndex !== -1) {
             state.paymentInfo[paymentInfoIndex] = paymentInfo;
-          } else {
-            state.paymentInfo = action.payload;
+            return;
           }
+          state.paymentInfo = action.payload;
         }
       }
     });

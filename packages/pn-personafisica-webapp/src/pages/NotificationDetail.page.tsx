@@ -12,6 +12,7 @@ import {
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
   NotificationStatus,
+  PagoPAPaymentHistory,
   PaymentAttachmentSName,
   PnBreadcrumb,
   TimedMessage,
@@ -264,38 +265,44 @@ const NotificationDetail = () => {
     }
   }, []);
 
-  const fetchPaymentsInfo = useCallback(() => {
-    const paymentInfoRequest = currentRecipient?.payments?.reduce((acc: any, payment) => {
-      if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
-        acc.push({
-          noticeCode: payment.pagoPA.noticeCode,
-          creditorTaxId: payment.pagoPA.creditorTaxId,
-        });
+  const fetchPaymentsInfo = useCallback(
+    (payment?: PagoPAPaymentHistory) => {
+      // eslint-disable-next-line functional/no-let
+      let paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> = [];
+
+      if (payment) {
+        paymentInfoRequest = [
+          {
+            noticeCode: payment.noticeCode,
+            creditorTaxId: payment.creditorTaxId,
+          },
+        ];
+      } else {
+        paymentInfoRequest = currentRecipient.payments?.reduce((acc: any, payment) => {
+          if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
+            acc.push({
+              noticeCode: payment.pagoPA.noticeCode,
+              creditorTaxId: payment.pagoPA.creditorTaxId,
+            });
+          }
+          return acc;
+        }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
       }
-      return acc;
-    }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
-    if (paymentInfoRequest.length === 0) {
-      void dispatch(setF24Payments(currentRecipient?.payments));
-      return;
-    }
+      if (paymentInfoRequest.length === 0) {
+        void dispatch(setF24Payments(currentRecipient.payments));
+        return;
+      }
 
-    void dispatch(
-      getNotificationPaymentInfo({
-        taxId: currentRecipient.taxId,
-        paymentInfoRequest,
-      })
-    ).then(() => setPaymentLoading(false));
-  }, [currentRecipient.payments]);
-
-  const handleReloadPayment = (noticeCode: string, creditorTaxId: string) => {
-    void dispatch(
-      getNotificationPaymentInfo({
-        taxId: currentRecipient.taxId,
-        paymentInfoRequest: [{ noticeCode, creditorTaxId }],
-      })
-    );
-  };
+      void dispatch(
+        getNotificationPaymentInfo({
+          taxId: currentRecipient.taxId,
+          paymentInfoRequest,
+        })
+      ).then(() => setPaymentLoading(false));
+    },
+    [currentRecipient.payments]
+  );
 
   useEffect(() => {
     if (checkIfUserHasPayments) {
@@ -395,7 +402,7 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
-                        handleReloadPayment={handleReloadPayment}
+                        handleReloadPayment={fetchPaymentsInfo}
                       />
                     </ApiErrorWrapper>
                   </Paper>
