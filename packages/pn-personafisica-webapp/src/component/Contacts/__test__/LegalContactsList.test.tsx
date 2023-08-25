@@ -1,8 +1,14 @@
 import React from 'react';
 import * as redux from 'react-redux';
-import { RenderResult, act, fireEvent, screen, waitFor } from '../../../__test__/test-utils';
 
-import { render } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../__test__/test-utils';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';

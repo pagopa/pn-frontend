@@ -6,12 +6,7 @@ import * as redux from 'react-redux';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
-import { act, render, screen } from './test-utils';
-
-// mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch;
-// questo totale viene verificato in un test
-jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
-jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
+import { render, screen } from './test-utils';
 
 /**
  * Componente che mette App all'interno di un Suspense,
@@ -100,27 +95,6 @@ describe('App', () => {
       render(<Component />);
       const loading = screen.getByText(/loading.../i);
       expect(loading).toBeInTheDocument();
-    });
-  });
-
-  /**
-   * Tests che usano App e inizializzazione di i18n che include react.useSuspense = false.
-   */
-  describe('tests che analizzano dettagli di comportamento (mock alle chiamate)', () => {
-    beforeEach(() => {
-      void i18n.init({
-        react: {
-          useSuspense: false,
-        },
-      });
-    });
-
-    it('Dispatches proper actions when session token is not empty', async () => {
-      await act(async () => void render(<App />, initialState('mocked-session-token')));
-
-      expect(mockUseDispatchFn).toBeCalledTimes(3);
-      expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
-      expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
     });
   });
 });

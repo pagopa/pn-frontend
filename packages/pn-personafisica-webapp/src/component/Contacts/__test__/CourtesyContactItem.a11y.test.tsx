@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { axe, render, act, RenderResult } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 

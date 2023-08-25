@@ -9,11 +9,6 @@ import { TrackEventType } from '../../utils/events';
 import * as trackingFunctions from '../../utils/mixpanel';
 import NuovaDelega from '../NuovaDelega.page';
 
-jest.mock('../../component/Deleghe/VerificationCodeComponent', () => ({
-  __esModule: true,
-  default: () => <div>verification code</div>,
-}));
-
 jest.mock('../../utils/delegation.utility', () => ({
   ...jest.requireActual('../../utils/delegation.utility'),
   generateVCode: () => 'verification code',

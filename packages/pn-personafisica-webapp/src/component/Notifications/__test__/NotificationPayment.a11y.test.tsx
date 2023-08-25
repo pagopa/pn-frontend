@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import {
   doMockUseDispatch,
   mockedNotificationDetailPayment,
@@ -7,11 +8,12 @@ import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import NotificationPayment from '../NotificationPayment';
 
 jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
-  Trans: () => 'mocked-text',
 }));
 
 describe('NotificationPayment component - accessibility tests', () => {
