@@ -104,8 +104,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
         params.taxId,
         notificationState.notification.timeline,
         notificationState.notification.recipients,
-        paymentInfo,
-        params.paymentInfoRequest
+        paymentInfo
       );
     } catch (e) {
       return rejectWithValue(e);

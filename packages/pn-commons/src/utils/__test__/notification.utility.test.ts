@@ -1832,20 +1832,14 @@ describe('Populate payment history', () => {
     expect(mappedPayments).toStrictEqual(res);
   });
 
-  it('When populatePaymentHistory receive paymentsToEvaluate param, it should map only these payments', () => {
-    const paymentToEvaluate: Array<{ noticeCode: string; creditorTaxId: string }> = [
-      { creditorTaxId: paymentInfo[0].creditorTaxId, noticeCode: paymentInfo[0].noticeCode },
-    ];
-
+  it('When populatePaymentHistory receive only one payment from checkout it should map only this payment', () => {
     let res: Array<PaymentHistory> = [];
+    let singlePaymentInfo = paymentInfo[0];
 
     recipient.payments!.forEach((item, index) => {
       if (
-        paymentToEvaluate?.findIndex(
-          (payment) =>
-            payment.creditorTaxId === item.pagoPA?.creditorTaxId &&
-            payment.noticeCode === item.pagoPA?.noticeCode
-        ) !== -1
+        singlePaymentInfo?.creditorTaxId === item.pagoPA?.creditorTaxId &&
+        singlePaymentInfo.noticeCode === item.pagoPA?.noticeCode
       ) {
         const checkoutSucceded =
           paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
@@ -1871,8 +1865,7 @@ describe('Populate payment history', () => {
       recipient.taxId,
       notificationToFe.timeline,
       notificationToFe.recipients,
-      paymentInfo,
-      paymentToEvaluate
+      [singlePaymentInfo]
     );
 
     expect(mappedPayments).toHaveLength(1);

@@ -866,8 +866,7 @@ export const populatePaymentHistory = (
   userTaxId: string,
   timeline: Array<INotificationDetailTimeline>,
   recipients: Array<NotificationDetailRecipient>,
-  checkoutPayments: Array<ExtRegistriesPaymentDetails>,
-  paymentsToEvaluate?: Array<{ noticeCode: string; creditorTaxId: string }>
+  checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentHistory> => {
   const paymentHistory: Array<PaymentHistory> = [];
 
@@ -894,7 +893,8 @@ export const populatePaymentHistory = (
 
     // 4. Get payment by creditorTaxId and noticeCode from checkout
     if (
-      paymentsToEvaluate?.findIndex(
+      checkoutPayments.length &&
+      checkoutPayments?.findIndex(
         (payment) =>
           payment.creditorTaxId === userPayment.pagoPA?.creditorTaxId &&
           payment.noticeCode === userPayment.pagoPA?.noticeCode

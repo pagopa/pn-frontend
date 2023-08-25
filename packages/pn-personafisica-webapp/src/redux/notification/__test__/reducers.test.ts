@@ -312,8 +312,7 @@ describe('Notification detail redux state tests', () => {
       recipient.taxId,
       notificationToFe.timeline,
       notificationToFe.recipients,
-      [{ ...failedPayment!, status: PaymentStatus.SUCCEEDED }],
-      paymentInfoRequest
+      [{ ...failedPayment!, status: PaymentStatus.SUCCEEDED }]
     );
 
     const actualState = mockedStore.getState().notificationState.paymentInfo;
@@ -369,8 +368,7 @@ describe('Notification detail redux state tests', () => {
       recipient.taxId,
       notificationToFe.timeline,
       notificationToFe.recipients,
-      [failedPayment!],
-      paymentInfoRequest
+      [failedPayment!]
     );
 
     const actualState = mockedStore.getState().notificationState.paymentInfo;
