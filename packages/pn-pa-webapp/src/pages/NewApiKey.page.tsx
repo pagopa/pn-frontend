@@ -1,32 +1,32 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import {
-  useIsMobile,
-  Prompt,
-  PnBreadcrumb,
-  TitleBox,
-  PnAutocomplete,
-  SectionHeading,
-} from '@pagopa-pn/pn-commons';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
 import {
   Box,
-  Typography,
-  TextField,
-  Paper,
-  Grid,
   Button,
-  MenuItem,
+  Checkbox,
+  Grid,
   ListItemIcon,
   ListItemText,
-  Checkbox,
+  MenuItem,
+  Paper,
+  TextField,
+  Typography,
 } from '@mui/material';
+import {
+  PnAutocomplete,
+  PnBreadcrumb,
+  Prompt,
+  SectionHeading,
+  TitleBox,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
+import { useFormik } from 'formik';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import * as yup from 'yup';
 import { GroupStatus, UserGroup } from '../models/user';
+import * as routes from '../navigation/routes.const';
+import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const NewApiKey = () => {
@@ -141,6 +141,8 @@ const NewApiKey = () => {
                           value={formik.values.groups}
                           options={groups}
                           id="groups"
+                          openText=""
+                          closeText=""
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
                           renderOption={(props, option) => (
