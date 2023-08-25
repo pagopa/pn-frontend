@@ -127,7 +127,7 @@ Props) => {
         </Stack>
       </Grid>
       <Grid key={'download-files-section'} item>
-        {!disableDownloads && documents ? mapOtherDocuments(documents) : []}
+        {documents && mapOtherDocuments(documents)}
       </Grid>
     </Fragment>
   );

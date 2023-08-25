@@ -85,10 +85,6 @@ describe('NotificationDetailDocuments Component', () => {
       />
     );
     const documentsButtons = resultDisabledFiles?.queryByTestId('documentButton');
-    if (documentsButtons) {
-      expect(documentsButtons![0]).toBeDisabled();
-    } else {
-      expect(documentsButtons).toBe(null);
-    }
+    expect(documentsButtons![0]).toBeDisabled();
   });
 });

@@ -1,23 +1,14 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { NotificationDetail, NotificationStatus, TimelineCategory } from '@pagopa-pn/pn-commons';
+import {
+  Notification,
+  NotificationDetail,
+  NotificationStatus,
+  TimelineCategory,
+} from '@pagopa-pn/pn-commons';
 import { apiClient } from './apiClients';
 
-// eslint-disable-next-line functional/no-let
-let axiosResponseInterceptor: number; // outer variable
-// eslint-disable-next-line functional/no-let
-let axiosRequestInterceptor: number; // outer variable
-
-const clearInterceptor = (interceptorInstance: number, method: 'request' | 'response') => {
-  if (interceptorInstance >= 0) {
-    apiClient.interceptors[method].eject(interceptorInstance);
-  }
-};
-
 export const setUpInterceptor = (store: EnhancedStore) => {
-  clearInterceptor(axiosRequestInterceptor, 'request');
-  clearInterceptor(axiosResponseInterceptor, 'response');
-
-  axiosRequestInterceptor = apiClient.interceptors.request.use(
+  apiClient.interceptors.request.use(
     (config) => {
       /* eslint-disable functional/immutable-data */
       const token: string = store.getState().userState.user.sessionToken;
@@ -29,7 +20,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (error) => Promise.reject(error)
   );
 
-  axiosResponseInterceptor = apiClient.interceptors.response.use(
+  apiClient.interceptors.response.use(
     (response) => {
       if (response.config?.url === '/delivery/notifications/received/DKRU-XUDK-UERQ-202308-X-1') {
         const data = response.data as NotificationDetail;
@@ -40,10 +31,46 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           relatedTimelineElements: [],
         });
         data.timeline.push({
-          elementId: 'NOTIFICATION_CANCELLED.HYTD-ERPH-WDUE-202308-H-1',
+          elementId: 'NOTIFICATION_CANCELLED.DKRU-XUDK-UERQ-202308-X-1',
           timestamp: '2033-08-14T13:42:54.17675939Z',
           legalFactsIds: [],
           category: TimelineCategory.NOTIFICATION_CANCELLED,
+          details: {},
+        });
+        return {
+          data,
+          status: response.status,
+          statusText: '',
+          headers: response.headers,
+          config: response.config,
+          request: response.request,
+        };
+      } else if (response.config?.url?.startsWith('/delivery/notifications/received?startDate')) {
+        const data = response.data as { resultsPage: Array<Notification> };
+        const specificIun = data.resultsPage.find(
+          (el: Notification) => el.iun === 'DKRU-XUDK-UERQ-202308-X-1'
+        );
+        if (specificIun) {
+          specificIun.notificationStatus = NotificationStatus.CANCELLED;
+        }
+        return {
+          data,
+          status: response.status,
+          statusText: '',
+          headers: response.headers,
+          config: response.config,
+          request: response.request,
+        };
+      } else if (
+        response.config?.url === '/delivery/notifications/received/HRTX-GZQZ-DZDX-202308-G-1'
+      ) {
+        const data = response.data as NotificationDetail;
+        data.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
+        data.timeline.push({
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          timestamp: '2033-08-14T13:42:54.17675939Z',
+          legalFactsIds: [],
+          category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
           details: {},
         });
         return {

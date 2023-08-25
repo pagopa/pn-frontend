@@ -235,11 +235,13 @@ const NotificationDetail = () => {
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    const fetchParams: GetNotificationDowntimeEventsParams = {
-      startDate: fromDate,
-      endDate: toDate,
-    };
-    void dispatch(getDowntimeEvents(fetchParams));
+    if (!isCancelled) {
+      const fetchParams: GetNotificationDowntimeEventsParams = {
+        startDate: fromDate,
+        endDate: toDate,
+      };
+      void dispatch(getDowntimeEvents(fetchParams));
+    }
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
@@ -327,7 +329,7 @@ const NotificationDetail = () => {
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={isCancelled ? [] : notification.documents}
+                    documents={notification.documents}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
