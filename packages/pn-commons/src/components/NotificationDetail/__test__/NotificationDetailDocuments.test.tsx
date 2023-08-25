@@ -84,7 +84,7 @@ describe('NotificationDetailDocuments Component', () => {
         disableDownloads={true}
       />
     );
-    const documentsButtons = resultDisabledFiles?.queryByTestId('documentButton');
-    expect(documentsButtons![0]).toBeDisabled();
+    const documentsButtons = resultDisabledFiles?.getByTestId('documentButton');
+    expect(documentsButtons).toHaveAttribute('disabled');
   });
 });

@@ -235,13 +235,11 @@ const NotificationDetail = () => {
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    if (!isCancelled) {
-      const fetchParams: GetNotificationDowntimeEventsParams = {
-        startDate: fromDate,
-        endDate: toDate,
-      };
-      void dispatch(getDowntimeEvents(fetchParams));
-    }
+    const fetchParams: GetNotificationDowntimeEventsParams = {
+      startDate: fromDate,
+      endDate: toDate,
+    };
+    void dispatch(getDowntimeEvents(fetchParams));
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {

@@ -256,6 +256,7 @@ const NotificationDetailTimelineStep = ({
             {timelineStatusInfos.description}&nbsp;
             {s.legalFactsIds &&
               s.legalFactsIds.length > 0 &&
+              !disableDownloads &&
               s.legalFactsIds.map((lf) => (
                 <Typography
                   fontSize={14}
