@@ -1,243 +1,165 @@
-import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { act, render, screen } from '../../__test__/test-utils';
+import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
+import { store } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
-import * as routes from '../routes.const';
-
-const SessionGuardWithErrorPublisher = () => (
-  <>
-    <ResponseEventDispatcher />
-    <AppResponseMessage />
-    <SessionGuard />
-  </>
-);
-
-const mockNavigateFn = jest.fn(() => {});
-
-/* eslint-disable functional/no-let */
-let mockLocationHash: string; // #token=mocked_token
-let mockLocationPath: string; // e.g. "/" or routes.NOTIFICHE
-let mockLocationSearch: string;
-
-jest.mock('react-router-dom', () => {
-  const original = jest.requireActual('react-router-dom');
-  return {
-    ...original,
-    Outlet: () => <div>Generic Page</div>,
-    useNavigate: () => mockNavigateFn,
-    useLocation: () => ({
-      hash: mockLocationHash,
-      search: mockLocationSearch,
-      pathname: mockLocationPath,
-    }),
-  };
-});
 
 jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: () => 'mocked verify description',
 }));
 
-const mockSessionCheckFn = jest.fn(() => {});
-
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    useSessionCheck: () => mockSessionCheckFn,
-    SessionModal: ({ title }: { title: string }) => (
-      <>
-        <div>Session Modal</div>
-        <div>{title}</div>
-      </>
-    ),
-  };
-});
+const Guard = () => (
+  <Routes>
+    <Route path="/" element={<SessionGuard />}>
+      <Route path="/" element={<div>Generic Page</div>} />
+    </Route>
+  </Routes>
+);
 
 describe('SessionGuard Component', () => {
+  const original = window.location;
   let mock: MockAdapter;
-
-  beforeEach(() => {
-    mockLocationHash = '';
-    mockLocationSearch = '';
-  });
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-  });
-
-  afterAll(() => {
-    mock.restore();
-    jest.resetAllMocks();
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: { hash: '' },
+    });
   });
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
+  });
+
+  afterAll(() => {
+    mock.restore();
+    Object.defineProperty(window, 'location', { writable: true, value: original });
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck
-  it('reload - session token already present', async () => {
-    mockLocationSearch = `?${routes.DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=toto`;
+  it('session expired', async () => {
     const mockReduxState = {
-      userState: { user: { sessionToken: 'mocked-token' } },
+      userState: { user: { ...userResponse, desired_exp: 1 } },
     };
-    await act(
-      async () =>
-        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
-    );
+
+    await act(async () => {
+      render(<Guard />, { preloadedState: mockReduxState });
+    });
+
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: undefined, search: mockLocationSearch, hash: '' },
-      { replace: true }
-    );
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
+    await waitFor(() => {
+      expect(store.getState().userState.user.sessionToken).toEqual('');
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+      const logoutTitleComponent = screen.queryByText('leaving-app.title');
+      expect(logoutTitleComponent).toBeTruthy();
+    });
+  });
+
+  it('no spid token - anonymous access', async () => {
+    await act(async () => {
+      render(<Guard />);
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
   });
 
   it('reload - session token already present - with hash', async () => {
-    mockLocationPath = routes.DELEGHE;
-    mockLocationHash = '#greet=hola';
+    window.location.hash = '#greet=hola';
     const mockReduxState = {
-      userState: { user: { sessionToken: 'mocked-token' } },
+      userState: { user: { ...userResponse, desired_exp: 1 } },
     };
-    await act(
-      async () =>
-        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
-    );
+    await act(async () => {
+      render(<Guard />, { preloadedState: mockReduxState });
+    });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.DELEGHE, search: '', hash: mockLocationHash },
-      { replace: true }
-    );
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
-  // expected behavior: enters the app, does no navigate, doesn't launch sessionCheck
-  it('no spid token - anonymous access', async () => {
-    mockLocationPath = routes.TERMS_OF_SERVICE;
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(0);
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
-  });
-
-  it('sound login - no path indicated', async () => {
-    mock
-      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
-      .reply(200, userResponse);
-    mockLocationHash = '#token=200_token';
-    mockLocationPath = '/';
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.NOTIFICHE, search: '' },
-      { replace: true }
-    );
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
-  });
-
-  it('sound login - path indicated', async () => {
-    mock
-      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
-      .reply(200, userResponse);
-    mockLocationHash = '#token=200_token';
-    mockLocationPath = routes.DELEGHE;
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.DELEGHE, search: '', hash: '' },
-      { replace: true }
-    );
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
-  });
-
-  it('sound login - path indicated - with additional hash value', async () => {
-    mock
-      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
-      .reply(200, userResponse);
-    mockLocationHash = '#token=200_token&#greet=hola';
-    mockLocationPath = routes.DELEGHE;
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: routes.DELEGHE, search: '', hash: '#greet=hola' },
-      { replace: true }
-    );
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
-  });
-
-  // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
-  // (i.e. different than the logout message)
-  it('bad SPID token (403)', async () => {
-    mock
-      .onPost(AUTH_TOKEN_EXCHANGE(), {
-        authorizationToken: '403_token',
-      })
-      .reply(403);
-    mockLocationHash = '#token=403_token';
-    mockLocationPath = '/';
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const logoutComponent = screen.queryByText('Session Modal');
+  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
+  it('exchange token error (403)', async () => {
+    window.location.hash = '#token=403_token';
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(403, {
+      authorizationToken: '403_token',
+    });
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      authorizationToken: '403_token',
+    });
+    const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toBeCalledTimes(0);
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 
-  // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
-  // (i.e. different than the logout message)
-  it('bad SPID token (451)', async () => {
-    mock
-      .onPost(AUTH_TOKEN_EXCHANGE(), {
-        authorizationToken: '451_token',
-      })
-      .reply(451);
-    mockLocationHash = '#token=451_token';
-    mockLocationPath = '/';
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const logoutComponent = screen.queryByText('Session Modal');
+  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
+  it('exchange token error (451)', async () => {
+    window.location.hash = '#token=451_token';
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
+      authorizationToken: '451_token',
+    });
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      authorizationToken: '451_token',
+    });
+
+    const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('messages.451-message');
+    const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 
-  // expected behavior: does not enter the app, does no navigate, message about logout
+  // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
+  it('user logged in - TOS accepted', async () => {
+    window.location.hash = '#token=200_token';
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
+      .reply(200, userResponse);
+    await act(async () => {
+      render(<Guard />);
+    });
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        authorizationToken: '200_token',
+      });
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+  });
+
+  // cosa si aspetta: non entra nell'app, messaggio di logout
   it('logout', async () => {
-    mockLocationPath = routes.NOTIFICHE;
+    window.location.hash = '';
     const mockReduxState = {
-      userState: { user: { sessionToken: 'mocked-token' }, isClosedSession: true },
+      userState: { user: userResponse, isClosedSession: true },
     };
-    await act(
-      async () =>
-        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
-    );
-    const logoutComponent = screen.queryByText('Session Modal');
+    await act(async () => {
+      render(<Guard />, { preloadedState: mockReduxState });
+    });
+    const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeTruthy();
-    expect(mockNavigateFn).toBeCalledTimes(0);
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 });
