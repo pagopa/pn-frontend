@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { createSlice } from '@reduxjs/toolkit';
+
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -7,15 +7,16 @@ import {
   basicUserDataMatcherContents,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { PartyRole, PNRole } from '../../models/user';
+import { PNRole, PartyRole } from '../../models/user';
 import {
-  exchangeToken,
-  logout,
-  acceptToS,
-  getToSApproval,
   acceptPrivacy,
+  acceptToS,
+  exchangeToken,
   getPrivacyApproval,
+  getToSApproval,
+  logout,
 } from './actions';
 import { User } from './types';
 
@@ -93,7 +94,9 @@ const userSlice = createSlice({
       } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
-        console.debug(e);
+        if (process.env.NODE_ENV === 'development') {
+          console.debug(e);
+        }
       }
       state.isClosedSession = false;
       state.isForbiddenUser = false;

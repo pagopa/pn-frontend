@@ -7,9 +7,9 @@ import { exchangeToken, logout } from '../redux/auth/actions';
 import { User } from '../redux/auth/types';
 import { store } from '../redux/store';
 
-export const mockLogin = async (): Promise<any> => {
+export const mockLogin = async (body: User | string = userResponse): Promise<any> => {
   const mock = new MockAdapter(authClient);
-  mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
+  mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: 'mocked-token' }).reply(200, body);
   const action = store.dispatch(exchangeToken('mocked-token'));
   mock.reset();
   mock.restore();
@@ -23,7 +23,9 @@ export const mockAuthentication = () => {
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: 'mocked-token' })
+      .reply(200, userResponse);
     store.dispatch(exchangeToken('mocked-token'));
   });
 
