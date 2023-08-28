@@ -19,6 +19,7 @@ interface Props {
   isSelected: boolean;
   handleReloadPayment: () => void;
   handleDeselectPayment: () => void;
+  isSinglePayment?: boolean;
 }
 
 const SkeletonCard: React.FC = () => {
@@ -87,7 +88,8 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
   pagoPAItem: PagoPAPaymentHistory;
   isSelected: boolean;
   handleDeselectPayment: () => void;
-}> = ({ pagoPAItem, isSelected, handleDeselectPayment }) => {
+  isSinglePayment?: boolean;
+}> = ({ pagoPAItem, isSelected, handleDeselectPayment, isSinglePayment }) => {
   const isMobile = useIsMobile();
   // eslint-disable-next-line functional/no-let
   let color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' =
@@ -146,14 +148,16 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
         </Box>
       )}
       {pagoPAItem.status === PaymentStatus.REQUIRED ? (
-        <Box display="flex" justifyContent="center">
-          <Radio
-            data-testid="radio-button"
-            checked={isSelected}
-            value={pagoPAItem.noticeCode}
-            onClick={() => isSelected && handleDeselectPayment()}
-          />
-        </Box>
+        !isSinglePayment && (
+          <Box display="flex" justifyContent="center">
+            <Radio
+              data-testid="radio-button"
+              checked={isSelected}
+              value={pagoPAItem.noticeCode}
+              onClick={() => isSelected && handleDeselectPayment()}
+            />
+          </Box>
+        )
       ) : (
         <StatusTooltip
           label={getLocalizedOrDefaultLabel('notifications', `detail.payment.status.${tooltip}`)}
@@ -176,6 +180,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   isSelected,
   handleReloadPayment,
   handleDeselectPayment,
+  isSinglePayment,
 }) => {
   const isMobile = useIsMobile();
 
@@ -308,6 +313,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
           pagoPAItem={pagoPAItem}
           isSelected={isSelected}
           handleDeselectPayment={handleDeselectPayment}
+          isSinglePayment={isSinglePayment}
         />
       )}
     </Box>

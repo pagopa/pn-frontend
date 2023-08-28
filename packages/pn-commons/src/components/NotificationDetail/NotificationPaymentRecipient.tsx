@@ -1,15 +1,15 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
   NotificationDetailPayment,
   PagoPAPaymentHistory,
   PaymentAttachmentSName,
   PaymentHistory,
+  PaymentStatus,
 } from '../../types';
 import { formatEurocentToCurrency } from '../../utils';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
@@ -30,6 +30,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   handleReloadPayment,
 }) => {
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
+  const isSinglePayment =
+    payments.length === 1 && payments[0].pagoPA?.status === PaymentStatus.REQUIRED;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -42,6 +44,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const handleDeselectPayment = () => {
     setSelectedPayment(null);
   };
+
+  useEffect(() => {
+    if (isSinglePayment) {
+      setSelectedPayment(payments[0].pagoPA || null);
+    }
+  }, [isSinglePayment, payments]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
@@ -66,6 +74,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   isSelected={payment.pagoPA.noticeCode === selectedPayment?.noticeCode}
                   handleReloadPayment={() => handleReloadPayment([payment])}
                   handleDeselectPayment={handleDeselectPayment}
+                  isSinglePayment={isSinglePayment}
                 />
               </Box>
             ) : null

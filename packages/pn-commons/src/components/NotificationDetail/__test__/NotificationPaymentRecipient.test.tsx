@@ -5,6 +5,7 @@ import { notificationToFe, recipient } from '../../../__mocks__/NotificationDeta
 import { fireEvent, render, waitFor } from '../../../test-utils';
 import { populatePaymentHistory } from '../../../utils';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
+import { PaymentStatus } from '../../../types';
 
 describe('NotificationPaymentRecipient Component', () => {
   const mappedPayments = populatePaymentHistory(
@@ -162,4 +163,28 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(radioButton);
     expect(payButton).toBeDisabled();
   });
+
+  // it('Should show abled pay button and hide radio button if having only one payment', async () => {
+  //   const payment = [{ ...mappedPayments[0], status: PaymentStatus.REQUIRED }];
+  //   const result = render(
+  //     <NotificationPaymentRecipient
+  //       loading={false}
+  //       payments={payment}
+  //       handleDownloadAttachamentPagoPA={() => void 0}
+  //       onPayClick={() => void 0}
+  //       handleReloadPayment={() => void 0}
+  //     />
+  //   );
+
+  //   const payButton = result.getByTestId('pay-button');
+  //   const radioButton = result.container.querySelector(
+  //     '[data-testid="radio-button"] input'
+  //   ) as HTMLInputElement;
+
+  //   expect(radioButton).not.toBeInTheDocument();
+
+  //   await waitFor(() => {
+  //     expect(payButton).not.toBeDisabled();
+  //   });
+  // });
 });
