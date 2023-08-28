@@ -5,7 +5,7 @@ import { notificationToFe, recipient } from '../../../__mocks__/NotificationDeta
 import { fireEvent, render, waitFor } from '../../../test-utils';
 import { populatePaymentHistory } from '../../../utils';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
-import { PaymentStatus } from '../../../types';
+import { PaymentHistory, PaymentStatus } from '../../../types';
 
 describe('NotificationPaymentRecipient Component', () => {
   const mappedPayments = populatePaymentHistory(
@@ -164,27 +164,33 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(payButton).toBeDisabled();
   });
 
-  // it('Should show abled pay button and hide radio button if having only one payment', async () => {
-  //   const payment = [{ ...mappedPayments[0], status: PaymentStatus.REQUIRED }];
-  //   const result = render(
-  //     <NotificationPaymentRecipient
-  //       loading={false}
-  //       payments={payment}
-  //       handleDownloadAttachamentPagoPA={() => void 0}
-  //       onPayClick={() => void 0}
-  //       handleReloadPayment={() => void 0}
-  //     />
-  //   );
+  it('Should show abled pay button and hide radio button if having only one payment', async () => {
+    const payment = [
+      {
+        ...mappedPayments[0],
+        pagoPA: {
+          ...mappedPayments[0].pagoPA,
+          status: PaymentStatus.REQUIRED,
+        },
+      },
+    ] as PaymentHistory[];
 
-  //   const payButton = result.getByTestId('pay-button');
-  //   const radioButton = result.container.querySelector(
-  //     '[data-testid="radio-button"] input'
-  //   ) as HTMLInputElement;
+    const result = render(
+      <NotificationPaymentRecipient
+        loading={false}
+        payments={payment}
+        handleDownloadAttachamentPagoPA={() => void 0}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
 
-  //   expect(radioButton).not.toBeInTheDocument();
+    const payButton = result.getByTestId('pay-button');
+    const radioButton = result.container.querySelector(
+      '[data-testid="radio-button"] input'
+    ) as HTMLInputElement;
 
-  //   await waitFor(() => {
-  //     expect(payButton).not.toBeDisabled();
-  //   });
-  // });
+    expect(radioButton).not.toBeInTheDocument();
+    expect(payButton).not.toBeDisabled();
+  });
 });
