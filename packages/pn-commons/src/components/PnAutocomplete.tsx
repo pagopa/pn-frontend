@@ -10,6 +10,8 @@ const PnAutocomplete = <
 ) => (
   <Autocomplete
     {...props}
+    openText={props.openText || ""}
+    closeText={props.closeText || ""}
     PaperComponent={({ children }) => <Paper elevation={8}>{children}</Paper>}
   />
 );

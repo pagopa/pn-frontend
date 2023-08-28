@@ -8,22 +8,8 @@ import { EnhancedStore } from '@reduxjs/toolkit';
 
 import { apiClient } from './apiClients';
 
-// eslint-disable-next-line functional/no-let
-let axiosResponseInterceptor: number; // outer variable
-// eslint-disable-next-line functional/no-let
-let axiosRequestInterceptor: number; // outer variable
-
-const clearInterceptor = (interceptorInstance: number, method: 'request' | 'response') => {
-  if (interceptorInstance >= 0) {
-    apiClient.interceptors[method].eject(interceptorInstance);
-  }
-};
-
 export const setUpInterceptor = (store: EnhancedStore) => {
-  clearInterceptor(axiosRequestInterceptor, 'request');
-  clearInterceptor(axiosResponseInterceptor, 'response');
-
-  axiosRequestInterceptor = apiClient.interceptors.request.use(
+  apiClient.interceptors.request.use(
     (config) => {
       if (config.url === '/delivery-push/notifications/sent/cancel/PELM-VYNK-XVGV-202308-R-1') {
         return Promise.reject({ error: true, type: 'cancellation-200' });
@@ -40,7 +26,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
     (error) => Promise.reject(error)
   );
 
-  axiosResponseInterceptor = apiClient.interceptors.response.use(
+  apiClient.interceptors.response.use(
     (response) => {
       if (response.config?.url === '/delivery/notifications/sent/NRJP-NZRW-LDTL-202308-L-1') {
         const data = response.data as NotificationDetail;
