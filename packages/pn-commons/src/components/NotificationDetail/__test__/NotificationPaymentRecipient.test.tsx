@@ -137,4 +137,29 @@ describe('NotificationPaymentRecipient Component', () => {
       expect(downloadAttachmentMk).toBeCalledTimes(1);
     });
   });
+
+  it('Should disable pay button when deselect a payment', () => {
+    const result = render(
+      <NotificationPaymentRecipient
+        loading={false}
+        payments={mappedPayments}
+        handleDownloadAttachamentPagoPA={() => void 0}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
+
+    const payButton = result.getByTestId('pay-button');
+    const radioButton = result.container.querySelector(
+      '[data-testid="radio-button"] input'
+    ) as HTMLInputElement;
+
+    if (!radioButton) return;
+
+    fireEvent.click(radioButton);
+    expect(payButton).not.toBeDisabled();
+
+    fireEvent.click(radioButton);
+    expect(payButton).toBeDisabled();
+  });
 });

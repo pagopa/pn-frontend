@@ -30,7 +30,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleClick', event.target.value);
     const radioSelection = event.target.value;
 
     setSelectedPayment(
