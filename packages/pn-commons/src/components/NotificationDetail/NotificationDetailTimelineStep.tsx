@@ -45,6 +45,7 @@ type Props = {
   historyButtonClickHandler?: () => void;
   eventTrackingCallbackShowMore?: () => void;
   disableDownloads?: boolean;
+  isParty?: boolean;
 };
 
 /**
@@ -89,6 +90,7 @@ const timelineStepCmp = (
  * @param eventTrackingCallbackShowMore event tracking callback
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  * @param disableDownloads if notification is disabled
+ * @param isParty for specific render of notification
  */
 
 const NotificationDetailTimelineStep = ({
@@ -103,6 +105,7 @@ const NotificationDetailTimelineStep = ({
   historyButtonClickHandler,
   eventTrackingCallbackShowMore,
   disableDownloads,
+  isParty = true,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -150,7 +153,9 @@ const NotificationDetailTimelineStep = ({
         size={position === 'first' ? 'medium' : 'small'}
         sx={{
           opacity:
-            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS ? '0.5' : '1',
+            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty
+              ? '0.5'
+              : '1',
         }}
       />
       {showHistoryButton && historyButtonLabel ? (

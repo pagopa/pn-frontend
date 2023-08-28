@@ -395,6 +395,7 @@ const NotificationDetail = () => {
                     trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
                   }
                   disableDownloads={isCancelled}
+                  isParty={false}
                 />
               </Box>
             </Grid>
