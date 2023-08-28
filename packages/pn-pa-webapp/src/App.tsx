@@ -28,7 +28,7 @@ import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
 import { AUTH_ACTIONS, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState, store } from './redux/store';
+import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
 import * as routes from './navigation/routes.const';
@@ -37,7 +37,6 @@ import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
 import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
-import { setUpInterceptor } from './api/interceptors';
 import { getConfiguration } from './services/configuration.service';
 
 
@@ -67,7 +66,6 @@ const ActualApp = () => {
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
-  setUpInterceptor(store);
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = loggedUser.organization;

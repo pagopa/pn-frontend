@@ -65,7 +65,7 @@ Props) => {
                     sm: '20rem',
                     md: '30rem',
                     lg: '24rem',
-                    xl: '34rem'
+                    xl: '34rem',
                   },
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
@@ -93,6 +93,7 @@ Props) => {
       >
         <Grid key={'detail-documents-title'} item sx={{ mb: 3 }}>
           <Typography
+            id="notification-detail-document-attached"
             color="text.primary"
             variant="overline"
             fontWeight={700}

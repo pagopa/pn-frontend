@@ -14,7 +14,12 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
     <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
       <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
         <IllusCompleted />
-        <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
+        <Typography
+          id="api-key-succesfully-generated"
+          variant="h4"
+          color="text.primary"
+          sx={{ margin: '20px 0 10px 0' }}
+        >
           {t('api-key-succesfully-generated')}
         </Typography>
         <Typography variant="body1" color="text.primary">
@@ -50,6 +55,7 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
           />
         </Box>
         <Button
+          id="go-to-api-keys"
           variant="contained"
           sx={{ marginTop: '30px' }}
           onClick={() => navigate(routes.API_KEYS)}

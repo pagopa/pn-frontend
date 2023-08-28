@@ -5,3 +5,4 @@ export PORTALE_PF_LOGIN_CERTIFICATE_ARN="arn:aws:acm:us-east-1:558518206506:cert
 export PORTALE_PG_CERTIFICATE_ARN="arn:aws:acm:us-east-1:558518206506:certificate/3c7d089a-a052-4492-8089-1dd58c5f41c7"
 export REACT_APP_URL_API="https://webapi.dev.pn.pagopa.it/ https://pn-safestorage-eu-south-1-946373734005.s3.eu-south-1.amazonaws.com/"
 
+#export LANDING_SITE_ALTERNATE_DNS="landing-page.custom-url.pn.pagopa.it"

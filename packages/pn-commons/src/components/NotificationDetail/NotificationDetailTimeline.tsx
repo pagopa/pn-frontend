@@ -97,6 +97,7 @@ const NotificationDetailTimeline = ({
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography
+            id="notification-state"
             component="h5"
             color="text.primary"
             fontWeight={700}
