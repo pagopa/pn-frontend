@@ -16,7 +16,6 @@ import {
 import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
-
 import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,

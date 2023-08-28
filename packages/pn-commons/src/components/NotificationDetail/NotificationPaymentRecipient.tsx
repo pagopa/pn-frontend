@@ -1,7 +1,9 @@
+import React, { memo, useState } from 'react';
+
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import React, { memo, useState } from 'react';
+
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
   NotificationDetailPayment,

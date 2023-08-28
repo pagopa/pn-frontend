@@ -1,3 +1,8 @@
+import _ from 'lodash';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
@@ -22,10 +27,7 @@ import {
   useErrors,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import _ from 'lodash';
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
@@ -159,6 +161,10 @@ const NotificationDetail = () => {
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
+  const listOfPayments = paymentLoading
+    ? currentRecipient.payments?.map((item) => item as PaymentHistory) ?? []
+    : userPayments;
+
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
@@ -229,7 +235,7 @@ const NotificationDetail = () => {
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+  const hasDocumentsAvailable = !isCancelled && notification.documentsAvailable;
 
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
@@ -387,7 +393,7 @@ const NotificationDetail = () => {
                     >
                       <NotificationPaymentRecipient
                         loading={paymentLoading}
-                        payments={userPayments}
+                        payments={listOfPayments}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
                         handleReloadPayment={fetchPaymentsInfo}
