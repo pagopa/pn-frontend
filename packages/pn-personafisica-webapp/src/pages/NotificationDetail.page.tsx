@@ -192,7 +192,7 @@ const NotificationDetail = () => {
     }
   };
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+  const hasDocumentsAvailable = notification.documentsAvailable ? true : false;
 
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION

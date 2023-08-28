@@ -74,7 +74,7 @@ describe('NotificationDetailDocuments Component', () => {
     });
   });
 
-  it('renders documents with disabled our download', () => {
+  it('renders documents with disabled download', () => {
     const resultDisabledFiles = render(
       <NotificationDetailDocuments
         title="Mocked title"

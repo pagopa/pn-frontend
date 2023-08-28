@@ -256,14 +256,13 @@ const NotificationDetailTimelineStep = ({
             {timelineStatusInfos.description}&nbsp;
             {s.legalFactsIds &&
               s.legalFactsIds.length > 0 &&
-              !disableDownloads &&
               s.legalFactsIds.map((lf) => (
                 <Typography
                   fontSize={14}
                   display="inline"
                   variant="button"
-                  color="primary"
-                  sx={{ cursor: 'pointer' }}
+                  color={disableDownloads ? 'text.disabled' : 'primary'}
+                  sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
                   onClick={() => clickHandler(lf)}
                   key={
                     (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId

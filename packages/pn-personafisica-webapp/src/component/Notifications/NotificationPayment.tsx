@@ -465,7 +465,7 @@ const NotificationPayment: React.FC<Props> = ({
             sx={{ mb: 2 }}
             severity="info"
           >
-            {t('detail.payment.cancelled-alert-text-payment')}{' '}
+            {t('detail.payment.cancelled-alert-text-payment')}&nbsp;
             <Link href="" sx={{ fontSize: '16px' }} target="_blank" variant="body1">
               {t('detail.disclaimer-link')}
             </Link>

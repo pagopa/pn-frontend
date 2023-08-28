@@ -22,7 +22,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
 
   apiClient.interceptors.response.use(
     (response) => {
-      if (response.config?.url === '/delivery/notifications/received/DKRU-XUDK-UERQ-202308-X-1') {
+      if (response.config?.url === '/delivery/notifications/received/JPEM-HWLE-PURT-202308-P-1') {
         const data = response.data as NotificationDetail;
         data.notificationStatus = NotificationStatus.CANCELLED;
         data.notificationStatusHistory.push({
@@ -31,7 +31,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           relatedTimelineElements: [],
         });
         data.timeline.push({
-          elementId: 'NOTIFICATION_CANCELLED.DKRU-XUDK-UERQ-202308-X-1',
+          elementId: 'NOTIFICATION_CANCELLED.JPEM-HWLE-PURT-202308-P-1',
           timestamp: '2033-08-14T13:42:54.17675939Z',
           legalFactsIds: [],
           category: TimelineCategory.NOTIFICATION_CANCELLED,
@@ -48,7 +48,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
       } else if (response.config?.url?.startsWith('/delivery/notifications/received?startDate')) {
         const data = response.data as { resultsPage: Array<Notification> };
         const specificIun = data.resultsPage.find(
-          (el: Notification) => el.iun === 'DKRU-XUDK-UERQ-202308-X-1'
+          (el: Notification) => el.iun === 'JPEM-HWLE-PURT-202308-P-1'
         );
         if (specificIun) {
           specificIun.notificationStatus = NotificationStatus.CANCELLED;
