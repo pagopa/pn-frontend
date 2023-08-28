@@ -1,11 +1,14 @@
-import React, { ChangeEvent, memo, useState } from 'react';
-
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-
+import React, { memo, useState } from 'react';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { PagoPAPaymentHistory, PaymentAttachmentSName, PaymentHistory } from '../../types';
+import {
+  NotificationDetailPayment,
+  PagoPAPaymentHistory,
+  PaymentAttachmentSName,
+  PaymentHistory,
+} from '../../types';
 import { formatEurocentToCurrency } from '../../utils';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
@@ -14,7 +17,7 @@ type Props = {
   payments: Array<PaymentHistory>;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
-  handleReloadPayment: (payment: PagoPAPaymentHistory) => void;
+  handleReloadPayment: (payment: Array<PaymentHistory | NotificationDetailPayment>) => void;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -26,11 +29,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 }) => {
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const radioSelection = (event.target as HTMLInputElement).value;
+  const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleClick', event.target.value);
+    const radioSelection = event.target.value;
+
     setSelectedPayment(
       payments.find((item) => item.pagoPA?.noticeCode === radioSelection)?.pagoPA || null
     );
+  };
+
+  const handleDeselectPayment = () => {
+    setSelectedPayment(null);
   };
 
   return (
@@ -46,7 +55,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </Link>
       </Typography>
       <Box>
-        <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleChange}>
+        <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
           {payments.map((payment, index) =>
             payment.pagoPA ? (
               <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
@@ -54,7 +63,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   pagoPAItem={payment.pagoPA}
                   loading={loading}
                   isSelected={payment.pagoPA.noticeCode === selectedPayment?.noticeCode}
-                  handleReloadPayment={handleReloadPayment}
+                  handleReloadPayment={() => handleReloadPayment([payment])}
+                  handleDeselectPayment={handleDeselectPayment}
                 />
               </Box>
             ) : null

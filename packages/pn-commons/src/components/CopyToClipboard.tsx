@@ -12,8 +12,6 @@ interface Props {
   tooltip?: string;
   tooltipBefore?: string;
   disabled?: boolean;
-  iconProps?: SxProps<Theme>;
-  buttonProps?: SxProps<Theme>;
 }
 
 const CopyToClipboard: React.FC<Props> = ({
@@ -23,8 +21,6 @@ const CopyToClipboard: React.FC<Props> = ({
   tooltip = '',
   tooltipBefore = '',
   disabled = false,
-  iconProps,
-  buttonProps,
 }) => {
   const padding = tooltipMode ? 0 : undefined;
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
@@ -58,17 +54,17 @@ const CopyToClipboard: React.FC<Props> = ({
     <Button
       component={Link}
       color="primary"
-      sx={{ ...alertButtonStyle, ...buttonProps }}
+      sx={{ ...alertButtonStyle }}
       onClick={doCopyToClipboard}
       disabled={disabled}
       aria-label={copied ? tooltip : tooltipBefore}
     >
       {copied && (
         <Tooltip arrow={true} title={tooltip} placement="top">
-          <CheckIcon fontSize="small" sx={{ ...iconProps, m: '5px' }} />
+          <CheckIcon fontSize="small" sx={{ m: '5px' }} />
         </Tooltip>
       )}
-      {!copied && <ContentCopyIcon fontSize="small" sx={{ ...iconProps, m: '5px' }} />}
+      {!copied && <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />}
       {text}
     </Button>
   );

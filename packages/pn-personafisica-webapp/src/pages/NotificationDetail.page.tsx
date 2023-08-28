@@ -6,14 +6,15 @@ import {
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
+  NotificationDetailPayment,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
   NotificationStatus,
-  PagoPAPaymentHistory,
   PaymentAttachmentSName,
+  PaymentHistory,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
@@ -25,7 +26,6 @@ import _ from 'lodash';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
@@ -266,28 +266,16 @@ const NotificationDetail = () => {
   }, []);
 
   const fetchPaymentsInfo = useCallback(
-    (payment?: PagoPAPaymentHistory) => {
-      // eslint-disable-next-line functional/no-let
-      let paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> = [];
-
-      if (payment) {
-        paymentInfoRequest = [
-          {
-            noticeCode: payment.noticeCode,
-            creditorTaxId: payment.creditorTaxId,
-          },
-        ];
-      } else {
-        paymentInfoRequest = currentRecipient.payments?.reduce((acc: any, payment) => {
-          if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
-            acc.push({
-              noticeCode: payment.pagoPA.noticeCode,
-              creditorTaxId: payment.pagoPA.creditorTaxId,
-            });
-          }
-          return acc;
-        }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
-      }
+    (payments: Array<PaymentHistory | NotificationDetailPayment>) => {
+      const paymentInfoRequest = payments.reduce((acc: any, payment) => {
+        if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
+          acc.push({
+            noticeCode: payment.pagoPA.noticeCode,
+            creditorTaxId: payment.pagoPA.creditorTaxId,
+          });
+        }
+        return acc;
+      }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
       if (paymentInfoRequest.length === 0) {
         void dispatch(setF24Payments(currentRecipient.payments));
@@ -306,7 +294,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (checkIfUserHasPayments) {
-      fetchPaymentsInfo();
+      fetchPaymentsInfo(currentRecipient.payments ?? []);
     }
   }, [currentRecipient.payments]);
 
@@ -392,7 +380,7 @@ const NotificationDetail = () => {
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
                       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
-                      reloadAction={fetchPaymentsInfo}
+                      reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
                       mainText={t('detail.payment.message-error-fetch-payment', {
                         ns: 'notifiche',
                       })}

@@ -1,6 +1,6 @@
 import { InfoRounded, Refresh } from '@mui/icons-material';
 import { Box, Radio, Skeleton, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 import { Fragment } from 'react';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
@@ -11,17 +11,17 @@ import {
 } from '../../types/NotificationDetail';
 import { formatEurocentToCurrency } from '../../utils';
 import { formatDate } from '../../utils/date.utility';
-import CopyToClipboard from '../CopyToClipboard';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
 interface Props {
   pagoPAItem: PagoPAPaymentHistory;
   loading: boolean;
   isSelected: boolean;
-  handleReloadPayment: (payment: PagoPAPaymentHistory) => void;
+  handleReloadPayment: () => void;
+  handleDeselectPayment: () => void;
 }
 
-const SkeletonCard = () => {
+const SkeletonCard: React.FC = () => {
   const isMobile = useIsMobile();
   return (
     <Box
@@ -86,7 +86,8 @@ const SkeletonCard = () => {
 const NotificationPaymentPagoPAStatusElem: React.FC<{
   pagoPAItem: PagoPAPaymentHistory;
   isSelected: boolean;
-}> = ({ pagoPAItem, isSelected }) => {
+  handleDeselectPayment: () => void;
+}> = ({ pagoPAItem, isSelected, handleDeselectPayment }) => {
   const isMobile = useIsMobile();
   // eslint-disable-next-line functional/no-let
   let color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' =
@@ -125,7 +126,7 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           display="flex"
           flexDirection="column"
           justifyContent="center"
-          alignItems="flex-end"
+          alignItems={isMobile ? 'flex-start' : 'flex-end'}
           sx={{ mr: pagoPAItem.status === PaymentStatus.SUCCEEDED ? 1 : 0 }}
         >
           <Typography variant="h6" color="primary.main" data-testid="payment-amount">
@@ -146,7 +147,12 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
       )}
       {pagoPAItem.status === PaymentStatus.REQUIRED ? (
         <Box display="flex" justifyContent="center">
-          <Radio data-testid="radio-button" checked={isSelected} value={pagoPAItem.noticeCode} />
+          <Radio
+            data-testid="radio-button"
+            checked={isSelected}
+            value={pagoPAItem.noticeCode}
+            onClick={() => isSelected && handleDeselectPayment()}
+          />
         </Box>
       ) : (
         <StatusTooltip
@@ -169,6 +175,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   loading,
   isSelected,
   handleReloadPayment,
+  handleDeselectPayment,
 }) => {
   const isMobile = useIsMobile();
 
@@ -223,11 +230,16 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
                   &nbsp;
                   {pagoPAItem.detail_v2}
                 </Typography>
-                <CopyToClipboard
-                  getValue={() => pagoPAItem.detail_v2 || ''}
-                  tooltipMode={true}
-                  iconProps={{ color: 'text.secondary', width: '16px' }}
-                  buttonProps={{ height: 'min-content' }}
+                <CopyToClipboardButton
+                  value={() => pagoPAItem.detail_v2 || ''}
+                  size="small"
+                  sx={{
+                    '& .MuiSvgIcon-root': {
+                      width: '16px',
+                      height: '16px',
+                    },
+                    ml: 0,
+                  }}
                 />
               </Box>
             </Box>
@@ -287,16 +299,16 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
       </Box>
 
       {isError ? (
-        <ButtonNaked
-          color="primary"
-          data-testid="reload-button"
-          onClick={() => handleReloadPayment(pagoPAItem)}
-        >
+        <ButtonNaked color="primary" data-testid="reload-button" onClick={handleReloadPayment}>
           <Refresh sx={{ width: '20px' }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
         </ButtonNaked>
       ) : (
-        <NotificationPaymentPagoPAStatusElem pagoPAItem={pagoPAItem} isSelected={isSelected} />
+        <NotificationPaymentPagoPAStatusElem
+          pagoPAItem={pagoPAItem}
+          isSelected={isSelected}
+          handleDeselectPayment={handleDeselectPayment}
+        />
       )}
     </Box>
   );

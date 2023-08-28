@@ -29,6 +29,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -43,6 +44,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -58,6 +60,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -80,6 +83,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -98,6 +102,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -117,6 +122,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
     const amountContainer = result.getByTestId('payment-amount');
@@ -133,6 +139,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={true}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -141,6 +148,27 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     ) as Element;
 
     expect(radioButton).toBeChecked();
+  });
+
+  it('Should call handleDeselectPayment when radio button is selected and is clicked', async () => {
+    const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
+    const handleDeselectPaymentMk = jest.fn();
+    const result = render(
+      <NotificationPaymentPagoPAItem
+        pagoPAItem={item}
+        loading={false}
+        isSelected={true}
+        handleReloadPayment={() => void 0}
+        handleDeselectPayment={handleDeselectPaymentMk}
+      />
+    );
+
+    const radioButton = result.container.querySelector(
+      '[data-testid="radio-button"] input'
+    ) as Element;
+
+    fireEvent.click(radioButton);
+    expect(handleDeselectPaymentMk).toBeCalledTimes(1);
   });
 
   it('Should call handleReloadPayment when reload button is clicked', async () => {
@@ -156,6 +184,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={handleReloadPaymentMk}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -179,6 +208,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -203,6 +233,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -225,6 +256,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -248,6 +280,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -271,6 +304,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
@@ -294,6 +328,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
       />
     );
 
