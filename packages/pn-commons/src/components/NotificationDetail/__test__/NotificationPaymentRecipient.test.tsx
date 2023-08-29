@@ -18,7 +18,6 @@ describe('NotificationPaymentRecipient Component', () => {
   it('should render component title and subtitle', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
@@ -41,7 +40,6 @@ describe('NotificationPaymentRecipient Component', () => {
   it('should render component buttons and should be disabled', () => {
     const { getByTestId } = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
@@ -59,7 +57,6 @@ describe('NotificationPaymentRecipient Component', () => {
   it('should remove disable from buttons if there is a checked required payment', () => {
     const result = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
@@ -88,7 +85,6 @@ describe('NotificationPaymentRecipient Component', () => {
 
     const result = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={payClickMk}
@@ -116,7 +112,6 @@ describe('NotificationPaymentRecipient Component', () => {
 
     const result = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={downloadAttachmentMk}
         onPayClick={() => void 0}
@@ -142,7 +137,6 @@ describe('NotificationPaymentRecipient Component', () => {
   it('Should disable pay button when deselect a payment', () => {
     const result = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={mappedPayments}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
@@ -164,7 +158,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(payButton).toBeDisabled();
   });
 
-  it('Should show abled pay button and hide radio button if having only one payment', async () => {
+  it('Should show enabled pay button and hide radio button if having only one payment', async () => {
     const payment = [
       {
         ...mappedPayments[0],
@@ -177,7 +171,6 @@ describe('NotificationPaymentRecipient Component', () => {
 
     const result = render(
       <NotificationPaymentRecipient
-        loading={false}
         payments={payment}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}

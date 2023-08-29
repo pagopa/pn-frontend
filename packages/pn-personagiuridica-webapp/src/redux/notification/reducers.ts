@@ -13,6 +13,8 @@ import {
   PaymentInfoDetail,
   Downtime,
   PaymentHistory,
+  populatePaymentHistory,
+  ExtRegistriesPaymentDetails,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
@@ -136,6 +138,36 @@ const notificationSlice = createSlice({
           }
           state.paymentInfo = action.payload;
         }
+      }
+    });
+    builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
+      const paymentHistory = populatePaymentHistory(
+        action.meta.arg.taxId,
+        state.notification.timeline,
+        state.notification.recipients,
+        action.meta.arg.paymentInfoRequest as Array<ExtRegistriesPaymentDetails>
+      );
+
+      if (action.meta.arg.paymentInfoRequest.length === 1) {
+        const payment = state.paymentInfo.find(
+          (payment) =>
+            payment.pagoPA?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
+            payment.pagoPA?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
+        );
+
+        if (payment) {
+          payment.isLoading = true;
+        }
+        return;
+      }
+
+      if (action.meta.arg.paymentInfoRequest.length > 1) {
+        paymentHistory.forEach((payment) => {
+          state.paymentInfo.push({
+            ...payment,
+            isLoading: true,
+          });
+        });
       }
     });
     builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {

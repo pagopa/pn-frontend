@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { Fragment, memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
@@ -15,7 +15,6 @@ import { formatEurocentToCurrency } from '../../utils';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
 type Props = {
-  loading: boolean;
   payments: Array<PaymentHistory>;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
@@ -23,15 +22,14 @@ type Props = {
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
-  loading,
   payments,
   onPayClick,
   handleDownloadAttachamentPagoPA,
   handleReloadPayment,
 }) => {
+  const isSinglePayment = payments.length === 1;
+
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
-  const isSinglePayment =
-    payments.length === 1 && payments[0].pagoPA?.status === PaymentStatus.REQUIRED;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -45,11 +43,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setSelectedPayment(null);
   };
 
+  const allPaymentsIsPaid = payments.every(
+    (payment) => payment.pagoPA?.status === PaymentStatus.SUCCEEDED
+  );
+
   useEffect(() => {
     if (isSinglePayment) {
       setSelectedPayment(payments[0].pagoPA || null);
     }
-  }, [isSinglePayment, payments]);
+  }, [payments]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
@@ -63,66 +65,71 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how')}
         </Link>
       </Typography>
-      <Box>
-        <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
-          {payments.map((payment, index) =>
-            payment.pagoPA ? (
-              <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
-                <NotificationPaymentPagoPAItem
-                  pagoPAItem={payment.pagoPA}
-                  loading={loading}
-                  isSelected={payment.pagoPA.noticeCode === selectedPayment?.noticeCode}
-                  handleReloadPayment={() => handleReloadPayment([payment])}
-                  handleDeselectPayment={handleDeselectPayment}
-                  isSinglePayment={isSinglePayment}
-                />
-              </Box>
-            ) : null
-          )}
-        </RadioGroup>
-      </Box>
-      <Button
-        fullWidth
-        variant="contained"
-        data-testid="pay-button"
-        disabled={!selectedPayment}
-        onClick={() =>
-          onPayClick(
-            selectedPayment?.noticeCode,
-            selectedPayment?.creditorTaxId,
-            selectedPayment?.amount
-          )
-        }
-      >
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
-        &nbsp;
-        {selectedPayment && selectedPayment.amount
-          ? formatEurocentToCurrency(selectedPayment.amount)
-          : null}
-      </Button>
-      <Button
-        fullWidth
-        variant="outlined"
-        data-testid="download-pagoPA-notice-button"
-        disabled={!selectedPayment}
-        onClick={() => handleDownloadAttachamentPagoPA(PaymentAttachmentSName.PAGOPA)}
-      >
-        <Download fontSize="small" sx={{ mr: 1 }} />
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
-      </Button>
-      {selectedPayment &&
-      payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
-        ?.f24Data ? (
-        <Box display="flex" justifyContent="space-between" data-testid="f24-download">
-          <Typography variant="body2">
-            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
-          </Typography>
-          <ButtonNaked color="primary">
+
+      <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
+        {payments.map((payment, index) =>
+          payment.pagoPA ? (
+            <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
+              <NotificationPaymentPagoPAItem
+                pagoPAItem={payment.pagoPA}
+                loading={payment.isLoading ?? false}
+                isSelected={payment.pagoPA.noticeCode === selectedPayment?.noticeCode}
+                handleReloadPayment={() => handleReloadPayment([payment])}
+                handleDeselectPayment={handleDeselectPayment}
+                isSinglePayment={isSinglePayment}
+              />
+            </Box>
+          ) : null
+        )}
+      </RadioGroup>
+
+      {!allPaymentsIsPaid && (
+        <Fragment>
+          <Button
+            fullWidth
+            variant="contained"
+            data-testid="pay-button"
+            disabled={!selectedPayment}
+            onClick={() =>
+              onPayClick(
+                selectedPayment?.noticeCode,
+                selectedPayment?.creditorTaxId,
+                selectedPayment?.amount
+              )
+            }
+          >
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
+            &nbsp;
+            {selectedPayment && selectedPayment.amount
+              ? formatEurocentToCurrency(selectedPayment.amount)
+              : null}
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            data-testid="download-pagoPA-notice-button"
+            disabled={!selectedPayment}
+            onClick={() => handleDownloadAttachamentPagoPA(PaymentAttachmentSName.PAGOPA)}
+          >
             <Download fontSize="small" sx={{ mr: 1 }} />
-            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
-          </ButtonNaked>
-        </Box>
-      ) : null}
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
+          </Button>
+          {selectedPayment &&
+          payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
+            ?.f24Data ? (
+            <Box display="flex" justifyContent="space-between" data-testid="f24-download">
+              <Typography variant="body2">
+                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
+              </Typography>
+              <ButtonNaked color="primary">
+                <Download fontSize="small" sx={{ mr: 1 }} />
+                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
+              </ButtonNaked>
+            </Box>
+          ) : null}
+        </Fragment>
+      )}
     </Box>
   );
 };

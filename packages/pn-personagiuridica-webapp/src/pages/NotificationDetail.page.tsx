@@ -76,7 +76,6 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(true);
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -158,7 +157,7 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const checkIfUserHasPayments = (): boolean =>
+  const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
   const documentDowloadHandler = (
@@ -231,7 +230,7 @@ const NotificationDetail = () => {
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+  const hasDocumentsAvailable = !isCancelled && notification.documentsAvailable;
 
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
@@ -287,13 +286,13 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      ).then(() => setPaymentLoading(false));
+      );
     },
     [currentRecipient.payments]
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments()) {
+    if (checkIfUserHasPayments) {
       fetchPaymentsInfo(currentRecipient.payments ?? []);
     }
   }, [currentRecipient.payments]);
@@ -379,7 +378,7 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
-                {!isCancelled && checkIfUserHasPayments() && (
+                {!isCancelled && checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
                       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
@@ -389,7 +388,6 @@ const NotificationDetail = () => {
                       })}
                     >
                       <NotificationPaymentRecipient
-                        loading={paymentLoading}
                         payments={userPayments}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}

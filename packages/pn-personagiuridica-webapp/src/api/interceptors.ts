@@ -10,7 +10,9 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         return Promise.reject({ error: true, type: 'delivery' });
       }
       if (config.url === '/ext-registry/pagopa/v2/paymentinfo') {
-        return Promise.reject({ error: true, type: 'ext-registry' });
+        return new Promise((_resolve, reject) =>
+          setTimeout(() => reject({ error: true, type: 'ext-registry' }), 500)
+        );
       }
       /* eslint-disable functional/immutable-data */
       const token: string = store.getState().userState.user.sessionToken;

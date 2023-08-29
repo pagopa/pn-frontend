@@ -250,6 +250,8 @@ describe('Notification detail redux state tests', () => {
     const mockedStore = createMockedStore({
       notificationState: {
         notification: notificationToFe,
+        timeline: notificationToFe.timeline,
+        paymentInfo: notificationToFe.recipients,
       },
     });
     const paymentInfoRequest = paymentInfo.map((payment) => ({

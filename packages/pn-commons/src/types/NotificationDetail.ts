@@ -35,6 +35,7 @@ export type PagoPAPaymentHistory = PagoPAPaymentDetails & PaidDetails & ExtRegis
 export interface PaymentHistory {
   pagoPA?: PagoPAPaymentHistory;
   f24Data?: F24PaymentDetails;
+  isLoading?: boolean; // only fe
 }
 
 export type NotificationDetailTimelineDetails =

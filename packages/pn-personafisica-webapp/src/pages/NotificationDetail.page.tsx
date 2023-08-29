@@ -76,7 +76,6 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(true);
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -160,10 +159,6 @@ const NotificationDetail = () => {
 
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
-
-  const listOfPayments = paymentLoading
-    ? currentRecipient.payments?.map((item) => item as PaymentHistory) ?? []
-    : userPayments;
 
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
@@ -293,7 +288,7 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      ).then(() => setPaymentLoading(false));
+      );
     },
     [currentRecipient.payments]
   );
@@ -392,8 +387,7 @@ const NotificationDetail = () => {
                       })}
                     >
                       <NotificationPaymentRecipient
-                        loading={paymentLoading}
-                        payments={listOfPayments}
+                        payments={userPayments}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
                         handleReloadPayment={fetchPaymentsInfo}
