@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
 
-function downloadDocument(url: string) {
-  /* eslint-disable functional/immutable-data */
+function downloadDocument(url: string, isMobile?: boolean) {
   const link = document.createElement('a');
   link.href = url;
-  link.target = '_blank';
+  if (!isMobile) {
+    link.target = '_blank';
+  }
   link.rel = 'noreferrer';
   link.click();
-  /* eslint-enable functional/immutable-data */
 }
 
 type Props = {
   url?: string;
+  isMobile?: boolean;
   clearDownloadAction?: () => void;
 };
 
@@ -23,10 +24,10 @@ type Props = {
 // -------------------------------
 // Carlos Lombardi and Andrea Cimini, 2022.11.17
 // -------------------------------
-export function useDownloadDocument({ url, clearDownloadAction }: Props) {
+export function useDownloadDocument({ url, isMobile, clearDownloadAction }: Props) {
   useEffect(() => {
     if (url) {
-      downloadDocument(url);
+      downloadDocument(url, isMobile);
       clearDownloadAction && clearDownloadAction();
     }
   }, [url, clearDownloadAction]);
