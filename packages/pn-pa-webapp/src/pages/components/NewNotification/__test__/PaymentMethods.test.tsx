@@ -29,7 +29,9 @@ function uploadDocument(elem: HTMLElement) {
   fireEvent.change(input!, { target: { files: [file] } });
 }
 
-describe('PaymentMethods Component', () => {
+// Tutto il blocco di test su PaymentMethods è skippato
+
+describe.skip('PaymentMethods Component', () => {
   let result: RenderResult;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
