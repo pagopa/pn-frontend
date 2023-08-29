@@ -102,7 +102,7 @@ async function testAutocomplete(
 ) {
   const autocomplete = within(container as HTMLElement).getByTestId(elementName);
   if (mustBeOpened) {
-    const button = autocomplete.querySelector('button[class^="MuiAutocomplete-popupIndicator"]');
+    const button = autocomplete.querySelector('button[class*="MuiAutocomplete-popupIndicator"]');
     fireEvent.click(button!);
   }
   const dropdown = (await waitFor(() =>
