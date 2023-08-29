@@ -47,7 +47,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   });
 
   it('empty list', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, []);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, []);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
@@ -57,7 +57,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   }, 15000);
 
   it('no empty list', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
@@ -67,7 +67,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   }, 15000);
 
   it('api return error', async () => {
-    mock.onGet(APIKEY_LIST()).reply(500);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(500);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(

@@ -119,7 +119,7 @@ describe('NewApiKey component', () => {
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
     expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toContain('/api-key-self/api-keys/');
+    expect(mock.history.post[0].url).toContain(CREATE_APIKEY());
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(newApiKeyDTO);
   });
 
