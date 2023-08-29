@@ -25,13 +25,12 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
-import { setUpInterceptor } from './api/interceptors';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState, store } from './redux/store';
+import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
 import { TrackEventType } from './utils/events';
@@ -65,7 +64,6 @@ const ActualApp = () => {
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
-  setUpInterceptor(store);
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = loggedUser.organization;
