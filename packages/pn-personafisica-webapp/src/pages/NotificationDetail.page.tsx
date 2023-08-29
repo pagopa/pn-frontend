@@ -1,50 +1,50 @@
 import _ from 'lodash';
-import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
+  ApiError,
+  GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
-  // HelpNotificationDetails,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailTimeline,
-  TitleBox,
-  useIsMobile,
-  PnBreadcrumb,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  TimedMessage,
-  useDownloadDocument,
   NotificationDetailOtherDocument,
+  NotificationDetailTable, // HelpNotificationDetails,
+  NotificationDetailTableRow,
+  NotificationDetailTimeline,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
+  NotificationStatus,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
+  useDownloadDocument,
+  useErrors,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import NotificationPayment from '../component/Notifications/NotificationPayment';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
 import {
+  NOTIFICATION_ACTIONS,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
-import NotificationPayment from '../component/Notifications/NotificationPayment';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import { trackEventByType } from '../utils/mixpanel';
+import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -192,7 +192,7 @@ const NotificationDetail = () => {
     }
   };
 
-  const hasDocumentsAvailable = notification.documentsAvailable ? true : false;
+  const hasDocumentsAvailable = notification.documentsAvailable;
 
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
