@@ -12,6 +12,7 @@ import {
   NewNotificationRecipient,
   PaymentModel,
 } from '../models/NewNotification';
+import { GroupStatus, UserGroup } from '../models/user';
 
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
@@ -127,6 +128,19 @@ export const newNotification: NewNotification = {
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
 
+export const newNotificationEmpty: NewNotification = {
+  paProtocolNumber: '',
+  subject: '',
+  recipients: [],
+  documents: [],
+  payment: {},
+  physicalCommunicationType: '' as PhysicalCommunicationType,
+  paymentMode: '' as PaymentModel,
+  group: '',
+  taxonomyCode: '',
+  notificationFeePolicy: '' as NotificationFeePolicy,
+};
+
 export const newNotificationDTO: NewNotificationDTO = {
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
@@ -223,3 +237,30 @@ export const newNotificationDTO: NewNotificationDTO = {
   taxonomyCode: '010801N',
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
+
+export const newNotificationGroups: Array<UserGroup> = [
+  {
+    id: 'mock-id-1',
+    name: 'mock-group-1',
+    description: 'mock-description-1',
+    status: GroupStatus.ACTIVE,
+  },
+  {
+    id: 'mock-id-2',
+    name: 'mock-group-2',
+    description: 'mock-description-2',
+    status: GroupStatus.ACTIVE,
+  },
+  {
+    id: 'mock-id-3',
+    name: 'mock-group-3',
+    description: 'mock-description-3',
+    status: GroupStatus.ACTIVE,
+  },
+  {
+    id: 'mock-id-4',
+    name: 'mock-group-4',
+    description: 'mock-description-4',
+    status: GroupStatus.ACTIVE,
+  },
+];

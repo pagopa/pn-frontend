@@ -1,37 +1,38 @@
+import { Form, Formik, FormikErrors, FormikProps } from 'formik';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Formik, Form, FormikProps, FormikErrors } from 'formik';
+
 import { Add, Delete } from '@mui/icons-material';
 import {
+  Box,
+  Checkbox,
   FormControl,
+  FormControlLabel,
+  Grid,
+  Paper,
+  Radio,
+  RadioGroup,
   Stack,
   Typography,
-  RadioGroup,
-  Grid,
-  Radio,
-  FormControlLabel,
-  Checkbox,
-  Box,
-  Paper,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   DigitalDomicileType,
   RecipientType,
-  dataRegex,
   SectionHeading,
+  dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { saveRecipients } from '../../../redux/newNotification/reducers';
-import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
-import { trackEventByType } from '../../../utils/mixpanel';
+import { useAppDispatch } from '../../../redux/hooks';
+import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { TrackEventType } from '../../../utils/events';
-import PhysicalAddress from './PhysicalAddress';
+import { trackEventByType } from '../../../utils/mixpanel';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
+import PhysicalAddress from './PhysicalAddress';
 import {
   denominationLengthAndCharacters,
   identicalIUV,
@@ -395,7 +396,7 @@ const Recipient = ({
         errors,
         isValid /* setValues */,
       }) => (
-        <Form>
+        <Form data-testid="recipientForm">
           <NewNotificationCard
             noPaper
             isContinueDisabled={!isValid}
@@ -609,6 +610,7 @@ const Recipient = ({
                             />
                           }
                           name={`recipients[${index}].showPhysicalAddress`}
+                          data-testid={`showPhysicalAddress${index}`}
                           label={`${t('add-physical-domicile')}*`}
                         />
                       </Grid>

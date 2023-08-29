@@ -1,9 +1,12 @@
 import { Fragment } from 'react';
-import { Box, Grid, Stack, Typography } from '@mui/material';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { NotificationDetailDocument, NotificationDetailOtherDocument } from '../../types';
+
 type Props = {
   title: string;
   documents: Array<NotificationDetailDocument> | undefined;
@@ -44,7 +47,7 @@ Props) => {
           : d.docIdx,
       };
       return (
-        <Box key={document.key}>
+        <Box key={document.key} data-testid="notificationDetailDocuments">
           {!documentsAvailable ? (
             <Typography sx={{ display: 'flex', alignItems: 'center' }}>
               <AttachFileIcon sx={{ mr: 1 }} fontSize="inherit" color="inherit" />

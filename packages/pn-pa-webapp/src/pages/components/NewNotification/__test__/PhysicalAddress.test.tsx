@@ -1,5 +1,7 @@
-import PhysicalAddress from '../PhysicalAddress';
+import React from 'react';
+
 import { render } from '../../../../__test__/test-utils';
+import PhysicalAddress from '../PhysicalAddress';
 import { formTestErrors, formTestTouched, formTestValues } from './test-utils';
 
 jest.mock('react-i18next', () => ({

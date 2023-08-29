@@ -1,10 +1,13 @@
 /* eslint-disable functional/no-let */
+
 /* eslint-disable functional/immutable-data */
-import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
 import * as redux from 'react-redux';
 
+import { RenderResult, act, fireEvent, waitFor, within } from '@testing-library/react';
+
+import { newNotification } from '../../../../__mocks__/NewNotification.mock';
 import { render } from '../../../../__test__/test-utils';
-import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import { PaymentObject } from '../../../../models/NewNotification';
 import * as actions from '../../../../redux/newNotification/actions';
 import PaymentMethods from '../PaymentMethods';
@@ -19,8 +22,9 @@ jest.mock('react-i18next', () => ({
 
 const file = new File(['mocked content'], 'Mocked file', { type: 'application/pdf' });
 
-function uploadDocument(elem: ParentNode) {
-  const fileInput = elem.querySelector('[data-testid="fileInput"]');
+function uploadDocument(elem: HTMLElement) {
+  // const fileInput = elem.querySelector('[data-testid="fileInput"]');
+  const fileInput = within(elem).getByTestId('fileInput');
   const input = fileInput?.querySelector('input');
   fireEvent.change(input!, { target: { files: [file] } });
 }
@@ -85,8 +89,8 @@ describe('PaymentMethods Component', () => {
   it('adds first and second pagoPa documents (confirm disabled)', async () => {
     const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
-    uploadDocument(paymentBoxes[0].parentNode!);
-    uploadDocument(paymentBoxes[2].parentNode!);
+    uploadDocument(paymentBoxes[0].parentElement!);
+    uploadDocument(paymentBoxes[2].parentElement!);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
@@ -96,10 +100,10 @@ describe('PaymentMethods Component', () => {
   it('adds all payment documents and clicks on confirm', async () => {
     const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
-    uploadDocument(paymentBoxes[0].parentNode!);
-    uploadDocument(paymentBoxes[1].parentNode!);
-    uploadDocument(paymentBoxes[2].parentNode!);
-    uploadDocument(paymentBoxes[3].parentNode!);
+    uploadDocument(paymentBoxes[0].parentElement!);
+    uploadDocument(paymentBoxes[1].parentElement!);
+    uploadDocument(paymentBoxes[2].parentElement!);
+    uploadDocument(paymentBoxes[3].parentElement!);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse

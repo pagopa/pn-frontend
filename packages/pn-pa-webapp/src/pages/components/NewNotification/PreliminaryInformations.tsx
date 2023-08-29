@@ -136,7 +136,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       mainText={t('fetch-groups-error')}
       mt={3}
     >
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
           <TextField
             id="paProtocolNumber"
