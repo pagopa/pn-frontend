@@ -107,7 +107,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       ],
     },
   ],
-  total: 3,
+  total: 14,
   lastKey: '9e522ef5-a024-4dbd-8a59-3e090c637653',
   lastUpdate: '22/09/2022',
 };

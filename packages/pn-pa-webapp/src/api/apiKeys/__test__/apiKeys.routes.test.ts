@@ -2,13 +2,13 @@ import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../api
 
 describe('ApiKeys routes', () => {
   it('should compile APIKEY_LIST', () => {
-    const route = APIKEY_LIST();
-    expect(route).toEqual('/api-key-self/api-keys/');
+    const route = APIKEY_LIST({ limit: 10, lastKey: 'mocked-key' });
+    expect(route).toEqual('/api-key-self/api-keys?limit=10&lastKey=mocked-key&showVirtualKey=true');
   });
 
   it('should compile CREATE_APIKEY', () => {
     const route = CREATE_APIKEY();
-    expect(route).toEqual('/api-key-self/api-keys/');
+    expect(route).toEqual('/api-key-self/api-keys');
   });
 
   it('should compile DELETE_APIKEY', () => {

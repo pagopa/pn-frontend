@@ -13,6 +13,7 @@ import {
   PaymentModel,
 } from '../models/NewNotification';
 import { GroupStatus, UserGroup } from '../models/user';
+import { newNotificationMapper } from '../utils/notification.utility';
 
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
@@ -113,10 +114,10 @@ export const newNotification: NewNotification = {
   recipients: newNotificationRecipients,
   documents: [newNotificationDocument],
   payment: {
-    MRARSS90P08H501Q: {
+    [newNotificationRecipients[0].taxId]: {
       pagoPaForm: { ...newNotificationPagoPa },
     },
-    SRAGLL00P48H501U: {
+    [newNotificationRecipients[1].taxId]: {
       pagoPaForm: { ...newNotificationPagoPa },
       f24standard: { ...newNotificationF24Standard },
     },
@@ -141,102 +142,7 @@ export const newNotificationEmpty: NewNotification = {
   notificationFeePolicy: '' as NotificationFeePolicy,
 };
 
-export const newNotificationDTO: NewNotificationDTO = {
-  paProtocolNumber: '12345678910',
-  subject: 'Multone esagerato',
-  recipients: [
-    {
-      taxId: 'MRARSS90P08H501Q',
-      denomination: 'Mario Rossi',
-      recipientType: RecipientType.PF,
-      digitalDomicile: {
-        type: DigitalDomicileType.PEC,
-        address: 'mocked@mail.it',
-      },
-      physicalAddress: {
-        address: 'address 1',
-        zip: 'zip',
-        municipality: 'municipality',
-        province: 'province',
-        foreignState: 'foreignState',
-      },
-      payment: {
-        creditorTaxId: '12345678910',
-        noticeCode: '123456789123456788',
-        pagoPaForm: {
-          title: 'mocked-name',
-          digests: {
-            sha256: 'mocked-pa-sha256',
-          },
-          contentType: 'application/pdf',
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
-      },
-    },
-    {
-      taxId: 'SRAGLL00P48H501U',
-      denomination: 'Sara Giallo',
-      recipientType: RecipientType.PF,
-      digitalDomicile: {
-        type: DigitalDomicileType.PEC,
-        address: 'mocked@mail.it',
-      },
-      physicalAddress: {
-        address: 'address 2',
-        foreignState: 'foreignState',
-        municipality: 'municipality',
-        province: 'province',
-        zip: 'zip',
-      },
-      payment: {
-        creditorTaxId: '12345678910',
-        noticeCode: '123456789123456789',
-        pagoPaForm: {
-          title: 'mocked-name',
-          digests: {
-            sha256: 'mocked-pa-sha256',
-          },
-          contentType: 'application/pdf',
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
-        f24standard: {
-          title: 'mocked-name',
-          digests: {
-            sha256: 'mocked-f24standard-sha256',
-          },
-          contentType: 'application/pdf',
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
-      },
-    },
-  ],
-  documents: [
-    {
-      title: 'mocked-name',
-      digests: {
-        sha256: 'mocked-sha256',
-      },
-      contentType: 'application/pdf',
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-    },
-  ],
-  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  group: 'GroupTest',
-  taxonomyCode: '010801N',
-  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-};
+export const newNotificationDTO: NewNotificationDTO = newNotificationMapper(newNotification);
 
 export const newNotificationGroups: Array<UserGroup> = [
   {

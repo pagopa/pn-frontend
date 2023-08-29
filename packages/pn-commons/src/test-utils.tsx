@@ -125,6 +125,4 @@ async function testAutocomplete(
 }
 
 export * from '@testing-library/react';
-export { customRender as render };
-// utility functions
-export { testSelect, createMatchMedia, testAutocomplete };
+export { customRender as render, testSelect, createMatchMedia, testAutocomplete };

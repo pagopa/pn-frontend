@@ -95,7 +95,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('renders the page', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
@@ -109,7 +109,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('click Generate New Api Key button', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
@@ -123,27 +123,23 @@ describe('ApiKeys Page', () => {
   });
 
   it('change pagination and size', async () => {
-    mock.onGet(APIKEY_LIST()).reply(function (config) {
-      if (
-        config.params.limit === 2 &&
-        config.params.lastKey === mockApiKeysDTO.lastKey &&
-        config.params.lastUpdate === mockApiKeysDTO.lastUpdate
-      ) {
-        return [200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(2) }];
-      } else if (config.params.limit === 20) {
-        return [200, mockApiKeysDTO];
-      }
-      return [200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(0, 2) }];
-    });
+    mock
+      .onGet(APIKEY_LIST({ limit: 10 }))
+      .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(0, 2) });
+    mock
+      .onGet(
+        APIKEY_LIST({
+          limit: 10,
+          lastKey: mockApiKeysDTO.lastKey,
+          lastUpdate: mockApiKeysDTO.lastUpdate,
+        })
+      )
+      .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(2) });
+    mock.onGet(APIKEY_LIST({ limit: 20 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />, {
-        preloadedState: {
-          apiKeysState: {
-            ...reduxInitialState.apiKeysState,
-            pagination: { ...reduxInitialState.apiKeysState.pagination, size: 2 },
-          },
-        },
+        preloadedState: reduxInitialState,
       });
     });
     let rows = result!.getAllByTestId('tableApiKeys.row');
@@ -184,7 +180,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('block apiKey', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />);
@@ -200,7 +196,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('enable apiKey', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />);
@@ -216,7 +212,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('rotate apiKey', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />);
@@ -232,7 +228,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('delete apiKey', async () => {
-    mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysDTO);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(200, mockApiKeysDTO);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(<ApiKeys />);
@@ -256,7 +252,7 @@ describe('ApiKeys Page', () => {
   });
 
   it('api return error', async () => {
-    mock.onGet(APIKEY_LIST()).reply(500);
+    mock.onGet(APIKEY_LIST({ limit: 10 })).reply(500);
     mock.onGet(GET_USER_GROUPS()).reply(200, mockGroups);
     await act(async () => {
       result = render(
