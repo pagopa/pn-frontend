@@ -42,8 +42,6 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const localizedNotificationStatus = getNotificationAllowedStatus();
-
 describe('Dashboard Page', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;

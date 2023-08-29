@@ -12,6 +12,7 @@ import {
   render,
   testFormElements,
   testInput,
+  waitFor,
   within,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -20,6 +21,14 @@ import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
+
+const mockNavigateFn = jest.fn();
+
+// mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -103,14 +112,15 @@ describe('NewApiKey component', () => {
     );
     const submitButton = within(form).getByTestId('submit-new-api-key');
     expect(submitButton).toBeEnabled();
-    await act(async () => {
-      fireEvent.click(submitButton!);
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(result?.container).toHaveTextContent(/api-key-succesfully-generated/);
     });
-    expect(result?.container).toHaveTextContent(/api-key-succesfully-generated/);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
     expect(mock.history.post).toHaveLength(1);
     expect(mock.history.post[0].url).toContain('/api-key-self/api-keys/');
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(newApiKeyDTO);
   });
 
   it('clicks on the breadcrumb button', async () => {
@@ -120,5 +130,15 @@ describe('NewApiKey component', () => {
     const links = result?.getAllByRole('link');
     expect(links![0]).toHaveTextContent(/title/i);
     expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
+    fireEvent.click(links![0]);
+    // prompt must be shown
+    const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
+    expect(promptDialog).toBeInTheDocument();
+    const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
+    fireEvent.click(confirmExitBtn);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
+    });
   });
 });

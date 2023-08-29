@@ -1,13 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 
+import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
 import { apiClient } from '../../../api/apiClients';
 import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.routes';
-import { Consent, ConsentActionType, ConsentType } from '../../../models/consents';
-import { PartyRole, PNRole } from '../../../models/user';
-import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
+import { ConsentActionType, ConsentType } from '../../../models/consents';
+import { PNRole, PartyRole } from '../../../models/user';
 import { store } from '../../store';
 import { acceptPrivacy, acceptToS, getPrivacyApproval, getToSApproval } from '../actions';
-import { User } from '../types';
 
 describe('Auth redux state tests', () => {
   // eslint-disable-next-line functional/no-let
@@ -71,16 +70,36 @@ describe('Auth redux state tests', () => {
 
   it('Should be able to exchange token', async () => {
     const action = await mockLogin();
-    const payload = action.payload as User;
     expect(action.type).toBe('exchangeToken/fulfilled');
-    expect(payload).toEqual(userResponse);
+    expect(action.payload).toEqual(userResponse);
+  });
+
+  it('Should be able to exchange token - invalid json', async () => {
+    const action = await mockLogin('invalid-json');
+    expect(action.type).toBe('exchangeToken/fulfilled');
+    expect(action.payload).toStrictEqual({
+      email: undefined,
+      name: undefined,
+      organization: undefined,
+      uid: undefined,
+      sessionToken: undefined,
+      family_name: undefined,
+      fiscal_number: undefined,
+      desired_exp: undefined,
+    });
+  });
+
+  it('Should be able to exchange token - fail validation', async () => {
+    const action = await mockLogin({ ...userResponse, uid: 'not an uid' });
+    expect(action.type).toBe('exchangeToken/fulfilled');
+    const state = store.getState();
+    expect(state.userState.isUnauthorizedUser).toBeTruthy();
   });
 
   it('Should be able to logout', async () => {
     const action = await mockLogout();
-    const payload = action.payload;
     expect(action.type).toBe('logout/fulfilled');
-    expect(payload).toEqual({
+    expect(action.payload).toEqual({
       email: '',
       name: '',
       uid: '',
@@ -110,9 +129,8 @@ describe('Auth redux state tests', () => {
     };
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, tosMock);
     const action = await store.dispatch(getToSApproval());
-    const payload = action.payload as Consent;
     expect(action.type).toBe('getToSApproval/fulfilled');
-    expect(payload).toEqual(tosMock);
+    expect(action.payload).toEqual(tosMock);
     expect(store.getState().userState.tosConsent.accepted).toStrictEqual(true);
     expect(store.getState().userState.tosConsent.isFirstAccept).toStrictEqual(true);
     expect(store.getState().userState.fetchedTos).toStrictEqual(true);
@@ -136,9 +154,8 @@ describe('Auth redux state tests', () => {
       })
       .reply(200);
     const action = await store.dispatch(acceptToS('mock-version-1'));
-    const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/fulfilled');
-    expect(payload).toEqual('success');
+    expect(action.payload).toEqual('success');
     expect(store.getState().userState.tosConsent.accepted).toStrictEqual(true);
   });
 
@@ -165,9 +182,8 @@ describe('Auth redux state tests', () => {
     };
     mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, tosMock);
     const action = await store.dispatch(getPrivacyApproval());
-    const payload = action.payload as Consent;
     expect(action.type).toBe('getPrivacyApproval/fulfilled');
-    expect(payload).toEqual(tosMock);
+    expect(action.payload).toEqual(tosMock);
     expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(true);
     expect(store.getState().userState.privacyConsent.isFirstAccept).toStrictEqual(true);
     expect(store.getState().userState.fetchedPrivacy).toStrictEqual(true);
@@ -191,9 +207,8 @@ describe('Auth redux state tests', () => {
       })
       .reply(200);
     const action = await store.dispatch(acceptPrivacy('mock-version-1'));
-    const payload = action.payload as string;
     expect(action.type).toBe('acceptPrivacy/fulfilled');
-    expect(payload).toEqual('success');
+    expect(action.payload).toEqual('success');
     expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(true);
   });
 

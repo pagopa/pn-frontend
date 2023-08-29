@@ -1,11 +1,12 @@
-import React, { ReactElement, ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { configureStore, Store } from '@reduxjs/toolkit';
-import { fireEvent, render, RenderOptions, waitFor, within, screen } from '@testing-library/react';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
+import React, { ReactElement, ReactNode } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
+import { Store, configureStore } from '@reduxjs/toolkit';
+import { RenderOptions, fireEvent, render, waitFor, within } from '@testing-library/react';
 
 import { appReducers } from '../redux/store';
 
@@ -128,7 +129,7 @@ export async function testAutocomplete(
 ) {
   const autocomplete = container.querySelector(`[data-testid="${elementName}"]`) as Element;
   if (mustBeOpened) {
-    const button = autocomplete.querySelector('button[title="Open"]') as Element;
+    const button = autocomplete.querySelector('.MuiAutocomplete-popupIndicator') as Element;
     fireEvent.click(button);
   }
   const dropdown = (await waitFor(() =>
@@ -153,7 +154,6 @@ export async function testAutocomplete(
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
-export { customRender as render };
-export { axe };
+export { axe, customRender as render };
 // utility functions
 export { mockApi };
