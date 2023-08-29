@@ -201,7 +201,9 @@ const NotificationDetail = () => {
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
       if (isCancelled) {
-        return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
+        return type === 'aar'
+          ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
       } else if (hasDocumentsAvailable) {
         return type === 'aar'
           ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
