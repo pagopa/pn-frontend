@@ -1,9 +1,16 @@
+import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
-import { render, axe } from '../../__test__/test-utils';
+
+import { DOWNTIME_HISTORY, KnownFunctionality } from '@pagopa-pn/pn-commons';
+
+import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import {
-  notificationToFe,
-  notificationToFeMultiRecipient,
-} from '../../redux/notification/__test__/test-utils';
+  notificationDTO,
+  notificationDTOMultiRecipient,
+} from '../../__mocks__/NotificationDetail.mock';
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { NOTIFICATION_DETAIL } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
 
 jest.mock('react-i18next', () => ({
@@ -14,16 +21,38 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('NotificationDetail Page - accessibility tests', () => {
+  let mock: MockAdapter;
+  let result: RenderResult | undefined;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    result = undefined;
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('one recipient - does not have basic accessibility issues rendering the page', async () => {
-    const result = render(<NotificationDetail />, {
-      preloadedState: {
-        notificationState: {
-          notification: notificationToFe,
-          documentDownloadUrl: 'mocked-download-url',
-          legalFactDownloadUrl: 'mocked-legal-fact-url',
-        },
-        userState: { user: { organization: { id: 'mocked-sender' } } },
-      },
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onGet(
+        DOWNTIME_HISTORY({
+          startDate: '2022-10-23T15:50:04Z',
+          functionality: [
+            KnownFunctionality.NotificationCreate,
+            KnownFunctionality.NotificationVisualization,
+            KnownFunctionality.NotificationWorkflow,
+          ],
+        })
+      )
+      .reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />);
     });
     if (result) {
       const results = await axe(result.container);
@@ -31,17 +60,22 @@ describe('NotificationDetail Page - accessibility tests', () => {
     }
   }, 15000);
 
-
   it('multi recipient - does not have basic accessibility issues rendering the page', async () => {
-    const result = render(<NotificationDetail />, {
-      preloadedState: {
-        notificationState: {
-          notification: notificationToFeMultiRecipient,
-          documentDownloadUrl: 'mocked-download-url',
-          legalFactDownloadUrl: 'mocked-legal-fact-url',
-        },
-        userState: { user: { organization: { id: 'mocked-sender' } } },
-      },
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTOMultiRecipient.iun)).reply(200, notificationDTO);
+    mock
+      .onGet(
+        DOWNTIME_HISTORY({
+          startDate: '2022-10-23T15:50:04Z',
+          functionality: [
+            KnownFunctionality.NotificationCreate,
+            KnownFunctionality.NotificationVisualization,
+            KnownFunctionality.NotificationWorkflow,
+          ],
+        })
+      )
+      .reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />);
     });
     if (result) {
       const results = await axe(result.container);
@@ -49,5 +83,3 @@ describe('NotificationDetail Page - accessibility tests', () => {
     }
   }, 15000);
 });
-
-

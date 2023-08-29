@@ -25,7 +25,6 @@ import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
 
-const initialEntries = ['/dashboard/RTRD-UDGU-QTQY-202308-P-/dettaglio'];
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
