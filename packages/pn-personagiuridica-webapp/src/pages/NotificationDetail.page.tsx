@@ -1,54 +1,58 @@
-import _ from 'lodash';
-import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
+import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
+  ApiError,
+  ApiErrorWrapper,
+  GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailTimeline,
-  TitleBox,
-  useIsMobile,
-  PnBreadcrumb,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  TimedMessage,
-  useDownloadDocument,
   NotificationDetailOtherDocument,
-  NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
-  useHasPermissions,
+  NotificationDetailPayment,
+  NotificationDetailTable,
+  NotificationDetailTableRow,
+  NotificationDetailTimeline,
   NotificationPaymentRecipient,
-  ApiErrorWrapper,
+  NotificationRelatedDowntimes,
+  NotificationStatus,
+  PaymentAttachmentSName,
+  PaymentHistory,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
+  useDownloadDocument,
+  useErrors,
+  useHasPermissions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-
+import _ from 'lodash';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
+import { PNRole } from '../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
 import {
+  NOTIFICATION_ACTIONS,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
+  getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
+  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
-  getNotificationPaymentInfo,
 } from '../redux/notification/actions';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
   setF24Payments,
 } from '../redux/notification/reducers';
-import { PNRole } from '../redux/auth/types';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { trackEventByType } from '../utils/mixpanel';
+import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -72,7 +76,6 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(true);
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -103,6 +106,12 @@ const NotificationDetail = () => {
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
+
+  const pagopaAttachmentUrl = useAppSelector(
+    (state: RootState) => state.notificationState.pagopaAttachmentUrl
+  );
+
+  useDownloadDocument({ url: pagopaAttachmentUrl });
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -191,9 +200,37 @@ const NotificationDetail = () => {
     }
   };
 
+  const handleDownloadAttachamentPagoPA = (name: PaymentAttachmentSName) => {
+    void dispatch(getPaymentAttachment({ iun: notification.iun, attachmentName: name, mandateId }));
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
+  };
+
+  const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
+    if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      dispatch(
+        getNotificationPaymentUrl({
+          paymentNotice: {
+            noticeNumber: noticeCode,
+            fiscalCode: creditorTaxId,
+            amount,
+            companyName: notification.senderDenomination,
+            description: notification.subject,
+          },
+          returnUrl: window.location.href,
+        })
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
+    }
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
+  };
+
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+  const hasDocumentsAvailable = !isCancelled && notification.documentsAvailable;
 
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
@@ -227,33 +264,36 @@ const NotificationDetail = () => {
     }
   }, []);
 
-  const fetchPaymentsInfo = useCallback(() => {
-    const paymentInfoRequest = currentRecipient?.payments?.reduce((acc: any, payment) => {
-      if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
-        acc.push({
-          noticeCode: payment.pagoPA.noticeCode,
-          creditorTaxId: payment.pagoPA.creditorTaxId,
-        });
+  const fetchPaymentsInfo = useCallback(
+    (payments: Array<PaymentHistory | NotificationDetailPayment>) => {
+      const paymentInfoRequest = payments.reduce((acc: any, payment) => {
+        if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
+          acc.push({
+            noticeCode: payment.pagoPA.noticeCode,
+            creditorTaxId: payment.pagoPA.creditorTaxId,
+          });
+        }
+        return acc;
+      }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
+
+      if (paymentInfoRequest.length === 0) {
+        void dispatch(setF24Payments(currentRecipient.payments));
+        return;
       }
-      return acc;
-    }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
-    if (paymentInfoRequest.length === 0) {
-      void dispatch(setF24Payments(currentRecipient?.payments));
-      return;
-    }
-
-    void dispatch(
-      getNotificationPaymentInfo({
-        taxId: currentRecipient.taxId,
-        paymentInfoRequest,
-      })
-    ).then(() => setPaymentLoading(false));
-  }, [currentRecipient.payments]);
+      void dispatch(
+        getNotificationPaymentInfo({
+          taxId: currentRecipient.taxId,
+          paymentInfoRequest,
+        })
+      );
+    },
+    [currentRecipient.payments]
+  );
 
   useEffect(() => {
     if (checkIfUserHasPayments) {
-      fetchPaymentsInfo();
+      fetchPaymentsInfo(currentRecipient.payments ?? []);
     }
   }, [currentRecipient.payments]);
 
@@ -342,14 +382,16 @@ const NotificationDetail = () => {
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
                       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
-                      reloadAction={fetchPaymentsInfo}
+                      reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
                       mainText={t('detail.payment.message-error-fetch-payment', {
                         ns: 'notifiche',
                       })}
                     >
                       <NotificationPaymentRecipient
-                        loading={paymentLoading}
                         payments={userPayments}
+                        onPayClick={onPayClick}
+                        handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
+                        handleReloadPayment={fetchPaymentsInfo}
                       />
                     </ApiErrorWrapper>
                   </Paper>

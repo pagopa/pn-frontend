@@ -888,7 +888,18 @@ export const populatePaymentHistory = (
     if (!userPayment.pagoPA) {
       paymentHistory.push({
         f24Data: userPayment.f24Data,
-      });
+      } as PaymentHistory);
+      continue;
+    }
+
+    if (
+      checkoutPayments.length &&
+      checkoutPayments?.findIndex(
+        (payment) =>
+          payment.creditorTaxId === userPayment.pagoPA?.creditorTaxId &&
+          payment.noticeCode === userPayment.pagoPA?.noticeCode
+      ) === -1
+    ) {
       continue;
     }
 

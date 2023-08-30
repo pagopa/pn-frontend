@@ -1,23 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
 import {
-  NotificationStatus,
+  Downtime,
+  ExtRegistriesPaymentDetails,
+  INotificationDetailTimeline,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  INotificationDetailTimeline,
-  NotificationStatusHistory,
-  PhysicalCommunicationType,
   NotificationFeePolicy,
+  NotificationStatus,
+  NotificationStatusHistory,
   PaymentAttachmentSName,
-  RecipientType,
-  PaymentStatus,
-  PaymentInfoDetail,
-  Downtime,
   PaymentHistory,
-  ExtRegistriesPaymentDetails,
+  PaymentInfoDetail,
+  PaymentStatus,
+  PhysicalCommunicationType,
+  RecipientType,
+  populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
-
 import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
@@ -118,7 +118,55 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
-        state.paymentInfo = action.payload;
+        // Not single payment reload
+        if (action.payload.length > 1) {
+          state.paymentInfo = action.payload;
+          return;
+        }
+
+        if (action.payload.length === 1) {
+          const paymentInfo = action.payload[0];
+          const paymentInfoIndex = state.paymentInfo.findIndex(
+            (payment) =>
+              payment.pagoPA?.creditorTaxId === paymentInfo.pagoPA?.creditorTaxId &&
+              payment.pagoPA?.noticeCode === paymentInfo.pagoPA?.noticeCode
+          );
+          if (paymentInfoIndex !== -1) {
+            state.paymentInfo[paymentInfoIndex] = paymentInfo;
+            return;
+          }
+          state.paymentInfo = action.payload;
+        }
+      }
+    });
+    builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
+      const paymentHistory = populatePaymentHistory(
+        action.meta.arg.taxId,
+        state.notification.timeline,
+        state.notification.recipients,
+        action.meta.arg.paymentInfoRequest as Array<ExtRegistriesPaymentDetails>
+      );
+
+      if (action.meta.arg.paymentInfoRequest.length > 1) {
+        state.paymentInfo = paymentHistory.map((payment) => ({
+          ...payment,
+          isLoading: true,
+        }));
+        return;
+      }
+
+      if (action.meta.arg.paymentInfoRequest.length === 1) {
+        const payment = state.paymentInfo.find(
+          (payment) =>
+            payment.pagoPA?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
+            payment.pagoPA?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
+        );
+
+        if (payment) {
+          payment.isLoading = true;
+          return;
+        }
+        state.paymentInfo = [{ ...paymentHistory[0], isLoading: true }];
       }
     });
     builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
@@ -130,16 +178,18 @@ const notificationSlice = createSlice({
           payment.pagoPA?.noticeCode === noticeCode
       );
 
-      const updatedPaymentInfo = {
-        ...paymentInfo?.f24Data,
-        pagoPA: {
-          ...paymentInfo?.pagoPA,
-          status: PaymentStatus.FAILED,
-          detail: PaymentInfoDetail.GENERIC_ERROR,
-        } as ExtRegistriesPaymentDetails,
-      };
+      if (paymentInfo && paymentInfo.pagoPA) {
+        const updatedPaymentInfo = {
+          ...paymentInfo?.f24Data,
+          pagoPA: {
+            ...paymentInfo?.pagoPA,
+            status: PaymentStatus.FAILED,
+            detail: PaymentInfoDetail.GENERIC_ERROR,
+          },
+        };
 
-      state.paymentInfo = [...state.paymentInfo, updatedPaymentInfo];
+        state.paymentInfo = [...state.paymentInfo, updatedPaymentInfo];
+      }
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.downtimes;

@@ -1,3 +1,8 @@
+import { useFormik } from 'formik';
+import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
 import {
   Alert,
   Card,
@@ -23,16 +28,12 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+
+import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-
-import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';

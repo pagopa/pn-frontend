@@ -4,7 +4,11 @@ type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
 };
 
-type LocalizationFunction = (namespace: string | Array<string>, path: string, data?: { [key: string]: string | undefined }) => string;
+type LocalizationFunction = (
+  namespace: string | Array<string>,
+  path: string,
+  data?: { [key: string]: string | undefined }
+) => string;
 
 /* eslint-disable-next-line functional/no-let */
 let localizationNamespaces: LocalizationNamespaces = {
@@ -32,7 +36,7 @@ export const initLocalization = (
 export function getLocalizedOrDefaultLabel(
   namespaceName: string | Array<string>,
   path: string,
-  defaultLabel: string,
+  defaultLabel?: string,
   data?: { [key: string]: any }
 ): string {
   const namespace = Array.isArray(namespaceName)
@@ -41,9 +45,9 @@ export function getLocalizedOrDefaultLabel(
   if (translateFunction) {
     const localizedLabel = translateFunction(namespace, path, data);
     if (!localizedLabel || localizedLabel === path) {
-      return defaultLabel;
+      return defaultLabel ?? path;
     }
     return localizedLabel;
   }
-  return defaultLabel;
+  return defaultLabel ?? path;
 }

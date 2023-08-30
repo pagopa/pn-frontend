@@ -3,6 +3,7 @@ import {
   LegalFactType,
   NotificationDetail,
   PaymentAttachmentSName,
+  PaymentStatus,
   RecipientType,
   populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
@@ -13,7 +14,7 @@ import {
   notificationToFe,
   recipient,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { mockApi } from '../../../__test__/test-utils';
+import { createMockedStore, mockApi } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import {
@@ -217,6 +218,13 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch payment info', async () => {
+    const mockedStore = createMockedStore({
+      notificationState: {
+        notification: notificationToFe,
+        timeline: notificationToFe.timeline,
+        paymentInfo: notificationToFe.recipients,
+      },
+    });
     const paymentInfoRequest = paymentInfo.map((payment) => ({
       creditorTaxId: payment.creditorTaxId,
       noticeCode: payment.noticeCode,
@@ -229,29 +237,125 @@ describe('Notification detail redux state tests', () => {
       paymentInfoRequest,
       paymentInfo
     );
-    mockApi(mock, 'GET', NOTIFICATION_DETAIL(notificationDTO.iun), 200, undefined, notificationDTO);
-    // store notification
-    await store.dispatch(
-      getReceivedNotification({
-        iun: notificationDTO.iun,
-      })
-    );
-    const notification = store.getState().notificationState.notification;
+
     const paymentHistory = populatePaymentHistory(
       recipient.taxId,
-      notification.timeline,
-      notification.recipients,
+      notificationDTO.timeline,
+      notificationDTO.recipients,
       paymentInfo
     );
-    const action = await store.dispatch(
+    const action = await mockedStore.dispatch(
       getNotificationPaymentInfo({ taxId: recipient.taxId, paymentInfoRequest })
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual(paymentHistory);
+    expect(payload).toStrictEqual(paymentHistory);
+    const state = mockedStore.getState().notificationState;
+    expect(state.paymentInfo).toStrictEqual(paymentHistory);
+  });
 
-    const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual(paymentHistory);
+  it('Should be able to fetch payment info and replace the modified payment', async () => {
+    const mockedStore = createMockedStore({
+      notificationState: {
+        notification: notificationToFe,
+        paymentInfo: populatePaymentHistory(
+          recipient.taxId,
+          notificationDTO.timeline,
+          notificationDTO.recipients,
+          paymentInfo
+        ),
+      },
+    });
+
+    // Try to update redux state with an updated payment
+    const failedPayment = paymentInfo.find((payment) => payment.status === PaymentStatus.FAILED);
+
+    const paymentInfoRequest = [
+      {
+        creditorTaxId: failedPayment!.creditorTaxId,
+        noticeCode: failedPayment!.noticeCode,
+      },
+    ];
+
+    mock = mockApi(apiClient, 'POST', NOTIFICATION_PAYMENT_INFO(), 200, paymentInfoRequest, [
+      { ...failedPayment, status: PaymentStatus.SUCCEEDED },
+    ]);
+
+    const paymentHistory = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      notificationToFe.recipients,
+      [{ ...failedPayment!, status: PaymentStatus.SUCCEEDED }]
+    );
+
+    const actualState = mockedStore.getState().notificationState.paymentInfo;
+
+    const action = await mockedStore.dispatch(
+      getNotificationPaymentInfo({ taxId: recipient.taxId, paymentInfoRequest })
+    );
+
+    const newState = actualState.map((payment) => {
+      if (
+        payment.pagoPA?.creditorTaxId === failedPayment?.creditorTaxId &&
+        payment.pagoPA?.noticeCode === failedPayment?.noticeCode
+      ) {
+        return { ...payment, pagoPA: { ...payment.pagoPA, status: PaymentStatus.SUCCEEDED } };
+      }
+      return payment;
+    });
+
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
+    expect(payload).toStrictEqual(paymentHistory);
+    const state = mockedStore.getState().notificationState.paymentInfo;
+    expect(state).toStrictEqual(newState);
+  });
+
+  it('Should be able to fetch payment info and not replace the payment if is equal', async () => {
+    const mockedStore = createMockedStore({
+      notificationState: {
+        notification: notificationToFe,
+        paymentInfo: populatePaymentHistory(
+          recipient.taxId,
+          notificationDTO.timeline,
+          notificationDTO.recipients,
+          paymentInfo
+        ),
+      },
+    });
+
+    const failedPayment = paymentInfo.find((payment) => payment.status === PaymentStatus.FAILED);
+
+    const paymentInfoRequest = [
+      {
+        creditorTaxId: failedPayment!.creditorTaxId,
+        noticeCode: failedPayment!.noticeCode,
+      },
+    ];
+
+    mock = mockApi(apiClient, 'POST', NOTIFICATION_PAYMENT_INFO(), 200, paymentInfoRequest, [
+      failedPayment,
+    ]);
+
+    const paymentHistory = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      notificationToFe.recipients,
+      [failedPayment!]
+    );
+
+    const actualState = mockedStore.getState().notificationState.paymentInfo;
+
+    const action = await mockedStore.dispatch(
+      getNotificationPaymentInfo({ taxId: recipient.taxId, paymentInfoRequest })
+    );
+
+    const newState = mockedStore.getState().notificationState.paymentInfo;
+
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
+    expect(payload).toStrictEqual(paymentHistory);
+    expect(actualState).toStrictEqual(newState);
   });
 
   it('Should be able to fetch payment url', async () => {

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useIsMobile } from '../hooks';
 interface Props {
   /** callback used to retrieve the text to be copied */
@@ -54,7 +54,7 @@ const CopyToClipboard: React.FC<Props> = ({
     <Button
       component={Link}
       color="primary"
-      sx={alertButtonStyle}
+      sx={{ ...alertButtonStyle }}
       onClick={doCopyToClipboard}
       disabled={disabled}
       aria-label={copied ? tooltip : tooltipBefore}

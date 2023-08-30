@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
+import { notificationToFe, recipient } from '../../__mocks__/NotificationDetail.mock';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
@@ -1829,6 +1829,46 @@ describe('Populate payment history', () => {
       paymentInfo
     );
 
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('When populatePaymentHistory receive only one payment from checkout it should map only this payment', () => {
+    let res: Array<PaymentHistory> = [];
+    let singlePaymentInfo = paymentInfo[0];
+
+    recipient.payments!.forEach((item, index) => {
+      if (
+        singlePaymentInfo?.creditorTaxId === item.pagoPA?.creditorTaxId &&
+        singlePaymentInfo.noticeCode === item.pagoPA?.noticeCode
+      ) {
+        const checkoutSucceded =
+          paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+
+        const timelineEvent = notificationToFe.timeline.find(
+          (event) =>
+            event.category === TimelineCategory.PAYMENT &&
+            (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+            (event.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+        )?.details;
+
+        res = [
+          ...res,
+          {
+            pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
+            f24Data: item.f24Data,
+          } as PaymentHistory,
+        ];
+      }
+    });
+
+    const mappedPayments = populatePaymentHistory(
+      recipient.taxId,
+      notificationToFe.timeline,
+      notificationToFe.recipients,
+      [singlePaymentInfo]
+    );
+
+    expect(mappedPayments).toHaveLength(1);
     expect(mappedPayments).toStrictEqual(res);
   });
 

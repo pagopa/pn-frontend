@@ -1,3 +1,4 @@
+/*
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
@@ -253,9 +254,9 @@ const NotificationPayment: React.FC<Props> = ({
     return attachments;
   };
 
-  /** composes Payment Data to be rendered */
+  // composes Payment Data to be rendered
   const composePaymentData = (): PaymentData => {
-    /* eslint-disable-next-line functional/no-let */
+    // eslint-disable-next-line functional/no-let
     let title = t('detail.payment.summary-pending', { ns: 'notifiche' });
     if (
       paymentInfo.status === PaymentStatus.SUCCEEDED ||
@@ -277,7 +278,7 @@ const NotificationPayment: React.FC<Props> = ({
     };
   };
 
-  /** returns message data to be passed into the alert */
+  // returns message data to be passed into the alert
   const getMessageData = (): PaymentMessageData | undefined => {
     if (!(notificationPayment.noticeCode && notificationPayment.creditorTaxId)) {
       return {
@@ -335,7 +336,7 @@ const NotificationPayment: React.FC<Props> = ({
     return undefined;
   };
 
-  /** returns message data for failed status */
+  // returns message data for failed status
   const getFailedMessageData = (): PaymentMessageData | undefined => {
     // eslint-disable-next-line functional/no-let
     let body = '';
@@ -384,7 +385,7 @@ const NotificationPayment: React.FC<Props> = ({
     };
   };
 
-  /** returns action data used to render the main button */
+  // returns action data used to render the main button
   const getActionData = (amount: string): PrimaryAction | undefined => {
     switch (paymentInfo.status) {
       case PaymentStatus.REQUIRED:
@@ -398,7 +399,7 @@ const NotificationPayment: React.FC<Props> = ({
     return undefined;
   };
 
-  /** returns action data for failed status */
+  // returns action data for failed status
   const getFailedActionData = (): PrimaryAction | undefined => {
     switch (paymentInfo.detail) {
       case PaymentInfoDetail.DOMAIN_UNKNOWN: // Creditor institution error
@@ -420,7 +421,7 @@ const NotificationPayment: React.FC<Props> = ({
     }
   };
 
-  /** returns main button JSX  */
+  // returns main button JSX
   const getMessageAction = (message: PaymentMessageData | undefined) => {
     switch (message?.action) {
       case MessageActionType.CONTACT_SUPPORT:
@@ -551,5 +552,10 @@ const NotificationPayment: React.FC<Props> = ({
     </ApiErrorWrapper>
   );
 };
+
+export default NotificationPayment;
+*/
+
+const NotificationPayment = () => <div>Deprecated</div>;
 
 export default NotificationPayment;

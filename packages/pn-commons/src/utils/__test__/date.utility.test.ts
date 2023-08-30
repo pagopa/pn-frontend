@@ -30,6 +30,16 @@ describe('Date utility', () => {
     expect(dateFormatted).toBe('Oggi');
   });
 
+  test('format today date without label', () => {
+    const date = new Date();
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    const year = date.getFullYear();
+
+    const dateFormatted = formatDate(new Date().toISOString(), false);
+    expect(dateFormatted).toBe(`${day}/${month}/${year}`);
+  });
+
   test('format date to sliced ISO string ', () => {
     const date = new Date('2022-02-16T16:03:37.123Z');
     const dateFormatted = formatToSlicedISOString(date);

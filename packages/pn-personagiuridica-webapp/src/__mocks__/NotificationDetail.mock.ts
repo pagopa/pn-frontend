@@ -55,6 +55,20 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
       description: 'F24 seconda rata TARI',
     },
   },
+  {
+    pagoPA: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695134',
+      applyCostFlg: false,
+    },
+  },
+  {
+    pagoPA: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695135',
+      applyCostFlg: false,
+    },
+  },
 ];
 
 export const recipient: NotificationDetailRecipient = {
