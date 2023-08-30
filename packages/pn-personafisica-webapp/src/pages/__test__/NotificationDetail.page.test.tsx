@@ -221,7 +221,7 @@ describe('NotificationDetail Page', () => {
     const documentTitle = result.queryByText('Mocked document');
     expect(documentTitle).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/Payment/i);
-    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled');
+    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled_aar');
     expect(documentsText.length).toBeGreaterThan(0);
   });
 
