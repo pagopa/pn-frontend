@@ -14,7 +14,6 @@ Starting applications
 - `yarn start:pf` to start app for citizens in local
 - `yarn start:pa` to start app for public administration in local
 - `yarn start:login` to start the login section for citizens in local (url: localhost:3000)
-- `yarn start:landing` to start landing site in local (url: localhost:3000)
 
 You can also run `yarn start` in the relative package folder:
 
@@ -45,17 +44,16 @@ The content of monorepo is:
 - packages/pn-pa-webapp app for public administration
 - packages/pn-personafisica-webapp app for citizens
 - packages/pn-personafisica-login login section for citizen app
-- packages/pn-landing-webapp landing site for SEND
 
 https://medium.com/geekculture/setting-up-monorepo-with-create-react-app-cb2cfa763b96
 
-
 ### Sonar
-You can run a task analysis with sonar-scanner using this script in each package
-- `yarn sonar`
-To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
-The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
 
+You can run a task analysis with sonar-scanner using this script in each package
+
+- `yarn sonar`
+  To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
+  The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
 
 ### Version
 
@@ -64,6 +62,7 @@ Use `yarn run version` from branch `main` to tag a new version of the project an
 The tool automatically detects the modified packages starting from the previous version and then executes git commit and tag.
 
 Examples:
+
 - `yarn run version 1.0.1` to directly specify a version number
 - `yarn run version patch` to update the project according SemVer mode
 - `yarn run version` to make choices from prompt
