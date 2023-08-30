@@ -5,4 +5,5 @@ export interface Party {
 
 export interface FilterPartiesParams {
   paNameFilter?: string;
+  blockLoading?: boolean;
 }

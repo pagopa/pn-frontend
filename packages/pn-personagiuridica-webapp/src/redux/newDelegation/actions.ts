@@ -68,6 +68,6 @@ export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams
     }
   },
   {
-    getPendingMeta: () => ({ blockLoading: true }),
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
   }
 );

@@ -133,9 +133,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
-      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue }));
+      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
     } else if (senderInputValue.length === 0) {
-      void dispatch(getAllActivatedParties(null));
+      void dispatch(getAllActivatedParties({ blockLoading: true }));
     }
   }, [senderInputValue]);
 
