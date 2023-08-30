@@ -1,25 +1,26 @@
+import { FormikErrors, useFormik } from 'formik';
 import {
   ChangeEvent,
-  forwardRef,
-  Fragment,
-  useMemo,
   ForwardedRef,
+  Fragment,
+  forwardRef,
   useImperativeHandle,
+  useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormikErrors, useFormik } from 'formik';
 import * as yup from 'yup';
-import { Box, SxProps, TextField, Typography } from '@mui/material';
+
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, SxProps, TextField, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { NewNotificationDocument } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
 import { getConfiguration } from '../../../services/configuration.service';
-import { NewNotificationDocument } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
 import { requiredStringFieldValidation } from './validation.utility';
 
@@ -297,7 +298,7 @@ const Attachments = ({
   }));
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="attachmentsForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
