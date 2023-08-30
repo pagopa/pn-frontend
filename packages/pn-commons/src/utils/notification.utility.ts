@@ -889,9 +889,9 @@ export const populatePaymentHistory = (
       paymentHistory.push({
         f24Data: userPayment.f24Data,
       } as PaymentHistory);
+      continue;
     }
 
-    // 4. Get payment by creditorTaxId and noticeCode from checkout
     if (
       checkoutPayments.length &&
       checkoutPayments?.findIndex(
@@ -903,6 +903,7 @@ export const populatePaymentHistory = (
       continue;
     }
 
+    // 4. Get payment by creditorTaxId and noticeCode from checkout
     const checkoutPayment = checkoutPayments.find(
       (p) =>
         p.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&

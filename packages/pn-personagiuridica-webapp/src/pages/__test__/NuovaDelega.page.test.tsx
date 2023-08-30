@@ -1,15 +1,16 @@
 import React from 'react';
 
-import { render, fireEvent, waitFor, mockApi, testAutocomplete } from '../../__test__/test-utils';
+import { RecipientType } from '@pagopa-pn/pn-commons';
+
+import { fireEvent, mockApi, render, testAutocomplete, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
+import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import { mockCreateDelegation } from '../../redux/delegation/__test__/test.utils';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
-import * as trackingFunctions from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import * as trackingFunctions from '../../utils/mixpanel';
 import NuovaDelega from '../NuovaDelega.page';
-import { RecipientType } from '@pagopa-pn/pn-commons';
 
 jest.mock('../../utils/delegation.utility', () => ({
   ...jest.requireActual('../../utils/delegation.utility'),
