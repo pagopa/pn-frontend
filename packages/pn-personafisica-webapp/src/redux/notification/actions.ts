@@ -14,6 +14,7 @@ import {
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
@@ -109,6 +110,9 @@ export const getNotificationPaymentInfo = createAsyncThunk<
     } catch (e) {
       return rejectWithValue(e);
     }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );
 

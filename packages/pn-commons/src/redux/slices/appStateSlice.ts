@@ -1,4 +1,5 @@
-import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
 import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
@@ -91,7 +92,7 @@ export const appStateSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(isLoading, (state, action) => {
-        if (!action.meta.arg || !action.meta.arg.blockLoading) {
+        if (!action.meta || !action.meta.blockLoading) {
           state.loading.result = true;
         }
       })

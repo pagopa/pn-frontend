@@ -1,3 +1,5 @@
+import { act } from 'react-dom/test-utils';
+
 import {
   NotificationDetail as INotificationDetail,
   NotificationDetailTableRow,
@@ -6,7 +8,7 @@ import {
   populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import { RenderResult, fireEvent, screen, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   notificationToFe,
@@ -257,8 +259,7 @@ describe('NotificationDetail Page', () => {
     expect(indietroButton).not.toBeInTheDocument();
   });
 
-  // TODO check why this test fails after edited radio button handling
-  it.skip('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
     mockUseParamsFn.mockReturnValue({ id: notificationToFe.iun });
 
     mockDispatchFn = jest.fn(() => ({

@@ -147,6 +147,14 @@ const notificationSlice = createSlice({
         action.meta.arg.paymentInfoRequest as Array<ExtRegistriesPaymentDetails>
       );
 
+      if (action.meta.arg.paymentInfoRequest.length > 1) {
+        state.paymentInfo = paymentHistory.map((payment) => ({
+          ...payment,
+          isLoading: true,
+        }));
+        return;
+      }
+
       if (action.meta.arg.paymentInfoRequest.length === 1) {
         const payment = state.paymentInfo.find(
           (payment) =>
@@ -156,17 +164,9 @@ const notificationSlice = createSlice({
 
         if (payment) {
           payment.isLoading = true;
+          return;
         }
-        return;
-      }
-
-      if (action.meta.arg.paymentInfoRequest.length > 1) {
-        paymentHistory.forEach((payment) => {
-          state.paymentInfo.push({
-            ...payment,
-            isLoading: true,
-          });
-        });
+        state.paymentInfo = [{ ...paymentHistory[0], isLoading: true }];
       }
     });
     builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
