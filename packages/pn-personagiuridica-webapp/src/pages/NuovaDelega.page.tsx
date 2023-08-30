@@ -165,9 +165,9 @@ const NuovaDelega = () => {
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
-      void dispatch(getAllEntities({ paNameFilter: senderInputValue, blockLoading: true }));
+      void dispatch(getAllEntities({ paNameFilter: senderInputValue }));
     } else if (senderInputValue.length === 0 && loadAllEntities) {
-      void dispatch(getAllEntities({ blockLoading: true }));
+      void dispatch(getAllEntities(null));
     }
   }, [senderInputValue]);
 
