@@ -44,6 +44,8 @@ type Props = {
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
   eventTrackingCallbackShowMore?: () => void;
+  disableDownloads?: boolean;
+  isParty?: boolean;
 };
 
 /**
@@ -87,7 +89,10 @@ const timelineStepCmp = (
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
+ * @param disableDownloads if notification is disabled
+ * @param isParty for specific render of notification
  */
+
 const NotificationDetailTimelineStep = ({
   timelineStep,
   recipients,
@@ -99,6 +104,8 @@ const NotificationDetailTimelineStep = ({
   historyButtonLabel,
   historyButtonClickHandler,
   eventTrackingCallbackShowMore,
+  disableDownloads,
+  isParty = true,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -146,7 +153,9 @@ const NotificationDetailTimelineStep = ({
         size={position === 'first' ? 'medium' : 'small'}
         sx={{
           opacity:
-            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS ? '0.5' : '1',
+            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty
+              ? '0.5'
+              : '1',
         }}
       />
       {showHistoryButton && historyButtonLabel ? (
@@ -176,6 +185,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
+                disabled={disableDownloads}
               >
                 {getLegalFactLabel(
                   lf.step,
@@ -256,8 +266,8 @@ const NotificationDetailTimelineStep = ({
                   fontSize={14}
                   display="inline"
                   variant="button"
-                  color="primary"
-                  sx={{ cursor: 'pointer' }}
+                  color={disableDownloads ? 'text.disabled' : 'primary'}
+                  sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
                   onClick={() => clickHandler(lf)}
                   key={
                     (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId

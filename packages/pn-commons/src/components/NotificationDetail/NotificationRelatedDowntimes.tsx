@@ -30,6 +30,9 @@ type Props = {
 
   // api id for ApiErrorWrapper
   apiId: string;
+
+  // for disabled downloads
+  disableDownloads?: boolean;
 };
 
 /*
@@ -227,6 +230,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                             event.legalFactId as string
                           );
                         }}
+                        disabled={props.disableDownloads}
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',
