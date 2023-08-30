@@ -359,6 +359,7 @@
         "group": "Gruppo",
         "no-groups": "Non ci sono gruppi per questo prodotto",
         "taxonomy-id": "Codice tassonomico",
+        "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Modalità di invio",
         "registered-letter-890": "Modello 890",
         "simple-registered-letter": "Raccomandata A/R",
