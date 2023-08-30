@@ -1,33 +1,34 @@
-import { useEffect, Fragment, useState, forwardRef, useImperativeHandle, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FormikValues, useFormik } from 'formik';
-import * as yup from 'yup';
 import _ from 'lodash';
+import { Fragment, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import {
-  getNotificationAllowedStatus,
-  tenYearsAgo,
-  today,
-  IUN_regex,
-  useIsMobile,
   CustomMobileDialog,
-  CustomMobileDialogToggle,
   CustomMobileDialogContent,
-  filtersApplied,
-  getValidValue,
-  formatToTimezoneString,
+  CustomMobileDialogToggle,
   GetNotificationsParams,
+  IUN_regex,
   dataRegex,
   dateIsDefined,
+  filtersApplied,
+  formatToTimezoneString,
+  getNotificationAllowedStatus,
+  getValidValue,
+  tenYearsAgo,
+  today,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
-import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
-import FilterNotificationsFormBody from './FilterNotificationsFormBody';
+import { trackEventByType } from '../../../utils/mixpanel';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
+import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
@@ -77,8 +78,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'notifiche']);
-  const dialogRef = useRef<{toggleOpen: () => void}>(null);
-
+  const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const validationSchema = yup.object({
     recipientId: yup
@@ -91,7 +91,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     endDate: yup
       .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today),
+      .max(new Date()),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
@@ -131,7 +131,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
       setEndDate(formik.values.endDate);
     }
-  };  
+  };
 
   useEffect(() => {
     void formik.validateForm();
@@ -158,7 +158,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   if (!showFilters) {
     return <></>;
   }
-
 
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
 
