@@ -1,5 +1,3 @@
-import { Fragment } from 'react';
-
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Grid, Stack, Typography } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
@@ -86,7 +84,7 @@ Props) => {
     });
 
   return (
-    <Fragment>
+    <>
       <Grid
         key={'files-section'}
         container
@@ -113,7 +111,7 @@ Props) => {
         </Grid>
       */}
       </Grid>
-      <Grid key={'detail-documents-message'} item>
+      <Grid key={'detail-documents-message'} item data-testid="documentsMessage">
         <Stack direction="row">
           {downloadFilesMessage && (
             <Typography variant="body2" sx={{ mb: 3 }}>
@@ -128,7 +126,7 @@ Props) => {
       <Grid key={'download-files-section'} item>
         {documents && mapOtherDocuments(documents)}
       </Grid>
-    </Fragment>
+    </>
   );
 };
 

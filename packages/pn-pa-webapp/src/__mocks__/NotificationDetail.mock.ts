@@ -63,7 +63,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
     {
       recipientType: RecipientType.PF,
       taxId: 'FRMTTR76M06B715E',
-      denomination: 'Mario Cucumber',
+      denomination: 'Mario Gherkin',
       digitalDomicile: {
         type: DigitalDomicileType.PEC,
         address: 'testpagopa3@pec.pagopa.it',
@@ -475,7 +475,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
       details: {
         recIndex: 1,
         recipientType: RecipientType.PF,
-        amount: 200,
+        amount: 5000,
         creditorTaxId: '77777777777',
         noticeCode: '302011692956029096',
         paymentSourceChannel: 'PA',
@@ -486,7 +486,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
 
 export const notificationDTO = getOneRecipientNotification();
 
-export const notificationToFe = parseNotificationDetail(notificationDTO);
+export const notificationToFe = parseNotificationDetail(_.cloneDeep(notificationDTO));
 export const notificationToFeMultiRecipient = parseNotificationDetail(
-  notificationDTOMultiRecipient
+  _.cloneDeep(notificationDTOMultiRecipient)
 );
