@@ -34,7 +34,7 @@ export type PagoPAPaymentHistory = PagoPAPaymentDetails & PaidDetails & ExtRegis
 
 export interface PaymentHistory {
   pagoPA?: PagoPAPaymentHistory;
-  f24Data?: F24PaymentDetails;
+  f24?: F24PaymentDetails;
   isLoading?: boolean; // only fe
 }
 
@@ -222,7 +222,7 @@ export interface NotificationDetailRecipient {
   payments?: Array<NotificationDetailPayment>;
 }
 
-export interface NotificationDetailDocument {
+export interface Attachment {
   digests: {
     sha256: string;
   };
@@ -231,6 +231,9 @@ export interface NotificationDetailDocument {
     key: string;
     versionToken: string;
   };
+}
+
+export interface NotificationDetailDocument extends Attachment {
   title?: string;
   requiresAck?: boolean;
   docIdx?: string;
@@ -248,17 +251,18 @@ export interface PagoPAPaymentDetails {
   creditorTaxId: string;
   noticeCode: string;
   attachment?: NotificationDetailDocument;
-  applyCostFlg: boolean;
+  applyCost: boolean;
 }
 
 export interface F24PaymentDetails {
-  description: string;
-  metadata: any;
+  title: string;
+  applyCost: boolean;
+  metadataAttachment: any; // TODO replace any with Attachment type
 }
 
 export interface NotificationDetailPayment {
   pagoPA?: PagoPAPaymentDetails;
-  f24Data?: F24PaymentDetails;
+  f24?: F24PaymentDetails;
 }
 
 export interface PaymentNotice {

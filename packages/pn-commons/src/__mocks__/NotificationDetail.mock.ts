@@ -21,7 +21,7 @@ const payments: Array<NotificationDetailPayment> = [
     pagoPA: {
       noticeCode: '302011686772695132',
       creditorTaxId: '77777777777',
-      applyCostFlg: true,
+      applyCost: true,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
@@ -38,7 +38,7 @@ const payments: Array<NotificationDetailPayment> = [
     pagoPA: {
       noticeCode: '302011686772695133',
       creditorTaxId: '77777777777',
-      applyCostFlg: true,
+      applyCost: true,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
@@ -50,7 +50,7 @@ const payments: Array<NotificationDetailPayment> = [
         },
       },
     },
-    f24Data: {
+    f24: {
       metadata: 'metadata-mocked',
       description: 'F24 seconda rata TARI',
     },

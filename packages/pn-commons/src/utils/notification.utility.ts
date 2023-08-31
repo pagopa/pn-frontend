@@ -887,7 +887,7 @@ export const populatePaymentHistory = (
   for (const userPayment of userPayments) {
     if (!userPayment.pagoPA) {
       paymentHistory.push({
-        f24Data: userPayment.f24Data,
+        f24: userPayment.f24,
       } as PaymentHistory);
       continue;
     }
@@ -938,7 +938,7 @@ export const populatePaymentHistory = (
 
     paymentHistory.push({
       pagoPA: pagoPAPayment,
-      f24Data: userPayment.f24Data,
+      f24: userPayment.f24,
     } as PaymentHistory);
   }
 

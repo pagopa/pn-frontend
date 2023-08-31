@@ -1818,7 +1818,7 @@ describe('Populate payment history', () => {
     const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
       return {
         pagoPA: { ...item.pagoPA, ...paymentInfo[index] },
-        f24Data: item.f24Data,
+        f24: item.f24,
       } as PaymentHistory;
     });
 
@@ -1855,7 +1855,7 @@ describe('Populate payment history', () => {
           ...res,
           {
             pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
-            f24Data: item.f24Data,
+            f24: item.f24,
           } as PaymentHistory,
         ];
       }
@@ -1888,7 +1888,7 @@ describe('Populate payment history', () => {
 
       return {
         pagoPA: pagoPAPayment,
-        f24Data: item.f24Data,
+        f24: item.f24,
       } as PaymentHistory;
     });
 
@@ -1916,7 +1916,7 @@ describe('Populate payment history', () => {
 
       return {
         pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
-        f24Data: item.f24Data,
+        f24: item.f24,
       } as PaymentHistory;
     });
 
@@ -1949,7 +1949,7 @@ describe('Populate payment history', () => {
 
       return {
         pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
-        f24Data: item.f24Data,
+        f24: item.f24,
       } as PaymentHistory;
     });
 

@@ -37,10 +37,10 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(radioButton).toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show caption if applyCostFlg is true', () => {
+  it('renders NotificationPaymentPagoPAItem - should show caption if applyCost is true', () => {
     const result = render(
       <NotificationPaymentPagoPAItem
-        pagoPAItem={{ ...pagoPAItem, amount: 999 }}
+        pagoPAItem={{ ...pagoPAItem, amount: 999, applyCost: true }}
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}

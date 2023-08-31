@@ -180,7 +180,7 @@ const notificationSlice = createSlice({
 
       if (paymentInfo && paymentInfo.pagoPA) {
         const updatedPaymentInfo = {
-          ...paymentInfo?.f24Data,
+          ...paymentInfo?.f24,
           pagoPA: {
             ...paymentInfo?.pagoPA,
             status: PaymentStatus.FAILED,

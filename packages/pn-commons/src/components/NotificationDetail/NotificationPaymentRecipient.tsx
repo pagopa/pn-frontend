@@ -117,7 +117,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           </Button>
           {selectedPayment &&
           payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
-            ?.f24Data ? (
+            ?.f24 ? (
             <Box display="flex" justifyContent="space-between" data-testid="f24-download">
               <Typography variant="body2">
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}

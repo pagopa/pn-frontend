@@ -401,7 +401,7 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011689142547191',
-      applyCostFlg: true,
+      applyCost: true,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
@@ -418,7 +418,7 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011689142547192',
-      applyCostFlg: true,
+      applyCost: true,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
@@ -438,7 +438,7 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695133',
-      applyCostFlg: true,
+      applyCost: true,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
@@ -450,21 +450,24 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
         },
       },
     },
-    f24Data: {
-      metadata: 'metadata-mocked',
-      description: 'F24 prima rata TARI',
+    f24: {
+      metadataAttachment: 'metadata-mocked',
+      applyCost: false,
+      title: 'F24 prima rata TARI',
     },
   },
   {
-    f24Data: {
-      metadata: 'metadata-mocked',
-      description: 'F24 seconda rata TARI',
+    f24: {
+      metadataAttachment: 'metadata-mocked',
+      applyCost: false,
+      title: 'F24 seconda rata TARI',
     },
   },
   {
-    f24Data: {
-      metadata: 'metadata-mocked',
-      description: 'F24 terza rata TARI',
+    f24: {
+      metadataAttachment: 'metadata-mocked',
+      applyCost: false,
+      title: 'F24 terza rata TARI',
     },
   },
 ];

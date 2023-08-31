@@ -119,7 +119,7 @@ describe('NotificationPaymentSender Component', () => {
       getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'pagoPA')
     );
     expect(f24Items).toHaveLength(
-      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'f24Data')
+      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'f24')
     );
     await selectRecipient(1);
     paymentItems = result?.queryAllByTestId('payment-item');
@@ -128,7 +128,7 @@ describe('NotificationPaymentSender Component', () => {
       getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPA')
     );
     expect(f24Items).toHaveLength(
-      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'f24Data')
+      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'f24')
     );
   });
 });

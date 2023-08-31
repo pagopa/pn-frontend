@@ -74,9 +74,9 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
   }, [] as Array<PagoPAPaymentHistory>);
 
   const f24PaymentHistory = paymentHistory.reduce((arr, payment) => {
-    if (payment.f24Data) {
+    if (payment.f24) {
       // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.f24Data);
+      arr.push(payment.f24);
     }
     return arr;
   }, [] as Array<F24PaymentDetails>);
