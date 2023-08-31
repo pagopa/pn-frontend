@@ -136,8 +136,8 @@ const NotificationPayment: React.FC<Props> = ({
     fetchPaymentInfo();
   }, []);
 
-  useDownloadDocument({ url: pagopaAttachmentUrl, isMobile });
-  useDownloadDocument({ url: f24AttachmentUrl, isMobile });
+  useDownloadDocument({ url: pagopaAttachmentUrl });
+  useDownloadDocument({ url: f24AttachmentUrl });
 
   const fetchPaymentInfo = () => {
     if (

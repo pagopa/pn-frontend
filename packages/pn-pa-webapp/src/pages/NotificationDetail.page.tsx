@@ -19,8 +19,7 @@ import {
 } from '@mui/material';
 import {
   ApiError,
-  GetNotificationDowntimeEventsParams, // PN-1714
-  // NotificationStatus,
+  GetNotificationDowntimeEventsParams, // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -320,9 +319,9 @@ const NotificationDetail = () => {
     []
   );
 
-  useDownloadDocument({ url: legalFactDownloadUrl, isMobile });
-  useDownloadDocument({ url: documentDownloadUrl, isMobile });
-  useDownloadDocument({ url: otherDocumentDownloadUrl, isMobile });
+  useDownloadDocument({ url: legalFactDownloadUrl });
+  useDownloadDocument({ url: documentDownloadUrl });
+  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 

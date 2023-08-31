@@ -239,9 +239,9 @@ const NotificationDetail = () => {
     []
   );
 
-  useDownloadDocument({ url: documentDownloadUrl, isMobile });
-  useDownloadDocument({ url: legalFactDownloadUrl, isMobile });
-  useDownloadDocument({ url: otherDocumentDownloadUrl, isMobile });
+  useDownloadDocument({ url: documentDownloadUrl });
+  useDownloadDocument({ url: legalFactDownloadUrl });
+  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 

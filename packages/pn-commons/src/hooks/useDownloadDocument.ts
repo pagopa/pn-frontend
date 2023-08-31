@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 
-function downloadDocument(url: string, isMobile?: boolean) {
+import { useIsMobile } from './useIsMobile';
+
+function downloadDocument(url: string, isMobile: boolean) {
   const link = document.createElement('a');
   link.href = url;
   if (!isMobile) {
@@ -12,7 +14,6 @@ function downloadDocument(url: string, isMobile?: boolean) {
 
 type Props = {
   url?: string;
-  isMobile?: boolean;
   clearDownloadAction?: () => void;
 };
 
@@ -24,7 +25,8 @@ type Props = {
 // -------------------------------
 // Carlos Lombardi and Andrea Cimini, 2022.11.17
 // -------------------------------
-export function useDownloadDocument({ url, isMobile, clearDownloadAction }: Props) {
+export function useDownloadDocument({ url, clearDownloadAction }: Props) {
+  const isMobile = useIsMobile();
   useEffect(() => {
     if (url) {
       downloadDocument(url, isMobile);
