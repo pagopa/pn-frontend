@@ -66,8 +66,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
-      abstract: notification.abstract || '',
-      group: notification.group || '',
+      abstract: notification.abstract ?? '',
+      group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
       paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),

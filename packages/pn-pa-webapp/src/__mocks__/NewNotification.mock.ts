@@ -15,6 +15,33 @@ import {
 import { GroupStatus, UserGroup } from '../models/user';
 import { newNotificationMapper } from '../utils/notification.utility';
 
+export const newNotificationGroups: Array<UserGroup> = [
+  {
+    id: 'mock-id-1',
+    name: 'mock-group-1',
+    description: 'mock-description-1',
+    status: GroupStatus.ACTIVE,
+  },
+  {
+    id: 'mock-id-2',
+    name: 'mock-group-2',
+    description: 'mock-description-2',
+    status: GroupStatus.ACTIVE,
+  },
+  {
+    id: 'mock-id-3',
+    name: 'mock-group-3',
+    description: 'mock-description-3',
+    status: GroupStatus.ACTIVE,
+  },
+  {
+    id: 'mock-id-4',
+    name: 'mock-group-4',
+    description: 'mock-description-4',
+    status: GroupStatus.ACTIVE,
+  },
+];
+
 const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: '0',
@@ -124,7 +151,7 @@ export const newNotification: NewNotification = {
   },
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
-  group: 'GroupTest',
+  group: newNotificationGroups[2].id,
   taxonomyCode: '010801N',
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
@@ -143,30 +170,3 @@ export const newNotificationEmpty: NewNotification = {
 };
 
 export const newNotificationDTO: NewNotificationDTO = newNotificationMapper(newNotification);
-
-export const newNotificationGroups: Array<UserGroup> = [
-  {
-    id: 'mock-id-1',
-    name: 'mock-group-1',
-    description: 'mock-description-1',
-    status: GroupStatus.ACTIVE,
-  },
-  {
-    id: 'mock-id-2',
-    name: 'mock-group-2',
-    description: 'mock-description-2',
-    status: GroupStatus.ACTIVE,
-  },
-  {
-    id: 'mock-id-3',
-    name: 'mock-group-3',
-    description: 'mock-description-3',
-    status: GroupStatus.ACTIVE,
-  },
-  {
-    id: 'mock-id-4',
-    name: 'mock-group-4',
-    description: 'mock-description-4',
-    status: GroupStatus.ACTIVE,
-  },
-];

@@ -41,56 +41,6 @@ const axe = configureAxe({
   },
 });
 
-type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY';
-type MockCodes = 200 | 204 | 500 | 401 | 400 | 403 | 451;
-
-/**
- * Utility function to mock api response
- * @param client Axios client or Mock Adapter instance
- * @param method the api method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY
- * @param path the api path
- * @param code the response code
- * @param request body request
- * @param response response
- * @param requestHeader request header
- * @param responseHeader response header
- * @returns the mock instance
- */
-function mockApi(
-  client: AxiosInstance | MockAdapter,
-  method: MockMethods,
-  path: string,
-  code: MockCodes,
-  request?: any,
-  response?: any,
-  requestHeader?: any,
-  responseHeader?: any
-): MockAdapter {
-  const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
-  switch (method) {
-    case 'GET':
-      mock.onGet(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'POST':
-      mock.onPost(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'PUT':
-      mock.onPut(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'DELETE':
-      mock.onDelete(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'PATCH':
-      mock.onPatch(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'ANY':
-      mock.onAny(path, request, requestHeader).reply(code, response, responseHeader);
-    default:
-      break;
-  }
-  return mock;
-}
-
 // utility functions
 /**
  * Test the existence of a field, its label and optionally its value
@@ -131,10 +81,37 @@ async function testInput(container: HTMLElement, elementName: string, value: str
   });
 }
 
+/**
+ * Test radio options and optionally select a value
+ * @container container element
+ * @dataTestId data-testid attribute
+ * @values list of options
+ * @valueToSelect option to select
+ */
+async function testRadio(
+  container: HTMLElement,
+  dataTestId: string,
+  values: Array<string>,
+  valueToSelect?: number
+) {
+  const radioButtons = container?.querySelectorAll(`[data-testid="${dataTestId}"]`);
+  expect(radioButtons).toHaveLength(values.length);
+  values.forEach((value, index) => {
+    expect(radioButtons[index]).toHaveTextContent(value);
+  });
+  if (valueToSelect !== undefined) {
+    fireEvent.click(radioButtons[valueToSelect]);
+    await waitFor(() => {
+      const radioInput = radioButtons[valueToSelect].querySelector('input');
+      expect(radioInput!).toBeChecked();
+    });
+  }
+}
+
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
 export { customRender as render, testStore };
 export { axe };
 // utility functions
-export { mockApi, testInput, testFormElements };
+export { testInput, testFormElements, testRadio };
