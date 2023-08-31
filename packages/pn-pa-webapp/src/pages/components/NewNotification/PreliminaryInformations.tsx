@@ -33,8 +33,8 @@ import { RootState } from '../../../redux/store';
 import { getConfiguration } from '../../../services/configuration.service';
 import { TrackEventType } from '../../../utils/events';
 import { trackEventByType } from '../../../utils/mixpanel';
+import { requiredStringFieldValidation } from '../../../utils/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { requiredStringFieldValidation } from './validation.utility';
 
 type Props = {
   notification: NewNotification;

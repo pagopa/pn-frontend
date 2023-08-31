@@ -44,22 +44,22 @@ const axe = configureAxe({
 // utility functions
 /**
  * Test the existence of a field, its label and optionally its value
- * @form form element
+ * @container container element
  * @elementName element name
  * @label element's label
  * @value the expected value of the element
  */
 function testFormElements(
-  form: HTMLFormElement,
+  container: HTMLElement,
   elementName: string,
   label: string,
   value?: string | number
 ) {
-  const formElement = form.querySelector(
+  const formElement = container.querySelector(
     `input[id="${elementName}"], input[name="${elementName}"]`
   );
   expect(formElement).toBeInTheDocument();
-  const formElementLabel = form.querySelector(`label[for="${elementName}"]`);
+  const formElementLabel = container.querySelector(`label[for="${elementName}"]`);
   expect(formElementLabel).toBeInTheDocument();
   expect(formElementLabel).toHaveTextContent(label);
   if (value !== undefined && value !== null) {
@@ -72,13 +72,22 @@ function testFormElements(
  * @container container element
  * @elementName element name
  * @value the expected value of the element
+ * @blur set if a blur event must be fired after input change
  */
-async function testInput(container: HTMLElement, elementName: string, value: string | number) {
+async function testInput(
+  container: HTMLElement,
+  elementName: string,
+  value: string | number,
+  blur: boolean = false
+) {
   const input = container.querySelector(`input[name="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
     expect(input).toHaveValue(value);
   });
+  if (blur) {
+    fireEvent.blur(input!);
+  }
 }
 
 /**
@@ -108,10 +117,23 @@ async function testRadio(
   }
 }
 
+/**
+ * Generate a random string with specified length
+ * @length desired length
+ */
+function randomString(length: number) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; ++i) {
+    result += alphabet[Math.floor(alphabet.length * Math.random())];
+  }
+  return result;
+}
+
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
 export { customRender as render, testStore };
 export { axe };
 // utility functions
-export { testInput, testFormElements, testRadio };
+export { testInput, testFormElements, testRadio, randomString };

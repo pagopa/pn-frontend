@@ -1,6 +1,7 @@
-import _ from 'lodash';
-import { Grid, SxProps, TextField } from '@mui/material';
 import { FormikErrors, FormikTouched, FormikValues, getIn } from 'formik';
+import _ from 'lodash';
+
+import { Grid, SxProps, TextField } from '@mui/material';
 
 type Props = {
   keyName: string;
@@ -14,7 +15,7 @@ type Props = {
   sx?: SxProps;
 };
 
-const FormTextField = ({
+const FormTextField: React.FC<Props> = ({
   keyName,
   label,
   values,
@@ -24,9 +25,10 @@ const FormTextField = ({
   handleBlur,
   width = 12,
   sx,
-}: Props) => {
-
-  const showErrorIfPresent = Boolean(getIn(touched, keyName) || String(_.get(values, keyName)).length > 0);
+}) => {
+  const showErrorIfPresent = Boolean(
+    getIn(touched, keyName) || String(_.get(values, keyName)).length > 0
+  );
 
   return (
     <Grid item xs={width}>

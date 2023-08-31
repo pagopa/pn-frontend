@@ -18,6 +18,7 @@ import {
   RenderResult,
   act,
   fireEvent,
+  randomString,
   render,
   testFormElements,
   testInput,
@@ -51,15 +52,6 @@ jest.mock('../../../../services/configuration.service', () => {
     }),
   };
 });
-
-function randomString(length) {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; ++i) {
-    result += alphabet[Math.floor(alphabet.length * Math.random())];
-  }
-  return result;
-}
 
 const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
   await testInput(form!, 'paProtocolNumber', newNotification.paProtocolNumber);
@@ -109,7 +101,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
     mock.restore();
   });
 
-  it('renders with enabled payment - no required groups', async () => {
+  it('renders - no required groups', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
@@ -137,7 +129,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
     expect(button!).toBeDisabled();
   });
 
-  it('renders with enabled payment - required groups', async () => {
+  it('renders - required groups', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
@@ -357,7 +349,7 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     mock.restore();
   });
 
-  it('renders PreliminaryInformations with disabled payment', async () => {
+  it('renders component', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(

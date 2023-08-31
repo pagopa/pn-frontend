@@ -21,8 +21,8 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
 import { getConfiguration } from '../../../services/configuration.service';
+import { requiredStringFieldValidation } from '../../../utils/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { requiredStringFieldValidation } from './validation.utility';
 
 type AttachmentBoxProps = {
   id: string;
