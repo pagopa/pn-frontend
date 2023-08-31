@@ -16,7 +16,7 @@ import {
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
-const payments: Array<NotificationDetailPayment> = [
+export const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       noticeCode: '302011686772695132',
@@ -51,8 +51,16 @@ const payments: Array<NotificationDetailPayment> = [
       },
     },
     f24: {
-      metadata: 'metadata-mocked',
-      description: 'F24 seconda rata TARI',
+      metadataAttachment: 'metadata-mocked',
+      applyCost: false,
+      title: 'F24 seconda rata TARI',
+    },
+  },
+  {
+    f24: {
+      metadataAttachment: 'metadata-mocked',
+      applyCost: false,
+      title: 'F24 seconda terza TARI',
     },
   },
 ];

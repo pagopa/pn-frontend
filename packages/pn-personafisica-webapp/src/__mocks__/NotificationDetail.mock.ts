@@ -72,6 +72,13 @@ const payments: Array<NotificationDetailPayment> = [
       applyCost: false,
     },
   },
+  {
+    f24: {
+      title: 'F24 prima rata',
+      metadataAttachment: [],
+      applyCost: false,
+    },
+  },
 ];
 
 export const recipient: NotificationDetailRecipient = {

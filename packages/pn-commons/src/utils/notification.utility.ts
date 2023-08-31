@@ -887,6 +887,7 @@ export const populatePaymentHistory = (
   for (const userPayment of userPayments) {
     if (!userPayment.pagoPA) {
       paymentHistory.push({
+        pagoPA: undefined,
         f24: userPayment.f24,
       } as PaymentHistory);
       continue;
