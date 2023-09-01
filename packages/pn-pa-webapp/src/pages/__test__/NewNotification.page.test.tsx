@@ -130,6 +130,57 @@ describe('NewNotification Page without payment', () => {
     });
   });
 
+  it('clicks on stepper and naavigate', async () => {
+    // render component
+    // because all the step are already deeply tested, we can set the new notification already populated
+    await act(async () => {
+      result = render(<NewNotification />, {
+        preloadedState: {
+          newNotificationState: { notification: newNotification, groups: [] },
+          userState: { user: userResponse },
+        },
+      });
+    });
+    const stepper = result?.getByTestId('stepper');
+    const step1 = within(stepper!).getByTestId('step-0');
+    const step2 = within(stepper!).getByTestId('step-1');
+    // STEP 1
+    let buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    let preliminaryInformation = result?.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+    fireEvent.click(buttonSubmit!);
+    // STEP 2
+    await waitFor(() => {
+      expect(preliminaryInformation).not.toBeInTheDocument();
+    });
+    buttonSubmit = result?.getByTestId('step-submit');
+    let recipientForm = result?.getByTestId('recipientForm');
+    expect(recipientForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit!);
+    // STEP 3
+    await waitFor(() => {
+      expect(recipientForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result?.getByTestId('step-submit');
+    const attachmentsForm = result?.getByTestId('attachmentsForm');
+    expect(attachmentsForm).toBeInTheDocument();
+    // return to step 2
+    fireEvent.click(step2);
+    await waitFor(() => {
+      expect(attachmentsForm).not.toBeInTheDocument();
+    });
+    recipientForm = result?.getByTestId('recipientForm');
+    expect(recipientForm).toBeInTheDocument();
+    // return to step 1
+    fireEvent.click(step1);
+    await waitFor(() => {
+      expect(recipientForm).not.toBeInTheDocument();
+    });
+    preliminaryInformation = result?.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+  });
+
   it('create new notification', async () => {
     const mappedNotification = newNotificationMapper(newNotification);
     const mockResponse = {
