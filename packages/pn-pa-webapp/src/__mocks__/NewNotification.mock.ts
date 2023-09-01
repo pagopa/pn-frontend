@@ -91,23 +91,46 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
   },
 ];
 
-const newNotificationDocument: NewNotificationDocument = {
-  id: 'mocked-id',
-  idx: 0,
-  name: 'mocked-name',
-  contentType: 'application/pdf',
-  file: {
-    data: new File([''], 'mocked-name', { type: 'application/pdf' }),
-    sha256: {
-      hashBase64: 'mocked-sha256',
-      hashHex: '',
+const newNotificationDocuments: Array<NewNotificationDocument> = [
+  {
+    id: 'mocked-id-0',
+    idx: 0,
+    name: 'mocked-name-0',
+    contentType: 'application/pdf',
+    file: {
+      data: new File(['mocked content first file'], 'mocked-first-file.pdf', {
+        type: 'application/pdf',
+      }),
+      sha256: {
+        hashBase64: 'mocked-sha256-0',
+        hashHex: 'mocked-hashHex-0',
+      },
+    },
+    ref: {
+      key: 'mocked-key-0',
+      versionToken: 'mocked-versionToken-0',
     },
   },
-  ref: {
-    key: '',
-    versionToken: '',
+  {
+    id: 'mocked-id-1',
+    idx: 1,
+    name: 'mocked-name-1',
+    contentType: 'application/pdf',
+    file: {
+      data: new File(['mocked content second file'], 'mocked-second-file.pdf', {
+        type: 'application/pdf',
+      }),
+      sha256: {
+        hashBase64: 'mocked-sha256-1',
+        hashHex: 'mocked-hashHex-1',
+      },
+    },
+    ref: {
+      key: 'mocked-key-1',
+      versionToken: 'mocked-versionToken-1',
+    },
   },
-};
+];
 
 const newNotificationPagoPa: NewNotificationDocument = {
   id: 'mocked-pagopa-id',
@@ -149,7 +172,7 @@ export const newNotification: NewNotification = {
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
   recipients: newNotificationRecipients,
-  documents: [newNotificationDocument],
+  documents: newNotificationDocuments,
   payment: {
     [newNotificationRecipients[0].taxId]: {
       pagoPaForm: { ...newNotificationPagoPa },

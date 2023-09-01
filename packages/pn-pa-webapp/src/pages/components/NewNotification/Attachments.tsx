@@ -1,12 +1,5 @@
 import { FormikErrors, useFormik } from 'formik';
-import {
-  ChangeEvent,
-  ForwardedRef,
-  Fragment,
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-} from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -46,7 +39,7 @@ type AttachmentBoxProps = {
 
 const MAX_NUMBER_OF_ATTACHMENTS = 10;
 
-const AttachmentBox = ({
+const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   id,
   title,
   sx,
@@ -60,18 +53,12 @@ const AttachmentBox = ({
   onFileUploaded,
   onRemoveFile,
   fileUploaded,
-}: AttachmentBoxProps) => {
+}) => {
   const { t } = useTranslation(['notifiche']);
 
   return (
-    <Fragment>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={sx}
-        data-testid="attachmentBox"
-      >
+    <Box data-testid="attachmentBox">
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
           <ButtonNaked
@@ -104,8 +91,9 @@ const AttachmentBox = ({
         helperText={fieldTouched && fieldErros}
         size="small"
         margin="normal"
+        data-testid="attachmentNameInput"
       />
-    </Fragment>
+    </Box>
   );
 };
 
@@ -134,13 +122,13 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({
+const Attachments: React.FC<Props> = ({
   onConfirm,
   onPreviousStep,
   attachmentsData,
   forwardedRef,
   isCompleted,
-}: Props) => {
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',

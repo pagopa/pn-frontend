@@ -47,7 +47,7 @@ export const calcUnit8Array = (file: any): Promise<Uint8Array> => {
 export const calcSha256String = (file: any): Promise<{ hashHex: string; hashBase64: string }> => {
   // this is because in jest crypto is undefined and test fails due to resolve in onload function
   if (process.env.NODE_ENV === 'test') {
-    return Promise.resolve({ hashHex: 'mocked-hashHex', hashBase64: 'mocked-hasBase64' });
+    return Promise.resolve({ hashHex: 'mocked-hashHex', hashBase64: 'mocked-hashBase64' });
   }
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
