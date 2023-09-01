@@ -34,6 +34,7 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { URL_DIGITAL_NOTIFICATIONS_FAQ } from '@pagopa-pn/pn-commons/src/utils/costants';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   getNotificationPaymentInfo,
@@ -466,7 +467,12 @@ const NotificationPayment: React.FC<Props> = ({
             severity="info"
           >
             {t('detail.payment.cancelled-alert-text-payment')}&nbsp;
-            <Link href="" sx={{ fontSize: '16px' }} target="_blank" variant="body1">
+            <Link
+              href={URL_DIGITAL_NOTIFICATIONS_FAQ}
+              sx={{ fontSize: '16px' }}
+              target="_blank"
+              variant="body1"
+            >
               {t('detail.disclaimer-link')}
             </Link>
           </Alert>

@@ -12,9 +12,12 @@ export const LANGUAGES: Languages = {
   sl: { it: 'Italijansko', en: 'Angleško', fr: 'Francosko', de: 'Nemško', sl: 'Slovensko' },
 };
 
+export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it';
+const FAQ = 'faq';
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
 const ACCESSIBILITY_LINK = 'https://form.agid.gov.it/view/ee21027b-0e20-4e57-98c1-b3652daa6ef5/';
+export const URL_DIGITAL_NOTIFICATIONS_FAQ = `${URL_DIGITAL_NOTIFICATIONS}/${FAQ}`;
 
 const getFooterLinkLabels = (
   link: string,
