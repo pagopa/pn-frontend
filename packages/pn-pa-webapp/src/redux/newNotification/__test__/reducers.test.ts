@@ -74,18 +74,16 @@ describe('New notification redux state tests', () => {
 
   it('Should be able to set cancelled iun', () => {
     const action = store.dispatch(setCancelledIun('mocked-iun'));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setCancelledIun');
-    expect(payload).toEqual('mocked-iun');
+    expect(action.payload).toEqual('mocked-iun');
   });
 
   it('Should be able to set sender infos', () => {
     const action = store.dispatch(
       setSenderInfos({ senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId' })
     );
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setSenderInfos');
-    expect(payload).toEqual({
+    expect(action.payload).toEqual({
       senderDenomination: 'mocked-denomination',
       senderTaxId: 'mocked-taxId',
     });
@@ -97,9 +95,8 @@ describe('New notification redux state tests', () => {
     ];
     mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
-    const payload = action.payload;
     expect(action.type).toBe('getUserGroups/fulfilled');
-    expect(payload).toEqual(mockResponse);
+    expect(action.payload).toEqual(mockResponse);
     expect(store.getState().newNotificationState.groups).toStrictEqual(mockResponse);
   });
 
@@ -114,23 +111,20 @@ describe('New notification redux state tests', () => {
       paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');
-    expect(payload).toEqual(preliminaryInformations);
+    expect(action.payload).toEqual(preliminaryInformations);
   });
 
   it('Should be able to save recipients', () => {
     const action = store.dispatch(saveRecipients({ recipients: newNotification.recipients }));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/saveRecipients');
-    expect(payload).toEqual({ recipients: newNotification.recipients });
+    expect(action.payload).toEqual({ recipients: newNotification.recipients });
   });
 
   it('Should be able to save attachemnts', () => {
     const action = store.dispatch(setAttachments({ documents: newNotification.documents }));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setAttachments');
-    expect(payload).toEqual({ documents: newNotification.documents });
+    expect(action.payload).toEqual({ documents: newNotification.documents });
   });
 
   it('Should be able to upload attachment', async () => {
@@ -158,10 +152,19 @@ describe('New notification redux state tests', () => {
         'x-amz-version-id': 'mocked-versionToken',
       });
     }
-    const action = await store.dispatch(uploadNotificationAttachment(newNotification.documents));
-    const payload = action.payload;
+    const action = await store.dispatch(
+      uploadNotificationAttachment(
+        newNotification.documents.map((doc) => ({
+          ...doc,
+          ref: {
+            versionToken: '',
+            key: '',
+          },
+        }))
+      )
+    );
     expect(action.type).toBe('uploadNotificationAttachment/fulfilled');
-    expect(payload).toEqual(
+    expect(action.payload).toEqual(
       newNotification.documents.map((document) => ({
         ...document,
         ref: {
@@ -177,9 +180,8 @@ describe('New notification redux state tests', () => {
     const action = store.dispatch(
       setPaymentDocuments({ paymentDocuments: newNotification.payment! })
     );
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
-    expect(payload).toEqual({ paymentDocuments: newNotification.payment! });
+    expect(action.payload).toEqual({ paymentDocuments: newNotification.payment! });
   });
 
   it('Should be able to upload payment document', async () => {
@@ -252,7 +254,6 @@ describe('New notification redux state tests', () => {
     const action = await store.dispatch(
       uploadNotificationPaymentDocument(newNotification.payment!)
     );
-    const payload = action.payload;
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
     const response = {};
     for (const [key, value] of Object.entries(newNotification.payment!)) {
@@ -285,15 +286,14 @@ describe('New notification redux state tests', () => {
         };
       }
     }
-    expect(payload).toEqual(response);
+    expect(action.payload).toEqual(response);
     extMock.restore();
   });
 
   it('Should be able to set isCompleted status', () => {
     const action = store.dispatch(setIsCompleted());
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setIsCompleted');
-    expect(payload).toEqual(void 0);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to create new notification', async () => {
@@ -305,16 +305,14 @@ describe('New notification redux state tests', () => {
     const mappedNotification = newNotificationMapper(newNotification);
     mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(200, mockResponse);
     const action = await store.dispatch(createNewNotification(newNotification));
-    const payload = action.payload;
     expect(action.type).toBe('createNewNotification/fulfilled');
-    expect(payload).toEqual(mockResponse);
+    expect(action.payload).toEqual(mockResponse);
   });
 
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/resetState');
-    expect(payload).toEqual(undefined);
+    expect(action.payload).toEqual(undefined);
     const state = store.getState().newNotificationState;
     expect(state).toEqual(initialState);
   });

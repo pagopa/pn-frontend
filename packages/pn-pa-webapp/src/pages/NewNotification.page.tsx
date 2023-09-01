@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -24,10 +24,10 @@ import SyncFeedback from './components/NewNotification/SyncFeedback';
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   return (
-    <Fragment>
+    <>
       {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
       <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>
-    </Fragment>
+    </>
   );
 };
 
@@ -166,14 +166,19 @@ const NewNotification = () => {
                 </Typography>
               </Alert>
             )}
-
-            <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
+            <Stepper
+              activeStep={activeStep}
+              alternativeLabel
+              sx={{ marginTop: '60px' }}
+              data-testid="stepper"
+            >
               {steps.map((label, index) => (
                 <Step
                   id={label}
                   key={label}
                   onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
                   sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
+                  data-testid={`step-${index}`}
                 >
                   <StepLabel>{label}</StepLabel>
                 </Step>

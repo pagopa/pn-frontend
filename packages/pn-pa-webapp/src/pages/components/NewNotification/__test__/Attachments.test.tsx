@@ -115,7 +115,7 @@ describe('Attachments Component with payment enabled', () => {
           key: 'mocked-key',
         },
       ]);
-    extMock.onPut(`https://mocked-url.com`).reply(200, undefined, {
+    extMock.onPut(`https://mocked-url.com`).reply(200, newNotification.documents[0].file.data, {
       'x-amz-version-id': 'mocked-versionToken',
     });
     // render component
@@ -261,10 +261,10 @@ describe('Attachments Component with payment enabled', () => {
           key: 'mocked-key-1',
         },
       ]);
-    extMock.onPut(`https://mocked-url-0.com`).reply(200, undefined, {
+    extMock.onPut(`https://mocked-url-0.com`).reply(200, newNotification.documents[0].file.data, {
       'x-amz-version-id': 'mocked-versionToken-0',
     });
-    extMock.onPut(`https://mocked-url-1.com`).reply(200, undefined, {
+    extMock.onPut(`https://mocked-url-1.com`).reply(200, newNotification.documents[1].file.data, {
       'x-amz-version-id': 'mocked-versionToken-1',
     });
     // render component
@@ -390,7 +390,9 @@ describe('Attachments Component with payment enabled', () => {
     const form = result?.container.querySelector('form');
     const buttonAddAnotherDoc = within(form!).getByTestId('add-another-doc');
     for (let i = 0; i < 10; i++) {
-      fireEvent.click(buttonAddAnotherDoc);
+      await act(async () => {
+        fireEvent.click(buttonAddAnotherDoc);
+      });
     }
     expect(buttonAddAnotherDoc).not.toBeInTheDocument();
   });

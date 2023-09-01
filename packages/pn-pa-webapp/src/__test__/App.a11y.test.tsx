@@ -7,8 +7,6 @@ import { theme } from '@pagopa/mui-italia';
 import App from '../App';
 import { currentStatusOk } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
-import { GET_CONSENTS } from '../api/consents/consents.routes';
-import { ConsentType } from '../models/consents';
 import { axe, render } from './test-utils';
 
 // mock imports

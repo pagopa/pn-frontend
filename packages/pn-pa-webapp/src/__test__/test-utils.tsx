@@ -28,6 +28,10 @@ const customRender = (
   testStore = configureStore({
     reducer: appReducers,
     preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
   return render(ui, {
     wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,

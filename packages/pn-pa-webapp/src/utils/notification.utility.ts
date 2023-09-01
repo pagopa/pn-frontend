@@ -59,23 +59,27 @@ const newNotificationRecipientsMapper = (
           address: recipient.digitalDomicile,
         }
       : undefined;
-    return {
+    const parsedRecipient: NotificationDetailRecipient = {
       denomination:
         recipient.recipientType === RecipientType.PG
           ? recipient.firstName
           : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      payment:
-        paymentMethod === PaymentModel.NOTHING
-          ? undefined
-          : {
-              creditorTaxId: recipient.creditorTaxId,
-              noticeCode: recipient.noticeCode,
-            },
-      digitalDomicile,
       physicalAddress: checkPhysicalAddress(recipient),
     };
+    if (digitalDomicile) {
+      // eslint-disable-next-line functional/immutable-data
+      parsedRecipient.digitalDomicile = digitalDomicile;
+    }
+    if (paymentMethod !== PaymentModel.NOTHING) {
+      // eslint-disable-next-line functional/immutable-data
+      parsedRecipient.payment = {
+        creditorTaxId: recipient.creditorTaxId,
+        noticeCode: recipient.noticeCode,
+      };
+    }
+    return parsedRecipient;
   });
 
 const newNotificationDocumentMapper = (

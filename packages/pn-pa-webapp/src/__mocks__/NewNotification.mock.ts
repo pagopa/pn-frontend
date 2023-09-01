@@ -14,6 +14,7 @@ import {
 } from '../models/NewNotification';
 import { GroupStatus, UserGroup } from '../models/user';
 import { newNotificationMapper } from '../utils/notification.utility';
+import { userResponse } from './Auth.mock';
 
 export const newNotificationGroups: Array<UserGroup> = [
   {
@@ -169,6 +170,7 @@ const newNotificationF24Standard: NewNotificationDocument = {
 };
 
 export const newNotification: NewNotification = {
+  abstract: '',
   paProtocolNumber: '12345678910',
   subject: 'Multone esagerato',
   recipients: newNotificationRecipients,
@@ -186,7 +188,9 @@ export const newNotification: NewNotification = {
   paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
   group: newNotificationGroups[2].id,
   taxonomyCode: '010801N',
-  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+  senderDenomination: userResponse.organization.name,
+  senderTaxId: userResponse.organization.fiscal_code,
 };
 
 export const newNotificationEmpty: NewNotification = {

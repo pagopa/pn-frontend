@@ -1,9 +1,10 @@
-import { ForwardedRef, forwardRef, Fragment, useImperativeHandle, useMemo } from 'react';
-import _ from 'lodash';
-import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import _ from 'lodash';
+import { ForwardedRef, Fragment, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+
 import { Link, Paper, Typography } from '@mui/material';
-import { SectionHeading, FileUpload } from '@pagopa-pn/pn-commons';
+import { FileUpload, SectionHeading } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -28,7 +29,13 @@ type PaymentBoxProps = {
   fileUploaded?: NewNotificationDocument;
 };
 
-const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: PaymentBoxProps) => {
+const PaymentBox: React.FC<PaymentBoxProps> = ({
+  id,
+  title,
+  onFileUploaded,
+  onRemoveFile,
+  fileUploaded,
+}) => {
   const { t } = useTranslation(['notifiche']);
 
   return (
@@ -74,13 +81,13 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
   },
 });
 
-const PaymentMethods = ({
+const PaymentMethods: React.FC<Props> = ({
   notification,
   onConfirm,
   isCompleted,
   onPreviousStep,
   forwardedRef,
-}: Props) => {
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.payment-methods',
@@ -91,29 +98,30 @@ const PaymentMethods = ({
   const initialValues = useMemo(
     () =>
       notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
-        /* eslint-disable functional/immutable-data */
         const recipientPayment = paymentDocumentsExists
           ? (notification.payment as { [key: string]: PaymentObject })[r.taxId]
           : undefined;
         const pagoPaForm = recipientPayment?.pagoPaForm;
         const f24flatRate = recipientPayment?.f24flatRate;
         const f24standard = recipientPayment?.f24standard;
+        // eslint-disable-next-line functional/immutable-data
         obj[r.taxId] = {
           pagoPaForm: pagoPaForm
             ? pagoPaForm
             : newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
         };
         if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
+          // eslint-disable-next-line functional/immutable-data
           obj[r.taxId].f24flatRate = f24flatRate
             ? f24flatRate
             : newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate'));
         }
         if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
+          // eslint-disable-next-line functional/immutable-data
           obj[r.taxId].f24standard = f24standard
             ? f24standard
             : newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24'));
         }
-        /* eslint-enable functional/immutable-data */
         return obj;
       }, {}),
     []
@@ -132,8 +140,8 @@ const PaymentMethods = ({
       // ---------------------------------------------
       // Carlos Lombardi, 2023.01.10
       const paymentsForThisRecipient: any = {};
-      /* eslint-disable functional/immutable-data */
       if (formikPagoPaForm.file.data) {
+        // eslint-disable-next-line functional/immutable-data
         paymentsForThisRecipient.pagoPaForm = {
           ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
           file: {
@@ -150,6 +158,7 @@ const PaymentMethods = ({
         };
       }
       if (formikF24flatRate?.file.data) {
+        // eslint-disable-next-line functional/immutable-data
         paymentsForThisRecipient.f24flatRate = {
           ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
           file: {
@@ -166,6 +175,7 @@ const PaymentMethods = ({
         };
       }
       if (formikF24standard?.file.data) {
+        // eslint-disable-next-line functional/immutable-data
         paymentsForThisRecipient.f24standard = {
           ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
           file: {
@@ -182,9 +192,9 @@ const PaymentMethods = ({
         };
       }
       if (Object.keys(paymentsForThisRecipient).length > 0) {
+        // eslint-disable-next-line functional/immutable-data
         obj[r.taxId] = paymentsForThisRecipient;
       }
-      /* eslint-enable functional/immutable-data */
       return obj;
     }, {});
 

@@ -62,10 +62,10 @@ describe('NewApiKey component', () => {
       result = render(<NewApiKey />);
     });
     expect(result?.container).toHaveTextContent(/page-title/i);
-    const form = result?.getByTestId('new-api-key-form') as HTMLFormElement;
+    const form = result?.getByTestId('new-api-key-form');
     testFormElements(form!, 'name', 'form-placeholder-name');
     testFormElements(form!, 'groups', 'form-placeholder-groups');
-    const submitButton = within(form).getByTestId('submit-new-api-key');
+    const submitButton = within(form!).getByTestId('submit-new-api-key');
     expect(submitButton!).toBeDisabled();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
@@ -76,20 +76,20 @@ describe('NewApiKey component', () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    const form = result?.getByTestId('new-api-key-form') as HTMLFormElement;
+    const form = result?.getByTestId('new-api-key-form');
 
     // initial status: empty form, submit is disabled, no error message
-    const submitButton = within(form).getByTestId('submit-new-api-key');
+    const submitButton = within(form!).getByTestId('submit-new-api-key');
     expect(submitButton).toBeDisabled();
     expect(result?.container).not.toHaveTextContent(/form-error-name/);
 
     // fill api key name: valid form, submit is enabled, no error message
-    await testInput(form, 'name', newApiKeyDTO.name);
+    await testInput(form!, 'name', newApiKeyDTO.name);
     expect(submitButton).toBeEnabled();
     expect(result?.container).not.toHaveTextContent(/form-error-name/);
 
     // set back api key name to empty text field, submit is disabled, error message shown
-    await testInput(form, 'name', '');
+    await testInput(form!, 'name', '');
     expect(submitButton).toBeDisabled();
     expect(result?.container).toHaveTextContent(/form-error-name/);
   });
@@ -101,16 +101,16 @@ describe('NewApiKey component', () => {
     await act(async () => {
       result = render(<NewApiKey />);
     });
-    const form = result?.getByTestId('new-api-key-form') as HTMLFormElement;
-    await testInput(form, 'name', newApiKeyDTO.name);
+    const form = result?.getByTestId('new-api-key-form');
+    await testInput(form!, 'name', newApiKeyDTO.name);
     await testAutocomplete(
-      form,
+      form!,
       'groups',
       mockGroups.map((g) => ({ id: g.id, name: g.name })),
       true,
       0
     );
-    const submitButton = within(form).getByTestId('submit-new-api-key');
+    const submitButton = within(form!).getByTestId('submit-new-api-key');
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
