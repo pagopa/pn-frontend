@@ -2,7 +2,7 @@ import React from 'react';
 import * as redux from 'react-redux';
 
 import { TextField } from '@mui/material';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { RenderResult, render, screen, waitFor } from '../../../__test__/test-utils';
@@ -54,11 +54,17 @@ const mockTrackEventFn = jest.fn();
 
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
+  const original = window.matchMedia;
+
+  beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
+  });
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
 
   beforeEach(() => {
-    const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
-    useIsMobileSpy.mockImplementation(() => true);
-
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
     // mock action
     const deleteActionSpy = jest.spyOn(actions, 'deleteLegalAddress');

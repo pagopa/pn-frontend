@@ -1,10 +1,10 @@
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import React from 'react';
 import * as redux from 'react-redux';
-import { act, axe, render, RenderResult } from '../../__test__/test-utils';
-import Deleghe from '../Deleghe.page';
 
-const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -18,11 +18,19 @@ const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 describe('Deleghe page - accessibility tests', () => {
+  const original = window.matchMedia;
+
+  beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
+  });
+
   afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
     useDispatchSpy.mockClear();
     useDispatchSpy.mockReset();
+  });
+
+  afterAll(() => {
+    window.matchMedia = original;
   });
 
   it('is deleghe page accessible - desktop version', async () => {
@@ -30,7 +38,6 @@ describe('Deleghe page - accessibility tests', () => {
     let result: RenderResult | undefined;
 
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-    useIsMobileSpy.mockReturnValue(false);
 
     await act(async () => {
       result = render(<Deleghe />);
@@ -48,9 +55,7 @@ describe('Deleghe page - accessibility tests', () => {
   it('is deleghe page accessible - mobile version', async () => {
     // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
-
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-    useIsMobileSpy.mockReturnValue(true);
 
     await act(async () => {
       result = render(<Deleghe />);

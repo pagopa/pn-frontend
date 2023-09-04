@@ -1,15 +1,9 @@
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import { initialState } from '../../__mocks__/Delegations.mock';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  waitFor,
-  within
-} from '../../__test__/test-utils';
+
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
@@ -18,9 +12,8 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../api/delegations/delegations.routes';
+import { Delegation } from '../../redux/delegation/types';
 import Deleghe from '../Deleghe.page';
-
-const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -50,22 +43,49 @@ jest.mock('../../component/Deleghe/MobileDelegators', () => ({
   default: () => <div>mobile delegators</div>,
 }));
 
+const initialState = {
+  delegations: {
+    delegators: [] as Array<Delegation>,
+    delegates: [] as Array<Delegation>,
+    isCompany: false,
+  },
+  modalState: {
+    open: false,
+    id: '',
+    type: '',
+  },
+  acceptModalState: {
+    open: false,
+    id: '',
+    name: '',
+    error: false,
+  },
+  sortDelegators: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+  sortDelegates: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+};
+
 describe('Deleghe page', () => {
-  // eslint-disable-next-line functional/no-let
+  const original = window.matchMedia;
   let result: RenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
     mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
     mock.reset();
   });
 
   afterAll(() => {
+    window.matchMedia = original;
     mock.restore();
   });
 
@@ -99,7 +119,6 @@ describe('Deleghe page', () => {
   it('renders the desktop view of the deleghe page', async () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, false, 'delegates');
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
@@ -111,7 +130,6 @@ describe('Deleghe page', () => {
   it('renders the mobile view of the deleghe page', async () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    useIsMobileSpy.mockReturnValue(true);
     await renderComponent(false, false, 'delegates');
     expect(result.container).toHaveTextContent(/deleghe.title/i);
     expect(result.container).toHaveTextContent(/deleghe.description/i);
@@ -124,7 +142,6 @@ describe('Deleghe page', () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     mock.onPatch(REVOKE_DELEGATION('1')).reply(204);
-    useIsMobileSpy.mockReturnValue(false);
     await renderComponent(true, false, 'delegates');
     const confirmRevocationButton = result.getByText(/deleghe.confirm_revocation/i);
     const closeButton = result.getByText(/button.annulla/i);
@@ -143,7 +160,6 @@ describe('Deleghe page', () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     mock.onPatch(REJECT_DELEGATION('1')).reply(204);
-    useIsMobileSpy.mockReturnValue(false);
     await renderComponent(true, false, 'delegators');
     const confirmRejectionButton = result.getByText(/deleghe.confirm_rejection/i);
     const closeButton = result.getByText(/button.annulla/i);
@@ -162,7 +178,6 @@ describe('Deleghe page', () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     mock.onPatch(ACCEPT_DELEGATION('1'), { verificationCode: '11111' }).reply(204);
-    useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, true, 'delegators');
     const codeInput = result.queryAllByPlaceholderText('-');
     const confirmAcceptButton = result.getByText('deleghe.accept');
@@ -183,7 +198,6 @@ describe('Deleghe page', () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     mock.onPatch(ACCEPT_DELEGATION('1'), { verificationCode: '11111' }).reply(500);
-    useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, true, 'delegators');
     const dialog = result.queryByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();

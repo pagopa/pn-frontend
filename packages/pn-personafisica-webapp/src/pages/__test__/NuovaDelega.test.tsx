@@ -1,7 +1,7 @@
 import * as redux from 'react-redux';
 
 import { RecipientType } from '@pagopa-pn/pn-commons';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import * as actions from '../../redux/newDelegation/actions';
@@ -27,7 +27,6 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 // mock action
 const mockEntitiesActionFn = jest.fn();
 const mockCreateActionFn = jest.fn();
@@ -46,6 +45,8 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
 }
 
 describe('NuovaDelega page', () => {
+  const original = window.matchMedia;
+
   let createActionSpy;
   // mock action
   let entitiesActionSpy;
@@ -61,6 +62,10 @@ describe('NuovaDelega page', () => {
     },
   });
 
+  beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
+  });
+
   beforeEach(() => {
     createActionSpy = jest.spyOn(actions, 'createDelegation');
     entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
@@ -72,8 +77,6 @@ describe('NuovaDelega page', () => {
   });
 
   afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
     useDispatchSpy.mockClear();
     useDispatchSpy.mockReset();
     createActionSpy.mockClear();
@@ -84,8 +87,11 @@ describe('NuovaDelega page', () => {
     createTrackEventSpy.mockReset();
   });
 
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   it('renders the component desktop view', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
 
     expect(result.container).toHaveTextContent(/nuovaDelega.title/i);
@@ -94,7 +100,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('renders the component mobile view', () => {
-    useIsMobileSpy.mockReturnValue(true);
     const result = render(<NuovaDelega />, initialState(false));
 
     expect(result.container).toHaveTextContent(/nuovaDelega.title/i);
@@ -103,7 +108,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('renders the component after a delegation is created', () => {
-    useIsMobileSpy.mockReturnValue(true);
     const result = render(<NuovaDelega />, initialState(true));
 
     expect(result.container).toHaveTextContent(/nuovaDelega.createdTitle/i);
@@ -111,7 +115,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('navigates to Deleghe page before creation', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
     const backButton = result.getByTestId('breadcrumb-indietro-button');
 
@@ -120,7 +123,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('navigates to Deleghe page after creation', () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(true));
     const backButton = result.getByText('nuovaDelega.backToDelegations');
 
@@ -129,7 +131,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('switch to selected entities radio and call the filling entities function', async () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
     const radio = result.getByTestId('radioSelectedEntities');
     await waitFor(() => fireEvent.click(radio));
@@ -137,7 +138,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('fills the form and calls the create function', async () => {
-    useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'nome', 'Mario');
