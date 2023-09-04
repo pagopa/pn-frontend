@@ -189,7 +189,7 @@ const testStringFieldValidation = async (
   return error!;
 };
 
-describe('Recipient Component with payment enabled', () => {
+describe('Recipient Component with payment enabled - part 1/3', () => {
   const confirmHandlerMk = jest.fn();
   let result: RenderResult | undefined;
 
@@ -248,7 +248,17 @@ describe('Recipient Component with payment enabled', () => {
       );
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
-  }, 10000);
+  });
+});
+
+describe('Recipient Component with payment enabled - part 2/3', () => {
+  const confirmHandlerMk = jest.fn();
+  let result: RenderResult | undefined;
+
+  afterEach(() => {
+    result = undefined;
+    jest.clearAllMocks();
+  });
 
   it('fills form with invalid values - two recipients', async () => {
     // render component
@@ -305,7 +315,7 @@ describe('Recipient Component with payment enabled', () => {
     const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
     fireEvent.click(deleteIcon![1]);
     await waitFor(() => expect(submitButton).toBeEnabled());
-  }, 10000);
+  });
 
   it('form initially filled - two recipients', async () => {
     // render component
@@ -326,7 +336,9 @@ describe('Recipient Component with payment enabled', () => {
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
   });
+});
 
+describe('Recipient Component with payment enabled - part 3/3', () => {
   it('changes form values and clicks on confirm - one recipient', async () => {
     // render component
     await act(async () => {
