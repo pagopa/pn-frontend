@@ -30,6 +30,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   const PrivacyLink = ({ children }: { children?: ReactNode }) => (
     <Link
       key="privacy-link"
+      data-testid="privacy-link"
       sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
       onClick={redirectPrivacyLink}
     >
@@ -40,7 +41,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   const TosLink = ({ children }: { children?: ReactNode }) => (
     <Link
       key="tos-link"
-      data-testid="terms-and-conditions"
+      data-testid="tos-link"
       sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
       onClick={redirectToSLink}
     >
