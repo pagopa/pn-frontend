@@ -134,8 +134,7 @@
   "invalid": "non valido",
   "upload-file": {
     "or": "oppure",
-    "select-from-pc": "selezionalo dal tuo computer",
-    "select-from-mobile": "Carica un documento",
+    "select-from-pc": "carica un documento",
     "loading": "Caricamento in corso...",
     "sending": "Invio in corso...",
     "hash-code": "Codice hash",

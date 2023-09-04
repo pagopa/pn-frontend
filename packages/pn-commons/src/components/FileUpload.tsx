@@ -300,11 +300,7 @@ const FileUpload = ({
           )}
           <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
             <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
-              {getLocalizedOrDefaultLabel(
-                'common',
-                isMobile ? 'upload-file.select-from-mobile' : 'upload-file.select-from-pc',
-                'selezionalo dal tuo computer'
-              )}
+              {getLocalizedOrDefaultLabel('common', 'carica un documento', 'carica un documento')}
             </Typography>
           </ButtonNaked>
           <Input
