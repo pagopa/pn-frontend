@@ -162,10 +162,10 @@ describe('ApiKeys Page', () => {
       expect(rows[0]).toHaveTextContent(`${mockApiKeysForFE.items[2].value.substring(0, 10)}...`);
     });
     // change size
-    const itemsPerPageSelector = await result?.findByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
     const button = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(button!);
-    const itemsPerPageList = await screen.findAllByRole('menuitem');
+    const itemsPerPageList = screen.getAllByRole('menuitem');
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(6);

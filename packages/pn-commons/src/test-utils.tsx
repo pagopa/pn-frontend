@@ -54,11 +54,11 @@ async function testSelect(
   const selectInput = container.querySelector(`input[name="${elementName}"]`);
   const selectButton = container.querySelector(`div[id="${elementName}"]`);
   fireEvent.mouseDown(selectButton!);
-  const selectOptionsContainer = await screen.findByRole('presentation');
+  const selectOptionsContainer = screen.getByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();
-  const selectOptionsList = await within(selectOptionsContainer).findByRole('listbox');
+  const selectOptionsList = within(selectOptionsContainer).getByRole('listbox');
   expect(selectOptionsList).toBeInTheDocument();
-  const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
+  const selectOptionsListItems = within(selectOptionsList).getAllByRole('option');
   expect(selectOptionsListItems).toHaveLength(options.length);
   selectOptionsListItems.forEach((opt, index) => {
     expect(opt).toHaveTextContent(options[index].label);

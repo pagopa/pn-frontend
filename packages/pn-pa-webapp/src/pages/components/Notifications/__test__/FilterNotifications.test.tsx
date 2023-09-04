@@ -45,7 +45,7 @@ async function testCalendar(form: HTMLFormElement, elementName: string) {
   const input = form.querySelector(`input[name="${elementName}"]`);
   const button = input?.parentElement!.querySelector(`button`);
   fireEvent.click(button!);
-  const dialog = await screen.findByRole('dialog');
+  const dialog = screen.getByRole('dialog');
   expect(dialog).toBeInTheDocument();
   const dateButton = document.evaluate(
     `//button[text()="1"]`,

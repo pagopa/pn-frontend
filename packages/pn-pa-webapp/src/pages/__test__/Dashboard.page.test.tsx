@@ -187,7 +187,7 @@ describe('Dashboard Page', () => {
     const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
     const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
-    const itemsPerPageList = await screen.findAllByRole('menuitem');
+    const itemsPerPageList = screen.getAllByPlaceholderTextAllByRole('menuitem');
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
