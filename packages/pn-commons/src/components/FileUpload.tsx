@@ -1,21 +1,33 @@
 import {
-  useMemo,
-  useReducer,
-  Fragment,
-  useRef,
   ChangeEvent,
   DragEvent,
-  useEffect,
+  Fragment,
   ReactNode,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
 } from 'react';
-import { Alert, Box, IconButton, Input, LinearProgress, SxProps, Typography } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import {
+  Alert,
+  Box,
+  Grid,
+  IconButton,
+  Input,
+  LinearProgress,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { calcSha256String, parseFileSize } from '../utils/file.utility';
+
+import { useIsMobile } from '../hooks';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { calcSha256String, parseFileSize } from '../utils/file.utility';
 import CustomTooltip from './CustomTooltip';
 
 type Props = {
@@ -154,6 +166,8 @@ const FileUpload = ({
 
   const attachmentExists = fileUploaded?.file && fileUploaded?.file.data;
 
+  const isMobile = useIsMobile();
+
   const containerStyle = useMemo(() => {
     if (fileData.status === UploadStatus.IN_PROGRESS || fileData.status === UploadStatus.SENDING) {
       return {
@@ -249,6 +263,21 @@ const FileUpload = ({
     }
   }, [attachmentExists]);
 
+  const HashToolTip = () => (
+    <CustomTooltip
+      openOnClick
+      tooltipContent={getLocalizedOrDefaultLabel(
+        'common',
+        'upload-file.hash-code-descr',
+        'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
+      )}
+      sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
+    >
+      <IconButton>
+        <InfoOutlinedIcon color="action" />
+      </IconButton>
+    </CustomTooltip>
+  );
   return (
     <Box
       sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
@@ -260,11 +289,15 @@ const FileUpload = ({
     >
       {fileData.status === UploadStatus.TO_UPLOAD && (
         <OrientedBox vertical={vertical}>
-          <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
-          <Typography display="inline" variant="body2">
-            {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
-            &nbsp;
-          </Typography>
+          {!isMobile && (
+            <>
+              <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
+              <Typography display="inline" variant="body2">
+                {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
+                &nbsp;
+              </Typography>
+            </>
+          )}
           <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
             <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
               {getLocalizedOrDefaultLabel(
@@ -309,10 +342,12 @@ const FileUpload = ({
             alignItems="center"
             sx={{ width: '100%' }}
           >
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <AttachFileIcon color="primary" />
-              <Typography color="primary">{fileData.file.name}</Typography>
-              <Typography fontWeight={600} sx={{ marginLeft: '30px' }}>
+            <Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center">
+              <Box display="flex">
+                <AttachFileIcon color="primary" />
+                <Typography color="primary">{fileData.file.name}</Typography>
+              </Box>
+              <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
                 {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
@@ -329,25 +364,31 @@ const FileUpload = ({
           </Box>
           {fileData.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
-              <Typography id="file-upload-hash-code" display="inline" fontWeight={700}>
-                {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
-              </Typography>
-              <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
-                {fileData.sha256}
-              </Typography>
-              <CustomTooltip
-                openOnClick
-                tooltipContent={getLocalizedOrDefaultLabel(
-                  'common',
-                  'upload-file.hash-code-descr',
-                  'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
-                )}
-                sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
-              >
-                <IconButton>
-                  <InfoOutlinedIcon color="action" />
-                </IconButton>
-              </CustomTooltip>
+              <Grid container wrap="nowrap" alignItems={'center'}>
+                <Grid item xs="auto">
+                  <Typography id="file-upload-hash-code" display="inline" fontWeight={700}>
+                    {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
+                  </Typography>
+                </Grid>
+                <Grid item zeroMinWidth>
+                  <Typography
+                    sx={{
+                      marginLeft: '10px',
+                      marginTop: '3px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      display: 'block',
+                    }}
+                    variant="caption"
+                  >
+                    {fileData.sha256}
+                  </Typography>
+                </Grid>
+                <Grid item xs="auto">
+                  <HashToolTip />
+                </Grid>
+              </Grid>
             </Box>
           )}
         </Fragment>
