@@ -81,6 +81,11 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
   },
 });
 
+/**
+ * @deprecated
+ * Last step of the notification creation, where the user configures the payments
+ * @returns
+ */
 const PaymentMethods: React.FC<Props> = ({
   notification,
   onConfirm,

@@ -1,6 +1,3 @@
-/* eslint-disable functional/no-let */
-
-/* eslint-disable functional/immutable-data */
 import React from 'react';
 import * as redux from 'react-redux';
 
@@ -30,7 +27,6 @@ function uploadDocument(elem: HTMLElement) {
 }
 
 // Tutto il blocco di test su PaymentMethods è skippato
-
 describe.skip('PaymentMethods Component', () => {
   let result: RenderResult;
   let mockDispatchFn: jest.Mock;
