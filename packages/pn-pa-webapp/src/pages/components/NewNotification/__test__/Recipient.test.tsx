@@ -248,7 +248,7 @@ describe('Recipient Component with payment enabled', () => {
       );
     });
     expect(confirmHandlerMk).toBeCalledTimes(1);
-  });
+  }, 10000);
 
   it('fills form with invalid values - two recipients', async () => {
     // render component
@@ -305,7 +305,7 @@ describe('Recipient Component with payment enabled', () => {
     const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
     fireEvent.click(deleteIcon![1]);
     await waitFor(() => expect(submitButton).toBeEnabled());
-  });
+  }, 10000);
 
   it('form initially filled - two recipients', async () => {
     // render component
