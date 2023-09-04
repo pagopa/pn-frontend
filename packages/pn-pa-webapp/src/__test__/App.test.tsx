@@ -24,6 +24,8 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
 
+const unmockedFetch = global.fetch;
+
 const Component = () => (
   <ThemeProvider theme={theme}>
     <App />
@@ -54,6 +56,12 @@ describe('App', () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
+    // this causes an error, so we mock to avoid it
+    global.fetch = () =>
+      Promise.resolve({
+        json: () => Promise.resolve([]),
+      }) as Promise<Response>;
   });
 
   afterEach(() => {
@@ -62,6 +70,7 @@ describe('App', () => {
 
   afterAll(() => {
     mock.restore();
+    global.fetch = unmockedFetch;
   });
 
   it('render component - user not logged in', async () => {

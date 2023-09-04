@@ -9,7 +9,7 @@ type Props = {
   values: FormikValues;
   touched: FormikTouched<any>;
   errors: FormikErrors<FormikValues>;
-  setFieldValue: any;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
   handleBlur?: any;
   width?: number;
   sx?: SxProps;

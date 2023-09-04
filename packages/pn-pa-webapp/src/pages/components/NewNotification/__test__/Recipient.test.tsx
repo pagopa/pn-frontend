@@ -94,7 +94,7 @@ const testRecipientFormRendering = async (
     `input[name="recipients[${recipientIndex}].digitalDomicile"]`
   );
   const physicalForm = within(form).queryByTestId(`physicalAddressForm${recipientIndex}`);
-  if (recipient && recipient.showPhysicalAddress) {
+  if (recipient?.showPhysicalAddress) {
     expect(physicalForm).toBeInTheDocument();
     const address = physicalForm?.querySelector(
       `input[name="recipients[${recipientIndex}].address"]`
