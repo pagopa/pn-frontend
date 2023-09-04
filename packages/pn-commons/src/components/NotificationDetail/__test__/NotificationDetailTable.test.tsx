@@ -20,7 +20,7 @@ describe('NotificationDetailTable Component', () => {
 
   beforeEach(() => {
     // render component
-    result = render(<NotificationDetailTable rows={detailRows}/>);
+    result = render(<NotificationDetailTable rows={detailRows} />);
   });
 
   afterEach(() => {
@@ -29,7 +29,7 @@ describe('NotificationDetailTable Component', () => {
 
   it('renders NotificationDetailTable', () => {
     const table = result?.container.querySelector('table');
-    expect(table).toBeInTheDocument(); 
+    expect(table).toBeInTheDocument();
     expect(table).toHaveAttribute('aria-label', 'Dettaglio notifica');
     const rows = table?.querySelectorAll('tr');
     expect(rows).toHaveLength(detailRows.length);

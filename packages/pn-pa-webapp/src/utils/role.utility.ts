@@ -1,13 +1,17 @@
-import { People, /*  ShowChart */ SupervisedUserCircle } from '@mui/icons-material';
+import {
+  People,
+  /*  ShowChart */
+  SupervisedUserCircle,
+} from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
-import * as routes from '../navigation/routes.const';
 import { PNRole } from '../models/user';
+import * as routes from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 
 // const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
 
-function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
+export function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
     { label: 'menu.users', icon: People, route: routes.USERS(idOrganization) },
     { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },

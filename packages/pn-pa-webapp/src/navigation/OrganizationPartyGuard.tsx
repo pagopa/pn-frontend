@@ -1,12 +1,12 @@
-import { ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
+import { ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+
 import { AUTH_ACTIONS, getOrganizationParty } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-
 
 /**
  @deprecated since PN-5881

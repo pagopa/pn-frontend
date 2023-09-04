@@ -1,5 +1,6 @@
 import { MouseEventHandler, ReactNode, useEffect } from 'react';
-import { Button, Dialog, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
+
+import { Button, Dialog, DialogActions, DialogContentText, DialogTitle } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
 
@@ -59,7 +60,12 @@ const SessionModal = ({
   }, []);
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="session-dialog-title">
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="session-dialog-title"
+      data-testid="session-modal"
+    >
       <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
       <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
         {message}
