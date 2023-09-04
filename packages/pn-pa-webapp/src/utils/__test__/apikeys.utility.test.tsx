@@ -1,10 +1,6 @@
-import { ApiKeyStatus, ApiKeyStatusHistory } from '../../models/ApiKeys';
+import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
+import { ApiKeyStatus } from '../../models/ApiKeys';
 import { TooltipApiKey, apikeysMapper, getApiKeyStatusInfos } from '../apikeys.utility';
-import {
-  mockGroups,
-  mockApiKeysForFE,
-  mockApiKeysFromBE,
-} from '../../redux/apiKeys/__test__/test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -15,36 +11,21 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('test apikeys utilities', () => {
-  const statusHistory: Array<ApiKeyStatusHistory> = [
-    {
-      status: ApiKeyStatus.CREATED,
-      changedByDenomination: 'mocked-denomination-1',
-      date: 'mocked-date-1',
-    },
-    {
-      status: ApiKeyStatus.BLOCKED,
-      changedByDenomination: 'mocked-denomination-2',
-      date: 'mocked-date-2',
-    },
-    {
-      status: ApiKeyStatus.ENABLED,
-      changedByDenomination: 'mocked-denomination-3',
-      date: 'mocked-date-3',
-    },
-  ];
-
-  it('test getApiKeyStatusInfos', () => {
-    const statusInfo = getApiKeyStatusInfos(ApiKeyStatus.ENABLED, statusHistory);
+  it('getApiKeyStatusInfos', () => {
+    const statusInfo = getApiKeyStatusInfos(
+      ApiKeyStatus.ENABLED,
+      mockApiKeysForFE.items[0].statusHistory
+    );
     expect(statusInfo).toStrictEqual({
       color: 'success',
       label: 'status.enabled',
       description: 'status.enabled-description',
-      tooltip: TooltipApiKey(statusHistory),
+      tooltip: TooltipApiKey(mockApiKeysForFE.items[0].statusHistory),
     });
   });
 
-  it('test apikeysMapper', () => {
-    const mappedApikeys = apikeysMapper(mockApiKeysFromBE.items, mockGroups);
+  it('apikeysMapper', () => {
+    const mappedApikeys = apikeysMapper(mockApiKeysDTO.items, mockGroups);
     expect(mappedApikeys).toStrictEqual(mockApiKeysForFE.items);
   });
 });

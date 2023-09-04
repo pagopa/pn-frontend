@@ -92,7 +92,8 @@
       "verificationCode": "Verifizierungscode",
       "verificationCodeDescr": "Teile dem Bevollmächtigten diesen Code mit: Dieser muss den Code bei der Annahme der Vollmacht eingeben.",
       "submit": "Anfrage senden",
-      "mandatoryField": "Pflichtfelder*"
+      "mandatoryField": "Pflichtfelder*",
+      "party-not-found": "Keine Körperschaft gefunden"
     },
     "validation": {
       "fiscalCode": {

@@ -1,5 +1,6 @@
-import { AccessDenied } from '@pagopa-pn/pn-commons';
 import { Outlet, useNavigate } from 'react-router-dom';
+
+import { AccessDenied } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../models/user';
 import { useAppSelector } from '../redux/hooks';

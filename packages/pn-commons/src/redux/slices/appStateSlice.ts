@@ -1,4 +1,5 @@
-import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
 import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
@@ -99,7 +100,6 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
-
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
         state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
       })

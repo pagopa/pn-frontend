@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
+
 import { Badge, BadgeProps, Box, Button } from '@mui/material';
-import { styled, SxProps, Theme } from '@mui/material/styles';
+import { SxProps, Theme, styled } from '@mui/material/styles';
 
 import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
 
@@ -35,7 +36,7 @@ const CustomMobileDialogToggle = ({ children, hasCounterBadge, bagdeCount = 0, s
 
   return (
     <Box data-testid="dialogToggle">
-      <Button onClick={handleClickOpen} sx={sx}>
+      <Button onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
         {children}
       </Button>
       {hasCounterBadge && bagdeCount > 0 && (

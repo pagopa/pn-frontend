@@ -1,67 +1,67 @@
 import _ from 'lodash';
+import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import {
+  Alert,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  Typography,
   DialogTitle,
   Grid,
   Paper,
   Stack,
-  Alert,
+  Typography,
 } from '@mui/material';
 import {
-  // PN-1714
+  ApiError,
+  GetNotificationDowntimeEventsParams, // PN-1714
   // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
+  NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
-  PnBreadcrumb,
-  TitleBox,
-  useIsMobile,
-  NotificationDetailRecipient,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  formatEurocentToCurrency,
-  TimedMessage,
-  useDownloadDocument,
-  NotificationDetailOtherDocument,
-  NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
   NotificationPaidDetail,
+  NotificationRelatedDowntimes,
+  NotificationStatus,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
   dataRegex,
+  formatEurocentToCurrency,
+  useDownloadDocument,
+  useErrors,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
+  NOTIFICATION_ACTIONS,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { setCancelledIun } from '../redux/newNotification/reducers';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 const NotificationDetail = () => {
   const { id } = useParams();
@@ -108,16 +108,16 @@ const NotificationDetail = () => {
     alt: boolean = false
   ): ReactNode => {
     if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient, index) => (
-        <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
+      return filteredRecipients.map((recipient) => (
+        <Box key={recipient.taxId} fontWeight={600}>
+          {recipient.taxId}&nbsp;-&nbsp;{recipient?.payment?.creditorTaxId}&nbsp;-&nbsp;
           {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
       ));
     }
     return (
       <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
+        {filteredRecipients[0]?.payment?.creditorTaxId}&nbsp;-&nbsp;
         {alt
           ? filteredRecipients[0]?.payment?.noticeCodeAlternative
           : filteredRecipients[0]?.payment?.noticeCode}
@@ -153,8 +153,8 @@ const NotificationDetail = () => {
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
       value: (
         <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
+          {recipients.map((recipient) => (
+            <Box key={recipient.taxId} fontWeight={600}>
               {recipients.length > 1
                 ? `${recipient.taxId} - ${recipient.denomination}`
                 : recipient.taxId}
@@ -428,7 +428,11 @@ const NotificationDetail = () => {
       {hasNotificationSentApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError onClick={() => fetchSentNotification()} mt={3} />
+          <ApiError
+            onClick={() => fetchSentNotification()}
+            mt={3}
+            apiId={NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION}
+          />
         </Box>
       )}
       {!hasNotificationSentApiError && (
@@ -490,7 +494,7 @@ const NotificationDetail = () => {
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
                     </Alert>
                   }

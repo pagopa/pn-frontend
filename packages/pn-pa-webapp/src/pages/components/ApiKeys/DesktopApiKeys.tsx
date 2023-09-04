@@ -1,30 +1,31 @@
-import { Fragment, useState, MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CopyToClipboardButton, Tag } from '@pagopa/mui-italia';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
+import { MoreVert } from '@mui/icons-material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import {
   Column,
+  CustomTagGroup,
+  CustomTooltip,
+  EmptyState,
   Item,
   ItemsTable,
   StatusTooltip,
-  EmptyState,
   formatDate,
-  CustomTagGroup,
-  CustomTooltip,
 } from '@pagopa-pn/pn-commons';
+import { CopyToClipboardButton, Tag } from '@pagopa/mui-italia';
+
 import {
-  ApiKeyColumn,
   ApiKey,
+  ApiKeyColumn,
   ApiKeyStatus,
   ApiKeyStatusHistory,
   ModalApiKeyView,
 } from '../../../models/ApiKeys';
-import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
-import * as routes from '../../../navigation/routes.const';
 import { UserGroup } from '../../../models/user';
+import * as routes from '../../../navigation/routes.const';
+import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
 
 type Props = {
   apiKeys: Array<ApiKey<UserGroup>>;
@@ -296,28 +297,24 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   }, [apiKeys]);
 
   return (
-    <Fragment>
-      {apiKeys && (
-        <Fragment>
-          {apiKeys.length > 0 ? (
-            <ItemsTable
-              key={tableKey}
-              data-testid="tableApiKeys"
-              columns={columns}
-              rows={rows}
-              ariaTitle={t('table.title')}
-            />
-          ) : (
-            <EmptyState
-              data-testid="emptyState"
-              emptyMessage={t('empty-message')}
-              emptyActionLabel={t('empty-action-label')}
-              emptyActionCallback={() => navigate(routes.NUOVA_API_KEY)}
-            />
-          )}
-        </Fragment>
+    <>
+      {apiKeys && apiKeys.length > 0 ? (
+        <ItemsTable
+          key={tableKey}
+          testId="tableApiKeys"
+          columns={columns}
+          rows={rows}
+          ariaTitle={t('table.title')}
+        />
+      ) : (
+        <EmptyState
+          data-testid="emptyState"
+          emptyMessage={t('empty-message')}
+          emptyActionLabel={t('empty-action-label')}
+          emptyActionCallback={() => navigate(routes.NUOVA_API_KEY)}
+        />
       )}
-    </Fragment>
+    </>
   );
 };
 

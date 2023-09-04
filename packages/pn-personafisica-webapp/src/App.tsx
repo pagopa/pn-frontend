@@ -34,7 +34,7 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState, store } from './redux/store';
+import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { trackEventByType } from './utils/mixpanel';
@@ -42,7 +42,6 @@ import { TrackEventType } from './utils/events';
 import './utils/onetrust';
 import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
-import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { getConfiguration } from './services/configuration.service';
 
@@ -90,7 +89,6 @@ const App = () => {
 };
 
 const ActualApp = () => {
-  setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);

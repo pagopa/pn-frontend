@@ -347,7 +347,7 @@ interface DigitalAddress {
   address: string;
 }
 
-interface PhysicalAddress {
+export interface PhysicalAddress {
   at?: string;
   address: string;
   addressDetails?: string;

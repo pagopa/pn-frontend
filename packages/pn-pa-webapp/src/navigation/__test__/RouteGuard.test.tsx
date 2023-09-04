@@ -1,83 +1,65 @@
-import { act, screen } from '@testing-library/react';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { act, render, screen } from '../../__test__/test-utils';
 import { PNRole } from '../../models/user';
-import { render } from '../../__test__/test-utils';
 import RouteGuard from '../RouteGuard';
-
-jest.mock('react-router-dom', () => {
-  const original = jest.requireActual('react-router-dom');
-  return {
-    ...original,
-    Outlet: () => <div>Generic Page</div>,
-  };
-});
-
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    AccessDenied: ({ isLogged }: { isLogged: boolean }) => (
-      <>
-        <div>Access Denied</div>
-        <div>{isLogged ? 'sì è loggato' : 'non è loggato'}</div>
-      </>
-    ),
-  };
-});
 
 const mockReduxState = {
   userState: {
-    user: { sessionToken: 'mocked-token', organization: { roles: [{ role: PNRole.OPERATOR }] } },
+    user: userResponse,
   },
 };
 
+const Guard = ({ roles }) => (
+  <Routes>
+    <Route path="/" element={<RouteGuard roles={roles} />}>
+      <Route path="/" element={<div>Generic Page</div>} />
+    </Route>
+  </Routes>
+);
+
 describe('RouteGuard component', () => {
   it('No user logged', async () => {
-    await act(async () => void render(<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />));
+    await act(async () => {
+      render(<Guard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />);
+    });
     const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByText('Access Denied');
-    const deniedLogged = screen.queryByText('sì è loggato');
-    const deniedNotLogged = screen.queryByText('non è loggato');
+    const accessDeniedComponent = screen.queryByTestId('access-denied');
     expect(pageComponent).toBeNull();
     expect(accessDeniedComponent).toBeTruthy();
-    expect(deniedLogged).toBeNull();
-    expect(deniedNotLogged).toBeTruthy();
   });
 
-  it('Logged user - route che non richiede di ruoli', async () => {
-    await act(
-      async () => void render(<RouteGuard roles={null} />, { preloadedState: mockReduxState })
-    );
+  it('Logged user - route without required roles', async () => {
+    await act(async () => {
+      render(<Guard roles={null} />, { preloadedState: mockReduxState });
+    });
     const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByText('Access Denied');
+    const accessDeniedComponent = screen.queryByTestId('access-denied');
     expect(pageComponent).toBeTruthy();
     expect(accessDeniedComponent).toBeNull();
   });
 
-  it("Logged user - l'utente ha un ruolo accettato", async () => {
-    await act(
-      async () =>
-        void render(<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />, {
-          preloadedState: mockReduxState,
-        })
-    );
+  it('Logged user - the user roles match the required ones', async () => {
+    await act(async () => {
+      render(<Guard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />, {
+        preloadedState: mockReduxState,
+      });
+    });
     const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByText('Access Denied');
+    const accessDeniedComponent = screen.queryByTestId('access-denied');
     expect(pageComponent).toBeTruthy();
     expect(accessDeniedComponent).toBeNull();
   });
 
-  it("Logged user - l'utente non ha un ruolo accettato", async () => {
-    await act(
-      async () =>
-        void render(<RouteGuard roles={[PNRole.ADMIN]} />, { preloadedState: mockReduxState })
-    );
+  it("Logged user - the user roles don't match the required ones", async () => {
+    await act(async () => {
+      render(<Guard roles={[PNRole.OPERATOR]} />, { preloadedState: mockReduxState });
+    });
     const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByText('Access Denied');
-    const deniedLogged = screen.queryByText('sì è loggato');
-    const deniedNotLogged = screen.queryByText('non è loggato');
+    const accessDeniedComponent = screen.queryByTestId('access-denied');
     expect(pageComponent).toBeNull();
     expect(accessDeniedComponent).toBeTruthy();
-    expect(deniedLogged).toBeTruthy();
-    expect(deniedNotLogged).toBeNull();
   });
 });
