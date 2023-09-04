@@ -12,10 +12,11 @@ import {
   testFormElements,
   testInput,
   testRadio,
+  testStore,
   waitFor,
   within,
 } from '../../../../__test__/test-utils';
-import { NewNotificationRecipient } from '../../../../models/NewNotification';
+import { NewNotificationRecipient, PaymentModel } from '../../../../models/NewNotification';
 import Recipient from '../Recipient';
 
 jest.mock('react-i18next', () => ({
@@ -188,7 +189,7 @@ const testStringFieldValidation = async (
   return error!;
 };
 
-describe('Recipient Component with payment enabled - 2/3', () => {
+describe('Recipient Component with payment enabled', () => {
   const confirmHandlerMk = jest.fn();
   let result: RenderResult | undefined;
 
@@ -196,6 +197,58 @@ describe('Recipient Component with payment enabled - 2/3', () => {
     result = undefined;
     jest.clearAllMocks();
   });
+
+  it('renders component', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
+      );
+    });
+    expect(result?.container).toHaveTextContent(/title/i);
+    const form = result!.getByTestId('recipientForm');
+    await testRecipientFormRendering(form, 0, true);
+    const addButton = within(form).getByTestId('add-recipient');
+    expect(addButton).toBeInTheDocument();
+    const button = within(form).getByTestId('step-submit');
+    expect(button).toBeDisabled();
+    const backButton = within(form).getByTestId('previous-step');
+    expect(backButton).toBeInTheDocument();
+  });
+
+  it('changes form values and clicks on confirm - two recipients', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
+      );
+    });
+    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    // fill the first recipient
+    await populateForm(form, 0, true, newNotification.recipients[0]);
+    const submitButton = within(form).getByTestId('step-submit');
+    expect(submitButton).toBeEnabled();
+    // add new recipient
+    const addButton = within(form).getByTestId('add-recipient');
+    fireEvent.click(addButton);
+    await waitFor(() => {
+      expect(result?.container).toHaveTextContent(/title 1/i);
+      expect(result?.container).toHaveTextContent(/title 2/i);
+      expect(submitButton).toBeDisabled();
+    });
+    await testRecipientFormRendering(form, 1, true);
+    // fill the second recipient
+    await populateForm(form, 1, true, newNotification.recipients[1]);
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.recipients).toStrictEqual(
+        newNotification.recipients
+      );
+    });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
+  }, 10000);
 
   it('fills form with invalid values - two recipients', async () => {
     // render component
@@ -252,7 +305,7 @@ describe('Recipient Component with payment enabled - 2/3', () => {
     const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
     fireEvent.click(deleteIcon![1]);
     await waitFor(() => expect(submitButton).toBeEnabled());
-  });
+  }, 10000);
 
   it('form initially filled - two recipients', async () => {
     // render component
@@ -272,5 +325,186 @@ describe('Recipient Component with payment enabled - 2/3', () => {
     await testRecipientFormRendering(form, 1, true, newNotification.recipients[1]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
+  }, 10000);
+
+  it('changes form values and clicks on confirm - one recipient', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
+      );
+    });
+    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    // fill the first recipient
+    await populateForm(form, 0, true, newNotification.recipients[0]);
+    const submitButton = within(form).getByTestId('step-submit');
+    expect(submitButton).toBeEnabled();
+    // add new recipient
+    const addButton = within(form).getByTestId('add-recipient');
+    fireEvent.click(addButton);
+    await waitFor(() => {
+      expect(result?.container).toHaveTextContent(/title 1/i);
+      expect(result?.container).toHaveTextContent(/title 2/i);
+      expect(submitButton).toBeDisabled();
+    });
+    const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
+    expect(deleteIcon).toHaveLength(2);
+    // remove the second recipient
+    fireEvent.click(deleteIcon![1]);
+    await waitFor(() => {
+      expect(result?.container).not.toHaveTextContent(/title 2/i);
+    });
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.recipients).toStrictEqual([
+        newNotification.recipients[0],
+      ]);
+    });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
+  }, 10000);
+
+  it('changes form values and clicks on back - one recipient', async () => {
+    const previousHandlerMk = jest.fn();
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient
+          paymentMode={newNotification.paymentMode}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousHandlerMk}
+        />
+      );
+    });
+    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    // fill the first recipient
+    await populateForm(form, 0, true, newNotification.recipients[0]);
+    const backButton = within(form).getByTestId('previous-step');
+    fireEvent.click(backButton!);
+    await waitFor(() => {
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.recipients).toStrictEqual([
+        newNotification.recipients[0],
+      ]);
+    });
+    expect(previousHandlerMk).toBeCalledTimes(1);
+  }, 10000);
+
+  it('fills form with invalid values - one recipient', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
+      );
+    });
+    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const submitButton = within(form).getByTestId('step-submit');
+    expect(submitButton).toBeDisabled();
+    await populateForm(form, 0, true, newNotification.recipients[0]);
+    expect(submitButton).toBeEnabled();
+    // set invalid values
+    // firstName
+    const firstNameError = await testStringFieldValidation(form, 0, 'firstName');
+    await testInput(form!, 'recipients[0].firstName', 'text-with-invalid-char’');
+    expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
+    // lastName
+    const lastNameError = await testStringFieldValidation(form, 0, 'lastName');
+    await testInput(form!, 'recipients[0].lastName', 'text-with-invalid-char’');
+    expect(lastNameError).toBeInTheDocument();
+    // firstName + lastName
+    await testInput(form!, 'recipients[0].firstName', randomString(40));
+    await testInput(form!, 'recipients[0].lastName', randomString(45));
+    expect(firstNameError).toHaveTextContent('too-long-field-error');
+    expect(lastNameError).toBeInTheDocument();
+    // taxId
+    await testInput(form, 'recipients[0].taxId', '', true);
+    const taxIdError = form.querySelector('[id="recipients[0].taxId-helper-text"]');
+    expect(taxIdError).toHaveTextContent('required-field');
+    await testInput(form!, 'recipients[0].taxId', 'wrong-fiscal-code');
+    expect(taxIdError).toHaveTextContent('fiscal-code-error');
+    // digitalDomicile
+    const digitalDomicileError = await testStringFieldValidation(form, 0, 'digitalDomicile', 321);
+    await testInput(form!, 'recipients[0].digitalDomicile', 'wrong-email-format');
+    expect(digitalDomicileError).toHaveTextContent('pec-error');
+    // address
+    await testStringFieldValidation(form, 0, 'address', 1025);
+    // houseNumber
+    await testInput(form, 'recipients[0].houseNumber', '', true);
+    const houseNumberError = form.querySelector('[id="recipients[0].houseNumber-helper-text"]');
+    expect(houseNumberError).toHaveTextContent('required-field');
+    // zip
+    await testStringFieldValidation(form, 0, 'zip', 13);
+    // municipalityDetails
+    await testInput(form, 'recipients[0].municipalityDetails', ' text-with-spaces ', true);
+    const municipalityDetailsError = form.querySelector(
+      '[id="recipients[0].municipalityDetails-helper-text"]'
+    );
+    expect(municipalityDetailsError).toHaveTextContent('no-spaces-at-edges');
+    await testInput(form!, 'recipients[0].municipalityDetails', randomString(257));
+    expect(municipalityDetailsError).toHaveTextContent('too-long-field-error');
+    // municipality
+    await testStringFieldValidation(form, 0, 'zip', 257);
+    // province
+    await testStringFieldValidation(form, 0, 'province', 257);
+    // foreignState
+    await testStringFieldValidation(form, 0, 'foreignState');
+    // creditorTaxId
+    await testInput(form, 'recipients[0].creditorTaxId', '', true);
+    const creditorTaxIdError = form.querySelector('[id="recipients[0].creditorTaxId-helper-text"]');
+    expect(creditorTaxIdError).toHaveTextContent('required-field');
+    await testInput(form!, 'recipients[0].creditorTaxId', 'wrong-fiscal-code');
+    expect(creditorTaxIdError).toHaveTextContent('fiscal-code-error');
+    // noticeCode
+    await testInput(form, 'recipients[0].noticeCode', '', true);
+    const noticeCodeError = form.querySelector('[id="recipients[0].noticeCode-helper-text"]');
+    expect(noticeCodeError).toHaveTextContent('required-field');
+    await testInput(form!, 'recipients[0].noticeCode', 'wrong-notice-code');
+    expect(noticeCodeError).toHaveTextContent('notice-code-error');
+    expect(submitButton).toBeDisabled();
+  }, 10000);
+});
+
+describe('Recipient Component without payment enabled', () => {
+  const confirmHandlerMk = jest.fn();
+  let result: RenderResult | undefined;
+
+  afterEach(() => {
+    result = undefined;
+    jest.clearAllMocks();
+  });
+
+  it('renders component', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
+      );
+    });
+    expect(result?.container).toHaveTextContent(/title/i);
+    const form = result!.getByTestId('recipientForm');
+    await testRecipientFormRendering(form, 0, false);
+  });
+
+  it('changes form values and clicks on confirm - one recipient', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
+      );
+    });
+    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    // fill the first recipient
+    await populateForm(form, 0, false, newNotification.recipients[0]);
+    const submitButton = within(form).getByTestId('step-submit');
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.recipients).toStrictEqual([
+        { ...newNotification.recipients[0], creditorTaxId: '', noticeCode: '' },
+      ]);
+    });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
   });
 });
