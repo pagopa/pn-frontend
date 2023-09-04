@@ -302,7 +302,7 @@ const FileUpload = ({
             <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
               {getLocalizedOrDefaultLabel(
                 'common',
-                'upload-file.select-from-pc',
+                isMobile ? 'upload-file.select-from-mobile' : 'upload-file.select-from-pc',
                 'selezionalo dal tuo computer'
               )}
             </Typography>
