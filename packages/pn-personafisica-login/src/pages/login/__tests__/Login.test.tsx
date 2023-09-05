@@ -57,9 +57,9 @@ describe('test login page', () => {
         <Login />
       </BrowserRouter>
     );
-    const ButtonSpid = document.getElementById('spidButton');
-    if (ButtonSpid) {
-      fireEvent.click(ButtonSpid);
+    const buttonSpid = document.getElementById('spidButton');
+    if (buttonSpid) {
+      fireEvent.click(buttonSpid);
     }
     expect(screen.getAllByRole('img')[0]).toHaveAttribute('src', 'spid_big.svg');
   });
@@ -70,9 +70,9 @@ describe('test login page', () => {
         <Login />
       </BrowserRouter>
     );
-    const ButtonCIE = document.getElementById('cieButton');
-    if (ButtonCIE) {
-      fireEvent.click(ButtonCIE);
+    const buttonCIE = document.getElementById('cieButton');
+    if (buttonCIE) {
+      fireEvent.click(buttonCIE);
     }
 
     expect(global.window.location.assign).toBeCalledWith(
