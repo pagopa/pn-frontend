@@ -24,6 +24,10 @@ const customRender = (
   const testStore = configureStore({
     reducer: appReducers,
     preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
   return render(ui, {
     wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
@@ -45,7 +49,6 @@ const createMockedStore = (preloadedState: any) =>
 
 expect.extend(toHaveNoViolations);
 
-// re-exporting everything
 export * from '@testing-library/react';
-// override render method
-export { axe, customRender as render, createMockedStore };
+export { customRender as render, createMockedStore };
+export { axe };

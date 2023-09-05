@@ -1,7 +1,6 @@
 import * as redux from 'react-redux';
 
-import { RecipientType } from '@pagopa-pn/pn-commons';
-import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import { RecipientType, createMatchMedia } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import * as actions from '../../redux/newDelegation/actions';

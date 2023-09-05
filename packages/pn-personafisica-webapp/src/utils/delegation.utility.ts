@@ -1,4 +1,5 @@
-import { formatDate, Item } from '@pagopa-pn/pn-commons';
+import { Item, formatDate } from '@pagopa-pn/pn-commons';
+
 import { Delegation, Person } from '../redux/delegation/types';
 
 /**
@@ -9,7 +10,6 @@ import { Delegation, Person } from '../redux/delegation/types';
  */
 
 export default function delegationToItem(delegations: Array<Delegation>): Array<Item> {
-  // TODO to be tested
   return delegations.map((delegation: Delegation) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),
@@ -28,20 +28,6 @@ export function generateVCode() {
   return crypto.getRandomValues(array).toString().slice(0, 5);
 }
 
-export function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string) {
-  if ('delegator' in a && a.delegator && 'delegator' in b && b.delegator) {
-    const delegator1 = compareOrderAttribute(a.delegator, orderAttr);
-    const delegator2 = compareOrderAttribute(b.delegator, orderAttr);
-    return delegator1 < delegator2 ? 1 : -1;
-  }
-  if ('delegate' in a && a.delegate && 'delegate' in b && b.delegate) {
-    const delegate1 = compareOrderAttribute(a.delegate, orderAttr);
-    const delegate2 = compareOrderAttribute(b.delegate, orderAttr);
-    return delegate1 < delegate2 ? 1 : -1;
-  }
-  return 0;
-}
-
 export function sortDelegations(order: string, sortAttr: string, values: Array<Delegation>) {
   /* eslint-disable-next-line functional/immutable-data */
   return values.sort((a: Delegation, b: Delegation) => {
@@ -55,10 +41,24 @@ export function sortDelegations(order: string, sortAttr: string, values: Array<D
   });
 }
 
+function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string) {
+  if ('delegator' in a && a.delegator && 'delegator' in b && b.delegator) {
+    const delegator1 = compareOrderAttribute(a.delegator, orderAttr);
+    const delegator2 = compareOrderAttribute(b.delegator, orderAttr);
+    return delegator1 < delegator2 ? 1 : -1;
+  }
+  if ('delegate' in a && a.delegate && 'delegate' in b && b.delegate) {
+    const delegate1 = compareOrderAttribute(a.delegate, orderAttr);
+    const delegate2 = compareOrderAttribute(b.delegate, orderAttr);
+    return delegate1 < delegate2 ? 1 : -1;
+  }
+  return 0;
+}
+
 function compareOrderAttribute(person: Person, orderAttr: string) {
   return orderAttr === 'name'
     ? person.displayName.toLowerCase()
-    : person[orderAttr as keyof Person] || '';
+    : person[orderAttr as keyof Person] ?? '';
 }
 
 function getFirstName(delegation: Delegation): string {

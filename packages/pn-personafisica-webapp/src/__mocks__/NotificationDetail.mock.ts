@@ -419,6 +419,6 @@ export const overrideNotificationMock = (overrideObj: object): NotificationDetai
 export const notificationToFeDelegate = parseNotificationDetailForRecipient(
   _.cloneDeep(notificationDTO),
   'CGNNMO80A03H501U', // this is the taxid of the user delegated
-  [arrayOfDelegators[2]],
+  arrayOfDelegators,
   arrayOfDelegators[2].mandateId
 );

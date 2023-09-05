@@ -1,7 +1,7 @@
 import React from 'react';
 import * as redux from 'react-redux';
 
-import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia } from '@pagopa-pn/pn-commons';
 
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
 import Deleghe from '../Deleghe.page';

@@ -2,7 +2,7 @@ import React from 'react';
 import * as redux from 'react-redux';
 
 import { TextField } from '@mui/material';
-import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia } from '@pagopa-pn/pn-commons';
 import userEvent from '@testing-library/user-event';
 
 import { RenderResult, render, screen, waitFor } from '../../../__test__/test-utils';

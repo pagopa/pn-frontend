@@ -1,5 +1,3 @@
-import { AxiosInstance } from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';

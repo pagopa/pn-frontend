@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia } from '@pagopa-pn/pn-commons';
 
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
