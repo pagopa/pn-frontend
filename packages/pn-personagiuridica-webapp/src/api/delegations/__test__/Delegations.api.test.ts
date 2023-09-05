@@ -1,13 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockApi } from '../../../__test__/test-utils';
-import { DelegationStatus } from '../../../models/Deleghe';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
   arrayOfDelegates,
   arrayOfDelegators,
   mockCreateDelegation,
-} from '../../../redux/delegation/__test__/test.utils';
+} from '../../../__mocks__/Delegations.mock';
+import { DelegationStatus } from '../../../models/Deleghe';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
 import {
@@ -16,7 +15,6 @@ import {
   CREATE_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
-  DELEGATIONS_NAME_BY_DELEGATE,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
   UPDATE_DELEGATION,
@@ -24,28 +22,35 @@ import {
 
 describe('Delegations api tests', () => {
   let mock: MockAdapter;
+
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
-    if (mock) {
-      mock.restore();
-      mock.reset();
-    }
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('gets non empty delegates', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
     const res = await DelegationsApi.getDelegatesByCompany();
     expect(res).toStrictEqual(arrayOfDelegates);
   });
 
   it('gets empty delegates', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_BY_DELEGATOR(), 200, undefined, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
     const res = await DelegationsApi.getDelegatesByCompany();
     expect(res).toHaveLength(0);
   });
 
   it('gets non empty delegators', async () => {
-    mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
       resultsPage: arrayOfDelegators,
       moreResult: false,
       nextPagesKey: [],
@@ -55,7 +60,7 @@ describe('Delegations api tests', () => {
   });
 
   it('gets empty delegators', async () => {
-    mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
       resultsPage: [],
       moreResult: false,
       nextPagesKey: [],
@@ -65,31 +70,31 @@ describe('Delegations api tests', () => {
   });
 
   it('revokes a delegation', async () => {
-    mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('7'), 204);
+    mock.onPatch(REVOKE_DELEGATION('7')).reply(204, { id: '7' });
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
   });
 
   it("doesn't revoke a delegation", async () => {
-    mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('10'), 200);
+    mock.onPatch(REVOKE_DELEGATION('10')).reply(200);
     const res = await DelegationsApi.revokeDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
   });
 
   it('rejects a delegation', async () => {
-    mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('8'), 204);
+    mock.onPatch(REJECT_DELEGATION('8')).reply(204);
     const res = await DelegationsApi.rejectDelegation('8');
     expect(res).toStrictEqual({ id: '8' });
   });
 
   it("doesn't reject a delegation", async () => {
-    mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('10'), 200);
+    mock.onPatch(REJECT_DELEGATION('10')).reply(200);
     const res = await DelegationsApi.rejectDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
   });
 
   it('accept a delegation', async () => {
-    mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('9'), 204, undefined, {});
+    mock.onPatch(ACCEPT_DELEGATION('9')).reply(204);
     const res = await DelegationsApi.acceptDelegation('9', {
       verificationCode: '12345',
       groups: [{ id: 'group-1', name: 'Group 1' }],
@@ -98,53 +103,19 @@ describe('Delegations api tests', () => {
   });
 
   it('creates a new delegation', async () => {
-    mock = mockApi(
-      apiClient,
-      'POST',
-      CREATE_DELEGATION(),
-      200,
-      mockCreateDelegation,
-      mockCreateDelegation
-    );
+    mock.onPost(CREATE_DELEGATION(), mockCreateDelegation).reply(200, mockCreateDelegation);
     const res = await DelegationsApi.createDelegation(mockCreateDelegation);
     expect(res).toStrictEqual(mockCreateDelegation);
   });
 
   it('count delegators', async () => {
-    mock = mockApi(apiClient, 'GET', COUNT_DELEGATORS(DelegationStatus.PENDING), 200, undefined, {
-      value: 5,
-    });
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, { value: 5 });
     const res = await DelegationsApi.countDelegators(DelegationStatus.PENDING);
     expect(res).toStrictEqual({ value: 5 });
   });
 
-  it('gets non empty delegators names', async () => {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_NAME_BY_DELEGATE(),
-      200,
-      undefined,
-      arrayOfDelegators
-    );
-    const res = await DelegationsApi.getDelegatorsNames();
-    expect(res).toStrictEqual(
-      arrayOfDelegators.map((delegator) => ({
-        id: delegator.delegator.fiscalCode,
-        name: delegator.delegator.displayName,
-        mandateIds: [delegator.mandateId],
-      }))
-    );
-  });
-
-  it('gets empty delegators names', async () => {
-    mock = mockApi(apiClient, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
-    const res = await DelegationsApi.getDelegatorsNames();
-    expect(res).toHaveLength(0);
-  });
-
   it('update a delegation', async () => {
-    mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('9'), 204, undefined, {});
+    mock.onPatch(UPDATE_DELEGATION('9')).reply(204, { id: '9' });
     const res = await DelegationsApi.updateDelegation('9', [{ id: 'group-1', name: 'Group 1' }]);
     expect(res).toStrictEqual({ id: '9', groups: [{ id: 'group-1', name: 'Group 1' }] });
   });
