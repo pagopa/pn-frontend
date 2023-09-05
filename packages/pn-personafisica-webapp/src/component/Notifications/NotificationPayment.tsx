@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { LoadingButton } from '@mui/lab';
@@ -34,7 +34,6 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { URL_DIGITAL_NOTIFICATIONS_FAQ } from '@pagopa-pn/pn-commons/src/utils/costants';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   getNotificationPaymentInfo,
@@ -46,6 +45,7 @@ import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 import { getConfiguration } from '../../services/configuration.service';
+import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../navigation/externalRoutes.const';
 
 interface Props {
   iun: string;
@@ -129,6 +129,7 @@ const NotificationPayment: React.FC<Props> = ({
   const f24AttachmentUrl = useAppSelector(
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
+  const { LANDING_SITE_URL } = getConfiguration();
 
   const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
@@ -140,6 +141,14 @@ const NotificationPayment: React.FC<Props> = ({
 
   useDownloadDocument({ url: pagopaAttachmentUrl });
   useDownloadDocument({ url: f24AttachmentUrl });
+
+  const faqHowDoIGetRefundedCompleteLink = useMemo(
+    () =>
+      LANDING_SITE_URL && FAQ_HOW_DO_I_GET_REFUNDED
+        ? `${LANDING_SITE_URL}${FAQ_HOW_DO_I_GET_REFUNDED}`
+        : undefined,
+    []
+  );
 
   const fetchPaymentInfo = () => {
     if (
@@ -468,7 +477,7 @@ const NotificationPayment: React.FC<Props> = ({
           >
             {t('detail.payment.cancelled-alert-text-payment')}&nbsp;
             <Link
-              href={URL_DIGITAL_NOTIFICATIONS_FAQ}
+              href={faqHowDoIGetRefundedCompleteLink}
               sx={{ fontSize: '16px' }}
               target="_blank"
               variant="body1"
