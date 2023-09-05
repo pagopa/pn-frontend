@@ -6,6 +6,19 @@ import {
   KnownFunctionality,
 } from '@pagopa-pn/pn-commons';
 
+export const openIncidents = [
+  {
+    functionality: 'NOTIFICATION_WORKFLOW',
+    status: 'KO',
+    startDate: '2022-10-21T06:07:05Z',
+  },
+  {
+    functionality: 'NOTIFICATION_CREATE',
+    status: 'KO',
+    startDate: '2022-10-21T06:07:08Z',
+  },
+];
+
 export const currentStatusDTO: AppStatusDTO = {
   functionalities: ['NOTIFICATION_CREATE', 'NOTIFICATION_VISUALIZATION', 'NOTIFICATION_WORKFLOW'],
   openIncidents: [],

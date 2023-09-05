@@ -1,13 +1,19 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import * as redux from 'react-redux';
 
 import { TextField } from '@mui/material';
-import { createMatchMedia } from '@pagopa-pn/pn-commons';
-import userEvent from '@testing-library/user-event';
 
-import { RenderResult, render, screen, waitFor } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
 import { LegalChannelType } from '../../../models/contacts';
-import * as actions from '../../../redux/contact/actions';
 import { TrackEventType } from '../../../utils/events';
 import * as trackingFunctions from '../../../utils/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
@@ -18,90 +24,82 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const fields = [
   {
-    id: '1',
-    component: 'Campo 1',
+    id: 'label',
+    component: 'PEC',
     size: 'variable' as 'variable' | 'auto',
   },
   {
-    id: '2',
+    id: 'value',
     component: (
       <TextField
-        id="campo-2"
+        id="pec"
         fullWidth
-        name="campo-2"
-        label="campo-2"
+        name="pec"
+        label="PEC"
         variant="outlined"
         size="small"
-        value="Campo 2"
+        value="mocked@pec.it"
         data-testid="field"
-      ></TextField>
+      />
     ),
     size: 'auto' as 'variable' | 'auto',
     isEditable: true,
   },
 ];
 
-const deleteMockActionFn = jest.fn();
 const mockResetModifyValue = jest.fn();
+const mockDeleteCbk = jest.fn();
+const mockOnConfirm = jest.fn();
 // mock tracking
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
 
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
-  const original = window.matchMedia;
+  let mock: MockAdapter;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
-  });
-
-  afterAll(() => {
-    window.matchMedia = original;
+    mock = new MockAdapter(apiClient);
   });
 
   beforeEach(() => {
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
-    // mock action
-    const deleteActionSpy = jest.spyOn(actions, 'deleteLegalAddress');
-    deleteActionSpy.mockImplementation(deleteMockActionFn as any);
-    // mock dispatch
-    const mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-    // render component
-    result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <DigitalContactElem
-          fields={fields}
-          removeModalTitle="mocked-title"
-          removeModalBody="mocked-body"
-          recipientId="mocked-recipientId"
-          senderId="mocked-senderId"
-          value="mocked-value"
-          contactType={LegalChannelType.PEC}
-          onConfirmClick={() => {}}
-          resetModifyValue={mockResetModifyValue}
-        />
-      </DigitalContactsCodeVerificationProvider>
-    );
   });
 
   afterEach(() => {
-    result = undefined;
-    createTrackEventSpy.mockClear();
-    createTrackEventSpy.mockReset();
+    mock.reset();
+    jest.clearAllMocks();
   });
 
-  it('renders DigitalContactElem (no edit mode)', () => {
-    expect(result?.container).toHaveTextContent('Campo 1');
-    expect(result?.container).toHaveTextContent('Campo 2');
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders component', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <DigitalContactElem
+            fields={fields}
+            removeModalTitle="mocked-title"
+            removeModalBody="mocked-body"
+            recipientId="mocked-recipientId"
+            senderId="mocked-senderId"
+            value="mocked@pec.it"
+            contactType={LegalChannelType.PEC}
+            onConfirmClick={mockOnConfirm}
+            resetModifyValue={mockResetModifyValue}
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    expect(result?.container).toHaveTextContent('PEC');
+    expect(result?.container).toHaveTextContent('mocked@pec.it');
     const input = result?.queryByTestId('field');
     expect(input).not.toBeInTheDocument();
     const buttons = result?.container.querySelectorAll('button');
@@ -110,65 +108,190 @@ describe('DigitalContactElem Component', () => {
     expect(buttons![1]).toHaveTextContent('button.elimina');
   });
 
-  it('renders DigitalContactElem (edit mode)', async () => {
-    const buttons = result?.container.querySelectorAll('button');
-    userEvent.click(buttons![0]);
-    await waitFor(() => {
-      const input = result?.queryByTestId('field');
-      expect(input).toBeInTheDocument();
-      const newButtons = result?.container.querySelectorAll('button');
-      expect(newButtons).toHaveLength(2);
-      expect(newButtons![0]).toHaveTextContent('button.salva');
-      expect(newButtons![1]).toHaveTextContent('button.annulla');
-      userEvent.click(newButtons![1]);
+  it('edits contact', async () => {
+    mock
+      .onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC))
+      .reply(204, { value: 'mocked-modified@pec.it', verificationCode: '12345' });
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <DigitalContactElem
+            fields={fields}
+            removeModalTitle="mocked-title"
+            removeModalBody="mocked-body"
+            recipientId="mocked-recipientId"
+            senderId="mocked-senderId"
+            value="mocked@pec.it"
+            contactType={LegalChannelType.PEC}
+            onConfirmClick={mockOnConfirm}
+            resetModifyValue={mockResetModifyValue}
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
     });
+    const buttons = result?.container.querySelectorAll('button');
+    fireEvent.click(buttons![0]);
+    let input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('mocked@pec.it');
+    fireEvent.change(input!, { target: { value: 'mocked-modified@pec.it' } });
+    const newButtons = result?.container.querySelectorAll('button');
+    expect(newButtons).toHaveLength(2);
+    expect(newButtons![0]).toHaveTextContent('button.salva');
+    expect(newButtons![1]).toHaveTextContent('button.annulla');
+    // cancel edit
+    fireEvent.click(newButtons![1]);
     expect(mockResetModifyValue).toBeCalledTimes(1);
+    await waitFor(() => {
+      expect(input).not.toBeInTheDocument();
+    });
+    // confirm edit
+    fireEvent.click(buttons![0]);
+    input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
+    fireEvent.change(input!, { target: { value: 'mocked-modified@pec.it' } });
+    fireEvent.click(newButtons![0]);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(input).not.toBeInTheDocument();
+    });
   });
 
-  it('shows remove modal', async () => {
+  it('remove contact', async () => {
+    mock.onDelete(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(204);
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <DigitalContactElem
+            fields={fields}
+            removeModalTitle="mocked-title"
+            removeModalBody="mocked-body"
+            recipientId="mocked-recipientId"
+            senderId="mocked-senderId"
+            value="mocked@pec.it"
+            contactType={LegalChannelType.PEC}
+            onConfirmClick={mockOnConfirm}
+            resetModifyValue={mockResetModifyValue}
+            onDeleteCbk={mockDeleteCbk}
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
     const buttons = result?.container.querySelectorAll('button');
-    userEvent.click(buttons![1]);
-    const dialog = await waitFor(() => screen.queryByRole('dialog'));
+    fireEvent.click(buttons![1]);
+    let dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('mocked-title');
     expect(dialog).toHaveTextContent('mocked-body');
-    const dialogButtons = dialog?.querySelectorAll('button');
+    let dialogButtons = dialog?.querySelectorAll('button');
     expect(dialogButtons).toHaveLength(2);
     expect(dialogButtons![0]).toHaveTextContent('button.annulla');
     expect(dialogButtons![1]).toHaveTextContent('button.conferma');
-  });
-
-  it('closes remove modal (clicks on cancel)', async () => {
-    const buttons = result?.container.querySelectorAll('button');
-    userEvent.click(buttons![1]);
-    const dialog = await waitFor(() => screen.queryByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-    const dialogButtons = dialog?.querySelectorAll('button');
-    userEvent.click(dialogButtons![0]);
+    // click on cancel
+    fireEvent.click(dialogButtons![0]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
+    // click on confirm
+    fireEvent.click(buttons![1]);
+    dialog = await waitFor(() => screen.getByRole('dialog'));
+    dialogButtons = dialog?.querySelectorAll('button');
+    fireEvent.click(dialogButtons![1]);
+    expect(mockTrackEventFn).toBeCalledTimes(1);
+    expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {
+      action: 'delete',
+    });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    expect(mock.history.delete).toHaveLength(1);
+    await waitFor(() => {
+      expect(mockDeleteCbk).toBeCalledTimes(1);
+    });
   });
 
-  it('closes remove modal (clicks on confirm)', async () => {
-    const buttons = result?.container.querySelectorAll('button');
-    userEvent.click(buttons![1]);
-    const dialog = await waitFor(() => screen.queryByRole('dialog'));
-    expect(dialog).toBeInTheDocument();
-    const dialogButtons = dialog?.querySelectorAll('button');
-    userEvent.click(dialogButtons![1]);
-    await waitFor(() => {
-      expect(mockTrackEventFn).toBeCalledTimes(1);
-      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {
-        action: 'delete',
-      });
-      expect(dialog).not.toBeInTheDocument();
-      expect(deleteMockActionFn).toBeCalledTimes(1);
-      expect(deleteMockActionFn).toBeCalledWith({
-        recipientId: 'mocked-recipientId',
-        senderId: 'mocked-senderId',
-        channelType: LegalChannelType.PEC,
-      });
+  it('delete contacts blocked', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <DigitalContactElem
+            fields={fields}
+            removeModalTitle="mocked-title"
+            removeModalBody="mocked-body"
+            recipientId="mocked-recipientId"
+            senderId="mocked-senderId"
+            value="mocked@pec.it"
+            contactType={LegalChannelType.PEC}
+            onConfirmClick={mockOnConfirm}
+            resetModifyValue={mockResetModifyValue}
+            blockDelete
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
     });
+    const buttons = result?.container.querySelectorAll('button');
+    fireEvent.click(buttons![1]);
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    const dialogButtons = dialog?.querySelectorAll('button');
+    expect(dialogButtons).toHaveLength(1);
+    expect(dialogButtons![0]).toHaveTextContent('button.close');
+  });
+
+  it('save disabled', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <DigitalContactElem
+            fields={fields}
+            removeModalTitle="mocked-title"
+            removeModalBody="mocked-body"
+            recipientId="mocked-recipientId"
+            senderId="mocked-senderId"
+            value="mocked@pec.it"
+            contactType={LegalChannelType.PEC}
+            onConfirmClick={mockOnConfirm}
+            resetModifyValue={mockResetModifyValue}
+            saveDisabled
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    const buttons = result?.container.querySelectorAll('button');
+    fireEvent.click(buttons![0]);
+    const newButtons = await waitFor(() => result?.container.querySelectorAll('button'));
+    expect(newButtons).toHaveLength(2);
+    expect(newButtons![0]).toHaveTextContent('button.salva');
+    expect(newButtons![0]).toBeDisabled();
+    expect(newButtons![1]).toHaveTextContent('button.annulla');
+  });
+
+  it('edit disabled', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <DigitalContactElem
+            fields={fields}
+            removeModalTitle="mocked-title"
+            removeModalBody="mocked-body"
+            recipientId="mocked-recipientId"
+            senderId="mocked-senderId"
+            value="mocked@pec.it"
+            contactType={LegalChannelType.PEC}
+            onConfirmClick={mockOnConfirm}
+            resetModifyValue={mockResetModifyValue}
+            editDisabled
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    const buttons = result?.container.querySelectorAll('button');
+    expect(buttons).toHaveLength(2);
+    expect(buttons![0]).toHaveTextContent('button.modifica');
+    expect(buttons![0]).toBeDisabled();
+    expect(buttons![1]).toHaveTextContent('button.elimina');
   });
 });
