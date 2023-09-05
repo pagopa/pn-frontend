@@ -1,39 +1,65 @@
-import { AppCurrentStatus, DowntimeLogPage,  } from "@pagopa-pn/pn-commons";
-import { AppStatusApi } from "../../../api/appStatus/AppStatus.api";
-import { mockAuthentication } from "../../auth/__test__/test-utils";
-import { store } from '../../store';
-import { getCurrentAppStatus, getDowntimeLogPage } from "../actions";
-import { currentStatusOk, simpleDowntimeLogPage } from "./test-utils";
+import MockAdapter from 'axios-mock-adapter';
 
+import {
+  AppCurrentStatus,
+  DOWNTIME_HISTORY,
+  DOWNTIME_STATUS,
+  DowntimeLogPage,
+} from '@pagopa-pn/pn-commons';
+
+import {
+  currentStatusDTO,
+  currentStatusOk,
+  downtimesDTO,
+  simpleDowntimeLogPage,
+} from '../../../__mocks__/AppStatus.mock';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { apiClient } from '../../../api/apiClients';
+import { store } from '../../store';
+import { getCurrentAppStatus, getDowntimeLogPage } from '../actions';
 
 describe('App Status redux state tests', () => {
+  // eslint-disable-next-line functional/no-let
+  let mock: MockAdapter;
+
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('Initial state', () => {
     const state = store.getState().appStatus;
-    expect(state).toEqual({pagination: { size: 10, page: 0, resultPages: ["0"] }});
+    expect(state).toEqual({ pagination: { size: 10, page: 0, resultPages: ['0'] } });
   });
 
   it('Should be able to fetch the current status', async () => {
-    const apiSpy = jest.spyOn(AppStatusApi, 'getCurrentStatus');
-    apiSpy.mockResolvedValue(currentStatusOk);
-    const action = await store.dispatch(
-      getCurrentAppStatus()
-    );
+    mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
+    const action = await store.dispatch(getCurrentAppStatus());
     const payload = action.payload as AppCurrentStatus;
     expect(action.type).toBe('getCurrentAppStatus/fulfilled');
-    expect(payload).toEqual(currentStatusOk);
+    expect(payload).toEqual({
+      ...currentStatusOk,
+      lastCheckTimestamp: new Date().toISOString().slice(0, -5) + 'Z',
+    });
   });
 
   it('Should be able to fetch a downtime page', async () => {
-    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
-    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
-    const action = await store.dispatch(
-      getDowntimeLogPage({ startDate: '2012-11-01T00:00:00Z' })
-    );
+    const mockRequest = {
+      startDate: '2022-10-23T15:50:04Z',
+    };
+    mock.onGet(DOWNTIME_HISTORY(mockRequest)).reply(200, downtimesDTO);
+    const action = await store.dispatch(getDowntimeLogPage(mockRequest));
     const payload = action.payload as DowntimeLogPage;
     expect(action.type).toBe('getDowntimeLogPage/fulfilled');
     expect(payload).toEqual(simpleDowntimeLogPage);
   });
-
 });

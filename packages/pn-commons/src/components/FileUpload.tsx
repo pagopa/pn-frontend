@@ -1,21 +1,23 @@
 import {
-  useMemo,
-  useReducer,
-  Fragment,
-  useRef,
   ChangeEvent,
   DragEvent,
-  useEffect,
+  Fragment,
   ReactNode,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
 } from 'react';
-import { Alert, Box, IconButton, Input, LinearProgress, SxProps, Typography } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Alert, Box, IconButton, Input, LinearProgress, SxProps, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { calcSha256String, parseFileSize } from '../utils/file.utility';
+
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { calcSha256String, parseFileSize } from '../utils/file.utility';
 import CustomTooltip from './CustomTooltip';
 
 type Props = {
@@ -317,6 +319,7 @@ const FileUpload = ({
               </Typography>
             </Box>
             <IconButton
+              data-testid="removeDocument"
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
                 'common',

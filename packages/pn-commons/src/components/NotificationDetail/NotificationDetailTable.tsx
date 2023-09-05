@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 
-import { NotificationDetailTableRow } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { NotificationDetailTableRow } from '../../types';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;
@@ -24,6 +24,7 @@ const NotificationDetailTable = ({ rows }: Props) => (
         'detail.table-aria-label',
         'Dettaglio notifica'
       )}
+      data-testid="notificationDetailTable"
     >
       <TableBody>
         {rows.map((row) => (

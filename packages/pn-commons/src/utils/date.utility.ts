@@ -1,6 +1,7 @@
 import DateFnsAdapter from '@date-io/date-fns';
-import { DatePickerTypes } from '../types';
+
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { DatePickerTypes } from '../types';
 
 const dateFns = new DateFnsAdapter();
 export const DATE_FORMAT = 'dd/MM/yyyy';
@@ -66,7 +67,7 @@ export function isToday(date: DatePickerTypes): boolean {
   );
 }
 
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string, todayLabelizzation: boolean = true): string {
   const date = new Date(dateString);
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
@@ -75,7 +76,7 @@ export function formatDate(dateString: string): string {
     'date-time.today-uppercase-initial',
     'Oggi'
   );
-  return isToday(date) ? todayLabel : `${day}/${month}/${date.getFullYear()}`;
+  return isToday(date) && todayLabelizzation ? todayLabel : `${day}/${month}/${date.getFullYear()}`;
 }
 
 export function formatDateTime(dateString: string): string {

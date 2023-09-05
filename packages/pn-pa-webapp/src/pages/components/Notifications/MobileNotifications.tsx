@@ -1,30 +1,31 @@
-import { Fragment, useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, Typography } from '@mui/material';
+
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Box, Grid, Typography } from '@mui/material';
 import {
-  Sort,
-  Notification,
-  CardElement,
-  Item,
-  getNotificationStatusInfos,
-  NotificationStatus,
-  StatusTooltip,
-  ItemsCard,
-  EmptyState,
   CardAction,
-  MobileNotificationsSort,
+  CardElement,
   CardSort,
-  KnownSentiment,
   CustomTagGroup,
+  EmptyState,
+  Item,
+  ItemsCard,
+  KnownSentiment,
+  MobileNotificationsSort,
+  Notification,
+  NotificationStatus,
+  Sort,
+  StatusTooltip,
+  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, Tag } from '@pagopa/mui-italia';
 
-import { trackEventByType } from '../../../utils/mixpanel';
-import { TrackEventType } from '../../../utils/events';
-import * as routes from '../../../navigation/routes.const';
 import { NotificationSortField } from '../../../models/Notifications';
+import * as routes from '../../../navigation/routes.const';
+import { TrackEventType } from '../../../utils/events';
+import { trackEventByType } from '../../../utils/mixpanel';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -186,8 +187,10 @@ const MobileNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', { ns: 'common' }),
+    emptyMessage: filtersApplied ? t('empty-state.filter-message') : t('empty-state.message'),
+    emptyActionLabel: filtersApplied
+      ? t('empty-state.filter-action')
+      : t('menu.api-key', { ns: 'common' }),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied
@@ -204,7 +207,7 @@ const MobileNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   return (
-    <Fragment>
+    <>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
           <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
@@ -236,7 +239,7 @@ const MobileNotifications = ({
       ) : (
         <EmptyState {...EmptyStateProps} />
       )}
-    </Fragment>
+    </>
   );
 };
 

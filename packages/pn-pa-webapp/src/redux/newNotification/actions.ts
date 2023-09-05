@@ -1,12 +1,13 @@
 import _ from 'lodash';
+
+import { calcUnit8Array, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { performThunkAction, calcUnit8Array } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
-  NewNotificationResponse,
   NewNotification,
   NewNotificationDocument,
+  NewNotificationResponse,
   PaymentObject,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
@@ -163,12 +164,8 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
 
 export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
   'createNewNotification',
-  async (notification: NewNotification, { rejectWithValue }) => {
-    try {
-      const mappedNotification = newNotificationMapper(notification);
-      return await NotificationsApi.createNewNotification(mappedNotification);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(async (notification: NewNotification) => {
+    const mappedNotification = newNotificationMapper(notification);
+    return await NotificationsApi.createNewNotification(mappedNotification);
+  })
 );

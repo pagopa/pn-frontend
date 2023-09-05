@@ -1,7 +1,7 @@
-import { fireEvent } from '@testing-library/react';
+import React from 'react';
 
-import { render } from "../../../../__test__/test-utils";
-import NewNotificationCard from "../NewNotificationCard";
+import { fireEvent, render } from '../../../../__test__/test-utils';
+import NewNotificationCard from '../NewNotificationCard';
 
 const mockStepBackFn = jest.fn();
 
@@ -14,36 +14,109 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('NewNotificationCard Component', () => {
-
-  const Component = (isContinueDisabled: boolean) => <NewNotificationCard title="Mocked title" previousStepOnClick={mockStepBackFn} previousStepLabel="mock-previous-step-label" isContinueDisabled={isContinueDisabled}>Mocked content</NewNotificationCard>
+  it('renders NewNotificationCard (no title and no subtitle)', () => {
+    // render component
+    const { queryByTestId } = render(
+      <NewNotificationCard
+        previousStepOnClick={mockStepBackFn}
+        submitLabel="mock-submit-label"
+        isContinueDisabled={false}
+      >
+        Mocked content
+      </NewNotificationCard>
+    );
+    const title = queryByTestId('title');
+    expect(title).not.toBeInTheDocument();
+    const subtitle = queryByTestId('subtitle');
+    expect(subtitle).not.toBeInTheDocument();
+  });
 
   it('renders NewNotificationCard (continue disabled)', () => {
     // render component
-    const result = render(Component(true));
-    expect(result.container).toHaveTextContent(/Mocked title/i);
-    expect(result.container).toHaveTextContent(/Mocked content/i);
-    const buttons = result.container.querySelectorAll('button');
-    expect(buttons).toHaveLength(2);
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // vedi flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons[1]).toHaveTextContent(/mock-previous-step-label/i);
-    expect(buttons[0]).toHaveTextContent(/button.continue/i);
-    expect(buttons[0]).toBeDisabled();
+    const { container, getByTestId } = render(
+      <NewNotificationCard
+        title="Mocked title"
+        subtitle="Mocked subtitle"
+        previousStepOnClick={mockStepBackFn}
+        previousStepLabel="mock-previous-step-label"
+        isContinueDisabled
+      >
+        Mocked content
+      </NewNotificationCard>
+    );
+    expect(container).toHaveTextContent(/Mocked title/i);
+    expect(container).toHaveTextContent(/Mocked subtitle/i);
+    expect(container).toHaveTextContent(/Mocked content/i);
+    const submitButton = getByTestId('step-submit');
+    expect(submitButton).toHaveTextContent(/button.continue/i);
+    expect(submitButton).toBeDisabled();
+    const previousButton = getByTestId('previous-step');
+    expect(previousButton).toHaveTextContent(/mock-previous-step-label/i);
   });
 
   it('renders NewNotificationCard (continue enabled)', () => {
     // render component
-    const result = render(Component(false));
-    const buttons = result.container.querySelectorAll('button');
-    expect(buttons[0]).toBeEnabled();
+    const { getByTestId } = render(
+      <NewNotificationCard
+        title="Mocked title"
+        previousStepOnClick={mockStepBackFn}
+        previousStepLabel="mock-previous-step-label"
+        isContinueDisabled={false}
+      >
+        Mocked content
+      </NewNotificationCard>
+    );
+    const submitButton = getByTestId('step-submit');
+    expect(submitButton).toBeEnabled();
+  });
+
+  it('renders NewNotificationCard (continue custom label)', () => {
+    // render component
+    const { getByTestId } = render(
+      <NewNotificationCard
+        title="Mocked title"
+        previousStepOnClick={mockStepBackFn}
+        previousStepLabel="mock-previous-step-label"
+        submitLabel="mock-submit-label"
+        isContinueDisabled={false}
+      >
+        Mocked content
+      </NewNotificationCard>
+    );
+    const submitButton = getByTestId('step-submit');
+    expect(submitButton).toHaveTextContent(/mock-submit-label/i);
+  });
+
+  it('renders NewNotificationCard (no previous button)', () => {
+    // render component
+    const { queryByTestId } = render(
+      <NewNotificationCard
+        title="Mocked title"
+        previousStepOnClick={mockStepBackFn}
+        submitLabel="mock-submit-label"
+        isContinueDisabled={false}
+      >
+        Mocked content
+      </NewNotificationCard>
+    );
+    const previousButton = queryByTestId('previous-step');
+    expect(previousButton).not.toBeInTheDocument();
   });
 
   it('clicks on back button', () => {
     // render component
-    const result = render(Component(false));
-    const buttons = result.container.querySelectorAll('button');
-    fireEvent.click(buttons[1]);
+    const { getByTestId } = render(
+      <NewNotificationCard
+        title="Mocked title"
+        previousStepOnClick={mockStepBackFn}
+        previousStepLabel="mock-previous-step-label"
+        isContinueDisabled={false}
+      >
+        Mocked content
+      </NewNotificationCard>
+    );
+    const previousButton = getByTestId('previous-step');
+    fireEvent.click(previousButton);
     expect(mockStepBackFn).toBeCalledTimes(1);
   });
 });

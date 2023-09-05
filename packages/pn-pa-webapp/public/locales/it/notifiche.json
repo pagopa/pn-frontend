@@ -43,7 +43,9 @@
   "empty-state": {
     "message": "L'ente non ha ancora inviato nessuna notifica. Usa le",
     "secondary-message": "o fai un",
-    "secondary-action": "invio manuale"
+    "secondary-action": "invio manuale",
+    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
+    "filter-action": "Rimuovi filtri"
   },
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
@@ -350,6 +352,7 @@
         "group": "Gruppo",
         "no-groups": "Non ci sono gruppi per questo prodotto",
         "taxonomy-id": "Codice tassonomico",
+        "taxonomy-tooltip": "È il codice che definisce la tipologia della notifica. Trovi più informazioni nel manuale di SEND.",
         "comunication-type": "Modalità di invio",
         "registered-letter-890": "Modello 890",
         "simple-registered-letter": "Raccomandata A/R",
