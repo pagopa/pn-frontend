@@ -1,7 +1,7 @@
 // momentarily commented for pn-5157
 // import { AppRouteType } from '@pagopa-pn/pn-commons';
+import { getConfiguration } from '../../services/configuration.service';
 import { goToLoginPortal } from '../navigation.utility';
-import { getConfiguration } from "../../services/configuration.service";
 
 const replaceFn = jest.fn();
 
@@ -18,8 +18,7 @@ describe('Tests navigation utility methods', () => {
       href: '',
       replace: replaceFn,
     };
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll((): void => {
@@ -46,7 +45,7 @@ describe('Tests navigation utility methods', () => {
     expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?aar=fake-aar-token`);
   });
 
-  it('goToLoginPortal - aar', () => {
+  it('goToLoginPortal - aar with malicious code', () => {
     // momentarily commented for pn-5157
     // goToLoginPortal(AppRouteType.PF, '<script>malicious code</script>malicious-aar-token');
     goToLoginPortal('<script>malicious code</script>malicious-aar-token');

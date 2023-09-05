@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import * as redux from 'react-redux';
 
 import App from '../App';
