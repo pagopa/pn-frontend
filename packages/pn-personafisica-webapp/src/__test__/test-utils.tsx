@@ -3,10 +3,12 @@ import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Store, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, render } from '@testing-library/react';
 
-import { appReducers } from '../redux/store';
+import { RootState, appReducers } from '../redux/store';
+
+let testStore: EnhancedStore<RootState>;
 
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
   <BrowserRouter>
@@ -21,7 +23,7 @@ const customRender = (
     renderOptions,
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
-  const testStore = configureStore({
+  testStore = configureStore({
     reducer: appReducers,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
@@ -50,5 +52,5 @@ const createMockedStore = (preloadedState: any) =>
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore };
+export { customRender as render, createMockedStore, testStore };
 export { axe };
