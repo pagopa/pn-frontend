@@ -1,15 +1,20 @@
 /* eslint-disable functional/no-let */
-
 import _ from 'lodash';
-import { NotificationDetailRecipient, NotificationDetailDocument, RecipientType } from '@pagopa-pn/pn-commons';
 
 import {
-  NewNotificationRecipient,
-  NewNotificationDocument,
-  NewNotificationDTO,
+  NotificationDetailDocument,
+  NotificationDetailRecipient,
+  PhysicalAddress,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
+
+import {
   NewNotification,
+  NewNotificationDTO,
+  NewNotificationDocument,
+  NewNotificationRecipient,
+  PaymentModel,
   PaymentObject,
-  PaymentModel
 } from '../models/NewNotification';
 
 const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
@@ -21,7 +26,7 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
     recipient.province &&
     recipient.foreignState
   ) {
-    return {
+    const address = {
       at: recipient.at,
       address: `${recipient.address} ${recipient.houseNumber}`,
       addressDetails: recipient.addressDetails,
@@ -31,6 +36,14 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
       province: recipient.province,
       foreignState: recipient.foreignState,
     };
+    // clean the object from undefined keys
+    (Object.keys(address) as Array<keyof PhysicalAddress>).forEach((key) => {
+      if (!address[key]) {
+        // eslint-disable-next-line functional/immutable-data
+        delete address[key];
+      }
+    });
+    return address;
   }
   return undefined;
 };
@@ -46,17 +59,27 @@ const newNotificationRecipientsMapper = (
           address: recipient.digitalDomicile,
         }
       : undefined;
-    return {
-      denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
+    const parsedRecipient: NotificationDetailRecipient = {
+      denomination:
+        recipient.recipientType === RecipientType.PG
+          ? recipient.firstName
+          : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      payment: paymentMethod === PaymentModel.NOTHING ? undefined : {
-        creditorTaxId: recipient.creditorTaxId,
-        noticeCode: recipient.noticeCode,
-      },
-      digitalDomicile,
       physicalAddress: checkPhysicalAddress(recipient),
     };
+    if (digitalDomicile) {
+      // eslint-disable-next-line functional/immutable-data
+      parsedRecipient.digitalDomicile = digitalDomicile;
+    }
+    if (paymentMethod !== PaymentModel.NOTHING) {
+      // eslint-disable-next-line functional/immutable-data
+      parsedRecipient.payment = {
+        creditorTaxId: recipient.creditorTaxId,
+        noticeCode: recipient.noticeCode,
+      };
+    }
+    return parsedRecipient;
   });
 
 const newNotificationDocumentMapper = (
@@ -86,14 +109,27 @@ const newNotificationPaymentDocumentsMapper = (
       f24standard?: NotificationDetailDocument;
     } = {};
     /* eslint-disable functional/immutable-data */
-    if (paymentDocuments[r.taxId].pagoPaForm && paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== '') {
-      documents.pagoPaForm = newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm as NewNotificationDocument);
+    if (
+      paymentDocuments[r.taxId].pagoPaForm &&
+      paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== ''
+    ) {
+      documents.pagoPaForm = newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm);
     }
-    if (paymentDocuments[r.taxId].f24flatRate && paymentDocuments[r.taxId].f24flatRate?.file.sha256.hashBase64 !== '') {
-      documents.f24flatRate = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument);
+    if (
+      paymentDocuments[r.taxId].f24flatRate &&
+      paymentDocuments[r.taxId].f24flatRate?.file.sha256.hashBase64 !== ''
+    ) {
+      documents.f24flatRate = newNotificationDocumentMapper(
+        paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument
+      );
     }
-    if (paymentDocuments[r.taxId].f24standard && paymentDocuments[r.taxId].f24standard?.file.sha256.hashBase64 !== '') {
-      documents.f24standard = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24standard as NewNotificationDocument);
+    if (
+      paymentDocuments[r.taxId].f24standard &&
+      paymentDocuments[r.taxId].f24standard?.file.sha256.hashBase64 !== ''
+    ) {
+      documents.f24standard = newNotificationDocumentMapper(
+        paymentDocuments[r.taxId].f24standard as NewNotificationDocument
+      );
     }
     r.payment = {
       ...documents,
@@ -116,7 +152,10 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
     documents: [],
   };
   // format recipients
-  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients, newNotification.paymentMode);
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(
+    newNotification.recipients,
+    newNotification.paymentMode
+  );
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   // format payments
@@ -130,11 +169,14 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   return newNotificationParsed;
 }
 
-export function getDuplicateValuesByKeys<T>(objectsList: Array<T>, keys: Array<keyof T>): Array<string> {
+export function getDuplicateValuesByKeys<T>(
+  objectsList: Array<T>,
+  keys: Array<keyof T>
+): Array<string> {
   const getValue = (item: T) => {
     let valueByKeys = '';
-    for (let i = 0; i < keys.length; i++) {
-      valueByKeys += item[keys[i]] ?? '';
+    for (const element of keys) {
+      valueByKeys += item[element] ?? '';
     }
     return valueByKeys;
   };

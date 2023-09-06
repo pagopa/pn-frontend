@@ -1,13 +1,42 @@
-/* eslint-disable functional/no-let */
-import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
-import * as redux from 'react-redux';
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 
-import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
-import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
+import {
+  AppResponseMessage,
+  NotificationFeePolicy,
+  PhysicalCommunicationType,
+  ResponseEventDispatcher,
+} from '@pagopa-pn/pn-commons';
+import { testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import {
+  newNotification,
+  newNotificationEmpty,
+  newNotificationGroups,
+} from '../../../../__mocks__/NewNotification.mock';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  randomString,
+  render,
+  testFormElements,
+  testInput,
+  testRadio,
+  testStore,
+  waitFor,
+  within,
+} from '../../../../__test__/test-utils';
+import { apiClient } from '../../../../api/apiClients';
+import { GET_USER_GROUPS } from '../../../../api/notifications/notifications.routes';
 import { PaymentModel } from '../../../../models/NewNotification';
+import { GroupStatus } from '../../../../models/user';
+import { NEW_NOTIFICATION_ACTIONS } from '../../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
 
+const mockIsPaymentEnabledGetter = jest.fn();
+
+// mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -15,40 +44,6 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-function testRadioElements(form: HTMLFormElement, dataTestId: string, values: Array<string>) {
-  const radioButtons = form?.querySelectorAll(`[data-testid="${dataTestId}"]`);
-  expect(radioButtons).toHaveLength(values.length);
-  values.forEach((value, index) => {
-    expect(radioButtons[index]).toHaveTextContent(value);
-  });
-}
-
-async function testRadio(form: HTMLFormElement, dataTestId: string, index: number) {
-  const radioButtons = form?.querySelectorAll(`[data-testid="${dataTestId}"]`);
-  fireEvent.click(radioButtons[index]);
-  await waitFor(() => {
-    const radioInput = radioButtons[index].querySelector('input');
-    expect(radioInput!).toBeChecked();
-  });
-}
-
-const populateFormWithoutPayment = async (form: HTMLFormElement) => {
-  await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
-  await testInput(form!, 'subject', 'mocked-Subject');
-  await testInput(form!, 'taxonomyCode', '012345N');
-  await testSelect(
-    form!,
-    'group',
-    [
-      { label: 'Group1', value: '1' },
-      { label: 'Group2', value: '2' },
-    ],
-    1
-  );
-  await testRadio(form!, 'comunicationTypeRadio', 1);
-};
-
-const mockIsPaymentEnabledGetter = jest.fn();
 jest.mock('../../../../services/configuration.service', () => {
   return {
     ...jest.requireActual('../../../../services/configuration.service'),
@@ -58,209 +53,374 @@ jest.mock('../../../../services/configuration.service', () => {
   };
 });
 
-describe('PreliminaryInformations component with payment enabled', () => {
-  let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
+const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
+  await testInput(form!, 'paProtocolNumber', newNotification.paProtocolNumber);
+  await testInput(form!, 'subject', newNotification.subject);
+  await testInput(form!, 'taxonomyCode', newNotification.taxonomyCode);
+  await testSelect(
+    form!,
+    'group',
+    newNotificationGroups.map((g) => ({ label: g.name, value: g.id })),
+    1
+  );
+  await testRadio(
+    form!,
+    'comunicationTypeRadio',
+    ['registered-letter-890', 'simple-registered-letter'],
+    1
+  );
+  if (hasPayment) {
+    await testRadio(
+      form!,
+      'paymentMethodRadio',
+      ['pagopa-notice', 'pagopa-notice-f24-flatrate', 'pagopa-notice-f24', 'nothing'],
+      1
+    );
+  }
+};
 
-  beforeEach(async () => {
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    mockDispatchFn = jest.fn();
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+describe('PreliminaryInformations component with payment enabled', () => {
+  let result: RenderResult | undefined;
+  const confirmHandlerMk = jest.fn();
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
     mockIsPaymentEnabledGetter.mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    result = undefined;
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders - no required groups', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
-        <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />,
-        {
-          preloadedState: {
-            newNotificationState: {
-              groups: [
-                { id: '1', name: 'Group1', description: '', status: 'ACTIVE' },
-                { id: '2', name: 'Group2', description: '', status: 'ACTIVE' },
-              ],
-            },
-          },
-        }
+        <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
       );
     });
-    // render component
-  });
-  afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-  });
-
-  it('renders PreliminaryInformations with enabled payment', async () => {
-    expect(result.container).toHaveTextContent(/title/i);
-    const form = result.container.querySelector('form');
+    expect(result!.container).toHaveTextContent(/title/i);
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     testFormElements(form!, 'paProtocolNumber', 'protocol-number*');
     testFormElements(form!, 'subject', 'subject*');
     testFormElements(form!, 'abstract', 'abstract');
     testFormElements(form!, 'group', 'group');
     testFormElements(form!, 'taxonomyCode', 'taxonomy-id*');
-    testRadioElements(form!, 'comunicationTypeRadio', [
+    testRadio(form!, 'comunicationTypeRadio', [
       'registered-letter-890',
       'simple-registered-letter',
     ]);
-    testRadioElements(form!, 'paymentMethodRadio', [
+    testRadio(form!, 'paymentMethodRadio', [
       'pagopa-notice',
       'pagopa-notice-f24-flatrate',
       'pagopa-notice-f24',
       'nothing',
     ]);
-
-    const button = form?.querySelector('button');
+    const button = within(form).getByTestId('step-submit');
     expect(button!).toBeDisabled();
   });
 
-  it('changes form values and clicks on confirm ', async () => {
-    const form = result.container.querySelector('form');
-    await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
-    await testInput(form!, 'subject', 'mocked-Subject');
-    await testInput(form!, 'taxonomyCode', '012345N');
-    await testSelect(
-      form!,
-      'group',
-      [
-        { label: 'Group1', value: '1' },
-        { label: 'Group2', value: '2' },
-      ],
-      1
-    );
-    await testRadio(form!, 'comunicationTypeRadio', 1);
-    await testRadio(form!, 'paymentMethodRadio', 1);
-    const button = form?.querySelector('button');
-    expect(button).toBeEnabled();
-    fireEvent.click(button!);
-    await waitFor(() => {
-      // infatti vengono eseguiti due dispatch, uno all'inizio per getUserGroups, l'altro nel submit per setPreliminaryInformations
-      // del dispatch per getUserGroups non so' come recuperare l'informazione relativa,
-      // perché essendo un asyncThunk il valore con cui viene chiamato il dispatch è infatti una funzione, di cui non so' come ottenere dettagli
-      expect(mockDispatchFn).toBeCalledTimes(2);
-      expect(mockDispatchFn).toBeCalledWith({
-        payload: {
-          paProtocolNumber: 'mocked-NotificationId',
-          subject: 'mocked-Subject',
-          abstract: '',
-          taxonomyCode: '012345N',
-          group: '2',
-          physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-          paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
-        },
-        type: 'newNotificationSlice/setPreliminaryInformations',
-      });
-      expect(confirmHandlerMk).toBeCalledTimes(1);
-    });
-  });
-});
-
-describe('PreliminaryInformations Component with payment disabled', () => {
-  let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
-
-  beforeEach(async () => {
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    mockDispatchFn = jest.fn();
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-    mockIsPaymentEnabledGetter.mockReturnValue(false);
+  it('renders - required groups', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
     await act(async () => {
       result = render(
-        <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />,
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
         {
           preloadedState: {
-            newNotificationState: {
-              groups: [
-                { id: '1', name: 'Group1', description: '', status: 'ACTIVE' },
-                { id: '2', name: 'Group2', description: '', status: 'ACTIVE' },
-              ],
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
             },
           },
         }
       );
     });
-    // render component
-  });
-  afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-  });
-
-  it('renders PreliminaryInformations with disabled payment', async () => {
-    expect(result.container).toHaveTextContent(/title/i);
-    const form = result.container.querySelector('form');
-    testFormElements(form!, 'paProtocolNumber', 'protocol-number*');
-    testFormElements(form!, 'subject', 'subject*');
-    testFormElements(form!, 'abstract', 'abstract');
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     testFormElements(form!, 'group', 'group');
-    testFormElements(form!, 'taxonomyCode', 'taxonomy-id*');
-    testRadioElements(form!, 'comunicationTypeRadio', [
-      'registered-letter-890',
-      'simple-registered-letter',
-    ]);
-    const button = form?.querySelector('button');
-    expect(button!).toBeDisabled();
   });
 
-  it('tests form validation (subject)', async () => {
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    const submitButton = form.querySelector('button[type="submit"]');
-    expect(submitButton).toBeDisabled();
-    await populateFormWithoutPayment(form);
-    expect(submitButton).toBeEnabled();
-    await testInput(form, `subject`, 'five5');
-    expect(submitButton).toBeDisabled();
-    await testInput(form, `subject`, 'TwentyTwentyTwenty20');
-    expect(submitButton).toBeEnabled();
-    await testInput(form, 
-      `subject`, 
-      'oneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySixoneHundredAndThirtySix3456'
-    );
-    expect(submitButton).toBeDisabled();
-    await testInput(form, `subject`, 'FifteenFifteenX');
-    expect(submitButton).toBeEnabled();
-  }, 20000);
-
-
-  it.skip('changes form values and clicks on confirm', async () => {
-    const form = result.container.querySelector('form');
-    await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
-    await testInput(form!, 'subject', 'mocked-Subject');
-    await testInput(form!, 'taxonomyCode', '012345N');
-    await testSelect(
-      form!,
-      'group',
-      [
-        { label: 'Group1', value: '1' },
-        { label: 'Group2', value: '2' },
-      ],
-      1
-    );
-    await testRadio(form!, 'comunicationTypeRadio', 1);
-    await testRadio(form!, 'paymentMethodRadio', 1);
-    const button = form?.querySelector('button');
+  it('changes form values and clicks on confirm', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const button = within(form).getByTestId('step-submit');
+    expect(button).toBeDisabled();
+    await populateForm(form, true);
     expect(button).toBeEnabled();
     fireEvent.click(button!);
     await waitFor(() => {
-      // infatti vengono eseguiti due dispatch, uno all'inizio per getUserGroups, l'altro nel submit per setPreliminaryInformations
-      // del dispatch per getUserGroups non so' come recuperare l'informazione relativa,
-      // perché essendo un asyncThunk il valore con cui viene chiamato il dispatch è infatti una funzione, di cui non so' come ottenere dettagli
-      expect(mockDispatchFn).toBeCalledTimes(2);
-      expect(mockDispatchFn).toBeCalledWith({
-        payload: {
-          paProtocolNumber: 'mocked-NotificationId',
-          subject: 'mocked-Subject',
-          abstract: '',
-          taxonomyCode: '012345N',
-          group: '2',
-          physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
-          paymentMode: PaymentModel.NOTHING,
-        },
-        type: 'newNotificationSlice/setPreliminaryInformations',
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification).toEqual({
+        paProtocolNumber: newNotification.paProtocolNumber,
+        abstract: '',
+        subject: newNotification.subject,
+        taxonomyCode: newNotification.taxonomyCode,
+        group: newNotificationGroups[1].id,
+        notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+        payment: {},
+        documents: [],
+        recipients: [],
+        physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+        paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
       });
-      expect(confirmHandlerMk).toBeCalledTimes(1);
     });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
+  });
+
+  it('fills form with invalid values', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    await populateForm(form, true);
+    // set invalid values
+    // paProtocolNumber
+    await testInput(form!, 'paProtocolNumber', '');
+    const potrocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
+    expect(potrocolNumberError).toHaveTextContent('required-field');
+    await testInput(form!, 'paProtocolNumber', ' text-with-spaces ');
+    expect(potrocolNumberError).toHaveTextContent('no-spaces-at-edges');
+    await testInput(form!, 'paProtocolNumber', randomString(257));
+    expect(potrocolNumberError).toHaveTextContent('too-long-field-error');
+    // subject
+    await testInput(form!, 'subject', '');
+    const subjectError = form.querySelector('#subject-helper-text');
+    expect(subjectError).toHaveTextContent('required-field');
+    await testInput(form!, 'subject', ' text-with-spaces ');
+    expect(subjectError).toHaveTextContent('no-spaces-at-edges');
+    await testInput(form!, 'subject', randomString(135));
+    expect(subjectError).toHaveTextContent('too-long-field-error');
+    await testInput(form!, 'subject', randomString(9));
+    expect(subjectError).toHaveTextContent('too-short-field-error');
+    // abstract
+    await testInput(form!, 'abstract', ' text-with-spaces ');
+    const abstractError = form.querySelector('#abstract-helper-text');
+    expect(abstractError).toHaveTextContent('no-spaces-at-edges');
+    await testInput(form!, 'abstract', randomString(1025));
+    expect(abstractError).toHaveTextContent('too-long-field-error');
+    // taxonomyCode
+    await testInput(form!, 'taxonomyCode', '');
+    const taxonomyCodeError = form.querySelector('#taxonomyCode-helper-text');
+    expect(taxonomyCodeError).toHaveTextContent('taxonomy-id required');
+    await testInput(form!, 'taxonomyCode', randomString(4));
+    expect(taxonomyCodeError).toHaveTextContent('taxonomy-id invalid');
+    // check submit button state
+    const button = within(form).getByTestId('step-submit');
+    expect(button).toBeDisabled();
+  });
+
+  it('form initially filled', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    testFormElements(
+      form!,
+      'paProtocolNumber',
+      'protocol-number*',
+      newNotification.paProtocolNumber
+    );
+    testFormElements(form!, 'subject', 'subject*', newNotification.subject);
+    testFormElements(form!, 'abstract', 'abstract', newNotification.abstract);
+    testFormElements(form!, 'group', 'group', newNotification.group);
+    testFormElements(form!, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
+    const physicalCommunicationType = form.querySelector(
+      `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
+    );
+    expect(physicalCommunicationType).toBeChecked();
+    const paymentMode = form.querySelector(
+      `input[name="paymentMode"][value="${newNotification.paymentMode}"]`
+    );
+    expect(paymentMode).toBeChecked();
+  });
+
+  it('errors on api call', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(500);
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />
+        </>,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const statusApiErrorComponent = result?.queryByTestId(
+      `api-error-${NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}`
+    );
+    expect(statusApiErrorComponent).toBeInTheDocument();
+  });
+});
+
+describe('PreliminaryInformations Component with payment disabled', () => {
+  let result: RenderResult | undefined;
+  const confirmHandlerMk = jest.fn();
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
+    mockIsPaymentEnabledGetter.mockReturnValue(false);
+  });
+
+  afterEach(() => {
+    result = undefined;
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders component', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    expect(result!.container).toHaveTextContent(/title/i);
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const paymentMethodRadio = within(form!).queryAllByTestId('paymentMethodRadio');
+    expect(paymentMethodRadio).toHaveLength(0);
+    const button = within(form).getByTestId('step-submit');
+    expect(button!).toBeDisabled();
+  });
+
+  it('changes form values and clicks on confirm', async () => {
+    mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, newNotificationGroups);
+    await act(async () => {
+      result = render(
+        <PreliminaryInformations
+          notification={newNotificationEmpty}
+          onConfirm={confirmHandlerMk}
+        />,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                organization: {
+                  hasGroup: true,
+                },
+              },
+            },
+          },
+        }
+      );
+    });
+    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const button = within(form).getByTestId('step-submit');
+    expect(button).toBeDisabled();
+    await populateForm(form, false);
+    expect(button).toBeEnabled();
+    fireEvent.click(button!);
+    await waitFor(() => {
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification).toEqual({
+        paProtocolNumber: newNotification.paProtocolNumber,
+        abstract: '',
+        subject: newNotification.subject,
+        taxonomyCode: newNotification.taxonomyCode,
+        group: newNotificationGroups[1].id,
+        notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+        payment: {},
+        documents: [],
+        recipients: [],
+        physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+        paymentMode: PaymentModel.NOTHING,
+      });
+    });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
   });
 });

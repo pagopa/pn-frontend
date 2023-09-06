@@ -1,25 +1,26 @@
-import { Fragment, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import { Typography } from '@mui/material';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
 import {
   Column,
-  getNotificationStatusInfos,
+  EmptyState,
   Item,
   ItemsTable,
+  KnownSentiment,
+  Notification,
   NotificationStatus,
   Sort,
   StatusTooltip,
-  EmptyState,
-  Notification,
-  KnownSentiment,
+  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
 
-import { trackEventByType } from '../../../utils/mixpanel';
-import { TrackEventType } from '../../../utils/events';
-import * as routes from '../../../navigation/routes.const';
 import { NotificationColumn } from '../../../models/Notifications';
+import * as routes from '../../../navigation/routes.const';
+import { TrackEventType } from '../../../utils/events';
+import { trackEventByType } from '../../../utils/mixpanel';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -155,8 +156,10 @@ const DesktopNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', { ns: 'common' }),
+    emptyMessage: filtersApplied ? t('empty-state.filter-message') : t('empty-state.message'),
+    emptyActionLabel: filtersApplied
+      ? t('empty-state.filter-action')
+      : t('menu.api-key', { ns: 'common' }),
     sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied
@@ -173,9 +176,9 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   return (
-    <Fragment>
+    <>
       {notifications && (
-        <Fragment>
+        <>
           <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
             <ItemsTable
@@ -184,13 +187,14 @@ const DesktopNotifications = ({
               rows={rows}
               onChangeSorting={onChangeSorting}
               ariaTitle={t('table.title')}
+              testId="notificationsTable"
             />
           ) : (
             <EmptyState {...EmptyStateProps} />
           )}
-        </Fragment>
+        </>
       )}
-    </Fragment>
+    </>
   );
 };
 

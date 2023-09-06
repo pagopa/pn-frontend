@@ -6,7 +6,7 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
-  formatDate, // NotificationStatus,
+  formatDate,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 

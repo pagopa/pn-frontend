@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Box, Stack, Typography } from '@mui/material';
-import { PaginationData } from '../Pagination/types';
-import { formatDateTime } from '../../utils/date.utility';
-import CustomPagination from '../Pagination/CustomPagination';
-import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
-import { AppStatusData, KnownSentiment } from '../../types';
+
 import { useDownloadDocument, useIsMobile } from '../../hooks';
+import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import TitleBox from '../TitleBox';
-import EmptyState from '../EmptyState';
+import { AppStatusData, KnownSentiment } from '../../types';
+import { formatDateTime } from '../../utils/date.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
+import EmptyState from '../EmptyState';
+import CustomPagination from '../Pagination/CustomPagination';
+import { PaginationData } from '../Pagination/types';
+import TitleBox from '../TitleBox';
 import { AppStatusBar } from './AppStatusBar';
-import MobileDowntimeLog from './MobileDowntimeLog';
 import DesktopDowntimeLog from './DesktopDowntimeLog';
+import MobileDowntimeLog from './MobileDowntimeLog';
 
 type Props = {
   appStatus: AppStatusData;

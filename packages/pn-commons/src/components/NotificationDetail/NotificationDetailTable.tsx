@@ -25,6 +25,7 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
         'detail.table-aria-label',
         'Dettaglio notifica'
       )}
+      data-testid="notificationDetailTable"
     >
       <TableBody>
         {rows.map((row) => (

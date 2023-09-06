@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+
 import {
   ApiError,
   AppResponse,
   AppResponsePublisher,
   GetNotificationDowntimeEventsParams, // PN-1714
+  // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -270,7 +272,11 @@ const NotificationDetail: React.FC = () => {
       {hasNotificationSentApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError onClick={() => fetchSentNotification()} mt={3} />
+          <ApiError
+            onClick={() => fetchSentNotification()}
+            mt={3}
+            apiId={NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION}
+          />
         </Box>
       )}
       {!hasNotificationSentApiError && (
@@ -336,7 +342,7 @@ const NotificationDetail: React.FC = () => {
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
                     </Alert>
                   }

@@ -1,3 +1,4 @@
+import MockAdapter from 'axios-mock-adapter';
 import {
   formatToTimezoneString,
   getNextDay,
@@ -7,15 +8,31 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { apiClient } from '../../../api/apiClients';
+import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
-import { notificationsToFe } from './test-utils';
 
 describe('Dashboard redux state tests', () => {
+  // eslint-disable-next-line functional/no-let
+  let mock: MockAdapter;
+
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('Initial state', () => {
     const state = store.getState().dashboardState;
@@ -43,20 +60,21 @@ describe('Dashboard redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotifications');
-    apiSpy.mockResolvedValue(notificationsToFe);
-    const action = await store.dispatch(
-      getSentNotifications({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-        status: '',
-        recipientId: '',
-        iunMatch: '',
-      })
-    );
+    const mockRequest = {
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
+      status: '',
+      recipientId: '',
+      iunMatch: '',
+    };
+    mock.onGet(NOTIFICATIONS_LIST(mockRequest)).reply(200, notificationsDTO);
+    const action = await store.dispatch(getSentNotifications(mockRequest));
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');
     expect(payload).toEqual(notificationsToFe);
+    expect(store.getState().dashboardState.notifications).toStrictEqual(
+      notificationsToFe.resultsPage
+    );
   });
 
   it('Should be able to change pagination', () => {

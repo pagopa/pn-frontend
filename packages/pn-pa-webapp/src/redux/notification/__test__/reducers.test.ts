@@ -1,13 +1,27 @@
 import MockAdapter from 'axios-mock-adapter';
-
-import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
-
 import { apiClient } from '../../../api/apiClients';
 import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
-import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+
+import { KnownFunctionality, LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import {
+  DOWNTIME_HISTORY,
+  DOWNTIME_LEGAL_FACT_DETAILS,
+} from '@pagopa-pn/pn-commons/src/api/appStatus/appStatus.routes';
+
+import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import {
+  notificationDTOMultiRecipient,
+  notificationToFeMultiRecipient,
+} from '../../../__mocks__/NotificationDetail.mock';
+import {
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+} from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import {
   cancelNotification,
@@ -19,7 +33,6 @@ import {
   getSentNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
-import { notificationToFe } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -63,90 +76,125 @@ describe('Notification detail redux state tests', () => {
 
   mockAuthentication();
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('Initial state', () => {
     const state = store.getState().notificationState;
     expect(state).toEqual(initialState);
   });
 
   it('Should be able to fetch the notification detail', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotification');
-    apiSpy.mockResolvedValue(notificationToFe);
-    const action = await store.dispatch(getSentNotification('mocked-iun'));
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationToFeMultiRecipient.iun))
+      .reply(200, notificationDTOMultiRecipient);
+    const action = await store.dispatch(getSentNotification(notificationToFeMultiRecipient.iun));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getSentNotification/fulfilled');
-    expect(payload).toEqual(notificationToFe);
+    expect(payload).toEqual(notificationToFeMultiRecipient);
+    expect(store.getState().notificationState.notification).toStrictEqual(
+      notificationToFeMultiRecipient
+    );
   });
 
   it('Should be able to fetch the notification document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationDocument');
-    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
-    const action = await store.dispatch(
-      getSentNotificationDocument({ iun: 'mocked-iun', documentIndex: '0' })
-    );
+    const mockRequest = {
+      iun: notificationToFeMultiRecipient.iun,
+      documentIndex: '0',
+    };
+    const mockResponse = { url: 'http://mocked-url.com' };
+    mock
+      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(mockRequest.iun, mockRequest.documentIndex))
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getSentNotificationDocument(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationDocument/fulfilled');
-    expect(payload).toEqual({ url: 'http://mocked-url.com' });
+    expect(payload).toEqual(mockResponse);
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationLegalfact');
-    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
-    const action = await store.dispatch(
-      getSentNotificationLegalfact({
-        iun: 'mocked-iun',
-        legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
-      })
-    );
+    const mockRequest = {
+      iun: notificationToFeMultiRecipient.iun,
+      legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
+    };
+    const mockResponse = { url: 'http://mocked-url.com' };
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(mockRequest.iun, mockRequest.legalFact))
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getSentNotificationLegalfact(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
-    expect(payload).toEqual({ url: 'http://mocked-url.com' });
+    expect(payload).toEqual(mockResponse);
   });
 
   it('Should be able to fetch the notification AAR document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationOtherDocument');
-    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
-    const action = await store.dispatch(
-      getSentNotificationOtherDocument({
-        iun: 'mocked-iun',
-        otherDocument: {
-          documentId: 'mocked-document-id',
-          documentType: 'mocked-document-type',
-        },
-      })
-    );
+    const mockRequest = {
+      iun: notificationToFeMultiRecipient.iun,
+      otherDocument: {
+        documentId: 'mocked-document-id',
+        documentType: 'mocked-document-type',
+      },
+    };
+    const mockResponse = { url: 'http://mocked-url.com' };
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(mockRequest.iun, mockRequest.otherDocument))
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getSentNotificationOtherDocument(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
-    expect(payload).toEqual({ url: 'http://mocked-url.com' });
+    expect(payload).toEqual(mockResponse);
   });
 
   it('Should be able to fetch the downtimes events', async () => {
-    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
-    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
-    const action = await store.dispatch(
-      getDowntimeEvents({
-        startDate: '2022-10-23T15:50:04Z',
-      })
-    );
+    const mockRequest = {
+      startDate: '2022-10-23T15:50:04Z',
+    };
+    mock
+      .onGet(
+        DOWNTIME_HISTORY({
+          ...mockRequest,
+          functionality: [
+            KnownFunctionality.NotificationCreate,
+            KnownFunctionality.NotificationVisualization,
+            KnownFunctionality.NotificationWorkflow,
+          ],
+        })
+      )
+      .reply(200, downtimesDTO);
+    const action = await store.dispatch(getDowntimeEvents(mockRequest));
     const payload = action.payload;
     expect(action.type).toBe('getDowntimeEvents/fulfilled');
     expect(payload).toEqual(simpleDowntimeLogPage);
+    expect(store.getState().notificationState.downtimeEvents).toStrictEqual(
+      simpleDowntimeLogPage.downtimes
+    );
   });
 
   it('Should be able to fetch the downtimes legal fact details', async () => {
-    const apiSpy = jest.spyOn(AppStatusApi, 'getLegalFactDetails');
-    apiSpy.mockResolvedValue({
+    const mockResponse = {
       filename: 'mocked-filename',
       contentLength: 0,
       url: 'mocked-url',
-    });
-    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails('mocked-iun'));
+    };
+    mock
+      .onGet(DOWNTIME_LEGAL_FACT_DETAILS(notificationToFeMultiRecipient.iun))
+      .reply(200, mockResponse);
+    const action = await store.dispatch(
+      getDowntimeLegalFactDocumentDetails(notificationToFeMultiRecipient.iun)
+    );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
-    expect(payload).toEqual({
-      filename: 'mocked-filename',
-      contentLength: 0,
-      url: 'mocked-url',
-    });
+    expect(payload).toEqual(mockResponse);
+    expect(store.getState().notificationState.downtimeLegalFactUrl).toStrictEqual(mockResponse.url);
   });
 
   it('Should be able to reset state', () => {

@@ -1,13 +1,16 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import PrivacyPolicyPage from '../PrivacyPolicy.page';
+
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
+import { render } from '@testing-library/react';
+
+import PrivacyPolicyPage from '../PrivacyPolicy.page';
 
 jest.mock('../../services/configuration.service', () => {
   return {
     ...jest.requireActual('../../services/configuration.service'),
     getConfiguration: () => ({
-      ONE_TRUST_DRAFT_MODE: false, ONE_TRUST_PP: 'mocked-id'
+      ONE_TRUST_DRAFT_MODE: false,
+      ONE_TRUST_PP: 'mocked-id',
     }),
   };
 });

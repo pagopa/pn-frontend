@@ -1,11 +1,12 @@
 import { ErrorInfo, ReactNode } from 'react';
-import { Stack } from '@mui/material';
-import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
-import { Box } from '@mui/system';
 
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+import { Stack } from '@mui/material';
+import { Box } from '@mui/system';
+import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
+
 import ErrorBoundary from '../ErrorBoundary';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
 
 type Props = {
   children?: ReactNode;
@@ -98,7 +99,11 @@ export default function Layout({
           )}
           <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
             {showSideMenu && (
-              <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
+              <Box
+                sx={{ width: { lg: 300 }, flexShrink: '0' }}
+                component="nav"
+                data-testid="side-menu"
+              >
                 {sideMenu}
               </Box>
             )}
