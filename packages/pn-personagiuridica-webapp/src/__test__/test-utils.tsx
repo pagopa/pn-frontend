@@ -3,11 +3,12 @@ import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Store, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, fireEvent, render, waitFor, within } from '@testing-library/react';
 
-import { appReducers } from '../redux/store';
+import { RootState, appReducers } from '../redux/store';
 
+let testStore: EnhancedStore<RootState>;
 type NavigationRouter = 'default' | 'none';
 
 const AllTheProviders = ({
@@ -126,4 +127,4 @@ export async function testAutocomplete(
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
-export { axe, createMockedStore, customRender as render };
+export { axe, createMockedStore, customRender as render, testStore };
