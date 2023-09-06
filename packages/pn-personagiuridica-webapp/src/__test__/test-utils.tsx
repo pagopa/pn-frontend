@@ -1,5 +1,3 @@
-import { AxiosInstance } from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
@@ -30,6 +28,12 @@ const AllTheProviders = ({
   }
   return <Provider store={testStore}>{children}</Provider>;
 };
+
+const createMockedStore = (preloadedState: any) =>
+  configureStore({
+    reducer: appReducers,
+    preloadedState,
+  });
 
 const customRender = (
   ui: ReactElement,
@@ -77,38 +81,6 @@ type MockCodes = 200 | 204 | 500 | 401 | 400 | 403 | 451;
  * @param response response
  * @returns the mock instance
  */
-function mockApi(
-  client: AxiosInstance | MockAdapter,
-  method: MockMethods,
-  path: string,
-  code: MockCodes,
-  request?: any,
-  response?: any
-): MockAdapter {
-  const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
-  switch (method) {
-    case 'GET':
-      mock.onGet(path, request).reply(code, response);
-      break;
-    case 'POST':
-      mock.onPost(path, request).reply(code, response);
-      break;
-    case 'PUT':
-      mock.onPut(path, request).reply(code, response);
-      break;
-    case 'DELETE':
-      mock.onDelete(path, request).reply(code, response);
-      break;
-    case 'PATCH':
-      mock.onPatch(path, request).reply(code, response);
-      break;
-    case 'ANY':
-      mock.onAny(path, request).reply(code, response);
-    default:
-      break;
-  }
-  return mock;
-}
 
 /**
  * Utility function to test autocomplete component
@@ -154,6 +126,4 @@ export async function testAutocomplete(
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
-export { axe, customRender as render };
-// utility functions
-export { mockApi };
+export { axe, createMockedStore, customRender as render };

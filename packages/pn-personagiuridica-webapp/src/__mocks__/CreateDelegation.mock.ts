@@ -1,10 +1,5 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-export const initialState = {
-  created: false,
-  entities: [],
-};
-
 export const createDelegationPayload = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
   codiceFiscale: 'fiscalCode',
