@@ -6,8 +6,8 @@ import {
   NotificationFeePolicy,
   PhysicalCommunicationType,
   ResponseEventDispatcher,
-  testSelect,
 } from '@pagopa-pn/pn-commons';
+import { testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   newNotification,

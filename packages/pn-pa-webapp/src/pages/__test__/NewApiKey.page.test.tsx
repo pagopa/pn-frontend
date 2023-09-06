@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { testAutocomplete } from '@pagopa-pn/pn-commons';
+import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
