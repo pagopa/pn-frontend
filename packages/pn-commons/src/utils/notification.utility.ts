@@ -855,28 +855,20 @@ const populateOtherDocuments = (
 };
 
 /**
- * Populate payment history array before send notification to fe.
- * @param  {string} userTaxId
+ * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
- * @param  {Array<NotificationDetailRecipient>} recipients
+ * @param  {Array<PaymentHistory>} pagoPaF24Payemnts
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
  * @returns Array<PaymentHistory>
  */
-export const populatePaymentHistory = (
-  userTaxId: string,
+export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  recipients: Array<NotificationDetailRecipient>,
+  pagoPaF24Payemnts: Array<PaymentHistory>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentHistory> => {
   const paymentHistory: Array<PaymentHistory> = [];
 
-  // 1. get user from recipents array by userTaxId
-  const user = recipients.find((r) => r.taxId === userTaxId);
-
-  // 2. Get array of payments of user
-  const userPayments = user?.payments;
-
-  if (!userPayments || userPayments.length === 0) {
+  if (!pagoPaF24Payemnts || pagoPaF24Payemnts.length === 0) {
     return [];
   }
 
@@ -884,12 +876,8 @@ export const populatePaymentHistory = (
   const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
 
   // populate payment history array with the informations from timeline and related recipients
-  for (const userPayment of userPayments) {
+  for (const userPayment of pagoPaF24Payemnts) {
     if (!userPayment.pagoPA) {
-      paymentHistory.push({
-        pagoPA: undefined,
-        f24: userPayment.f24,
-      } as PaymentHistory);
       continue;
     }
 

@@ -6,7 +6,7 @@ import {
   LegalFactId,
   PaymentAttachmentNameType,
   performThunkAction,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
@@ -101,10 +101,10 @@ export const getNotificationPaymentInfo = createAsyncThunk<
       const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
         params.paymentInfoRequest
       );
-      return populatePaymentHistory(
-        params.taxId,
+
+      return populatePaymentsPagoPaF24(
         notificationState.notification.timeline,
-        notificationState.notification.recipients,
+        notificationState.paymentsData.pagoPaF24,
         paymentInfo
       );
     } catch (e) {

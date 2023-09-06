@@ -15,8 +15,13 @@ import { formatEurocentToCurrency } from '../../utils';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
+type PaymentsData = {
+  pagoPaF24: Array<PaymentHistory>;
+  f24Only: Array<F24PaymentDetails>;
+};
+
 type Props = {
-  payments: Array<PaymentHistory>;
+  payments: PaymentsData;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
   handleReloadPayment: (payment: Array<PaymentHistory | NotificationDetailPayment>) => void;
@@ -28,29 +33,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   handleDownloadAttachamentPagoPA,
   handleReloadPayment,
 }) => {
-  const isSinglePayment = payments.length === 1;
+  const { pagoPaF24, f24Only } = payments;
+
+  const isSinglePayment = pagoPaF24.length === 1;
 
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
 
-  const allPaymentsIsPaid = payments.every(
+  const allPaymentsIsPaid = pagoPaF24.every(
     (payment) => payment.pagoPA?.status === PaymentStatus.SUCCEEDED
   );
-
-  const pagoPAPaymentHistory = payments.reduce((arr, payment) => {
-    if (payment.pagoPA) {
-      // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.pagoPA);
-    }
-    return arr;
-  }, [] as Array<PagoPAPaymentHistory>);
-
-  const f24PaymentHistory = payments.reduce((arr, payment) => {
-    if (!payment.pagoPA && payment.f24) {
-      // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.f24);
-    }
-    return arr;
-  }, [] as Array<F24PaymentDetails>);
 
   const getTitle = () => {
     const FaqLink = (
@@ -59,7 +50,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       </Link>
     );
 
-    if (pagoPAPaymentHistory.length > 0 && f24PaymentHistory.length > 0) {
+    if (pagoPaF24.length > 0 && f24Only.length > 0) {
       return (
         <>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-mixed')}
@@ -69,7 +60,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       );
     }
 
-    if (pagoPAPaymentHistory.length > 0) {
+    if (pagoPaF24.length > 0) {
       return (
         <>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
@@ -86,7 +77,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     const radioSelection = event.target.value;
 
     setSelectedPayment(
-      payments.find((item) => item.pagoPA?.noticeCode === radioSelection)?.pagoPA || null
+      pagoPaF24.find((item) => item.pagoPA?.noticeCode === radioSelection)?.pagoPA || null
     );
   };
 
@@ -96,7 +87,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   useEffect(() => {
     if (isSinglePayment) {
-      setSelectedPayment(payments[0].pagoPA || null);
+      setSelectedPayment(pagoPaF24[0].pagoPA || null);
     }
   }, [payments]);
 
@@ -110,16 +101,16 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         {getTitle()}
       </Typography>
 
-      {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length > 0 && (
+      {f24Only.length > 0 && pagoPaF24.length > 0 && (
         <Typography variant="overline" mt={3}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pagoPANotices')}
         </Typography>
       )}
 
-      {pagoPAPaymentHistory.length > 0 && (
+      {pagoPaF24.length > 0 && (
         <>
           <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
-            {payments.map((payment, index) =>
+            {pagoPaF24.map((payment, index) =>
               payment.pagoPA ? (
                 <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
                   <NotificationPaymentPagoPAItem
@@ -171,7 +162,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 )}
               </Button>
               {selectedPayment &&
-              payments.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
+              pagoPaF24.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
                 ?.f24 ? (
                 <Box display="flex" justifyContent="space-between" data-testid="f24-download">
                   <Typography variant="body2">
@@ -188,13 +179,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </>
       )}
 
-      {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length > 0 && (
+      {f24Only.length > 0 && pagoPaF24.length > 0 && (
         <Typography variant="overline" mt={3}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
         </Typography>
       )}
 
-      {f24PaymentHistory.map((f24Item, index) => (
+      {f24Only.map((f24Item, index) => (
         <Box key={index}>
           <NotificationPaymentF24Item f24Item={f24Item} loading={false} />
         </Box>

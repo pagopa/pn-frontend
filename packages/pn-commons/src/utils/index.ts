@@ -28,7 +28,7 @@ import {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   parseNotificationDetail,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from './notification.utility';
 import { compileOneTrustPath } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
@@ -110,5 +110,5 @@ export {
   sortArray,
   calcUnit8Array,
   lazyRetry,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 };
