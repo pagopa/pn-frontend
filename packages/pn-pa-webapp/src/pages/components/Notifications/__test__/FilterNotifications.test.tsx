@@ -1,14 +1,13 @@
-import React, { createRef } from 'react';
+import React from 'react';
 
 import {
-  createMatchMedia,
   formatDate,
   formatToTimezoneString,
   getNotificationAllowedStatus,
   tenYearsAgo,
-  testSelect,
   today,
 } from '@pagopa-pn/pn-commons';
+import { createMatchMedia, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   RenderResult,
