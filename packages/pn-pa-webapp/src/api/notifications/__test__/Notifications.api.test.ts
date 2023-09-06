@@ -31,7 +31,6 @@ import {
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   mockAuthentication();
@@ -174,11 +173,8 @@ describe('Notifications api tests', () => {
   });
 
   it('cancelNotification', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
     const res = await NotificationsApi.cancelNotification('mocked-iun');
     expect(res).toEqual(undefined);
-    mock.reset();
-    mock.restore();
   });
 });

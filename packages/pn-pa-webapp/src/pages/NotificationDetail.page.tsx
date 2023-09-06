@@ -266,7 +266,6 @@ const NotificationDetail: React.FC = () => {
 
   const direction = isMobile ? 'column-reverse' : 'row';
   const spacing = isMobile ? 3 : 0;
-
   return (
     <>
       {hasNotificationSentApiError && (

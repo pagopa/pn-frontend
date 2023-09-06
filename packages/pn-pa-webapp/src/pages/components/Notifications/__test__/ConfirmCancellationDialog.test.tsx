@@ -27,7 +27,7 @@ describe('render dialog', () => {
     jest.clearAllMocks();
   });
 
-  test('check dialog text with not payment', async () => {
+  it('check dialog text with not payment', async () => {
     render(
       <ConfirmCancellationDialog
         showModal={true}
@@ -43,7 +43,7 @@ describe('render dialog', () => {
     });
   });
 
-  test('check dialog text with payment', async () => {
+  it('check dialog text with payment', async () => {
     render(
       <ConfirmCancellationDialog
         showModal={true}

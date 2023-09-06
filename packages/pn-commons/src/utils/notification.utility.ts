@@ -936,6 +936,7 @@ const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail)
       };
       // eslint-disable-next-line functional/immutable-data
       notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
+      notificationDetail.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
     }
   }
 };
@@ -952,7 +953,7 @@ export function parseNotificationDetail(
     ),
     sentAt: formatDate(notificationDetail.sentAt),
   };
-  insertCancelledStatusInTimeline(notificationDetail);
+  insertCancelledStatusInTimeline(parsedNotification);
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
   // set which elements are visible

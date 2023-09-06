@@ -16,10 +16,10 @@ import {
   notificationDTO,
   notificationDTOMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
-import * as actions from '../../redux/notification/actions';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
+  CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
@@ -60,19 +60,6 @@ describe('NotificationDetail Page (one recipient)', () => {
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
-
-  const changeStatus = (status: NotificationStatus) => {
-    result = render(<NotificationDetail />, {
-      preloadedState: {
-        notificationState: {
-          notification: { ...notificationDTO, notificationStatus: status },
-          documentDownloadUrl: 'mocked-download-url',
-          legalFactDownloadUrl: 'mocked-legal-fact-url',
-        },
-        userState: { user: { organization: { id: 'mocked-sender' } } },
-      },
-    });
-  };
 
   afterEach(() => {
     result = undefined;
@@ -136,6 +123,9 @@ describe('NotificationDetail Page (one recipient)', () => {
     // check downtimes box
     const downtimesBox = result?.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();
+    // check cancellation alert
+    const alert = result?.queryByTestId('alert');
+    expect(alert).not.toBeInTheDocument();
   });
 
   it('checks not available documents - mono recipient', async () => {
@@ -267,17 +257,6 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
-  test('check alert on screen with change status', () => {
-    changeStatus(NotificationStatus.CANCELLED);
-    const alert = result?.getByTestId('alert');
-    expect(alert).toBeInTheDocument();
-    expect(result?.container).toHaveTextContent('detail.alert-cancellation-confirmed');
-    changeStatus(NotificationStatus.CANCELLATION_IN_PROGRESS);
-    expect(result?.container).toHaveTextContent('detail.alert-cancellation-in-progress');
-    changeStatus(NotificationStatus.DELIVERED);
-    expect(alert).not.toBeInTheDocument();
-  });
-
   it('errors on api call - mono recipient', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(500);
     // we use regexp to not set the query parameters
@@ -297,28 +276,91 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(statusApiErrorComponent).toBeInTheDocument();
   });
 
-  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
-  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
-  it.skip('clicks on the cancel button and on close modal', async () => {
+  it('clicks on the cancel button and on close modal', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
     const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn!);
-    const modal = await waitFor(() => result?.queryByTestId('modalId'));
+    const modal = await waitFor(() => result?.getByTestId('cancel-notification-modal'));
     expect(modal).toBeInTheDocument();
-    const closeModalBtn = modal?.querySelector('[data-testid="modalCloseBtnId"]');
+    const closeModalBtn = within(modal!).getByTestId('modalCloseBtnId');
     fireEvent.click(closeModalBtn!);
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
-  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
-  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
-  it.skip('clicks on the cancel button and on confirm button', async () => {
+  it.only('clicks on the cancel button and on confirm button', async () => {
+    let count = 0;
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(() => {
+      if (count === 0) {
+        return [200, notificationDTO];
+      }
+      return [
+        200,
+        {
+          ...notificationDTO,
+          timeline: [
+            ...notificationDTO.timeline,
+            {
+              elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+              timestamp: '2033-08-14T13:42:54.17675939Z',
+              legalFactsIds: [],
+              category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+              details: {},
+            },
+          ],
+        },
+      ];
+    });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock.onPut(CANCEL_NOTIFICATION(notificationDTO.iun)).reply(200);
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
     const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn!);
-    const modal = await waitFor(() => result?.queryByTestId('modalId'));
+    const modal = await waitFor(() => result?.getByTestId('cancel-notification-modal'));
     expect(modal).toBeInTheDocument();
-    const modalCloseAndProceedBtn = within(modal!).getByTestId('modalCloseAndProceedBtnId');
+    const checkbox = within(modal!).getByTestId('checkbox');
+    fireEvent.click(checkbox);
+    const modalCloseAndProceedBtn = await waitFor(() =>
+      within(modal!).getByTestId('modalCloseAndProceedBtnId')
+    );
+    count++;
     fireEvent.click(modalCloseAndProceedBtn!);
-    await waitFor(() => expect(modal).not.toBeInTheDocument());
+    await waitFor(() => {
+      expect(modal).not.toBeInTheDocument();
+    });
+    expect(mock.history.put).toHaveLength(1);
+    expect(mock.history.put[0].url).toBe(CANCEL_NOTIFICATION(notificationDTO.iun));
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get[2].url).toBe(NOTIFICATION_DETAIL(notificationDTO.iun));
+    });
+    // check alert cancellation in progress
+    let alert = await waitFor(() => result?.getByTestId('alert'));
+    expect(alert).toBeInTheDocument();
+    expect(result?.container).toHaveTextContent('detail.alert-cancellation-in-progress');
+    expect(cancelNotificationBtn).not.toBeInTheDocument();
+  });
+
+  it('check alert on screen with change status', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
+      .reply(200, { ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+    const alert = result?.getByTestId('alert');
+    expect(alert).toBeInTheDocument();
+    expect(result?.container).toHaveTextContent('detail.alert-cancellation-confirmed');
   });
 
   it('renders NotificationDetail page - multi recipient', async () => {

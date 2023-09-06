@@ -36,7 +36,7 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
   }, [showModal]);
 
   return (
-    <Dialog open={showModal} data-testid="modalId">
+    <Dialog open={showModal} data-testid="cancel-notification-modal">
       <DialogTitle id="dialog-title" sx={{ p: 4 }}>
         {t('detail.cancel-notification-modal.title')}
       </DialogTitle>

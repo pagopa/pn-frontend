@@ -1,7 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
 import { apiClient } from '../../../api/apiClients';
-import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
 
 import { KnownFunctionality, LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
