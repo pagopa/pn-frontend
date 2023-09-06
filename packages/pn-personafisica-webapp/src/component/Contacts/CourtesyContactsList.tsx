@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { Stack } from '@mui/material';
 
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';

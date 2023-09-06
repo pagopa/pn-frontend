@@ -24,6 +24,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const fields = [
@@ -58,6 +59,12 @@ const mockOnConfirm = jest.fn();
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
 
+/*
+In questo test viene testato solo il rendering dei componenti e non il flusso.
+Il flusso completo viene testato nella pagina dei contatti, dove si può testare anche il cambio di stato di redux e le api
+
+Andrea Cimini - 6/09/2023
+*/
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
@@ -110,8 +117,10 @@ describe('DigitalContactElem Component', () => {
 
   it('edits contact', async () => {
     mock
-      .onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC))
-      .reply(204, { value: 'mocked-modified@pec.it', verificationCode: '12345' });
+      .onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), {
+        value: 'mocked@pec.it',
+      })
+      .reply(204);
     // render component
     await act(async () => {
       result = render(
@@ -135,7 +144,6 @@ describe('DigitalContactElem Component', () => {
     let input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@pec.it');
-    fireEvent.change(input!, { target: { value: 'mocked-modified@pec.it' } });
     const newButtons = result?.container.querySelectorAll('button');
     expect(newButtons).toHaveLength(2);
     expect(newButtons![0]).toHaveTextContent('button.salva');
@@ -149,12 +157,11 @@ describe('DigitalContactElem Component', () => {
     // confirm edit
     fireEvent.click(buttons![0]);
     input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
-    fireEvent.change(input!, { target: { value: 'mocked-modified@pec.it' } });
     fireEvent.click(newButtons![0]);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(input).not.toBeInTheDocument();
     });
+    expect(input).not.toBeInTheDocument();
   });
 
   it('remove contact', async () => {

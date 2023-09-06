@@ -1,8 +1,8 @@
-import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 import React from 'react';
-import { act, fireEvent, RenderResult, waitFor } from '../../../__test__/test-utils';
 
-import { render } from '../../../__test__/test-utils';
+import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
+
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
@@ -16,7 +16,6 @@ jest.mock('react-i18next', () => ({
 
 describe('SpecialContactElem Component', () => {
   it('renders SpecialContactElem', async () => {
-    // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
 
     // render component
@@ -55,7 +54,6 @@ describe('SpecialContactElem Component', () => {
   });
 
   it('changes a mail - new value valid', async () => {
-    // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
 
     // render component

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
-import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import LegalContactsList from '../LegalContactsList';
 
@@ -13,26 +13,42 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const legalAddresses: Array<DigitalAddress> = [
-  {
-    addressType: 'legal',
-    recipientId: 'mocked-recipientId',
-    senderId: 'default',
-    channelType: LegalChannelType.PEC,
-    value: 'mocked@mail.it',
-    code: '12345',
-  },
-];
+const defaultAddress = digitalAddresses.legal.find(
+  (addr) => addr.senderId === 'default' && addr.pecValid
+);
 
 describe('LegalContactsList Component - accessibility tests', () => {
-  it('does not have basic accessibility issues', async () => {
-    // eslint-disable-next-line functional/no-let
+  it('does not have basic accessibility issues - pec valid', async () => {
     let result: RenderResult | undefined;
 
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <LegalContactsList recipientId="mocked-recipientId" legalAddresses={legalAddresses} />
+          <LegalContactsList
+            recipientId="mocked-recipientId"
+            legalAddresses={digitalAddresses.legal}
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  });
+
+  it('does not have basic accessibility issues - pec validating', async () => {
+    let result: RenderResult | undefined;
+
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <LegalContactsList
+            recipientId="mocked-recipientId"
+            legalAddresses={[{ ...defaultAddress!, pecValid: false }]}
+          />
         </DigitalContactsCodeVerificationProvider>
       );
     });

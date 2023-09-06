@@ -32,7 +32,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateDigitalAddress (pec to verify)', async () => {
     const body = { value: 'a@a.it' };
-    mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(200, body);
+    mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), body).reply(200);
     const res = await ContactsApi.createOrUpdateLegalAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -66,7 +66,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateDigitalAddress (pec verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(204, body);
+    mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), body).reply(204);
     const res = await ContactsApi.createOrUpdateLegalAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -91,8 +91,8 @@ describe('Contacts api tests', () => {
   });
 
   it('createOrUpdateCourtesyAddress (email to verify)', async () => {
-    const body = { value: 'a@a.it', verificationCode: '12345' };
-    mock.onPost(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL)).reply(200, body);
+    const body = { value: 'a@a.it' };
+    mock.onPost(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL), body).reply(200);
     const res = await ContactsApi.createOrUpdateCourtesyAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -104,7 +104,7 @@ describe('Contacts api tests', () => {
 
   it('createOrUpdateCourtesyAddress (email verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    mock.onPost(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL)).reply(204, body);
+    mock.onPost(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL), body).reply(204);
     const res = await ContactsApi.createOrUpdateCourtesyAddress(
       'mocked-recipientId',
       'mocked-senderId',

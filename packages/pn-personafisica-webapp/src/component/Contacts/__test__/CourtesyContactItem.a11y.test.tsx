@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, fireEvent, render } from '../../../__test__/test-utils';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -9,18 +9,17 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: () => 'mocked verify description',
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('CourtesyContactItem component - accessibility tests', () => {
   const INPUT_VALID_PHONE = '3331234567';
-  const SUBMITTED_VALID_PHONE = '+393331234567';
   const VALID_EMAIL = 'prova@pagopa.it';
 
   // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
-  it('type "phone" - add a new phone number - does not have basic accessibility issues', async () => {
+  it('type "phone" - no phone added - does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -39,7 +38,7 @@ describe('CourtesyContactItem component - accessibility tests', () => {
     }
   });
 
-  it('type "phone" - change an existing phone number - does not have basic accessibility issues', async () => {
+  it('type "phone" - phone added - does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -58,18 +57,21 @@ describe('CourtesyContactItem component - accessibility tests', () => {
     }
   });
 
-  it('type "phone" - delete an existing phone number - does not have basic accessibility issues', async () => {
+  it('type "phone" - phone added (edit mode) - does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactItem
             recipientId="mocked-recipient"
             type={CourtesyFieldType.PHONE}
-            value={SUBMITTED_VALID_PHONE}
+            value={INPUT_VALID_PHONE}
           />
         </DigitalContactsCodeVerificationProvider>
       );
     });
+
+    const editButton = result?.getByRole('button', { name: 'button.modifica' });
+    fireEvent.click(editButton!);
 
     if (result) {
       const results = await axe(result.container);
@@ -77,7 +79,7 @@ describe('CourtesyContactItem component - accessibility tests', () => {
     }
   });
 
-  it('type "email" - add a new email - does not have basic accessibility issues', async () => {
+  it('type "email" - no email added - does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -96,7 +98,7 @@ describe('CourtesyContactItem component - accessibility tests', () => {
     }
   });
 
-  it('type "email" - change an existing email - does not have basic accessibility issues', async () => {
+  it('type "email" - email added - does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -108,6 +110,28 @@ describe('CourtesyContactItem component - accessibility tests', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
+
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
+  });
+
+  it('type "email" - email added (edit mode) - does not have basic accessibility issues', async () => {
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <CourtesyContactItem
+            recipientId="mocked-recipient"
+            type={CourtesyFieldType.EMAIL}
+            value={VALID_EMAIL}
+          />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    const editButton = result?.getByRole('button', { name: 'button.modifica' });
+    fireEvent.click(editButton!);
 
     if (result) {
       const results = await axe(result.container);
