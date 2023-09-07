@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import {
+  AppResponseMessage,
+  ResponseEventDispatcher,
+  apiOutcomeTestHelper,
   formatToTimezoneString,
   getNextDay,
-  apiOutcomeTestHelper,
   tenYearsAgo,
   today,
-  ResponseEventDispatcher,
-  AppResponseMessage,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { RenderResult, act, fireEvent, screen, waitFor, within } from '../../__test__/test-utils';
 import { render } from '../../__test__/test-utils';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import Notifiche from '../Notifiche.page';
 import { doPrepareTestScenario } from './Notifiche.page.test-utils';
 

@@ -1,5 +1,3 @@
-import { act } from 'react-dom/test-utils';
-
 import {
   NotificationDetail as INotificationDetail,
   NotificationDetailTableRow,
@@ -12,6 +10,7 @@ import {
   notificationToFeTwoRecipients,
   overrideNotificationMock,
 } from '../../__mocks__/NotificationDetail.mock';
+import { act } from '../../__test__/test-utils';
 import { RenderResult, render, screen } from '../../__test__/test-utils';
 import * as routes from '../../navigation/routes.const';
 import * as actions from '../../redux/notification/actions';

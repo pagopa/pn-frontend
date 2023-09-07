@@ -1,8 +1,9 @@
 import React from 'react';
-import { render } from '../../__test__/test-utils';
 
-import TermsOfServicePage from '../TermsOfService.page';
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
+
+import { render } from '../../__test__/test-utils';
+import TermsOfServicePage from '../TermsOfService.page';
 
 describe('TermsOfService page component', () => {
   const loadNoticesFn = jest.fn();

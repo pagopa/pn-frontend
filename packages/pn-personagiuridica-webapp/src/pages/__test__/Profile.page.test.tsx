@@ -1,14 +1,15 @@
-import { fireEvent, screen } from "@testing-library/react";
-import { render } from "../../__test__/test-utils";
-import Profile from "../Profile.page";
-import * as hooks from '../../redux/hooks';
+import React from 'react';
+
+import { fireEvent, render, screen } from '../../__test__/test-utils';
 import { RECAPITI } from '../../navigation/routes.const';
+import * as hooks from '../../redux/hooks';
+import Profile from '../Profile.page';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    })
+    t: (str: string) => str,
+  }),
 }));
 
 const mockNavigateFn = jest.fn();
@@ -21,16 +22,16 @@ jest.mock('react-router-dom', () => ({
 describe('testing profile page', () => {
   beforeEach(() => {
     const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    
+
     mockUseAppSelector.mockReturnValueOnce({
       name: 'Mario',
       family_name: 'Rossi',
-      fiscal_number: 'RSSMRA45P02H501W'
+      fiscal_number: 'RSSMRA45P02H501W',
     });
-    
+
     render(<Profile />);
   });
-  
+
   test('profile page renders properly', () => {
     const title = screen.getByRole('heading', { name: 'title' });
     expect(title).toBeInTheDocument();
@@ -52,7 +53,7 @@ describe('testing profile page', () => {
     const fiscalNumber = screen.getByText('RSSMRA45P02H501W');
     expect(fiscalNumber).toBeInTheDocument();
 
-    const alert = screen.getByRole('alert', { name: 'contacts-redirect'});
+    const alert = screen.getByRole('alert', { name: 'contacts-redirect' });
     expect(alert).toBeInTheDocument();
 
     const alertTitle = screen.getByText('alert-redirect-to-contacts.title');
@@ -63,7 +64,7 @@ describe('testing profile page', () => {
   });
 
   test('button redirects to contacts page', () => {
-    const button = screen.getByRole('button', { name: 'alert-redirect-to-contacts.action-text'});
+    const button = screen.getByRole('button', { name: 'alert-redirect-to-contacts.action-text' });
     expect(button).toBeInTheDocument();
 
     fireEvent.click(button);

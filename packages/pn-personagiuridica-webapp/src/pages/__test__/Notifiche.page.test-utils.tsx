@@ -2,9 +2,9 @@ import React from 'react';
 import * as redux from 'react-redux';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-import { RenderResult, act } from '@testing-library/react';
 
 import { notificationsToFe } from '../../__mocks__/Notifications.mock';
+import { RenderResult, act } from '../../__test__/test-utils';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
 import * as hooks from '../../redux/hooks';

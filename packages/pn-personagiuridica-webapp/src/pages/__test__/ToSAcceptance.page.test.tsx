@@ -1,7 +1,9 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
 import { ConsentUser } from '@pagopa-pn/pn-commons';
-import { fireEvent, mockApi, render, waitFor } from '../../__test__/test-utils';
+
+import { RenderResult, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
@@ -24,6 +26,21 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('test Terms of Service page', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   const tosFirstAcceptance: ConsentUser = {
     accepted: false,
     isFirstAccept: true,
@@ -49,7 +66,7 @@ describe('test Terms of Service page', () => {
   };
 
   it('checks the texts in the page - First ToS acceptance', () => {
-    const result = render(
+    result = render(
       <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
     );
 
@@ -60,7 +77,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page - ToS has changed', () => {
-    const result = render(
+    result = render(
       <ToSAcceptance
         tosConsent={tosNonFirstAcceptance}
         privacyConsent={privacyNonFirstAcceptance}
@@ -74,15 +91,17 @@ describe('test Terms of Service page', () => {
   });
 
   it('tests the switch and button', async () => {
-    const mock = mockApi(apiClient, 'PUT', SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), 200, {
-      action: ConsentActionType.ACCEPT,
-    });
-
-    mockApi(mock, 'PUT', SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'), 200, {
-      action: ConsentActionType.ACCEPT,
-    });
-
-    const result = render(
+    mock
+      .onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(200);
+    mock
+      .onPut(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mocked-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(200);
+    result = render(
       <ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />
     );
 
