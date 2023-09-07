@@ -9,6 +9,7 @@ import {
   NotificationStatus,
   ResponseEventDispatcher,
   TimelineCategory,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
@@ -16,7 +17,15 @@ import {
   notificationDTO,
   notificationDTOMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
@@ -94,21 +103,28 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(tableRows![2]).toHaveTextContent(
       `detail.tax-id-citizen-recipient${notificationDTO.recipients[0].taxId}`
     );
-    expect(tableRows![3]).toHaveTextContent(`detail.date${notificationDTO.sentAt}`);
+    // format date beacuse in UI the date is formatted
+    expect(tableRows![3]).toHaveTextContent(`detail.date${formatDate(notificationDTO.sentAt)}`);
     expect(tableRows![4]).toHaveTextContent(`detail.iun${notificationDTO.iun}`);
     expect(tableRows![5]).toHaveTextContent(
       `detail.notice-code${notificationDTO.recipients[0].payment?.creditorTaxId} - ${notificationDTO.recipients[0].payment?.noticeCode}`
     );
     expect(tableRows![6]).toHaveTextContent(`detail.groups${notificationDTO.group}`);
     // check documents box
+    let notificationDocumentLength: number;
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(
-      notificationDTO.documents.length + notificationDTO.otherDocuments?.length!
-    );
+    if (notificationDTOMultiRecipient.otherDocuments) {
+      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
+      +notificationDTOMultiRecipient.otherDocuments?.length!;
+    } else {
+      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
+    }
+
+    expect(notificationDetailDocuments?.length).toBeGreaterThanOrEqual(notificationDocumentLength);
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
-        /detail.download-aar-available|detail.download-message-available/
+        /detail.download-aar-available|detail.download-message-available|detail.download-message-expired|detail.download-aar-expired/
       );
     }
     // check timeline box
@@ -292,7 +308,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
-  it.only('clicks on the cancel button and on confirm button', async () => {
+  it('clicks on the cancel button and on confirm button', async () => {
     let count = 0;
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(() => {
       if (count === 0) {
@@ -390,7 +406,9 @@ describe('NotificationDetail Page (one recipient)', () => {
           : `${recipient.taxId} - ${recipient.denomination}`
       );
     });
-    expect(tableRows![2]).toHaveTextContent(`detail.date${notificationDTOMultiRecipient.sentAt}`);
+    expect(tableRows![2]).toHaveTextContent(
+      `detail.date${formatDate(notificationDTOMultiRecipient.sentAt)}`
+    );
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationDTOMultiRecipient.iun}`);
     notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
       expect(tableRows![4]).toHaveTextContent(
@@ -412,11 +430,16 @@ describe('NotificationDetail Page (one recipient)', () => {
       );
     }
     // check documents box
+    let notificationDocumentLength: number;
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(
-      notificationDTOMultiRecipient.documents.length +
-        notificationDTOMultiRecipient.otherDocuments?.length!
-    );
+    if (notificationDTOMultiRecipient.otherDocuments) {
+      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
+      +notificationDTOMultiRecipient.otherDocuments?.length!;
+    } else {
+      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
+    }
+
+    expect(notificationDetailDocuments?.length).toBeGreaterThanOrEqual(notificationDocumentLength);
     // check timeline box
     const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();

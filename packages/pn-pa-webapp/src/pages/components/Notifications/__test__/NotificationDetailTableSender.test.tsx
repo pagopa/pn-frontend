@@ -6,7 +6,7 @@ import { fireEvent, render, waitFor, within } from '../../../../__test__/test-ut
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
-} from '../../../../redux/notification/__test__/test-utils';
+} from '../../../../__mocks__/NotificationDetail.mock';
 import NotificationDetailTableSender from '../NotificationDetailTableSender';
 
 jest.mock('react-i18next', () => ({
@@ -58,72 +58,6 @@ describe('NotificationDetailTableSender Component', () => {
       expect(row).toHaveTextContent(
         `${notificationToFeMultiRecipient.recipients[index].taxId} - ${notificationToFeMultiRecipient.recipients[index].denomination}`
       );
-    });
-  });
-
-  it('clicks on the cancel button and on close modal', async () => {
-    // render component
-    const { getByTestId } = render(
-      <NotificationDetailTableSender
-        notification={notificationToFe}
-        onCancelNotification={mockCancelHandler}
-      />
-    );
-    const cancelNotificationBtn = getByTestId('cancelNotificationBtn');
-    fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => getByTestId('modalId'));
-    expect(modal).toBeInTheDocument();
-    const closeModalBtn = within(modal).getByTestId('modalCloseBtnId');
-    fireEvent.click(closeModalBtn!);
-    await waitFor(() => expect(modal).not.toBeInTheDocument());
-  });
-
-  it('clicks on the cancel button and on confirm button - no payment', async () => {
-    // remove payment elem from timeline
-    const noPaymentNotification = {
-      ...notificationToFe,
-      timeline: [
-        ...notificationToFe.timeline.filter((elem) => elem.category !== TimelineCategory.PAYMENT),
-      ],
-    };
-    // render component
-    const { getByTestId } = render(
-      <NotificationDetailTableSender
-        notification={noPaymentNotification}
-        onCancelNotification={mockCancelHandler}
-      />
-    );
-    const cancelNotificationBtn = getByTestId('cancelNotificationBtn');
-    fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => getByTestId('modalId'));
-    expect(modal).toBeInTheDocument();
-    const modalCloseAndProceedBtn = within(modal).getByTestId('modalCloseAndProceedBtnId');
-    fireEvent.click(modalCloseAndProceedBtn!);
-    await waitFor(() => {
-      expect(mockCancelHandler).toBeCalledTimes(1);
-      expect(modal).not.toBeInTheDocument();
-    });
-  });
-
-  it('clicks on the cancel button and on confirm button - payment', async () => {
-    // render component
-    const { getByTestId } = render(
-      <NotificationDetailTableSender
-        notification={notificationToFe}
-        onCancelNotification={mockCancelHandler}
-      />
-    );
-    const cancelNotificationBtn = getByTestId('cancelNotificationBtn');
-    fireEvent.click(cancelNotificationBtn);
-    const modal = await waitFor(() => getByTestId('modalId'));
-    expect(modal).toBeInTheDocument();
-    const checkbox = within(modal).getByTestId('checkbox');
-    fireEvent.click(checkbox);
-    const modalCloseAndProceedBtn = within(modal).getByTestId('modalCloseAndProceedBtnId');
-    fireEvent.click(modalCloseAndProceedBtn!);
-    await waitFor(() => {
-      expect(mockCancelHandler).toBeCalledTimes(1);
-      expect(modal).not.toBeInTheDocument();
     });
   });
 });

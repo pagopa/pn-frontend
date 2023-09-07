@@ -183,11 +183,9 @@ const NotificationDetail: React.FC = () => {
     return true;
   }, []);
 
-  const hasDocumentsAvailable = !notification.documentsAvailable;
-
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (hasDocumentsAvailable) {
+      if (notification.documentsAvailable) {
         return type === 'aar'
           ? t('detail.download-aar-available', { ns: 'notifiche' })
           : t('detail.download-message-available', { ns: 'notifiche' });
@@ -196,7 +194,7 @@ const NotificationDetail: React.FC = () => {
         ? t('detail.download-aar-expired', { ns: 'notifiche' })
         : t('detail.download-message-expired', { ns: 'notifiche' });
     },
-    [hasDocumentsAvailable]
+    [notification.documentsAvailable]
   );
 
   const fetchSentNotification = useCallback(() => {
@@ -310,7 +308,7 @@ const NotificationDetail: React.FC = () => {
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={notification.documents}
                     clickHandler={documentDowloadHandler}
-                    documentsAvailable={hasDocumentsAvailable}
+                    documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
@@ -320,7 +318,7 @@ const NotificationDetail: React.FC = () => {
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments}
                     clickHandler={documentDowloadHandler}
-                    documentsAvailable={hasDocumentsAvailable}
+                    documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
