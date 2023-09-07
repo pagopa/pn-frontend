@@ -1,4 +1,4 @@
-import { Delegation, DelegationStatus } from '../models/Deleghe';
+import { Delegate, Delegation, DelegationStatus, Delegator } from '../models/Deleghe';
 
 export const mockCreateDelegation = {
   delegate: {
@@ -8,7 +8,6 @@ export const mockCreateDelegation = {
     companyName: 'eni',
     fiscalCode: 'DVDLGT83C12H501C',
     person: true,
-    email: 'email@falsa.it',
   },
   visibilityIds: [
     {
@@ -17,11 +16,10 @@ export const mockCreateDelegation = {
     },
   ],
   verificationCode: '123456',
-  datefrom: '2021-12-15',
   dateto: '2022-04-16',
 };
 
-export const arrayOfDelegates = [
+export const arrayOfDelegates: Array<Delegate> = [
   {
     mandateId: '1',
     delegate: {
@@ -31,7 +29,6 @@ export const arrayOfDelegates = [
       companyName: 'eni',
       fiscalCode: 'MRCVRD83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'pending' as DelegationStatus,
     visibilityIds: [
@@ -53,7 +50,6 @@ export const arrayOfDelegates = [
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'active' as DelegationStatus,
     visibilityIds: [
@@ -68,7 +64,7 @@ export const arrayOfDelegates = [
   },
 ];
 
-export const arrayOfDelegators = [
+export const arrayOfDelegators: Array<Delegator> = [
   {
     mandateId: '3',
     delegator: {
@@ -78,7 +74,6 @@ export const arrayOfDelegators = [
       companyName: 'eni',
       fiscalCode: 'MRCVRD83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'pending' as DelegationStatus,
     visibilityIds: [
@@ -101,7 +96,6 @@ export const arrayOfDelegators = [
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'active' as DelegationStatus,
     visibilityIds: [
