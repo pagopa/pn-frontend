@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, recipient } from '../../__mocks__/NotificationDetail.mock';
+import { notificationToFe, payments, recipient } from '../../__mocks__/NotificationDetail.mock';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
@@ -28,13 +28,16 @@ import {
   PaidDetails,
   PaymentDetails,
   PaymentStatus,
+  PaymentsData,
 } from '../../types/NotificationDetail';
 import {
+  getF24Payments,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
+  getPagoPaF24Payments,
   parseNotificationDetail,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '../notification.utility';
 import {
   acceptedDeliveringDeliveredTimeline,
@@ -1777,58 +1780,27 @@ describe('timeline legal fact link text', () => {
   });
 });
 
-describe('Populate payment history', () => {
-  it('return empty array if user payments is undefined', () => {
-    const recipients = [
-      {
-        ...recipient,
-        payments: undefined,
-      },
-    ];
-
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      notificationToFe.timeline,
-      recipients,
-      paymentInfo
-    );
-
-    expect(mappedPayments).toStrictEqual([]);
-  });
+describe('Populate pagoPA and F24 payments', () => {
+  const paymentsData: PaymentsData = {
+    pagoPaF24: getPagoPaF24Payments(payments),
+    f24Only: getF24Payments(payments),
+  };
 
   it('return empty array if user payments is an empty array', () => {
-    const recipients = [
-      {
-        ...recipient,
-        payments: [],
-      },
-    ];
-
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      notificationToFe.timeline,
-      recipients,
-      paymentInfo
-    );
+    const mappedPayments = populatePaymentsPagoPaF24(notificationToFe.timeline, [], paymentInfo);
 
     expect(mappedPayments).toStrictEqual([]);
   });
 
   it('With empty timeline it should return the mapped array with only external registry info', () => {
-    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       return {
         pagoPA: item.pagoPA ? { ...item.pagoPA, ...paymentInfo[index] } : undefined,
         f24: item.f24,
       } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      [],
-      notificationToFe.recipients,
-      paymentInfo
-    );
-
+    const mappedPayments = populatePaymentsPagoPaF24([], paymentsData.pagoPaF24, paymentInfo);
     expect(mappedPayments).toStrictEqual(res);
   });
 
@@ -1836,7 +1808,7 @@ describe('Populate payment history', () => {
     let res: Array<PaymentDetails> = [];
     let singlePaymentInfo = paymentInfo[0];
 
-    recipient.payments!.forEach((item, index) => {
+    paymentsData.pagoPaF24.forEach((item, index) => {
       if (
         singlePaymentInfo?.creditorTaxId === item.pagoPA?.creditorTaxId &&
         singlePaymentInfo.noticeCode === item.pagoPA?.noticeCode
@@ -1870,10 +1842,9 @@ describe('Populate payment history', () => {
       }
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
+    const mappedPayments = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       [singlePaymentInfo]
     );
 
@@ -1882,7 +1853,7 @@ describe('Populate payment history', () => {
   });
 
   it('With empty external registry it should return the mapped array with only timeline info', () => {
-    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const timelineEvent = notificationToFe.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&
@@ -1903,10 +1874,9 @@ describe('Populate payment history', () => {
       } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
+    const mappedPayments = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       []
     );
 
@@ -1914,7 +1884,7 @@ describe('Populate payment history', () => {
   });
 
   it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
-    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
         item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
           ? paymentInfo[index]
@@ -1935,10 +1905,9 @@ describe('Populate payment history', () => {
       } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
+    const mappedPayments = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       paymentInfo
     );
 
@@ -1951,7 +1920,7 @@ describe('Populate payment history', () => {
       amount: undefined,
     }));
 
-    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
         item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
           ? paymentInfo[index]
@@ -1972,12 +1941,7 @@ describe('Populate payment history', () => {
       } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      timeline,
-      notificationToFe.recipients,
-      paymentInfo
-    );
+    const mappedPayments = populatePaymentsPagoPaF24(timeline, paymentsData.pagoPaF24, paymentInfo);
 
     expect(mappedPayments).toStrictEqual(res);
   });

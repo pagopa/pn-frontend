@@ -30,6 +30,11 @@ export interface NotificationDetail {
   otherDocuments?: Array<NotificationDetailDocument>;
 }
 
+export type PaymentsData = {
+  pagoPaF24: Array<PaymentDetails>;
+  f24Only: Array<F24PaymentDetails>;
+};
+
 export type PagoPAPaymentFullDetails = PagoPAPaymentDetails &
   PaidDetails &
   ExtRegistriesPaymentDetails;

@@ -8,14 +8,13 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../../types';
-import { formatEurocentToCurrency, populatePaymentHistory } from '../../../utils';
+import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../utils';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
-  const pagoPAItems: PaymentDetails[] = populatePaymentHistory(
-    recipient.taxId,
+  const pagoPAItems: PaymentDetails[] = populatePaymentsPagoPaF24(
     notificationToFe.timeline,
-    notificationToFe.recipients,
+    notificationToFe.recipients[0].payments as PaymentDetails[],
     paymentInfo
   );
 

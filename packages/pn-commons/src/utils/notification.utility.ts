@@ -28,7 +28,10 @@ import {
 import {
   AppIoCourtesyMessageEventType,
   ExtRegistriesPaymentDetails,
+  F24PaymentDetails,
+  NotificationDetailPayment,
   NotificationDetailTimelineDetails,
+  PagoPAPaymentFullDetails,
   PaymentStatus,
 } from '../types/NotificationDetail';
 import { formatDate } from '../utils';
@@ -853,6 +856,31 @@ const populateOtherDocuments = (
   }
   return [];
 };
+
+export const getF24Payments = (
+  payments: Array<NotificationDetailPayment>
+): Array<F24PaymentDetails> =>
+  payments.reduce((arr, payment) => {
+    if (!payment.pagoPA && payment.f24) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push(payment.f24);
+    }
+    return arr;
+  }, [] as Array<F24PaymentDetails>);
+
+export const getPagoPaF24Payments = (
+  payments: Array<NotificationDetailPayment>
+): Array<PaymentDetails> =>
+  payments.reduce((arr, payment) => {
+    if (payment.pagoPA) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push({
+        pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
+        f24: payment.f24,
+      });
+    }
+    return arr;
+  }, [] as Array<PaymentDetails>);
 
 /**
  * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.

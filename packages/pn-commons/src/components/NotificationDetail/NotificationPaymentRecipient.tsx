@@ -4,21 +4,16 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import React, { Fragment, memo, useState } from 'react';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
-  F24PaymentDetails,
   NotificationDetailPayment,
   PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentStatus,
+  PaymentsData,
 } from '../../types';
 import { formatEurocentToCurrency } from '../../utils';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
-
-type PaymentsData = {
-  pagoPaF24: Array<PaymentDetails>;
-  f24Only: Array<F24PaymentDetails>;
-};
 
 type Props = {
   payments: PaymentsData;
