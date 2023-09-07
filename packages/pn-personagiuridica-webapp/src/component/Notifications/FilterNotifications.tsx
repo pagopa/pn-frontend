@@ -98,7 +98,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     endDate: yup
       .date()
       .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(new Date()),
+      .max(today),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
