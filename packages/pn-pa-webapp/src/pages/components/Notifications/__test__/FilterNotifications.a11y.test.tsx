@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { createMatchMedia } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   RenderResult,
