@@ -9,18 +9,10 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  screen,
-  testInput,
-  waitFor,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';

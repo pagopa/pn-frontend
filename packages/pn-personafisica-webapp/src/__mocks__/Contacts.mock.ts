@@ -18,9 +18,17 @@ export const digitalAddresses: DigitalAddresses = {
     {
       addressType: 'legal',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
-      senderId: 'cmbo',
+      senderId: 'comune-milano',
       channelType: LegalChannelType.PEC,
-      value: 'nome.utente@server.it',
+      value: 'nome.utente@pec-comune-milano.it',
+      pecValid: true,
+    },
+    {
+      addressType: 'legal',
+      recipientId: '123e4567-e89b-12d3-a456-426614174000',
+      senderId: 'tribunale-milano',
+      channelType: LegalChannelType.PEC,
+      value: 'nome.utente@pec-tribunale-milano.it',
       pecValid: true,
     },
   ],
@@ -28,16 +36,16 @@ export const digitalAddresses: DigitalAddresses = {
     {
       addressType: 'courtesy',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
-      senderId: 'cmbo',
+      senderId: 'comune-milano',
       channelType: CourtesyChannelType.EMAIL,
-      value: 'nome.utente-special@server.it',
+      value: 'nome.utente@mail-comune-milano.it',
     },
     {
       addressType: 'courtesy',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
       senderId: 'default',
       channelType: CourtesyChannelType.EMAIL,
-      value: 'nome.utente@server.it',
+      value: 'nome.utente@mail.it',
     },
     {
       addressType: 'courtesy',
@@ -45,6 +53,13 @@ export const digitalAddresses: DigitalAddresses = {
       senderId: 'default',
       channelType: CourtesyChannelType.SMS,
       value: '3333333333',
+    },
+    {
+      addressType: 'courtesy',
+      recipientId: '123e4567-e89b-12d3-a456-426614174000',
+      senderId: 'tribunale-milano',
+      channelType: CourtesyChannelType.SMS,
+      value: '3333333334',
     },
     {
       addressType: 'courtesy',

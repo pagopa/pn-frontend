@@ -89,7 +89,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         avatar={<IllusEmailValidation />}
       >
         {!verifyingAddress && (
-          <Box mt="20px">
+          <Box mt="20px" data-testid="legalContacts">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -149,7 +149,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         )}
 
         {verifyingAddress && (
-          <Box mt="20px">
+          <Box mt="20px" data-testid="legalContacts">
             <Typography mb={1} sx={{ fontWeight: 'bold' }}>
               {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
             </Typography>

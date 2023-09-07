@@ -7,7 +7,7 @@ import {
   PhysicalCommunicationType,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
-import { testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import { testFormElements, testInput, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   newNotification,
@@ -20,8 +20,6 @@ import {
   fireEvent,
   randomString,
   render,
-  testFormElements,
-  testInput,
   testRadio,
   testStore,
   waitFor,

@@ -15,8 +15,6 @@ jest.mock('react-i18next', () => ({
 describe('CourtesyContactItem component - accessibility tests', () => {
   const INPUT_VALID_PHONE = '3331234567';
   const VALID_EMAIL = 'prova@pagopa.it';
-
-  // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
   it('type "phone" - no phone added - does not have basic accessibility issues', async () => {

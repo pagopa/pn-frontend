@@ -1,4 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -10,12 +9,11 @@ import {
   screen,
   waitFor,
 } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
+import * as api from '../../../api/contacts/Contacts.api';
+import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import {
   Component,
-  mockContactsApi,
   pecValue,
   pecValueToVerify,
   senderId,
@@ -38,45 +36,25 @@ Andrea Cimini - 6/09/2023
 */
 describe('DigitalContactsCodeVerification Context - accessibility tests', () => {
   let result: RenderResult | undefined;
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
 
   afterEach(() => {
-    mock.reset();
     result = undefined;
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
-    mock.restore();
+    jest.restoreAllMocks();
   });
 
-  it('does not have basic accessibility issues (modal closed)', async () => {
+  it('does not have basic accessibility issues (code modal)', async () => {
+    jest.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
         <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
-  });
-
-  it('does not have basic accessibility issues (modal opened)', async () => {
-    mockContactsApi(mock, LegalChannelType.PEC, pecValue, senderId);
-    // render component
-    result = render(
-      <DigitalContactsCodeVerificationProvider>
-        <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
-      </DigitalContactsCodeVerificationProvider>
-    );
-    const dialog = await showDialog(result!, mock, pecValue);
+    const dialog = await showDialog(result!);
     expect(dialog).toBeInTheDocument();
     if (result) {
       const res = await axe(result.container);
@@ -87,14 +65,17 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
   });
 
   it('does not have basic accessibility issues (pec to verify)', async () => {
-    mockContactsApi(mock, LegalChannelType.PEC, pecValueToVerify, senderId, true);
+    jest
+      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+      .mockResolvedValueOnce(void 0)
+      .mockResolvedValueOnce({ pecValid: false } as DigitalAddress);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
         <Component type={LegalChannelType.PEC} value={pecValueToVerify} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const dialog = await showDialog(result!, mock, pecValueToVerify);
+    const dialog = await showDialog(result);
     const codeInputs = dialog?.querySelectorAll('input');
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
@@ -116,12 +97,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
   });
 
   it('does not have basic accessibility issues (try to add an already existing contact)', async () => {
-    mockContactsApi(
-      mock,
-      CourtesyChannelType.EMAIL,
-      digitalAddresses.courtesy[0].value,
-      'another-sender-id'
-    );
+    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>

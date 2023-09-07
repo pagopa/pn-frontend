@@ -1,11 +1,13 @@
+import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
-import * as redux from 'react-redux';
-import {
-  courtesyAddresses,
-  initialState,
-  legalAddresses,
-} from '../../../__mocks__/SpecialContacts.mock';
+
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 
@@ -18,29 +20,60 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('SpecialContacts Component - accessibility tests', () => {
-  it('does not have basic accessibility issues', async () => {
-    const mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+  let result: RenderResult | undefined;
+  let mock: MockAdapter;
 
-    // eslint-disable-next-line functional/no-let
-    let result: RenderResult | undefined;
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
 
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('does not have basic accessibility issues - API OK', async () => {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
     // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
             recipientId="mocked-recipientId"
-            legalAddresses={legalAddresses}
-            courtesyAddresses={courtesyAddresses}
+            legalAddresses={digitalAddresses.legal}
+            courtesyAddresses={digitalAddresses.courtesy}
           />
-        </DigitalContactsCodeVerificationProvider>,
-        {
-          preloadedState: initialState,
-        }
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  }, 10000);
+
+  it('does not have basic accessibility issues - API ERROR', async () => {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(500);
+    // render component
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <DigitalContactsCodeVerificationProvider>
+            <SpecialContacts
+              recipientId="mocked-recipientId"
+              legalAddresses={digitalAddresses.legal}
+              courtesyAddresses={digitalAddresses.courtesy}
+            />
+          </DigitalContactsCodeVerificationProvider>
+        </>
       );
     });
 

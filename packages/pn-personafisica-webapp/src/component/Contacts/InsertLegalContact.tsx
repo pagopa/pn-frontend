@@ -49,7 +49,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
       <DigitalContactsCard
         sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
         title={t('legal-contacts.subtitle', { ns: 'recapiti' })}
@@ -77,7 +77,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
               disabled={!formik.isValid}
               fullWidth
               type="submit"
-              data-testid="add contact"
+              data-testid="addContact"
             >
               {t('button.conferma')}
               {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}

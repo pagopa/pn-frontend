@@ -17,7 +17,7 @@ jest.mock('react-i18next', () => ({
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
-Il flusso completo viene testato nella pagina dei contatti, dove si può testare anche il cambio di stato di redux e le api
+Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
 
 Andrea Cimini - 6/09/2023
 */

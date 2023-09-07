@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { RecipientType } from '@pagopa-pn/pn-commons';
+import { testFormElements, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../../__mocks__/NewNotification.mock';
 import {
@@ -9,8 +10,6 @@ import {
   fireEvent,
   randomString,
   render,
-  testFormElements,
-  testInput,
   testRadio,
   testStore,
   waitFor,

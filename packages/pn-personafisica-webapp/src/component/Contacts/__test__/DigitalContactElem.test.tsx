@@ -1,4 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
 import { TextField } from '@mui/material';
@@ -11,9 +10,8 @@ import {
   screen,
   waitFor,
 } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
-import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
-import { LegalChannelType } from '../../../models/contacts';
+import * as api from '../../../api/contacts/Contacts.api';
+import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { TrackEventType } from '../../../utils/events';
 import * as trackingFunctions from '../../../utils/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
@@ -61,29 +59,25 @@ const mockTrackEventFn = jest.fn();
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
-Il flusso completo viene testato nella pagina dei contatti, dove si può testare anche il cambio di stato di redux e le api
+Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
+Per questo motivo non è necessario mockare le api, ma va bene anche usare lo spyOn.
 
 Andrea Cimini - 6/09/2023
 */
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-  });
 
   beforeEach(() => {
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
   });
 
   afterEach(() => {
-    mock.reset();
+    result = undefined;
     jest.clearAllMocks();
   });
 
   afterAll(() => {
-    mock.restore();
+    jest.restoreAllMocks();
   });
 
   it('renders component', async () => {
@@ -116,11 +110,9 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    mock
-      .onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), {
-        value: 'mocked@pec.it',
-      })
-      .reply(204);
+    jest
+      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+      .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
     // render component
     await act(async () => {
       result = render(
@@ -150,7 +142,9 @@ describe('DigitalContactElem Component', () => {
     expect(newButtons![1]).toHaveTextContent('button.annulla');
     // cancel edit
     fireEvent.click(newButtons![1]);
-    expect(mockResetModifyValue).toBeCalledTimes(1);
+    await waitFor(() => {
+      expect(mockResetModifyValue).toBeCalledTimes(1);
+    });
     await waitFor(() => {
       expect(input).not.toBeInTheDocument();
     });
@@ -159,13 +153,15 @@ describe('DigitalContactElem Component', () => {
     input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
     fireEvent.click(newButtons![0]);
     await waitFor(() => {
-      expect(mock.history.post).toHaveLength(1);
+      expect(input).not.toBeInTheDocument();
     });
-    expect(input).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockOnConfirm).toBeCalledTimes(1);
+    });
   });
 
   it('remove contact', async () => {
-    mock.onDelete(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(204);
+    jest.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
     // render component
     await act(async () => {
       result = render(
@@ -212,7 +208,6 @@ describe('DigitalContactElem Component', () => {
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
-    expect(mock.history.delete).toHaveLength(1);
     await waitFor(() => {
       expect(mockDeleteCbk).toBeCalledTimes(1);
     });
