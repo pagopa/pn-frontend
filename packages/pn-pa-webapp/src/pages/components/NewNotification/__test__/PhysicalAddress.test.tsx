@@ -1,6 +1,21 @@
+import React from 'react';
+
+import { render, testFormElements } from '../../../../__test__/test-utils';
 import PhysicalAddress from '../PhysicalAddress';
-import { render } from '../../../../__test__/test-utils';
-import { formTestErrors, formTestTouched, formTestValues } from './test-utils';
+
+const mockSetValue = jest.fn();
+
+const formTestValues = {
+  address: 'via delle vie',
+  houseNumber: '12',
+  municipalityDetails: 'Ostia',
+  municipality: 'Roma',
+  province: 'Roma',
+  zip: '00122',
+  foreignState: 'Italia',
+  at: 'Multoni srl',
+  addressDetails: 'scala b quarto piano',
+};
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -9,28 +24,50 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockSetValue = jest.fn();
-
 describe('PhysicalAddress Component', () => {
   it('renders the component', () => {
-    const result = render(
+    const { container } = render(
       <PhysicalAddress
-        values={formTestValues}
-        touched={formTestTouched}
-        errors={formTestErrors}
+        values={{ recipients: [{}, formTestValues] }}
+        touched={{}}
+        errors={{}}
         recipient={1}
         setFieldValue={mockSetValue}
       />
     );
-
-    expect(result.container).toHaveTextContent(/at/i);
-    expect(result.container).toHaveTextContent(/foreign-state*/i);
-    expect(result.container).toHaveTextContent(/address*/i);
-    expect(result.container).toHaveTextContent(/house-number*/i);
-    expect(result.container).toHaveTextContent(/zip*/i);
-    expect(result.container).toHaveTextContent(/municipality*/i);
-    expect(result.container).toHaveTextContent(/municipality-details/i);
-    expect(result.container).toHaveTextContent(/province*/i);
-    expect(result.container).toHaveTextContent(/address-details/i);
+    testFormElements(container, 'recipients[1].address', 'address*', formTestValues.address);
+    testFormElements(
+      container,
+      'recipients[1].houseNumber',
+      'house-number*',
+      formTestValues.houseNumber
+    );
+    testFormElements(
+      container,
+      'recipients[1].municipalityDetails',
+      'municipality-details',
+      formTestValues.municipalityDetails
+    );
+    testFormElements(
+      container,
+      'recipients[1].municipality',
+      'municipality*',
+      formTestValues.municipality
+    );
+    testFormElements(container, 'recipients[1].province', 'province*', formTestValues.province);
+    testFormElements(container, 'recipients[1].zip', 'zip*', formTestValues.zip);
+    testFormElements(
+      container,
+      'recipients[1].foreignState',
+      'foreign-state*',
+      formTestValues.foreignState
+    );
+    testFormElements(container, 'recipients[1].at', 'at', formTestValues.at);
+    testFormElements(
+      container,
+      'recipients[1].addressDetails',
+      'address-details',
+      formTestValues.addressDetails
+    );
   });
 });

@@ -11,19 +11,25 @@ type Props = {
 };
 
 const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: Props) => {
-  const finalMessage = message || getLocalizedOrDefaultLabel(
-    'common',
-    isLogged ? 'access-denied' : 'not-logged',
-    'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-  );
-  const finalSubTitle = subtitle || (
-    isLogged 
-      ? '' 
-      : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', '')
-  );
+  const finalMessage =
+    message ||
+    getLocalizedOrDefaultLabel(
+      'common',
+      isLogged ? 'access-denied' : 'not-logged',
+      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
+    );
+  const finalSubTitle =
+    subtitle || (isLogged ? '' : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', ''));
 
   return (
-    <Stack direction="column" alignItems="center" my={4} px={4} sx={{ minHeight: '50vh' }}>
+    <Stack
+      direction="column"
+      alignItems="center"
+      my={4}
+      px={4}
+      sx={{ minHeight: '50vh' }}
+      data-testid="access-denied"
+    >
       <Box mt={4}>
         <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
           {finalMessage}

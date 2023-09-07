@@ -1,57 +1,59 @@
 import currentLocale from 'date-fns/locale/it';
-import { useNavigate } from 'react-router-dom';
+import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Formik, Form, FormikTouched, FormikErrors } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+
+import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
-  Typography,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
   Button,
   Divider,
+  FormControl,
+  FormControlLabel,
   Grid,
   MenuItem,
-  Stack,
   Paper,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
-import PeopleIcon from '@mui/icons-material/People';
-import { IllusCompleted } from '@pagopa/mui-italia';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   CourtesyPage,
   CustomDatePicker,
-  DatePickerTypes,
   DATE_FORMAT,
-  TitleBox,
-  useIsMobile,
-  PnBreadcrumb,
-  isToday,
-  dataRegex,
-  searchStringLimitReachedText,
-  useSearchStringChangeInput,
-  RecipientType,
+  DatePickerTypes,
   PnAutocomplete,
+  PnBreadcrumb,
+  RecipientType,
+  TitleBox,
+  dataRegex,
+  isToday,
+  searchStringLimitReachedText,
+  useIsMobile,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
+import { IllusCompleted } from '@pagopa/mui-italia';
+
+import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
+import { NewDelegationFormProps } from '../models/Deleghe';
+import { Party } from '../models/party';
+import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
-import * as routes from '../navigation/routes.const';
-import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import { getConfiguration } from '../services/configuration.service';
 import { generateVCode } from '../utils/delegation.utility';
-import DropDownPartyMenuItem from '../component/Party/DropDownParty';
-import { Party } from '../models/party';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
-import { NewDelegationFormProps } from '../models/Deleghe';
-import { getConfiguration } from '../services/configuration.service';
 
 const renderOption = (props: any, option: Party) => (
   <MenuItem {...props} value={option.id} key={option.id}>

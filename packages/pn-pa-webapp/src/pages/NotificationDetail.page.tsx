@@ -107,16 +107,16 @@ const NotificationDetail = () => {
     alt: boolean = false
   ): ReactNode => {
     if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient, index) => (
-        <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
+      return filteredRecipients.map((recipient) => (
+        <Box key={recipient.taxId} fontWeight={600}>
+          {recipient.taxId}&nbsp;-&nbsp;{recipient?.payment?.creditorTaxId}&nbsp;-&nbsp;
           {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
       ));
     }
     return (
       <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
+        {filteredRecipients[0]?.payment?.creditorTaxId}&nbsp;-&nbsp;
         {alt
           ? filteredRecipients[0]?.payment?.noticeCodeAlternative
           : filteredRecipients[0]?.payment?.noticeCode}
@@ -152,8 +152,8 @@ const NotificationDetail = () => {
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
       value: (
         <>
-          {recipients.map((recipient, i) => (
-            <Box key={i} fontWeight={600}>
+          {recipients.map((recipient) => (
+            <Box key={recipient.taxId} fontWeight={600}>
               {recipients.length > 1
                 ? `${recipient.taxId} - ${recipient.denomination}`
                 : recipient.taxId}
@@ -427,7 +427,11 @@ const NotificationDetail = () => {
       {hasNotificationSentApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError onClick={() => fetchSentNotification()} mt={3} />
+          <ApiError
+            onClick={() => fetchSentNotification()}
+            mt={3}
+            apiId={NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION}
+          />
         </Box>
       )}
       {!hasNotificationSentApiError && (
@@ -489,7 +493,7 @@ const NotificationDetail = () => {
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
                     </Alert>
                   }

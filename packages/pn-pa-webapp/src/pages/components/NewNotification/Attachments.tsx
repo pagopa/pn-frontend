@@ -1,27 +1,21 @@
-import {
-  ChangeEvent,
-  forwardRef,
-  Fragment,
-  useMemo,
-  ForwardedRef,
-  useImperativeHandle,
-} from 'react';
-import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
+import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Box, SxProps, TextField, Typography } from '@mui/material';
+
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, SxProps, TextField, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { NewNotificationDocument } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
 import { getConfiguration } from '../../../services/configuration.service';
-import { NewNotificationDocument } from '../../../models/NewNotification';
+import { requiredStringFieldValidation } from '../../../utils/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { requiredStringFieldValidation } from './validation.utility';
 
 type AttachmentBoxProps = {
   id: string;
@@ -45,7 +39,7 @@ type AttachmentBoxProps = {
 
 const MAX_NUMBER_OF_ATTACHMENTS = 10;
 
-const AttachmentBox = ({
+const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   id,
   title,
   sx,
@@ -59,18 +53,12 @@ const AttachmentBox = ({
   onFileUploaded,
   onRemoveFile,
   fileUploaded,
-}: AttachmentBoxProps) => {
+}) => {
   const { t } = useTranslation(['notifiche']);
 
   return (
-    <Fragment>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={sx}
-        data-testid="attachmentBox"
-      >
+    <Box data-testid="attachmentBox">
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
           <ButtonNaked
@@ -103,8 +91,9 @@ const AttachmentBox = ({
         helperText={fieldTouched && fieldErros}
         size="small"
         margin="normal"
+        data-testid="attachmentNameInput"
       />
-    </Fragment>
+    </Box>
   );
 };
 
@@ -133,13 +122,13 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({
+const Attachments: React.FC<Props> = ({
   onConfirm,
   onPreviousStep,
   attachmentsData,
   forwardedRef,
   isCompleted,
-}: Props) => {
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
@@ -297,7 +286,7 @@ const Attachments = ({
   }));
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="attachmentsForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}

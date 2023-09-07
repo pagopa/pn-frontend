@@ -1,4 +1,7 @@
+import React from 'react';
+
 import { fireEvent, render } from '../../../../__test__/test-utils';
+import * as routes from '../../../../navigation/routes.const';
 import SyncFeedbackApiKey from '../SyncFeedbackApiKey';
 
 // mock imports
@@ -33,5 +36,6 @@ describe('SyncFeedbackApiKey Component', () => {
     const button = result.container.querySelector('button');
     fireEvent.click(button!);
     expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
   });
 });

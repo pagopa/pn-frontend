@@ -92,7 +92,8 @@
       "verificationCode": "Verification code",
       "verificationCodeDescr": "Share this code with the delegate: they will have to enter it when accepting the delegation.",
       "submit": "Submit request",
-      "mandatoryField": "Mandatory fields*"
+      "mandatoryField": "Mandatory fields*",
+      "party-not-found": "No entity found"
     },
     "validation": {
       "fiscalCode": {

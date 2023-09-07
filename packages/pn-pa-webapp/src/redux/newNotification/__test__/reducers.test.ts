@@ -1,27 +1,35 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { newNotification } from '../../../__mocks__/NewNotification.mock';
+import { apiClient, externalClient } from '../../../api/apiClients';
+import {
+  CREATE_NOTIFICATION,
+  GET_USER_GROUPS,
+  NOTIFICATION_PRELOAD_DOCUMENT,
+} from '../../../api/notifications/notifications.routes';
 import { PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { newNotificationMapper } from '../../../utils/notification.utility';
 import { store } from '../../store';
 import {
   createNewNotification,
+  getUserGroups,
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
-  getUserGroups,
 } from '../actions';
 import {
-  setCancelledIun,
-  setPreliminaryInformations,
-  setSenderInfos,
+  resetState,
   saveRecipients,
   setAttachments,
-  resetState,
+  setCancelledIun,
+  setIsCompleted,
   setPaymentDocuments,
-  setIsCompleted
+  setPreliminaryInformations,
+  setSenderInfos,
 } from '../reducers';
-import { newNotification } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -42,7 +50,22 @@ const initialState = {
 };
 
 describe('New notification redux state tests', () => {
+  // eslint-disable-next-line functional/no-let
+  let mock: MockAdapter;
+
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('Initial state', () => {
     const state = store.getState().newNotificationState;
@@ -51,34 +74,30 @@ describe('New notification redux state tests', () => {
 
   it('Should be able to set cancelled iun', () => {
     const action = store.dispatch(setCancelledIun('mocked-iun'));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setCancelledIun');
-    expect(payload).toEqual('mocked-iun');
+    expect(action.payload).toEqual('mocked-iun');
   });
 
   it('Should be able to set sender infos', () => {
     const action = store.dispatch(
       setSenderInfos({ senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId' })
     );
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setSenderInfos');
-    expect(payload).toEqual({
+    expect(action.payload).toEqual({
       senderDenomination: 'mocked-denomination',
       senderTaxId: 'mocked-taxId',
     });
   });
 
   it('Should be able to get user groups', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getUserGroups');
-    apiSpy.mockResolvedValue([
+    const mockResponse = [
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' as GroupStatus },
-    ]);
+    ];
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
     const action = await store.dispatch(getUserGroups());
-    const payload = action.payload;
     expect(action.type).toBe('getUserGroups/fulfilled');
-    expect(payload).toEqual([
-      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
-    ]);
+    expect(action.payload).toEqual(mockResponse);
+    expect(store.getState().newNotificationState.groups).toStrictEqual(mockResponse);
   });
 
   it('Should be able to set preliminary informations', () => {
@@ -92,127 +111,208 @@ describe('New notification redux state tests', () => {
       paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');
-    expect(payload).toEqual(preliminaryInformations);
+    expect(action.payload).toEqual(preliminaryInformations);
   });
 
   it('Should be able to save recipients', () => {
     const action = store.dispatch(saveRecipients({ recipients: newNotification.recipients }));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/saveRecipients');
-    expect(payload).toEqual({ recipients: newNotification.recipients });
+    expect(action.payload).toEqual({ recipients: newNotification.recipients });
   });
 
   it('Should be able to save attachemnts', () => {
     const action = store.dispatch(setAttachments({ documents: newNotification.documents }));
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setAttachments');
-    expect(payload).toEqual({ documents: newNotification.documents });
+    expect(action.payload).toEqual({ documents: newNotification.documents });
   });
 
   it('Should be able to upload attachment', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
-    apiSpy.mockResolvedValue([
-      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
-    ]);
-    const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationAttachment');
-    nextApiSpy.mockResolvedValue('mocked-versionToken');
-    const action = await store.dispatch(uploadNotificationAttachment(newNotification.documents));
-    const payload = action.payload;
+    mock
+      .onPost(
+        NOTIFICATION_PRELOAD_DOCUMENT(),
+        newNotification.documents.map((document) => ({
+          key: document.name,
+          contentType: document.file.data?.type,
+          sha256: document.file.sha256.hashBase64,
+        }))
+      )
+      .reply(
+        200,
+        newNotification.documents.map(() => ({
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'POST',
+          key: 'mocked-preload-key',
+        }))
+      );
+    const extMock = new MockAdapter(externalClient);
+    for (const document of newNotification.documents) {
+      extMock.onPost(`https://mocked-url.com`).reply(200, document.file.data, {
+        'x-amz-version-id': 'mocked-versionToken',
+      });
+    }
+    const action = await store.dispatch(
+      uploadNotificationAttachment(
+        newNotification.documents.map((doc) => ({
+          ...doc,
+          ref: {
+            versionToken: '',
+            key: '',
+          },
+        }))
+      )
+    );
     expect(action.type).toBe('uploadNotificationAttachment/fulfilled');
-    expect(payload).toEqual([
-      {
-        ...newNotification.documents[0],
+    expect(action.payload).toEqual(
+      newNotification.documents.map((document) => ({
+        ...document,
         ref: {
           key: 'mocked-preload-key',
           versionToken: 'mocked-versionToken',
         },
-      },
-    ]);
+      }))
+    );
+    extMock.restore();
   });
 
   it('Should be able to save payment documents', () => {
     const action = store.dispatch(
       setPaymentDocuments({ paymentDocuments: newNotification.payment! })
     );
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
-    expect(payload).toEqual({ paymentDocuments: newNotification.payment! });
+    expect(action.payload).toEqual({ paymentDocuments: newNotification.payment! });
   });
 
   it('Should be able to upload payment document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
-    apiSpy.mockResolvedValue([
-      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
-      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
-      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
-    ]);
-    const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationAttachment');
-    nextApiSpy.mockResolvedValue('mocked-versionToken');
+    mock
+      .onPost(
+        NOTIFICATION_PRELOAD_DOCUMENT(),
+        Object.values(newNotification.payment!).reduce((arr, elem) => {
+          if (elem.pagoPaForm) {
+            arr.push({
+              key: elem.pagoPaForm.name,
+              contentType: elem.pagoPaForm.contentType,
+              sha256: elem.pagoPaForm.file.sha256.hashBase64,
+            });
+          }
+          if (elem.f24flatRate) {
+            arr.push({
+              key: elem.f24flatRate.name,
+              contentType: elem.f24flatRate.contentType,
+              sha256: elem.f24flatRate.file.sha256.hashBase64,
+            });
+          }
+          if (elem.f24standard) {
+            arr.push({
+              key: elem.f24standard.name,
+              contentType: elem.f24standard.contentType,
+              sha256: elem.f24standard.file.sha256.hashBase64,
+            });
+          }
+          return arr;
+        }, [] as any)
+      )
+      .reply(200, [
+        {
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'POST',
+          key: 'mocked-preload-key',
+        },
+        {
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'POST',
+          key: 'mocked-preload-key',
+        },
+        {
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'POST',
+          key: 'mocked-preload-key',
+        },
+      ]);
+    const extMock = new MockAdapter(externalClient);
+    for (const payment of Object.values(newNotification.payment!)) {
+      if (payment.pagoPaForm) {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPaForm.file.data, {
+          'x-amz-version-id': 'mocked-versionToken',
+        });
+      }
+      if (payment.f24flatRate) {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.f24flatRate.file.data, {
+          'x-amz-version-id': 'mocked-versionToken',
+        });
+      }
+      if (payment.f24standard) {
+        extMock.onPost(`https://mocked-url.com`).reply(200, payment.f24standard.file.data, {
+          'x-amz-version-id': 'mocked-versionToken',
+        });
+      }
+    }
     const action = await store.dispatch(
       uploadNotificationPaymentDocument(newNotification.payment!)
     );
-    const payload = action.payload;
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
-    expect(payload).toEqual({
-      'MRARSS90P08H501Q': {
-        pagoPaForm: {
-          ...newNotification.payment!['MRARSS90P08H501Q'].pagoPaForm,
+    const response = {};
+    for (const [key, value] of Object.entries(newNotification.payment!)) {
+      response[key] = {};
+      if (value.pagoPaForm) {
+        response[key].pagoPaForm = {
+          ...value.pagoPaForm,
           ref: {
             key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
           },
-        },
-      },
-      'SRAGLL00P48H501U': {
-        pagoPaForm: {
-          ...newNotification.payment!['SRAGLL00P48H501U'].pagoPaForm,
+        };
+      }
+      if (value.f24flatRate) {
+        response[key].f24flatRate = {
+          ...value.f24flatRate,
           ref: {
             key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
           },
-        },
-        f24standard: {
-          ...newNotification.payment!['SRAGLL00P48H501U'].f24standard,
+        };
+      }
+      if (value.f24standard) {
+        response[key].f24standard = {
+          ...value.f24standard,
           ref: {
             key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
           },
-        },
-      },
-    });
+        };
+      }
+    }
+    expect(action.payload).toEqual(response);
+    extMock.restore();
   });
 
   it('Should be able to set isCompleted status', () => {
     const action = store.dispatch(setIsCompleted());
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setIsCompleted');
-    expect(payload).toEqual(void 0);
+    expect(action.payload).toEqual(void 0);
   });
 
   it('Should be able to create new notification', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'createNewNotification');
-    apiSpy.mockResolvedValue({
+    const mockResponse = {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
-    });
+    };
+    const mappedNotification = newNotificationMapper(newNotification);
+    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(200, mockResponse);
     const action = await store.dispatch(createNewNotification(newNotification));
-    const payload = action.payload;
     expect(action.type).toBe('createNewNotification/fulfilled');
-    expect(payload).toEqual({
-      notificationRequestId: 'mocked-notificationRequestId',
-      paProtocolNumber: 'mocked-paProtocolNumber',
-      idempotenceToken: 'mocked-idempotenceToken',
-    });
+    expect(action.payload).toEqual(mockResponse);
   });
 
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
-    const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/resetState');
-    expect(payload).toEqual(undefined);
+    expect(action.payload).toEqual(undefined);
     const state = store.getState().newNotificationState;
     expect(state).toEqual(initialState);
   });

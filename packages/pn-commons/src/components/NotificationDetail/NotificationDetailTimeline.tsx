@@ -1,16 +1,17 @@
 import { Fragment, useState } from 'react';
-import { Typography, Grid, Drawer, Box } from '@mui/material';
+
 import CloseIcon from '@mui/icons-material/Close';
+import { Box, Drawer, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import {
   LegalFactId,
-  NotificationStatusHistory,
-  NotificationDetailRecipient,
   NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
 } from '../../types';
-import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -94,7 +95,13 @@ const NotificationDetailTimeline = ({
 
   return (
     <Fragment>
-      <Grid container direction="row" justifyContent="space-between" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        data-testid="NotificationDetailTimeline"
+      >
         <Grid item>
           <Typography
             id="notification-state"

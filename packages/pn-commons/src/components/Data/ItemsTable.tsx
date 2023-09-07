@@ -1,5 +1,5 @@
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -7,13 +7,13 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Box,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { Column, Item, Sort } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { Column, Item, Sort } from '../../types';
 import { buttonNakedInheritStyle } from '../../utils';
 
 type Props<ColumnId> = {
@@ -27,6 +27,8 @@ type Props<ColumnId> = {
   onChangeSorting?: (s: Sort<ColumnId>) => void;
   /** Table title used in aria-label */
   ariaTitle?: string;
+  /** Table test id */
+  testId?: string;
 };
 
 function ItemsTable<ColumnId extends string>({
@@ -35,6 +37,7 @@ function ItemsTable<ColumnId extends string>({
   sort,
   onChangeSorting,
   ariaTitle,
+  testId = 'table(notifications)',
 }: Props<ColumnId>) {
   const sortHandler = (property: ColumnId) => () => {
     if (sort && onChangeSorting) {
@@ -72,7 +75,7 @@ function ItemsTable<ColumnId extends string>({
               ? ariaTitle
               : getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
           }
-          data-testid="table(notifications)"
+          data-testid={testId}
         >
           <TableHead role="rowgroup">
             <TableRow role="row">
@@ -112,7 +115,7 @@ function ItemsTable<ColumnId extends string>({
             {rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-testid="table(notifications).row"
+                data-testid={`${testId}.row`}
                 role="row"
                 aria-rowindex={index + 1}
               >

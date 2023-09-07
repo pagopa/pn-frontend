@@ -1,30 +1,30 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { appStateActions } from '../redux';
 
-import { AppResponsePublisher } from '../utils/AppResponse';
+import { appStateActions } from '../redux';
 import { AppResponse } from '../types/AppResponse';
+import { AppResponsePublisher } from '../utils/AppResponse';
 
 const AppResponseMessage = () => {
   const dispatch = useDispatch();
-  
+
   const showErrorMessage = (response: AppResponse) => {
     const { errors, action } = response;
-    
-    errors?.forEach(error => {
+
+    errors?.forEach((error) => {
       dispatch(
         appStateActions.addError({
           title: error.message.title,
-          message:error.message.content,
-          action
-        }),
+          message: error.message.content,
+          action,
+        })
       );
     });
   };
 
   useEffect(() => {
     AppResponsePublisher.error.subscribe(showErrorMessage);
-    
+
     return () => {
       AppResponsePublisher.error.unsubscribe(showErrorMessage);
     };
