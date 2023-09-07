@@ -51,16 +51,34 @@ export const payments: Array<NotificationDetailPayment> = [
       },
     },
     f24: {
-      metadataAttachment: 'metadata-mocked',
-      applyCost: false,
       title: 'F24 seconda rata TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
     },
   },
   {
     f24: {
-      metadataAttachment: 'metadata-mocked',
+      title: 'F24 terza terza TARI',
       applyCost: false,
-      title: 'F24 seconda terza TARI',
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
     },
   },
 ];

@@ -18,7 +18,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
-  PaymentHistory,
+  PaymentDetails,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
@@ -857,25 +857,25 @@ const populateOtherDocuments = (
 /**
  * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
- * @param  {Array<PaymentHistory>} pagoPaF24Payemnts
+ * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
- * @returns Array<PaymentHistory>
+ * @returns Array<PaymentDetails>
  */
 export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  pagoPaF24Payemnts: Array<PaymentHistory>,
+  pagoPaF24Payemnts: Array<PaymentDetails>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
-): Array<PaymentHistory> => {
-  const paymentHistory: Array<PaymentHistory> = [];
+): Array<PaymentDetails> => {
+  const paymentHistory: Array<PaymentDetails> = [];
 
   if (!pagoPaF24Payemnts || pagoPaF24Payemnts.length === 0) {
     return [];
   }
 
-  // 3. Get all timeline steps that have category payment
+  // 1. Get all timeline steps that have category payment
   const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
 
-  // populate payment history array with the informations from timeline and related recipients
+  // 2. populate payment history array with the informations from timeline and related recipients
   for (const userPayment of pagoPaF24Payemnts) {
     if (!userPayment.pagoPA) {
       continue;
@@ -892,7 +892,7 @@ export const populatePaymentsPagoPaF24 = (
       continue;
     }
 
-    // 4. Get payment by creditorTaxId and noticeCode from checkout
+    // 3. Get payment by creditorTaxId and noticeCode from checkout
     const checkoutPayment = checkoutPayments.find(
       (p) =>
         p.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
@@ -928,7 +928,7 @@ export const populatePaymentsPagoPaF24 = (
     paymentHistory.push({
       pagoPA: pagoPAPayment,
       f24: userPayment.f24,
-    } as PaymentHistory);
+    } as PaymentDetails);
   }
 
   return paymentHistory;

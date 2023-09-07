@@ -30,10 +30,12 @@ export interface NotificationDetail {
   otherDocuments?: Array<NotificationDetailDocument>;
 }
 
-export type PagoPAPaymentHistory = PagoPAPaymentDetails & PaidDetails & ExtRegistriesPaymentDetails;
+export type PagoPAPaymentFullDetails = PagoPAPaymentDetails &
+  PaidDetails &
+  ExtRegistriesPaymentDetails;
 
-export interface PaymentHistory {
-  pagoPA?: PagoPAPaymentHistory;
+export interface PaymentDetails {
+  pagoPA?: PagoPAPaymentFullDetails;
   f24?: F24PaymentDetails;
   isLoading?: boolean; // only fe
 }
@@ -257,7 +259,7 @@ export interface PagoPAPaymentDetails {
 export interface F24PaymentDetails {
   title: string;
   applyCost: boolean;
-  metadataAttachment: any; // TODO replace any with Attachment type
+  metadataAttachment: Attachment;
 }
 
 export interface NotificationDetailPayment {

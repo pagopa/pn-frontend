@@ -24,9 +24,9 @@ import {
 import {
   AppIoCourtesyMessageEventType,
   NotificationDetailOtherDocument,
-  PagoPAPaymentHistory,
+  PagoPAPaymentFullDetails,
   PaidDetails,
-  PaymentHistory,
+  PaymentDetails,
   PaymentStatus,
 } from '../../types/NotificationDetail';
 import {
@@ -1815,11 +1815,11 @@ describe('Populate payment history', () => {
   });
 
   it('With empty timeline it should return the mapped array with only external registry info', () => {
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
       return {
         pagoPA: item.pagoPA ? { ...item.pagoPA, ...paymentInfo[index] } : undefined,
         f24: item.f24,
-      } as PaymentHistory;
+      } as PaymentDetails;
     });
 
     const mappedPayments = populatePaymentHistory(
@@ -1833,7 +1833,7 @@ describe('Populate payment history', () => {
   });
 
   it('When populatePaymentHistory receive only one payment from checkout it should map only this payment', () => {
-    let res: Array<PaymentHistory> = [];
+    let res: Array<PaymentDetails> = [];
     let singlePaymentInfo = paymentInfo[0];
 
     recipient.payments!.forEach((item, index) => {
@@ -1856,7 +1856,7 @@ describe('Populate payment history', () => {
           {
             pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
             f24: item.f24,
-          } as PaymentHistory,
+          } as PaymentDetails,
         ];
       }
       if (!item.pagoPA && item.f24) {
@@ -1865,7 +1865,7 @@ describe('Populate payment history', () => {
           {
             pagoPA: undefined,
             f24: item.f24,
-          } as PaymentHistory,
+          } as PaymentDetails,
         ];
       }
     });
@@ -1882,7 +1882,7 @@ describe('Populate payment history', () => {
   });
 
   it('With empty external registry it should return the mapped array with only timeline info', () => {
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
       const timelineEvent = notificationToFe.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&
@@ -1891,7 +1891,7 @@ describe('Populate payment history', () => {
       )?.details;
 
       const pagoPAPayment = item.pagoPA
-        ? ({ ...item.pagoPA, ...timelineEvent } as PagoPAPaymentHistory)
+        ? ({ ...item.pagoPA, ...timelineEvent } as PagoPAPaymentFullDetails)
         : undefined;
       if (timelineEvent && pagoPAPayment) {
         pagoPAPayment.status = PaymentStatus.SUCCEEDED;
@@ -1900,7 +1900,7 @@ describe('Populate payment history', () => {
       return {
         pagoPA: pagoPAPayment,
         f24: item.f24,
-      } as PaymentHistory;
+      } as PaymentDetails;
     });
 
     const mappedPayments = populatePaymentHistory(
@@ -1914,7 +1914,7 @@ describe('Populate payment history', () => {
   });
 
   it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
       const checkoutSucceded =
         item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
           ? paymentInfo[index]
@@ -1932,7 +1932,7 @@ describe('Populate payment history', () => {
           ? { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent }
           : undefined,
         f24: item.f24,
-      } as PaymentHistory;
+      } as PaymentDetails;
     });
 
     const mappedPayments = populatePaymentHistory(
@@ -1951,7 +1951,7 @@ describe('Populate payment history', () => {
       amount: undefined,
     }));
 
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = recipient.payments!.map((item, index) => {
       const checkoutSucceded =
         item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
           ? paymentInfo[index]
@@ -1969,7 +1969,7 @@ describe('Populate payment history', () => {
           ? { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent }
           : undefined,
         f24: item.f24,
-      } as PaymentHistory;
+      } as PaymentDetails;
     });
 
     const mappedPayments = populatePaymentHistory(

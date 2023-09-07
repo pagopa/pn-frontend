@@ -8,7 +8,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaymentAttachmentSName,
-  PaymentHistory,
+  PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
   PhysicalCommunicationType,
@@ -63,7 +63,7 @@ const initialState = {
   f24AttachmentUrl: '',
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
-  paymentInfo: [] as Array<PaymentHistory>,
+  paymentInfo: [] as Array<PaymentDetails>,
   downtimeEvents: [] as Array<Downtime>,
 };
 

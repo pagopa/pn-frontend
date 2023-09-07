@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Chip, Grid, Typography } from '@mui/material';
 import {
-  PagoPAPaymentHistory,
+  PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
   PaymentStatus,
   downloadDocument,
@@ -16,7 +16,7 @@ import { trackEventByType } from '../../../utils/mixpanel';
 
 type Props = {
   iun: string;
-  payment: PagoPAPaymentHistory;
+  payment: PagoPAPaymentFullDetails;
 };
 
 const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {

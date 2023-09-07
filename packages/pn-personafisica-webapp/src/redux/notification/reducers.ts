@@ -7,9 +7,9 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PagoPAPaymentHistory,
+  PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
-  PaymentHistory,
+  PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
   PhysicalCommunicationType,
@@ -63,9 +63,8 @@ const initialState = {
   f24AttachmentUrl: '',
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
-  // paymentInfo: [] as Array<PaymentHistory>,
   paymentsData: {
-    pagoPaF24: [] as Array<PaymentHistory>,
+    pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
   },
   downtimeEvents: [] as Array<Downtime>,
@@ -92,7 +91,7 @@ const notificationSlice = createSlice({
       )?.payments;
 
       if (paymentsOfRecipient) {
-        const f24PaymentHistory = paymentsOfRecipient.reduce((arr, payment) => {
+        const f24Payments = paymentsOfRecipient.reduce((arr, payment) => {
           if (!payment.pagoPA && payment.f24) {
             // eslint-disable-next-line functional/immutable-data
             arr.push(payment.f24);
@@ -100,24 +99,24 @@ const notificationSlice = createSlice({
           return arr;
         }, [] as Array<F24PaymentDetails>);
 
-        const pagoPaPaymentHistory = paymentsOfRecipient.reduce((arr, payment) => {
+        const pagoPAPaymentFullDetails = paymentsOfRecipient.reduce((arr, payment) => {
           if (payment.pagoPA) {
             // eslint-disable-next-line functional/immutable-data
             arr.push({
-              pagoPA: payment.pagoPA as PagoPAPaymentHistory,
+              pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
               f24: payment.f24,
               isLoading: true,
             });
           }
           return arr;
-        }, [] as Array<PaymentHistory>);
+        }, [] as Array<PaymentDetails>);
 
-        if (pagoPaPaymentHistory) {
-          state.paymentsData.pagoPaF24 = pagoPaPaymentHistory;
+        if (pagoPAPaymentFullDetails) {
+          state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
         }
 
-        if (f24PaymentHistory) {
-          state.paymentsData.f24Only = f24PaymentHistory;
+        if (f24Payments) {
+          state.paymentsData.f24Only = f24Payments;
         }
       }
       state.notification = action.payload;
@@ -174,21 +173,6 @@ const notificationSlice = createSlice({
       }
     });
     builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
-      // const paymentHistory = populatePaymentsPagoPaF24(
-      //   action.meta.arg.taxId,
-      //   state.notification.timeline,
-      //   state.notification.recipients,
-      //   action.meta.arg.paymentInfoRequest as Array<ExtRegistriesPaymentDetails>
-      // );
-
-      // if (action.meta.arg.paymentInfoRequest.length > 1) {
-      //   state.paymentsData.pagoPaF24 = paymentHistory.map((payment) => ({
-      //     ...payment,
-      //     isLoading: true,
-      //   }));
-      //   return;
-      // }
-
       if (action.meta.arg.paymentInfoRequest.length === 1) {
         const payment = state.paymentsData.pagoPaF24.find(
           (payment) =>
@@ -200,7 +184,6 @@ const notificationSlice = createSlice({
           payment.isLoading = true;
           return;
         }
-        state.paymentsData.pagoPaF24 = [{ ...state.paymentsData.pagoPaF24[0], isLoading: true }];
       }
     });
     builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
@@ -213,15 +196,17 @@ const notificationSlice = createSlice({
       );
 
       if (paymentInfo && paymentInfo.pagoPA) {
-        const updatedPaymentInfo: PaymentHistory = {
-          ...paymentInfo?.f24,
-          pagoPA: {
-            ...paymentInfo?.pagoPA,
-            status: PaymentStatus.FAILED,
-            detail: PaymentInfoDetail.GENERIC_ERROR,
+        state.paymentsData.pagoPaF24 = [
+          ...state.paymentsData.pagoPaF24,
+          {
+            ...paymentInfo?.f24,
+            pagoPA: {
+              ...paymentInfo?.pagoPA,
+              status: PaymentStatus.FAILED,
+              detail: PaymentInfoDetail.GENERIC_ERROR,
+            },
           },
-        };
-        state.paymentsData.pagoPaF24 = [...state.paymentsData.pagoPaF24, updatedPaymentInfo];
+        ];
       }
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {

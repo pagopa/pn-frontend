@@ -6,8 +6,8 @@ import {
   F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
-  PagoPAPaymentHistory,
-  PaymentHistory,
+  PagoPAPaymentFullDetails,
+  PaymentDetails,
   RecipientType,
   populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
@@ -54,7 +54,7 @@ const renderSelectValue = (
 const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline }) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
-  const [paymentHistory, setPaymentHistory] = useState<Array<PaymentHistory>>(
+  const [paymentHistory, setPaymentHistory] = useState<Array<PaymentDetails>>(
     recipients.length === 1
       ? populatePaymentHistory(recipients[0].taxId, timeline, recipients, [])
       : []
@@ -65,13 +65,13 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
     setPaymentHistory(populatePaymentHistory(event.target.value, timeline, recipients, []));
   };
 
-  const pagoPAPaymentHistory = paymentHistory.reduce((arr, payment) => {
+  const PagoPAPaymentFullDetails = paymentHistory.reduce((arr, payment) => {
     if (payment.pagoPA) {
       // eslint-disable-next-line functional/immutable-data
       arr.push(payment.pagoPA);
     }
     return arr;
-  }, [] as Array<PagoPAPaymentHistory>);
+  }, [] as Array<PagoPAPaymentFullDetails>);
 
   const f24PaymentHistory = paymentHistory.reduce((arr, payment) => {
     if (payment.f24) {
@@ -86,14 +86,16 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       <Typography variant="h6">{t('payment.title', { ns: 'notifiche' })}</Typography>
       {recipients.length === 1 && (
         <Typography variant="body2" my={2}>
-          {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length === 0
+          {f24PaymentHistory.length > 0 && PagoPAPaymentFullDetails.length === 0
             ? t('payment.subtitle-single-f24', { ns: 'notifiche' })
             : t('payment.subtitle-single', { ns: 'notifiche' })}
         </Typography>
       )}
       {recipients.length > 1 && (
         <Typography variant="body2" my={2}>
-          {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length === 0 && recipientSelected
+          {f24PaymentHistory.length > 0 &&
+          PagoPAPaymentFullDetails.length === 0 &&
+          recipientSelected
             ? t('payment.subtitle-multiple-f24', { ns: 'notifiche' })
             : t('payment.subtitle-multiple', { ns: 'notifiche' })}
         </Typography>
@@ -119,11 +121,11 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
           {recipients.map((recipient, index) => renderRecipientMenuItem(index, recipient, t))}
         </TextField>
       )}
-      {pagoPAPaymentHistory.length > 0 &&
-        pagoPAPaymentHistory.map((payment) => (
+      {PagoPAPaymentFullDetails.length > 0 &&
+        PagoPAPaymentFullDetails.map((payment) => (
           <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
         ))}
-      {f24PaymentHistory.length > 0 && pagoPAPaymentHistory.length > 0 && (
+      {f24PaymentHistory.length > 0 && PagoPAPaymentFullDetails.length > 0 && (
         <Divider sx={{ my: 2 }} />
       )}
       {f24PaymentHistory.length > 0 && (

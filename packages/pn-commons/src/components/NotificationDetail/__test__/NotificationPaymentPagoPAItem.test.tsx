@@ -3,8 +3,8 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
 import {
-  PagoPAPaymentHistory,
-  PaymentHistory,
+  PagoPAPaymentFullDetails,
+  PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../../types';
@@ -12,14 +12,14 @@ import { formatEurocentToCurrency, populatePaymentHistory } from '../../../utils
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
-  const pagoPAItems: PaymentHistory[] = populatePaymentHistory(
+  const pagoPAItems: PaymentDetails[] = populatePaymentHistory(
     recipient.taxId,
     notificationToFe.timeline,
     notificationToFe.recipients,
     paymentInfo
   );
 
-  const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentHistory;
+  const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentFullDetails;
 
   it('renders NotificationPaymentPagoPAItem - should show radio button when status is REQUIRED', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };

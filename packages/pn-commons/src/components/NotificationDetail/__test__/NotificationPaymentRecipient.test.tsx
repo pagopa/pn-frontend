@@ -5,7 +5,7 @@ import { notificationToFe, recipient } from '../../../__mocks__/NotificationDeta
 import { fireEvent, render, waitFor } from '../../../test-utils';
 import { populatePaymentHistory } from '../../../utils';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
-import { PaymentHistory, PaymentStatus } from '../../../types';
+import { PaymentDetails, PaymentStatus } from '../../../types';
 
 describe('NotificationPaymentRecipient Component', () => {
   const mappedPayments = populatePaymentHistory(
@@ -167,7 +167,7 @@ describe('NotificationPaymentRecipient Component', () => {
           status: PaymentStatus.REQUIRED,
         },
       },
-    ] as PaymentHistory[];
+    ] as PaymentDetails[];
 
     const result = render(
       <NotificationPaymentRecipient

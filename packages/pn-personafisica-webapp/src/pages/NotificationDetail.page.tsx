@@ -19,7 +19,7 @@ import {
   NotificationRelatedDowntimes,
   NotificationStatus,
   PaymentAttachmentSName,
-  PaymentHistory,
+  PaymentDetails,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
@@ -266,7 +266,7 @@ const NotificationDetail = () => {
   }, []);
 
   const fetchPaymentsInfo = useCallback(
-    (payments: Array<PaymentHistory | NotificationDetailPayment>) => {
+    (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
       const paymentInfoRequest = payments.reduce((acc: any, payment) => {
         if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
           acc.push({

@@ -7,11 +7,9 @@ import { F24PaymentDetails } from '../../types';
 
 interface Props {
   f24Item: F24PaymentDetails;
-  loading: boolean;
 }
 
-const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, loading }) => {
-  console.log(loading);
+const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item }) => {
   const isMobile = useIsMobile();
   return (
     <Box

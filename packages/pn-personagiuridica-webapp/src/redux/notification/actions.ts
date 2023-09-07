@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
-  PaymentHistory,
+  PaymentDetails,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -79,7 +79,7 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  Array<PaymentHistory>,
+  Array<PaymentDetails>,
   { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
   { state: RootState }
 >(

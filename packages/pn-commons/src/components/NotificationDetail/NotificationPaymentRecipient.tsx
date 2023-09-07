@@ -1,14 +1,14 @@
-import React, { Fragment, memo, useEffect, useState } from 'react';
 import { Download } from '@mui/icons-material/';
 import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
+import React, { Fragment, memo, useState } from 'react';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
   F24PaymentDetails,
   NotificationDetailPayment,
-  PagoPAPaymentHistory,
+  PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
-  PaymentHistory,
+  PaymentDetails,
   PaymentStatus,
 } from '../../types';
 import { formatEurocentToCurrency } from '../../utils';
@@ -16,7 +16,7 @@ import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
 type PaymentsData = {
-  pagoPaF24: Array<PaymentHistory>;
+  pagoPaF24: Array<PaymentDetails>;
   f24Only: Array<F24PaymentDetails>;
 };
 
@@ -24,7 +24,7 @@ type Props = {
   payments: PaymentsData;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
-  handleReloadPayment: (payment: Array<PaymentHistory | NotificationDetailPayment>) => void;
+  handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -37,7 +37,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const isSinglePayment = pagoPaF24.length === 1;
 
-  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentHistory | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(
+    isSinglePayment ? pagoPaF24[0].pagoPA ?? null : null
+  );
 
   const allPaymentsIsPaid = pagoPaF24.every(
     (payment) => payment.pagoPA?.status === PaymentStatus.SUCCEEDED
@@ -84,12 +86,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const handleDeselectPayment = () => {
     setSelectedPayment(null);
   };
-
-  useEffect(() => {
-    if (isSinglePayment) {
-      setSelectedPayment(pagoPaF24[0].pagoPA || null);
-    }
-  }, [payments]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
@@ -187,7 +183,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
       {f24Only.map((f24Item, index) => (
         <Box key={index}>
-          <NotificationPaymentF24Item f24Item={f24Item} loading={false} />
+          <NotificationPaymentF24Item f24Item={f24Item} />
         </Box>
       ))}
     </Box>
