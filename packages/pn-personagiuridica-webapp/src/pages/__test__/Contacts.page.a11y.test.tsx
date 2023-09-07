@@ -1,5 +1,7 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import { axe, mockApi, render, act, RenderResult } from '../../__test__/test-utils';
+
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import Contacts from '../Contacts.page';
@@ -29,9 +31,23 @@ const initialState = {
 };
 
 describe('Contacts page - accessibility tests', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('is contact page accessible', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
-    let result: RenderResult | undefined;
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
     await act(async () => {
       result = render(<Contacts />, initialState);
     });

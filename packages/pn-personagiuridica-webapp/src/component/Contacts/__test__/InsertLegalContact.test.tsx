@@ -1,9 +1,10 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { render, fireEvent, waitFor, screen, mockApi } from '../../../__test__/test-utils';
-import { LegalChannelType } from '../../../models/contacts';
+import { RenderResult, fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
+import { LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 
@@ -16,8 +17,23 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('InsertLegalContact component', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('renders InsertLegalContact', async () => {
-    const result = render(
+    result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
       </DigitalContactsCodeVerificationProvider>
@@ -33,7 +49,7 @@ describe('InsertLegalContact component', () => {
   });
 
   it('checks invalid pec - 1', async () => {
-    const result = render(
+    result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
       </DigitalContactsCodeVerificationProvider>
@@ -50,7 +66,7 @@ describe('InsertLegalContact component', () => {
   });
 
   it('checks invalid pec - 2', async () => {
-    const result = render(
+    result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
       </DigitalContactsCodeVerificationProvider>
@@ -67,7 +83,7 @@ describe('InsertLegalContact component', () => {
   });
 
   it('checks valid pec', async () => {
-    const result = render(
+    result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
       </DigitalContactsCodeVerificationProvider>
@@ -83,21 +99,18 @@ describe('InsertLegalContact component', () => {
   });
 
   it('adds pec - validation required', async () => {
-    const mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
-      value: 'mail@valida.com',
-    });
-    mockApi(
-      mock,
-      'POST',
-      LEGAL_CONTACT('default', LegalChannelType.PEC),
-      200,
-      {
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+        value: 'mail@valida.com',
+      })
+      .reply(200);
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
         value: 'mail@valida.com',
         verificationCode: '01234',
-      },
-      { result: 'PEC_VALIDATION_REQUIRED' }
-    );
-    const result = render(
+      })
+      .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
+    result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
       </DigitalContactsCodeVerificationProvider>
@@ -133,19 +146,19 @@ describe('InsertLegalContact component', () => {
     expect(dialog).not.toBeInTheDocument();
     const validationDialog = await waitFor(() => screen.queryByTestId('validationDialog'));
     expect(validationDialog).toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 
   it('adds pec - validation not required', async () => {
-    const mock = mockApi(apiClient, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 200, {
-      value: 'mail@valida.com',
-    });
-    mockApi(mock, 'POST', LEGAL_CONTACT('default', LegalChannelType.PEC), 204, {
-      value: 'mail@valida.com',
-      verificationCode: '01234',
-    });
-    const result = render(
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), { value: 'mail@valida.com' })
+      .reply(200);
+    mock
+      .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
+        value: 'mail@valida.com',
+        verificationCode: '01234',
+      })
+      .reply(204);
+    result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
       </DigitalContactsCodeVerificationProvider>
@@ -181,7 +194,5 @@ describe('InsertLegalContact component', () => {
     expect(dialog).not.toBeInTheDocument();
     const validationDialog = await waitFor(() => screen.queryByTestId('validationDialog'));
     expect(validationDialog).not.toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 });

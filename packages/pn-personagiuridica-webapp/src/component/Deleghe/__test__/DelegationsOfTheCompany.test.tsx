@@ -1,17 +1,18 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+
 import {
-  testAutocomplete,
+  RenderResult,
+  act,
+  fireEvent,
   render,
   screen,
+  testAutocomplete,
   waitFor,
-  fireEvent,
   within,
-  mockApi,
-  act,
 } from '../../../__test__/test-utils';
-import { arrayOfDelegators, initialState } from '../../../redux/delegation/__test__/test.utils';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
@@ -20,6 +21,8 @@ import {
   UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
+import { arrayOfDelegators, initialState } from '../../../redux/delegation/__test__/test.utils';
+import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
 jest.mock('react-i18next', () => ({
@@ -64,8 +67,23 @@ export async function testMultiSelect(
 }
 
 describe('DelegationsOfTheCompany Component - assuming API works properly', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('renders the empty state', () => {
-    const result = render(<DelegationsOfTheCompany />, {
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: initialState,
       },
@@ -82,7 +100,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
   });
 
   it('renders the table', () => {
-    const result = render(<DelegationsOfTheCompany />, {
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -105,21 +123,16 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
   });
 
   it('filters the results', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }),
-      200,
-      {
+    mock
+      .onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }), {
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
-      },
-      {
+      })
+      .reply(200, {
         resultsPage: [arrayOfDelegators[1]],
         moreResult: false,
         nextPagesKey: [],
-      }
-    );
+      });
     const groups = [
       {
         id: 'group-1',
@@ -137,7 +150,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       { id: DelegationStatus.PENDING, name: 'deleghe.table.pending' },
       { id: DelegationStatus.REJECTED, name: 'deleghe.table.rejected' },
     ];
-    const result = render(<DelegationsOfTheCompany />, {
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -172,17 +185,15 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(result.container).toHaveTextContent(/davide legato/i);
       expect(cancelButton).toBeEnabled();
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('change pagination size', async () => {
-    const mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 20 }), 200, undefined, {
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 20 })).reply(200, {
       resultsPage: [arrayOfDelegators[1]],
       moreResult: false,
       nextPagesKey: [],
     });
-    const result = render(<DelegationsOfTheCompany />, {
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -211,24 +222,15 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('change pagination page', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: 'page-1' }),
-      200,
-      undefined,
-      {
-        resultsPage: [arrayOfDelegators[1]],
-        moreResult: false,
-        nextPagesKey: [],
-      }
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: 'page-1' })).reply(200, {
+      resultsPage: [arrayOfDelegators[1]],
+      moreResult: false,
+      nextPagesKey: [],
+    });
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -262,18 +264,11 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(result.container).not.toHaveTextContent(/marco verdi/i);
       expect(result.container).toHaveTextContent(/davide legato/i);
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('test reject delegation', async () => {
-    const mock = mockApi(
-      apiClient,
-      'PATCH',
-      REJECT_DELEGATION(arrayOfDelegators[0].mandateId),
-      204
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPatch(REJECT_DELEGATION(arrayOfDelegators[0].mandateId)).reply(204);
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -307,18 +302,11 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     expect(table).toBeInTheDocument();
     expect(table).not.toHaveTextContent('Marco Verdi');
     expect(table).toHaveTextContent('Davide Legato');
-    mock.reset();
-    mock.restore();
   });
 
   it('test accept delegation', async () => {
-    const mock = mockApi(
-      apiClient,
-      'PATCH',
-      ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId),
-      204
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPatch(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId)).reply(204);
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -356,8 +344,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(dialog).not.toBeInTheDocument();
     });
     expect(acceptButton).not.toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 
   it('test update delegation', async () => {
@@ -366,13 +352,8 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
       { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
     ];
-    const mock = mockApi(
-      apiClient,
-      'PATCH',
-      UPDATE_DELEGATION(arrayOfDelegators[1].mandateId),
-      204
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPatch(UPDATE_DELEGATION(arrayOfDelegators[1].mandateId)).reply(204);
+    result = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -414,8 +395,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     });
     table = result.getByTestId('table(notifications)');
     expect(table).toHaveTextContent('Group 3');
-    mock.reset();
-    mock.restore();
   });
 });
 

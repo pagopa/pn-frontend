@@ -1,13 +1,15 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   ResponseEventDispatcher,
+  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
 
-import { render, act, fireEvent, screen, mockApi } from '../../__test__/test-utils';
-import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
+import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import Contacts from '../Contacts.page';
 
 jest.mock('react-i18next', () => ({
@@ -59,13 +61,25 @@ const initialState = {
 };
 
 describe('Contacts page - assuming contact API works properly', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
   afterAll(() => {
+    mock.restore();
     jest.resetAllMocks();
   });
 
   it('renders Contacts (no contacts)', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
-    let result;
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
+
     await act(async () => {
       result = await render(<Contacts />, initialState);
     });
@@ -75,13 +89,10 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(result.container).toHaveTextContent(/CourtesyContacts/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/address-book/v1/digital-address');
-    mock.reset();
-    mock.restore();
   });
 
   it('subtitle link properly redirects to profile page', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
-    let result;
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
     await act(async () => {
       result = await render(<Contacts />, initialState);
     });
@@ -91,22 +102,32 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(subtitleLink).toBeInTheDocument();
     fireEvent.click(subtitleLink);
     expect(spyWindowOpen).toHaveBeenCalledTimes(1);
-    mock.reset();
-    mock.restore();
   });
 });
 
 describe('Contacts Page - different contact API behaviors', () => {
+  let mock: MockAdapter;
+
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   afterEach(() => {
     apiOutcomeTestHelper.clearMock();
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+    jest.resetAllMocks();
   });
 
   it('API error', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 500);
+    mock.onGet(CONTACTS_LIST()).reply(500, []);
     await act(
       async () =>
         void render(
@@ -118,12 +139,10 @@ describe('Contacts Page - different contact API behaviors', () => {
         )
     );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
-    mock.reset();
-    mock.restore();
   });
 
   it('API OK', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
+    mock.onGet(CONTACTS_LIST()).reply(200, []);
     await act(
       async () =>
         void render(
@@ -135,7 +154,5 @@ describe('Contacts Page - different contact API behaviors', () => {
         )
     );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
-    mock.reset();
-    mock.restore();
   });
 });
