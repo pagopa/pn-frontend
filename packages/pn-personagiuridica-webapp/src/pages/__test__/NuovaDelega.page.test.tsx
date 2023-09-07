@@ -3,7 +3,7 @@ import React from 'react';
 
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-import { mockCreateDelegation } from '../../__mocks__/delegations.mock';
+import { mockCreateDelegation } from '../../__mocks__/Delegations.mock';
 import {
   RenderResult,
   fireEvent,

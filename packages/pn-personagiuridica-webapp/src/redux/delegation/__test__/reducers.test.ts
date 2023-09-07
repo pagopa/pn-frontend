@@ -5,7 +5,7 @@ import {
   arrayOfDelegates,
   arrayOfDelegators,
   initialState,
-} from '../../../__mocks__/delegations.mock';
+} from '../../../__mocks__/Delegations.mock';
 import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
