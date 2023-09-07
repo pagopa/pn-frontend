@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { act, RenderResult } from "@testing-library/react";
-import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
-import { axe, render } from '../../../__test__/test-utils';
+
+import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import DesktopNotifications from '../DesktopNotifications';
 
 jest.mock('react-i18next', () => ({
@@ -11,10 +11,8 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-
 describe('DesktopNotifications Component - accessibility tests', () => {
   it('does not have basic accessibility issues', async () => {
-    // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
     await act(async () => {
       result = await render(
@@ -22,7 +20,7 @@ describe('DesktopNotifications Component - accessibility tests', () => {
           notifications={notificationsToFe.resultsPage}
           sort={{ orderBy: '', order: 'asc' }}
         />
-      )
+      );
     });
 
     if (result) {
@@ -38,11 +36,8 @@ describe('DesktopNotifications Component - accessibility tests', () => {
     let result: RenderResult | undefined;
     await act(async () => {
       result = await render(
-        <DesktopNotifications
-          notifications={[]}
-          sort={{ orderBy: '', order: 'asc' }}
-        />
-      )
+        <DesktopNotifications notifications={[]} sort={{ orderBy: '', order: 'asc' }} />
+      );
     });
 
     if (result) {

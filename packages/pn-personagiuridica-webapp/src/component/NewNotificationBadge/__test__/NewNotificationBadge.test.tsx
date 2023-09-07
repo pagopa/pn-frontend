@@ -1,4 +1,7 @@
+import React from 'react';
+
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
 import { render } from '../../../__test__/test-utils';
 import { getNewNotificationBadge } from '../NewNotificationBadge';
 

@@ -1,21 +1,22 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
+import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import {
-  render,
+  RenderResult,
   fireEvent,
-  waitFor,
+  render,
   screen,
   testAutocomplete,
-  mockApi,
+  waitFor,
 } from '../../../__test__/test-utils';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
+import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
   UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
-import { apiClient } from '../../../api/apiClients';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
@@ -29,8 +30,23 @@ jest.mock('react-i18next', () => ({
 const actionCbk = jest.fn();
 
 describe('DelegationElements', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('renders the Menu closed', () => {
-    const result = render(<Menu menuType="delegates" id="111" />);
+    result = render(<Menu menuType="delegates" id="111" />);
     const menuIcon = result.queryByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
 
@@ -39,7 +55,7 @@ describe('DelegationElements', () => {
   });
 
   it('opens the delegate Menu', () => {
-    const result = render(<Menu menuType="delegates" id="111" />);
+    result = render(<Menu menuType="delegates" id="111" />);
     const menuIcon = result.getByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
 
@@ -53,7 +69,7 @@ describe('DelegationElements', () => {
   });
 
   it('opens the delegator Menu', () => {
-    const result = render(<Menu menuType="delegators" id="111" />);
+    result = render(<Menu menuType="delegators" id="111" />);
     const menuIcon = result.getByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
 
@@ -66,20 +82,20 @@ describe('DelegationElements', () => {
   });
 
   it('renders the OrganizationList with all notifications label', () => {
-    const result = render(<OrganizationsList organizations={[]} />);
+    result = render(<OrganizationsList organizations={[]} />);
 
     expect(result.container).toHaveTextContent(/deleghe.table.allNotifications/i);
   });
 
   it('renders the OrganizationList with one organization', () => {
-    const result = render(<OrganizationsList organizations={['Bollate']} />);
+    result = render(<OrganizationsList organizations={['Bollate']} />);
 
     expect(result.container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
     expect(result.container).toHaveTextContent(/Bollate/i);
   });
 
   it('renders the OrganizationList with multiple organizations and visibleItems set to 3', async () => {
-    const result = render(
+    result = render(
       <OrganizationsList
         organizations={['Bollate', 'Milano', 'Abbiategrasso', 'Malpensa']}
         visibleItems={3}
@@ -94,7 +110,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton - open the modal', async () => {
-    const result = render(<AcceptButton id="1" name="test" onAccept={actionCbk} />);
+    result = render(<AcceptButton id="1" name="test" onAccept={actionCbk} />);
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
     const button = result.queryByTestId('acceptButton') as Element;
     fireEvent.click(button);
@@ -103,7 +119,7 @@ describe('DelegationElements', () => {
   });
 
   it('renders the AcceptButton - close the modal', async () => {
-    const result = render(<AcceptButton id="1" name="test" onAccept={actionCbk} />);
+    result = render(<AcceptButton id="1" name="test" onAccept={actionCbk} />);
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
     const button = result.queryByTestId('acceptButton') as Element;
     fireEvent.click(button);
@@ -120,8 +136,8 @@ describe('DelegationElements', () => {
       { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
     ];
-    const mock = mockApi(apiClient, 'PATCH', ACCEPT_DELEGATION('4'), 204);
-    const result = render(<AcceptButton id="4" name="test" onAccept={actionCbk} />, {
+    mock.onPatch(ACCEPT_DELEGATION('4')).reply(204);
+    result = render(<AcceptButton id="4" name="test" onAccept={actionCbk} />, {
       preloadedState: {
         delegationsState: {
           groups,
@@ -173,7 +189,7 @@ describe('DelegationElements', () => {
 
   it('check verificationCode for delegates', async () => {
     const verificationCode = '123456';
-    const result = render(
+    result = render(
       <Menu
         menuType="delegates"
         id="111"
@@ -200,8 +216,8 @@ describe('DelegationElements', () => {
   });
 
   it('check revoke for delegatates', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION('111'), 204);
-    const result = render(
+    mock.onPatch(REVOKE_DELEGATION('111')).reply(204);
+    result = render(
       <Menu
         menuType="delegates"
         id="111"
@@ -223,12 +239,10 @@ describe('DelegationElements', () => {
       expect(showDialog).not.toBeInTheDocument();
     });
     expect(actionCbk).toBeCalledTimes(1);
-    mock.reset();
-    mock.restore();
   });
 
   it('check close confimationDialog', async () => {
-    const result = render(
+    result = render(
       <Menu menuType="delegates" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
     );
     const menuIcon = result.getByTestId('delegationMenuIcon');
@@ -246,9 +260,9 @@ describe('DelegationElements', () => {
   });
 
   it('check reject for delegator', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REJECT_DELEGATION('111'), 204);
+    mock.onPatch(REJECT_DELEGATION('111')).reply(204);
 
-    const result = render(
+    result = render(
       <Menu menuType="delegators" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
     );
     const menuIcon = result.getByTestId('delegationMenuIcon');
@@ -265,12 +279,10 @@ describe('DelegationElements', () => {
       expect(mock.history.patch[0].url).toContain('mandate/api/v1/mandate/111/reject');
       expect(showDialog).not.toBeInTheDocument();
     });
-    mock.reset();
-    mock.restore();
   });
 
   it("doesn't show the update button - delegator", async () => {
-    const result = render(
+    result = render(
       <Menu
         menuType="delegators"
         id="111"
@@ -290,7 +302,7 @@ describe('DelegationElements', () => {
       { id: 'group-2', name: 'Group 2' },
       { id: 'group-3', name: 'Group 3' },
     ];
-    const result = render(
+    result = render(
       <Menu
         menuType="delegators"
         id="111"
@@ -330,8 +342,8 @@ describe('DelegationElements', () => {
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
       { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
     ];
-    const mock = mockApi(apiClient, 'PATCH', UPDATE_DELEGATION('4'), 204);
-    const result = render(
+    mock.onPatch(UPDATE_DELEGATION('4')).reply(204);
+    result = render(
       <Menu
         menuType="delegators"
         id="4"

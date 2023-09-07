@@ -1,19 +1,20 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   NotificationDetailPayment,
-  ResponseEventDispatcher,
-  PaymentStatus,
-  PaymentInfoDetail,
-  RecipientType,
   PaymentInfo,
+  PaymentInfoDetail,
+  PaymentStatus,
+  RecipientType,
+  ResponseEventDispatcher,
+  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
 
-import { mockApi, render, screen, act, waitFor } from '../../../__test__/test-utils';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { act, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { NOTIFICATION_PAYMENT_INFO } from '../../../api/notifications/notifications.routes';
 import NotificationPayment from '../NotificationPayment';
 
@@ -126,24 +127,27 @@ const mocked_payments_detail = {
 describe('NotificationPayment component', () => {
   let mock: MockAdapter;
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
   function mockPaymentApi(responseBody: PaymentInfo) {
-    mock = mockApi(
-      apiClient,
-      'GET',
-      NOTIFICATION_PAYMENT_INFO(
-        mockedNotificationDetailPayment.creditorTaxId,
-        mockedNotificationDetailPayment.noticeCode!
-      ),
-      200,
-      null,
-      responseBody
-    );
+    mock
+      .onGet(
+        NOTIFICATION_PAYMENT_INFO(
+          mockedNotificationDetailPayment.creditorTaxId,
+          mockedNotificationDetailPayment.noticeCode!
+        )
+      )
+      .reply(200, responseBody);
   }
 
   afterEach(() => {
     mock.reset();
+  });
+
+  afterAll(() => {
     mock.restore();
-    mock.resetHistory();
   });
 
   it('renders properly while loading payment info', async () => {

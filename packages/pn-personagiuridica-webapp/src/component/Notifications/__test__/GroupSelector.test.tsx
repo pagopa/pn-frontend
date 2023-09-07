@@ -1,6 +1,14 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { fireEvent, mockApi, within, render, screen, waitFor } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import GroupSelector from '../GroupSelector';
@@ -15,12 +23,27 @@ jest.mock('react-i18next', () => ({
 const onGroupSelectionCbk = jest.fn();
 
 describe('GroupSelector component', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('checks that it opens and renders the children correctly', async () => {
-    const mock = mockApi(apiClient, 'GET', GET_GROUPS(), 200, undefined, [
+    mock.onGet(GET_GROUPS()).reply(200, [
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
     ]);
-    const result = render(
+    result = render(
       <GroupSelector currentGroup="group-1" onGroupSelection={onGroupSelectionCbk} />
     );
     await waitFor(() => {
@@ -41,7 +64,5 @@ describe('GroupSelector component', () => {
     await waitFor(() => {
       expect(dropdown).not.toBeInTheDocument();
     });
-    mock.reset();
-    mock.restore();
   });
 });

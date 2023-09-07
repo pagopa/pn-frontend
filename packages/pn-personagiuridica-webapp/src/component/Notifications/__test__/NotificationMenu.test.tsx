@@ -1,15 +1,15 @@
 import React from 'react';
-import NotificationMenu from "../NotificationMenu";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+
+import userEvent from '@testing-library/user-event';
+
+import { render, screen } from '../../../__test__/test-utils';
+import NotificationMenu from '../NotificationMenu';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 describe('NotificationMenu component', () => {
@@ -24,4 +24,4 @@ describe('NotificationMenu component', () => {
 
     expect(screen.queryByText('test text')).toBeInTheDocument();
   });
-})
+});

@@ -1,10 +1,11 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { fireEvent, mockApi, render, waitFor, within } from '../../../__test__/test-utils';
-import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
-import * as routes from '../../../navigation/routes.const';
-import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
+import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
+import { RenderResult, fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
+import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
 
 const mockNavigateFn = jest.fn();
@@ -22,13 +23,25 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('Delegates Component - assuming delegates API works properly', () => {
+  let mock: MockAdapter;
+  let result: RenderResult;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
   afterAll(() => {
     jest.resetAllMocks();
     jest.restoreAllMocks();
+    mock.restore();
   });
 
   it('renders the empty state', () => {
-    const result = render(<DelegatesByCompany />, {
+    result = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
           delegations: {
@@ -46,7 +59,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
   });
 
   it('render table with data', async () => {
-    const result = render(<DelegatesByCompany />, {
+    result = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
           delegations: {
@@ -64,7 +77,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
   });
 
   it('clicks on add button and navigate to new delegation page', () => {
-    const result = render(<DelegatesByCompany />);
+    result = render(<DelegatesByCompany />);
     const addButton = result.getByTestId('addDeleghe');
     fireEvent.click(addButton);
     expect(mockNavigateFn).toBeCalledTimes(1);
@@ -72,7 +85,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
   });
 
   it('visualize modal code and check code', async () => {
-    const result = render(<DelegatesByCompany />, {
+    result = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
           delegations: {
@@ -99,8 +112,8 @@ describe('Delegates Component - assuming delegates API works properly', () => {
   });
 
   it('revoke mandate', async () => {
-    const mock = mockApi(apiClient, 'PATCH', REVOKE_DELEGATION(arrayOfDelegates[0].mandateId), 204);
-    const result = render(<DelegatesByCompany />, {
+    mock.onPatch(REVOKE_DELEGATION(arrayOfDelegates[0].mandateId)).reply(204);
+    result = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
           delegations: {
@@ -133,7 +146,5 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     expect(table).toBeInTheDocument();
     expect(table).not.toHaveTextContent('Marco Verdi');
     expect(table).toHaveTextContent('Davide Legato');
-    mock.reset();
-    mock.restore();
   });
 });

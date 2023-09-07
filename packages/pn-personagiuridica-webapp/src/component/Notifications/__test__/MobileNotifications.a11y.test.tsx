@@ -1,16 +1,14 @@
 import * as React from 'react';
-import { act, RenderResult } from "@testing-library/react";
-import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
-import { axe, render } from '../../../__test__/test-utils';
+
+import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import MobileNotifications from '../MobileNotifications';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 describe('MobileNotifications Component - accessibility tests', () => {
@@ -23,14 +21,14 @@ describe('MobileNotifications Component - accessibility tests', () => {
           notifications={notificationsToFe.resultsPage}
           sort={{ orderBy: '', order: 'asc' }}
         />
-      )
+      );
     });
 
     if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 
@@ -44,14 +42,14 @@ describe('MobileNotifications Component - accessibility tests', () => {
           sort={{ orderBy: 'sentAt', order: 'asc' }}
           onChangeSorting={() => {}}
         />
-      )
+      );
     });
 
     if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });

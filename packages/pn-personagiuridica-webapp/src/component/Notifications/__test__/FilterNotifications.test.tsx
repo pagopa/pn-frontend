@@ -1,8 +1,17 @@
-import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-library/react';
+import React from 'react';
 import * as redux from 'react-redux';
+
 import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 function formatDate(date: Date): string {
