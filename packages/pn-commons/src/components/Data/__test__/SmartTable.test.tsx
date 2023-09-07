@@ -1,64 +1,9 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, within } from '../../../test-utils';
 import { Item, Sort } from '../../../types';
 import { SmartTableAction, SmartTableData } from '../../../types/SmartTable';
 import SmartTable from '../SmartTable';
-
-jest.mock('../ItemsCard', () => (props) => (
-  <div>
-    Card
-    {props.cardData.map((data) => (
-      <div id={data.id} key={data.id}>
-        <div id="header">
-          {props.cardHeader.map((header) => (
-            <div id={header.id} key={header.id}>
-              {header.getLabel(data[header.id])}
-            </div>
-          ))}
-        </div>
-        <div id="body">
-          {props.cardBody.map((body) => (
-            <div id={body.id} key={body.id}>
-              {body.getLabel(data[body.id])}
-            </div>
-          ))}
-        </div>
-        <div id="action">
-          {props.cardActions.map((action) => (
-            <div id={action.id} key={action.id} onClick={action.onClick}>
-              {action.component}
-            </div>
-          ))}
-        </div>
-      </div>
-    ))}
-  </div>
-));
-
-jest.mock('../ItemsTable', () => (props) => (
-  <div>
-    Table
-    {props.columns.map((column) => (
-      <div id={column.id} key={column.id}>
-        {column.sortable && (
-          <div id="sortable" onClick={props.onChangeSorting}>
-            Sortable
-          </div>
-        )}
-        {props.rows.map((row) => (
-          <p id={row.id} key={row.id} onClick={() => column.onClick && column.onClick(row, column)}>
-            {column.getCellLabel(row[column.id])}
-          </p>
-        ))}
-      </div>
-    ))}
-  </div>
-));
-
-jest.mock('../../Pagination/CustomPagination', () => () => <div>Paginator</div>);
-
-jest.mock('../../EmptyState', () => () => <div>EmptyState</div>);
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
@@ -140,27 +85,22 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    expect(result.container).toHaveTextContent('Table');
-    for (const cfg of smartCfg) {
-      const column = result.container.querySelector(`#${cfg.id}`) as Element;
-      expect(column).toBeInTheDocument();
-      for (const d of data) {
-        const cell = column.querySelector(`#${d.id}`);
-        expect(cell).toBeInTheDocument();
-        expect(cell).toHaveTextContent(d[column.id] as string);
-      }
-    }
-    const clickableCell = result.container.querySelector('#column-3 #row-3') as Element;
+    const table = result.getByTestId('desktopTable');
+    expect(table).toBeInTheDocument();
+    const columns = result.getAllByTestId('tableHeadCell');
+    columns.forEach((column, i) => {
+      expect(column).toHaveTextContent(smartCfg[i].label);
+    });
+
+    const clickableCell = result.getByText('Row 3-3');
     fireEvent.click(clickableCell);
     expect(handleColumnClick).toBeCalledTimes(1);
-    const sortableElem = result.container.querySelector('#column-1 #sortable') as Element;
+    const sortableElem = result.getByText('sorted ascending');
     fireEvent.click(sortableElem);
     expect(handleSort).toBeCalledTimes(1);
-    const paginatorItemSelector = result.container.querySelector(
-      '[data-testid="itemsPerPageSelector"]'
-    );
+    const paginatorItemSelector = result.queryByTestId('itemsPerPageSelector');
     expect(paginatorItemSelector).not.toBeInTheDocument();
-    const paginatorPageSelector = result.container.querySelector('[data-testid="pageSelector"]');
+    const paginatorPageSelector = result.queryByTestId('pageSelector');
     expect(paginatorPageSelector).not.toBeInTheDocument();
   });
 
@@ -174,8 +114,10 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    expect(result.container).not.toHaveTextContent('Table');
-    expect(result.container).toHaveTextContent('EmptyState');
+    const table = result.queryByTestId('desktopTable');
+    expect(table).not.toBeInTheDocument();
+    const emptyState = result.getByTestId('emptyState');
+    expect(emptyState).toBeInTheDocument();
   });
 
   it('paginated smart table (desktop version)', async () => {
@@ -195,7 +137,8 @@ describe('Smart Table Component', () => {
         }}
       />
     );
-    expect(result.container).toHaveTextContent(/Paginator/);
+    const customPagination = result.getByTestId('customPagination');
+    expect(customPagination).toBeInTheDocument();
   });
 
   it('renders smart table (mobile version)', () => {
@@ -209,24 +152,20 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    expect(result.container).toHaveTextContent('Card');
-    for (const d of data) {
-      const card = result.container.querySelector(`#${d.id}`) as Element;
-      expect(card).toBeInTheDocument();
-      const header = card.querySelector(`#header`);
-      const body = card.querySelector(`#body`);
-      const action = card.querySelector('#action') as Element;
-      for (const cfg of smartCfg) {
-        if (cfg.cardConfiguration.position === 'header') {
-          expect(header).toHaveTextContent(d[cfg.id] as string);
-        } else {
-          expect(body).toHaveTextContent(d[cfg.id] as string);
-        }
-      }
-      expect(action).toHaveTextContent('Mocked action');
-    }
-    const actionElem = result.container.querySelector('#row-3 #action-1') as Element;
-    fireEvent.click(actionElem);
+    const mobileCards = result.getByTestId('mobileCards');
+    expect(mobileCards).toBeInTheDocument();
+    const cardHeaders = result.getAllByTestId('cardHeaderLeft');
+    expect(cardHeaders).toHaveLength(data.length);
+    const cardActions = result.getAllByTestId('cardAction');
+    expect(cardActions).toHaveLength(data.length);
+    cardHeaders.forEach((cardHeader, index) => {
+      expect(cardHeader).toHaveTextContent(data[index]['column-1'] as string);
+    });
+
+    const action = cardActions[0];
+    expect(action).toHaveTextContent('Mocked action');
+
+    fireEvent.click(action);
     expect(clickActionMockFn).toBeCalledTimes(1);
   });
 });

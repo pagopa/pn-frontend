@@ -1,8 +1,10 @@
+import React from 'react';
+
 import { fireEvent, screen, within } from '@testing-library/react';
 
-import ItemsTable from '../ItemsTable';
-import { Column, Item, Sort } from '../../../types';
 import { render } from '../../../test-utils';
+import { Column, Item, Sort } from '../../../types';
+import ItemsTable from '../ItemsTable';
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
@@ -40,8 +42,8 @@ const sort: Sort = {
 function testNotificationTableHead() {
   const table = screen.getByRole('table');
   expect(table).toHaveAttribute('aria-label', 'Tabella di item');
-  const tableHead = table.querySelector('thead');
-  const tableColumns = tableHead!.querySelectorAll('th');
+  const tableHead = within(table).getByTestId('tableHead');
+  const tableColumns = within(tableHead).getAllByTestId('tableHeadCell');
   expect(tableColumns).toHaveLength(columns.length);
   tableColumns.forEach((column, i) => {
     expect(column).toHaveTextContent(columns[i].label);
@@ -51,13 +53,13 @@ function testNotificationTableHead() {
 
 describe('Items Table Component', () => {
   it('renders items table (with rows)', () => {
-    render(<ItemsTable columns={columns} rows={rows} />);
+    render(<ItemsTable columns={columns} rows={rows} testId="table-test" />);
     const table = testNotificationTableHead();
-    const tableBody = table.querySelector('tbody');
-    const tableRows = tableBody!.querySelectorAll('tr');
+    const tableBody = within(table).getByTestId('tableBody');
+    const tableRows = within(tableBody).getAllByTestId('table-test.row');
     expect(tableRows).toHaveLength(rows.length);
     tableRows.forEach((row, i) => {
-      const tableColumns = row.querySelectorAll('td');
+      const tableColumns = within(row).getAllByTestId('tableBodyCell');
       expect(tableColumns).toHaveLength(columns.length);
       tableColumns.forEach((column, j) => {
         expect(column).toHaveTextContent(rows[i][columns[j].id].toString());
@@ -68,9 +70,9 @@ describe('Items Table Component', () => {
   it('sorts a column', () => {
     render(<ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleSort} />);
     const table = screen.getByRole('table');
-    const tableHead = table.querySelector('thead');
-    const firstColumn = tableHead!.querySelector('th');
-    const sortButton = within(firstColumn!).getByRole('button');
+    const tableHead = within(table).getByTestId('tableHead');
+    const firstColumn = within(tableHead).getAllByTestId('tableHeadCell')[0];
+    const sortButton = within(firstColumn).getByRole('button');
     expect(sortButton).toBeInTheDocument();
     fireEvent.click(sortButton);
     expect(handleSort).toBeCalledTimes(1);
@@ -78,23 +80,23 @@ describe('Items Table Component', () => {
   });
 
   it('click on a column', () => {
-    render(<ItemsTable columns={columns} rows={rows} sort={sort} />);
+    render(<ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />);
     const table = screen.getByRole('table');
-    const tableBody = table.querySelector('tbody');
-    const firstRow = tableBody!.querySelector('tr');
-    const tableColumns = firstRow!.querySelectorAll('td');
+    const tableBody = within(table).getByTestId('tableBody');
+    const firstRow = within(tableBody).getAllByTestId('table-test.row')[0];
+    const tableColumns = within(firstRow).getAllByTestId('tableBodyCell');
     fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
     expect(handleColumnClick).toBeCalledTimes(1);
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
   });
 
   it('disable accessibility navigation on a column', () => {
-    render(<ItemsTable columns={columns} rows={rows} sort={sort} />);
+    render(<ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />);
     const table = screen.getByRole('table');
-    const tableBody = table.querySelector('tbody');
-    const firstRow = tableBody!.querySelector('tr');
-    const tableColumns = firstRow!.querySelectorAll('td');
-    const button = tableColumns[2].querySelectorAll('button')[0];
+    const tableBody = within(table).getByTestId('tableBody');
+    const firstRow = within(tableBody).getAllByTestId('table-test.row');
+    const tableColumns = within(firstRow![0]).getAllByTestId('tableBodyCell');
+    const button = within(tableColumns[2]).getAllByRole('button')[0];
     expect(button).toHaveAttribute('tabIndex', '-1');
   });
 });

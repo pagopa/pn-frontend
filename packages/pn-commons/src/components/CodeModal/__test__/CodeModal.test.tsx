@@ -1,5 +1,6 @@
 import React from 'react';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import CodeModal from '../CodeModal';
@@ -7,7 +8,12 @@ import CodeModal from '../CodeModal';
 const cancelButtonMock = jest.fn();
 const confirmButtonMock = jest.fn();
 
-const openedModalComponent = (open: boolean, hasError: boolean = false, readonly: boolean = false, initialValues: string[] = new Array(5).fill('') ) => (
+const openedModalComponent = (
+  open: boolean,
+  hasError: boolean = false,
+  readonly: boolean = false,
+  initialValues: string[] = new Array(5).fill('')
+) => (
   <CodeModal
     title="mocked-title"
     subtitle="mocked-subtitle"
@@ -37,19 +43,17 @@ describe('CodeModal Component', () => {
     // render component
     render(openedModalComponent(true));
 
-    const dialog = screen.queryByTestId('codeDialog');
+    const dialog = screen.getByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
-    const title = dialog?.querySelector('#dialog-title');
-    expect(title).toHaveTextContent('mocked-title');
-    const subtitle = dialog?.querySelector('#dialog-description');
-    expect(subtitle).toHaveTextContent('mocked-subtitle');
-    expect(dialog).toHaveTextContent('mocked-section-title');
-    const codeInputs = dialog?.querySelectorAll('input');
+    expect(dialog).toHaveTextContent(/mocked-title/i);
+    expect(dialog).toHaveTextContent(/mocked-subtitle/i);
+    expect(dialog).toHaveTextContent(/mocked-section-title/i);
+    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
     expect(codeInputs).toHaveLength(5);
     codeInputs?.forEach((input) => {
       expect(input).toHaveValue('');
     });
-    const buttons = dialog?.querySelectorAll('button');
+    const buttons = within(dialog).getAllByRole('button');
     expect(buttons).toHaveLength(2);
     expect(buttons![0]).toHaveTextContent('mocked-cancel');
     expect(buttons![1]).toHaveTextContent('mocked-confirm');
@@ -59,19 +63,17 @@ describe('CodeModal Component', () => {
     // render component
     render(openedModalComponent(true, false, true, ['0', '1', '2', '3', '4']));
 
-    const dialog = screen.queryByTestId('codeDialog');
+    const dialog = screen.getByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
-    const title = dialog?.querySelector('#dialog-title');
-    expect(title).toHaveTextContent('mocked-title');
-    const subtitle = dialog?.querySelector('#dialog-description');
-    expect(subtitle).toHaveTextContent('mocked-subtitle');
-    expect(dialog).toHaveTextContent('mocked-section-title');
-    const codeInputs = dialog?.querySelectorAll('input');
+    expect(dialog).toHaveTextContent(/mocked-title/i);
+    expect(dialog).toHaveTextContent(/mocked-subtitle/i);
+    expect(dialog).toHaveTextContent(/mocked-section-title/i);
+    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
     expect(codeInputs).toHaveLength(5);
     codeInputs?.forEach((input, index) => {
       expect(input).toHaveValue(index.toString());
     });
-    const button = dialog?.querySelector('#copy-code-button');
+    const button = within(dialog).getByTestId('copyCodeButton');
     expect(button).toBeInTheDocument();
   });
 
@@ -79,9 +81,9 @@ describe('CodeModal Component', () => {
     // render component
     render(openedModalComponent(true));
 
-    const dialog = screen.queryByTestId('codeDialog');
-    const buttons = dialog?.querySelectorAll('button');
-    fireEvent.click(buttons![0]);
+    const dialog = screen.getByTestId('codeDialog');
+    const button = within(dialog).getByTestId('codeCancelButton');
+    fireEvent.click(button!);
     await waitFor(() => {
       expect(cancelButtonMock).toBeCalledTimes(1);
     });
@@ -91,10 +93,10 @@ describe('CodeModal Component', () => {
     // render component
     render(openedModalComponent(true));
 
-    const dialog = screen.queryByTestId('codeDialog');
-    const buttons = dialog?.querySelectorAll('button');
-    expect(buttons![1]).toBeDisabled();
-    const codeInputs = dialog?.querySelectorAll('input');
+    const dialog = screen.getByTestId('codeDialog');
+    const button = within(dialog).getByTestId('codeConfirmButton');
+    expect(button!).toBeDisabled();
+    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
@@ -103,9 +105,9 @@ describe('CodeModal Component', () => {
       codeInputs?.forEach((input, index) => {
         expect(input).toHaveValue(index.toString());
       });
-      expect(buttons![1]).toBeEnabled();
+      expect(button!).toBeEnabled();
     });
-    fireEvent.click(buttons![1]);
+    fireEvent.click(button!);
     expect(confirmButtonMock).toBeCalledTimes(1);
     expect(confirmButtonMock).toBeCalledWith(['0', '1', '2', '3', '4']);
   });
@@ -114,8 +116,8 @@ describe('CodeModal Component', () => {
     // render component
     render(openedModalComponent(true, true));
 
-    const dialog = screen.queryByTestId('codeDialog');
-    const errorAlert = dialog?.querySelector('[data-testid="errorAlert"]');
+    const dialog = screen.getByTestId('codeDialog');
+    const errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('mocked-errorMessage');
   });

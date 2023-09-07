@@ -1,8 +1,9 @@
 import React from 'react';
-import { act, screen, within } from '@testing-library/react';
 
-import { render } from '../../../test-utils';
+import { RenderResult, act, screen, within } from '@testing-library/react';
+
 import { DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models';
+import { render } from '../../../test-utils';
 import { formatDate, formatTime } from '../../../utils';
 import MobileDowntimeLog from '../MobileDowntimeLog';
 
@@ -61,25 +62,23 @@ jest.mock('../../../services/localization.service', () => {
 });
 
 describe('DesktopDowntimeLog component - with data', () => {
-  /* eslint-disable functional/no-let */
+  let result: RenderResult;
   let cardComponents: Array<HTMLElement>;
   let labelComponents: Array<HTMLElement>;
   let getLegalFactDetailsMock: jest.Mock<any, any>;
-  /* eslint-enable functional/no-let */
 
   beforeEach(async () => {
     getLegalFactDetailsMock = jest.fn();
-    await act(
-      async () =>
-        void render(
-          <MobileDowntimeLog
-            downtimeLog={exampleDowntimeLogPage}
-            getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
-          />
-        )
-    );
-    cardComponents = screen.queryAllByTestId('itemCard');
-    labelComponents = within(cardComponents[0]).queryAllByTestId('cardBodyLabel');
+    await act(async () => {
+      result = render(
+        <MobileDowntimeLog
+          downtimeLog={exampleDowntimeLogPage}
+          getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
+        />
+      );
+    });
+    cardComponents = result.getAllByTestId('itemCard');
+    labelComponents = within(cardComponents[0]).getAllByTestId('cardBodyLabel');
   });
 
   // one card for each downtime included
@@ -89,10 +88,10 @@ describe('DesktopDowntimeLog component - with data', () => {
 
   it('headers - in first card', async () => {
     // endDate should be immediately after startDate
-    const startDateIndex = Array.from(labelComponents).findIndex((elem) =>
+    const startDateIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.startDate')
     );
-    const endDateIndex = Array.from(labelComponents).findIndex((elem) =>
+    const endDateIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.endDate')
     );
     expect(startDateIndex).toBeGreaterThan(-1);
@@ -101,13 +100,13 @@ describe('DesktopDowntimeLog component - with data', () => {
 
     // legalFactId and functionality must be present,
     // status must not (since the status is in the header with no label)
-    const legalFactIdIndex = Array.from(labelComponents).findIndex((elem) =>
+    const legalFactIdIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.legalFactId')
     );
-    const functionalityIndex = Array.from(labelComponents).findIndex((elem) =>
+    const functionalityIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.functionality')
     );
-    const statusIndex = Array.from(labelComponents).findIndex((elem) =>
+    const statusIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.status')
     );
     expect(legalFactIdIndex).toBeGreaterThan(-1);
@@ -116,21 +115,21 @@ describe('DesktopDowntimeLog component - with data', () => {
   });
 
   it('date values', async () => {
-    const startDateIndex = Array.from(labelComponents).findIndex((elem) =>
+    const startDateIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.startDate')
     );
-    const endDateIndex = Array.from(labelComponents).findIndex((elem) =>
+    const endDateIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.endDate')
     );
 
     // first card - start date - date and time in the same element
     const firstCard = cardComponents[0];
-    const firstCardValues = within(firstCard).queryAllByTestId('cardBodyValue');
+    const firstCardValues = within(firstCard).getAllByTestId('cardBodyValue');
     const firstCardStartDate = firstCardValues[startDateIndex];
-    const startDateComponent1 = within(firstCardStartDate).queryByText(
+    const startDateComponent1 = within(firstCardStartDate).getByText(
       new RegExp(formatDate(incidentTimestamps[4]))
     );
-    const startHourComponent1 = within(firstCardStartDate).queryByText(
+    const startHourComponent1 = within(firstCardStartDate).getByText(
       new RegExp(formatTime(incidentTimestamps[4]))
     );
     expect(startDateComponent1).toBeInTheDocument();
@@ -139,17 +138,17 @@ describe('DesktopDowntimeLog component - with data', () => {
 
     // first card - end date - should be just a dash
     const firstCardEndDate = firstCardValues[endDateIndex];
-    const slashComponent = within(firstCardEndDate).queryByText('-');
+    const slashComponent = within(firstCardEndDate).getByText('-');
     expect(slashComponent).toBeInTheDocument();
 
     // third card - start date - date and time in the same element
     const thirdCard = cardComponents[2];
-    const thirdCardValues = within(thirdCard).queryAllByTestId('cardBodyValue');
+    const thirdCardValues = within(thirdCard).getAllByTestId('cardBodyValue');
     const thirdCardEndDate = thirdCardValues[endDateIndex];
-    const endDateComponent3 = within(thirdCardEndDate).queryByText(
+    const endDateComponent3 = within(thirdCardEndDate).getByText(
       new RegExp(formatDate(incidentTimestamps[1]))
     );
-    const endHourComponent3 = within(thirdCardEndDate).queryByText(
+    const endHourComponent3 = within(thirdCardEndDate).getByText(
       new RegExp(formatTime(incidentTimestamps[1]))
     );
     expect(endDateComponent3).toBeInTheDocument();
@@ -158,94 +157,94 @@ describe('DesktopDowntimeLog component - with data', () => {
   });
 
   it('functionality values', async () => {
-    const functionalityIndex = Array.from(labelComponents).findIndex((elem) =>
+    const functionalityIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.functionality')
     );
 
     // first card - known functionality
     const firstCard = cardComponents[0];
-    const firstCardValues = within(firstCard).queryAllByTestId('cardBodyValue');
+    const firstCardValues = within(firstCard).getAllByTestId('cardBodyValue');
     const firstCardFunctionality = firstCardValues[functionalityIndex];
-    const description1 = within(firstCardFunctionality).queryByText(
+    const description1 = within(firstCardFunctionality).getByText(
       `legends.knownFunctionality.${KnownFunctionality.NotificationWorkflow}`
     );
     expect(description1).toBeInTheDocument();
 
     // second card - unknown functionality
     const secondCard = cardComponents[1];
-    const secondCardValues = within(secondCard).queryAllByTestId('cardBodyValue');
+    const secondCardValues = within(secondCard).getAllByTestId('cardBodyValue');
     const secondCardFunctionality = secondCardValues[functionalityIndex];
-    const description2 = within(secondCardFunctionality).queryByText(
+    const description2 = within(secondCardFunctionality).getByText(
       new RegExp('legends.unknownFunctionality')
     );
     expect(description2).toBeInTheDocument();
 
     // third row - different known functionality
     const thirdCard = cardComponents[2];
-    const thirdCardValues = within(thirdCard).queryAllByTestId('cardBodyValue');
+    const thirdCardValues = within(thirdCard).getAllByTestId('cardBodyValue');
     const thirdCardFunctionality = thirdCardValues[functionalityIndex];
-    const description3 = within(thirdCardFunctionality).queryByText(
+    const description3 = within(thirdCardFunctionality).getByText(
       `legends.knownFunctionality.${KnownFunctionality.NotificationCreate}`
     );
     expect(description3).toBeInTheDocument();
   });
 
   it('legalFactId values', async () => {
-    const legalFactIdIndex = Array.from(labelComponents).findIndex((elem) =>
+    const legalFactIdIndex = labelComponents.findIndex((elem) =>
       within(elem).queryByText('downtimeList.columnHeader.legalFactId')
     );
 
     // first row - open downtime
     const firstCard = cardComponents[0];
-    const firstCardValues = within(firstCard).queryAllByTestId('cardBodyValue');
+    const firstCardValues = within(firstCard).getAllByTestId('cardBodyValue');
     const firstCardLegalFactId = firstCardValues[legalFactIdIndex];
     const button1 = within(firstCardLegalFactId).queryByRole('button');
     expect(button1).not.toBeInTheDocument();
-    const description1 = within(firstCardLegalFactId).queryByText(
+    const description1 = within(firstCardLegalFactId).getByText(
       `legends.noFileAvailableByStatus.${DowntimeStatus.KO}`
     );
     expect(description1).toBeInTheDocument();
 
     // second row - closed downtime no file available
     const secondCard = cardComponents[1];
-    const secondCardValues = within(secondCard).queryAllByTestId('cardBodyValue');
+    const secondCardValues = within(secondCard).getAllByTestId('cardBodyValue');
     const secondCardLegalFactId = secondCardValues[legalFactIdIndex];
     const button2 = within(secondCardLegalFactId).queryByRole('button');
     expect(button2).not.toBeInTheDocument();
-    const description2 = within(secondCardLegalFactId).queryByText(
+    const description2 = within(secondCardLegalFactId).getByText(
       `legends.noFileAvailableByStatus.${DowntimeStatus.OK}`
     );
     expect(description2).toBeInTheDocument();
 
     // third row - file available
     const thirdCard = cardComponents[2];
-    const thirdCardValues = within(thirdCard).queryAllByTestId('cardBodyValue');
+    const thirdCardValues = within(thirdCard).getAllByTestId('cardBodyValue');
     const thirdCardLegalFactId = thirdCardValues[legalFactIdIndex];
-    const button3 = within(thirdCardLegalFactId).queryByRole('button');
+    const button3 = within(thirdCardLegalFactId).getByRole('button');
     expect(button3).toBeInTheDocument();
-    const description3 = button3 && within(button3).queryByText('legends.legalFactDownload');
+    const description3 = button3 && within(button3).getByText('legends.legalFactDownload');
     expect(description3).toBeInTheDocument();
   });
 
   it('status values', async () => {
     // first row - open downtime
     const firstCard = cardComponents[0];
-    const statusChips1 = within(firstCard).queryAllByTestId('downtime-status');
+    const statusChips1 = within(firstCard).getAllByTestId('downtime-status');
     expect(statusChips1).toHaveLength(1);
     const statusChip1 = statusChips1[0];
     expect(statusChip1).toHaveStyle({ 'background-color': fakePalette.error.light });
     const description1 =
-      statusChip1 && within(statusChip1).queryByText(`legends.status.${DowntimeStatus.KO}`);
+      statusChip1 && within(statusChip1).getByText(`legends.status.${DowntimeStatus.KO}`);
     expect(description1).toBeInTheDocument();
 
     // third row - closed downtime
     const thirdCard = cardComponents[2];
-    const statusChips3 = within(thirdCard).queryAllByTestId('downtime-status');
+    const statusChips3 = within(thirdCard).getAllByTestId('downtime-status');
     expect(statusChips3).toHaveLength(1);
     const statusChip3 = statusChips3[0];
     expect(statusChip3).toHaveStyle({ 'background-color': fakePalette.success.light });
     const description3 =
-      statusChip3 && within(statusChip3).queryByText(`legends.status.${DowntimeStatus.OK}`);
+      statusChip3 && within(statusChip3).getByText(`legends.status.${DowntimeStatus.OK}`);
     expect(description3).toBeInTheDocument();
   });
 

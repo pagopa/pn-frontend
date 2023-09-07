@@ -1,8 +1,10 @@
-import { fireEvent, RenderResult } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, fireEvent } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import CustomMobileDialogToggle from '../CustomMobileDialogToggle';
 import * as customContext from '../CustomMobileDialog.context';
+import CustomMobileDialogToggle from '../CustomMobileDialogToggle';
 
 describe('CustomMobileDialog Component', () => {
   let result: RenderResult | undefined;
@@ -13,9 +15,7 @@ describe('CustomMobileDialog Component', () => {
     const customHookSpy = jest.spyOn(customContext, 'useCustomMobileDialogContext');
     customHookSpy.mockReturnValue({ open: false, toggleOpen: contextMockedFn });
     // render component
-    result = render(
-      <CustomMobileDialogToggle>Mocked title</CustomMobileDialogToggle>
-    );
+    result = render(<CustomMobileDialogToggle>Mocked title</CustomMobileDialogToggle>);
   });
 
   afterEach(() => {
@@ -24,7 +24,7 @@ describe('CustomMobileDialog Component', () => {
   });
 
   it('renders CustomMobileDialogToggle', () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     expect(button).toHaveTextContent(/Mocked title/i);
   });
 

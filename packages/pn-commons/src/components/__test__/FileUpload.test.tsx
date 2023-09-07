@@ -1,8 +1,9 @@
-import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../test-utils';
 import FileUpload from '../FileUpload';
-
 
 describe('FileUpload Component', () => {
   let result: RenderResult;
@@ -16,8 +17,8 @@ describe('FileUpload Component', () => {
   const wrongTypeFile = new Blob(['mocked content'], { type: 'application/pdf' });
 
   (file as any).name = 'Mocked file';
-  (bigFile as any).name ='Mocked big file';
-  (wrongTypeFile as any).name ='Mocked big file';
+  (bigFile as any).name = 'Mocked big file';
+  (wrongTypeFile as any).name = 'Mocked big file';
 
   async function testFileUploading() {
     const fileInput = result.queryByTestId('fileInput');
@@ -29,7 +30,7 @@ describe('FileUpload Component', () => {
       expect(mockUploadFn).toBeCalledWith(file, undefined);
       expect(result.container).toHaveTextContent(/Caricamento/i);
     });
-  };
+  }
 
   beforeEach(() => {
     mockUploadFn = jest.fn();
@@ -114,6 +115,6 @@ describe('FileUpload Component', () => {
     await waitFor(() => {
       expect(mockRemoveFileHandler).toBeCalledTimes(1);
       expect(result.container).toHaveTextContent(/Mocked upload text/i);
-    })
+    });
   });
 });

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { act, screen, within } from '@testing-library/react';
+import { RenderResult, act } from '@testing-library/react';
 
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import { render } from '../../../test-utils';
-import { AppStatusData, KnownSentiment } from '../../../types';
+import { AppStatusData } from '../../../types';
 import { apiOutcomeTestHelper } from '../../../utils';
 import { formatDate, formatTime } from '../../../utils/date.utility';
 import { AppStatusRender } from '../AppStatusRender';
@@ -31,26 +31,6 @@ jest.mock('../../../services/localization.service', () => {
     ),
   };
 });
-
-jest.mock('../AppStatusBar', () => {
-  const original = jest.requireActual('../AppStatusBar');
-  return {
-    ...original,
-    AppStatusBar: () => <div data-testid="mock-app-status-bar">Status bar</div>,
-  };
-});
-
-jest.mock('../MobileDowntimeLog', () => () => (
-  <div data-testid="mock-mobile-downtime-log">Mobile downtime log</div>
-));
-
-jest.mock('../DesktopDowntimeLog', () => () => (
-  <div data-testid="mock-desktop-downtime-log">Desktop downtime log</div>
-));
-
-jest.mock('../../EmptyState', () => (props: any) => (
-  <div data-testid="mock-empty-state">{String(props.sentimentIcon)}</div>
-));
 
 const mockActionIds = {
   GET_CURRENT_STATUS: 'mock-get-current-status',
@@ -87,30 +67,35 @@ const mockAppStatus: AppStatusData = {
   },
 };
 describe('AppStatusRender component', () => {
+  let result: RenderResult | undefined;
+
+  afterEach(() => {
+    result = undefined;
+  });
+
   it('with downtime - desktop', async () => {
     mockIsMobile = false;
 
-    await act(
-      async () =>
-        void render(
-          <AppStatusRender
-            actionIds={mockActionIds}
-            appStatus={mockAppStatus}
-            clearLegalFactDocument={() => {}}
-            clearPagination={() => {}}
-            fetchCurrentStatus={() => {}}
-            fetchDowntimeLegalFactDocumentDetails={() => {
-              return undefined;
-            }}
-            fetchDowntimeLogPage={() => {}}
-            setPagination={() => {}}
-          />
-        )
-    );
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={mockAppStatus}
+          clearLegalFactDocument={() => {}}
+          clearPagination={() => {}}
+          fetchCurrentStatus={() => {}}
+          fetchDowntimeLegalFactDocumentDetails={() => {
+            return undefined;
+          }}
+          fetchDowntimeLogPage={() => {}}
+          setPagination={() => {}}
+        />
+      );
+    });
+    const appStatusBarComponent = result?.getByTestId('app-status-bar');
+    const desktopDonwtimeLogComponent = result?.getByTestId('tableDowntimeLog');
+    const mobileDonwtimeLogComponent = result?.queryByTestId('mobileTableDowntimeLog');
+    const emptyStateComponent = result?.queryByTestId('emptyState');
     expect(appStatusBarComponent).toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).toBeInTheDocument();
     expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
@@ -120,27 +105,26 @@ describe('AppStatusRender component', () => {
   it('with downtime - mobile', async () => {
     mockIsMobile = true;
 
-    await act(
-      async () =>
-        void render(
-          <AppStatusRender
-            actionIds={mockActionIds}
-            appStatus={mockAppStatus}
-            clearLegalFactDocument={() => {}}
-            clearPagination={() => {}}
-            fetchCurrentStatus={() => {}}
-            fetchDowntimeLegalFactDocumentDetails={() => {
-              return undefined;
-            }}
-            fetchDowntimeLogPage={() => {}}
-            setPagination={() => {}}
-          />
-        )
-    );
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={mockAppStatus}
+          clearLegalFactDocument={() => {}}
+          clearPagination={() => {}}
+          fetchCurrentStatus={() => {}}
+          fetchDowntimeLegalFactDocumentDetails={() => {
+            return undefined;
+          }}
+          fetchDowntimeLogPage={() => {}}
+          setPagination={() => {}}
+        />
+      );
+    });
+    const appStatusBarComponent = result?.getByTestId('app-status-bar');
+    const desktopDonwtimeLogComponent = result?.queryByTestId('tableDowntimeLog');
+    const mobileDonwtimeLogComponent = result?.getByTestId('mobileTableDowntimeLog');
+    const emptyStateComponent = result?.queryByTestId('emptyState');
     expect(appStatusBarComponent).toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
     expect(mobileDonwtimeLogComponent).toBeInTheDocument();
@@ -150,77 +134,68 @@ describe('AppStatusRender component', () => {
   it('empty downtime list', async () => {
     mockIsMobile = false;
 
-    await act(
-      async () =>
-        void render(
-          <AppStatusRender
-            actionIds={mockActionIds}
-            appStatus={{ ...mockAppStatus, downtimeLogPage: { downtimes: [] } }}
-            clearLegalFactDocument={() => {}}
-            clearPagination={() => {}}
-            fetchCurrentStatus={() => {}}
-            fetchDowntimeLegalFactDocumentDetails={() => {
-              return undefined;
-            }}
-            fetchDowntimeLogPage={() => {}}
-            setPagination={() => {}}
-          />
-        )
-    );
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={{ ...mockAppStatus, downtimeLogPage: { downtimes: [] } }}
+          clearLegalFactDocument={() => {}}
+          clearPagination={() => {}}
+          fetchCurrentStatus={() => {}}
+          fetchDowntimeLegalFactDocumentDetails={() => {
+            return undefined;
+          }}
+          fetchDowntimeLogPage={() => {}}
+          setPagination={() => {}}
+        />
+      );
+    });
+    const appStatusBarComponent = result?.getByTestId('app-status-bar');
+    const desktopDonwtimeLogComponent = result?.queryByTestId('tableDowntimeLog');
+    const mobileDonwtimeLogComponent = result?.queryByTestId('mobileTableDowntimeLog');
+    const emptyStateComponent = result?.getByTestId('emptyState');
     expect(appStatusBarComponent).toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
     expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
     expect(emptyStateComponent).toBeInTheDocument();
-    const satisfied =
-      emptyStateComponent &&
-      within(emptyStateComponent).queryByText(String(KnownSentiment.SATISFIED));
-    const dissatisfied =
-      emptyStateComponent &&
-      within(emptyStateComponent).queryByText(String(KnownSentiment.DISSATISFIED));
-    expect(satisfied).toBeInTheDocument();
-    expect(dissatisfied).not.toBeInTheDocument();
+    expect(emptyStateComponent).toHaveTextContent(/downtimeList.emptyMessage/i);
   });
 
   it('error in status API', async () => {
     mockIsMobile = false;
 
-    await act(
-      async () =>
-        void render(
-          <AppStatusRender
-            actionIds={mockActionIds}
-            appStatus={mockAppStatus}
-            clearLegalFactDocument={() => {}}
-            clearPagination={() => {}}
-            fetchCurrentStatus={() => {}}
-            fetchDowntimeLegalFactDocumentDetails={() => {
-              return undefined;
-            }}
-            fetchDowntimeLogPage={() => {}}
-            setPagination={() => {}}
-          />,
-          {
-            preloadedState: {
-              appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-                mockActionIds.GET_CURRENT_STATUS
-              ),
-            },
-          }
-        )
-    );
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={mockAppStatus}
+          clearLegalFactDocument={() => {}}
+          clearPagination={() => {}}
+          fetchCurrentStatus={() => {}}
+          fetchDowntimeLegalFactDocumentDetails={() => {
+            return undefined;
+          }}
+          fetchDowntimeLogPage={() => {}}
+          setPagination={() => {}}
+        />,
+        {
+          preloadedState: {
+            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+              mockActionIds.GET_CURRENT_STATUS
+            ),
+          },
+        }
+      );
+    });
 
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    const errorStatusComponent = screen.queryByTestId(
+    const appStatusBarComponent = result?.queryByTestId('app-status-bar');
+    const desktopDonwtimeLogComponent = result?.getByTestId('tableDowntimeLog');
+    const mobileDonwtimeLogComponent = result?.queryByTestId('mobileTableDowntimeLog');
+    const emptyStateComponent = result?.queryByTestId('emptyState');
+    const errorStatusComponent = result?.getByTestId(
       `api-error-${mockActionIds.GET_CURRENT_STATUS}`
     );
-    const errorDowntimeComponent = screen.queryByTestId(
+    const errorDowntimeComponent = result?.queryByTestId(
       `api-error-${mockActionIds.GET_DOWNTIME_LOG_PAGE}`
     );
     expect(appStatusBarComponent).not.toBeInTheDocument();
@@ -241,33 +216,32 @@ describe('AppStatusRender component', () => {
       apiOutcomeTestHelper.errorMessageForAction(mockActionIds.GET_DOWNTIME_LOG_PAGE)
     );
 
-    await act(
-      async () =>
-        void render(
-          <AppStatusRender
-            actionIds={mockActionIds}
-            appStatus={mockAppStatus}
-            clearLegalFactDocument={() => {}}
-            clearPagination={() => {}}
-            fetchCurrentStatus={() => {}}
-            fetchDowntimeLegalFactDocumentDetails={() => {
-              return undefined;
-            }}
-            fetchDowntimeLogPage={() => {}}
-            setPagination={() => {}}
-          />,
-          { preloadedState: { appState: mockAppState } }
-        )
-    );
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={mockAppStatus}
+          clearLegalFactDocument={() => {}}
+          clearPagination={() => {}}
+          fetchCurrentStatus={() => {}}
+          fetchDowntimeLegalFactDocumentDetails={() => {
+            return undefined;
+          }}
+          fetchDowntimeLogPage={() => {}}
+          setPagination={() => {}}
+        />,
+        { preloadedState: { appState: mockAppState } }
+      );
+    });
 
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    const errorStatusComponent = screen.queryByTestId(
+    const appStatusBarComponent = result?.queryByTestId('app-status-bar');
+    const desktopDonwtimeLogComponent = result?.queryByTestId('tableDowntimeLog');
+    const mobileDonwtimeLogComponent = result?.queryByTestId('mobileTableDowntimeLog');
+    const emptyStateComponent = result?.queryByTestId('emptyState');
+    const errorStatusComponent = result?.getByTestId(
       `api-error-${mockActionIds.GET_CURRENT_STATUS}`
     );
-    const errorDowntimeComponent = screen.queryByTestId(
+    const errorDowntimeComponent = result?.getByTestId(
       `api-error-${mockActionIds.GET_DOWNTIME_LOG_PAGE}`
     );
     expect(appStatusBarComponent).not.toBeInTheDocument();
@@ -280,26 +254,25 @@ describe('AppStatusRender component', () => {
 
   it('Last check message, must include date and time of last check timestamp', async () => {
     mockIsMobile = false;
-    await act(
-      async () =>
-        void render(
-          <AppStatusRender
-            actionIds={mockActionIds}
-            appStatus={mockAppStatus}
-            clearLegalFactDocument={() => {}}
-            clearPagination={() => {}}
-            fetchCurrentStatus={() => {}}
-            fetchDowntimeLegalFactDocumentDetails={() => {
-              return undefined;
-            }}
-            fetchDowntimeLogPage={() => {}}
-            setPagination={() => {}}
-          />
-        )
-    );
-    const lastCheckLegend = screen.queryByText(new RegExp('appStatus.lastCheckLegend'));
-    const lastCheckDate = screen.queryByText(new RegExp(formatDate('2022-12-28T15:43:19.190Z')));
-    const lastCheckTime = screen.queryByText(new RegExp(formatTime('2022-12-28T15:43:19.190Z')));
+    await act(async () => {
+      result = render(
+        <AppStatusRender
+          actionIds={mockActionIds}
+          appStatus={mockAppStatus}
+          clearLegalFactDocument={() => {}}
+          clearPagination={() => {}}
+          fetchCurrentStatus={() => {}}
+          fetchDowntimeLegalFactDocumentDetails={() => {
+            return undefined;
+          }}
+          fetchDowntimeLogPage={() => {}}
+          setPagination={() => {}}
+        />
+      );
+    });
+    const lastCheckLegend = result?.getByText(new RegExp('appStatus.lastCheckLegend'));
+    const lastCheckDate = result?.getByText(new RegExp(formatDate('2022-12-28T15:43:19.190Z')));
+    const lastCheckTime = result?.getByText(new RegExp(formatTime('2022-12-28T15:43:19.190Z')));
     expect(lastCheckLegend).toBeInTheDocument();
     expect(lastCheckDate).toBeInTheDocument();
     expect(lastCheckTime).toBeInTheDocument();

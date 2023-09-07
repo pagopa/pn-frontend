@@ -1,8 +1,10 @@
-import { screen, within, fireEvent } from '@testing-library/react';
+import React from 'react';
+
+import { fireEvent, screen, within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import CustomMobileDialogContent from '../CustomMobileDialogContent';
 import * as customContext from '../CustomMobileDialog.context';
+import CustomMobileDialogContent from '../CustomMobileDialogContent';
 
 describe('CustomMobileDialogContent Component', () => {
   const contextMockedFn = jest.fn();
@@ -22,7 +24,7 @@ describe('CustomMobileDialogContent Component', () => {
   });
 
   it('renders CustomMobileDialogContent', () => {
-    const dialog =  screen.queryByTestId('mobileDialog');
+    const dialog = screen.queryByTestId('mobileDialog');
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/Mocked title/i);
     expect(dialog).toHaveTextContent(/Mocked content/i);

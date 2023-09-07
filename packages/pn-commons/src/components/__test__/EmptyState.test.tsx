@@ -1,6 +1,8 @@
 import React from 'react';
+
 import BalconyIcon from '@mui/icons-material/Balcony';
-import { render, fireEvent } from '../../test-utils';
+
+import { fireEvent, render } from '../../test-utils';
 import { KnownSentiment } from '../../types';
 import EmptyState from '../EmptyState';
 

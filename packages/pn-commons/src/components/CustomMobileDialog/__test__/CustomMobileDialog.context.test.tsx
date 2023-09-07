@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
-import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import {
@@ -16,7 +18,9 @@ const Component = () => {
   return (
     <div>
       <div>{`Status: ${open}`}</div>
-      <button onClick={() => toggleOpen()}>Click me</button>
+      <button data-testid="buttonTest" onClick={() => toggleOpen()}>
+        Click me
+      </button>
     </div>
   );
 };
@@ -42,7 +46,7 @@ describe('CustomMobileDialog Context', () => {
   });
 
   it('changes CustomMobileDialog Context', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('buttonTest');
     fireEvent.click(button!);
     await waitFor(() => expect(result?.container).toHaveTextContent('Status: true'));
   });

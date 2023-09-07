@@ -1,6 +1,7 @@
-/* eslint-disable functional/no-let */
+import React from 'react';
 
 import { fireEvent } from '@testing-library/react';
+
 import { render } from '../../test-utils';
 import CopyToClipboard from '../CopyToClipboard';
 

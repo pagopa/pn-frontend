@@ -1,7 +1,10 @@
-import { useNavigate, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+
 import { fireEvent } from '@testing-library/react';
-import Prompt from '../Prompt';
+
 import { render } from '../../test-utils';
+import Prompt from '../Prompt';
 
 const WrappedPrompt = () => {
   const navigate = useNavigate();

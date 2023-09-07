@@ -1,6 +1,8 @@
+import React from 'react';
+
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { fireEvent, waitFor, screen, RenderResult } from '@testing-library/react';
+import { RenderResult, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import CustomMobileDialog from '../CustomMobileDialog';
@@ -38,37 +40,37 @@ describe('CustomMobileDialog Component', () => {
   });
 
   it('renders CustomMobileDialog (closed)', () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     expect(button).toHaveTextContent(/Mocked title/i);
   });
 
   it('renders CustomMobileDialog (opened)', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
     const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/Mocked title/i);
     expect(dialog).toHaveTextContent(/Mocked content/i);
-    const actions = dialog?.querySelectorAll('[data-testid="dialogAction"]');
+    const actions = within(dialog as HTMLElement).getAllByTestId('dialogAction');
     expect(actions).toHaveLength(2);
     expect(actions![0]).toHaveTextContent(/Confirm/i);
     expect(actions![1]).toHaveTextContent(/Cancel/i);
   });
 
   it('clicks on confirm button', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
     const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const actions = dialog?.querySelectorAll('[data-testid="dialogAction"]');
+    const actions = within(dialog as HTMLElement).getAllByTestId('dialogAction');
     fireEvent.click(actions![0]);
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
   });
 
   it('clicks on cancel button', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
     const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const actions = dialog?.querySelectorAll('[data-testid="dialogAction"]');
+    const actions = within(dialog as HTMLElement).getAllByTestId('dialogAction');
     fireEvent.click(actions![1]);
     await waitFor(() => expect(dialog).toBeInTheDocument());
   });

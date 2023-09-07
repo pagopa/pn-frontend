@@ -1,12 +1,13 @@
 import { Children, PropsWithChildren, ReactNode, useMemo, useState } from 'react';
+
 import { Box, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
-import { calculatePages, sortArray } from '../../utils';
-import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
 import { CardAction, CardElement, Column, Item, PaginationData, Sort } from '../../types';
-import CustomPagination from '../Pagination/CustomPagination';
+import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
+import { calculatePages, sortArray } from '../../utils';
 import EmptyState, { Props as EmptyStateProps } from '../EmptyState';
+import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';
 import ItemsTable from './ItemsTable';
 import SmartFilter from './SmartFilter';
@@ -163,6 +164,7 @@ const SmartTable = <ColumnId extends string>({
         </Grid>
         {rowData.length > 0 && (
           <ItemsCard
+            testId="mobileCards"
             cardHeader={cardHeader}
             cardBody={cardBody}
             cardData={rowData}
@@ -211,7 +213,13 @@ const SmartTable = <ColumnId extends string>({
     <>
       <Box mb={3}>{filters}</Box>
       {rowData.length > 0 && (
-        <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
+        <ItemsTable
+          columns={columns}
+          rows={rowData}
+          sort={sort}
+          onChangeSorting={handleSorting}
+          testId="desktopTable"
+        />
       )}
       {rowData.length > 0 && pagination && (
         <CustomPagination

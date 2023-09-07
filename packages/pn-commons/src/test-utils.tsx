@@ -4,10 +4,19 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material';
-import { Store, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
+
+const createStore = () =>
+  configureStore({
+    reducer: { appState: appStateSlice.reducer },
+  });
+
+type RootState = ReturnType<ReturnType<typeof createStore>['getState']>;
+// eslint-disable-next-line functional/no-let
+let testStore: EnhancedStore<RootState>;
 
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
   const theme = createTheme({});
@@ -27,7 +36,7 @@ const customRender = (
     renderOptions,
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
-  const testStore = configureStore({
+  testStore = configureStore({
     reducer: { appState: appStateSlice.reducer },
     preloadedState,
   });
@@ -125,4 +134,4 @@ async function testAutocomplete(
 }
 
 export * from '@testing-library/react';
-export { customRender as render, testSelect, createMatchMedia, testAutocomplete };
+export { customRender as render, testSelect, createMatchMedia, testAutocomplete, testStore };

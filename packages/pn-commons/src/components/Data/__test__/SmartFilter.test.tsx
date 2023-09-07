@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render, screen, waitFor } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
 const submitHandler = jest.fn();
@@ -23,6 +23,7 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
       initialValues={{ username: '', email: '' }}
     >
       <input
+        data-testid="username"
         id="username"
         name="username"
         key="username"
@@ -30,6 +31,7 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
         onChange={(e) => setUsername(e.target.value)}
       ></input>
       <input
+        data-testid="email"
         id="email"
         name="email"
         type="email"
@@ -50,10 +52,10 @@ describe('Smart Filter Component', () => {
 
   it('renders smart filters (desktop version)', () => {
     const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username');
-    const email = result.container.querySelector('#email');
-    const confirmButton = result.queryByTestId('confirmButton');
-    const cancelButton = result.queryByTestId('cancelButton');
+    const username = result.getByTestId('username');
+    const email = result.getByTestId('email');
+    const confirmButton = result.getByTestId('confirmButton');
+    const cancelButton = result.getByTestId('cancelButton');
     const dialogToggle = result.queryByTestId('dialogToggle');
     expect(username).toBeInTheDocument();
     expect(email).toBeInTheDocument();
@@ -68,11 +70,11 @@ describe('Smart Filter Component', () => {
 
   it('clicks on confirm button (desktop version)', async () => {
     const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username') as Element;
-    const email = result.container.querySelector('#email') as Element;
+    const username = result.getByTestId('username');
+    const email = result.getByTestId('email');
     fireEvent.change(username, { target: { value: 'mariorossi' } });
     fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
-    const confirmButton = await waitFor(() => result.queryByTestId('confirmButton') as Element);
+    const confirmButton = await waitFor(() => result.getByTestId('confirmButton') as Element);
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     expect(submitHandler).toBeCalledTimes(1);
@@ -91,11 +93,11 @@ describe('Smart Filter Component', () => {
   it('renders smart filters (mobile version)', () => {
     window.matchMedia = createMatchMedia(800);
     const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username');
-    const email = result.container.querySelector('#email');
+    const username = result.queryByTestId('username');
+    const email = result.queryByTestId('email');
     const confirmButton = result.queryByTestId('confirmButton');
     const cancelButton = result.queryByTestId('cancelButton');
-    const dialogToggle = result.queryByTestId('dialogToggle');
+    const dialogToggle = result.getByTestId('dialogToggle');
     expect(username).not.toBeInTheDocument();
     expect(email).not.toBeInTheDocument();
     expect(confirmButton).not.toBeInTheDocument();
@@ -107,17 +109,15 @@ describe('Smart Filter Component', () => {
   it('clicks on toggle button (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
     const result = render(<ExampleForm />);
-    const dialogToggle = result.container.querySelector(
-      '[data-testid="dialogToggle"] button'
-    ) as Element;
+    const dialogToggle = result.getByTestId('dialogToggleButton');
     fireEvent.click(dialogToggle);
     await waitFor(() => {
-      const dialog = screen.queryByTestId('mobileDialog') as Element;
+      const dialog = screen.getByTestId('mobileDialog');
       expect(dialog).toBeInTheDocument();
-      const username = dialog.querySelector('#username');
-      const email = dialog.querySelector('#email');
-      const confirmButton = dialog.querySelector('[data-testid="confirmButton"]');
-      const cancelButton = dialog.querySelector('[data-testid="cancelButton"]');
+      const username = within(dialog).getByTestId('username');
+      const email = within(dialog).getByTestId('email');
+      const confirmButton = within(dialog).getByTestId('confirmButton');
+      const cancelButton = within(dialog).getByTestId('cancelButton');
       expect(username).toBeInTheDocument();
       expect(email).toBeInTheDocument();
       expect(confirmButton).toBeInTheDocument();
@@ -134,7 +134,7 @@ describe('Smart Filter Component', () => {
     const result = render(
       <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
     );
-    const dialogToggle = await waitFor(() => result.queryByTestId('dialogToggle'));
+    const dialogToggle = await waitFor(() => result.getByTestId('dialogToggle'));
     expect(dialogToggle).toHaveTextContent('2');
   });
 });

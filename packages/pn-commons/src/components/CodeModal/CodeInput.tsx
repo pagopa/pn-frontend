@@ -1,13 +1,14 @@
 import {
+  ChangeEvent,
+  Fragment,
+  KeyboardEvent,
   memo,
+  useEffect,
   useMemo,
   useRef,
-  KeyboardEvent,
-  Fragment,
   useState,
-  ChangeEvent,
-  useEffect,
 } from 'react';
+
 import { TextField } from '@mui/material';
 
 type Props = {
@@ -137,6 +138,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
             readOnly: isReadOnly,
             pattern: '^[0-9]{1}$',
             inputMode: 'numeric',
+            'data-testid': `code-input-${index}`,
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}

@@ -77,11 +77,12 @@ function ItemsTable<ColumnId extends string>({
           }
           data-testid={testId}
         >
-          <TableHead role="rowgroup">
+          <TableHead role="rowgroup" data-testid="tableHead">
             <TableRow role="row">
               {columns.map((column) => (
                 <TableCell
                   scope="col"
+                  data-testid="tableHeadCell"
                   key={column.id}
                   align={column.align}
                   sx={{
@@ -111,7 +112,11 @@ function ItemsTable<ColumnId extends string>({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody sx={{ backgroundColor: 'background.paper' }} role="rowgroup">
+          <TableBody
+            sx={{ backgroundColor: 'background.paper' }}
+            role="rowgroup"
+            data-testid="tableBody"
+          >
             {rows.map((row, index) => (
               <TableRow
                 key={row.id}
@@ -125,6 +130,7 @@ function ItemsTable<ColumnId extends string>({
                     <TableCell
                       key={column.id}
                       role="cell"
+                      data-testid="tableBodyCell"
                       sx={{
                         width: column.width,
                         borderBottom: 'none',

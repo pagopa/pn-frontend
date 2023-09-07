@@ -1,7 +1,9 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
+
+import { fireEvent, waitFor, within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { CardElement, CardAction, Item } from '../../../types';
+import { CardAction, CardElement, Item } from '../../../types';
 import ItemsCard from '../ItemsCard';
 
 const clickActionMockFn = jest.fn();
@@ -57,17 +59,17 @@ describe('Items Card Component', () => {
     const notificationsCards = result.queryAllByTestId('itemCard');
     expect(notificationsCards).toHaveLength(cardData.length);
     notificationsCards.forEach((card, index) => {
-      const cardHeaderLeft = card.querySelector('div[data-testid="cardHeaderLeft"]');
+      const cardHeaderLeft = within(card).getByTestId('cardHeaderLeft');
       expect(cardHeaderLeft).toHaveTextContent(cardData[index][cardHeader[0].id].toString());
-      const cardHeaderRight = card.querySelector('div[data-testid="cardHeaderRight"]');
+      const cardHeaderRight = within(card).getByTestId('cardHeaderRight');
       expect(cardHeaderRight).toHaveTextContent(cardData[index][cardHeader[1].id].toString());
-      const cardBodyLabel = card.querySelectorAll('p[data-testid="cardBodyLabel"]');
-      const cardBodyValue = card.querySelectorAll('div[data-testid="cardBodyValue"]');
+      const cardBodyLabel = within(card).getAllByTestId('cardBodyLabel');
+      const cardBodyValue = within(card).getAllByTestId('cardBodyValue');
       cardBodyLabel.forEach((label, j) => {
         expect(label).toHaveTextContent(cardBody[j].label);
         expect(cardBodyValue[j]).toHaveTextContent(cardData[index][cardBody[j].id].toString());
       });
-      const cardActionsEl = card.querySelectorAll('[data-testid="cardAction"]');
+      const cardActionsEl = within(card).getAllByTestId('cardAction');
       expect(cardActionsEl).toHaveLength(cardActions.length);
       cardActionsEl.forEach((action) => {
         expect(action).toHaveTextContent(/Mocked action/i);
@@ -85,7 +87,7 @@ describe('Items Card Component', () => {
       />
     );
     const notificationsCards = result.queryAllByTestId('itemCard');
-    const cardActionsEl = notificationsCards[0].querySelector('[data-testid="cardAction"]');
+    const cardActionsEl = within(notificationsCards[0]).getByTestId('cardAction');
     fireEvent.click(cardActionsEl!);
     await waitFor(() => {
       expect(clickActionMockFn).toBeCalledTimes(1);

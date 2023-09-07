@@ -16,7 +16,7 @@ describe('AppNotAccessible Component', () => {
 
   it('clicks on assistance click', () => {
     const result = render(<AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />);
-    const assistanceLink = result.queryByTestId('assistance-button');
+    const assistanceLink = result.getByTestId('assistance-button');
     fireEvent.click(assistanceLink!);
     expect(assistanceClickHandlerMk).toBeCalledTimes(1);
   });

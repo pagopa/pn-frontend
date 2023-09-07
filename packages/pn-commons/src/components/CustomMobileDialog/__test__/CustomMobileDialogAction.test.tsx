@@ -1,8 +1,10 @@
-import { fireEvent, RenderResult } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, fireEvent } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import CustomMobileDialogAction from '../CustomMobileDialogAction';
 import * as customContext from '../CustomMobileDialog.context';
+import CustomMobileDialogAction from '../CustomMobileDialogAction';
 
 describe('CustomMobileDialogAction Component', () => {
   let result: RenderResult | undefined;

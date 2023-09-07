@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { fireEvent, render } from '../../test-utils';
 import PnBreadcrumb from '../PnBreadcrumb';
 
@@ -15,13 +17,12 @@ describe('BreadcrumbLink Component', () => {
         currentLocationLabel={'mocked-current-label'}
       />
     );
-    const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
+    const indietroButton = result.getByTestId('breadcrumb-indietro-button');
     expect(indietroButton).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/mocked-label/i);
     expect(result.container).toHaveTextContent(/mocked-current-label/i);
-    const button = result.container.querySelector('button');
-    expect(button).toHaveTextContent(/mocked-back-label/i);
-    fireEvent.click(button!);
+    expect(indietroButton).toHaveTextContent(/mocked-back-label/i);
+    fireEvent.click(indietroButton!);
     expect(backActionHandlerMock).toBeCalledTimes(1);
   });
 
@@ -37,7 +38,7 @@ describe('BreadcrumbLink Component', () => {
         currentLocationLabel={'mocked-current-label'}
       />
     );
-    const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
+    const indietroButton = result.queryByTestId('breadcrumb-indietro-button');
     expect(indietroButton).not.toBeInTheDocument();
   });
 });
