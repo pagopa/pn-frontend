@@ -1,21 +1,10 @@
 import React from 'react';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+import * as redux from 'react-redux';
 
-import {
-  arrayOfDelegates,
-  arrayOfDelegators,
-} from '../../../../pn-personafisica-webapp/src/redux/delegation/__test__/test.utils';
-import { axe, mockApi, render, act, RenderResult } from '../../__test__/test-utils';
-import {
-  DELEGATIONS_BY_DELEGATE,
-  DELEGATIONS_BY_DELEGATOR,
-  DELEGATIONS_NAME_BY_DELEGATE,
-} from '../../api/delegations/delegations.routes';
-import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
-import { apiClient } from '../../api/apiClients';
+import { createMatchMedia } from '@pagopa-pn/pn-commons';
+
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
 import Deleghe from '../Deleghe.page';
-
-const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -24,30 +13,32 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+const mockDispatchFn = jest.fn();
+
 describe('Deleghe page - accessibility tests', () => {
+  const original = window.matchMedia;
+
+  beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
+  });
+
   afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
+    useDispatchSpy.mockClear();
+    useDispatchSpy.mockReset();
+  });
+
+  afterAll(() => {
+    window.matchMedia = original;
   });
 
   it('is deleghe page accessible - desktop version', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATOR(),
-      200,
-      undefined,
-      arrayOfDelegates
-    );
-    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
-      resultsPage: arrayOfDelegators,
-      nextPagesKey: [],
-      moreResult: false,
+    let result: RenderResult | undefined;
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    await act(async () => {
+      result = render(<Deleghe />);
     });
-    mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
-    useIsMobileSpy.mockReturnValue(false);
-    const result = render(<Deleghe />);
+
     if (result) {
       const { container } = result;
       const results = await axe(container);
@@ -58,23 +49,13 @@ describe('Deleghe page - accessibility tests', () => {
   });
 
   it('is deleghe page accessible - mobile version', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATOR(),
-      200,
-      undefined,
-      arrayOfDelegates
-    );
-    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
-      resultsPage: arrayOfDelegators,
-      nextPagesKey: [],
-      moreResult: false,
+    let result: RenderResult | undefined;
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+
+    await act(async () => {
+      result = render(<Deleghe />);
     });
-    mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
-    useIsMobileSpy.mockReturnValue(true);
-    const result = render(<Deleghe />);
+
     if (result) {
       const { container } = result;
       const results = await axe(container);

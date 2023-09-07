@@ -1,5 +1,9 @@
 import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
-import { notificationToFe, overrideNotificationMock } from '../../redux/notification/__test__/test-utils';
+
+import {
+  notificationToFe,
+  overrideNotificationMock,
+} from '../../__mocks__/NotificationDetail.mock';
 import { axe } from '../../__test__/test-utils';
 import { renderComponentBase } from './NotificationDetail.page.test-utils';
 
@@ -10,8 +14,8 @@ let mockUseParamsFn;
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('react-router-dom', () => {
@@ -30,9 +34,11 @@ describe('NotificationDetail Page - accessibility tests', () => {
 
   const mockedUserInStore = { fiscal_number: 'mocked-user' };
 
-  const renderComponent = async (notification: INotificationDetail) => 
-    renderComponentBase({ mockedUserInStore, mockDispatchFn, mockActionFn, mockUseParamsFn}, notification);
-  
+  const renderComponent = async (notification: INotificationDetail) =>
+    renderComponentBase(
+      { mockedUserInStore, mockDispatchFn, mockActionFn, mockUseParamsFn },
+      notification
+    );
 
   beforeEach(() => {
     mockDispatchFn = jest.fn(() => ({
@@ -56,10 +62,11 @@ describe('NotificationDetail Page - accessibility tests', () => {
   }, 15000);
 
   test('renders NotificationDetail page without payment box', async () => {
-    const result = await renderComponent(overrideNotificationMock({recipients: [{payment: { noticeCode: '' }}]}));
+    const result = await renderComponent(
+      overrideNotificationMock({ recipients: [{ payment: { noticeCode: '' } }] })
+    );
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container).not.toHaveTextContent(/Payment/i);
     expect(await axe(result.container as Element)).toHaveNoViolations(); // Accesibility test
   }, 15000);
-
 });

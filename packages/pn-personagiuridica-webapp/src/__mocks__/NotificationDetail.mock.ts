@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
   AddressSource,
   DigitalDomicileType,
@@ -244,3 +246,8 @@ export const notificationDTO: NotificationDetail = {
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(notificationDTO);
+
+export const overrideNotificationMock = (overrideObj: object): NotificationDetail => ({
+  ..._.cloneDeep(notificationToFe),
+  ...overrideObj,
+});

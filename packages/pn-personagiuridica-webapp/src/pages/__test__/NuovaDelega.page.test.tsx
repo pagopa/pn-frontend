@@ -1,15 +1,23 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { render, fireEvent, waitFor, mockApi, testAutocomplete } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
-import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
-import { mockCreateDelegation } from '../../redux/delegation/__test__/test.utils';
-import { createDelegationMapper } from '../../redux/newDelegation/actions';
-import * as trackingFunctions from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
-import NuovaDelega from '../NuovaDelega.page';
 import { RecipientType } from '@pagopa-pn/pn-commons';
+
+import { mockCreateDelegation } from '../../__mocks__/delegations.mock';
+import {
+  RenderResult,
+  fireEvent,
+  render,
+  testAutocomplete,
+  waitFor,
+} from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
+import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
+import { createDelegationMapper } from '../../redux/newDelegation/actions';
+import { TrackEventType } from '../../utils/events';
+import * as trackingFunctions from '../../utils/mixpanel';
+import NuovaDelega from '../NuovaDelega.page';
 
 jest.mock('../../utils/delegation.utility', () => ({
   ...jest.requireActual('../../utils/delegation.utility'),
@@ -51,17 +59,29 @@ describe('NuovaDelega page', () => {
     },
   });
 
+  let mock: MockAdapter;
+  let result: RenderResult;
+
   beforeEach(() => {
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
+  });
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
     createTrackEventSpy.mockClear();
     createTrackEventSpy.mockReset();
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   it('renders the component', () => {
-    const result = render(<NuovaDelega />, initialState());
+    result = render(<NuovaDelega />, initialState());
     expect(result.container).toHaveTextContent(/nuovaDelega.title/i);
     expect(result.container).toHaveTextContent(/nuovaDelega.subtitle/i);
     const form = result.container.querySelector('form') as HTMLFormElement;
@@ -97,23 +117,21 @@ describe('NuovaDelega page', () => {
   });
 
   it('navigates to Deleghe page before creation', () => {
-    const result = render(<NuovaDelega />, initialState());
+    result = render(<NuovaDelega />, initialState());
     const backButton = result.getByTestId('breadcrumb-indietro-button');
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalled();
   });
 
   it('switch to selected entities radio and call the filling entities function', async () => {
-    const mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(), 200, undefined, []);
-    const result = render(<NuovaDelega />, initialState());
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, []);
+    result = render(<NuovaDelega />, initialState());
     const radio = result.getByTestId('radioSelectedEntities');
     fireEvent.click(radio);
     await waitFor(() => {
       expect(mock.history.get.length).toBe(1);
       expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('switch to selected entities radio and filter entities list', async () => {
@@ -131,16 +149,9 @@ describe('NuovaDelega page', () => {
         name: 'Entity C',
       },
     ];
-    let mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(), 200, undefined, entitiesList);
-    mock = mockApi(
-      mock,
-      'GET',
-      GET_ALL_ACTIVATED_PARTIES({ paNameFilter: 'filter' }),
-      200,
-      undefined,
-      [entitiesList[2]]
-    );
-    const result = render(<NuovaDelega />, initialState());
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, entitiesList);
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES({ paNameFilter: 'filter' })).reply(200, [entitiesList[2]]);
+    result = render(<NuovaDelega />, initialState());
     const form = result.container.querySelector('form') as HTMLFormElement;
     const radio = result.getByTestId('radioSelectedEntities');
     fireEvent.click(radio);
@@ -157,8 +168,6 @@ describe('NuovaDelega page', () => {
       );
     });
     await testAutocomplete(form, 'enti', [entitiesList[2]], false);
-    mock.reset();
-    mock.restore();
   });
 
   it('fills the form and calls the create function - all entities', async () => {
@@ -173,15 +182,10 @@ describe('NuovaDelega page', () => {
       enti: [],
       verificationCode: 'verification code',
     };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      CREATE_DELEGATION(),
-      200,
-      createDelegationMapper(formData),
-      mockCreateDelegation
-    );
-    const result = render(<NuovaDelega />, initialState());
+    mock
+      .onPost(CREATE_DELEGATION(), createDelegationMapper(formData))
+      .reply(200, mockCreateDelegation);
+    result = render(<NuovaDelega />, initialState());
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'nome', 'Mario');
     await testInput(form, 'cognome', 'Rossi');
@@ -196,8 +200,6 @@ describe('NuovaDelega page', () => {
       expect(mock.history.post[0].url).toContain('mandate/api/v1/mandate');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(createDelegationMapper(formData));
     });
-    mock.reset();
-    mock.restore();
     expect(result.container).toHaveTextContent(/nuovaDelega.createdTitle/i);
     expect(result.container).toHaveTextContent(/nuovaDelega.createdDescription/i);
   });
@@ -217,7 +219,7 @@ describe('NuovaDelega page', () => {
         name: 'Entity C',
       },
     ];
-    let mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(), 200, undefined, entitiesList);
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, entitiesList);
     const formData = {
       selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
       codiceFiscale: 'RSSMRA01A01A111A',
@@ -238,15 +240,10 @@ describe('NuovaDelega page', () => {
       ],
       verificationCode: 'verification code',
     };
-    mock = mockApi(
-      mock,
-      'POST',
-      CREATE_DELEGATION(),
-      200,
-      createDelegationMapper(formData),
-      mockCreateDelegation
-    );
-    const result = render(<NuovaDelega />, initialState());
+    mock
+      .onPost(CREATE_DELEGATION(), createDelegationMapper(formData))
+      .reply(200, mockCreateDelegation);
+    result = render(<NuovaDelega />, initialState());
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'nome', 'Mario');
     await testInput(form, 'cognome', 'Rossi');
@@ -269,8 +266,6 @@ describe('NuovaDelega page', () => {
       expect(mock.history.post[0].url).toContain('mandate/api/v1/mandate');
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(createDelegationMapper(formData));
     });
-    mock.reset();
-    mock.restore();
     expect(result.container).toHaveTextContent(/nuovaDelega.createdTitle/i);
     expect(result.container).toHaveTextContent(/nuovaDelega.createdDescription/i);
   });
