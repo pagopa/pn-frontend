@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
-import { createMatchMedia } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { RenderResult, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
