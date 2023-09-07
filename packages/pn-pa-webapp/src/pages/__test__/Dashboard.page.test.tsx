@@ -4,13 +4,12 @@ import React from 'react';
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
-  createMatchMedia,
   formatToTimezoneString,
   getNextDay,
-  getNotificationAllowedStatus,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import {
