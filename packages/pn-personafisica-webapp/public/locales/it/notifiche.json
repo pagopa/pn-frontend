@@ -31,7 +31,9 @@
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
     "first-message": "Non hai ricevuto nessuna notifica.",
     "action": "Vai ai tuoi recapiti",
-    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo."
+    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
+    "filter-action": "Rimuovi filtri"
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"

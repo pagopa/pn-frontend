@@ -1,19 +1,30 @@
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
+
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
-  apiOutcomeTestHelper,
   formatToTimezoneString,
   getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
-import { RenderResult, act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
+import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { notificationsDTO } from '../../__mocks__/Notifications.mock';
+import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
+import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
-import { doPrepareTestScenario } from './Notifiche.page.test-utils';
+
+const mockNavigateFn = jest.fn();
+
+// mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -22,104 +33,10 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-/**
- * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
- */
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    useIsMobile: () => false,
-    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-  };
-});
-
-describe('Notifiche Page - with notifications', () => {
+describe('Notifiche Page', () => {
   let result: RenderResult | undefined;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-
-  beforeEach(async () => {
-    const scenario = await doPrepareTestScenario();
-    result = scenario.result;
-    mockDispatchFn = scenario.mockDispatchFn;
-    mockActionFn = scenario.mockActionFn;
-  });
-
-  afterEach(() => {
-    result = undefined;
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
-
-  it('renders notifiche page', () => {
-    expect(screen.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
-    const filterForm = result?.container.querySelector('form');
-    expect(filterForm).toBeInTheDocument();
-    const notificationsTable = result?.container.querySelector('table');
-    expect(notificationsTable).toBeInTheDocument();
-    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
-    expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = result?.queryByTestId('pageSelector');
-    expect(pageSelector).toBeInTheDocument();
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
-      recipientId: '',
-      status: '',
-      subjectRegExp: '',
-      size: 10,
-    });
-  });
-
-  it('changes items per page', async () => {
-    const itemsPerPageSelectorBtn = result?.container.querySelector(
-      '[data-testid="itemsPerPageSelector"] > button'
-    );
-    fireEvent.click(itemsPerPageSelectorBtn!);
-    const itemsPerPageDropdown = await waitFor(() => screen.queryByRole('presentation'));
-    expect(itemsPerPageDropdown).toBeInTheDocument();
-    const itemsPerPageItem = within(itemsPerPageDropdown!).queryByText('50');
-    // reset mock dispatch function
-    mockDispatchFn.mockReset();
-    mockDispatchFn.mockClear();
-    fireEvent.click(itemsPerPageItem!);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockDispatchFn).toBeCalledWith({
-        payload: { size: 50, page: 0 },
-        type: 'dashboardSlice/setPagination',
-      });
-    });
-  });
-
-  it('changes page', async () => {
-    const pageSelectorBtn = result?.container.querySelector(
-      '[data-testid="pageSelector"] li:nth-child(3) > button'
-    );
-    // reset mock dispatch function
-    mockDispatchFn.mockReset();
-    mockDispatchFn.mockClear();
-    fireEvent.click(pageSelectorBtn!);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockDispatchFn).toBeCalledWith({
-        payload: { size: 10, page: 1 },
-        type: 'dashboardSlice/setPagination',
-      });
-    });
-  });
-});
-
-describe('Notifiche Page - query for notification API outcome', () => {
   let mock: MockAdapter;
-
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
+  const original = window.matchMedia;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -127,65 +44,217 @@ describe('Notifiche Page - query for notification API outcome', () => {
 
   afterEach(() => {
     mock.reset();
-    apiOutcomeTestHelper.clearMock();
   });
 
   afterAll(() => {
     mock.restore();
-    jest.resetAllMocks();
+    window.matchMedia = original;
   });
 
-  it('API error', async () => {
+  it('renders page', async () => {
     mock
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
           endDate: formatToTimezoneString(getNextDay(today)),
-          recipientId: '',
-          status: '',
-          subjectRegExp: '',
+          size: 10,
+        })
+      )
+      .reply(200, notificationsDTO);
+
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    const filterForm = result?.getByTestId('filter-form');
+    expect(filterForm).toBeInTheDocument();
+    const notificationsTable = result?.container.querySelector('table');
+    expect(notificationsTable).toBeInTheDocument();
+    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    expect(itemsPerPageSelector).toBeInTheDocument();
+    const pageSelector = result?.queryByTestId('pageSelector');
+    expect(pageSelector).toBeInTheDocument();
+  });
+
+  it('change pagination', async () => {
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 10,
+        })
+      )
+      .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 20,
+        })
+      )
+      .reply(200, notificationsDTO);
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    let rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(1);
+    // change size
+    const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
+    const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
+    fireEvent.click(itemsPerPageSelectorBtn!);
+    const itemsPerPageList = screen.getAllByRole('menuitem');
+    fireEvent.click(itemsPerPageList[1]!);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/notifications/received');
+    });
+    rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(3);
+  });
+
+  it('changes page', async () => {
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 10,
+        })
+      )
+      .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 10,
+          nextPagesKey: notificationsDTO.nextPagesKey[0],
+        })
+      )
+      .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    let rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(1);
+    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
+    // change page
+    const pageSelector = result!.getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    // the buttons are < 1 2 >
+    fireEvent.click(pageButtons[2]);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/notifications/received');
+    });
+    rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(1);
+    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+  });
+
+  it('filter', async () => {
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 10,
+        })
+      )
+      .reply(200, notificationsDTO);
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 10,
+          iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
+        })
+      )
+      .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    let rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(3);
+    rows?.forEach((row, index) => {
+      expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
+    });
+    // filter
+    const form = result?.container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-1');
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/notifications/received');
+    });
+    rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(1);
+    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+  });
+
+  it('errors on api', async () => {
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
           size: 10,
         })
       )
       .reply(500);
-
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <Notifiche />
-          </>
-        )
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Notifiche />
+        </>
+      );
+    });
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}`
     );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
+    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 
-  it('API OK', async () => {
+  it('renders page - mobile', async () => {
+    window.matchMedia = createMatchMedia(800);
     mock
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
           endDate: formatToTimezoneString(getNextDay(today)),
-          recipientId: '',
-          status: '',
-          subjectRegExp: '',
           size: 10,
         })
       )
-      .reply(200, { resultsPage: [], moreResult: false, nextPagesKey: [] });
+      .reply(200, notificationsDTO);
 
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <Notifiche />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    const filterForm = result?.getByTestId('dialogToggle');
+    expect(filterForm).toBeInTheDocument();
+    const notificationsCards = result?.getAllByTestId('itemCard');
+    expect(notificationsCards).toHaveLength(notificationsDTO.resultsPage.length);
+    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    expect(itemsPerPageSelector).toBeInTheDocument();
+    const pageSelector = result?.queryByTestId('pageSelector');
+    expect(pageSelector).toBeInTheDocument();
   });
 });

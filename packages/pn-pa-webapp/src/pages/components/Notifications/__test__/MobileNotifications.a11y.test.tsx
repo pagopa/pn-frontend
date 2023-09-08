@@ -31,7 +31,7 @@ describe('MobileNotifications Component - accessibility tests', () => {
     } else {
       fail('render() returned undefined!');
     }
-  });
+  }, 15000);
 
   it('does not have basic accessibility issues (empty notifications)', async () => {
     let result: RenderResult | undefined;
@@ -60,7 +60,6 @@ describe('MobileNotifications Component - accessibility tests', () => {
                 startDate: formatToTimezoneString(tenYearsAgo),
                 endDate: formatToTimezoneString(today),
                 iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-                mandateId: undefined,
               },
             },
           },

@@ -1,32 +1,32 @@
 import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Typography } from '@mui/material';
+
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Grid, Typography } from '@mui/material';
 import {
+  CardAction,
   CardElement,
   CardSort,
-  getNotificationStatusInfos,
-  Notification,
-  ItemsCard,
   EmptyState,
-  NotificationStatus,
   Item,
+  ItemsCard,
+  KnownSentiment,
+  MobileNotificationsSort,
+  Notification,
+  NotificationStatus,
   Sort,
   StatusTooltip,
-  CardAction,
-  MobileNotificationsSort,
-  KnownSentiment,
+  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import * as routes from '../../navigation/routes.const';
-import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
-import { Delegator } from '../../redux/delegation/types';
 import { NotificationColumn } from '../../models/Notifications';
-
+import * as routes from '../../navigation/routes.const';
+import { Delegator } from '../../redux/delegation/types';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
+import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -168,14 +168,14 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
+    emptyActionLabel: filtersApplied ? t('empty-state.filter-action') : t('empty-state.action'),
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : currentDelegator
       ? undefined
       : handleRouteContacts,
     emptyMessage: filtersApplied
-      ? undefined
+      ? t('empty-state.filter-message')
       : currentDelegator
       ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName })
       : t('empty-state.first-message'),

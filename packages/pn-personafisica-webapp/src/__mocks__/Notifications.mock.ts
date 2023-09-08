@@ -39,6 +39,12 @@ export const notificationsDTO: GetNotificationsResponse = {
   ],
 };
 
+export const emptyNotificationsFromBe: GetNotificationsResponse = {
+  resultsPage: [],
+  moreResult: false,
+  nextPagesKey: [],
+};
+
 export const notificationsToFe: GetNotificationsResponse = {
   ...notificationsDTO,
   resultsPage: notificationsDTO.resultsPage.map((r) => ({

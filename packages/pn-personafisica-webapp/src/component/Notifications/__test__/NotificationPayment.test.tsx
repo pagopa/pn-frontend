@@ -4,13 +4,10 @@ import React, { ReactNode } from 'react';
 import {
   AppResponseMessage,
   PaymentAttachmentSName,
-  PaymentHistory,
   PaymentInfoDetail,
   PaymentStatus,
   RecipientType,
   ResponseEventDispatcher,
-  TimelineCategory,
-  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
