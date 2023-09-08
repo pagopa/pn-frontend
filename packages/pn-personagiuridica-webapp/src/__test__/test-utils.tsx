@@ -48,9 +48,13 @@ const customRender = (
     navigationRouter?: NavigationRouter;
   } = {}
 ) => {
-  const testStore = configureStore({
+  testStore = configureStore({
     reducer: appReducers,
     preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
   return render(ui, {
     wrapper: ({ children }) => (
@@ -67,11 +71,8 @@ const axe = configureAxe({
     region: { enabled: false },
   },
 });
+
 expect.extend(toHaveNoViolations);
-
-type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY';
-type MockCodes = 200 | 204 | 500 | 401 | 400 | 403 | 451;
-
 /**
  * Utility function to mock api response
  * @param client Axios client or Mock Adapter instance

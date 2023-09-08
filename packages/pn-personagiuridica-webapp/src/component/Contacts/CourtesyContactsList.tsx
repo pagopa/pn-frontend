@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { Stack } from '@mui/material';
 
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
@@ -44,13 +45,13 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.EMAIL}
-        value={emailContact && emailContact.value ? emailContact.value : ''}
+        value={emailContact?.value ? emailContact.value : ''}
         blockDelete={emailContactsQuantity > 1}
       />
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.PHONE}
-        value={phoneContact && phoneContact.value ? phoneContact.value : ''}
+        value={phoneContact?.value ? phoneContact.value : ''}
         blockDelete={phoneContactsQuantity > 1}
       />
     </Stack>

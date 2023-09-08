@@ -1,16 +1,16 @@
 import {
   Dispatch,
-  forwardRef,
   Fragment,
-  memo,
   ReactChild,
   SetStateAction,
+  forwardRef,
+  memo,
   useImperativeHandle,
   useMemo,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AsyncThunk } from '@reduxjs/toolkit';
+
 import {
   Button,
   Dialog,
@@ -21,16 +21,17 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
-
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
+import { AsyncThunk } from '@reduxjs/toolkit';
+
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch } from '../../redux/hooks';
-import { trackEventByType } from '../../utils/mixpanel';
-import { EventActions, TrackEventType } from '../../utils/events';
 import { getContactEventType } from '../../utils/contacts.utility';
+import { EventActions, TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -102,9 +103,11 @@ const DeleteDialog: React.FC<DialogProps> = ({
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>{removeModalTitle}</DialogTitle>
+      <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
+        {removeModalTitle}
+      </DialogTitle>
       <DialogContent sx={{ px: 4 }}>
-      <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
+        <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
       </DialogContent>
       <DialogActions
         disableSpacing={isMobile}
@@ -114,12 +117,14 @@ const DeleteDialog: React.FC<DialogProps> = ({
           px: 4,
           pb: 4,
         }}
-      >{deleteModalActions}</DialogActions>
+      >
+        {deleteModalActions}
+      </DialogActions>
     </Dialog>
   );
 };
 
-const DigitalContactElem = forwardRef(
+const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   (
     {
       fields,
@@ -137,7 +142,7 @@ const DigitalContactElem = forwardRef(
       editDisabled,
       setContextEditMode,
       onDeleteCbk,
-    }: Props,
+    },
     ref
   ) => {
     const { t } = useTranslation(['common']);

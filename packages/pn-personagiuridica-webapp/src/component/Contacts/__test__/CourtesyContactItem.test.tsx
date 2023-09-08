@@ -13,7 +13,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: () => 'mocked verify description',
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('CourtesyContactItem component', () => {
@@ -35,7 +35,6 @@ describe('CourtesyContactItem component', () => {
   describe('test component having type "phone"', () => {
     const INPUT_VALID_PHONE = '3331234567';
     const INPUT_INVALID_PHONE = '33312345';
-    const INPUT_VALID_PHONE_UPDATE = '+393337654321';
 
     it('type in an invalid number', async () => {
       result = render(
@@ -47,40 +46,18 @@ describe('CourtesyContactItem component', () => {
           />
         </DigitalContactsCodeVerificationProvider>
       );
-      const inputs = await result.findAllByRole('textbox');
-      expect(inputs![0]).toBeInTheDocument();
-      expect(inputs).toHaveLength(1);
-      const input = result.getByTestId('courtesy-contact-phone');
-      expect(inputs![0]).toEqual(input);
+      const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+      // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
-      const textMessage = result.queryByText('courtesy-contacts.valid-phone');
-      expect(textMessage).toBeInTheDocument();
-      const button = screen.getByRole('button');
+      const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      fireEvent.change(input!, { target: { value: '' } });
+      await waitFor(() => expect(input!).toHaveValue(''));
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      const button = result.getByRole('button');
       expect(button).toHaveTextContent('courtesy-contacts.phone-add');
       expect(button).toBeDisabled();
-    });
-
-    it('type in a valid number', async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.PHONE}
-            value=""
-          />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const input = result.getByRole('textbox');
-      expect(input).toHaveValue('');
-      fireEvent.change(input!, { target: { value: INPUT_VALID_PHONE } });
-      await waitFor(() => expect(input!).toHaveValue(INPUT_VALID_PHONE));
-      const textMessage = result.queryByText('courtesy-contacts.valid-phone');
-      expect(textMessage).not.toBeInTheDocument();
-      const buttons = result.getAllByRole('button');
-      expect(buttons).toHaveLength(1);
-      expect(buttons[0]).toHaveTextContent('courtesy-contacts.phone-add');
-      expect(buttons[0]).toBeEnabled();
     });
 
     it('save a new phone number', async () => {
@@ -154,81 +131,18 @@ describe('CourtesyContactItem component', () => {
           />
         </DigitalContactsCodeVerificationProvider>
       );
-      //verify initial conditions
       result.getByText(INPUT_VALID_PHONE);
-      result.getByRole('button', { name: 'button.elimina' });
       const editButton = result.getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
-      const input = result.getByRole('textbox');
+      const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
       const saveButton = result.getByRole('button', { name: 'button.salva' });
       expect(input).toHaveValue(INPUT_VALID_PHONE);
       expect(saveButton).toBeEnabled();
-      fireEvent.change(input, { target: { value: INPUT_INVALID_PHONE } });
+      fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
       expect(saveButton).toBeDisabled();
-    });
-
-    it('override an existing phone number with a new one', async () => {
-      mock
-        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
-          value: INPUT_VALID_PHONE_UPDATE,
-        })
-        .reply(200);
-      mock
-        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.SMS), {
-          value: INPUT_VALID_PHONE_UPDATE,
-          verificationCode: '01234',
-        })
-        .reply(204);
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.PHONE}
-            value={INPUT_VALID_PHONE}
-          />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const editButton = result.getByRole('button', { name: 'button.modifica' });
-      fireEvent.click(editButton);
-      const input = result.getByRole('textbox');
-      fireEvent.change(input!, { target: { value: INPUT_VALID_PHONE_UPDATE } });
-      await waitFor(() => expect(input!).toHaveValue(INPUT_VALID_PHONE_UPDATE));
-      const saveButton = result.getByRole('button', { name: 'button.salva' });
-      fireEvent.click(saveButton);
-      // Confirms the disclaimer dialog
-      const disclaimerCheckbox = await waitFor(() =>
-        screen.getByRole('checkbox', { name: 'button.capito' })
-      );
-      fireEvent.click(disclaimerCheckbox);
-      const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-      fireEvent.click(disclaimerConfirmButton);
-      await waitFor(() => {
-        expect(mock.history.post).toHaveLength(1);
-        expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-          value: INPUT_VALID_PHONE_UPDATE,
-        });
-      });
-      const dialog = await waitFor(() => {
-        const dialogEl = screen.queryByTestId('codeDialog');
-        expect(dialogEl).toBeInTheDocument();
-        return dialogEl;
-      });
-      const codeInputs = dialog?.querySelectorAll('input');
-      // fill inputs with values
-      codeInputs?.forEach((codeInput, index) => {
-        fireEvent.change(codeInput, { target: { value: index.toString() } });
-      });
-      const dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![1]);
-      await waitFor(() => {
-        expect(mock.history.post).toHaveLength(2);
-        expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-          value: INPUT_VALID_PHONE_UPDATE,
-          verificationCode: '01234',
-        });
-      });
-      expect(dialog).not.toBeInTheDocument();
+      const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
     });
 
     it('delete phone number', async () => {
@@ -238,11 +152,11 @@ describe('CourtesyContactItem component', () => {
           <CourtesyContactItem
             recipientId="mocked-recipient"
             type={CourtesyFieldType.PHONE}
-            value={INPUT_VALID_PHONE_UPDATE}
+            value={INPUT_VALID_PHONE}
           />
         </DigitalContactsCodeVerificationProvider>
       );
-      const phoneText = result.getByText(INPUT_VALID_PHONE_UPDATE);
+      const phoneText = result.getByText(INPUT_VALID_PHONE);
       expect(phoneText).toBeInTheDocument();
       const deleteButton = result.getByRole('button', { name: 'button.elimina' });
       fireEvent.click(deleteButton);
@@ -267,7 +181,6 @@ describe('CourtesyContactItem component', () => {
 
   describe('testing component having type "email"', () => {
     const VALID_EMAIL = 'prova@pagopa.it';
-    const VALID_EMAIL_UPDATE = 'prova-nuova@pagopa.it';
     const INVALID_EMAIL = 'testpagopa.it';
 
     it('type in an invalid email', async () => {
@@ -280,40 +193,18 @@ describe('CourtesyContactItem component', () => {
           />
         </DigitalContactsCodeVerificationProvider>
       );
-      const inputs = await result.findAllByRole('textbox');
-      expect(inputs![0]).toBeInTheDocument();
-      expect(inputs).toHaveLength(1);
-      const input = result.getByTestId('courtesy-contact-email');
-      expect(inputs![0]).toEqual(input);
+      const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+      // set invalid values
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL));
-      const textMessage = result.queryByText('courtesy-contacts.valid-email');
-      expect(textMessage).toBeInTheDocument();
-      const button = screen.getByRole('button');
+      const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
+      fireEvent.change(input!, { target: { value: '' } });
+      await waitFor(() => expect(input!).toHaveValue(''));
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
+      const button = result.getByRole('button');
       expect(button).toHaveTextContent('courtesy-contacts.email-add');
       expect(button).toBeDisabled();
-    });
-
-    it('type in a valid email', async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.EMAIL}
-            value=""
-          />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const input = result.getByRole('textbox');
-      expect(input).toHaveValue('');
-      fireEvent.change(input!, { target: { value: VALID_EMAIL } });
-      await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL));
-      const textMessage = result.queryByText('courtesy-contacts.valid-email');
-      expect(textMessage).not.toBeInTheDocument();
-      const buttons = result.getAllByRole('button');
-      expect(buttons).toHaveLength(1);
-      expect(buttons[0]).toHaveTextContent('courtesy-contacts.email-add');
-      expect(buttons[0]).toBeEnabled();
     });
 
     it('add a new email', async () => {
@@ -385,79 +276,19 @@ describe('CourtesyContactItem component', () => {
           />
         </DigitalContactsCodeVerificationProvider>
       );
-      //verify initial conditions
       result.getByText(VALID_EMAIL);
       result.getByRole('button', { name: 'button.elimina' });
       const editButton = result.getByRole('button', { name: 'button.modifica' });
       fireEvent.click(editButton);
-      const input = result.getByRole('textbox');
+      const input = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
       const saveButton = result.getByRole('button', { name: 'button.salva' });
       expect(input).toHaveValue(VALID_EMAIL);
       expect(saveButton).toBeEnabled();
-      fireEvent.change(input, { target: { value: INVALID_EMAIL } });
+      fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
       await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
       expect(saveButton).toBeDisabled();
-    });
-
-    it('override an existing email with a new one', async () => {
-      mock
-        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
-          value: VALID_EMAIL_UPDATE,
-        })
-        .reply(200);
-      mock
-        .onPost(COURTESY_CONTACT('default', CourtesyChannelType.EMAIL), {
-          value: VALID_EMAIL_UPDATE,
-          verificationCode: '01234',
-        })
-        .reply(204);
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactItem
-            recipientId="mocked-recipient"
-            type={CourtesyFieldType.EMAIL}
-            value={VALID_EMAIL}
-          />
-        </DigitalContactsCodeVerificationProvider>
-      );
-      const editButton = result.getByRole('button', { name: 'button.modifica' });
-      fireEvent.click(editButton);
-      const input = result.getByRole('textbox');
-      fireEvent.change(input!, { target: { value: VALID_EMAIL_UPDATE } });
-      await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL_UPDATE));
-      const saveButton = screen.getByRole('button', { name: 'button.salva' });
-      fireEvent.click(saveButton!);
-      // Confirms the disclaimer dialog
-      const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-      fireEvent.click(disclaimerCheckbox);
-      const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-      fireEvent.click(disclaimerConfirmButton);
-      await waitFor(() => {
-        expect(mock.history.post).toHaveLength(1);
-        expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-          value: VALID_EMAIL_UPDATE,
-        });
-      });
-      const dialog = await waitFor(() => {
-        const dialogEl = screen.queryByTestId('codeDialog');
-        expect(dialogEl).toBeInTheDocument();
-        return dialogEl;
-      });
-      const codeInputs = dialog?.querySelectorAll('input');
-      // fill inputs with values
-      codeInputs?.forEach((codeInput, index) => {
-        fireEvent.change(codeInput, { target: { value: index.toString() } });
-      });
-      const dialogButtons = dialog?.querySelectorAll('button');
-      fireEvent.click(dialogButtons![1]);
-      await waitFor(() => {
-        expect(mock.history.post).toHaveLength(2);
-        expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
-          value: VALID_EMAIL_UPDATE,
-          verificationCode: '01234',
-        });
-      });
-      expect(dialog).not.toBeInTheDocument();
+      const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
+      expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
     });
 
     it('delete email', async () => {

@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { act, RenderResult } from "@testing-library/react";
 import { fail } from 'assert';
+import * as React from 'react';
 
-import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
-import { axe, render } from "../../../__test__/test-utils";
-import CourtesyContactsList from "../CourtesyContactsList";
+import { RenderResult, act } from '@testing-library/react';
+
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { axe, render } from '../../../__test__/test-utils';
+import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
 jest.mock('react-i18next', () => ({
@@ -12,27 +13,10 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const mockedContacts: Array<DigitalAddress> = [{
-  addressType: 'courtesy',
-  recipientId: 'recipient1',
-  senderId: 'default',
-  channelType: CourtesyChannelType.SMS,
-  value: '3331234567',
-  code: '12345',
-}, {
-  addressType: 'courtesy',
-  recipientId: 'recipient1',
-  senderId: 'default',
-  channelType: CourtesyChannelType.EMAIL,
-  value: 'test@test.com',
-  code: '54321',
-},
-];
-
 describe('CourtesyContactsList Component', () => {
-  // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
   it('does not have basic accessibility issues (empty store)', async () => {
@@ -44,11 +28,11 @@ describe('CourtesyContactsList Component', () => {
       );
     });
 
-    if(result){
+    if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 
@@ -56,16 +40,16 @@ describe('CourtesyContactsList Component', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedContacts} />
+          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalAddresses.courtesy} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
 
-    if(result){
+    if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });

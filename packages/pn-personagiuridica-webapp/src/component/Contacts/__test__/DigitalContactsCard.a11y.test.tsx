@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { axe, render } from '../../../__test__/test-utils';
 import DigitalContactsCard from '../DigitalContactsCard';
 
@@ -12,6 +13,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('DigitalContactsCard Component - accessibility tests', () => {
