@@ -92,7 +92,6 @@ const notificationSlice = createSlice({
       // Carlos Lombardi, 2023.02.02
       state.downtimeLegalFactUrl = action.payload.url;
     });
-    // aggiungere i casi di stato della response
   },
 });
 

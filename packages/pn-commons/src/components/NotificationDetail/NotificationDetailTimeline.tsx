@@ -62,7 +62,7 @@ const NotificationDetailTimeline = ({
   showMoreButtonLabel,
   showLessButtonLabel,
   eventTrackingCallbackShowMore,
-  disableDownloads,
+  disableDownloads = false,
   isParty = true,
 }: Props) => {
   const [state, setState] = useState(false);

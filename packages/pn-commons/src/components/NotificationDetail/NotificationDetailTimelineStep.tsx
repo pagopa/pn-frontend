@@ -90,7 +90,7 @@ const timelineStepCmp = (
  * @param eventTrackingCallbackShowMore event tracking callback
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  * @param disableDownloads if notification is disabled
- * @param isParty for specific render of notification
+ * @param isParty if is party chip rendered with opacity for status cancellation in progress
  */
 
 const NotificationDetailTimelineStep = ({

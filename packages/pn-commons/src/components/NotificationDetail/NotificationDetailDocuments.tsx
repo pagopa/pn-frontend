@@ -32,7 +32,7 @@ const NotificationDetailDocuments = ({
   clickHandler,
   documentsAvailable = true,
   downloadFilesMessage,
-  disableDownloads,
+  disableDownloads = false,
 }: // TODO: remove comment when link ready downloadFilesLink
 Props) => {
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
