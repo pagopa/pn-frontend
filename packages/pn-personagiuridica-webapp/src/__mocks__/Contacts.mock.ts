@@ -5,9 +5,10 @@ export const digitalAddresses: DigitalAddresses = {
     {
       addressType: 'legal',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',
-      senderId: 'cmbo',
+      senderId: 'default',
       channelType: LegalChannelType.PEC,
-      value: 'nome.utente@server.it',
+      value: 'nome.utente@pec.it',
+      pecValid: true,
     },
     {
       addressType: 'legal',
@@ -35,6 +36,13 @@ export const digitalAddresses: DigitalAddresses = {
     },
   ],
   courtesy: [
+    {
+      addressType: 'courtesy',
+      recipientId: '123e4567-e89b-12d3-a456-426614174000',
+      senderId: 'comune-milano',
+      channelType: CourtesyChannelType.EMAIL,
+      value: 'nome.utente@mail-comune-milano.it',
+    },
     {
       addressType: 'courtesy',
       recipientId: '123e4567-e89b-12d3-a456-426614174000',

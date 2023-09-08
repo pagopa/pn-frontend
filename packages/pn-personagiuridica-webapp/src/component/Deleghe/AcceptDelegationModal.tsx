@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import {
   Button,
   Dialog,
@@ -22,10 +23,10 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { ServerResponseErrorCode } from '../../utils/AppError/types';
+import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { GroupStatus } from '../../models/groups';
+import { ServerResponseErrorCode } from '../../utils/AppError/types';
 
 type Props = {
   isEditMode: boolean;

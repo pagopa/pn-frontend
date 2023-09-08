@@ -1,8 +1,12 @@
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   AutocompleteRenderOptionState,
   Box,
@@ -14,9 +18,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
   ApiErrorWrapper,
   CustomTagGroup,
@@ -33,19 +34,19 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { GroupStatus } from '../../models/groups';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
-import { setFilters } from '../../redux/delegation/reducers';
-import delegationToItem from '../../utils/delegation.utility';
-import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import {
   DelegationStatus,
   DelegatorsColumn,
   DelegatorsFormFilters,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
+import { GroupStatus } from '../../models/groups';
+import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { setFilters } from '../../redux/delegation/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import delegationToItem from '../../utils/delegation.utility';
+import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const initialEmptyValues: {

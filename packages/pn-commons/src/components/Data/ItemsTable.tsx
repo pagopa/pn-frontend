@@ -96,6 +96,7 @@ function ItemsTable<ColumnId extends string>({
                       active={sort.orderBy === column.id}
                       direction={sort.orderBy === column.id ? sort.order : 'asc'}
                       onClick={sortHandler(column.id)}
+                      data-testid={`${testId}.sort.${column.id}`}
                     >
                       {column.label}
                       {sort.orderBy === column.id && (

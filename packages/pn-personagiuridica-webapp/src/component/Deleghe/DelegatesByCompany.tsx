@@ -1,17 +1,19 @@
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 import AddIcon from '@mui/icons-material/Add';
-import { EmptyState, ApiErrorWrapper, useIsMobile, SmartTable, Item } from '@pagopa-pn/pn-commons';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { ApiErrorWrapper, EmptyState, Item, SmartTable, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+
+import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
