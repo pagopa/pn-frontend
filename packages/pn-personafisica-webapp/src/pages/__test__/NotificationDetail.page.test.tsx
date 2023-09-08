@@ -1,11 +1,11 @@
+import React from 'react';
 import { act } from 'react-dom/test-utils';
-
 import {
   NotificationDetail as INotificationDetail,
   NotificationDetailTableRow,
   NotificationStatus,
   apiOutcomeTestHelper,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import { RenderResult, fireEvent, screen, waitFor } from '@testing-library/react';
 
@@ -13,7 +13,7 @@ import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   notificationToFe,
   overrideNotificationMock,
-  recipient,
+  paymentsData,
 } from '../../__mocks__/NotificationDetail.mock';
 import { render } from '../../__test__/test-utils';
 import * as routes from '../../navigation/routes.const';
@@ -268,10 +268,9 @@ describe('NotificationDetail Page', () => {
     }));
     result = await renderComponent(notificationToFe);
 
-    const paymentHistory = populatePaymentHistory(
-      recipient.taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       paymentInfo
     );
 
@@ -297,19 +296,6 @@ describe('NotificationDetail Page', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(4);
       expect(mockActionFn).toBeCalledTimes(1);
-      // expect(mockDispatchFn).toBeCalledWith({
-      //   payload: {
-      //     paymentNotice: {
-      //       noticeNumber: values.noticeCode,
-      //       fiscalCode: values.creditorTaxId,
-      //       amount: values.amount,
-      //       companyName: notificationToFe.senderDenomination,
-      //       description: notificationToFe.subject,
-      //     },
-      //     returnUrl: window.location.href,
-      //   },
-      //   type: 'getNotificationPaymentUrl',
-      // });
     });
   });
 

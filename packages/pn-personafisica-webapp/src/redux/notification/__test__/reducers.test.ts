@@ -5,13 +5,14 @@ import {
   PaymentAttachmentSName,
   PaymentStatus,
   RecipientType,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 
 import {
   notificationDTO,
   notificationToFe,
+  paymentsData,
   recipient,
 } from '../../../__mocks__/NotificationDetail.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
@@ -41,7 +42,7 @@ import {
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
 } from '../actions';
-import { resetLegalFactState, resetState, setF24Payments } from '../reducers';
+import { resetLegalFactState, resetState } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -74,7 +75,10 @@ const initialState = {
   legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
-  paymentInfo: [],
+  paymentsData: {
+    pagoPaF24: [],
+    f24Only: [],
+  },
   downtimeLegalFactUrl: '',
   downtimeEvents: [],
 };
@@ -199,13 +203,6 @@ describe('Notification detail redux state tests', () => {
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 
-  it('should be able to populate paymentInfo', () => {
-    const action = store.dispatch(setF24Payments(notificationToFe.recipients[0].payments));
-    const payload = action.payload;
-    expect(action.type).toBe('notificationSlice/setF24Payments');
-    expect(payload).toEqual(notificationToFe.recipients[0].payments);
-  });
-
   it('Should be able to fetch the pagopa document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
@@ -251,7 +248,7 @@ describe('Notification detail redux state tests', () => {
       notificationState: {
         notification: notificationToFe,
         timeline: notificationToFe.timeline,
-        paymentInfo: notificationToFe.recipients,
+        paymentsData,
       },
     });
     const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -267,10 +264,9 @@ describe('Notification detail redux state tests', () => {
       paymentInfo
     );
 
-    const paymentHistory = populatePaymentHistory(
-      recipient.taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationDTO.timeline,
-      notificationDTO.recipients,
+      paymentsData.pagoPaF24,
       paymentInfo
     );
     const action = await mockedStore.dispatch(
@@ -280,19 +276,21 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
     expect(payload).toStrictEqual(paymentHistory);
     const state = mockedStore.getState().notificationState;
-    expect(state.paymentInfo).toStrictEqual(paymentHistory);
+    expect(state.paymentsData.pagoPaF24).toStrictEqual(paymentHistory);
   });
 
   it('Should be able to fetch payment info and replace the modified payment', async () => {
     const mockedStore = createMockedStore({
       notificationState: {
         notification: notificationToFe,
-        paymentInfo: populatePaymentHistory(
-          recipient.taxId,
-          notificationDTO.timeline,
-          notificationDTO.recipients,
-          paymentInfo
-        ),
+        paymentsData: {
+          pagoPaF24: populatePaymentsPagoPaF24(
+            notificationToFe.timeline,
+            paymentsData.pagoPaF24,
+            paymentInfo
+          ),
+          f24Only: paymentsData.f24Only,
+        },
       },
     });
 
@@ -310,14 +308,13 @@ describe('Notification detail redux state tests', () => {
       { ...failedPayment, status: PaymentStatus.SUCCEEDED },
     ]);
 
-    const paymentHistory = populatePaymentHistory(
-      recipient.taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       [{ ...failedPayment!, status: PaymentStatus.SUCCEEDED }]
     );
 
-    const actualState = mockedStore.getState().notificationState.paymentInfo;
+    const actualState = mockedStore.getState().notificationState.paymentsData.pagoPaF24;
 
     const action = await mockedStore.dispatch(
       getNotificationPaymentInfo({ taxId: recipient.taxId, paymentInfoRequest })
@@ -336,7 +333,7 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
     expect(payload).toStrictEqual(paymentHistory);
-    const state = mockedStore.getState().notificationState.paymentInfo;
+    const state = mockedStore.getState().notificationState.paymentsData.pagoPaF24;
     expect(state).toStrictEqual(newState);
   });
 
@@ -344,12 +341,14 @@ describe('Notification detail redux state tests', () => {
     const mockedStore = createMockedStore({
       notificationState: {
         notification: notificationToFe,
-        paymentInfo: populatePaymentHistory(
-          recipient.taxId,
-          notificationDTO.timeline,
-          notificationDTO.recipients,
-          paymentInfo
-        ),
+        paymentsData: {
+          pagoPaF24: populatePaymentsPagoPaF24(
+            notificationToFe.timeline,
+            paymentsData.pagoPaF24,
+            paymentInfo
+          ),
+          f24Only: paymentsData.f24Only,
+        },
       },
     });
 
@@ -366,20 +365,19 @@ describe('Notification detail redux state tests', () => {
       failedPayment,
     ]);
 
-    const paymentHistory = populatePaymentHistory(
-      recipient.taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       [failedPayment!]
     );
 
-    const actualState = mockedStore.getState().notificationState.paymentInfo;
+    const actualState = mockedStore.getState().notificationState.paymentsData.pagoPaF24;
 
     const action = await mockedStore.dispatch(
       getNotificationPaymentInfo({ taxId: recipient.taxId, paymentInfoRequest })
     );
 
-    const newState = mockedStore.getState().notificationState.paymentInfo;
+    const newState = mockedStore.getState().notificationState.paymentsData.pagoPaF24;
 
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');

@@ -11,14 +11,17 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
 } from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
-const payments: Array<NotificationDetailPayment> = [
+export const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '77777777777',
@@ -396,6 +399,11 @@ export const notificationDTO: NotificationDetail = {
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory,
   timeline,
+};
+
+export const paymentsData: PaymentsData = {
+  pagoPaF24: getPagoPaF24Payments(payments),
+  f24Only: getF24Payments(payments),
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(
