@@ -106,7 +106,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2023-08-23T07:39:54.877429741Z',
     legalFactsIds: [
       {
-        key: 'safestorage://PN_LEGAL_FACTS-e0f9106c3ca4c1aaa8de73ecbc0eba5.pdf',
+        key: 'PN_LEGAL_FACTS-e0f9106c3ca4c1aaa8de73ecbc0eba5.pdf',
         category: LegalFactType.SENDER_ACK,
       },
     ],
@@ -120,7 +120,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     category: TimelineCategory.AAR_GENERATION,
     details: {
       recIndex: 2,
-      generatedAarUrl: 'safestorage://PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
+      generatedAarUrl: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
       numberOfPages: 1,
     },
   },
@@ -249,7 +249,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2023-08-23T07:45:19Z',
     legalFactsIds: [
       {
-        key: 'safestorage://PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
+        key: 'PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
         category: LegalFactType.ANALOG_DELIVERY,
       },
     ],
@@ -262,7 +262,7 @@ const timeline: Array<INotificationDetailTimeline> = [
         {
           id: '0',
           documentType: 'AR',
-          url: 'safestorage://PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
+          url: 'PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
         },
       ],
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
@@ -337,7 +337,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2023-08-23T12:38:42.172599701Z',
     legalFactsIds: [
       {
-        key: 'safestorage://PN_LEGAL_FACTS-4751a48146e41819522e4567b13c5a2.pdf',
+        key: 'PN_LEGAL_FACTS-4751a48146e41819522e4567b13c5a2.pdf',
         category: LegalFactType.RECIPIENT_ACCESS,
       },
     ],
@@ -368,6 +368,30 @@ const recipients: Array<NotificationDetailRecipient> = [
       municipalityDetails: 'CINISELLOBALSAMO',
       province: 'MI',
       foreignState: 'ITALIA',
+    },
+    payment: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302181677769720267',
+      pagoPaForm: {
+        digests: {
+          sha256: 'mocked-pagopa-sha256',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'mocked-pagopa-key',
+          versionToken: 'mockedVersionToken',
+        },
+      },
+      f24flatRate: {
+        digests: {
+          sha256: 'mocked-f24-sha256',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'mocked-f24-key',
+          versionToken: 'mockedVersionToken',
+        },
+      },
     },
   },
 ];
@@ -409,16 +433,4 @@ export const notificationToFe = parseNotificationDetailForRecipient(
   _.cloneDeep(notificationDTO),
   recipients[2].taxId,
   []
-);
-
-export const overrideNotificationMock = (overrideObj: object): NotificationDetail => ({
-  ..._.cloneDeep(notificationToFe),
-  ...overrideObj,
-});
-
-export const notificationToFeDelegate = parseNotificationDetailForRecipient(
-  _.cloneDeep(notificationDTO),
-  'CGNNMO80A03H501U', // this is the taxid of the user delegated
-  arrayOfDelegators,
-  arrayOfDelegators[2].mandateId
 );
