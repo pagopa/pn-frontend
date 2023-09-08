@@ -68,7 +68,7 @@
     "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
     "payment": {
-      "cancelled-alert-text-payment": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente.",
+      "cancelled-alert-text-payment": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, la lista potrebbe non essere aggiornata.",
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
       "summary-in-progress": "Pagamento in corso",

@@ -468,71 +468,77 @@ const NotificationPayment: React.FC<Props> = ({
       mainText={t('detail.payment.message-error-fetch-payment')}
     >
       <Paper sx={{ p: 3, mb: '1rem' }} elevation={0}>
-        {notificationIsCancelled && (
-          <Alert
-            tabIndex={0}
-            data-testid="cancelledAlertTextPayment"
-            sx={{ mb: 2 }}
-            severity="info"
-          >
-            {t('detail.payment.cancelled-alert-text-payment')}&nbsp;
-            <Link
-              href={faqHowDoIGetRefundedCompleteLink}
-              sx={{ fontSize: '16px' }}
-              target="_blank"
-              variant="body1"
-            >
-              {t('detail.disclaimer-link')}
-            </Link>
-          </Alert>
-        )}
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8} mb={2}>
             <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
               {data.title}
             </Typography>
           </Grid>
-          <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
-            <Typography
-              variant="h5"
-              aria-label={t('detail.payment.amount')}
-              display="inline"
-              fontWeight={600}
-              fontSize={24}
+          {notificationIsCancelled && (
+            <Alert
+              tabIndex={0}
+              data-testid="cancelledAlertTextPayment"
+              sx={{ mb: 2 }}
+              severity="info"
             >
-              {loading ? (
-                <Skeleton
-                  data-testid="loading-skeleton"
-                  width={100}
-                  height={28}
-                  aria-label="loading"
-                  sx={{ float: 'right' }}
-                />
-              ) : (
-                data.amount
-              )}
-            </Typography>
-          </Grid>
+              {t('detail.payment.cancelled-alert-text-payment')}&nbsp;
+              <Link
+                href={faqHowDoIGetRefundedCompleteLink}
+                sx={{ fontSize: '16px' }}
+                target="_blank"
+                variant="body1"
+              >
+                {t('detail.disclaimer-link')}
+              </Link>
+            </Alert>
+          )}
+          {!notificationIsCancelled && (
+            <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
+              <Typography
+                variant="h5"
+                aria-label={t('detail.payment.amount')}
+                display="inline"
+                fontWeight={600}
+                fontSize={24}
+              >
+                {loading ? (
+                  <Skeleton
+                    data-testid="loading-skeleton"
+                    width={100}
+                    height={28}
+                    aria-label="loading"
+                    sx={{ float: 'right' }}
+                  />
+                ) : (
+                  data.amount
+                )}
+              </Typography>
+            </Grid>
+          )}
+
           <Stack spacing={2} width="100%">
-            <Box width="100%">
-              {data.message && (
-                <Alert
-                  severity={data.message.type}
-                  action={isMobile ? undefined : getMessageAction(data.message)}
-                >
-                  <Typography variant="body1">{data.message.body}</Typography>
-                  <Typography variant="body1" fontWeight="bold">
-                    {data.message.errorCode}
-                  </Typography>
-                  {isMobile ? (
-                    <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
-                      {getMessageAction(data.message)}
-                    </Box>
-                  ) : null}
-                </Alert>
-              )}
-            </Box>
-            {loading && (
+            {!notificationIsCancelled && (
+              <Box width="100%">
+                {data.message && (
+                  <Alert
+                    severity={data.message.type}
+                    action={isMobile ? undefined : getMessageAction(data.message)}
+                  >
+                    <Typography variant="body1">{data.message.body}</Typography>
+                    <Typography variant="body1" fontWeight="bold">
+                      {data.message.errorCode}
+                    </Typography>
+                    {isMobile ? (
+                      <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
+                        {getMessageAction(data.message)}
+                      </Box>
+                    ) : null}
+                  </Alert>
+                )}
+              </Box>
+            )}
+
+            {loading && !notificationIsCancelled && (
               <Grid item xs={12} lg={12}>
                 <LoadingButton
                   loading={loading}
@@ -545,7 +551,7 @@ const NotificationPayment: React.FC<Props> = ({
                 </LoadingButton>
               </Grid>
             )}
-            {!loading && data.action && (
+            {!loading && data.action && !notificationIsCancelled && (
               <>
                 <Grid item xs={12} lg={12}>
                   <Button onClick={data.action.callback} variant="contained" fullWidth>
