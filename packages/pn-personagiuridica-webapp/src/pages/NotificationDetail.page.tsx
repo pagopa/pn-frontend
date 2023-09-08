@@ -48,7 +48,6 @@ import {
   clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  setF24Payments,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
@@ -105,7 +104,7 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
 
-  const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
+  const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
   const pagopaAttachmentUrl = useAppSelector(
     (state: RootState) => state.notificationState.pagopaAttachmentUrl
@@ -275,11 +274,6 @@ const NotificationDetail = () => {
         }
         return acc;
       }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
-
-      if (paymentInfoRequest.length === 0) {
-        void dispatch(setF24Payments(currentRecipient.payments));
-        return;
-      }
 
       void dispatch(
         getNotificationPaymentInfo({

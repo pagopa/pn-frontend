@@ -1,19 +1,19 @@
 import {
   Downtime,
-  ExtRegistriesPaymentDetails,
+  F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationDetailDocument,
   NotificationDetailRecipient,
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
   PhysicalCommunicationType,
   RecipientType,
-  populatePaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -63,7 +63,10 @@ const initialState = {
   f24AttachmentUrl: '',
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
-  paymentInfo: [] as Array<PaymentDetails>,
+  paymentsData: {
+    pagoPaF24: [] as Array<PaymentDetails>,
+    f24Only: [] as Array<F24PaymentDetails>,
+  },
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -80,12 +83,42 @@ const notificationSlice = createSlice({
     clearDowntimeLegalFactData: (state) => {
       state.downtimeLegalFactUrl = '';
     },
-    setF24Payments: (state, action) => {
-      state.paymentInfo = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
+      const paymentsOfRecipient = action.payload.recipients.find(
+        (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
+      )?.payments;
+
+      if (paymentsOfRecipient) {
+        const f24Payments = paymentsOfRecipient.reduce((arr, payment) => {
+          if (!payment.pagoPA && payment.f24) {
+            // eslint-disable-next-line functional/immutable-data
+            arr.push(payment.f24);
+          }
+          return arr;
+        }, [] as Array<F24PaymentDetails>);
+
+        const pagoPAPaymentFullDetails = paymentsOfRecipient.reduce((arr, payment) => {
+          if (payment.pagoPA) {
+            // eslint-disable-next-line functional/immutable-data
+            arr.push({
+              pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
+              f24: payment.f24,
+              isLoading: true,
+            });
+          }
+          return arr;
+        }, [] as Array<PaymentDetails>);
+
+        if (pagoPAPaymentFullDetails) {
+          state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
+        }
+
+        if (f24Payments) {
+          state.paymentsData.f24Only = f24Payments;
+        }
+      }
       state.notification = action.payload;
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
@@ -120,43 +153,28 @@ const notificationSlice = createSlice({
       if (action.payload) {
         // Not single payment reload
         if (action.payload.length > 1) {
-          state.paymentInfo = action.payload;
+          state.paymentsData.pagoPaF24 = action.payload;
           return;
         }
 
         if (action.payload.length === 1) {
           const paymentInfo = action.payload[0];
-          const paymentInfoIndex = state.paymentInfo.findIndex(
+          const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
             (payment) =>
               payment.pagoPA?.creditorTaxId === paymentInfo.pagoPA?.creditorTaxId &&
               payment.pagoPA?.noticeCode === paymentInfo.pagoPA?.noticeCode
           );
           if (paymentInfoIndex !== -1) {
-            state.paymentInfo[paymentInfoIndex] = paymentInfo;
+            state.paymentsData.pagoPaF24[paymentInfoIndex] = paymentInfo;
             return;
           }
-          state.paymentInfo = action.payload;
+          state.paymentsData.pagoPaF24 = action.payload;
         }
       }
     });
     builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
-      const paymentHistory = populatePaymentHistory(
-        action.meta.arg.taxId,
-        state.notification.timeline,
-        state.notification.recipients,
-        action.meta.arg.paymentInfoRequest as Array<ExtRegistriesPaymentDetails>
-      );
-
-      if (action.meta.arg.paymentInfoRequest.length > 1) {
-        state.paymentInfo = paymentHistory.map((payment) => ({
-          ...payment,
-          isLoading: true,
-        }));
-        return;
-      }
-
       if (action.meta.arg.paymentInfoRequest.length === 1) {
-        const payment = state.paymentInfo.find(
+        const payment = state.paymentsData.pagoPaF24.find(
           (payment) =>
             payment.pagoPA?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
             payment.pagoPA?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
@@ -166,29 +184,29 @@ const notificationSlice = createSlice({
           payment.isLoading = true;
           return;
         }
-        state.paymentInfo = [{ ...paymentHistory[0], isLoading: true }];
       }
     });
     builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
       const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
-      const paymentInfo = state.paymentInfo.find(
+      const paymentInfo = state.paymentsData.pagoPaF24.find(
         (payment) =>
           payment.pagoPA?.creditorTaxId === creditorTaxId &&
           payment.pagoPA?.noticeCode === noticeCode
       );
 
       if (paymentInfo && paymentInfo.pagoPA) {
-        const updatedPaymentInfo = {
-          ...paymentInfo?.f24,
-          pagoPA: {
-            ...paymentInfo?.pagoPA,
-            status: PaymentStatus.FAILED,
-            detail: PaymentInfoDetail.GENERIC_ERROR,
+        state.paymentsData.pagoPaF24 = [
+          ...state.paymentsData.pagoPaF24,
+          {
+            ...paymentInfo?.f24,
+            pagoPA: {
+              ...paymentInfo?.pagoPA,
+              status: PaymentStatus.FAILED,
+              detail: PaymentInfoDetail.GENERIC_ERROR,
+            },
           },
-        };
-
-        state.paymentInfo = [...state.paymentInfo, updatedPaymentInfo];
+        ];
       }
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
@@ -205,7 +223,7 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { resetState, resetLegalFactState, clearDowntimeLegalFactData, setF24Payments } =
+export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } =
   notificationSlice.actions;
 
 export default notificationSlice;

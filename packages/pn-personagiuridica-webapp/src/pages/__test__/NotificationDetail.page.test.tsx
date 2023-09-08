@@ -1,18 +1,18 @@
+import React from 'react';
 import { act } from 'react-dom/test-utils';
-
 import {
   NotificationDetail as INotificationDetail,
   NotificationDetailTableRow,
   NotificationStatus,
   apiOutcomeTestHelper,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import { RenderResult, fireEvent, screen, waitFor } from '@testing-library/react';
-
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   notificationToFe,
   overrideNotificationMock,
+  paymentsData,
   recipient,
 } from '../../__mocks__/NotificationDetail.mock';
 import { render } from '../../__test__/test-utils';
@@ -273,10 +273,9 @@ describe('NotificationDetail Page', () => {
     }));
     result = await renderComponent(notificationToFe);
 
-    const paymentHistory = populatePaymentHistory(
-      recipient.taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       paymentInfo
     );
 

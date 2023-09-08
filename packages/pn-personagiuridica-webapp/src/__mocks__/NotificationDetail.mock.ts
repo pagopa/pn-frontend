@@ -10,13 +10,16 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
 } from '@pagopa-pn/pn-commons';
 import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
-const paymentsPagoPA: Array<NotificationDetailPayment> = [
+const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '77777777777',
@@ -79,6 +82,22 @@ const paymentsPagoPA: Array<NotificationDetailPayment> = [
       applyCost: false,
     },
   },
+  {
+    f24: {
+      title: 'F24 prima rata F24',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
 ];
 
 export const recipient: NotificationDetailRecipient = {
@@ -99,7 +118,7 @@ export const recipient: NotificationDetailRecipient = {
     province: 'MI',
     foreignState: 'ITALIA',
   },
-  payments: paymentsPagoPA,
+  payments,
 };
 
 const statusHistory: Array<NotificationStatusHistory> = [
@@ -354,6 +373,11 @@ export const notificationDTO: NotificationDetail = {
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory: statusHistory,
   timeline,
+};
+
+export const paymentsData: PaymentsData = {
+  pagoPaF24: getPagoPaF24Payments(payments),
+  f24Only: getF24Payments(payments),
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
