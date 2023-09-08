@@ -1,8 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { createMatchMedia } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
@@ -12,7 +13,7 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../api/delegations/delegations.routes';
-import { Delegation } from '../../redux/delegation/types';
+import { DelegationStatus } from '../../utils/status.utility';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
@@ -20,55 +21,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: ({ children }: { children: React.ReactNode }) => children,
 }));
-
-jest.mock('../../component/Deleghe/Delegates', () => ({
-  __esModule: true,
-  default: () => <div>delegates</div>,
-}));
-
-jest.mock('../../component/Deleghe/MobileDelegates', () => ({
-  __esModule: true,
-  default: () => <div>mobile delegates</div>,
-}));
-
-jest.mock('../../component/Deleghe/Delegators', () => ({
-  __esModule: true,
-  default: () => <div>delegators</div>,
-}));
-
-jest.mock('../../component/Deleghe/MobileDelegators', () => ({
-  __esModule: true,
-  default: () => <div>mobile delegators</div>,
-}));
-
-const initialState = {
-  delegations: {
-    delegators: [] as Array<Delegation>,
-    delegates: [] as Array<Delegation>,
-    isCompany: false,
-  },
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
-  acceptModalState: {
-    open: false,
-    id: '',
-    name: '',
-    error: false,
-  },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
-};
 
 describe('Deleghe page', () => {
   const original = window.matchMedia;
@@ -76,7 +29,6 @@ describe('Deleghe page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
     mock = new MockAdapter(apiClient);
   });
 
@@ -89,126 +41,223 @@ describe('Deleghe page', () => {
     mock.restore();
   });
 
-  const renderComponent = async (
-    openConfirmationModal: boolean,
-    openCodeModal: boolean,
-    type: 'delegates' | 'delegators'
-  ) => {
+  it('renders the desktop view of the deleghe page - no data', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
     await act(async () => {
-      result = render(<Deleghe />, {
-        preloadedState: {
-          delegationsState: {
-            ...initialState,
-            modalState: {
-              id: '1',
-              open: openConfirmationModal,
-              type,
-            },
-            acceptModalState: {
-              id: '1',
-              open: openCodeModal,
-              name: 'Nome',
-              error: false,
-            },
-          },
-        },
+      result = render(<Deleghe />);
+    });
+    expect(result.container).toHaveTextContent(/deleghe.title/i);
+    expect(result.container).toHaveTextContent(/deleghe.description/i);
+    const delegates = result.getByTestId('delegates-wrapper');
+    expect(delegates).toBeInTheDocument();
+    const delegators = result.getByTestId('delegators-wrapper');
+    expect(delegators).toBeInTheDocument();
+    const mobileDelegates = result.queryByTestId('mobile-delegates-wrapper');
+    expect(mobileDelegates).not.toBeInTheDocument();
+    const mobileDelegators = result.queryByTestId('mobile-delegators-wrapper');
+    expect(mobileDelegators).not.toBeInTheDocument();
+    expect(mock.history.get).toHaveLength(2);
+  });
+
+  it('renders the mobile view of the deleghe page - no data', async () => {
+    window.matchMedia = createMatchMedia(800);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
+    expect(result.container).toHaveTextContent(/deleghe.title/i);
+    expect(result.container).toHaveTextContent(/deleghe.description/i);
+    const delegates = result.queryByTestId('delegates-wrapper');
+    expect(delegates).not.toBeInTheDocument();
+    const delegators = result.queryByTestId('delegators-wrapper');
+    expect(delegators).not.toBeInTheDocument();
+    const mobileDelegates = result.getByTestId('mobile-delegates-wrapper');
+    expect(mobileDelegates).toBeInTheDocument();
+    const mobileDelegators = result.getByTestId('mobile-delegators-wrapper');
+    expect(mobileDelegators).toBeInTheDocument();
+    expect(mock.history.get).toHaveLength(2);
+  });
+
+  it('revoke a delegate', async () => {
+    window.matchMedia = createMatchMedia(2000);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onPatch(REVOKE_DELEGATION(arrayOfDelegates[0].mandateId)).reply(204);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
+    // get first delegate row
+    let delegatesRows = result.getAllByTestId('delegatesTable.row');
+    const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
+    // open menu
+    fireEvent.click(delegationMenuIcon);
+    const revokeDelegate = await waitFor(() => result.getByTestId('menuItem-revokeDelegate'));
+    // show confirmation dialog
+    fireEvent.click(revokeDelegate);
+    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent('deleghe.revocation_question');
+    const confirmButton = within(dialog).getByRole('button', {
+      name: 'deleghe.confirm_revocation',
+    });
+    // confirm revokation
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.patch).toHaveLength(1);
+      expect(mock.history.patch[0].url).toBe(REVOKE_DELEGATION(arrayOfDelegates[0].mandateId));
+    });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    // check that the list of delegates is updated
+    delegatesRows = result.getAllByTestId('delegatesTable.row');
+    expect(delegatesRows).toHaveLength(arrayOfDelegates.length - 1);
+    delegatesRows.forEach((row, index) => {
+      // index + 1 because i suppose that the first delegate is revoked
+      expect(row).toHaveTextContent(arrayOfDelegates[index + 1].delegate?.displayName!);
+    });
+  });
+
+  it('reject a delegator', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock.onPatch(REJECT_DELEGATION(arrayOfDelegators[1].mandateId)).reply(204);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
+    // get second delegator row
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    const delegationMenuIcon = within(delegatorsRows[1]).getByTestId('delegationMenuIcon');
+    // open menu
+    fireEvent.click(delegationMenuIcon);
+    const rejectDelegator = await waitFor(() => result.getByTestId('menuItem-rejectDelegator'));
+    // show confirmation dialog
+    fireEvent.click(rejectDelegator);
+    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent('deleghe.rejection_question');
+    const confirmButton = within(dialog).getByRole('button', {
+      name: 'deleghe.confirm_rejection',
+    });
+    // confirm rejection
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.patch).toHaveLength(1);
+      expect(mock.history.patch[0].url).toBe(REJECT_DELEGATION(arrayOfDelegators[1].mandateId));
+    });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    // check that the list of delegators is updated
+    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    expect(delegatorsRows).toHaveLength(arrayOfDelegators.length - 1);
+    const newDelegators = arrayOfDelegators.filter(
+      (del) => del.mandateId !== arrayOfDelegators[1].mandateId
+    );
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(newDelegators[index].delegator?.displayName!);
+    });
+  });
+
+  it('accept a delegation', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock
+      .onPatch(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId), {
+        verificationCode: arrayOfDelegators[0].verificationCode,
+      })
+      .reply(204);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
+    // get first delegator row
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    const acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
+    // show code dialog
+    fireEvent.click(acceptButton);
+    const dialog = await waitFor(() => result.getByTestId('codeDialog'));
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent('deleghe.accept_title');
+    expect(dialog).toHaveTextContent('deleghe.accept_description');
+    expect(dialog).toHaveTextContent('deleghe.verification_code');
+    // fill the inputs
+    const codeInputs = dialog?.querySelectorAll('input');
+    expect(codeInputs).toHaveLength(5);
+    const codes = arrayOfDelegators[0].verificationCode.split('');
+    codeInputs?.forEach((codeInput, index) => {
+      fireEvent.change(codeInput, { target: { value: codes[index] } });
+    });
+    const dialogButtons = within(dialog).getByRole('button', { name: 'deleghe.accept' });
+    // confirm rejection
+    fireEvent.click(dialogButtons);
+    await waitFor(() => {
+      expect(mock.history.patch).toHaveLength(1);
+      expect(mock.history.patch[0].url).toBe(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId));
+      expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
+        verificationCode: arrayOfDelegators[0].verificationCode,
       });
     });
-  };
-
-  it('renders the desktop view of the deleghe page', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    await renderComponent(false, false, 'delegates');
-    expect(result.container).toHaveTextContent(/deleghe.title/i);
-    expect(result.container).toHaveTextContent(/deleghe.description/i);
-    expect(result.container).toHaveTextContent(/delegates/i);
-    expect(result.container).toHaveTextContent(/delegators/i);
-    expect(mock.history.get).toHaveLength(2);
-  });
-
-  it('renders the mobile view of the deleghe page', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    await renderComponent(false, false, 'delegates');
-    expect(result.container).toHaveTextContent(/deleghe.title/i);
-    expect(result.container).toHaveTextContent(/deleghe.description/i);
-    expect(result.container).toHaveTextContent(/mobile delegates/i);
-    expect(result.container).toHaveTextContent(/mobile delegators/i);
-    expect(mock.history.get).toHaveLength(2);
-  });
-
-  it('checks the revocation modal open', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    mock.onPatch(REVOKE_DELEGATION('1')).reply(204);
-    await renderComponent(true, false, 'delegates');
-    const confirmRevocationButton = result.getByText(/deleghe.confirm_revocation/i);
-    const closeButton = result.getByText(/button.annulla/i);
-    expect(mock.history.get).toHaveLength(2);
-    expect(result.baseElement).toHaveTextContent(/deleghe.revocation_question/i);
-    expect(result.baseElement).toHaveTextContent(/deleghe.confirm_revocation/i);
-    fireEvent.click(confirmRevocationButton);
-    expect(mock.history.patch).toHaveLength(1);
-    fireEvent.click(closeButton);
-    await waitFor(() =>
-      expect(result.baseElement).not.toHaveTextContent(/deleghe.revocation_question/i)
-    );
-  });
-
-  it('checks the rejection modal open', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    mock.onPatch(REJECT_DELEGATION('1')).reply(204);
-    await renderComponent(true, false, 'delegators');
-    const confirmRejectionButton = result.getByText(/deleghe.confirm_rejection/i);
-    const closeButton = result.getByText(/button.annulla/i);
-    expect(mock.history.get).toHaveLength(2);
-    expect(result.baseElement).toHaveTextContent(/deleghe.rejection_question/i);
-    expect(result.baseElement).toHaveTextContent(/deleghe.confirm_rejection/i);
-    fireEvent.click(confirmRejectionButton);
-    expect(mock.history.patch).toHaveLength(1);
-    fireEvent.click(closeButton);
-    await waitFor(() =>
-      expect(result.baseElement).not.toHaveTextContent(/deleghe.rejection_question/i)
-    );
-  });
-
-  it('checks the accept modal open', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    mock.onPatch(ACCEPT_DELEGATION('1'), { verificationCode: '11111' }).reply(204);
-    await renderComponent(false, true, 'delegators');
-    const codeInput = result.queryAllByPlaceholderText('-');
-    const confirmAcceptButton = result.getByText('deleghe.accept');
-    const closeButton = result.getByText(/button.indietro/i);
-    expect(mock.history.get).toHaveLength(2);
-    expect(result.baseElement).toHaveTextContent(/deleghe.accept_title/i);
-    expect(codeInput).toHaveLength(5);
-    codeInput.forEach((input) => {
-      fireEvent.change(input, { target: { value: '1' } });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
     });
-    fireEvent.click(confirmAcceptButton);
-    expect(mock.history.patch).toHaveLength(1);
-    fireEvent.click(closeButton);
-    await waitFor(() => expect(result.baseElement).not.toHaveTextContent(/deleghe.accept_title/i));
+    // check that the list of delegators is updated
+    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+    });
+    const newAcceptButton = within(delegatorsRows[0]).queryByTestId('acceptButton');
+    expect(newAcceptButton).not.toBeInTheDocument();
+    expect(delegatorsRows[0]).toHaveTextContent(`deleghe.table.${DelegationStatus.ACTIVE}`);
   });
 
-  it('checks the accept modal error state', async () => {
-    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
-    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    mock.onPatch(ACCEPT_DELEGATION('1'), { verificationCode: '11111' }).reply(500);
-    await renderComponent(false, true, 'delegators');
-    const dialog = result.queryByTestId('codeDialog');
+  it('accept a delegation - error', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
+    mock
+      .onPatch(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId), {
+        verificationCode: arrayOfDelegators[0].verificationCode,
+      })
+      .reply(500);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
+    // get first delegator row
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    const acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
+    // show code dialog
+    fireEvent.click(acceptButton);
+    const dialog = await waitFor(() => result.getByTestId('codeDialog'));
     expect(dialog).toBeInTheDocument();
-    const codeInput = within(dialog!).queryAllByPlaceholderText('-');
-    const confirmAcceptButton = within(dialog!).getByText('deleghe.accept');
-    expect(codeInput).toHaveLength(5);
-    codeInput.forEach((input) => {
-      fireEvent.change(input, { target: { value: '1' } });
+    expect(dialog).toHaveTextContent('deleghe.accept_title');
+    expect(dialog).toHaveTextContent('deleghe.accept_description');
+    expect(dialog).toHaveTextContent('deleghe.verification_code');
+    // fill the inputs
+    const codeInputs = dialog?.querySelectorAll('input');
+    expect(codeInputs).toHaveLength(5);
+    const codes = arrayOfDelegators[0].verificationCode.split('');
+    codeInputs?.forEach((codeInput, index) => {
+      fireEvent.change(codeInput, { target: { value: codes[index] } });
     });
-    fireEvent.click(confirmAcceptButton);
-    await waitFor(() => expect(mock.history.patch).toHaveLength(1));
+    const dialogButtons = within(dialog).getByRole('button', { name: 'deleghe.accept' });
+    // confirm rejection
+    fireEvent.click(dialogButtons);
+    await waitFor(() => {
+      expect(mock.history.patch).toHaveLength(1);
+      expect(mock.history.patch[0].url).toBe(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId));
+      expect(JSON.parse(mock.history.patch[0].data)).toStrictEqual({
+        verificationCode: arrayOfDelegators[0].verificationCode,
+      });
+    });
+    // check that nothing is changed
+    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+    });
+    expect(acceptButton).toBeInTheDocument();
     const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
     expect(error).toBeInTheDocument();
   });

@@ -1,23 +1,17 @@
+import React from 'react';
+
 import { render } from '../../../__test__/test-utils';
 import VerificationCodeComponent from '../VerificationCodeComponent';
 
 describe('VerificationCodeComponent', () => {
   it('renders the component and checks the digits', () => {
     const fiveDigits = '12345';
-    const result = render(<VerificationCodeComponent code={fiveDigits} />);
-    const digitsElements = result.queryAllByTestId('codeDigit');
-
-    expect(result.baseElement).toHaveTextContent(/12345/i);
-    expect(result.baseElement).not.toHaveTextContent(/123456/i);
+    const { queryAllByTestId } = render(<VerificationCodeComponent code={fiveDigits} />);
+    const digitsElements = queryAllByTestId('codeDigit');
+    const codes = fiveDigits.split('');
     expect(digitsElements).toHaveLength(fiveDigits.length);
-  });
-
-  it('renders the component with a different amount of digits', () => {
-    const fiveDigits = '987654321';
-    const result = render(<VerificationCodeComponent code={fiveDigits} />);
-    const digitsElements = result.queryAllByTestId('codeDigit');
-    expect(result.baseElement).toHaveTextContent(/987654321/i);
-    expect(result.baseElement).not.toHaveTextContent(/asdfgh/i);
-    expect(digitsElements).toHaveLength(fiveDigits.length);
+    digitsElements.forEach((code, index) => {
+      expect(code).toHaveTextContent(codes[index]);
+    });
   });
 });

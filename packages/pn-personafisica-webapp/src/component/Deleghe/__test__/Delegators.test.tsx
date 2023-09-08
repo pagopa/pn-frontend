@@ -1,8 +1,20 @@
+import React from 'react';
+
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
-import { act, render, screen } from '../../../__test__/test-utils';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  testStore,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
-import * as hooks from '../../../redux/hooks';
+import { Delegator } from '../../../redux/delegation/types';
+import { sortDelegations } from '../../../utils/delegation.utility';
 import Delegators from '../Delegators';
 
 jest.mock('react-i18next', () => ({
@@ -12,67 +24,102 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-/**
- * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
- */
- jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-  };
-});
-
-describe('Delegators Component - assuming delegators API works properly', () => {
+describe('Delegators Component', () => {
   it('renders the empty state', () => {
-    const result = render(<Delegators />);
-
-    expect(result.container).toHaveTextContent(/deleghe.delegatorsTitle/i);
-    expect(result.container).toHaveTextContent(/deleghe.no_delegators/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationStart/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationEnd/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.permissions/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.status/i);
+    const { container, queryByTestId, getByTestId } = render(<Delegators />);
+    expect(container).toHaveTextContent(/deleghe.delegatorsTitle/i);
+    const delegatorsTable = queryByTestId('delegatorsTable');
+    expect(delegatorsTable).not.toBeInTheDocument();
+    expect(container).toHaveTextContent(/deleghe.no_delegators/i);
   });
 
   it('renders the delegators', () => {
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
-    const result = render(<Delegators />);
-
-    expect(result.container).toHaveTextContent(/marco verdi/i);
-    expect(result.container).toHaveTextContent(/davide legato/i);
-    expect(result.container).not.toHaveTextContent(/luca blu/i);
-  });
-});
-
-describe('Delegators Component - different delegators API behaviors', () => {
-  beforeAll(() => {
-    jest.restoreAllMocks();
+    const { getByTestId, getAllByTestId } = render(<Delegators />, {
+      preloadedState: { delegationsState: { delegations: { delegators: arrayOfDelegators } } },
+    });
+    const delegatorsTable = getByTestId('delegatorsTable');
+    expect(delegatorsTable).toBeInTheDocument();
+    const delegatorsRows = getAllByTestId('delegatorsTable.row');
+    expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+    });
   });
 
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
+  it('sorts the delegators', async () => {
+    const { getByTestId, getAllByTestId } = render(<Delegators />, {
+      preloadedState: {
+        delegationsState: {
+          delegations: { delegators: arrayOfDelegators },
+          sortDelegators: {
+            orderBy: '',
+            order: 'asc',
+          },
+        },
+      },
+    });
+    let delegatorsTable = getByTestId('delegatorsTable');
+    expect(delegatorsTable).toBeInTheDocument();
+    // sort by name asc
+    let sortName = within(delegatorsTable).getByTestId('delegatorsTable.sort.name');
+    let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
+    fireEvent.click(sortIcon);
+    await waitFor(() => {
+      expect(testStore.getState().delegationsState.sortDelegators).toStrictEqual({
+        order: 'asc',
+        orderBy: 'name',
+      });
+    });
+    let delegatorsRows = getAllByTestId('delegatorsTable.row');
+    let sortedDelegators = sortDelegations('asc', 'name', arrayOfDelegators) as Array<Delegator>;
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
+    });
+    // sort by name desc
+    delegatorsTable = getByTestId('delegatorsTable');
+    sortName = within(delegatorsTable).getByTestId('delegatorsTable.sort.name');
+    sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
+    fireEvent.click(sortIcon);
+    await waitFor(() => {
+      expect(testStore.getState().delegationsState.sortDelegators).toStrictEqual({
+        order: 'desc',
+        orderBy: 'name',
+      });
+    });
+    delegatorsRows = getAllByTestId('delegatorsTable.row');
+    sortedDelegators = sortDelegations('desc', 'name', arrayOfDelegators) as Array<Delegator>;
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
+    });
+    // sort by endDate asc
+    delegatorsTable = getByTestId('delegatorsTable');
+    const sortEndDate = within(delegatorsTable).getByTestId('delegatorsTable.sort.endDate');
+    sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
+    fireEvent.click(sortIcon);
+    await waitFor(() => {
+      expect(testStore.getState().delegationsState.sortDelegators).toStrictEqual({
+        order: 'asc',
+        orderBy: 'endDate',
+      });
+    });
+    delegatorsRows = getAllByTestId('delegatorsTable.row');
+    sortedDelegators = sortDelegations('asc', 'endDate', arrayOfDelegators) as Array<Delegator>;
+    delegatorsRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
+    });
   });
 
   it('API error', async () => {
-    await act(async () => void render(
-      <Delegators />,
-      { preloadedState: { 
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATORS),
-      } }
-    ));
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    await act(async () => void render(<Delegators />));
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
+    render(<Delegators />, {
+      preloadedState: {
+        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+          DELEGATION_ACTIONS.GET_DELEGATORS
+        ),
+      },
+    });
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${DELEGATION_ACTIONS.GET_DELEGATORS}`
+    );
+    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });
-
