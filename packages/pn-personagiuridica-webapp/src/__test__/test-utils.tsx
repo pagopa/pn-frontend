@@ -30,12 +30,6 @@ const AllTheProviders = ({
   return <Provider store={testStore}>{children}</Provider>;
 };
 
-const createMockedStore = (preloadedState: any) =>
-  configureStore({
-    reducer: appReducers,
-    preloadedState,
-  });
-
 const customRender = (
   ui: ReactElement,
   {
@@ -71,6 +65,12 @@ const axe = configureAxe({
     region: { enabled: false },
   },
 });
+
+const createMockedStore = (preloadedState: any) =>
+  configureStore({
+    reducer: appReducers,
+    preloadedState,
+  });
 
 expect.extend(toHaveNoViolations);
 /**

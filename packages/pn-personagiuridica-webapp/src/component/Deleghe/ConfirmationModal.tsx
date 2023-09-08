@@ -56,6 +56,7 @@ export default function ConfirmationModal({
             alignItems={'center'}
             ml={'auto'}
             pb={4}
+            data-testid="dialogStack"
           >
             <Grid
               item

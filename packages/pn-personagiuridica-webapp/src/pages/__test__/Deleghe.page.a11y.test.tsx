@@ -1,9 +1,15 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import * as redux from 'react-redux';
 
-import { createMatchMedia } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import {
+  DELEGATIONS_BY_DELEGATE,
+  DELEGATIONS_BY_DELEGATOR,
+} from '../../api/delegations/delegations.routes';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
@@ -13,32 +19,30 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-const mockDispatchFn = jest.fn();
-
 describe('Deleghe page - accessibility tests', () => {
   const original = window.matchMedia;
+  let result: RenderResult;
+  let mock: MockAdapter;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
-    useDispatchSpy.mockClear();
-    useDispatchSpy.mockReset();
+    mock.reset();
   });
 
   afterAll(() => {
     window.matchMedia = original;
+    mock.restore();
   });
 
-  it('is deleghe page accessible - desktop version', async () => {
-    let result: RenderResult | undefined;
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+  it('is deleghe page accessible - desktop version - no data', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, []);
     await act(async () => {
       result = render(<Deleghe />);
     });
-
     if (result) {
       const { container } = result;
       const results = await axe(container);
@@ -48,14 +52,45 @@ describe('Deleghe page - accessibility tests', () => {
     }
   });
 
-  it('is deleghe page accessible - mobile version', async () => {
-    let result: RenderResult | undefined;
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-
+  it('is deleghe page accessible - mobile version - no data', async () => {
+    window.matchMedia = createMatchMedia(800);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, []);
     await act(async () => {
       result = render(<Deleghe />);
     });
+    if (result) {
+      const { container } = result;
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  });
 
+  it('is deleghe page accessible - desktop version - with data', async () => {
+    window.matchMedia = createMatchMedia(2000);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
+    if (result) {
+      const { container } = result;
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  });
+
+  it('is deleghe page accessible - mobile version - with data', async () => {
+    window.matchMedia = createMatchMedia(800);
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    await act(async () => {
+      result = render(<Deleghe />);
+    });
     if (result) {
       const { container } = result;
       const results = await axe(container);
