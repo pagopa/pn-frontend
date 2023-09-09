@@ -4,13 +4,13 @@ import { CreateDelegationResponse, NewDelegationFormProps } from '../redux/deleg
 
 export const createDelegationPayload: NewDelegationFormProps = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-  codiceFiscale: 'fiscalCode',
-  nome: 'nome',
-  cognome: 'cognome',
+  codiceFiscale: 'RSSMRA01A01A111A',
+  nome: 'Mario',
+  cognome: 'Rossi',
   ragioneSociale: 'Foo SAS di Anonimo',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
   expirationDate: new Date(),
-  enti: [{ name: '', id: '' }],
+  enti: [],
   verificationCode: '00000',
 };
 

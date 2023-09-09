@@ -45,33 +45,6 @@ const axe = configureAxe({
 
 // utility functions
 /**
- * Test radio options and optionally select a value
- * @container container element
- * @dataTestId data-testid attribute
- * @values list of options
- * @valueToSelect option to select
- */
-async function testRadio(
-  container: HTMLElement,
-  dataTestId: string,
-  values: Array<string>,
-  valueToSelect?: number
-) {
-  const radioButtons = container?.querySelectorAll(`[data-testid="${dataTestId}"]`);
-  expect(radioButtons).toHaveLength(values.length);
-  values.forEach((value, index) => {
-    expect(radioButtons[index]).toHaveTextContent(value);
-  });
-  if (valueToSelect !== undefined) {
-    fireEvent.click(radioButtons[valueToSelect]);
-    await waitFor(() => {
-      const radioInput = radioButtons[valueToSelect].querySelector('input');
-      expect(radioInput!).toBeChecked();
-    });
-  }
-}
-
-/**
  * Generate a random string with specified length
  * @length desired length
  */
@@ -90,4 +63,4 @@ export * from '@testing-library/react';
 export { customRender as render, testStore };
 export { axe };
 // utility functions
-export { testRadio, randomString };
+export { randomString };

@@ -172,6 +172,37 @@ async function testInput(
   }
 }
 
+/**
+ * Test radio options and optionally select a value
+ * @container container element
+ * @dataTestId data-testid attribute
+ * @values list of options
+ * @expectedValue desired value
+ * @select set if option must be selected
+ */
+async function testRadio(
+  container: HTMLElement,
+  dataTestId: string,
+  values: Array<string>,
+  expectedValue?: number,
+  select?: boolean
+) {
+  const radioButtons = container?.querySelectorAll(`[data-testid="${dataTestId}"]`);
+  expect(radioButtons).toHaveLength(values.length);
+  values.forEach((value, index) => {
+    expect(radioButtons[index]).toHaveTextContent(value);
+  });
+  if (expectedValue !== undefined) {
+    if (select) {
+      fireEvent.click(radioButtons[expectedValue]);
+    }
+    await waitFor(() => {
+      const radioInput = radioButtons[expectedValue].querySelector('input');
+      expect(radioInput!).toBeChecked();
+    });
+  }
+}
+
 export * from '@testing-library/react';
 export {
   customRender as render,
@@ -180,4 +211,5 @@ export {
   testAutocomplete,
   testFormElements,
   testInput,
+  testRadio,
 };
