@@ -7,6 +7,7 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
+  NotificationStatus,
   ResponseEventDispatcher,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
@@ -149,6 +150,33 @@ describe('NotificationDetail Page', () => {
     // check domicile banner
     const addDomicileBanner = result?.getByTestId('addDomicileBanner');
     expect(addDomicileBanner).toBeInTheDocument();
+  });
+
+  it('renders NotificationDetail if status is cancelled', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
+      .reply(200, { ...notificationDTO, status: NotificationStatus.CANCELLED });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
+    // payment component and documents should be hidden if notification
+    // status is "cancelled" even though documentsAvailable is true
+    // check documents box
+    const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
+    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
+      expect(notificationDetailDocumentMessage).toHaveTextContent(
+        /detail.acts_files.notification_cancelled_aar|detail.acts_files.notification_cancelled_acts/
+      );
+    }
   });
 
   it('checks not available documents', async () => {

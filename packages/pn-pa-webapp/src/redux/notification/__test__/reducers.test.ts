@@ -1,4 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
+import { apiClient } from '../../../api/apiClients';
+import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
 
 import { KnownFunctionality, LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 import {
@@ -12,7 +14,6 @@ import {
   notificationDTOMultiRecipient,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { apiClient } from '../../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -21,6 +22,7 @@ import {
 } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import {
+  cancelNotification,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
   getSentNotification,
@@ -56,8 +58,19 @@ const initialState = {
 };
 
 describe('Notification detail redux state tests', () => {
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   mockAuthentication();
 
@@ -199,5 +212,12 @@ describe('Notification detail redux state tests', () => {
     const state = store.getState().notificationState;
     expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
+  });
+
+  it('Should be able to cancel notification', async () => {
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    const action = await store.dispatch(cancelNotification('mocked-iun'));
+    expect(action.type).toBe('cancelNotification/fulfilled');
+    expect(action.payload).toEqual(undefined);
   });
 });

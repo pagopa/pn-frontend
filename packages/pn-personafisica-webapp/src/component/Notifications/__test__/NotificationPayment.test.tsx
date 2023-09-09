@@ -103,6 +103,8 @@ describe('NotificationPayment component', () => {
     expect(amountLoader).not.toBeInTheDocument();
     expect(loadingButton).not.toBeInTheDocument();
     expect(container).toHaveTextContent('detail.payment.message-completed');
+    const alert = screen.queryByTestId('cancelledAlertTextPayment');
+    expect(alert).not.toBeInTheDocument();
   });
 
   it('payment in SUCCEEDED status and PaymentHistory populated', async () => {
