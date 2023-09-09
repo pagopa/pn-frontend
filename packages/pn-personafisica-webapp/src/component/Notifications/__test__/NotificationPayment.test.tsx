@@ -78,7 +78,7 @@ describe('NotificationPayment component', () => {
           }, 2000);
         });
       });
-    const { container, getByTestId, getByRole } = render(
+    const { container, getByTestId, getByRole, queryByTestId } = render(
       <NotificationPayment
         iun={notificationToFe.iun}
         notificationPayment={payment!}
@@ -103,7 +103,8 @@ describe('NotificationPayment component', () => {
     expect(amountLoader).not.toBeInTheDocument();
     expect(loadingButton).not.toBeInTheDocument();
     expect(container).toHaveTextContent('detail.payment.message-completed');
-    const alert = screen.queryByTestId('cancelledAlertTextPayment');
+    // check cancelled alert
+    const alert = queryByTestId('cancelledAlertTextPayment');
     expect(alert).not.toBeInTheDocument();
   });
 
@@ -506,6 +507,31 @@ describe('NotificationPayment component', () => {
     expect(alert).toHaveTextContent('detail.payment.error-expired');
     const button = queryByRole('button');
     expect(button).not.toBeInTheDocument();
+  });
+
+  // Questo test fallisce per un bug nel dettaglio notifica. La paymentInfo viene chiamata anche se la notifica è in stato annullata
+  // Rimuovere il commento e lo skip del test una volta sistemato il bug
+  it.skip('renders payment when notification is CANCELLED', async () => {
+    const { getByTestId } = render(
+      <NotificationPayment
+        iun={notificationToFe.iun}
+        notificationPayment={payment!}
+        senderDenomination={notificationToFe.senderDenomination}
+        subject={notificationToFe.subject}
+        notificationIsCancelled
+      />
+    );
+    await waitFor(() => {
+      expect(mock.history.get.length).toBe(0);
+    });
+    // check cancelled alert
+    const alert = getByTestId('cancelledAlertTextPayment');
+    expect(alert).toBeInTheDocument();
+    // COSE DA FARE:
+    // testare che l'amount non sia visibile
+    // testare il click alla FAQ
+    // testare che non venga mostrato l'elemento con data-testid=messageAlert
+    // testare che non esistano attachments (verificare che non ci siano i bottoni di download pagopa e f24 - vedere test con pagamento REQUIRED)
   });
 
   it('API error', async () => {
