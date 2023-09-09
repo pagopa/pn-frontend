@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import Statistics from "../Statistics.page";
-import { render } from "../../__test__/test-utils";
+import { render } from '../../__test__/test-utils';
+import Statistics from '../Statistics.page';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -11,7 +11,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('Statistics Page tests', () => {
-  test('renders Statistics Page', () => {
+  it('renders Statistics Page', () => {
     const result = render(<Statistics />, {
       preloadedState: {
         userState: { organizationParty: { name: 'mocked-sender' } },

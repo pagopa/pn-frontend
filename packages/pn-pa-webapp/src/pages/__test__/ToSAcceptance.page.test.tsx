@@ -89,8 +89,8 @@ describe('test Terms of Service page', () => {
       result = render(<ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />);
     });
     const button = result?.getByText('tos.button');
-    fireEvent.click(button!);
     expect(button).toBeInTheDocument();
+    fireEvent.click(button!);
     await waitFor(() => {
       expect(mock.history.put).toHaveLength(2);
       expect(mock.history.put[0].url).toBe(

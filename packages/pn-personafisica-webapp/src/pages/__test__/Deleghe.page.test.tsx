@@ -226,7 +226,7 @@ describe('Deleghe page', () => {
     });
     // get first delegator row
     let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
-    const acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
+    let acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
     fireEvent.click(acceptButton);
     const dialog = await waitFor(() => result.getByTestId('codeDialog'));
@@ -257,6 +257,7 @@ describe('Deleghe page', () => {
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
     });
+    acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
     const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
     expect(error).toBeInTheDocument();
