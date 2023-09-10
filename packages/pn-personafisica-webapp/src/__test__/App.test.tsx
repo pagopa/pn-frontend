@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
@@ -42,7 +42,9 @@ const unmockedFetch = global.fetch;
 
 const Component = () => (
   <ThemeProvider theme={theme}>
-    <App />
+    <Suspense fallback="loading...">
+      <App />
+    </Suspense>
   </ThemeProvider>
 );
 
@@ -66,6 +68,7 @@ const reduxInitialState = {
 
 describe('App', () => {
   let mock: MockAdapter;
+  let result: RenderResult;
   const original = window.location;
 
   beforeAll(() => {
@@ -89,7 +92,6 @@ describe('App', () => {
   });
 
   it('render component - user not logged in', async () => {
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />);
     });
@@ -118,7 +120,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -146,7 +147,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -186,7 +186,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -206,7 +205,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -230,7 +228,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -282,7 +279,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, arrayOfDelegators);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -307,7 +303,6 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, []);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });

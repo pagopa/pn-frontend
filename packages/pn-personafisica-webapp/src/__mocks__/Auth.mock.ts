@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
 import { exchangeToken, logout } from '../redux/auth/actions';
@@ -44,7 +45,7 @@ export const userResponse: User = {
   aud: 'portale.dev.pn.pagopa.it',
   level: 'L2',
   iat: 1646394256,
-  exp: 1646394256,
+  exp: 4850004251,
   iss: 'https://spid-hub-test.dev.pn.pagopa.it',
   jti: 'mockedJTI004',
 };

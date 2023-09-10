@@ -57,7 +57,7 @@ describe('SessionGuard Component', () => {
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
   it('session expired', async () => {
     const mockReduxState = {
-      userState: { user: { ...userResponse, desired_exp: 1 } },
+      userState: { user: { ...userResponse, exp: 1 } },
     };
 
     await act(async () => {
