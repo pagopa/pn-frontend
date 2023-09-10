@@ -171,6 +171,9 @@ describe('NotificationPayment component', () => {
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
+    const alert = screen.queryByTestId('cancelledAlertTextPayment');
+    expect(alert).not.toBeInTheDocument();
+
     const loadingButton = screen.getByRole('button', { name: 'detail.payment.submit' });
     expect(loadingButton.querySelector('svg')).toBeInTheDocument();
     expect(loadingButton).toBeInTheDocument();

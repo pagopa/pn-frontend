@@ -207,9 +207,9 @@ describe('NotificationDetail Page', () => {
     // payment component and documents should be hidden if notification
     // status is "cancelled" even though documentsAvailable is true
     const documentTitle = result.queryByText('Mocked document');
-    expect(documentTitle).not.toBeInTheDocument();
-    expect(result.container).not.toHaveTextContent(/Payment/i);
-    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled');
+    expect(documentTitle).toBeInTheDocument();
+    expect(result.container).toHaveTextContent(/Payment/i);
+    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled_aar');
     expect(documentsText.length).toBeGreaterThan(0);
   });
 

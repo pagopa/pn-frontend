@@ -57,6 +57,7 @@ type Props = {
   row?: Item;
   onAction?: (data: any) => void;
 };
+
 export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
