@@ -8,10 +8,12 @@ import {
   createDelegationResponse,
   createDelegationSelectedPayload,
 } from '../../../__mocks__/CreateDelegation.mock';
+import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../../api/apiClients';
 import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';
+import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { store } from '../../store';
-import { createDelegation, createDelegationMapper } from '../actions';
+import { createDelegation, createDelegationMapper, getAllEntities } from '../actions';
 import { resetNewDelegation } from '../reducers';
 
 export const initialState = {
@@ -75,6 +77,13 @@ describe('delegation redux state tests', () => {
     const action = await store.dispatch(createDelegation(createDelegationPayload));
     expect(action.type).toBe('createDelegation/rejected');
     expect((action.payload as any).response.data).toEqual(createDelegationDuplicatedErrorResponse);
+  });
+
+  it('fecth parties list', async () => {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    const action = await store.dispatch(getAllEntities(null));
+    expect(action.type).toBe('getAllEntities/fulfilled');
+    expect(action.payload).toEqual(parties);
   });
 
   it('resets the newDelegation state', () => {

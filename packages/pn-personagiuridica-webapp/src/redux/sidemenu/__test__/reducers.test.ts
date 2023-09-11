@@ -21,6 +21,7 @@ const initialState = {
 
 describe('Sidemenu redux state tests', () => {
   let mock: MockAdapter;
+  mockAuthentication();
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -33,8 +34,6 @@ describe('Sidemenu redux state tests', () => {
   afterAll(() => {
     mock.restore();
   });
-
-  mockAuthentication();
 
   it('Initial state', () => {
     const state = store.getState().generalInfoState;

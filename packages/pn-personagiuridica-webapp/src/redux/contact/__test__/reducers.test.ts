@@ -122,7 +122,6 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to remove the digital address with legal value', async () => {
-    const updatedDigitalAddress = { ...digitalAddresses.legal[0], value: 'mario.rossi@mail.it' };
     mock
       .onDelete(LEGAL_CONTACT(digitalAddresses.legal[0].senderId, LegalChannelType.PEC))
       .reply(204);
@@ -138,7 +137,10 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
-    const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
+    const emailContact = digitalAddresses.courtesy.find(
+      (el) => el.channelType === CourtesyChannelType.EMAIL
+    );
+    const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
       .onPost(COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL))
       .reply(200, { value: updatedDigitalAddress.value });
@@ -156,7 +158,10 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to update the digital address with courtesy value (email verified)', async () => {
-    const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
+    const emailContact = digitalAddresses.courtesy.find(
+      (el) => el.channelType === CourtesyChannelType.EMAIL
+    );
+    const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
     mock
       .onPost(COURTESY_CONTACT(updatedDigitalAddress.senderId, CourtesyChannelType.EMAIL), {
         value: updatedDigitalAddress.value,

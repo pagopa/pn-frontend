@@ -118,9 +118,7 @@ describe('Auth redux state tests', () => {
       isFirstAccept: true,
       consentVersion: 'mocked-version',
     };
-
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, tosMock);
-
     const action = await store.dispatch(getToSApproval());
     expect(action.type).toBe('getToSApproval/fulfilled');
     expect(action.payload).toEqual(tosMock);
@@ -129,11 +127,10 @@ describe('Auth redux state tests', () => {
     expect(store.getState().userState.fetchedTos).toStrictEqual(true);
   });
 
-  it('Should fetch ToS not approved', async () => {
+  it('Should NOT be able to fetch the tos approval', async () => {
     const tosErrorResponse = { response: { data: 'error-tos', status: 500 } };
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500, 'error-tos');
     const action = await store.dispatch(getToSApproval());
-
     expect(action.type).toBe('getToSApproval/rejected');
     expect(action.payload).toEqual(tosErrorResponse);
     expect(store.getState().userState.tosConsent.accepted).toStrictEqual(false);
@@ -166,8 +163,6 @@ describe('Auth redux state tests', () => {
     expect(store.getState().userState.tosConsent.accepted).toStrictEqual(false);
   });
 
-  it('Should fetch privacy approved', async () => {});
-
   it('Should be able to fetch the privacy approval', async () => {
     const tosMock = {
       recipientId: 'mock-recipient-id',
@@ -186,6 +181,17 @@ describe('Auth redux state tests', () => {
     expect(store.getState().userState.fetchedPrivacy).toBe(true);
   });
 
+  it('Should NOT be able to fetch the privacy approval', async () => {
+    const tosErrorResponse = { response: { data: 'error-privacy-approval', status: 500 } };
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(500, 'error-privacy-approval');
+    const action = await store.dispatch(getPrivacyApproval());
+    expect(action.type).toBe('getPrivacyApproval/rejected');
+    expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.privacyConsent.accepted).toBe(false);
+    expect(store.getState().userState.privacyConsent.isFirstAccept).toBe(true);
+    expect(store.getState().userState.fetchedPrivacy).toBe(true);
+  });
+
   it('Should be able to fetch privacy acceptance', async () => {
     const tosAcceptanceMock = 'success';
     mock
@@ -199,7 +205,7 @@ describe('Auth redux state tests', () => {
     expect(store.getState().userState.privacyConsent.accepted).toBe(true);
   });
 
-  it('Should reject Privacy', async () => {
+  it('Should NOT be able to fetch privacy acceptance', async () => {
     const privacyErrorResponse = { response: { data: 'error-privacy-approval', status: 500 } };
     mock
       .onPut(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'))

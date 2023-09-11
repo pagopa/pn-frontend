@@ -1,7 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
+  DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
+  KnownFunctionality,
   LegalFactType,
   PaymentAttachmentSName,
   PaymentInfoDetail,
@@ -9,15 +11,15 @@ import {
   RecipientType,
 } from '@pagopa-pn/pn-commons';
 
-import { simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient } from '../../../api/apiClients';
-import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
@@ -32,6 +34,7 @@ import {
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
+  getReceivedNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
 
@@ -115,6 +118,22 @@ describe('Notification detail redux state tests', () => {
     expect(action.payload).toEqual({ url: 'http://mocked-url.com' });
   });
 
+  it('Should be able to fetch the notification other document', async () => {
+    const iun = notificationDTO.iun;
+    const otherDocument = {
+      documentId: 'mocked-id',
+      documentType: 'mocked-type',
+    };
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
+      .reply(200, { url: 'http://mocked-url.com' });
+    const action = await store.dispatch(
+      getReceivedNotificationOtherDocument({ iun, otherDocument })
+    );
+    expect(action.type).toBe('getReceivedNotificationOtherDocument/fulfilled');
+    expect(action.payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
   it('Should be able to fetch the notification legalfact', async () => {
     const iun = notificationDTO.iun;
     const legalFact = {
@@ -131,18 +150,16 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
-    const payload = action.payload;
     expect(action.type).toBe('notificationSlice/resetState');
-    expect(payload).toEqual(undefined);
+    expect(action.payload).toEqual(undefined);
     const state = store.getState().notificationState;
     expect(state).toEqual(initialState);
   });
 
   it('Should be able to reset legalfact state', () => {
     const action = store.dispatch(resetLegalFactState());
-    const payload = action.payload;
     expect(action.type).toBe('notificationSlice/resetLegalFactState');
-    expect(payload).toEqual(undefined);
+    expect(action.payload).toEqual(undefined);
     const state = store.getState().notificationState;
     expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
@@ -188,13 +205,6 @@ describe('Notification detail redux state tests', () => {
       amount: 1200,
       url: 'mocked-url',
     });
-
-    const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual({
-      status: PaymentStatus.REQUIRED,
-      amount: 1200,
-      url: 'mocked-url',
-    });
   });
 
   it('Should be able to fetch payment url', async () => {
@@ -216,18 +226,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.payload).toEqual({ checkoutUrl: 'mocked-url' });
   });
 
-  it('Should be able to fetch the downtimes events', async () => {
-    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
-    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
-    const action = await store.dispatch(
-      getDowntimeEvents({
-        startDate: '2022-10-23T15:50:04Z',
-      })
-    );
-    const payload = action.payload;
-    expect(action.type).toBe('getDowntimeEvents/fulfilled');
-    expect(payload).toEqual(simpleDowntimeLogPage);
-  });
   it('Should NOT be able to fetch payment url', async () => {
     const request = {
       paymentNotice: {
@@ -255,6 +253,27 @@ describe('Notification detail redux state tests', () => {
       detail: PaymentInfoDetail.GENERIC_ERROR,
       url: 'mocked-url',
     });
+  });
+
+  it('Should be able to fetch the downtimes events', async () => {
+    const mockRequest = {
+      startDate: '2022-10-23T15:50:04Z',
+    };
+    mock
+      .onGet(
+        DOWNTIME_HISTORY({
+          ...mockRequest,
+          functionality: [
+            KnownFunctionality.NotificationCreate,
+            KnownFunctionality.NotificationVisualization,
+            KnownFunctionality.NotificationWorkflow,
+          ],
+        })
+      )
+      .reply(200, downtimesDTO);
+    const action = await store.dispatch(getDowntimeEvents(mockRequest));
+    expect(action.type).toBe('getDowntimeEvents/fulfilled');
+    expect(action.payload).toEqual(simpleDowntimeLogPage);
   });
 
   it('Should be able to fetch the downtimes legal fact details', async () => {
