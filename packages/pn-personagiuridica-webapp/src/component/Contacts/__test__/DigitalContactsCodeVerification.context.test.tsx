@@ -34,7 +34,7 @@ In questo test viene testato solo il rendering dei componenti e non il flusso.
 Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
 Per questo motivo non è necessario mockare le api, ma va bene anche usare lo spyOn.
 
-Andrea Cimini - 6/09/2023
+Andrea Cimini - 11/09/2023
 */
 describe('DigitalContactsCodeVerification Context', () => {
   let result: RenderResult | undefined;

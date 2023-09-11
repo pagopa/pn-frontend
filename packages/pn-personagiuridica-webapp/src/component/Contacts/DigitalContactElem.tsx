@@ -1,6 +1,5 @@
 import {
   Dispatch,
-  Fragment,
   ReactChild,
   SetStateAction,
   forwardRef,
@@ -228,7 +227,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     }));
 
     return (
-      <Fragment>
+      <>
         <Grid container spacing="4" direction="row" alignItems="center">
           {mappedChildren}
           <Grid item lg={12} xs={12} textAlign={'left'}>
@@ -272,7 +271,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
           blockDelete={blockDelete}
           confirmHandler={confirmHandler}
         />
-      </Fragment>
+      </>
     );
   }
 );

@@ -8,19 +8,15 @@ import { getNewNotificationBadge } from '../NewNotificationBadge';
 describe('NewNotificationBadge component', () => {
   it('returns the component if notification status is accepted', () => {
     const notificationStatus = NotificationStatus.ACCEPTED;
-
-    const result = render(<>{getNewNotificationBadge(notificationStatus)}</>);
-
-    const badge = result.getByRole('status');
+    const { getByTestId } = render(<>{getNewNotificationBadge(notificationStatus)}</>);
+    const badge = getByTestId('new-notification-badge');
     expect(badge).toBeInTheDocument();
   });
 
   it('does not return the component if notification status is viewed', () => {
     const notificationStatus = NotificationStatus.VIEWED;
-
-    const result = render(<>{getNewNotificationBadge(notificationStatus)}</>);
-
-    const badge = result.queryByRole('status');
+    const { queryByTestId } = render(<>{getNewNotificationBadge(notificationStatus)}</>);
+    const badge = queryByTestId('new-notification-badge');
     expect(badge).not.toBeInTheDocument();
   });
 });

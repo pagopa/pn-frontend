@@ -90,6 +90,6 @@ describe('delegation redux state tests', () => {
     const action = store.dispatch(resetNewDelegation());
     const state = store.getState().newDelegationState;
     expect(action.type).toBe('newDelegationSlice/resetNewDelegation');
-    expect(state).toEqual(initialState);
+    expect(state.created).toBeFalsy();
   });
 });

@@ -16,7 +16,7 @@ import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.rou
 import { NotificationColumn } from '../../../models/Notifications';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
-import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
+import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 
 describe('Dashbaord redux state tests', () => {
   let mock: MockAdapter;
@@ -116,11 +116,5 @@ describe('Dashbaord redux state tests', () => {
     const action = store.dispatch(setNotificationFilters(filters));
     expect(action.type).toBe('dashboardSlice/setNotificationFilters');
     expect(action.payload).toEqual(filters);
-  });
-
-  it('Should be able to set mandate id', () => {
-    const action = store.dispatch(setMandateId('mocked-mandate-id'));
-    expect(action.type).toBe('dashboardSlice/setMandateId');
-    expect(action.payload).toEqual('mocked-mandate-id');
   });
 });

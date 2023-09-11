@@ -78,7 +78,7 @@ describe('CourtesyContactItem component - accessibility tests', () => {
     }
   });
 
-  it('type "email" - add a new email - does not have basic accessibility issues', async () => {
+  it('type "email" - no email added - does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>

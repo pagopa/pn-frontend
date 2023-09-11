@@ -314,6 +314,30 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MESSINA',
       foreignState: 'ITALIA',
     },
+    payment: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302181677769720267',
+      pagoPaForm: {
+        digests: {
+          sha256: 'mocked-pagopa-sha256',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'mocked-pagopa-key',
+          versionToken: 'mockedVersionToken',
+        },
+      },
+      f24flatRate: {
+        digests: {
+          sha256: 'mocked-f24-sha256',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'mocked-f24-key',
+          versionToken: 'mockedVersionToken',
+        },
+      },
+    },
   },
   {
     recipientType: RecipientType.PG,
@@ -340,7 +364,7 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetailForRecipient(notificationDTO);
+export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
 
 export const overrideNotificationMock = (overrideObj: object): NotificationDetail => ({
   ..._.cloneDeep(notificationToFe),

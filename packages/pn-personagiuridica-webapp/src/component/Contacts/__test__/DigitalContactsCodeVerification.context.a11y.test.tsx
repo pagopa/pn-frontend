@@ -32,7 +32,7 @@ jest.mock('react-i18next', () => ({
 In questo test manca il test di accessibilità sulla modale che compare in fase di inserimento di un contatto già eistente.
 Il componente, infatti, si trova in pn-commons e qualora sia necessario un test di accessibilità, è giusto farlo li
 
-Andrea Cimini - 6/09/2023
+Andrea Cimini - 11/09/2023
 */
 describe('DigitalContactsCodeVerification Context - accessibility tests', () => {
   let result: RenderResult | undefined;

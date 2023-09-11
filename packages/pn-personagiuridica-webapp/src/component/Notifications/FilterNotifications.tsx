@@ -1,39 +1,37 @@
-import { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import _ from 'lodash';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
+
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
   CustomMobileDialog,
   CustomMobileDialogContent,
   CustomMobileDialogToggle,
-  tenYearsAgo,
-  today,
-  useIsMobile,
+  GetNotificationsParams,
   IUN_regex,
+  dateIsDefined,
   filtersApplied,
   formatToTimezoneString,
   getValidValue,
-  GetNotificationsParams,
-  dateIsDefined,
+  tenYearsAgo,
+  today,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { setNotificationFilters } from '../../redux/dashboard/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { setNotificationFilters } from '../../redux/dashboard/reducers';
-import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { Delegator } from '../../models/Deleghe';
-import FilterNotificationsFormBody from './FilterNotificationsFormBody';
+import { trackEventByType } from '../../utils/mixpanel';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
+import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
-  /** Delegator */
-  currentDelegator?: Delegator;
 };
 
 const useStyles = makeStyles({
@@ -59,7 +57,6 @@ const initialValues = (
     startDate: string;
     endDate: string;
     iunMatch: string;
-    mandateId: string | undefined;
   }
 ) => {
   if (!filters || (filters && _.isEqual(filters, emptyValues))) {
@@ -72,7 +69,7 @@ const initialValues = (
   };
 };
 
-const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
@@ -80,13 +77,12 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const classes = useStyles();
-  const dialogRef = useRef<{toggleOpen: () => void}>(null);
+  const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
     startDate: formatToTimezoneString(tenYearsAgo),
     endDate: formatToTimezoneString(today),
     iunMatch: '',
-    mandateId: currentDelegator?.mandateId,
   };
 
   const validationSchema = yup.object({
@@ -113,7 +109,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         startDate: formatToTimezoneString(values.startDate),
         endDate: formatToTimezoneString(values.endDate),
         iunMatch: values.iunMatch,
-        mandateId: currentDelegator?.mandateId,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
@@ -181,7 +176,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -203,7 +198,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody

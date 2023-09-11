@@ -5,7 +5,7 @@ import VerificationCodeComponent from '../VerificationCodeComponent';
 
 describe('VerificationCodeComponent - accessibility tests', () => {
   it('is Verification Code component accessible', async () => {
-    const fiveDigits = '987654321';
+    const fiveDigits = '12345';
     const result = render(<VerificationCodeComponent code={fiveDigits} />);
     const results = await axe(result?.container);
     expect(results).toHaveNoViolations();

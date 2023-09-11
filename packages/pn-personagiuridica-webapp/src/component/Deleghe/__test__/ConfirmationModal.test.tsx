@@ -11,7 +11,7 @@ describe('ConfirmationModal Component', () => {
     const { getByRole, getAllByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
-        handleClose={mockCancelFunction}
+        onClose={mockCancelFunction}
         onCloseLabel={'Cancel'}
         open
         onConfirm={mockConfirmFunction}
@@ -31,7 +31,7 @@ describe('ConfirmationModal Component', () => {
     const { getAllByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
-        handleClose={mockCancelFunction}
+        onClose={mockCancelFunction}
         onCloseLabel={'Cancel'}
         open
         onConfirm={mockConfirmFunction}
@@ -44,14 +44,14 @@ describe('ConfirmationModal Component', () => {
     fireEvent.click(confirm);
     expect(mockConfirmFunction).toBeCalledTimes(1);
     fireEvent.click(cancel);
-    expect(mockCancelFunction).toBeCalledTimes(0);
+    expect(mockCancelFunction).toBeCalledTimes(1);
   });
 
   it('renders the dialog with default labels', () => {
     const { getAllByTestId } = render(
       <ConfirmationModal
         title={'Test title'}
-        handleClose={mockCancelFunction}
+        onClose={mockCancelFunction}
         open
         onConfirm={mockConfirmFunction}
       />
@@ -65,7 +65,7 @@ describe('ConfirmationModal Component', () => {
 
   it('renders the dialog with no confirm button', () => {
     const { getAllByTestId } = render(
-      <ConfirmationModal title={'Test title'} handleClose={mockCancelFunction} open />
+      <ConfirmationModal title={'Test title'} onClose={mockCancelFunction} open />
     );
     const dialogActions = getAllByTestId('dialogAction');
     expect(dialogActions).toHaveLength(1);

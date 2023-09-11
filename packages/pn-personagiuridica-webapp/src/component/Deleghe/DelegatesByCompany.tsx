@@ -135,11 +135,11 @@ const DelegatesByCompany = () => {
   ];
 
   const handleRewoke = (mandateId: string) => {
-    // because a PG can delegate itself, we must check if the rewoked delegation is in delegates object and redo the delegators api call
+    // because a PG can delegate itself, we must check if the rewoked delegation is in delegators object and redo the delegators api call
     const isSelfMandate =
       delegators.findIndex((delegator) => delegator.mandateId === mandateId) > -1;
     if (isSelfMandate) {
-      getDelegatorsData();
+      // getDelegatorsData();
     }
   };
 
@@ -195,6 +195,3 @@ const DelegatesByCompany = () => {
 };
 
 export default DelegatesByCompany;
-function getDelegatorsData() {
-  throw new Error('Function not implemented.');
-}

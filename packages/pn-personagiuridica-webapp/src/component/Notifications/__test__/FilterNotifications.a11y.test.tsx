@@ -1,6 +1,16 @@
 import * as React from 'react';
 
-import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import {
+  RenderResult,
+  act,
+  axe,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 jest.mock('react-i18next', () => ({
@@ -10,17 +20,14 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    useIsMobile: () => false,
-  };
-});
-
 describe('Filter Notifications Table Component - accessibility tests', () => {
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   it('does not have basic accessibility issues', async () => {
-    // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
 
     await act(async () => {
@@ -33,5 +40,25 @@ describe('Filter Notifications Table Component - accessibility tests', () => {
     } else {
       fail('render() returned undefined!');
     }
-  });
+  }, 15000);
+
+  it('does not have basic accessibility issues - mobile', async () => {
+    window.matchMedia = createMatchMedia(800);
+    let result: RenderResult | undefined;
+
+    await act(async () => {
+      result = render(<FilterNotifications showFilters />);
+    });
+
+    const button = result!.getByTestId('dialogToggleButton');
+    fireEvent.click(button);
+
+    const dialogForm = await waitFor(() => screen.getByTestId('filter-form'));
+    expect(dialogForm).toBeInTheDocument();
+
+    if (dialogForm) {
+      const results = await axe(dialogForm);
+      expect(results).toHaveNoViolations();
+    }
+  }, 15000);
 });

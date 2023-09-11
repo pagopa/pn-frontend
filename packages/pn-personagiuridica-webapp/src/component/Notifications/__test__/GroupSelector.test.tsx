@@ -1,14 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import {
-  RenderResult,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import GroupSelector from '../GroupSelector';
@@ -24,7 +17,6 @@ const onGroupSelectionCbk = jest.fn();
 
 describe('GroupSelector component', () => {
   let mock: MockAdapter;
-  let result: RenderResult;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -43,13 +35,13 @@ describe('GroupSelector component', () => {
       { id: 'group-1', name: 'Group 1' },
       { id: 'group-2', name: 'Group 2' },
     ]);
-    result = render(
+    const { getByTestId } = render(
       <GroupSelector currentGroup="group-1" onGroupSelection={onGroupSelectionCbk} />
     );
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(1);
     });
-    const menuButton = result.getByTestId('groupSelectorButton');
+    const menuButton = getByTestId('groupSelectorButton');
     expect(menuButton).toHaveTextContent('Group 1');
     fireEvent.click(menuButton);
     const dropdown = await waitFor(() => screen.getByRole('presentation'));

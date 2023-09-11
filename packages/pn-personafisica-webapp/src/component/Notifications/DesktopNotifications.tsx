@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -177,7 +177,7 @@ const DesktopNotifications = ({
   };
 
   return (
-    <Fragment>
+    <>
       <FilterNotifications
         ref={filterNotificationsRef}
         showFilters={showFilters}
@@ -194,7 +194,7 @@ const DesktopNotifications = ({
       ) : (
         <EmptyState {...EmptyStateProps} />
       )}
-    </Fragment>
+    </>
   );
 };
 

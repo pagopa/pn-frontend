@@ -8,7 +8,7 @@ describe('ConfirmationModal Component - accessibility tests', () => {
     const result = render(
       <ConfirmationModal
         title={'Test title'}
-        handleClose={() => {}}
+        onClose={() => {}}
         onCloseLabel="Cancella"
         open={true}
         onConfirm={() => {}}
