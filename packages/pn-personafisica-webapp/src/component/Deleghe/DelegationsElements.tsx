@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  IconButton,
-  Menu as MUIMenu,
-  MenuItem,
-  Box,
-  Typography,
-} from '@mui/material';
-import { Variant } from '@mui/material/styles/createTypography';
+
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 import { CustomTagGroup } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
-import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
-import { trackEventByType } from '../../utils/mixpanel';
+import { useAppDispatch } from '../../redux/hooks';
 import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,7 +45,11 @@ export const Menu = (props: any) => {
   const getMenuItemElements = () => {
     if (props.menuType === 'delegates') {
       return [
-        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal} data-testid="menuItem-showCode">
+        <MenuItem
+          key="showCode"
+          onClick={handleOpenVerificationCodeModal}
+          data-testid="menuItem-showCode"
+        >
           {t('deleghe.show')}
         </MenuItem>,
         <MenuItem key="revoke" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegate">
@@ -60,7 +58,11 @@ export const Menu = (props: any) => {
       ];
     } else {
       return [
-        <MenuItem key="reject" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegator">
+        <MenuItem
+          key="reject"
+          onClick={handleOpenModalClick}
+          data-testid="menuItem-rejectDelegator"
+        >
           {t('deleghe.reject')}
         </MenuItem>,
       ];
@@ -102,8 +104,8 @@ export const OrganizationsList = (props: {
           </Typography>
           <CustomTagGroup visibleItems={props.visibleItems}>
             {props.organizations.map((organization) => (
-              <Box sx={{mb:1, mr: 1, display: 'inline-block'}} key={organization}>
-                <Tag value={organization}/>
+              <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={organization}>
+                <Tag value={organization} />
               </Box>
             ))}
           </CustomTagGroup>
@@ -121,7 +123,12 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
   };
 
   return (
-    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'} data-testid='acceptButton'>
+    <Button
+      onClick={handleAcceptClick}
+      variant={'contained'}
+      color={'primary'}
+      data-testid="acceptButton"
+    >
       {t('deleghe.accept')}
     </Button>
   );

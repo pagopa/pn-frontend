@@ -68,6 +68,7 @@ export const ContactsApi = {
           return;
         }
       }),
+
   /**
    * Create or update a courtesy address
    * @param  {string} recipientId
@@ -99,6 +100,7 @@ export const ContactsApi = {
         value: body.value,
       };
     }),
+
   /*
    * Remove current user digital address
    * @param  {string} recipientId
@@ -106,6 +108,7 @@ export const ContactsApi = {
    */
   deleteLegalAddress: (senderId: string, channelType: LegalChannelType): Promise<string> =>
     apiClient.delete<string>(LEGAL_CONTACT(senderId, channelType)).then(() => senderId),
+
   /*
    * Remove current user digital address
    * @param  {string} recipientId

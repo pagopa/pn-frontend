@@ -292,7 +292,11 @@ const NotificationDetail = () => {
       {hasNotificationReceivedApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError onClick={fetchReceivedNotification} mt={3} />
+          <ApiError
+            onClick={fetchReceivedNotification}
+            mt={3}
+            apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
+          />
         </Box>
       )}
       {!hasNotificationReceivedApiError && (
@@ -378,7 +382,7 @@ const NotificationDetail = () => {
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
                     </Alert>
                   }

@@ -1,9 +1,9 @@
-import { act, screen } from '@testing-library/react';
+import React from 'react';
+
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
-import { render } from '../../../__test__/test-utils';
-import * as hooks from '../../../redux/hooks';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
+import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { render, screen } from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import MobileDelegators from '../MobileDelegators';
 
@@ -14,66 +14,43 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-/**
- * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
- */
- jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-  };
-});
-
-describe('MobileDelegators Component - assuming delegators API works properly', () => {
+describe('MobileDelegators Component', () => {
   it('renders the empty state', () => {
-    const result = render(<MobileDelegators />);
-
-    expect(result.container).toHaveTextContent(/deleghe.delegatorsTitle/i);
-    expect(result.container).toHaveTextContent(/deleghe.no_delegators/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationStart/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationEnd/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.permissions/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.status/i);
+    const { container, queryAllByTestId } = render(<MobileDelegators />);
+    expect(container).toHaveTextContent(/deleghe.delegatorsTitle/i);
+    const itemCards = queryAllByTestId('itemCard');
+    expect(itemCards).toHaveLength(0);
+    expect(container).toHaveTextContent(/deleghe.no_delegators/i);
   });
 
   it('renders the delegators', () => {
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
-    const result = render(<MobileDelegators />);
-
-    expect(result.container).toHaveTextContent(/marco verdi/i);
-    expect(result.container).toHaveTextContent(/davide legato/i);
-    expect(result.container).not.toHaveTextContent(/luca blu/i);
-  });
-});
-
-describe('MobileDelegators Component - different delegators API behaviors', () => {
-  beforeAll(() => {
-    jest.restoreAllMocks();
+    const { getAllByTestId } = render(<MobileDelegators />, {
+      preloadedState: { delegationsState: { delegations: { delegators: arrayOfDelegators } } },
+    });
+    const itemCards = getAllByTestId('itemCard');
+    expect(itemCards).toHaveLength(arrayOfDelegators.length);
+    itemCards.forEach((card, index) => {
+      expect(card).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+    });
   });
 
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
+  /* Manca nella parte mobile, ma per coerenza andrebbe aggiunto
+  it('sorts the delegators', async () => {
+    
   });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
-  });
+  */
 
   it('API error', async () => {
-    await act(async () => void render(
-      <MobileDelegators />,
-      { preloadedState: { 
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATORS),
-      } }
-    ));
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    await act(async () => void render(<MobileDelegators />));
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
+    render(<MobileDelegators />, {
+      preloadedState: {
+        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+          DELEGATION_ACTIONS.GET_DELEGATORS
+        ),
+      },
+    });
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${DELEGATION_ACTIONS.GET_DELEGATORS}`
+    );
+    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });

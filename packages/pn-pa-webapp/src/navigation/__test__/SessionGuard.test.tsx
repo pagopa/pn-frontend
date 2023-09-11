@@ -8,23 +8,22 @@ import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
+import * as routes from '../routes.const';
+
+const mockNavigateFn = jest.fn();
 
 // mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
+
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
-
-jest.mock('../../services/configuration.service', () => {
-  return {
-    ...jest.requireActual('../../services/configuration.service'),
-    getConfiguration: () => ({
-      DISABLE_INACTIVITY_HANDLER: true,
-    }),
-  };
-});
 
 const Guard = () => (
   <Routes>
@@ -36,7 +35,6 @@ const Guard = () => (
 
 describe('SessionGuard Component', () => {
   const original = window.location;
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -49,6 +47,7 @@ describe('SessionGuard Component', () => {
 
   afterEach(() => {
     mock.reset();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
@@ -56,7 +55,7 @@ describe('SessionGuard Component', () => {
     Object.defineProperty(window, 'location', { writable: true, value: original });
   });
 
-  // cosa si aspetta: entra nell'app, non fa nessun navigate, lancia il sessionCheck, l'utente viene cancellato da redux
+  // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
   it('session expired', async () => {
     const mockReduxState = {
       userState: { user: { ...userResponse, desired_exp: 1 } },
@@ -75,7 +74,7 @@ describe('SessionGuard Component', () => {
     });
   });
 
-  // cosa si aspetta: entra nell'app, non fa nessun navigate, non lancia il sessionCheck
+  // expected behavior: enters the app, doesn't navigate, doesn't launch sessionCheck
   it('no token - anonymous user', async () => {
     await act(async () => {
       render(<Guard />);
@@ -84,7 +83,7 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
+  // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
   it('exchange token error (403)', async () => {
     window.location.hash = '#selfCareToken=403_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(403, {
@@ -104,7 +103,7 @@ describe('SessionGuard Component', () => {
     expect(logoutTitleComponent).toBeNull();
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
+  // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
   it('exchange token error (451)', async () => {
     window.location.hash = '#selfCareToken=451_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
@@ -122,9 +121,11 @@ describe('SessionGuard Component', () => {
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
   });
 
-  // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
+  // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
   it('user logged in - TOS accepted', async () => {
     window.location.hash = '#selfCareToken=200_token';
     mock
@@ -144,7 +145,7 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio di logout
+  // expected behavior: enters the app, logout message
   it('logout', async () => {
     window.location.hash = '';
     const mockReduxState = {

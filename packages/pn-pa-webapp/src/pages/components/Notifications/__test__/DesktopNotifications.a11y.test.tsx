@@ -60,7 +60,6 @@ describe('DesktopNotifications Component - accessibility tests', () => {
                 startDate: formatToTimezoneString(tenYearsAgo),
                 endDate: formatToTimezoneString(today),
                 iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-                mandateId: undefined,
               },
             },
           },

@@ -1,12 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { Delegation } from '../../../redux/delegation/types';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
   arrayOfDelegates,
   arrayOfDelegators,
   mockCreateDelegation,
-} from '../../../redux/delegation/__test__/test.utils';
+} from '../../../__mocks__/Delegations.mock';
+import { Delegation } from '../../../redux/delegation/types';
 import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
 import {
@@ -18,35 +18,34 @@ import {
   REVOKE_DELEGATION,
 } from '../delegations.routes';
 
+let mock: MockAdapter;
+
 async function getDelegates(response: Array<Delegation> | null) {
-  const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, response);
+  mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, response);
   const res = await DelegationsApi.getDelegates();
-  axiosMock.reset();
-  axiosMock.restore();
   return res;
 }
 
 async function getDelegators(response: Array<Delegation> | null) {
-  const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, response);
+  mock.onGet(DELEGATIONS_BY_DELEGATE()).reply(200, response);
   const res = await DelegationsApi.getDelegators();
-  axiosMock.reset();
-  axiosMock.restore();
-  return res;
-}
-
-async function createDelegation() {
-  const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onPost(CREATE_DELEGATION()).reply(200, mockCreateDelegation);
-  const res = await DelegationsApi.createDelegation(mockCreateDelegation);
-  axiosMock.reset();
-  axiosMock.restore();
   return res;
 }
 
 describe('Delegations api tests', () => {
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('gets non empty delegates', async () => {
     const res = await getDelegates(arrayOfDelegates);
@@ -69,55 +68,38 @@ describe('Delegations api tests', () => {
   });
 
   it('revokes a delegation', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPatch(REVOKE_DELEGATION('7')).reply(204);
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
-    mock.reset();
-    mock.restore();
   });
 
   it("doesn't revoke a delegation", async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPatch(REVOKE_DELEGATION('10')).reply(200);
     const res = await DelegationsApi.revokeDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
-    mock.reset();
-    mock.restore();
   });
 
   it('rejects a delegation', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPatch(REJECT_DELEGATION('8')).reply(204);
     const res = await DelegationsApi.rejectDelegation('8');
     expect(res).toStrictEqual({ id: '8' });
-    mock.reset();
-    mock.restore();
   });
 
   it("doesn't reject a delegation", async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPatch(REJECT_DELEGATION('10')).reply(200);
     const res = await DelegationsApi.rejectDelegation('10');
     expect(res).toStrictEqual({ id: '-1' });
-    mock.reset();
-    mock.restore();
   });
 
   it('accept a delegation', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPatch(ACCEPT_DELEGATION('9')).reply(204, {});
     const res = await DelegationsApi.acceptDelegation('9', { verificationCode: '12345' });
     expect(res).toStrictEqual({ id: '9' });
-    mock.reset();
-    mock.restore();
   });
 
   it('creates a new delegation', async () => {
-    const mock = new MockAdapter(apiClient);
-    const res = await createDelegation();
+    mock.onPost(CREATE_DELEGATION()).reply(200, mockCreateDelegation);
+    const res = await DelegationsApi.createDelegation(mockCreateDelegation);
     expect(res).toStrictEqual(mockCreateDelegation);
-    mock.reset();
-    mock.restore();
   });
 });
