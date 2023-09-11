@@ -1,58 +1,30 @@
-import { act, screen } from '@testing-library/react';
-import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
-/* eslint-disable import/order */
-import { render } from './test-utils';
-import App from '../App';
-import { Party } from '../models/party';
-import { AUTH_ACTIONS } from '../redux/auth/actions';
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
+import { ThemeProvider } from '@emotion/react';
+import { theme } from '@pagopa/mui-italia';
+
+import App from '../App';
+import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
+import { userResponse } from '../__mocks__/Auth.mock';
+import { apiClient } from '../api/apiClients';
+import { GET_CONSENTS } from '../api/consents/consents.routes';
+import { ConsentType } from '../models/consents';
+import { RenderResult, act, render } from './test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
     t: (str: string) => str,
     i18n: { language: 'it' },
   }),
 }));
 
-let mockLayout = false;
+jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
 
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  const OriginalLayout = original.Layout;
-  return {
-    ...original,
-    Layout: (props: any) => mockLayout
-      ? <div>{ props.showSideMenu ? "sidemenu" : ""}</div>
-      : <OriginalLayout {...props} />,
-  };
-});
-
-jest.mock('../api/appStatus/AppStatus.api', () => {
-  const original = jest.requireActual('../api/consents/Consents.api');
-  return {
-    ...original,
-    AppStatusApi: {
-      getCurrentStatus: () => Promise.resolve({
-        appIsFullyOperative: true,
-        statusByFunctionality: [],  
-        lastCheckTimestamp: '2022-11-01T14:15:28Z',
-      }),
-      getDowntimeLogPage: () => Promise.resolve({
-        downtimes: [],
-        statusByFunctionality: [],     
-      }),
-    },
-  };
-});
-
-// mocko SessionGuard perché produce problemi nel test
-jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
-jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
+const unmockedFetch = global.fetch;
 
 const Component = () => (
   <ThemeProvider theme={theme}>
@@ -60,92 +32,145 @@ const Component = () => (
   </ThemeProvider>
 );
 
-const reduxInitialState = (
-  fetchedTos: boolean,
-  fetchedPrivacy: boolean,
-  acceptedTos: boolean,
-  acceptedPrivacy: boolean
-) => ({
+const reduxInitialState = {
   userState: {
-    user: {
-      fiscal_number: 'mocked-fiscal-number',
-      name: 'mocked-name',
-      family_name: 'mocked-family-name',
-      email: 'mocked-user@mocked-domain.com',
-      sessionToken: 'mocked-token',
-    },
-    fetchedTos,
-    fetchedPrivacy,
+    user: userResponse,
+    fetchedTos: false,
+    fetchedPrivacy: false,
     tosConsent: {
-      accepted: acceptedTos,
+      accepted: false,
       isFirstAccept: false,
-      currentVersion: 'mocked-version-1'
+      currentVersion: 'mocked-version-1',
     },
     privacyConsent: {
-      accepted: acceptedPrivacy,
+      accepted: false,
       isFirstAccept: false,
-      currentVersion: 'mocked-version-1'
-    }
+      currentVersion: 'mocked-version-1',
+    },
   },
-});
+};
 
 describe('App', () => {
-  beforeEach(() => {
-    mockLayout = false;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+    // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
+    // this causes an error, so we mock to avoid it
+    global.fetch = () =>
+      Promise.resolve({
+        json: () => Promise.resolve([]),
+      }) as Promise<Response>;
   });
 
-  it('SEND', () => {
-    render(<Component/>, { preloadedState: reduxInitialState(false, false, false, false) });
-    const welcomeElement = screen.getByText(/header.notification-platform/i);
-    expect(welcomeElement).toBeInTheDocument();
+  afterEach(() => {
+    mock.reset();
   });
 
-  it('Sidemenu not included if error in API call to fetch organization', async () => {
-    mockLayout = true;
-    const mockReduxStateWithApiError = {
-      ...reduxInitialState(true, true, false, false),
-      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY)
-    };
-    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
-    const sidemenuComponent = screen.queryByText("sidemenu");
-    expect(sidemenuComponent).toBeNull();
+  afterAll(() => {
+    mock.restore();
+    global.fetch = unmockedFetch;
+  });
+
+  it('render component - user not logged in', async () => {
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />);
+    });
+    const header = document.querySelector('header');
+    expect(header).toBeInTheDocument();
+    const footer = document.querySelector('footer');
+    expect(footer).toBeInTheDocument();
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    expect(result!.container).toHaveTextContent(
+      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
+    );
+  });
+
+  it('render component - user logged in', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const header = document.querySelector('header');
+    expect(header).toBeInTheDocument();
+    const footer = document.querySelector('footer');
+    expect(footer).toBeInTheDocument();
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).toBeInTheDocument();
+    expect(result!.container).toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('Sidemenu not included if error in API call to fetch TOS', async () => {
-    mockLayout = true;
-    const mockReduxStateWithApiError = {
-      ...reduxInitialState(true, true, false, false),
-      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_TOS_APPROVAL)
-    };
-    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
-    const sidemenuComponent = screen.queryByText("sidemenu");
-    expect(sidemenuComponent).toBeNull();
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('Sidemenu not included if error in API call to fetch PRIVACY', async () => {
-    mockLayout = true;
-    const mockReduxStateWithApiError = {
-      ...reduxInitialState(true, true, false, false),
-      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_PRIVACY_APPROVAL)
-    };
-    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
-    const sidemenuComponent = screen.queryByText("sidemenu");
-    expect(sidemenuComponent).toBeNull();
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(500);
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
-    mockLayout = true;
-    await act(async () => void render(<Component />, { preloadedState: reduxInitialState(true, true, false, false) }));
-    const sidemenuComponent = screen.queryByText("sidemenu");
-    expect(sidemenuComponent).toBeNull();
-  });
-
-  it('Sidemenu included if user has accepted the TOS and PRIVACY', async () => {
-    mockLayout = true;
-    await act(async () => void render(<Component />, { preloadedState: reduxInitialState(true, true, true, true) }));
-    const sidemenuComponent = screen.queryByText("sidemenu");
-    expect(sidemenuComponent).toBeTruthy();
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: false,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: false,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    const tosPage = result!.queryByTestId('tos-acceptance-page');
+    expect(tosPage).toBeInTheDocument();
+    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(3);
   });
 });
-
-export {};

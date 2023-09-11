@@ -182,7 +182,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -204,7 +204,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody

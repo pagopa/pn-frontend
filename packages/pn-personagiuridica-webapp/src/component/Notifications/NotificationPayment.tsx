@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { LoadingButton } from '@mui/lab';
@@ -45,6 +45,7 @@ import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 import { getConfiguration } from '../../services/configuration.service';
+import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../navigation/externalRoutes.const';
 
 interface Props {
   iun: string;
@@ -53,6 +54,7 @@ interface Props {
   mandateId?: string;
   senderDenomination?: string;
   paymentHistory?: Array<PaymentHistory>;
+  notificationIsCancelled?: boolean;
 }
 
 interface PrimaryAction {
@@ -113,6 +115,7 @@ const NotificationPayment: React.FC<Props> = ({
   paymentHistory,
   senderDenomination,
   subject,
+  notificationIsCancelled,
 }) => {
   const { PAGOPA_HELP_EMAIL } = getConfiguration();
   const { t } = useTranslation(['notifiche']);
@@ -126,6 +129,7 @@ const NotificationPayment: React.FC<Props> = ({
   const f24AttachmentUrl = useAppSelector(
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
+  const { LANDING_SITE_URL } = getConfiguration();
 
   const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
@@ -137,6 +141,14 @@ const NotificationPayment: React.FC<Props> = ({
 
   useDownloadDocument({ url: pagopaAttachmentUrl });
   useDownloadDocument({ url: f24AttachmentUrl });
+
+  const faqHowDoIGetRefundedCompleteLink = useMemo(
+    () =>
+      LANDING_SITE_URL && FAQ_HOW_DO_I_GET_REFUNDED
+        ? `${LANDING_SITE_URL}${FAQ_HOW_DO_I_GET_REFUNDED}`
+        : undefined,
+    []
+  );
 
   const fetchPaymentInfo = () => {
     if (
@@ -453,7 +465,7 @@ const NotificationPayment: React.FC<Props> = ({
     <ApiErrorWrapper
       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
       reloadAction={fetchPaymentInfo}
-      mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
+      mainText={t('detail.payment.message-error-fetch-payment')}
     >
       <Paper sx={{ p: 3, mb: '1rem' }} elevation={0}>
         <Grid container direction="row" justifyContent="space-between">
@@ -462,47 +474,71 @@ const NotificationPayment: React.FC<Props> = ({
               {data.title}
             </Typography>
           </Grid>
-          <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
-            <Typography
-              variant="h5"
-              aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
-              display="inline"
-              fontWeight={600}
-              fontSize={24}
+          {notificationIsCancelled && (
+            <Alert
+              tabIndex={0}
+              data-testid="cancelledAlertTextPayment"
+              sx={{ mb: 2 }}
+              severity="info"
             >
-              {loading ? (
-                <Skeleton
-                  data-testid="loading-skeleton"
-                  width={100}
-                  height={28}
-                  aria-label="loading"
-                  sx={{ float: 'right' }}
-                />
-              ) : (
-                data.amount
-              )}
-            </Typography>
-          </Grid>
+              {t('detail.payment.cancelled-alert-text-payment')}&nbsp;
+              <Link
+                href={faqHowDoIGetRefundedCompleteLink}
+                sx={{ fontSize: '16px' }}
+                target="_blank"
+                variant="body1"
+              >
+                {t('detail.disclaimer-link')}
+              </Link>
+            </Alert>
+          )}
+          {!notificationIsCancelled && (
+            <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
+              <Typography
+                variant="h5"
+                aria-label={t('detail.payment.amount')}
+                display="inline"
+                fontWeight={600}
+                fontSize={24}
+              >
+                {loading ? (
+                  <Skeleton
+                    data-testid="loading-skeleton"
+                    width={100}
+                    height={28}
+                    aria-label="loading"
+                    sx={{ float: 'right' }}
+                  />
+                ) : (
+                  data.amount
+                )}
+              </Typography>
+            </Grid>
+          )}
+
           <Stack spacing={2} width="100%">
-            <Box width="100%">
-              {data.message && (
-                <Alert
-                  severity={data.message.type}
-                  action={isMobile ? undefined : getMessageAction(data.message)}
-                >
-                  <Typography variant="body1">{data.message.body}</Typography>
-                  <Typography variant="body1" fontWeight="bold">
-                    {data.message.errorCode}
-                  </Typography>
-                  {isMobile ? (
-                    <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
-                      {getMessageAction(data.message)}
-                    </Box>
-                  ) : null}
-                </Alert>
-              )}
-            </Box>
-            {loading && (
+            {!notificationIsCancelled && (
+              <Box width="100%">
+                {data.message && (
+                  <Alert
+                    severity={data.message.type}
+                    action={isMobile ? undefined : getMessageAction(data.message)}
+                  >
+                    <Typography variant="body1">{data.message.body}</Typography>
+                    <Typography variant="body1" fontWeight="bold">
+                      {data.message.errorCode}
+                    </Typography>
+                    {isMobile ? (
+                      <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
+                        {getMessageAction(data.message)}
+                      </Box>
+                    ) : null}
+                  </Alert>
+                )}
+              </Box>
+            )}
+
+            {loading && !notificationIsCancelled && (
               <Grid item xs={12} lg={12}>
                 <LoadingButton
                   loading={loading}
@@ -511,11 +547,11 @@ const NotificationPayment: React.FC<Props> = ({
                   endIcon={<SendIcon />}
                   fullWidth
                 >
-                  {t('detail.payment.submit', { ns: 'notifiche' })}
+                  {t('detail.payment.submit')}
                 </LoadingButton>
               </Grid>
             )}
-            {!loading && data.action && (
+            {!loading && data.action && !notificationIsCancelled && (
               <>
                 <Grid item xs={12} lg={12}>
                   <Button onClick={data.action.callback} variant="contained" fullWidth>
@@ -524,7 +560,7 @@ const NotificationPayment: React.FC<Props> = ({
                 </Grid>
                 {attachments.length > 0 && (
                   <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                    <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+                    <Divider>{t('detail.payment.divider-text')}</Divider>
                   </Grid>
                 )}
                 <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>

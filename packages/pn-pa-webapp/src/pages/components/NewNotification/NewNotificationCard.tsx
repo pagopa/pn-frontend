@@ -1,5 +1,6 @@
 import { Fragment, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { SectionHeading } from '@pagopa-pn/pn-commons';
 
@@ -30,8 +31,12 @@ const NewNotificationCard = ({
     <Fragment>
       {!noPaper && (
         <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
-          {title && <SectionHeading>{title}</SectionHeading>}
-          {subtitle && <Typography variant="body1">{subtitle}</Typography>}
+          {title && <SectionHeading data-testid="title">{title}</SectionHeading>}
+          {subtitle && (
+            <Typography data-testid="subtitle" variant="body1">
+              {subtitle}
+            </Typography>
+          )}
           <Box sx={{ marginTop: '20px' }}>{children}</Box>
         </Paper>
       )}
@@ -49,7 +54,7 @@ const NewNotificationCard = ({
           disabled={isContinueDisabled}
           data-testid="step-submit"
         >
-          {submitLabel ? submitLabel : t('button.continue')}
+          {submitLabel || t('button.continue')}
         </Button>
         {previousStepLabel && (
           <Button

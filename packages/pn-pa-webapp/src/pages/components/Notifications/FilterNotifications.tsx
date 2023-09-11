@@ -1,6 +1,6 @@
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
-import { Fragment, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -177,7 +177,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -199,32 +199,30 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <Fragment>
-      <form onSubmit={formik.handleSubmit}>
-        <Box
-          display={'flex'}
-          sx={{
-            marginTop: 5,
-            marginBottom: 5,
-            verticalAlign: 'top',
-            '& .MuiTextField-root': { mr: 1, width: '100%' },
-          }}
-        >
-          <FilterNotificationsFormBody
-            formikInstance={formik}
-            startDate={startDate}
-            endDate={endDate}
-            setStartDate={(value) => setStartDate(value)}
-            setEndDate={(value) => setEndDate(value)}
-          />
-          <FilterNotificationsFormActions
-            cleanFilters={cancelSearch}
-            filtersApplied={isFilterapplied(filtersCount)}
-            isInitialSearch={isInitialSearch}
-          />
-        </Box>
-      </form>
-    </Fragment>
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+      <Box
+        display={'flex'}
+        sx={{
+          marginTop: 5,
+          marginBottom: 5,
+          verticalAlign: 'top',
+          '& .MuiTextField-root': { mr: 1, width: '100%' },
+        }}
+      >
+        <FilterNotificationsFormBody
+          formikInstance={formik}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={(value) => setStartDate(value)}
+          setEndDate={(value) => setEndDate(value)}
+        />
+        <FilterNotificationsFormActions
+          cleanFilters={cancelSearch}
+          filtersApplied={isFilterapplied(filtersCount)}
+          isInitialSearch={isInitialSearch}
+        />
+      </Box>
+    </form>
   );
 });
 

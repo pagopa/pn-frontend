@@ -1,16 +1,32 @@
-import { fireEvent, waitFor } from '@testing-library/react';
-import { render } from '../../../../__test__/test-utils';
+import React from 'react';
+
+import { fireEvent, render } from '../../../../__test__/test-utils';
 import FormTextField from '../FormTextField';
-import { formTestErrors, formTestTouched, formTestValues } from './test-utils';
 
 const mockSetValue = jest.fn();
 const mockBlur = jest.fn();
 
+const keyName = 'testKey';
+
+const formTestValues = {
+  testKey: 'someText',
+  testKey2: 'anotherText',
+  testKey3: 'thirdText',
+};
+
+const formTestTouched = {
+  testKey: true,
+};
+
+const formTestErrors = {
+  testKey: 'error',
+};
+
 describe('FormTextField Component', () => {
   it('renders the component', () => {
-    const result = render(
+    const { container } = render(
       <FormTextField
-        keyName={'testKey'}
+        keyName={keyName}
         label={'testLabel'}
         values={formTestValues}
         touched={{}}
@@ -20,13 +36,16 @@ describe('FormTextField Component', () => {
       />
     );
 
-    expect(result.container).toHaveTextContent(/testLabel/i);
+    expect(container).toHaveTextContent(/testLabel/i);
+    const input = container.querySelector(`input[name="${keyName}"]`);
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue(formTestValues[keyName]);
   });
 
   it('renders the component with an error', () => {
-    const result = render(
+    const { container } = render(
       <FormTextField
-        keyName={'testKey'}
+        keyName={keyName}
         label={'testLabel'}
         values={formTestValues}
         touched={formTestTouched}
@@ -36,29 +55,14 @@ describe('FormTextField Component', () => {
       />
     );
 
-    expect(result.container).toHaveTextContent(/error/i);
-  });
-
-  it('renders the component with an error - not touched but with value', () => {
-    const result = render(
-      <FormTextField
-        keyName={'testKey'}
-        label={'testLabel'}
-        values={formTestValues}
-        touched={{}}
-        errors={formTestErrors}
-        setFieldValue={mockSetValue}
-        handleBlur={mockBlur}
-      />
-    );
-
-    expect(result.container).toHaveTextContent(/error/i);
+    const helperText = container.querySelector(`#${keyName}-helper-text`);
+    expect(helperText).toHaveTextContent(/error/i);
   });
 
   it('tests the onChange function', async () => {
-    const result = render(
+    const { container } = render(
       <FormTextField
-        keyName={'testKey'}
+        keyName={keyName}
         label={'testLabel'}
         values={formTestValues}
         touched={formTestTouched}
@@ -68,11 +72,28 @@ describe('FormTextField Component', () => {
         width={4}
       />
     );
-    const input = result.container.querySelector(`input[name="testKey"]`);
-    fireEvent.change(input!, { target: { value: 's' } });
-    await waitFor(() => {
-      expect(input).toHaveValue('someText');
-    });
-    expect(mockSetValue).toHaveBeenCalled();
+    const input = container.querySelector(`input[name="${keyName}"]`);
+    fireEvent.change(input!, { target: { value: 'anotherText' } });
+    expect(mockSetValue).toHaveBeenCalledTimes(1);
+    expect(mockSetValue).toHaveBeenCalledWith(keyName, 'anotherText');
+  });
+
+  it('tests the onBlur function', async () => {
+    const { container } = render(
+      <FormTextField
+        keyName={keyName}
+        label={'testLabel'}
+        values={formTestValues}
+        touched={formTestTouched}
+        errors={formTestErrors}
+        setFieldValue={mockSetValue}
+        handleBlur={mockBlur}
+        width={4}
+      />
+    );
+    const input = container.querySelector(`input[name="${keyName}"]`);
+    fireEvent.focus(input!);
+    fireEvent.blur(input!);
+    expect(mockBlur).toBeCalledTimes(1);
   });
 });

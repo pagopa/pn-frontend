@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Box, Stack } from '@mui/material';
 import {
   AppResponse,
@@ -7,27 +9,26 @@ import {
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import {
-  rejectDelegation,
-  revokeDelegation,
-  getDelegates,
-  getDelegators,
-  acceptDelegation,
-} from '../redux/delegation/actions';
-import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
-import MobileDelegates from '../component/Deleghe/MobileDelegates';
-import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
-import { getSidemenuInformation } from '../redux/sidemenu/actions';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
+import MobileDelegates from '../component/Deleghe/MobileDelegates';
+import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import {
+  acceptDelegation,
+  getDelegates,
+  getDelegators,
+  rejectDelegation,
+  revokeDelegation,
+} from '../redux/delegation/actions';
+import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { getSidemenuInformation } from '../redux/sidemenu/actions';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();

@@ -1,5 +1,10 @@
+import React from 'react';
+
 import { fireEvent, render } from '../../../../__test__/test-utils';
+import * as routes from '../../../../navigation/routes.const';
 import SyncFeedback from '../SyncFeedback';
+
+const mockNavigateFn = jest.fn();
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -8,8 +13,6 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
-const mockNavigateFn = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -33,5 +36,6 @@ describe('SyncFeedback Component', () => {
     const button = result.container.querySelector('button');
     fireEvent.click(button!);
     expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.DASHBOARD);
   });
 });

@@ -43,7 +43,9 @@
   "empty-state": {
     "message": "L'ente non ha ancora inviato nessuna notifica. Usa le",
     "secondary-message": "o fai un",
-    "secondary-action": "invio manuale"
+    "secondary-action": "invio manuale",
+    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
+    "filter-action": "Rimuovi filtri"
   },
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
@@ -64,13 +66,23 @@
     "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
+    "alert-cancellation-in-progress": "L’ente mittente ha richiesto l’annullamento di questa notifica. Il suo stato sarà aggiornato al termine del processo di annullamento.",
+    "alert-cancellation-confirmed": "Questa notifica è stata annullata dall’ente mittente. I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi.",
     "cancel-notification": "Annulla notifica",
     "cancel-notification-modal": {
-      "title": "Ci siamo quasi",
-      "message": "Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente."
+      "notification-cancelled-successfully": "La richiesta di annullamento è stata accettata.",
+      "title": "Vuoi annullare la notifica?",
+      "message": "I destinatari non potranno più scaricare i documenti allegati né le attestazioni opponibili a terzi. L’operazione è irreversibile.",
+      "i-understand": "Ho capito",
+      "message-with-payment": "Annullando la notifica, dichiari di essere consapevole che ogni eventuale attività di rimborso in favore dei destinatari e rimane a carico dell'ente mittente."
+    },
+    "errors": {
+      "generic_error": {
+        "title": "",
+        "message": "Si è verificato un errore durante l’annullamento. Riprova."
+      }
     },
     "acts": "Documenti allegati",
-    "download-message-cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
     "download-message-available": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
     "download-message-expired": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.",
     "download-aar-available": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",

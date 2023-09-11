@@ -1,7 +1,8 @@
-import { cloneElement, ReactElement, useState } from 'react'; // ReactNode, cloneElement
-import Tooltip from '@mui/material/Tooltip';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { ReactElement, cloneElement, useState } from 'react';
+
 import { Box, SxProps } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Tooltip from '@mui/material/Tooltip';
 
 type Props = {
   tooltipContent: any;
@@ -33,9 +34,6 @@ function CustomTooltip({ openOnClick, tooltipContent, children, sx, onOpen }: Pr
           arrow
           leaveTouchDelay={5000}
           title={tooltipContent}
-          PopperProps={{
-            disablePortal: true,
-          }}
           onClose={handleTooltipClose}
           open={openOnClick ? open : undefined}
           disableFocusListener={openOnClick}

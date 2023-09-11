@@ -4,9 +4,7 @@ import { GET_CONSENTS, SET_CONSENTS } from './consents.routes';
 
 export const ConsentsApi = {
   getConsentByType: (consentType: ConsentType): Promise<Consent> =>
-    apiClient
-      .get<Consent>(GET_CONSENTS(consentType))
-      .then((response) => response.data),
+    apiClient.get<Consent>(GET_CONSENTS(consentType)).then((response) => response.data),
 
   setConsentByType: (
     consentType: ConsentType,
