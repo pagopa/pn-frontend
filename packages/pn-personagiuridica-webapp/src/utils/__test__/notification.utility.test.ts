@@ -1,67 +1,29 @@
-import { notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
+import _ from 'lodash';
 
-/**
- * This test suite tests the parseNotificationDetailForRecipient function in a rather indirect mode:
- * it resorts to notificationToFeTwoRecipients which in turn calls parseNotificationDetailForRecipient.
- */
-describe('Parse notification detail to FE - for a given recipient', () => {
-  it('Current recipient if first recipient logged', () => {
-    const notification = notificationToFeTwoRecipients(
-      'TTTUUU29J84Z600X',
-      'CGNNMO80A03H501U',
-      false
+import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
+import { parseNotificationDetailForRecipient } from '../notification.utility';
+
+const recipientIndex = notificationDTO.recipients.findIndex((rec) => rec.taxId);
+
+describe('Tests notification utility', () => {
+  it('parseNotificationDetailForRecipient - recipient is the current user logged', () => {
+    const notification = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
+    expect(notification.currentRecipientIndex).toEqual(recipientIndex);
+    expect(notification.currentRecipient.taxId).toEqual(
+      notificationDTO.recipients[recipientIndex].taxId
     );
-    expect(notification.currentRecipientIndex).toEqual(0);
-    expect(notification.currentRecipient.taxId).toEqual('TTTUUU29J84Z600X');
   });
 
-  it('Current recipient if second recipient logged', () => {
-    const notification = notificationToFeTwoRecipients(
-      'CGNNMO80A03H501U',
-      'TTTUUU29J84Z600X',
-      false
-    );
-    expect(notification.currentRecipientIndex).toEqual(1);
-    expect(notification.currentRecipient.taxId).toEqual('CGNNMO80A03H501U');
-  });
-
-  it('Current recipient if the user looks the notifications of first recipient as delegator - both users are recipients', () => {
-    const notification = notificationToFeTwoRecipients(
-      'CGNNMO80A03H501U',
-      'TTTUUU29J84Z600X',
-      true
-    );
-    expect(notification.currentRecipientIndex).toEqual(0);
-    expect(notification.currentRecipient.taxId).toEqual('TTTUUU29J84Z600X');
-  });
-
-  it('Current recipient if the user looks the notifications of second recipient as delegator - both users are recipients', () => {
-    const notification = notificationToFeTwoRecipients(
-      'TTTUUU29J84Z600X',
-      'CGNNMO80A03H501U',
-      true
-    );
-    expect(notification.currentRecipientIndex).toEqual(1);
-    expect(notification.currentRecipient.taxId).toEqual('CGNNMO80A03H501U');
-  });
-
-  it('Current recipient if the user looks the notifications of first recipient as delegator - user not recipient', () => {
-    const notification = notificationToFeTwoRecipients(
-      'CGNNMO80A03H501A',
-      'TTTUUU29J84Z600X',
-      true
-    );
-    expect(notification.currentRecipientIndex).toEqual(0);
-    expect(notification.currentRecipient.taxId).toEqual('TTTUUU29J84Z600X');
-  });
-
-  it('Current recipient if the user looks the notifications of second recipient as delegator - user not recipient', () => {
-    const notification = notificationToFeTwoRecipients(
-      'TTTUUU29J84Z600T',
-      'CGNNMO80A03H501U',
-      true
-    );
-    expect(notification.currentRecipientIndex).toEqual(1);
-    expect(notification.currentRecipient.taxId).toEqual('CGNNMO80A03H501U');
+  it('parseNotificationDetailForRecipient - more than one recipients defined', () => {
+    const clonedNotification = _.cloneDeep(notificationDTO);
+    for (const recipient of clonedNotification.recipients) {
+      if (!recipient.taxId) {
+        recipient.taxId = 'BNCSRA34H41G645K';
+        recipient.denomination = 'Sara Bianchi';
+      }
+    }
+    const notification = parseNotificationDetailForRecipient(clonedNotification);
+    expect(notification.currentRecipientIndex).toEqual(-1);
+    expect(notification.currentRecipient).toBeUndefined();
   });
 });

@@ -15,10 +15,10 @@ describe('Status utility test', () => {
       key: `deleghe.table.${DelegationStatus.ACTIVE}`,
     });
     // default status
-    result = getDelegationStatusKeyAndColor(DelegationStatus.ACTIVE || DelegationStatus.PENDING);
+    result = getDelegationStatusKeyAndColor('unknown' as DelegationStatus);
     expect(result).toStrictEqual({
-      color: 'success',
-      key: `deleghe.table.active`,
+      color: 'info',
+      key: ``,
     });
   });
 });

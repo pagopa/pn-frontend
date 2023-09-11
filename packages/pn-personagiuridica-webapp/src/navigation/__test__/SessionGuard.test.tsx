@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { act, render, screen, waitFor } from '../../__test__/test-utils';
+import { act, render, screen, testStore, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
@@ -54,6 +54,7 @@ describe('SessionGuard Component', () => {
     Object.defineProperty(window, 'location', { writable: true, value: original });
   });
 
+  // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
   it('session expired', async () => {
     const mockReduxState = {
       userState: { user: { ...userResponse, desired_exp: 1 } },
@@ -92,13 +93,11 @@ describe('SessionGuard Component', () => {
     await act(async () => {
       render(<Guard />);
     });
-
     expect(mock.history.post).toHaveLength(1);
     expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       authorizationToken: '403_token',
     });
-
     const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
@@ -148,6 +147,32 @@ describe('SessionGuard Component', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(
       { pathname: routes.NOTIFICHE, search: '' },
+      { replace: true }
+    );
+  });
+
+  // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
+  it('user with groups logged in - TOS accepted', async () => {
+    window.location.hash = '#selfCareToken=200_token';
+    mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' }).reply(200, {
+      ...userResponse,
+      organization: { ...userResponse.organization, groups: ['mocked-group'] },
+    });
+    await act(async () => {
+      render(<Guard />);
+    });
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        authorizationToken: '200_token',
+      });
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.NOTIFICHE_DELEGATO, search: '' },
       { replace: true }
     );
   });

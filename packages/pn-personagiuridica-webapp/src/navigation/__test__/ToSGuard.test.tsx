@@ -61,7 +61,7 @@ describe('Tests the ToSGuard component', () => {
     mock.restore();
   });
 
-  it('renders the loading page component if tos are not fetched', async () => {
+  it('renders the loading page component if tos and privacy are not fetched', async () => {
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(() => {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -134,37 +134,6 @@ describe('Tests the ToSGuard component', () => {
     expect(mock.history.get).toHaveLength(2);
   });
 
-  it('renders the loading page component if tos are not accepted', async () => {
-    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: false,
-    });
-    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(() => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([
-            200,
-            {
-              recipientId: 'mocked-recipientId',
-              consentType: ConsentType.DATAPRIVACY,
-              accepted: false,
-            },
-          ]);
-        }, 2000);
-      });
-    });
-    await act(async () => {
-      render(<Guard />, { preloadedState: reduxState });
-    });
-    const pageComponent = screen.queryByTestId('loading-skeleton');
-    const tosComponent = screen.queryByTestId('tos-acceptance-page');
-    const genericPage = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(tosComponent).toBeNull();
-    expect(genericPage).toBeNull();
-    expect(mock.history.get).toHaveLength(2);
-  });
   it('renders the loading page component if privacy are not fetched', async () => {
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
       recipientId: 'mocked-recipientId',

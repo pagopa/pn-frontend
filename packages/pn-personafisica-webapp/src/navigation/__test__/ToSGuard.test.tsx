@@ -59,7 +59,7 @@ describe('Tests the ToSGuard component', () => {
     mock.restore();
   });
 
-  it('renders the loading page component if tos are not fetched', async () => {
+  it('renders the loading page component if tos and privacy are not fetched', async () => {
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(() => {
       return new Promise((resolve) => {
         setTimeout(() => {
