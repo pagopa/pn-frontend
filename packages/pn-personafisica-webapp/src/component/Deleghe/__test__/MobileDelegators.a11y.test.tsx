@@ -1,7 +1,10 @@
 import * as React from 'react';
+
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+
+import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { axe, render } from '../../../__test__/test-utils';
-import { arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
-import * as hooks from '../../../redux/hooks';
+import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import MobileDelegators from '../MobileDelegators';
 
 jest.mock('react-i18next', () => ({
@@ -12,10 +15,30 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('MobileDelegators Component - accessibility tests', () => {
-  it('is Mobile Delegators component accessible', async()=>{
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
-    const result = render(<MobileDelegators />);
+  it('is MobileDelegators component accessible - no delegates', async () => {
+    const result = render(<MobileDelegators />, {
+      preloadedState: { delegationsState: { delegations: { delegators: [] } } },
+    });
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('is MobileDelegators component accessible - with delegates', async () => {
+    const result = render(<MobileDelegators />, {
+      preloadedState: { delegationsState: { delegations: { delegators: arrayOfDelegators } } },
+    });
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('is MobileDelegators component accessible - API error', async () => {
+    const result = render(<MobileDelegators />, {
+      preloadedState: {
+        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+          DELEGATION_ACTIONS.GET_DELEGATORS
+        ),
+      },
+    });
     const results = await axe(result?.container);
     expect(results).toHaveNoViolations();
   });

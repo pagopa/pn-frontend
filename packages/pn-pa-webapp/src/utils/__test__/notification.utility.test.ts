@@ -11,12 +11,12 @@ const mockArray = [
 ];
 
 describe('Test notification utility', () => {
-  test('Map notification from presentation layer to api layer', () => {
+  it('Map notification from presentation layer to api layer', () => {
     const result = newNotificationMapper(newNotification);
     expect(result).toEqual(newNotificationDTO);
   });
 
-  test('Checks that if physical address has empty required fields, its value is set to undefined', () => {
+  it('Checks that if physical address has empty required fields, its value is set to undefined', () => {
     const request = {
       ...newNotification,
       recipients: newNotification.recipients.map((recipient, index) => {
@@ -40,7 +40,7 @@ describe('Test notification utility', () => {
     expect(result).toEqual(response);
   });
 
-  test('Checks that getDuplicateValuesByKeys returns duplicate values', () => {
+  it('Checks that getDuplicateValuesByKeys returns duplicate values', () => {
     const result = getDuplicateValuesByKeys(mockArray, ['key1', 'key2', 'key3']);
     expect(result).toEqual(['value1value2value3', 'valueXvalueYvalueZ']);
   });

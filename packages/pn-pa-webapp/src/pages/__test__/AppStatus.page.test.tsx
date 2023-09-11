@@ -14,15 +14,7 @@ import { theme } from '@pagopa/mui-italia';
 import '@testing-library/react';
 
 import { currentStatusDTO, downtimesDTO, openIncidents } from '../../__mocks__/AppStatus.mock';
-import {
-  act,
-  fireEvent,
-  prettyDOM,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '../../__test__/test-utils';
+import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
@@ -43,7 +35,6 @@ const AppStatusWithErrorHandling = () => (
 );
 
 describe('AppStatus page', () => {
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -210,7 +201,7 @@ describe('AppStatus page', () => {
     // vorrei rimuovere questa dipendenza e richiamare la funzione di download direttamente nel then del dipatch
   });
 
-  it('DEsktop - change pagination and size', async () => {
+  it('Desktop - change pagination and size', async () => {
     mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
     mock
       .onGet(

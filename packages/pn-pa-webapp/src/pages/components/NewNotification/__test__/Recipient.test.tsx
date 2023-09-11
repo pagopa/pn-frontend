@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { RecipientType } from '@pagopa-pn/pn-commons';
+import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../../__mocks__/NewNotification.mock';
 import {
@@ -9,9 +10,6 @@ import {
   fireEvent,
   randomString,
   render,
-  testFormElements,
-  testInput,
-  testRadio,
   testStore,
   waitFor,
   within,
@@ -36,7 +34,8 @@ const testRecipientFormRendering = async (
     form,
     `recipientType${recipientIndex}`,
     ['physical-person', 'legal-person'],
-    recipient ? recipientIndex : undefined
+    recipient ? recipientIndex : undefined,
+    true
   );
   await testFormElements(
     form,
@@ -137,7 +136,13 @@ const populateForm = async (
 ) => {
   // if pg select the right radio button
   if (recipient.recipientType === RecipientType.PG) {
-    await testRadio(form, `recipientType${recipientIndex}`, ['physical-person', 'legal-person'], 1);
+    await testRadio(
+      form,
+      `recipientType${recipientIndex}`,
+      ['physical-person', 'legal-person'],
+      1,
+      true
+    );
   }
   await testInput(form, `recipients[${recipientIndex}].firstName`, recipient.firstName);
   if (recipient.recipientType === RecipientType.PF) {

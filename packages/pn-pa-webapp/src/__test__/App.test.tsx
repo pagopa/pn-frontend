@@ -51,7 +51,6 @@ const reduxInitialState = {
 };
 
 describe('App', () => {
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   beforeAll(() => {

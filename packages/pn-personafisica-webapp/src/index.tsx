@@ -7,15 +7,15 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LoadingPage } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
+import App from './App';
 import { initAxiosClients } from './api/apiClients';
 import { setUpInterceptor } from './api/interceptors';
-import { initStore, store } from './redux/store';
-import { loadPfConfiguration } from './services/configuration.service';
-import { initOneTrust } from './utils/onetrust';
-import App from './App';
 import './i18n';
 import './index.css';
+import { initStore, store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
+import { loadPfConfiguration } from './services/configuration.service';
+import { initOneTrust } from './utils/onetrust';
 
 async function doTheRender() {
   try {

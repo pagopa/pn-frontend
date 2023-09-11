@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Typography, Box, Button, Grid, Stack } from '@mui/material';
+
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -34,6 +35,7 @@ export default function ConfirmationModal({
       open={open}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
+      data-testid="confirmationDialog"
     >
       <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
         <Box mx={3} sx={{ height: '100%' }}>
@@ -55,7 +57,6 @@ export default function ConfirmationModal({
             alignItems={'center'}
             ml={'auto'}
             pb={isMobile ? 4 : 0}
-            data-testid="dialogStack"
           >
             <Grid
               item

@@ -1,24 +1,26 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Chip, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 import AddIcon from '@mui/icons-material/Add';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import {
+  ApiErrorWrapper,
   CardElement,
-  ItemsCard,
-  Item,
   CodeModal,
   EmptyState,
-  ApiErrorWrapper,
+  Item,
+  ItemsCard,
 } from '@pagopa-pn/pn-commons';
+
+import * as routes from '../../navigation/routes.const';
+import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
-import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
-import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
+import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const MobileDelegates = () => {
@@ -117,7 +119,7 @@ const MobileDelegates = () => {
         codeSectionTitle={t('deleghe.verification_code')}
         isReadOnly
       />
-      <Box>
+      <Box data-testid="mobile-delegates-wrapper">
         <Typography variant="h4" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
@@ -126,6 +128,7 @@ const MobileDelegates = () => {
             variant="outlined"
             onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
             sx={{ mb: 1 }}
+            data-testid="add-delegation"
           >
             <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
             {t('deleghe.add')}

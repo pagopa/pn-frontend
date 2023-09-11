@@ -1,13 +1,16 @@
+import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
 
 import { ThemeProvider } from '@emotion/react';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
 import App from '../App';
-import { currentStatusOk } from '../__mocks__/AppStatus.mock';
+import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
-import { axe, render } from './test-utils';
+import { apiClient } from '../api/apiClients';
+import { GET_CONSENTS } from '../api/consents/consents.routes';
+import { ConsentType } from '../models/consents';
+import { RenderResult, act, axe, render } from './test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -20,6 +23,8 @@ jest.mock('react-i18next', () => ({
 }));
 
 jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
+
+const unmockedFetch = global.fetch;
 
 const Component = () => (
   <ThemeProvider theme={theme}>
@@ -46,6 +51,27 @@ const reduxInitialState = {
 };
 
 describe('App - accessbility tests', () => {
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+    // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
+    // this causes an error, so we mock to avoid it
+    global.fetch = () =>
+      Promise.resolve({
+        json: () => Promise.resolve([]),
+      }) as Promise<Response>;
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+    global.fetch = unmockedFetch;
+  });
+
   it('Test if automatic accessibility tests passes - user not logged in', async () => {
     const { container } = render(<Component />);
     const result = await axe(container);
@@ -53,39 +79,42 @@ describe('App - accessbility tests', () => {
   });
 
   it('Test if automatic accessibility tests passes - user logged in', async () => {
-    const { container } = render(<Component />, {
-      preloadedState: {
-        userState: {
-          ...reduxInitialState.userState,
-          fetchedTos: true,
-          fetchedPrivacy: true,
-          tosConsent: { ...reduxInitialState.userState.tosConsent, accepted: true },
-          privacyConsent: { ...reduxInitialState.userState.privacyConsent, accepted: true },
-        },
-        appStatus: {
-          currentStatus: currentStatusOk,
-        },
-      },
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
     });
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult | undefined;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   }, 15000);
 
   it('Test if automatic accessibility tests passes - errors on API call', async () => {
-    const { container } = render(<Component />, {
-      preloadedState: {
-        userState: {
-          ...reduxInitialState.userState,
-          fetchedPrivacy: true,
-          privacyConsent: { ...reduxInitialState.userState.privacyConsent, accepted: true },
-        },
-        appStatus: {
-          currentStatus: currentStatusOk,
-        },
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction('getConsentByType'),
-      },
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
     });
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult | undefined;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   }, 15000);
 });

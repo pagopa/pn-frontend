@@ -1,65 +1,109 @@
-import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
-import { notificationToFe, overrideNotificationMock } from '../../redux/notification/__test__/test-utils';
-import { axe } from '../../__test__/test-utils';
-import { renderComponentBase } from './NotificationDetail.page.test-utils';
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 
-/* eslint-disable-next-line functional/no-let */
-let mockUseParamsFn;
+import { DOWNTIME_HISTORY } from '@pagopa-pn/pn-commons';
+
+import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
+import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import {
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_PAYMENT_INFO,
+} from '../../api/notifications/notifications.routes';
+import NotificationDetail from '../NotificationDetail.page';
+
+let mockIsDelegate = false;
 
 // mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () =>
+    mockIsDelegate
+      ? { id: 'DAPQ-LWQV-DKQH-202308-A-1', mandateId: '5' }
+      : { id: 'DAPQ-LWQV-DKQH-202308-A-1' },
+}));
+
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
+    t: (str: string) => str,
+  }),
 }));
 
-jest.mock('react-router-dom', () => {
-  const original = jest.requireActual('react-router-dom');
-  return {
-    ...original,
-    useParams: () => mockUseParamsFn(),
-  };
-});
-
 describe('NotificationDetail Page - accessibility tests', () => {
-  /* eslint-disable-next-line functional/no-let */
-  let mockDispatchFn: jest.Mock;
-  /* eslint-disable-next-line functional/no-let */
-  let mockActionFn: jest.Mock;
+  let result: RenderResult | undefined;
+  let mock: MockAdapter;
 
-  const mockedUserInStore = { fiscal_number: 'mocked-user' };
-
-  const renderComponent = async (notification: INotificationDetail) => 
-    renderComponentBase({ mockedUserInStore, mockDispatchFn, mockActionFn, mockUseParamsFn}, notification);
-  
-
-  beforeEach(() => {
-    mockDispatchFn = jest.fn(() => ({
-      then: () => Promise.resolve(),
-      unwrap: () => Promise.resolve(),
-    }));
-    mockActionFn = jest.fn();
-    mockUseParamsFn = jest.fn();
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    result = undefined;
+    jest.clearAllMocks();
+    mock.reset();
+    mockIsDelegate = false;
   });
 
-  test('renders NotificationDetail page with payment box', async () => {
-    const result = await renderComponent(notificationToFe);
-    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
-    expect(result.container).toHaveTextContent(/Payment/i);
-    expect(await axe(result.container as Element)).toHaveNoViolations(); // Accesibility test
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders NotificationDetail page', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onGet(
+        NOTIFICATION_PAYMENT_INFO(
+          notificationDTO.recipients[2].payment?.creditorTaxId!,
+          notificationDTO.recipients[2].payment?.noticeCode!
+        )
+      )
+      .reply(200, {
+        status: 'SUCCEEDED',
+        amount: 250,
+      });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+    expect(await axe(result?.container!)).toHaveNoViolations();
   }, 15000);
 
-  test('renders NotificationDetail page without payment box', async () => {
-    const result = await renderComponent(overrideNotificationMock({recipients: [{payment: { noticeCode: '' }}]}));
-    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result.container).not.toHaveTextContent(/Payment/i);
-    expect(await axe(result.container as Element)).toHaveNoViolations(); // Accesibility test
+  it('renders NotificationDetail page with delegator logged', async () => {
+    mockIsDelegate = true;
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun, delegator?.mandateId))
+      .reply(200, notificationDTO);
+    mock
+      .onGet(
+        NOTIFICATION_PAYMENT_INFO(
+          notificationDTO.recipients[2].payment?.creditorTaxId!,
+          notificationDTO.recipients[2].payment?.noticeCode!
+        )
+      )
+      .reply(200, {
+        status: 'SUCCEEDED',
+        amount: 250,
+      });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
+          generalInfoState: {
+            delegators: arrayOfDelegators,
+          },
+        },
+      });
+    });
+    expect(await axe(result?.container!)).toHaveNoViolations(); // Accesibility test
   }, 15000);
-
 });
