@@ -1,4 +1,3 @@
-import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 

@@ -7,7 +7,12 @@ import {
   PhysicalCommunicationType,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
-import { testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import {
+  testFormElements,
+  testInput,
+  testRadio,
+  testSelect,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   newNotification,
@@ -20,9 +25,6 @@ import {
   fireEvent,
   randomString,
   render,
-  testFormElements,
-  testInput,
-  testRadio,
   testStore,
   waitFor,
   within,
@@ -67,14 +69,16 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
     form!,
     'comunicationTypeRadio',
     ['registered-letter-890', 'simple-registered-letter'],
-    1
+    1,
+    true
   );
   if (hasPayment) {
     await testRadio(
       form!,
       'paymentMethodRadio',
       ['pagopa-notice', 'pagopa-notice-f24-flatrate', 'pagopa-notice-f24', 'nothing'],
-      1
+      1,
+      true
     );
   }
 };

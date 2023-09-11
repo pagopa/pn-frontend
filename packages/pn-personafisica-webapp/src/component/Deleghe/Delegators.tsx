@@ -1,22 +1,23 @@
 import { useTranslation } from 'react-i18next';
+
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import {
-  Column,
-  ItemsTable,
-  Item,
-  Sort,
   ApiErrorWrapper,
+  Column,
   EmptyState,
+  Item,
+  ItemsTable,
   KnownSentiment,
+  Sort,
 } from '@pagopa-pn/pn-commons';
 
+import { DelegatorsColumn } from '../../models/Deleghe';
+import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
+import { setDelegatorsSorting } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
-import { setDelegatorsSorting } from '../../redux/delegation/reducers';
-import { DelegatorsColumn } from '../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegators = () => {
@@ -110,6 +111,7 @@ const Delegators = () => {
               rows={rows}
               sort={sortDelegators}
               onChangeSorting={handleChangeSorting}
+              testId="delegatorsTable"
             />
           ) : (
             <EmptyState

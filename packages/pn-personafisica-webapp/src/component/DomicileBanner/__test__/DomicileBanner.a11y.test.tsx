@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { axe, render } from '../../../__test__/test-utils';
 import DomicileBanner from '../DomicileBanner';
 
@@ -10,9 +11,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('DomicileBanner component - accessibility tests', () => {
-  it('is Domicile Banner component accessible', async()=>{
-    const result = render(<DomicileBanner />);
-    const results = await axe(result?.container);
+  it('is Domicile Banner component accessible', async () => {
+    const { container } = render(<DomicileBanner />);
+    const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 });

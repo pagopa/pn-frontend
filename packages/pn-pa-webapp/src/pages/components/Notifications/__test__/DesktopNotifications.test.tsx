@@ -30,9 +30,10 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('DesktopNotifications Component', () => {
+  let result: RenderResult;
+
   it('renders component - no notification', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(
         <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
@@ -49,7 +50,6 @@ describe('DesktopNotifications Component', () => {
 
   it('renders component - notification', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(
         <DesktopNotifications
@@ -67,7 +67,6 @@ describe('DesktopNotifications Component', () => {
 
   it('renders component - no notification after filter', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(
         <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />,
@@ -78,7 +77,6 @@ describe('DesktopNotifications Component', () => {
                 startDate: formatToTimezoneString(tenYearsAgo),
                 endDate: formatToTimezoneString(today),
                 iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-                mandateId: undefined,
               },
             },
           },
@@ -102,7 +100,6 @@ describe('DesktopNotifications Component', () => {
   });
 
   it('go to notification detail', async () => {
-    let result: RenderResult;
     await act(async () => {
       result = render(
         <DesktopNotifications

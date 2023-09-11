@@ -70,7 +70,6 @@
       "message": "To complete the cancellation, you must send a new notification that replaces the previous one."
     },
     "acts": "Attached documents",
-    "download-message-cancelled": "As this notification has been cancelled, the attached documents are not available.",
     "download-message-available": "The attached documents are available online for 120 days from the completion of the notification.",
     "download-message-expired": "As 120 days have passed since the date of completion, the documents are no longer available.",
     "download-files-link": "When is a notification completed?",

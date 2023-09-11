@@ -1,16 +1,15 @@
 import {
   Dispatch,
-  forwardRef,
-  Fragment,
-  memo,
   ReactChild,
   SetStateAction,
+  forwardRef,
+  memo,
   useImperativeHandle,
   useMemo,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AsyncThunk } from '@reduxjs/toolkit';
+
 import {
   Button,
   Dialog,
@@ -21,16 +20,17 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
-
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
+import { AsyncThunk } from '@reduxjs/toolkit';
+
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch } from '../../redux/hooks';
-import { trackEventByType } from '../../utils/mixpanel';
-import { EventActions, TrackEventType } from '../../utils/events';
 import { getContactEventType } from '../../utils/contacts.utility';
+import { EventActions, TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -76,7 +76,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
   const { t } = useTranslation(['common']);
   const isMobile = useIsMobile();
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
-  
+
   const deleteModalActions = blockDelete ? (
     <Button onClick={handleModalClose} variant="outlined" sx={{ width: isMobile ? '100%' : null }}>
       {t('button.close')}
@@ -123,7 +123,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
   );
 };
 
-const DigitalContactElem = forwardRef(
+const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
   (
     {
       fields,
@@ -141,7 +141,7 @@ const DigitalContactElem = forwardRef(
       editDisabled,
       setContextEditMode,
       onDeleteCbk,
-    }: Props,
+    },
     ref
   ) => {
     const { t } = useTranslation(['common']);
@@ -227,7 +227,7 @@ const DigitalContactElem = forwardRef(
     }));
 
     return (
-      <Fragment>
+      <>
         <Grid container spacing="4" direction="row" alignItems="center">
           {mappedChildren}
           <Grid item lg={12} xs={12} textAlign={'left'}>
@@ -271,7 +271,7 @@ const DigitalContactElem = forwardRef(
           blockDelete={blockDelete}
           confirmHandler={confirmHandler}
         />
-      </Fragment>
+      </>
     );
   }
 );

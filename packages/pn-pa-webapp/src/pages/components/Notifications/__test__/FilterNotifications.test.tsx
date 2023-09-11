@@ -7,7 +7,12 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import { createMatchMedia, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
+import {
+  createMatchMedia,
+  testFormElements,
+  testInput,
+  testSelect,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   RenderResult,
@@ -15,8 +20,6 @@ import {
   fireEvent,
   render,
   screen,
-  testFormElements,
-  testInput,
   testStore,
   waitFor,
   within,
