@@ -858,12 +858,18 @@ const populateOtherDocuments = (
 };
 
 export const getF24Payments = (
-  payments: Array<NotificationDetailPayment>
+  payments: Array<NotificationDetailPayment>,
+  onlyF24: boolean = true
 ): Array<F24PaymentDetails> =>
   payments.reduce((arr, payment) => {
-    if (!payment.pagoPA && payment.f24) {
+    if (onlyF24) {
+      if (!payment.pagoPA && payment.f24) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push(payment.f24 as F24PaymentDetails);
+      }
+    } else if (payment.f24) {
       // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.f24);
+      arr.push(payment.f24 as F24PaymentDetails);
     }
     return arr;
   }, [] as Array<F24PaymentDetails>);
@@ -891,7 +897,7 @@ export const getPagoPaF24Payments = (
  */
 export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  pagoPaF24Payemnts: Array<PaymentDetails>,
+  pagoPaF24Payemnts: Array<PaymentDetails> | Array<NotificationDetailPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentDetails> => {
   const paymentHistory: Array<PaymentDetails> = [];

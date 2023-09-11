@@ -5,7 +5,7 @@ import {
   PaymentAttachmentSName,
   PaymentStatus,
   downloadDocument,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
 import { notificationToFeMultiRecipient } from '../../../../__mocks__/NotificationDetail.mock';
@@ -45,10 +45,9 @@ describe('NotificationPaymentPagoPa Component', () => {
   });
 
   it('renders component', () => {
-    const paymentHistory = populatePaymentHistory(
-      notificationToFeMultiRecipient.recipients[1].taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFeMultiRecipient.timeline,
-      notificationToFeMultiRecipient.recipients,
+      notificationToFeMultiRecipient.recipients[1].payments ?? [],
       []
     );
     const { container, queryByTestId, rerender } = render(
@@ -81,10 +80,9 @@ describe('NotificationPaymentPagoPa Component', () => {
     mock
       .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
       .reply(200, { url: 'http://mocked-url.com' });
-    const paymentHistory = populatePaymentHistory(
-      notificationToFeMultiRecipient.recipients[1].taxId,
+    const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFeMultiRecipient.timeline,
-      notificationToFeMultiRecipient.recipients,
+      notificationToFeMultiRecipient.recipients[1].payments ?? [],
       []
     );
     const { getByRole } = render(
