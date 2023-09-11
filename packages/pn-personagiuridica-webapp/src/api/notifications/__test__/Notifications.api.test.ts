@@ -61,14 +61,14 @@ describe('Notifications api tests', () => {
   });
 
   it('getReceivedNotification', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTO);
     const res = await NotificationsApi.getReceivedNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
   });
 
   it('getReceivedNotificationDocument', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const documentIndex = '0';
     mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex)).reply(200, {
       url: 'http://mocked-url.com',
@@ -78,7 +78,7 @@ describe('Notifications api tests', () => {
   });
 
   it('getReceivedNotificationLegalfact', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const legalFact: LegalFactId = {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
@@ -89,7 +89,7 @@ describe('Notifications api tests', () => {
   });
 
   it('getPaymentAttachment', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTO.iun;
     const attachmentName = 'mocked-attachmentName';
     mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, {
       url: 'http://mocked-url.com',

@@ -30,7 +30,7 @@ describe('Contacts api tests', () => {
     expect(res).toStrictEqual(digitalAddresses);
   });
 
-  it('createOrUpdateDigitalAddress (email to verify)', async () => {
+  it('createOrUpdateDigitalAddress (pec to verify)', async () => {
     const body = { value: 'a@a.it' };
     mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(200, body);
     const res = await ContactsApi.createOrUpdateLegalAddress(
@@ -42,7 +42,7 @@ describe('Contacts api tests', () => {
     expect(res).toStrictEqual(undefined);
   });
 
-  it('createOrUpdateDigitalAddress (email to validate)', async () => {
+  it('createOrUpdateDigitalAddress (pec to validate)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(200, {
       result: 'PEC_VALIDATION_REQUIRED',
@@ -64,7 +64,7 @@ describe('Contacts api tests', () => {
     });
   });
 
-  it('createOrUpdateDigitalAddress (email verified)', async () => {
+  it('createOrUpdateDigitalAddress (pec verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(204, {
       result: 'PEC_VALIDATION_REQUIRED',

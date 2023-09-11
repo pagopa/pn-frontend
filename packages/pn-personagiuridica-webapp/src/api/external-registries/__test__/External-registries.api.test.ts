@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { GroupStatus } from '../../../models/groups';
 import { apiClient } from '../../apiClients';
 import { ExternalRegistriesAPI } from '../External-registries.api';
@@ -23,29 +24,23 @@ describe('ExternalRegistries API tests', () => {
     mock.restore();
   });
 
-  it('getAllActivatedParties 200', async () => {
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, []);
+  it('getAllActivatedParties', async () => {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, parties);
     const res = await ExternalRegistriesAPI.getAllActivatedParties();
-    expect(res).toStrictEqual([]);
+    expect(res).toStrictEqual(parties);
   });
 
   it('getGroups 200', async () => {
-    mock.onGet(GET_GROUPS()).reply(200, [
+    const response = [
       {
         id: 'group-1',
         name: 'Group 1',
         description: 'This is a mocked group',
         status: GroupStatus.ACTIVE,
       },
-    ]);
+    ];
+    mock.onGet(GET_GROUPS()).reply(200, response);
     const res = await ExternalRegistriesAPI.getGroups();
-    expect(res).toStrictEqual([
-      {
-        id: 'group-1',
-        name: 'Group 1',
-        description: 'This is a mocked group',
-        status: GroupStatus.ACTIVE,
-      },
-    ]);
+    expect(res).toStrictEqual(response);
   });
 });
