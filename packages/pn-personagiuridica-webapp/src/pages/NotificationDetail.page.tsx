@@ -1,52 +1,52 @@
 import _ from 'lodash';
-import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
+  ApiError,
+  GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
-  // HelpNotificationDetails,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailTimeline,
-  TitleBox,
-  useIsMobile,
-  PnBreadcrumb,
-  NotificationStatus,
-  useErrors,
-  ApiError,
-  TimedMessage,
-  useDownloadDocument,
   NotificationDetailOtherDocument,
+  NotificationDetailTable, // HelpNotificationDetails,
+  NotificationDetailTableRow,
+  NotificationDetailTimeline,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
+  NotificationStatus,
+  PnBreadcrumb,
+  TimedMessage,
+  TitleBox,
+  useDownloadDocument,
+  useErrors,
   useHasPermissions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import NotificationPayment from '../component/Notifications/NotificationPayment';
 import * as routes from '../navigation/routes.const';
+import { PNRole } from '../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
 import {
+  NOTIFICATION_ACTIONS,
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,
-  NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import {
+  clearDowntimeLegalFactData,
   resetLegalFactState,
   resetState,
-  clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
-import { PNRole } from '../redux/auth/types';
-import NotificationPayment from '../component/Notifications/NotificationPayment';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { trackEventByType } from '../utils/mixpanel';
+import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -84,7 +84,7 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
-  const currentRecipient = notification && notification.currentRecipient;
+  const currentRecipient = notification?.currentRecipient;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
@@ -295,7 +295,11 @@ const NotificationDetail = () => {
       {hasNotificationReceivedApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError onClick={fetchReceivedNotification} mt={3} />
+          <ApiError
+            onClick={fetchReceivedNotification}
+            mt={3}
+            apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
+          />
         </Box>
       )}
       {!hasNotificationReceivedApiError && (
@@ -381,7 +385,7 @@ const NotificationDetail = () => {
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
                     </Alert>
                   }

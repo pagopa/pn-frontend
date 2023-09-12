@@ -10,7 +10,7 @@ export const notificationsDTO: GetNotificationsResponse = {
       subject: 'Pagamento rata IMU',
       notificationStatus: NotificationStatus.VIEWED,
       recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'LVLDAA85T50G702B'],
-      group: '6467344676f10c7617353c90',
+      group: 'group-1',
     },
     {
       iun: 'HRTX-GZQZ-DZDX-202308-G-1',
@@ -20,7 +20,7 @@ export const notificationsDTO: GetNotificationsResponse = {
       subject: 'notifica analogica con cucumber',
       notificationStatus: NotificationStatus.EFFECTIVE_DATE,
       recipients: ['LVLDAA85T50G702B'],
-      group: '6467344676f10c7617353c90',
+      group: 'group-3',
     },
     {
       iun: 'DKRU-XUDK-UERQ-202308-X-1',
@@ -30,13 +30,19 @@ export const notificationsDTO: GetNotificationsResponse = {
       subject: 'notifica analogica con cucumber',
       notificationStatus: NotificationStatus.VIEWED,
       recipients: ['LVLDAA85T50G702B'],
-      group: '6467344676f10c7617353c90',
+      group: 'group-1',
     },
   ],
   moreResult: false,
   nextPagesKey: [
     'eyJlayI6IlBGLWIzMmU0OTIwLTZmZjMtNDg3Mi04MDE4LWQ2MGE0ZTU4MjdmOSMjMjAyMzA4IiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiREdWRy1aTVVMLVRaUFQtMjAyMzA4LVItMSMjUEYtYjMyZTQ5MjAtNmZmMy00ODcyLTgwMTgtZDYwYTRlNTgyN2Y5IiwicmVjaXBpZW50SWRfY3JlYXRpb25Nb250aCI6IlBGLWIzMmU0OTIwLTZmZjMtNDg3Mi04MDE4LWQ2MGE0ZTU4MjdmOSMjMjAyMzA4Iiwic2VudEF0IjoiMjAyMy0wOC0yMVQwODoyMjo0NC4zNzYzOTI1NTlaIn19',
   ],
+};
+
+export const emptyNotificationsFromBe: GetNotificationsResponse = {
+  resultsPage: [],
+  moreResult: false,
+  nextPagesKey: [],
 };
 
 export const notificationsToFe: GetNotificationsResponse = {

@@ -75,7 +75,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.AAR_GENERATION,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       generatedAarUrl: 'PN_AAR-7b9cfda7870346248daf669191ec2cf1.pdf',
       numberOfPages: 1,
     },
@@ -86,7 +86,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.GET_ADDRESS,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       digitalAddressSource: AddressSource.PLATFORM,
       isAvailable: false,
       attemptDate: '2023-05-09T13:20:29.739079404Z',
@@ -98,7 +98,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.GET_ADDRESS,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       digitalAddressSource: AddressSource.SPECIAL,
       isAvailable: false,
       attemptDate: '2023-05-09T13:20:29.761491883Z',
@@ -111,7 +111,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.PUBLIC_REGISTRY_CALL,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       sentAttemptMade: 0,
       sendDate: '2023-05-09T13:20:29.876148931Z',
     },
@@ -123,7 +123,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.PUBLIC_REGISTRY_RESPONSE,
     details: {
-      recIndex: 0,
+      recIndex: 1,
     },
   },
   {
@@ -132,7 +132,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.GET_ADDRESS,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       digitalAddressSource: AddressSource.GENERAL,
       isAvailable: false,
       attemptDate: '2023-05-09T13:21:45.9616657Z',
@@ -144,7 +144,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
     details: {
-      recIndex: 0,
+      recIndex: 1,
     },
   },
   {
@@ -153,7 +153,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.PREPARE_ANALOG_DOMICILE,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       physicalAddress: {
         at: '',
         address: 'VIA MESSI 2022',
@@ -174,7 +174,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.SEND_ANALOG_DOMICILE,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       physicalAddress: {
         address: 'VIA MESSI 2022',
         zip: '98036',
@@ -199,7 +199,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     ],
     category: TimelineCategory.NOTIFICATION_VIEWED,
     details: {
-      recIndex: 0,
+      recIndex: 1,
     },
   },
   {
@@ -208,7 +208,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       notificationDate: '2023-05-09T13:22:10.001Z',
       deliveryDetailCode: 'CON080',
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
@@ -220,13 +220,13 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2023-05-09T13:22:19.001Z',
     legalFactsIds: [
       {
-        key: 'safestorage://PN_EXTERNAL_LEGAL_FACTS-2e53ade5875b4e77a242103e7db6ddc4.pdf',
+        key: 'PN_EXTERNAL_LEGAL_FACTS-2e53ade5875b4e77a242103e7db6ddc4.pdf',
         category: LegalFactType.ANALOG_DELIVERY,
       },
     ],
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       notificationDate: '2023-05-09T13:22:19.001Z',
       deliveryDetailCode: 'RECRN001B',
       attachments: [
@@ -246,7 +246,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.SEND_ANALOG_FEEDBACK,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       physicalAddress: {
         at: '',
         address: 'VIA MESSI 2022',
@@ -272,7 +272,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.ANALOG_SUCCESS_WORKFLOW,
     details: {
-      recIndex: 0,
+      recIndex: 1,
       physicalAddress: {
         at: '',
         address: 'VIA MESSI 2022',
@@ -291,7 +291,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.SCHEDULE_REFINEMENT,
     details: {
-      recIndex: 0,
+      recIndex: 1,
     },
   },
 ];
@@ -349,7 +349,20 @@ export const notificationDTO: NotificationDetail = {
   paProtocolNumber: '3801',
   subject: 'Inadequatezza nel camminare',
   recipients,
-  documents: [],
+  documents: [
+    {
+      digests: {
+        sha256: '7f3Nr8Yhkv4tH40iOrtMr4Y9fPR0vmCCt9BIwvH8fxs=',
+      },
+      contentType: 'application/pdf',
+      ref: {
+        key: 'PN_NOTIFICATION_ATTACHMENTS-c433d019acaa485288974021237beb8e.pdf',
+        versionToken: 'l0pwhTshqzIIdVKnCqiV1BlQBZA_LC7r',
+      },
+      title: 'RATA SCADUTA IMU',
+      docIdx: '0',
+    },
+  ],
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
   physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
   senderDenomination: 'Comune di Palermo',
@@ -358,15 +371,10 @@ export const notificationDTO: NotificationDetail = {
   senderPaId: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
   iun: 'RPTH-YULD-WKMA-202305-T-1',
   sentAt: '2023-05-09T13:17:31.401700947Z',
-  documentsAvailable: false,
+  documentsAvailable: true,
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory: statusHistory,
   timeline,
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
-
-export const overrideNotificationMock = (overrideObj: object): NotificationDetail => ({
-  ..._.cloneDeep(notificationToFe),
-  ...overrideObj,
-});

@@ -144,53 +144,51 @@ const DelegatesByCompany = () => {
   };
 
   return (
-    <>
-      <Box mb={8}>
-        <Stack
-          mb={4}
-          direction={isMobile ? 'column' : 'row'}
-          justifyContent={'space-between'}
-          alignItems={isMobile ? 'flex-start' : 'center'}
+    <Box mb={8} data-testid="delegatesByCompany">
+      <Stack
+        mb={4}
+        direction={isMobile ? 'column' : 'row'}
+        justifyContent={'space-between'}
+        alignItems={isMobile ? 'flex-start' : 'center'}
+      >
+        <Typography variant="h6" mb={3}>
+          {t('deleghe.delegatesTitle')}
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+          data-testid="addDeleghe"
         >
-          <Typography variant="h6" mb={3}>
-            {t('deleghe.delegatesTitle')}
-          </Typography>
-          <Button
-            variant="outlined"
-            onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
-            data-testid="addDeleghe"
-          >
-            <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
-            {t('deleghe.add')}
-          </Button>
-        </Stack>
-        <ApiErrorWrapper
-          apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
-          reloadAction={() => dispatch(getDelegatesByCompany())}
-        >
-          {delegatesByCompany.length > 0 ? (
-            <SmartTable
-              data={rows}
-              conf={delegatesColumn}
-              sortLabels={{
-                title: t('sort.title', { ns: 'notifiche' }),
-                optionsTitle: t('sort.options', { ns: 'notifiche' }),
-                cancel: t('sort.cancel', { ns: 'notifiche' }),
-                asc: t('sort.asc', { ns: 'notifiche' }),
-                dsc: t('sort.desc', { ns: 'notifiche' }),
-              }}
-              currentSort={{ orderBy: '', order: 'asc' }}
-            ></SmartTable>
-          ) : (
-            <EmptyState
-              emptyActionLabel={t('deleghe.add')}
-              emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
-              emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-            />
-          )}
-        </ApiErrorWrapper>
-      </Box>
-    </>
+          <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
+          {t('deleghe.add')}
+        </Button>
+      </Stack>
+      <ApiErrorWrapper
+        apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
+        reloadAction={() => dispatch(getDelegatesByCompany())}
+      >
+        {delegatesByCompany.length > 0 ? (
+          <SmartTable
+            data={rows}
+            conf={delegatesColumn}
+            sortLabels={{
+              title: t('sort.title', { ns: 'notifiche' }),
+              optionsTitle: t('sort.options', { ns: 'notifiche' }),
+              cancel: t('sort.cancel', { ns: 'notifiche' }),
+              asc: t('sort.asc', { ns: 'notifiche' }),
+              dsc: t('sort.desc', { ns: 'notifiche' }),
+            }}
+            currentSort={{ orderBy: '', order: 'asc' }}
+          ></SmartTable>
+        ) : (
+          <EmptyState
+            emptyActionLabel={t('deleghe.add')}
+            emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
+            emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+          />
+        )}
+      </ApiErrorWrapper>
+    </Box>
   );
 };
 

@@ -18,8 +18,6 @@ import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
 
-const fakePalette = { success: { main: '#00FF00' }, error: { main: '#FF0000' } };
-
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -50,7 +48,6 @@ describe('AppStatus page', () => {
   afterAll(() => {
     mock.restore();
   });
-
   /*
    * The intent of the "OK" test is to verify somehow that the result of the API calls
    * is rendered.
@@ -58,7 +55,6 @@ describe('AppStatus page', () => {
    * (1) the "green" variant of the status bar is rendered, instead of the "red" one.
    * (2) the downtime log list includes a datum from the mocked API response.
    */
-
   it('Desktop - OK', async () => {
     mock.onGet(DOWNTIME_STATUS()).reply(200, currentStatusDTO);
     mock
@@ -89,7 +85,6 @@ describe('AppStatus page', () => {
   /*
    * In the "not OK" test, we just check that the "red" variant of the status bar is rendered.
    */
-
   it('Desktop - not OK', async () => {
     mock.onGet(DOWNTIME_STATUS()).reply(200, { ...currentStatusDTO, openIncidents });
     mock

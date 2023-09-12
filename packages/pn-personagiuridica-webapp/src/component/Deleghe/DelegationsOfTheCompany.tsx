@@ -342,7 +342,7 @@ const DelegationsOfTheCompany = () => {
   }, [filters]);
 
   return (
-    <>
+    <Box data-testid="delegationsOfTheCompany">
       <Typography variant="h6" mb={4}>
         {t('deleghe.delegatorsTitle')}
       </Typography>
@@ -468,7 +468,7 @@ const DelegationsOfTheCompany = () => {
           />
         )}
       </ApiErrorWrapper>
-    </>
+    </Box>
   );
 };
 
