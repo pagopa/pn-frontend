@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { render, testFormElements } from '../../../../__test__/test-utils';
+import { testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { render } from '../../../../__test__/test-utils';
 import PhysicalAddress from '../PhysicalAddress';
 
 const mockSetValue = jest.fn();

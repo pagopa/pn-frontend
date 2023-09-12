@@ -1,4 +1,5 @@
-import { formatDate, Item } from '@pagopa-pn/pn-commons';
+import { Item, formatDate } from '@pagopa-pn/pn-commons';
+
 import { Delegation, Person } from '../redux/delegation/types';
 
 /**
@@ -9,7 +10,6 @@ import { Delegation, Person } from '../redux/delegation/types';
  */
 
 export default function delegationToItem(delegations: Array<Delegation>): Array<Item> {
-  // TODO to be tested
   return delegations.map((delegation: Delegation) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),
@@ -28,7 +28,24 @@ export function generateVCode() {
   return crypto.getRandomValues(array).toString().slice(0, 5);
 }
 
-export function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string) {
+export function sortDelegations(
+  order: string,
+  sortAttr: string,
+  values: Array<Delegation>
+): Array<Delegation> {
+  /* eslint-disable-next-line functional/immutable-data */
+  return values.sort((a: Delegation, b: Delegation) => {
+    const orderDirection = order === 'desc' ? 1 : -1;
+    if (sortAttr === 'endDate') {
+      const dateA = new Date(a.dateto).getTime();
+      const dateB = new Date(b.dateto).getTime();
+      return orderDirection * (dateB - dateA);
+    }
+    return orderDirection * compareDelegationsStrings(a, b, sortAttr);
+  });
+}
+
+function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string): number {
   if ('delegator' in a && a.delegator && 'delegator' in b && b.delegator) {
     const delegator1 = compareOrderAttribute(a.delegator, orderAttr);
     const delegator2 = compareOrderAttribute(b.delegator, orderAttr);
@@ -42,23 +59,10 @@ export function compareDelegationsStrings(a: Delegation, b: Delegation, orderAtt
   return 0;
 }
 
-export function sortDelegations(order: string, sortAttr: string, values: Array<Delegation>) {
-  /* eslint-disable-next-line functional/immutable-data */
-  return values.sort((a: Delegation, b: Delegation) => {
-    const orderDirection = order === 'desc' ? 1 : -1;
-    if (sortAttr === 'endDate') {
-      const dateA = new Date(a.dateto).getTime();
-      const dateB = new Date(b.dateto).getTime();
-      return orderDirection * (dateB - dateA);
-    }
-    return orderDirection * compareDelegationsStrings(a, b, sortAttr);
-  });
-}
-
 function compareOrderAttribute(person: Person, orderAttr: string) {
   return orderAttr === 'name'
     ? person.displayName.toLowerCase()
-    : person[orderAttr as keyof Person] || '';
+    : person[orderAttr as keyof Person] ?? '';
 }
 
 function getFirstName(delegation: Delegation): string {

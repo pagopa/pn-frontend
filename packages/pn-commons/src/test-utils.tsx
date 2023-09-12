@@ -1,5 +1,6 @@
 import mediaQuery from 'css-mediaquery';
 import { ReactElement, ReactNode } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -133,5 +134,93 @@ async function testAutocomplete(
   }
 }
 
+/**
+ * Test the existence of a field, its label and optionally its value
+ * @container container element
+ * @elementName element name
+ * @label element's label
+ * @value the expected value of the element
+ */
+function testFormElements(
+  container: HTMLElement,
+  elementName: string,
+  label: string,
+  value?: string | number
+) {
+  const formElement = container.querySelector(
+    `input[id="${elementName}"], input[name="${elementName}"]`
+  );
+  expect(formElement).toBeInTheDocument();
+  const formElementLabel = container.querySelector(`label[for="${elementName}"]`);
+  expect(formElementLabel).toBeInTheDocument();
+  expect(formElementLabel).toHaveTextContent(label);
+  if (value !== undefined && value !== null) {
+    expect(formElement).toHaveValue(value);
+  }
+}
+
+/**
+ * Fire change event on an input and check its value
+ * @container container element
+ * @elementName element name
+ * @value the expected value of the element
+ * @blur set if a blur event must be fired after input change
+ */
+async function testInput(
+  container: HTMLElement,
+  elementName: string,
+  value: string | number,
+  blur: boolean = false
+) {
+  const input = container.querySelector(`input[name="${elementName}"]`);
+  fireEvent.change(input!, { target: { value } });
+  await waitFor(() => {
+    expect(input).toHaveValue(value);
+  });
+  if (blur) {
+    fireEvent.blur(input!);
+  }
+}
+
+/**
+ * Test radio options and optionally select a value
+ * @container container element
+ * @dataTestId data-testid attribute
+ * @values list of options
+ * @expectedValue desired value
+ * @select set if option must be selected
+ */
+async function testRadio(
+  container: HTMLElement,
+  dataTestId: string,
+  values: Array<string>,
+  expectedValue?: number,
+  select?: boolean
+) {
+  const radioButtons = container?.querySelectorAll(`[data-testid="${dataTestId}"]`);
+  expect(radioButtons).toHaveLength(values.length);
+  values.forEach((value, index) => {
+    expect(radioButtons[index]).toHaveTextContent(value);
+  });
+  if (expectedValue !== undefined) {
+    if (select) {
+      fireEvent.click(radioButtons[expectedValue]);
+    }
+    await waitFor(() => {
+      const radioInput = radioButtons[expectedValue].querySelector('input');
+      expect(radioInput!).toBeChecked();
+    });
+  }
+}
+
 export * from '@testing-library/react';
-export { customRender as render, testSelect, createMatchMedia, testAutocomplete, testStore };
+export {
+  customRender as render,
+  testSelect,
+  createMatchMedia,
+  testAutocomplete,
+  testFormElements,
+  testInput,
+  testRadio,
+  testStore,
+};

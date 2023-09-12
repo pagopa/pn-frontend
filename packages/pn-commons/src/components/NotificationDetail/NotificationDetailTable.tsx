@@ -11,12 +11,13 @@ type Props = {
  * Table with the details of a notification
  * @param rows data to show
  */
-const NotificationDetailTable = ({ rows }: Props) => (
+const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
   <TableContainer
     component={Paper}
     sx={{ px: 3, py: { xs: 3, lg: 2 } }}
     elevation={0}
     id="notification-detail"
+    data-testid="detailTable"
   >
     <Table
       aria-label={getLocalizedOrDefaultLabel(
@@ -48,6 +49,7 @@ const NotificationDetailTable = ({ rows }: Props) => (
         ))}
       </TableBody>
     </Table>
+    {children}
   </TableContainer>
 );
 

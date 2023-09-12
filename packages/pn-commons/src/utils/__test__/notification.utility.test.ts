@@ -1,29 +1,28 @@
 import _ from 'lodash';
+
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  DigitalWorkflowDetails,
+  INotificationDetailTimeline,
   LegalFactType,
   NotHandledDetails,
+  NotificationDeliveryMode,
+  NotificationDetail,
+  NotificationDetailRecipient,
+  NotificationStatus,
+  NotificationStatusHistory,
   PhysicalCommunicationType,
+  RecipientType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  NotificationStatus,
-  NotificationStatusHistory,
-  NotificationDetailRecipient,
-  NotificationDetail,
-  NotificationDeliveryMode,
-  ResponseStatus,
-  INotificationDetailTimeline,
-  DigitalWorkflowDetails,
-  RecipientType,
 } from '../../types';
 import {
   AppIoCourtesyMessageEventType,
   NotificationDetailOtherDocument,
 } from '../../types/NotificationDetail';
-import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
@@ -426,6 +425,17 @@ describe('notification status texts', () => {
       'warning',
       'status.canceled-tooltip',
       'status.canceled-description'
+    );
+  });
+
+  it('return notification status infos - CANCELLATION_IN_PROGRESS - passing status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      NotificationStatus.CANCELLATION_IN_PROGRESS,
+      undefined,
+      'status.cancellation-in-progress',
+      'warning',
+      'status.cancellation-in-progress-tooltip',
+      'status.cancellation-in-progress-description'
     );
   });
 });

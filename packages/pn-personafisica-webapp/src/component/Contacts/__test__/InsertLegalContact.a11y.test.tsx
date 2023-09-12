@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { axe, render, act, RenderResult } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 
@@ -13,9 +13,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('InsertLegalContact component', () => {
+  let result: RenderResult | undefined;
+
   it('does not have basic accessibility issues', async () => {
-    // eslint-disable-next-line functional/no-let
-    let result: RenderResult | undefined;
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>

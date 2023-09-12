@@ -1,13 +1,13 @@
-import { Delegation } from '../types';
+import { CreateDelegationProps, Delegate, Delegator } from '../redux/delegation/types';
 
-export const mockCreateDelegation = {
+export const mockCreateDelegation: CreateDelegationProps = {
   delegate: {
     firstName: 'Davide',
     lastName: 'Legato',
+    displayName: 'Davide Legato',
     companyName: 'eni',
     fiscalCode: 'DVDLGT83C12H501C',
     person: true,
-    email: 'email@falsa.it',
   },
   visibilityIds: [
     {
@@ -16,11 +16,10 @@ export const mockCreateDelegation = {
     },
   ],
   verificationCode: '123456',
-  datefrom: '2021-12-15',
   dateto: '2022-04-16',
 };
 
-export const arrayOfDelegates = [
+export const arrayOfDelegates: Array<Delegate> = [
   {
     mandateId: '1',
     delegate: {
@@ -30,16 +29,15 @@ export const arrayOfDelegates = [
       companyName: 'eni',
       fiscalCode: 'MRCVRD83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
-    status: 'pending' as const,
+    status: 'pending',
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
         uniqueIdentifier: '123456789',
       },
     ],
-    verificationCode: '123456',
+    verificationCode: '12345',
     datefrom: '2021-12-15',
     dateto: '2022-04-17',
   },
@@ -52,22 +50,21 @@ export const arrayOfDelegates = [
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
-    status: 'active' as const,
+    status: 'active',
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
         uniqueIdentifier: '123456789',
       },
     ],
-    verificationCode: '123456',
+    verificationCode: '67890',
     datefrom: '2021-12-15',
-    dateto: '2022-04-16',
+    dateto: '2022-07-25',
   },
 ];
 
-export const arrayOfDelegators = [
+export const arrayOfDelegators: Array<Delegator> = [
   {
     mandateId: '3',
     delegator: {
@@ -77,16 +74,15 @@ export const arrayOfDelegators = [
       companyName: 'eni',
       fiscalCode: 'MRCVRD83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
-    status: 'pending' as const,
+    status: 'pending',
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
         uniqueIdentifier: '123456789',
       },
     ],
-    verificationCode: '123456',
+    verificationCode: '12345',
     datefrom: '2021-12-15',
     dateto: '2022-04-16',
   },
@@ -99,71 +95,37 @@ export const arrayOfDelegators = [
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
-    status: 'active' as const,
+    status: 'active',
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
         uniqueIdentifier: '123456789',
       },
     ],
+    verificationCode: '67890',
+    datefrom: '2021-12-15',
+    dateto: '2022-12-01',
+  },
+  {
+    mandateId: '5',
+    delegator: {
+      displayName: 'Ada Lovelace',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      companyName: 'eni',
+      fiscalCode: 'LVLDAA85T50G702B',
+      person: true,
+    },
+    status: 'active',
+    visibilityIds: [
+      {
+        name: 'Comune di Salerno',
+        uniqueIdentifier: '123456789',
+      },
+    ],
     verificationCode: '123456',
     datefrom: '2021-12-15',
-    dateto: '2022-04-16',
+    dateto: '2023-08-23',
   },
 ];
-
-export const mockDelegationsState = {
-  delegations: {
-    delegators: arrayOfDelegators,
-    delegates: arrayOfDelegates,
-    isCompany: false,
-  },
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
-  acceptModalState: {
-    open: false,
-    id: '',
-    name: '',
-    error: false,
-  },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc',
-  },
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc',
-  },
-};
-
-export const initialState = {
-  delegations: {
-    delegators: [] as Array<Delegation>,
-    delegates: [] as Array<Delegation>,
-    isCompany: false,
-  },
-  modalState: {
-    open: false,
-    id: '',
-    type: '',
-  },
-  acceptModalState: {
-    open: false,
-    id: '',
-    name: '',
-    error: false,
-  },
-  sortDelegators: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
-  sortDelegates: {
-    orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
-};
