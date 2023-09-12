@@ -29,7 +29,7 @@ export function useDownloadDocument({ url, clearDownloadAction }: Props) {
   const isMobile = useIsMobile();
   useEffect(() => {
     if (url) {
-      downloadDocument(url);
+      downloadDocument(url, isMobile);
       if (clearDownloadAction) {
         clearDownloadAction();
       }
