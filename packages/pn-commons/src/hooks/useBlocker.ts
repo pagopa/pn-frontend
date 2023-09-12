@@ -1,12 +1,14 @@
+import type { Blocker, History, Transition } from 'history';
 import { useContext, useEffect } from 'react';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
-import type { History, Blocker, Transition } from 'history';
 
 export function useBlocker(blocker: Blocker, when = true): void {
   const navigator = useContext(UNSAFE_NavigationContext).navigator as History;
 
   useEffect(() => {
-    if (!when) return;
+    if (!when) {
+      return;
+    }
 
     // prevents the current location from changing and sets up a listener
     const unblock = navigator.block((tx: Transition) => {

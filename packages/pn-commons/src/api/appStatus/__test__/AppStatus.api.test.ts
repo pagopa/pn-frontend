@@ -37,10 +37,8 @@ import {
    ------------------------------------------------------------------------ */
 describe('AppStatus api tests', () => {
   const fakeApiClient = axios.create();
-
-  /* eslint-disable-next-line functional/no-let */
   let mock: MockAdapter;
-  let appStatusApi = createAppStatusApi(() => fakeApiClient);
+  const appStatusApi = createAppStatusApi(() => fakeApiClient);
 
   beforeEach(() => {
     mock = new MockAdapter(fakeApiClient);
@@ -48,6 +46,9 @@ describe('AppStatus api tests', () => {
 
   afterEach(() => {
     mock.reset();
+  });
+
+  afterAll(() => {
     mock.restore();
   });
 

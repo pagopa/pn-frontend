@@ -35,7 +35,7 @@ export const beAppStatusNoIncidents: AppStatusDTO = {
 };
 
 export const beAppStatusOneIncident: AppStatusDTO = {
-  functionalities: knownFunctionalities,
+  ...beAppStatusNoIncidents,
   openIncidents: [
     {
       functionality: 'NOTIFICATION_WORKFLOW',
@@ -46,7 +46,7 @@ export const beAppStatusOneIncident: AppStatusDTO = {
 };
 
 export const beAppStatusTwoIncidentsNormalCase: AppStatusDTO = {
-  functionalities: knownFunctionalities,
+  ...beAppStatusNoIncidents,
   openIncidents: [
     {
       functionality: 'NOTIFICATION_WORKFLOW',
@@ -62,7 +62,7 @@ export const beAppStatusTwoIncidentsNormalCase: AppStatusDTO = {
 };
 
 export const beAppStatusTwoIncidentsOneUnknownFunctionality: AppStatusDTO = {
-  functionalities: knownFunctionalities,
+  ...beAppStatusNoIncidents,
   openIncidents: [
     {
       functionality: 'NOTIFICATION_VISUALIZATION',
@@ -78,7 +78,7 @@ export const beAppStatusTwoIncidentsOneUnknownFunctionality: AppStatusDTO = {
 };
 
 export const beAppStatusOneFinishedDowntimeAsOpenIncident: AppStatusDTO = {
-  functionalities: knownFunctionalities,
+  ...beAppStatusNoIncidents,
   openIncidents: [
     {
       functionality: 'NOTIFICATION_WORKFLOW',
@@ -95,7 +95,7 @@ export const beAppStatusOneFinishedDowntimeAsOpenIncident: AppStatusDTO = {
 };
 
 export const beAppStatusOneIncidentWithError: AppStatusDTO = {
-  functionalities: knownFunctionalities,
+  ...beAppStatusNoIncidents,
   openIncidents: [
     {
       functionality: 'NOTIFICATION_WORKFLOW',
