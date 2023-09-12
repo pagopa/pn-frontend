@@ -14,6 +14,7 @@ import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNot
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../apiClients';
 import {
+  CANCEL_NOTIFICATION, // CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -109,7 +110,7 @@ export const NotificationsApi = {
       .then((response) => getDownloadUrl(response)),
 
   /**
-   * get user groups
+   * Get user groups
    * @param  {GroupStatus} status
    * @returns Promise
    */
@@ -163,7 +164,7 @@ export const NotificationsApi = {
   },
 
   /**
-   * create new notification
+   * Create new notification
    * @param  {NewNotificationDTO} notification
    * @returns Promise
    */
@@ -171,4 +172,12 @@ export const NotificationsApi = {
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
       .then((response) => response.data),
+
+  /**
+   * Cancel notification
+   * @param  {string} iun
+   * @returns Promise
+   */
+  cancelNotification: (iun: string): Promise<string> =>
+    apiClient.put<string>(CANCEL_NOTIFICATION(iun)).then((response) => response.data),
 };

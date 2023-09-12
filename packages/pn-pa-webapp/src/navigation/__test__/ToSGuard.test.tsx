@@ -45,7 +45,6 @@ const Guard = () => (
 );
 
 describe('Tests the ToSGuard component', () => {
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -89,7 +88,9 @@ describe('Tests the ToSGuard component', () => {
         }, 2000);
       });
     });
-    await act(async () => void render(<Guard />, { preloadedState: reduxState }));
+    await act(async () => {
+      render(<Guard />, { preloadedState: reduxState });
+    });
     const pageComponent = screen.queryByTestId('loading-skeleton');
     const tosComponent = screen.queryByTestId('tos-acceptance-page');
     const genericPage = screen.queryByText('Generic Page');

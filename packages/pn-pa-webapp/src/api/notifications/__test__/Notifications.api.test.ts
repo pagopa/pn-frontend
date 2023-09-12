@@ -9,7 +9,6 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
 import {
@@ -20,6 +19,7 @@ import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifica
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
+  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -31,7 +31,6 @@ import {
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
-  // eslint-disable-next-line functional/no-let
   let mock: MockAdapter;
 
   mockAuthentication();
@@ -171,5 +170,11 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+  });
+
+  it('cancelNotification', async () => {
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    const res = await NotificationsApi.cancelNotification('mocked-iun');
+    expect(res).toEqual(undefined);
   });
 });

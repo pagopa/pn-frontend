@@ -1,20 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { testAutocomplete } from '@pagopa-pn/pn-commons';
+import {
+  testAutocomplete,
+  testFormElements,
+  testInput,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  testFormElements,
-  testInput,
-  waitFor,
-  within,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CREATE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';

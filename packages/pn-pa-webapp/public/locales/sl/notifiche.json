@@ -70,7 +70,6 @@
       "message": "Če želite dokončati preklic, morate poslati novo obvestilo, ki nadomešča prejšnje."
     },
     "acts": "Priloženi dokumenti",
-    "download-message-cancelled": "Ker je bilo to obvestilo preklicano, priloženi dokumenti niso na voljo.",
     "download-message-available": "Priloženi dokumenti so na voljo na spletu 120 dni po zaključku obvestila.",
     "download-message-expired": "Ker je od datuma zaključka minilo 120 dni, dokumenti niso več na voljo.",
     "download-files-link": "Kdaj se zaključi obvestilo?",

@@ -1,11 +1,7 @@
 import React from 'react';
 
-import {
-  createMatchMedia,
-  formatToTimezoneString,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
@@ -92,7 +88,6 @@ describe('MobileNotifications Component', () => {
                 startDate: formatToTimezoneString(tenYearsAgo),
                 endDate: formatToTimezoneString(today),
                 iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-                mandateId: undefined,
               },
             },
           },

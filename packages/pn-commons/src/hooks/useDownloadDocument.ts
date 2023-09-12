@@ -27,7 +27,9 @@ export function useDownloadDocument({ url, clearDownloadAction }: Props) {
   useEffect(() => {
     if (url) {
       downloadDocument(url);
-      clearDownloadAction && clearDownloadAction();
+      if (clearDownloadAction) {
+        clearDownloadAction();
+      }
     }
   }, [url, clearDownloadAction]);
 

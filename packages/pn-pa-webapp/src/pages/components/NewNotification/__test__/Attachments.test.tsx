@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import * as redux from 'react-redux';
+
+import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../../__mocks__/NewNotification.mock';
 import {
@@ -8,7 +9,6 @@ import {
   act,
   fireEvent,
   render,
-  testInput,
   testStore,
   waitFor,
   within,
@@ -16,8 +16,6 @@ import {
 import { apiClient, externalClient } from '../../../../api/apiClients';
 import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../../api/notifications/notifications.routes';
 import { NewNotificationDocument } from '../../../../models/NewNotification';
-import * as actions from '../../../../redux/newNotification/actions';
-import { UploadDocumentParams } from '../../../../redux/newNotification/types';
 import Attachments from '../Attachments';
 
 const mockIsPaymentEnabledGetter = jest.fn();
