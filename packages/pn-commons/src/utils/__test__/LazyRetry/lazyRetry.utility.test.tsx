@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import { render, waitFor } from '../../../test-utils';
+import { RenderResult, act, render, waitFor } from '../../../test-utils';
 import { lazyRetry } from '../../lazyRetry.utility';
 
 describe('test lazy loading retry', () => {
@@ -25,19 +25,21 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loaded at first try', async () => {
-    jest.mock('../../../components/EmptyState', () => () => <>Chunk loaded</>);
     const LazyComponent = lazyRetry(() => import('../../../components/EmptyState'));
-    const result = render(
-      <Suspense fallback={'Loading...'}>
-        <LazyComponent />
-      </Suspense>
-    );
+    let result: RenderResult;
+    await act(async () => {
+      result = render(
+        <Suspense fallback={'Loading...'}>
+          <LazyComponent emptyMessage={'mocked-empty-message'} />
+        </Suspense>
+      );
+    });
     await waitFor(() => {
       const refreshFlag = sessionStorage.getItem('retry-lazy-refreshed');
-      expect(result.container).toHaveTextContent('Chunk loaded');
+      expect(result.container).toHaveTextContent('mocked-empty-message');
       expect(refreshFlag).toBeNull();
     });
-  });
+  }, 10000);
 
   it('test lazyRetry - component loading fails at first try', async () => {
     jest.mock('../../../components/EmptyState', () => {

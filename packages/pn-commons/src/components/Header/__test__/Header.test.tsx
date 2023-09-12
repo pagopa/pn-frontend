@@ -1,4 +1,6 @@
-import { fireEvent, waitFor, screen } from '@testing-library/react';
+import React from 'react';
+
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import Header from '../Header';
@@ -34,7 +36,7 @@ describe('Header Component', () => {
     // @ts-ignore
     window.location = {
       href: '',
-      assign: exitFn
+      assign: exitFn,
     };
     jest.restoreAllMocks();
     jest.resetAllMocks();
@@ -157,7 +159,7 @@ describe('Header Component', () => {
         enableDropdown
         userActions={userActions}
         partyList={partyList}
-        onAssistanceClick={() => window.location.href = 'mailto:email'}
+        onAssistanceClick={() => (window.location.href = 'mailto:email')}
       />
     );
     expect(window.location.href).toBe('');

@@ -1,40 +1,58 @@
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import React from 'react';
 
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, waitFor, within } from '@testing-library/react';
+
 import * as hooks from '../../../hooks/useIsMobile';
+import { act, render } from '../../../test-utils';
 import SideMenu from '../SideMenu';
 import { sideMenuItems } from './test-utils';
 
 const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
 describe('SideMenu', () => {
+  let result: RenderResult | undefined;
+
   afterEach(() => {
+    result = undefined;
     useIsMobileSpy.mockClear();
     useIsMobileSpy.mockReset();
   });
 
   it('Renders side menu (no mobile)', async () => {
     useIsMobileSpy.mockReturnValue(false);
-    render(<SideMenu menuItems={sideMenuItems} />);
-    const ul = screen.getByRole('navigation');
+
+    await act(async () => {
+      result = render(<SideMenu menuItems={sideMenuItems} />);
+    });
+
+    const ul = result?.getByRole('navigation');
     expect(ul).toBeInTheDocument();
-    const buttons = await within(ul).findAllByRole('button');
+
+    const buttons = within(ul!).getAllByRole('button');
     expect(buttons).toHaveLength(sideMenuItems.length);
   });
 
   it('Renders side menu (mobile)', async () => {
     useIsMobileSpy.mockReturnValue(true);
-    render(<SideMenu menuItems={sideMenuItems} />);
-    const ul = screen.getByRole('navigation');
+
+    await act(async () => {
+      result = render(<SideMenu menuItems={sideMenuItems} />);
+    });
+
+    const ul = result?.getByRole('navigation');
     expect(ul).toBeInTheDocument();
-    const menuButtons = await within(ul).findAllByRole('button');
+
+    const menuButtons = within(ul!).getAllByRole('button');
     expect(menuButtons).toHaveLength(1);
+
     await waitFor(() => {
       fireEvent.click(menuButtons[0]);
     });
-    const drawer = screen.queryByRole('presentation');
+
+    const drawer = result?.getByRole('presentation');
     expect(drawer).toBeInTheDocument();
-    const buttons = await within(drawer!).findAllByRole('button');
+
+    const buttons = within(drawer!).getAllByRole('button');
     expect(buttons).toHaveLength(sideMenuItems.length);
   });
 });

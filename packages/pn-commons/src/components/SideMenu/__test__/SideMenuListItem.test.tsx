@@ -1,4 +1,6 @@
-import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import SideMenuListItem from '../SideMenuListItem';
@@ -33,7 +35,7 @@ describe('SideMenuListItem', () => {
   });
 
   it('Clicks side menu list item', async () => {
-    const link = result!.queryByRole('button');
+    const link = result!.getByRole('button');
     await waitFor(() => {
       fireEvent.click(link!);
     });

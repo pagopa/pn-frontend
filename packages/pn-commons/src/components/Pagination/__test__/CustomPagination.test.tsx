@@ -1,7 +1,8 @@
 import React from 'react';
-import { fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, waitFor, within } from '@testing-library/react';
+
+import { act, render } from '../../../test-utils';
 import CustomPagination from '../CustomPagination';
 import { PaginationData } from '../types';
 
@@ -17,15 +18,17 @@ const mockEventTrackingPageSize = jest.fn();
 describe('CustomPagination Component', () => {
   let result: RenderResult | undefined;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // render component
-    result = render(
-      <CustomPagination
-        paginationData={paginationData}
-        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
-        onPageRequest={handlePageChange}
-      />
-    );
+    await act(async () => {
+      result = render(
+        <CustomPagination
+          paginationData={paginationData}
+          eventTrackingCallbackPageSize={mockEventTrackingPageSize}
+          onPageRequest={handlePageChange}
+        />
+      );
+    });
   });
 
   afterEach(() => {
@@ -38,27 +41,26 @@ describe('CustomPagination Component', () => {
     };
   });
 
-  it('renders custom pagination', async () => {
-    const itemsPerPageSelector = await result?.findByTestId('itemsPerPageSelector');
+  it('renders custom pagination', () => {
+    const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = await result?.findByTestId('pageSelector');
+    const pageSelector = result?.getByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
 
   it('changes items per page', async () => {
-    const itemsPerPageSelector = await result?.findByTestId('itemsPerPageSelector');
-    const button = itemsPerPageSelector?.querySelector('button');
+    const button = result?.getByTestId('rows-per-page');
     expect(button).toHaveTextContent(/50/i);
     await waitFor(() => {
       fireEvent.click(button!);
     });
 
-    const itemsPerPageListContainer = await screen.findByRole('presentation');
+    const itemsPerPageListContainer = result?.getByRole('presentation');
     expect(itemsPerPageListContainer).toBeInTheDocument();
-    const itemsPerPageList = await screen.findAllByRole('menuitem');
+    const itemsPerPageList = result?.getAllByRole('menuitem');
     expect(itemsPerPageList).toHaveLength(3);
     await waitFor(() => {
-      fireEvent.click(itemsPerPageList[1]!);
+      fireEvent.click(itemsPerPageList![1]);
     });
     expect(button).toHaveTextContent(/20/i);
     expect(handlePageChange).toBeCalledTimes(1);
@@ -71,8 +73,8 @@ describe('CustomPagination Component', () => {
   });
 
   it('changes page', async () => {
-    const pageSelector = await result?.findByTestId('pageSelector');
-    let pageButtons = pageSelector?.querySelectorAll('button');
+    const pageSelector = result?.getByTestId('pageSelector');
+    let pageButtons = within(pageSelector!).getAllByRole('button');
     // depends on mui pagination
     // for 10 pages we have: < 1 2 3 4 5 ... 10 >
     expect(pageButtons).toHaveLength(8);

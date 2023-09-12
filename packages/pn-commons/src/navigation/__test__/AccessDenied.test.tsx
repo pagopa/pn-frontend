@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { render } from '../../test-utils';
 import AccessDenied from '../AccessDenied';
 
@@ -15,7 +17,7 @@ describe('AccessDenied Component', () => {
         }}
       />
     );
-    const heading = result?.queryByRole('heading');
+    const heading = result?.getByRole('heading');
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent(
       /Non hai le autorizzazioni necessarie per accedere a questa pagina/i
@@ -37,8 +39,8 @@ describe('AccessDenied Component', () => {
         }}
       />
     );
-    const messageElement = result?.queryByText("mock-message");
-    const subtitleElement = result?.queryByText("mock-subtitle");
+    const messageElement = result?.getByText('mock-message');
+    const subtitleElement = result?.getByText('mock-subtitle');
     expect(messageElement).toBeInTheDocument();
     expect(subtitleElement).toBeInTheDocument();
   });

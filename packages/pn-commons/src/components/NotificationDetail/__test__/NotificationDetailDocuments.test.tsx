@@ -1,4 +1,6 @@
-import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { NotificationDetailDocument } from '../../../types';
@@ -11,11 +13,11 @@ const documents: Array<NotificationDetailDocument> = [
     },
     ref: {
       key: 'mocked-doc-title',
-      versionToken: 'mocked-versionToken'
+      versionToken: 'mocked-versionToken',
     },
     contentType: 'mocked-contentType',
     title: 'mocked-doc-title',
-    docIdx: '0'
+    docIdx: '0',
   },
 ];
 

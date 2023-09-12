@@ -1,11 +1,17 @@
 import React from 'react';
 
-import { render, fireEvent } from '../../../test-utils';
+import { RenderResult, act, fireEvent, render, within } from '../../../test-utils';
 import { PaymentHistory, RecipientType } from '../../../types';
 import { formatEurocentToCurrency, formatFiscalCode } from '../../../utils';
 import NotificationPaidDetail from '../NotificationPaidDetail';
 
 describe('NotificationDetailPaid Component', () => {
+  let result: RenderResult | undefined;
+
+  afterEach(() => {
+    result = undefined;
+  });
+
   const paymentHistory: Array<PaymentHistory> = [
     {
       recipientDenomination: 'Mario Rossi',
@@ -67,15 +73,15 @@ describe('NotificationDetailPaid Component', () => {
       },
     ];
     for (const tableRow of tableRows) {
-      const row = table.querySelector(`[data-testid="${tableRow.id}"]`);
+      const row = within(table).queryByTestId(tableRow.id);
       if (payment[tableRow.id] || tableRow.id === 'paymentType') {
         if (tableRow.id === 'recipientType' && !isSender) {
           expect(row).not.toBeInTheDocument();
           continue;
         }
         expect(row).toBeInTheDocument();
-        const label = row!.querySelector(`[data-testid="label"]`);
-        const value = row!.querySelector(`[data-testid="value"]`);
+        const label = within(row!).getByTestId('label');
+        const value = within(row!).getByTestId('value');
         expect(label).toHaveTextContent(tableRow.label);
         expect(value!.textContent).toBe(tableRow.value);
         continue;
@@ -84,13 +90,15 @@ describe('NotificationDetailPaid Component', () => {
     }
   }
 
-  it('renders NotificationPaidDetail - one recipient and no sender', () => {
-    const result = render(<NotificationPaidDetail paymentDetailsList={[paymentHistory[0]]} />);
-    const table = result.getByTestId('paymentTable');
+  it('renders NotificationPaidDetail - one recipient and no sender', async () => {
+    await act(async () => {
+      result = render(<NotificationPaidDetail paymentDetailsList={[paymentHistory[0]]} />);
+    });
+    const table = result?.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
-    const recipient = result.queryByTestId('paymentRecipient');
+    const recipient = result?.queryByTestId('paymentRecipient');
     expect(recipient).not.toBeInTheDocument();
-    testTableData(paymentHistory[0], table, false);
+    testTableData(paymentHistory[0], table!, false);
   });
 
   it('renders NotificationPaidDetail - one recipient and sender', () => {
@@ -121,25 +129,25 @@ describe('NotificationDetailPaid Component', () => {
     const accordions = result.getAllByTestId('paymentAccordion');
     expect(accordions).toHaveLength(paymentHistory.length);
     accordions.forEach((accordion, index) => {
-      const recipient = accordion.querySelector(`[data-testid="recipient"]`);
+      const recipient = within(accordion).getByTestId('recipient');
       expect(recipient).toBeInTheDocument();
       expect(recipient).toHaveTextContent(
         `${paymentHistory[index].recipientDenomination} - ${paymentHistory[index].recipientTaxId}`
       );
-      const table = accordion.querySelector(`[data-testid="paymentTable"]`);
+      const table = within(accordion).getByTestId('paymentTable');
       expect(table).toBeInTheDocument();
       testTableData(paymentHistory[index], table as HTMLElement, true);
-      const button = accordion.querySelector(`[role="button"]`);
+      const button = within(accordion).getByRole('button');
       // accordion collapsed
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
     // click on first accordion
-    const buttonFirst = accordions[0].querySelector(`[role="button"]`);
+    const buttonFirst = within(accordions[0]).getByRole('button');
     fireEvent.click(buttonFirst!);
     // accordion expanded
     expect(buttonFirst).toHaveAttribute('aria-expanded', 'true');
     // click on last accordion
-    const buttonlast = accordions[accordions.length - 1].querySelector(`[role="button"]`);
+    const buttonlast = within(accordions[accordions.length - 1]).getByRole('button');
     fireEvent.click(buttonlast!);
     // accordion expanded and others collapsed
     expect(buttonlast).toHaveAttribute('aria-expanded', 'true');

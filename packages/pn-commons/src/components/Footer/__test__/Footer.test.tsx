@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { fireEvent, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
@@ -8,7 +10,7 @@ describe('Footer Component', () => {
   it('renders footer', () => {
     // render component
     const result = render(<Footer loggedUser={true} />);
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result.getAllByRole('button');
 
     expect(buttons).toHaveLength(5);
     buttons.forEach((button, index) => {
@@ -32,7 +34,7 @@ describe('Footer Component', () => {
         eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}
       />
     );
-    const buttons = result.container.querySelectorAll('button');
+    const buttons = result.getAllByRole('button');
     const dropdownLanguageButton = buttons[4];
     const languageKeys = Object.keys(LANGUAGES);
 
@@ -44,7 +46,7 @@ describe('Footer Component', () => {
 
     languageKeys.forEach((currentDropdownLanguage, index) => {
       fireEvent.click(dropdownLanguageButton);
-      const languageSelector = screen.queryByRole('presentation');
+      const languageSelector = screen.getByRole('presentation');
       expect(languageSelector).toBeInTheDocument();
       const languageOptions = languageSelector?.querySelectorAll('ul li');
       expect(languageOptions).toHaveLength(Object.keys(LANGUAGES[currentDropdownLanguage]).length);

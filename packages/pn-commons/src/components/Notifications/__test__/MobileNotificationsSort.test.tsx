@@ -1,17 +1,28 @@
 import React from 'react';
-import { fireEvent, waitFor, screen, RenderResult, within } from '@testing-library/react';
-import { CardSort, Sort } from '../../../types';
+
+import { RenderResult, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
+import { CardSort, Sort } from '../../../types';
 import MobileNotificationsSort from '../MobileNotificationsSort';
 
 type MockOrderByFields = 'mocked-field-1' | 'mocked-field-2';
 
 const sortFields: Array<CardSort<MockOrderByFields>> = [
   { id: 'mocked-field-1-asc', label: 'Mocked label 1 asc', value: 'asc', field: 'mocked-field-1' },
-  { id: 'mocked-field-1-desc', label: 'Mocked label 1 desc', value: 'desc', field: 'mocked-field-1' },
+  {
+    id: 'mocked-field-1-desc',
+    label: 'Mocked label 1 desc',
+    value: 'desc',
+    field: 'mocked-field-1',
+  },
   { id: 'mocked-field-2-asc', label: 'Mocked label 2 asc', value: 'asc', field: 'mocked-field-2' },
-  { id: 'mocked-field-2-desc', label: 'Mocked label 2 desc', value: 'desc', field: 'mocked-field-2' },
+  {
+    id: 'mocked-field-2-desc',
+    label: 'Mocked label 2 desc',
+    value: 'desc',
+    field: 'mocked-field-2',
+  },
 ];
 
 const sort: Sort<MockOrderByFields> = {
@@ -44,43 +55,43 @@ describe('MobileNotifications Component', () => {
   });
 
   it('renders MobileNotificationsSort (closed)', () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     expect(button).toHaveTextContent(/sort.title/i);
   });
 
   it('renders MobileNotificationsSort (opened)', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
     const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/sort.title/i);
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     expect(radioGroup).toBeInTheDocument();
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels).toHaveLength(sortFields.length);
     radioLabels!.forEach((label, index) => {
       expect(label).toHaveTextContent(sortFields[index].label);
     });
-    const actions = dialog?.querySelectorAll('[data-testid="dialogAction"]');
+    const actions = within(dialog!).getAllByTestId('dialogAction');
     expect(actions).toHaveLength(2);
     expect(actions![0]).toHaveTextContent(/sort.title/i);
     expect(actions![1]).toHaveTextContent(/sort.cancel/i);
   });
 
   it('checks radioGroup initial value', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels![0].children[0].classList.contains('Mui-checked')).toBe(true);
   });
 
   it('changes radioGroup value', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).queryByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels![0].children[0].classList.contains('Mui-checked')).toBe(true);
     fireEvent.click(radioLabels![3]);
@@ -91,10 +102,10 @@ describe('MobileNotifications Component', () => {
   });
 
   it('confirm sort', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     fireEvent.click(radioLabels![3]);
     const actions = dialog?.querySelectorAll('[data-testid="dialogAction"] > button');
@@ -110,10 +121,10 @@ describe('MobileNotifications Component', () => {
   });
 
   it('cancel sort', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result?.getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     fireEvent.click(radioLabels![3]);
     const actions = dialog?.querySelectorAll('[data-testid="dialogAction"] > button');

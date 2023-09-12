@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { fireEvent, waitFor, screen } from '@testing-library/react';
+import { RenderResult, act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { render } from '../../../test-utils';
 import * as hooks from '../../../hooks/useIsMobile';
+import { render } from '../../../test-utils';
 import {
   formatDay,
   formatMonthString,
@@ -21,7 +21,7 @@ const testTimelineRendering = async (container: HTMLElement) => {
   expect(timelineItems).toHaveLength(parsedNotification.notificationStatusHistory.length * 2);
   timelineItems.forEach((item, timelineIndex) => {
     if (timelineIndex % 2 === 0) {
-      const dateItems = item.querySelectorAll('[data-testid="dateItem"]');
+      const dateItems = within(item as HTMLElement).getAllByTestId('dateItem');
       expect(dateItems).toHaveLength(3);
       expect(dateItems[0]).toHaveTextContent(
         formatMonthString(
@@ -34,7 +34,7 @@ const testTimelineRendering = async (container: HTMLElement) => {
       expect(dateItems[2]).toHaveTextContent(
         formatTime(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
       );
-      const itemStatus = item.querySelector('[data-testid="itemStatus"]');
+      const itemStatus = within(item as HTMLElement).getByTestId('itemStatus');
       expect(itemStatus).toBeInTheDocument();
       const classRoot = 'MuiChip-color';
       const { color, label } = getNotificationStatusInfos(
@@ -44,7 +44,7 @@ const testTimelineRendering = async (container: HTMLElement) => {
       expect(itemStatus).toHaveTextContent(label);
       expect(itemStatus!.classList.contains(buttonClass)).toBe(true);
     } else {
-      const moreLessButton = item.querySelector('[data-testid="moreLessButton"]');
+      const moreLessButton = within(item as HTMLElement).getByTestId('moreLessButton');
       expect(moreLessButton).toBeInTheDocument();
       expect(moreLessButton).toHaveTextContent(/mocked-more-label/i);
     }
@@ -52,10 +52,15 @@ const testTimelineRendering = async (container: HTMLElement) => {
 };
 
 describe('NotificationDetailTimeline Component', () => {
+  let result: RenderResult | undefined;
+
+  afterEach(() => {
+    result = undefined;
+  });
   it('renders NotificationDetailTimeline (desktop)', async () => {
     useIsMobileSpy.mockReturnValue(false);
     // render component
-    const result = render(
+    result = render(
       <NotificationDetailTimeline
         title="mocked-title"
         recipients={parsedNotification.recipients}
@@ -74,26 +79,26 @@ describe('NotificationDetailTimeline Component', () => {
   it('renders NotificationDetailTimeline (mobile)', async () => {
     useIsMobileSpy.mockReturnValue(true);
     // render component
-    const result = render(
-      <NotificationDetailTimeline
-        title="mocked-title"
-        recipients={parsedNotification.recipients}
-        statusHistory={parsedNotification.notificationStatusHistory}
-        clickHandler={jest.fn()}
-        historyButtonLabel="mocked-history-label"
-        showLessButtonLabel="mocked-less-label"
-        showMoreButtonLabel="mocked-more-label"
-      />
-    );
+    await act(async () => {
+      result = render(
+        <NotificationDetailTimeline
+          title="mocked-title"
+          recipients={parsedNotification.recipients}
+          statusHistory={parsedNotification.notificationStatusHistory}
+          clickHandler={jest.fn()}
+          historyButtonLabel="mocked-history-label"
+          showLessButtonLabel="mocked-less-label"
+          showMoreButtonLabel="mocked-more-label"
+        />
+      );
+    });
     expect(result?.container).toHaveTextContent(/mocked-title/i);
     const timelineItems = result?.container.querySelectorAll('.MuiTimelineItem-root');
     expect(timelineItems).toHaveLength(1);
-    const historyButton = await result?.findByTestId('historyButton');
+    const historyButton = result?.getByTestId('historyButton');
     expect(historyButton).toBeInTheDocument();
-    fireEvent.click(historyButton);
-    const drawer = await waitFor(() => {
-      return screen.queryByRole('presentation');
-    });
+    fireEvent.click(historyButton!);
+    const drawer = result?.getByRole('presentation');
     expect(drawer!).toBeInTheDocument();
     await testTimelineRendering(drawer!);
   });
@@ -101,26 +106,31 @@ describe('NotificationDetailTimeline Component', () => {
   it('expand timeline item (desktop)', async () => {
     useIsMobileSpy.mockReturnValue(false);
     // render component
-    const result = render(
-      <NotificationDetailTimeline
-        title="mocked-title"
-        recipients={parsedNotification.recipients}
-        statusHistory={parsedNotification.notificationStatusHistory}
-        clickHandler={jest.fn()}
-        historyButtonLabel="mocked-history-label"
-        showLessButtonLabel="mocked-less-label"
-        showMoreButtonLabel="mocked-more-label"
-      />
-    );
+    await act(async () => {
+      result = render(
+        <NotificationDetailTimeline
+          title="mocked-title"
+          recipients={parsedNotification.recipients}
+          statusHistory={parsedNotification.notificationStatusHistory}
+          clickHandler={jest.fn()}
+          historyButtonLabel="mocked-history-label"
+          showLessButtonLabel="mocked-less-label"
+          showMoreButtonLabel="mocked-more-label"
+        />
+      );
+    });
     // get first moreLessButton
-    const moreLessButton = result?.container.querySelector('[data-testid="moreLessButton"] button');
+    const moreLessButton = within(
+      result?.getAllByTestId('moreLessButton')[0] as HTMLElement
+    ).getByRole('button');
+    expect(moreLessButton).toHaveTextContent(/mocked-more-label/i);
     fireEvent.click(moreLessButton!);
     await waitFor(() => {
       expect(moreLessButton).toHaveTextContent(/mocked-less-label/i);
       const timelineExpandedItem = result?.container.querySelector(
         '.MuiTimelineItem-root:nth-child(3)'
       );
-      const dateItems = timelineExpandedItem!.querySelectorAll('[data-testid="dateItem"]');
+      const dateItems = within(timelineExpandedItem as HTMLElement).getAllByTestId('dateItem');
       expect(dateItems).toHaveLength(3);
       expect(dateItems[0]).toHaveTextContent(
         formatMonthString(parsedNotification.timeline[0].timestamp)

@@ -1,4 +1,6 @@
-import { RenderResult } from '@testing-library/react';
+import React from 'react';
+
+import { RenderResult, within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { NotificationDetailTableRow } from '../../../types';
@@ -28,13 +30,13 @@ describe('NotificationDetailTable Component', () => {
   });
 
   it('renders NotificationDetailTable', () => {
-    const table = result?.container.querySelector('table');
+    const table = result?.getByTestId('notificationDetailTable');
     expect(table).toBeInTheDocument();
     expect(table).toHaveAttribute('aria-label', 'Dettaglio notifica');
-    const rows = table?.querySelectorAll('tr');
+    const rows = within(table!).getAllByTestId('notificationDetailTableRow');
     expect(rows).toHaveLength(detailRows.length);
     rows?.forEach((row, index) => {
-      const columns = row.querySelectorAll('td');
+      const columns = within(row).getAllByRole('cell');
       expect(columns).toHaveLength(2);
       expect(columns[0]).toHaveTextContent(detailRows[index].label);
       expect(columns[1]).toHaveTextContent(detailRows[index].value as string);
