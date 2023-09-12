@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import _ from 'lodash';
+
+import DownloadIcon from '@mui/icons-material/Download';
+import SendIcon from '@mui/icons-material/Send';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
   Divider,
   Grid,
@@ -15,37 +18,35 @@ import {
   SxProps,
   Theme,
   Typography,
-  Box,
 } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import SendIcon from '@mui/icons-material/Send';
 import {
   ApiErrorWrapper,
   CopyToClipboard,
-  formatEurocentToCurrency,
   NotificationDetailPayment,
+  NotificationPaidDetail,
   PaymentAttachmentSName,
+  PaymentHistory,
   PaymentInfoDetail,
   PaymentStatus,
-  useIsMobile,
   appStateActions,
+  formatEurocentToCurrency,
   useDownloadDocument,
-  NotificationPaidDetail,
-  PaymentHistory,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../navigation/externalRoutes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
+  NOTIFICATION_ACTIONS,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
-  NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import { getConfiguration } from '../../services/configuration.service';
-import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../navigation/externalRoutes.const';
+import _ from 'lodash';
 
 interface Props {
   iun: string;
