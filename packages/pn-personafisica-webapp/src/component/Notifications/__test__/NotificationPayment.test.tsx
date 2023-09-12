@@ -509,9 +509,7 @@ describe('NotificationPayment component', () => {
     expect(button).not.toBeInTheDocument();
   });
 
-  // Questo test fallisce per un bug nel dettaglio notifica. La paymentInfo viene chiamata anche se la notifica è in stato annullata
-  // Rimuovere il commento e lo skip del test una volta sistemato il bug
-  it.skip('renders payment when notification is CANCELLED', async () => {
+  it('renders payment when notification is CANCELLED', async () => {
     const { getByTestId } = render(
       <NotificationPayment
         iun={notificationToFe.iun}

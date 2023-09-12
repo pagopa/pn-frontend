@@ -154,7 +154,8 @@ const NotificationPayment: React.FC<Props> = ({
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
-      notificationPayment.creditorTaxId
+      notificationPayment.creditorTaxId &&
+      !notificationIsCancelled
     ) {
       void dispatch(
         getNotificationPaymentInfo({
