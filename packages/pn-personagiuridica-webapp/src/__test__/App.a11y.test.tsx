@@ -8,12 +8,11 @@ import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
-import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
-import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
-import i18n from '../i18n';
+import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
+import { DelegationStatus } from '../models/Deleghe';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
 
@@ -78,7 +77,6 @@ describe('App.tsx - accessibility tests', () => {
   });
 
   it('Test if automatic accessibility tests passes', async () => {
-    void i18n.init();
     const { container } = render(<Component />);
     const result = await axe(container);
     expect(result).toHaveNoViolations();
@@ -97,7 +95,7 @@ describe('App.tsx - accessibility tests', () => {
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult | undefined;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -117,7 +115,7 @@ describe('App.tsx - accessibility tests', () => {
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult | undefined;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });

@@ -8,12 +8,13 @@ import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
-import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
 import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
-import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
+import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
+import { DelegationStatus } from '../models/Deleghe';
 import { ConsentType } from '../models/consents';
+import { PNRole, PartyRole } from '../redux/auth/types';
 import { RenderResult, act, render } from './test-utils';
 
 jest.mock('react-i18next', () => ({
@@ -26,7 +27,6 @@ jest.mock('react-i18next', () => ({
 }));
 
 jest.mock('../pages/Notifiche.page', () => () => <div>Generic Page</div>);
-jest.mock('../pages/Profile.page', () => () => <div>Profile Page</div>);
 
 const unmockedFetch = global.fetch;
 
@@ -107,7 +107,7 @@ describe('App', () => {
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -122,50 +122,6 @@ describe('App', () => {
     expect(mock.history.get).toHaveLength(5);
   });
 
-  // it('check header actions - user logged in', async () => {
-  //   mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-  //     recipientId: userResponse.uid,
-  //     consentType: ConsentType.DATAPRIVACY,
-  //     accepted: true,
-  //   });
-  //   mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-  //     recipientId: userResponse.uid,
-  //     consentType: ConsentType.TOS,
-  //     accepted: true,
-  //   });
-  //   mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-  //   mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-  //   mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
-  //   let result: RenderResult;
-  //   await act(async () => {
-  //     result = render(<Component />, { preloadedState: reduxInitialState });
-  //   });
-  //   const header = document.querySelector('header');
-  //   const userButton = header?.querySelector('[aria-label="party-menu-button"]');
-  //   fireEvent.click(userButton!);
-  //   let menu = await waitFor(() => screen.getByRole('presentation'));
-  //   let menuItems = within(menu).getAllByRole('menuitem');
-  //   expect(menuItems).toHaveLength(2);
-  //   expect(menuItems[0]).toHaveTextContent('menu.profilo');
-  //   expect(menuItems[1]).toHaveTextContent('header.logout');
-  //   fireEvent.click(menuItems[0]);
-  //   await waitFor(() => {
-  //     expect(result!.container).toHaveTextContent('Profile Page');
-  //   });
-  //   Object.defineProperty(window, 'location', {
-  //     writable: true,
-  //     value: { href: '', replace: jest.fn() },
-  //   });
-  //   fireEvent.click(userButton!);
-  //   menu = await waitFor(() => screen.getByRole('presentation'));
-  //   menuItems = within(menu).getAllByRole('menuitem');
-  //   fireEvent.click(menuItems[1]);
-  //   await waitFor(() => {
-  //     expect(testStore.getState().userState.user.sessionToken).toBe('');
-  //   });
-  //   Object.defineProperty(window, 'location', { writable: true, value: original });
-  // });
-
   it('sidemenu not included if error in API call to fetch TOS', async () => {
     mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
       recipientId: userResponse.uid,
@@ -175,7 +131,7 @@ describe('App', () => {
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -195,7 +151,7 @@ describe('App', () => {
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -219,7 +175,7 @@ describe('App', () => {
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -232,33 +188,7 @@ describe('App', () => {
     expect(mock.history.get).toHaveLength(5);
   });
 
-  // it('check header actions - user has not accepted the TOS and PRIVACY', async () => {
-  //   mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-  //     recipientId: userResponse.uid,
-  //     consentType: ConsentType.DATAPRIVACY,
-  //     accepted: false,
-  //   });
-  //   mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-  //     recipientId: userResponse.uid,
-  //     consentType: ConsentType.TOS,
-  //     accepted: false,
-  //   });
-  //   mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-  //   mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-  //   mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
-  //   await act(async () => {
-  //     render(<Component />, { preloadedState: reduxInitialState });
-  //   });
-  //   const header = document.querySelector('header');
-  //   const userButton = header?.querySelector('[aria-label="party-menu-button"]');
-  //   fireEvent.click(userButton!);
-  //   const menu = await waitFor(() => screen.getByRole('presentation'));
-  //   const menuItems = within(menu).getAllByRole('menuitem');
-  //   expect(menuItems).toHaveLength(1);
-  //   expect(menuItems[0]).toHaveTextContent('header.logout');
-  // });
-
-  it('sidemenu items if there are delegators', async () => {
+  it('sidemenu items if user is admin', async () => {
     mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
       recipientId: userResponse.uid,
       consentType: ConsentType.DATAPRIVACY,
@@ -271,40 +201,143 @@ describe('App', () => {
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-    mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, arrayOfDelegators);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to notifications + link to delegated notifications + link to app status + link to delegations +
+    // link to contacts + 2 links to selfcare + collapsible menu that contains the first two links
     expect(sideMenuItems).toHaveLength(8);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).toBeInTheDocument();
   });
 
-  // it('sidemenu items if there are no delegators', async () => {
-  //   mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
-  //     recipientId: userResponse.uid,
-  //     consentType: ConsentType.DATAPRIVACY,
-  //     accepted: true,
-  //   });
-  //   mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
-  //     recipientId: userResponse.uid,
-  //     consentType: ConsentType.TOS,
-  //     accepted: true,
-  //   });
-  //   mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-  //   mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
-  //   mock.onGet(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, []);
-  //   let result: RenderResult;
-  //   await act(async () => {
-  //     result = render(<Component />, { preloadedState: reduxInitialState });
-  //   });
-  //   const sideMenu = result!.getByTestId('side-menu');
-  //   const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
-  //   expect(sideMenuItems).toHaveLength(8);
-  //   const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
-  //   expect(collapsibleMenu).not.toBeInTheDocument();
-  // });
+  it('sidemenu items if user is a group admin', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            user: {
+              ...userResponse,
+              hasGroup: true,
+            },
+          },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(4);
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to delegated notifications + link to app status + link to delegations +
+    // 2 links to selfcare
+    expect(sideMenuItems).toHaveLength(5);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).not.toBeInTheDocument();
+  });
+
+  it('sidemenu items if user is an operator', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            user: {
+              ...userResponse,
+              organization: {
+                ...userResponse.organization,
+                roles: [
+                  {
+                    partyRole: PartyRole.MANAGER,
+                    role: PNRole.OPERATOR,
+                  },
+                ],
+              },
+            },
+          },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(3);
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to notifications + link to delegated notifications + link to app status +
+    // 2 links to selfcare + collapsible menu that contains the first two links
+    expect(sideMenuItems).toHaveLength(6);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).toBeInTheDocument();
+  });
+
+  it('sidemenu items if user is a group operator', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            user: {
+              ...userResponse,
+              organization: {
+                ...userResponse.organization,
+                roles: [
+                  {
+                    partyRole: PartyRole.MANAGER,
+                    role: PNRole.OPERATOR,
+                  },
+                ],
+              },
+              hasGroup: true,
+            },
+          },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(3);
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to delegated notifications + link to app status +
+    // 2 links to selfcare
+    expect(sideMenuItems).toHaveLength(4);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).not.toBeInTheDocument();
+  });
 });
