@@ -154,6 +154,9 @@ const NotificationPayment: React.FC<Props> = ({
   );
 
   const fetchPaymentInfo = () => {
+    if (notificationIsCancelled) {
+      return;
+    }
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
