@@ -19,6 +19,8 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
+import _ from 'lodash';
+
 import {
   ApiErrorWrapper,
   CopyToClipboard,
@@ -46,7 +48,6 @@ import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import _ from 'lodash';
 
 interface Props {
   iun: string;
@@ -175,7 +176,7 @@ const NotificationPayment: React.FC<Props> = ({
         .then(() => {
           setLoading(() => false);
         })
-        .catch(() => {});
+        .catch(() => { });
     } else if (paymentHistory && paymentHistory.length > 0) {
       setLoading(() => false);
     } else {
