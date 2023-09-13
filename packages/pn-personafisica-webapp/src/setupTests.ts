@@ -31,7 +31,7 @@ beforeAll(async () => {
     IS_PAYMENT_ENABLED: false,
     URL_FE_LOGIN: 'https://portale-login.dev.pn.pagopa.it/',
     DELEGATIONS_TO_PG_ENABLED: true,
-    LANDING_SITE_URL: 'https://www.dev.pn.pagopa.itr',
+    LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
   });
   initStore(false);
   initAxiosClients();

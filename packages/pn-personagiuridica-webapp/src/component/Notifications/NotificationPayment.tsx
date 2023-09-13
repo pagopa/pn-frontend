@@ -491,6 +491,7 @@ const NotificationPayment: React.FC<Props> = ({
                 sx={{ fontSize: '16px' }}
                 target="_blank"
                 variant="body1"
+                data-testid="linkFaq"
               >
                 {t('detail.disclaimer-link')}
               </Link>

@@ -161,7 +161,7 @@ describe('NotificationDetail Page', () => {
   it('renders NotificationDetail if status is cancelled', async () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, status: NotificationStatus.CANCELLED });
+      .reply(200, { ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED });
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {

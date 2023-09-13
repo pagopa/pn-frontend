@@ -532,7 +532,7 @@ describe('NotificationPayment component', () => {
     expect(amount).toBe(null);
     // check link of faq has attribute href
     const { LANDING_SITE_URL } = getConfiguration();
-    const faq = queryByTestId('linkFaq');
+    const faq = getByTestId('linkFaq');
     expect(faq).toHaveAttribute('href', `${LANDING_SITE_URL}${FAQ_HOW_DO_I_GET_REFUNDED}`);
     // check message alert
     const messageAlert = queryByTestId('messageAlert');
