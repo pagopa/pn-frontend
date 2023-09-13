@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
-import { getByTestId, render } from '@testing-library/react';
-
 import App from '../App';
+import { getById, queryById, render } from './test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -21,38 +20,38 @@ jest.mock('react-router-dom', () => ({
 
 describe('App', () => {
   it('inital page', () => {
-    const { getByTestId, queryByTestId } = render(
+    const { container } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    const loginPage = getByTestId('loginPage');
+    const loginPage = getById(container, 'loginPage');
     expect(loginPage).toBeInTheDocument();
-    const errorDialog = queryByTestId('errorDialog');
+    const errorDialog = queryById(document.body, 'errorDialog');
     expect(errorDialog).not.toBeInTheDocument();
   });
 
   it('logout page', () => {
-    const { queryByTestId } = render(
+    const { container } = render(
       <MemoryRouter initialEntries={['/logout']}>
         <App />
       </MemoryRouter>
     );
-    const loginPage = queryByTestId('loginPage');
+    const loginPage = queryById(container, 'loginPage');
     expect(loginPage).not.toBeInTheDocument();
-    const errorDialog = queryByTestId('errorDialog');
+    const errorDialog = queryById(document.body, 'errorDialog');
     expect(errorDialog).not.toBeInTheDocument();
   });
 
   it('login error', () => {
-    const { queryByTestId, getByTestId } = render(
+    const { container } = render(
       <MemoryRouter initialEntries={['/login/error']}>
         <App />
       </MemoryRouter>
     );
-    const loginPage = queryByTestId('loginPage');
+    const loginPage = queryById(container, 'loginPage');
     expect(loginPage).not.toBeInTheDocument();
-    const errorDialog = getByTestId('errorDialog');
+    const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toBeInTheDocument();
   });
 });

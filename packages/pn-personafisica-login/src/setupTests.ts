@@ -8,17 +8,17 @@ beforeAll(async () => {
   const { Configuration } = await import('@pagopa-pn/pn-commons');
 
   Configuration.setForTest<any>({
-    MIXPANEL_TOKEN: 'DUMMY',
+    MIXPANEL_TOKEN: 'ba1f5101fe34a61bb125cbfe587780d8',
     ONE_TRUST_DRAFT_MODE: false,
-    ONE_TRUST_PP: 'mocked-id',
-    OT_DOMAIN_ID: 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c',
-    PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
-    PF_URL: 'https://portale.dev.pn.pagopa.it',
-    PG_URL: 'https://portale-pg.dev.pn.pagopa.it',
+    ONE_TRUST_PP: '133242e7-ad9a-45e5-a417-b7a50c746899',
+    OT_DOMAIN_ID: 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test',
+    PAGOPA_HELP_EMAIL: 'destinatari-send@assistenza.pagopa.it',
+    PF_URL: 'https://cittadini.dev.notifichedigitali.it',
+    PG_URL: 'https://imprese.dev.notifichedigitali.it',
     PUBLIC_URL: '',
     SPID_TEST_ENV_ENABLED: true,
     SPID_VALIDATOR_ENV_ENABLED: true,
     SPID_CIE_ENTITY_ID: 'xx_servizicie_test',
-    URL_API_LOGIN: 'https://hub-login.spid.svil.pn.pagopa.it',
+    URL_API_LOGIN: 'https://hub-login.spid.dev.notifichedigitali.it',
   });
 });

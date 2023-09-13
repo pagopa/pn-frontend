@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AppRouteType } from '@pagopa-pn/pn-commons';
-import { fireEvent, render, waitFor } from '@testing-library/react';
 
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import { storageAarOps, storageTypeOps } from '../../../utils/storage';
 import SuccessPage from '../Success';

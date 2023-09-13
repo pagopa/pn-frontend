@@ -79,7 +79,7 @@ const Login = () => {
         email: undefined,
       }}
     >
-      <Grid container direction="column" my={isMobile ? 4 : 16} data-testid="loginPage">
+      <Grid container direction="column" my={isMobile ? 4 : 16} id="loginPage">
         <Grid container item justifyContent="center">
           <Grid item>
             <Typography
@@ -134,7 +134,6 @@ const Login = () => {
                   onClick={() => setShowIDPS(true)}
                   variant="contained"
                   startIcon={<SpidIcon />}
-                  data-testid="spidButton"
                 >
                   {t('loginPage.loginBox.spidLogin')}
                 </LoginButton>
@@ -152,7 +151,6 @@ const Login = () => {
                   variant="contained"
                   startIcon={<CieIcon />}
                   onClick={() => goCIE()}
-                  data-testid="cieButton"
                 >
                   {t('loginPage.loginBox.cieLogin')}
                 </LoginButton>

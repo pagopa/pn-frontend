@@ -34,14 +34,14 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       container
       direction="column"
       sx={{ backgroundColor: '#FFF', minHeight: '100vh' }}
-      data-testid="spidSelect"
+      id="spidSelect"
     >
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
           <img src={SpidBig} />
         </Grid>
         <Grid item xs={1} sx={{ textAlign: 'right' }}>
-          <IconButton color="primary" onClick={onBack} data-testid="backIcon">
+          <IconButton color="primary" onClick={onBack} id="backIcon">
             <ClearOutlinedIcon />
           </IconButton>
         </Grid>
@@ -75,7 +75,6 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
                   id={`spid-select-${IDP.entityId}`}
                   onClick={() => getSPID(IDP)}
                   sx={{ width: '100px', padding: '0' }}
-                  data-testid={`spid-select-${IDP.entityId}`}
                 >
                   <Icon sx={{ width: '100px', height: '48px' }}>
                     <img width="100px" src={IDP.imageUrl} alt={IDP.name} />
@@ -98,7 +97,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
             component="div"
           >
             <Trans i18nKey="spidSelect.hintText" ns="login">
-              <Link href={IDPS.richiediSpid} data-testid="requestForSpid">
+              <Link href={IDPS.richiediSpid} id="requestForSpid">
                 {'spidSelect.hintText'}
               </Link>
             </Trans>
@@ -106,7 +105,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
           <Button
             type="submit"
             variant="outlined"
-            data-testid="backButton"
+            id="backButton"
             sx={{
               borderRadius: '4px',
               width: '328px',

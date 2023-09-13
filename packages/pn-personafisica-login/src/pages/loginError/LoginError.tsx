@@ -87,13 +87,13 @@ const LoginError = () => {
       fullScreen={true}
       open={true}
       aria-labelledby="dialog-per-messaggi-di-errore"
-      data-testid="errorDialog"
+      id="errorDialog"
     >
       <Box m="auto" sx={{ textAlign: 'center', width: '100%' }}>
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
           {title}
         </Typography>
-        <Typography variant="body2" data-testid="message">
+        <Typography variant="body2" id="message">
           {message}
         </Typography>
       </Box>

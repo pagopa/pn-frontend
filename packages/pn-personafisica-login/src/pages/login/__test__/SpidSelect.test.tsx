@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { fireEvent, render } from '@testing-library/react';
-
+import { fireEvent, getById, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import { getIDPS } from '../../../utils/IDPS';
 import SpidSelect from '../SpidSelect';
@@ -37,37 +36,37 @@ describe('test spid select page', () => {
 
   it('renders page', () => {
     const { URL_API_LOGIN } = getConfiguration();
-    const { container, getByTestId } = render(<SpidSelect onBack={backHandler} />);
+    const { container } = render(<SpidSelect onBack={backHandler} />);
     expect(container).toHaveTextContent('spidSelect.title');
-    const backIcon = getByTestId('backIcon');
+    const backIcon = getById(container, 'backIcon');
     expect(backIcon).toBeInTheDocument();
     idps.identityProviders.forEach((element, index) => {
-      const spidButton = getByTestId(`spid-select-${element.entityId}`);
+      const spidButton = getById(container, `spid-select-${element.entityId}`);
       fireEvent.click(spidButton);
       expect(mockAssign).toBeCalledTimes(index + 1);
       expect(mockAssign).toBeCalledWith(
         `${URL_API_LOGIN}/login?entityID=${element.entityId}&authLevel=SpidL2`
       );
     });
-    const requestForSpid = getByTestId('requestForSpid');
+    const requestForSpid = getById(container, 'requestForSpid');
     expect(requestForSpid).toBeInTheDocument();
-    const backButton = getByTestId('backButton');
+    const backButton = getById(container, 'backButton');
     expect(backButton).toBeInTheDocument();
   });
 
   it('clicks on back buttons', () => {
-    const { getByTestId } = render(<SpidSelect onBack={backHandler} />);
-    const backIcon = getByTestId('backIcon');
+    const { container } = render(<SpidSelect onBack={backHandler} />);
+    const backIcon = getById(container, 'backIcon');
     fireEvent.click(backIcon);
     expect(backHandler).toBeCalledTimes(1);
-    const backButton = getByTestId('backButton');
+    const backButton = getById(container, 'backButton');
     fireEvent.click(backButton);
     expect(backHandler).toBeCalledTimes(2);
   });
 
   it('request spid', () => {
-    const { getByTestId } = render(<SpidSelect onBack={backHandler} />);
-    const requestForSpid = getByTestId('requestForSpid');
+    const { container } = render(<SpidSelect onBack={backHandler} />);
+    const requestForSpid = getById(container, 'requestForSpid');
     expect(requestForSpid).toHaveAttribute('href', idps.richiediSpid);
   });
 });

@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AppRouteType } from '@pagopa-pn/pn-commons';
-import { render } from '@testing-library/react';
 
+import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import { storageAarOps, storageOnSuccessOps, storageTypeOps } from '../../../utils/storage';
 import Logout from '../Logout';
