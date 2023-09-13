@@ -18,9 +18,10 @@ import {
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../../../api/notifications/notifications.routes';
+import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../../navigation/externalRoutes.const';
 import { NOTIFICATION_ACTIONS } from '../../../redux/notification/actions';
-import NotificationPayment from '../NotificationPayment';
 import { getConfiguration } from '../../../services/configuration.service';
+import NotificationPayment from '../NotificationPayment';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -532,7 +533,7 @@ describe('NotificationPayment component', () => {
     // check link of faq has attribute href
     const { LANDING_SITE_URL } = getConfiguration();
     const faq = queryByTestId('linkFaq');
-    expect(faq).toHaveAttribute('href', `${LANDING_SITE_URL}/faq#notifica-pagata-rimborso`);
+    expect(faq).toHaveAttribute('href', `${LANDING_SITE_URL}${FAQ_HOW_DO_I_GET_REFUNDED}`);
     // check message alert
     const messageAlert = queryByTestId('messageAlert');
     expect(messageAlert).toBe(null);
