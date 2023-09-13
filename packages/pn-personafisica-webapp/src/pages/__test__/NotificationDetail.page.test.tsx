@@ -168,8 +168,6 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/received');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
-    // payment component and documents should be hidden if notification
-    // status is "cancelled" even though documentsAvailable is true
     // check documents box
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
