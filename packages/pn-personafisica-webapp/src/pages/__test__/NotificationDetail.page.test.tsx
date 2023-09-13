@@ -152,8 +152,6 @@ describe('NotificationDetail Page', () => {
     expect(addDomicileBanner).toBeInTheDocument();
   });
 
-  // Questo test fallisce per un bug nel dettaglio notifica. La paymentInfo viene chiamata anche se la notifica è in stato annullata
-  // Rimuovere il commento e lo skip del test una volta sistemato il bug
   it('renders NotificationDetail if status is cancelled', async () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))

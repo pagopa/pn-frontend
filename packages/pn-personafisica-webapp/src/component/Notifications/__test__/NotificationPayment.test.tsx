@@ -20,6 +20,7 @@ import {
 } from '../../../api/notifications/notifications.routes';
 import { NOTIFICATION_ACTIONS } from '../../../redux/notification/actions';
 import NotificationPayment from '../NotificationPayment';
+import { getConfiguration } from '../../../services/configuration.service';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -510,7 +511,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders payment when notification is CANCELLED', async () => {
-    const { getByTestId } = render(
+    const { getByTestId, queryByTestId, queryByRole } = render(
       <NotificationPayment
         iun={notificationToFe.iun}
         notificationPayment={payment!}
@@ -525,11 +526,25 @@ describe('NotificationPayment component', () => {
     // check cancelled alert
     const alert = getByTestId('cancelledAlertTextPayment');
     expect(alert).toBeInTheDocument();
-    // COSE DA FARE:
-    // testare che l'amount non sia visibile
-    // testare il click alla FAQ
-    // testare che non venga mostrato l'elemento con data-testid=messageAlert
-    // testare che non esistano attachments (verificare che non ci siano i bottoni di download pagopa e f24 - vedere test con pagamento REQUIRED)
+    // check amount isn't visible
+    const amount = queryByTestId('paymentAmount');
+    expect(amount).toBe(null);
+    // check link of faq has attribute href
+    const { LANDING_SITE_URL } = getConfiguration();
+    const faq = queryByTestId('linkFaq');
+    expect(faq).toHaveAttribute('href', `${LANDING_SITE_URL}/faq#notifica-pagata-rimborso`);
+    // check message alert
+    const messageAlert = queryByTestId('messageAlert');
+    expect(messageAlert).toBe(null);
+    // check attachments are not available
+    const attachments = queryByTestId('stackAttachments');
+    expect(attachments).toBe(null);
+    const pagopaAttachmentButton = queryByRole('button', {
+      name: 'detail.payment.download-pagopa-notification',
+    });
+    expect(pagopaAttachmentButton).not.toBeInTheDocument();
+    const f24AttachmentButton = queryByRole('button', { name: 'detail.payment.download-f24' });
+    expect(f24AttachmentButton).not.toBeInTheDocument();
   });
 
   it('API error', async () => {
