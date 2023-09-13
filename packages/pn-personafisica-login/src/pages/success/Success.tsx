@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import PersonIcon from '@mui/icons-material/Person';
+import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
 import {
   AppRouteParams,
   AppRouteType,
@@ -11,10 +12,10 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { storageAarOps, storageTypeOps } from '../../utils/storage';
+import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import { getConfiguration } from '../../services/configuration.service';
+import { storageAarOps, storageTypeOps } from '../../utils/storage';
 
 type DisambiguationAccountProps = {
   type: AppRouteType;
@@ -100,7 +101,7 @@ const SuccessPage = () => {
     (type: AppRouteType): string => {
       // momentarily changed for pn-5157
       // eslint-disable-next-line functional/no-let
-      let redirectUrl = PF_URL ? PF_URL : '';
+      let redirectUrl = PF_URL ?? '';
       // let redirectUrl = '';
       if ((PF_URL && type === AppRouteType.PF) || (PG_URL && type === AppRouteType.PG)) {
         storageTypeOps.delete();
