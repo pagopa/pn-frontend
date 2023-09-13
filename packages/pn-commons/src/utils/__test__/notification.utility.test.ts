@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, payments, recipient } from '../../__mocks__/NotificationDetail.mock';
+import { notificationToFe, payments } from '../../__mocks__/NotificationDetail.mock';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
@@ -435,6 +435,17 @@ describe('notification status texts', () => {
       'warning',
       'status.canceled-tooltip',
       'status.canceled-description'
+    );
+  });
+
+  it('return notification status infos - CANCELLATION_IN_PROGRESS - passing status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      NotificationStatus.CANCELLATION_IN_PROGRESS,
+      undefined,
+      'status.cancellation-in-progress',
+      'warning',
+      'status.cancellation-in-progress-tooltip',
+      'status.cancellation-in-progress-description'
     );
   });
 });

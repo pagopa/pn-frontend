@@ -7,20 +7,15 @@ import {
   apiOutcomeTestHelper,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
-import { RenderResult, fireEvent, screen, waitFor } from '@testing-library/react';
+import { RenderResult, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   notificationToFe,
-  overrideNotificationMock,
-  paymentsData,
-  recipient,
-} from '../../__mocks__/NotificationDetail.mock';
-import { render } from '../../__test__/test-utils';
-import * as routes from '../../navigation/routes.const';
-import { notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
-import * as actions from '../../redux/notification/actions';
+  notificationToFeTwoRecipients,
+} from '../../redux/notification/__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 import { mockDispatchAndActions, renderComponentBase } from './NotificationDetail.page.test-utils';
+import { overrideNotificationMock, paymentsData } from '../../__mocks__/NotificationDetail.mock';
 
 const fixedMandateId = 'ALFA-BETA-GAMMA';
 
@@ -227,7 +222,7 @@ describe('NotificationDetail Page', () => {
     const documentTitle = result.queryByText(notificationToFe.documents[0].title || '');
     expect(documentTitle).not.toBeInTheDocument();
     expect(result.container).not.toHaveTextContent(/Payment/i);
-    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled');
+    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled_aar');
     expect(documentsText.length).toBeGreaterThan(0);
   });
 
@@ -356,7 +351,40 @@ describe('NotificationDetail Page', () => {
     expect(result.container).not.toHaveTextContent('Totito');
   });
 
-  it.skip("'notifiche' link for recipient", async () => {
+  it('Notification detailAPI error', async () => {
+    // need to handle mocks since it does not resort to renderComponent
+    mockUseParamsFn.mockReturnValue({ id: 'mocked-id' });
+    mockDispatchAndActions({ mockDispatchFn, mockActionFn });
+    // custom render
+    await act(
+      async () =>
+        void render(<NotificationDetail />, {
+          preloadedState: {
+            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+              actions.NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
+            ),
+          },
+        })
+    );
+    // verification
+    const apiErrorComponent = screen.queryByText('Api Error');
+    expect(apiErrorComponent).toBeTruthy();
+  });
+
+  it("normal navigation - includes 'indietro' button", async () => {
+    result = await renderComponent(notificationToFe);
+    const indietroButton = result.queryByTestId('breadcrumb-indietro-button');
+    expect(indietroButton).toBeInTheDocument();
+  });
+
+  it("navigation from QR code - does not include 'indietro' button", async () => {
+    mockReactRouterState = { fromQrCode: true };
+    result = await renderComponent(notificationToFe);
+    const indietroButton = result.queryByTestId('breadcrumb-indietro-button');
+    expect(indietroButton).not.toBeInTheDocument();
+  });
+
+  it("'notifiche' link for recipient", async () => {
     mockUseSimpleBreadcrumb = true;
     // Using a notification with two recipients just because it's easy to set whether
     // the logged user is the recipient or a delegate.

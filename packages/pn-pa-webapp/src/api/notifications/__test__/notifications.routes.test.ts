@@ -1,6 +1,7 @@
 import { LegalFactType } from '@pagopa-pn/pn-commons';
 
 import {
+  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -28,7 +29,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/v2/notifications/sent/mocked-iun');
+    expect(route).toEqual('/delivery/v2.0/notifications/sent/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
@@ -72,5 +73,10 @@ describe('Notifications routes', () => {
     expect(route).toEqual(
       '/delivery/notifications/sent/mocked-iun/attachments/payment/mocked-attachmentName'
     );
+  });
+
+  it('should compile CANCEL_NOTIFICATION', () => {
+    const route = CANCEL_NOTIFICATION('mocked-iun');
+    expect(route).toEqual('/delivery-push/v2.0/notifications/cancel/mocked-iun');
   });
 });

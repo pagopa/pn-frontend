@@ -1,5 +1,5 @@
 {
-  "API_BASE_URL": "https://webapi.dev.pn.pagopa.it/",
+  "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
   "DISABLE_INACTIVITY_HANDLER": true,
   "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
   "ONE_TRUST_DRAFT_MODE": false,
@@ -9,7 +9,7 @@
   "SELFCARE_BASE_URL": "https://imprese.dev.notifichedigitali.it",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
   "URL_FE_LOGIN": "https://imprese.dev.notifichedigitali.it/auth/login",
-  "LANDING_SITE_URL": "https://www.dev.pn.pagopa.it",
+  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it/",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false
 }

@@ -31,15 +31,13 @@ import {
   NotificationDetailTableRow,
   NotificationFeePolicy,
   NotificationStatusHistory,
-  PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentAttachmentNameType,
   PaymentAttachmentSName,
-  PaymentDetails,
   PaymentInfoDetail,
   PaymentNotice,
   PaymentStatus,
-  PaymentsData,
+  PhysicalAddress,
   PhysicalCommunicationType,
   RecipientType,
   ResponseStatus,
@@ -48,6 +46,9 @@ import {
   SendPaperDetails,
   TimelineCategory,
   ViewedDetails,
+  PagoPAPaymentFullDetails,
+  PaymentDetails,
+  PaymentsData,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
@@ -121,4 +122,5 @@ export type {
   SmartTableData,
   Sort,
   ViewedDetails,
+  PhysicalAddress,
 };

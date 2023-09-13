@@ -1,11 +1,15 @@
-import { ApiKeysApi } from '../../../api/apiKeys/ApiKeys.api';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import MockAdapter from 'axios-mock-adapter';
+
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/NewApiKey.mock';
+import { apiClient } from '../../../api/apiClients';
+import { CREATE_APIKEY } from '../../../api/apiKeys/apiKeys.routes';
+import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { GroupStatus, UserGroup } from '../../../models/user';
-import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { getUserGroups } from '../../newNotification/actions';
 import { store } from '../../store';
-import { getApiKeyUserGroups, saveNewApiKey } from '../actions';
-import { resetState } from  '../reducers';
-import { newApiKeyForBE } from './test-utils';
+import { saveNewApiKey } from '../actions';
+import { resetState } from '../reducers';
 
 const initialState = {
   loading: false,
@@ -14,7 +18,22 @@ const initialState = {
 };
 
 describe('api keys page redux state test', () => {
+  // eslint-disable-next-line functional/no-let
+  let mock: MockAdapter;
+
   mockAuthentication();
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('Initial state', () => {
     const state = store.getState().newApiKeyState;
@@ -22,27 +41,25 @@ describe('api keys page redux state test', () => {
   });
 
   it('Should be able to get user groups', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getUserGroups');
-    apiSpy.mockResolvedValue([
-      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' as GroupStatus },
-    ]);
-    const action = await store.dispatch(getApiKeyUserGroups());
+    const mockResponse = [
+      { id: 'mocked-id', name: 'mocked-name', description: '', status: GroupStatus.ACTIVE },
+    ];
+    mock.onGet(GET_USER_GROUPS()).reply(200, mockResponse);
+    const action = await store.dispatch(getUserGroups());
     const payload = action.payload;
-    expect(action.type).toBe('getApiKeyUserGroups/fulfilled');
-    expect(payload).toEqual([
-      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
-    ]);
+    expect(action.type).toBe('getUserGroups/fulfilled');
+    expect(payload).toEqual(mockResponse);
+    expect(store.getState().newNotificationState.groups).toStrictEqual(mockResponse);
   });
 
   it('Should be able to create new API Key', async () => {
-    const apiSpy = jest.spyOn(ApiKeysApi, 'createNewApiKey');
-    apiSpy.mockResolvedValue('mocked-api-key');
-    const action = await store.dispatch(saveNewApiKey(newApiKeyForBE));
+    mock.onPost(CREATE_APIKEY(), newApiKeyDTO).reply(200, newApiKeyResponse);
+    const action = await store.dispatch(saveNewApiKey(newApiKeyDTO));
     const payload = action.payload;
     expect(action.type).toBe('saveNewApiKey/fulfilled');
-    expect(payload).toEqual('mocked-api-key');
+    expect(payload).toEqual(newApiKeyResponse.apiKey);
   });
-  
+
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
     const payload = action.payload;

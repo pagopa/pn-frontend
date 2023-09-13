@@ -28,10 +28,9 @@ export class TimelineStepFactory {
       case TimelineCategory.SEND_DIGITAL_PROGRESS:
         return new SendDigitalProgressStep();
       case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
-         return new SendSimpleRegisteredLetterStep();
+        return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:
-         return new SendAnalogDomicileStep();
-
+        return new SendAnalogDomicileStep();
       // analog flow events: all processed by the same class
       case TimelineCategory.SEND_ANALOG_FEEDBACK:
         return new SendAnalogFlowStep();
@@ -40,7 +39,6 @@ export class TimelineStepFactory {
       case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS:
         return new SendAnalogFlowStep();
       // -------------------------------------------
-        
       case TimelineCategory.NOT_HANDLED:
         return new NotHandledStep();
       default:

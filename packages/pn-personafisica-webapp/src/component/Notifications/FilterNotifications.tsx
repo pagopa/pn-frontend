@@ -1,34 +1,35 @@
-import { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import _ from 'lodash';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
+
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
   CustomMobileDialog,
   CustomMobileDialogContent,
   CustomMobileDialogToggle,
-  tenYearsAgo,
-  today,
-  useIsMobile,
+  GetNotificationsParams,
   IUN_regex,
+  dateIsDefined,
   filtersApplied,
   formatToTimezoneString,
   getValidValue,
-  GetNotificationsParams,
-  dateIsDefined,
+  tenYearsAgo,
+  today,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/reducers';
 import { Delegator } from '../../redux/delegation/types';
-import { trackEventByType } from '../../utils/mixpanel';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utils/events';
-import FilterNotificationsFormBody from './FilterNotificationsFormBody';
+import { trackEventByType } from '../../utils/mixpanel';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
+import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
@@ -80,7 +81,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const classes = useStyles();
-  const dialogRef = useRef<{toggleOpen: () => void}>(null);
+  const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
     startDate: formatToTimezoneString(tenYearsAgo),
@@ -181,7 +182,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -203,7 +204,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody

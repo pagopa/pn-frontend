@@ -1,7 +1,8 @@
 // momentarily commented for pn-5157
 // import { AppRouteType, sanitizeString, AppRouteParams } from '@pagopa-pn/pn-commons';
-import { sanitizeString, AppRouteParams } from '@pagopa-pn/pn-commons';
-import { getConfiguration } from "../services/configuration.service";
+import { AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
+
+import { getConfiguration } from '../services/configuration.service';
 
 // momentarily commented for pn-5157
 /*

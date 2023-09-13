@@ -5,36 +5,52 @@ import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { DelegationParty } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
-import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
+import {
+  CreateDelegationProps,
+  CreateDelegationResponse,
+  NewDelegationFormProps,
+  Person,
+} from '../delegation/types';
+
+export function createDelegationMapper(formData: NewDelegationFormProps): CreateDelegationProps {
+  const delegate = {
+    fiscalCode: formData.codiceFiscale,
+  } as Person;
+
+  /* eslint-disable functional/immutable-data */
+  if (formData.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF) {
+    delegate.person = true;
+    delegate.displayName = `${formData.nome} ${formData.cognome}`;
+    delegate.firstName = formData.nome;
+    delegate.lastName = formData.cognome;
+  } else {
+    delegate.person = false;
+    delegate.displayName = formData.ragioneSociale;
+    delegate.companyName = formData.ragioneSociale;
+  }
+  /* eslint-enable functional/immutable-data */
+
+  return {
+    delegate,
+    visibilityIds:
+      formData.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
+        ? []
+        : formData.enti.map(function (ente) {
+            return {
+              uniqueIdentifier: ente.id,
+              name: ente.name,
+            } as DelegationParty;
+          }),
+    verificationCode: formData.verificationCode,
+    dateto: formatToSlicedISOString(formData.expirationDate),
+  };
+}
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
   async (data, { rejectWithValue }) => {
-    const payload = {
-      delegate: {
-        displayName:
-          data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF
-            ? `${data.nome} ${data.cognome}`
-            : data.ragioneSociale,
-        firstName: data.nome || undefined,
-        lastName: data.cognome || undefined,
-        fiscalCode: data.codiceFiscale,
-        companyName: data.ragioneSociale || undefined,
-        person: data.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF,
-      },
-      visibilityIds:
-        data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
-          ? []
-          : data.enti.map(function (ente) {
-              return {
-                uniqueIdentifier: ente.id,
-                name: ente.name,
-              } as DelegationParty;
-            }),
-      verificationCode: data.verificationCode,
-      dateto: formatToSlicedISOString(data.expirationDate),
-    };
     try {
+      const payload = createDelegationMapper(data);
       return await DelegationsApi.createDelegation(payload);
     } catch (e: any) {
       return rejectWithValue(e);
@@ -46,7 +62,7 @@ export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams
   'getAllEntities',
   async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+      return await ExternalRegistriesAPI.getAllActivatedParties(payload ?? {});
     } catch (e) {
       return rejectWithValue(e);
     }

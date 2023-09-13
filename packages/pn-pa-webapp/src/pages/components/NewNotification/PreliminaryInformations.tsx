@@ -33,8 +33,8 @@ import { RootState } from '../../../redux/store';
 import { getConfiguration } from '../../../services/configuration.service';
 import { TrackEventType } from '../../../utils/events';
 import { trackEventByType } from '../../../utils/mixpanel';
+import { requiredStringFieldValidation } from '../../../utils/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { requiredStringFieldValidation } from './validation.utility';
 
 type Props = {
   notification: NewNotification;
@@ -66,8 +66,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
-      abstract: notification.abstract || '',
-      group: notification.group || '',
+      abstract: notification.abstract ?? '',
+      group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
       paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
@@ -136,7 +136,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       mainText={t('fetch-groups-error')}
       mt={3}
     >
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
           <TextField
             id="paProtocolNumber"

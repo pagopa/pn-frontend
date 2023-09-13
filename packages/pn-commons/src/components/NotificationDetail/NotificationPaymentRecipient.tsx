@@ -83,7 +83,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" gap={2}>
+    <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
       <Typography variant="h6" data-testid="notification-payment-recipient-title">
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title')}
       </Typography>

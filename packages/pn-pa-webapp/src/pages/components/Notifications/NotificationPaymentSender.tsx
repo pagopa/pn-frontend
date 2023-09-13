@@ -84,6 +84,8 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
     return arr;
   }, [] as Array<PagoPAPaymentFullDetails>);
 
+  console.log('pagoPAPaymentFullDetails', pagoPAPaymentFullDetails);
+
   return (
     <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="paymentInfoBox">
       <Typography variant="h6">{t('payment.title', { ns: 'notifiche' })}</Typography>

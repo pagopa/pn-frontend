@@ -1,86 +1,112 @@
 import crypto from 'crypto';
-import delegationToItem, { compareDelegationsStrings, generateVCode, sortDelegations } from '../delegation.utility';
-import { delegationArray, testItem } from './testObjects';
-import { arrayOfDelegators, arrayOfDelegates } from "../../redux/delegation/__test__/test.utils";
 
-test('Should convert an delegation array of delegate to an item array', () => {
-  const item = delegationToItem(delegationArray);
-  expect(item).toStrictEqual(testItem);
-});
+import { formatDate } from '@pagopa-pn/pn-commons';
 
-// eslint-disable-next-line functional/immutable-data
+import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import delegationToItem, { generateVCode, sortDelegations } from '../delegation.utility';
+
 Object.defineProperty(global, 'crypto', {
   value: {
     getRandomValues: () => crypto.randomInt(2 ** 32),
   },
 });
 
-describe('Generate Verification Code', () => {
-  const verificationCode = generateVCode();
-  it('Should be a numerical string', () => {
-    expect(Number(verificationCode)).not.toBeNaN();
+describe('Delegation utility test', () => {
+  it('Should convert an delegation array of delegate to an item array - delegate', () => {
+    const item = delegationToItem(arrayOfDelegates);
+    const expected = arrayOfDelegates.map((delegation) => ({
+      id: delegation.mandateId,
+      name: delegation.delegate?.displayName,
+      // la data arriva nel formato YYYY-MM-DDZ rimuovere slice in caso di rimozione di Z
+      startDate: formatDate(delegation.datefrom.slice(0, 10)),
+      endDate: formatDate(delegation.dateto),
+      visibilityIds: delegation.visibilityIds.map((entity) => entity.name),
+      status: delegation.status,
+      verificationCode: delegation.verificationCode,
+    }));
+    expect(item).toStrictEqual(expected);
   });
-  it('Should have a length of 5 digits', () => {
+
+  it('Should convert an delegation array of delegate to an item array - delegator', () => {
+    const item = delegationToItem(arrayOfDelegators);
+    const expected = arrayOfDelegators.map((delegation) => ({
+      id: delegation.mandateId,
+      name: delegation.delegator?.displayName,
+      // la data arriva nel formato YYYY-MM-DDZ rimuovere slice in caso di rimozione di Z
+      startDate: formatDate(delegation.datefrom.slice(0, 10)),
+      endDate: formatDate(delegation.dateto),
+      visibilityIds: delegation.visibilityIds.map((entity) => entity.name),
+      status: delegation.status,
+      verificationCode: delegation.verificationCode,
+    }));
+    expect(item).toStrictEqual(expected);
+  });
+
+  it('Should generate a random code', () => {
+    const verificationCode = generateVCode();
+    expect(Number(verificationCode)).not.toBeNaN();
     expect(verificationCode.length).toBe(5);
   });
-});
 
-describe('compareDelegationStrings function', () => {
-  describe('delegators case', () => {
-    it('returns 1 if the name is ordered alphabetically', () => {
-      const result = compareDelegationsStrings(arrayOfDelegators[1], arrayOfDelegators[0], 'displayName')
-      expect(result).toEqual(1)
-    });
-
-    it('returns -1 if the name is not ordered alphabetically', () => {
-      const result = compareDelegationsStrings(arrayOfDelegators[0], arrayOfDelegators[1], 'displayName')
-      expect(result).toEqual(-1)
-    });
-
-    it('returns -1 if the name is the same', () => {
-      const result = compareDelegationsStrings(arrayOfDelegators[0], arrayOfDelegators[0], 'displayName')
-      expect(result).toEqual(-1)
-    });
-  })
-
-  describe('delegates case', () => {
-    it('returns 1 if the name is ordered alphabetically', () => {
-      const result = compareDelegationsStrings(arrayOfDelegates[1], arrayOfDelegates[0], 'displayName')
-      expect(result).toEqual(1)
-    });
-
-    it('returns -1 if the name is not ordered alphabetically', () => {
-      const result = compareDelegationsStrings(arrayOfDelegates[0], arrayOfDelegates[1], 'displayName')
-      expect(result).toEqual(-1)
-    });
-
-    it('returns -1 if the name is the same', () => {
-      const result = compareDelegationsStrings(arrayOfDelegates[0], arrayOfDelegates[0], 'displayName')
-      expect(result).toEqual(-1)
-    });
-  });
-});
-
-describe('sortDelegations function', () => {
-  it('ascendant by name', () => {
-    // make a copy of the array because the original one
-    const originalCopy = [...arrayOfDelegates];
-    const result = sortDelegations('asc', 'displayName', arrayOfDelegates);
-    expect(originalCopy[0]).toEqual(result[1]);
-    expect(originalCopy[0]).toEqual(result[1]);
+  it('sort delegation by name - delegates', () => {
+    // sort ascending
+    const sortedCopy = (order: 'asc' | 'desc') =>
+      [...arrayOfDelegates].sort((a, b) => {
+        const multiplier = order === 'asc' ? 1 : -1;
+        if (a.delegate?.displayName === b.delegate?.displayName) {
+          return 0;
+        }
+        return (a.delegate?.displayName! < b.delegate?.displayName! ? -1 : 1) * multiplier;
+      });
+    let result = sortDelegations('asc', 'displayName', arrayOfDelegates);
+    expect(sortedCopy('asc')).toStrictEqual(result);
+    // sort descending
+    result = sortDelegations('desc', 'displayName', arrayOfDelegates);
+    expect(sortedCopy('desc')).toStrictEqual(result);
   });
 
-  it('descendant by name', () => {
-    const originalCopy = [...arrayOfDelegates];
-    const result = sortDelegations('desc', 'displayName', arrayOfDelegates);
-    expect(originalCopy[0]).toEqual(result[1]);
-    expect(originalCopy[1]).toEqual(result[0]);
+  it('sort delegation by endDate - delegates', () => {
+    const sortedCopy = (order: 'asc' | 'desc') =>
+      [...arrayOfDelegates].sort((a, b) => {
+        const multiplier = order === 'asc' ? 1 : -1;
+        const dateA = new Date(a.dateto).getTime();
+        const dateB = new Date(b.dateto).getTime();
+        return (dateA - dateB) * multiplier;
+      });
+    let result = sortDelegations('asc', 'endDate', arrayOfDelegates);
+    expect(sortedCopy('asc')).toStrictEqual(result);
+    result = sortDelegations('desc', 'endDate', arrayOfDelegates);
+    expect(sortedCopy('desc')).toStrictEqual(result);
   });
 
-  it('descendant by endDate', () => {
-    const originalCopy = [...arrayOfDelegates];
-    const result = sortDelegations('asc', 'endDate', arrayOfDelegates);
-    expect(originalCopy[0]).toEqual(result[1]);
-    expect(originalCopy[1]).toEqual(result[0]);
+  it('sort delegation by name - delegators', () => {
+    // sort ascending
+    const sortedCopy = (order: 'asc' | 'desc') =>
+      [...arrayOfDelegators].sort((a, b) => {
+        const multiplier = order === 'asc' ? 1 : -1;
+        if (a.delegator?.displayName === b.delegator?.displayName) {
+          return 0;
+        }
+        return (a.delegator?.displayName! < b.delegator?.displayName! ? -1 : 1) * multiplier;
+      });
+    let result = sortDelegations('asc', 'displayName', arrayOfDelegators);
+    expect(sortedCopy('asc')).toStrictEqual(result);
+    // sort descending
+    result = sortDelegations('desc', 'displayName', arrayOfDelegators);
+    expect(sortedCopy('desc')).toStrictEqual(result);
+  });
+
+  it('sort delegation by endDate - delegators', () => {
+    const sortedCopy = (order: 'asc' | 'desc') =>
+      [...arrayOfDelegators].sort((a, b) => {
+        const multiplier = order === 'asc' ? 1 : -1;
+        const dateA = new Date(a.dateto).getTime();
+        const dateB = new Date(b.dateto).getTime();
+        return (dateA - dateB) * multiplier;
+      });
+    let result = sortDelegations('asc', 'endDate', arrayOfDelegators);
+    expect(sortedCopy('asc')).toStrictEqual(result);
+    result = sortDelegations('desc', 'endDate', arrayOfDelegators);
+    expect(sortedCopy('desc')).toStrictEqual(result);
   });
 });

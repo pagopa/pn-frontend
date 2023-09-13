@@ -1,9 +1,10 @@
-import { Fragment } from 'react';
-import { Box, Grid, Stack, Typography } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { NotificationDetailDocument, NotificationDetailOtherDocument } from '../../types';
+
 type Props = {
   title: string;
   documents: Array<NotificationDetailDocument> | undefined;
@@ -11,6 +12,7 @@ type Props = {
   documentsAvailable?: boolean;
   downloadFilesMessage?: string;
   downloadFilesLink?: string;
+  disableDownloads?: boolean;
 };
 
 /**
@@ -21,6 +23,7 @@ type Props = {
  * @param documentsAvailable flag that allows download file or not (after 120 days)
  * @param downloadFilesMessage disclaimer to show about downloadable acts
  * @param downloadFilesLink text to bring to
+ * @param disableDownloads if notification is cancelled button naked is disabled
  */
 
 const NotificationDetailDocuments = ({
@@ -29,6 +32,7 @@ const NotificationDetailDocuments = ({
   clickHandler,
   documentsAvailable = true,
   downloadFilesMessage,
+  disableDownloads = false,
 }: // TODO: remove comment when link ready downloadFilesLink
 Props) => {
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
@@ -44,7 +48,7 @@ Props) => {
           : d.docIdx,
       };
       return (
-        <Box key={document.key}>
+        <Box key={document.key} data-testid="notificationDetailDocuments">
           {!documentsAvailable ? (
             <Typography sx={{ display: 'flex', alignItems: 'center' }}>
               <AttachFileIcon sx={{ mr: 1 }} fontSize="inherit" color="inherit" />
@@ -56,6 +60,7 @@ Props) => {
               color={'primary'}
               startIcon={<AttachFileIcon />}
               onClick={() => clickHandler(document.downloadHandler)}
+              disabled={disableDownloads}
             >
               <Box
                 sx={{
@@ -83,7 +88,7 @@ Props) => {
     });
 
   return (
-    <Fragment>
+    <>
       <Grid
         key={'files-section'}
         container
@@ -110,7 +115,7 @@ Props) => {
         </Grid>
       */}
       </Grid>
-      <Grid key={'detail-documents-message'} item>
+      <Grid key={'detail-documents-message'} item data-testid="documentsMessage">
         <Stack direction="row">
           {downloadFilesMessage && (
             <Typography variant="body2" sx={{ mb: 3 }}>
@@ -125,7 +130,7 @@ Props) => {
       <Grid key={'download-files-section'} item>
         {documents && mapOtherDocuments(documents)}
       </Grid>
-    </Fragment>
+    </>
   );
 };
 

@@ -141,9 +141,25 @@ describe.skip('NotificationPayment component', () => {
   }
 
   afterEach(() => {
-    mock.reset();
-    mock.restore();
-    mock.resetHistory();
+    mock?.reset();
+    mock?.restore();
+    mock?.resetHistory();
+  });
+
+  it('render alert with notification cancelled', () => {
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+        notificationIsCancelled={true}
+      />,
+      { preloadedState: { notificationState: { paymentInfo: {} } } }
+    );
+
+    const alert = screen.getByTestId('cancelledAlertTextPayment');
+    expect(alert).toBeInTheDocument();
   });
 
   it('renders properly while loading payment info', async () => {
@@ -166,6 +182,9 @@ describe.skip('NotificationPayment component', () => {
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
+
+    const alert = screen.queryByTestId('cancelledAlertTextPayment');
+    expect(alert).not.toBeInTheDocument();
 
     const loadingButton = screen.getByRole('button', { name: 'detail.payment.submit' });
     expect(loadingButton.querySelector('svg')).toBeInTheDocument();

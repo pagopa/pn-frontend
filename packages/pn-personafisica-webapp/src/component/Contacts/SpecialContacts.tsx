@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -52,14 +52,6 @@ type Address = {
   phone?: string;
   mail?: string;
   pec?: string;
-};
-
-type SpecialContacts = {
-  sender: Party;
-  addressType: LegalChannelType | CourtesyChannelType | undefined;
-  s_pec: string;
-  s_mail: string;
-  s_phone: string;
 };
 
 type AddressType = {
@@ -222,8 +214,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', newValue);
-    // formik.handleChange(e);
-    setSenderInputValue(newValue?.name || '');
+    setSenderInputValue(newValue?.name ?? '');
     if (formik.values.addressType === LegalChannelType.PEC) {
       const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.pec) > -1;
       setAlreadyExistsMessage(
@@ -326,13 +317,18 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         avatar={null}
       >
         <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
-        <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
+        <form
+          style={{ margin: '20px 0' }}
+          onSubmit={formik.handleSubmit}
+          data-testid="specialContact"
+        >
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
               <PnAutocomplete
                 id="sender"
+                data-testid="sender"
                 size="small"
-                options={parties}
+                options={parties ?? []}
                 fullWidth
                 autoComplete
                 getOptionLabel={getOptionLabel}
@@ -439,7 +435,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
                 }
                 color="primary"
-                data-testid="Special contact add button"
+                data-testid="addSpecialButton"
               >
                 {t('button.associa')}
               </ButtonNaked>
@@ -447,13 +443,13 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           </Grid>
         </form>
         {alreadyExistsMessage && (
-          <Alert severity="warning" sx={{ marginBottom: '20px' }}>
+          <Alert severity="warning" sx={{ marginBottom: '20px' }} data-testid="alreadyExistsAlert">
             {alreadyExistsMessage}
           </Alert>
         )}
         <SpecialContactsProvider>
           {addresses.length > 0 && (
-            <Fragment>
+            <>
               <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
                 {t('special-contacts.associated', { ns: 'recapiti' })}
               </Typography>
@@ -491,7 +487,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     </CardContent>
                   </Card>
                 ))}
-            </Fragment>
+            </>
           )}
         </SpecialContactsProvider>
       </DigitalContactsCard>

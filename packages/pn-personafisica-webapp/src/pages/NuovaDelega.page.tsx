@@ -258,6 +258,7 @@ const NuovaDelega = () => {
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
+                                data-testid="recipientType"
                               />
                               <FormControlLabel
                                 id="recipent-pg"
@@ -267,6 +268,7 @@ const NuovaDelega = () => {
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}
+                                data-testid="recipientType"
                               />
                             </RadioGroup>
                           </Stack>
@@ -367,6 +369,7 @@ const NuovaDelega = () => {
                               control={<Radio />}
                               name={'selectTuttiEntiOrSelezionati'}
                               label={t('nuovaDelega.form.allEntities')}
+                              data-testid="radioSelectedEntities"
                             />
 
                             <FormControlLabel
@@ -381,6 +384,7 @@ const NuovaDelega = () => {
                               <FormControl fullWidth>
                                 <PnAutocomplete
                                   id="enti"
+                                  data-testid="enti"
                                   multiple
                                   options={entities}
                                   fullWidth
@@ -401,6 +405,7 @@ const NuovaDelega = () => {
                                   renderOption={renderOption}
                                   renderInput={(params) => (
                                     <TextField
+                                      name="enti"
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
                                       error={Boolean(getError(touched.enti, errors.enti))}

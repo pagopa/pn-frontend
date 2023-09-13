@@ -70,7 +70,6 @@
       "message": "Um die Stornierung abzuschließen, musst du einen neuen Bescheid senden, der den vorherigen ersetzt."
     },
     "acts": "Beigefügte Dokumente",
-    "download-message-cancelled": "Da diese Benachrichtigung annulliert wurde, sind die beigefügten Dokumente nicht verfügbar.",
     "download-message-available": "Die beiliegenden Unterlagen sind 120 Tage nach Vervollständigung des Bescheids online verfügbar.",
     "download-message-expired": "Da seit dem Datum der Vervollständigung 120 Tage vergangen sind, sind die Urkunden nicht mehr verfügbar.",
     "download-files-link": "Wann ist ein Bescheid vollständig?",

@@ -1,36 +1,27 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationRecipient, PaymentModel } from '../../../../models/NewNotification';
+import { randomString } from '../../__test__/test-utils';
+import { NewNotificationRecipient, PaymentModel } from '../../models/NewNotification';
 import {
   denominationLengthAndCharacters,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
-} from '../Recipient.validations';
-
-function makeRandomString(length) {
-  var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+} from '../validation.utility';
 
 describe('test custom validation for recipients', () => {
   it('denominationLengthAndCharacters (no errors)', () => {
-    const result = denominationLengthAndCharacters(makeRandomString(5), makeRandomString(5));
+    const result = denominationLengthAndCharacters(randomString(5), randomString(5));
     expect(result).toBe(undefined);
   });
 
   it('denominationTotalLength (errors - too long)', () => {
-    const result = denominationLengthAndCharacters(makeRandomString(56), makeRandomString(24));
+    const result = denominationLengthAndCharacters(randomString(56), randomString(24));
     expect(result).toStrictEqual({ messageKey: 'too-long-field-error', data: { maxLength: 80 } });
   });
 
   it('denominationTotalLength (errors - forbidden characters)', () => {
-    const result = denominationLengthAndCharacters(makeRandomString(56), 'D’Arco');
+    const result = denominationLengthAndCharacters(randomString(56), 'D’Arco');
     expect(result).toStrictEqual({ messageKey: 'forbidden-characters-denomination-error' });
   });
 

@@ -333,6 +333,8 @@ export enum TimelineCategory {
   SEND_ANALOG_PROGRESS = 'SEND_ANALOG_PROGRESS',
   SEND_ANALOG_FEEDBACK = 'SEND_ANALOG_FEEDBACK',
   AAR_GENERATION = 'AAR_GENERATION',
+  NOTIFICATION_CANCELLATION_REQUEST = 'NOTIFICATION_CANCELLATION_REQUEST',
+  NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
 }
 
 interface DigitalAddress {
@@ -340,7 +342,7 @@ interface DigitalAddress {
   address: string;
 }
 
-interface PhysicalAddress {
+export interface PhysicalAddress {
   at?: string;
   address: string;
   addressDetails?: string;

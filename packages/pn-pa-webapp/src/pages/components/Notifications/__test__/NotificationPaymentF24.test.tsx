@@ -14,7 +14,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 const f24Payments =
-  notificationToFeMultiRecipient.recipients[1].payments?.reduce((arr, item) => {
+  notificationToFeMultiRecipient.recipients[0].payments?.reduce((arr, item) => {
     if (item.f24) {
       arr.push(item.f24);
     }

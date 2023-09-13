@@ -4,15 +4,13 @@ import {
   KnownFunctionality,
   LegalFactDocumentDetails,
   LegalFactId,
+  NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
+  PaymentDetails,
+  PaymentNotice,
   performThunkAction,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
-import {
-  NotificationDetailOtherDocument,
-  PaymentDetails,
-  PaymentNotice,
-} from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';

@@ -1,11 +1,12 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
 import { Party } from '../../models/party';
-import { PartyRole, PNRole } from '../../models/user';
+import { PNRole, PartyRole } from '../../models/user';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
@@ -20,14 +21,7 @@ export enum AUTH_ACTIONS {
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  async (selfCareToken: string, { rejectWithValue }) => {
-    // use selfcare token to get autenticated user
-    try {
-      return await AuthApi.exchangeToken(selfCareToken);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((selfCareToken: string) => AuthApi.exchangeToken(selfCareToken))
 );
 
 /**

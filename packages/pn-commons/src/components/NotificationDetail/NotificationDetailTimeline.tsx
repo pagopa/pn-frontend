@@ -1,16 +1,17 @@
 import { Fragment, useState } from 'react';
-import { Typography, Grid, Drawer, Box } from '@mui/material';
+
 import CloseIcon from '@mui/icons-material/Close';
+import { Box, Drawer, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import {
   LegalFactId,
-  NotificationStatusHistory,
-  NotificationDetailRecipient,
   NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
 } from '../../types';
-import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -25,6 +26,8 @@ type Props = {
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
   eventTrackingCallbackShowMore?: () => void;
+  disableDownloads?: boolean;
+  isParty?: boolean;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -47,6 +50,8 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
+ * @param disableDownloads for disable downloads
+ * @param isParty for specific render of notification
  */
 const NotificationDetailTimeline = ({
   recipients,
@@ -57,6 +62,8 @@ const NotificationDetailTimeline = ({
   showMoreButtonLabel,
   showLessButtonLabel,
   eventTrackingCallbackShowMore,
+  disableDownloads = false,
+  isParty = true,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -89,12 +96,20 @@ const NotificationDetailTimeline = ({
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
+      disableDownloads={disableDownloads}
+      isParty={isParty}
     />
   ));
 
   return (
     <Fragment>
-      <Grid container direction="row" justifyContent="space-between" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        data-testid="NotificationDetailTimeline"
+      >
         <Grid item>
           <Typography
             id="notification-state"
@@ -122,6 +137,8 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
+            disableDownloads={disableDownloads}
+            isParty={isParty}
           />
         ) : (
           timelineComponent
