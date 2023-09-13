@@ -17,7 +17,7 @@ jest.mock('@mui/material', () => {
   const original = jest.requireActual('@mui/material');
   return {
     ...original,
-    useTheme: () => ({ palette: fakePalette }),
+    useTheme: () => ({ ...original.useTheme(), palette: fakePalette }),
   };
 });
 
