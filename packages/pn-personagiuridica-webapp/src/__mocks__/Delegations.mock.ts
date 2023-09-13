@@ -1,4 +1,4 @@
-import { Delegation, DelegationStatus } from '../../../models/Deleghe';
+import { Delegate, DelegationStatus, Delegator } from '../models/Deleghe';
 
 export const mockCreateDelegation = {
   delegate: {
@@ -8,7 +8,6 @@ export const mockCreateDelegation = {
     companyName: 'eni',
     fiscalCode: 'DVDLGT83C12H501C',
     person: true,
-    email: 'email@falsa.it',
   },
   visibilityIds: [
     {
@@ -17,11 +16,10 @@ export const mockCreateDelegation = {
     },
   ],
   verificationCode: '123456',
-  datefrom: '2021-12-15',
   dateto: '2022-04-16',
 };
 
-export const arrayOfDelegates = [
+export const arrayOfDelegates: Array<Delegate> = [
   {
     mandateId: '1',
     delegate: {
@@ -31,7 +29,6 @@ export const arrayOfDelegates = [
       companyName: 'eni',
       fiscalCode: 'MRCVRD83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'pending' as DelegationStatus,
     visibilityIds: [
@@ -53,7 +50,6 @@ export const arrayOfDelegates = [
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'active' as DelegationStatus,
     visibilityIds: [
@@ -62,13 +58,13 @@ export const arrayOfDelegates = [
         uniqueIdentifier: '123456789',
       },
     ],
-    verificationCode: '123456',
+    verificationCode: '67890',
     datefrom: '2021-12-15',
     dateto: '2023-04-07',
   },
 ];
 
-export const arrayOfDelegators = [
+export const arrayOfDelegators: Array<Delegator> = [
   {
     mandateId: '3',
     delegator: {
@@ -78,7 +74,6 @@ export const arrayOfDelegators = [
       companyName: 'eni',
       fiscalCode: 'MRCVRD83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'pending' as DelegationStatus,
     visibilityIds: [
@@ -101,7 +96,6 @@ export const arrayOfDelegators = [
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
       person: true,
-      email: 'email@falsa.it',
     },
     status: 'active' as DelegationStatus,
     visibilityIds: [
@@ -115,20 +109,27 @@ export const arrayOfDelegators = [
     dateto: '2022-04-16',
     groups: [],
   },
+  {
+    mandateId: '5',
+    delegator: {
+      displayName: 'DivinaCommedia Srl',
+      fiscalCode: '70412331207',
+      person: false,
+    },
+    status: 'active' as DelegationStatus,
+    visibilityIds: [
+      {
+        name: 'Comune di Cesara',
+        uniqueIdentifier: '987654321',
+      },
+      {
+        name: 'Agenzia delle Entrate',
+        uniqueIdentifier: '123456789',
+      },
+    ],
+    datefrom: '2023-01-05',
+    dateto: '2029-05-06',
+    verificationCode: '954765',
+    groups: [],
+  },
 ];
-
-export const initialState = {
-  delegations: {
-    delegators: [] as Array<Delegation>,
-    delegates: [] as Array<Delegation>,
-  },
-  pagination: {
-    moreResult: false,
-    nextPagesKey: [],
-  },
-  groups: [],
-  filters: {
-    size: 10,
-    page: 0,
-  },
-};

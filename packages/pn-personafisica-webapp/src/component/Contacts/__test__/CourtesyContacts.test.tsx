@@ -1,8 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
 
-import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
-
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
   RenderResult,

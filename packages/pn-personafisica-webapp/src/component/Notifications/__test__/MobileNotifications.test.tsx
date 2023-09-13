@@ -24,6 +24,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('MobileNotifications Component', () => {
+  let result: RenderResult;
   const original = window.matchMedia;
 
   beforeAll(() => {
@@ -36,7 +37,6 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - no notifications', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(<MobileNotifications notifications={[]} />);
     });
@@ -51,7 +51,6 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - notifications', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
     });
@@ -63,7 +62,6 @@ describe('MobileNotifications Component', () => {
 
   it('renders component - no notification after filter', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(<MobileNotifications notifications={[]} />, {
         preloadedState: {
@@ -88,7 +86,6 @@ describe('MobileNotifications Component', () => {
 
   it('clicks on go to detail action', async () => {
     // render component
-    let result: RenderResult;
     await act(async () => {
       result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
     });

@@ -2,14 +2,7 @@ import React from 'react';
 
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  prettyDOM,
-  render,
-  waitFor,
-} from '../../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 

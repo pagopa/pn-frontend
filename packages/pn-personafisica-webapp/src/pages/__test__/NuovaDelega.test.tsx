@@ -9,7 +9,7 @@ import {
   testRadio,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { createDelegationPayload } from '../../__mocks__/CreateDelegations.mock';
+import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';

@@ -197,11 +197,21 @@ describe('NotificationDetail Page', () => {
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(3);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[1].url).toBe(
+      NOTIFICATION_PAYMENT_INFO(
+        notificationDTO.recipients[2].payment?.creditorTaxId!,
+        notificationDTO.recipients[2].payment?.noticeCode!
+      )
+    );
+    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
     // check documents box
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {

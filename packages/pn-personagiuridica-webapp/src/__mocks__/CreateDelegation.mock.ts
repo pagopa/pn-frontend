@@ -1,46 +1,35 @@
 import { RecipientType } from '@pagopa-pn/pn-commons';
 
-export const initialState = {
-  created: false,
-  entities: [],
-};
+import { CreateDelegationResponse, NewDelegationFormProps } from '../models/Deleghe';
 
-export const createDelegationPayload = {
+export const createDelegationPayload: NewDelegationFormProps = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-  codiceFiscale: 'fiscalCode',
-  email: 'test@email.com',
-  nome: 'nome',
-  cognome: 'cognome',
-  ragioneSociale: '',
+  codiceFiscale: 'RSSMRA01A01A111A',
+  nome: 'Mario',
+  cognome: 'Rossi',
+  ragioneSociale: 'Foo SAS di Anonimo',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
   expirationDate: new Date(),
-  enti: [{ name: '', id: '' }],
+  enti: [],
   verificationCode: '00000',
 };
 
-export const createDelegationSelectedPayload = {
-  selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-  codiceFiscale: 'fiscalCode',
-  email: 'test@email.com',
-  nome: 'nome',
-  cognome: 'cognome',
-  ragioneSociale: '',
+export const createDelegationSelectedPayload: NewDelegationFormProps = {
+  ...createDelegationPayload,
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
-  expirationDate: new Date(),
   enti: [{ name: 'test', id: 'test' }],
-  verificationCode: '00000',
 };
 
-export const createDelegationResponse = {
+export const createDelegationResponse: CreateDelegationResponse = {
   datefrom: '2022-01-01',
   dateto: '2022-01-02',
   delegate: {
     firstName: 'nome',
     lastName: 'cognome',
+    displayName: 'nome cognome',
     fiscalCode: 'fiscalCode',
-    companyName: null,
+    companyName: 'companyName',
     person: true,
-    email: 'email@test.com',
   },
   delegator: null,
   mandateId: '1',

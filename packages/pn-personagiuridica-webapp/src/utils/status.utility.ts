@@ -28,3 +28,5 @@ export const DelegationAllowedStatus = [
   { value: DelegationStatus.ACTIVE, label: 'Active' },
   { value: DelegationStatus.PENDING, label: 'In attesa di conferma' },
 ];
+
+export { DelegationStatus };
