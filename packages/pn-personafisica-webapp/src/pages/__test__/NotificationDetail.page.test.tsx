@@ -152,12 +152,10 @@ describe('NotificationDetail Page', () => {
     expect(addDomicileBanner).toBeInTheDocument();
   });
 
-  // Questo test fallisce per un bug nel dettaglio notifica. La paymentInfo viene chiamata anche se la notifica è in stato annullata
-  // Rimuovere il commento e lo skip del test una volta sistemato il bug
-  it.skip('renders NotificationDetail if status is cancelled', async () => {
+  it('renders NotificationDetail if status is cancelled', async () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, status: NotificationStatus.CANCELLED });
+      .reply(200, { ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED });
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -169,9 +167,7 @@ describe('NotificationDetail Page', () => {
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
-    // payment component and documents should be hidden if notification
-    // status is "cancelled" even though documentsAvailable is true
+    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
     // check documents box
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {

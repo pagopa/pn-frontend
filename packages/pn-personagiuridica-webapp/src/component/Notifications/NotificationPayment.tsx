@@ -157,7 +157,8 @@ const NotificationPayment: React.FC<Props> = ({
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
-      notificationPayment.creditorTaxId
+      notificationPayment.creditorTaxId &&
+      !notificationIsCancelled
     ) {
       void dispatch(
         getNotificationPaymentInfo({
@@ -490,6 +491,7 @@ const NotificationPayment: React.FC<Props> = ({
                 sx={{ fontSize: '16px' }}
                 target="_blank"
                 variant="body1"
+                data-testid="linkFaq"
               >
                 {t('detail.disclaimer-link')}
               </Link>
