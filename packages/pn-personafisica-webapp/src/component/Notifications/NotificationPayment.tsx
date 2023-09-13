@@ -581,7 +581,6 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
-
             {!loading && paymentHistory && paymentHistory.length > 0 && (
               <NotificationPaidDetail paymentDetailsList={paymentHistory} />
             )}

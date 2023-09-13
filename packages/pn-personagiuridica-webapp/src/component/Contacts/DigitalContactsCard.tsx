@@ -1,4 +1,5 @@
-import { memo, ReactNode } from 'react';
+import { ReactNode, memo } from 'react';
+
 import { Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 

@@ -35,7 +35,9 @@
   },
   "empty-state": {
     "message": "Non ci sono notifiche per {{name}}.",
-    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere."
+    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere.",
+    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
+    "filter-action": "Rimuovi filtri"
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"

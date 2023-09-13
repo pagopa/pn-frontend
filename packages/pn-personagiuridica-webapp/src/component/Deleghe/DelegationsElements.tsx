@@ -1,9 +1,9 @@
 import React, { Dispatch, useCallback, useEffect, useState } from 'react';
-import { AnyAction } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, Typography } from '@mui/material';
-import { Variant } from '@mui/material/styles/createTypography';
+
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 import {
   AppResponse,
   AppResponsePublisher,
@@ -13,20 +13,21 @@ import {
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
+import { AnyAction } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { DelegationStatus } from '../../models/Deleghe';
+import { User } from '../../redux/auth/types';
 import {
   acceptDelegation,
   rejectDelegation,
   revokeDelegation,
   updateDelegation,
 } from '../../redux/delegation/actions';
-import { User } from '../../redux/auth/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
 import { ServerResponseErrorCode } from '../../utils/AppError/types';
-import { DelegationStatus } from '../../models/Deleghe';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 import AcceptDelegationModal from './AcceptDelegationModal';
 import ConfirmationModal from './ConfirmationModal';
 
@@ -186,7 +187,11 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   const getMenuItemElements = () => {
     if (menuType === 'delegates') {
       return [
-        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
+        <MenuItem
+          key="showCode"
+          onClick={handleOpenVerificationCodeModal}
+          data-testid="menuItem-showCode"
+        >
           {t('deleghe.show')}
         </MenuItem>,
         <MenuItem key="revoke" onClick={handleOpenModalClick}>

@@ -1,16 +1,17 @@
+import { useFormik } from 'formik';
 import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { ButtonNaked, IllusEmailValidation } from '@pagopa/mui-italia';
+
+import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import { Alert, Box, Grid, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
+import { ButtonNaked, IllusEmailValidation } from '@pagopa/mui-italia';
 
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
-import DigitalContactsCard from './DigitalContactsCard';
-import DigitalContactElem from './DigitalContactElem';
 import CancelVerificationModal from './CancelVerificationModal';
+import DigitalContactElem from './DigitalContactElem';
+import DigitalContactsCard from './DigitalContactsCard';
 
 type Props = {
   recipientId: string;
@@ -88,7 +89,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         avatar={<IllusEmailValidation />}
       >
         {!verifyingAddress && (
-          <Box mt="20px">
+          <Box mt="20px" data-testid="legalContacts">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -147,7 +148,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
           </Box>
         )}
         {verifyingAddress && (
-          <Box mt="20px">
+          <Box mt="20px" data-testid="legalContacts">
             <Typography mb={1} sx={{ fontWeight: 'bold' }}>
               {t('legal-contacts.pec-validating', { ns: 'recapiti' })}
             </Typography>
@@ -158,7 +159,11 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                   {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
                 </Typography>
               </Box>
-              <ButtonNaked color="primary" onClick={handlePecValidationCancel}>
+              <ButtonNaked
+                color="primary"
+                onClick={handlePecValidationCancel}
+                data-testid="cancelValidation"
+              >
                 {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
               </ButtonNaked>
             </Box>
@@ -175,7 +180,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             role="banner"
             component="span"
             variant="body1"
-            data-testid="legal contact disclaimer"
+            data-testid="legal-contact-disclaimer"
           >
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>

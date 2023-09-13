@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -192,14 +192,14 @@ const NuovaDelega = () => {
     handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
   const breadcrumbs = (
-    <Fragment>
+    <>
       <PnBreadcrumb
         linkRoute={routes.DELEGHEACARICO}
         linkLabel={
-          <Fragment>
+          <>
             <PeopleIcon sx={{ mr: 0.5 }} />
             {t('deleghe.title')}
-          </Fragment>
+          </>
         }
         currentLocationLabel={t('nuovaDelega.breadcrumb')}
       />
@@ -213,7 +213,7 @@ const NuovaDelega = () => {
       <Typography sx={{ mt: '1rem', mb: '1rem' }}>
         {t('nuovaDelega.form.mandatoryField')}
       </Typography>
-    </Fragment>
+    </>
   );
 
   return (
@@ -259,7 +259,7 @@ const NuovaDelega = () => {
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
-                                data-testid="selectPF"
+                                data-testid="recipientType"
                               />
                               <FormControlLabel
                                 id="select-pg"
@@ -269,7 +269,7 @@ const NuovaDelega = () => {
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}
-                                data-testid="selectPG"
+                                data-testid="recipientType"
                               />
                             </RadioGroup>
                           </Stack>
@@ -369,6 +369,7 @@ const NuovaDelega = () => {
                               control={<Radio />}
                               name={'selectTuttiEntiOrSelezionati'}
                               label={t('nuovaDelega.form.allEntities')}
+                              data-testid="radioSelectedEntities"
                             />
 
                             <FormControlLabel
@@ -440,7 +441,6 @@ const NuovaDelega = () => {
                                 <TextField
                                   id="expirationDate"
                                   name="expirationDate"
-                                  data-testid="expirationDate"
                                   {...params}
                                   aria-label="Data termine delega" // aria-label for (TextField + Button) Group
                                   inputProps={{

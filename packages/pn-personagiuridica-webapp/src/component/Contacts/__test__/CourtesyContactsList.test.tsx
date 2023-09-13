@@ -1,101 +1,83 @@
 import * as React from 'react';
-import { act, RenderResult, screen } from '@testing-library/react';
-import * as redux from 'react-redux';
-import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
-import * as hooks from '../../../redux/hooks';
-import { render } from '../../../__test__/test-utils';
+
+import { act } from '@testing-library/react';
+
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { RenderResult, render } from '../../../__test__/test-utils';
+import { CourtesyChannelType } from '../../../models/contacts';
+import { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
-// import * as actions from '../../../redux/contact/actions';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const emptyMockedStore = {
-  legal: [],
-  courtesy: [],
-};
-
-const mockedStore: Array<DigitalAddress> = [
-  {
-    addressType: 'courtesy',
-    recipientId: 'recipient1',
-    senderId: 'default',
-    channelType: CourtesyChannelType.SMS,
-    value: '3331234567',
-    code: '12345',
-  },
-  {
-    addressType: 'courtesy',
-    recipientId: 'recipient1',
-    senderId: 'default',
-    channelType: CourtesyChannelType.EMAIL,
-    value: 'test@test.com',
-    code: '54321',
-  },
-];
-
+/*
+In questo test viene testato solo il rendering dei componenti e non il flusso.
+Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
+Andrea Cimini - 11/09/2023
+*/
 describe('CourtesyContactsList Component', () => {
-  const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-  const mockDispatchFn = jest.fn(() => ({
-    unwrap: () => Promise.resolve(),
-  }));
-  const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-  useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-  // const mockActionFn = jest.fn();
+  let result: RenderResult | undefined;
 
-  it('renders correctly with empty store', async () => {
-    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce([]);
+  it('renders component - no contacts', async () => {
     await act(async () => {
-      render(
+      result = render(
         <DigitalContactsCodeVerificationProvider>
           <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
-
-    const textBoxes = await screen.findAllByRole('textbox');
-    expect(textBoxes).toHaveLength(2);
-
-    const mailTextBox = await screen.findByTestId('courtesy-contact-email');
-    expect(mailTextBox).toEqual(textBoxes[0]);
-    expect(mailTextBox).toHaveValue('');
-
-    const phoneTextBox = await screen.findByTestId('courtesy-contact-phone');
-    expect(phoneTextBox).toEqual(textBoxes[1]);
-    expect(phoneTextBox).toHaveValue('');
-
-    const buttons = await screen.findAllByRole('button');
-    expect(buttons[0]).toBeDisabled();
-    expect(buttons[1]).toBeDisabled();
-    expect(buttons[0].textContent).toMatch('courtesy-contacts.email-add');
-    expect(buttons[1].textContent).toMatch('courtesy-contacts.phone-add');
+    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    expect(phoneInput).toBeInTheDocument();
+    expect(phoneInput).toHaveValue('');
+    expect(emailInput).toBeInTheDocument();
+    expect(emailInput).toHaveValue('');
+    const buttons = result?.getAllByRole('button');
+    expect(buttons![0]).toBeDisabled();
+    expect(buttons![1]).toBeDisabled();
+    expect(buttons![0].textContent).toMatch('courtesy-contacts.email-add');
+    expect(buttons![1].textContent).toMatch('courtesy-contacts.phone-add');
   });
 
-  it('renders correctly with data in store', async () => {
-    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
+  it('renders components - contacts', async () => {
     await act(async () => {
-      render(
+      result = render(
         <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedStore} />
+          <CourtesyContactsList recipientId="mock-recipient" contacts={digitalAddresses.courtesy} />
         </DigitalContactsCodeVerificationProvider>
       );
     });
 
-    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
-    const phoneNumber = screen.queryByText(mockedStore[0].value);
-    expect(phoneNumber).toBeInTheDocument();
-    const email = screen.queryByText(mockedStore[1].value);
-    expect(email).toBeInTheDocument();
+    const defaultPhone = digitalAddresses.courtesy.find(
+      (addr) => addr.channelType === CourtesyChannelType.SMS && addr.senderId === 'default'
+    );
+    const defaultEmail = digitalAddresses.courtesy.find(
+      (addr) => addr.channelType === CourtesyChannelType.EMAIL && addr.senderId === 'default'
+    );
 
-    const buttons = await screen.findAllByRole('button');
-    expect(buttons[0]).toBeEnabled();
-    expect(buttons[1]).toBeEnabled();
-    expect(buttons[0].textContent).toMatch('button.modifica');
-    expect(buttons[1].textContent).toMatch('button.elimina');
+    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    expect(phoneInput).not.toBeInTheDocument();
+    expect(emailInput).not.toBeInTheDocument();
+    const phoneNumber = result?.getByText(defaultPhone!.value);
+    expect(phoneNumber).toBeInTheDocument();
+    const email = result?.getByText(defaultEmail!.value);
+    expect(email).toBeInTheDocument();
+    const buttons = result?.getAllByRole('button');
+    expect(buttons![0]).toBeEnabled();
+    expect(buttons![1]).toBeEnabled();
+    expect(buttons![0].textContent).toMatch('button.modifica');
+    expect(buttons![1].textContent).toMatch('button.elimina');
+    expect(buttons![2]).toBeEnabled();
+    expect(buttons![3]).toBeEnabled();
+    expect(buttons![2].textContent).toMatch('button.modifica');
+    expect(buttons![3].textContent).toMatch('button.elimina');
   });
 });
