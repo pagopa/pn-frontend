@@ -4,13 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
-
 import {
   ApiError,
   AppResponse,
   AppResponsePublisher,
-  GetNotificationDowntimeEventsParams, // PN-1714
-  // NotificationStatus,
+  GetNotificationDowntimeEventsParams, // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,

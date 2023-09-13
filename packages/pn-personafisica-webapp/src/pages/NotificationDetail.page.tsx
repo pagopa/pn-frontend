@@ -10,7 +10,7 @@ import {
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
-  NotificationDetailTable, // HelpNotificationDetails,
+  NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationRelatedDowntimes,
