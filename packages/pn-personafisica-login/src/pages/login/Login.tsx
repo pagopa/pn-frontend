@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
-import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
-import { styled } from '@mui/material/styles';
 import { useSearchParams } from 'react-router-dom';
 
-import { storageTypeOps, storageSpidSelectedOps, storageAarOps } from '../../utils/storage';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
+
 import { getConfiguration } from '../../services/configuration.service';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
+import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../utils/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -133,6 +134,7 @@ const Login = () => {
                   onClick={() => setShowIDPS(true)}
                   variant="contained"
                   startIcon={<SpidIcon />}
+                  data-testid="spidButton"
                 >
                   {t('loginPage.loginBox.spidLogin')}
                 </LoginButton>
@@ -150,6 +152,7 @@ const Login = () => {
                   variant="contained"
                   startIcon={<CieIcon />}
                   onClick={() => goCIE()}
+                  data-testid="cieButton"
                 >
                   {t('loginPage.loginBox.cieLogin')}
                 </LoginButton>
