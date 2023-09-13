@@ -8,20 +8,20 @@ import {
   ApiError,
   AppResponse,
   AppResponsePublisher,
-  GetNotificationDowntimeEventsParams, // NotificationStatus,
+  GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailTimeline,
   NotificationPaidDetail,
   NotificationRelatedDowntimes,
-  NotificationStatus,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
   appStateActions,
   useDownloadDocument,
   useErrors,
+  useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -48,19 +48,14 @@ import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
 import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
 
-const AlertNotificationCancel: React.FC<{ notificationStatus: NotificationStatus }> = (
-  notification
-) => {
+const AlertNotificationCancel: React.FC<{ notification: any }> = (notification) => {
   const { t } = useTranslation(['notifiche']);
-
-  if (
-    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
-    notification.notificationStatus === NotificationStatus.CANCELLED
-  ) {
+  const isCancelled = useIsCancelled(notification);
+  if (isCancelled) {
     return (
       <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
         <Typography component="span" variant="body1">
-          {notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
+          {isCancelled
             ? t('detail.alert-cancellation-in-progress')
             : t('detail.alert-cancellation-confirmed')}
         </Typography>
@@ -281,7 +276,7 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <AlertNotificationCancel notificationStatus={notification.notificationStatus} />
+                <AlertNotificationCancel notification={notification} />
                 <NotificationDetailTableSender
                   notification={notification}
                   onCancelNotification={handleCancelNotification}

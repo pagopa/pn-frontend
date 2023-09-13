@@ -8,10 +8,10 @@ import {
   NotificationDetailRecipient,
   NotificationDetailTable,
   NotificationDetailTableRow,
-  NotificationStatus,
   TimelineCategory,
   dataRegex,
   formatEurocentToCurrency,
+  useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
@@ -27,7 +27,7 @@ type Props = {
 const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancelNotification }) => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
-
+  const isCancelled = useIsCancelled({ notification });
   const { recipients } = notification;
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
   const recipientsWithAltNoticeCode = recipients.filter(
@@ -184,25 +184,24 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   return (
     <>
       <NotificationDetailTable rows={detailTableRows}>
-        {notification.notificationStatus !== NotificationStatus.CANCELLATION_IN_PROGRESS &&
-          notification.notificationStatus !== NotificationStatus.CANCELLED && (
-            <Button
-              variant="outlined"
-              sx={{
-                my: {
-                  xs: 3,
-                  md: 2,
-                },
-                borderColor: 'error.dark',
-                outlineColor: 'error.dark',
-                color: 'error.dark',
-              }}
-              onClick={openModal}
-              data-testid="cancelNotificationBtn"
-            >
-              {t('detail.cancel-notification', { ns: 'notifiche' })}
-            </Button>
-          )}
+        {isCancelled && (
+          <Button
+            variant="outlined"
+            sx={{
+              my: {
+                xs: 3,
+                md: 2,
+              },
+              borderColor: 'error.dark',
+              outlineColor: 'error.dark',
+              color: 'error.dark',
+            }}
+            onClick={openModal}
+            data-testid="cancelNotificationBtn"
+          >
+            {t('detail.cancel-notification', { ns: 'notifiche' })}
+          </Button>
+        )}
       </NotificationDetailTable>
       <ConfirmCancellationDialog
         onClose={handleModalClose}

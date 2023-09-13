@@ -14,12 +14,12 @@ import {
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationRelatedDowntimes,
-  NotificationStatus,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
   useDownloadDocument,
   useErrors,
+  useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -83,9 +83,7 @@ const NotificationDetail = () => {
   );
 
   const currentRecipient = notification && notification.currentRecipient;
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ||
-    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
+  const isCancelled = useIsCancelled({ notification });
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;

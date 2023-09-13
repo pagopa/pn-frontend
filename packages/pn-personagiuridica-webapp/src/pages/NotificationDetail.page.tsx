@@ -14,13 +14,13 @@ import {
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationRelatedDowntimes,
-  NotificationStatus,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
   useDownloadDocument,
   useErrors,
   useHasPermissions,
+  useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -190,9 +190,7 @@ const NotificationDetail = () => {
     }
   };
 
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ||
-    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
+  const isCancelled = useIsCancelled({ notification });
 
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
