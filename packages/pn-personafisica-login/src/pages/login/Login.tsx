@@ -79,7 +79,7 @@ const Login = () => {
         email: undefined,
       }}
     >
-      <Grid container direction="column" my={isMobile ? 4 : 16}>
+      <Grid container direction="column" my={isMobile ? 4 : 16} data-testid="loginPage">
         <Grid container item justifyContent="center">
           <Grid item>
             <Typography

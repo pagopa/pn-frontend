@@ -1,9 +1,9 @@
+import React from 'react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
+
+import { getByTestId, render } from '@testing-library/react';
 
 import App from '../App';
-
-const mockNavigateFn = jest.fn();
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -11,40 +11,48 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn,
+  useNavigate: () => jest.fn(),
 }));
 
-jest.mock('../pages/logout/Logout', () => () => 'LOGOUT');
-jest.mock('../pages/login/Login', () => () => 'LOGIN');
-jest.mock('../pages/loginError/LoginError', () => () => 'LOGIN_ERROR');
+describe('App', () => {
+  it('inital page', () => {
+    const { getByTestId, queryByTestId } = render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    const loginPage = getByTestId('loginPage');
+    expect(loginPage).toBeInTheDocument();
+    const errorDialog = queryByTestId('errorDialog');
+    expect(errorDialog).not.toBeInTheDocument();
+  });
 
-test('test not served path', () => {
-  const result = render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
-  expect(result.container).toHaveTextContent('LOGIN');
-});
+  it('logout page', () => {
+    const { queryByTestId } = render(
+      <MemoryRouter initialEntries={['/logout']}>
+        <App />
+      </MemoryRouter>
+    );
+    const loginPage = queryByTestId('loginPage');
+    expect(loginPage).not.toBeInTheDocument();
+    const errorDialog = queryByTestId('errorDialog');
+    expect(errorDialog).not.toBeInTheDocument();
+  });
 
-test('test logout', () => {
-  const result = render(
-    <MemoryRouter initialEntries={['/logout']}>
-      <App />
-    </MemoryRouter>
-  );
-  expect(result.container).toHaveTextContent('LOGOUT');
-});
-
-test('test login error', () => {
-  const result = render(
-    <MemoryRouter initialEntries={['/login/error']}>
-      <App />
-    </MemoryRouter>
-  );
-  expect(result.container).toHaveTextContent('LOGIN_ERROR');
+  it('login error', () => {
+    const { queryByTestId, getByTestId } = render(
+      <MemoryRouter initialEntries={['/login/error']}>
+        <App />
+      </MemoryRouter>
+    );
+    const loginPage = queryByTestId('loginPage');
+    expect(loginPage).not.toBeInTheDocument();
+    const errorDialog = getByTestId('errorDialog');
+    expect(errorDialog).toBeInTheDocument();
+  });
 });
