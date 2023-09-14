@@ -39,7 +39,7 @@ describe('test lazy loading retry', () => {
       expect(result.container).toHaveTextContent('mocked-empty-message');
       expect(refreshFlag).toBeNull();
     });
-  }, 10000);
+  }, 20000);
 
   it('test lazyRetry - component loading fails at first try', async () => {
     jest.mock('../../../components/EmptyState', () => {

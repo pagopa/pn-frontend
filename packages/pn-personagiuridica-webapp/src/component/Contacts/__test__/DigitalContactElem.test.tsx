@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
+import { RenderResult, waitFor, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { TextField } from '@mui/material';
 

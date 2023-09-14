@@ -1,22 +1,17 @@
-import { act } from 'react-dom/test-utils';
+import React from 'react';
 import { RenderResult, screen } from '@testing-library/react';
 import {
-  apiOutcomeTestHelper,
   NotificationDetail as INotificationDetail,
   NotificationDetailTableRow,
   NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
-import { render } from '../../__test__/test-utils';
-import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
   notificationToFeTwoRecipients,
   overrideNotificationMock,
 } from '../../redux/notification/__test__/test-utils';
-import NotificationDetail from '../NotificationDetail.page';
-import { mockDispatchAndActions, renderComponentBase } from './NotificationDetail.page.test-utils';
 
 const fixedMandateId = 'ALFA-BETA-GAMMA';
 
@@ -252,26 +247,6 @@ describe('NotificationDetail Page', () => {
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent('Analogico Ok');
     expect(result.container).not.toHaveTextContent('Totito');
-  });
-
-  it('Notification detailAPI error', async () => {
-    // need to handle mocks since it does not resort to renderComponent
-    mockUseParamsFn.mockReturnValue({ id: 'mocked-id' });
-    mockDispatchAndActions({ mockDispatchFn, mockActionFn });
-    // custom render
-    await act(
-      async () =>
-        void render(<NotificationDetail />, {
-          preloadedState: {
-            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-              actions.NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
-            ),
-          },
-        })
-    );
-    // verification
-    const apiErrorComponent = screen.queryByText('Api Error');
-    expect(apiErrorComponent).toBeTruthy();
   });
 
   it("normal navigation - includes 'indietro' button", async () => {

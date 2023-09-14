@@ -4,7 +4,6 @@ import React from 'react';
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
-  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
 import {
   testAutocomplete,

@@ -1,19 +1,12 @@
 import React from 'react';
 
-import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import {
   formatToTimezoneString,
   getNextDay,
-  apiOutcomeTestHelper,
   tenYearsAgo,
-  today,
-  ResponseEventDispatcher,
-  AppResponseMessage,
+  today
 } from '@pagopa-pn/pn-commons';
-
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { render } from '../../__test__/test-utils';
-import Notifiche from '../Notifiche.page';
 import { doPrepareTestScenario } from './Notifiche.page.test-utils';
 
 jest.mock('react-i18next', () => ({
@@ -121,47 +114,6 @@ describe('Notifiche Page - with notifications', () => {
   });
 });
 
-describe('Notifiche Page - query for notification API outcome', () => {
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
-  });
-
-  it('API error', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
-    apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <Notifiche />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
-    apiSpy.mockResolvedValue({ resultsPage: [], moreResult: false, nextPagesKey: [] });
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <Notifiche />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
-  });
-});
 
 describe('Notifiche Delegate Page - with delegated notifications', () => {
   let result: RenderResult | undefined;

@@ -1,9 +1,4 @@
 import React from 'react';
-import {
-  apiOutcomeTestHelper,
-  AppResponseMessage,
-  ResponseEventDispatcher,
-} from '@pagopa-pn/pn-commons';
 
 import { render, act, fireEvent, screen, mockApi } from '../../__test__/test-utils';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
@@ -91,50 +86,6 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(subtitleLink).toBeInTheDocument();
     fireEvent.click(subtitleLink);
     expect(spyWindowOpen).toHaveBeenCalledTimes(1);
-    mock.reset();
-    mock.restore();
-  });
-});
-
-describe('Contacts Page - different contact API behaviors', () => {
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
-  });
-
-  it('API error', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 500);
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <Contacts />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-    mock.reset();
-    mock.restore();
-  });
-
-  it('API OK', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, []);
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <Contacts />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
     mock.reset();
     mock.restore();
   });

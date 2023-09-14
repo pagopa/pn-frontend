@@ -42,11 +42,6 @@ import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
 import {
-  apiOutcomeTestHelper,
-  mockApiErrorWrapper,
-  simpleMockForApiErrorWrapper,
-} from './test.utility';
-import {
   adaptedTokenExchangeError,
   basicInitialUserData,
   basicUserDataMatcherContents,
@@ -93,9 +88,6 @@ export {
   adaptedTokenExchangeError,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
-  mockApiErrorWrapper,
-  apiOutcomeTestHelper,
-  simpleMockForApiErrorWrapper,
   performThunkAction,
   AppResponsePublisher,
   ResponseEventDispatcher,

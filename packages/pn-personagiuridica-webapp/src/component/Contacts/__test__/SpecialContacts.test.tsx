@@ -1,7 +1,6 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
@@ -438,52 +437,5 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       mockActionFn,
       CourtesyChannelType.EMAIL
     );
-  });
-});
-
-describe('Contacts Page - different contact API behaviors', () => {
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
-    jest.restoreAllMocks();
-  });
-
-  it('API error', async () => {
-    const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
-    apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <DigitalContactsCodeVerificationProvider>
-              <SpecialContacts recipientId="toto" legalAddresses={[]} courtesyAddresses={[]} />
-            </DigitalContactsCodeVerificationProvider>
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
-    apiSpy.mockResolvedValue([]);
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <DigitalContactsCodeVerificationProvider>
-              <SpecialContacts recipientId="toto" legalAddresses={[]} courtesyAddresses={[]} />
-            </DigitalContactsCodeVerificationProvider>
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });

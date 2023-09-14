@@ -5,7 +5,7 @@ import { RenderResult, act } from '@testing-library/react';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import { render } from '../../../test-utils';
 import { AppStatusData } from '../../../types';
-import { apiOutcomeTestHelper } from '../../../utils';
+import { apiOutcomeTestHelper } from '../../../utils/test.utility';
 import { formatDate, formatTime } from '../../../utils/date.utility';
 import { AppStatusRender } from '../AppStatusRender';
 

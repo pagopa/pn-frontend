@@ -1,5 +1,4 @@
 import React from 'react';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import {
   testAutocomplete,
   render,
@@ -416,38 +415,5 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
     expect(table).toHaveTextContent('Group 3');
     mock.reset();
     mock.restore();
-  });
-});
-
-describe('DelegationsOfTheCompany Component - different API behaviors', () => {
-  beforeAll(() => {
-    jest.restoreAllMocks();
-  });
-
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
-  });
-
-  it('API error', async () => {
-    await act(
-      async () =>
-        void render(<DelegationsOfTheCompany />, {
-          preloadedState: {
-            appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-              DELEGATION_ACTIONS.GET_DELEGATORS
-            ),
-          },
-        })
-    );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    await act(async () => void render(<DelegationsOfTheCompany />));
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });

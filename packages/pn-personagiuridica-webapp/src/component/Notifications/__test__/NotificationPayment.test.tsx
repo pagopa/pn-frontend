@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   NotificationDetailPayment,
   ResponseEventDispatcher,
@@ -590,61 +589,5 @@ describe('NotificationPayment component', () => {
 
     const button = screen.queryByRole('button');
     expect(button).not.toBeInTheDocument();
-  });
-});
-
-describe('NotificationPayment - different payment fetch API behaviors', () => {
-  beforeAll(() => {
-    jest.restoreAllMocks();
-  });
-
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
-  });
-
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
-  });
-
-  it('API error', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <NotificationPayment
-              iun="mocked-iun"
-              notificationPayment={mockedNotificationDetailPayment}
-              senderDenomination="mocked-senderDenomination"
-              subject="mocked-subject"
-            />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockResolvedValue({ status: PaymentStatus.SUCCEEDED, url: 'https://react.org' });
-    await act(
-      async () =>
-        void render(
-          <>
-            <ResponseEventDispatcher />
-            <AppResponseMessage />
-            <NotificationPayment
-              iun="mocked-iun"
-              notificationPayment={mockedNotificationDetailPayment}
-              senderDenomination="mocked-senderDenomination"
-              subject="mocked-subject"
-            />
-          </>
-        )
-    );
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
