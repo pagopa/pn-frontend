@@ -7,21 +7,17 @@ import { UnauthorizedAppError } from '../UnauthorizedAppError';
 import { UnavailableForLegalReasonsError } from '../UnavailableForLegalReasonsError';
 
 describe('GenericAppErrorFactory', () => {
-  const arrayCodes = [400, 401, 403, 451, 404, 500];
-
-  const arrayClasses = [
-    BadRequestAppError,
-    UnauthorizedAppError,
-    ForbiddenAppError,
-    UnavailableForLegalReasonsError,
-    NotFoundAppError,
-    InternalServerAppError,
+  const arrayCodes = [
+    { code: 400, class: BadRequestAppError },
+    { code: 401, class: UnauthorizedAppError },
+    { code: 403, class: ForbiddenAppError },
+    { code: 451, class: UnavailableForLegalReasonsError },
+    { code: 404, class: NotFoundAppError },
+    { code: 500, class: InternalServerAppError },
   ];
 
-  arrayCodes.forEach((code, index) => {
-    const currentClass = GenericAppErrorFactory.create(code);
-    it(`test return instance of ${currentClass.constructor.name} with code ${code}`, () => {
-      expect(currentClass instanceof arrayClasses[index]);
-    });
+  it.each(arrayCodes)(`test return instance of $class.name with code $code`, (code) => {
+    const currentClass = GenericAppErrorFactory.create(code.code);
+    expect(currentClass instanceof code.class);
   });
 });

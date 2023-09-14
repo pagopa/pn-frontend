@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material';
-import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
+import { Store, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';

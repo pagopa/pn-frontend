@@ -1,8 +1,7 @@
-/* eslint-disable functional/immutable-data */
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useEffect } from "react";
 
-import { AppResponse, AppResponseOutcome } from "../../types/AppResponse";
+import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
 
 type CallBackFunction = (err: AppResponse) => void | boolean;
 
@@ -23,12 +22,12 @@ class AppResponsePublisher {
   };
   private regularQueue: EventsList = {};
   private fallbackQueue: Array<CallBackFunction> = [];
-  
-  constructor (type: AppResponseOutcome) {
-    if(!AppResponsePublisher.instance) {
+
+  constructor(type: AppResponseOutcome) {
+    if (!AppResponsePublisher.instance) {
       AppResponsePublisher.instance = {
         success: undefined,
-        error: undefined
+        error: undefined,
       };
     }
     if (!AppResponsePublisher.instance[type]) {
@@ -41,13 +40,15 @@ class AppResponsePublisher {
    * - subscribe(eventName, func) to register a regular subscriber
    * - subscribe(func): to register a fallback subscriber
    */
-  subscribe (a: string | CallBackFunction, b: CallBackFunction | null = null) {
-    if(typeof a === 'string' && b){
+  subscribe(a: string | CallBackFunction, b: CallBackFunction | null = null) {
+    if (typeof a === 'string' && b) {
       this.regularSubscribe(a, b);
-    } else if ( typeof a === 'function') {
+    } else if (typeof a === 'function') {
       this.fallbackSubscribe(a);
     } else {
-      console.log("subscribe should be called either using a single function param or two params of type string and function respectively");
+      console.log(
+        'subscribe should be called either using a single function param or two params of type string and function respectively'
+      );
       // throw new Error('');
     }
   }
@@ -56,12 +57,14 @@ class AppResponsePublisher {
    * same as subscribe()
    */
   unsubscribe(a: string | CallBackFunction, b: CallBackFunction | null = null) {
-    if(typeof a === 'string' && b){
+    if (typeof a === 'string' && b) {
       this.regularUnsubscribe(a, b);
-    } else if ( typeof a === 'function') {
+    } else if (typeof a === 'function') {
       this.fallbackUnsubscribe(a);
     } else {
-      console.log("unsubscribe should be called either using a single function param or two params of type string and function respectively");
+      console.log(
+        'unsubscribe should be called either using a single function param or two params of type string and function respectively'
+      );
       // throw new Error('');
     }
   }
@@ -73,19 +76,20 @@ class AppResponsePublisher {
     if (Array.isArray(callbacks)) {
       callbacks.forEach((callback) => {
         const ignored = callback.apply(null, [response]);
-        if(!ignored && !published) {
+        if (!ignored && !published) {
           published = true;
         }
       });
     }
-    if(!published) {
+    if (!published) {
       this.fallbackQueue.forEach((func) => {
         func.apply(null, [response]);
       });
     }
   }
 
-  private regularSubscribe (eventName: string, func: (err: AppResponse) => void) {
+  /* eslint-disable functional/immutable-data */
+  private regularSubscribe(eventName: string, func: (err: AppResponse) => void) {
     if (this.regularQueue[eventName]) {
       this.regularQueue[eventName].push(func);
     } else {
@@ -98,14 +102,17 @@ class AppResponsePublisher {
   }
 
   private regularUnsubscribe(eventName: string, func: (err: AppResponse) => void) {
-    if(this.regularQueue[eventName]){
-      this.regularQueue[eventName] = this.regularQueue[eventName].filter((subscriber) => subscriber !== func);
+    if (this.regularQueue[eventName]) {
+      this.regularQueue[eventName] = this.regularQueue[eventName].filter(
+        (subscriber) => subscriber !== func
+      );
     }
   }
 
   private fallbackUnsubscribe(func: CallBackFunction) {
     this.fallbackQueue = this.fallbackQueue.filter((subscriber) => subscriber !== func);
   }
+  /* eslint-enable functional/immutable-data */
 }
 
 const success = new AppResponsePublisher('success');
@@ -115,20 +122,19 @@ export const ResponseEventDispatcher = () => {
   const responseEvent = useSelector((state: any) => state.appState.responseEvent);
 
   useEffect(() => {
-    if(responseEvent) {
-      if(responseEvent.outcome === 'success') {
+    if (responseEvent) {
+      if (responseEvent.outcome === 'success') {
         success.publish(responseEvent.name, responseEvent.response);
       } else {
         error.publish(responseEvent.name, responseEvent.response);
       }
     }
-
   }, [responseEvent]);
-  
+
   return <></>;
 };
 
 export default {
   success,
-  error
+  error,
 };
