@@ -27,7 +27,7 @@ type Props = {
 const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancelNotification }) => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
-  const isCancelled = useIsCancelled({ notification });
+  const { cancellationInProgress, cancelled } = useIsCancelled({ notification });
   const { recipients } = notification;
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
   const recipientsWithAltNoticeCode = recipients.filter(
@@ -184,7 +184,7 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   return (
     <>
       <NotificationDetailTable rows={detailTableRows}>
-        {isCancelled && (
+        {!cancellationInProgress && !cancelled && (
           <Button
             variant="outlined"
             sx={{

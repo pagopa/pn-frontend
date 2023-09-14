@@ -14,9 +14,10 @@ export const useIsCancelled = ({ notification }: Props) => {
       el.category === TimelineCategory.NOTIFICATION_CANCELLED ||
       el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
   );
-  return (
-    notification.notificationStatus === NotificationStatus.CANCELLED ||
-    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS ||
-    timelineCancelled
-  );
+  return {
+    cancelled: notification.notificationStatus === NotificationStatus.CANCELLED,
+    cancellationInProgress:
+      notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS,
+    cancellationInTimeline: timelineCancelled,
+  };
 };

@@ -50,12 +50,12 @@ import NotificationDetailTableSender from './components/Notifications/Notificati
 
 const AlertNotificationCancel: React.FC<{ notification: any }> = (notification) => {
   const { t } = useTranslation(['notifiche']);
-  const isCancelled = useIsCancelled(notification);
-  if (isCancelled) {
+  const { cancelled, cancellationInProgress } = useIsCancelled(notification);
+  if (cancelled || cancellationInProgress) {
     return (
       <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
         <Typography component="span" variant="body1">
-          {isCancelled
+          {cancellationInProgress
             ? t('detail.alert-cancellation-in-progress')
             : t('detail.alert-cancellation-confirmed')}
         </Typography>
