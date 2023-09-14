@@ -56,7 +56,7 @@ describe('TimelineStepFactory', () => {
   arrayCategories.forEach((category, index) => {
     const currentClass = TimelineStepFactory.createTimelineStep(setStepCategory(category));
     it(`test return instance of ${currentClass.constructor.name} with category ${category}`, () => {
-      expect(currentClass instanceof arrayClasses[index]);
+      expect(currentClass).toBeInstanceOf(arrayClasses[index]);
     });
   });
 
@@ -64,6 +64,6 @@ describe('TimelineStepFactory', () => {
     const currentClass = TimelineStepFactory.createTimelineStep(
       setStepCategory(TimelineCategory.REFINEMENT)
     );
-    expect(currentClass instanceof DefaultStep);
+    expect(currentClass).toBeInstanceOf(DefaultStep);
   });
 });
