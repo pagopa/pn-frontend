@@ -1,16 +1,10 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import {
-  testAutocomplete,
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-  mockApi,
-  act,
-} from '../../../__test__/test-utils';
-import { arrayOfDelegators, initialState } from '../../../redux/delegation/__test__/test.utils';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+
+import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
@@ -19,6 +13,7 @@ import {
   UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
+import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
 jest.mock('react-i18next', () => ({
@@ -27,17 +22,6 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
-/**
- * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
- */
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-  };
-});
 
 export async function testMultiSelect(
   form: HTMLElement,
@@ -62,26 +46,51 @@ export async function testMultiSelect(
   fireEvent.click(selectOptionsListItems[optToSelect]);
 }
 
-describe('DelegationsOfTheCompany Component - assuming API works properly', () => {
-  it('renders the empty state', () => {
-    const result = render(<DelegationsOfTheCompany />, {
-      preloadedState: {
-        delegationsState: initialState,
-      },
-    });
+const initialState = {
+  delegations: {
+    delegators: [],
+    delegates: [],
+  },
+  pagination: {
+    nextPagesKey: [],
+    moreResult: false,
+  },
+  groups: [],
+  filters: {
+    size: 10,
+    page: 0,
+  },
+};
 
-    expect(result.container).toHaveTextContent(/deleghe.delegatorsTitle/i);
-    expect(result.container).toHaveTextContent(/deleghe.no_delegators/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationStart/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationEnd/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.permissions/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.groups/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.status/i);
+describe('DelegationsOfTheCompany Component', () => {
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('renders the empty state', () => {
+    const { container } = render(<DelegationsOfTheCompany />);
+    expect(container).toHaveTextContent(/deleghe.delegatorsTitle/i);
+    expect(container).toHaveTextContent(/deleghe.no_delegators/i);
+    expect(container).not.toHaveTextContent(/deleghe.table.name/i);
+    expect(container).not.toHaveTextContent(/deleghe.table.delegationStart/i);
+    expect(container).not.toHaveTextContent(/deleghe.table.delegationEnd/i);
+    expect(container).not.toHaveTextContent(/deleghe.table.permissions/i);
+    expect(container).not.toHaveTextContent(/deleghe.table.groups/i);
+    expect(container).not.toHaveTextContent(/deleghe.table.status/i);
   });
 
   it('renders the table', () => {
-    const result = render(<DelegationsOfTheCompany />, {
+    const { container, getByTestId, getAllByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -92,33 +101,33 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       },
     });
 
-    expect(result.container).not.toHaveTextContent(/deleghe.no_delegators/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.delegationStart/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.delegationEnd/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.permissions/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.groups/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.status/i);
-    expect(result.container).toHaveTextContent(/marco verdi/i);
-    expect(result.container).toHaveTextContent(/davide legato/i);
+    expect(container).not.toHaveTextContent(/deleghe.no_delegators/i);
+    expect(container).toHaveTextContent(/deleghe.table.name/i);
+    expect(container).toHaveTextContent(/deleghe.table.delegationStart/i);
+    expect(container).toHaveTextContent(/deleghe.table.delegationEnd/i);
+    expect(container).toHaveTextContent(/deleghe.table.permissions/i);
+    expect(container).toHaveTextContent(/deleghe.table.groups/i);
+    expect(container).toHaveTextContent(/deleghe.table.status/i);
+    const table = getByTestId('table(notifications)');
+    expect(table).toBeInTheDocument();
+    const rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(arrayOfDelegators.length);
+    rows.forEach((row, index) => {
+      expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
+    });
   });
 
   it('filters the results', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }),
-      200,
-      {
+    mock
+      .onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }), {
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
-      },
-      {
+      })
+      .reply(200, {
         resultsPage: [arrayOfDelegators[1]],
         moreResult: false,
         nextPagesKey: [],
-      }
-    );
+      });
     const groups = [
       {
         id: 'group-1',
@@ -136,7 +145,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       { id: DelegationStatus.PENDING, name: 'deleghe.table.pending' },
       { id: DelegationStatus.REJECTED, name: 'deleghe.table.rejected' },
     ];
-    const result = render(<DelegationsOfTheCompany />, {
+    const { container, getAllByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -148,16 +157,16 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       },
     });
 
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    const cancelButton = form.querySelector('[data-testid="cancelButton"]') as Element;
-    const confirmButton = form.querySelector('[data-testid="confirmButton"]') as Element;
+    const form = container.querySelector('form');
+    const cancelButton = within(form!).getByTestId('cancelButton');
+    const confirmButton = within(form!).getByTestId('confirmButton');
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton).toBeDisabled();
     expect(confirmButton).toBeInTheDocument();
     expect(confirmButton).toBeDisabled();
-    await testAutocomplete(form, 'groups', groups, true, 1, false);
-    await testMultiSelect(form, 'status', status, 0, true);
-    await testMultiSelect(form, 'status', status, 2, false);
+    await testAutocomplete(form!, 'groups', groups, true, 1, false);
+    await testMultiSelect(form!, 'status', status, 0, true);
+    await testMultiSelect(form!, 'status', status, 2, false);
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     await waitFor(() => {
@@ -167,21 +176,20 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         groups: ['group-2'],
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
       });
-      expect(result.container).not.toHaveTextContent(/marco verdi/i);
-      expect(result.container).toHaveTextContent(/davide legato/i);
-      expect(cancelButton).toBeEnabled();
     });
-    mock.reset();
-    mock.restore();
+    const rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
+    expect(cancelButton).toBeEnabled();
   });
 
   it('change pagination size', async () => {
-    const mock = mockApi(apiClient, 'POST', DELEGATIONS_BY_DELEGATE({ size: 20 }), 200, undefined, {
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 20 })).reply(200, {
       resultsPage: [arrayOfDelegators[1]],
       moreResult: false,
       nextPagesKey: [],
     });
-    const result = render(<DelegationsOfTheCompany />, {
+    const { getAllByTestId, getByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -192,42 +200,35 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       },
     });
 
-    expect(result.container).toHaveTextContent(/marco verdi/i);
-    expect(result.container).not.toHaveTextContent(/davide legato/i);
-    const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector') as Element;
-    const button = itemsPerPageSelector.querySelector('button') as Element;
+    let rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent(arrayOfDelegators[0].delegator?.displayName!);
+    const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
+    const button = itemsPerPageSelector.querySelector('button');
     expect(button).toHaveTextContent(/10/i);
-    fireEvent.click(button);
+    fireEvent.click(button!);
     const itemsPerPageListContainer = await waitFor(() => screen.queryByRole('presentation'));
     expect(itemsPerPageListContainer).toBeInTheDocument();
-    const itemsPerPageList = await screen.findAllByRole('menuitem');
+    const itemsPerPageList = screen.getAllByRole('menuitem');
     expect(itemsPerPageList).toHaveLength(3);
     fireEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(button).toHaveTextContent(/20/i);
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=20');
-      expect(result.container).not.toHaveTextContent(/marco verdi/i);
-      expect(result.container).toHaveTextContent(/davide legato/i);
     });
-    mock.reset();
-    mock.restore();
+    rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
   });
 
   it('change pagination page', async () => {
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: 'page-1' }),
-      200,
-      undefined,
-      {
-        resultsPage: [arrayOfDelegators[1]],
-        moreResult: false,
-        nextPagesKey: [],
-      }
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: 'page-1' })).reply(200, {
+      resultsPage: [arrayOfDelegators[1]],
+      moreResult: false,
+      nextPagesKey: [],
+    });
+    const { getAllByTestId, getByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -241,10 +242,10 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         },
       },
     });
-
-    expect(result.container).toHaveTextContent(/marco verdi/i);
-    expect(result.container).not.toHaveTextContent(/davide legato/i);
-    const pageSelector = result.queryByTestId('pageSelector') as Element;
+    let rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent(arrayOfDelegators[0].delegator?.displayName!);
+    const pageSelector = getByTestId('pageSelector');
     const pageButtons = pageSelector.querySelectorAll('button');
     // depends on mui pagination
     // for 10 pages we have: < 1 2 3 >
@@ -258,21 +259,15 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(mock.history.post[0].url).toContain(
         'mandate/api/v1/mandates-by-delegate?size=10&nextPageKey=page-1'
       );
-      expect(result.container).not.toHaveTextContent(/marco verdi/i);
-      expect(result.container).toHaveTextContent(/davide legato/i);
     });
-    mock.reset();
-    mock.restore();
+    rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
   });
 
   it('test reject delegation', async () => {
-    const mock = mockApi(
-      apiClient,
-      'PATCH',
-      REJECT_DELEGATION(arrayOfDelegators[0].mandateId),
-      204
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPatch(REJECT_DELEGATION(arrayOfDelegators[0].mandateId)).reply(204);
+    const { getAllByTestId, getByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -283,14 +278,14 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         },
       },
     });
-    const menu = result.getAllByTestId('delegationMenuIcon');
+    const menu = getAllByTestId('delegationMenuIcon');
     fireEvent.click(menu[0]);
-    const menuOpen = await waitFor(async () => result.getByTestId('delegationMenu'));
+    const menuOpen = await waitFor(async () => getByTestId('delegationMenu'));
     const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(1);
     expect(menuItems[0]).toHaveTextContent(/deleghe.reject/i);
     fireEvent.click(menuItems[0]);
-    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    const dialog = await waitFor(() => getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
     const dialogAction = within(dialog).getAllByTestId('dialogAction');
     // click on confirm button
@@ -302,22 +297,17 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       );
       expect(dialog).not.toBeInTheDocument();
     });
-    const table = result.getByTestId('table(notifications)');
-    expect(table).toBeInTheDocument();
-    expect(table).not.toHaveTextContent('Marco Verdi');
-    expect(table).toHaveTextContent('Davide Legato');
-    mock.reset();
-    mock.restore();
+    const rows = getAllByTestId('table(notifications).row');
+    expect(rows).toHaveLength(arrayOfDelegators.length - 1);
+    // the index + 1 is because we reject the first delegator
+    rows.forEach((row, index) => {
+      expect(row).toHaveTextContent(arrayOfDelegators[index + 1].delegator?.displayName!);
+    });
   });
 
   it('test accept delegation', async () => {
-    const mock = mockApi(
-      apiClient,
-      'PATCH',
-      ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId),
-      204
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPatch(ACCEPT_DELEGATION(arrayOfDelegators[0].mandateId)).reply(204);
+    const { getByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -328,12 +318,12 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         },
       },
     });
-    const table = result.getByTestId('table(notifications)');
+    const table = getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
     const acceptButton = within(table).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
     fireEvent.click(acceptButton);
-    const dialog = await waitFor(() => result.getByTestId('codeDialog'));
+    const dialog = await waitFor(() => getByTestId('codeDialog'));
     expect(dialog).toBeInTheDocument();
     // fill the code
     const codeInputs = dialog.querySelectorAll('input');
@@ -355,8 +345,6 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       expect(dialog).not.toBeInTheDocument();
     });
     expect(acceptButton).not.toBeInTheDocument();
-    mock.reset();
-    mock.restore();
   });
 
   it('test update delegation', async () => {
@@ -365,13 +353,8 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
       { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
       { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
     ];
-    const mock = mockApi(
-      apiClient,
-      'PATCH',
-      UPDATE_DELEGATION(arrayOfDelegators[1].mandateId),
-      204
-    );
-    const result = render(<DelegationsOfTheCompany />, {
+    mock.onPatch(UPDATE_DELEGATION(arrayOfDelegators[1].mandateId)).reply(204);
+    const { getByTestId, getAllByTestId } = render(<DelegationsOfTheCompany />, {
       preloadedState: {
         delegationsState: {
           ...initialState,
@@ -383,21 +366,18 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         },
       },
     });
-    let table = result.getByTestId('table(notifications)');
-    expect(table).toBeInTheDocument();
-    expect(table).not.toHaveTextContent('Group 3');
-    const menu = result.getAllByTestId('delegationMenuIcon');
-    fireEvent.click(menu[1]);
-    const menuOpen = await waitFor(async () => result.getByTestId('delegationMenu'));
+    let rows = getAllByTestId('table(notifications).row');
+    expect(rows[1]).not.toHaveTextContent('Group 3');
+    const menu = within(rows[1]).getByTestId('delegationMenuIcon');
+    fireEvent.click(menu);
+    const menuOpen = await waitFor(async () => getByTestId('delegationMenu'));
     const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(2);
     expect(menuItems[1]).toHaveTextContent(/deleghe.update/i);
     fireEvent.click(menuItems[1]);
     const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
     expect(updateDialog).toBeInTheDocument();
-    const associateGroupRadio = updateDialog.querySelector(
-      '[data-testid="associate-group"]'
-    ) as Element;
+    const associateGroupRadio = within(updateDialog).getByTestId('associate-group');
     fireEvent.click(associateGroupRadio);
     await testAutocomplete(updateDialog, 'groups', groups, true, 2);
     const groupConfirmButton = within(updateDialog).getByTestId('groupConfirmButton');
@@ -411,9 +391,7 @@ describe('DelegationsOfTheCompany Component - assuming API works properly', () =
         groups: ['group-3'],
       });
     });
-    table = result.getByTestId('table(notifications)');
-    expect(table).toHaveTextContent('Group 3');
-    mock.reset();
-    mock.restore();
+    rows = getAllByTestId('table(notifications).row');
+    expect(rows[1]).toHaveTextContent('Group 3');
   });
 });

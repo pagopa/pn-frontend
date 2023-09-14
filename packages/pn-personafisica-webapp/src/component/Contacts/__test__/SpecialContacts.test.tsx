@@ -1,10 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import {
-  AppResponseMessage,
-  ResponseEventDispatcher,
-} from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import {
   testAutocomplete,
   testFormElements,

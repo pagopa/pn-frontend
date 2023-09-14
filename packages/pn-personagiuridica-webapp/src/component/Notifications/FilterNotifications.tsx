@@ -22,7 +22,6 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { Delegator } from '../../models/Deleghe';
 import { setNotificationFilters } from '../../redux/dashboard/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -33,8 +32,6 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
-  /** Delegator */
-  currentDelegator?: Delegator;
 };
 
 const useStyles = makeStyles({
@@ -60,7 +57,6 @@ const initialValues = (
     startDate: string;
     endDate: string;
     iunMatch: string;
-    mandateId: string | undefined;
   }
 ) => {
   if (!filters || (filters && _.isEqual(filters, emptyValues))) {
@@ -73,7 +69,7 @@ const initialValues = (
   };
 };
 
-const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
@@ -87,7 +83,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     startDate: formatToTimezoneString(tenYearsAgo),
     endDate: formatToTimezoneString(today),
     iunMatch: '',
-    mandateId: currentDelegator?.mandateId,
   };
 
   const validationSchema = yup.object({
@@ -114,7 +109,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         startDate: formatToTimezoneString(values.startDate),
         endDate: formatToTimezoneString(values.endDate),
         iunMatch: values.iunMatch,
-        mandateId: currentDelegator?.mandateId,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
@@ -182,7 +176,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -204,7 +198,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody

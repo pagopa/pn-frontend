@@ -6,7 +6,7 @@ import {
   createDelegationPayload,
   createDelegationResponse,
   createDelegationSelectedPayload,
-} from '../../../__mocks__/CreateDelegations.mock';
+} from '../../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../../api/apiClients';
 import { CREATE_DELEGATION } from '../../../api/delegations/delegations.routes';

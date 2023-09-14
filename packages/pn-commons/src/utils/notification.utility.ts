@@ -277,14 +277,6 @@ export const getNotificationAllowedStatus = () => [
     label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
   },
   {
-    value: NotificationStatus.CANCELLATION_IN_PROGRESS,
-    label: getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.cancellation-in-progress',
-      'Annullata'
-    ),
-  },
-  {
     value: NotificationStatus.UNREACHABLE,
     label: getLocalizedOrDefaultLabel(
       'notifications',

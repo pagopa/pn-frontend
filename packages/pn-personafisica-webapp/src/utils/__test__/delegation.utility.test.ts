@@ -97,6 +97,7 @@ describe('Delegation utility test', () => {
   });
 
   it('sort delegation by endDate - delegators', () => {
+    // sort ascending
     const sortedCopy = (order: 'asc' | 'desc') =>
       [...arrayOfDelegators].sort((a, b) => {
         const multiplier = order === 'asc' ? 1 : -1;
@@ -106,6 +107,7 @@ describe('Delegation utility test', () => {
       });
     let result = sortDelegations('asc', 'endDate', arrayOfDelegators);
     expect(sortedCopy('asc')).toStrictEqual(result);
+    // sort descending
     result = sortDelegations('desc', 'endDate', arrayOfDelegators);
     expect(sortedCopy('desc')).toStrictEqual(result);
   });
