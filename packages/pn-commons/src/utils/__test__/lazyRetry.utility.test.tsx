@@ -42,7 +42,7 @@ describe('test lazy loading retry', () => {
   }, 10000);
 
   it('test lazyRetry - component loading fails at first try', async () => {
-    jest.mock('../../../components/EmptyState', () => {
+    jest.mock('../../components/EmptyState', () => {
       throw new Error('Chunk loading error');
     });
     const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));
@@ -59,7 +59,7 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loading fails at second try', async () => {
-    jest.mock('../../../components/EmptyState', () => {
+    jest.mock('../../components/EmptyState', () => {
       throw new Error('Chunk loading error');
     });
     const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));

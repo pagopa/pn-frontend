@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 
 import { waitFor } from '@testing-library/react';
 
-import { render, testStore } from '../../test-utils';
+import { render } from '../../test-utils';
 import { IAppMessage } from '../../types';
 import AppMessage from '../AppMessage';
 
@@ -29,7 +29,7 @@ const reduxInitialState = {
 
 describe('AppMessage Component', () => {
   it('renders toast and dispacthes event on close', async () => {
-    render(<AppMessage />, { preloadedState: reduxInitialState });
+    const { testStore } = render(<AppMessage />, { preloadedState: reduxInitialState });
     await waitFor(
       () => {
         expect(testStore.getState().appState.messages.errors).toStrictEqual(errors);
