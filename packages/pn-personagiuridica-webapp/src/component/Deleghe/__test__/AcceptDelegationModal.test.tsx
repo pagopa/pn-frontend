@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { fireEvent, render, screen, testAutocomplete, waitFor } from '../../../__test__/test-utils';
+import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import AcceptDelegationModal from '../AcceptDelegationModal';
 
 jest.mock('react-i18next', () => ({
@@ -24,7 +26,7 @@ describe('AcceptDelegationModal', () => {
         handleConfirm={confirmCbk}
       />
     );
-    const dialog = screen.queryByTestId('codeDialog') as Element;
+    const dialog = screen.getByTestId('codeDialog') as Element;
     expect(dialog).toBeInTheDocument();
   });
 
@@ -38,9 +40,9 @@ describe('AcceptDelegationModal', () => {
         handleConfirm={confirmCbk}
       />
     );
-    const dialog = screen.queryByTestId('codeDialog') as Element;
-    const codeConfirmButton = dialog.querySelector('[data-testid="codeConfirmButton"]') as Element;
-    const codeCancelButton = dialog.querySelector('[data-testid="codeCancelButton"]') as Element;
+    const dialog = screen.getByTestId('codeDialog');
+    const codeConfirmButton = within(dialog).getByTestId('codeConfirmButton');
+    const codeCancelButton = within(dialog).getByTestId('codeCancelButton');
     expect(codeConfirmButton).toBeDisabled();
     fireEvent.click(codeCancelButton);
     expect(cancelCbk).toBeCalledTimes(1);
@@ -56,9 +58,9 @@ describe('AcceptDelegationModal', () => {
         handleConfirm={confirmCbk}
       />
     );
-    const dialog = screen.queryByTestId('groupDialog') as Element;
+    const dialog = screen.getByTestId('groupDialog');
     expect(dialog).toBeInTheDocument();
-    const noGroupRadio = dialog.querySelector('[data-testid="no-group"] input') as Element;
+    const noGroupRadio = dialog.querySelector('[data-testid="no-group"] input');
     expect(noGroupRadio).toBeChecked();
   });
 
@@ -84,13 +86,11 @@ describe('AcceptDelegationModal', () => {
         },
       }
     );
-    const dialog = screen.queryByTestId('groupDialog') as Element;
+    const dialog = screen.getByTestId('groupDialog');
     expect(dialog).toBeInTheDocument();
-    const associateGroupRadio = dialog.querySelector(
-      '[data-testid="associate-group"] input'
-    ) as Element;
+    const associateGroupRadio = dialog.querySelector('[data-testid="associate-group"] input');
     expect(associateGroupRadio).toBeChecked();
-    const autocomplete = dialog.querySelector(`[data-testid="groups"]`) as Element;
+    const autocomplete = within(dialog).getByTestId(`groups`);
     expect(autocomplete).toHaveTextContent(groups[1].name);
   });
 
@@ -104,11 +104,9 @@ describe('AcceptDelegationModal', () => {
         handleConfirm={confirmCbk}
       />
     );
-    const dialog = screen.queryByTestId('groupDialog') as Element;
-    const groupConfirmButton = dialog.querySelector(
-      '[data-testid="groupConfirmButton"]'
-    ) as Element;
-    const groupCancelButton = dialog.querySelector('[data-testid="groupCancelButton"]') as Element;
+    const dialog = screen.getByTestId('groupDialog');
+    const groupConfirmButton = within(dialog).getByTestId('groupConfirmButton');
+    const groupCancelButton = within(dialog).getByTestId('groupCancelButton');
     expect(groupConfirmButton).toBeEnabled();
     expect(groupCancelButton).toHaveTextContent('button.annulla');
     fireEvent.click(groupCancelButton);
@@ -136,11 +134,9 @@ describe('AcceptDelegationModal', () => {
         },
       }
     );
-    const dialog = screen.queryByTestId('groupDialog') as Element;
-    const groupConfirmButton = dialog.querySelector(
-      '[data-testid="groupConfirmButton"]'
-    ) as Element;
-    const associateGroupRadio = dialog.querySelector('[data-testid="associate-group"]') as Element;
+    const dialog = screen.getByTestId('groupDialog');
+    const groupConfirmButton = within(dialog).getByTestId('groupConfirmButton');
+    const associateGroupRadio = within(dialog).getByTestId('associate-group');
     fireEvent.click(associateGroupRadio);
     await testAutocomplete(dialog, 'groups', groups, true, 1);
     expect(groupConfirmButton).toBeEnabled();
@@ -170,10 +166,8 @@ describe('AcceptDelegationModal', () => {
         },
       }
     );
-    let codeDialog = screen.queryByTestId('codeDialog') as Element;
-    const codeConfirmButton = codeDialog.querySelector(
-      '[data-testid="codeConfirmButton"]'
-    ) as Element;
+    let codeDialog = screen.getByTestId('codeDialog');
+    const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeDisabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
@@ -186,13 +180,11 @@ describe('AcceptDelegationModal', () => {
     expect(codeDialog).not.toBeInTheDocument();
     expect(groupDialog).toBeInTheDocument();
     // go to previous step and check that inputs are filled with previous values
-    const groupCancelButton = groupDialog.querySelector(
-      '[data-testid="groupCancelButton"]'
-    ) as Element;
+    const groupCancelButton = within(groupDialog).getByTestId('groupCancelButton');
     expect(groupCancelButton).toHaveTextContent('button.indietro');
     fireEvent.click(groupCancelButton);
     await waitFor(() => {
-      codeDialog = screen.queryByTestId('codeDialog') as Element;
+      codeDialog = screen.getByTestId('codeDialog');
       expect(groupDialog).not.toBeInTheDocument();
     });
     expect(codeDialog).toBeInTheDocument();
@@ -211,10 +203,8 @@ describe('AcceptDelegationModal', () => {
         handleConfirm={confirmCbk}
       />
     );
-    const codeDialog = screen.queryByTestId('codeDialog') as Element;
-    const codeConfirmButton = codeDialog.querySelector(
-      '[data-testid="codeConfirmButton"]'
-    ) as Element;
+    const codeDialog = screen.getByTestId('codeDialog');
+    const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeDisabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
@@ -247,10 +237,8 @@ describe('AcceptDelegationModal', () => {
         },
       }
     );
-    const codeDialog = screen.queryByTestId('codeDialog') as Element;
-    const codeConfirmButton = codeDialog.querySelector(
-      '[data-testid="codeConfirmButton"]'
-    ) as Element;
+    const codeDialog = screen.getByTestId('codeDialog');
+    const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeDisabled();
     const codeInputs = codeDialog.querySelectorAll('input');
     codeInputs.forEach((input, index) => {
@@ -262,14 +250,12 @@ describe('AcceptDelegationModal', () => {
     const groupDialog = await waitFor(() => screen.findByTestId('groupDialog'));
     expect(codeDialog).not.toBeInTheDocument();
     expect(groupDialog).toBeInTheDocument();
-    const associateGroupRadio = await waitFor(
-      () => groupDialog.querySelector('[data-testid="associate-group"]') as Element
+    const associateGroupRadio = await waitFor(() =>
+      within(groupDialog).getByTestId('associate-group')
     );
     fireEvent.click(associateGroupRadio);
     await testAutocomplete(groupDialog, 'groups', groups, true, 1);
-    const groupConfirmButton = groupDialog.querySelector(
-      '[data-testid="groupConfirmButton"]'
-    ) as Element;
+    const groupConfirmButton = within(groupDialog).getByTestId('groupConfirmButton');
     fireEvent.click(groupConfirmButton);
     expect(confirmCbk).toBeCalledTimes(1);
     expect(confirmCbk).toBeCalledWith(['0', '1', '2', '3', '4'], [groups[1]]);

@@ -16,7 +16,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
-import { arrayOfDelegators } from './Delegations.mock';
 
 const notificationStatusHistory: Array<NotificationStatusHistory> = [
   {

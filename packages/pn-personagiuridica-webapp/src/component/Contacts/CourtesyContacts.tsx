@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
+
 import { Alert, Box, Typography } from '@mui/material';
 import { IllusEmail } from '@pagopa/mui-italia';
 
 import { DigitalAddress } from '../../models/contacts';
-import DigitalContactsCard from './DigitalContactsCard';
 import CourtesyContactsList from './CourtesyContactsList';
+import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
   recipientId: string;
@@ -24,7 +25,7 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
        * */
       avatar={<IllusEmail size={60} />}
     >
-      <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+      <Box sx={{ width: { xs: '100%', lg: '50%' } }} data-testid="courtesyContacts">
         <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
       </Box>
       <Alert

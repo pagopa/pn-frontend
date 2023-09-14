@@ -1,18 +1,18 @@
+import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
 import {
   AppResponsePublisher,
-  // momentarily commented for pn-5157
-  // AppRouteType,
-  appStateActions,
   InactivityHandler,
   LoadingPage,
   SessionModal,
+  appStateActions,
   useErrors,
   useProcess,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
-import { useCallback, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';

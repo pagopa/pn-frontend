@@ -1,15 +1,15 @@
-import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
-
-import { ChangeEvent, useEffect, useMemo, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+
+import { Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
+import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 export enum CourtesyFieldType {
   EMAIL = 'email',

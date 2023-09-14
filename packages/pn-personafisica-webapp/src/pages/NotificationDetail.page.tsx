@@ -82,7 +82,7 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
-  const currentRecipient = notification && notification.currentRecipient;
+  const currentRecipient = notification?.currentRecipient;
   const isCancelled =
     notification.notificationStatus === NotificationStatus.CANCELLED ||
     notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
