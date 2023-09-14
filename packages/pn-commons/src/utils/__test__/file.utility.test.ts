@@ -1,4 +1,4 @@
-import { parseFileSize } from '../file.utility';
+import { calcBase64String, calcSha256String, calcUnit8Array, parseFileSize } from '../file.utility';
 
 describe('File utility', () => {
   it('Parse file size (0 bytes)', () => {
@@ -29,5 +29,23 @@ describe('File utility', () => {
   it('Parse file size (10 TB)', () => {
     const result = parseFileSize(10 * 1024 ** 4);
     expect(result).toBe('10 TB');
+  });
+
+  it('calcBase64String', async () => {
+    const base64String = await calcBase64String('test');
+    expect(base64String).toBe('mocked-base64String');
+  });
+
+  it('calcUnit8Array', async () => {
+    const unit8Array = await calcUnit8Array('test');
+    expect(unit8Array).toStrictEqual(new Uint8Array());
+  });
+
+  it('calcSha256String', async () => {
+    const sha256String = await calcSha256String('test');
+    expect(sha256String).toStrictEqual({
+      hashHex: 'mocked-hashHex',
+      hashBase64: 'mocked-hashBase64',
+    });
   });
 });

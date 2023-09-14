@@ -10,15 +10,6 @@ import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@test
 
 import { appStateSlice } from './redux/slices/appStateSlice';
 
-const createStore = () =>
-  configureStore({
-    reducer: { appState: appStateSlice.reducer },
-  });
-
-type RootState = ReturnType<ReturnType<typeof createStore>['getState']>;
-// eslint-disable-next-line functional/no-let
-let testStore: EnhancedStore<RootState>;
-
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
   const theme = createTheme({});
   return (
@@ -37,14 +28,19 @@ const customRender = (
     renderOptions,
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
-  testStore = configureStore({
+  const testStore = configureStore({
     reducer: { appState: appStateSlice.reducer },
     preloadedState,
   });
-  return render(ui, {
-    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
-    ...renderOptions,
-  });
+  return {
+    ...render(ui, {
+      wrapper: ({ children }) => (
+        <AllTheProviders testStore={testStore}>{children}</AllTheProviders>
+      ),
+      ...renderOptions,
+    }),
+    testStore,
+  };
 };
 
 // utility function
@@ -222,5 +218,4 @@ export {
   testFormElements,
   testInput,
   testRadio,
-  testStore,
 };
