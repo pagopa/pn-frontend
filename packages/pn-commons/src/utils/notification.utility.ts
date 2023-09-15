@@ -541,6 +541,8 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_PROGRESS,
   TimelineCategory.SEND_ANALOG_FEEDBACK,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
+  // PN-7743
+  TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE,
 ];
 
 const AnalogFlowAllowedCodes = [
