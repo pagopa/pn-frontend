@@ -1,10 +1,15 @@
 import _ from 'lodash';
 
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
 describe('SendDigitalFeedbackStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('test getTimelineStepInfo with responseStatus OK', () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_FEEDBACK, {
       digitalAddress: {

@@ -1,4 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { PhysicalCommunicationType, TimelineCategory } from '../../../types';
 import { SendAnalogDomicileStep } from '../SendAnalogDomicileStep';
 
@@ -13,6 +14,10 @@ const physicalAddress = {
 };
 
 describe('SendAnalogDomicileStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('test getTimelineStepInfo with serviceLevel REGISTERED_LETTER_890', () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_DOMICILE, {
       serviceLevel: PhysicalCommunicationType.REGISTERED_LETTER_890,

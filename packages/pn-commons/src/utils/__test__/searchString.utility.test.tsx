@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render } from '../../test-utils';
+import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from '../searchString.utility';
 
 const setValueMock = jest.fn();
@@ -17,6 +17,10 @@ const Component: React.FC = () => {
 };
 
 describe('searchString utility', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('should not display a limit text if search string is shorter than maximum length', () => {
     const searchString = 'abcde';
     const maxLength = 10;

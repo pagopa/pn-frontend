@@ -1,8 +1,13 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalDomicileStep } from '../SendDigitalDomicileStep';
 
 describe('SendDigitalDomicileStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('test getTimelineStepInfo without digitalAddress data', () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_DOMICILE, {});
     const payload = {
