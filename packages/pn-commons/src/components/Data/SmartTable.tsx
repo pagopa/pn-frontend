@@ -164,7 +164,6 @@ const SmartTable = <ColumnId extends string>({
         </Grid>
         {rowData.length > 0 && (
           <ItemsCard
-            testId="mobileCards"
             cardHeader={cardHeader}
             cardBody={cardBody}
             cardData={rowData}
@@ -213,13 +212,7 @@ const SmartTable = <ColumnId extends string>({
     <>
       <Box mb={3}>{filters}</Box>
       {rowData.length > 0 && (
-        <ItemsTable
-          columns={columns}
-          rows={rowData}
-          sort={sort}
-          onChangeSorting={handleSorting}
-          testId="desktopTable"
-        />
+        <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
       )}
       {rowData.length > 0 && pagination && (
         <CustomPagination

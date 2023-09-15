@@ -49,7 +49,7 @@ const ItemsCard = ({
   cardActions,
   sx,
   headerGridProps,
-  testId,
+  testId = 'mobileCards',
 }: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
