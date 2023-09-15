@@ -3,14 +3,35 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ApiErrorWrapper from '../ApiErrorWrapper';
 
+const mockApiError = 'mockApiId';
 // Mocking the useErrors hook
 jest.mock('../../../hooks', () => ({
     useErrors: () => ({
-        hasApiErrors: (apiId) => apiId === 'mockApiId', // Mocking hasApiErrors function
+        hasApiErrors: (apiId) => apiId === mockApiError, // Mocking hasApiErrors function
     }),
 }));
 
 describe('ApiErrorWrapper', () => {
+    const original = window.location;
+    const reloadText = 'Ricarica';
+
+    beforeAll(() => {
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value: { reload: jest.fn() },
+        });
+    });
+
+
+    afterAll(() => {
+        Object.defineProperty(window, 'location', { configurable: true, value: original });
+    });
+
+
+    it('mocks reload function', () => {
+        expect(jest.isMockFunction(window.location.reload)).toBe(true);
+    });
+
     it('renders children when there are no API errors', () => {
         render(
             <ApiErrorWrapper apiId="otherApiId">
@@ -23,31 +44,50 @@ describe('ApiErrorWrapper', () => {
     });
 
     it('renders errorComponent when there are API errors', () => {
+        const errorText = "Error Text";
         render(
-            <ApiErrorWrapper apiId="mockApiId" mainText="Error Text">
+            <ApiErrorWrapper apiId={mockApiError} mainText={errorText}>
                 <div data-testid="child-element">Child content</div>
             </ApiErrorWrapper>
         );
 
-        const errorComponent = screen.getByText('Error Text');
+        const errorComponent = screen.getByTestId(`api-error-${mockApiError}`);
         expect(errorComponent).toBeInTheDocument();
+        expect(errorComponent).toHaveTextContent(errorText);
     });
 
-    it('calls reloadAction when errorComponent is clicked', async () => {
+    it('calls reloadAction when errorComponent is clicked and if a reloadAcion is specified', async () => {
         const reloadActionMock = jest.fn();
 
         render(
-            <ApiErrorWrapper apiId="mockApiId" reloadAction={reloadActionMock}>
+            <ApiErrorWrapper apiId={mockApiError} reloadAction={reloadActionMock}>
                 <div data-testid="child-element">Child content</div>
             </ApiErrorWrapper>
         );
 
-        const errorComponent = screen.getByText('Ricarica');
-        expect(errorComponent).toBeInTheDocument();
-        userEvent.click(errorComponent);
+        const reloadItemComponent = screen.getByText(reloadText);
+        expect(reloadItemComponent).toBeInTheDocument();
+        userEvent.click(reloadItemComponent);
 
         await waitFor(() => {
             expect(reloadActionMock).toHaveBeenCalled();
+        });
+
+    });
+
+    it('calls reloadAction when errorComponent is clicked - no reloadAction Defined ', async () => {
+        render(
+            <ApiErrorWrapper apiId={mockApiError}>
+                <div data-testid="child-element">Child content</div>
+            </ApiErrorWrapper>
+        );
+
+        const reloadItemComponent = screen.getByText(reloadText);
+        expect(reloadItemComponent).toBeInTheDocument();
+        userEvent.click(reloadItemComponent);
+
+        await waitFor(() => {
+            expect(window.location.reload).toHaveBeenCalled();
         });
 
     });
