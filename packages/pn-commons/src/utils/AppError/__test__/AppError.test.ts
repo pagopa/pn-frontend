@@ -1,5 +1,4 @@
 import { ErrorMessage } from '../../../types';
-import { ServerResponseErrorCode } from '../../../types/AppResponse';
 import AppError from '../AppError';
 
 class MockAppError extends AppError {
@@ -35,6 +34,13 @@ describe('AppError', () => {
         content: 'mock-content',
         title: 'mock-title',
       },
+    });
+  });
+
+  it('getMessage', () => {
+    expect(mockAppError.getMessage()).toStrictEqual({
+      title: 'mock-title',
+      content: 'mock-content',
     });
   });
 });

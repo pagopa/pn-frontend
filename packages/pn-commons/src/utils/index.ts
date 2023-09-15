@@ -33,11 +33,7 @@ import { compileOneTrustPath } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
 import { performThunkAction } from './redux.utility';
 import { AppRouteParams, AppRouteType, compileRoute } from './routes.utility';
-import {
-  searchStringCleanDenomination,
-  searchStringLimitReachedText,
-  useSearchStringChangeInput,
-} from './searchString.utility';
+import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
@@ -65,7 +61,6 @@ export {
   formatToTimezoneString,
   getValidValue,
   formatFiscalCode,
-  searchStringCleanDenomination,
   searchStringLimitReachedText,
   useSearchStringChangeInput,
   formatDateTime,

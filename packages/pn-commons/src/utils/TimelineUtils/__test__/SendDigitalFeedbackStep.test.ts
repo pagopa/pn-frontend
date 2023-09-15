@@ -1,35 +1,81 @@
 import _ from 'lodash';
 
-import { mockTimelineStepSendDigitalFeedback } from '../../../__mocks__/TimelineStep.mock';
-import { SendDigitalDetails } from '../../../types';
+import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
 describe('SendDigitalFeedbackStep', () => {
   it('test getTimelineStepInfo with responseStatus OK', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_FEEDBACK, {
+      digitalAddress: {
+        address: 'nome.cognome@pec.it',
+        type: DigitalDomicileType.PEC,
+      },
+      responseStatus: 'OK',
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationToFe.recipients[0],
+      isMultiRecipient: false,
+    };
     const sendDigitalDomicileStep = new SendDigitalFeedbackStep();
-    const digitalAddress = (mockTimelineStepSendDigitalFeedback.step.details as SendDigitalDetails)
-      .digitalAddress;
+    // mono recipient
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-success`,
+      description: `notifiche - detail.timeline.send-digital-success-description - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
+    });
+    // multi recipient
     expect(
-      sendDigitalDomicileStep.getTimelineStepInfo(mockTimelineStepSendDigitalFeedback)
+      sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
     ).toStrictEqual({
-      label: `Invio via PEC riuscito`,
-      description: `L'invio della notifica a ${mockTimelineStepSendDigitalFeedback.recipient?.denomination} all'indirizzo PEC ${digitalAddress?.address} è riuscito.`,
+      label: `notifiche - detail.timeline.send-digital-success`,
+      description: `notifiche - detail.timeline.send-digital-success-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
     });
   });
 
   it('test getTimelineStepInfo with responseStatus KO', () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_FEEDBACK, {
+      digitalAddress: {
+        address: 'nome.cognome@pec.it',
+        type: DigitalDomicileType.PEC,
+      },
+      responseStatus: 'KO',
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationToFe.recipients[0],
+      isMultiRecipient: false,
+    };
     const sendDigitalDomicileStep = new SendDigitalFeedbackStep();
-    let cloneMockTimelineStepSendDigitalFeedback = _.cloneDeep(mockTimelineStepSendDigitalFeedback);
-    (cloneMockTimelineStepSendDigitalFeedback.step.details as SendDigitalDetails).responseStatus =
-      'KO';
-    const digitalAddress = (
-      cloneMockTimelineStepSendDigitalFeedback.step.details as SendDigitalDetails
-    ).digitalAddress;
+    // mono recipient
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-error`,
+      description: `notifiche - detail.timeline.send-digital-error-description - ${JSON.stringify({
+        ...sendDigitalDomicileStep.nameAndTaxId(payload),
+        address: 'nome.cognome@pec.it',
+      })}`,
+    });
+    // multi recipient
     expect(
-      sendDigitalDomicileStep.getTimelineStepInfo(cloneMockTimelineStepSendDigitalFeedback)
+      sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
     ).toStrictEqual({
-      label: `Invio via PEC non riuscito`,
-      description: `L'invio della notifica a ${cloneMockTimelineStepSendDigitalFeedback.recipient?.denomination} all'indirizzo PEC ${digitalAddress?.address} non è riuscito perché la casella è satura, non valida o inattiva.`,
+      label: `notifiche - detail.timeline.send-digital-error`,
+      description: `notifiche - detail.timeline.send-digital-error-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
     });
   });
 });

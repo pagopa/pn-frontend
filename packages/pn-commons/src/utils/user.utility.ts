@@ -14,7 +14,6 @@ export const basicUserDataMatcherContents = {
   name: yup.string().matches(dataRegex.name),
   uid: yup.string().uuid(),
   sessionToken: yup.string().matches(dataRegex.token),
-
   email: yup.string().email(),
   /* *Note*:
    * For the user email that arrives to PN from other apps, we use the more liberal

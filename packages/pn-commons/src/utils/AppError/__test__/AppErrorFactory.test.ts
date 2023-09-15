@@ -5,7 +5,7 @@ import UnknownAppError from '../UnknownAppError';
 describe('AppErrorFactory', () => {
   const appErrorFactory = new AppErrorFactory();
 
-  it('test return instance of GenericAppErrorFactory', () => {
+  it('test return instance of InternalServerAppError', () => {
     const currentClass = appErrorFactory.create(500);
     expect(currentClass).toBeInstanceOf(InternalServerAppError);
   });

@@ -1,15 +1,32 @@
-import { mockTimelineStepAnalogFailureWorkflow } from '../../../__mocks__/TimelineStep.mock';
+import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { TimelineCategory } from '../../../types';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
+
+const timelineElem = getTimelineElem(TimelineCategory.ANALOG_FAILURE_WORKFLOW, {});
+const payload = {
+  step: timelineElem,
+  recipient: notificationToFe.recipients[0],
+  isMultiRecipient: false,
+};
 
 describe('AnalogFailureWorkflowStep', () => {
   it('test getTimelineStepInfo', () => {
+    // mono recipient
     const analogFailureWorkflowStep = new AnalogFailureWorkflowStep();
-
+    expect(analogFailureWorkflowStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.analog-failure-workflow`,
+      description: `notifiche - detail.timeline.analog-failure-workflow-description - ${JSON.stringify(
+        analogFailureWorkflowStep.nameAndTaxId(payload)
+      )}`,
+    });
+    // multi recipient
     expect(
-      analogFailureWorkflowStep.getTimelineStepInfo(mockTimelineStepAnalogFailureWorkflow)
+      analogFailureWorkflowStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
     ).toStrictEqual({
-      label: 'Invio analogico assolutamente fallimentare',
-      description: `Invio analogico a ${mockTimelineStepAnalogFailureWorkflow.recipient?.denomination} assolutamente fallimentare.`,
+      label: `notifiche - detail.timeline.analog-failure-workflow`,
+      description: `notifiche - detail.timeline.analog-failure-workflow-description-multirecipient - ${JSON.stringify(
+        analogFailureWorkflowStep.nameAndTaxId(payload)
+      )}`,
     });
   });
 });
