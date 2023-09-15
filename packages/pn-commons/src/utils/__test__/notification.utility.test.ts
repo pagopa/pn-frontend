@@ -824,7 +824,7 @@ describe('timeline event description', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
     testTimelineStatusInfosFnSingle(
       'prepare-analog-domicile-failure',
-      'prepare-analog-domicile-failure-XXX-description',
+      'prepare-analog-domicile-failure-ZZZ-description',
       { 
         name: 'Nome Cognome', taxId: '(mocked-taxId)', 
         address: '',
@@ -925,7 +925,7 @@ describe('timeline event description', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
     testTimelineStatusInfosFnMulti0(
       'prepare-analog-domicile-failure',
-      'prepare-analog-domicile-failure-XXX-description-multirecipient',
+      'prepare-analog-domicile-failure-ZZZ-description-multirecipient',
       {
         name: `Lorenza Catrufizzio`,
         taxId: '(mocked-taxId)',
