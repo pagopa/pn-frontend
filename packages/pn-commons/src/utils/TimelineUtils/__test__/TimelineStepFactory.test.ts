@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { mockTimelineStepSendDigitalFeedback } from '../../../__mocks__/TimelineStep.mock';
+import { getTimelineElem } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../types';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
 import { DefaultStep } from '../DefaultStep';
@@ -16,54 +16,39 @@ import { SendSimpleRegisteredLetterStep } from '../SendSimpleRegisteredLetterSte
 import { TimelineStepFactory } from '../TimelineStepFactory';
 
 describe('TimelineStepFactory', () => {
-  const mockStep = mockTimelineStepSendDigitalFeedback.step;
-  const setStepCategory = (category: TimelineCategory) => {
-    let step = _.cloneDeep(mockStep);
-    step.category = category;
-    return step;
-  };
-
   const arrayCategories = [
-    TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
-    TimelineCategory.ANALOG_FAILURE_WORKFLOW,
-    TimelineCategory.SEND_COURTESY_MESSAGE,
-    TimelineCategory.SEND_DIGITAL_DOMICILE,
-    TimelineCategory.SEND_DIGITAL_FEEDBACK,
-    TimelineCategory.SEND_DIGITAL_PROGRESS,
-    TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
-    TimelineCategory.SEND_ANALOG_DOMICILE,
-    TimelineCategory.SEND_ANALOG_FEEDBACK,
-    TimelineCategory.SEND_ANALOG_PROGRESS,
-    TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
-    TimelineCategory.NOT_HANDLED,
+    { category: TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW, class: ScheduleDigitalWorkflowStep },
+    { category: TimelineCategory.ANALOG_FAILURE_WORKFLOW, class: AnalogFailureWorkflowStep },
+    { category: TimelineCategory.SEND_COURTESY_MESSAGE, class: SendCourtesyMessageStep },
+    { category: TimelineCategory.SEND_DIGITAL_DOMICILE, class: SendDigitalDomicileStep },
+    { category: TimelineCategory.SEND_DIGITAL_FEEDBACK, class: SendDigitalFeedbackStep },
+    { category: TimelineCategory.SEND_DIGITAL_PROGRESS, class: SendDigitalProgressStep },
+    {
+      category: TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
+      class: SendSimpleRegisteredLetterStep,
+    },
+    { category: TimelineCategory.SEND_ANALOG_DOMICILE, class: SendAnalogDomicileStep },
+    { category: TimelineCategory.SEND_ANALOG_FEEDBACK, class: SendAnalogFlowStep },
+    { category: TimelineCategory.SEND_ANALOG_PROGRESS, class: SendAnalogFlowStep },
+    {
+      category: TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
+      class: SendAnalogFlowStep,
+    },
+    { category: TimelineCategory.NOT_HANDLED, class: NotHandledStep },
   ];
 
-  const arrayClasses = [
-    ScheduleDigitalWorkflowStep,
-    AnalogFailureWorkflowStep,
-    SendCourtesyMessageStep,
-    SendDigitalDomicileStep,
-    SendDigitalFeedbackStep,
-    SendDigitalProgressStep,
-    SendSimpleRegisteredLetterStep,
-    SendAnalogDomicileStep,
-    SendAnalogFlowStep,
-    SendAnalogFlowStep,
-    SendAnalogFlowStep,
-    NotHandledStep,
-  ];
-
-  arrayCategories.forEach((category, index) => {
-    const currentClass = TimelineStepFactory.createTimelineStep(setStepCategory(category));
-    it(`test return instance of ${currentClass.constructor.name} with category ${category}`, () => {
-      expect(currentClass).toBeInstanceOf(arrayClasses[index]);
-    });
-  });
+  it.each(arrayCategories)(
+    `test return instance of $class.name with category $category`,
+    (category) => {
+      const currentStep = getTimelineElem(category.category, {});
+      const currentClass = TimelineStepFactory.createTimelineStep(currentStep);
+      expect(currentClass).toBeInstanceOf(category.class);
+    }
+  );
 
   it('test return instance of DefaultStep with a not handled category', () => {
-    const currentClass = TimelineStepFactory.createTimelineStep(
-      setStepCategory(TimelineCategory.REFINEMENT)
-    );
+    const currentStep = getTimelineElem(TimelineCategory.REFINEMENT, {});
+    const currentClass = TimelineStepFactory.createTimelineStep(currentStep);
     expect(currentClass).toBeInstanceOf(DefaultStep);
   });
 });

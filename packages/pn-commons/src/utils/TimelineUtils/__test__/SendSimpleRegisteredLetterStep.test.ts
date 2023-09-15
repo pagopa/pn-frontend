@@ -1,21 +1,51 @@
-import { mockTimelineStepAnalogFailureWorkflow } from '../../../__mocks__/TimelineStep.mock';
-import { AnalogWorkflowDetails } from '../../../types';
+import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { TimelineCategory } from '../../../types';
 import { SendSimpleRegisteredLetterStep } from '../SendSimpleRegisteredLetterStep';
+
+const physicalAddress = {
+  at: '',
+  addressDetails: '',
+  address: 'Via Mazzini 1848',
+  zip: '98036',
+  municipality: 'Graniti',
+  province: '',
+  foreignState: 'Italy',
+};
+
+const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
+  physicalAddress,
+});
+
+const payload = {
+  step: timelineElem,
+  recipient: notificationToFe.recipients[0],
+  isMultiRecipient: false,
+};
 
 describe('SendSimpleRegisteredLetterStep', () => {
   it('test getTimelineStepInfo', () => {
     const sendSimpleRegisteredLetterStep = new SendSimpleRegisteredLetterStep();
-
+    // mono recipient
+    expect(sendSimpleRegisteredLetterStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-simple-registered-letter`,
+      description: `notifiche - detail.timeline.send-simple-registered-letter-description - ${JSON.stringify(
+        {
+          ...sendSimpleRegisteredLetterStep.nameAndTaxId(payload),
+          ...sendSimpleRegisteredLetterStep.completePhysicalAddress(payload.step),
+        }
+      )}`,
+    });
+    // multi recipient
     expect(
-      sendSimpleRegisteredLetterStep.getTimelineStepInfo(mockTimelineStepAnalogFailureWorkflow)
+      sendSimpleRegisteredLetterStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
     ).toStrictEqual({
-      label: 'Invio via raccomandata semplice',
-      description: `È in corso l'invio della notifica a ${
-        mockTimelineStepAnalogFailureWorkflow.recipient?.denomination
-      } all'indirizzo ${
-        (mockTimelineStepAnalogFailureWorkflow.step.details as AnalogWorkflowDetails)
-          .physicalAddress?.address
-      } tramite raccomandata semplice.`,
+      label: `notifiche - detail.timeline.send-simple-registered-letter`,
+      description: `notifiche - detail.timeline.send-simple-registered-letter-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendSimpleRegisteredLetterStep.nameAndTaxId(payload),
+          ...sendSimpleRegisteredLetterStep.completePhysicalAddress(payload.step),
+        }
+      )}`,
     });
   });
 });

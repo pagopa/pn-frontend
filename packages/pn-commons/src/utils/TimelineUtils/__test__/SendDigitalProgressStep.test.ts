@@ -1,53 +1,101 @@
-import _ from 'lodash';
-
-import { mockTimelineStepSendDigitalProgress } from '../../../__mocks__/TimelineStep.mock';
-import { SendDigitalDetails } from '../../../types';
+import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalProgressStep } from '../SendDigitalProgressStep';
 
-const setDeliveryCode = (deliveryCode: string) => {
-  let cloneMockTimelineStepSendDigitalProgress = _.cloneDeep(mockTimelineStepSendDigitalProgress);
-  (cloneMockTimelineStepSendDigitalProgress.step.details as SendDigitalDetails).deliveryDetailCode =
-    deliveryCode;
-  return cloneMockTimelineStepSendDigitalProgress;
-};
+describe('SendDigitalProgressStep', () => {
+  const errorDeliveryCodes = ['C008', 'C010', 'DP10'];
+  const successDeliveryCodes = ['C001', 'DP00'];
 
-describe('SendDigitalProgressStep - test getTimelineStepInfo with deliveryDetailCode C008, C010 and DP10', () => {
-  const deliveryCodes = ['C008', 'C010', 'DP10'];
-  deliveryCodes.forEach((code) => {
-    it(`test getTimelineStepInfo with deliveryDetailCode ${code}`, () => {
-      const sendDigitalDomicileStep = new SendDigitalProgressStep();
-      const digitalAddress = (
-        mockTimelineStepSendDigitalProgress.step.details as SendDigitalDetails
-      ).digitalAddress;
-      expect(sendDigitalDomicileStep.getTimelineStepInfo(setDeliveryCode(code))).toStrictEqual({
-        label: `Invio via PEC non preso in carico`,
-        description: `L'invio della notifica a ${mockTimelineStepSendDigitalProgress.recipient?.denomination} all'indirizzo PEC ${digitalAddress?.address} non è stato preso in carico.`,
-      });
+  it.each(errorDeliveryCodes)(`test getTimelineStepInfo with deliveryDetailCode %s`, (code) => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
+      digitalAddress: {
+        address: 'nome.cognome@pec.it',
+        type: DigitalDomicileType.PEC,
+      },
+      deliveryDetailCode: code,
     });
-  });
-});
-
-describe('SendDigitalProgressStep - test getTimelineStepInfo with deliveryDetailCode C001 and DP00', () => {
-  const deliveryCodes = ['C001', 'DP00'];
-  deliveryCodes.forEach((code) => {
-    it(`test getTimelineStepInfo with deliveryDetailCode ${code}`, () => {
-      const sendDigitalDomicileStep = new SendDigitalProgressStep();
-      const digitalAddress = (
-        mockTimelineStepSendDigitalProgress.step.details as SendDigitalDetails
-      ).digitalAddress;
-      expect(sendDigitalDomicileStep.getTimelineStepInfo(setDeliveryCode(code))).toStrictEqual({
-        label: `Invio via PEC preso in carico`,
-        description: `L'invio della notifica a ${mockTimelineStepSendDigitalProgress.recipient?.denomination} all'indirizzo PEC ${digitalAddress?.address} è stato preso in carico.`,
-      });
-    });
-  });
-});
-
-describe('SendDigitalProgressStep - test with unhandled deliveryDetailCode', () => {
-  it(`test getTimelineStepInfo with unhandled deliveryDetailCode`, () => {
+    const payload = {
+      step: timelineElem,
+      recipient: notificationToFe.recipients[0],
+      isMultiRecipient: false,
+    };
     const sendDigitalDomicileStep = new SendDigitalProgressStep();
+    // mono recipient
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-progress-error`,
+      description: `notifiche - detail.timeline.send-digital-progress-error-description - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
+    });
+    // multi recipient
     expect(
-      sendDigitalDomicileStep.getTimelineStepInfo(setDeliveryCode('mocked-code'))
-    ).toStrictEqual(null);
+      sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
+    ).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-progress-error`,
+      description: `notifiche - detail.timeline.send-digital-progress-error-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
+    });
+  });
+
+  it.each(successDeliveryCodes)(`test getTimelineStepInfo with deliveryDetailCode %s`, (code) => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
+      digitalAddress: {
+        address: 'nome.cognome@pec.it',
+        type: DigitalDomicileType.PEC,
+      },
+      deliveryDetailCode: code,
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationToFe.recipients[0],
+      isMultiRecipient: false,
+    };
+    const sendDigitalDomicileStep = new SendDigitalProgressStep();
+    // mono recipient
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-progress-success`,
+      description: `notifiche - detail.timeline.send-digital-progress-success-description - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
+    });
+    // multi recipient
+    expect(
+      sendDigitalDomicileStep.getTimelineStepInfo({ ...payload, isMultiRecipient: true })
+    ).toStrictEqual({
+      label: `notifiche - detail.timeline.send-digital-progress-success`,
+      description: `notifiche - detail.timeline.send-digital-progress-success-description-multirecipient - ${JSON.stringify(
+        {
+          ...sendDigitalDomicileStep.nameAndTaxId(payload),
+          address: 'nome.cognome@pec.it',
+        }
+      )}`,
+    });
+  });
+
+  it(`test getTimelineStepInfo with unhandled deliveryDetailCode`, () => {
+    const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
+      digitalAddress: {
+        address: 'nome.cognome@pec.it',
+        type: DigitalDomicileType.PEC,
+      },
+      deliveryDetailCode: 'INVCD',
+    });
+    const payload = {
+      step: timelineElem,
+      recipient: notificationToFe.recipients[0],
+      isMultiRecipient: false,
+    };
+    const sendDigitalDomicileStep = new SendDigitalProgressStep();
+    expect(sendDigitalDomicileStep.getTimelineStepInfo(payload)).toStrictEqual(null);
   });
 });

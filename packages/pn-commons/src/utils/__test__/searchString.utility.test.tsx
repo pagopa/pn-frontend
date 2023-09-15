@@ -3,19 +3,6 @@ import React from 'react';
 import { fireEvent, render } from '../../test-utils';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from '../searchString.utility';
 
-jest.mock('../../services/localization.service', () => {
-  const original = jest.requireActual('../../services/localization.service');
-  return {
-    ...original,
-    getLocalizedOrDefaultLabel: (
-      namespace: string,
-      key: string,
-      _defaultLabel: string,
-      extra?: { maxLength: number }
-    ) => (extra ? `${namespace} - ${key} - ${extra.maxLength}` : `${namespace} - ${key}`),
-  };
-});
-
 const setValueMock = jest.fn();
 
 const Component: React.FC = () => {
@@ -41,7 +28,9 @@ describe('searchString utility', () => {
     const searchString = 'abcdefghilmnopq';
     const maxLength = 10;
     const result = searchStringLimitReachedText(searchString, maxLength);
-    expect(result).toBe(` (common - validation.search-pattern-length-limit - ${maxLength})`);
+    expect(result).toBe(
+      ` (common - validation.search-pattern-length-limit - ${JSON.stringify({ maxLength })})`
+    );
   });
 
   it('should clean the search string', () => {
