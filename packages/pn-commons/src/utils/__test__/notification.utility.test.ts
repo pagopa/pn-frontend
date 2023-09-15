@@ -8,25 +8,21 @@ import {
   notificationToFeMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
 import { initLocalization } from '../../services';
+import { initLocalizationForTest } from '../../test-utils';
 import {
   DigitalDomicileType,
-  DigitalWorkflowDetails,
-  INotificationDetailTimeline,
   LegalFactType,
   NotificationDeliveryMode,
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-  PhysicalCommunicationType,
   RecipientType,
-  SendCourtesyMessageDetails,
   SendDigitalDetails,
   TimelineCategory,
 } from '../../types';
 import {
   AarDetails,
   AppIoCourtesyMessageEventType,
-  NotificationDetailOtherDocument,
   ViewedDetails,
 } from '../../types/NotificationDetail';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
@@ -62,6 +58,10 @@ function testNotificationStatusInfos(
 }
 
 describe('notification status texts', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
     testNotificationStatusInfos(
       'default',
@@ -331,6 +331,10 @@ describe('notification status texts', () => {
 });
 
 describe('timeline legal fact link text', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('return legalFact label - default', () => {
     const timelineElem = {
       elementId: 'GET_ADDRESS.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',

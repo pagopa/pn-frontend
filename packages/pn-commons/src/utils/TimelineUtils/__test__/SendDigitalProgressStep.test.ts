@@ -1,10 +1,15 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalProgressStep } from '../SendDigitalProgressStep';
 
 describe('SendDigitalProgressStep', () => {
   const errorDeliveryCodes = ['C008', 'C010', 'DP10'];
   const successDeliveryCodes = ['C001', 'DP00'];
+
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   it.each(errorDeliveryCodes)(`test getTimelineStepInfo with deliveryDetailCode %s`, (code) => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {

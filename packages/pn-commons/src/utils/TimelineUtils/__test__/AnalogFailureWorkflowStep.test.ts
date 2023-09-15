@@ -1,4 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { TimelineCategory } from '../../../types';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
 
@@ -10,6 +11,10 @@ const payload = {
 };
 
 describe('AnalogFailureWorkflowStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('test getTimelineStepInfo', () => {
     // mono recipient
     const analogFailureWorkflowStep = new AnalogFailureWorkflowStep();

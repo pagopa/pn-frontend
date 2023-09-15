@@ -1,4 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { TimelineCategory } from '../../../types';
 import { TimelineStep, TimelineStepInfo } from '../TimelineStep';
 
@@ -14,6 +15,10 @@ class MockTimelineStep extends TimelineStep {
 
 describe('TimelineStep', () => {
   const mockTimelineStep = new MockTimelineStep();
+
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   it('getTimelineStepInfo', () => {
     expect(mockTimelineStep.getTimelineStepInfo()).toStrictEqual({

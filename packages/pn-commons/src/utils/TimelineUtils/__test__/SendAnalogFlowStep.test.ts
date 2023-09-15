@@ -1,4 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { TimelineCategory } from '../../../types';
 import { SendAnalogFlowStep } from '../SendAnalogFlowStep';
 import { TimelineStepPayload } from '../TimelineStep';
@@ -22,6 +23,10 @@ const physicalAddress = {
 };
 
 describe('SendAnalogFlowStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('getTimelineStepLabel SEND_ANALOG_DOMICILE', () => {
     const sendAnalogFlowStep = new SendAnalogFlowStep();
     expect(sendAnalogFlowStep.getTimelineStepLabel(payload)).toStrictEqual(

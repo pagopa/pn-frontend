@@ -1,4 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { TimelineCategory } from '../../../types';
 import { SendSimpleRegisteredLetterStep } from '../SendSimpleRegisteredLetterStep';
 
@@ -23,6 +24,10 @@ const payload = {
 };
 
 describe('SendSimpleRegisteredLetterStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('test getTimelineStepInfo', () => {
     const sendSimpleRegisteredLetterStep = new SendSimpleRegisteredLetterStep();
     // mono recipient

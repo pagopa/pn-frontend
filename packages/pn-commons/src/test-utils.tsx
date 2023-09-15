@@ -9,6 +9,7 @@ import { Store, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
+import { initLocalization } from './services/localization.service';
 
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
   const theme = createTheme({});
@@ -209,6 +210,18 @@ async function testRadio(
   }
 }
 
+/**
+ * Init localization and set the translate function to a default value
+ */
+function initLocalizationForTest() {
+  const mockedTranslationFn = (
+    namespace: string | Array<string>,
+    path: string,
+    data?: { [key: string]: any | undefined }
+  ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
+  initLocalization(mockedTranslationFn);
+}
+
 export * from '@testing-library/react';
 export {
   customRender as render,
@@ -218,4 +231,5 @@ export {
   testFormElements,
   testInput,
   testRadio,
+  initLocalizationForTest,
 };

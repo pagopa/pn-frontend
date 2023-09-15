@@ -1,4 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { initLocalizationForTest } from '../../../test-utils';
 import { TimelineCategory } from '../../../types';
 import { ScheduleDigitalWorkflowStep } from '../ScheduleDigitalWorkflowStep';
 
@@ -10,6 +11,10 @@ const payload = {
 };
 
 describe('ScheduleDigitalWorkflowStep', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('test getTimelineStepInfo', () => {
     // mono recipient
     const scheduleDigitalWorkflowStep = new ScheduleDigitalWorkflowStep();
