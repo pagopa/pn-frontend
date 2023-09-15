@@ -8,7 +8,7 @@ import CourtesyPage from '../CourtesyPage';
 const mockClickFn = jest.fn();
 
 describe('test CourtesyPage component', () => {
-  test('renders the full component', () => {
+  it('renders the full component', () => {
     const result = render(
       <CourtesyPage
         title="Test title"
@@ -22,7 +22,7 @@ describe('test CourtesyPage component', () => {
     expect(result.container).toHaveTextContent(/test subtitle/i);
   });
 
-  test('clicks on the action button', () => {
+  it('clicks on the action button', () => {
     const result = render(
       <CourtesyPage
         title="Test title"

@@ -1,40 +1,51 @@
 import React from 'react';
 
-import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
-
-import { render } from '../../test-utils';
+import {
+  RenderResult,
+  fireEvent,
+  initLocalizationForTest,
+  render,
+  waitFor,
+} from '../../test-utils';
 import FileUpload from '../FileUpload';
+
+const mockUploadFn = jest.fn();
+const mockUploadFileHandler = jest.fn();
+const mockRemoveFileHandler = jest.fn();
+
+const file = new File(['mocked content'], 'Mocked file', { type: 'text/plain' });
+const bigFile = new File(['mocked content big'], 'Mocked big file', { type: 'text/plain' });
+const wrongTypeFile = new File(['mocked content'], 'Wrong file type', { type: 'application/pdf' });
+
+async function testFileUploading(result: RenderResult) {
+  const fileInput = result.queryByTestId('fileInput');
+  expect(fileInput).toBeInTheDocument();
+  const input = fileInput?.querySelector('input');
+  fireEvent.change(input!, { target: { files: [file] } });
+  await waitFor(() => {
+    expect(mockUploadFn).toBeCalledTimes(1);
+    expect(mockUploadFn).toBeCalledWith(file, undefined);
+    expect(result.container).toHaveTextContent('common - upload-file.loading');
+  });
+}
 
 describe('FileUpload Component', () => {
   let result: RenderResult;
-  let mockUploadFn: jest.Mock;
 
-  const mockUploadFileHandler = jest.fn();
-  const mockRemoveFileHandler = jest.fn();
-
-  const file = new Blob(['mocked content'], { type: 'text/plain' });
-  const bigFile = new Blob(['mocked content big'], { type: 'text/plain' });
-  const wrongTypeFile = new Blob(['mocked content'], { type: 'application/pdf' });
-
-  (file as any).name = 'Mocked file';
-  (bigFile as any).name = 'Mocked big file';
-  (wrongTypeFile as any).name = 'Mocked big file';
-
-  async function testFileUploading() {
-    const fileInput = result.queryByTestId('fileInput');
-    expect(fileInput).toBeInTheDocument();
-    const input = fileInput?.querySelector('input');
-    fireEvent.change(input!, { target: { files: [file] } });
-    await waitFor(() => {
-      expect(mockUploadFn).toBeCalledTimes(1);
-      expect(mockUploadFn).toBeCalledWith(file, undefined);
-      expect(result.container).toHaveTextContent(/Caricamento/i);
-    });
-  }
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   beforeEach(() => {
-    mockUploadFn = jest.fn();
     mockUploadFn.mockImplementation(jest.fn(() => Promise.resolve(null)));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+  });
+
+  it('renders FileUpload', () => {
     // render component
     result = render(
       <FileUpload
@@ -46,38 +57,49 @@ describe('FileUpload Component', () => {
         fileSizeLimit={file.size}
       />
     );
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
-  });
-
-  it('renders FileUpload', () => {
     expect(result.container).toHaveTextContent(/Mocked upload text/i);
     const loadFromPc = result.getByTestId('loadFromPc');
     expect(loadFromPc).toBeInTheDocument();
-  });
-
-  it('uploads file (correct format)', async () => {
-    await testFileUploading();
+    const fileInput = result.getByTestId('fileInput');
+    expect(fileInput).toBeInTheDocument();
   });
 
   it('uploads file (file too big)', async () => {
-    const fileInput = result.queryByTestId('fileInput');
-    expect(fileInput).toBeInTheDocument();
+    // render component
+    result = render(
+      <FileUpload
+        uploadText="Mocked upload text"
+        accept="text/plain"
+        uploadFn={mockUploadFn}
+        onFileUploaded={mockUploadFileHandler}
+        onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
+      />
+    );
+    const fileInput = result.getByTestId('fileInput');
     const input = fileInput?.querySelector('input');
     fireEvent.change(input!, { target: { files: [bigFile] } });
     await waitFor(() => {
       expect(mockUploadFn).not.toBeCalled();
       expect(result.container).toHaveTextContent(/Mocked upload text/i);
       expect(result.container).toHaveTextContent(
-        /Il file selezionato supera la dimensione massima di 14 Bytes./i
+        `common - upload-file.file-size-exceeded - ${JSON.stringify({ limit: '14 Bytes' })}`
       );
     });
   });
 
   it('uploads file (wrong format)', async () => {
+    // render component
+    result = render(
+      <FileUpload
+        uploadText="Mocked upload text"
+        accept="text/plain"
+        uploadFn={mockUploadFn}
+        onFileUploaded={mockUploadFileHandler}
+        onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
+      />
+    );
     const fileInput = result.queryByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
     const input = fileInput?.querySelector('input');
@@ -85,22 +107,62 @@ describe('FileUpload Component', () => {
     await waitFor(() => {
       expect(mockUploadFn).not.toBeCalled();
       expect(result.container).toHaveTextContent(/Mocked upload text/i);
-      expect(result.container).toHaveTextContent(
-        /Estensione file non supportata. Riprovare con un altro file./i
-      );
+      expect(result.container).toHaveTextContent('common - upload-file.ext-not-supported');
     });
   });
 
   it('uploads file (error)', async () => {
-    mockUploadFn.mockImplementation(jest.fn(() => Promise.reject(null)));
-    await testFileUploading();
-    expect(result.container).toHaveTextContent(
-      /Si è verificato un errore durante il caricamento del file. Si prega di riprovare./i
+    // render component
+    result = render(
+      <FileUpload
+        uploadText="Mocked upload text"
+        accept="text/plain"
+        uploadFn={mockUploadFn}
+        onFileUploaded={mockUploadFileHandler}
+        onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
+      />
     );
+    mockUploadFn.mockImplementation(jest.fn(() => Promise.reject(null)));
+    await testFileUploading(result);
+    expect(result.container).toHaveTextContent('common - upload-file.loading-error');
   });
 
-  it('file uploaded', async () => {
-    await testFileUploading();
+  it('uploads the same file', async () => {
+    // render component
+    result = render(
+      <FileUpload
+        uploadText="Mocked upload text"
+        accept="text/plain"
+        uploadFn={mockUploadFn}
+        onFileUploaded={mockUploadFileHandler}
+        onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
+        fileUploaded={{
+          file: { data: file, sha256: { hashHex: 'hashHex', hashBase64: 'hashBase64' } },
+        }}
+      />
+    );
+    mockUploadFn.mockImplementation(jest.fn(() => Promise.resolve(null)));
+    await waitFor(() => {
+      expect(result.container).toHaveTextContent(/Mocked file/i);
+      expect(mockUploadFileHandler).toBeCalledTimes(0);
+    });
+  });
+
+  it('uploads file (correct format)', async () => {
+    // render component
+    result = render(
+      <FileUpload
+        uploadText="Mocked upload text"
+        accept="text/plain"
+        uploadFn={mockUploadFn}
+        onFileUploaded={mockUploadFileHandler}
+        onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
+      />
+    );
+    await testFileUploading(result);
     await waitFor(() => {
       expect(result.container).toHaveTextContent(/Mocked file/i);
       expect(mockUploadFileHandler).toBeCalledTimes(1);
@@ -108,7 +170,18 @@ describe('FileUpload Component', () => {
   });
 
   it('removes file uploaded', async () => {
-    await testFileUploading();
+    // render component
+    result = render(
+      <FileUpload
+        uploadText="Mocked upload text"
+        accept="text/plain"
+        uploadFn={mockUploadFn}
+        onFileUploaded={mockUploadFileHandler}
+        onRemoveFile={mockRemoveFileHandler}
+        fileSizeLimit={file.size}
+      />
+    );
+    await testFileUploading(result);
     const removeIcon = result.queryByTestId('CloseIcon');
     expect(removeIcon).toBeInTheDocument();
     fireEvent.click(removeIcon!);

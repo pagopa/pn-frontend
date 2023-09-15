@@ -128,11 +128,17 @@ describe('Date utility', () => {
       isPreviousDateMonth ? now.getFullYear() - 1 : now.getFullYear()
     );
     // month
-    expect(date.getMonth()).toBe(isPreviousDateMonth ? 11 : now.getMonth());
+    expect(date.getMonth()).toBe(
+      isPreviousDateMonth ? 11 : isPreviousDateDay ? now.getMonth() - 1 : now.getMonth()
+    );
     // day
-    expect(date.getDate()).toBe(isPreviousDateDay ? 31 : now.getDate());
+    expect(date.getDate()).toBe(
+      isPreviousDateDay ? 31 : isPreviousDateHours ? now.getDate() - 1 : now.getDate()
+    );
     // hours
-    expect(date.getHours()).toBe(isPreviousDateHours ? 23 : now.getHours());
+    expect(date.getHours()).toBe(
+      isPreviousDateHours ? 23 : isPreviousDateMinutes ? now.getHours() - 1 : now.getHours()
+    );
     // minutes
     expect(date.getMinutes()).toBe(
       isPreviousDateMinutes ? 60 + now.getMinutes() - 10 : now.getMinutes() - 10

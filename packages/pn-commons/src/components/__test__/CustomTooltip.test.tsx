@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
-
-import { render } from '../../test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../test-utils';
 import CustomTooltip from '../CustomTooltip';
 
 describe('CustomTooltip Component', () => {
   let result: RenderResult;
+
   it('renders custom tooltip', async () => {
     // render component
     await act(async () => {
@@ -34,10 +33,8 @@ describe('CustomTooltip Component', () => {
       );
     });
     const paragraph = result.getByTestId('testTooltipText');
-    await waitFor(() => {
-      fireEvent.mouseOver(paragraph!);
-    });
-    const tooltip = await result.findByRole('tooltip');
+    fireEvent.mouseOver(paragraph!);
+    const tooltip = await waitFor(() => result.getByRole('tooltip'));
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent(/Mocked content/i);
     expect(mockOnOpenCallback).toBeCalledTimes(1);
@@ -45,16 +42,14 @@ describe('CustomTooltip Component', () => {
 
   it('toggle tooltip on click', async () => {
     // render component
-    const result = render(
+    const { container, getByRole } = render(
       <CustomTooltip tooltipContent="Mocked content" openOnClick={true}>
         <p>Mocked Text</p>
       </CustomTooltip>
     );
-    const paragraph = result.container.querySelector('p');
-    await waitFor(() => {
-      fireEvent.click(paragraph!);
-    });
-    const tooltip = result.queryByRole('tooltip');
+    const paragraph = container.querySelector('p');
+    fireEvent.click(paragraph!);
+    const tooltip = await waitFor(() => getByRole('tooltip'));
     expect(tooltip!).toBeInTheDocument();
     expect(tooltip!).toHaveTextContent(/Mocked content/i);
   });

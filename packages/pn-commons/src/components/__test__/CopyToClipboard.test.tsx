@@ -1,34 +1,46 @@
 import React from 'react';
 
-import { fireEvent } from '@testing-library/react';
-
-import { render } from '../../test-utils';
+import { act, fireEvent, render, waitFor } from '../../test-utils';
 import CopyToClipboard from '../CopyToClipboard';
 
 describe('CopyToClipboard component', () => {
-  it('renders properly and works as expected', () => {
-    const result = render(
-      <CopyToClipboard getValue={() => 'text-to-be-copied'} text="text-to-be-displayed" />
-    );
+  const original = window.navigator;
 
-    // eslint-disable-next-line functional/immutable-data
+  beforeAll(() => {
     Object.assign(window.navigator, {
       clipboard: {
         writeText: jest.fn().mockImplementation(() => Promise.resolve()),
       },
     });
+  });
 
-    const copy_button = result.getByRole('button', { name: /text-to-be-displayed/ });
+  afterAll(() => {
+    Object.defineProperty(window, 'navigator', { value: original });
+  });
+
+  it('renders properly and works as expected', async () => {
+    const { getByTestId, getByRole, getByText } = render(
+      <CopyToClipboard
+        getValue={() => 'text-to-be-copied'}
+        text="text-to-be-displayed"
+        tooltipMode
+      />
+    );
+    const copy_button = getByRole('button', { name: /text-to-be-displayed/ });
     expect(copy_button).toBeInTheDocument();
-
-    const copy_icon = result.getByTestId('ContentCopyIcon');
+    let copy_icon = getByTestId('ContentCopyIcon');
     expect(copy_icon).toBeInTheDocument();
-
-    const text_displayed = result.getByText(/text-to-be-displayed/);
+    const text_displayed = getByText(/text-to-be-displayed/);
     expect(text_displayed).toBeInTheDocument();
-
     fireEvent.click(copy_button);
-
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('text-to-be-copied');
+    expect(copy_icon).not.toBeInTheDocument();
+    const check_icon = getByTestId('CheckIcon');
+    expect(check_icon).toBeInTheDocument();
+    // wait that copy action is cancelled
+    await act(() => new Promise((t) => setTimeout(t, 3000)));
+    copy_icon = getByTestId('ContentCopyIcon');
+    expect(copy_icon).toBeInTheDocument();
+    expect(check_icon).not.toBeInTheDocument();
   });
 });

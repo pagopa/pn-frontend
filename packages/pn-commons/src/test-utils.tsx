@@ -6,7 +6,17 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import {
+  Matcher,
+  MatcherOptions,
+  RenderOptions,
+  fireEvent,
+  queryByAttribute,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
 import { initLocalization } from './services/localization.service';
@@ -221,6 +231,38 @@ function initLocalizationForTest() {
   ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
   initLocalization(mockedTranslationFn);
 }
+/**
+ * Get element by id
+ * @param container
+ * @param id
+ * @param options
+ * @returns HTMLElement | null
+ */
+const queryById: (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions
+) => HTMLElement | null = (container: HTMLElement, id: Matcher, options?: MatcherOptions) =>
+  queryByAttribute('id', container, id, options);
+
+/**
+ * Get element by id
+ * @param container
+ * @param id
+ * @param options
+ * @returns HTMLElement
+ */
+const getById: (container: HTMLElement, id: Matcher, options?: MatcherOptions) => HTMLElement = (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions
+) => {
+  const elem = queryByAttribute('id', container, id, options);
+  if (!elem) {
+    throw new Error(`cannot find an element with id ${id}`);
+  }
+  return elem;
+};
 
 export * from '@testing-library/react';
 export {
@@ -232,4 +274,6 @@ export {
   testInput,
   testRadio,
   initLocalizationForTest,
+  getById,
+  queryById,
 };

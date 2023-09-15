@@ -1,21 +1,25 @@
 import React from 'react';
 
-import * as hooks from '../../hooks/useIsMobile';
-import { render } from '../../test-utils';
+import { act, createMatchMedia, render } from '../../test-utils';
 import SessionModal from '../SessionModal';
 
-const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
-
 describe('test SessionModal component', () => {
-  test('renders the component without confirm button', () => {
-    const result = render(<SessionModal open title={'Test title'} message={'test message'} />);
+  const original = window.matchMedia;
 
-    expect(result.baseElement).toHaveTextContent(/test title/i);
-    expect(result.baseElement).toHaveTextContent(/test message/i);
+  afterAll(() => {
+    window.matchMedia = original;
   });
 
-  test('renders the full component with custom label', () => {
-    const result = render(
+  it('renders the component without confirm button', () => {
+    const { baseElement } = render(
+      <SessionModal open title={'Test title'} message={'test message'} />
+    );
+    expect(baseElement).toHaveTextContent(/test title/i);
+    expect(baseElement).toHaveTextContent(/test message/i);
+  });
+
+  it('renders the full component with custom label', () => {
+    const { baseElement } = render(
       <SessionModal
         open
         title={'Test title'}
@@ -24,25 +28,42 @@ describe('test SessionModal component', () => {
         onConfirmLabel={'Confirm'}
       />
     );
-
-    expect(result.baseElement).toHaveTextContent(/test title/i);
-    expect(result.baseElement).toHaveTextContent(/test message/i);
-    expect(result.baseElement).toHaveTextContent(/confirm/i);
+    expect(baseElement).toHaveTextContent(/test title/i);
+    expect(baseElement).toHaveTextContent(/test message/i);
+    expect(baseElement).toHaveTextContent(/confirm/i);
   });
 
-  test('renders the full component with default label', () => {
-    const result = render(
+  it('renders the full component with default label', () => {
+    const { baseElement } = render(
       <SessionModal open title={'Test title'} message={'test message'} onConfirm={() => {}} />
     );
-
-    expect(result.baseElement).toHaveTextContent(/test title/i);
-    expect(result.baseElement).toHaveTextContent(/test message/i);
-    expect(result.baseElement).toHaveTextContent(/riprova/i);
+    expect(baseElement).toHaveTextContent(/test title/i);
+    expect(baseElement).toHaveTextContent(/test message/i);
+    expect(baseElement).toHaveTextContent(/riprova/i);
   });
 
-  test('renders the full component in mobile view', () => {
-    useIsMobileSpy.mockReturnValue(true);
-    const result = render(
+  it('check that close function is called after timeout', async () => {
+    window.matchMedia = createMatchMedia(800);
+    const mockCloseHandler = jest.fn();
+    const { baseElement } = render(
+      <SessionModal
+        open
+        title={'Test title'}
+        message={'test message'}
+        onConfirm={() => {}}
+        onConfirmLabel={'Confirm'}
+        initTimeout
+        handleClose={mockCloseHandler}
+      />
+    );
+    // wait timeout
+    await act(() => new Promise((t) => setTimeout(t, 3000)));
+    expect(mockCloseHandler).toBeCalledTimes(1);
+  });
+
+  it('renders the full component in mobile view', () => {
+    window.matchMedia = createMatchMedia(800);
+    const { baseElement } = render(
       <SessionModal
         open
         title={'Test title'}
@@ -51,9 +72,8 @@ describe('test SessionModal component', () => {
         onConfirmLabel={'Confirm'}
       />
     );
-
-    expect(result.baseElement).toHaveTextContent(/test title/i);
-    expect(result.baseElement).toHaveTextContent(/test message/i);
-    expect(result.baseElement).toHaveTextContent(/confirm/i);
+    expect(baseElement).toHaveTextContent(/test title/i);
+    expect(baseElement).toHaveTextContent(/test message/i);
+    expect(baseElement).toHaveTextContent(/confirm/i);
   });
 });
