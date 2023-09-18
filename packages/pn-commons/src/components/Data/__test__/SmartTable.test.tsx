@@ -85,7 +85,7 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    const table = result.getByTestId('desktopTable');
+    const table = result.getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
     const columns = result.getAllByTestId('tableHeadCell');
     columns.forEach((column, i) => {
@@ -114,7 +114,7 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    const table = result.queryByTestId('desktopTable');
+    const table = result.queryByTestId('table(notifications)');
     expect(table).not.toBeInTheDocument();
     const emptyState = result.getByTestId('emptyState');
     expect(emptyState).toBeInTheDocument();

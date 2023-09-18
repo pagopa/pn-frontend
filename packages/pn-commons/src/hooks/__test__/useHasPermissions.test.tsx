@@ -12,7 +12,7 @@ const Component = ({ currentPermissions }: { currentPermissions: Array<string> }
 };
 
 describe('test usePermissions hook', () => {
-  test('has permissions', () => {
+  it('has permissions', () => {
     const result = render(<Component currentPermissions={['read', 'write']} />);
     expect(result.container).toHaveTextContent('Accepted!');
   });

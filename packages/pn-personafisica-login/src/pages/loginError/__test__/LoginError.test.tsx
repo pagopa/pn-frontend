@@ -1,7 +1,9 @@
 import React, { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { getById, render } from '../../../__test__/test-utils';
+import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
+
+import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import LoginError from '../LoginError';
 

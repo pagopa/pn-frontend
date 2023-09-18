@@ -4,7 +4,6 @@ import React from 'react';
 import { TextField } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { fireEvent } from '@testing-library/react';
 
 import { render } from '../../test-utils';
 import CustomDatePicker from '../CustomDatePicker';
@@ -37,10 +36,9 @@ const WrappedCustomDatePicker = () => {
 
 describe('test CustomDatePicker component', () => {
   it('renders the component', () => {
-    const result = render(<WrappedCustomDatePicker />);
-    const input = result.getByPlaceholderText(/datepickerinput/i);
-
-    expect(result.container).toHaveTextContent(/datepicker/i);
-    fireEvent.click(input);
+    const { getByPlaceholderText, container } = render(<WrappedCustomDatePicker />);
+    const input = getByPlaceholderText(/datepickerinput/i);
+    expect(container).toHaveTextContent(/datepicker/i);
+    expect(input).toBeInTheDocument();
   });
 });

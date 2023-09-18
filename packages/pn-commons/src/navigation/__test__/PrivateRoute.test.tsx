@@ -4,7 +4,7 @@ import { render } from '../../test-utils';
 import PrivateRoute from '../PrivateRoute';
 
 describe('test PrivateRoute component', () => {
-  test('has permissions', () => {
+  it('has permissions', () => {
     const result = render(
       <PrivateRoute
         currentRoles={['read', 'write']}
