@@ -7,7 +7,6 @@ const global = window as any;
 // target cookies (Mixpanel)
 const targCookiesGroup = 'C0002';
 
-
 /**
  * React hook that sets up Mixpanel tracking based on OneTrust consent settings. 
  * It listens for changes in OneTrust consent and checks for the presence of a 
@@ -17,22 +16,22 @@ const targCookiesGroup = 'C0002';
  */
 export function useTracking(mixpanelToken: string, nodeEnv: string) {
   useEffect(() => {
+    // OneTrust callback at first time
+    // eslint-disable-next-line functional/immutable-data
     global.OptanonWrapper = function () {
-      OneTrust.OnConsentChanged(handleConsentChange);
+      OneTrust.OnConsentChanged(function () {
+        if (OnetrustActiveGroups.indexOf(targCookiesGroup) > -1) {
+          mixpanelInit(mixpanelToken, nodeEnv);
+        }
+      });
     };
-
-    handleConsentChange();
-  }, []);
-
-  function handleConsentChange() {
-    if (OnetrustActiveGroups.includes(targCookiesGroup) || checkOptanonCookie()) {
-      mixpanelInit(mixpanelToken, nodeEnv);
-    }
-  } 
-
-  function checkOptanonCookie(): boolean {
+    // // check mixpanel cookie consent in cookie
     const OTCookieValue: string =
       document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
-    return OTCookieValue.includes(`${targCookiesGroup}%3A1`);
-  }
+    const checkValue = `${targCookiesGroup}%3A1`;
+
+    if (OTCookieValue.indexOf(checkValue) > -1) {
+      mixpanelInit(mixpanelToken, nodeEnv);
+    }
+  }, []);
 }

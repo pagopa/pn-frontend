@@ -1,30 +1,11 @@
-import React from 'react';
-import { unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
-import { useTracking } from '../useTracking'; // Import your hook
-import { render } from '../../test-utils';
+// useTracking.test.tsx
+import { renderHook } from '@testing-library/react-hooks';
+import { useTracking } from '../useTracking';
+import { mixpanelInit } from '../../utils/mixpanel.utility';
 
-let container;
-const mixpanelToken = 'your-mixpanel-token';
-const nodeEnv = 'development';
-
-beforeEach(() => {
-    // Set up a DOM element as a render target
-    container = document.createElement('div');
-    document.body.appendChild(container);
-});
-
-afterEach(() => {
-    // Clean up on exiting
-    unmountComponentAtNode(container);
-    container.remove();
-});
-
-// Mock the global OneTrust object
 global.OneTrust = {
     OnConsentChanged: jest.fn(),
 };
-
 
 // Mock the mixpanelInit function
 jest.mock('../../utils/mixpanel.utility', () => ({
@@ -32,55 +13,67 @@ jest.mock('../../utils/mixpanel.utility', () => ({
 }));
 
 describe('useTracking', () => {
-    it('should initialize Mixpanel when OneTrust consent is granted', () => {
-        global.OnetrustActiveGroups = 'C0002';
+    it('should initialize Mixpanel when OneTrust consent is given', () => {
+        const mixpanelToken = 'your-mixpanel-token';
+        const nodeEnv = 'test';
 
-        act(() => {
-            render(<TestComponent mixpanelToken={mixpanelToken} nodeEnv={nodeEnv} />, container);
+        // Mock OneTrust
+        const originalOnConsentChanged = global.OneTrust.OnConsentChanged;
+        global.OneTrust.OnConsentChanged = jest.fn((callback) => {
+            callback();
         });
 
-        // Simulate OneTrust consent change
-        act(() => {
-            global.OptanonWrapper();
+        // Mock document.cookie
+        const originalDocumentCookie = Object.getOwnPropertyDescriptor(
+            Document.prototype,
+            'cookie'
+        )?.get;
+        Object.defineProperty(Document.prototype, 'cookie', {
+            get: () => 'OptanonConsent=C0002%3A1; otherCookie=example',
         });
 
-        expect(global.OneTrust.OnConsentChanged).toHaveBeenCalled();
-        expect(require('../../utils/mixpanel.utility').mixpanelInit).toHaveBeenCalledWith(mixpanelToken, nodeEnv);
+        // Render the hook
+        renderHook(() => useTracking(mixpanelToken, nodeEnv));
+
+        // Assert that mixpanelInit was called
+        expect(mixpanelInit).toHaveBeenCalledWith(mixpanelToken, nodeEnv);
+
+        // Restore original values
+        global.OneTrust.OnConsentChanged = originalOnConsentChanged;
+        Object.defineProperty(Document.prototype, 'cookie', {
+            get: originalDocumentCookie,
+        });
     });
 
-    it('should initialize Mixpanel when the Optanon cookie is present', () => {
-        // Mock the document.cookie value to include the OptanonConsent cookie
-        Object.defineProperty(document, 'cookie', {
-            value: 'OptanonConsent=C0002%3A1; path=/',
-            writable: true,
+    it('should not initialize Mixpanel when OneTrust consent is not given', () => {
+        const mixpanelToken = 'your-mixpanel-token';
+        const nodeEnv = 'test';
+
+        // Mock OneTrust
+        const originalOnConsentChanged = global.OneTrust.OnConsentChanged;
+        global.OneTrust.OnConsentChanged = jest.fn((callback) => {
+            // Simulate no consent
         });
 
-        act(() => {
-            render(<TestComponent mixpanelToken={mixpanelToken} nodeEnv={nodeEnv} />, container);
+        // Mock document.cookie
+        const originalDocumentCookie = Object.getOwnPropertyDescriptor(
+            Document.prototype,
+            'cookie'
+        )?.get;
+        Object.defineProperty(Document.prototype, 'cookie', {
+            get: () => 'otherCookie=example',
         });
 
-        expect(global.OneTrust.OnConsentChanged).not.toHaveBeenCalled();
-        expect(require('../../utils/mixpanel.utility').mixpanelInit).toHaveBeenCalledWith(mixpanelToken, nodeEnv);
-    });
+        // Render the hook
+        renderHook(() => useTracking(mixpanelToken, nodeEnv));
 
-    it('should not initialize Mixpanel if there is no consent on target cookie', () => {
-        // Mock the document.cookie value to include the OptanonConsent cookie
-        global.OnetrustActiveGroups = 'C0003';
-        Object.defineProperty(document, 'cookie', {
-            value: 'OptanonConsent=C0003; path=/',
-            writable: true,
+        // Assert that mixpanelInit was not called
+        expect(mixpanelInit).not.toHaveBeenCalled();
+
+        // Restore original values
+        global.OneTrust.OnConsentChanged = originalOnConsentChanged;
+        Object.defineProperty(Document.prototype, 'cookie', {
+            get: originalDocumentCookie,
         });
-
-        act(() => {
-            render(<TestComponent mixpanelToken={mixpanelToken} nodeEnv={nodeEnv} />, container);
-        });
-
-        expect(global.OneTrust.OnConsentChanged).not.toHaveBeenCalled();
-        expect(require('../../utils/mixpanel.utility').mixpanelInit).not.toHaveBeenCalledWith(mixpanelToken, nodeEnv);
     });
 });
-
-function TestComponent({ mixpanelToken, nodeEnv }) {
-    useTracking(mixpanelToken, nodeEnv);
-    return <div />;
-}
