@@ -1,5 +1,4 @@
 import React from "react";
-import { unmountComponentAtNode } from "react-dom";
 import { useUnload } from "../useUnload";
 import { render } from '../../test-utils';
 
