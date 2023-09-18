@@ -2,46 +2,11 @@ import React from 'react';
 
 import { RenderResult, act, screen, within } from '@testing-library/react';
 
-import { DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models';
-import { render } from '../../../test-utils';
+import { exampleDowntimeLogPage, incidentTimestamps } from '../../../__mocks__/AppStatus.mock';
+import { DowntimeStatus, KnownFunctionality } from '../../../models';
+import { initLocalizationForTest, render } from '../../../test-utils';
 import { formatDate, formatTime } from '../../../utils';
 import MobileDowntimeLog from '../MobileDowntimeLog';
-
-const incidentTimestamps = [
-  '2022-10-23T15:50:04Z',
-  '2022-10-23T15:51:12Z',
-  '2022-10-24T08:15:21Z',
-  '2022-10-24T08:15:29Z',
-  '2022-10-28T10:11:09Z',
-];
-
-const exampleDowntimeLogPage: DowntimeLogPage = {
-  downtimes: [
-    {
-      rawFunctionality: KnownFunctionality.NotificationWorkflow,
-      knownFunctionality: KnownFunctionality.NotificationWorkflow,
-      status: DowntimeStatus.KO,
-      startDate: incidentTimestamps[4],
-      fileAvailable: false,
-    },
-    {
-      rawFunctionality: 'NEW_FUNCTIONALITY',
-      status: DowntimeStatus.OK,
-      startDate: incidentTimestamps[2],
-      endDate: incidentTimestamps[3],
-      fileAvailable: false,
-    },
-    {
-      rawFunctionality: KnownFunctionality.NotificationCreate,
-      knownFunctionality: KnownFunctionality.NotificationCreate,
-      status: DowntimeStatus.OK,
-      startDate: incidentTimestamps[0],
-      endDate: incidentTimestamps[1],
-      legalFactId: 'some-legal-fact-id',
-      fileAvailable: true,
-    },
-  ],
-};
 
 const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
 
@@ -53,19 +18,15 @@ jest.mock('@mui/material', () => {
   };
 });
 
-jest.mock('../../../services/localization.service', () => {
-  const original = jest.requireActual('../../../services/localization.service');
-  return {
-    ...original,
-    getLocalizedOrDefaultLabel: (_: string, key: string) => key,
-  };
-});
-
 describe('DesktopDowntimeLog component - with data', () => {
   let result: RenderResult;
   let cardComponents: Array<HTMLElement>;
   let labelComponents: Array<HTMLElement>;
   let getLegalFactDetailsMock: jest.Mock<any, any>;
+
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   beforeEach(async () => {
     getLegalFactDetailsMock = jest.fn();
@@ -89,10 +50,10 @@ describe('DesktopDowntimeLog component - with data', () => {
   it('headers - in first card', async () => {
     // endDate should be immediately after startDate
     const startDateIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.startDate')
+      within(elem).queryByText(/downtimeList.columnHeader.startDate/i)
     );
     const endDateIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.endDate')
+      within(elem).queryByText(/downtimeList.columnHeader.endDate/i)
     );
     expect(startDateIndex).toBeGreaterThan(-1);
     expect(endDateIndex).toBeGreaterThan(-1);
@@ -101,13 +62,13 @@ describe('DesktopDowntimeLog component - with data', () => {
     // legalFactId and functionality must be present,
     // status must not (since the status is in the header with no label)
     const legalFactIdIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.legalFactId')
+      within(elem).queryByText(/downtimeList.columnHeader.legalFactId/i)
     );
     const functionalityIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.functionality')
+      within(elem).queryByText(/downtimeList.columnHeader.functionality/i)
     );
     const statusIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.status')
+      within(elem).queryByText(/downtimeList.columnHeader.status/i)
     );
     expect(legalFactIdIndex).toBeGreaterThan(-1);
     expect(functionalityIndex).toBeGreaterThan(-1);
@@ -116,10 +77,10 @@ describe('DesktopDowntimeLog component - with data', () => {
 
   it('date values', async () => {
     const startDateIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.startDate')
+      within(elem).queryByText(/downtimeList.columnHeader.startDate/i)
     );
     const endDateIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.endDate')
+      within(elem).queryByText(/downtimeList.columnHeader.endDate/i)
     );
 
     // first card - start date - date and time in the same element
@@ -158,7 +119,7 @@ describe('DesktopDowntimeLog component - with data', () => {
 
   it('functionality values', async () => {
     const functionalityIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.functionality')
+      within(elem).queryByText(/downtimeList.columnHeader.functionality/i)
     );
 
     // first card - known functionality
@@ -166,7 +127,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const firstCardValues = within(firstCard).getAllByTestId('cardBodyValue');
     const firstCardFunctionality = firstCardValues[functionalityIndex];
     const description1 = within(firstCardFunctionality).getByText(
-      `legends.knownFunctionality.${KnownFunctionality.NotificationWorkflow}`
+      new RegExp(`legends.knownFunctionality.${KnownFunctionality.NotificationWorkflow}`)
     );
     expect(description1).toBeInTheDocument();
 
@@ -184,14 +145,14 @@ describe('DesktopDowntimeLog component - with data', () => {
     const thirdCardValues = within(thirdCard).getAllByTestId('cardBodyValue');
     const thirdCardFunctionality = thirdCardValues[functionalityIndex];
     const description3 = within(thirdCardFunctionality).getByText(
-      `legends.knownFunctionality.${KnownFunctionality.NotificationCreate}`
+      new RegExp(`legends.knownFunctionality.${KnownFunctionality.NotificationCreate}`)
     );
     expect(description3).toBeInTheDocument();
   });
 
   it('legalFactId values', async () => {
     const legalFactIdIndex = labelComponents.findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.legalFactId')
+      within(elem).queryByText(/downtimeList.columnHeader.legalFactId/i)
     );
 
     // first row - open downtime
@@ -201,7 +162,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const button1 = within(firstCardLegalFactId).queryByRole('button');
     expect(button1).not.toBeInTheDocument();
     const description1 = within(firstCardLegalFactId).getByText(
-      `legends.noFileAvailableByStatus.${DowntimeStatus.KO}`
+      new RegExp(`legends.noFileAvailableByStatus.${DowntimeStatus.KO}`)
     );
     expect(description1).toBeInTheDocument();
 
@@ -212,7 +173,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const button2 = within(secondCardLegalFactId).queryByRole('button');
     expect(button2).not.toBeInTheDocument();
     const description2 = within(secondCardLegalFactId).getByText(
-      `legends.noFileAvailableByStatus.${DowntimeStatus.OK}`
+      new RegExp(`legends.noFileAvailableByStatus.${DowntimeStatus.OK}`)
     );
     expect(description2).toBeInTheDocument();
 
@@ -222,7 +183,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const thirdCardLegalFactId = thirdCardValues[legalFactIdIndex];
     const button3 = within(thirdCardLegalFactId).getByRole('button');
     expect(button3).toBeInTheDocument();
-    const description3 = button3 && within(button3).getByText('legends.legalFactDownload');
+    const description3 = button3 && within(button3).getByText(/legends.legalFactDownload/i);
     expect(description3).toBeInTheDocument();
   });
 
@@ -234,7 +195,8 @@ describe('DesktopDowntimeLog component - with data', () => {
     const statusChip1 = statusChips1[0];
     expect(statusChip1).toHaveStyle({ 'background-color': fakePalette.error.light });
     const description1 =
-      statusChip1 && within(statusChip1).getByText(`legends.status.${DowntimeStatus.KO}`);
+      statusChip1 &&
+      within(statusChip1).getByText(new RegExp(`legends.status.${DowntimeStatus.KO}`));
     expect(description1).toBeInTheDocument();
 
     // third row - closed downtime
@@ -244,7 +206,8 @@ describe('DesktopDowntimeLog component - with data', () => {
     const statusChip3 = statusChips3[0];
     expect(statusChip3).toHaveStyle({ 'background-color': fakePalette.success.light });
     const description3 =
-      statusChip3 && within(statusChip3).getByText(`legends.status.${DowntimeStatus.OK}`);
+      statusChip3 &&
+      within(statusChip3).getByText(new RegExp(`legends.status.${DowntimeStatus.OK}`));
     expect(description3).toBeInTheDocument();
   });
 
