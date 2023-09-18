@@ -3,34 +3,11 @@ import React from 'react';
 import { RenderResult, act } from '@testing-library/react';
 
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
-import { render } from '../../../test-utils';
+import { createMatchMedia, initLocalizationForTest, render } from '../../../test-utils';
 import { AppStatusData } from '../../../types';
 import { apiOutcomeTestHelper } from '../../../utils/test.utility';
 import { formatDate, formatTime } from '../../../utils/date.utility';
 import { AppStatusRender } from '../AppStatusRender';
-
-/* eslint-disable-next-line functional/no-let */
-let mockIsMobile: boolean;
-
-jest.mock('../../../hooks', () => {
-  const original = jest.requireActual('../../../hooks');
-  return {
-    ...original,
-    useIsMobile: () => mockIsMobile,
-  };
-});
-
-jest.mock('../../../services/localization.service', () => {
-  const original = jest.requireActual('../../../services/localization.service');
-  return {
-    ...original,
-    getLocalizedOrDefaultLabel: (_1: string, key: string, _2: string, data: any) => (
-      <span>
-        {key} - {JSON.stringify(data)}
-      </span>
-    ),
-  };
-});
 
 const mockActionIds = {
   GET_CURRENT_STATUS: 'mock-get-current-status',
@@ -68,14 +45,18 @@ const mockAppStatus: AppStatusData = {
 };
 describe('AppStatusRender component', () => {
   let result: RenderResult | undefined;
+  const original = window.matchMedia;
+
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   afterEach(() => {
     result = undefined;
+    window.matchMedia = original;
   });
 
   it('with downtime - desktop', async () => {
-    mockIsMobile = false;
-
     await act(async () => {
       result = render(
         <AppStatusRender
@@ -103,7 +84,7 @@ describe('AppStatusRender component', () => {
   });
 
   it('with downtime - mobile', async () => {
-    mockIsMobile = true;
+    window.matchMedia = createMatchMedia(800);
 
     await act(async () => {
       result = render(
@@ -132,8 +113,6 @@ describe('AppStatusRender component', () => {
   });
 
   it('empty downtime list', async () => {
-    mockIsMobile = false;
-
     await act(async () => {
       result = render(
         <AppStatusRender
@@ -162,8 +141,6 @@ describe('AppStatusRender component', () => {
   });
 
   it('error in status API', async () => {
-    mockIsMobile = false;
-
     await act(async () => {
       result = render(
         <AppStatusRender
@@ -207,8 +184,6 @@ describe('AppStatusRender component', () => {
   });
 
   it('error in both status and downtime API', async () => {
-    mockIsMobile = false;
-
     const mockAppState = apiOutcomeTestHelper.appStateWithMessageForAction(
       mockActionIds.GET_CURRENT_STATUS
     );
@@ -253,7 +228,6 @@ describe('AppStatusRender component', () => {
   });
 
   it('Last check message, must include date and time of last check timestamp', async () => {
-    mockIsMobile = false;
     await act(async () => {
       result = render(
         <AppStatusRender

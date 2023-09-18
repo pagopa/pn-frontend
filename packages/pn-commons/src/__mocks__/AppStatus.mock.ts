@@ -1,4 +1,11 @@
-import { AppStatusDTO, DowntimeLogPageDTO, GetDowntimeHistoryParams } from '../models';
+import {
+  AppStatusDTO,
+  DowntimeLogPage,
+  DowntimeLogPageDTO,
+  DowntimeStatus,
+  GetDowntimeHistoryParams,
+  KnownFunctionality,
+} from '../models';
 
 /* ------------------------------------------------------------------------
    auxiliary functions and constants
@@ -138,4 +145,32 @@ export const beDowntimeHistoryThreeIncidents: DowntimeLogPageDTO = {
     },
   ],
   nextPage: 'some-next-page',
+};
+
+export const exampleDowntimeLogPage: DowntimeLogPage = {
+  downtimes: [
+    {
+      rawFunctionality: KnownFunctionality.NotificationWorkflow,
+      knownFunctionality: KnownFunctionality.NotificationWorkflow,
+      status: DowntimeStatus.KO,
+      startDate: incidentTimestamps[4],
+      fileAvailable: false,
+    },
+    {
+      rawFunctionality: 'NEW_FUNCTIONALITY',
+      status: DowntimeStatus.OK,
+      startDate: incidentTimestamps[2],
+      endDate: incidentTimestamps[3],
+      fileAvailable: false,
+    },
+    {
+      rawFunctionality: KnownFunctionality.NotificationCreate,
+      knownFunctionality: KnownFunctionality.NotificationCreate,
+      status: DowntimeStatus.OK,
+      startDate: incidentTimestamps[0],
+      endDate: incidentTimestamps[1],
+      legalFactId: 'some-legal-fact-id',
+      fileAvailable: true,
+    },
+  ],
 };
