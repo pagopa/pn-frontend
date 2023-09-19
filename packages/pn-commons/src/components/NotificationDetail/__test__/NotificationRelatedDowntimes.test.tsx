@@ -2,7 +2,7 @@ import React from 'react';
 
 import { mockDowntimes, mockHistory } from '../../../__mocks__/NotificationDetail.mock';
 import { Downtime, DowntimeStatus, KnownFunctionality } from '../../../models';
-import { act, render, screen, within } from '../../../test-utils';
+import { RenderResult, act, render, screen, within } from '../../../test-utils';
 import { IAppMessage, NotificationStatus, NotificationStatusHistory } from '../../../types';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 
@@ -23,13 +23,17 @@ jest.mock('@mui/material', () => {
 /* eslint-disable-next-line functional/no-let */
 let mockMakeApiFail: boolean;
 
-// jest.mock('../../../hooks', () => {
-//   const original = jest.requireActual('../../../hooks');
-//   return {
-//     ...original,
-//     useErrors: () => ({ hasApiErrors: () => mockMakeApiFail }),
-//   };
-// });
+// I think we still need to mock useErrors() hook because I tried to use a preloadedState but without success.
+// Also we don't have access to getDowntimeEvents in pn-commons to try to mockApi client because it's on webapps.
+// Maybe we should add API error tests in webapp folders instead (if they aren't written yet)
+// Nicola Giornetta - 19/09/2023
+jest.mock('../../../hooks', () => {
+  const original = jest.requireActual('../../../hooks');
+  return {
+    ...original,
+    useErrors: () => ({ hasApiErrors: () => mockMakeApiFail }),
+  };
+});
 
 const errors: Array<IAppMessage> = [
   {
@@ -57,7 +61,7 @@ describe('NotificationRelatedDowntimes component', () => {
   let fetchDowntimeEventsMock: jest.Mock<any, any>;
 
   beforeEach(async () => {
-    mockMakeApiFail = false;
+    // mockMakeApiFail = false;
     fetchDowntimeEventsMock = jest.fn();
   });
 
@@ -66,21 +70,20 @@ describe('NotificationRelatedDowntimes component', () => {
     history: NotificationStatusHistory[],
     setApiError?: boolean
   ) {
-    await act(
-      async () =>
-        void render(
-          <NotificationRelatedDowntimes
-            downtimeEvents={downtimes}
-            fetchDowntimeEvents={fetchDowntimeEventsMock}
-            notificationStatusHistory={history}
-            apiId="getDowntimeEvents"
-            clearDowntimeLegalFactData={() => {}}
-            downtimeLegalFactUrl="mock-url"
-            fetchDowntimeLegalFactDocumentDetails={() => {}}
-          />,
-          setApiError ? mockErrorState : undefined
-        )
-    );
+    await act(async () => {
+      void render(
+        <NotificationRelatedDowntimes
+          downtimeEvents={downtimes}
+          fetchDowntimeEvents={fetchDowntimeEventsMock}
+          notificationStatusHistory={history}
+          apiId="getDowntimeEvents"
+          clearDowntimeLegalFactData={() => {}}
+          downtimeLegalFactUrl="mock-url"
+          fetchDowntimeLegalFactDocumentDetails={() => {}}
+        />,
+        setApiError ? mockErrorState : undefined
+      );
+    });
   }
 
   it('normal history - with two downtimes', async () => {
@@ -242,14 +245,12 @@ describe('NotificationRelatedDowntimes component', () => {
     expect(mainComponent).toBeInTheDocument();
   });
 
-  // TO-DO: Fix this
-  it.skip('api error', async () => {
+  it('api error', async () => {
     mockMakeApiFail = true;
     await renderComponent(mockDowntimes, mockHistory, true);
-
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).not.toBeInTheDocument();
-    const apiErrorComponent = screen.getByTestId('api-error-mock-api-id');
+    const apiErrorComponent = screen.getByTestId('api-error-getDowntimeEvents');
     expect(apiErrorComponent).toBeInTheDocument();
   });
 });
