@@ -2,7 +2,7 @@ import React from 'react';
 
 import { mockDowntimes, mockHistory } from '../../../__mocks__/NotificationDetail.mock';
 import { Downtime, DowntimeStatus, KnownFunctionality } from '../../../models';
-import { act, render, screen, within } from '../../../test-utils';
+import { RenderResult, act, render, screen, within } from '../../../test-utils';
 import { IAppMessage, NotificationStatus, NotificationStatusHistory } from '../../../types';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 
@@ -54,21 +54,20 @@ describe('NotificationRelatedDowntimes component', () => {
     history: NotificationStatusHistory[],
     setApiError?: boolean
   ) {
-    await act(
-      async () =>
-        void render(
-          <NotificationRelatedDowntimes
-            downtimeEvents={downtimes}
-            fetchDowntimeEvents={fetchDowntimeEventsMock}
-            notificationStatusHistory={history}
-            apiId="getDowntimeEvents"
-            clearDowntimeLegalFactData={() => {}}
-            downtimeLegalFactUrl="mock-url"
-            fetchDowntimeLegalFactDocumentDetails={() => {}}
-          />,
-          setApiError ? mockErrorState : undefined
-        )
-    );
+    await act(async () => {
+      void render(
+        <NotificationRelatedDowntimes
+          downtimeEvents={downtimes}
+          fetchDowntimeEvents={fetchDowntimeEventsMock}
+          notificationStatusHistory={history}
+          apiId="getDowntimeEvents"
+          clearDowntimeLegalFactData={() => {}}
+          downtimeLegalFactUrl="mock-url"
+          fetchDowntimeLegalFactDocumentDetails={() => {}}
+        />,
+        setApiError ? mockErrorState : undefined
+      );
+    });
   }
 
   it('normal history - with two downtimes', async () => {
