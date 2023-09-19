@@ -103,7 +103,7 @@ const DelegatesByCompany = () => {
       },
       getValue(value: string) {
         const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip label={t(key)} color={color} />;
+        return <Chip id={`chip-status-${color}`} label={t(key)} color={color} />;
       },
       cardConfiguration: {
         position: 'header',

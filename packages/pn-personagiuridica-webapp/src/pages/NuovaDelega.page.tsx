@@ -254,6 +254,7 @@ const NuovaDelega = () => {
                               }}
                             >
                               <FormControlLabel
+                                id="select-pf"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PF}
                                 control={<Radio />}
@@ -365,6 +366,7 @@ const NuovaDelega = () => {
                             }}
                           >
                             <FormControlLabel
+                              id="tutti-gli-enti-selezionati"
                               value="tuttiGliEnti"
                               control={<Radio />}
                               name={'selectTuttiEntiOrSelezionati'}
@@ -373,6 +375,7 @@ const NuovaDelega = () => {
                             />
 
                             <FormControlLabel
+                              id="enti-selezionati"
                               value="entiSelezionati"
                               control={<Radio />}
                               data-testid="radioSelectedEntities"
@@ -481,6 +484,7 @@ const NuovaDelega = () => {
                       <Stack alignItems="flex-start" justifyContent={'flex-start'}>
                         <Stack>
                           <Button
+                            id="create-button"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
                             variant={'contained'}

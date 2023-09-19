@@ -188,13 +188,14 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     if (menuType === 'delegates') {
       return [
         <MenuItem
+          id="show-code-button"
           key="showCode"
           onClick={handleOpenVerificationCodeModal}
           data-testid="menuItem-showCode"
         >
           {t('deleghe.show')}
         </MenuItem>,
-        <MenuItem key="revoke" onClick={handleOpenModalClick}>
+        <MenuItem id="revoke-delegation-button" key="revoke" onClick={handleOpenModalClick}>
           {t('deleghe.revoke')}
         </MenuItem>,
       ];
@@ -359,6 +360,7 @@ export const AcceptButton: React.FC<{ id: string; name: string; onAccept: () => 
         handleConfirm={handleConfirm}
       />
       <Button
+        id="accept-button"
         onClick={handleAcceptClick}
         variant={'contained'}
         color={'primary'}

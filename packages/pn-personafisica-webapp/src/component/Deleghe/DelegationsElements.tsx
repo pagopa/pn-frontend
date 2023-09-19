@@ -46,13 +46,19 @@ export const Menu = (props: any) => {
     if (props.menuType === 'delegates') {
       return [
         <MenuItem
+          id="show-code-button"
           key="showCode"
           onClick={handleOpenVerificationCodeModal}
           data-testid="menuItem-showCode"
         >
           {t('deleghe.show')}
         </MenuItem>,
-        <MenuItem key="revoke" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegate">
+        <MenuItem
+          id="revoke-delegation-button"
+          key="revoke"
+          onClick={handleOpenModalClick}
+          data-testid="menuItem-revokeDelegate"
+        >
           {t('deleghe.revoke')}
         </MenuItem>,
       ];
@@ -124,6 +130,7 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
 
   return (
     <Button
+      id="accept-button"
       onClick={handleAcceptClick}
       variant={'contained'}
       color={'primary'}

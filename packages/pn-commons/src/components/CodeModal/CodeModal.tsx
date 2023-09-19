@@ -1,16 +1,17 @@
-import { ReactNode, useState, memo, useMemo, useCallback } from 'react';
+import { ReactNode, memo, useCallback, useMemo, useState } from 'react';
+
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  DialogContentText,
-  Divider,
-  Typography,
-  Box,
   Alert,
   AlertTitle,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Typography,
 } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
@@ -103,7 +104,7 @@ const CodeModal = memo(
           <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ mt:2, textAlign: textPosition }}>
+          <Box sx={{ mt: 2, textAlign: textPosition }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -154,6 +155,7 @@ const CodeModal = memo(
           )}
           {confirmLabel && confirmCallback && (
             <Button
+              id="code-confirm-button"
               variant="contained"
               data-testid="codeConfirmButton"
               onClick={confirmHandler}
