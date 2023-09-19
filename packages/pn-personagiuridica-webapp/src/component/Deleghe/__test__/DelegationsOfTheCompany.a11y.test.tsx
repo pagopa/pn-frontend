@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { axe, render } from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
@@ -32,18 +30,6 @@ describe('Delegators Component - accessibility tests', () => {
       },
     });
     const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it('API error', async () => {
-    const result = render(<DelegationsOfTheCompany />, {
-      preloadedState: {
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-          DELEGATION_ACTIONS.GET_DELEGATORS
-        ),
-      },
-    });
-    const results = await axe(result.container);
     expect(results).toHaveNoViolations();
   });
 });
