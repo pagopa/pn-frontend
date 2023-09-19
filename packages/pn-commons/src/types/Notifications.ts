@@ -9,6 +9,7 @@ export interface Notification {
   notificationStatus: NotificationStatus;
   recipients: Array<string>;
   group?: string;
+  mandateId?: string;
 }
 
 export interface GetNotificationsResponse {

@@ -1,3 +1,8 @@
+import _ from 'lodash';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
@@ -23,10 +28,7 @@ import {
   useHasPermissions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import _ from 'lodash';
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
@@ -89,7 +91,7 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
-  const currentRecipient = notification && notification.currentRecipient;
+  const currentRecipient = notification?.currentRecipient;
 
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
@@ -366,7 +368,11 @@ const NotificationDetail = () => {
       {hasNotificationReceivedApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError onClick={fetchReceivedNotification} mt={3} />
+          <ApiError
+            onClick={fetchReceivedNotification}
+            mt={3}
+            apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
+          />
         </Box>
       )}
       {!hasNotificationReceivedApiError && (
@@ -460,7 +466,7 @@ const NotificationDetail = () => {
                 <TimedMessage
                   timeout={timeoutMessage}
                   message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
                     </Alert>
                   }

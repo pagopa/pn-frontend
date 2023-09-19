@@ -34,7 +34,6 @@
     "**/__tests__/*",
     "**/__test__/*",
     "src/test-utils.tsx",
-    "src/setupTests.ts",
-    "Dangerfile.ts"
+    "src/setupTests.ts"
   ]
 }

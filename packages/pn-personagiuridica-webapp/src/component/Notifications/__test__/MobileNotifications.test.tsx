@@ -1,10 +1,14 @@
 import React from 'react';
 
-import { basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
-import * as routes from '../../../navigation/routes.const';
-import { PNRole, PartyRole } from '../../../redux/auth/types';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import {
+  GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
+  GET_DETTAGLIO_NOTIFICA_PATH,
+} from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
 const mockNavigateFn = jest.fn();
@@ -15,15 +19,6 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    NotificationsCard: () => <div>Cards</div>,
-    MobileNotificationsSort: () => <div>Sort</div>,
-  };
-});
-
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -31,95 +26,127 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../FilterNotifications', () => {
-  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
-  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
-    useImperativeHandle(ref, () => ({
-      filtersApplied: false,
-    }));
-    if (!showFilters) {
-      return <></>;
-    }
-    return <div>Filters</div>;
-  });
-});
-
 describe('MobileNotifications Component', () => {
-  it('renders MobileNotifications - empty case - recipient access - admin', () => {
-    // render component
-    const result = render(
-      <MobileNotifications
-        notifications={[]}
-        sort={{ orderBy: 'sentAt', order: 'asc' }}
-        onChangeSorting={() => {}}
-      />
-    );
-    expect(result.container).not.toHaveTextContent(/Filters/i);
-    expect(result.container).not.toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(/empty-state.message/i);
+  let result: RenderResult;
+  const original = window.matchMedia;
+
+  beforeAll(() => {
+    window.matchMedia = createMatchMedia(800);
   });
 
-  it('renders MobileNotifications - empty case - recipient access - not admin', () => {
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
+  it('renders MobileNotifications - no notifications', async () => {
     // render component
-    const result = render(
-      <MobileNotifications
-        notifications={[]}
-        sort={{ orderBy: 'sentAt', order: 'asc' }}
-        onChangeSorting={() => {}}
-      />,
-      {
+    await act(async () => {
+      result = render(<MobileNotifications notifications={[]} />);
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).not.toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    expect(norificationCards).toHaveLength(0);
+    expect(result!.container).toHaveTextContent(/empty-state.message/i);
+  });
+
+  it('renders component - no notification - delegate access', async () => {
+    // render component
+    await act(async () => {
+      result = render(<MobileNotifications notifications={[]} isDelegatedPage />);
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).not.toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    expect(norificationCards).toHaveLength(0);
+    expect(result.container).toHaveTextContent(/empty-state.delegate/i);
+  });
+
+  it('renders MobileNotifications - notifications', async () => {
+    // render component
+    await act(async () => {
+      result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
+    expect(result.container).not.toHaveTextContent('table.destinatario');
+  });
+
+  it('renders component - notification - delegate access', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <MobileNotifications notifications={notificationsToFe.resultsPage} isDelegatedPage />
+      );
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
+    expect(result.container).toHaveTextContent('table.destinatario');
+  });
+
+  it('renders component - no notification after filter', async () => {
+    // render component
+    await act(async () => {
+      result = render(<MobileNotifications notifications={[]} />, {
         preloadedState: {
-          userState: {
-            user: {
-              ...basicNoLoggedUserData,
-              organization: {
-                id: '',
-                roles: [
-                  {
-                    role: PNRole.OPERATOR,
-                    partyRole: PartyRole.OPERATOR,
-                  },
-                ],
-              },
+          dashboardState: {
+            filters: {
+              startDate: formatToTimezoneString(tenYearsAgo),
+              endDate: formatToTimezoneString(today),
+              iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
             },
           },
         },
-      }
-    );
-    expect(result.container).not.toHaveTextContent(/Filters/i);
-    expect(result.container).not.toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(/empty-state.message/i);
-  });
-
-  it('renders MobileNotifications - empty case - delegate access', () => {
-    // render component
-    const result = render(
-      <MobileNotifications
-        notifications={[]}
-        sort={{ orderBy: 'sentAt', order: 'asc' }}
-        onChangeSorting={() => {}}
-        isDelegatedPage
-      />
-    );
-    expect(result.container).not.toHaveTextContent(/Filters/i);
-    expect(result.container).not.toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(/empty-state.delegate/i);
+      });
+    });
+    // the rerendering must be done to take the useRef updates
+    result!.rerender(<MobileNotifications notifications={[]} />);
+    const filters = await waitFor(() => result!.queryByTestId('dialogToggle'));
+    expect(filters).toBeInTheDocument();
+    expect(result!.container).toHaveTextContent(/empty-state.filter-message/i);
   });
 
   it('clicks on go to detail action', async () => {
     // render component
-    const result = render(
-      <MobileNotifications
-        notifications={notificationsToFe.resultsPage}
-        sort={{ orderBy: '', order: 'asc' }}
-      />
-    );
-    const notificationsCardButton = result?.container.querySelector('button');
+    await act(async () => {
+      result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
+    });
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    const notificationsCardButton = norificationCards[1].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
       expect(mockNavigateFn).toBeCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
+        GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[1].iun)
+      );
+    });
+  });
+
+  it('go to notification detail - delegate access', async () => {
+    await act(async () => {
+      result = render(
+        <MobileNotifications
+          notifications={[
+            ...notificationsToFe.resultsPage.map((n) => ({ ...n, mandateId: 'mocked-mandate-id' })),
+          ]}
+          isDelegatedPage
+        />
+      );
+    });
+    const norificationCards = result!.queryAllByTestId('itemCard');
+    const notificationsCardButton = norificationCards[1].querySelector('button');
+    fireEvent.click(notificationsCardButton!);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toBeCalledWith(
+        GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
+          notificationsToFe.resultsPage[1].iun,
+          'mocked-mandate-id'
+        )
       );
     });
   });

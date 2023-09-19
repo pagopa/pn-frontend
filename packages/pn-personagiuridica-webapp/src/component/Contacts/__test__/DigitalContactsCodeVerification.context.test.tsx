@@ -1,15 +1,24 @@
 import * as React from 'react';
-import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
-import * as redux from 'react-redux';
 
-import { LegalChannelType } from '../../../models/contacts';
-import * as actions from '../../../redux/contact/actions';
-import * as hooks from '../../../redux/hooks';
-import { render } from '../../../__test__/test-utils';
+import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import {
+  RenderResult,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
+import * as api from '../../../api/contacts/Contacts.api';
+import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../../models/contacts';
+import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import {
   Component,
-  mockedStore,
-  Wrapper,
+  emailValue,
+  pecValue,
+  pecValueToVerify,
+  senderId,
+  showDialog,
 } from './DigitalContactsCodeVerification.context.test-utils';
 
 jest.mock('react-i18next', () => ({
@@ -20,73 +29,37 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-const showDialog = async (
-  result: RenderResult,
-  mockDispatchFn: jest.Mock,
-  mockActionFn: jest.Mock
-): Promise<HTMLElement | null> => {
-  const button = result.container.querySelector('button');
-  fireEvent.click(button!);
-  await waitFor(() => {
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({
-      recipientId: 'mocked-recipientId',
-      senderId: 'mocked-senderId',
-      channelType: LegalChannelType.PEC,
-      value: 'mocked-value',
-      code: undefined,
-    });
-  });
+/*
+In questo test viene testato solo il rendering dei componenti e non il flusso.
+Il flusso completo viene testato nei singoli componenti, dove si potrà testare anche il cambio di stato di redux e le api.
+Per questo motivo non è necessario mockare le api, ma va bene anche usare lo spyOn.
 
-  return waitFor(() => screen.queryByTestId('codeDialog'));
-};
-
+Andrea Cimini - 11/09/2023
+*/
 describe('DigitalContactsCodeVerification Context', () => {
   let result: RenderResult | undefined;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-  const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-  mockUseAppSelector.mockReturnValue(mockedStore);
-
-  beforeEach(() => {
-    // mock action
-    mockActionFn = jest.fn();
-    const actionSpy = jest.spyOn(actions, 'createOrUpdateLegalAddress');
-    actionSpy.mockImplementation(mockActionFn as any);
-    // mock dispatch
-    mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-    // render component
-    result = render(
-      <Wrapper>
-        <Component />
-      </Wrapper>
-    );
-  });
 
   afterEach(() => {
     result = undefined;
-    jest.resetAllMocks();
     jest.clearAllMocks();
   });
 
-  it('renders CodeModal (modal closed)', () => {
-    const button = result?.container.querySelector('button');
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('Click me');
-    const dialog = screen.queryByTestId('codeDialog');
-    expect(dialog).not.toBeInTheDocument();
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 
-  it('renders CodeModal (modal opened)', async () => {
-    const dialog = await showDialog(result!, mockDispatchFn, mockActionFn);
+  it('code modal', async () => {
+    jest.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
+    // render component
+    result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
+      </DigitalContactsCodeVerificationProvider>
+    );
+    const dialog = await showDialog(result!);
     expect(dialog).toBeInTheDocument();
     const title = dialog?.querySelector('#dialog-title');
-    expect(title).toHaveTextContent('legal-contacts.pec-verify mocked-value');
+    expect(title).toHaveTextContent(`legal-contacts.pec-verify ${pecValue}`);
     const subtitle = dialog?.querySelector('#dialog-description');
     expect(subtitle).toHaveTextContent('legal-contacts.pec-verify-descr');
     expect(dialog).toHaveTextContent('legal-contacts.insert-code');
@@ -98,53 +71,125 @@ describe('DigitalContactsCodeVerification Context', () => {
     const buttons = dialog?.querySelectorAll('button');
     expect(buttons![0]).toHaveTextContent('button.annulla');
     expect(buttons![1]).toHaveTextContent('button.conferma');
+    // close modal
+    fireEvent.click(buttons![0]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
   });
 
-  it('clicks on confirm button', async () => {
-    const dialog = await showDialog(result!, mockDispatchFn, mockActionFn);
+  it('validation modal - pec to verify', async () => {
+    jest
+      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+      .mockResolvedValueOnce(void 0)
+      .mockResolvedValueOnce({ pecValid: false } as DigitalAddress);
+    // render component
+    result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <Component type={LegalChannelType.PEC} value={pecValueToVerify} senderId={senderId} />
+      </DigitalContactsCodeVerificationProvider>
+    );
+    const dialog = await showDialog(result!);
     const codeInputs = dialog?.querySelectorAll('input');
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
       fireEvent.change(input, { target: { value: index.toString() } });
     });
     const buttons = dialog?.querySelectorAll('button');
-    // clear mocks
-    mockActionFn.mockClear();
-    mockActionFn.mockReset();
-    mockDispatchFn.mockReset();
-    mockDispatchFn.mockClear();
-    mockDispatchFn.mockImplementation(
-      jest.fn(() => ({
-        unwrap: () => Promise.resolve({ code: 'verified' }),
-      }))
-    );
     fireEvent.click(buttons![1]);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith({
-        recipientId: 'mocked-recipientId',
-        senderId: 'mocked-senderId',
-        channelType: LegalChannelType.PEC,
-        value: 'mocked-value',
-        code: '01234',
-      });
-    });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
+    const validationDialog = result.getByTestId('validationDialog');
+    expect(validationDialog).toBeInTheDocument();
+    expect(validationDialog).toHaveTextContent('legal-contacts.validation-progress-title');
+    expect(validationDialog).toHaveTextContent('legal-contacts.validation-progress-content');
+    // close dialog
+    const button = validationDialog.querySelector('button');
+    fireEvent.click(button!);
+    await waitFor(() => {
+      expect(validationDialog).not.toBeInTheDocument();
+    });
   });
 
-  it('asks for confirmation when trying to add an already existing contact', async () => {
-    const button = screen.getByRole('button', { name: 'Click me' });
-    expect(button).toBeInTheDocument();
-    mockUseAppSelector.mockReturnValue(mockedStore);
+  it('validation modal - pec verified', async () => {
+    jest
+      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+      .mockResolvedValueOnce(void 0)
+      .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
+    // render component
+    result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
+      </DigitalContactsCodeVerificationProvider>
+    );
+    const dialog = await showDialog(result!);
+    const codeInputs = dialog?.querySelectorAll('input');
+    // fill inputs with values
+    codeInputs?.forEach((input, index) => {
+      fireEvent.change(input, { target: { value: index.toString() } });
+    });
+    const buttons = dialog?.querySelectorAll('button');
+    fireEvent.click(buttons![1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    const validationDialog = result.queryByTestId('validationDialog');
+    expect(validationDialog).not.toBeInTheDocument();
+  });
 
-    fireEvent.click(button);
-    screen.getByRole('heading', { name: 'common.duplicate-contact-title' });
-    const confirmButton = screen.getByRole('button', { name: 'button.conferma' });
-
+  it('disclaimer modal', async () => {
+    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
+    // render component
+    result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <Component type={CourtesyChannelType.EMAIL} value={emailValue} />
+      </DigitalContactsCodeVerificationProvider>
+    );
+    const button = result.container.querySelector('button');
+    fireEvent.click(button!);
+    // show disclaimer modal
+    const disclaimerDialog = await waitFor(() => result?.getByTestId('disclaimerDialog'));
+    expect(disclaimerDialog).toBeInTheDocument();
+    const confirmButton = within(disclaimerDialog!).getByTestId('disclaimer-confirm-button');
+    expect(confirmButton).toBeDisabled();
+    const checkbox = result.getByRole('checkbox');
+    fireEvent.click(checkbox);
+    // open code dialog
+    await waitFor(() => {
+      expect(confirmButton).toBeEnabled();
+    });
     fireEvent.click(confirmButton);
-    await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/ });
+    await waitFor(() => {
+      expect(disclaimerDialog).not.toBeInTheDocument();
+    });
+    const dialog = screen.queryByTestId('codeDialog');
+    expect(dialog).toBeInTheDocument();
+  });
+
+  it('already existing contact modal', async () => {
+    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
+    // render component
+    result = render(
+      <DigitalContactsCodeVerificationProvider>
+        <Component
+          type={CourtesyChannelType.EMAIL}
+          value={digitalAddresses.courtesy[0].value}
+          senderId={'another-sender-id'}
+        />
+      </DigitalContactsCodeVerificationProvider>,
+      { preloadedState: { contactsState: { digitalAddresses } } }
+    );
+    const button = screen.getByRole('button', { name: 'Click me' });
+    fireEvent.click(button);
+    const duplicateDialog = await waitFor(() => result?.getByTestId('duplicateDialog'));
+    expect(duplicateDialog).toBeInTheDocument();
+    const confirmButton = within(duplicateDialog!).getByRole('button', { name: 'button.conferma' });
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(duplicateDialog).not.toBeInTheDocument();
+    });
+    const dialog = await waitFor(() => screen.queryByTestId('codeDialog'));
+    expect(dialog).toBeInTheDocument();
   });
 });

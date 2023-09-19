@@ -8,9 +8,7 @@ import { Delegation, Person } from '../models/Deleghe';
  * @param  {boolean} isDelegator
  * @returns Array<Item>
  */
-
 export default function delegationToItem(delegations: Array<Delegation>): Array<Item> {
-  // TODO to be tested
   return delegations.map((delegation: Delegation) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),
@@ -32,11 +30,7 @@ export function generateVCode() {
   return crypto.getRandomValues(array).toString().slice(0, 5);
 }
 
-export function sortDelegations(
-  order: string,
-  sortAttr: string,
-  values: Array<Delegation>
-): Array<Delegation> {
+export function sortDelegations(order: string, sortAttr: string, values: Array<Delegation>) {
   /* eslint-disable-next-line functional/immutable-data */
   return values.sort((a: Delegation, b: Delegation) => {
     const orderDirection = order === 'desc' ? 1 : -1;
@@ -49,7 +43,7 @@ export function sortDelegations(
   });
 }
 
-export function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string): number {
+function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string) {
   if ('delegator' in a && a.delegator && 'delegator' in b && b.delegator) {
     const delegator1 = compareOrderAttribute(a.delegator, orderAttr);
     const delegator2 = compareOrderAttribute(b.delegator, orderAttr);

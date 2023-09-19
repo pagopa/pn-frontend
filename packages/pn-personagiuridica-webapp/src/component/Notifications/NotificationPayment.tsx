@@ -1,11 +1,14 @@
 /*
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import _ from 'lodash';
+
+import DownloadIcon from '@mui/icons-material/Download';
+import SendIcon from '@mui/icons-material/Send';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
   Divider,
   Grid,
@@ -16,37 +19,34 @@ import {
   SxProps,
   Theme,
   Typography,
-  Box,
 } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import SendIcon from '@mui/icons-material/Send';
 import {
   ApiErrorWrapper,
   CopyToClipboard,
-  formatEurocentToCurrency,
   NotificationDetailPayment,
+  NotificationPaidDetail,
   PaymentAttachmentSName,
+  PaymentHistory,
   PaymentInfoDetail,
   PaymentStatus,
-  useIsMobile,
   appStateActions,
+  formatEurocentToCurrency,
   useDownloadDocument,
-  NotificationPaidDetail,
-  PaymentHistory,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../navigation/externalRoutes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
+  NOTIFICATION_ACTIONS,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
-  NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
+import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import { getConfiguration } from '../../services/configuration.service';
-import { FAQ_HOW_DO_I_GET_REFUNDED } from '../../navigation/externalRoutes.const';
 
 interface Props {
   iun: string;
@@ -91,6 +91,7 @@ const ReloadPaymentInfoButton: React.FC<{ fetchPaymentInfo: () => void }> = ({
     sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
     color="primary"
     onClick={fetchPaymentInfo}
+    data-testid="reload-payment-button"
   >
     {children}
   </Link>
@@ -104,6 +105,7 @@ const SupportButton: React.FC<{ contactSupportClick: () => void }> = ({
     key="support-button"
     sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
     onClick={contactSupportClick}
+    data-testid="support-button"
   >
     {children}
   </Link>
@@ -118,8 +120,8 @@ const NotificationPayment: React.FC<Props> = ({
   subject,
   notificationIsCancelled,
 }) => {
-  const { PAGOPA_HELP_EMAIL } = getConfiguration();
   const { t } = useTranslation(['notifiche']);
+  const { PAGOPA_HELP_EMAIL } = getConfiguration();
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
@@ -155,7 +157,8 @@ const NotificationPayment: React.FC<Props> = ({
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
-      notificationPayment.creditorTaxId
+      notificationPayment.creditorTaxId &&
+      !notificationIsCancelled
     ) {
       void dispatch(
         getNotificationPaymentInfo({
@@ -468,7 +471,7 @@ const NotificationPayment: React.FC<Props> = ({
       reloadAction={fetchPaymentInfo}
       mainText={t('detail.payment.message-error-fetch-payment')}
     >
-      <Paper sx={{ p: 3, mb: '1rem' }} elevation={0}>
+      <Paper sx={{ p: 3, mb: '1rem' }} elevation={0} data-testid="paymentData">
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8} mb={2}>
             <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
@@ -488,6 +491,7 @@ const NotificationPayment: React.FC<Props> = ({
                 sx={{ fontSize: '16px' }}
                 target="_blank"
                 variant="body1"
+                data-testid="linkFaq"
               >
                 {t('detail.disclaimer-link')}
               </Link>
@@ -516,7 +520,6 @@ const NotificationPayment: React.FC<Props> = ({
               </Typography>
             </Grid>
           )}
-
           <Stack spacing={2} width="100%">
             {!notificationIsCancelled && (
               <Box width="100%">
@@ -524,6 +527,7 @@ const NotificationPayment: React.FC<Props> = ({
                   <Alert
                     severity={data.message.type}
                     action={isMobile ? undefined : getMessageAction(data.message)}
+                    data-testid="messageAlert"
                   >
                     <Typography variant="body1">{data.message.body}</Typography>
                     <Typography variant="body1" fontWeight="bold">
@@ -538,7 +542,6 @@ const NotificationPayment: React.FC<Props> = ({
                 )}
               </Box>
             )}
-
             {loading && !notificationIsCancelled && (
               <Grid item xs={12} lg={12}>
                 <LoadingButton
@@ -547,6 +550,7 @@ const NotificationPayment: React.FC<Props> = ({
                   loadingPosition="end"
                   endIcon={<SendIcon />}
                   fullWidth
+                  data-testid="loadingButton"
                 >
                   {t('detail.payment.submit')}
                 </LoadingButton>

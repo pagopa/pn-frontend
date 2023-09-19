@@ -6,6 +6,7 @@ import {
   PaymentAttachmentSName,
   PaymentStatus,
   downloadDocument,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -22,6 +23,7 @@ type Props = {
 const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
 
   // TODO: l'api di apgamento non è corretta perchè prevede solo il caso in cui si abbia un solo pagamento
   const dowloadHandler = () => {
@@ -30,7 +32,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
       .unwrap()
       .then((res) => {
         if (res.url) {
-          downloadDocument(res.url);
+          downloadDocument(res.url, isMobile);
         }
       })
       .catch(() => {});

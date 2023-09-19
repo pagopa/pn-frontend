@@ -97,7 +97,7 @@ describe('NotificationPaymentPagoPa Component', () => {
       expect(mock.history.get).toHaveLength(1);
       expect(mock.history.get[0].url).toBe(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName));
       expect(downloadDocument).toBeCalledTimes(1);
-      expect(downloadDocument).toBeCalledWith('http://mocked-url.com');
+      expect(downloadDocument).toBeCalledWith('http://mocked-url.com', false);
     });
   });
 });

@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   GetNotificationsParams,
+  Notification,
+  Sort,
+  formatToTimezoneString,
   tenYearsAgo,
   today,
-  Notification,
-  formatToTimezoneString,
-  Sort,
 } from '@pagopa-pn/pn-commons';
-import { NotificationColumn } from '../../models/Notifications';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { NotificationColumn } from '../../models/Notifications';
 import { getReceivedNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -21,7 +21,6 @@ const dashboardSlice = createSlice({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(today),
       iunMatch: '',
-      mandateId: undefined,
     } as GetNotificationsParams,
     pagination: {
       nextPagesKey: [] as Array<string>,
@@ -54,20 +53,6 @@ const dashboardSlice = createSlice({
       state.pagination.nextPagesKey = [];
       state.pagination.moreResult = false;
     },
-    setMandateId: (state, action: PayloadAction<string | undefined>) => {
-      state.notifications = [];
-      state.filters = {
-        iunMatch: '',
-        mandateId: action.payload,
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(today),
-      };
-      // reset pagination
-      state.pagination.size = 10;
-      state.pagination.page = 0;
-      state.pagination.nextPagesKey = [];
-      state.pagination.moreResult = false;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotifications.fulfilled, (state, action) => {
@@ -85,7 +70,6 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { setPagination, setSorting, setNotificationFilters, setMandateId } =
-  dashboardSlice.actions;
+export const { setPagination, setSorting, setNotificationFilters } = dashboardSlice.actions;
 
 export default dashboardSlice;

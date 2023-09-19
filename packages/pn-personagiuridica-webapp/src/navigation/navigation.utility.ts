@@ -1,4 +1,5 @@
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
+
 // momentarily commented for pn-5157
 // import { AppRouteParams, AppRouteType, sanitizeString } from '@pagopa-pn/pn-commons';
 
