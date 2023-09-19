@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -19,8 +20,6 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import _ from 'lodash';
-
 import {
   ApiErrorWrapper,
   CopyToClipboard,
@@ -176,7 +175,7 @@ const NotificationPayment: React.FC<Props> = ({
         .then(() => {
           setLoading(() => false);
         })
-        .catch(() => { });
+        .catch(() => {});
     } else if (paymentHistory && paymentHistory.length > 0) {
       setLoading(() => false);
     } else {
@@ -273,11 +272,10 @@ const NotificationPayment: React.FC<Props> = ({
     let title = t('detail.payment.summary-pending', { ns: 'notifiche' });
     if (
       paymentInfo.status === PaymentStatus.SUCCEEDED ||
+      paymentInfo.status === PaymentStatus.INPROGRESS ||
       (paymentHistory && paymentHistory.length > 0)
     ) {
-      title = t('detail.payment.summary-succeeded', { ns: 'notifiche' });
-    } else if (paymentInfo.status === PaymentStatus.INPROGRESS) {
-      title = t('detail.payment.summary-in-progress', { ns: 'notifiche' });
+      title = t('detail.payment.summary', { ns: 'notifiche' });
     }
     const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
     const message = getMessageData();

@@ -1,19 +1,20 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
 import {
-  apiOutcomeTestHelper,
   AppResponseMessage,
   NotificationDetailPayment,
-  ResponseEventDispatcher,
-  PaymentStatus,
-  PaymentInfoDetail,
-  RecipientType,
   PaymentInfo,
+  PaymentInfoDetail,
+  PaymentStatus,
+  RecipientType,
+  ResponseEventDispatcher,
+  apiOutcomeTestHelper,
 } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
 
-import { mockApi, render, screen, act, waitFor } from '../../../__test__/test-utils';
-import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { act, mockApi, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { NOTIFICATION_PAYMENT_INFO } from '../../../api/notifications/notifications.routes';
 import NotificationPayment from '../NotificationPayment';
 
@@ -262,7 +263,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
 
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary-in-progress' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -271,7 +272,7 @@ describe('NotificationPayment component', () => {
     expect(loadingButton).not.toBeInTheDocument();
     const alert = screen.getByTestId('InfoOutlinedIcon');
     expect(alert).toBeInTheDocument();
-    expect(result.container).toHaveTextContent('detail.payment.summary-in-progress');
+    expect(result.container).toHaveTextContent('detail.payment.summary');
   });
 
   it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
@@ -302,7 +303,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
 
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary-succeeded' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
