@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
 const cancelButtonMock = jest.fn();

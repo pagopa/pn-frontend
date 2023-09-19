@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { loggedUser, partyList, productsList } from '../../../__mocks__/User.mock';
+import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import Header from '../Header';
-import { loggedUser, partyList, productsList } from './test-utils';
 
 const handleActionClick = jest.fn();
 const handleClick = jest.fn();

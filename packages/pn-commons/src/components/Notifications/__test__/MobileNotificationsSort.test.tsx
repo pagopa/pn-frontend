@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { RenderResult, fireEvent, screen, waitFor, within } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import { CardSort, Sort } from '../../../types';
 import MobileNotificationsSort from '../MobileNotificationsSort';
 

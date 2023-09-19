@@ -1,5 +1,6 @@
 import _ from 'lodash';
 
+import { Downtime, DowntimeStatus, KnownFunctionality } from '../models';
 import {
   AddressSource,
   DigitalDomicileType,
@@ -14,7 +15,7 @@ import {
   RecipientType,
   TimelineCategory,
 } from '../types';
-import { NotificationDetailTimelineDetails } from '../types/NotificationDetail';
+import { NotificationDetailTimelineDetails, PaymentHistory } from '../types/NotificationDetail';
 import { parseNotificationDetail } from '../utils';
 
 function getOneRecipientNotification(): NotificationDetail {
@@ -515,3 +516,81 @@ export const getTimelineElem = (
   timestamp: '2023-08-25T11:38:05.392Z',
   details,
 });
+
+export const mockPaymentHistory: Array<PaymentHistory> = [
+  {
+    recipientDenomination: 'Mario Rossi',
+    recipientTaxId: 'RSSMRA80A01H501U',
+    paymentSourceChannel: 'EXTERNAL_REGISTRY',
+    recipientType: RecipientType.PF,
+    amount: 10000.45,
+    creditorTaxId: '77777777777',
+    noticeCode: '302181677769720267',
+  },
+  {
+    recipientDenomination: 'Sara Bianchi',
+    recipientTaxId: 'BNCSRA00E44H501J',
+    paymentSourceChannel: 'EXTERNAL_REGISTRY',
+    recipientType: RecipientType.PF,
+    amount: 30.67,
+    creditorTaxId: '77777777777',
+    noticeCode: '302181677459720267',
+    idF24: 'aw345s',
+  },
+  {
+    recipientDenomination: 'Ufficio Tal dei Tali',
+    recipientTaxId: '12345678910',
+    paymentSourceChannel: 'EXTERNAL_REGISTRY',
+    recipientType: RecipientType.PG,
+    amount: 65.12,
+    creditorTaxId: '77777777777',
+    noticeCode: '302181677459720267',
+  },
+];
+
+export const mockDowntimes: Array<Downtime> = [
+  {
+    rawFunctionality: KnownFunctionality.NotificationWorkflow,
+    knownFunctionality: KnownFunctionality.NotificationWorkflow,
+    status: DowntimeStatus.OK,
+    startDate: '2022-10-28T10:11:09Z',
+    endDate: '2022-10-28T10:18:14Z',
+    fileAvailable: true,
+  },
+  {
+    rawFunctionality: KnownFunctionality.NotificationCreate,
+    knownFunctionality: KnownFunctionality.NotificationCreate,
+    status: DowntimeStatus.OK,
+    startDate: '2022-10-23T15:50:04Z',
+    endDate: '2022-10-23T15:51:12Z',
+    legalFactId: 'some-legal-fact-id',
+    fileAvailable: true,
+  },
+];
+
+export const mockHistory: NotificationStatusHistory[] = [
+  {
+    status: NotificationStatus.EFFECTIVE_DATE,
+    activeFrom: '2022-10-30T13:59:23Z',
+    relatedTimelineElements: [],
+    steps: [],
+  },
+  {
+    status: NotificationStatus.DELIVERED,
+    activeFrom: '2022-10-04T13:56:16Z',
+    relatedTimelineElements: [],
+    steps: [],
+  },
+  {
+    status: NotificationStatus.DELIVERING,
+    activeFrom: '2022-10-04T13:55:52Z',
+    relatedTimelineElements: [],
+    steps: [],
+  },
+  {
+    status: NotificationStatus.ACCEPTED,
+    activeFrom: '2022-10-04T13:54:47Z',
+    relatedTimelineElements: [],
+    steps: [],
+  },
+];

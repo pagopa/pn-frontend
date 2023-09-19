@@ -2,9 +2,8 @@ import React from 'react';
 
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { RenderResult, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import CustomMobileDialog from '../CustomMobileDialog';
 import CustomMobileDialogAction from '../CustomMobileDialogAction';
 import CustomMobileDialogContent from '../CustomMobileDialogContent';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render, within } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { Item, Sort } from '../../../types';
 import { SmartTableAction, SmartTableData } from '../../../types/SmartTable';
 import SmartTable from '../SmartTable';

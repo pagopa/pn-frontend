@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Email } from '@mui/icons-material';
 
+import { loggedUser, productsList } from '../../../__mocks__/User.mock';
 import SideMenu from '../../../components/SideMenu/SideMenu';
 import { render } from '../../../test-utils';
 import { SideMenuItem } from '../../../types';
-import { loggedUser, productsList } from '../../Header/__test__/test-utils';
 import Layout from '../Layout';
 
 describe('Layout Component', () => {

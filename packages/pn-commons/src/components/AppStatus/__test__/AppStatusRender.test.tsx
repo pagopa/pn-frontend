@@ -1,9 +1,13 @@
 import React from 'react';
 
-import { RenderResult, act } from '@testing-library/react';
-
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
-import { createMatchMedia, initLocalizationForTest, render } from '../../../test-utils';
+import {
+  RenderResult,
+  act,
+  createMatchMedia,
+  initLocalizationForTest,
+  render,
+} from '../../../test-utils';
 import { AppStatusData } from '../../../types';
 import { apiOutcomeTestHelper } from '../../../utils/test.utility';
 import { formatDate, formatTime } from '../../../utils/date.utility';

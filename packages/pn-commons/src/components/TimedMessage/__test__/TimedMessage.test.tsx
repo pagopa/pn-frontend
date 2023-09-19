@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RenderResult, act, render, screen } from '../../../test-utils';
+import { RenderResult, act, render } from '../../../test-utils';
 import TimedMessage from '../TimedMessage';
 
 describe('TimedMessage component', () => {

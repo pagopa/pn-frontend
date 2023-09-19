@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent, waitFor } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { fireEvent, render, waitFor } from '../../../test-utils';
 import { NotificationDetailDocument } from '../../../types';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
@@ -26,17 +24,6 @@ describe('NotificationDetailDocuments Component', () => {
 
   beforeEach(() => {
     mockClickFn = jest.fn();
-    // render component
-
-    /*  resultNotDownloadableFiles = render(
-      <NotificationDetailDocuments
-        title="Mocked title"
-        documents={documents}
-        clickHandler={mockClickFn}
-        documentsAvailable={false}
-        downloadFilesMessage="mocked"
-      />
-    ); */
   });
 
   afterEach(() => {
