@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { RenderResult, act, screen, within } from '@testing-library/react';
-
 import { exampleDowntimeLogPage, incidentTimestamps } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
-import { initLocalizationForTest, render } from '../../../test-utils';
+import { RenderResult, act, initLocalizationForTest, render, within } from '../../../test-utils';
 import { formatDate, formatTime } from '../../../utils';
 import MobileDowntimeLog from '../MobileDowntimeLog';
 

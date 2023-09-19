@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { RenderResult, act } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { RenderResult, act, render } from '../../../test-utils';
 import HelpNotificationDetails from '../HelpNotificationDetails';
 
 /**

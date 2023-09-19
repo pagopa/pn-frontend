@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent, screen } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { fireEvent, render, screen } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
 import Footer from '../Footer';
 

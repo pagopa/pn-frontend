@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent, waitFor, within } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { fireEvent, render, waitFor } from '../../../test-utils';
 import CodeInput from '../CodeInput';
 
 const handleChangeMock = jest.fn();

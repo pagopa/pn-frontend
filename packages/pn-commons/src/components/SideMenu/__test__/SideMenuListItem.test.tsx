@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, render, waitFor } from '../../../test-utils';
 import SideMenuListItem from '../SideMenuListItem';
 import { sideMenuItems } from './test-utils';
 

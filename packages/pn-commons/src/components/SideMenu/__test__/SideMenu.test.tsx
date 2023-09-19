@@ -1,26 +1,31 @@
 import React from 'react';
 
-import { RenderResult, fireEvent, waitFor, within } from '@testing-library/react';
-
-import * as hooks from '../../../hooks/useIsMobile';
-import { act, render } from '../../../test-utils';
+import {
+  RenderResult,
+  act,
+  createMatchMedia,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../test-utils';
 import SideMenu from '../SideMenu';
 import { sideMenuItems } from './test-utils';
 
-const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
-
 describe('SideMenu', () => {
   let result: RenderResult | undefined;
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
 
   afterEach(() => {
     result = undefined;
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
+    window.matchMedia = original;
   });
 
   it('Renders side menu (no mobile)', async () => {
-    useIsMobileSpy.mockReturnValue(false);
-
     await act(async () => {
       result = render(<SideMenu menuItems={sideMenuItems} />);
     });
@@ -33,7 +38,7 @@ describe('SideMenu', () => {
   });
 
   it('Renders side menu (mobile)', async () => {
-    useIsMobileSpy.mockReturnValue(true);
+    window.matchMedia = createMatchMedia(800);
 
     await act(async () => {
       result = render(<SideMenu menuItems={sideMenuItems} />);

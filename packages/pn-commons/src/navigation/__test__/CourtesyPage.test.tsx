@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent } from '@testing-library/react';
-
-import { render } from '../../test-utils';
+import { fireEvent, render } from '../../test-utils';
 import CourtesyPage from '../CourtesyPage';
 
 const mockClickFn = jest.fn();

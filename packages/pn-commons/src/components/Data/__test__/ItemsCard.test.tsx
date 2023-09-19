@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent, waitFor, within } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import { CardAction, CardElement, Item } from '../../../types';
 import ItemsCard from '../ItemsCard';
 

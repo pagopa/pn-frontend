@@ -1,10 +1,15 @@
 import React from 'react';
 
-import { RenderResult, act, fireEvent, waitFor, within } from '@testing-library/react';
-
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import * as hooks from '../../../hooks/useIsMobile';
-import { render } from '../../../test-utils';
+import {
+  RenderResult,
+  act,
+  createMatchMedia,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../test-utils';
 import {
   formatDay,
   formatMonthString,
@@ -12,8 +17,6 @@ import {
   getNotificationStatusInfos,
 } from '../../../utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
-
-const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
 const testTimelineRendering = async (container: HTMLElement) => {
   const timelineItems = container.querySelectorAll('.MuiTimelineItem-root');
@@ -49,16 +52,18 @@ const testTimelineRendering = async (container: HTMLElement) => {
   });
 };
 
-// Da sistemare perchè falliscono da quando è stato cambiato il mock
+// TO-DO: Da sistemare perchè falliscono da quando è stato cambiato il mock
 describe.skip('NotificationDetailTimeline Component', () => {
   let result: RenderResult | undefined;
+  const original = window.matchMedia;
 
   afterEach(() => {
     result = undefined;
+    window.matchMedia = original;
   });
 
   it('renders NotificationDetailTimeline (desktop)', async () => {
-    useIsMobileSpy.mockReturnValue(false);
+    window.matchMedia = createMatchMedia(800);
     // render component
     result = render(
       <NotificationDetailTimeline
@@ -77,7 +82,7 @@ describe.skip('NotificationDetailTimeline Component', () => {
   });
 
   it('renders NotificationDetailTimeline (mobile)', async () => {
-    useIsMobileSpy.mockReturnValue(true);
+    window.matchMedia = createMatchMedia(800);
     // render component
     await act(async () => {
       result = render(
@@ -104,7 +109,7 @@ describe.skip('NotificationDetailTimeline Component', () => {
   });
 
   it('expand timeline item (desktop)', async () => {
-    useIsMobileSpy.mockReturnValue(false);
+    window.matchMedia = createMatchMedia(800);
     // render component
     await act(async () => {
       result = render(

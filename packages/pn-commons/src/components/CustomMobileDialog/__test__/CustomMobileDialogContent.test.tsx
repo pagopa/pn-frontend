@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { fireEvent, screen, within } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { fireEvent, render, screen, within } from '../../../test-utils';
 import * as customContext from '../CustomMobileDialog.context';
 import CustomMobileDialogContent from '../CustomMobileDialogContent';
 

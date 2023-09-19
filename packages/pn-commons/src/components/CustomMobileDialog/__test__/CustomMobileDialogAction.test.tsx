@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { RenderResult, fireEvent } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, render } from '../../../test-utils';
 import * as customContext from '../CustomMobileDialog.context';
 import CustomMobileDialogAction from '../CustomMobileDialogAction';
 
@@ -26,12 +24,12 @@ describe('CustomMobileDialogAction Component', () => {
   });
 
   it('renders CustomMobileDialogAction', () => {
-    const button = result?.queryByTestId('dialogAction');
+    const button = result?.getByTestId('dialogAction');
     expect(button).toHaveTextContent(/Mocked action/i);
   });
 
   it('clicks on action', () => {
-    const button = result?.queryByTestId('dialogAction');
+    const button = result?.getByTestId('dialogAction');
     fireEvent.click(button!);
     expect(contextMockedFn).toBeCalledTimes(1);
   });

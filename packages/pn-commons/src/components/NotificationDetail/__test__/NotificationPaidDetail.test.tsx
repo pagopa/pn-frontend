@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { mockPaymentHistory } from '../../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, within } from '../../../test-utils';
 import { PaymentHistory, RecipientType } from '../../../types';
 import { formatEurocentToCurrency, formatFiscalCode } from '../../../utils';
@@ -11,37 +12,6 @@ describe('NotificationDetailPaid Component', () => {
   afterEach(() => {
     result = undefined;
   });
-
-  const paymentHistory: Array<PaymentHistory> = [
-    {
-      recipientDenomination: 'Mario Rossi',
-      recipientTaxId: 'RSSMRA80A01H501U',
-      paymentSourceChannel: 'EXTERNAL_REGISTRY',
-      recipientType: RecipientType.PF,
-      amount: 10000.45,
-      creditorTaxId: '77777777777',
-      noticeCode: '302181677769720267',
-    },
-    {
-      recipientDenomination: 'Sara Bianchi',
-      recipientTaxId: 'BNCSRA00E44H501J',
-      paymentSourceChannel: 'EXTERNAL_REGISTRY',
-      recipientType: RecipientType.PF,
-      amount: 30.67,
-      creditorTaxId: '77777777777',
-      noticeCode: '302181677459720267',
-      idF24: 'aw345s',
-    },
-    {
-      recipientDenomination: 'Ufficio Tal dei Tali',
-      recipientTaxId: '12345678910',
-      paymentSourceChannel: 'EXTERNAL_REGISTRY',
-      recipientType: RecipientType.PG,
-      amount: 65.12,
-      creditorTaxId: '77777777777',
-      noticeCode: '302181677459720267',
-    },
-  ];
 
   function testTableData(payment: PaymentHistory, table: HTMLElement, isSender: boolean) {
     const tableRows = [
@@ -92,51 +62,53 @@ describe('NotificationDetailPaid Component', () => {
 
   it('renders NotificationPaidDetail - one recipient and no sender', async () => {
     await act(async () => {
-      result = render(<NotificationPaidDetail paymentDetailsList={[paymentHistory[0]]} />);
+      result = render(<NotificationPaidDetail paymentDetailsList={[mockPaymentHistory[0]]} />);
     });
     const table = result?.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
     const recipient = result?.queryByTestId('paymentRecipient');
     expect(recipient).not.toBeInTheDocument();
-    testTableData(paymentHistory[0], table!, false);
+    testTableData(mockPaymentHistory[0], table!, false);
   });
 
   it('renders NotificationPaidDetail - one recipient and sender', () => {
     const result = render(
-      <NotificationPaidDetail paymentDetailsList={[paymentHistory[0]]} isSender />
+      <NotificationPaidDetail paymentDetailsList={[mockPaymentHistory[0]]} isSender />
     );
     const table = result.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
     const recipient = result.getByTestId('paymentRecipient');
     expect(recipient).toBeInTheDocument();
     expect(recipient).toHaveTextContent(
-      `${paymentHistory[0].recipientDenomination} - ${paymentHistory[0].recipientTaxId}`
+      `${mockPaymentHistory[0].recipientDenomination} - ${mockPaymentHistory[0].recipientTaxId}`
     );
-    testTableData(paymentHistory[0], table, true);
+    testTableData(mockPaymentHistory[0], table, true);
   });
 
   it('renders NotificationPaidDetail - multi recipient and no sender', () => {
-    const result = render(<NotificationPaidDetail paymentDetailsList={paymentHistory} />);
+    const result = render(<NotificationPaidDetail paymentDetailsList={mockPaymentHistory} />);
     const tables = result.getAllByTestId('paymentTable');
-    expect(tables).toHaveLength(paymentHistory.length);
+    expect(tables).toHaveLength(mockPaymentHistory.length);
     tables.forEach((table, index) => {
-      testTableData(paymentHistory[index], table, false);
+      testTableData(mockPaymentHistory[index], table, false);
     });
   });
 
   it('renders NotificationPaidDetail - multi recipient and sender', () => {
-    const result = render(<NotificationPaidDetail paymentDetailsList={paymentHistory} isSender />);
+    const result = render(
+      <NotificationPaidDetail paymentDetailsList={mockPaymentHistory} isSender />
+    );
     const accordions = result.getAllByTestId('paymentAccordion');
-    expect(accordions).toHaveLength(paymentHistory.length);
+    expect(accordions).toHaveLength(mockPaymentHistory.length);
     accordions.forEach((accordion, index) => {
       const recipient = within(accordion).getByTestId('recipient');
       expect(recipient).toBeInTheDocument();
       expect(recipient).toHaveTextContent(
-        `${paymentHistory[index].recipientDenomination} - ${paymentHistory[index].recipientTaxId}`
+        `${mockPaymentHistory[index].recipientDenomination} - ${mockPaymentHistory[index].recipientTaxId}`
       );
       const table = within(accordion).getByTestId('paymentTable');
       expect(table).toBeInTheDocument();
-      testTableData(paymentHistory[index], table as HTMLElement, true);
+      testTableData(mockPaymentHistory[index], table as HTMLElement, true);
       const button = within(accordion).getByRole('button');
       // accordion collapsed
       expect(button).toHaveAttribute('aria-expanded', 'false');

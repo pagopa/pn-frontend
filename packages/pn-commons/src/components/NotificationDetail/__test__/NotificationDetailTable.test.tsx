@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { RenderResult, within } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
+import { RenderResult, render, within } from '../../../test-utils';
 import { NotificationDetailTableRow } from '../../../types';
 import NotificationDetailTable from '../NotificationDetailTable';
 
