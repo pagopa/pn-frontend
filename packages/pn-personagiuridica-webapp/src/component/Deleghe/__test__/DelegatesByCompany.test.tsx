@@ -2,11 +2,10 @@ import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import DelegatesByCompany from '../DelegatesByCompany';
 
 const mockNavigateFn = jest.fn();
