@@ -91,8 +91,13 @@
       "submit": "Paga",
       "download-f24": "Scarica F24",
       "pay-with-f24": "Se preferisci, puoi pagare tramite F24.",
+      "download-f24-in-progress": "Documento in elaborazione",
+      "download-f24-waiting": "Ancora un attimo",
+      "download-f24-ongoing": "Download in corso",
       "reload": "Ricarica",
       "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
+      "cancelled-message": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, le informazioni qui sotto potrebbero non essere aggiornate.",
+      "disclaimer-link": "Scopri di più",
       "status": {
         "succeded": "Pagato",
         "succeded-tooltip": "Il pagamento è stato inviato correttamente.",
