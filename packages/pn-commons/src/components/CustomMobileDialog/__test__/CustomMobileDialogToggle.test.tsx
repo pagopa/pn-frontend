@@ -2,6 +2,7 @@ import React from 'react';
 
 import { RenderResult, fireEvent, render } from '../../../test-utils';
 import CustomMobileDialog from '../CustomMobileDialog';
+import * as customContext from '../CustomMobileDialog.context';
 import CustomMobileDialogContent from '../CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialogToggle';
 
@@ -10,6 +11,9 @@ describe('CustomMobileDialog Component', () => {
   const contextMockedFn = jest.fn();
 
   beforeEach(() => {
+    const customHookSpy = jest.spyOn(customContext, 'useCustomMobileDialogContext');
+    customHookSpy.mockReturnValue({ open: false, toggleOpen: contextMockedFn });
+
     // render component
     result = render(
       <CustomMobileDialog>
@@ -33,8 +37,7 @@ describe('CustomMobileDialog Component', () => {
     expect(button).toHaveTextContent(/mocked dialog toggle title/i);
   });
 
-  // TO-DO: Mock function toggleOpen from createContext
-  it.skip('clicks on button', async () => {
+  it('clicks on button', async () => {
     const button = result?.container.querySelector('button');
     fireEvent.click(button!);
     expect(contextMockedFn).toBeCalledTimes(1);
