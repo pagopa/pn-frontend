@@ -155,6 +155,7 @@ const DelegatesByCompany = () => {
           {t('deleghe.delegatesTitle')}
         </Typography>
         <Button
+          id="add-deleghe"
           variant="outlined"
           onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
           data-testid="addDeleghe"

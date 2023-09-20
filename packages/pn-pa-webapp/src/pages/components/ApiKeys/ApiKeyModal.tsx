@@ -1,4 +1,5 @@
 import { ReactNode, useMemo } from 'react';
+
 import { Button, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
@@ -34,7 +35,12 @@ const ApiKeyModal = ({
       )}
       <DialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
         {subTitle && !subTitleAtBottom && (
-          <Typography data-testid="subtitle-top" variant="body1" sx={{ marginBottom: 3 }}>
+          <Typography
+            id="subtitle-top"
+            data-testid="subtitle-top"
+            variant="body1"
+            sx={{ marginBottom: 3 }}
+          >
             {subTitle}
           </Typography>
         )}
@@ -55,6 +61,7 @@ const ApiKeyModal = ({
         }}
       >
         <Button
+          id="close-modal-button"
           data-testid="close-modal-button"
           variant="outlined"
           onClick={closeModalHandler}
@@ -64,6 +71,7 @@ const ApiKeyModal = ({
         </Button>
         {actionButtonLabel && (
           <Button
+            id="action-modal-button"
             sx={{ mb: isMobile ? 2 : 0 }}
             data-testid="action-modal-button"
             variant="contained"

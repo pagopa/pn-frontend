@@ -127,7 +127,12 @@ const CodeModal = memo(
           <Box sx={{ marginTop: '10px', textAlign: textPosition }}>{codeSectionAdditional}</Box>
           <Divider sx={{ margin: '20px 0' }} />
           {hasError && (
-            <Alert data-testid="errorAlert" severity="error" sx={{ textAlign: textPosition }}>
+            <Alert
+              id="error-alert"
+              data-testid="errorAlert"
+              severity="error"
+              sx={{ textAlign: textPosition }}
+            >
               <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
             </Alert>
@@ -144,6 +149,7 @@ const CodeModal = memo(
         >
           {cancelLabel && cancelCallback && (
             <Button
+              id="code-cancel-button"
               variant="outlined"
               onClick={cancelCallback}
               fullWidth={isMobile}

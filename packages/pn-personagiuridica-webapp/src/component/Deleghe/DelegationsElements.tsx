@@ -201,7 +201,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
       ];
     }
     const menuItems = [
-      <MenuItem key="reject" onClick={handleOpenModalClick}>
+      <MenuItem id="reject-delegation-button" key="reject" onClick={handleOpenModalClick}>
         {t('deleghe.reject')}
       </MenuItem>,
     ];

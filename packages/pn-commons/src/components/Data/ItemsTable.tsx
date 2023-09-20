@@ -69,6 +69,7 @@ function ItemsTable<ColumnId extends string>({
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
         <Table
+          id="notifications-table"
           stickyHeader
           aria-label={
             ariaTitle
@@ -115,6 +116,7 @@ function ItemsTable<ColumnId extends string>({
           <TableBody sx={{ backgroundColor: 'background.paper' }} role="rowgroup">
             {rows.map((row, index) => (
               <TableRow
+                id={`${testId}.row`}
                 key={row.id}
                 data-testid={`${testId}.row`}
                 role="row"
