@@ -4,6 +4,7 @@ import { useBlocker } from '../useBlocker';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
 
 let navigator;
+const blocker = jest.fn();
 
 beforeEach(() => {
     navigator = {
@@ -21,8 +22,6 @@ afterEach(() => {
 
 describe('useBlocker', () => {
     it('should not set up a blocker when "when" is false', () => {
-        const blocker = jest.fn();
-
 
         const { unmount } = renderHook(() => useBlocker(blocker, false), {
             wrapper: ({ children }) => (
@@ -37,7 +36,6 @@ describe('useBlocker', () => {
     });
 
     it('should set up a blocker when "when" is true', () => {
-        const blocker = jest.fn();
 
         const { unmount } = renderHook(() => useBlocker(blocker, true), {
             wrapper: ({ children }) => (
@@ -52,7 +50,6 @@ describe('useBlocker', () => {
     });
 
     it('should call the provided blocker function when a transition occurs', () => {
-        const blocker = jest.fn();
         navigator = {
             ...navigator,
             block: jest.fn((callback) => {

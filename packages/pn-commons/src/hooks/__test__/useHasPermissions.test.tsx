@@ -17,7 +17,7 @@ describe('test usePermissions hook', () => {
     expect(result.container).toHaveTextContent('Accepted!');
   });
 
-  test("doesn't have permissions", () => {
+  it("doesn't have permissions", () => {
     const result = render(<Component currentPermissions={['read']} />);
     expect(result.container).toHaveTextContent('Denied!');
   });

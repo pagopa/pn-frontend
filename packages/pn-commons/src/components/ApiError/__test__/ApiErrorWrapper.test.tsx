@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import ApiErrorWrapper from '../ApiErrorWrapper';
 
 const mockApiError = 'mockApiId';
-// Mocking the useErrors hook
+// Mocking the useErrors hook, since the hook is already tested
 jest.mock('../../../hooks', () => ({
     useErrors: () => ({
         hasApiErrors: (apiId) => apiId === mockApiError, // Mocking hasApiErrors function
