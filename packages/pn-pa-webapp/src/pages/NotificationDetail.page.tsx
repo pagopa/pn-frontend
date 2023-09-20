@@ -13,6 +13,7 @@ import {
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailTimeline,
+  NotificationDetail as NotificationDetailType,
   NotificationPaidDetail,
   NotificationRelatedDowntimes,
   PnBreadcrumb,
@@ -48,7 +49,9 @@ import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
 import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
 
-const AlertNotificationCancel: React.FC<{ notification: any }> = (notification) => {
+const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }> = (
+  notification
+) => {
   const { t } = useTranslation(['notifiche']);
   const { cancelled, cancellationInProgress } = useIsCancelled(notification);
   if (cancelled || cancellationInProgress) {

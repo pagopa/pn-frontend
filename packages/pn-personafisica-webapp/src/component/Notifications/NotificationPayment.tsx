@@ -154,14 +154,12 @@ const NotificationPayment: React.FC<Props> = ({
   );
 
   const fetchPaymentInfo = () => {
-    console.log('fuori :>> ', notificationIsCancelled);
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
       notificationPayment.creditorTaxId &&
       !notificationIsCancelled
     ) {
-      console.log('dentro :>> ');
       void dispatch(
         getNotificationPaymentInfo({
           noticeCode: notificationPayment.noticeCode,
@@ -275,11 +273,7 @@ const NotificationPayment: React.FC<Props> = ({
   const composePaymentData = (): PaymentData => {
     /* eslint-disable-next-line functional/no-let */
     let title = t('detail.payment.summary-pending', { ns: 'notifiche' });
-    if (
-      paymentInfo.status === PaymentStatus.SUCCEEDED ||
-      paymentInfo.status === PaymentStatus.INPROGRESS ||
-      (paymentHistory && paymentHistory.length > 0)
-    ) {
+    if (paymentHistory && paymentHistory.length > 0) {
       title = t('detail.payment.summary', { ns: 'notifiche' });
     }
     const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';

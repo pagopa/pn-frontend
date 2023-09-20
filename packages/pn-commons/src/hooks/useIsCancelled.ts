@@ -2,6 +2,11 @@ import { NotificationDetail, NotificationStatus, TimelineCategory } from '../typ
 
 /**
  * Checks if notification is cancelled
+ *
+ * The check is on notification status and if in timeline
+ * there is an element with category cancelled or cancellation request
+ *
+ * @param notification Notification where check if notification is cancelled
  */
 
 interface Props {
