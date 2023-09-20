@@ -1,10 +1,13 @@
 import { useCallback } from 'react';
-import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
+
 import DownloadIcon from '@mui/icons-material/Download';
-import { CardElement, Column, Item } from '../../types';
+import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
+
 import { DowntimeLogPage, DowntimeStatus } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { formatDateTime, formatDate, formatTimeWithLegend } from '../../utils/date.utility';
+import { CardElement, Column, Item } from '../../types';
+import { formatDate, formatDateTime, formatTimeWithLegend } from '../../utils/date.utility';
+
 export function booleanStringToBoolean(booleanString: string): boolean {
   return booleanString.toLowerCase() === 'true';
 }
@@ -111,6 +114,7 @@ export function useFieldSpecs({
             <Button
               sx={{ px: 0 }}
               startIcon={<DownloadIcon />}
+              data-testid="download-legal-fact"
               onClick={() => {
                 void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
               }}

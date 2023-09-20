@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render, waitFor, screen } from '../../../test-utils';
-import { SmartTableData, SmartTableAction } from '../../../types/SmartTable';
+import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { Item, Sort } from '../../../types';
+import { SmartTableAction, SmartTableData } from '../../../types/SmartTable';
 import SmartTable from '../SmartTable';
 
 jest.mock('../ItemsCard', () => (props) => (
@@ -124,8 +124,13 @@ const smartActions: Array<SmartTableAction> = [
 ];
 
 describe('Smart Table Component', () => {
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   it('renders smart table (desktop version)', () => {
-    window.matchMedia = createMatchMedia(2000);
     const result = render(
       <SmartTable
         conf={smartCfg}
@@ -160,7 +165,6 @@ describe('Smart Table Component', () => {
   });
 
   it('renders empty state (desktop version)', () => {
-    window.matchMedia = createMatchMedia(2000);
     const result = render(
       <SmartTable
         conf={smartCfg}
@@ -172,6 +176,26 @@ describe('Smart Table Component', () => {
     );
     expect(result.container).not.toHaveTextContent('Table');
     expect(result.container).toHaveTextContent('EmptyState');
+  });
+
+  it('paginated smart table (desktop version)', async () => {
+    const result = render(
+      <SmartTable
+        conf={smartCfg}
+        data={data}
+        currentSort={sort}
+        onChangeSorting={handleSort}
+        actions={smartActions}
+        pagination={{
+          size: 10,
+          totalElements: 100,
+          numOfDisplayedPages: 10,
+          currentPage: 0,
+          onChangePage: handleChangePagination,
+        }}
+      />
+    );
+    expect(result.container).toHaveTextContent(/Paginator/);
   });
 
   it('renders smart table (mobile version)', () => {
@@ -204,26 +228,5 @@ describe('Smart Table Component', () => {
     const actionElem = result.container.querySelector('#row-3 #action-1') as Element;
     fireEvent.click(actionElem);
     expect(clickActionMockFn).toBeCalledTimes(1);
-  });
-
-  it('paginated smart table (desktop version)', async () => {
-    window.matchMedia = createMatchMedia(2000);
-    const result = render(
-      <SmartTable
-        conf={smartCfg}
-        data={data}
-        currentSort={sort}
-        onChangeSorting={handleSort}
-        actions={smartActions}
-        pagination={{
-          size: 10,
-          totalElements: 100,
-          numOfDisplayedPages: 10,
-          currentPage: 0,
-          onChangePage: handleChangePagination,
-        }}
-      />
-    );
-    expect(result.container).toHaveTextContent(/Paginator/);
   });
 });

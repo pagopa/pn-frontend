@@ -1,4 +1,5 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
+
 import {
   Button,
   Dialog,
@@ -8,9 +9,9 @@ import {
   DialogTitle,
 } from '@mui/material';
 
+import { useIsMobile } from '../hooks';
 import { usePrompt } from '../hooks/usePrompt';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
-import { useIsMobile } from '../hooks';
 
 const Prompt = ({
   title,
@@ -43,8 +44,14 @@ const Prompt = ({
   });
 
   return (
-    <Fragment>
-      <Dialog onClose={cancelNavigation} open={showPrompt} maxWidth={'xs'} fullWidth>
+    <>
+      <Dialog
+        onClose={cancelNavigation}
+        open={showPrompt}
+        maxWidth={'xs'}
+        fullWidth
+        data-testid="promptDialog"
+      >
         <DialogTitle sx={{ p: isMobile ? 3 : 4, pb: 2, textAlign: textPosition }}>
           {title}
         </DialogTitle>
@@ -70,13 +77,14 @@ const Prompt = ({
             autoFocus
             sx={{ mb: isMobile ? 2 : 0 }}
             fullWidth={isMobile}
+            data-testid="confirmExitBtn"
           >
             {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
           </Button>
         </DialogActions>
       </Dialog>
       {children}
-    </Fragment>
+    </>
   );
 };
 

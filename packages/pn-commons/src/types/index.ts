@@ -1,56 +1,57 @@
 // types
-import { PaginationData } from '../components/Pagination/types';
 import { DatePickerTypes } from '../components/CustomDatePicker';
-import { AppStatusData } from './AppStatus';
+import { PaginationData } from '../components/Pagination/types';
 import { IAppMessage } from './AppMessage';
-import { NotificationStatus } from './NotificationStatus';
-import { SideMenuItem } from './SideMenuItem';
-import { Column, Item, Sort } from './ItemsTable';
-import { Notification, GetNotificationsResponse, GetNotificationsParams } from './Notifications';
+import { AppResponse, ErrorMessage, ServerResponseError } from './AppResponse';
+import { AppStatusData } from './AppStatus';
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
+import { CardAction, CardElement, CardSort } from './ItemsCard';
+import { Column, Item, Sort } from './ItemsTable';
+import { MessageType } from './MessageType';
+import { EventsType } from './MixpanelEvents';
 import {
-  AnalogWorkflowDetails,
-  NotHandledDetails,
-  NotificationDetailTableRow,
-  NotificationDetail,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationDetailDocument,
-  NotificationFeePolicy,
-  NotificationDeliveryMode,
-  NotificationDetailPayment,
-  PaymentInfo,
-  NotificationStatusHistory,
-  TimelineCategory,
-  DigitalDomicileType,
-  RecipientType,
-  ResponseStatus,
+  AarDetails,
   AddressSource,
-  LegalFactType,
+  AnalogWorkflowDetails,
+  DigitalDomicileType,
+  DigitalWorkflowDetails,
+  INotificationDetailTimeline,
   LegalFactId,
+  LegalFactType,
+  NotHandledDetails,
+  NotificationDeliveryMode,
+  NotificationDetail,
+  NotificationDetailDocument,
   NotificationDetailOtherDocument,
-  PhysicalCommunicationType,
+  NotificationDetailPayment,
+  NotificationDetailRecipient,
+  NotificationDetailTableRow,
+  NotificationFeePolicy,
+  NotificationStatusHistory,
+  PaidDetails,
+  PaymentAttachmentNameType,
+  PaymentAttachmentSName,
+  PaymentHistory,
+  PaymentInfo,
   PaymentInfoDetail,
   PaymentNotice,
   PaymentStatus,
-  PaymentAttachmentSName,
-  PaymentAttachmentNameType,
+  PhysicalAddress,
+  PhysicalCommunicationType,
+  RecipientType,
+  ResponseStatus,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
-  PaidDetails,
-  DigitalWorkflowDetails,
+  TimelineCategory,
   ViewedDetails,
-  AarDetails,
-  PaymentHistory,
 } from './NotificationDetail';
-import { CardElement, CardSort, CardAction } from './ItemsCard';
-import { MessageType } from './MessageType';
-import { BasicUser, basicNoLoggedUserData, ConsentUser } from './User';
-import { EventsType } from './MixpanelEvents';
-import { AppResponse, ServerResponseError, ErrorMessage } from './AppResponse';
+import { NotificationStatus } from './NotificationStatus';
+import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
+import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
+import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
 
 export {
   basicNoLoggedUserData,
@@ -115,4 +116,5 @@ export type {
   ErrorMessage,
   PaymentHistory,
   SmartTableData,
+  PhysicalAddress,
 };

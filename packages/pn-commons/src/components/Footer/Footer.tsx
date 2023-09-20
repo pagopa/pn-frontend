@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Footer as MuiFooter, LangCode } from '@pagopa/mui-italia';
+
+import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
 
 import {
   LANGUAGES,
-  pagoPALink,
   companyLegalInfo,
+  pagoPALink,
   postLoginLinks,
   preLoginLinks,
 } from '../../utils/costants';
@@ -18,7 +19,12 @@ type Props = {
   hasTermsOfService?: boolean;
 };
 
-const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage, hasTermsOfService }: Props) => {
+const Footer = ({
+  onLanguageChanged = () => {},
+  loggedUser = false,
+  eventTrackingCallbackChangeLanguage,
+  hasTermsOfService,
+}: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
   const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {

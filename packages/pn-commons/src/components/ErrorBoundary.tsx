@@ -1,5 +1,6 @@
 import { Component, ErrorInfo } from 'react';
-import { Typography, Box, Button, SxProps } from '@mui/material';
+
+import { Box, Button, SxProps, Typography } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
@@ -25,7 +26,9 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(_error: Error, _errorInfo: ErrorInfo) {
     // You can also log the error to an error reporting service
-    if (this.props.eventTrackingCallback) this.props.eventTrackingCallback(_error, _errorInfo);
+    if (this.props.eventTrackingCallback) {
+      this.props.eventTrackingCallback(_error, _errorInfo);
+    }
   }
 
   private handleRefreshPage() {

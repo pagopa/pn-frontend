@@ -102,7 +102,7 @@ export const preLoginLinks = (
       links: [
         {
           ...getFooterLinkLabels('privacy-info', 'Informativa Privacy'),
-          href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
+          href: privacyPolicyHref || `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
           linkType: 'internal',
         },
         {
@@ -207,7 +207,7 @@ export const preLoginLinks = (
       ...links.resources.links,
       {
         ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-        href: termsOfServiceHref ?? `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
+        href: termsOfServiceHref || `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
         linkType: 'internal',
       },
     ];
@@ -222,7 +222,7 @@ export const postLoginLinks = (
 ): Array<FooterLinksType> => [
   {
     label: 'Informativa Privacy',
-    href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
+    href: privacyPolicyHref || `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
@@ -232,7 +232,7 @@ export const postLoginLinks = (
   },
   {
     ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-    href: termsOfServiceHref ?? `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
+    href: termsOfServiceHref || `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
     linkType: 'internal',
   },
   {

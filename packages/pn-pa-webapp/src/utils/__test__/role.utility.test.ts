@@ -1,8 +1,9 @@
-import { People, SupervisedUserCircle, VpnKey, Email, ShowChart } from '@mui/icons-material';
+import { Email, VpnKey } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
+
 import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
-import { getHomePage, getMenuItems } from '../role.utility';
+import { getHomePage, getMenuItems, selfcareMenuItems } from '../role.utility';
 
 const mockedIdOrganization = 'mocked-id';
 // The actual basicMenuItems includes an additional element, which would be cumbersome
@@ -17,38 +18,30 @@ const basicMenuItems: Array<SideMenuItem> = [
   { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
 ];
 
-test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
-  // define SelfCareItems inside the test since it cannot be static code (as it accesses configuration)
-  // and it is used in this test only
-  const SelfCareItems: Array<SideMenuItem> = [
-    { label: 'menu.users', icon: People, route: routes.USERS(mockedIdOrganization) },
-    {
-      label: 'menu.groups',
-      icon: SupervisedUserCircle,
-      route: routes.GROUPS(mockedIdOrganization),
-    },
-  ];
-  const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.ADMIN);
-  expect(items).toEqual({
-    menuItems: [
-      ...basicMenuItems,
-      // { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE },
-    ],
-    selfCareItems: SelfCareItems,
+describe('Test role utility', () => {
+  it('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
+    const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.ADMIN);
+    expect(items).toEqual({
+      menuItems: [
+        ...basicMenuItems,
+        // { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE },
+      ],
+      selfCareItems: selfcareMenuItems(mockedIdOrganization),
+    });
   });
-});
 
-test('return menu items for role REFERENTE_OPERATIVO', () => {
-  const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.OPERATOR);
-  expect(items).toEqual({ menuItems: basicMenuItems });
-});
+  it('return menu items for role REFERENTE_OPERATIVO', () => {
+    const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.OPERATOR);
+    expect(items).toEqual({ menuItems: basicMenuItems });
+  });
 
-test('return home page for role REFERENTE_AMMINISTRATIVO', () => {
-  const home = getHomePage();
-  expect(home).toBe(routes.DASHBOARD);
-});
+  it('return home page for role REFERENTE_AMMINISTRATIVO', () => {
+    const home = getHomePage();
+    expect(home).toBe(routes.DASHBOARD);
+  });
 
-test('return home page for role REFERENTE_OPERATIVO', () => {
-  const home = getHomePage();
-  expect(home).toBe(routes.DASHBOARD);
+  it('return home page for role REFERENTE_OPERATIVO', () => {
+    const home = getHomePage();
+    expect(home).toBe(routes.DASHBOARD);
+  });
 });

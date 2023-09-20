@@ -1,10 +1,29 @@
-import { act, screen } from '@testing-library/react';
-import { render } from '../../../__test__/test-utils';
-import Delegates from '../Delegates';
-import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
-import * as hooks from '../../../redux/hooks';
+import React from 'react';
+
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+
+import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
+import {
+  fireEvent,
+  render,
+  screen,
+  testStore,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
+import * as routes from '../../../navigation/routes.const';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+import { Delegate } from '../../../redux/delegation/types';
+import { sortDelegations } from '../../../utils/delegation.utility';
+import Delegates from '../Delegates';
+
+const mockNavigateFn = jest.fn();
+
+// mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -13,73 +32,142 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-
-/**
- * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
- */
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-  };
-});
-
-
-describe('Delegates Component - assuming delegates API works properly', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+describe('Delegates Component', () => {
+  it('renders the empty state', () => {
+    const { container, queryByTestId, getByTestId } = render(<Delegates />);
+    expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
+    const addDelegation = getByTestId('add-delegation');
+    expect(addDelegation).toBeInTheDocument();
+    const delegatesTable = queryByTestId('delegatesTable');
+    expect(delegatesTable).not.toBeInTheDocument();
+    expect(container).toHaveTextContent(/deleghe.add/i);
+    expect(container).toHaveTextContent(/deleghe.no_delegates/i);
   });
 
-  it('renders the empty state', () => {
-    const result = render(<Delegates />);
-
-    expect(result.container).toHaveTextContent(/deleghe.delegatesTitle/i);
-    expect(result.container).toHaveTextContent(/deleghe.add/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationStart/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.delegationEnd/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.permissions/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.status/i);
-    expect(result.container).toHaveTextContent(/deleghe.no_delegates/i);
+  it('navigates to the add delegation page', () => {
+    const { getByTestId } = render(<Delegates />);
+    const addDelegation = getByTestId('add-delegation');
+    fireEvent.click(addDelegation);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
   });
 
   it('renders the delegates', () => {
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegates);
-    const result = render(<Delegates />);
-
-    expect(result.container).toHaveTextContent(/marco verdi/i);
-    expect(result.container).toHaveTextContent(/davide legato/i);
-    expect(result.container).not.toHaveTextContent(/luca blu/i);
-  });
-});
-
-
-describe('Delegates Component - different delegates API behaviors', () => {
-  beforeAll(() => {
-    jest.restoreAllMocks();
+    const { getByTestId, getAllByTestId } = render(<Delegates />, {
+      preloadedState: { delegationsState: { delegations: { delegates: arrayOfDelegates } } },
+    });
+    const delegatesTable = getByTestId('delegatesTable');
+    expect(delegatesTable).toBeInTheDocument();
+    const delegatesRows = getAllByTestId('delegatesTable.row');
+    expect(delegatesRows).toHaveLength(arrayOfDelegates.length);
+    delegatesRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
+    });
   });
 
-  beforeEach(() => {
-    apiOutcomeTestHelper.setStandardMock();
+  it('sorts the delegates', async () => {
+    const { getByTestId, getAllByTestId } = render(<Delegates />, {
+      preloadedState: {
+        delegationsState: {
+          delegations: { delegates: arrayOfDelegates },
+          sortDelegates: {
+            orderBy: '',
+            order: 'asc',
+          },
+        },
+      },
+    });
+    let delegatesTable = getByTestId('delegatesTable');
+    expect(delegatesTable).toBeInTheDocument();
+    // sort by name asc
+    let sortName = within(delegatesTable).getByTestId('delegatesTable.sort.name');
+    let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
+    fireEvent.click(sortIcon);
+    await waitFor(() => {
+      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+        order: 'asc',
+        orderBy: 'name',
+      });
+    });
+    let delegatesRows = getAllByTestId('delegatesTable.row');
+    let sortedDelegates = sortDelegations('asc', 'name', arrayOfDelegates) as Array<Delegate>;
+    delegatesRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
+    });
+    // sort by name desc
+    delegatesTable = getByTestId('delegatesTable');
+    sortName = within(delegatesTable).getByTestId('delegatesTable.sort.name');
+    sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
+    fireEvent.click(sortIcon);
+    await waitFor(() => {
+      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+        order: 'desc',
+        orderBy: 'name',
+      });
+    });
+    delegatesRows = getAllByTestId('delegatesTable.row');
+    sortedDelegates = sortDelegations('desc', 'name', arrayOfDelegates) as Array<Delegate>;
+    delegatesRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
+    });
+    // sort by endDate asc
+    delegatesTable = getByTestId('delegatesTable');
+    const sortEndDate = within(delegatesTable).getByTestId('delegatesTable.sort.endDate');
+    sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
+    fireEvent.click(sortIcon);
+    await waitFor(() => {
+      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+        order: 'asc',
+        orderBy: 'endDate',
+      });
+    });
+    delegatesRows = getAllByTestId('delegatesTable.row');
+    sortedDelegates = sortDelegations('asc', 'endDate', arrayOfDelegates) as Array<Delegate>;
+    delegatesRows.forEach((row, index) => {
+      expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
+    });
   });
 
-  afterEach(() => {
-    apiOutcomeTestHelper.clearMock();
+  it('shows verification code', async () => {
+    const { getByTestId, getAllByTestId } = render(<Delegates />, {
+      preloadedState: {
+        delegationsState: {
+          delegations: { delegates: arrayOfDelegates },
+        },
+      },
+    });
+    // get first row
+    const delegatesRows = getAllByTestId('delegatesTable.row');
+    const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
+    // open menu
+    fireEvent.click(delegationMenuIcon);
+    const showCode = await waitFor(() => getByTestId('menuItem-showCode'));
+    // show code dialog
+    fireEvent.click(showCode);
+    const dialog = await waitFor(() => getByTestId('codeDialog'));
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent('deleghe.show_code_title');
+    expect(dialog).toHaveTextContent('deleghe.show_code_subtitle');
+    expect(dialog).toHaveTextContent('deleghe.close');
+    expect(dialog).toHaveTextContent('deleghe.verification_code');
+    const codeInputs = dialog?.querySelectorAll('input');
+    const codes = arrayOfDelegates[0].verificationCode.split('');
+    codeInputs?.forEach((input, index) => {
+      expect(input).toHaveValue(codes[index]);
+    });
   });
 
   it('API error', async () => {
-    await act(async () => void render(
-      <Delegates />,
-      { preloadedState: { appState: apiOutcomeTestHelper.appStateWithMessageForAction(DELEGATION_ACTIONS.GET_DELEGATES) } }
-    ));
-    apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it('API OK', async () => {
-    await act(async () => void render(<Delegates />));
-    apiOutcomeTestHelper.expectApiOKComponent(screen);
+    render(<Delegates />, {
+      preloadedState: {
+        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
+          DELEGATION_ACTIONS.GET_DELEGATES
+        ),
+      },
+    });
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${DELEGATION_ACTIONS.GET_DELEGATES}`
+    );
+    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });
-

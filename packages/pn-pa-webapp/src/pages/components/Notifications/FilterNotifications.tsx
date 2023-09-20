@@ -1,33 +1,34 @@
-import { useEffect, Fragment, useState, forwardRef, useImperativeHandle, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FormikValues, useFormik } from 'formik';
-import * as yup from 'yup';
 import _ from 'lodash';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import {
-  getNotificationAllowedStatus,
-  tenYearsAgo,
-  today,
-  IUN_regex,
-  useIsMobile,
   CustomMobileDialog,
-  CustomMobileDialogToggle,
   CustomMobileDialogContent,
-  filtersApplied,
-  getValidValue,
-  formatToTimezoneString,
+  CustomMobileDialogToggle,
   GetNotificationsParams,
+  IUN_regex,
   dataRegex,
   dateIsDefined,
+  filtersApplied,
+  formatToTimezoneString,
+  getNotificationAllowedStatus,
+  getValidValue,
+  tenYearsAgo,
+  today,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
-import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
-import FilterNotificationsFormBody from './FilterNotificationsFormBody';
+import { trackEventByType } from '../../../utils/mixpanel';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
+import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
@@ -77,8 +78,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'notifiche']);
-  const dialogRef = useRef<{toggleOpen: () => void}>(null);
-
+  const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const validationSchema = yup.object({
     recipientId: yup
@@ -131,7 +131,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
       setEndDate(formik.values.endDate);
     }
-  };  
+  };
 
   useEffect(() => {
     void formik.validateForm();
@@ -159,7 +159,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     return <></>;
   }
 
-
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
 
   return isMobile ? (
@@ -178,7 +177,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -200,32 +199,30 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <Fragment>
-      <form onSubmit={formik.handleSubmit}>
-        <Box
-          display={'flex'}
-          sx={{
-            marginTop: 5,
-            marginBottom: 5,
-            verticalAlign: 'top',
-            '& .MuiTextField-root': { mr: 1, width: '100%' },
-          }}
-        >
-          <FilterNotificationsFormBody
-            formikInstance={formik}
-            startDate={startDate}
-            endDate={endDate}
-            setStartDate={(value) => setStartDate(value)}
-            setEndDate={(value) => setEndDate(value)}
-          />
-          <FilterNotificationsFormActions
-            cleanFilters={cancelSearch}
-            filtersApplied={isFilterapplied(filtersCount)}
-            isInitialSearch={isInitialSearch}
-          />
-        </Box>
-      </form>
-    </Fragment>
+    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+      <Box
+        display={'flex'}
+        sx={{
+          marginTop: 5,
+          marginBottom: 5,
+          verticalAlign: 'top',
+          '& .MuiTextField-root': { mr: 1, width: '100%' },
+        }}
+      >
+        <FilterNotificationsFormBody
+          formikInstance={formik}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={(value) => setStartDate(value)}
+          setEndDate={(value) => setEndDate(value)}
+        />
+        <FilterNotificationsFormActions
+          cleanFilters={cancelSearch}
+          filtersApplied={isFilterapplied(filtersCount)}
+          isInitialSearch={isInitialSearch}
+        />
+      </Box>
+    </form>
   );
 });
 

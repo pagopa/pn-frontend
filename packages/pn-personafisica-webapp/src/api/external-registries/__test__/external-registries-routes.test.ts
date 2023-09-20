@@ -1,7 +1,6 @@
-import { GET_ALL_ACTIVATED_PARTIES } from "../external-registries-routes";
+import { GET_ALL_ACTIVATED_PARTIES } from '../external-registries-routes';
 
-
-describe('Consents routes', () => {
+describe('External registries routes', () => {
   it('should compile GET_ALL_ACTIVATED_PARTIES', () => {
     const route = GET_ALL_ACTIVATED_PARTIES(undefined);
     expect(route).toEqual(`/ext-registry/pa/v1/activated-on-pn`);

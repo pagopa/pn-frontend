@@ -1,6 +1,4 @@
-import {
-  compileRoute,
-} from '@pagopa-pn/pn-commons';
+import { compileRoute } from '@pagopa-pn/pn-commons';
 
 import { ConsentType } from '../../models/consents';
 
@@ -23,7 +21,7 @@ export function GET_CONSENTS(consentType: ConsentType) {
     prefix: API_CONSENTS_PREFIX,
     path: API_CONSENTS_BASE_PATH,
     params: {
-      [API_CONSENTS_TYPE_PARAMETER]: consentType
+      [API_CONSENTS_TYPE_PARAMETER]: consentType,
     },
   });
 }
@@ -33,7 +31,7 @@ export function SET_CONSENTS(consentType: ConsentType, consentVersion: string) {
     prefix: API_CONSENTS_PREFIX,
     path: API_CONSENTS_BASE_PATH,
     params: {
-      [API_CONSENTS_TYPE_PARAMETER]: consentType
+      [API_CONSENTS_TYPE_PARAMETER]: consentType,
     },
     query: {
       version: consentVersion,

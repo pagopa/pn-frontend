@@ -1,3 +1,8 @@
+import { useFormik } from 'formik';
+import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
 import {
   Alert,
   Card,
@@ -23,16 +28,12 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useFormik } from 'formik';
-import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+
+import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-
-import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -51,14 +52,6 @@ type Address = {
   phone?: string;
   mail?: string;
   pec?: string;
-};
-
-type SpecialContacts = {
-  sender: Party;
-  addressType: LegalChannelType | CourtesyChannelType | undefined;
-  s_pec: string;
-  s_mail: string;
-  s_phone: string;
 };
 
 type AddressType = {
@@ -221,8 +214,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const senderChangeHandler = async (_: any, newValue: Party | null) => {
     await formik.setFieldTouched('sender', true, false);
     await formik.setFieldValue('sender', newValue);
-    // formik.handleChange(e);
-    setSenderInputValue(newValue?.name || '');
+    setSenderInputValue(newValue?.name ?? '');
     if (formik.values.addressType === LegalChannelType.PEC) {
       const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.pec) > -1;
       setAlreadyExistsMessage(
@@ -325,13 +317,18 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         avatar={null}
       >
         <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
-        <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
+        <form
+          style={{ margin: '20px 0' }}
+          onSubmit={formik.handleSubmit}
+          data-testid="specialContact"
+        >
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
               <PnAutocomplete
                 id="sender"
+                data-testid="sender"
                 size="small"
-                options={parties}
+                options={parties ?? []}
                 fullWidth
                 autoComplete
                 noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
@@ -438,7 +435,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   !formik.isValid || senderInputValue.length > 80 || senderInputValue.length === 0
                 }
                 color="primary"
-                data-testid="Special contact add button"
+                data-testid="addSpecialButton"
               >
                 {t('button.associa')}
               </ButtonNaked>
@@ -446,7 +443,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           </Grid>
         </form>
         {alreadyExistsMessage && (
-          <Alert severity="warning" sx={{ marginBottom: '20px' }}>
+          <Alert severity="warning" sx={{ marginBottom: '20px' }} data-testid="alreadyExistsAlert">
             {alreadyExistsMessage}
           </Alert>
         )}

@@ -352,6 +352,7 @@ const FileUpload = ({
               </Typography>
             </Box>
             <IconButton
+              data-testid="removeDocument"
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
                 'common',

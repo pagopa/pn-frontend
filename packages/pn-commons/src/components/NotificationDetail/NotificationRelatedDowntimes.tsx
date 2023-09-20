@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { NotificationStatus, NotificationStatusHistory } from '../../types';
+
+import { useDownloadDocument } from '../../hooks';
 import { Downtime } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { NotificationStatus, NotificationStatusHistory } from '../../types';
 import { formatDate, isToday } from '../../utils';
-import { useDownloadDocument } from '../../hooks';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 
 type Props = {
@@ -30,6 +32,9 @@ type Props = {
 
   // api id for ApiErrorWrapper
   apiId: string;
+
+  // for disabled downloads
+  disableDownloads?: boolean;
 };
 
 /*
@@ -154,7 +159,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
       )}
     >
       {shouldFetchEvents && props.downtimeEvents.length > 0 ? (
-        <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+        <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="downtimesBox">
           <Grid
             key={'downtimes-section'}
             container
@@ -227,6 +232,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                             event.legalFactId as string
                           );
                         }}
+                        disabled={props.disableDownloads}
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',

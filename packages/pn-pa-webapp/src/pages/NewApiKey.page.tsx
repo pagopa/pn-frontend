@@ -1,3 +1,8 @@
+import { useFormik } from 'formik';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
 import {
   Box,
   Button,
@@ -18,10 +23,7 @@ import {
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { useFormik } from 'formik';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+
 import { GroupStatus, UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
@@ -111,7 +113,7 @@ const NewApiKey = () => {
                   subTitle={tkp('page-description')}
                   variantSubTitle="body1"
                 ></TitleBox>
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} data-testid="new-api-key-form">
                   <Typography sx={{ marginTop: 4 }} variant="body2">
                     * {tkp('required-fields')}
                   </Typography>
@@ -141,6 +143,7 @@ const NewApiKey = () => {
                           value={formik.values.groups}
                           options={groups}
                           id="groups"
+                          data-testid="groups"
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
                           renderOption={(props, option) => (
@@ -162,6 +165,7 @@ const NewApiKey = () => {
                     </Paper>
                     <Box mt={3}>
                       <Button
+                        data-testid="submit-new-api-key"
                         id="continue-button"
                         variant="contained"
                         type="submit"

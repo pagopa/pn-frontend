@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { ApiKeys } from '../../models/ApiKeys';
 import { UserGroup } from '../../models/user';
 import { getApiKeys } from './actions';
@@ -44,7 +45,7 @@ const apiKeysSlice = createSlice({
         };
         if (
           state.pagination.nextPagesKey.findIndex(
-            (el) => el.lastKey !== pageKey.lastKey && el.lastUpdate !== pageKey.lastUpdate
+            (el) => el.lastKey === pageKey.lastKey && el.lastUpdate === pageKey.lastUpdate
           ) === -1
         ) {
           state.pagination.nextPagesKey.push(pageKey);

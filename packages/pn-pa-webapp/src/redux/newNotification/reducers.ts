@@ -1,22 +1,20 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
-
-import { getConfiguration } from '../../services/configuration.service';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
-  NewNotificationRecipient,
   NewNotification,
-  PaymentModel,
   NewNotificationDocument,
+  NewNotificationRecipient,
+  PaymentModel,
   PaymentObject,
 } from '../../models/NewNotification';
-
 import { UserGroup } from '../../models/user';
+import { getConfiguration } from '../../services/configuration.service';
 import {
+  createNewNotification,
+  getUserGroups,
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
-  getUserGroups,
-  createNewNotification,
 } from './actions';
 import { PreliminaryInformationsPayload } from './types';
 
@@ -104,7 +102,7 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
-      state.isCompleted = getConfiguration().IS_PAYMENT_ENABLED ? false : true;
+      state.isCompleted = !getConfiguration().IS_PAYMENT_ENABLED;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
       state.notification.payment = action.payload;

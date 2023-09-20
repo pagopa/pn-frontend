@@ -1,17 +1,23 @@
 import React from 'react';
-import { act, screen, within } from '@testing-library/react';
-import { render } from '../../../test-utils';
-import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
-import { Downtime, DowntimeStatus, KnownFunctionality } from '../../../models';
-import { NotificationStatus, NotificationStatusHistory } from '../../../types';
 
-const fakePalette = { success: {main: "#00FF00"}, error: {main: "#FF0000"}, text: { primary: "#AAAAAA", secondary: "#BBBBBB"} };
+import { act, screen, within } from '@testing-library/react';
+
+import { Downtime, DowntimeStatus, KnownFunctionality } from '../../../models';
+import { render } from '../../../test-utils';
+import { NotificationStatus, NotificationStatusHistory } from '../../../types';
+import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
+
+const fakePalette = {
+  success: { main: '#00FF00' },
+  error: { main: '#FF0000' },
+  text: { primary: '#AAAAAA', secondary: '#BBBBBB' },
+};
 
 jest.mock('@mui/material', () => {
   const original = jest.requireActual('@mui/material');
   return {
     ...original,
-    useTheme: () => ({ palette: fakePalette }),
+    useTheme: () => ({ ...original.useTheme(), palette: fakePalette }),
   };
 });
 
@@ -87,9 +93,9 @@ describe('NotificationRelatedDowntimes component', () => {
         void render(
           <NotificationRelatedDowntimes
             downtimeEvents={downtimes}
-            fetchDowntimeEvents={fetchDowntimeEventsMock} 
+            fetchDowntimeEvents={fetchDowntimeEventsMock}
             notificationStatusHistory={history}
-            apiId='mock-api-id'
+            apiId="mock-api-id"
             clearDowntimeLegalFactData={() => {}}
             downtimeLegalFactUrl="mock-url"
             fetchDowntimeLegalFactDocumentDetails={() => {}}
@@ -102,17 +108,28 @@ describe('NotificationRelatedDowntimes component', () => {
     await renderComponent(mockDowntimes, mockHistory);
 
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
-    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(mockHistory[3].activeFrom, mockHistory[0].activeFrom);
+    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(
+      mockHistory[3].activeFrom,
+      mockHistory[0].activeFrom
+    );
 
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     const detailComponents = screen.queryAllByTestId('notification-related-downtime-detail');
     expect(mainComponent).toBeInTheDocument();
     expect(detailComponents).toHaveLength(2);
 
-    const startDate0 = within(detailComponents[0]).queryByText(new RegExp(mockDowntimes[0].startDate));
-    const endDate0 = within(detailComponents[0]).queryByText(new RegExp(mockDowntimes[0].endDate as string));
-    const funct0 = within(detailComponents[0]).queryByText(new RegExp(mockDowntimes[0].knownFunctionality as string));
-    const startDate1 = within(detailComponents[0]).queryByText(new RegExp(mockDowntimes[1].startDate));
+    const startDate0 = within(detailComponents[0]).queryByText(
+      new RegExp(mockDowntimes[0].startDate)
+    );
+    const endDate0 = within(detailComponents[0]).queryByText(
+      new RegExp(mockDowntimes[0].endDate as string)
+    );
+    const funct0 = within(detailComponents[0]).queryByText(
+      new RegExp(mockDowntimes[0].knownFunctionality as string)
+    );
+    const startDate1 = within(detailComponents[0]).queryByText(
+      new RegExp(mockDowntimes[1].startDate)
+    );
     expect(startDate0).toBeInTheDocument();
     expect(endDate0).toBeInTheDocument();
     expect(funct0).toBeInTheDocument();
@@ -139,7 +156,7 @@ describe('NotificationRelatedDowntimes component', () => {
     newDowntimes[1].fileAvailable = false;
 
     // downtime #2 - finished, file available
-    newDowntimes.push(  {
+    newDowntimes.push({
       rawFunctionality: KnownFunctionality.NotificationWorkflow,
       knownFunctionality: KnownFunctionality.NotificationWorkflow,
       status: DowntimeStatus.OK,
@@ -184,7 +201,10 @@ describe('NotificationRelatedDowntimes component', () => {
     await renderComponent([], mockHistory);
 
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
-    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(mockHistory[3].activeFrom, mockHistory[0].activeFrom);
+    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(
+      mockHistory[3].activeFrom,
+      mockHistory[0].activeFrom
+    );
 
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).not.toBeInTheDocument();
@@ -210,7 +230,7 @@ describe('NotificationRelatedDowntimes component', () => {
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).not.toBeInTheDocument();
   });
-  
+
   it('history with VIEWED status', async () => {
     const newMockHistory = mockHistory.filter(
       (el) => el.status != NotificationStatus.EFFECTIVE_DATE
@@ -219,7 +239,10 @@ describe('NotificationRelatedDowntimes component', () => {
     await renderComponent(mockDowntimes, newMockHistory);
 
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
-    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(mockHistory[3].activeFrom, mockHistory[0].activeFrom);
+    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(
+      mockHistory[3].activeFrom,
+      mockHistory[0].activeFrom
+    );
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
     const detailComponents = screen.queryAllByTestId('notification-related-downtime-detail');
@@ -232,7 +255,10 @@ describe('NotificationRelatedDowntimes component', () => {
     await renderComponent(mockDowntimes, newMockHistory);
 
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
-    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(mockHistory[3].activeFrom, mockHistory[2].activeFrom);
+    expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(
+      mockHistory[3].activeFrom,
+      mockHistory[2].activeFrom
+    );
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
   });

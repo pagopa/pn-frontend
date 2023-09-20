@@ -1,6 +1,7 @@
 import DateFnsAdapter from '@date-io/date-fns';
-import { DatePickerTypes } from '../types';
+
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { DatePickerTypes } from '../types';
 
 const dateFns = new DateFnsAdapter();
 export const DATE_FORMAT = 'dd/MM/yyyy';
@@ -9,6 +10,8 @@ const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'00:mm:ss.SSS'Z'";
 export const today = new Date();
 export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));
 today.setHours(0, 0, 0, 0);
+today.setTime(today.getTime() - today.getTimezoneOffset() * 60 * 1000); // UTC Offset
+today.setTime(today.getTime() + 120 * 60 * 1000); // Rome Offset (120min)
 tenYearsAgo.setHours(0, 0, 0, 0);
 
 export function dateIsDefined(date: Date | null | undefined) {
@@ -66,7 +69,7 @@ export function isToday(date: DatePickerTypes): boolean {
   );
 }
 
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string, todayLabelizzation: boolean = true): string {
   const date = new Date(dateString);
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
@@ -75,7 +78,7 @@ export function formatDate(dateString: string): string {
     'date-time.today-uppercase-initial',
     'Oggi'
   );
-  return isToday(date) ? todayLabel : `${day}/${month}/${date.getFullYear()}`;
+  return isToday(date) && todayLabelizzation ? todayLabel : `${day}/${month}/${date.getFullYear()}`;
 }
 
 export function formatDateTime(dateString: string): string {
