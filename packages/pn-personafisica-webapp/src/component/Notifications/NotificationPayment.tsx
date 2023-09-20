@@ -154,12 +154,14 @@ const NotificationPayment: React.FC<Props> = ({
   );
 
   const fetchPaymentInfo = () => {
+    console.log('fuori :>> ', notificationIsCancelled);
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
       notificationPayment.creditorTaxId &&
       !notificationIsCancelled
     ) {
+      console.log('dentro :>> ');
       void dispatch(
         getNotificationPaymentInfo({
           noticeCode: notificationPayment.noticeCode,
