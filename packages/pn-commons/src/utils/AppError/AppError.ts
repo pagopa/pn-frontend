@@ -1,4 +1,4 @@
-import { ServerResponseError, ErrorMessage, AppResponseError } from '../../types/AppResponse';
+import { AppResponseError, ErrorMessage, ServerResponseError } from '../../types/AppResponse';
 
 abstract class AppError {
   protected code: string;
@@ -9,14 +9,6 @@ abstract class AppError {
     this.code = error.code;
     this.element = error.element || '';
     this.detail = error.detail || '';
-  }
-
-  getErrorDetail(): ServerResponseError {
-    return {
-      code: this.code,
-      element: this.element,
-      detail: this.detail,
-    };
   }
 
   getResponseError(): AppResponseError {
