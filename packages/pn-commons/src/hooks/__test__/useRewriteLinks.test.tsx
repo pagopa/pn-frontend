@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render, waitFor } from '@testing-library/react';
-
+import { waitFor } from '@testing-library/react';
+import { render } from '../../test-utils';
 import { useRewriteLinks } from '../useRewriteLinks';
 
 const ROUTE = '/informativa-privacy';

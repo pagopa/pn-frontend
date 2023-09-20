@@ -37,7 +37,6 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from './sear
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
-import { apiOutcomeTestHelper } from './test.utility';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -84,7 +83,6 @@ export {
   adaptedTokenExchangeError,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
-  apiOutcomeTestHelper,
   performThunkAction,
   AppResponsePublisher,
   ResponseEventDispatcher,

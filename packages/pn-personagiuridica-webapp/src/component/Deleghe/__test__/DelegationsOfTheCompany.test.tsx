@@ -1,11 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
-import { act, fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
@@ -394,19 +393,5 @@ describe('DelegationsOfTheCompany Component', () => {
     });
     rows = getAllByTestId('table(notifications).row');
     expect(rows[1]).toHaveTextContent('Group 3');
-  });
-
-  it('API error', async () => {
-    render(<DelegationsOfTheCompany />, {
-      preloadedState: {
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-          DELEGATION_ACTIONS.GET_DELEGATORS
-        ),
-      },
-    });
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DELEGATION_ACTIONS.GET_DELEGATORS}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });

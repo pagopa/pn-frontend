@@ -1,5 +1,6 @@
-import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+
+import MockAdapter from 'axios-mock-adapter';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import {

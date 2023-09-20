@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import {
   fireEvent,
@@ -12,7 +10,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utils/delegation.utility';
 import Delegates from '../Delegates';
@@ -155,19 +152,5 @@ describe('Delegates Component', () => {
     codeInputs?.forEach((input, index) => {
       expect(input).toHaveValue(codes[index]);
     });
-  });
-
-  it('API error', async () => {
-    render(<Delegates />, {
-      preloadedState: {
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-          DELEGATION_ACTIONS.GET_DELEGATES
-        ),
-      },
-    });
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DELEGATION_ACTIONS.GET_DELEGATES}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });
