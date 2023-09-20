@@ -1,7 +1,8 @@
-import { Box, Dialog, Typography } from '@mui/material';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { Box, Dialog, Typography } from '@mui/material';
 
 import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utils/events';
@@ -20,6 +21,7 @@ const LoginError = () => {
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const errorCode = urlSearchParams.has('errorCode') ? urlSearchParams.get('errorCode') : null;
+  const navigationTimeout = process.env.NODE_ENV !== 'test' ? 5000 : 200;
 
   // PN-1989 - per alcune causali di errore, si evita il passaggio transitorio per la pagina di errore
   //           e si fa il redirect verso la pagina di login immediatamente
@@ -58,11 +60,9 @@ const LoginError = () => {
 
   const title = t('loginError.title');
   const message = (
-    <Fragment>
-      <Trans i18nKey="loginError.message" ns="login">
-        {getErrorMessage()}
-      </Trans>
-    </Fragment>
+    <Trans i18nKey="loginError.message" ns="login">
+      {getErrorMessage()}
+    </Trans>
   );
 
   // log error
@@ -73,7 +73,7 @@ const LoginError = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigate(ROUTE_LOGIN);
-    }, 5000);
+    }, navigationTimeout);
 
     return () => {
       if (timeout) {
@@ -83,12 +83,19 @@ const LoginError = () => {
   }, []);
 
   return (
-    <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
+    <Dialog
+      fullScreen={true}
+      open={true}
+      aria-labelledby="dialog-per-messaggi-di-errore"
+      id="errorDialog"
+    >
       <Box m="auto" sx={{ textAlign: 'center', width: '100%' }}>
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
           {title}
         </Typography>
-        <Typography variant="body2">{message}</Typography>
+        <Typography variant="body2" id="message">
+          {message}
+        </Typography>
       </Box>
     </Dialog>
   );

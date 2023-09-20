@@ -32,6 +32,10 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+const delegator = arrayOfDelegators.find(
+  (delegator) => delegator.delegator?.fiscalCode === notificationDTO.recipients[2].taxId
+);
+
 describe('NotificationDetail Page - accessibility tests', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;

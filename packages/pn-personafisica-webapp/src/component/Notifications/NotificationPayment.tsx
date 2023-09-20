@@ -157,7 +157,8 @@ const NotificationPayment: React.FC<Props> = ({
     if (
       (!paymentHistory || paymentHistory.length === 0) &&
       notificationPayment.noticeCode &&
-      notificationPayment.creditorTaxId
+      notificationPayment.creditorTaxId &&
+      !notificationIsCancelled
     ) {
       void dispatch(
         getNotificationPaymentInfo({
@@ -489,6 +490,7 @@ const NotificationPayment: React.FC<Props> = ({
                 sx={{ fontSize: '16px' }}
                 target="_blank"
                 variant="body1"
+                data-testid="linkFaq"
               >
                 {t('detail.disclaimer-link')}
               </Link>
@@ -502,6 +504,7 @@ const NotificationPayment: React.FC<Props> = ({
                 display="inline"
                 fontWeight={600}
                 fontSize={24}
+                data-testid="paymentAmount"
               >
                 {loading ? (
                   <Skeleton
@@ -565,7 +568,11 @@ const NotificationPayment: React.FC<Props> = ({
                     <Divider>{t('detail.payment.divider-text')}</Divider>
                   </Grid>
                 )}
-                <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>
+                <Stack
+                  direction={{ xs: 'column', lg: 'row' }}
+                  sx={{ alignSelf: 'center' }}
+                  data-testid="stackAttachments"
+                >
                   {attachments.map((attachment) => (
                     <Button
                       key={attachment.name}
@@ -580,7 +587,6 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
-
             {!loading && paymentHistory && paymentHistory.length > 0 && (
               <NotificationPaidDetail paymentDetailsList={paymentHistory} />
             )}

@@ -82,8 +82,8 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
-  const currentRecipient = notification && notification.currentRecipient;
   const isCancelled = useIsCancelled({ notification });
+  const currentRecipient = notification?.currentRecipient;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;

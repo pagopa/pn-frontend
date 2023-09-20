@@ -1,21 +1,15 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
-import {
-  arrayOfDelegates,
-  arrayOfDelegators,
-} from '../../../../pn-personafisica-webapp/src/redux/delegation/__test__/test.utils';
-import { axe, mockApi, render, act, RenderResult } from '../../__test__/test-utils';
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
-  DELEGATIONS_NAME_BY_DELEGATE,
 } from '../../api/delegations/delegations.routes';
-import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
-import { apiClient } from '../../api/apiClients';
 import Deleghe from '../Deleghe.page';
-
-const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -25,29 +19,31 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('Deleghe page - accessibility tests', () => {
-  afterEach(() => {
-    useIsMobileSpy.mockClear();
-    useIsMobileSpy.mockReset();
+  let result: RenderResult;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
   });
 
-  it('is deleghe page accessible - desktop version', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATOR(),
-      200,
-      undefined,
-      arrayOfDelegates
-    );
-    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
-      resultsPage: arrayOfDelegators,
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
+  it('is deleghe page accessible - no data', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, []);
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
+      resultsPage: [],
       nextPagesKey: [],
       moreResult: false,
     });
-    mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
-    useIsMobileSpy.mockReturnValue(false);
-    const result = render(<Deleghe />);
+    await act(async () => {
+      result = render(<Deleghe />, { preloadedState: { userState: { user: userResponse } } });
+    });
     if (result) {
       const { container } = result;
       const results = await axe(container);
@@ -57,24 +53,32 @@ describe('Deleghe page - accessibility tests', () => {
     }
   });
 
-  it('is deleghe page accessible - mobile version', async () => {
-    const mock = mockApi(
-      apiClient,
-      'GET',
-      DELEGATIONS_BY_DELEGATOR(),
-      200,
-      undefined,
-      arrayOfDelegates
-    );
-    mockApi(mock, 'POST', DELEGATIONS_BY_DELEGATE({ size: 10 }), 200, undefined, {
+  it('is deleghe page accessible - with data', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10 })).reply(200, {
       resultsPage: arrayOfDelegators,
       nextPagesKey: [],
       moreResult: false,
     });
-    mockApi(mock, 'GET', GET_GROUPS(), 200, undefined, []);
-    mockApi(mock, 'GET', DELEGATIONS_NAME_BY_DELEGATE(), 200, undefined, []);
-    useIsMobileSpy.mockReturnValue(true);
-    const result = render(<Deleghe />);
+    await act(async () => {
+      result = render(<Deleghe />, { preloadedState: { userState: { user: userResponse } } });
+    });
+    if (result) {
+      const { container } = result;
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  });
+
+  it('is deleghe page accessible - with data and user with groups', async () => {
+    mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
+    await act(async () => {
+      result = render(<Deleghe />, {
+        preloadedState: { userState: { user: { ...userResponse, hasGroup: true } } },
+      });
+    });
     if (result) {
       const { container } = result;
       const results = await axe(container);

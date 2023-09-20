@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { axe, fireEvent, prettyDOM, render, screen, waitFor } from '../../../__test__/test-utils';
+import { axe, fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import AcceptDelegationModal from '../AcceptDelegationModal';
 
 jest.mock('react-i18next', () => ({
@@ -21,7 +21,7 @@ describe('AcceptDelegationModal - accessibility tests', () => {
         handleConfirm={() => {}}
       />
     );
-    const dialog = screen.queryByTestId('codeDialog') as Element;
+    const dialog = screen.getByTestId('codeDialog');
     const results = await axe(dialog);
     expect(results).toHaveNoViolations();
   });
@@ -36,7 +36,7 @@ describe('AcceptDelegationModal - accessibility tests', () => {
         handleConfirm={() => {}}
       />
     );
-    const dialog = screen.queryByTestId('groupDialog') as Element;
+    const dialog = screen.getByTestId('groupDialog');
     const results = await axe(dialog);
     expect(results).toHaveNoViolations();
   });
@@ -51,9 +51,9 @@ describe('AcceptDelegationModal - accessibility tests', () => {
         handleConfirm={() => {}}
       />
     );
-    const dialog = screen.queryByTestId('groupDialog') as Element;
+    const dialog = screen.getByTestId('groupDialog');
     const results = await axe(dialog);
-    const associateGroupRadio = dialog.querySelector('[data-testid="associate-group"]') as Element;
+    const associateGroupRadio = within(dialog).getByTestId('associate-group');
     fireEvent.click(associateGroupRadio);
     await waitFor(() => expect(results).toHaveNoViolations());
   });

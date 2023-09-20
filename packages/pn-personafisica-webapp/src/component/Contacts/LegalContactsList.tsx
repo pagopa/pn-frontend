@@ -147,7 +147,6 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             </form>
           </Box>
         )}
-
         {verifyingAddress && (
           <Box mt="20px" data-testid="legalContacts">
             <Typography mb={1} sx={{ fontWeight: 'bold' }}>
