@@ -342,7 +342,7 @@ const FileUpload = ({
             alignItems="center"
             sx={{ width: '100%' }}
           >
-            <Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center">
+            <Box display={isMobile ? 'block' : 'flex'} alignItems="center">
               <Box display="flex">
                 <AttachFileIcon color="primary" />
                 <Typography color="primary">{fileData.file.name}</Typography>
