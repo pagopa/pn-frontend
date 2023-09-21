@@ -1,5 +1,9 @@
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../types';
 
+interface Props {
+  notification: NotificationDetail;
+}
+
 /**
  * Checks if notification is cancelled
  *
@@ -8,11 +12,6 @@ import { NotificationDetail, NotificationStatus, TimelineCategory } from '../typ
  *
  * @param notification Notification where check if notification is cancelled
  */
-
-interface Props {
-  notification: NotificationDetail;
-}
-
 export const useIsCancelled = ({ notification }: Props) => {
   const timelineCancelled = !!notification.timeline.find(
     (el) =>
