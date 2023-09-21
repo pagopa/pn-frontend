@@ -250,7 +250,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
+    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
