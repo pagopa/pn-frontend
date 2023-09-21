@@ -41,7 +41,18 @@ export const dataRegex = {
   noticeCode: /^\d{18}$/,
 
   email:
-    /^[a-zA-Z0-9]+(?:[.\-_][a-zA-Z0-9]+){0,10}@[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+){0,10}(?:\.[a-zA-Z0-9]{2,10})$/,
+    // eslint-disable-next-line no-control-regex
+    /^(?:[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/,
+
+  // Email RegEx pattern has been updated due to PN-7586 requests
+  // About the LINT error "Unexpected control character(s) in regular expression":
+  // This can be disabled by adding "no-control-regex": 0 under "rules" in .eslintrc.js
+  // I have added disabling next-line rule at the moment.
+  //
+  // Nicola Giornetta 2023.09.20
+  //
+  // ===============================================================================================================
+  //
   // We adopt a regex to validate email addresses, which is stricter than the one adopted by the BE
   // the difference being that other special characters besides dash and underscore are allowed BE-side.
   // We will raise the issue to the test team.
