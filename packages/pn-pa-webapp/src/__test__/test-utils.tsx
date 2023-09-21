@@ -1,14 +1,14 @@
-import { AxiosInstance } from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
+import { RenderOptions, render } from '@testing-library/react';
 
-import { appReducers } from '../redux/store';
+import { RootState, appReducers } from '../redux/store';
+
+let testStore: EnhancedStore<RootState>;
 
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
   <BrowserRouter>
@@ -23,29 +23,16 @@ const customRender = (
     renderOptions,
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
-  const testStore = configureStore({
+  testStore = configureStore({
     reducer: appReducers,
     preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
   return render(ui, {
     wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
-    ...renderOptions,
-  });
-};
-
-const renderWithoutRouter = (
-  ui: ReactElement,
-  {
-    preloadedState,
-    renderOptions,
-  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
-) => {
-  const testStore = configureStore({
-    reducer: appReducers,
-    preloadedState,
-  });
-  return render(ui, {
-    wrapper: ({ children }) => <Provider store={testStore}>{children}</Provider>,
     ...renderOptions,
   });
 };
@@ -56,117 +43,24 @@ const axe = configureAxe({
   },
 });
 
-type MockMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY';
-type MockCodes = 200 | 204 | 500 | 401 | 400 | 403 | 451;
-
-/**
- * Utility function to mock api response
- * @param client Axios client or Mock Adapter instance
- * @param method the api method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'ANY
- * @param path the api path
- * @param code the response code
- * @param request body request
- * @param response response
- * @param requestHeader request header
- * @param responseHeader response header
- * @returns the mock instance
- */
-function mockApi(
-  client: AxiosInstance | MockAdapter,
-  method: MockMethods,
-  path: string,
-  code: MockCodes,
-  request?: any,
-  response?: any,
-  requestHeader?: any,
-  responseHeader?: any
-): MockAdapter {
-  const mock = client instanceof MockAdapter ? client : new MockAdapter(client);
-  switch (method) {
-    case 'GET':
-      mock.onGet(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'POST':
-      mock.onPost(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'PUT':
-      mock.onPut(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'DELETE':
-      mock.onDelete(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'PATCH':
-      mock.onPatch(path, request, requestHeader).reply(code, response, responseHeader);
-      break;
-    case 'ANY':
-      mock.onAny(path, request, requestHeader).reply(code, response, responseHeader);
-    default:
-      break;
-  }
-  return mock;
-}
-
 // utility functions
 /**
- * @form form element
- * @elementName element name
- * @label element's label
- * @findById set true if a form component doesn't have "name" prop like Autocomplete component
+ * Generate a random string with specified length
+ * @length desired length
  */
-export function testFormElements(
-  form: HTMLFormElement,
-  elementName: string,
-  label: string,
-  findById?: boolean
-) {
-  const formElement = form.querySelector(`input[${findById ? 'id' : 'name'}="${elementName}"]`);
-  expect(formElement).toBeInTheDocument();
-  const formElementLabel = form.querySelector(`label[for="${elementName}"]`);
-  expect(formElementLabel).toBeInTheDocument();
-  expect(formElementLabel).toHaveTextContent(label);
-}
-
-export async function testInput(
-  form: HTMLFormElement,
-  elementName: string,
-  value: string | number
-) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
-  fireEvent.change(input!, { target: { value } });
-  await waitFor(() => {
-    expect(input).toHaveValue(value);
-  });
-}
-
-export async function testSelect(
-  form: HTMLFormElement,
-  elementName: string,
-  options: Array<{ label: string; value: string }>,
-  optToSelect: number
-) {
-  const selectInput = form.querySelector(`input[name="${elementName}"]`);
-  const selectButton = form.querySelector(`div[id="${elementName}"]`);
-  fireEvent.mouseDown(selectButton!);
-  const selectOptionsContainer = await screen.findByRole('presentation');
-  expect(selectOptionsContainer).toBeInTheDocument();
-  const selectOptionsList = await within(selectOptionsContainer).findByRole('listbox');
-  expect(selectOptionsList).toBeInTheDocument();
-  const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
-  expect(selectOptionsListItems).toHaveLength(options.length);
-  selectOptionsListItems.forEach((opt, index) => {
-    expect(opt).toHaveTextContent(options[index].label);
-  });
-  await waitFor(() => {
-    fireEvent.click(selectOptionsListItems[optToSelect]);
-    expect(selectInput).toHaveValue(options[optToSelect].value);
-  });
+function randomString(length: number) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; ++i) {
+    result += alphabet[Math.floor(alphabet.length * Math.random())];
+  }
+  return result;
 }
 
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
-export { customRender as render };
-export { renderWithoutRouter };
+export { customRender as render, testStore };
 export { axe };
 // utility functions
-export { mockApi };
+export { randomString };

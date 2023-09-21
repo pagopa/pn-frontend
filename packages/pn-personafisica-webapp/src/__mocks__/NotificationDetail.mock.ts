@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import {
   AddressSource,
-  AnalogWorkflowDetails,
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDetail,
@@ -11,19 +10,23 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
+  SendPaperDetails,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
 } from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
-const payments: Array<NotificationDetailPayment> = [
+export const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695132',
-      applyCostFlg: false,
+      applyCost: false,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
@@ -40,7 +43,7 @@ const payments: Array<NotificationDetailPayment> = [
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695133',
-      applyCostFlg: true,
+      applyCost: true,
       attachment: {
         digests: {
           sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
@@ -52,91 +55,142 @@ const payments: Array<NotificationDetailPayment> = [
         },
       },
     },
-    f24Data: {
-      metadata: 'metadata-mocked',
-      description: 'F24 seconda rata TARI',
+    f24: {
+      title: 'F24 seconda rata TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
     },
   },
   {
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695134',
-      applyCostFlg: false,
+      applyCost: false,
     },
   },
   {
     pagoPA: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695135',
-      applyCostFlg: false,
+      applyCost: false,
+    },
+  },
+  {
+    f24: {
+      title: 'F24 prima rata',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
     },
   },
 ];
 
-export const recipient: NotificationDetailRecipient = {
-  recipientType: RecipientType.PF,
-  taxId: 'LVLDAA85T50G702B',
-  denomination: 'FAIL-Giacenza-lte10_890',
-  physicalAddress: {
-    at: 'Presso',
-    address: 'VIA@FAIL-GIACENZA-LTE10_890',
-    addressDetails: 'SCALA B',
-    zip: '87100',
-    municipality: 'MILANO',
-    municipalityDetails: 'MILANO',
-    province: 'MI',
-    foreignState: 'ITALIA',
-  },
-  payments,
-};
-
 const notificationStatusHistory: Array<NotificationStatusHistory> = [
   {
     status: NotificationStatus.ACCEPTED,
-    activeFrom: '2023-06-14T19:58:17.27203321Z',
+    activeFrom: '2023-08-23T07:38:49.601270863Z',
     relatedTimelineElements: [
-      'REQUEST_ACCEPTED.IUN_PXPX-PQZU-PHPQ-202306-M-1',
-      'AAR_CREATION_REQUEST.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0',
-      'AAR_GEN.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0',
-      'GET_ADDRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
-      'GET_ADDRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
-      'GET_ADDRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
-      'PREPARE_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
+      'REQUEST_ACCEPTED.IUN_DAPQ-LWQV-DKQH-202308-A-1',
+      'AAR_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'AAR_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'AAR_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'SEND_COURTESY_MESSAGE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.COURTESYADDRESSTYPE_EMAIL',
+      'PROBABLE_SCHEDULING_ANALOG_DATE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_SPECIAL.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.SOURCE_SPECIAL.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
+      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
     ],
   },
   {
     status: NotificationStatus.DELIVERING,
-    activeFrom: '2023-06-14T23:25:46.672440711Z',
+    activeFrom: '2023-08-23T07:40:47.833137272Z',
     relatedTimelineElements: [
-      'SEND_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-      'SEND_ANALOG_PROGRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0.IDX_1',
-      'SEND_ANALOG_PROGRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
+      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1.ATTEMPT_0',
+      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
+      'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
     ],
   },
   {
-    status: NotificationStatus.DELIVERED,
-    activeFrom: '2023-06-14T23:26:42.401199296Z',
-    relatedTimelineElements: ['ANALOG_SUCCESS_WORKFLOW.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0'],
+    status: NotificationStatus.EFFECTIVE_DATE,
+    activeFrom: '2023-08-23T07:47:35.995132435Z',
+    relatedTimelineElements: [
+      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0.IDX_2',
+      'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0.ATTEMPT_0',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+    ],
   },
   {
     status: NotificationStatus.VIEWED,
-    activeFrom: '2023-06-19T13:51:44.11651144Z',
+    activeFrom: '2023-08-23T08:35:27.109686054Z',
     relatedTimelineElements: [
-      'NOTIFICATION_VIEWED.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0',
-      'SEND_ANALOG_PROGRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0.IDX_3',
-      'SEND_ANALOG_FEEDBACK.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-      'NOTIFICATION_PAID.IUN_PXPX-PQZU-PHPQ-202306-M-1.CODE_PPA30201168677269513277777777777',
+      'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_0',
+      'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
     ],
   },
 ];
 
 const timeline: Array<INotificationDetailTimeline> = [
   {
-    elementId: 'REQUEST_ACCEPTED.IUN_PXPX-PQZU-PHPQ-202306-M-1',
-    timestamp: '2023-06-14T21:33:07.495352803Z',
+    elementId: 'REQUEST_ACCEPTED.IUN_DAPQ-LWQV-DKQH-202308-A-1',
+    timestamp: '2023-08-23T07:39:54.877429741Z',
     legalFactsIds: [
       {
-        key: 'safestorage://PN_LEGAL_FACTS-3ada37cc1b254fafa4849010b8ea0af8.pdf',
+        key: 'PN_LEGAL_FACTS-e0f9106c3ca4c1aaa8de73ecbc0eba5.pdf',
         category: LegalFactType.SENDER_ACK,
       },
     ],
@@ -144,189 +198,241 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {},
   },
   {
-    elementId: 'AAR_GEN.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0',
-    timestamp: '2023-06-14T23:24:43.304018485Z',
+    elementId: 'AAR_GEN.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T07:40:24.804602803Z',
     legalFactsIds: [],
     category: TimelineCategory.AAR_GENERATION,
     details: {
-      recIndex: 0,
-      generatedAarUrl: 'safestorage://PN_AAR-8a5abf02e252438b9fb827dd59580b18.pdf',
+      recIndex: 2,
+      generatedAarUrl: 'PN_AAR-f773e631f0934287999939fefb0b0db6.pdf',
       numberOfPages: 1,
     },
   },
   {
-    elementId: 'GET_ADDRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
-    timestamp: '2023-06-14T23:25:13.396503891Z',
+    elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_PLATFORM.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:34.878603762Z',
     legalFactsIds: [],
     category: TimelineCategory.GET_ADDRESS,
     details: {
-      recIndex: 0,
+      recIndex: 2,
       digitalAddressSource: AddressSource.PLATFORM,
       isAvailable: false,
-      attemptDate: '2023-06-14T23:25:13.396501469Z',
+      attemptDate: '2023-08-23T07:40:34.878603673Z',
     },
   },
   {
-    elementId: 'GET_ADDRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
-    timestamp: '2023-06-14T23:25:13.424988864Z',
+    elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_SPECIAL.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:34.924030215Z',
     legalFactsIds: [],
     category: TimelineCategory.GET_ADDRESS,
     details: {
-      recIndex: 0,
+      recIndex: 2,
       digitalAddressSource: AddressSource.SPECIAL,
       isAvailable: false,
-      attemptDate: '2023-06-14T23:25:13.424986714Z',
+      attemptDate: '2023-08-23T07:40:34.924030072Z',
     },
   },
   {
-    elementId: 'GET_ADDRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
-    timestamp: '2023-06-14T23:25:15.776535853Z',
+    elementId:
+      'NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:35.112444462Z',
+    legalFactsIds: [],
+    category: TimelineCategory.PUBLIC_REGISTRY_CALL,
+    details: {
+      recIndex: 2,
+      sentAttemptMade: 0,
+      sendDate: '2023-08-23T07:40:35.112443796Z',
+    },
+  },
+  {
+    elementId:
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:37.727768001Z',
+    legalFactsIds: [],
+    category: TimelineCategory.PUBLIC_REGISTRY_RESPONSE,
+    details: {
+      recIndex: 2,
+    },
+  },
+  {
+    elementId: 'GET_ADDRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.SOURCE_GENERAL.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:37.770115085Z',
     legalFactsIds: [],
     category: TimelineCategory.GET_ADDRESS,
     details: {
-      recIndex: 0,
+      recIndex: 2,
       digitalAddressSource: AddressSource.GENERAL,
       isAvailable: false,
-      attemptDate: '2023-06-14T23:25:15.776532273Z',
+      attemptDate: '2023-08-23T07:40:37.770114893Z',
     },
   },
   {
-    elementId: 'SEND_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-    timestamp: '2023-06-14T23:25:46.672440711Z',
+    elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T07:40:37.803744183Z',
     legalFactsIds: [],
-    category: TimelineCategory.SEND_ANALOG_DOMICILE,
+    category: TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
     details: {
-      recIndex: 0,
+      recIndex: 2,
+    },
+  },
+  {
+    elementId: 'PREPARE_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:45.061648749Z',
+    legalFactsIds: [],
+    category: TimelineCategory.PREPARE_ANALOG_DOMICILE,
+    details: {
+      recIndex: 2,
       physicalAddress: {
-        at: 'Presso',
-        address: 'VIA@FAIL-GIACENZA-LTE10_890',
-        addressDetails: 'SCALA B',
-        zip: '87100',
-        municipality: 'MILANO',
-        municipalityDetails: 'MILANO',
+        at: '',
+        address: 'VIATORINO 15',
+        addressDetails: '',
+        zip: '20092',
+        municipality: 'CINISELLOBALSAMO',
+        municipalityDetails: 'CINISELLOBALSAMO',
         province: 'MI',
         foreignState: 'ITALIA',
       },
       sentAttemptMade: 0,
-      serviceLevel: PhysicalCommunicationType.REGISTERED_LETTER_890,
-      productType: '890',
-      numberOfPages: 3,
     },
   },
   {
-    elementId: 'SEND_ANALOG_PROGRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0.IDX_1',
-    timestamp: '2023-06-14T23:26:05Z',
+    elementId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+    timestamp: '2023-08-23T07:40:48.49281686Z',
     legalFactsIds: [],
-    category: TimelineCategory.SEND_ANALOG_PROGRESS,
+    category: TimelineCategory.SEND_ANALOG_DOMICILE,
     details: {
-      recIndex: 0,
-      notificationDate: '2023-06-14T23:26:05Z',
-      deliveryDetailCode: 'CON080',
-      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-      registeredLetterCode: '77435b1b891145b7bc1bd92176a94a75',
-    },
-  },
-  {
-    elementId: 'SEND_ANALOG_PROGRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0.IDX_2',
-    timestamp: '2023-06-14T23:26:15Z',
-    legalFactsIds: [],
-    category: TimelineCategory.SEND_ANALOG_PROGRESS,
-    details: {
-      recIndex: 0,
-      notificationDate: '2023-06-14T23:26:15Z',
-      deliveryDetailCode: 'RECAG011A',
-      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-      registeredLetterCode: '77435b1b891145b7bc1bd92176a94a75',
-    },
-  },
-  {
-    elementId: 'ANALOG_SUCCESS_WORKFLOW.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0',
-    timestamp: '2023-06-14T23:26:42.401199296Z',
-    legalFactsIds: [],
-    category: TimelineCategory.ANALOG_SUCCESS_WORKFLOW,
-    details: {
-      recIndex: 0,
+      recIndex: 2,
       physicalAddress: {
-        at: 'Presso',
-        address: 'VIA@FAIL-GIACENZA-LTE10_890',
-        addressDetails: 'SCALA B',
-        zip: '87100',
-        municipality: 'MILANO',
-        municipalityDetails: 'MILANO',
+        address: 'VIATORINO 15',
+        zip: '20092',
+        municipality: 'CINISELLOBALSAMO',
+        municipalityDetails: 'CINISELLOBALSAMO',
         province: 'MI',
         foreignState: 'ITALIA',
       },
+      sentAttemptMade: 0,
+      productType: 'AR',
+      numberOfPages: 2,
     },
   },
   {
-    elementId: 'NOTIFICATION_VIEWED.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0',
-    timestamp: '2023-06-19T13:51:44.11651144Z',
-    legalFactsIds: [
-      {
-        key: 'safestorage://PN_LEGAL_FACTS-3ada926f9f24436fab9614580d78d061.pdf',
-        category: LegalFactType.RECIPIENT_ACCESS,
-      },
-    ],
-    category: TimelineCategory.NOTIFICATION_VIEWED,
+    elementId: 'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_1',
+    timestamp: '2023-08-23T07:45:10Z',
+    legalFactsIds: [],
+    category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
-      recIndex: 0,
+      recIndex: 2,
+      notificationDate: '2023-08-23T07:45:10Z',
+      deliveryDetailCode: 'CON080',
+      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
     },
   },
   {
-    elementId: 'SEND_ANALOG_PROGRESS.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0.IDX_3',
-    timestamp: '2023-06-19T23:26:30Z',
+    elementId: 'SEND_ANALOG_PROGRESS.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0.IDX_2',
+    timestamp: '2023-08-23T07:45:19Z',
     legalFactsIds: [
       {
-        key: 'safestorage://PN_EXTERNAL_LEGAL_FACTS-b563ce70a2fd4563ae04a81a74b716ab.pdf',
+        key: 'PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
         category: LegalFactType.ANALOG_DELIVERY,
       },
     ],
     category: TimelineCategory.SEND_ANALOG_PROGRESS,
     details: {
-      recIndex: 0,
-      notificationDate: '2023-06-19T23:26:30Z',
-      deliveryDetailCode: 'RECAG007B',
+      recIndex: 2,
+      notificationDate: '2023-08-23T07:45:19Z',
+      deliveryDetailCode: 'RECRN001B',
       attachments: [
         {
-          id: '1',
-          documentType: 'Plico',
-          url: 'safestorage://PN_EXTERNAL_LEGAL_FACTS-b563ce70a2fd4563ae04a81a74b716ab.pdf',
+          id: '0',
+          documentType: 'AR',
+          url: 'PN_EXTERNAL_LEGAL_FACTS-e944f4be54804c69a5e61621a17b22fb.pdf',
         },
       ],
-      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-      registeredLetterCode: '77435b1b891145b7bc1bd92176a94a75',
+      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
     },
   },
   {
-    elementId: 'SEND_ANALOG_FEEDBACK.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-    timestamp: '2023-06-19T23:26:35Z',
+    elementId: 'SEND_ANALOG_FEEDBACK.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+    timestamp: '2023-08-23T07:45:25Z',
     legalFactsIds: [],
     category: TimelineCategory.SEND_ANALOG_FEEDBACK,
     details: {
-      recIndex: 0,
+      recIndex: 2,
       physicalAddress: {
-        at: 'Presso',
-        address: 'VIA@FAIL-GIACENZA-LTE10_890',
-        addressDetails: 'SCALA B',
-        zip: '87100',
-        municipality: 'MILANO',
-        municipalityDetails: 'MILANO',
+        at: '',
+        address: 'VIATORINO 15',
+        addressDetails: '',
+        zip: '20092',
+        municipality: 'CINISELLOBALSAMO',
+        municipalityDetails: 'CINISELLOBALSAMO',
         province: 'MI',
         foreignState: 'ITALIA',
       },
       sentAttemptMade: 0,
       responseStatus: 'OK',
-      notificationDate: '2023-06-19T23:26:35Z',
-      deliveryDetailCode: 'RECAG007C',
-      serviceLevel: 'REGISTERED_LETTER_890',
-      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_PXPX-PQZU-PHPQ-202306-M-1.RECINDEX_0.ATTEMPT_0',
-      registeredLetterCode: '77435b1b891145b7bc1bd92176a94a75',
-    } as AnalogWorkflowDetails,
+      notificationDate: '2023-08-23T07:45:25Z',
+      deliveryDetailCode: 'RECRN001C',
+      serviceLevel: 'AR_REGISTERED_LETTER',
+      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
+    } as SendPaperDetails,
   },
   {
-    elementId:
-      'NOTIFICATION_PAID.IUN_PXPX-PQZU-PHPQ-202306-M-1.CODE_PPA30201168677269513277777777777',
-    timestamp: '2023-07-10T15:54:31.874Z',
+    elementId: 'ANALOG_SUCCESS_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T07:45:33.831087008Z',
+    legalFactsIds: [],
+    category: TimelineCategory.ANALOG_SUCCESS_WORKFLOW,
+    details: {
+      recIndex: 2,
+      physicalAddress: {
+        at: '',
+        address: 'VIATORINO 15',
+        addressDetails: '',
+        zip: '20092',
+        municipality: 'CINISELLOBALSAMO',
+        municipalityDetails: 'CINISELLOBALSAMO',
+        province: 'MI',
+        foreignState: 'ITALIA',
+      },
+    },
+  },
+  {
+    elementId: 'SCHEDULE_REFINEMENT_WORKFLOW.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T07:45:33.897717635Z',
+    legalFactsIds: [],
+    category: TimelineCategory.SCHEDULE_REFINEMENT,
+    details: {
+      recIndex: 2,
+    },
+  },
+  {
+    elementId: 'REFINEMENT.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T07:47:36.05742356Z',
+    legalFactsIds: [],
+    category: TimelineCategory.REFINEMENT,
+    details: {
+      recIndex: 2,
+    },
+  },
+  {
+    elementId: 'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T12:38:42.172599701Z',
+    legalFactsIds: [
+      {
+        key: 'PN_LEGAL_FACTS-4751a48146e41819522e4567b13c5a2.pdf',
+        category: LegalFactType.RECIPIENT_ACCESS,
+      },
+    ],
+    category: TimelineCategory.NOTIFICATION_VIEWED,
+    details: {
+      recIndex: 2,
+    },
+  },
+  {
+    elementId: 'NOTIFICATION_PAID.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+    timestamp: '2023-08-23T17:38:42.172599701Z',
     legalFactsIds: [],
     category: TimelineCategory.PAYMENT,
     details: {
@@ -335,79 +441,85 @@ const timeline: Array<INotificationDetailTimeline> = [
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695132',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
+      notificationDate: '2023-08-23T07:45:25Z',
+      deliveryDetailCode: 'RECRN001C',
+      serviceLevel: 'AR_REGISTERED_LETTER',
+      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
+      registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
+    } as SendPaperDetails,
+  },
+];
+
+export const recipients: Array<NotificationDetailRecipient> = [
+  {
+    recipientType: RecipientType.PF,
+  } as NotificationDetailRecipient,
+  {
+    recipientType: RecipientType.PF,
+  } as NotificationDetailRecipient,
+  {
+    recipientType: RecipientType.PF,
+    taxId: 'LVLDAA85T50G702B',
+    denomination: 'Ada Lovelace',
+    physicalAddress: {
+      at: '',
+      address: 'VIATORINO 15',
+      addressDetails: '',
+      zip: '20092',
+      municipality: 'CINISELLOBALSAMO',
+      municipalityDetails: 'CINISELLOBALSAMO',
+      province: 'MI',
+      foreignState: 'ITALIA',
     },
+    payments,
   },
 ];
 
 export const notificationDTO: NotificationDetail = {
-  abstract: 'Abstract della notifica',
-  paProtocolNumber: '302011686772695119',
-  subject: 'notifica analogica con cucumber',
-  recipients: [recipient],
+  abstract: 'PAGAMENTO RATA IMU',
+  paProtocolNumber: 'TA-FFSMRC-20230823-2',
+  subject: 'Pagamento rata IMU',
+  recipients,
   documents: [
     {
-      title: 'Documento 1',
       digests: {
-        sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+        sha256: '7f3Nr8Yhkv4tH40iOrtMr4Y9fPR0vmCCt9BIwvH8fxs=',
       },
       contentType: 'application/pdf',
       ref: {
-        key: 'PN_NOTIFICATION_ATTACHMENTS-25fc46c294cb4dc48d84eec3005c134c.pdf',
-        versionToken: 'v1',
+        key: 'PN_NOTIFICATION_ATTACHMENTS-c433d019acaa485288974021237beb8e.pdf',
+        versionToken: 'l0pwhTshqzIIdVKnCqiV1BlQBZA_LC7r',
       },
+      title: 'RATA SCADUTA IMU',
       docIdx: '0',
     },
   ],
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
-  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  senderDenomination: 'Comune di palermo',
+  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+  senderDenomination: 'Comune di Palermo',
   senderTaxId: '80016350821',
-  group: '63f359bc72337440a40f537e',
+  group: '6467344676f10c7617353c90',
   senderPaId: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
-  iun: 'PXPX-PQZU-PHPQ-202306-M-1',
-  sentAt: '2023-06-14T19:58:17.27203321Z',
+  iun: 'DAPQ-LWQV-DKQH-202308-A-1',
+  sentAt: '2023-08-23T07:38:49.601270863Z',
   documentsAvailable: true,
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory,
   timeline,
 };
 
-export const notificationToFe = parseNotificationDetailForRecipient(
-  _.cloneDeep(notificationDTO),
-  recipient.taxId,
-  []
-);
+export const paymentsData: PaymentsData = {
+  pagoPaF24: getPagoPaF24Payments(payments),
+  f24Only: getF24Payments(payments),
+};
 
 export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
   const notification = { ...notificationDTO, ...overrideObj };
   return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
 };
 
-// export const notificationToFeTwoRecipients = (
-//   userFiscalNumber: string,
-//   delegatorFiscalNumber?: string,
-//   isDelegate?: boolean
-// ) =>
-//   parseNotificationDetailForRecipient(
-//     notificationFromBeTwoRecipients,
-//     userFiscalNumber,
-//     delegatorFiscalNumber && isDelegate
-//       ? [
-//           {
-//             mandateId: fixedMandateId,
-//             delegator: {
-//               fiscalCode: delegatorFiscalNumber,
-//               firstName: 'Mario',
-//               lastName: 'Rossi',
-//               person: true,
-//             },
-//             status: 'active',
-//             visibilityIds: [],
-//             verificationCode: '',
-//             datefrom: '',
-//             dateto: '',
-//           },
-//         ]
-//       : [],
-//     isDelegate ? fixedMandateId : undefined
-//   );
+export const notificationToFe = parseNotificationDetailForRecipient(
+  _.cloneDeep(notificationDTO),
+  recipients[2].taxId,
+  []
+);

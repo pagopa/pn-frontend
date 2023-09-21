@@ -8,3 +8,4 @@
 // is added to the FAQ page in pn-landing.
 // At this moment, the env var REACT_APP_LANDING_SITE_URL should be given a value as well.
 export const FAQ_DIFFERENT_AMOUNTS_SUFFIX: string | undefined = undefined;
+export const FAQ_HOW_DO_I_GET_REFUNDED: string = '/faq#notifica-pagata-rimborso';

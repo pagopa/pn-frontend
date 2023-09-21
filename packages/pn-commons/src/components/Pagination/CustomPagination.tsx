@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
+
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
+import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { PaginationData, A11yPaginationLabelsTypes } from './types';
+import { A11yPaginationLabelsTypes, PaginationData } from './types';
 
 type Props = {
   /** The actual paginationData */
@@ -89,8 +90,10 @@ export default function CustomPagination({
 
   const handleChangeElementsPerPage = (selectedSize: number) => {
     if (size !== selectedSize) {
+      // eslint-disable-next-line functional/immutable-data
       paginationData.size = selectedSize;
       // reset current page
+      // eslint-disable-next-line functional/immutable-data
       paginationData.page = 0;
       onPageRequest(paginationData);
       if (eventTrackingCallbackPageSize) {

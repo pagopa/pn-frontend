@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, recipient } from '../../__mocks__/NotificationDetail.mock';
+import { notificationToFe, payments } from '../../__mocks__/NotificationDetail.mock';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
@@ -24,17 +24,20 @@ import {
 import {
   AppIoCourtesyMessageEventType,
   NotificationDetailOtherDocument,
-  PagoPAPaymentHistory,
+  PagoPAPaymentFullDetails,
   PaidDetails,
-  PaymentHistory,
+  PaymentDetails,
   PaymentStatus,
+  PaymentsData,
 } from '../../types/NotificationDetail';
 import {
+  getF24Payments,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
+  getPagoPaF24Payments,
   parseNotificationDetail,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '../notification.utility';
 import {
   acceptedDeliveringDeliveredTimeline,
@@ -432,6 +435,17 @@ describe('notification status texts', () => {
       'warning',
       'status.canceled-tooltip',
       'status.canceled-description'
+    );
+  });
+
+  it('return notification status infos - CANCELLATION_IN_PROGRESS - passing status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      NotificationStatus.CANCELLATION_IN_PROGRESS,
+      undefined,
+      'status.cancellation-in-progress',
+      'warning',
+      'status.cancellation-in-progress-tooltip',
+      'status.cancellation-in-progress-description'
     );
   });
 });
@@ -1777,66 +1791,35 @@ describe('timeline legal fact link text', () => {
   });
 });
 
-describe('Populate payment history', () => {
-  it('return empty array if user payments is undefined', () => {
-    const recipients = [
-      {
-        ...recipient,
-        payments: undefined,
-      },
-    ];
-
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      notificationToFe.timeline,
-      recipients,
-      paymentInfo
-    );
-
-    expect(mappedPayments).toStrictEqual([]);
-  });
+describe('Populate pagoPA and F24 payments', () => {
+  const paymentsData: PaymentsData = {
+    pagoPaF24: getPagoPaF24Payments(payments),
+    f24Only: getF24Payments(payments),
+  };
 
   it('return empty array if user payments is an empty array', () => {
-    const recipients = [
-      {
-        ...recipient,
-        payments: [],
-      },
-    ];
-
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      notificationToFe.timeline,
-      recipients,
-      paymentInfo
-    );
+    const mappedPayments = populatePaymentsPagoPaF24(notificationToFe.timeline, [], paymentInfo);
 
     expect(mappedPayments).toStrictEqual([]);
   });
 
   it('With empty timeline it should return the mapped array with only external registry info', () => {
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       return {
-        pagoPA: { ...item.pagoPA, ...paymentInfo[index] },
-        f24Data: item.f24Data,
-      } as PaymentHistory;
+        pagoPA: item.pagoPA ? { ...item.pagoPA, ...paymentInfo[index] } : undefined,
+        f24: item.f24,
+      } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      [],
-      notificationToFe.recipients,
-      paymentInfo
-    );
-
+    const mappedPayments = populatePaymentsPagoPaF24([], paymentsData.pagoPaF24, paymentInfo);
     expect(mappedPayments).toStrictEqual(res);
   });
 
   it('When populatePaymentHistory receive only one payment from checkout it should map only this payment', () => {
-    let res: Array<PaymentHistory> = [];
+    let res: Array<PaymentDetails> = [];
     let singlePaymentInfo = paymentInfo[0];
 
-    recipient.payments!.forEach((item, index) => {
+    paymentsData.pagoPaF24.forEach((item, index) => {
       if (
         singlePaymentInfo?.creditorTaxId === item.pagoPA?.creditorTaxId &&
         singlePaymentInfo.noticeCode === item.pagoPA?.noticeCode
@@ -1855,25 +1838,33 @@ describe('Populate payment history', () => {
           ...res,
           {
             pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
-            f24Data: item.f24Data,
-          } as PaymentHistory,
+            f24: item.f24,
+          } as PaymentDetails,
+        ];
+      }
+      if (!item.pagoPA && item.f24) {
+        res = [
+          ...res,
+          {
+            pagoPA: undefined,
+            f24: item.f24,
+          } as PaymentDetails,
         ];
       }
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
+    const mappedPayments = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       [singlePaymentInfo]
     );
 
-    expect(mappedPayments).toHaveLength(1);
+    expect(mappedPayments).toHaveLength(res.length);
     expect(mappedPayments).toStrictEqual(res);
   });
 
   it('With empty external registry it should return the mapped array with only timeline info', () => {
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const timelineEvent = notificationToFe.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&
@@ -1881,21 +1872,22 @@ describe('Populate payment history', () => {
           (event.details as PaidDetails).noticeCode === item.pagoPA?.noticeCode
       )?.details;
 
-      const pagoPAPayment = { ...item.pagoPA, ...timelineEvent } as PagoPAPaymentHistory;
-      if (timelineEvent) {
+      const pagoPAPayment = item.pagoPA
+        ? ({ ...item.pagoPA, ...timelineEvent } as PagoPAPaymentFullDetails)
+        : undefined;
+      if (timelineEvent && pagoPAPayment) {
         pagoPAPayment.status = PaymentStatus.SUCCEEDED;
       }
 
       return {
         pagoPA: pagoPAPayment,
-        f24Data: item.f24Data,
-      } as PaymentHistory;
+        f24: item.f24,
+      } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
+    const mappedPayments = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       []
     );
 
@@ -1903,9 +1895,11 @@ describe('Populate payment history', () => {
   });
 
   it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
-        paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+        item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
+          ? paymentInfo[index]
+          : undefined;
 
       const timelineEvent = notificationToFe.timeline.find(
         (event) =>
@@ -1915,15 +1909,16 @@ describe('Populate payment history', () => {
       )?.details;
 
       return {
-        pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
-        f24Data: item.f24Data,
-      } as PaymentHistory;
+        pagoPA: item.pagoPA
+          ? { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent }
+          : undefined,
+        f24: item.f24,
+      } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
+    const mappedPayments = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
-      notificationToFe.recipients,
+      paymentsData.pagoPaF24,
       paymentInfo
     );
 
@@ -1936,9 +1931,11 @@ describe('Populate payment history', () => {
       amount: undefined,
     }));
 
-    const res: Array<PaymentHistory> = recipient.payments!.map((item, index) => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
-        paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+        item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
+          ? paymentInfo[index]
+          : undefined;
 
       const timelineEvent = notificationToFe.timeline.find(
         (item) =>
@@ -1948,17 +1945,14 @@ describe('Populate payment history', () => {
       )?.details;
 
       return {
-        pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
-        f24Data: item.f24Data,
-      } as PaymentHistory;
+        pagoPA: item.pagoPA
+          ? { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent }
+          : undefined,
+        f24: item.f24,
+      } as PaymentDetails;
     });
 
-    const mappedPayments = populatePaymentHistory(
-      recipient.taxId,
-      timeline,
-      notificationToFe.recipients,
-      paymentInfo
-    );
+    const mappedPayments = populatePaymentsPagoPaF24(timeline, paymentsData.pagoPaF24, paymentInfo);
 
     expect(mappedPayments).toStrictEqual(res);
   });

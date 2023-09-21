@@ -31,10 +31,10 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
         <DialogTitle id="dialog-title">{t('payment.f24-dialog-title', { iun })}</DialogTitle>
         <PnDialogContent>
           {payments.map((payment, index) => (
-            <Fragment key={window.btoa(payment.description.substring(0, 10))}>
+            <Fragment key={window.btoa(payment.title.substring(0, 10))}>
               <ListItem sx={{ px: 0, py: '4px' }} data-testid="dialog-all-attachments">
                 <Typography variant="body2" color="action.active">
-                  {payment.description}
+                  {payment.title}
                 </Typography>
               </ListItem>
               {index !== payments.length - 1 && <Divider sx={{ my: 1 }} />}
@@ -60,10 +60,10 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
             variant="caption"
             color="text.secondary"
             mr={1}
-            key={window.btoa(f24.description.substring(0, 10))}
+            key={window.btoa(f24.title.substring(0, 10))}
             data-testid="f24"
           >
-            {f24.description}
+            {f24.title}
           </Typography>
         )}
         renderRemainingItem={(count) => (

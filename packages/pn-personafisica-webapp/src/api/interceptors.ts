@@ -12,7 +12,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
       }
       if (config.url === '/ext-registry/pagopa/v2/paymentinfo') {
         return new Promise((_resolve, reject) =>
-          setTimeout(() => reject({ error: true, type: 'ext-registry' }), 500)
+          setTimeout(() => reject({ error: true, type: 'ext-registry' }), 4000)
         );
       }
       /* eslint-disable functional/immutable-data */

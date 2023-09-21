@@ -1,7 +1,7 @@
-import { createContext, FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import _ from 'lodash';
+import { FC, ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import _ from 'lodash';
 import {
   Box,
   Button,
@@ -12,26 +12,27 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
-  appStateActions,
-  CodeModal,
-  AppResponsePublisher,
   AppResponse,
-  ErrorMessage,
+  AppResponsePublisher,
+  CodeModal,
   DisclaimerModal,
+  ErrorMessage,
+  appStateActions,
 } from '@pagopa-pn/pn-commons';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { RootState } from '../../redux/store';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
 } from '../../redux/contact/actions';
-import { trackEventByType } from '../../utils/mixpanel';
-import { EventActions, TrackEventType } from '../../utils/events';
-import { getContactEventType } from '../../utils/contacts.utility';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { getContactEventType } from '../../utils/contacts.utility';
+import { EventActions, TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 
 type ModalProps = {
   labelRoot: string;
@@ -331,6 +332,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         onClose={handleDiscard}
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
+        data-testid="duplicateDialog"
       >
         <DialogTitle id="dialog-title">
           {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}

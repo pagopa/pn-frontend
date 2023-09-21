@@ -3,23 +3,22 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
 import {
-  PagoPAPaymentHistory,
-  PaymentHistory,
+  PagoPAPaymentFullDetails,
+  PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../../types';
-import { formatEurocentToCurrency, populatePaymentHistory } from '../../../utils';
+import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../utils';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
-  const pagoPAItems: PaymentHistory[] = populatePaymentHistory(
-    recipient.taxId,
+  const pagoPAItems: PaymentDetails[] = populatePaymentsPagoPaF24(
     notificationToFe.timeline,
-    notificationToFe.recipients,
+    notificationToFe.recipients[0].payments as PaymentDetails[],
     paymentInfo
   );
 
-  const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentHistory;
+  const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentFullDetails;
 
   it('renders NotificationPaymentPagoPAItem - should show radio button when status is REQUIRED', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
@@ -37,10 +36,10 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(radioButton).toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show caption if applyCostFlg is true', () => {
+  it('renders NotificationPaymentPagoPAItem - should show caption if applyCost is true', () => {
     const result = render(
       <NotificationPaymentPagoPAItem
-        pagoPAItem={{ ...pagoPAItem, amount: 999 }}
+        pagoPAItem={{ ...pagoPAItem, amount: 999, applyCost: true }}
         loading={false}
         isSelected={false}
         handleReloadPayment={() => void 0}

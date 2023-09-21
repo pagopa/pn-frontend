@@ -92,7 +92,8 @@
       "verificationCode": "Koda za preverjanje",
       "verificationCodeDescr": "To kodo delite s pooblaščencem: ta jo bo moral vnesti ob sprejemu pooblastila.",
       "submit": "Pošlji zahtevo",
-      "mandatoryField": "Obvezna polja*"
+      "mandatoryField": "Obvezna polja*",
+      "party-not-found": "Ni najdenih subjektov"
     },
     "validation": {
       "fiscalCode": {

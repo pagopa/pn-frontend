@@ -30,11 +30,18 @@ export interface NotificationDetail {
   otherDocuments?: Array<NotificationDetailDocument>;
 }
 
-export type PagoPAPaymentHistory = PagoPAPaymentDetails & PaidDetails & ExtRegistriesPaymentDetails;
+export type PaymentsData = {
+  pagoPaF24: Array<PaymentDetails>;
+  f24Only: Array<F24PaymentDetails>;
+};
 
-export interface PaymentHistory {
-  pagoPA?: PagoPAPaymentHistory;
-  f24Data?: F24PaymentDetails;
+export type PagoPAPaymentFullDetails = PagoPAPaymentDetails &
+  PaidDetails &
+  ExtRegistriesPaymentDetails;
+
+export interface PaymentDetails {
+  pagoPA?: PagoPAPaymentFullDetails;
+  f24?: F24PaymentDetails;
   isLoading?: boolean; // only fe
 }
 
@@ -222,7 +229,7 @@ export interface NotificationDetailRecipient {
   payments?: Array<NotificationDetailPayment>;
 }
 
-export interface NotificationDetailDocument {
+export interface Attachment {
   digests: {
     sha256: string;
   };
@@ -231,6 +238,9 @@ export interface NotificationDetailDocument {
     key: string;
     versionToken: string;
   };
+}
+
+export interface NotificationDetailDocument extends Attachment {
   title?: string;
   requiresAck?: boolean;
   docIdx?: string;
@@ -248,17 +258,18 @@ export interface PagoPAPaymentDetails {
   creditorTaxId: string;
   noticeCode: string;
   attachment?: NotificationDetailDocument;
-  applyCostFlg: boolean;
+  applyCost: boolean;
 }
 
 export interface F24PaymentDetails {
-  description: string;
-  metadata: any;
+  title: string;
+  applyCost: boolean;
+  metadataAttachment: Attachment;
 }
 
 export interface NotificationDetailPayment {
   pagoPA?: PagoPAPaymentDetails;
-  f24Data?: F24PaymentDetails;
+  f24?: F24PaymentDetails;
 }
 
 export interface PaymentNotice {
@@ -322,6 +333,8 @@ export enum TimelineCategory {
   SEND_ANALOG_PROGRESS = 'SEND_ANALOG_PROGRESS',
   SEND_ANALOG_FEEDBACK = 'SEND_ANALOG_FEEDBACK',
   AAR_GENERATION = 'AAR_GENERATION',
+  NOTIFICATION_CANCELLATION_REQUEST = 'NOTIFICATION_CANCELLATION_REQUEST',
+  NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
 }
 
 interface DigitalAddress {
@@ -329,7 +342,7 @@ interface DigitalAddress {
   address: string;
 }
 
-interface PhysicalAddress {
+export interface PhysicalAddress {
   at?: string;
   address: string;
   addressDetails?: string;

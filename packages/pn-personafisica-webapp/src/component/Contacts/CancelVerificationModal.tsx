@@ -1,7 +1,9 @@
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { useAppDispatch } from "../../redux/hooks";
-import { resetPecValidation } from "../../redux/contact/reducers";
+import { useTranslation } from 'react-i18next';
+
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+
+import { resetPecValidation } from '../../redux/contact/reducers';
+import { useAppDispatch } from '../../redux/hooks';
 
 type Props = {
   open: boolean;
@@ -20,7 +22,7 @@ const CancelVerificationModal = ({ open, handleClose }: Props) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
       <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
         {t('legal-contacts.validation-cancel-title', { ns: 'recapiti' })}
       </DialogTitle>

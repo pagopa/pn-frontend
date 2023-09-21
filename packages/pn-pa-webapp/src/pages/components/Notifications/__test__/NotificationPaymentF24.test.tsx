@@ -14,9 +14,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 const f24Payments =
-  notificationToFeMultiRecipient.recipients[1].payments?.reduce((arr, item) => {
-    if (item.f24Data) {
-      arr.push(item.f24Data);
+  notificationToFeMultiRecipient.recipients[0].payments?.reduce((arr, item) => {
+    if (item.f24) {
+      arr.push(item.f24);
     }
     return arr;
   }, [] as Array<F24PaymentDetails>) ?? [];
@@ -31,7 +31,7 @@ describe('NotificationPaymentF24 Component', () => {
     const f24Elem = queryAllByTestId('f24');
     expect(f24Elem).toHaveLength(f24Payments.length);
     f24Elem.forEach((elem, index) => {
-      expect(elem).toHaveTextContent(f24Payments[index].description);
+      expect(elem).toHaveTextContent(f24Payments[index].title);
     });
     const remainingF24 = queryByTestId('remaining-f24');
     expect(remainingF24).not.toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('NotificationPaymentF24 Component', () => {
       ...f24Payments,
       ...f24Payments.map((f24) => ({
         ...f24,
-        description: f24.description.split('').reverse().join(''),
+        description: f24.title.split('').reverse().join(''),
       })),
     ];
     const { queryAllByTestId, queryByTestId } = render(
@@ -54,7 +54,7 @@ describe('NotificationPaymentF24 Component', () => {
       if (index >= 3) {
         return false;
       }
-      expect(f24).toHaveTextContent(f24LotPayments[index].description);
+      expect(f24).toHaveTextContent(f24LotPayments[index].title);
     });
     const remainingF24 = queryByTestId('remaining-f24');
     expect(remainingF24).toBeInTheDocument();
@@ -67,7 +67,7 @@ describe('NotificationPaymentF24 Component', () => {
     const dialogAllF24 = queryAllByTestId('dialog-all-attachments');
     expect(dialogAllF24).toHaveLength(f24LotPayments.length);
     dialogAllF24.forEach((dialogF24, index) => {
-      expect(dialogF24).toHaveTextContent(f24LotPayments[index].description);
+      expect(dialogF24).toHaveTextContent(f24LotPayments[index].title);
     });
     // close dialog
     const closeDialogBtn = within(dialog!).queryByTestId('close-dialog');

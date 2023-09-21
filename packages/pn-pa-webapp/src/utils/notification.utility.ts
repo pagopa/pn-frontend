@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {
   NotificationDetailDocument,
   NotificationDetailRecipient,
+  PhysicalAddress,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
 
@@ -25,7 +26,7 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
     recipient.province &&
     recipient.foreignState
   ) {
-    return {
+    const address = {
       at: recipient.at,
       address: `${recipient.address} ${recipient.houseNumber}`,
       addressDetails: recipient.addressDetails,
@@ -35,6 +36,14 @@ const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
       province: recipient.province,
       foreignState: recipient.foreignState,
     };
+    // clean the object from undefined keys
+    (Object.keys(address) as Array<keyof PhysicalAddress>).forEach((key) => {
+      if (!address[key]) {
+        // eslint-disable-next-line functional/immutable-data
+        delete address[key];
+      }
+    });
+    return address;
   }
   return undefined;
 };
@@ -50,23 +59,27 @@ const newNotificationRecipientsMapper = (
           address: recipient.digitalDomicile,
         }
       : undefined;
-    return {
+    const parsedRecipient: NotificationDetailRecipient = {
       denomination:
         recipient.recipientType === RecipientType.PG
           ? recipient.firstName
           : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      payment:
-        paymentMethod === PaymentModel.NOTHING
-          ? undefined
-          : {
-              creditorTaxId: recipient.creditorTaxId,
-              noticeCode: recipient.noticeCode,
-            },
-      digitalDomicile,
       physicalAddress: checkPhysicalAddress(recipient),
     };
+    if (digitalDomicile) {
+      // eslint-disable-next-line functional/immutable-data
+      parsedRecipient.digitalDomicile = digitalDomicile;
+    }
+    if (paymentMethod !== PaymentModel.NOTHING) {
+      // eslint-disable-next-line functional/immutable-data
+      // parsedRecipient.payment = {
+      //   creditorTaxId: recipient.creditorTaxId,
+      //   noticeCode: recipient.noticeCode,
+      // };
+    }
+    return parsedRecipient;
   });
 
 const newNotificationDocumentMapper = (
@@ -100,9 +113,7 @@ const newNotificationPaymentDocumentsMapper = (
       paymentDocuments[r.taxId].pagoPaForm &&
       paymentDocuments[r.taxId].pagoPaForm.file.sha256.hashBase64 !== ''
     ) {
-      documents.pagoPaForm = newNotificationDocumentMapper(
-        paymentDocuments[r.taxId].pagoPaForm as NewNotificationDocument
-      );
+      documents.pagoPaForm = newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm);
     }
     if (
       paymentDocuments[r.taxId].f24flatRate &&
@@ -168,8 +179,8 @@ export function getDuplicateValuesByKeys<T>(
 ): Array<string> {
   const getValue = (item: T) => {
     let valueByKeys = '';
-    for (let i = 0; i < keys.length; i++) {
-      valueByKeys += item[keys[i]] ?? '';
+    for (const element of keys) {
+      valueByKeys += item[element] ?? '';
     }
     return valueByKeys;
   };

@@ -1,15 +1,9 @@
-import { fireEvent, screen } from "@testing-library/react";
-import { render } from "../../__test__/test-utils";
-import Profile from "../Profile.page";
-import * as hooks from '../../redux/hooks';
-import { RECAPITI } from '../../navigation/routes.const';
+import React from 'react';
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-      t: (str: string) => str,
-    })
-}));
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { fireEvent, render } from '../../__test__/test-utils';
+import { RECAPITI } from '../../navigation/routes.const';
+import Profile from '../Profile.page';
 
 const mockNavigateFn = jest.fn();
 // mock imports
@@ -18,54 +12,48 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 describe('testing profile page', () => {
-  beforeEach(() => {
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    
-    mockUseAppSelector.mockReturnValueOnce({
-      name: 'Mario',
-      family_name: 'Rossi',
-      fiscal_number: 'RSSMRA45P02H501W'
+  it('profile page renders properly', () => {
+    const { getByRole, getByText } = render(<Profile />, {
+      preloadedState: { userState: { user: userResponse } },
     });
-    
-    render(<Profile />);
-  });
-  
-  test('profile page renders properly', () => {
-    const title = screen.getByRole('heading', { name: 'title' });
+    const title = getByRole('heading', { name: 'title' });
     expect(title).toBeInTheDocument();
-
-    const subtitle = screen.getByText('subtitle');
+    const subtitle = getByText('subtitle');
     expect(subtitle).toBeInTheDocument();
-
-    const nameLabel = screen.getByText('profile.name');
+    const nameLabel = getByText('profile.name');
     expect(nameLabel).toBeInTheDocument();
-    const familyNameLabel = screen.getByText('profile.family_name');
+    const familyNameLabel = getByText('profile.family_name');
     expect(familyNameLabel).toBeInTheDocument();
-    const fiscalNumberLabel = screen.getByText('profile.fiscal_number');
+    const fiscalNumberLabel = getByText('profile.fiscal_number');
     expect(fiscalNumberLabel).toBeInTheDocument();
-
-    const firstName = screen.getByText('Mario');
+    const firstName = getByText(userResponse.name);
     expect(firstName).toBeInTheDocument();
-    const familyName = screen.getByText('Rossi');
+    const familyName = getByText(userResponse.family_name);
     expect(familyName).toBeInTheDocument();
-    const fiscalNumber = screen.getByText('RSSMRA45P02H501W');
+    const fiscalNumber = getByText(userResponse.fiscal_number);
     expect(fiscalNumber).toBeInTheDocument();
-
-    const alert = screen.getByRole('alert', { name: 'contacts-redirect'});
+    const alert = getByRole('alert', { name: 'contacts-redirect' });
     expect(alert).toBeInTheDocument();
-
-    const alertTitle = screen.getByText('alert-redirect-to-contacts.title');
+    const alertTitle = getByText('alert-redirect-to-contacts.title');
     expect(alertTitle).toBeInTheDocument();
-
-    const alertMessage = screen.getByText('alert-redirect-to-contacts.message');
+    const alertMessage = getByText('alert-redirect-to-contacts.message');
     expect(alertMessage).toBeInTheDocument();
   });
 
-  test('button redirects to contacts page', () => {
-    const button = screen.getByRole('button', { name: 'alert-redirect-to-contacts.action-text'});
+  it('button redirects to contacts page', () => {
+    const { getByRole } = render(<Profile />, {
+      preloadedState: { userState: { user: userResponse } },
+    });
+    const button = getByRole('button', { name: 'alert-redirect-to-contacts.action-text' });
     expect(button).toBeInTheDocument();
-
     fireEvent.click(button);
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(RECAPITI);

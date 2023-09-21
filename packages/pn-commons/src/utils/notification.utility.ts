@@ -18,7 +18,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
-  PaymentHistory,
+  PaymentDetails,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
@@ -28,7 +28,10 @@ import {
 import {
   AppIoCourtesyMessageEventType,
   ExtRegistriesPaymentDetails,
+  F24PaymentDetails,
+  NotificationDetailPayment,
   NotificationDetailTimelineDetails,
+  PagoPAPaymentFullDetails,
   PaymentStatus,
 } from '../types/NotificationDetail';
 import { formatDate } from '../utils';
@@ -228,6 +231,16 @@ export function getNotificationStatusInfos(
           'Annullata',
           "L'ente ha annullato l'invio della notifica",
           "L'ente ha annullato l'invio della notifica"
+        ),
+      };
+    case NotificationStatus.CANCELLATION_IN_PROGRESS:
+      return {
+        color: 'warning',
+        ...localizeStatus(
+          'cancellation-in-progress',
+          'Annullata',
+          'Annullamento in corso. Lo stato sarà aggiornato a breve.',
+          'Annullamento in corso. Lo stato sarà aggiornato a breve.'
         ),
       };
     default:
@@ -854,41 +867,61 @@ const populateOtherDocuments = (
   return [];
 };
 
+export const getF24Payments = (
+  payments: Array<NotificationDetailPayment>,
+  onlyF24: boolean = true
+): Array<F24PaymentDetails> =>
+  payments.reduce((arr, payment) => {
+    if (onlyF24) {
+      if (!payment.pagoPA && payment.f24) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push(payment.f24 as F24PaymentDetails);
+      }
+    } else if (payment.f24) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push(payment.f24 as F24PaymentDetails);
+    }
+    return arr;
+  }, [] as Array<F24PaymentDetails>);
+
+export const getPagoPaF24Payments = (
+  payments: Array<NotificationDetailPayment>
+): Array<PaymentDetails> =>
+  payments.reduce((arr, payment) => {
+    if (payment.pagoPA) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push({
+        pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
+        f24: payment.f24,
+      });
+    }
+    return arr;
+  }, [] as Array<PaymentDetails>);
+
 /**
- * Populate payment history array before send notification to fe.
- * @param  {string} userTaxId
+ * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
  * @param  {Array<INotificationDetailTimeline>} timeline
- * @param  {Array<NotificationDetailRecipient>} recipients
+ * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
- * @returns Array<PaymentHistory>
+ * @returns Array<PaymentDetails>
  */
-export const populatePaymentHistory = (
-  userTaxId: string,
+export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  recipients: Array<NotificationDetailRecipient>,
+  pagoPaF24Payemnts: Array<PaymentDetails> | Array<NotificationDetailPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
-): Array<PaymentHistory> => {
-  const paymentHistory: Array<PaymentHistory> = [];
+): Array<PaymentDetails> => {
+  const paymentHistory: Array<PaymentDetails> = [];
 
-  // 1. get user from recipents array by userTaxId
-  const user = recipients.find((r) => r.taxId === userTaxId);
-
-  // 2. Get array of payments of user
-  const userPayments = user?.payments;
-
-  if (!userPayments || userPayments.length === 0) {
+  if (!pagoPaF24Payemnts || pagoPaF24Payemnts.length === 0) {
     return [];
   }
 
-  // 3. Get all timeline steps that have category payment
+  // 1. Get all timeline steps that have category payment
   const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
 
-  // populate payment history array with the informations from timeline and related recipients
-  for (const userPayment of userPayments) {
+  // 2. populate payment history array with the informations from timeline and related recipients
+  for (const userPayment of pagoPaF24Payemnts) {
     if (!userPayment.pagoPA) {
-      paymentHistory.push({
-        f24Data: userPayment.f24Data,
-      } as PaymentHistory);
       continue;
     }
 
@@ -903,7 +936,7 @@ export const populatePaymentHistory = (
       continue;
     }
 
-    // 4. Get payment by creditorTaxId and noticeCode from checkout
+    // 3. Get payment by creditorTaxId and noticeCode from checkout
     const checkoutPayment = checkoutPayments.find(
       (p) =>
         p.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
@@ -938,8 +971,8 @@ export const populatePaymentHistory = (
 
     paymentHistory.push({
       pagoPA: pagoPAPayment,
-      f24Data: userPayment.f24Data,
-    } as PaymentHistory);
+      f24: userPayment.f24,
+    } as PaymentDetails);
   }
 
   return paymentHistory;
@@ -957,6 +990,32 @@ function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
   return TimelineAllowedStatus.includes(t.category);
 }
 
+/**
+ * Insert cancelled status n timeline.
+ * @param  {NotificationDetail} notificationDetail
+ */
+const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail) => {
+  const timelineCancelledElement = notificationDetail.timeline.find(
+    (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLED
+  );
+  if (!timelineCancelledElement) {
+    const timelineCancellationRequestElement = notificationDetail.timeline.find(
+      (el) => el.category === TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST
+    );
+
+    if (timelineCancellationRequestElement) {
+      const notificationStatusHistoryElement = {
+        status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+        activeFrom: timelineCancellationRequestElement.timestamp,
+        relatedTimelineElements: [],
+      };
+      // eslint-disable-next-line functional/immutable-data
+      notificationDetail.notificationStatusHistory.push(notificationStatusHistoryElement);
+      notificationDetail.notificationStatus = NotificationStatus.CANCELLATION_IN_PROGRESS;
+    }
+  }
+};
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
@@ -965,6 +1024,7 @@ export function parseNotificationDetail(
     otherDocuments: populateOtherDocuments(notificationDetail),
     sentAt: formatDate(notificationDetail.sentAt),
   };
+  insertCancelledStatusInTimeline(parsedNotification);
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
   // set which elements are visible

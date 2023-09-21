@@ -100,7 +100,6 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
-
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
         state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
       })

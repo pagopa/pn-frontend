@@ -1,34 +1,34 @@
 import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Typography } from '@mui/material';
+
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Grid, Typography } from '@mui/material';
 import {
+  CardAction,
   CardElement,
   CardSort,
-  getNotificationStatusInfos,
-  Notification,
-  ItemsCard,
   EmptyState,
-  NotificationStatus,
   Item,
+  ItemsCard,
+  KnownSentiment,
+  MobileNotificationsSort,
+  Notification,
+  NotificationStatus,
   Sort,
   StatusTooltip,
-  CardAction,
-  MobileNotificationsSort,
-  KnownSentiment,
+  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { NotificationColumn } from '../../models/Notifications';
+import * as routes from '../../navigation/routes.const';
+import { Organization } from '../../redux/auth/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Organization } from '../../redux/auth/types';
-import * as routes from '../../navigation/routes.const';
-import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
-import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { NotificationColumn } from '../../models/Notifications';
-
+import { trackEventByType } from '../../utils/mixpanel';
+import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -61,7 +61,7 @@ function mainEmptyMessage(
   t: any
 ) {
   return filtersApplied
-    ? undefined
+    ? t('empty-state.filter-message')
     : isDelegatedPage
     ? t('empty-state.delegate', { name: organization.name })
     : t('empty-state.message', { name: organization.name });

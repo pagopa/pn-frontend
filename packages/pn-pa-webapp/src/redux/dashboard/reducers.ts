@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  formatToTimezoneString,
   GetNotificationsParams,
   Notification,
   Sort,
+  formatToTimezoneString,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { NotificationColumn } from '../../models/Notifications';
 import { getSentNotifications } from './actions';

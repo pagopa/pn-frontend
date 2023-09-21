@@ -1,17 +1,12 @@
-import { act, screen } from '@testing-library/react';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-import { render } from '../../__test__/test-utils';
-import OrganizationPartyGuard from '../OrganizationPartyGuard';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { act, render, screen } from '../../__test__/test-utils';
 import { AUTH_ACTIONS } from '../../redux/auth/actions';
+import OrganizationPartyGuard from '../OrganizationPartyGuard';
 
-jest.mock('react-router-dom', () => {
-  const original = jest.requireActual('react-router-dom');
-  return {
-    ...original,
-    Outlet: () => <div data-testid="normal-contents">Generic Page</div>,
-  };
-});
-
+// mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -19,32 +14,62 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-describe("OrganizationPartyGuard component", () => {
+const mockReduxState = {
+  userState: {
+    user: userResponse,
+  },
+};
+
+const Guard = () => (
+  <Routes>
+    <Route path="/" element={<OrganizationPartyGuard />}>
+      <Route path="/" element={<div>Generic Page</div>} />
+    </Route>
+  </Routes>
+);
+
+describe('OrganizationPartyGuard component', () => {
   it('no API error in call for organization party data - shows the content', async () => {
-    const mockReduxState = {
-      userState: { user: { 
-        sessionToken: 'mocked-token',
-        organization: { id: "good-organization-id" },
-      } },
-    };
-    await act(async () => void render(<OrganizationPartyGuard />, { preloadedState: mockReduxState }));
-    const contentsComponent = screen.queryByTestId("normal-contents"); 
-    const apiErrorComponent = screen.queryByTestId("api-error"); 
+    await act(async () => {
+      render(<Guard />, { preloadedState: mockReduxState });
+    });
+    const contentsComponent = screen.queryByText('Generic Page');
+    const apiErrorComponent = screen.queryByTestId(
+      `api-error-${AUTH_ACTIONS.GET_ORGANIZATION_PARTY}`
+    );
     expect(contentsComponent).toBeInTheDocument();
     expect(apiErrorComponent).not.toBeInTheDocument();
   });
 
   it('API error in call for organization party data - shows ApiError component', async () => {
-    const mockReduxState = {
-      userState: { user: { 
-        sessionToken: 'mocked-token',
-        organization: { id: "bad-organization-id" },
-      } },
-      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY),
-    };
-    await act(async () => void render(<OrganizationPartyGuard />, { preloadedState: mockReduxState }));
-    const contentsComponent = screen.queryByTestId("normal-contents"); 
-    const apiErrorComponent = screen.queryByTestId(`api-error-${AUTH_ACTIONS.GET_ORGANIZATION_PARTY}`); 
+    await act(async () => {
+      render(<Guard />, {
+        preloadedState: {
+          ...mockReduxState,
+          appState: {
+            loading: { result: false, tasks: {} },
+            messages: {
+              errors: [
+                {
+                  id: 'error',
+                  blocking: false,
+                  message: 'Errore',
+                  title: 'Errore',
+                  toNotify: true,
+                  action: AUTH_ACTIONS.GET_ORGANIZATION_PARTY,
+                  alreadyShown: true,
+                },
+              ],
+              success: [],
+            },
+          },
+        },
+      });
+    });
+    const contentsComponent = screen.queryByText('Generic Page');
+    const apiErrorComponent = screen.queryByTestId(
+      `api-error-${AUTH_ACTIONS.GET_ORGANIZATION_PARTY}`
+    );
     expect(contentsComponent).not.toBeInTheDocument();
     expect(apiErrorComponent).toBeInTheDocument();
   });

@@ -1,4 +1,4 @@
-import { formatDate, GetNotificationsResponse, NotificationStatus } from '@pagopa-pn/pn-commons';
+import { GetNotificationsResponse, NotificationStatus, formatDate } from '@pagopa-pn/pn-commons';
 
 export const notificationsDTO: GetNotificationsResponse = {
   resultsPage: [
@@ -47,6 +47,12 @@ export const notificationsDTO: GetNotificationsResponse = {
   nextPagesKey: [
     'eyJlayI6IlBGLWE2YzEzNTBkLTFkNjktNDIwOS04YmY4LTMxZGU1OGM3OWQ2ZSMjMjAyMzA4IiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiUU1BTS1MWUhBLVBMVkUtMjAyMzA4LVgtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwicmVjaXBpZW50SWRfY3JlYXRpb25Nb250aCI6IlBGLWE2YzEzNTBkLTFkNjktNDIwOS04YmY4LTMxZGU1OGM3OWQ2ZSMjMjAyMzA4Iiwic2VudEF0IjoiMjAyMy0wOC0wMlQwODozMjozNS45MTg5NTYyMDdaIn19',
   ],
+};
+
+export const emptyNotificationsFromBe: GetNotificationsResponse = {
+  resultsPage: [],
+  moreResult: false,
+  nextPagesKey: [],
 };
 
 export const notificationsToFe: GetNotificationsResponse = {

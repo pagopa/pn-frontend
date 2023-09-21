@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render, waitFor, screen } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, screen, waitFor } from '../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
 const submitHandler = jest.fn();
@@ -42,8 +42,13 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
 };
 
 describe('Smart Filter Component', () => {
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   it('renders smart filters (desktop version)', () => {
-    window.matchMedia = createMatchMedia(2000);
     const result = render(<ExampleForm />);
     const username = result.container.querySelector('#username');
     const email = result.container.querySelector('#email');
@@ -61,6 +66,28 @@ describe('Smart Filter Component', () => {
     expect(dialogToggle).not.toBeInTheDocument();
   });
 
+  it('clicks on confirm button (desktop version)', async () => {
+    const result = render(<ExampleForm />);
+    const username = result.container.querySelector('#username') as Element;
+    const email = result.container.querySelector('#email') as Element;
+    fireEvent.change(username, { target: { value: 'mariorossi' } });
+    fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
+    const confirmButton = await waitFor(() => result.queryByTestId('confirmButton') as Element);
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    expect(submitHandler).toBeCalledTimes(1);
+  });
+
+  it('clicks on cancel button (desktop version)', async () => {
+    const result = render(
+      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
+    );
+    const cancelButton = result.queryByTestId('cancelButton') as Element;
+    expect(cancelButton).toBeEnabled();
+    fireEvent.click(cancelButton);
+    expect(cancelHandler).toBeCalledTimes(1);
+  });
+
   it('renders smart filters (mobile version)', () => {
     window.matchMedia = createMatchMedia(800);
     const result = render(<ExampleForm />);
@@ -75,30 +102,6 @@ describe('Smart Filter Component', () => {
     expect(cancelButton).not.toBeInTheDocument();
     expect(dialogToggle).toBeInTheDocument();
     expect(dialogToggle).toHaveTextContent('Filter');
-  });
-
-  it('clicks on confirm button (desktop version)', async () => {
-    window.matchMedia = createMatchMedia(2000);
-    const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username') as Element;
-    const email = result.container.querySelector('#email') as Element;
-    fireEvent.change(username, { target: { value: 'mariorossi' } });
-    fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
-    const confirmButton = await waitFor(() => result.queryByTestId('confirmButton') as Element);
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
-    expect(submitHandler).toBeCalledTimes(1);
-  });
-
-  it('clicks on cancel button (desktop version)', async () => {
-    window.matchMedia = createMatchMedia(2000);
-    const result = render(
-      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
-    );
-    const cancelButton = result.queryByTestId('cancelButton') as Element;
-    expect(cancelButton).toBeEnabled();
-    fireEvent.click(cancelButton);
-    expect(cancelHandler).toBeCalledTimes(1);
   });
 
   it('clicks on toggle button (mobile version)', async () => {

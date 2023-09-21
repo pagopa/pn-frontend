@@ -1,24 +1,21 @@
 import React from 'react';
 
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
+import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
-import { populatePaymentHistory } from '../../../utils';
+import { PaymentStatus, PaymentsData } from '../../../types';
+import { getF24Payments, getPagoPaF24Payments } from '../../../utils/notification.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
-import { PaymentHistory, PaymentStatus } from '../../../types';
 
 describe('NotificationPaymentRecipient Component', () => {
-  const mappedPayments = populatePaymentHistory(
-    recipient.taxId,
-    notificationToFe.timeline,
-    notificationToFe.recipients,
-    paymentInfo
-  );
+  const paymentsData: PaymentsData = {
+    pagoPaF24: getPagoPaF24Payments(payments),
+    f24Only: getF24Payments(payments),
+  };
 
   it('should render component title and subtitle', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
-        payments={mappedPayments}
+        payments={paymentsData}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -34,13 +31,15 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).toBeInTheDocument();
     expect(subtitle).toHaveTextContent('detail.payment.subtitle');
     expect(f24Download).not.toBeInTheDocument();
-    expect(pagoPABox).toHaveLength(mappedPayments.filter((payment) => payment.pagoPA).length);
+    expect(pagoPABox).toHaveLength(
+      paymentsData.pagoPaF24.filter((payment) => payment.pagoPA).length
+    );
   });
 
   it('should render component buttons and should be disabled', () => {
     const { getByTestId } = render(
       <NotificationPaymentRecipient
-        payments={mappedPayments}
+        payments={paymentsData}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -57,7 +56,7 @@ describe('NotificationPaymentRecipient Component', () => {
   it('should remove disable from buttons if there is a checked required payment', () => {
     const result = render(
       <NotificationPaymentRecipient
-        payments={mappedPayments}
+        payments={paymentsData}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -85,7 +84,7 @@ describe('NotificationPaymentRecipient Component', () => {
 
     const result = render(
       <NotificationPaymentRecipient
-        payments={mappedPayments}
+        payments={paymentsData}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
@@ -112,7 +111,7 @@ describe('NotificationPaymentRecipient Component', () => {
 
     const result = render(
       <NotificationPaymentRecipient
-        payments={mappedPayments}
+        payments={paymentsData}
         handleDownloadAttachamentPagoPA={downloadAttachmentMk}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -137,7 +136,7 @@ describe('NotificationPaymentRecipient Component', () => {
   it('Should disable pay button when deselect a payment', () => {
     const result = render(
       <NotificationPaymentRecipient
-        payments={mappedPayments}
+        payments={paymentsData}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -159,15 +158,15 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('Should show enabled pay button and hide radio button if having only one payment', async () => {
-    const payment = [
-      {
-        ...mappedPayments[0],
-        pagoPA: {
-          ...mappedPayments[0].pagoPA,
-          status: PaymentStatus.REQUIRED,
+    const payment = {
+      ...paymentsData,
+      pagoPaF24: [
+        {
+          ...paymentsData.pagoPaF24[0],
+          status: PaymentStatus.SUCCEEDED,
         },
-      },
-    ] as PaymentHistory[];
+      ],
+    };
 
     const result = render(
       <NotificationPaymentRecipient

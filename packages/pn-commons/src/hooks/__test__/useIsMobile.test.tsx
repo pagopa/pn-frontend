@@ -10,8 +10,13 @@ const Component = () => {
 };
 
 describe('test useIsMobile hook', () => {
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
   test('hook should return false', () => {
-    window.matchMedia = createMatchMedia(2000);
     const result = render(<Component />);
     expect(result.container).toHaveTextContent('false');
   });

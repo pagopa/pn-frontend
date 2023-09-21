@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
-  PagoPAPaymentHistory,
+  PagoPAPaymentFullDetails,
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../types/NotificationDetail';
@@ -14,7 +14,7 @@ import { formatDate } from '../../utils/date.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
 interface Props {
-  pagoPAItem: PagoPAPaymentHistory;
+  pagoPAItem: PagoPAPaymentFullDetails;
   loading: boolean;
   isSelected: boolean;
   handleReloadPayment: () => void;
@@ -85,7 +85,7 @@ const SkeletonCard: React.FC = () => {
 };
 
 const NotificationPaymentPagoPAStatusElem: React.FC<{
-  pagoPAItem: PagoPAPaymentHistory;
+  pagoPAItem: PagoPAPaymentFullDetails;
   isSelected: boolean;
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
@@ -134,7 +134,7 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           <Typography variant="h6" color="primary.main" data-testid="payment-amount">
             {formatEurocentToCurrency(pagoPAItem.amount)}
           </Typography>
-          {pagoPAItem.applyCostFlg && (
+          {pagoPAItem.applyCost && (
             <Typography
               fontSize="0.625rem"
               fontWeight="600"

@@ -6,11 +6,11 @@ import {
   LegalFactId,
   PaymentAttachmentNameType,
   performThunkAction,
-  populatePaymentHistory,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
-  PaymentHistory,
+  PaymentDetails,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -79,7 +79,7 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  Array<PaymentHistory>,
+  Array<PaymentDetails>,
   { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
   { state: RootState }
 >(
@@ -96,10 +96,10 @@ export const getNotificationPaymentInfo = createAsyncThunk<
       const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
         params.paymentInfoRequest
       );
-      return populatePaymentHistory(
-        params.taxId,
+
+      return populatePaymentsPagoPaF24(
         notificationState.notification.timeline,
-        notificationState.notification.recipients,
+        notificationState.paymentsData.pagoPaF24,
         paymentInfo
       );
     } catch (e) {

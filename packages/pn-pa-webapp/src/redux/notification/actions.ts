@@ -18,11 +18,22 @@ export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
   GET_DOWNTIME_EVENTS = 'getDowntimeEvents',
   GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
+  CANCEL_NOTIFICATION = 'cancelNotification',
 }
 
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION,
   performThunkAction((params: string) => NotificationsApi.getSentNotification(params))
+);
+
+// da cambiare il ritorno nel caso venga restituito qualcosa
+export const cancelNotification = createAsyncThunk<
+  string,
+  string,
+  { dispatch: <AnyAction>(action: AnyAction) => AnyAction }
+>(
+  NOTIFICATION_ACTIONS.CANCEL_NOTIFICATION,
+  performThunkAction((params: string) => NotificationsApi.cancelNotification(params))
 );
 
 export const getSentNotificationLegalfact = createAsyncThunk<

@@ -1,7 +1,8 @@
 // momentarily commented for pn-5157
 // import { AccessDenied, AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
-import { AccessDenied, AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+
+import { AccessDenied, AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';

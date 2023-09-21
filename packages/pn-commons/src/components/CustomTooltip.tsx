@@ -34,9 +34,6 @@ function CustomTooltip({ openOnClick, tooltipContent, children, sx, onOpen, tool
           arrow
           leaveTouchDelay={5000}
           title={tooltipContent}
-          PopperProps={{
-            disablePortal: true,
-          }}
           onClose={handleTooltipClose}
           open={openOnClick ? open : undefined}
           disableFocusListener={openOnClick}

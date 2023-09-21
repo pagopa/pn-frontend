@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import {
   Accordion,
   AccordionSummary,
@@ -11,24 +12,23 @@ import {
   */
   Typography,
 } from '@mui/material';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import { useState } from 'react';
 
-import { PaymentHistory } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { PaymentDetails } from '../../types';
 /*
 import { formatEurocentToCurrency, formatFiscalCode } from '../../utils';
 import CustomTableRow from '../CustomTableRow';
 */
 
 type NotificationPaidDetailProps = {
-  paymentDetailsList: Array<PaymentHistory> | undefined;
+  paymentDetailsList: Array<PaymentDetails> | undefined;
   isSender?: boolean;
 };
 
 /*
 type PaymentTableProps = {
-  paymentDetails: PaymentHistory;
+  paymentDetails: PaymentDetails;
   showRecipientType?: boolean;
 };
 */
@@ -154,7 +154,7 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
       )}
       {paymentDetailsList &&
         paymentDetailsList.length > 1 &&
-        paymentDetailsList.map((_paymentEventDetails: PaymentHistory, index: number) =>
+        paymentDetailsList.map((_paymentEventDetails: PaymentDetails, index: number) =>
           isSender ? (
             <Accordion
               key={index}
@@ -197,7 +197,9 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
               {/* <PaymentTable paymentDetails={paymentEventDetails} showRecipientType /> */}
             </Accordion>
           ) : (
-            {/* <PaymentTable key={index} paymentDetails={paymentEventDetails} /> */}
+            {
+              /* <PaymentTable key={index} paymentDetails={paymentEventDetails} /> */
+            }
           )
         )}
     </>

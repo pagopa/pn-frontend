@@ -4,24 +4,17 @@ import { goToSelfcareLogin } from '../navigation.utility';
 const exitFn = jest.fn();
 
 describe('Tests notification.utility', () => {
-  const { location } = window;
+  const original = window.location;
 
-  beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    delete window.location;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    window.location = {
-      href: '',
-      assign: exitFn,
-    };
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+  beforeAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '', assign: exitFn },
+    });
   });
 
   afterAll((): void => {
-    window.location = location;
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   it('goToSelfcareLogin', () => {

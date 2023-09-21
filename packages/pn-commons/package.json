@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-commons",
-  "version": "2.0.1-RC.4",
+  "version": "2.0.1",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
@@ -25,7 +25,7 @@
   "scripts": {
     "start": "tsc -w --sourceMap=true",
     "build": "tsc",
-    "test": "react-scripts test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
+    "test": "tsc && react-scripts test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:a11y": "react-scripts test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:all": "react-script test --watchAll=false",
     "test:coverage": "tsc && react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\" --coveragePathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$|.src.types|.src.assets\"",
@@ -54,7 +54,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@testing-library/dom": "^8.19.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^8.0.1",

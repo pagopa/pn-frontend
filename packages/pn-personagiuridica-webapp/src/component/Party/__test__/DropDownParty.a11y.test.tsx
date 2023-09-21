@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { render } from '@testing-library/react';
-import { axe } from '../../../__test__/test-utils';
+
+import { axe, render } from '../../../__test__/test-utils';
 import DropDownPartyMenuItem from '../DropDownParty';
 
 describe('DropDownParty Component - accessibility tests', () => {

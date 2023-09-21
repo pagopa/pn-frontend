@@ -1,9 +1,4 @@
-import {
-  newNotification,
-  newNotificationDTO,
-  newNotificationDTOWithUndefinedAddress,
-  newNotificationWithEmptyAddress,
-} from '../../redux/newNotification/__test__/test-utils';
+import { newNotification, newNotificationDTO } from '../../__mocks__/NewNotification.mock';
 import { getDuplicateValuesByKeys, newNotificationMapper } from '../notification.utility';
 
 const mockArray = [
@@ -16,25 +11,37 @@ const mockArray = [
 ];
 
 describe('Test notification utility', () => {
-  // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
-  // Andrea Cimini - 16/08/2023
-  test.skip('Map notification from presentation layer to api layer', () => {
+  it('Map notification from presentation layer to api layer', () => {
     const result = newNotificationMapper(newNotification);
-
     expect(result).toEqual(newNotificationDTO);
   });
 
-  // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
-  // Andrea Cimini - 16/08/2023
-  test.skip('Checks that if physical address has empty required fields, its value is set to undefined', () => {
-    const result = newNotificationMapper(newNotificationWithEmptyAddress);
-
-    expect(result).toEqual(newNotificationDTOWithUndefinedAddress);
+  it('Checks that if physical address has empty required fields, its value is set to undefined', () => {
+    const request = {
+      ...newNotification,
+      recipients: newNotification.recipients.map((recipient, index) => {
+        if (index === 0) {
+          recipient.address = '';
+          recipient.houseNumber = '';
+        }
+        return recipient;
+      }),
+    };
+    const response = {
+      ...newNotificationDTO,
+      recipients: newNotificationDTO.recipients.map((recipient, index) => {
+        if (index === 0) {
+          recipient.physicalAddress = undefined;
+        }
+        return recipient;
+      }),
+    };
+    const result = newNotificationMapper(request);
+    expect(result).toEqual(response);
   });
 
-  test('Checks that getDuplicateValuesByKeys returns duplicate values', () => {
+  it('Checks that getDuplicateValuesByKeys returns duplicate values', () => {
     const result = getDuplicateValuesByKeys(mockArray, ['key1', 'key2', 'key3']);
-
     expect(result).toEqual(['value1value2value3', 'valueXvalueYvalueZ']);
   });
 });
