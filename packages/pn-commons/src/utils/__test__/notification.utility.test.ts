@@ -750,6 +750,191 @@ describe('timeline event description', () => {
     );
   });
 
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - failure cause D00 - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationCopy.timeline[0].details as any).failureCause = 'D00';
+    testTimelineStatusInfosFnSingle(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D00-description',
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: '', simpleAddress: '' }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - failure cause D01 - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationCopy.timeline[0].details as any).failureCause = 'D01';
+    (parsedNotificationCopy.timeline[0].details as any).foundAddress = {
+      at: '',
+      addressDetails: '',
+      address: 'Via Roma 753',
+      zip: '98036',
+      municipality: 'Graniti',
+      province: 'Messina',
+      foreignState: 'ITALIA',
+    };
+    testTimelineStatusInfosFnSingle(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D01-description',
+      { 
+        name: 'Nome Cognome', taxId: '(mocked-taxId)', 
+        address: 'Via Roma 753 - Graniti (98036) ITALIA',
+        simpleAddress: 'Via Roma 753',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - failure cause D02 - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationCopy.timeline[0].details as any).failureCause = 'D02';
+    (parsedNotificationCopy.timeline[0].details as any).foundAddress = {
+      at: '',
+      addressDetails: '',
+      address: 'Via Roma 753',
+      zip: '98036',
+      municipality: 'Graniti',
+      province: 'Messina',
+      foreignState: 'ITALIA',
+    };
+    testTimelineStatusInfosFnSingle(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D02-description',
+      { 
+        name: 'Nome Cognome', taxId: '(mocked-taxId)', 
+        address: 'Via Roma 753 - Graniti (98036) ITALIA',
+        simpleAddress: 'Via Roma 753',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - no address - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationCopy.timeline[0].details as any).failureCause = 'D02';
+    testTimelineStatusInfosFnSingle(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D02-description',
+      { 
+        name: 'Nome Cognome', taxId: '(mocked-taxId)', 
+        address: '',
+        simpleAddress: '',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - no failure code - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    testTimelineStatusInfosFnSingle(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-ZZZ-description',
+      { 
+        name: 'Nome Cognome', taxId: '(mocked-taxId)', 
+        address: '',
+        simpleAddress: '',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - failure cause D00 - multi recipient 0', () => {
+    parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
+    parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as any).failureCause = 'D00';
+    testTimelineStatusInfosFnMulti0(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D00-description-multirecipient',
+      {
+        name: 'Lorenza Catrufizzio',
+        taxId: '(mocked-taxId)',
+        address: '',
+        simpleAddress: '',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - failure cause D01 - multi recipient 1', () => {
+    parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
+    parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as any).failureCause = 'D01';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as any).foundAddress = {
+      at: '',
+      addressDetails: '',
+      address: 'Via Roma 753',
+      zip: '98036',
+      municipality: 'Graniti',
+      province: '',
+      foreignState: '',
+    };
+    testTimelineStatusInfosFnMulti1(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D01-description-multirecipient',
+      {
+        name: `Catena Dall'Olio`,
+        taxId: '(mocked-taxId2)',
+        address: 'Via Roma 753 - Graniti (98036)',
+        simpleAddress: 'Via Roma 753',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - failure cause D02 - multi recipient', () => {
+    parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
+    parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as any).failureCause = 'D02';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as any).foundAddress = {
+      at: '',
+      addressDetails: '',
+      address: 'Via Roma 753',
+      zip: '98036',
+      municipality: 'Graniti',
+      province: 'Messina',
+      foreignState: 'ITALIA',
+    };
+    testTimelineStatusInfosFnMulti0(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D02-description-multirecipient',
+      {
+        name: 'Lorenza Catrufizzio',
+        taxId: '(mocked-taxId)',
+        address: 'Via Roma 753 - Graniti (98036) ITALIA',
+        simpleAddress: 'Via Roma 753',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - no address - multi recipient 1', () => {
+    parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
+    parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as any).failureCause = 'D02';
+    testTimelineStatusInfosFnMulti1(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-D02-description-multirecipient',
+      {
+        name: `Catena Dall'Olio`,
+        taxId: '(mocked-taxId2)',
+        address: '',
+        simpleAddress: '',
+      }
+    );
+  });
+
+  it('return timeline status infos - PREPARE_ANALOG_DOMICILE_FAILURE - no failure code - multi recipient 0', () => {
+    parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
+    parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE;
+    testTimelineStatusInfosFnMulti0(
+      'prepare-analog-domicile-failure',
+      'prepare-analog-domicile-failure-ZZZ-description-multirecipient',
+      {
+        name: `Lorenza Catrufizzio`,
+        taxId: '(mocked-taxId)',
+        address: '',
+        simpleAddress: '',
+      }
+    );
+  });
+
   it('return timeline status infos - SEND_ANALOG_DOMICILE - 890 - single recipient - bare address', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).serviceLevel =

@@ -31,7 +31,7 @@ export class SendAnalogDomicileStep extends TimelineStep {
           } tramite raccomandata 890.`,
           {
             ...this.nameAndTaxId(payload),
-            ...this.completePhysicalAddress(payload.step),
+            ...this.completePhysicalAddressFromStep(payload.step),
           }
         ),
       };
@@ -46,7 +46,7 @@ export class SendAnalogDomicileStep extends TimelineStep {
         } tramite raccomandata A/R.`,
         {
           ...this.nameAndTaxId(payload),
-          ...this.completePhysicalAddress(payload.step),
+          ...this.completePhysicalAddressFromStep(payload.step),
         }
       ),
     };
