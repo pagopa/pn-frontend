@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import ApiError from '../ApiError';
+import { render, screen, fireEvent } from '../../../test-utils';
 
 describe('ApiError', () => {
     it('renders main text and action text correctly', () => {

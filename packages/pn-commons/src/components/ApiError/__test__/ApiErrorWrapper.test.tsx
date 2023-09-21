@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ApiErrorWrapper from '../ApiErrorWrapper';
+import { render, screen, waitFor } from '../../../test-utils';
 
 const mockApiError = 'mockApiId';
 // Mocking the useErrors hook, since the hook is already tested

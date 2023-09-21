@@ -78,6 +78,9 @@ const timelineStepCmp = (
 
 /**
  * Notification detail timeline
+ * This component used to display a timeline of events or notifications, 
+ * allowing users to expand and collapse additional details as needed. 
+ * The component's behavior and appearance can be customized by passing various props to it.
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
@@ -214,6 +217,7 @@ const NotificationDetailTimelineStep = ({
     <Box data-testid="moreLessButton">
       <ButtonNaked
         id="more-less-timeline-step"
+        data-testid="more-less-timeline-step"
         startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
         onClick={handleShowMoreClick}
       >
