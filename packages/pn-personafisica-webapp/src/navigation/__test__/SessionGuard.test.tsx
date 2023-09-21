@@ -63,7 +63,6 @@ describe('SessionGuard Component', () => {
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
-
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
