@@ -310,12 +310,11 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isCancelled.cancelled ||
-                  (isCancelled.cancellationInProgress && (
-                    <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
-                      {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
-                    </Alert>
-                  ))}
+                {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
+                  <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
+                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
+                  </Alert>
+                )}
                 <NotificationDetailTable rows={detailTableRows} />
                 {currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
