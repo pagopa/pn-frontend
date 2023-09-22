@@ -35,7 +35,7 @@ describe('SendAnalogDomicileStep', () => {
       description: `notifiche - detail.timeline.send-analog-domicile-890-description - ${JSON.stringify(
         {
           ...sendAnalogDomicileStep.nameAndTaxId(payload),
-          ...sendAnalogDomicileStep.completePhysicalAddress(payload.step),
+          ...sendAnalogDomicileStep.completePhysicalAddressFromStep(payload.step),
         }
       )}`,
     });
@@ -47,7 +47,7 @@ describe('SendAnalogDomicileStep', () => {
       description: `notifiche - detail.timeline.send-analog-domicile-890-description-multirecipient - ${JSON.stringify(
         {
           ...sendAnalogDomicileStep.nameAndTaxId(payload),
-          ...sendAnalogDomicileStep.completePhysicalAddress(payload.step),
+          ...sendAnalogDomicileStep.completePhysicalAddressFromStep(payload.step),
         }
       )}`,
     });
@@ -70,7 +70,7 @@ describe('SendAnalogDomicileStep', () => {
       description: `notifiche - detail.timeline.send-analog-domicile-ar-description - ${JSON.stringify(
         {
           ...sendAnalogDomicileStep.nameAndTaxId(payload),
-          ...sendAnalogDomicileStep.completePhysicalAddress(payload.step),
+          ...sendAnalogDomicileStep.completePhysicalAddressFromStep(payload.step),
         }
       )}`,
     });
@@ -82,7 +82,7 @@ describe('SendAnalogDomicileStep', () => {
       description: `notifiche - detail.timeline.send-analog-domicile-ar-description-multirecipient - ${JSON.stringify(
         {
           ...sendAnalogDomicileStep.nameAndTaxId(payload),
-          ...sendAnalogDomicileStep.completePhysicalAddress(payload.step),
+          ...sendAnalogDomicileStep.completePhysicalAddressFromStep(payload.step),
         }
       )}`,
     });

@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { render } from '@testing-library/react';
+import { render } from '../../test-utils';
 
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../types';
-import { parsedNotification } from '../../utils/__test__/test-utils';
 import { useIsCancelled } from '../useIsCancelled';
-
+import { notificationToFe } from '../../__mocks__/NotificationDetail.mock';
 interface Props {
   notification: NotificationDetail;
 }
@@ -24,7 +23,7 @@ const Component: React.FC<Props> = ({ notification }) => {
 
 describe('useIsCancelled test', () => {
   it("notification isn't cancelled", () => {
-    const { getByTestId } = render(<Component notification={parsedNotification} />);
+    const { getByTestId } = render(<Component notification={notificationToFe} />);
 
     expect(getByTestId('cancellationInProgress')).toHaveTextContent('false');
     expect(getByTestId('cancellationInTimeline')).toHaveTextContent('false');
@@ -33,7 +32,7 @@ describe('useIsCancelled test', () => {
   it('notification is cancelled', () => {
     const { getByTestId } = render(
       <Component
-        notification={{ ...parsedNotification, notificationStatus: NotificationStatus.CANCELLED }}
+        notification={{ ...notificationToFe, notificationStatus: NotificationStatus.CANCELLED }}
       />
     );
 
@@ -45,7 +44,7 @@ describe('useIsCancelled test', () => {
     const { getByTestId } = render(
       <Component
         notification={{
-          ...parsedNotification,
+          ...notificationToFe,
           notificationStatus: NotificationStatus.CANCELLATION_IN_PROGRESS,
         }}
       />
@@ -59,9 +58,9 @@ describe('useIsCancelled test', () => {
     const { getByTestId } = render(
       <Component
         notification={{
-          ...parsedNotification,
+          ...notificationToFe,
           timeline: [
-            ...parsedNotification.timeline,
+            ...notificationToFe.timeline,
             {
               elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
               timestamp: '2033-08-14T13:42:54.17675939Z',

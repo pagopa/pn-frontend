@@ -36,7 +36,7 @@ describe('SendSimpleRegisteredLetterStep', () => {
       description: `notifiche - detail.timeline.send-simple-registered-letter-description - ${JSON.stringify(
         {
           ...sendSimpleRegisteredLetterStep.nameAndTaxId(payload),
-          ...sendSimpleRegisteredLetterStep.completePhysicalAddress(payload.step),
+          ...sendSimpleRegisteredLetterStep.completePhysicalAddressFromStep(payload.step),
         }
       )}`,
     });
@@ -48,7 +48,7 @@ describe('SendSimpleRegisteredLetterStep', () => {
       description: `notifiche - detail.timeline.send-simple-registered-letter-description-multirecipient - ${JSON.stringify(
         {
           ...sendSimpleRegisteredLetterStep.nameAndTaxId(payload),
-          ...sendSimpleRegisteredLetterStep.completePhysicalAddress(payload.step),
+          ...sendSimpleRegisteredLetterStep.completePhysicalAddressFromStep(payload.step),
         }
       )}`,
     });

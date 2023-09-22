@@ -135,7 +135,7 @@ describe('SendAnalogFlowStep', () => {
       description: `notifiche - detail.timeline.send-analog-flow-CON080-description - ${JSON.stringify(
         {
           ...sendAnalogFlowStep.nameAndTaxId(payload),
-          ...sendAnalogFlowStep.completePhysicalAddress(sendAnalogDomicileElem),
+          ...sendAnalogFlowStep.completePhysicalAddressFromStep(sendAnalogDomicileElem),
           registeredLetterKind: ` notifiche - detail.timeline.registered-letter-kind.AR`,
           deliveryFailureCause: `notifiche - detail.timeline.analog-workflow-failure-cause.M05`,
           registeredLetterNumber: 'RACC-034-B93',
@@ -149,7 +149,7 @@ describe('SendAnalogFlowStep', () => {
       description: `notifiche - detail.timeline.send-analog-flow-CON080-description-multirecipient - ${JSON.stringify(
         {
           ...sendAnalogFlowStep.nameAndTaxId(payload),
-          ...sendAnalogFlowStep.completePhysicalAddress(sendAnalogDomicileElem),
+          ...sendAnalogFlowStep.completePhysicalAddressFromStep(sendAnalogDomicileElem),
           registeredLetterKind: ` notifiche - detail.timeline.registered-letter-kind.AR`,
           deliveryFailureCause: `notifiche - detail.timeline.analog-workflow-failure-cause.M05`,
           registeredLetterNumber: 'RACC-034-B93',

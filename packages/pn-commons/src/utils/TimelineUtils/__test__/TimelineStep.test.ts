@@ -90,7 +90,7 @@ describe('TimelineStep', () => {
       physicalAddress,
     });
     // physical address filled
-    expect(mockTimelineStep.completePhysicalAddress(timelineElem)).toStrictEqual({
+    expect(mockTimelineStep.completePhysicalAddressFromStep(timelineElem)).toStrictEqual({
       address: `${physicalAddress.address} - ${physicalAddress.municipality} (${physicalAddress.zip}) ${physicalAddress.foreignState}`,
       simpleAddress: `${physicalAddress.address}`,
     });
@@ -107,7 +107,7 @@ describe('TimelineStep', () => {
         foreignState: '',
       },
     });
-    expect(mockTimelineStep.completePhysicalAddress(timelineElem)).toStrictEqual({
+    expect(mockTimelineStep.completePhysicalAddressFromStep(timelineElem)).toStrictEqual({
       address: ``,
       simpleAddress: ``,
     });

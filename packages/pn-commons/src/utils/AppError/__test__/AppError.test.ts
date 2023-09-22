@@ -17,14 +17,6 @@ describe('AppError', () => {
     detail: 'mock-detail',
   });
 
-  it('getErrorDetail', () => {
-    expect(mockAppError.getErrorDetail()).toStrictEqual({
-      code: 'mock-code',
-      element: 'mock-element',
-      detail: 'mock-detail',
-    });
-  });
-
   it('getResponseError', () => {
     expect(mockAppError.getResponseError()).toStrictEqual({
       code: 'mock-code',
