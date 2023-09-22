@@ -6,6 +6,7 @@ import {
   KnownFunctionality,
   LegalFactType,
   PaymentAttachmentSName,
+  PaymentInfoDetail,
   PaymentStatus,
   RecipientType,
   populatePaymentsPagoPaF24,

@@ -163,6 +163,10 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+    // TODO: capire perchè è stato necessario rimuovere il body
+    // per qualche motivo la libreria di mock considera diversi il body passato
+    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
+    // nonostante siano la stessa identica cosa
     const res = await NotificationsApi.createNewNotification(newNotificationDTO);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',

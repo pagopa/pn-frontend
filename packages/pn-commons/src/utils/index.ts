@@ -18,6 +18,7 @@ import {
   tenYearsAgo,
   today,
 } from './date.utility';
+import { waitForElement } from './dom.utility';
 import { calcUnit8Array } from './file.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { IUN_regex, formatIun } from './iun.utility';
@@ -115,4 +116,5 @@ export {
   tenYearsAgo,
   today,
   useSearchStringChangeInput,
+  waitForElement,
 };

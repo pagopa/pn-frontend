@@ -118,6 +118,12 @@ export interface SendPaperDetails extends AnalogWorkflowDetails {
   attachments?: Array<AnalogFlowAttachment>;
 }
 
+export interface PrepareAnalogDomicileFailureDetails extends BaseDetails {
+  foundAddress?: PhysicalAddress;
+  failureCause?: string;
+  prepareRequestId?: string;
+}
+
 interface BaseDetails {
   recIndex?: number;
 }
@@ -330,6 +336,8 @@ export enum TimelineCategory {
   NOT_HANDLED = 'NOT_HANDLED',
   PREPARE_SIMPLE_REGISTERED_LETTER = 'PREPARE_SIMPLE_REGISTERED_LETTER',
   PREPARE_ANALOG_DOMICILE = 'PREPARE_ANALOG_DOMICILE',
+  // PN-7743
+  PREPARE_ANALOG_DOMICILE_FAILURE = 'PREPARE_ANALOG_DOMICILE_FAILURE',
   SEND_ANALOG_PROGRESS = 'SEND_ANALOG_PROGRESS',
   SEND_ANALOG_FEEDBACK = 'SEND_ANALOG_FEEDBACK',
   AAR_GENERATION = 'AAR_GENERATION',

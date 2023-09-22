@@ -13,7 +13,7 @@ export class SendSimpleRegisteredLetterStep extends TimelineStep {
         } tramite raccomandata semplice.`,
         {
           ...this.nameAndTaxId(payload),
-          ...this.completePhysicalAddress(payload.step),
+          ...this.completePhysicalAddressFromStep(payload.step),
         }
       ),
     };

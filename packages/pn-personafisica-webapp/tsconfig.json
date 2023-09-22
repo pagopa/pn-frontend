@@ -26,7 +26,7 @@
   "include": ["src/**/*"],
   "exclude": [
     "__mocks__",
-    "src/__mocks__/*",
+    "**/__mocks__/*",
     "dist",
     "lib",
     "node_modules",
