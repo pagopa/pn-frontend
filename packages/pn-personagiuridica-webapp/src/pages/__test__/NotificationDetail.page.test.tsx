@@ -151,9 +151,20 @@ describe('NotificationDetail Page', () => {
   });
 
   it('renders NotificationDetail if status is cancelled', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED });
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      notificationStatus: NotificationStatus.CANCELLED,
+      timeline: [
+        ...notificationDTO.timeline,
+        {
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          timestamp: '2033-08-14T13:42:54.17675939Z',
+          legalFactsIds: [],
+          category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+          details: {},
+        },
+      ],
+    });
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {

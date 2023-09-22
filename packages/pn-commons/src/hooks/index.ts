@@ -1,6 +1,7 @@
 import { downloadDocument, useDownloadDocument } from './useDownloadDocument';
 import { useErrors } from './useErrors';
 import { useHasPermissions } from './useHasPermissions';
+import { useIsCancelled } from './useIsCancelled';
 import { useIsMobile } from './useIsMobile';
 import { useMultiEvent } from './useMultiEvent';
 import { useProcess } from './useProcess';
@@ -21,4 +22,5 @@ export {
   useRewriteLinks,
   useHasPermissions,
   downloadDocument,
+  useIsCancelled,
 };

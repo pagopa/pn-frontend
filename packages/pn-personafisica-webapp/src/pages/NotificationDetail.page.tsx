@@ -17,7 +17,6 @@ import {
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  NotificationStatus,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -25,6 +24,7 @@ import {
   TitleBox,
   useDownloadDocument,
   useErrors,
+  useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -89,10 +89,8 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
   );
 
+  const isCancelled = useIsCancelled({ notification });
   const currentRecipient = notification?.currentRecipient;
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ||
-    notification.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS;
 
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
@@ -166,7 +164,7 @@ const NotificationDetail = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
-    if (isCancelled) {
+    if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
       return;
     }
     if (_.isObject(document)) {
@@ -189,7 +187,7 @@ const NotificationDetail = () => {
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
   // Cfr. comment in the definition of INotificationDetailTimeline in pn-commons/src/types/NotificationDetail.ts.
   const legalFactDownloadHandler = (legalFact: LegalFactId | NotificationDetailOtherDocument) => {
-    if (isCancelled) {
+    if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
       return;
     }
     if ((legalFact as LegalFactId).key) {
@@ -243,7 +241,7 @@ const NotificationDetail = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelled) {
+      if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
@@ -316,7 +314,7 @@ const NotificationDetail = () => {
   }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
-    if (!isCancelled) {
+    if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
       void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId));
     }
   }, []);
@@ -383,11 +381,12 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isCancelled && (
-                  <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
-                  </Alert>
-                )}
+                {isCancelled.cancelled ||
+                  (isCancelled.cancellationInProgress && (
+                    <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
+                      {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
+                    </Alert>
+                  ))}
                 <NotificationDetailTable rows={detailTableRows} />
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
@@ -417,7 +416,7 @@ const NotificationDetail = () => {
                     documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled}
+                    disableDownloads={isCancelled.cancellationInTimeline}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
@@ -428,7 +427,7 @@ const NotificationDetail = () => {
                     documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled}
+                    disableDownloads={isCancelled.cancellationInTimeline}
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
@@ -439,7 +438,7 @@ const NotificationDetail = () => {
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
-                  disableDownloads={isCancelled}
+                  disableDownloads={isCancelled.cancellationInTimeline}
                 />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} elevation={0}>
@@ -479,7 +478,7 @@ const NotificationDetail = () => {
                   eventTrackingCallbackShowMore={() =>
                     trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
                   }
-                  disableDownloads={isCancelled}
+                  disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
                 />
               </Box>
