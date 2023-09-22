@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 import {
   AppResponseMessage,
@@ -141,7 +141,8 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get.length).toBe(0);
       expect(amountLoader).not.toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-succeeded' });
+
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -250,7 +251,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-in-progress' });
+    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();

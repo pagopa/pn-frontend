@@ -1,9 +1,7 @@
 import { INotificationDetailTimeline, TimelineCategory } from '../../types';
 import { AnalogFailureWorkflowStep } from './AnalogFailureWorkflowStep';
 import { DefaultStep } from './DefaultStep';
-import { NotHandledStep } from './NotHandledStep';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
-import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
 import { SendAnalogFlowStep } from './SendAnalogFlowStep';
 import { SendCourtesyMessageStep } from './SendCourtesyMessageStep';
 import { SendDigitalDomicileStep } from './SendDigitalDomicileStep';
@@ -11,6 +9,9 @@ import { SendDigitalFeedbackStep } from './SendDigitalFeedbackStep';
 import { SendDigitalProgressStep } from './SendDigitalProgressStep';
 import { SendSimpleRegisteredLetterStep } from './SendSimpleRegisteredLetterStep';
 import { TimelineStep } from './TimelineStep';
+import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
+import { NotHandledStep } from './NotHandledStep';
+import { PrepareAnalogDomicileFailureStep } from './PrepareAnalogDomicileFailureStep';
 
 export class TimelineStepFactory {
   static createTimelineStep(step: INotificationDetailTimeline): TimelineStep {
@@ -31,6 +32,8 @@ export class TimelineStepFactory {
         return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:
         return new SendAnalogDomicileStep();
+      case TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE:
+        return new PrepareAnalogDomicileFailureStep();
       // analog flow events: all processed by the same class
       case TimelineCategory.SEND_ANALOG_FEEDBACK:
         return new SendAnalogFlowStep();

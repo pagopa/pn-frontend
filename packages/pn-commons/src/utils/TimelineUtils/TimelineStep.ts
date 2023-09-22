@@ -3,6 +3,7 @@ import {
   AnalogWorkflowDetails,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
+  PhysicalAddress,
 } from '../../types';
 
 export interface TimelineStepPayload {
@@ -48,11 +49,14 @@ export abstract class TimelineStep {
     };
   }
 
-  completePhysicalAddress(step: INotificationDetailTimeline) {
-    const physicalAddress = (step.details as AnalogWorkflowDetails).physicalAddress;
-    const zip = physicalAddress?.zip ? ` (${physicalAddress.zip})` : '';
-    const city = physicalAddress?.municipality ? ` - ${physicalAddress.municipality}` : '';
-    const country = physicalAddress?.foreignState ? ` ${physicalAddress.foreignState}` : '';
+  completePhysicalAddressFromStep(step: INotificationDetailTimeline) {
+    return this.completePhysicalAddressFromAddress((step.details as AnalogWorkflowDetails).physicalAddress);
+  }
+
+  completePhysicalAddressFromAddress(physicalAddress?: PhysicalAddress) {
+    const zip = physicalAddress && physicalAddress.zip ? ` (${physicalAddress.zip})` : '';
+    const city = physicalAddress && physicalAddress?.municipality ? ` - ${physicalAddress.municipality}` : '';
+    const country = physicalAddress && physicalAddress.foreignState ? ` ${physicalAddress.foreignState}` : '';
     return {
       address: physicalAddress ? `${physicalAddress.address}${city}${zip}${country}` : '',
       simpleAddress: physicalAddress ? physicalAddress.address : '',
