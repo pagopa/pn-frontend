@@ -41,8 +41,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
-    "test:a11y": "craco test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
+    "test": "craco test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.tsx?$\"",
+    "test:a11y": "craco test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.tsx?$\"",
     "test:all": "craco test --watchAll=false",
     "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\" --coveragePathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$|.src.models\"",
     "eject": "craco eject",
