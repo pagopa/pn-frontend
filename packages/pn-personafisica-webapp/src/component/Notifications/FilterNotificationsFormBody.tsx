@@ -45,9 +45,11 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
-  const handlePaste = (e: React.ClipboardEvent) => {
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    const trimmedValue = e.clipboardData.getData('text').trim();
     // eslint-disable-next-line functional/immutable-data
-    (e.target as HTMLInputElement).value = e.clipboardData.getData('text').trim();
+    (e.target as HTMLInputElement).value = trimmedValue;
+    await formikInstance.setFieldValue((e.target as HTMLInputElement).id, trimmedValue, false);
   };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
