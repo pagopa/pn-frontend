@@ -20,15 +20,43 @@ import {
 import { appStateSlice } from './redux/slices/appStateSlice';
 import { initLocalization } from './services/localization.service';
 
-const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
+type NavigationRouter = 'default' | 'none';
+
+const AllTheProviders = ({
+  children,
+  testStore,
+  navigationRouter,
+}: {
+  children: ReactNode;
+  testStore: Store;
+  navigationRouter: NavigationRouter;
+}) => {
   const theme = createTheme({});
+  if (navigationRouter === 'default') {
+    return (
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <Provider store={testStore}>{children}</Provider>
+        </ThemeProvider>
+      </BrowserRouter>
+    );
+  }
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <Provider store={testStore}>{children}</Provider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <Provider store={testStore}>{children}</Provider>
+    </ThemeProvider>
   );
+};
+
+const createTestStore = (preloadedState = {}) => {
+  return configureStore({
+    reducer: { appState: appStateSlice.reducer },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+    preloadedState,
+  });
 };
 
 const customRender = (
@@ -36,16 +64,20 @@ const customRender = (
   {
     preloadedState,
     renderOptions,
-  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+    navigationRouter = 'default',
+  }: {
+    preloadedState?: any;
+    renderOptions?: Omit<RenderOptions, 'wrapper'>;
+    navigationRouter?: NavigationRouter;
+  } = {}
 ) => {
-  const testStore = configureStore({
-    reducer: { appState: appStateSlice.reducer },
-    preloadedState,
-  });
+  const testStore = createTestStore(preloadedState);
   return {
     ...render(ui, {
       wrapper: ({ children }) => (
-        <AllTheProviders testStore={testStore}>{children}</AllTheProviders>
+        <AllTheProviders testStore={testStore} navigationRouter={navigationRouter}>
+          {children}
+        </AllTheProviders>
       ),
       ...renderOptions,
     }),
@@ -275,4 +307,5 @@ export {
   initLocalizationForTest,
   getById,
   queryById,
+  createTestStore,
 };

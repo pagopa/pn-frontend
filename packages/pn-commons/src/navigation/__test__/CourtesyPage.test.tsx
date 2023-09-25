@@ -7,7 +7,7 @@ const mockClickFn = jest.fn();
 
 describe('test CourtesyPage component', () => {
   it('renders the full component', () => {
-    const result = render(
+    const { container } = render(
       <CourtesyPage
         title="Test title"
         subtitle="Test subtitle"
@@ -16,12 +16,12 @@ describe('test CourtesyPage component', () => {
       />
     );
 
-    expect(result.container).toHaveTextContent(/test title/i);
-    expect(result.container).toHaveTextContent(/test subtitle/i);
+    expect(container).toHaveTextContent(/test title/i);
+    expect(container).toHaveTextContent(/test subtitle/i);
   });
 
   it('clicks on the action button', () => {
-    const result = render(
+    const { getByText } = render(
       <CourtesyPage
         title="Test title"
         subtitle="Test subtitle"
@@ -29,8 +29,7 @@ describe('test CourtesyPage component', () => {
         onClickLabel="Click label"
       />
     );
-    const button = result.getByText('Click label');
-
+    const button = getByText('Click label');
     fireEvent.click(button);
     expect(mockClickFn).toHaveBeenCalledTimes(1);
   });

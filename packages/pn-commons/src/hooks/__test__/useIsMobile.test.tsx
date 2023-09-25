@@ -6,7 +6,7 @@ import { useIsMobile } from '../useIsMobile';
 const Component = () => {
   const isMobile = useIsMobile();
 
-  return <div>{JSON.stringify(isMobile)}</div>;
+  return <div>{`${isMobile}`}</div>;
 };
 
 describe('test useIsMobile hook', () => {

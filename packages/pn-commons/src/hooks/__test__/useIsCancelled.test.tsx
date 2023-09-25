@@ -1,13 +1,14 @@
 import React from 'react';
 
+import { notificationToFe } from '../../__mocks__/NotificationDetail.mock';
 import { render } from '../../test-utils';
-
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../types';
 import { useIsCancelled } from '../useIsCancelled';
-import { notificationToFe } from '../../__mocks__/NotificationDetail.mock';
+
 interface Props {
   notification: NotificationDetail;
 }
+
 const Component: React.FC<Props> = ({ notification }) => {
   const { cancellationInProgress, cancellationInTimeline, cancelled } = useIsCancelled({
     notification,
@@ -40,7 +41,8 @@ describe('useIsCancelled test', () => {
     expect(getByTestId('cancellationInTimeline')).toHaveTextContent('false');
     expect(getByTestId('cancelled')).toHaveTextContent('true');
   });
-  it('notification is cancelled', () => {
+
+  it('notification is cancellation in progress', () => {
     const { getByTestId } = render(
       <Component
         notification={{
@@ -54,7 +56,8 @@ describe('useIsCancelled test', () => {
     expect(getByTestId('cancellationInTimeline')).toHaveTextContent('false');
     expect(getByTestId('cancelled')).toHaveTextContent('false');
   });
-  it('notification is cancelled', () => {
+
+  it('notification has cancellation request in timeline', () => {
     const { getByTestId } = render(
       <Component
         notification={{

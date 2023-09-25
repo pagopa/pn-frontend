@@ -5,7 +5,7 @@ import PrivateRoute from '../PrivateRoute';
 
 describe('test PrivateRoute component', () => {
   it('has permissions', () => {
-    const result = render(
+    const { container } = render(
       <PrivateRoute
         currentRoles={['read', 'write']}
         requiredRoles={['write']}
@@ -14,15 +14,15 @@ describe('test PrivateRoute component', () => {
         Accepted!
       </PrivateRoute>
     );
-    expect(result.container).toHaveTextContent('Accepted!');
+    expect(container).toHaveTextContent('Accepted!');
   });
 
   test("doesn't have permissions", () => {
-    const result = render(
+    const { container } = render(
       <PrivateRoute currentRoles={['read']} requiredRoles={['write']} redirectTo={'Denied!'}>
         Accepted!
       </PrivateRoute>
     );
-    expect(result.container).toHaveTextContent('Denied!');
+    expect(container).toHaveTextContent('Denied!');
   });
 });

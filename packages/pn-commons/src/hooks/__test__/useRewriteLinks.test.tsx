@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { waitFor } from '@testing-library/react';
-import { render } from '../../test-utils';
+import { render, waitFor } from '../../test-utils';
 import { useRewriteLinks } from '../useRewriteLinks';
 
 const ROUTE = '/informativa-privacy';
@@ -16,9 +15,9 @@ const Component = () => {
 };
 
 describe('test useRewriteLinks hook', () => {
-  it('hook set new href', async () => {
-    const result = render(<Component></Component>);
-    const link = await result.findByRole('link');
+  it('hook set new href', () => {
+    const { getByRole } = render(<Component />);
+    const link = getByRole('link');
     waitFor(() => {
       expect(link).toHaveAttribute('href', `${ROUTE}#abc-123`);
     });

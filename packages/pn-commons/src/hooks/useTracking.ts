@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { mixpanelInit } from "../utils/mixpanel.utility";
+import { useEffect } from 'react';
+
+import { mixpanelInit } from '../utils/mixpanel.utility';
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
@@ -8,8 +9,8 @@ const global = window as any;
 const targCookiesGroup = 'C0002';
 
 /**
- * React hook that sets up Mixpanel tracking based on OneTrust consent settings. 
- * It listens for changes in OneTrust consent and checks for the presence of a 
+ * React hook that sets up Mixpanel tracking based on OneTrust consent settings.
+ * It listens for changes in OneTrust consent and checks for the presence of a
  * specific cookie value to determine whether to initialize Mixpanel tracking.
  * @param {string} mixpanelToken:string
  * @param {string} nodeEnv:string
