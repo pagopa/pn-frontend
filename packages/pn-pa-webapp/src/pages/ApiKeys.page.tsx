@@ -14,6 +14,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
+import ApiKeyModal from '../components/ApiKeys/ApiKeyModal';
+import DesktopApiKeys from '../components/ApiKeys/DesktopApiKeys';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import { UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
@@ -26,10 +28,8 @@ import {
 import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
-import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
-import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const SubTitle = () => {
   const { t } = useTranslation(['apikeys']);
