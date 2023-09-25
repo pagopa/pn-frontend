@@ -45,8 +45,8 @@ import {
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 interface Props {
   iun: string;

@@ -1,15 +1,16 @@
-import { Alert, Box, Link, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { Alert, Box, Link, Typography } from '@mui/material';
+
+import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 const DomicileBanner = () => {
   const { t } = useTranslation(['notifiche']);
@@ -17,7 +18,9 @@ const DomicileBanner = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
-  const defaultAddresses = useAppSelector((state: RootState) => state.generalInfoState.defaultAddresses);
+  const defaultAddresses = useAppSelector(
+    (state: RootState) => state.generalInfoState.defaultAddresses
+  );
   const path = pathname.split('/');
   const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
@@ -31,10 +34,13 @@ const DomicileBanner = () => {
     navigate(routes.RECAPITI);
   }, []);
 
-  const lackingAddressTypes = useMemo(() => 
-    [LegalChannelType.PEC, CourtesyChannelType.EMAIL]
-    .filter(type => !defaultAddresses.some(address => address.channelType === type))
-  , [defaultAddresses]);
+  const lackingAddressTypes = useMemo(
+    () =>
+      [LegalChannelType.PEC, CourtesyChannelType.EMAIL].filter(
+        (type) => !defaultAddresses.some((address) => address.channelType === type)
+      ),
+    [defaultAddresses]
+  );
 
   useEffect(() => {
     if (lackingAddressTypes.length === 0) {

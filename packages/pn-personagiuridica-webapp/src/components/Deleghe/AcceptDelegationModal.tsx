@@ -26,7 +26,7 @@ import {
 import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { ServerResponseErrorCode } from '../../utils/AppError/types';
+import { ServerResponseErrorCode } from '../../utility/AppError/types';
 
 type Props = {
   isEditMode: boolean;

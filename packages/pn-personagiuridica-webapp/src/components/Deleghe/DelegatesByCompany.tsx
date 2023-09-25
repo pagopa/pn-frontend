@@ -11,10 +11,10 @@ import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import delegationToItem from '../../utils/delegation.utility';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
-import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
+import delegationToItem from '../../utility/delegation.utility';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
+import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const DelegatesByCompany = () => {

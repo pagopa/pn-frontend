@@ -25,9 +25,9 @@ import {
 } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { ServerResponseErrorCode } from '../../utils/AppError/types';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { ServerResponseErrorCode } from '../../utility/AppError/types';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import AcceptDelegationModal from './AcceptDelegationModal';
 import ConfirmationModal from './ConfirmationModal';
 

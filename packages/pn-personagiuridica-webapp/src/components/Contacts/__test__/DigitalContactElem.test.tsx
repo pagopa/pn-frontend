@@ -12,8 +12,8 @@ import {
 } from '../../../__test__/test-utils';
 import * as api from '../../../api/contacts/Contacts.api';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
-import { TrackEventType } from '../../../utils/events';
-import * as trackingFunctions from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utility/events';
+import * as trackingFunctions from '../../../utility/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 

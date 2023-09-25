@@ -7,8 +7,8 @@ import { TableCell, TableRow, TextField, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { EventActions, TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {

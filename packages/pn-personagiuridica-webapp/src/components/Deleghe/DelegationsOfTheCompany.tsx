@@ -45,8 +45,8 @@ import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/action
 import { setFilters } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import delegationToItem from '../../utils/delegation.utility';
-import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
+import delegationToItem from '../../utility/delegation.utility';
+import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const initialEmptyValues: {
