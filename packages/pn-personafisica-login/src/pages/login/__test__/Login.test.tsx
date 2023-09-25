@@ -5,7 +5,7 @@ import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, getById, queryById, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../../utils/storage';
+import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = jest.fn();

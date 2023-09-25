@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { fireEvent, getById, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { getIDPS } from '../../../utils/IDPS';
+import { getIDPS } from '../../../utility/IDPS';
 import SpidSelect from '../SpidSelect';
 
 const idps = getIDPS(false, false);
