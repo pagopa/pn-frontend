@@ -1,9 +1,10 @@
 import React from 'react';
+
 import { act, screen, within } from '@testing-library/react';
 
-import { render } from '../../../test-utils';
 import { DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models';
-import { formatDate, formatTime } from '../../../utils';
+import { render } from '../../../test-utils';
+import { formatDate, formatTime } from '../../../utility';
 import MobileDowntimeLog from '../MobileDowntimeLog';
 
 const incidentTimestamps = [

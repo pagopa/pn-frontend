@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
+import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
 import Footer from '../Footer';
 
 describe('Footer Component', () => {

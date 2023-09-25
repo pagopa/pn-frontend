@@ -5,8 +5,8 @@ import { act, screen, within } from '@testing-library/react';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import { render } from '../../../test-utils';
 import { AppStatusData, KnownSentiment } from '../../../types';
-import { apiOutcomeTestHelper } from '../../../utils';
-import { formatDate, formatTime } from '../../../utils/date.utility';
+import { apiOutcomeTestHelper } from '../../../utility';
+import { formatDate, formatTime } from '../../../utility/date.utility';
 import { AppStatusRender } from '../AppStatusRender';
 
 /* eslint-disable-next-line functional/no-let */

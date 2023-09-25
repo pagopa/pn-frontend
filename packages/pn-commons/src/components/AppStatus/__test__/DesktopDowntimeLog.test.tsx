@@ -1,9 +1,12 @@
 import React from 'react';
+
 import { act, fireEvent, screen, within } from '@testing-library/react';
-import { render } from '../../../test-utils';
+
 import { DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models';
+import { render } from '../../../test-utils';
+import { formatDate, formatTime } from '../../../utility';
 import DesktopDowntimeLog from '../DesktopDowntimeLog';
-import { formatDate, formatTime } from '../../../utils';
+
 const incidentTimestamps = [
   '2022-10-23T15:50:04Z',
   '2022-10-23T15:51:12Z',

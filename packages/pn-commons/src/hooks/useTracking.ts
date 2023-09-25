@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import { mixpanelInit } from "../utils/mixpanel.utility";
+import { useEffect } from 'react';
+
+import { mixpanelInit } from '../utility/mixpanel.utility';
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
 const global = window as any;
 // target cookies (Mixpanel)
 const targCookiesGroup = 'C0002';
-
 
 export function useTracking(mixpanelToken: string, nodeEnv: string) {
   useEffect(() => {

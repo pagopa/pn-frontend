@@ -8,7 +8,7 @@ import { useDownloadDocument } from '../../hooks';
 import { Downtime } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { NotificationStatus, NotificationStatusHistory } from '../../types';
-import { formatDate, isToday } from '../../utils';
+import { formatDate, isToday } from '../../utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 
 type Props = {

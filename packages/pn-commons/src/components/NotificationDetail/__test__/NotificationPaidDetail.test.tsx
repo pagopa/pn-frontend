@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { render, fireEvent } from '../../../test-utils';
+import { fireEvent, render } from '../../../test-utils';
 import { PaymentHistory, RecipientType } from '../../../types';
-import { formatEurocentToCurrency, formatFiscalCode } from '../../../utils';
+import { formatEurocentToCurrency, formatFiscalCode } from '../../../utility';
 import NotificationPaidDetail from '../NotificationPaidDetail';
 
 describe('NotificationDetailPaid Component', () => {

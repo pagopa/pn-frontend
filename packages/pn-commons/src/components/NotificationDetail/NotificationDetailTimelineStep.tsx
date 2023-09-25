@@ -1,18 +1,27 @@
-import { useState, Fragment, ReactNode } from 'react';
-import { Typography, Chip, Box, Button } from '@mui/material';
-import { TimelineConnector } from '@mui/lab';
+import { Fragment, ReactNode, useState } from 'react';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { TimelineConnector } from '@mui/lab';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import {
-  TimelineNotificationItem,
-  TimelineNotificationOppositeContent,
+  ButtonNaked,
   TimelineNotificationContent,
   TimelineNotificationDot,
+  TimelineNotificationItem,
+  TimelineNotificationOppositeContent,
   TimelineNotificationSeparator,
-  ButtonNaked,
 } from '@pagopa/mui-italia';
 
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+  NotificationStatus,
+  NotificationStatusHistory,
+} from '../../types';
 import {
   formatDay,
   formatMonthString,
@@ -20,15 +29,7 @@ import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utils';
-import {
-  LegalFactId,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationStatusHistory,
-  NotificationDetailOtherDocument,
-  NotificationStatus,
-} from '../../types';
+} from '../../utility';
 
 type Props = {
   timelineStep: NotificationStatusHistory;

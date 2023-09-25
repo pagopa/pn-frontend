@@ -1,30 +1,32 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+
 /* eslint-disable complexity */
+
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
-import { formatDate } from '../utils';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
+  AarDetails,
+  DigitalDomicileType,
   INotificationDetailTimeline,
-  TimelineCategory,
-  NotificationDetailRecipient,
+  LegalFactType,
+  NotificationDeliveryMode,
   NotificationDetail,
+  NotificationDetailDocument,
+  NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-  AarDetails,
-  LegalFactType,
-  NotificationDetailDocument,
-  SendDigitalDetails,
-  ViewedDetails,
-  SendPaperDetails,
-  NotificationDeliveryMode,
-  SendCourtesyMessageDetails,
-  DigitalDomicileType,
   PaidDetails,
   PaymentHistory,
+  SendCourtesyMessageDetails,
+  SendDigitalDetails,
+  SendPaperDetails,
+  TimelineCategory,
+  ViewedDetails,
 } from '../types';
 import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
+import { formatDate } from '../utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 

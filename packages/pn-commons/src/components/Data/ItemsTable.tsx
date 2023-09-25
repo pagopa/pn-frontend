@@ -14,7 +14,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { Column, Item, Sort } from '../../types';
-import { buttonNakedInheritStyle } from '../../utils';
+import { buttonNakedInheritStyle } from '../../utility';
 
 type Props<ColumnId> = {
   /** Table columns */

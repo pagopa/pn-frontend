@@ -1,4 +1,7 @@
 import { useState } from 'react';
+
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import {
   Accordion,
   AccordionSummary,
@@ -9,12 +12,10 @@ import {
   TableContainer,
   Typography,
 } from '@mui/material';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
-import { PaymentHistory } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { formatEurocentToCurrency, formatFiscalCode } from '../../utils';
+import { PaymentHistory } from '../../types';
+import { formatEurocentToCurrency, formatFiscalCode } from '../../utility';
 import CustomTableRow from '../CustomTableRow';
 
 type NotificationPaidDetailProps = {

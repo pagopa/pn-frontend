@@ -57,7 +57,7 @@ export const dataRegex = {
   // a more liberal specification.
   // Namely, this is the case for the email address that comes as part of the logged user data
   // in the response to token exchange.
-  // Cfr. the comment in src/utils/user.utility.ts
+  // Cfr. the comment in src/utility/user.utility.ts
   // ------------------------------------
   // Carlos Lombardi, 2023.01.24
 };

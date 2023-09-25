@@ -10,7 +10,7 @@ import {
 } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { pagoPALink } from '../../utils/costants';
+import { pagoPALink } from '../../utility/costants';
 
 type HeaderProps = {
   /** List of available products */

@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../types';
-import { parsedNotification } from '../../utils/__test__/test-utils';
+import { parsedNotification } from '../../utility/__test__/test-utils';
 import { useIsCancelled } from '../useIsCancelled';
 
 interface Props {
