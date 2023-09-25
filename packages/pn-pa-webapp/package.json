@@ -41,8 +41,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.tsx?$\"",
-    "test:a11y": "craco test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.tsx?$\"",
+    "test": "craco test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
+    "test:a11y": "craco test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:all": "craco test --watchAll=false",
     "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\" --coveragePathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$|.src.models\"",
     "eject": "craco eject",
@@ -85,7 +85,6 @@
     "eslint-plugin-sonarjs": "^0.10.0",
     "jest-axe": "^5.0.1",
     "jest-sonar-reporter": "^2.0.0",
-    "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
     "react-scripts": "^5.0.1",
