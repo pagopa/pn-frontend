@@ -1,14 +1,15 @@
+import currentLocale from 'date-fns/locale/it';
+import { FormikErrors, FormikState, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormikErrors, FormikState, FormikTouched, FormikValues } from 'formik';
-import currentLocale from 'date-fns/locale/it';
+
+import { ListItemText, MenuItem, TextField } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { ListItemText, MenuItem, TextField } from '@mui/material';
 import {
   CustomDatePicker,
-  DatePickerTypes,
   DATE_FORMAT,
+  DatePickerTypes,
   formatIun,
   getNotificationAllowedStatus,
   tenYearsAgo,
@@ -16,8 +17,8 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
+import { trackEventByType } from '../../../utils/mixpanel';
 
 type Props = {
   formikInstance: {
@@ -49,6 +50,11 @@ const FilterNotificationsFormBody = ({
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    // eslint-disable-next-line functional/immutable-data
+    (e.target as HTMLInputElement).value = e.clipboardData.getData('text').trim();
+  };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (formikInstance.errors) {
@@ -93,6 +99,7 @@ const FilterNotificationsFormBody = ({
         id="recipientId"
         value={formikInstance.values.recipientId}
         onChange={handleChangeTouched}
+        onPaste={handlePaste}
         label={t('filters.fiscal-code-tax-code')}
         name="recipientId"
         error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
@@ -105,6 +112,7 @@ const FilterNotificationsFormBody = ({
         id="iunMatch"
         value={formikInstance.values.iunMatch}
         onChange={handleChangeTouched}
+        onPaste={handlePaste}
         label={t('filters.iun')}
         name="iunMatch"
         error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
