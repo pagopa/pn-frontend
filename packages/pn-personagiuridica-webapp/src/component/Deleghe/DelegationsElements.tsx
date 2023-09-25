@@ -209,7 +209,11 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     if (row?.status === DelegationStatus.ACTIVE && groups.length) {
       // eslint-disable-next-line functional/immutable-data
       menuItems.push(
-        <MenuItem key="update" onClick={() => setShowUpdateModal(true)}>
+        <MenuItem
+          id="update-delegation-button"
+          key="update"
+          onClick={() => setShowUpdateModal(true)}
+        >
           {t('deleghe.update')}
         </MenuItem>
       );

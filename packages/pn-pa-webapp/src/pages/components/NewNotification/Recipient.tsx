@@ -601,9 +601,11 @@ const Recipient: React.FC<Props> = ({
                         }}
                       >
                         <FormControlLabel
+                          id="add-physical-domicile-form"
                           checked={values.recipients[index].showPhysicalAddress}
                           control={
                             <Checkbox
+                              id="add-physical-domicile"
                               onChange={(physicalCheckEvent) =>
                                 handleAddressTypeChange(
                                   physicalCheckEvent as ChangeEvent,
