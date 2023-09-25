@@ -3,13 +3,13 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 
 const DomicileBanner = () => {

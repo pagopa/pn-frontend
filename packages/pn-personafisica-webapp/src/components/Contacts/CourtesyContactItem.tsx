@@ -7,7 +7,7 @@ import { Button, Grid, InputAdornment, TextField, Typography } from '@mui/materi
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { internationalPhonePrefix } from '../../utils/contacts.utility';
+import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import DigitalContactElem from './DigitalContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 

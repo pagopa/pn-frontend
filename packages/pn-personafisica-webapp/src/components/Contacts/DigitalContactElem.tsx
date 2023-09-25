@@ -28,9 +28,9 @@ import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch } from '../../redux/hooks';
-import { getContactEventType } from '../../utils/contacts.utility';
-import { EventActions, TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { getContactEventType } from '../../utility/contacts.utility';
+import { EventActions, TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {

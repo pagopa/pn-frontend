@@ -24,8 +24,8 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 

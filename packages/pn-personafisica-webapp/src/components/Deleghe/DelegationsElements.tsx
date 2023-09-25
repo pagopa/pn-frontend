@@ -9,8 +9,8 @@ import { Tag } from '@pagopa/mui-italia';
 
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
 import { useAppDispatch } from '../../redux/hooks';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

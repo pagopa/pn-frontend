@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Stack } from '@mui/material';
 
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
-import { countContactsByType } from '../../utils/contacts.utility';
+import { countContactsByType } from '../../utility/contacts.utility';
 import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 
 interface Props {

@@ -4,7 +4,6 @@ import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import {
-  act,
   fireEvent,
   render,
   screen,
@@ -14,7 +13,7 @@ import {
 } from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import { Delegator } from '../../../redux/delegation/types';
-import { sortDelegations } from '../../../utils/delegation.utility';
+import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegators from '../Delegators';
 
 jest.mock('react-i18next', () => ({

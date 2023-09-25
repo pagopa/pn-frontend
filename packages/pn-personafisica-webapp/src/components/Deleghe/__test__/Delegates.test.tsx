@@ -14,7 +14,7 @@ import {
 import * as routes from '../../../navigation/routes.const';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import { Delegate } from '../../../redux/delegation/types';
-import { sortDelegations } from '../../../utils/delegation.utility';
+import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegates from '../Delegates';
 
 const mockNavigateFn = jest.fn();

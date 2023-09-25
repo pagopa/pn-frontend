@@ -34,7 +34,7 @@ import { Party } from '../../models/party';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { internationalPhonePrefix } from '../../utils/contacts.utility';
+import { internationalPhonePrefix } from '../../utility/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';

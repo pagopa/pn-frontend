@@ -30,9 +30,9 @@ import {
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { getContactEventType } from '../../utils/contacts.utility';
-import { EventActions, TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { getContactEventType } from '../../utility/contacts.utility';
+import { EventActions, TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 type ModalProps = {
   labelRoot: string;
