@@ -76,7 +76,6 @@ const AppMessage = () => {
     <>
       {currentMessage && (
         <SnackBar
-          id={currentMessage.message.id}
           key={currentMessage.message.id}
           title={currentMessage.message.title}
           message={currentMessage.message.message}
