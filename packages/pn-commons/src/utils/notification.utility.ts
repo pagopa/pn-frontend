@@ -887,7 +887,8 @@ export const getF24Payments = (
   }, [] as Array<F24PaymentDetails>);
 
 export const getPagoPaF24Payments = (
-  payments: Array<NotificationDetailPayment>
+  payments: Array<NotificationDetailPayment>,
+  withLoading: boolean = false
 ): Array<PaymentDetails> =>
   payments.reduce((arr, payment) => {
     if (payment.pagoPA) {
@@ -895,6 +896,7 @@ export const getPagoPaF24Payments = (
       arr.push({
         pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
         f24: payment.f24,
+        ...(withLoading && { isLoading: true }),
       });
     }
     return arr;

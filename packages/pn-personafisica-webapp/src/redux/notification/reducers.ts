@@ -116,7 +116,7 @@ const notificationSlice = createSlice({
           const payments = populatePaymentsPagoPaF24(timelineEvents, timelineRecipientPayments, []);
           state.paymentsData.pagoPaF24 = payments;
         } else {
-          const pagoPAPaymentFullDetails = getPagoPaF24Payments(paymentsOfRecipient);
+          const pagoPAPaymentFullDetails = getPagoPaF24Payments(paymentsOfRecipient, true);
           const f24Payments = getF24Payments(paymentsOfRecipient);
 
           if (pagoPAPaymentFullDetails) {

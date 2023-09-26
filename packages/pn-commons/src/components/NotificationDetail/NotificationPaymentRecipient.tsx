@@ -32,7 +32,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 }) => {
   const { pagoPaF24, f24Only } = payments;
 
-  const isSinglePayment = pagoPaF24.length === 1;
+  const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(
     isSinglePayment ? pagoPaF24[0].pagoPA ?? null : null

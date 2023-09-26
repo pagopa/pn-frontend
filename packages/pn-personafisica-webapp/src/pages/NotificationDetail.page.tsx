@@ -22,7 +22,6 @@ import {
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
-  populatePaymentsPagoPaF24,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -53,7 +52,6 @@ import {
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
-import { paymentsData } from '../__mocks__/NotificationDetail.mock';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -296,10 +294,8 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments && (!isCancelled.cancelled || !isCancelled.cancellationInProgress)) {
+    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments ?? []);
-    } else {
-      console.log(populatePaymentsPagoPaF24(notification.timeline, paymentsData.pagoPaF24, []));
     }
   }, [currentRecipient.payments]);
 
