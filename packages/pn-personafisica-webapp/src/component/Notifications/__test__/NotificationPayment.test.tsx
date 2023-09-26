@@ -88,7 +88,7 @@ describe('NotificationPayment component', () => {
         subject={notificationToFe.subject}
       />
     );
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amountLoader = getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -195,7 +195,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -250,7 +250,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -298,7 +298,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -340,7 +340,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -383,7 +383,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -423,7 +423,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -461,7 +461,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
@@ -497,7 +497,7 @@ describe('NotificationPayment component', () => {
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
