@@ -1,5 +1,5 @@
 import { Download } from '@mui/icons-material/';
-import { Box, Button, Link, RadioGroup, Typography } from '@mui/material';
+import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import React, { Fragment, memo, useState } from 'react';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
@@ -17,6 +17,7 @@ import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
 type Props = {
   payments: PaymentsData;
+  isCancelled: boolean;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
@@ -24,6 +25,7 @@ type Props = {
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
+  isCancelled,
   onPayClick,
   handleDownloadAttachamentPagoPA,
   handleReloadPayment,
@@ -88,9 +90,19 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title')}
       </Typography>
 
-      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-        {getTitle()}
-      </Typography>
+      {isCancelled ? (
+        <Alert tabIndex={0} data-testid="cancelledAlertPayment" severity="info">
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
+          &nbsp;
+          <Link href={void 0} target="_blank" fontWeight="bold" sx={{ cursor: 'pointer' }}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.disclaimer-link')}
+          </Link>
+        </Alert>
+      ) : (
+        <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
+          {getTitle()}
+        </Typography>
+      )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
         <Typography variant="overline" mt={3}>
@@ -170,17 +182,21 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </>
       )}
 
-      {f24Only.length > 0 && pagoPaF24.length > 0 && (
-        <Typography variant="overline" mt={3}>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
-        </Typography>
-      )}
+      {!isCancelled && (
+        <Fragment>
+          {f24Only.length > 0 && pagoPaF24.length > 0 && (
+            <Typography variant="overline" mt={3}>
+              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
+            </Typography>
+          )}
 
-      {f24Only.map((f24Item, index) => (
-        <Box key={index}>
-          <NotificationPaymentF24Item f24Item={f24Item} />
-        </Box>
-      ))}
+          {f24Only.map((f24Item, index) => (
+            <Box key={index}>
+              <NotificationPaymentF24Item f24Item={f24Item} />
+            </Box>
+          ))}
+        </Fragment>
+      )}
     </Box>
   );
 };

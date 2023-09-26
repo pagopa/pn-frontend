@@ -7,13 +7,17 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PagoPAPaymentFullDetails,
+  PaidDetails,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
   PhysicalCommunicationType,
   RecipientType,
+  TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -91,32 +95,37 @@ const notificationSlice = createSlice({
       )?.payments;
 
       if (paymentsOfRecipient) {
-        const f24Payments = paymentsOfRecipient.reduce((arr, payment) => {
-          if (!payment.pagoPA && payment.f24) {
-            // eslint-disable-next-line functional/immutable-data
-            arr.push(payment.f24);
+        if (
+          action.payload.notificationStatus === NotificationStatus.CANCELLED ||
+          action.payload.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
+        ) {
+          const timelineEvents = action.payload.timeline.filter(
+            (item) => item.category === TimelineCategory.PAYMENT
+          );
+
+          // get only the payments of the current recipient that are in the timeline (by creditorTaxId and noticeCode
+          const timelineRecipientPayments = paymentsOfRecipient.filter((payment) =>
+            timelineEvents.some(
+              (timelineEvent) =>
+                (timelineEvent.details as PaidDetails).creditorTaxId ===
+                  payment.pagoPA?.creditorTaxId &&
+                (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPA?.noticeCode
+            )
+          );
+
+          const payments = populatePaymentsPagoPaF24(timelineEvents, timelineRecipientPayments, []);
+          state.paymentsData.pagoPaF24 = payments;
+        } else {
+          const pagoPAPaymentFullDetails = getPagoPaF24Payments(paymentsOfRecipient);
+          const f24Payments = getF24Payments(paymentsOfRecipient);
+
+          if (pagoPAPaymentFullDetails) {
+            state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
           }
-          return arr;
-        }, [] as Array<F24PaymentDetails>);
 
-        const pagoPAPaymentFullDetails = paymentsOfRecipient.reduce((arr, payment) => {
-          if (payment.pagoPA) {
-            // eslint-disable-next-line functional/immutable-data
-            arr.push({
-              pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
-              f24: payment.f24,
-              isLoading: true,
-            });
+          if (f24Payments) {
+            state.paymentsData.f24Only = f24Payments;
           }
-          return arr;
-        }, [] as Array<PaymentDetails>);
-
-        if (pagoPAPaymentFullDetails) {
-          state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
-        }
-
-        if (f24Payments) {
-          state.paymentsData.f24Only = f24Payments;
         }
       }
       state.notification = action.payload;

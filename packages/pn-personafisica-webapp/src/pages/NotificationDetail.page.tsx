@@ -22,6 +22,7 @@ import {
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
+  populatePaymentsPagoPaF24,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -52,6 +53,7 @@ import {
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
+import { paymentsData } from '../__mocks__/NotificationDetail.mock';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -294,8 +296,10 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments) {
+    if (checkIfUserHasPayments && (!isCancelled.cancelled || !isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments ?? []);
+    } else {
+      console.log(populatePaymentsPagoPaF24(notification.timeline, paymentsData.pagoPaF24, []));
     }
   }, [currentRecipient.payments]);
 
@@ -381,12 +385,11 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isCancelled.cancelled ||
-                  (isCancelled.cancellationInProgress && (
-                    <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
-                      {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
-                    </Alert>
-                  ))}
+                {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
+                  <Alert tabIndex={0} data-testid="cancelledAlertText" severity="warning">
+                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
+                  </Alert>
+                )}
                 <NotificationDetailTable rows={detailTableRows} />
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
@@ -399,6 +402,7 @@ const NotificationDetail = () => {
                     >
                       <NotificationPaymentRecipient
                         payments={userPayments}
+                        isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
                         handleReloadPayment={fetchPaymentsInfo}

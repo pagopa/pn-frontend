@@ -508,6 +508,30 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
+export const cancelledNotificationDTO: NotificationDetail = {
+  ...notificationDTO,
+  notificationStatus: NotificationStatus.CANCELLED,
+  timeline: [
+    ...notificationDTO.timeline,
+    {
+      elementId: 'NOTIFICATION_CANCELLED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2',
+      timestamp: '2023-08-23T12:39:00.172599701Z',
+      category: TimelineCategory.NOTIFICATION_CANCELLED,
+      details: {
+        recIndex: 2,
+      },
+    },
+  ],
+  notificationStatusHistory: [
+    ...notificationDTO.notificationStatusHistory,
+    {
+      status: NotificationStatus.CANCELLED,
+      activeFrom: '2023-08-23T08:42:27.109686054Z',
+      relatedTimelineElements: ['NOTIFICATION_CANCELLED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2'],
+    },
+  ],
+};
+
 export const paymentsData: PaymentsData = {
   pagoPaF24: getPagoPaF24Payments(payments),
   f24Only: getF24Payments(payments),
@@ -520,6 +544,12 @@ export const overrideNotificationMock = (overrideObj: object): NotificationDetai
 
 export const notificationToFe = parseNotificationDetailForRecipient(
   _.cloneDeep(notificationDTO),
+  recipients[2].taxId,
+  []
+);
+
+export const cancelledNotificationToFe = parseNotificationDetailForRecipient(
+  _.cloneDeep(cancelledNotificationDTO),
   recipients[2].taxId,
   []
 );
