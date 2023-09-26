@@ -272,10 +272,7 @@ const NotificationPayment: React.FC<Props> = ({
   /** composes Payment Data to be rendered */
   const composePaymentData = (): PaymentData => {
     /* eslint-disable-next-line functional/no-let */
-    let title = t('detail.payment.summary-pending', { ns: 'notifiche' });
-    if (paymentHistory && paymentHistory.length > 0) {
-      title = t('detail.payment.summary', { ns: 'notifiche' });
-    }
+    const title = t('detail.payment.summary', { ns: 'notifiche' });
     const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
     const message = getMessageData();
     const action = getActionData(amount);

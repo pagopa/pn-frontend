@@ -439,7 +439,9 @@ describe('Recipient Component with payment enabled', () => {
     const houseNumberError = form.querySelector('[id="recipients[0].houseNumber-helper-text"]');
     expect(houseNumberError).toHaveTextContent('required-field');
     // zip
-    await testStringFieldValidation(form, 0, 'zip', 13);
+    await testInput(form, 'recipients[0].zip', '20100&', true);
+    const zipError = form.querySelector('[id="recipients[0].zip-helper-text"]');
+    expect(zipError).toHaveTextContent('zip invalid');
     // municipalityDetails
     await testInput(form, 'recipients[0].municipalityDetails', ' text-with-spaces ', true);
     const municipalityDetailsError = form.querySelector(
@@ -449,7 +451,7 @@ describe('Recipient Component with payment enabled', () => {
     await testInput(form!, 'recipients[0].municipalityDetails', randomString(257));
     expect(municipalityDetailsError).toHaveTextContent('too-long-field-error');
     // municipality
-    await testStringFieldValidation(form, 0, 'zip', 257);
+    await testStringFieldValidation(form, 0, 'municipality', 257);
     // province
     await testStringFieldValidation(form, 0, 'province', 257);
     // foreignState

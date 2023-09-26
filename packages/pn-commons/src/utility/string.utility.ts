@@ -39,7 +39,7 @@ export const dataRegex = {
   denomination: /^([\x20-\xFF]{1,80})$/,
   denominationSearch: /([\x20-\xFF]*)/g,
   noticeCode: /^\d{18}$/,
-
+  zipCode: /^(\w|\ |\-)*$/,
   email:
     /^[a-zA-Z0-9]+(?:[.\-_][a-zA-Z0-9]+){0,10}@[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+){0,10}(?:\.[a-zA-Z0-9]{2,10})$/,
   // We adopt a regex to validate email addresses, which is stricter than the one adopted by the BE
