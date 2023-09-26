@@ -126,8 +126,8 @@ describe('SpecialContactElem Component', () => {
     expect(newButtons!).toHaveLength(2);
     expect(newButtons![0]).toHaveTextContent('button.salva');
     expect(newButtons![0]).toBeEnabled();
-    fireEvent.change(input!, { target: { value: 'new.bad.-pec-123@456.it' } });
-    await waitFor(() => expect(input!).toHaveValue('new.bad.-pec-123@456.it'));
+    fireEvent.change(input!, { target: { value: 'new.bad.-pec-123]@456.it' } });
+    await waitFor(() => expect(input!).toHaveValue('new.bad.-pec-123]@456.it'));
     expect(newButtons![0]).toBeDisabled();
     let inputError = result?.container.querySelector(`#mocked-senderId_pec-helper-text`);
     expect(inputError).toBeInTheDocument();
@@ -205,8 +205,8 @@ describe('SpecialContactElem Component', () => {
     expect(newButtons!).toHaveLength(2);
     expect(newButtons![0]).toHaveTextContent('button.salva');
     expect(newButtons![0]).toBeEnabled();
-    fireEvent.change(input!, { target: { value: 'new.bad.-mail-123@456.it' } });
-    await waitFor(() => expect(input!).toHaveValue('new.bad.-mail-123@456.it'));
+    fireEvent.change(input!, { target: { value: 'new.bad.-mail-123]@456.it' } });
+    await waitFor(() => expect(input!).toHaveValue('new.bad.-mail-123]@456.it'));
     expect(newButtons![0]).toBeDisabled();
     let inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
     expect(inputError).toBeInTheDocument();
