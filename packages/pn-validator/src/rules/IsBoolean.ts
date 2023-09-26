@@ -1,9 +1,8 @@
-import { isBoolean } from './../utility/IsBoolean';
-import { isDefined } from '../utility/IsDefined';
 import { Rule } from '../Rule';
+import { isBoolean } from '../utility/IsBoolean';
+import { isDefined } from '../utility/IsDefined';
 
 export class IsBoolean<TModel, TValue> extends Rule<TModel, TValue> {
-
   constructor(customErrorMessage?: string) {
     super(customErrorMessage);
   }
@@ -13,7 +12,7 @@ export class IsBoolean<TModel, TValue> extends Rule<TModel, TValue> {
       return null;
     }
     if (!isBoolean(value)) {
-        return 'Value must be of type boolean';
+      return 'Value must be of type boolean';
     }
     return null;
   };
