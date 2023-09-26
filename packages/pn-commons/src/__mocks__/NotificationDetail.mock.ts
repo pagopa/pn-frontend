@@ -475,6 +475,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   recipients,
   documents: [
     {
+      title: 'Document 0',
       digests: {
         sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
       },
@@ -484,6 +485,17 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
         versionToken: 'v1',
       },
       docIdx: '0',
+    },
+    {
+      digests: {
+        sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+      },
+      contentType: 'application/pdf',
+      ref: {
+        key: 'PN_NOTIFICATION_ATTACHMENTS-abb7804b6e442c8b2223648af970cd1.pdf',
+        versionToken: 'v1',
+      },
+      docIdx: '1',
     },
   ],
   notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
@@ -545,52 +557,5 @@ export const mockPaymentHistory: Array<PaymentHistory> = [
     amount: 65.12,
     creditorTaxId: '77777777777',
     noticeCode: '302181677459720267',
-  },
-];
-
-export const mockDowntimes: Array<Downtime> = [
-  {
-    rawFunctionality: KnownFunctionality.NotificationWorkflow,
-    knownFunctionality: KnownFunctionality.NotificationWorkflow,
-    status: DowntimeStatus.OK,
-    startDate: '2022-10-28T10:11:09Z',
-    endDate: '2022-10-28T10:18:14Z',
-    fileAvailable: true,
-  },
-  {
-    rawFunctionality: KnownFunctionality.NotificationCreate,
-    knownFunctionality: KnownFunctionality.NotificationCreate,
-    status: DowntimeStatus.OK,
-    startDate: '2022-10-23T15:50:04Z',
-    endDate: '2022-10-23T15:51:12Z',
-    legalFactId: 'some-legal-fact-id',
-    fileAvailable: true,
-  },
-];
-
-export const mockHistory: NotificationStatusHistory[] = [
-  {
-    status: NotificationStatus.EFFECTIVE_DATE,
-    activeFrom: '2022-10-30T13:59:23Z',
-    relatedTimelineElements: [],
-    steps: [],
-  },
-  {
-    status: NotificationStatus.DELIVERED,
-    activeFrom: '2022-10-04T13:56:16Z',
-    relatedTimelineElements: [],
-    steps: [],
-  },
-  {
-    status: NotificationStatus.DELIVERING,
-    activeFrom: '2022-10-04T13:55:52Z',
-    relatedTimelineElements: [],
-    steps: [],
-  },
-  {
-    status: NotificationStatus.ACCEPTED,
-    activeFrom: '2022-10-04T13:54:47Z',
-    relatedTimelineElements: [],
-    steps: [],
   },
 ];

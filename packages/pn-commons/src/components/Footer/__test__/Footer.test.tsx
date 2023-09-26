@@ -4,12 +4,26 @@ import { fireEvent, render, screen } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
 import Footer from '../Footer';
 
+const mockOpenFn = jest.fn();
+
 describe('Footer Component', () => {
+  const original = window.open;
+
+  beforeAll(() => {
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
+  });
+
+  afterAll((): void => {
+    Object.defineProperty(window, 'open', { configurable: true, value: original });
+  });
+
   it('renders footer', () => {
     // render component
-    const result = render(<Footer loggedUser={true} />);
-    const buttons = result.getAllByRole('button');
-
+    const { getAllByRole } = render(<Footer loggedUser={true} />);
+    const buttons = getAllByRole('button');
     expect(buttons).toHaveLength(5);
     buttons.forEach((button, index) => {
       if (index === 0) {
@@ -24,24 +38,31 @@ describe('Footer Component', () => {
     });
   });
 
+  it('clicks on company link', () => {
+    const { getAllByRole } = render(<Footer loggedUser={true} />);
+    const buttons = getAllByRole('button');
+    fireEvent.click(buttons[0]);
+    const localizedPagoPALink = pagoPALink();
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(localizedPagoPALink.href, '_blank');
+  });
+
   it('shows languages dropdown', async () => {
     const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const result = render(
+    const { getAllByRole } = render(
       <Footer
         loggedUser={true}
         eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}
       />
     );
-    const buttons = result.getAllByRole('button');
+    const buttons = getAllByRole('button');
     const dropdownLanguageButton = buttons[4];
     const languageKeys = Object.keys(LANGUAGES);
-
     // This array represents how the options labels should sequentially change when you click the option.
     const expectedLanguagesLabels = new Array();
     for (var i = 0; i < languageKeys.length; i++) {
       expectedLanguagesLabels.push(LANGUAGES[languageKeys[i - 1 < 0 ? 0 : i - 1]][languageKeys[i]]);
     }
-
     languageKeys.forEach((currentDropdownLanguage, index) => {
       fireEvent.click(dropdownLanguageButton);
       const languageSelector = screen.getByRole('presentation');

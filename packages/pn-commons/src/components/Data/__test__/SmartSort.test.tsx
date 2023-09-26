@@ -21,8 +21,8 @@ const sortFields = [
 ];
 
 describe('Smart Sort Component', () => {
-  it('renders smart sort', () => {
-    const result = render(
+  it('renders component', () => {
+    const { getByTestId } = render(
       <SmartSort
         title="Sort"
         optionsTitle="Options"
@@ -37,7 +37,7 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.queryByTestId('dialogToggle');
+    const dialogToggle = getByTestId('dialogToggle');
     expect(dialogToggle).toBeInTheDocument();
     expect(dialogToggle).toHaveTextContent('Sort');
   });
@@ -58,10 +58,8 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.container.querySelector(
-      '[data-testid="dialogToggle"] button'
-    ) as Element;
-    fireEvent.click(dialogToggle);
+    const dialogToggle = result.container.querySelector('[data-testid="dialogToggle"] button');
+    fireEvent.click(dialogToggle!);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
     expect(dialog).toBeInTheDocument();
     const options = within(dialog).getAllByRole('radiogroup')[0];
@@ -82,7 +80,7 @@ describe('Smart Sort Component', () => {
   });
 
   it('clicks on confirm button', async () => {
-    const result = render(
+    const { getByTestId, container } = render(
       <SmartSort
         title="Sort"
         optionsTitle="Options"
@@ -97,17 +95,14 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.getByTestId('dialogToggleButton');
+    const dialogToggle = getByTestId('dialogToggleButton');
     fireEvent.click(dialogToggle);
-    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    let dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
     const options = within(dialog).getAllByRole('radiogroup')[0];
     const optionDsc = within(options).getAllByLabelText('Surname Descending')[0];
     fireEvent.click(optionDsc);
-    const confirmButton = await waitFor(() => {
-      const confirmButton = within(dialog).getByTestId('confirmButton');
-      expect(confirmButton).toBeEnabled();
-      return confirmButton;
-    });
+    const confirmButton = await waitFor(() => within(dialog).getByTestId('confirmButton'));
+    expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     expect(sortingHandler).toBeCalledTimes(1);
     expect(sortingHandler).toBeCalledWith({
@@ -116,12 +111,17 @@ describe('Smart Sort Component', () => {
     });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
-      expect(result.container).toHaveTextContent(/Sort1/);
+      expect(container).toHaveTextContent(/Sort1/);
     });
+    // confirm again and check that noting happens
+    fireEvent.click(dialogToggle);
+    dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    fireEvent.click(confirmButton);
+    expect(sortingHandler).toBeCalledTimes(1);
   });
 
   it('clicks on cancel button', async () => {
-    const result = render(
+    const { container, getByTestId } = render(
       <SmartSort
         title="Sort"
         optionsTitle="Options"
@@ -136,7 +136,7 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.getByTestId('dialogToggleButton');
+    const dialogToggle = getByTestId('dialogToggleButton');
     fireEvent.click(dialogToggle);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
     const cancelButton = within(dialog).getByTestId('cancelButton');
@@ -148,7 +148,7 @@ describe('Smart Sort Component', () => {
     });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
-      expect(result.container).not.toHaveTextContent(/Sort1/);
+      expect(container).not.toHaveTextContent(/Sort1/);
     });
   });
 });

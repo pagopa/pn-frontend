@@ -42,7 +42,7 @@ const cardStyle = {
   },
 };
 
-const ItemsCard = ({
+const ItemsCard: React.FC<Props> = ({
   cardHeader,
   cardBody,
   cardData,
@@ -50,7 +50,7 @@ const ItemsCard = ({
   sx,
   headerGridProps,
   testId = 'mobileCards',
-}: Props) => {
+}) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
       <Grid

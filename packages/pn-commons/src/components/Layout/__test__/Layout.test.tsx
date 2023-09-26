@@ -8,27 +8,28 @@ import { render } from '../../../test-utils';
 import { SideMenuItem } from '../../../types';
 import Layout from '../Layout';
 
+const menuItems: Array<SideMenuItem> = [
+  {
+    label: 'menu-1',
+    icon: Email,
+    route: 'route-mock-1',
+  },
+  {
+    label: 'menu-2',
+    icon: Email,
+    route: 'route-mock-2',
+  },
+  {
+    label: 'menu-3',
+    icon: Email,
+    route: 'route-mock-3',
+  },
+];
+
 describe('Layout Component', () => {
-  const menuItems: Array<SideMenuItem> = [
-    {
-      label: 'menu-1',
-      icon: Email,
-      route: 'route-mock-1',
-    },
-    {
-      label: 'menu-2',
-      icon: Email,
-      route: 'route-mock-2',
-    },
-    {
-      label: 'menu-3',
-      icon: Email,
-      route: 'route-mock-3',
-    },
-  ];
   it('renders layout', () => {
     // render component
-    const result = render(
+    const { container, getByTestId } = render(
       <Layout
         sideMenu={<SideMenu menuItems={menuItems} />}
         productsList={productsList}
@@ -38,17 +39,14 @@ describe('Layout Component', () => {
       </Layout>
     );
     // check for mui-header;
-    expect(result.container).toHaveTextContent(/PagoPA S.p.A.AssistenzaEsci/i);
-
+    expect(container).toHaveTextContent(/PagoPA S.p.A.AssistenzaEsci/i);
     // check for mui-footer
-    expect(result.container).toHaveTextContent(/PagoPA S.p.A. — società per azioni/i);
-
+    expect(container).toHaveTextContent(/PagoPA S.p.A. — società per azioni/i);
     // check for sidemenu
-    const sideMenu = result.getByTestId('sideMenu');
+    const sideMenu = getByTestId('sideMenu');
     expect(sideMenu).toHaveTextContent(/menu-1menu-2menu-3/i);
-
     // check for layout children
-    const mockedChildren = result.getByTestId('mockedChild');
+    const mockedChildren = getByTestId('mockedChild');
     expect(mockedChildren).toHaveTextContent(/Mocked Child/i);
   });
 });

@@ -71,9 +71,7 @@ function ItemsTable<ColumnId extends string>({
         <Table
           stickyHeader
           aria-label={
-            ariaTitle
-              ? ariaTitle
-              : getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
+            ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
           }
           data-testid={testId}
         >

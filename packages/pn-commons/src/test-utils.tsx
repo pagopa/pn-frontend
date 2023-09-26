@@ -22,6 +22,8 @@ import { initLocalization } from './services/localization.service';
 
 type NavigationRouter = 'default' | 'none';
 
+const theme = createTheme({});
+
 const AllTheProviders = ({
   children,
   testStore,
@@ -31,7 +33,6 @@ const AllTheProviders = ({
   testStore: Store;
   navigationRouter: NavigationRouter;
 }) => {
-  const theme = createTheme({});
   if (navigationRouter === 'default') {
     return (
       <BrowserRouter>
@@ -308,4 +309,5 @@ export {
   getById,
   queryById,
   createTestStore,
+  theme,
 };

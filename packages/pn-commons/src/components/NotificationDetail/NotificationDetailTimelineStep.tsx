@@ -1,18 +1,27 @@
-import { useState, Fragment, ReactNode } from 'react';
-import { Typography, Chip, Box, Button } from '@mui/material';
-import { TimelineConnector } from '@mui/lab';
+import { Fragment, ReactNode, useState } from 'react';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { TimelineConnector } from '@mui/lab';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import {
-  TimelineNotificationItem,
-  TimelineNotificationOppositeContent,
+  ButtonNaked,
   TimelineNotificationContent,
   TimelineNotificationDot,
+  TimelineNotificationItem,
+  TimelineNotificationOppositeContent,
   TimelineNotificationSeparator,
-  ButtonNaked,
 } from '@pagopa/mui-italia';
 
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+  NotificationStatus,
+  NotificationStatusHistory,
+} from '../../types';
 import {
   formatDay,
   formatMonthString,
@@ -21,14 +30,6 @@ import {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
 } from '../../utils';
-import {
-  LegalFactId,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationStatusHistory,
-  NotificationDetailOtherDocument,
-  NotificationStatus,
-} from '../../types';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
@@ -78,8 +79,8 @@ const timelineStepCmp = (
 
 /**
  * Notification detail timeline
- * This component used to display a timeline of events or notifications, 
- * allowing users to expand and collapse additional details as needed. 
+ * This component used to display a timeline of events or notifications,
+ * allowing users to expand and collapse additional details as needed.
  * The component's behavior and appearance can be customized by passing various props to it.
  * @param timelineStep data to show
  * @param recipients list of recipients
@@ -239,16 +240,16 @@ const NotificationDetailTimelineStep = ({
     return timelineStepCmp(
       s.elementId,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatMonthString(s.timestamp)}
         </Typography>
-        <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+        <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
           {formatDay(s.timestamp)}
         </Typography>
       </Fragment>,
       undefined,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatTime(s.timestamp)}
         </Typography>
         <Typography
@@ -276,7 +277,7 @@ const NotificationDetailTimelineStep = ({
                   key={
                     (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId
                   }
-                  data-testid="download-legalfact"
+                  data-testid="download-legalfact-micro"
                 >
                   {getLegalFactLabel(
                     s,

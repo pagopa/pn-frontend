@@ -1,6 +1,8 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '../../../test-utils';
+
 import { Box } from '@mui/material';
+
+import { fireEvent, prettyDOM, render, screen, waitFor } from '../../../test-utils';
 import CustomTagGroup from '../CustomTagGroup';
 
 describe('CustomTagGroup component', () => {
@@ -9,43 +11,46 @@ describe('CustomTagGroup component', () => {
   const mockCallbackFn = jest.fn();
 
   it('renders component with all tags', () => {
-    const result = render(<CustomTagGroup>{tags}</CustomTagGroup>);
-    expect(result.container).toHaveTextContent(/mock-tag-1mock-tag-2mock-tag-3mock-tag-4/);
+    const { container } = render(<CustomTagGroup>{tags}</CustomTagGroup>);
+    expect(container).toHaveTextContent(new RegExp(tagsArray.join('')));
   });
 
   it('renders component with limited 3 tags', () => {
-    const result = render(<CustomTagGroup visibleItems={3}>{tags}</CustomTagGroup>);
-    expect(result.container).toHaveTextContent(/mock-tag-1mock-tag-2mock-tag-3/);
-    expect(result.container).not.toHaveTextContent(/mock-tag-4/);
-    expect(result.container).toHaveTextContent(/\+1/);
+    const { container } = render(<CustomTagGroup visibleItems={3}>{tags}</CustomTagGroup>);
+    expect(container).toHaveTextContent(new RegExp(tagsArray.slice(0, 3).join('')));
+    expect(container).not.toHaveTextContent(/mock-tag-4/);
+    expect(container).toHaveTextContent(/\+1/);
   });
 
   it('renders component with limited 3 tags, trigger tooltip and callback', async () => {
-    const result = render(
+    const { container, getByTestId } = render(
       <CustomTagGroup visibleItems={3} onOpen={mockCallbackFn}>
         {tags}
       </CustomTagGroup>
     );
-    expect(result.container).toHaveTextContent(/mock-tag-1mock-tag-2mock-tag-3/);
-    expect(result.container).not.toHaveTextContent(/mock-tag-4/);
-    expect(result.container).toHaveTextContent(/\+1/);
-    const tooltip = screen.getByTestId('custom-tooltip-indicator');
-    fireEvent.mouseOver(tooltip);
-    await waitFor(async () => expect(screen.getAllByText(/mock-tag-4/)[0]).toBeInTheDocument());
+    expect(container).toHaveTextContent(new RegExp(tagsArray.slice(0, 3).join('')));
+    expect(container).not.toHaveTextContent(/mock-tag-4/);
+    expect(container).toHaveTextContent(/\+1/);
+    const tooltipIndicator = getByTestId('custom-tooltip-indicator');
+    fireEvent.mouseOver(tooltipIndicator);
+    const tooltip = await waitFor(() => screen.getByRole('tooltip'));
+    expect(tooltip).toHaveTextContent(/mock-tag-4/);
     expect(mockCallbackFn).toBeCalledTimes(1);
   });
 
   it('renders component with limited 3 tags with disabled tooltip, triggering mouseover should not do callback', async () => {
-    const result = render(
+    const { container, getByTestId } = render(
       <CustomTagGroup visibleItems={3} onOpen={mockCallbackFn} disableTooltip>
         {tags}
       </CustomTagGroup>
     );
-    expect(result.container).toHaveTextContent(/mock-tag-1mock-tag-2mock-tag-3/);
-    expect(result.container).not.toHaveTextContent(/mock-tag-4/);
-    expect(result.container).toHaveTextContent(/\+1/);
-    const tooltip = screen.getByTestId('remaining-tag-indicator');
-    await waitFor(async () => fireEvent.mouseOver(tooltip));
+    expect(container).toHaveTextContent(/mock-tag-1mock-tag-2mock-tag-3/);
+    expect(container).not.toHaveTextContent(/mock-tag-4/);
+    expect(container).toHaveTextContent(/\+1/);
+    const tooltipIndicator = getByTestId('remaining-tag-indicator');
+    fireEvent.mouseOver(tooltipIndicator);
+    const tooltip = await waitFor(() => screen.queryByRole('tooltip'));
+    expect(tooltip).not.toBeInTheDocument();
     expect(mockCallbackFn).toBeCalledTimes(0);
   });
 });

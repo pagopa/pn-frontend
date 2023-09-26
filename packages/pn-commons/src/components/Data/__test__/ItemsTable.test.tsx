@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { fireEvent, render, screen, within } from '../../../test-utils';
+import { fireEvent, render, within } from '../../../test-utils';
 import { Column, Item, Sort } from '../../../types';
 import ItemsTable from '../ItemsTable';
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
 
-const columns: Array<Column> = [
+const columns: Array<Column<'column-1' | 'column-2' | 'column-3'>> = [
   {
     id: 'column-1',
     label: 'Column 1',
@@ -32,27 +32,24 @@ const rows: Array<Item> = [
   { id: 'row-3', 'column-1': 'Row 3-1', 'column-2': 'Row 3-2', 'column-3': 'Row 3-3' },
 ];
 
-const sort: Sort = {
+const sort: Sort<'column-1'> = {
   orderBy: 'column-1',
   order: 'asc',
 };
 
-function testNotificationTableHead() {
-  const table = screen.getByRole('table');
-  expect(table).toHaveAttribute('aria-label', 'Tabella di item');
-  const tableHead = within(table).getByTestId('tableHead');
-  const tableColumns = within(tableHead).getAllByTestId('tableHeadCell');
-  expect(tableColumns).toHaveLength(columns.length);
-  tableColumns.forEach((column, i) => {
-    expect(column).toHaveTextContent(columns[i].label);
-  });
-  return table;
-}
-
 describe('Items Table Component', () => {
-  it('renders items table (with rows)', () => {
-    render(<ItemsTable columns={columns} rows={rows} testId="table-test" />);
-    const table = testNotificationTableHead();
+  it('renders component (with rows)', () => {
+    const { getByRole } = render(<ItemsTable columns={columns} rows={rows} testId="table-test" />);
+    const table = getByRole('table');
+    // check header
+    expect(table).toHaveAttribute('aria-label', 'Tabella di item');
+    const tableHead = within(table).getByTestId('tableHead');
+    const tableColumns = within(tableHead).getAllByTestId('tableHeadCell');
+    expect(tableColumns).toHaveLength(columns.length);
+    tableColumns.forEach((column, i) => {
+      expect(column).toHaveTextContent(columns[i].label);
+    });
+    // check body
     const tableBody = within(table).getByTestId('tableBody');
     const tableRows = within(tableBody).getAllByTestId('table-test.row');
     expect(tableRows).toHaveLength(rows.length);
@@ -66,8 +63,10 @@ describe('Items Table Component', () => {
   });
 
   it('sorts a column', () => {
-    render(<ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleSort} />);
-    const table = screen.getByRole('table');
+    const { getByRole } = render(
+      <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleSort} />
+    );
+    const table = getByRole('table');
     const tableHead = within(table).getByTestId('tableHead');
     const firstColumn = within(tableHead).getAllByTestId('tableHeadCell')[0];
     const sortButton = within(firstColumn).getByRole('button');
@@ -78,8 +77,10 @@ describe('Items Table Component', () => {
   });
 
   it('click on a column', () => {
-    render(<ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />);
-    const table = screen.getByRole('table');
+    const { getByRole } = render(
+      <ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />
+    );
+    const table = getByRole('table');
     const tableBody = within(table).getByTestId('tableBody');
     const firstRow = within(tableBody).getAllByTestId('table-test.row')[0];
     const tableColumns = within(firstRow).getAllByTestId('tableBodyCell');
@@ -89,8 +90,10 @@ describe('Items Table Component', () => {
   });
 
   it('disable accessibility navigation on a column', () => {
-    render(<ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />);
-    const table = screen.getByRole('table');
+    const { getByRole } = render(
+      <ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />
+    );
+    const table = getByRole('table');
     const tableBody = within(table).getByTestId('tableBody');
     const firstRow = within(tableBody).getAllByTestId('table-test.row');
     const tableColumns = within(firstRow![0]).getAllByTestId('tableBodyCell');

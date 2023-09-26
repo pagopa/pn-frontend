@@ -24,32 +24,30 @@ const userActions = [
 ];
 
 describe('Header Component', () => {
-  const { location } = window;
+  const original = window.location;
+
+  beforeAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '', assign: exitFn },
+    });
+  });
 
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    delete window.location;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    window.location = {
-      href: '',
-      assign: exitFn,
-    };
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    window.location.href = '';
+    jest.clearAllMocks();
   });
 
   afterAll((): void => {
-    window.location = location;
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   it('renders header (one product, no parties and no user dropdown)', async () => {
     // render component
-    const result = render(
+    const { container } = render(
       <Header productsList={[productsList[0]]} loggedUser={loggedUser} onExitAction={handleClick} />
     );
-    const headers = result.container.querySelectorAll('.MuiContainer-root');
+    const headers = container.querySelectorAll('.MuiContainer-root');
     expect(headers[0]).toBeInTheDocument();
     expect(headers[0]).toHaveTextContent(/PagoPA S.p.A./i);
     const buttons = headers[0]!.querySelectorAll('button');
@@ -64,9 +62,11 @@ describe('Header Component', () => {
   });
 
   it('renders header (two products, no parties and no user dropdown)', async () => {
+    sessionStorage.setItem('fake-item', 'prova');
     // render component
-    const result = render(<Header productsList={productsList} loggedUser={loggedUser} />);
-    const headers = result.container.querySelectorAll('.MuiContainer-root');
+    const { container } = render(<Header productsList={productsList} loggedUser={loggedUser} />);
+    expect(sessionStorage.getItem('fake-item')).not.toBeNull();
+    const headers = container.querySelectorAll('.MuiContainer-root');
     const productButton = headers[1].querySelector('[role="button"]');
     expect(productButton).toBeInTheDocument();
     fireEvent.click(productButton!);
@@ -76,11 +76,14 @@ describe('Header Component', () => {
     expect(products).toHaveLength(2);
     expect(products[0]).toHaveTextContent(productsList[0].title);
     expect(products[1]).toHaveTextContent(productsList[1].title);
+    fireEvent.click(products[1]);
+    expect(window.location.href).toBe(productsList[1].productUrl);
+    expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
   it('renders header (two products, no parties and user dropdown)', async () => {
     // render component
-    const result = render(
+    const { container } = render(
       <Header
         productsList={productsList}
         loggedUser={loggedUser}
@@ -88,7 +91,7 @@ describe('Header Component', () => {
         userActions={userActions}
       />
     );
-    const headers = result.container.querySelectorAll('.MuiContainer-root');
+    const headers = container.querySelectorAll('.MuiContainer-root');
     const buttons = headers[0]!.querySelectorAll('button');
     expect(buttons[2]).toHaveTextContent(/Mario Rossi/i);
     fireEvent.click(buttons[2]);
@@ -104,7 +107,7 @@ describe('Header Component', () => {
 
   it('renders header (two products, one party and user dropdown)', async () => {
     // render component
-    const result = render(
+    const { container } = render(
       <Header
         productsList={productsList}
         loggedUser={loggedUser}
@@ -113,7 +116,7 @@ describe('Header Component', () => {
         partyList={[partyList[0]]}
       />
     );
-    const headers = result.container.querySelectorAll('.MuiContainer-root');
+    const headers = container.querySelectorAll('.MuiContainer-root');
     expect(headers[1]).toHaveTextContent(partyList[0].name);
     expect(headers[1]).toHaveTextContent(partyList[0].productRole);
     const buttons = headers[1].querySelectorAll('[role="button"]');
@@ -122,7 +125,7 @@ describe('Header Component', () => {
 
   it('renders header (two products, two parties and user dropdown)', async () => {
     // render component
-    const result = render(
+    const { container } = render(
       <Header
         productsList={productsList}
         loggedUser={loggedUser}
@@ -131,7 +134,7 @@ describe('Header Component', () => {
         partyList={partyList}
       />
     );
-    const headers = result.container.querySelectorAll('.MuiContainer-root');
+    const headers = container.querySelectorAll('.MuiContainer-root');
     const buttons = headers[1].querySelectorAll('[role="button"]');
     expect(buttons).toHaveLength(2);
     fireEvent.click(buttons[1]);
@@ -150,7 +153,7 @@ describe('Header Component', () => {
 
   it('clicks on assistanceEmail when value is passed', async () => {
     // render component
-    const result = render(
+    const { getByText } = render(
       <Header
         productsList={productsList}
         loggedUser={loggedUser}
@@ -161,14 +164,14 @@ describe('Header Component', () => {
       />
     );
     expect(window.location.href).toBe('');
-    const assistanceLink = result.getByText(/Assistenza/i);
+    const assistanceLink = getByText(/Assistenza/i);
     fireEvent.click(assistanceLink);
     expect(window.location.href).toBe('mailto:email');
   });
 
   it('clicks on assistance link when assistanceEmail has no value', () => {
     // render component
-    const result = render(
+    const { getByText } = render(
       <Header
         productsList={productsList}
         loggedUser={loggedUser}
@@ -177,14 +180,16 @@ describe('Header Component', () => {
         partyList={partyList}
       />
     );
-    const assistanceLink = result.getByText(/Assistenza/i);
+    const assistanceLink = getByText(/Assistenza/i);
     fireEvent.click(assistanceLink);
     expect(window.location.href).toBe('');
   });
 
   it('clicks on exit with default value', async () => {
-    const result = render(<Header productsList={[productsList[0]]} loggedUser={loggedUser} />);
-    const headers = result.container.querySelectorAll('.MuiContainer-root');
+    const { container } = render(
+      <Header productsList={[productsList[0]]} loggedUser={loggedUser} />
+    );
+    const headers = container.querySelectorAll('.MuiContainer-root');
     const buttons = headers[0]!.querySelectorAll('button');
     fireEvent.click(buttons[2]);
     await waitFor(() => expect(exitFn).toBeCalledTimes(1));

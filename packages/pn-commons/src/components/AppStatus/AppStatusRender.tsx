@@ -47,7 +47,7 @@ export const AppStatusRender = (props: Props) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const isMobile = useIsMobile();
   useDownloadDocument({
-    url: legalFactDocumentData && legalFactDocumentData.url,
+    url: legalFactDocumentData?.url,
     clearDownloadAction: clearLegalFactDocument,
   });
 

@@ -45,8 +45,8 @@ const cardActions: Array<CardAction> = [
 ];
 
 describe('Items Card Component', () => {
-  it('renders items card (with data)', () => {
-    const result = render(
+  it('renders component (with data)', () => {
+    const { queryAllByTestId } = render(
       <ItemsCard
         cardHeader={cardHeader}
         cardBody={cardBody}
@@ -54,7 +54,7 @@ describe('Items Card Component', () => {
         cardActions={cardActions}
       />
     );
-    const notificationsCards = result.queryAllByTestId('itemCard');
+    const notificationsCards = queryAllByTestId('itemCard');
     expect(notificationsCards).toHaveLength(cardData.length);
     notificationsCards.forEach((card, index) => {
       const cardHeaderLeft = within(card).getByTestId('cardHeaderLeft');
@@ -76,7 +76,7 @@ describe('Items Card Component', () => {
   });
 
   it('clicks on action', async () => {
-    const result = render(
+    const { queryAllByTestId } = render(
       <ItemsCard
         cardHeader={cardHeader}
         cardBody={cardBody}
@@ -84,7 +84,7 @@ describe('Items Card Component', () => {
         cardActions={cardActions}
       />
     );
-    const notificationsCards = result.queryAllByTestId('itemCard');
+    const notificationsCards = queryAllByTestId('itemCard');
     const cardActionsEl = within(notificationsCards[0]).getByTestId('cardAction');
     fireEvent.click(cardActionsEl!);
     await waitFor(() => {

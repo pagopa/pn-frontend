@@ -30,10 +30,9 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   const inputsRef = useRef(new Array(initialValues.length).fill(undefined));
 
   const inputStyle = useMemo(() => {
-    /* eslint-disable functional/no-let */
+    // eslint-disable-next-line functional/no-let
     let color = isReadOnly ? 'primary.main' : '';
     color = hasError ? 'error.main' : color;
-    /* eslint-enalbe functional/no-let */
     return {
       width: '33px',
       height: '56px',
@@ -96,6 +95,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   };
 
   const changeHandler = (event: ChangeEvent, index: number) => {
+    // eslint-disable-next-line functional/no-let
     let value = String((event.target as HTMLInputElement).value);
     // removed value - i.e. backspace or canc clicked
     if (value === '' && currentValues[index] !== '') {

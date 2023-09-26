@@ -29,10 +29,23 @@ const openedModalComponent = (
 );
 
 describe('CodeModal Component', () => {
+  const original = window.navigator;
+
+  beforeAll(() => {
+    Object.assign(window.navigator, {
+      clipboard: {
+        writeText: jest.fn().mockImplementation(() => Promise.resolve()),
+      },
+    });
+  });
+
+  afterAll(() => {
+    Object.defineProperty(window, 'navigator', { value: original });
+  });
+
   it('renders CodeModal (closed)', () => {
     // render component
     render(openedModalComponent(false));
-
     const dialog = screen.queryByTestId('codeDialog');
     expect(dialog).not.toBeInTheDocument();
   });
@@ -40,7 +53,6 @@ describe('CodeModal Component', () => {
   it('renders CodeModal (opened)', () => {
     // render component
     render(openedModalComponent(true));
-
     const dialog = screen.getByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/mocked-title/i);
@@ -57,10 +69,9 @@ describe('CodeModal Component', () => {
     expect(buttons![1]).toHaveTextContent('mocked-confirm');
   });
 
-  it('renders CodeModal (read only)', () => {
+  it('renders CodeModal (read only)', async () => {
     // render component
     render(openedModalComponent(true, false, true, ['0', '1', '2', '3', '4']));
-
     const dialog = screen.getByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/mocked-title/i);
@@ -70,15 +81,19 @@ describe('CodeModal Component', () => {
     expect(codeInputs).toHaveLength(5);
     codeInputs?.forEach((input, index) => {
       expect(input).toHaveValue(index.toString());
+      expect(input).toHaveAttribute('readonly');
     });
     const button = within(dialog).getByTestId('copyCodeButton');
     expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    await waitFor(() => {
+      expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('01234');
+    });
   });
 
   it('clicks on cancel', async () => {
     // render component
     render(openedModalComponent(true));
-
     const dialog = screen.getByTestId('codeDialog');
     const button = within(dialog).getByTestId('codeCancelButton');
     fireEvent.click(button!);
@@ -90,7 +105,6 @@ describe('CodeModal Component', () => {
   it('clicks on confirm', async () => {
     // render component
     render(openedModalComponent(true));
-
     const dialog = screen.getByTestId('codeDialog');
     const button = within(dialog).getByTestId('codeConfirmButton');
     expect(button!).toBeDisabled();
@@ -113,7 +127,6 @@ describe('CodeModal Component', () => {
   it('shows error', () => {
     // render component
     render(openedModalComponent(true, true));
-
     const dialog = screen.getByTestId('codeDialog');
     const errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();

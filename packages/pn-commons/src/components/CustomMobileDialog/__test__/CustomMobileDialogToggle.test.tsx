@@ -1,21 +1,14 @@
 import React from 'react';
 
-import { RenderResult, fireEvent, render } from '../../../test-utils';
+import { fireEvent, getById, queryById, render, screen, waitFor } from '../../../test-utils';
 import CustomMobileDialog from '../CustomMobileDialog';
-import * as customContext from '../CustomMobileDialog.context';
 import CustomMobileDialogContent from '../CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialogToggle';
 
 describe('CustomMobileDialog Component', () => {
-  let result: RenderResult | undefined;
-  const contextMockedFn = jest.fn();
-
-  beforeEach(() => {
-    const customHookSpy = jest.spyOn(customContext, 'useCustomMobileDialogContext');
-    customHookSpy.mockReturnValue({ open: false, toggleOpen: contextMockedFn });
-
+  it('renders component - with badge', () => {
     // render component
-    result = render(
+    const { container, getByTestId } = render(
       <CustomMobileDialog>
         <CustomMobileDialogToggle hasCounterBadge bagdeCount={1}>
           mocked dialog toggle title
@@ -25,21 +18,48 @@ describe('CustomMobileDialog Component', () => {
         </CustomMobileDialogContent>
       </CustomMobileDialog>
     );
-  });
-
-  afterEach(() => {
-    result = undefined;
-    jest.resetAllMocks();
-  });
-
-  it('renders CustomMobileDialogToggle', () => {
-    const button = result?.getByTestId('dialogToggleButton');
+    const button = getByTestId('dialogToggleButton');
     expect(button).toHaveTextContent(/mocked dialog toggle title/i);
+    const badge = getById(container, 'dialogToggleBadge');
+    expect(badge).toBeInTheDocument();
+    expect(badge).toHaveTextContent('1');
+    const dialog = screen.queryByTestId('mobileDialog');
+    expect(dialog).not.toBeInTheDocument();
   });
 
-  it('clicks on button', async () => {
-    const button = result?.container.querySelector('button');
+  it('renders component - without badge', () => {
+    // render component
+    const { container, getByTestId } = render(
+      <CustomMobileDialog>
+        <CustomMobileDialogToggle hasCounterBadge>
+          mocked dialog toggle title
+        </CustomMobileDialogToggle>
+        <CustomMobileDialogContent title={'mocked dialog toggle title'}>
+          mocked content
+        </CustomMobileDialogContent>
+      </CustomMobileDialog>
+    );
+    const button = getByTestId('dialogToggleButton');
+    expect(button).toHaveTextContent(/mocked dialog toggle title/i);
+    const badge = queryById(container, 'dialogToggleBadge');
+    expect(badge).not.toBeInTheDocument();
+  });
+
+  it('clicks on button and opens the dialog', async () => {
+    // render component
+    const { container } = render(
+      <CustomMobileDialog>
+        <CustomMobileDialogToggle hasCounterBadge>
+          mocked dialog toggle title
+        </CustomMobileDialogToggle>
+        <CustomMobileDialogContent title={'mocked dialog toggle title'}>
+          mocked content
+        </CustomMobileDialogContent>
+      </CustomMobileDialog>
+    );
+    const button = container.querySelector('button');
     fireEvent.click(button!);
-    expect(contextMockedFn).toBeCalledTimes(1);
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    expect(dialog).toBeInTheDocument();
   });
 });

@@ -24,7 +24,7 @@ const Component = () => {
 };
 
 describe('CustomMobileDialog Context', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   beforeEach(() => {
     // render component
@@ -35,17 +35,13 @@ describe('CustomMobileDialog Context', () => {
     );
   });
 
-  afterEach(() => {
-    result = undefined;
-  });
-
   it('uses CustomMobileDialog Context', () => {
-    expect(result?.container).toHaveTextContent('Status: false');
+    expect(result.container).toHaveTextContent('Status: false');
   });
 
   it('changes CustomMobileDialog Context', async () => {
-    const button = result?.getByTestId('buttonTest');
+    const button = result.getByTestId('buttonTest');
     fireEvent.click(button!);
-    await waitFor(() => expect(result?.container).toHaveTextContent('Status: true'));
+    await waitFor(() => expect(result.container).toHaveTextContent('Status: true'));
   });
 });
