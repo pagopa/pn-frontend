@@ -169,7 +169,11 @@ const Recipient: React.FC<Props> = ({
     */
       zip: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: requiredStringFieldValidation(tc, 12),
+        then: yup
+          .string()
+          .required(tc('required-field'))
+          .max(12, tc('too-long-field-error', { maxLength: 12 }))
+          .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`),
       }),
       municipalityDetails: yup.string().when('showPhysicalAddress', {
         is: true,
