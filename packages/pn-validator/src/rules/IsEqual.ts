@@ -1,7 +1,7 @@
-import { isDate } from './../utility/IsDate';
-import { isArray } from './../utility/IsArray';
-import { isObject } from '../utility/IsObject';
 import { Rule } from '../Rule';
+import { isArray } from '../utility/IsArray';
+import { isDate } from '../utility/IsDate';
+import { isObject } from '../utility/IsObject';
 
 export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   private not?: boolean;
@@ -39,10 +39,7 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   };
 
   private compareArray = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
-    if (
-      isArray(value) &&
-      isArray(valueToCompare)
-    ) {
+    if (isArray(value) && isArray(valueToCompare)) {
       if (value.length === valueToCompare.length) {
         return value.every((elem, index) => {
           return this.compare(elem, valueToCompare[index]);
@@ -61,10 +58,7 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
       if (isArray(value)) {
         return this.compareArray(value, valueToCompare);
       }
-      if (
-        (isDate(value) && this.compareDate(value, valueToCompare)) ||
-        value === valueToCompare
-      ) {
+      if ((isDate(value) && this.compareDate(value, valueToCompare)) || value === valueToCompare) {
         return true;
       }
     }

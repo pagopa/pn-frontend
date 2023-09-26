@@ -1,11 +1,11 @@
-import { isDefined } from '../utility/IsDefined';
 import { Rule } from '../Rule';
+import { isDefined } from '../utility/IsDefined';
 
 export class IsOneOf<TModel, TValue> extends Rule<TModel, TValue> {
-  private possibleValues: TValue[];
+  private possibleValues: Array<TValue>;
   private not?: boolean;
 
-  constructor(possibleValues: TValue[], not?: boolean, customErrorMessage?: string) {
+  constructor(possibleValues: Array<TValue>, not?: boolean, customErrorMessage?: string) {
     super(customErrorMessage);
     this.possibleValues = possibleValues;
     this.not = not;

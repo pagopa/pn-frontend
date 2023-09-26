@@ -52,7 +52,7 @@ const TitleBox: React.FC<Props> = ({
     {title && (
       <Grid id="item" item xs={12} mb={mbTitle}>
         <Typography
-          id="title-of-page"
+          id={`${title}-page`}
           data-testid="titleBox"
           role="heading"
           aria-label={ariaLabel}
