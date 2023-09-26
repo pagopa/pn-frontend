@@ -123,6 +123,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     handleReloadPayment={() => handleReloadPayment([payment])}
                     handleDeselectPayment={handleDeselectPayment}
                     isSinglePayment={isSinglePayment}
+                    isCancelled={isCancelled}
                   />
                 </Box>
               ) : null

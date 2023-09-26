@@ -293,7 +293,7 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments) {
+    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments ?? []);
     }
   }, [currentRecipient.payments]);

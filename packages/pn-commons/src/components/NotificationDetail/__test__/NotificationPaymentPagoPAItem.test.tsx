@@ -29,6 +29,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -44,6 +45,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -60,6 +62,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -83,6 +86,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -102,6 +106,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -122,6 +127,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
     const amountContainer = result.getByTestId('payment-amount');
@@ -139,6 +145,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={true}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -159,6 +166,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={true}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={handleDeselectPaymentMk}
+        isCancelled={false}
       />
     );
 
@@ -184,6 +192,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={handleReloadPaymentMk}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -208,6 +217,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -233,6 +243,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -256,6 +267,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -280,6 +292,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -304,6 +317,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
@@ -328,6 +342,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isSelected={false}
         handleReloadPayment={() => void 0}
         handleDeselectPayment={() => void 0}
+        isCancelled={false}
       />
     );
 
