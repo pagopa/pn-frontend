@@ -23,7 +23,6 @@ export function useBlocker(blocker: Blocker, when = true): void {
       const autoUnblockingTx = {
         ...tx,
         retry() {
-          console.log('sono dentrooooo');
           // stop blocking
           unblock();
           // retries location update

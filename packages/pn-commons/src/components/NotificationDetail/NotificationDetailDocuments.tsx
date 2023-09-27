@@ -51,7 +51,12 @@ const NotificationDetailDocuments: React.FC<Props> = (
       return (
         <Box key={document.key} data-testid="notificationDetailDocuments">
           {!documentsAvailable ? (
-            <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography
+              sx={{ display: 'flex', alignItems: 'center' }}
+              variant="button"
+              color="text.disabled"
+              fontSize={14}
+            >
               <AttachFileIcon sx={{ mr: 1 }} fontSize="inherit" color="inherit" />
               {document.name}
             </Typography>

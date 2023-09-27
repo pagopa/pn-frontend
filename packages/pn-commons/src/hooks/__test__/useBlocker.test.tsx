@@ -67,6 +67,20 @@ describe('useBlocker', () => {
     unmount();
   });
 
+  // Questo test non è di facile implementazione
+  // COSA SI VUOLE TESTARE
+  // si vuole testare la parte di codice
+  /*
+  retry() {
+    // stop blocking
+    unblock();
+    // retries location update
+    tx.retry();
+  },
+  */
+  // che si verifica quando la funzione retry viene chiamata
+  // il problema sta nella funzione di unblock che, non venendo restituita, blocca l'esecuzione del codice
+  // e fa fallire il test
   it.skip('should unblock the navigation when the blocker callback is retried', () => {
     const retryCallback = jest.fn();
     const unblockFn = jest.fn();

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import { fireEvent, prettyDOM, render, screen, waitFor } from '../../../test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import CustomTagGroup from '../CustomTagGroup';
 
 describe('CustomTagGroup component', () => {

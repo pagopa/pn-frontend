@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../../test-utils';
+import { selfcareMenuItems, sideMenuItems } from '../../../__mocks__/SideMenu.mock';
+import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import { SideMenuItem } from '../../../types';
 import SideMenuList from '../SideMenuList';
-import { sideMenuItems } from './test-utils';
 
 async function testMenuItem(
   container: HTMLElement,
@@ -22,74 +22,135 @@ async function testMenuItem(
 const handleLinkClick = jest.fn();
 
 describe('SideMenuList', () => {
-  let result: RenderResult | undefined;
-  beforeEach(async () => {
-    await act(async () => {
-      result = render(
-        <SideMenuList
-          menuItems={sideMenuItems}
-          handleLinkClick={handleLinkClick}
-          selectedItem={{
-            index: 0,
-            label: sideMenuItems[0].label,
-            route: sideMenuItems[0].route!,
-          }}
-        />
-      );
-    });
-  });
-
   afterEach(() => {
-    result = undefined;
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
-  it('Render side menu list', async () => {
-    const ul = result?.getByRole('navigation');
-    await testMenuItem(ul!, sideMenuItems.length, sideMenuItems);
+  it('renders component', async () => {
+    const { getByRole } = render(
+      <SideMenuList
+        menuItems={sideMenuItems}
+        handleLinkClick={handleLinkClick}
+        selectedItem={{
+          index: 0,
+          label: sideMenuItems[0].label,
+          route: sideMenuItems[0].route!,
+        }}
+      />
+    );
+    const ul = getByRole('navigation');
+    await testMenuItem(ul, sideMenuItems.length, sideMenuItems);
   });
 
-  // This test failed occassionally when executed in a developer' locale environment.
-  // I guess that such failed runs were due to this passage in the code
-  //     fireEvent.click(buttons[2]);
-  //     await waitFor(() => {
-  //       expect(collapsedMenu).not.toBeInTheDocument();
-  //     });
-  // In fact, the click dispatches immediately, what should be waited for is the re-rendering of the component.
-  // Based on some examples found in
-  //   https://snyk.io/advisor/npm-package/react-testing-library/functions/react-testing-library.fireEvent.change
-  // I changed this part into
-  //     fireEvent.click(buttons[2]);
-  //     await waitFor(() => {
-  //       expect(collapsedMenu).not.toBeInTheDocument();
-  //     });
-  // In order to verify that the latter ("new") implementation is indeed better than the former ("old") one,
-  // I launched a loop of 100 run executions for each version, obtaining the following result
-  //   - old implementation: 92 green, 8 red.
-  //   - new implementation: 100 green, 0 red.
-  // This was verified in the context of PN-2712.
-  // --------------------------------------
-  // Carlos Lombardi, 2022.12.14
-  // --------------------------------------
-  it('Open and close sub menu', async () => {
-    const ul = result?.getByRole('navigation');
-    const buttons = within(ul!).getAllByRole('button');
-    fireEvent.click(buttons[1]);
-    let collapsedMenu = within(ul!).getByTestId(`collapse-${sideMenuItems[1].label}`);
+  it('open and close sub menu', async () => {
+    const { getByRole } = render(
+      <SideMenuList
+        menuItems={sideMenuItems}
+        handleLinkClick={handleLinkClick}
+        selectedItem={{
+          index: 0,
+          label: sideMenuItems[0].label,
+          route: sideMenuItems[0].route!,
+        }}
+      />
+    );
+    const ul = getByRole('navigation');
+    const buttons = within(ul).getAllByRole('button');
+    const itemWithChildrenIdx = sideMenuItems.findIndex((item) => item.children);
+    // open menu
+    fireEvent.click(buttons[itemWithChildrenIdx]);
+    if (!sideMenuItems[itemWithChildrenIdx].notSelectable) {
+      expect(buttons[itemWithChildrenIdx]).toHaveClass('Mui-selected');
+    } else {
+      expect(buttons[itemWithChildrenIdx]).not.toHaveClass('Mui-selected');
+    }
+    let collapsedMenu = within(ul).getByTestId(
+      `collapse-${sideMenuItems[itemWithChildrenIdx].label}`
+    );
     await testMenuItem(
       collapsedMenu,
-      sideMenuItems[1].children!.length,
-      sideMenuItems[1].children!
+      sideMenuItems[itemWithChildrenIdx].children!.length,
+      sideMenuItems[itemWithChildrenIdx].children!
     );
-    fireEvent.click(buttons[2]);
+    // open another menu
+    const otherItemWithChildrenIdx = sideMenuItems.findIndex(
+      (item, index) => item.children && index !== itemWithChildrenIdx
+    );
+    fireEvent.click(buttons[otherItemWithChildrenIdx]);
+    if (!sideMenuItems[otherItemWithChildrenIdx].notSelectable) {
+      expect(buttons[otherItemWithChildrenIdx]).toHaveClass('Mui-selected');
+    } else {
+      expect(buttons[otherItemWithChildrenIdx]).not.toHaveClass('Mui-selected');
+    }
+    await waitFor(() => {
+      expect(collapsedMenu).not.toBeInTheDocument();
+      if (!sideMenuItems[otherItemWithChildrenIdx].notSelectable) {
+        expect(buttons[itemWithChildrenIdx]).not.toHaveClass('Mui-selected');
+      } else {
+        expect(buttons[itemWithChildrenIdx]).toHaveClass('Mui-selected');
+      }
+    });
+    collapsedMenu = await within(ul).getByTestId(
+      `collapse-${sideMenuItems[otherItemWithChildrenIdx].label}`
+    );
+    await testMenuItem(
+      collapsedMenu,
+      sideMenuItems[otherItemWithChildrenIdx].children!.length,
+      sideMenuItems[otherItemWithChildrenIdx].children!
+    );
+    // close the same menu
+    fireEvent.click(buttons[otherItemWithChildrenIdx]);
     await waitFor(() => {
       expect(collapsedMenu).not.toBeInTheDocument();
     });
-    collapsedMenu = await within(ul!).getByTestId(`collapse-${sideMenuItems[2].label}`);
-    await testMenuItem(
-      collapsedMenu,
-      sideMenuItems[2].children!.length,
-      sideMenuItems[2].children!
+    expect(handleLinkClick).toBeCalledTimes(3);
+  });
+
+  it('select child menu voice', () => {
+    const { getByRole } = render(
+      <SideMenuList
+        menuItems={sideMenuItems}
+        handleLinkClick={handleLinkClick}
+        selectedItem={{
+          index: 0,
+          label: sideMenuItems[0].label,
+          route: sideMenuItems[0].route!,
+        }}
+      />
     );
+    const ul = getByRole('navigation');
+    const buttons = within(ul).getAllByRole('button');
+    // open menu
+    const itemWithChildrenIdx = sideMenuItems.findIndex((item) => item.children);
+    fireEvent.click(buttons[itemWithChildrenIdx]);
+    const collapsedMenu = within(ul).getByTestId(
+      `collapse-${sideMenuItems[itemWithChildrenIdx].label}`
+    );
+    // select a child voice
+    const item = within(collapsedMenu).getByTestId(
+      `sideMenuItem-${sideMenuItems[itemWithChildrenIdx].children![0].label}`
+    );
+    fireEvent.click(item);
+    expect(item).toHaveClass('Mui-selected');
+    expect(handleLinkClick).toBeCalledTimes(2);
+  });
+
+  it('renders selfcare itmes', async () => {
+    const { getAllByRole } = render(
+      <SideMenuList
+        menuItems={sideMenuItems}
+        handleLinkClick={handleLinkClick}
+        selectedItem={{
+          index: 0,
+          label: sideMenuItems[0].label,
+          route: sideMenuItems[0].route!,
+        }}
+        selfCareItems={selfcareMenuItems}
+      />
+    );
+    const ul = getAllByRole('navigation');
+    expect(ul).toHaveLength(2);
+    await testMenuItem(ul[0], sideMenuItems.length, sideMenuItems);
+    await testMenuItem(ul[1], selfcareMenuItems.length, selfcareMenuItems);
   });
 });

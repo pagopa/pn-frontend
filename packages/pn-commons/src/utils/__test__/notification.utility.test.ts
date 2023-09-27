@@ -963,9 +963,6 @@ describe('parse notification & filters', () => {
     const prevDeliveredStatus = clonedNotification.notificationStatusHistory.find(
       (sh) => sh.status === NotificationStatus.DELIVERED
     );
-    const prevDeliveringStatus = clonedNotification.notificationStatusHistory.find(
-      (sh) => sh.status === NotificationStatus.DELIVERING
-    );
     const digitalSuccessElIndex = prevDeliveredStatus!.relatedTimelineElements.findIndex(
       (el) => el === clonedNotification.timeline[digitalSuccessIndex].elementId
     );
@@ -977,7 +974,6 @@ describe('parse notification & filters', () => {
       sendLetter.elementId
     );
     const deliveredCount = prevDeliveredStatus!.relatedTimelineElements.length;
-    const deliveringCount = prevDeliveringStatus!.relatedTimelineElements.length;
     // change timeline
     clonedNotification.timeline[digitalSuccessIndex] = digitalFailure;
     clonedNotification.timeline.splice(digitalSuccessIndex + 1, 0, prepareLetter, sendLetter);

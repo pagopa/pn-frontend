@@ -21,21 +21,21 @@ const renderSnackBar = (open: boolean, type: MessageType, closingDelay?: number)
 
 describe('SnackBar Component', () => {
   it('renders snack bar (closed)', () => {
-    const result = renderSnackBar(false, MessageType.INFO);
-    const snackBarContainer = result?.queryByTestId('snackBarContainer');
+    const { queryByTestId } = renderSnackBar(false, MessageType.INFO);
+    const snackBarContainer = queryByTestId('snackBarContainer');
     expect(snackBarContainer).not.toBeInTheDocument();
   });
 
   it('renders snack bar (opened)', () => {
-    const result = renderSnackBar(true, MessageType.INFO);
-    const snackBarContainer = result?.getByTestId('snackBarContainer');
+    const { getByTestId } = renderSnackBar(true, MessageType.INFO);
+    const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     expect(snackBarContainer).toHaveTextContent(snackBarProps.message);
   });
 
   it('closes snack bar by clicking close button', async () => {
-    const result = renderSnackBar(true, MessageType.INFO);
-    const snackBarContainer = result?.getByTestId('snackBarContainer');
+    const { getByTestId } = renderSnackBar(true, MessageType.INFO);
+    const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     const closeButton = within(snackBarContainer!).getByRole('button');
     await waitFor(() => {
@@ -45,8 +45,8 @@ describe('SnackBar Component', () => {
   });
 
   it('closes snack bar after delay', async () => {
-    const result = renderSnackBar(true, MessageType.INFO, 400);
-    const snackBarContainer = result?.getByTestId('snackBarContainer');
+    const { getByTestId } = renderSnackBar(true, MessageType.INFO, 400);
+    const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     await waitFor(
       () => {

@@ -1,6 +1,8 @@
-import { Alert, Snackbar, IconButton, AlertTitle } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
+
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert, AlertTitle, IconButton, Snackbar } from '@mui/material';
+
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MessageType } from '../../types/MessageType';
 

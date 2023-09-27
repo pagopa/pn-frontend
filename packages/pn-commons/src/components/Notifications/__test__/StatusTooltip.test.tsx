@@ -11,7 +11,7 @@ const mockEventTrackingCallback = jest.fn();
 async function testStatusTooltip(
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'
 ) {
-  render(
+  const { getByRole } = render(
     <StatusTooltip
       tooltip={tooltip}
       label={label}
@@ -19,7 +19,7 @@ async function testStatusTooltip(
       eventTrackingCallback={mockEventTrackingCallback}
     />
   );
-  const button = screen.getByRole('button');
+  const button = getByRole('button');
   expect(button).toHaveTextContent(/mocked label/i);
   const buttonClass = `${classRoot}${color.charAt(0).toUpperCase() + color.slice(1)}`;
   expect(button.classList.contains(buttonClass)).toBe(true);

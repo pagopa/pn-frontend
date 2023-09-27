@@ -15,18 +15,24 @@ describe('TimedMessage component', () => {
         <TimedMessage message={'mock-message'} timeout={2000} callback={callbackFn} />
       );
     });
-
     // Expect the message to be rendered
-    const messageRendered = result?.getByTestId('timed-message');
+    const messageRendered = result.getByTestId('timed-message');
     expect(messageRendered).toBeInTheDocument();
-
     // Wait for 2000 milliseconds
     await act(() => new Promise((t) => setTimeout(t, 2000)));
-
     // Expect the message to be disappeared
     expect(messageRendered).not.toBeInTheDocument();
-
     // Expect the function callback to be called
     expect(callbackFn).toBeCalledTimes(1);
+  });
+
+  it('no message if timeout is 0', async () => {
+    // Render component
+    await act(async () => {
+      result = render(<TimedMessage message={'mock-message'} timeout={0} callback={callbackFn} />);
+    });
+    // Expect the message to be rendered
+    const messageRendered = result.queryByTestId('timed-message');
+    expect(messageRendered).not.toBeInTheDocument();
   });
 });

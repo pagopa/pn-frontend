@@ -1,14 +1,6 @@
 import React from 'react';
 
-import {
-  act,
-  createMatchMedia,
-  fireEvent,
-  prettyDOM,
-  render,
-  waitFor,
-  within,
-} from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
 import { Item, Sort } from '../../../types';
 import { SmartTableAction, SmartTableData } from '../../../types/SmartTable';
 import SmartFilter from '../SmartFilter';

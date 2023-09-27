@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-import { Downtime, DowntimeStatus, KnownFunctionality } from '../models';
 import {
   AddressSource,
   DigitalDomicileType,
@@ -15,7 +14,7 @@ import {
   RecipientType,
   TimelineCategory,
 } from '../types';
-import { NotificationDetailTimelineDetails, PaymentHistory } from '../types/NotificationDetail';
+import { NotificationDetailTimelineDetails } from '../types/NotificationDetail';
 import { parseNotificationDetail } from '../utils';
 
 function getOneRecipientNotification(): NotificationDetail {
@@ -77,7 +76,7 @@ const recipients: Array<NotificationDetailRecipient> = [
     physicalAddress: {
       at: 'Presso',
       address: 'VIA SENZA NOME',
-      addressDetails: 'SCALA B',
+      addressDetails: 'SCALA A',
       zip: '87100',
       municipality: 'MILANO',
       municipalityDetails: 'MILANO',
@@ -89,11 +88,40 @@ const recipients: Array<NotificationDetailRecipient> = [
       creditorTaxId: '77777777777',
       pagoPaForm: {
         digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
         },
         contentType: 'application/pdf',
         ref: {
           key: 'PN_NOTIFICATION_ATTACHMENTS-25cc3a14c824a3e8fdd751d6ce7b7df.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    recipientType: RecipientType.PG,
+    taxId: '12345678910',
+    denomination: 'Ufficio Tal dei Tali',
+    physicalAddress: {
+      at: 'Presso',
+      address: 'VIA SENZA NOME',
+      addressDetails: 'SCALA C',
+      zip: '87100',
+      municipality: 'MILANO',
+      municipalityDetails: 'MILANO',
+      province: 'MI',
+      foreignState: 'ITALIA',
+    },
+    payment: {
+      noticeCode: '302181677459720267',
+      creditorTaxId: '77777777777',
+      pagoPaForm: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlR=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-25cc3a14c824a3e8fdd751d6ce7b7d2.pdf',
           versionToken: 'v1',
         },
       },
@@ -109,8 +137,10 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
       'REQUEST_ACCEPTED.IUN_RTRD-UDGU-QTQY-202308-P-1',
       'AAR_CREATION_REQUEST.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_0',
       'AAR_CREATION_REQUEST.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1',
+      'AAR_CREATION_REQUEST.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_2',
       'AAR_GEN.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1',
       'AAR_GEN.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_0',
+      'AAR_GEN.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_2',
       'SEND_COURTESY_MESSAGE.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_0.COURTESYADDRESSTYPE_SMS',
       'PROBABLE_SCHEDULING_ANALOG_DATE.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_0',
       'GET_ADDRESS.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
@@ -151,6 +181,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
       'REFINEMENT.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1',
       'NOTIFICATION_PAID.IUN_RTRD-UDGU-QTQY-202308-P-1.CODE_PPA30201169295602908877777777777',
       'NOTIFICATION_PAID.IUN_RTRD-UDGU-QTQY-202308-P-1.CODE_PPA30201169295602909677777777777',
+      'NOTIFICATION_PAID.IUN_RTRD-UDGU-QTQY-202308-P-1.CODE_PPA30218167745972026777777777777',
     ],
   },
 ];
@@ -162,6 +193,17 @@ const timeline: Array<INotificationDetailTimeline> = [
     legalFactsIds: [],
     category: TimelineCategory.REQUEST_ACCEPTED,
     details: {},
+  },
+  {
+    elementId: 'AAR_GEN.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_2',
+    timestamp: '2023-08-25T09:35:27.328299384Z',
+    category: TimelineCategory.AAR_GENERATION,
+    details: {
+      recIndex: 2,
+      generatedAarUrl: 'PN_AAR-7e3c456307f743669b42105aa9357dac.pdf',
+      numberOfPages: 1,
+    },
+    legalFactsIds: [],
   },
   {
     elementId: 'AAR_GEN.IUN_RTRD-UDGU-QTQY-202308-P-1.RECINDEX_1',
@@ -449,7 +491,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       amount: 200,
       creditorTaxId: '77777777777',
       noticeCode: '302011692956029088',
-      paymentSourceChannel: 'PA',
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
     },
   },
   {
@@ -460,10 +502,25 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 1,
       recipientType: RecipientType.PF,
-      amount: 5000,
+      paymentObject: 'Multone esagerato',
       creditorTaxId: '77777777777',
       noticeCode: '302011692956029096',
-      paymentSourceChannel: 'PA',
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
+      idF24: 'aw345s',
+    },
+  },
+  {
+    elementId:
+      'NOTIFICATION_PAID.IUN_RTRD-UDGU-QTQY-202308-P-1.CODE_PPA30218167745972026777777777777',
+    timestamp: '2023-08-25T11:38:05.392Z',
+    category: TimelineCategory.PAYMENT,
+    details: {
+      recIndex: 2,
+      recipientType: RecipientType.PG,
+      amount: 65.12,
+      creditorTaxId: '77777777777',
+      noticeCode: '302181677459720267',
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
     },
   },
 ];
@@ -528,34 +585,3 @@ export const getTimelineElem = (
   timestamp: '2023-08-25T11:38:05.392Z',
   details,
 });
-
-export const mockPaymentHistory: Array<PaymentHistory> = [
-  {
-    recipientDenomination: 'Mario Rossi',
-    recipientTaxId: 'RSSMRA80A01H501U',
-    paymentSourceChannel: 'EXTERNAL_REGISTRY',
-    recipientType: RecipientType.PF,
-    amount: 10000.45,
-    creditorTaxId: '77777777777',
-    noticeCode: '302181677769720267',
-  },
-  {
-    recipientDenomination: 'Sara Bianchi',
-    recipientTaxId: 'BNCSRA00E44H501J',
-    paymentSourceChannel: 'EXTERNAL_REGISTRY',
-    recipientType: RecipientType.PF,
-    amount: 30.67,
-    creditorTaxId: '77777777777',
-    noticeCode: '302181677459720267',
-    idF24: 'aw345s',
-  },
-  {
-    recipientDenomination: 'Ufficio Tal dei Tali',
-    recipientTaxId: '12345678910',
-    paymentSourceChannel: 'EXTERNAL_REGISTRY',
-    recipientType: RecipientType.PG,
-    amount: 65.12,
-    creditorTaxId: '77777777777',
-    noticeCode: '302181677459720267',
-  },
-];

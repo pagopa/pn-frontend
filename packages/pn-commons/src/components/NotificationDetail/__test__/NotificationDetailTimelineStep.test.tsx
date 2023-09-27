@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render } from '../../../test-utils';
+import { fireEvent, render, theme } from '../../../test-utils';
 import {
   INotificationDetailTimeline,
   LegalFactId,
@@ -79,6 +79,7 @@ describe('NotificationDetailTimelineStep', () => {
           (mockLegalFacts[index].file as LegalFactId).key || ''
         )
       );
+      expect(el).toBeEnabled();
     });
   });
 
@@ -121,7 +122,7 @@ describe('NotificationDetailTimelineStep', () => {
     expect(dateItemsMicro).toHaveLength(3 * notHiddenSteps.length);
     const microLegalFacts = getAllByTestId('download-legalfact-micro');
     expect(microLegalFacts).toHaveLength(
-      notHiddenSteps.reduce((count, item) => (count = count + (item.legalFactsIds?.length || 0)), 0)
+      notHiddenSteps.reduce((count, item) => count + (item.legalFactsIds?.length || 0), 0)
     );
     let counter = 0;
     notHiddenSteps.forEach((step, index) => {
@@ -137,6 +138,10 @@ describe('NotificationDetailTimelineStep', () => {
               (lf as LegalFactId).key || ''
             )
           );
+          expect(microLegalFacts[counter]).toHaveStyle({
+            color: theme.palette.primary.main,
+            cursor: 'pointer',
+          });
         }
         counter++;
       }
@@ -155,7 +160,7 @@ describe('NotificationDetailTimelineStep', () => {
   });
 
   it('calls the clickHandler function when a download button is clicked', () => {
-    const { getAllByTestId } = render(
+    const { getAllByTestId, getByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}
         recipients={mockRecipients}
@@ -163,13 +168,93 @@ describe('NotificationDetailTimelineStep', () => {
       />
     );
     // Assuming there is at least one download button
+    const legalFacts = getLegalFacts();
     const downloadButtons = getAllByTestId('download-legalfact');
     // Simulate a click on the download button
-    downloadButtons.forEach((btn) => {
+    downloadButtons.forEach((btn, index) => {
       fireEvent.click(btn);
+      // Verify that the clickHandler function is called with the expected arguments
+      expect(mockClickHandler).toHaveBeenCalledTimes(index + 1);
+      expect(mockClickHandler).toBeCalledWith(legalFacts[index].file);
     });
-    // Verify that the clickHandler function is called with the expected arguments
-    expect(mockClickHandler).toHaveBeenCalledTimes(downloadButtons.length);
+    // expand step
+    const moreLessButton = getByTestId('more-less-timeline-step');
+    fireEvent.click(moreLessButton);
+    const notHiddenSteps = mockTimelineStep!.steps!.filter((s) => !s.hidden);
+    const microLegalFacts = getAllByTestId('download-legalfact-micro');
+    let counter = 0;
+    notHiddenSteps.forEach((step) => {
+      if (step.legalFactsIds && step.legalFactsIds.length > 0) {
+        for (const lf of step.legalFactsIds) {
+          fireEvent.click(microLegalFacts[counter]);
+          // Verify that the clickHandler function is called with the expected arguments
+          expect(mockClickHandler).toHaveBeenCalledTimes(legalFacts.length + counter + 1);
+          expect(mockClickHandler).toBeCalledWith(lf);
+        }
+        counter++;
+      }
+    });
+  });
+
+  it('renders component with disabled donwloads', () => {
+    const { getAllByTestId, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={mockTimelineStep!}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        disableDownloads
+      />
+    );
+    const downloadButtons = getAllByTestId('download-legalfact');
+    downloadButtons.forEach((btn) => {
+      expect(btn).toBeDisabled();
+    });
+    // expand step
+    const moreLessButton = getByTestId('more-less-timeline-step');
+    fireEvent.click(moreLessButton);
+    const microLegalFacts = getAllByTestId('download-legalfact-micro');
+    microLegalFacts.forEach((btn) => {
+      expect(btn).toHaveStyle({
+        color: theme.palette.text.disabled,
+        cursor: 'default',
+      });
+    });
+  });
+
+  it('renders component when notification is CANCELLATION_IN_PROGRESS', () => {
+    const { rerender, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={{
+          ...mockTimelineStep!,
+          steps: [],
+          status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+        }}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        isParty
+      />
+    );
+    let status = getByTestId('itemStatus');
+    expect(status).toHaveStyle({
+      opacity: '0.5',
+    });
+    // rerender component simulating no party user
+    rerender(
+      <NotificationDetailTimelineStep
+        timelineStep={{
+          ...mockTimelineStep!,
+          steps: [],
+          status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+        }}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        isParty={false}
+      />
+    );
+    status = getByTestId('itemStatus');
+    expect(status).toHaveStyle({
+      opacity: '1',
+    });
   });
 
   it('doesnt render any step if there are no status history', () => {
