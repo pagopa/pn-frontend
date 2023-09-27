@@ -559,6 +559,7 @@ const Recipient: React.FC<Props> = ({
                           checked={values.recipients[index].showDigitalDomicile}
                           control={
                             <Checkbox
+                              id="checkbox-digital-domicile"
                               onChange={(digitalCheckEvent) =>
                                 handleAddressTypeChange(
                                   digitalCheckEvent as ChangeEvent,
@@ -572,6 +573,7 @@ const Recipient: React.FC<Props> = ({
                           name={`recipients[${index}].showDigitalDomicile`}
                           label={t('add-digital-domicile')}
                           data-testid={`showDigitalDomicile${index}`}
+                          id="add-digital-domicile"
                         />
                       </Grid>
                       {values.recipients[index].showDigitalDomicile && (

@@ -148,7 +148,7 @@ const NotificationDetailTimelineStep = ({
         {formatTime(timelineStep.activeFrom)}
       </Typography>
       <Chip
-        id="item-status"
+        id={`${notificationStatusInfos.label}-status`}
         data-testid="itemStatus"
         label={notificationStatusInfos.label}
         color={position === 'first' ? notificationStatusInfos.color : 'default'}
