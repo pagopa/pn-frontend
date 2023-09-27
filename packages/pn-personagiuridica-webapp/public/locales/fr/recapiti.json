@@ -101,7 +101,8 @@
   "common": {
     "duplicate-contact-title": "Coordonnées déjà présentes",
     "duplicate-contact-descr": "Le contact {{value}} est déjà présent. Voulez-vous continuer ?",
-    "enti-not-found": "Aucun organisme trouvé"
+    "enti-not-found": "Aucun organisme trouvé",
+    "too-long-field-error": "Saisir {{maxLength}} caractères max"
   },
   "errors": {
     "invalid_verification_code": {

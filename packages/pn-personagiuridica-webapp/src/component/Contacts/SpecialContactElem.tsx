@@ -85,6 +85,7 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
     [`${address.senderId}_pec`]: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
       .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     [`${address.senderId}_phone`]: yup
       .string()
@@ -96,6 +97,7 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
     [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
       .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
