@@ -9,7 +9,6 @@ interface ApiErrorWrapperProps extends ApiErrorWrapperCommonProps {
   reloadAction?: () => void;
   mt?: number;
   mainText?: string;
-  children: React.ReactNode;
 }
 
 interface ApiErrorWrapperGeneralProps extends ApiErrorWrapperCommonProps {
@@ -48,7 +47,7 @@ const ApiErrorWrapper: React.FC<ApiErrorWrapperProps> = ({
   reloadAction,
   mt,
   mainText,
-}: ApiErrorWrapperProps) => (
+}) => (
   <ApiErrorWrapperGeneral
     apiId={apiId}
     errorComponent={<ApiError onClick={reloadAction} mt={mt} mainText={mainText} apiId={apiId} />}
