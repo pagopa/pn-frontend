@@ -35,6 +35,7 @@ const FilterNotificationsFormActions = ({
 
   const confirmAction = (
     <Button
+      id="filter-button"
       data-testid="filterButton"
       variant="outlined"
       type="submit"

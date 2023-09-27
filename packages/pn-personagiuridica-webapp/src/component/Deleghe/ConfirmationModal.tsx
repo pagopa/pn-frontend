@@ -65,6 +65,7 @@ export default function ConfirmationModal({
               mr={isMobile ? 0 : 1}
             >
               <Button
+                id="dialog-close-button"
                 sx={{ width: isMobile ? '100%' : null }}
                 onClick={onClose}
                 color="primary"
@@ -78,6 +79,7 @@ export default function ConfirmationModal({
             {onConfirm && (
               <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4}>
                 <Button
+                  id="dialog-action-button"
                   sx={{ width: isMobile ? '100%' : null }}
                   color="primary"
                   variant="contained"

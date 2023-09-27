@@ -73,6 +73,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
           </Grid>
           <Grid item lg={2} sm={2} xs={12} alignItems="right">
             <Button
+              id="add-contact"
               variant="outlined"
               disabled={!formik.isValid}
               fullWidth

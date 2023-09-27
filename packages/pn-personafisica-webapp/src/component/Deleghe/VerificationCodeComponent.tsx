@@ -8,6 +8,7 @@ const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
   <Stack direction="row" spacing={1}>
     {code.split('').map((codeDigit: string, i: number) => (
       <Box
+        id={`digit-${i}`}
         key={i}
         sx={{
           display: 'flex',

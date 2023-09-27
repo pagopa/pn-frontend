@@ -49,6 +49,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       <Grid container direction="column" justifyContent="center" alignItems="center" spacing="10">
         <Grid item>
           <Typography
+            id="spid-select"
             py={5}
             px={0}
             color="textPrimary"

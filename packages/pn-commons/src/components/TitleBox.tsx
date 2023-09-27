@@ -69,6 +69,7 @@ const TitleBox: React.FC<Props> = ({
     {subTitle && (
       <Grid aria-orientation="horizontal" item xs={12} mb={mbSubTitle}>
         <Typography
+          id="subtitle-page"
           variant={variantSubTitle}
           sx={{ fontSize: '18px' }}
           component={typeof subTitle !== 'string' ? 'div' : 'p'}
