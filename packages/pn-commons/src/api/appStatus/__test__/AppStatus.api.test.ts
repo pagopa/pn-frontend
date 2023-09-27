@@ -10,8 +10,11 @@ import {
   beAppStatusTwoIncidentsOneUnknownFunctionality,
   beDowntimeHistoryNoIncidents,
   beDowntimeHistoryThreeIncidents,
+  downStatusOnKnownFunctionality,
+  downStatusOnUnknownFunctionality,
   downtimeHistoryEmptyQueryParams,
   incidentTimestamps,
+  statusByFunctionalityOk,
 } from '../../../__mocks__/AppStatus.mock';
 import {
   DowntimeLogPage,
@@ -26,11 +29,6 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   DOWNTIME_STATUS,
 } from '../appStatus.routes';
-import {
-  downStatusOnKnownFunctionality,
-  downStatusOnUnknownFunctionality,
-  statusByFunctionalityOk,
-} from './test-utils';
 
 /* ------------------------------------------------------------------------
    The actual test suite
