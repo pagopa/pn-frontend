@@ -202,7 +202,7 @@ describe('SpecialContacts Component', () => {
       1
     );
     // change email
-    await testInput(form!, 's_mail', 'due__trattini_bassi_no@pagopa.it');
+    await testInput(form!, 's_mail', 'email.non.[valida]@pagopa.it');
     // check if invalid
     testInvalidField(form!, 's_mail', 'courtesy-contacts.valid-email');
     // change email
