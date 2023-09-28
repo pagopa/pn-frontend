@@ -2,6 +2,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import { Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
+
 import { useIsMobile } from '../../hooks';
 import { AppCurrentStatus } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
@@ -43,7 +44,6 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
       })}
     >
       <IconComponent
-        data-testid="app-status-bar-icon"
         sx={{
           width: '20px',
           mr: isMobile ? 0 : '20px',

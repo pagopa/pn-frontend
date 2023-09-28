@@ -1,42 +1,51 @@
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
-  formatMonthString,
-  formatDay,
-  formatTime,
-  getNextDay,
-  formatToTimezoneString,
-  formatTimeWithLegend,
-  isToday,
-  formatDate,
-  formatToSlicedISOString,
-  formatDateTime,
   dateIsDefined,
+  formatDate,
+  formatDateTime,
+  formatDay,
   formatFromString,
+  formatMonthString,
+  formatTime,
+  formatTimeWithLegend,
+  formatToSlicedISOString,
+  formatToTimezoneString,
+  getNextDay,
+  isToday,
+  minutesBeforeNow,
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
 const date = new Date(dateString);
 
 describe('Date utility', () => {
-  test('format date in the format DD/MM/YYYY', () => {
+  it('format date in the format DD/MM/YYYY', () => {
     const date = '2022-02-16T16:03:37.123Z';
     const dateFormatted = formatDate(date);
     expect(dateFormatted).toBe('16/02/2022');
   });
 
-  test('format today date', () => {
+  it('format today date', () => {
     const date = new Date().toISOString();
     const dateFormatted = formatDate(date);
     expect(dateFormatted).toBe('Oggi');
   });
 
-  test('format date to sliced ISO string ', () => {
+  it('format today date - no labelization', () => {
+    const date = new Date();
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    const dateFormatted = formatDate(date.toISOString(), false);
+    expect(dateFormatted).toBe(`${day}/${month}/${date.getFullYear()}`);
+  });
+
+  it('format date to sliced ISO string ', () => {
     const date = new Date('2022-02-16T16:03:37.123Z');
     const dateFormatted = formatToSlicedISOString(date);
     expect(dateFormatted).toBe('2022-02-16');
   });
 
-  test('format dateTime as { date: DD/MM/YYYY, time: ore HH:MM }', () => {
+  it('format dateTime as { date: DD/MM/YYYY, time: ore HH:MM }', () => {
     const date = '2022-02-16T16:03:37.123Z';
     const timeFormatted = formatDateTime(date);
     // the time will be localized to the locale of wherever the test is to be run,
@@ -86,6 +95,7 @@ describe('Date utility', () => {
 
   it('date is defined - no date', () => {
     expect(dateIsDefined(null)).toBeFalsy();
+    expect(dateIsDefined(undefined)).toBeFalsy();
   });
 
   it('return next day', () => {
@@ -103,7 +113,36 @@ describe('Date utility', () => {
   });
 
   it('return date minus the minutes before now', () => {
-    //not tested because we create two Date instance with difference by the way of CPU clock
+    const date = minutesBeforeNow(10);
+    const now = new Date();
+    // minutes
+    const isPreviousDateMinutes = now.getMinutes() < 10;
+    // hours
+    const isPreviousDateHours = isPreviousDateMinutes && now.getHours() === 0;
+    // day
+    const isPreviousDateDay = isPreviousDateHours && now.getDate() === 1;
+    // month
+    const isPreviousDateMonth = isPreviousDateDay && now.getMonth() === 1;
+    // year
+    expect(date.getFullYear()).toBe(
+      isPreviousDateMonth ? now.getFullYear() - 1 : now.getFullYear()
+    );
+    // month
+    expect(date.getMonth()).toBe(
+      isPreviousDateMonth ? 11 : isPreviousDateDay ? now.getMonth() - 1 : now.getMonth()
+    );
+    // day
+    expect(date.getDate()).toBe(
+      isPreviousDateDay ? 31 : isPreviousDateHours ? now.getDate() - 1 : now.getDate()
+    );
+    // hours
+    expect(date.getHours()).toBe(
+      isPreviousDateHours ? 23 : isPreviousDateMinutes ? now.getHours() - 1 : now.getHours()
+    );
+    // minutes
+    expect(date.getMinutes()).toBe(
+      isPreviousDateMinutes ? 60 + now.getMinutes() - 10 : now.getMinutes() - 10
+    );
   });
 
   it('return a boolean value if the date is today', () => {

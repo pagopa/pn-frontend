@@ -4,10 +4,13 @@ import { useIsMobile } from './useIsMobile';
 
 function downloadDocument(url: string, isMobile: boolean) {
   const link = document.createElement('a');
+  // eslint-disable-next-line functional/immutable-data
   link.href = url;
   if (!isMobile) {
+    // eslint-disable-next-line functional/immutable-data
     link.target = '_blank';
   }
+  // eslint-disable-next-line functional/immutable-data
   link.rel = 'noreferrer';
   link.click();
 }
@@ -27,6 +30,7 @@ type Props = {
 // -------------------------------
 export function useDownloadDocument({ url, clearDownloadAction }: Props) {
   const isMobile = useIsMobile();
+
   useEffect(() => {
     if (url) {
       downloadDocument(url, isMobile);

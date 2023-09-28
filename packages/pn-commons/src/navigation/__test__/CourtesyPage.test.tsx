@@ -1,36 +1,36 @@
-import { render } from "../../test-utils";
-import CourtesyPage from "../CourtesyPage";
-import { fireEvent } from "@testing-library/react";
+import React from 'react';
 
-const mockClickFn = jest.fn()
+import { fireEvent, render } from '../../test-utils';
+import CourtesyPage from '../CourtesyPage';
+
+const mockClickFn = jest.fn();
 
 describe('test CourtesyPage component', () => {
-    test('renders the full component', () => {
-        const result = render(
-            <CourtesyPage
-                title="Test title"
-                subtitle="Test subtitle"
-                onClick={mockClickFn}
-                onClickLabel="Click label"
-            />
-        );
+  it('renders the full component', () => {
+    const { container } = render(
+      <CourtesyPage
+        title="Test title"
+        subtitle="Test subtitle"
+        onClick={mockClickFn}
+        onClickLabel="Click label"
+      />
+    );
 
-        expect(result.container).toHaveTextContent(/test title/i);
-        expect(result.container).toHaveTextContent(/test subtitle/i);
-    });
+    expect(container).toHaveTextContent(/test title/i);
+    expect(container).toHaveTextContent(/test subtitle/i);
+  });
 
-    test('clicks on the action button', () => {
-        const result = render(
-            <CourtesyPage
-                title="Test title"
-                subtitle="Test subtitle"
-                onClick={mockClickFn}
-                onClickLabel="Click label"
-            />
-        );
-        const button = result.getByText("Click label");
-
-        fireEvent.click(button);
-        expect(mockClickFn).toHaveBeenCalled();
-    });
+  it('clicks on the action button', () => {
+    const { getByText } = render(
+      <CourtesyPage
+        title="Test title"
+        subtitle="Test subtitle"
+        onClick={mockClickFn}
+        onClickLabel="Click label"
+      />
+    );
+    const button = getByText('Click label');
+    fireEvent.click(button);
+    expect(mockClickFn).toHaveBeenCalledTimes(1);
+  });
 });

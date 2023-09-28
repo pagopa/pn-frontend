@@ -1,7 +1,8 @@
-import { useNavigate, Routes, Route } from 'react-router-dom';
-import { fireEvent } from '@testing-library/react';
+import React from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+
+import { fireEvent, render } from '../../test-utils';
 import Prompt from '../Prompt';
-import { render } from '../../test-utils';
 
 const WrappedPrompt = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const WrappedPrompt = () => {
 };
 
 describe('test Prompt component', () => {
-  test('renders the prompt closed, then opens it', () => {
+  it('renders the prompt closed, then opens it', () => {
     const result = render(<WrappedPrompt />);
     const navigateButton = result.getByText('navigate');
 
@@ -46,7 +47,7 @@ describe('test Prompt component', () => {
     expect(result.baseElement).toHaveTextContent(/test subtitle/i);
   });
 
-  test('opens the prompt and then closes it', () => {
+  it('opens the prompt and then closes it', () => {
     const result = render(<WrappedPrompt />);
 
     const navigateButton = result.getByText('navigate');

@@ -6,7 +6,7 @@ import { useIsMobile } from '../useIsMobile';
 const Component = () => {
   const isMobile = useIsMobile();
 
-  return <div>{JSON.stringify(isMobile)}</div>;
+  return <div>{`${isMobile}`}</div>;
 };
 
 describe('test useIsMobile hook', () => {
@@ -16,12 +16,12 @@ describe('test useIsMobile hook', () => {
     window.matchMedia = original;
   });
 
-  test('hook should return false', () => {
+  it('hook should return false', () => {
     const result = render(<Component />);
     expect(result.container).toHaveTextContent('false');
   });
 
-  test('hook should return true', () => {
+  it('hook should return true', () => {
     window.matchMedia = createMatchMedia(800);
     const result = render(<Component />);
     expect(result.container).toHaveTextContent('true');

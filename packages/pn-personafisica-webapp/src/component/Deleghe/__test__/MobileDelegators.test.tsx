@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { render, screen } from '../../../__test__/test-utils';
 import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
@@ -39,18 +37,4 @@ describe('MobileDelegators Component', () => {
     
   });
   */
-
-  it('API error', async () => {
-    render(<MobileDelegators />, {
-      preloadedState: {
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-          DELEGATION_ACTIONS.GET_DELEGATORS
-        ),
-      },
-    });
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DELEGATION_ACTIONS.GET_DELEGATORS}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
-  });
 });

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, fireEvent, render, waitFor, within } from '@testing-library/react';
+import { RenderOptions, render } from '@testing-library/react';
 
 import { RootState, appReducers } from '../redux/store';
 

@@ -1,30 +1,32 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+
 /* eslint-disable complexity */
+
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
-import { formatDate } from '../utils';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
+  AarDetails,
+  DigitalDomicileType,
   INotificationDetailTimeline,
-  TimelineCategory,
-  NotificationDetailRecipient,
+  LegalFactType,
+  NotificationDeliveryMode,
   NotificationDetail,
+  NotificationDetailDocument,
+  NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-  AarDetails,
-  LegalFactType,
-  NotificationDetailDocument,
-  SendDigitalDetails,
-  ViewedDetails,
-  SendPaperDetails,
-  NotificationDeliveryMode,
-  SendCourtesyMessageDetails,
-  DigitalDomicileType,
   PaidDetails,
   PaymentHistory,
+  SendCourtesyMessageDetails,
+  SendDigitalDetails,
+  SendPaperDetails,
+  TimelineCategory,
+  ViewedDetails,
 } from '../types';
 import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
+import { formatDate } from '../utils';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -46,7 +48,7 @@ function localizeStatus(
   tooltip: string;
   description: string;
 } {
-  const isMultiRecipient = data && data.isMultiRecipient;
+  const isMultiRecipient = data?.isMultiRecipient;
   // eslint-disable-next-line functional/no-let
   let filteredData: any = _.omit(data, ['isMultiRecipient']);
   if (Object.keys(filteredData).length === 0) {
@@ -123,7 +125,7 @@ export function getNotificationStatusInfos(
         { isMultiRecipient }
       );
       // if the deliveryMode is defined, then change the description for a more specific one ...
-      const deliveryMode = statusObject && statusObject.deliveryMode;
+      const deliveryMode = statusObject?.deliveryMode;
       // ... only for single-recipient notifications!
       if (deliveryMode && !isMultiRecipient) {
         const deliveryModeDescription = getLocalizedOrDefaultLabel(
@@ -195,7 +197,7 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED:
-      if (statusObject && statusObject.recipient) {
+      if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
