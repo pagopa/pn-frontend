@@ -295,7 +295,11 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
             <Typography variant="caption" color="text.secondary" mr={0.5}>
               {getLocalizedOrDefaultLabel('notifications', 'detail.creditor-tax-id')}
             </Typography>
-            <Typography variant="caption-semibold" color="text.secondary">
+            <Typography
+              variant="caption-semibold"
+              color="text.secondary"
+              data-testid="creditorTaxId"
+            >
               {pagoPAItem.creditorTaxId}
             </Typography>
           </Box>

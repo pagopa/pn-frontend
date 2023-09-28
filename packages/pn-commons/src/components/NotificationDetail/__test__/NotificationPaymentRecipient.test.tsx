@@ -194,7 +194,7 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should show alert if notification is cancelled', () => {
-    const { getByTestId } = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={true}
@@ -204,6 +204,9 @@ describe('NotificationPaymentRecipient Component', () => {
       />
     );
     const alert = getByTestId('cancelledAlertPayment');
+    const subtitle = queryByTestId('notification-payment-recipient-subtitle');
+
     expect(alert).toBeInTheDocument();
+    expect(subtitle).not.toBeInTheDocument();
   });
 });
