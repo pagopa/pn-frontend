@@ -452,6 +452,7 @@ const Recipient: React.FC<Props> = ({
                         <Grid container spacing={2}>
                           <Grid item xs={setValueByDevice(12, 4)}>
                             <FormControlLabel
+                              id="recipient-pf"
                               value={RecipientType.PF}
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
@@ -459,6 +460,7 @@ const Recipient: React.FC<Props> = ({
                               data-testid={`recipientType${index}`}
                             />
                             <FormControlLabel
+                              id="recipient-pg"
                               value={RecipientType.PG}
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
@@ -561,6 +563,7 @@ const Recipient: React.FC<Props> = ({
                           checked={values.recipients[index].showDigitalDomicile}
                           control={
                             <Checkbox
+                              id="checkbox-digital-domicile"
                               onChange={(digitalCheckEvent) =>
                                 handleAddressTypeChange(
                                   digitalCheckEvent as ChangeEvent,
@@ -574,6 +577,7 @@ const Recipient: React.FC<Props> = ({
                           name={`recipients[${index}].showDigitalDomicile`}
                           label={t('add-digital-domicile')}
                           data-testid={`showDigitalDomicile${index}`}
+                          id="add-digital-domicile"
                         />
                       </Grid>
                       {values.recipients[index].showDigitalDomicile && (
@@ -603,9 +607,11 @@ const Recipient: React.FC<Props> = ({
                         }}
                       >
                         <FormControlLabel
+                          id="add-physical-domicile-form"
                           checked={values.recipients[index].showPhysicalAddress}
                           control={
                             <Checkbox
+                              id="add-physical-domicile"
                               onChange={(physicalCheckEvent) =>
                                 handleAddressTypeChange(
                                   physicalCheckEvent as ChangeEvent,
@@ -642,6 +648,7 @@ const Recipient: React.FC<Props> = ({
                     {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                       <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
                         <ButtonNaked
+                          id="add-recipient"
                           startIcon={<Add />}
                           onClick={() => {
                             handleAddRecipient(values, setFieldValue);

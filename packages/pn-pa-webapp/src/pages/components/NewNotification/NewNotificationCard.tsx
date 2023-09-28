@@ -49,6 +49,7 @@ const NewNotificationCard = ({
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
         <Button
+          id="step-submit"
           variant="contained"
           type="submit"
           disabled={isContinueDisabled}
@@ -58,6 +59,7 @@ const NewNotificationCard = ({
         </Button>
         {previousStepLabel && (
           <Button
+            id="previous-step"
             variant="outlined"
             type="button"
             onClick={previousStepOnClick}

@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from 'react';
+
 import Chip from '@mui/material/Chip';
 
 import CustomTooltip from '../CustomTooltip';
@@ -23,7 +24,7 @@ const StatusTooltip = ({
       onOpen={eventTrackingCallback}
     >
       <Chip
-        id="notification-status-tooltip"
+        id={`status-chip-${label}`}
         label={label}
         color={color}
         sx={{ cursor: 'default' }}

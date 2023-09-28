@@ -26,6 +26,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+        .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
         .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
   });
@@ -73,6 +74,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
           </Grid>
           <Grid item lg={4} sm={4} xs={12} alignItems="right">
             <Button
+              id="add-contact"
               variant="outlined"
               disabled={!formik.isValid}
               fullWidth

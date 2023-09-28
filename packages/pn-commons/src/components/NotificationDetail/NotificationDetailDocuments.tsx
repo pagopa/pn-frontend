@@ -56,6 +56,7 @@ Props) => {
             </Typography>
           ) : (
             <ButtonNaked
+              id="document-button"
               data-testid="documentButton"
               color={'primary'}
               startIcon={<AttachFileIcon />}
