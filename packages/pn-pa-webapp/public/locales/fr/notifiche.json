@@ -70,7 +70,6 @@
       "message": "Pour terminer l’annulation, vous devez envoyer une nouvelle notification remplaçant la précédente."
     },
     "acts": "Pièces jointes",
-    "download-message-cancelled": "Cette notification ayant été annulée, les documents joints ne sont pas disponibles.",
     "download-message-available": "Les documents joints sont disponibles en ligne pendant 120 jours une fois la notification transmise.",
     "download-message-expired": "120 jours se sont écoulés depuis la date de transmission de la notification, par conséquent, les documents ne sont plus disponibles.",
     "download-files-link": "Quand est-ce qu'une notification est considérée comme transmise ?",

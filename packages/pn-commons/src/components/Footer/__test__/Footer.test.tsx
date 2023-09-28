@@ -1,14 +1,13 @@
-import { fireEvent, waitFor, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
 import Footer from '../Footer';
 
 describe('Footer Component', () => {
-
   it('renders footer', () => {
     // render component
-    const result = render(<Footer loggedUser={true}/>);
+    const result = render(<Footer loggedUser={true} />);
     const buttons = result.container.querySelectorAll('button');
 
     expect(buttons).toHaveLength(5);
@@ -27,7 +26,12 @@ describe('Footer Component', () => {
 
   it('shows languages dropdown', async () => {
     const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const result = render(<Footer loggedUser={true} eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage} />);
+    const result = render(
+      <Footer
+        loggedUser={true}
+        eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}
+      />
+    );
     const buttons = result.container.querySelectorAll('button');
     const dropdownLanguageButton = buttons[4];
     const languageKeys = Object.keys(LANGUAGES);
@@ -35,7 +39,7 @@ describe('Footer Component', () => {
     // This array represents how the options labels should sequentially change when you click the option.
     const expectedLanguagesLabels = new Array();
     for (var i = 0; i < languageKeys.length; i++) {
-      expectedLanguagesLabels.push(LANGUAGES[languageKeys[(i - 1 < 0) ? 0 : i - 1]][languageKeys[i]]);
+      expectedLanguagesLabels.push(LANGUAGES[languageKeys[i - 1 < 0 ? 0 : i - 1]][languageKeys[i]]);
     }
 
     languageKeys.forEach((currentDropdownLanguage, index) => {

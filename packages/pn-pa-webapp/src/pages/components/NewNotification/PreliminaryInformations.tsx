@@ -1,41 +1,53 @@
-import { ChangeEvent, useEffect, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+
+import { InfoOutlined } from '@mui/icons-material';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  InputAdornment,
+  MenuItem,
   Radio,
   RadioGroup,
   TextField,
+  Tooltip,
   Typography,
-  MenuItem,
 } from '@mui/material';
 import {
-  PhysicalCommunicationType,
-  CustomDropdown,
   ApiErrorWrapper,
+  CustomDropdown,
+  PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
-import { getConfiguration } from '../../../services/configuration.service';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { NEW_NOTIFICATION_ACTIONS, getUserGroups } from '../../../redux/newNotification/actions';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
-import { getUserGroups, NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
 import { RootState } from '../../../redux/store';
-import { trackEventByType } from '../../../utils/mixpanel';
+import { getConfiguration } from '../../../services/configuration.service';
 import { TrackEventType } from '../../../utils/events';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { requiredStringFieldValidation } from '../../../utils/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { requiredStringFieldValidation } from './validation.utility';
 
 type Props = {
   notification: NewNotification;
   onConfirm: () => void;
 };
+
+const InfoTooltip = ({ tooltip }: { tooltip: string | ReactNode }) => (
+  <InputAdornment position="end">
+    <Tooltip arrow={true} title={tooltip}>
+      <InfoOutlined />
+    </Tooltip>
+  </InputAdornment>
+);
 
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
@@ -54,8 +66,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     () => ({
       paProtocolNumber: notification.paProtocolNumber || '',
       subject: notification.subject || '',
-      abstract: notification.abstract || '',
-      group: notification.group || '',
+      abstract: notification.abstract ?? '',
+      group: notification.group ?? '',
       taxonomyCode: notification.taxonomyCode || '',
       physicalCommunicationType: notification.physicalCommunicationType || '',
       paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
@@ -124,7 +136,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       mainText={t('fetch-groups-error')}
       mt={3}
     >
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} data-testid="preliminaryInformationsForm">
         <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
           <TextField
             id="paProtocolNumber"
@@ -193,6 +205,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
             size="small"
             margin="normal"
+            InputProps={{
+              endAdornment: <InfoTooltip tooltip={t('taxonomy-tooltip')} />,
+            }}
           />
           <FormControl margin="normal" fullWidth>
             <FormLabel id="comunication-type-label">

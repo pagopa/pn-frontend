@@ -1,57 +1,59 @@
 import currentLocale from 'date-fns/locale/it';
-import { useNavigate } from 'react-router-dom';
+import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Formik, Form, FormikTouched, FormikErrors } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+
+import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
-  Typography,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
   Button,
   Divider,
+  FormControl,
+  FormControlLabel,
   Grid,
   MenuItem,
-  Stack,
   Paper,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
-import PeopleIcon from '@mui/icons-material/People';
-import { IllusCompleted } from '@pagopa/mui-italia';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   CourtesyPage,
   CustomDatePicker,
-  DatePickerTypes,
   DATE_FORMAT,
-  TitleBox,
-  useIsMobile,
-  PnBreadcrumb,
-  isToday,
-  dataRegex,
-  searchStringLimitReachedText,
-  useSearchStringChangeInput,
-  RecipientType,
+  DatePickerTypes,
   PnAutocomplete,
+  PnBreadcrumb,
+  RecipientType,
+  TitleBox,
+  dataRegex,
+  isToday,
+  searchStringLimitReachedText,
+  useIsMobile,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
+import { IllusCompleted } from '@pagopa/mui-italia';
+
+import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
+import { Party } from '../models/party';
+import * as routes from '../navigation/routes.const';
+import { NewDelegationFormProps } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
-import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
-import * as routes from '../navigation/routes.const';
-import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import { getConfiguration } from '../services/configuration.service';
 import { generateVCode } from '../utils/delegation.utility';
-import DropDownPartyMenuItem from '../component/Party/DropDownParty';
-import { Party } from '../models/party';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
-import { getConfiguration } from '../services/configuration.service';
 
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
@@ -250,19 +252,23 @@ const NuovaDelega = () => {
                               }}
                             >
                               <FormControlLabel
+                                id="recipient-pf"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PF}
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
+                                data-testid="recipientType"
                               />
                               <FormControlLabel
+                                id="recipent-pg"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PG}
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}
+                                data-testid="recipientType"
                               />
                             </RadioGroup>
                           </Stack>
@@ -343,6 +349,7 @@ const NuovaDelega = () => {
                       <FormControl sx={{ width: '100%' }}>
                         <Stack>
                           <RadioGroup
+                            id="radio-buttons-group-enti"
                             aria-labelledby="radio-buttons-group-pf-pg"
                             defaultValue="tuttiGliEnti"
                             name="selectTuttiEntiOrSelezionati"
@@ -358,13 +365,16 @@ const NuovaDelega = () => {
                             }}
                           >
                             <FormControlLabel
+                              id="tutti-gli-enti-selezionati"
                               value="tuttiGliEnti"
                               control={<Radio />}
                               name={'selectTuttiEntiOrSelezionati'}
                               label={t('nuovaDelega.form.allEntities')}
+                              data-testid="radioSelectedEntities"
                             />
 
                             <FormControlLabel
+                              id="enti-selezionati"
                               value="entiSelezionati"
                               control={<Radio />}
                               data-testid="radioSelectedEntities"
@@ -376,6 +386,7 @@ const NuovaDelega = () => {
                               <FormControl fullWidth>
                                 <PnAutocomplete
                                   id="enti"
+                                  data-testid="enti"
                                   multiple
                                   options={entities}
                                   fullWidth
@@ -396,6 +407,7 @@ const NuovaDelega = () => {
                                   renderOption={renderOption}
                                   renderInput={(params) => (
                                     <TextField
+                                      name="enti"
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
                                       error={Boolean(getError(touched.enti, errors.enti))}
@@ -476,6 +488,7 @@ const NuovaDelega = () => {
                       >
                         <Stack>
                           <Button
+                            id="create-button"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
                             variant={'contained'}

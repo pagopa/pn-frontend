@@ -1,14 +1,26 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-/* eslint-disable functional/no-let */
 
-import { RenderResult, act, fireEvent, waitFor, screen } from '@testing-library/react';
-import * as redux from 'react-redux';
+import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { render } from '../../../../__test__/test-utils';
-import { UploadDocumentParams } from '../../../../redux/newNotification/types';
-import * as actions from '../../../../redux/newNotification/actions';
+import { newNotification } from '../../../../__mocks__/NewNotification.mock';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  testStore,
+  waitFor,
+  within,
+} from '../../../../__test__/test-utils';
+import { apiClient, externalClient } from '../../../../api/apiClients';
+import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../../api/notifications/notifications.routes';
+import { NewNotificationDocument } from '../../../../models/NewNotification';
 import Attachments from '../Attachments';
 
+const mockIsPaymentEnabledGetter = jest.fn();
+
+// mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -16,7 +28,6 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockIsPaymentEnabledGetter = jest.fn();
 jest.mock('../../../../services/configuration.service', () => {
   return {
     ...jest.requireActual('../../../../services/configuration.service'),
@@ -26,346 +37,400 @@ jest.mock('../../../../services/configuration.service', () => {
   };
 });
 
+const confirmHandlerMk = jest.fn();
+
+function uploadDocument(elem: HTMLElement, index: number, document: NewNotificationDocument) {
+  const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
+  fireEvent.change(nameInput!, { target: { value: document.name } });
+  const fileInput = elem.querySelector('[data-testid="fileInput"]');
+  const input = fileInput?.querySelector('input');
+  fireEvent.change(input!, { target: { files: [document.file.data] } });
+}
 
 describe('Attachments Component with payment enabled', () => {
-  let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
+  let result: RenderResult | undefined;
+  let mock: MockAdapter;
+  let extMock: MockAdapter;
 
-  const file = new Blob(['mocked content'], { type: 'application/pdf' });
-  // eslint-disable-next-line functional/immutable-data
-  (file as any).name = 'Mocked file';
-
-  function uploadDocument(elem: ParentNode, index: number) {
-    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
-    fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
-    const fileInput = elem.querySelector('[data-testid="fileInput"]');
-    const input = fileInput?.querySelector('input');
-    fireEvent.change(input!, { target: { files: [file] } });
-  }
-
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
-    fireEvent.click(button);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(documents);
-      expect(confirmHandlerMk).toBeCalledTimes(1);
-    });
-  }
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+    extMock = new MockAdapter(externalClient);
+  });
 
   beforeEach(async () => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-
-    // mock action
-    mockActionFn = jest.fn();
-    const actionSpy = jest.spyOn(actions, 'uploadNotificationAttachment');
-    actionSpy.mockImplementation(mockActionFn);
-    // mock dispatch
-    mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     mockIsPaymentEnabledGetter.mockReturnValue(true);
-
-    // render component
-    await act(async () => {
-      result = render(<Attachments onConfirm={confirmHandlerMk} />);
-    });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    result = undefined;
     jest.clearAllMocks();
+    mock.reset();
+    extMock.reset();
   });
 
-  it('renders Attachments', () => {
-    const form = result.container.querySelector('form');
+  afterAll(() => {
+    mock.restore();
+    extMock.restore();
+  });
+
+  it('renders component', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
+    });
+    const form = result?.container.querySelector('form');
     expect(form).toHaveTextContent(/attach-for-recipients/i);
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
+    const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     expect(attachmentBoxes).toHaveLength(1);
-    expect(attachmentBoxes[0]).toHaveTextContent(/act-attachment*/i);
-    const deleteIcon = attachmentBoxes[0].querySelector('[data-testid="DeleteIcon"]');
+    expect(attachmentBoxes![0]).toHaveTextContent(/act-attachment*/i);
+    const deleteIcon = within(attachmentBoxes![0]).queryByTestId('deletebutton');
     expect(deleteIcon).not.toBeInTheDocument();
-    const fileInput = attachmentBoxes[0].parentNode?.querySelector('[data-testid="fileInput"]');
+    const fileInput = within(attachmentBoxes![0]).getByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
-    const buttonSubmit = result.getByTestId('step-submit');
-    const buttonPrevious = result.getByTestId('previous-step');
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
+    const attachmentNameInput = within(attachmentBoxes![0]).getByTestId('attachmentNameInput');
+    expect(attachmentNameInput).toBeInTheDocument();
+    const buttonSubmit = result?.getByTestId('step-submit');
+    const buttonPrevious = result?.getByTestId('previous-step');
     expect(buttonSubmit).toBeDisabled();
-    expect(buttonPrevious).toHaveTextContent(/back-to-recipient/i);
+    expect(buttonSubmit).toHaveTextContent('button.continue');
+    expect(buttonPrevious).toBeInTheDocument();
   });
 
-  it('adds document and click on confirm', async () => {
-    const form = result.container.querySelector('form');
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![1]).toBeEnabled();
-    void testConfirm(buttons![1], [
-      {
-        id: 'documents.0',
-        key: 'Doc0',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-    ]);
-  });
-
-  it('adds another document and click on confirm', async () => {
-    const form = result.container.querySelector('form');
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    fireEvent.click(buttons![0]);
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    await waitFor(() => {
-      expect(buttons![1]).toBeDisabled();
+  it('changes form values and clicks on confirm - one document', async () => {
+    mock
+      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+        {
+          key: newNotification.documents[0].name,
+          contentType: newNotification.documents[0].contentType,
+          sha256: 'mocked-hashBase64',
+        },
+      ])
+      .reply(200, [
+        {
+          url: 'https://mocked-url.com',
+          secret: 'mocked-secret',
+          httpMethod: 'PUT',
+          key: 'mocked-key',
+        },
+      ]);
+    extMock.onPut(`https://mocked-url.com`).reply(200, newNotification.documents[0].file.data, {
+      'x-amz-version-id': 'mocked-versionToken',
     });
-    const newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
-    expect(newAttachmentBoxes).toHaveLength(2);
-    expect(newAttachmentBoxes[1]).toHaveTextContent(/doc-attachment*/i);
-    const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
-    expect(deleteIcon).toBeInTheDocument();
-    uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
-    await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![2], [
-      {
-        id: 'documents.0',
-        key: 'Doc0',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-      {
-        id: 'documents.1',
-        key: 'Doc1',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-    ]);
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
+    });
+    const form = result?.container.querySelector('form');
+    let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
+    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    // add and upload second document
+    const addButton = result?.getByTestId('add-another-doc');
+    fireEvent.click(addButton!);
+    await waitFor(() => {
+      attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+      expect(buttonSubmit).toBeEnabled();
+    });
+    // remove second document
+    const deleteButton = within(attachmentBoxes[1]).getByTestId('deletebutton');
+    fireEvent.click(deleteButton);
+    await waitFor(() => {
+      expect(buttonSubmit).toBeEnabled();
+    });
+    fireEvent.click(buttonSubmit!);
+    await waitFor(() => {
+      // check api call
+      expect(mock.history.post).toHaveLength(1);
+      expect(extMock.history.put).toHaveLength(1);
+      // check data stored in redux state
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.documents).toStrictEqual([
+        {
+          ...newNotification.documents[0],
+          id: 'documents.0',
+          file: {
+            ...newNotification.documents[0].file,
+            sha256: {
+              hashBase64: 'mocked-hashBase64',
+              hashHex: 'mocked-hashHex',
+            },
+          },
+          ref: {
+            versionToken: 'mocked-versionToken',
+            key: 'mocked-key',
+          },
+        },
+      ]);
+    });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
   });
 
-  it('delete document and click on confirm', async () => {
-    const form = result.container.querySelector('form');
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    fireEvent.click(buttons![0]);
-    let newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
-    const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
-    fireEvent.click(deleteIcon!);
-    await waitFor(() => {
-      newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
-      expect(newAttachmentBoxes).toHaveLength(1);
+  it('fills form with invalid values - one document', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![1], [
-      {
-        id: 'documents.0',
-        key: 'Doc0',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-    ]);
+    const form = result?.container.querySelector('form');
+    let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    // upload first document
+    uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
+    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    // remove document uploaded
+    const removeDocument = within(attachmentBoxes[0]).getByTestId('removeDocument');
+    fireEvent.click(removeDocument);
+    await waitFor(() => {
+      expect(buttonSubmit).toBeDisabled();
+    });
+    await testInput(form!, `documents.0.name`, '');
+    const error = form!.querySelector(`[id="documents.0.name-helper-text"]`);
+    expect(error).toHaveTextContent('required-field');
+    await testInput(form!, `documents.0.name`, ' text-with-spaces ');
+    expect(error).toHaveTextContent('no-spaces-at-edges');
+  });
+
+  it('changes form values and clicks on back - one document', async () => {
+    const previousHandlerMk = jest.fn();
+    // render component
+    await act(async () => {
+      result = render(
+        <Attachments
+          isCompleted={false}
+          onConfirm={confirmHandlerMk}
+          onPreviousStep={previousHandlerMk}
+        />
+      );
+    });
+    const form = result?.container.querySelector('form');
+    const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    // upload first document
+    uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
+    const backButton = await waitFor(() => within(form!).getByTestId('previous-step'));
+    fireEvent.click(backButton!);
+    await waitFor(() => {
+      // check data stored in redux state
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.documents).toStrictEqual([
+        {
+          ...newNotification.documents[0],
+          id: 'documents.0',
+          file: {
+            ...newNotification.documents[0].file,
+            sha256: {
+              hashBase64: 'mocked-hashBase64',
+              hashHex: 'mocked-hashHex',
+            },
+          },
+          ref: {
+            versionToken: '',
+            key: '',
+          },
+        },
+      ]);
+    });
+    expect(previousHandlerMk).toBeCalledTimes(1);
+  });
+
+  it('changes form values and clicks on confirm - two documents', async () => {
+    mock
+      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+        {
+          key: newNotification.documents[0].name,
+          contentType: newNotification.documents[0].contentType,
+          sha256: 'mocked-hashBase64',
+        },
+        {
+          key: newNotification.documents[1].name,
+          contentType: newNotification.documents[1].contentType,
+          sha256: 'mocked-hashBase64',
+        },
+      ])
+      .reply(200, [
+        {
+          url: 'https://mocked-url-0.com',
+          secret: 'mocked-secret',
+          httpMethod: 'PUT',
+          key: 'mocked-key-0',
+        },
+        {
+          url: 'https://mocked-url-1.com',
+          secret: 'mocked-secret',
+          httpMethod: 'PUT',
+          key: 'mocked-key-1',
+        },
+      ]);
+    extMock.onPut(`https://mocked-url-0.com`).reply(200, newNotification.documents[0].file.data, {
+      'x-amz-version-id': 'mocked-versionToken-0',
+    });
+    extMock.onPut(`https://mocked-url-1.com`).reply(200, newNotification.documents[1].file.data, {
+      'x-amz-version-id': 'mocked-versionToken-1',
+    });
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
+    });
+    const form = result?.container.querySelector('form');
+    let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    // upload first document
+    uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
+    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    // add and upload second document
+    const addButton = result?.getByTestId('add-another-doc');
+    fireEvent.click(addButton!);
+    attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
+    expect(attachmentBoxes).toHaveLength(2);
+    expect(buttonSubmit).toBeDisabled();
+    uploadDocument(attachmentBoxes[1], 1, newNotification.documents[1]);
+    await waitFor(() => {
+      expect(buttonSubmit).toBeEnabled();
+    });
+    fireEvent.click(buttonSubmit!);
+    await waitFor(() => {
+      // check api call
+      expect(mock.history.post).toHaveLength(1);
+      expect(extMock.history.put).toHaveLength(2);
+      // check data stored in redux state
+      const state = testStore.getState();
+      expect(state.newNotificationState.notification.documents).toStrictEqual([
+        {
+          ...newNotification.documents[0],
+          id: 'documents.0',
+          file: {
+            ...newNotification.documents[0].file,
+            sha256: {
+              hashBase64: 'mocked-hashBase64',
+              hashHex: 'mocked-hashHex',
+            },
+          },
+          ref: {
+            versionToken: 'mocked-versionToken-0',
+            key: 'mocked-key-0',
+          },
+        },
+        {
+          ...newNotification.documents[1],
+          id: 'documents.1',
+          file: {
+            ...newNotification.documents[1].file,
+            sha256: {
+              hashBase64: 'mocked-hashBase64',
+              hashHex: 'mocked-hashHex',
+            },
+          },
+          ref: {
+            versionToken: 'mocked-versionToken-1',
+            key: 'mocked-key-1',
+          },
+        },
+      ]);
+    });
+    expect(confirmHandlerMk).toBeCalledTimes(1);
+  });
+
+  it('fills form with invalid values - two documents', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
+    });
+    const form = result?.container.querySelector('form');
+    let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    // upload first document
+    uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
+    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    // add and upload second document
+    const addButton = result?.getByTestId('add-another-doc');
+    fireEvent.click(addButton!);
+    attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
+    expect(attachmentBoxes).toHaveLength(2);
+    expect(buttonSubmit).toBeDisabled();
+    uploadDocument(attachmentBoxes[1], 1, newNotification.documents[1]);
+    await waitFor(() => {
+      expect(buttonSubmit).toBeEnabled();
+    });
+    // remove second document name
+    await testInput(form!, `documents.1.name`, '');
+    const error = form!.querySelector(`[id="documents.1.name-helper-text"]`);
+    expect(error).toHaveTextContent('required-field');
+    expect(buttonSubmit).toBeDisabled();
+    // remove second document and check that the form returns valid
+    const deleteButton = within(attachmentBoxes[1]).getByTestId('deletebutton');
+    fireEvent.click(deleteButton);
+    await waitFor(() => {
+      expect(buttonSubmit).toBeEnabled();
+    });
+  });
+
+  it('form initially filled - two documents', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Attachments
+          isCompleted={false}
+          onConfirm={confirmHandlerMk}
+          attachmentsData={newNotification.documents}
+        />
+      );
+    });
+    const form = result?.container.querySelector('form');
+    const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    expect(attachmentBoxes).toHaveLength(newNotification.documents.length);
+    const submitButton = within(form!).getByTestId('step-submit');
+    expect(submitButton).toBeEnabled();
   });
 
   it('Adds ten documents placeholders and checks that is not possible to add more', async () => {
-    const form = result.container.querySelector('form');
-    const buttonAddAnotherDoc = result.getByTestId('add-another-doc');
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
+    });
+    const form = result?.container.querySelector('form');
+    const buttonAddAnotherDoc = within(form!).getByTestId('add-another-doc');
     for (let i = 0; i < 10; i++) {
-      fireEvent.click(buttonAddAnotherDoc);
+      await act(async () => {
+        fireEvent.click(buttonAddAnotherDoc);
+      });
     }
     expect(buttonAddAnotherDoc).not.toBeInTheDocument();
-    const buttonNextStep = result.getByTestId('step-submit');
-    expect(buttonNextStep).toHaveTextContent(/button.continue/i);
   });
 });
 
 describe('Attachments Component without payment enabled', () => {
-  let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
-
-  const file = new Blob(['mocked content'], { type: 'application/pdf' });
-  // eslint-disable-next-line functional/immutable-data
-  (file as any).name = 'Mocked file';
-
-  function uploadDocument(elem: ParentNode, index: number) {
-    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
-    fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
-    const fileInput = elem.querySelector('[data-testid="fileInput"]');
-    const input = fileInput?.querySelector('input');
-    fireEvent.change(input!, { target: { files: [file] } });
-  }
-
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
-    fireEvent.click(button);
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(documents);
-      expect(confirmHandlerMk).toBeCalledTimes(1);
-    });
-  }
+  let result: RenderResult | undefined;
 
   beforeEach(async () => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-    // mock action
-    mockActionFn = jest.fn();
-    const actionSpy = jest.spyOn(actions, 'uploadNotificationAttachment');
-    actionSpy.mockImplementation(mockActionFn);
-    // mock dispatch
-    mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     mockIsPaymentEnabledGetter.mockReturnValue(false);
-
-    // render component
-    await act(async () => {
-      result = render(<Attachments onConfirm={confirmHandlerMk} />);
-    });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    result = undefined;
     jest.clearAllMocks();
   });
 
-  it('renders Attachments', () => {
-    const form = result.container.querySelector('form');
-    expect(form).toHaveTextContent(/attach-for-recipients/i);
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    expect(attachmentBoxes).toHaveLength(1);
-    expect(attachmentBoxes[0]).toHaveTextContent(/act-attachment*/i);
-    const deleteIcon = attachmentBoxes[0].querySelector('[data-testid="DeleteIcon"]');
-    expect(deleteIcon).not.toBeInTheDocument();
-    const fileInput = attachmentBoxes[0].parentNode?.querySelector('[data-testid="fileInput"]');
-    expect(fileInput).toBeInTheDocument();
-    const buttonSubmit = result.getByTestId('step-submit');
-    const buttonPrevious = result.getByTestId('previous-step');
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    waitFor(() => {
-      expect(buttonSubmit).toBeDisabled();
+  it('renders component', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    expect(buttonPrevious).toHaveTextContent(/back-to-recipient/i);
+    const form = result?.container.querySelector('form');
+    const buttonSubmit = within(form!).getByTestId('step-submit');
+    expect(buttonSubmit).toHaveTextContent('button.send');
   });
 
-  it('adds document and click on confirm', async () => {
-    const form = result.container.querySelector('form');
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const button = await waitFor(() => result.getByTestId('step-submit'));
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(button).toBeEnabled();
-    void testConfirm(button as HTMLButtonElement, [
-      {
-        id: 'documents.0',
-        key: 'Doc0',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-    ]);
-  });
-
-  it('adds another document and click on confirm', async () => {
-    const form = result.container.querySelector('form');
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    fireEvent.click(buttons![0]);
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
+  it('changes form values and clicks on confirm - one document and completed set to true', async () => {
+    // render component
+    await act(async () => {
+      result = render(<Attachments isCompleted={true} onConfirm={confirmHandlerMk} />);
+    });
+    const form = result?.container.querySelector('form');
+    const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
+    uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
+    const buttonSubmit = await waitFor(() => within(form!).getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    fireEvent.click(buttonSubmit);
     await waitFor(() => {
-      expect(buttons![1]).toBeDisabled();
+      expect(confirmHandlerMk).toBeCalledTimes(1);
     });
-    const newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
-    expect(newAttachmentBoxes).toHaveLength(2);
-    expect(newAttachmentBoxes[1]).toHaveTextContent(/doc-attachment*/i);
-    const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
-    expect(deleteIcon).toBeInTheDocument();
-    uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
-    await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![2], [
-      {
-        id: 'documents.0',
-        key: 'Doc0',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-      {
-        id: 'documents.1',
-        key: 'Doc1',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-    ]);
-  });
-
-  it('delete document and click on confirm', async () => {
-    const form = result.container.querySelector('form');
-    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
-    uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    fireEvent.click(buttons![0]);
-    let newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
-    const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
-    fireEvent.click(deleteIcon!);
-    await waitFor(() => {
-      newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
-      expect(newAttachmentBoxes).toHaveLength(1);
-    });
-    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
-    // flexDirection row-reverse
-    // PN-1843 Carlotta Dimatteo 12/08/2022
-    await waitFor(() => expect(buttons![1]).toBeEnabled());
-    void testConfirm(buttons![1], [
-      {
-        id: 'documents.0',
-        key: 'Doc0',
-        contentType: 'application/pdf',
-        file: new Uint8Array(),
-        sha256: 'mocked-hasBase64',
-      },
-    ]);
-  });
-
-  it('Adds ten documents placeholders and checks that is not possible to add more', async () => {
-    const form = result.container.querySelector('form');
-    const buttonAddAnotherDoc = result.getByTestId('add-another-doc');
-    for (let i = 0; i < 10; i++) {
-      fireEvent.click(buttonAddAnotherDoc);
-    }
-    expect(buttonAddAnotherDoc).not.toBeInTheDocument();
-    const buttonNextStep = result.getByTestId('step-submit');
-    expect(buttonNextStep).toHaveTextContent(/button.send/i);
   });
 });

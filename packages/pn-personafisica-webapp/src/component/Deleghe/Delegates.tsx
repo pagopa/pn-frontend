@@ -1,29 +1,29 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 import AddIcon from '@mui/icons-material/Add';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import {
-  Column,
-  ItemsTable as Table,
-  Item,
-  CodeModal,
-  Sort,
-  EmptyState,
   ApiErrorWrapper,
+  CodeModal,
+  Column,
+  EmptyState,
+  Item,
+  Sort,
+  ItemsTable as Table,
 } from '@pagopa-pn/pn-commons';
 
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
+import { DelegatesColumn } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
-import delegationToItem from '../../utils/delegation.utility';
-import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
-import { trackEventByType } from '../../utils/mixpanel';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import delegationToItem from '../../utils/delegation.utility';
 import { TrackEventType } from '../../utils/events';
-import { DelegatesColumn } from '../../models/Deleghe';
-
+import { trackEventByType } from '../../utils/mixpanel';
+import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegates = () => {
@@ -130,6 +130,7 @@ const Delegates = () => {
           <Typography variant="h5">{t('deleghe.delegatesTitle')}</Typography>
           <Box>
             <Button
+              id="add-delegation-button"
               variant="outlined"
               onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
               data-testid="add-delegation"
@@ -150,11 +151,12 @@ const Delegates = () => {
                 rows={rows}
                 sort={sortDelegates}
                 onChangeSorting={handleChangeSorting}
+                testId="delegatesTable"
               />
             ) : (
               <EmptyState
-                emptyActionLabel={t('deleghe.add') as string}
-                emptyMessage={t('deleghe.no_delegates') as string}
+                emptyActionLabel={t('deleghe.add')}
+                emptyMessage={t('deleghe.no_delegates')}
                 emptyActionCallback={(_e, source = 'empty_state') =>
                   handleAddDelegationClick(source)
                 }

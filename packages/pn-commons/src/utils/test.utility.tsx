@@ -1,29 +1,32 @@
 import React from 'react';
-import { ApiErrorWrapperGeneral } from "../components/ApiError/ApiErrorWrapper";
+
+import { ApiErrorWrapperGeneral } from '../components/ApiError/ApiErrorWrapper';
 import { IAppMessage } from '../types';
 
 /**
  * Per testare un componente che usa ApiErrorWrapper, penso che non serve moccare ApiErrorWrapper al completo,
  * perché la logica di renderizzare sia il componente "normale" sia ApiError serve.
  * Penso che invece sia meglio moccare i componenti "normale" e di errore.
- * 
+ *
  * Perciò ho creato questa funzione mockApiErrorWrapper, che riceve in parametro appunto questi componenti.
  * - Il componente "normale" l'ho lasciato come funzione, perché a seconda di quello che si vuol testare potrebbe
- *   essere diverso in ogni test. Definito come funzione, si esegue ad ogni volta che viene invocato il mock 
+ *   essere diverso in ogni test. Definito come funzione, si esegue ad ogni volta che viene invocato il mock
  *   di ApiErrorWrapper. Se non viene passato, o la funzione ritorna undefined, allora si usa lo stesso
  *   componente "normale" del componente/page che si sta testando.
  * - Il componente di errore l'ho lasciato fisso, se non viene passato si usa <div>Api Error</div>
  */
 export function mockApiErrorWrapper(
-  mockNormalComponentFn?: () => (JSX.Element | undefined),
-  mockApiErrorComponent?: JSX.Element,
-) { 
-  return ({ apiId, children }: { apiId: string, children: React.ReactNode }) => <ApiErrorWrapperGeneral 
-      apiId={apiId} 
-      errorComponent={mockApiErrorComponent || <div>Api Error</div>} 
+  mockNormalComponentFn?: () => JSX.Element | undefined,
+  mockApiErrorComponent?: JSX.Element
+) {
+  return ({ apiId, children }: { apiId: string; children: React.ReactNode }) => (
+    <ApiErrorWrapperGeneral
+      apiId={apiId}
+      errorComponent={mockApiErrorComponent || <div>Api Error</div>}
     >
-      {(mockNormalComponentFn && mockNormalComponentFn()) || children } 
-    </ApiErrorWrapperGeneral>;
+      {(mockNormalComponentFn && mockNormalComponentFn()) || children}
+    </ApiErrorWrapperGeneral>
+  );
 }
 
 let mockComponent: JSX.Element | undefined;
@@ -89,21 +92,29 @@ let mockComponent: JSX.Element | undefined;
 export const simpleMockForApiErrorWrapper = mockApiErrorWrapper(() => mockComponent);
 
 type AppState = {
-  loading: { result: boolean, tasks: any };
-  messages: { errors: IAppMessage[], success: IAppMessage[] }
+  loading: { result: boolean; tasks: any };
+  messages: { errors: IAppMessage[]; success: IAppMessage[] };
 };
 
 type ApiOutcomeTestHelperType = {
-  setStandardMock: () => void,
-  clearMock: () => void,
+  setStandardMock: () => void;
+  clearMock: () => void;
   errorMessageForAction: (action: string) => IAppMessage;
   appStateWithMessageForAction: (action: string) => AppState;
-  expectApiErrorComponent: (screen: any) => void,
-  expectApiOKComponent: (screen: any) => void,
-}
+  expectApiErrorComponent: (screen: any) => void;
+  expectApiOKComponent: (screen: any) => void;
+};
 
 function errorMessageForAction(action: string): IAppMessage {
-  return { id: "toto", blocking: false, message: "Errore", title: "Errore", toNotify: true, action, alreadyShown: true };
+  return {
+    id: 'toto',
+    blocking: false,
+    message: 'Errore',
+    title: 'Errore',
+    toNotify: true,
+    action,
+    alreadyShown: true,
+  };
 }
 
 export const apiOutcomeTestHelper: ApiOutcomeTestHelperType = {
@@ -112,7 +123,7 @@ export const apiOutcomeTestHelper: ApiOutcomeTestHelperType = {
     mockComponent = <div>Ecco il componente</div>;
   },
 
-  // pulisce il mock del componente "vero e proprio", in modo che il mock di ApiGuardError 
+  // pulisce il mock del componente "vero e proprio", in modo che il mock di ApiGuardError
   // renderizza il vero componente in assenza di errori di API
   clearMock: () => {
     mockComponent = undefined;
@@ -124,28 +135,28 @@ export const apiOutcomeTestHelper: ApiOutcomeTestHelperType = {
 
   // costruisce l'intero valore dello slice appState con un errore di API legato a un'action specifica,
   // utile per simulare errori di API
-  appStateWithMessageForAction: (action: string) => ({ 
-    loading: {result: false, tasks: {}}, 
-    messages: { errors: [errorMessageForAction(action)], success: [] }
+  appStateWithMessageForAction: (action: string) => ({
+    loading: { result: false, tasks: {} },
+    messages: { errors: [errorMessageForAction(action)], success: [] },
   }),
 
   // verifica che si sia renderizzato il componente di errore e non quello "vero e proprio",
-  // assumendo che sono stati moccati tramite simpleMockForApiErrorWrapper 
+  // assumendo che sono stati moccati tramite simpleMockForApiErrorWrapper
   // e apiOutcomeTestHelper.setStandardMock
   expectApiErrorComponent: (screen: any) => {
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco il componente");
+    const apiErrorComponent = screen.queryByText('Api Error');
+    const notificheComponent = screen.queryByText('Ecco il componente');
     expect(apiErrorComponent).toBeTruthy();
     expect(notificheComponent).toEqual(null);
   },
 
   // verifica che si sia renderizzato il componente "vero e proprio" e non quello di errore,
   // assumendo che sono stati moccati tramite apiOutcomeTestHelper.setStandardMock
-  // e simpleMockForApiErrorWrapper 
+  // e simpleMockForApiErrorWrapper
   expectApiOKComponent: (screen: any) => {
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco il componente");
+    const apiErrorComponent = screen.queryByText('Api Error');
+    const notificheComponent = screen.queryByText('Ecco il componente');
     expect(apiErrorComponent).toEqual(null);
     expect(notificheComponent).toBeTruthy();
   },
-}
+};

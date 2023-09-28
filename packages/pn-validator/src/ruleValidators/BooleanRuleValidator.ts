@@ -1,7 +1,7 @@
-import { BooleanRules } from '../types/BooleanRules';
 import { Rule } from '../Rule';
-import { CommonRuleValidator } from './CommonRuleValidator';
+import { BooleanRules } from '../types/BooleanRules';
 import { NotRuleValidator } from '../types/CommonRules';
+import { CommonRuleValidator } from './CommonRuleValidator';
 
 export class BooleanRuleValidator<TModel, TValue>
   extends CommonRuleValidator<TModel, TValue>
@@ -16,6 +16,6 @@ export class BooleanRuleValidator<TModel, TValue>
    */
   public readonly not = (): NotRuleValidator<TModel, TValue> =>
     ({
-      ...this._not()
+      ...this.commonNot(),
     } as unknown as NotRuleValidator<TModel, TValue>);
 }

@@ -1,27 +1,21 @@
-import {
-  ChangeEvent,
-  forwardRef,
-  Fragment,
-  useMemo,
-  ForwardedRef,
-  useImperativeHandle,
-} from 'react';
-import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
+import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Box, SxProps, TextField, Typography } from '@mui/material';
+
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, SxProps, TextField, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { NewNotificationDocument } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
 import { getConfiguration } from '../../../services/configuration.service';
-import { NewNotificationDocument } from '../../../models/NewNotification';
+import { requiredStringFieldValidation } from '../../../utils/validation.utility';
 import NewNotificationCard from './NewNotificationCard';
-import { requiredStringFieldValidation } from './validation.utility';
 
 type AttachmentBoxProps = {
   id: string;
@@ -36,10 +30,8 @@ type AttachmentBoxProps = {
   onFieldTouched: (e: ChangeEvent) => void;
   onFileUploaded: (
     id: string,
-    file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
+    file?: File,
+    sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
@@ -47,7 +39,7 @@ type AttachmentBoxProps = {
 
 const MAX_NUMBER_OF_ATTACHMENTS = 10;
 
-const AttachmentBox = ({
+const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   id,
   title,
   sx,
@@ -61,18 +53,12 @@ const AttachmentBox = ({
   onFileUploaded,
   onRemoveFile,
   fileUploaded,
-}: AttachmentBoxProps) => {
+}) => {
   const { t } = useTranslation(['notifiche']);
 
   return (
-    <Fragment>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={sx}
-        data-testid="attachmentBox"
-      >
+    <Box data-testid="attachmentBox">
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx}>
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
           <ButtonNaked
@@ -88,10 +74,9 @@ const AttachmentBox = ({
         key={`${new Date()}`}
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, name, size) => onFileUploaded(id, file, sha256, name, size)}
+        onFileUploaded={(file, sha256) => onFileUploaded(id, file, sha256)}
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
-        fileFormat="uint8Array"
         calcSha256
         fileUploaded={fileUploaded}
       />
@@ -106,8 +91,9 @@ const AttachmentBox = ({
         helperText={fieldTouched && fieldErros}
         size="small"
         margin="normal"
+        data-testid="attachmentNameInput"
       />
-    </Fragment>
+    </Box>
   );
 };
 
@@ -120,10 +106,8 @@ type Props = {
 };
 
 const emptyFileData = {
-  uint8Array: undefined,
+  data: undefined,
   sha256: { hashBase64: '', hashHex: '' },
-  name: '',
-  size: 0,
 };
 
 const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument => ({
@@ -138,13 +122,13 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({
+const Attachments: React.FC<Props> = ({
   onConfirm,
   onPreviousStep,
   attachmentsData,
   forwardedRef,
   isCompleted,
-}: Props) => {
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
@@ -157,11 +141,9 @@ const Attachments = ({
       yup.object({
         file: yup
           .object({
-            size: yup.number().required(),
-            name: yup.string().required(),
-            uint8Array: yup
+            data: yup
               .mixed()
-              .test((input) => input instanceof Uint8Array)
+              .test((input) => input instanceof File)
               .required(),
             sha256: yup
               .object({
@@ -189,6 +171,17 @@ const Attachments = ({
     []
   );
 
+  const storeAttachments = (documents: Array<NewNotificationDocument>) => {
+    dispatch(
+      setAttachments({
+        documents: documents.map((v) => ({
+          ...v,
+          id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+        })),
+      })
+    );
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -198,18 +191,13 @@ const Attachments = ({
         if (!IS_PAYMENT_ENABLED && isCompleted) {
           onConfirm();
         } else {
-          dispatch(
-            setAttachments({
-              documents: values.documents.map((v) => ({
-                ...v,
-                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-              })),
-            })
-          );
+          storeAttachments(values.documents);
           // upload attachments
           dispatch(uploadNotificationAttachment(values.documents))
             .unwrap()
-            .then(() => {
+            .then((docs) => {
+              // update formik
+              void formik.setFieldValue('documents', docs, false);
               onConfirm();
             })
             .catch(() => undefined);
@@ -226,20 +214,16 @@ const Attachments = ({
   const fileUploadedHandler = async (
     index: number,
     id: string,
-    file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
+    file?: File,
+    sha256?: { hashBase64: string; hashHex: string }
   ) => {
     await formik.setFieldValue(
       id,
       {
         ...formik.values.documents[index],
         file: {
-          size,
-          uint8Array: file,
+          data: file,
           sha256,
-          name,
         },
         ref: {
           key: '',
@@ -290,33 +274,19 @@ const Attachments = ({
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
-      dispatch(
-        setAttachments({
-          documents: formik.values.documents.map((v) => ({
-            ...v,
-            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-          })),
-        })
-      );
+      storeAttachments(formik.values.documents);
       onPreviousStep();
     }
   };
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      dispatch(
-        setAttachments({
-          documents: formik.values.documents.map((v) => ({
-            ...v,
-            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-          })),
-        })
-      );
+      storeAttachments(formik.values.documents);
     },
   }));
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="attachmentsForm">
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
@@ -346,9 +316,7 @@ const Attachments = ({
                 : undefined
             }
             onFieldTouched={handleChangeTouched}
-            onFileUploaded={(id, file, sha256, name, size) =>
-              fileUploadedHandler(i, id, file, sha256, name, size)
-            }
+            onFileUploaded={(id, file, sha256) => fileUploadedHandler(i, id, file, sha256)}
             onRemoveFile={(id) => removeFileHandler(id, i)}
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />

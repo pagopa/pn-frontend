@@ -1,40 +1,47 @@
 import {
-  useMemo,
-  useReducer,
-  Fragment,
-  useRef,
   ChangeEvent,
   DragEvent,
-  useEffect,
+  Fragment,
   ReactNode,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
 } from 'react';
-import { Alert, Box, IconButton, Input, LinearProgress, SxProps, Typography } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import {
+  Alert,
+  Box,
+  Grid,
+  IconButton,
+  Input,
+  LinearProgress,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
+
+import { useIsMobile } from '../hooks';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { calcSha256String, parseFileSize } from '../utils/file.utility';
 import CustomTooltip from './CustomTooltip';
 
 type Props = {
   uploadText: string;
   vertical?: boolean;
   accept: string;
-  uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
-  onFileUploaded: (
-    file: any,
-    sha256?: { hashBase64: string; hashHex: string },
-    name?: string,
-    size?: number
-  ) => void;
+  uploadFn?: (file: File, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
+  onFileUploaded: (file: File, sha256?: { hashBase64: string; hashHex: string }) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
   calcSha256?: boolean;
-  fileFormat?: 'base64' | 'uint8Array';
-  fileUploaded?: any;
+  fileUploaded?: { file: { data?: File; sha256?: { hashBase64: string; hashHex: string } } };
+  fileSizeLimit?: number;
 };
 
 enum UploadStatus {
@@ -45,7 +52,7 @@ enum UploadStatus {
 }
 
 type UploadState = {
-  file: any;
+  file: File;
   status: UploadStatus;
   error: string;
   sha256: string;
@@ -62,6 +69,19 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
           'common',
           'upload-file.ext-not-supported',
           'Estensione file non supportata. Riprovare con un altro file.'
+        ),
+      };
+    case 'FILE_SIZE_EXCEEDED':
+      return {
+        ...state,
+        ...action.payload,
+        error: getLocalizedOrDefaultLabel(
+          'common',
+          'upload-file.file-size-exceeded',
+          `Il file selezionato supera la dimensione massima di ${action.payload}.`,
+          {
+            limit: action.payload,
+          }
         ),
       };
     case 'UPLOAD_IN_ERROR':
@@ -83,7 +103,7 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         status: UploadStatus.UPLOADED,
         error: '',
         sha256: action.payload.file.sha256.hashHex,
-        name: action.payload.name ? action.payload.name : '',
+        file: action.payload.file.data,
       };
     case 'FILE_UPLOADED':
       return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
@@ -119,8 +139,8 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param isSending flag for sending status
  * @param sx style to be addded to the component
  * @param calcSha256 flag to calculate the sha256
- * @param fileFormat format of the file after loading
  * @param fileUploaded file previously uploaded
+ * @param fileSizeLimit max file size limit - default is 209715200 (200MB)
  * @returns
  */
 const FileUpload = ({
@@ -133,10 +153,10 @@ const FileUpload = ({
   isSending,
   sx,
   calcSha256 = false,
-  fileFormat,
   fileUploaded,
+  fileSizeLimit = 209715200,
 }: Props) => {
-  const [data, dispatch] = useReducer(reducer, {
+  const [fileData, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
     file: null,
     error: '',
@@ -144,18 +164,19 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists =
-    fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null;
+  const attachmentExists = fileUploaded?.file && fileUploaded?.file.data;
+
+  const isMobile = useIsMobile();
 
   const containerStyle = useMemo(() => {
-    if (data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) {
+    if (fileData.status === UploadStatus.IN_PROGRESS || fileData.status === UploadStatus.SENDING) {
       return {
         backgroundColor: 'white',
         '& > div': {
           height: '24px',
         },
       };
-    } else if (data.status === UploadStatus.UPLOADED) {
+    } else if (fileData.status === UploadStatus.UPLOADED) {
       return {
         border: '1px solid',
         borderColor: 'primary.main',
@@ -167,29 +188,27 @@ const FileUpload = ({
       borderColor: 'primary.main',
       backgroundColor: 'primaryAction.selected',
     };
-  }, [data.status]);
+  }, [fileData.status]);
 
   const chooseFileHandler = () => {
     (uploadInputRef.current as any).click();
   };
 
-  const uploadFile = async (file: any) => {
-    if (file && file.type && accept.indexOf(file.type) > -1) {
+  const uploadFile = async (file: File) => {
+    if (file?.size > fileSizeLimit) {
+      dispatch({ type: 'FILE_SIZE_EXCEEDED', payload: parseFileSize(fileSizeLimit) });
+      return;
+    }
+    if (file?.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
       try {
         /* eslint-disable-next-line functional/no-let */
-        let fileFormatted = file;
-        if (fileFormat === 'base64') {
-          fileFormatted = await calcBase64String(file);
-        } else if (fileFormat === 'uint8Array') {
-          fileFormatted = await calcUnit8Array(file);
-        }
         const sha256 = calcSha256 ? await calcSha256String(file) : undefined;
         if (uploadFn) {
-          await uploadFn(fileFormatted, sha256);
+          await uploadFn(file, sha256);
         }
         dispatch({ type: 'FILE_UPLOADED', payload: sha256?.hashHex });
-        onFileUploaded(fileFormatted, sha256, file.name, file.size);
+        onFileUploaded(file, sha256);
       } catch {
         dispatch({ type: 'UPLOAD_IN_ERROR' });
       }
@@ -232,18 +251,33 @@ const FileUpload = ({
   };
 
   useEffect(() => {
-    if (data.status !== UploadStatus.UPLOADED && data.status !== UploadStatus.SENDING) {
+    if (fileData.status !== UploadStatus.UPLOADED && fileData.status !== UploadStatus.SENDING) {
       return;
     }
     dispatch(isSending ? { type: 'IS_SENDING' } : { type: 'FILE_UPLOADED' });
   }, [isSending]);
 
   useEffect(() => {
-    if (attachmentExists && data.status !== UploadStatus.UPLOADED) {
+    if (attachmentExists && fileData.status !== UploadStatus.UPLOADED) {
       dispatch({ type: 'FILE_PREVIOUSLY_UPLOADED', payload: fileUploaded });
     }
   }, [attachmentExists]);
 
+  const HashToolTip = () => (
+    <CustomTooltip
+      openOnClick
+      tooltipContent={getLocalizedOrDefaultLabel(
+        'common',
+        'upload-file.hash-code-descr',
+        'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
+      )}
+      sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
+    >
+      <IconButton>
+        <InfoOutlinedIcon color="action" />
+      </IconButton>
+    </CustomTooltip>
+  );
   return (
     <Box
       sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
@@ -253,23 +287,28 @@ const FileUpload = ({
       onDragLeave={handleDragLeave}
       component="div"
     >
-      {data.status === UploadStatus.TO_UPLOAD && (
+      {fileData.status === UploadStatus.TO_UPLOAD && (
         <OrientedBox vertical={vertical}>
-          <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
-          <Typography display="inline" variant="body2">
-            {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
-            &nbsp;
-          </Typography>
+          {!isMobile && (
+            <>
+              <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
+              <Typography display="inline" variant="body2">
+                {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
+                &nbsp;
+              </Typography>
+            </>
+          )}
           <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
             <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
               {getLocalizedOrDefaultLabel(
                 'common',
-                'upload-file.select-from-pc',
+                isMobile ? 'upload-file.select-from-mobile' : 'upload-file.select-from-pc',
                 'selezionalo dal tuo computer'
               )}
             </Typography>
           </ButtonNaked>
           <Input
+            id="file-input"
             type="file"
             sx={{ display: 'none' }}
             inputRef={uploadInputRef}
@@ -279,10 +318,11 @@ const FileUpload = ({
           />
         </OrientedBox>
       )}
-      {(data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) && (
+      {(fileData.status === UploadStatus.IN_PROGRESS ||
+        fileData.status === UploadStatus.SENDING) && (
         <OrientedBox vertical={vertical}>
           <Typography display="inline" variant="body2">
-            {data.status === UploadStatus.IN_PROGRESS
+            {fileData.status === UploadStatus.IN_PROGRESS
               ? getLocalizedOrDefaultLabel(
                   'common',
                   'upload-file.loading',
@@ -295,7 +335,7 @@ const FileUpload = ({
           </Typography>
         </OrientedBox>
       )}
-      {data.status === UploadStatus.UPLOADED && (
+      {fileData.status === UploadStatus.UPLOADED && (
         <Fragment>
           <Box
             display="flex"
@@ -303,52 +343,61 @@ const FileUpload = ({
             alignItems="center"
             sx={{ width: '100%' }}
           >
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <AttachFileIcon color="primary" />
-              <Typography color="primary">{data.file.name}</Typography>
-              <Typography fontWeight={600} sx={{ marginLeft: '30px' }}>
-                {(data.file.size / 1024).toFixed(2)}&nbsp;KB
+            <Box display={isMobile ? 'block' : 'flex'} alignItems="center">
+              <Box display="flex">
+                <AttachFileIcon color="primary" />
+                <Typography color="primary">{fileData.file.name}</Typography>
+              </Box>
+              <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
+                {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
             <IconButton
+              data-testid="removeDocument"
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
-                'notifiche',
-                'new-notification.steps.attachments.remove-attachment',
-                'Rimuovi allegato'
+                'common',
+                'attachments.remove-attachment',
+                'Elimina allegato'
               )}
             >
               <CloseIcon />
             </IconButton>
           </Box>
-          {data.sha256 && (
+          {fileData.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
-              <Typography display="inline" fontWeight={700}>
-                {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
-              </Typography>
-              <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
-                {data.sha256}
-              </Typography>
-              <CustomTooltip
-                openOnClick
-                tooltipContent={getLocalizedOrDefaultLabel(
-                  'common',
-                  'upload-file.hash-code-descr',
-                  'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
-                )}
-                sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
-              >
-                <IconButton>
-                  <InfoOutlinedIcon color="action" />
-                </IconButton>
-              </CustomTooltip>
+              <Grid container wrap="nowrap" alignItems={'center'}>
+                <Grid item xs="auto">
+                  <Typography id="file-upload-hash-code" display="inline" fontWeight={700}>
+                    {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
+                  </Typography>
+                </Grid>
+                <Grid item zeroMinWidth>
+                  <Typography
+                    sx={{
+                      marginLeft: '10px',
+                      marginTop: '3px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      display: 'block',
+                    }}
+                    variant="caption"
+                  >
+                    {fileData.sha256}
+                  </Typography>
+                </Grid>
+                <Grid item xs="auto">
+                  <HashToolTip />
+                </Grid>
+              </Grid>
             </Box>
           )}
         </Fragment>
       )}
-      {data.error && (
-        <Alert severity="error" sx={{ marginTop: '10px' }}>
-          {data.error}
+      {fileData.error && (
+        <Alert id="file-upload-error" severity="error" sx={{ marginTop: '10px' }}>
+          {fileData.error}
         </Alert>
       )}
     </Box>

@@ -3,13 +3,35 @@ import { ValidatorBuilders } from './types/ValidatorBuilders';
 import { ValidatorBuilder } from './ValidatorBuilder';
 import { hasError } from './HasError';
 import { TypeRules } from './types/TypeRules';
+import { ValidatorOptions } from './types/ValidatorOptions';
+import { isMissingRules } from './utility/isMissingRules';
 
 export class Validator<TModel> {
   private validatorBuilders: ValidatorBuilders<TModel> = {};
+  private strict: boolean; // strict mode
+
+  constructor(options: ValidatorOptions = {}) {
+    this.strict = options.strict ?? false;
+  }
 
   public readonly validate = (model: TModel): ValidationError<TModel> | null => {
+    // eslint-disable-next-line functional/no-let
     let errors: ValidationError<TModel> | null = null;
-    
+
+    // check if the number of rule keys are equals to the number of model keys.
+    if (this.strict) {
+      const missingKeys = isMissingRules(model, this.validatorBuilders);
+      if (missingKeys.length > 0) {
+        missingKeys.forEach((key) => {
+          if (!errors) {
+            errors = {};
+          }
+          errors[key] = 'Rule is missing'; // Build the validation error object
+        });
+        return errors;
+      }
+    }
+
     // loop over all validators
     for (const propertyName of Object.keys(this.validatorBuilders)) {
       const validatorBuilder = this.validatorBuilders[propertyName as keyof TModel];
@@ -19,9 +41,9 @@ export class Validator<TModel> {
         // check errors
         if (hasError(result)) {
           if (!errors) {
-
             errors = {};
           }
+          // eslint-disable-next-line functional/immutable-data
           errors[propertyName as keyof TModel] = result;
         }
       }
@@ -33,12 +55,13 @@ export class Validator<TModel> {
    * Add rule for a specific property
    * @param  {TPropertyName} propertyName property name
    */
-  public readonly ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
+  public readonly ruleFor = <TPropertyName extends keyof TModel>(
     propertyName: TPropertyName
-  ): TypeRules<TModel, TValue> => {
-    const validatorBuilder = new ValidatorBuilder<TModel, TValue>();
-    this.validatorBuilders[propertyName] = validatorBuilder as any;
+  ): TypeRules<TModel, TModel[TPropertyName]> => {
+    const validatorBuilder = new ValidatorBuilder<TModel, TModel[TPropertyName]>();
+    // eslint-disable-next-line functional/immutable-data
+    this.validatorBuilders[propertyName] = validatorBuilder;
 
-    return validatorBuilder.getTypeRules() as unknown as TypeRules<TModel, TValue>;
+    return validatorBuilder.getTypeRules() as TypeRules<TModel, TModel[TPropertyName]>;
   };
 }

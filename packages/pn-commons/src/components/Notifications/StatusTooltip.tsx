@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from 'react';
+
 import Chip from '@mui/material/Chip';
 
 import CustomTooltip from '../CustomTooltip';
@@ -17,8 +18,18 @@ const StatusTooltip = ({
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} onOpen={eventTrackingCallback}>
-      <Chip label={label} color={color} sx={{ cursor: 'default' }} data-testid={`statusChip-${label}`} />
+    <CustomTooltip
+      openOnClick={false}
+      tooltipContent={tooltipContent}
+      onOpen={eventTrackingCallback}
+    >
+      <Chip
+        id={`status-chip-${label}`}
+        label={label}
+        color={color}
+        sx={{ cursor: 'default' }}
+        data-testid={`statusChip-${label}`}
+      />
     </CustomTooltip>
   );
 };

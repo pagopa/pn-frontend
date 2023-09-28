@@ -92,7 +92,8 @@
       "verificationCode": "Code de vérification",
       "verificationCodeDescr": "Partagez ce code avec la personne déléguée : elle devra le saisir lors de l'acceptation de la procuration.",
       "submit": "Envoyer la demande",
-      "mandatoryField": "*Champs obligatoires"
+      "mandatoryField": "*Champs obligatoires",
+      "party-not-found": "Aucun organisme trouvé"
     },
     "validation": {
       "fiscalCode": {

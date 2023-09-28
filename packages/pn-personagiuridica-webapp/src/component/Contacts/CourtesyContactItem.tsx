@@ -1,15 +1,15 @@
-import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
-
-import { ChangeEvent, useEffect, useMemo, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+
+import { Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
+import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 export enum CourtesyFieldType {
   EMAIL = 'email',
@@ -40,6 +40,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
         email: yup
           .string()
           .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+          .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
           .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
       }),
     []

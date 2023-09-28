@@ -9,4 +9,6 @@ export enum NotificationStatus {
   UNREACHABLE = 'UNREACHABLE',
   CANCELLED = 'CANCELLED',
   REFUSED = 'REFUSED',
+  // only fe
+  CANCELLATION_IN_PROGRESS = 'CANCELLATION_IN_PROGRESS',
 }

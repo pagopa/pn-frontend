@@ -1,31 +1,29 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
+import { Box, Button, Typography } from '@mui/material';
 import {
-  calculatePages,
+  ApiErrorWrapper,
   CustomPagination,
   PaginationData,
-  // Sort, // Riabilitare con la issue PN-1124
-  useIsMobile,
-  formatToTimezoneString,
-  getNextDay,
-  ApiErrorWrapper,
   TitleBox,
+  calculatePages,
+  formatToTimezoneString,
+  getNextDay, // Sort, // Riabilitare con la issue PN-1124
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Box, Button, Typography } from '@mui/material';
 
 import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   DASHBOARD_ACTIONS,
-  getSentNotifications,
-  // setSorting, // Riabilitare con la issue PN-1124
+  getSentNotifications, // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
-import { trackEventByType } from '../utils/mixpanel';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import { TrackEventType } from '../utils/events';
-
+import { trackEventByType } from '../utils/mixpanel';
 // import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
@@ -119,6 +117,7 @@ const Dashboard = () => {
               {t('subtitle')}
             </Typography>
             <Button
+              id="new-notification-btn"
               variant="contained"
               onClick={handleRouteManualSend}
               aria-label={t('new-notification-button')}

@@ -1,22 +1,23 @@
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import Icon from '@mui/material/Icon';
-import { IconButton } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Button from '@mui/material/Button';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { getIDPS, IdentityProvider } from '../../utils/IDPS';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import { IconButton } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+
 import SpidBig from '../../assets/spid_big.svg';
-import { shuffleList } from '../../utils/utils';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
 import { getConfiguration } from '../../services/configuration.service';
+import { IdentityProvider, getIDPS } from '../../utils/IDPS';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
+import { shuffleList } from '../../utils/utils';
 
 const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   const { URL_API_LOGIN, SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED } = getConfiguration();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['login']);
   const IDPS = getIDPS(SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED);
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
@@ -29,13 +30,18 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   };
 
   return (
-    <Grid container direction="column" sx={{ backgroundColor: '#FFF', 'minHeight': '100vh' }}>
+    <Grid
+      container
+      direction="column"
+      sx={{ backgroundColor: '#FFF', minHeight: '100vh' }}
+      id="spidSelect"
+    >
       <Grid container direction="row" justifyContent="space-around" mt={3}>
         <Grid item xs={1}>
           <img src={SpidBig} />
         </Grid>
         <Grid item xs={1} sx={{ textAlign: 'right' }}>
-          <IconButton color="primary" onClick={onBack}>
+          <IconButton color="primary" onClick={onBack} id="backIcon">
             <ClearOutlinedIcon />
           </IconButton>
         </Grid>
@@ -43,6 +49,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       <Grid container direction="column" justifyContent="center" alignItems="center" spacing="10">
         <Grid item>
           <Typography
+            id="spid-select"
             py={5}
             px={0}
             color="textPrimary"
@@ -90,14 +97,16 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
             }}
             component="div"
           >
-            <Trans i18nKey="spidSelect.hintText">
-              Non hai SPID?
-              <Link href={IDPS.richiediSpid}>{' Scopri di più'}</Link>
+            <Trans i18nKey="spidSelect.hintText" ns="login">
+              <Link href={IDPS.richiediSpid} id="requestForSpid">
+                {'spidSelect.hintText'}
+              </Link>
             </Trans>
           </Typography>
           <Button
             type="submit"
             variant="outlined"
+            id="backButton"
             sx={{
               borderRadius: '4px',
               width: '328px',

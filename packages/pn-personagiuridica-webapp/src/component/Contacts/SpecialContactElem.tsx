@@ -1,13 +1,14 @@
+import { useFormik } from 'formik';
 import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormik } from 'formik';
 import * as yup from 'yup';
+
 import { TableCell, TableRow, TextField, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { trackEventByType } from '../../utils/mixpanel';
 import { EventActions, TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -48,9 +49,9 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
   });
 
   const initialValues = {
-    [`${address.senderId}_pec`]: address.pec || '',
-    [`${address.senderId}_phone`]: address.phone || '',
-    [`${address.senderId}_mail`]: address.mail || '',
+    [`${address.senderId}_pec`]: address.pec ?? '',
+    [`${address.senderId}_phone`]: address.phone ?? '',
+    [`${address.senderId}_mail`]: address.mail ?? '',
   };
 
   const fields: Array<Field> = useMemo(
@@ -84,6 +85,7 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
     [`${address.senderId}_pec`]: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
       .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     [`${address.senderId}_phone`]: yup
       .string()
@@ -95,6 +97,7 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
     [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+      .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
       .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
@@ -119,14 +122,14 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
 
   useEffect(() => {
     void formik.setValues({
-      [`${address.senderId}_pec`]: address.pec || '',
-      [`${address.senderId}_phone`]: address.phone || '',
-      [`${address.senderId}_mail`]: address.mail || '',
+      [`${address.senderId}_pec`]: address.pec ?? '',
+      [`${address.senderId}_phone`]: address.phone ?? '',
+      [`${address.senderId}_mail`]: address.mail ?? '',
     });
   }, [address]);
 
   const jsxField = (f: Field) => (
-    <Fragment>
+    <>
       {address[f.addressId] ? (
         <form
           data-testid="specialContactForm"
@@ -187,12 +190,12 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
       ) : (
         '-'
       )}
-    </Fragment>
+    </>
   );
 
   if (isMobile) {
     return (
-      <Fragment>
+      <>
         <Typography fontWeight={600}>{t('special-contacts.sender', { ns: 'recapiti' })}</Typography>
         <Typography fontWeight={700} fontSize={16}>
           {address.senderName}
@@ -205,7 +208,7 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
             {jsxField(f)}
           </Fragment>
         ))}
-      </Fragment>
+      </>
     );
   }
 

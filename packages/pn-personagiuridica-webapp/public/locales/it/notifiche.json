@@ -35,7 +35,9 @@
   },
   "empty-state": {
     "message": "Non ci sono notifiche per {{name}}.",
-    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere."
+    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere.",
+    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
+    "filter-action": "Rimuovi filtri"
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"
@@ -67,9 +69,11 @@
     "add_domicile_EMAIL": "Aggiungi e-mail",
     "domicile_PEC": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
     "domicile_EMAIL": "Aggiungi il tuo indirizzo e-mail: ti invieremo un messaggio ogni volta che ricevi una notifica.",
+    "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
+    "disclaimer-link": "Scopri di più",
     "payment": {
-      "summary-pending": "Da pagare",
-      "summary-succeeded": "Pagato",
+      "cancelled-alert-text-payment": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, la lista potrebbe non essere aggiornata.",
+      "summary": "Pagamenti",
       "summary-in-progress": "Pagamento in corso",
       "amount": "Importo",
       "submit": "Paga",
@@ -99,7 +103,8 @@
       "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
       "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
       "not_downloadable_aar": "Poiché sono trascorsi 10 anni dalla data di perfezionamento, l’avviso di avvenuta ricezione non è più disponibile.",
-      "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
+      "notification_cancelled_aar": "Poiché questa notifica è stata annullata, il download dell’Avviso di Avvenuta Ricezione è stato disabilitato.",
+      "notification_cancelled_acts": "Poiché questa notifica è stata annullata, il download dei documenti è stato disabilitato.",
       "effected_faq": "Quando si perfeziona una notifica?"
     },
     "timeline": {
@@ -137,6 +142,17 @@
       "send-digital-progress-success-description": "L'invio della notifica all'indirizzo PEC {{address}} è stato preso in carico.",
       "send-digital-progress-success-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è stato preso in carico.",
       "send-analog-progress": "Aggiornamento sull'invio cartaceo",
+      "prepare-analog-domicile-failure": "Aggiornamento sull'invio cartaceo",
+      "prepare-analog-domicile-failure-D00-description": "Non è stato trovato nessun nuovo indirizzo per predisporre un altro tentativo di invio.",
+      "prepare-analog-domicile-failure-D00-description-multirecipient": "Non è stato trovato nessun nuovo indirizzo per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio.",
+      "prepare-analog-domicile-failure-D01-description": "L'indirizzo {{address}} non ha superato il processo di validazione.",
+      "prepare-analog-domicile-failure-D01-description-multirecipient": "L'indirizzo {{address}} del destinatario {{name}} {{taxId}} non ha superato il processo di validazione.",
+      "prepare-analog-domicile-failure-D02-description": "L'indirizzo {{address}} è già stato usato per effettuare un tentativo di invio.",
+      "prepare-analog-domicile-failure-D02-description-multirecipient": "L'indirizzo {{address}} del destinatario {{name}} {{taxId}} è già stato usato per effettuare un tentativo di invio.",
+      "prepare-analog-domicile-failure-XXX-description": "Non è stato trovato un indirizzo valido per predisporre un altro tentativo di invio - motivo sconosciuto {{failureCause}}.",
+      "prepare-analog-domicile-failure-XXX-description-multirecipient": "Non è stato trovato un indirizzo valido per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio - motivo sconosciuto {{failureCause}}.",
+      "prepare-analog-domicile-failure-ZZZ-description": "Non è stato trovato un indirizzo valido per predisporre un altro tentativo di invio - motivo non specificato.",
+      "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Non è stato trovato un indirizzo valido per il destinatario {{name}} {{taxId}} per predisporre un altro tentativo di invio - motivo non specificato.",
       "send-analog-flow-description": "C'è un aggiornamento sull'invio cartaceo.",
       "send-analog-flow-CON080-description": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} è stata stampata ed imbustata.",
       "send-analog-flow-CON080-description-multirecipient": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} per {{name}} {{taxId}} è stata stampata ed imbustata.",

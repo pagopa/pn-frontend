@@ -1,28 +1,29 @@
-import { Fragment, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Column,
-  Sort,
-  Notification,
-  getNotificationStatusInfos,
-  NotificationStatus,
-  StatusTooltip,
-  Item,
-  ItemsTable,
-  EmptyState,
-  KnownSentiment,
-} from '@pagopa-pn/pn-commons';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
+import {
+  Column,
+  EmptyState,
+  Item,
+  ItemsTable,
+  KnownSentiment,
+  Notification,
+  NotificationStatus,
+  Sort,
+  StatusTooltip,
+  getNotificationStatusInfos,
+} from '@pagopa-pn/pn-commons';
+
+import { NotificationColumn } from '../../models/Notifications';
+import * as routes from '../../navigation/routes.const';
+import { Organization } from '../../redux/auth/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Organization } from '../../redux/auth/types';
-import * as routes from '../../navigation/routes.const';
-import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
-import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { NotificationColumn } from '../../models/Notifications';
+import { trackEventByType } from '../../utils/mixpanel';
+import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -43,7 +44,7 @@ function mainEmptyMessage(
   t: any
 ) {
   return filtersApplied
-    ? undefined
+    ? t('empty-state.filter-message')
     : isDelegatedPage
     ? t('empty-state.delegate', { name: organization.name })
     : t('empty-state.message', { name: organization.name });
@@ -199,14 +200,20 @@ const DesktopNotifications = ({
   };
 
   return (
-    <Fragment>
+    <>
       <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
-        <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
+        <ItemsTable
+          testId="notificationsTable"
+          columns={columns}
+          rows={rows}
+          sort={sort}
+          onChangeSorting={onChangeSorting}
+        />
       ) : (
         <EmptyState {...EmptyStateProps} />
       )}
-    </Fragment>
+    </>
   );
 };
 

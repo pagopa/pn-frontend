@@ -1,13 +1,16 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import PrivacyPolicyPage from '../PrivacyPolicy.page';
+
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
+import { render } from '@testing-library/react';
+
+import PrivacyPolicyPage from '../PrivacyPolicy.page';
 
 jest.mock('../../services/configuration.service', () => {
   return {
     ...jest.requireActual('../../services/configuration.service'),
     getConfiguration: () => ({
-      ONE_TRUST_DRAFT_MODE: false, ONE_TRUST_PP: 'mocked-id'
+      ONE_TRUST_DRAFT_MODE: false,
+      ONE_TRUST_PP: 'mocked-id',
     }),
   };
 });
@@ -30,7 +33,7 @@ describe('test the Privacy Policy page', () => {
     };
   });
 
-  test('check that Privacy Policy page container is rendered', () => {
+  it('check that Privacy Policy page container is rendered', () => {
     const result = render(<PrivacyPolicyPage />);
     expect(loadNoticesFn).toBeCalledTimes(1);
     expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);

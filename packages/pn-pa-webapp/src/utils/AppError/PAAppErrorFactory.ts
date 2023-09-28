@@ -6,8 +6,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { GenericInvalidParameterAppError } from './GenericInvalidParameterAppError';
-import { ServerResponseErrorCode } from './types';
 import { GenericInvalidParameterDuplicateAppError } from './GenericInvalidParameterDuplicateAppError';
+import { ServerResponseErrorCode } from './types';
 
 export class PAAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;

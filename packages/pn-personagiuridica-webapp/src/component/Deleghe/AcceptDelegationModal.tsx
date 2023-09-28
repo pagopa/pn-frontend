@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import {
   Button,
   Dialog,
@@ -22,10 +23,10 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { ServerResponseErrorCode } from '../../utils/AppError/types';
+import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { GroupStatus } from '../../models/groups';
+import { ServerResponseErrorCode } from '../../utils/AppError/types';
 
 type Props = {
   isEditMode: boolean;
@@ -165,13 +166,15 @@ const AcceptDelegationModal: React.FC<Props> = ({
             onChange={handleChange}
           >
             <FormControlLabel
+              id="associate-form-no-group"
               value="no-group"
-              control={<Radio data-testid="no-group" />}
+              control={<Radio id="associate-group" data-testid="no-group" />}
               label={t('deleghe.no-group')}
             />
             <FormControlLabel
+              id="associate-form-group"
               value="associate-group"
-              control={<Radio data-testid="associate-group" />}
+              control={<Radio id="associate-group" data-testid="associate-group" />}
               label={t('deleghe.associate-group')}
             />
           </RadioGroup>
@@ -231,6 +234,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
             : t('button.indietro', { ns: 'common' })}
         </Button>
         <Button
+          id="group-confirm-button"
           variant="contained"
           data-testid="groupConfirmButton"
           onClick={() => handleConfirm(code, groupForm.value)}

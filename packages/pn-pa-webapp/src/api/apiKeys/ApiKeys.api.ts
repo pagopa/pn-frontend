@@ -12,14 +12,12 @@ const setResponseError = (response: number) => (response === 200 ? 'success' : '
 
 export const ApiKeysApi = {
   getApiKeys: (param?: ApiKeyParam): Promise<ApiKeys<string>> =>
-    apiClient
-      .get<ApiKeys<string>>(APIKEY_LIST(), { params: { showVirtualKey: true, ...param } })
-      .then((response) => {
-        if (response.data) {
-          return response.data;
-        }
-        return { items: [], total: 0 };
-      }),
+    apiClient.get<ApiKeys<string>>(APIKEY_LIST(param)).then((response) => {
+      if (response.data) {
+        return response.data;
+      }
+      return { items: [], total: 0 };
+    }),
 
   createNewApiKey: (newApiKey: NewApiKeyBE): Promise<string> =>
     apiClient.post<GetNewApiKeyResponse>(CREATE_APIKEY(), newApiKey).then((response) => {

@@ -1,18 +1,31 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockAuthentication} from "../../../redux/auth/__test__/test-utils";
-import { ExternalRegistriesAPI } from "../External-registries.api";
-import { apiClient } from "../../apiClients";
-import { GET_ALL_ACTIVATED_PARTIES } from "../external-registries-routes";
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { parties } from '../../../__mocks__/ExternalRegistry.mock';
+import { apiClient } from '../../apiClients';
+import { ExternalRegistriesAPI } from '../External-registries.api';
+import { GET_ALL_ACTIVATED_PARTIES } from '../external-registries-routes';
 
 describe('ExternalRegistries API tests', () => {
+  let mock: MockAdapter;
+
   mockAuthentication();
-  test('getAllActivatedParties 200', async () => {
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, []);
-    const res = await ExternalRegistriesAPI.getAllActivatedParties();
-    expect(res).toStrictEqual([]);
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
     mock.reset();
+  });
+
+  afterAll(() => {
     mock.restore();
-  })
-})
+  });
+
+  it('getAllActivatedParties', async () => {
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES(undefined)).reply(200, parties);
+    const res = await ExternalRegistriesAPI.getAllActivatedParties();
+    expect(res).toStrictEqual(parties);
+  });
+});

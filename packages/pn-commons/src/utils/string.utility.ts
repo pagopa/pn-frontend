@@ -39,9 +39,16 @@ export const dataRegex = {
   denomination: /^([\x20-\xFF]{1,80})$/,
   denominationSearch: /([\x20-\xFF]*)/g,
   noticeCode: /^\d{18}$/,
-
+  zipCode: /^(\w|\ |\-)*$/,
   email:
-    /^[a-zA-Z0-9]+(?:[.\-_][a-zA-Z0-9]+){0,10}@[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+){0,10}(?:\.[a-zA-Z0-9]{2,10})$/,
+    /^(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x21\x23-\x5b\x5d-\x7f]|\\[\x20-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x21-\x5a\x53-\x7f]|\\[\x20-\x7f])+)\])$/,
+
+  // Email RegEx pattern has been updated due to PN-7586 requests
+  //
+  // Nicola Giornetta 2023.09.20
+  //
+  // ===============================================================================================================
+  //
   // We adopt a regex to validate email addresses, which is stricter than the one adopted by the BE
   // the difference being that other special characters besides dash and underscore are allowed BE-side.
   // We will raise the issue to the test team.

@@ -19,6 +19,7 @@ export class ValidatorBuilder<TModel, TValue> {
   private rules: Array<{ isAsync: boolean; rule: Rule<TModel, TValue> }> = [];
 
   private pushRule = (rule: Rule<TModel, TValue>) => {
+    // eslint-disable-next-line functional/immutable-data
     this.rules.push({ isAsync: false, rule });
   };
 

@@ -1,32 +1,29 @@
-import * as React from 'react';
+import React from 'react';
+
+import { RenderResult, fireEvent, waitFor } from '@testing-library/react';
 
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
-import {
-  DigitalContactsCodeVerificationProvider,
-  useDigitalContactsCodeVerificationContext
-} from '../DigitalContactsCodeVerification.context';
+import { useDigitalContactsCodeVerificationContext } from '../DigitalContactsCodeVerification.context';
 
-export const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <DigitalContactsCodeVerificationProvider>{children}</DigitalContactsCodeVerificationProvider>
-);
+const pecValue = 'mocked@pec.it';
+const pecValueToVerify = 'mocked@pec-to-verify.it';
+const emailValue = 'mocked@mail.it';
+const recipientId = 'mocked-recipientId';
+const senderId = 'mocked-senderId';
 
-export const mockedStore = {
-  legal: [],
-  courtesy: [{
-    addressType: 'courtesy',
-    recipientId: 'mocked-recipientId',
-    senderId: 'mocked-senderId',
-    channelType: CourtesyChannelType.EMAIL,
-    value: "mocked-value",
-    code: ''
-  }]
-};
-
-export const Component = () => {
+const Component = ({
+  type,
+  value,
+  senderId = 'default',
+}: {
+  type: LegalChannelType | CourtesyChannelType;
+  value: string;
+  senderId?: string;
+}) => {
   const { initValidation } = useDigitalContactsCodeVerificationContext();
 
   const handleButtonClick = () => {
-    initValidation(LegalChannelType.PEC, 'mocked-value', 'mocked-recipientId', 'mocked-senderId');
+    initValidation(type, value, recipientId, senderId);
   };
 
   return (
@@ -36,3 +33,10 @@ export const Component = () => {
   );
 };
 
+const showDialog = async (result: RenderResult): Promise<HTMLElement | null> => {
+  const button = result.container.querySelector('button');
+  fireEvent.click(button!);
+  return waitFor(() => result.getByTestId('codeDialog'));
+};
+
+export { Component, emailValue, pecValue, pecValueToVerify, senderId, showDialog };

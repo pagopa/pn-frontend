@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
+
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
+import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { PaginationData, A11yPaginationLabelsTypes } from './types';
+import { A11yPaginationLabelsTypes, PaginationData } from './types';
 
 type Props = {
   /** The actual paginationData */
@@ -89,8 +90,10 @@ export default function CustomPagination({
 
   const handleChangeElementsPerPage = (selectedSize: number) => {
     if (size !== selectedSize) {
+      // eslint-disable-next-line functional/immutable-data
       paginationData.size = selectedSize;
       // reset current page
+      // eslint-disable-next-line functional/immutable-data
       paginationData.page = 0;
       onPageRequest(paginationData);
       if (eventTrackingCallbackPageSize) {
@@ -123,7 +126,7 @@ export default function CustomPagination({
             'paginator.rows-per-page',
             'Righe per pagina'
           )}
-          data-testid="rows-per-page"
+          id="rows-per-page"
         >
           {size}
         </Button>
@@ -143,6 +146,7 @@ export default function CustomPagination({
         >
           {elementsPerPage.map((ep) => (
             <MenuItem
+              id={`pageSize-${ep}`}
               key={ep}
               data-testid={`pageSize-${ep}`}
               onClick={() => handleChangeElementsPerPage(ep)}
@@ -184,7 +188,17 @@ export default function CustomPagination({
               ) {
                 return null;
               }
-              return <PaginationItem {...props2} sx={{ border: 'none' }} />;
+              return (
+                <PaginationItem
+                  id={
+                    props2.type === 'page' && props2.page
+                      ? props2.type.concat(props2.page.toString())
+                      : props2.type
+                  }
+                  {...props2}
+                  sx={{ border: 'none' }}
+                />
+              );
             }}
             onChange={(_event: ChangeEvent<unknown>, value: number) =>
               onPageRequest({

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Typography, Box, Button, Grid, Stack } from '@mui/material';
+
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -57,8 +58,14 @@ export default function ConfirmationModal({
             pb={4}
             data-testid="dialogStack"
           >
-            <Grid item sx={{ width: isMobile ? '100%' : null }} mt={isMobile ? 2 : 4} mr={isMobile ? 0 : 1}>
+            <Grid
+              item
+              sx={{ width: isMobile ? '100%' : null }}
+              mt={isMobile ? 2 : 4}
+              mr={isMobile ? 0 : 1}
+            >
               <Button
+                id="dialog-close-button"
                 sx={{ width: isMobile ? '100%' : null }}
                 onClick={onClose}
                 color="primary"
@@ -72,6 +79,7 @@ export default function ConfirmationModal({
             {onConfirm && (
               <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4}>
                 <Button
+                  id="dialog-action-button"
                   sx={{ width: isMobile ? '100%' : null }}
                   color="primary"
                   variant="contained"

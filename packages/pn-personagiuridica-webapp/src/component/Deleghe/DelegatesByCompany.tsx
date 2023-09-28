@@ -1,17 +1,19 @@
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 import AddIcon from '@mui/icons-material/Add';
-import { EmptyState, ApiErrorWrapper, useIsMobile, SmartTable, Item } from '@pagopa-pn/pn-commons';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { ApiErrorWrapper, EmptyState, Item, SmartTable, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+
+import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
-import { trackEventByType } from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
-import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 import { getDelegationStatusKeyAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
@@ -101,7 +103,7 @@ const DelegatesByCompany = () => {
       },
       getValue(value: string) {
         const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip label={t(key)} color={color} />;
+        return <Chip id={`chip-status-${color}`} label={t(key)} color={color} />;
       },
       cardConfiguration: {
         position: 'header',
@@ -133,66 +135,62 @@ const DelegatesByCompany = () => {
   ];
 
   const handleRewoke = (mandateId: string) => {
-    // because a PG can delegate itself, we must check if the rewoked delegation is in delegates object and redo the delegators api call
+    // because a PG can delegate itself, we must check if the rewoked delegation is in delegators object and redo the delegators api call
     const isSelfMandate =
       delegators.findIndex((delegator) => delegator.mandateId === mandateId) > -1;
     if (isSelfMandate) {
-      getDelegatorsData();
+      // getDelegatorsData();
     }
   };
 
   return (
-    <>
-      <Box mb={8}>
-        <Stack
-          mb={4}
-          direction={isMobile ? 'column' : 'row'}
-          justifyContent={'space-between'}
-          alignItems={isMobile ? 'flex-start' : 'center'}
+    <Box mb={8} data-testid="delegatesByCompany">
+      <Stack
+        mb={4}
+        direction={isMobile ? 'column' : 'row'}
+        justifyContent={'space-between'}
+        alignItems={isMobile ? 'flex-start' : 'center'}
+      >
+        <Typography variant="h6" mb={3}>
+          {t('deleghe.delegatesTitle')}
+        </Typography>
+        <Button
+          id="add-deleghe"
+          variant="outlined"
+          onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+          data-testid="addDeleghe"
         >
-          <Typography variant="h6" mb={3}>
-            {t('deleghe.delegatesTitle')}
-          </Typography>
-          <Button
-            variant="outlined"
-            onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
-            data-testid="addDeleghe"
-          >
-            <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
-            {t('deleghe.add')}
-          </Button>
-        </Stack>
-        <ApiErrorWrapper
-          apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
-          reloadAction={() => dispatch(getDelegatesByCompany())}
-        >
-          {delegatesByCompany.length > 0 ? (
-            <SmartTable
-              data={rows}
-              conf={delegatesColumn}
-              sortLabels={{
-                title: t('sort.title', { ns: 'notifiche' }),
-                optionsTitle: t('sort.options', { ns: 'notifiche' }),
-                cancel: t('sort.cancel', { ns: 'notifiche' }),
-                asc: t('sort.asc', { ns: 'notifiche' }),
-                dsc: t('sort.desc', { ns: 'notifiche' }),
-              }}
-              currentSort={{ orderBy: '', order: 'asc' }}
-            ></SmartTable>
-          ) : (
-            <EmptyState
-              emptyActionLabel={t('deleghe.add')}
-              emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
-              emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-            />
-          )}
-        </ApiErrorWrapper>
-      </Box>
-    </>
+          <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
+          {t('deleghe.add')}
+        </Button>
+      </Stack>
+      <ApiErrorWrapper
+        apiId={DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}
+        reloadAction={() => dispatch(getDelegatesByCompany())}
+      >
+        {delegatesByCompany.length > 0 ? (
+          <SmartTable
+            data={rows}
+            conf={delegatesColumn}
+            sortLabels={{
+              title: t('sort.title', { ns: 'notifiche' }),
+              optionsTitle: t('sort.options', { ns: 'notifiche' }),
+              cancel: t('sort.cancel', { ns: 'notifiche' }),
+              asc: t('sort.asc', { ns: 'notifiche' }),
+              dsc: t('sort.desc', { ns: 'notifiche' }),
+            }}
+            currentSort={{ orderBy: '', order: 'asc' }}
+          ></SmartTable>
+        ) : (
+          <EmptyState
+            emptyActionLabel={t('deleghe.add')}
+            emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
+            emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+          />
+        )}
+      </ApiErrorWrapper>
+    </Box>
   );
 };
 
 export default DelegatesByCompany;
-function getDelegatorsData() {
-  throw new Error('Function not implemented.');
-}

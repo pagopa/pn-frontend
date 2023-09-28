@@ -5,10 +5,10 @@ interface VerificationCodeProps {
 }
 
 const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
-  <Box>
-    <Stack direction="row" spacing={1}>
+  <Stack direction="row" spacing={1}>
     {code.split('').map((codeDigit: string, i: number) => (
       <Box
+        id={`digit-${i}`}
         key={i}
         sx={{
           display: 'flex',
@@ -29,8 +29,7 @@ const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
         </Typography>
       </Box>
     ))}
-    </Stack>
-  </Box>
+  </Stack>
 );
 
 export default VerificationCodeComponent;

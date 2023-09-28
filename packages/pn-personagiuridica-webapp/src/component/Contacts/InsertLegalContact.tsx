@@ -1,14 +1,15 @@
+import { useFormik } from 'formik';
 import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormik } from 'formik';
 import * as yup from 'yup';
+
 import { Alert, Button, Grid, TextField, Typography } from '@mui/material';
-import { IllusEmailValidation } from '@pagopa/mui-italia';
 import { dataRegex } from '@pagopa-pn/pn-commons';
+import { IllusEmailValidation } from '@pagopa/mui-italia';
 
 import { LegalChannelType } from '../../models/contacts';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactsCard from './DigitalContactsCard';
+import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
   recipientId: string;
@@ -25,6 +26,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+        .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
         .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
   });
@@ -48,7 +50,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="insertLegalContact">
       <DigitalContactsCard
         sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
         title={t('legal-contacts.subtitle', { ns: 'recapiti' })}
@@ -72,11 +74,12 @@ const InsertLegalContact = ({ recipientId }: Props) => {
           </Grid>
           <Grid item lg={2} sm={2} xs={12} alignItems="right">
             <Button
+              id="add-contact"
               variant="outlined"
               disabled={!formik.isValid}
               fullWidth
               type="submit"
-              data-testid="add contact"
+              data-testid="addContact"
             >
               {t('button.conferma')}
               {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
@@ -94,7 +97,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
             role="banner"
             component="span"
             variant="body1"
-            data-testid="legal contact disclaimer"
+            data-testid="legal-contact-disclaimer"
           >
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>

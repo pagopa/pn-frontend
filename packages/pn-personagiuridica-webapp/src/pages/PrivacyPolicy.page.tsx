@@ -1,8 +1,9 @@
-import { compileOneTrustPath, useRewriteLinks } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 
+import { compileOneTrustPath, useRewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
+
 import * as routes from '../navigation/routes.const';
-import { getConfiguration } from "../services/configuration.service";
+import { getConfiguration } from '../services/configuration.service';
 
 declare const OneTrust: {
   NoticeApi: {
@@ -21,18 +22,16 @@ const PrivacyPolicyPage = () => {
     if (ONE_TRUST_PP) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices(
-          [
-            compileOneTrustPath(
-              ONE_TRUST_PP,
-              ONE_TRUST_DRAFT_MODE
-            ),
-          ],
+          [compileOneTrustPath(ONE_TRUST_PP, ONE_TRUST_DRAFT_MODE)],
           false
         );
-        setContentLoaded(true);
       });
     }
   }, []);
+
+  void waitForElement('.otnotice-content').then(() => {
+    setContentLoaded(true);
+  });
 
   useRewriteLinks(contentLoaded, routes.PRIVACY_POLICY, '.otnotice-content a');
 

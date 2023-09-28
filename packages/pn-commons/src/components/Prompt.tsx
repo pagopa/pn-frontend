@@ -1,4 +1,5 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
+
 import {
   Button,
   Dialog,
@@ -8,6 +9,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 
+import { useIsMobile } from '../hooks';
 import { usePrompt } from '../hooks/usePrompt';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
@@ -32,6 +34,9 @@ const Prompt = ({
     eventTrackingCallbackConfirm
   );
 
+  const isMobile = useIsMobile();
+  const textPosition = isMobile ? 'center' : 'left';
+
   useEffect(() => {
     if (showPrompt) {
       eventTrackingCallbackPromptOpened();
@@ -39,23 +44,47 @@ const Prompt = ({
   });
 
   return (
-    <Fragment>
-      <Dialog onClose={cancelNavigation} open={showPrompt} maxWidth={'xs'} fullWidth>
-        <DialogTitle sx={{ pt: 4, pl: 4, pb: 2, pr: 4 }}>{title}</DialogTitle>
-        <DialogContent sx={{ px: 4, py: 0 }}>
+    <>
+      <Dialog
+        onClose={cancelNavigation}
+        open={showPrompt}
+        maxWidth={'xs'}
+        fullWidth
+        data-testid="promptDialog"
+      >
+        <DialogTitle sx={{ p: isMobile ? 3 : 4, pb: 2, textAlign: textPosition }}>
+          {title}
+        </DialogTitle>
+        <DialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
           <DialogContentText>{message}</DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ p: 4 }}>
-          <Button variant="outlined" onClick={cancelNavigation}>
+        <DialogActions
+          disableSpacing={isMobile}
+          sx={{
+            textAlign: textPosition,
+            flexDirection: isMobile ? 'column-reverse' : 'row',
+            p: isMobile ? 3 : 4,
+            pt: 0,
+          }}
+        >
+          <Button variant="outlined" onClick={cancelNavigation} fullWidth={isMobile}>
             {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
           </Button>
-          <Button variant="contained" onClick={confirmNavigation} autoFocus>
+          <Button
+            id="button-exit"
+            variant="contained"
+            onClick={confirmNavigation}
+            autoFocus
+            sx={{ mb: isMobile ? 2 : 0 }}
+            fullWidth={isMobile}
+            data-testid="confirmExitBtn"
+          >
             {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
           </Button>
         </DialogActions>
       </Dialog>
       {children}
-    </Fragment>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
-import { GridSize, Typography, Grid, SxProps, Theme } from '@mui/material';
-import { Variant } from '@mui/material/styles/createTypography';
 import { ReactNode } from 'react';
+
+import { Grid, GridSize, SxProps, Theme, Typography } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 
 type Props = {
   /** Title of the page to render */
@@ -51,7 +52,8 @@ const TitleBox: React.FC<Props> = ({
     {title && (
       <Grid id="item" item xs={12} mb={mbTitle}>
         <Typography
-          id="title-of-page"
+          id={`${title}-page`}
+          data-testid="titleBox"
           role="heading"
           aria-label={ariaLabel}
           aria-selected="true"
@@ -67,6 +69,7 @@ const TitleBox: React.FC<Props> = ({
     {subTitle && (
       <Grid aria-orientation="horizontal" item xs={12} mb={mbSubTitle}>
         <Typography
+          id="subtitle-page"
           variant={variantSubTitle}
           sx={{ fontSize: '18px' }}
           component={typeof subTitle !== 'string' ? 'div' : 'p'}

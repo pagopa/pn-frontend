@@ -10,12 +10,12 @@ import { ObjectRuleValidator } from '../ruleValidators/ObjectRuleValidator';
 import { ArrayRuleValidator } from '../ruleValidators/ArrayRuleValidator';
 import { Rule } from '../Rule';
 import { hasError } from '../HasError';
+import { BooleanRuleValidator } from '../ruleValidators/BooleanRuleValidator';
 import { IsString } from './IsString';
 import { IsNumber } from './IsNumber';
 import { IsDate } from './IsDate';
 import { IsObject } from './IsObject';
 import { IsArray } from './IsArray';
-import { BooleanRuleValidator } from '../ruleValidators/BooleanRuleValidator';
 import { IsBoolean } from './IsBoolean';
 
 export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
@@ -27,6 +27,7 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   private pushRule = (rule: Rule<TModel, TElemValue<TValue>>) => {
+    // eslint-disable-next-line functional/immutable-data
     this.rules.push({ isAsync: false, rule });
   };
 
@@ -78,19 +79,23 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
       const results: Array<ValidationResult<TElemValue<TValue>>> = [];
       // eval rules for each element
       for (const rule of this.rules) {
+        // eslint-disable-next-line functional/no-let
         let index = 0;
         for (const el of value) {
           const result = rule.rule.validate(el as TElemValue<TValue>, model);
 
           // check if there are errors
+          // eslint-disable-next-line functional/no-let
           let resultToAdd = null;
           if (hasError(result)) {
             resultToAdd = result;
           }
           if (results[index] === undefined) {
+            // eslint-disable-next-line functional/immutable-data
             results.push(resultToAdd);
             continue;
           }
+          // eslint-disable-next-line functional/immutable-data
           results[index] = resultToAdd;
           index++;
         }

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { act, RenderResult } from '@testing-library/react';
+
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
@@ -15,10 +15,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('SpecialContactElem Component - accessibility tests', () => {
-  it('does not have basic accessibility issues', async () => {
-    // eslint-disable-next-line functional/no-let
-    let result: RenderResult | undefined;
+  let result: RenderResult | undefined;
 
+  it('does not have basic accessibility issues', async () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -26,10 +25,10 @@ describe('SpecialContactElem Component - accessibility tests', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>

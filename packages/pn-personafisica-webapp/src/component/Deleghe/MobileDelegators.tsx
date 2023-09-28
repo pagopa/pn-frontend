@@ -1,13 +1,20 @@
-import { Box, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { CardElement, ItemsCard, Item, ApiErrorWrapper, EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
 
+import { Box, Chip, Typography } from '@mui/material';
+import {
+  ApiErrorWrapper,
+  CardElement,
+  EmptyState,
+  Item,
+  ItemsCard,
+  KnownSentiment,
+} from '@pagopa-pn/pn-commons';
+
+import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utils/status.utility';
-import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const MobileDelegators = () => {
@@ -32,8 +39,8 @@ const MobileDelegators = () => {
         }
       },
       gridProps: {
-        xs: 8
-      }
+        xs: 8,
+      },
     },
     {
       id: 'id',
@@ -42,8 +49,8 @@ const MobileDelegators = () => {
         return <Menu menuType={'delegators'} id={value} />;
       },
       gridProps: {
-        xs: 4
-      }
+        xs: 4,
+      },
     },
   ];
 
@@ -80,19 +87,24 @@ const MobileDelegators = () => {
   ];
 
   return (
-    <>
-      <Box>
-        <Typography variant="h4" mb={3}>
-          {t('deleghe.delegatorsTitle')}
-        </Typography>
-        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())}>
-          { delegators.length > 0 
-            ? <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
-            : <EmptyState sentimentIcon={KnownSentiment.NONE} emptyMessage={t('deleghe.no_delegators')} />
-          }
-        </ApiErrorWrapper>
-      </Box>
-    </>
+    <Box data-testid="mobile-delegators-wrapper">
+      <Typography variant="h4" mb={3}>
+        {t('deleghe.delegatorsTitle')}
+      </Typography>
+      <ApiErrorWrapper
+        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
+        reloadAction={() => dispatch(getDelegators())}
+      >
+        {delegators.length > 0 ? (
+          <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+        ) : (
+          <EmptyState
+            sentimentIcon={KnownSentiment.NONE}
+            emptyMessage={t('deleghe.no_delegators')}
+          />
+        )}
+      </ApiErrorWrapper>
+    </Box>
   );
 };
 

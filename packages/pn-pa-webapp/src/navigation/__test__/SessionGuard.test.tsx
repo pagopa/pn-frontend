@@ -1,161 +1,162 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
-import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import { Route, Routes } from 'react-router-dom';
 
-import { render, act, screen, mockApi } from '../../__test__/test-utils';
+import { userResponse } from '../../__mocks__/Auth.mock';
+import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
-import { userResponse } from '../../redux/auth/__test__/test-utils';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
+import { store } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
+import * as routes from '../routes.const';
 
-const SessionGuardWithErrorPublisher = () => (
-  <>
-    <ResponseEventDispatcher />
-    <AppResponseMessage />
-    <SessionGuard />
-  </>
-);
+const mockNavigateFn = jest.fn();
 
-/* eslint-disable functional/no-let */
-let mockLocationHash: string; // #selfCareToken=mocked_token
-
-jest.mock('react-router-dom', () => {
-  const original = jest.requireActual('react-router-dom');
-  return {
-    ...original,
-    Outlet: () => <div>Generic Page</div>,
-    useLocation: () => ({ hash: mockLocationHash }),
-  };
-});
+// mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
 
 jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: () => 'mocked verify description',
 }));
 
-const mockSessionCheckFn = jest.fn(() => {});
-
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    useSessionCheck: () => mockSessionCheckFn,
-    SessionModal: ({ title }: { title: string }) => (
-      <>
-        <div>Session Modal</div>
-        <div>{title}</div>
-      </>
-    ),
-  };
-});
-
-jest.mock('../../services/configuration.service', () => {
-  return {
-    ...jest.requireActual('../../services/configuration.service'),
-    getConfiguration: () => ({
-      DISABLE_INACTIVITY_HANDLER: true,
-    }),
-  };
-});
+const Guard = () => (
+  <Routes>
+    <Route path="/" element={<SessionGuard />}>
+      <Route path="/" element={<div>Generic Page</div>} />
+    </Route>
+  </Routes>
+);
 
 describe('SessionGuard Component', () => {
-  beforeEach(() => {
-    mockLocationHash = '';
+  const original = window.location;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(authClient);
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: { hash: '' },
+    });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
-
-  // cosa si aspetta: entra nell'app, non fa nessun navigate, lancia il sessionCheck
-  it('reload - session token presente', async () => {
-    const mockReduxState = {
-      userState: { user: { sessionToken: 'mocked-token' } },
-    };
-    await act(
-      async () =>
-        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
-    );
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
-  });
-
-  // cosa si aspetta: entra nell'app, non fa nessun navigate, non lancia il sessionCheck
-  it('senza spid token - ingresso anonimo', async () => {
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
-  });
-
-  // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
-  it('utente riconosciuto - TOS accettate', async () => {
-    const mock = mockApi(
-      authClient,
-      'POST',
-      AUTH_TOKEN_EXCHANGE(),
-      200,
-      { authorizationToken: '200_token' },
-      userResponse
-    );
-    mockLocationHash = '#selfCareToken=200_token';
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const pageComponent = screen.queryByText('Generic Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
     mock.reset();
-    mock.restore();
+    jest.clearAllMocks();
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
-  it('errore nel selfCare token (403)', async () => {
-    const mock = mockApi(authClient, 'POST', AUTH_TOKEN_EXCHANGE(), 403, {
+  afterAll(() => {
+    mock.restore();
+    Object.defineProperty(window, 'location', { writable: true, value: original });
+  });
+
+  // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
+  it('session expired', async () => {
+    const mockReduxState = {
+      userState: { user: { ...userResponse, desired_exp: 1 } },
+    };
+    await act(async () => {
+      render(<Guard />, { preloadedState: mockReduxState });
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+    await waitFor(() => {
+      expect(store.getState().userState.user.sessionToken).toEqual('');
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+      const logoutTitleComponent = screen.queryByText('leaving-app.title');
+      expect(logoutTitleComponent).toBeTruthy();
+    });
+  });
+
+  // expected behavior: enters the app, doesn't navigate, doesn't launch sessionCheck
+  it('no token - anonymous user', async () => {
+    await act(async () => {
+      render(<Guard />);
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+  });
+
+  // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
+  it('exchange token error (403)', async () => {
+    window.location.hash = '#selfCareToken=403_token';
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(403, {
       authorizationToken: '403_token',
     });
-    mockLocationHash = '#selfCareToken=403_token';
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const logoutComponent = screen.queryByText('Session Modal');
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      authorizationToken: '403_token',
+    });
+    const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
-    mock.reset();
-    mock.restore();
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
-  it('errore nel selfCare token (451)', async () => {
-    const mock = mockApi(authClient, 'POST', AUTH_TOKEN_EXCHANGE(), 451, {
+  // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
+  it('exchange token error (451)', async () => {
+    window.location.hash = '#selfCareToken=451_token';
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
       authorizationToken: '451_token',
     });
-    mockLocationHash = '#selfCareToken=451_token';
-    await act(async () => void render(<SessionGuardWithErrorPublisher />));
-    const logoutComponent = screen.queryByText('Session Modal');
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      authorizationToken: '451_token',
+    });
+    const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('messages.451-message');
+    const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
-    mock.reset();
-    mock.restore();
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio di logout
+  // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
+  it('user logged in - TOS accepted', async () => {
+    window.location.hash = '#selfCareToken=200_token';
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
+      .reply(200, userResponse);
+    await act(async () => {
+      render(<Guard />);
+    });
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        authorizationToken: '200_token',
+      });
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+  });
+
+  // expected behavior: enters the app, logout message
   it('logout', async () => {
+    window.location.hash = '';
     const mockReduxState = {
-      userState: { user: { sessionToken: 'mocked-token' }, isClosedSession: true },
+      userState: { user: userResponse, isClosedSession: true },
     };
-    await act(
-      async () =>
-        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
-    );
-    const logoutComponent = screen.queryByText('Session Modal');
+    await act(async () => {
+      render(<Guard />, { preloadedState: mockReduxState });
+    });
+    const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeTruthy();
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 });

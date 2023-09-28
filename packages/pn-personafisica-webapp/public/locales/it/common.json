@@ -33,9 +33,9 @@
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
-    "switch-label": "Accetto l’<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di SEND",
+    "body": "Per accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.",
+    "redo-body": "I Termini e condizioni d’uso del servizio e l’Informativa Privacy sono cambiati. Per accedere, accetta e conferma di avere letto le nuove versioni.",
+    "switch-label": "Accetto i <1>Termini e condizioni d’uso</1> e confermo di avere letto l’<0>Informativa Privacy</0>",
     "button": "Accedi"
   },
   "table": {
@@ -113,7 +113,7 @@
   "footer": {
     "go-to-pagopa": "Link: vai al sito di PagoPA S.p.A.",
     "go-to": "Vai al link",
-    "privacy-info": "Informaativa Privacy",
+    "privacy-info": "Informativa Privacy",
     "who": "Chi siamo",
     "work": "Lavora con noi",
     "certifications": "Certificazioni",

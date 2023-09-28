@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Tab, Tabs } from '@mui/material';
-import { TitleBox, TabPanel } from '@pagopa-pn/pn-commons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import * as routes from '../navigation/routes.const';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { resetState } from '../redux/delegation/reducers';
-import { getDelegators, getGroups, getDelegatesByCompany } from '../redux/delegation/actions';
-import { RootState } from '../redux/store';
+
+import { Box, Tab, Tabs } from '@mui/material';
+import { TabPanel, TitleBox } from '@pagopa-pn/pn-commons';
+
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import * as routes from '../navigation/routes.const';
+import { getDelegatesByCompany, getDelegators, getGroups } from '../redux/delegation/actions';
+import { resetState } from '../redux/delegation/reducers';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 
 const Deleghe = () => {
@@ -76,8 +78,8 @@ const Deleghe = () => {
                 centered
                 variant="fullWidth"
               >
-                <Tab data-testid="tab2" label={t('deleghe.tab_deleghe')} />
-                <Tab data-testid="tab1" label={t('deleghe.tab_delegati')} />
+                <Tab id="tab-2" data-testid="tab2" label={t('deleghe.tab_deleghe')} />
+                <Tab id="tab-1" data-testid="tab1" label={t('deleghe.tab_delegati')} />
               </Tabs>
             </Box>
             <TabPanel value={-1} index={-1}>

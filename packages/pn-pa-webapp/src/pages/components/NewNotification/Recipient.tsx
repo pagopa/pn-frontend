@@ -1,44 +1,45 @@
+import { Form, Formik, FormikErrors, FormikProps } from 'formik';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Formik, Form, FormikProps, FormikErrors } from 'formik';
+
 import { Add, Delete } from '@mui/icons-material';
 import {
+  Box,
+  Checkbox,
   FormControl,
+  FormControlLabel,
+  Grid,
+  Paper,
+  Radio,
+  RadioGroup,
   Stack,
   Typography,
-  RadioGroup,
-  Grid,
-  Radio,
-  FormControlLabel,
-  Checkbox,
-  Box,
-  Paper,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   DigitalDomicileType,
   RecipientType,
-  dataRegex,
   SectionHeading,
+  dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { saveRecipients } from '../../../redux/newNotification/reducers';
-import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
-import { trackEventByType } from '../../../utils/mixpanel';
+import { useAppDispatch } from '../../../redux/hooks';
+import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { TrackEventType } from '../../../utils/events';
-import PhysicalAddress from './PhysicalAddress';
-import FormTextField from './FormTextField';
-import NewNotificationCard from './NewNotificationCard';
+import { trackEventByType } from '../../../utils/mixpanel';
 import {
   denominationLengthAndCharacters,
   identicalIUV,
   identicalTaxIds,
+  requiredStringFieldValidation,
   taxIdDependingOnRecipientType,
-} from './Recipient.validations';
-import { requiredStringFieldValidation } from './validation.utility';
+} from '../../../utils/validation.utility';
+import FormTextField from './FormTextField';
+import NewNotificationCard from './NewNotificationCard';
+import PhysicalAddress from './PhysicalAddress';
 
 const singleRecipient = {
   recipientType: RecipientType.PF,
@@ -74,13 +75,13 @@ type Props = {
   forwardedRef: ForwardedRef<unknown>;
 };
 
-const Recipient = ({
+const Recipient: React.FC<Props> = ({
   paymentMode,
   onConfirm,
   onPreviousStep,
   recipientsData,
   forwardedRef,
-}: Props) => {
+}) => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche'], {
@@ -168,7 +169,11 @@ const Recipient = ({
     */
       zip: yup.string().when('showPhysicalAddress', {
         is: true,
-        then: requiredStringFieldValidation(tc, 12),
+        then: yup
+          .string()
+          .required(tc('required-field'))
+          .max(12, tc('too-long-field-error', { maxLength: 12 }))
+          .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`),
       }),
       municipalityDetails: yup.string().when('showPhysicalAddress', {
         is: true,
@@ -320,7 +325,7 @@ const Recipient = ({
     ) => void,
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
   ) => {
-    if (errors && errors.recipients && errors.recipients[index]) {
+    if (errors?.recipients && errors?.recipients[index]) {
       setFieldTouched(`recipients.${index}`, false, false);
     }
     setFieldValue(
@@ -384,7 +389,7 @@ const Recipient = ({
       validateOnBlur={false}
       validateOnMount
       // eslint-disable-next-line functional/immutable-data
-      innerRef={(form) => (formRef.current = form || undefined)}
+      innerRef={(form) => (formRef.current = form ?? undefined)}
     >
       {({
         values,
@@ -395,7 +400,7 @@ const Recipient = ({
         errors,
         isValid /* setValues */,
       }) => (
-        <Form>
+        <Form data-testid="recipientForm">
           <NewNotificationCard
             noPaper
             isContinueDisabled={!isValid}
@@ -447,16 +452,20 @@ const Recipient = ({
                         <Grid container spacing={2}>
                           <Grid item xs={setValueByDevice(12, 4)}>
                             <FormControlLabel
+                              id="recipient-pf"
                               value={RecipientType.PF}
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('physical-person')}
+                              data-testid={`recipientType${index}`}
                             />
                             <FormControlLabel
+                              id="recipient-pg"
                               value={RecipientType.PG}
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('legal-person')}
+                              data-testid={`recipientType${index}`}
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PF && (
@@ -541,7 +550,7 @@ const Recipient = ({
                       <Grid
                         item
                         xs={setValueByDevice(12, 6)}
-                        data-testid="DigitalDomicileCheckbox"
+                        data-testid={`recipients[${index}].digitalDomicileCheckbox`}
                         onClick={(e) => {
                           setFieldValue(
                             `recipients[${index}].showDigitalDomicile`,
@@ -554,6 +563,7 @@ const Recipient = ({
                           checked={values.recipients[index].showDigitalDomicile}
                           control={
                             <Checkbox
+                              id="checkbox-digital-domicile"
                               onChange={(digitalCheckEvent) =>
                                 handleAddressTypeChange(
                                   digitalCheckEvent as ChangeEvent,
@@ -566,6 +576,8 @@ const Recipient = ({
                           }
                           name={`recipients[${index}].showDigitalDomicile`}
                           label={t('add-digital-domicile')}
+                          data-testid={`showDigitalDomicile${index}`}
+                          id="add-digital-domicile"
                         />
                       </Grid>
                       {values.recipients[index].showDigitalDomicile && (
@@ -585,7 +597,7 @@ const Recipient = ({
                       <Grid
                         xs={12}
                         item
-                        data-testid="PhysicalAddressCheckbox"
+                        data-testid={`recipients[${index}].physicalAddressCheckbox`}
                         onClick={(e) => {
                           setFieldValue(
                             `recipients[${index}].showPhysicalAddress`,
@@ -595,9 +607,11 @@ const Recipient = ({
                         }}
                       >
                         <FormControlLabel
+                          id="add-physical-domicile-form"
                           checked={values.recipients[index].showPhysicalAddress}
                           control={
                             <Checkbox
+                              id="add-physical-domicile"
                               onChange={(physicalCheckEvent) =>
                                 handleAddressTypeChange(
                                   physicalCheckEvent as ChangeEvent,
@@ -609,12 +623,18 @@ const Recipient = ({
                             />
                           }
                           name={`recipients[${index}].showPhysicalAddress`}
+                          data-testid={`showPhysicalAddress${index}`}
                           label={`${t('add-physical-domicile')}*`}
                         />
                       </Grid>
                     </Grid>
-                    <Grid container spacing={2} mt={1}>
-                      {values.recipients[index].showPhysicalAddress && (
+                    {values.recipients[index].showPhysicalAddress && (
+                      <Grid
+                        container
+                        spacing={2}
+                        mt={1}
+                        data-testid={`physicalAddressForm${index}`}
+                      >
                         <PhysicalAddress
                           values={values}
                           setFieldValue={setFieldValue}
@@ -623,11 +643,12 @@ const Recipient = ({
                           recipient={index}
                           handleBlur={handleBlur}
                         />
-                      )}
-                    </Grid>
+                      </Grid>
+                    )}
                     {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                       <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
                         <ButtonNaked
+                          id="add-recipient"
                           startIcon={<Add />}
                           onClick={() => {
                             handleAddRecipient(values, setFieldValue);
