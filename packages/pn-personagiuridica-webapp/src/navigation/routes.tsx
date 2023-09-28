@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
 import {
   AppNotAccessible,
   LoadingPage,
@@ -8,17 +9,17 @@ import {
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
-import { RootState } from '../redux/store';
-import { useAppSelector } from '../redux/hooks';
+import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
+import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
 import { PNRole } from '../redux/auth/types';
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import DelegationsOfTheCompany from '../component/Deleghe/DelegationsOfTheCompany';
-import DelegatesByCompany from '../component/Deleghe/DelegatesByCompany';
-import * as routes from './routes.const';
-import SessionGuard from './SessionGuard';
-import RouteGuard from './RouteGuard';
-import ToSGuard from './ToSGuard';
 import AARGuard from './AARGuard';
+import RouteGuard from './RouteGuard';
+import SessionGuard from './SessionGuard';
+import ToSGuard from './ToSGuard';
+import * as routes from './routes.const';
 
 const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
 const Contacts = lazyRetry(() => import('../pages/Contacts.page'));

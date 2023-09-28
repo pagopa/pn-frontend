@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { appStateActions } from '../redux';
 import { AppResponse } from '../types/AppResponse';
-import { AppResponsePublisher } from '../utils/AppResponse';
+import { AppResponsePublisher } from '../utility/AppResponse';
 
 /**
  * AppResponseMessage that subscribes to error messages using an AppResponsePublisher 

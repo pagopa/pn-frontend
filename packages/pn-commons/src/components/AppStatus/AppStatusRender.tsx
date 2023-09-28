@@ -6,7 +6,7 @@ import { useDownloadDocument, useIsMobile } from '../../hooks';
 import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { AppStatusData, KnownSentiment } from '../../types';
-import { formatDateTime } from '../../utils/date.utility';
+import { formatDateTime } from '../../utility/date.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 import EmptyState from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';

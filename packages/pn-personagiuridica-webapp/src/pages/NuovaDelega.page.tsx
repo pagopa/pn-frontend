@@ -40,9 +40,9 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { IllusCompleted } from '@pagopa/mui-italia';
 
-import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import DropDownPartyMenuItem from '../component/Party/DropDownParty';
+import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import DropDownPartyMenuItem from '../components/Party/DropDownParty';
 import { NewDelegationFormProps } from '../models/Deleghe';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
@@ -51,9 +51,9 @@ import { createDelegation, getAllEntities } from '../redux/newDelegation/actions
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { generateVCode } from '../utils/delegation.utility';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
+import { generateVCode } from '../utility/delegation.utility';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const renderOption = (props: any, option: Party) => (
   <MenuItem {...props} value={option.id} key={option.id}>

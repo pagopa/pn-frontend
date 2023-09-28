@@ -5,7 +5,7 @@ import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import { useIsMobile } from '../../hooks';
-import { filtersApplied } from '../../utils';
+import { filtersApplied } from '../../utility';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';

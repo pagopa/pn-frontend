@@ -15,7 +15,6 @@ import { fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
-import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
 
@@ -25,8 +24,8 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('../../utils/delegation.utility', () => ({
-  ...jest.requireActual('../../utils/delegation.utility'),
+jest.mock('../../utility/delegation.utility', () => ({
+  ...jest.requireActual('../../utility/delegation.utility'),
   generateVCode: () => '34153',
 }));
 

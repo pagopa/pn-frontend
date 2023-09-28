@@ -5,7 +5,7 @@ import { Box, Grid } from '@mui/material';
 import { useIsMobile } from '../../hooks';
 import { CardAction, CardElement, Column, Item, PaginationData, Sort } from '../../types';
 import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
-import { calculatePages, sortArray } from '../../utils';
+import { calculatePages, sortArray } from '../../utility';
 import EmptyState, { Props as EmptyStateProps } from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';

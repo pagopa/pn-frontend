@@ -13,8 +13,8 @@ import {
   waitFor,
 } from '../../../test-utils';
 import { AppStatusData } from '../../../types';
-import { formatDateTime } from '../../../utils/date.utility';
-import { apiOutcomeTestHelper } from '../../../utils/test.utility';
+import { formatDateTime } from '../../../utility/date.utility';
+import { apiOutcomeTestHelper } from '../../../utility/test.utility';
 import { AppStatusRender } from '../AppStatusRender';
 
 const mockActionIds = {
