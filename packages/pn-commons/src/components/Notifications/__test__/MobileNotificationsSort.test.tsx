@@ -1,32 +1,51 @@
 import React from 'react';
-import { fireEvent, waitFor, screen, RenderResult, within } from '@testing-library/react';
-import { CardSort, Sort } from '../../../types';
 
-import { render } from '../../../test-utils';
+import {
+  fireEvent,
+  getById,
+  queryById,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../../test-utils';
+import { CardSort, Sort } from '../../../types';
 import MobileNotificationsSort from '../MobileNotificationsSort';
 
-type MockOrderByFields = 'mocked-field-1' | 'mocked-field-2';
+type MockOrderByFields = 'mocked-field-1' | 'mocked-field-2' | '';
 
 const sortFields: Array<CardSort<MockOrderByFields>> = [
   { id: 'mocked-field-1-asc', label: 'Mocked label 1 asc', value: 'asc', field: 'mocked-field-1' },
-  { id: 'mocked-field-1-desc', label: 'Mocked label 1 desc', value: 'desc', field: 'mocked-field-1' },
+  {
+    id: 'mocked-field-1-desc',
+    label: 'Mocked label 1 desc',
+    value: 'desc',
+    field: 'mocked-field-1',
+  },
   { id: 'mocked-field-2-asc', label: 'Mocked label 2 asc', value: 'asc', field: 'mocked-field-2' },
-  { id: 'mocked-field-2-desc', label: 'Mocked label 2 desc', value: 'desc', field: 'mocked-field-2' },
+  {
+    id: 'mocked-field-2-desc',
+    label: 'Mocked label 2 desc',
+    value: 'desc',
+    field: 'mocked-field-2',
+  },
 ];
 
 const sort: Sort<MockOrderByFields> = {
-  orderBy: 'mocked-field-1',
+  orderBy: '',
   order: 'asc',
 };
 
 const onChangeSortingMk = jest.fn();
 
 describe('MobileNotifications Component', () => {
-  let result: RenderResult | undefined;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  beforeEach(() => {
+  it('renders MobileNotificationsSort (closed)', () => {
     // render component
-    result = render(
+    const { getByTestId, container } = render(
       <MobileNotificationsSort
         sortFields={sortFields}
         sort={sort}
@@ -36,51 +55,79 @@ describe('MobileNotifications Component', () => {
         cancelLabel="sort.cancel"
       />
     );
-  });
-
-  afterEach(() => {
-    result = undefined;
-    jest.resetAllMocks();
-  });
-
-  it('renders MobileNotificationsSort (closed)', () => {
-    const button = result?.container.querySelector('button');
+    const button = getByTestId('dialogToggleButton');
     expect(button).toHaveTextContent(/sort.title/i);
+    // no badge
+    const badge = queryById(container, 'dialogToggleBadge');
+    expect(badge).not.toBeInTheDocument();
   });
 
   it('renders MobileNotificationsSort (opened)', async () => {
-    const button = result?.container.querySelector('button');
+    // render component
+    const { getByTestId } = render(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={sort}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    const button = getByTestId('dialogToggleButton');
     fireEvent.click(button!);
     const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/sort.title/i);
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     expect(radioGroup).toBeInTheDocument();
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels).toHaveLength(sortFields.length);
     radioLabels!.forEach((label, index) => {
       expect(label).toHaveTextContent(sortFields[index].label);
     });
-    const actions = dialog?.querySelectorAll('[data-testid="dialogAction"]');
+    const actions = within(dialog!).getAllByTestId('dialogAction');
     expect(actions).toHaveLength(2);
     expect(actions![0]).toHaveTextContent(/sort.title/i);
     expect(actions![1]).toHaveTextContent(/sort.cancel/i);
   });
 
   it('checks radioGroup initial value', async () => {
-    const button = result?.container.querySelector('button');
+    // render component
+    const { getByTestId } = render(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={{ ...sort, orderBy: 'mocked-field-1' }}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    const button = getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels![0].children[0].classList.contains('Mui-checked')).toBe(true);
   });
 
   it('changes radioGroup value', async () => {
-    const button = result?.container.querySelector('button');
+    // render component
+    const { getByTestId } = render(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={{ ...sort, orderBy: 'mocked-field-1' }}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    const button = getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).queryByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels![0].children[0].classList.contains('Mui-checked')).toBe(true);
     fireEvent.click(radioLabels![3]);
@@ -91,10 +138,21 @@ describe('MobileNotifications Component', () => {
   });
 
   it('confirm sort', async () => {
-    const button = result?.container.querySelector('button');
+    // render component
+    const { getByTestId, container, rerender } = render(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={sort}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    const button = getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     fireEvent.click(radioLabels![3]);
     const actions = dialog?.querySelectorAll('[data-testid="dialogAction"] > button');
@@ -107,13 +165,42 @@ describe('MobileNotifications Component', () => {
       });
       expect(dialog).not.toBeInTheDocument();
     });
+    // simulate rerendering due to sorting
+    rerender(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={{ orderBy: sortFields[3].field, order: sortFields[3].value }}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    // badge
+    const badge = getById(container, 'dialogToggleBadge');
+    expect(badge).toBeInTheDocument();
+    expect(badge).toHaveTextContent('1');
   });
 
   it('cancel sort', async () => {
-    const button = result?.container.querySelector('button');
+    // render component
+    const { getByTestId, container, rerender } = render(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={{ ...sort, orderBy: 'mocked-field-1' }}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    const badge = getById(container, 'dialogToggleBadge');
+    expect(badge).toBeInTheDocument();
+    expect(badge).toHaveTextContent('1');
+    const button = getByTestId('dialogToggleButton');
     fireEvent.click(button!);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
-    const radioGroup = await within(dialog!).queryByRole('radiogroup');
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const radioGroup = within(dialog!).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     fireEvent.click(radioLabels![3]);
     const actions = dialog?.querySelectorAll('[data-testid="dialogAction"] > button');
@@ -126,5 +213,18 @@ describe('MobileNotifications Component', () => {
       });
       expect(dialog).not.toBeInTheDocument();
     });
+    // simulate rerendering due to sorting
+    rerender(
+      <MobileNotificationsSort
+        sortFields={sortFields}
+        sort={sort}
+        onChangeSorting={onChangeSortingMk}
+        title="sort.title"
+        optionsTitle="sort.options"
+        cancelLabel="sort.cancel"
+      />
+    );
+    // no badge
+    expect(badge).not.toBeInTheDocument();
   });
 });

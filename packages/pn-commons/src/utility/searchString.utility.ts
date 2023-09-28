@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { appStateActions } from '../redux';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { dataRegex } from './string.utility';
@@ -20,7 +21,7 @@ import { dataRegex } from './string.utility';
  * NB I changed searchStringCleanDenomination implementation because matchAll is part of the ECMAScript 2020
  * and at this date (30/03/2023) our compiler target does not include
  */
-export function searchStringCleanDenomination(wholeSearchString: string): string {
+function searchStringCleanDenomination(wholeSearchString: string): string {
   return [...wholeSearchString.matchAll(dataRegex.denominationSearch)]
     .map((match) => match[0])
     .join('');

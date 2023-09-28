@@ -15,7 +15,7 @@ export const calcBase64String = (file: any): Promise<string> => {
       resolve(base64String[1]);
     };
     reader.onerror = () => {
-      reject();
+      reject(new Error('Error on conversion'));
     };
     /* eslint-enable functional/immutable-data */
   });
@@ -34,11 +34,11 @@ export const calcUnit8Array = (file: any): Promise<Uint8Array> => {
       try {
         resolve(new Uint8Array(reader.result as ArrayBuffer));
       } catch {
-        reject();
+        reject(new Error('Error on conversion'));
       }
     };
     reader.onerror = () => {
-      reject();
+      reject(new Error('Error on conversion'));
     };
     /* eslint-enable functional/immutable-data */
   });
@@ -61,11 +61,11 @@ export const calcSha256String = (file: any): Promise<{ hashHex: string; hashBase
         const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
         resolve({ hashHex, hashBase64 });
       } catch {
-        reject();
+        reject(new Error('Error on conversion'));
       }
     };
     reader.onerror = () => {
-      reject();
+      reject(new Error('Error on conversion'));
     };
     /* eslint-enable functional/immutable-data */
   });

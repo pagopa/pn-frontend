@@ -16,7 +16,12 @@ const SyncFeedback = () => {
     <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }} data-testid="finalStep">
       <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
         <IllusCompleted />
-        <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
+        <Typography
+          id="title-sync-feedback"
+          variant="h4"
+          color="text.primary"
+          sx={{ margin: '20px 0 10px 0' }}
+        >
           {t('title')}
         </Typography>
         <Typography variant="body1" color="text.primary">

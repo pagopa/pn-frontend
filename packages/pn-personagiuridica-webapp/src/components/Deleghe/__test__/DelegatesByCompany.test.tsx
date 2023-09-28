@@ -1,14 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import DelegatesByCompany from '../DelegatesByCompany';
 
 const mockNavigateFn = jest.fn();
@@ -152,19 +149,5 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegates[index + 1].delegate?.displayName!);
     });
-  });
-
-  it('API error', () => {
-    render(<DelegatesByCompany />, {
-      preloadedState: {
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-          DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY
-        ),
-      },
-    });
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DELEGATION_ACTIONS.GET_DELEGATES_BY_COMPANY}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });

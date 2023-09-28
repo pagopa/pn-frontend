@@ -115,7 +115,8 @@
   "common": {
     "duplicate-contact-title": "Contact already present",
     "duplicate-contact-descr": "The contact {{value}} is already present, do you want to proceed anyway?",
-    "enti-not-found": "No entity found"
+    "enti-not-found": "No entity found",
+    "too-long-field-error": "Write max {{maxLength}} characters"
   },
   "errors": {
     "invalid_verification_code": {

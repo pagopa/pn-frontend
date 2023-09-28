@@ -1,11 +1,8 @@
-import { ReactNode } from 'react';
-
 import { Box } from '@mui/material';
 
 import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
 
 type Props = {
-  children: ReactNode;
   closeOnClick?: boolean;
 };
 
@@ -14,7 +11,7 @@ type Props = {
  * @param children the react component for the action
  * @param closeOnClick flag for close the dialog on action click
  */
-const CustomMobileDialogAction = ({ children, closeOnClick = false }: Props) => {
+const CustomMobileDialogAction: React.FC<Props> = ({ children, closeOnClick = false }) => {
   const { toggleOpen } = useCustomMobileDialogContext();
 
   const handleActionClick = () => {

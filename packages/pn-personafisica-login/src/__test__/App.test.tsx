@@ -1,8 +1,10 @@
 import React from 'react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
+import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
+
 import App from '../App';
-import { getById, queryById, render } from './test-utils';
+import { render } from './test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({

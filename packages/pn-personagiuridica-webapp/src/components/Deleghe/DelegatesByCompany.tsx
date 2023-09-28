@@ -103,7 +103,7 @@ const DelegatesByCompany = () => {
       },
       getValue(value: string) {
         const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip label={t(key)} color={color} />;
+        return <Chip id={`chip-status-${color}`} label={t(key)} color={color} />;
       },
       cardConfiguration: {
         position: 'header',
@@ -155,6 +155,7 @@ const DelegatesByCompany = () => {
           {t('deleghe.delegatesTitle')}
         </Typography>
         <Button
+          id="add-deleghe"
           variant="outlined"
           onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
           data-testid="addDeleghe"

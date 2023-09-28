@@ -74,7 +74,7 @@ const Delegators = () => {
       getCellLabel(value: string, row: Item) {
         const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={t(key)} color={color} />;
+          return <Chip id={`chip-status-${color}`} label={t(key)} color={color} />;
         } else {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }

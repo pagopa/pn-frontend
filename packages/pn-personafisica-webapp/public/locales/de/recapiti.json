@@ -115,7 +115,8 @@
   "common": {
     "duplicate-contact-title": "Anschrift bereits vorhanden",
     "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, möchtest du trotzdem fortfahren?",
-    "enti-not-found": "Keine Körperschaft gefunden"
+    "enti-not-found": "Keine Körperschaft gefunden",
+    "too-long-field-error": "Maximal {{maxLength}} Zeichen eingeben"
   },
   "errors": {
     "invalid_verification_code": {

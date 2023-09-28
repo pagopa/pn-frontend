@@ -130,7 +130,7 @@ describe('NewNotification Page without payment', () => {
     });
   });
 
-  it('clicks on stepper and naavigate', async () => {
+  it('clicks on stepper and navigate', async () => {
     // render component
     // because all the step are already deeply tested, we can set the new notification already populated
     await act(async () => {

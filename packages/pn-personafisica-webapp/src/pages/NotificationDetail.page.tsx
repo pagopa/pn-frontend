@@ -358,18 +358,6 @@ const NotificationDetail = () => {
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
                   disableDownloads={isCancelled.cancellationInTimeline}
                 />
-                {/* TODO decommentare con pn-841
-            <Paper sx={{ p: 3 }} elevation={0}>
-              <HelpNotificationDetails 
-                title="Hai bisogno di aiuto?"
-                subtitle="Se hai domande relative al contenuto della notifica, contatta il"
-                courtName="Tribunale di Milano"
-                phoneNumber="848.800.444"
-                mail="nome.cognome@email.it"
-                website="https://www.tribunale.milano.it/"
-              />              
-            </Paper>
-                */}
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>

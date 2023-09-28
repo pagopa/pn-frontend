@@ -1,6 +1,11 @@
 import { calculatePages } from '../pagination.utility';
 
 describe('Pagination utility', () => {
+  it('no displayed pages if there is no data', () => {
+    const displayedPages = calculatePages(0, 0, 5, 1);
+    expect(displayedPages).toEqual([]);
+  });
+
   it('calculate 5 displayed pages for 100 items, 10 items per page and page 1', () => {
     const displayedPages = calculatePages(10, 100, 5, 1);
     expect(displayedPages).toEqual([1, 2, 3, 4, 5]);

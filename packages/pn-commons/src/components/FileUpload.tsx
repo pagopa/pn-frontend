@@ -308,6 +308,7 @@ const FileUpload = ({
             </Typography>
           </ButtonNaked>
           <Input
+            id="file-input"
             type="file"
             sx={{ display: 'none' }}
             inputRef={uploadInputRef}

@@ -365,6 +365,7 @@ const NuovaDelega = () => {
                             }}
                           >
                             <FormControlLabel
+                              id="tutti-gli-enti-selezionati"
                               value="tuttiGliEnti"
                               control={<Radio />}
                               name={'selectTuttiEntiOrSelezionati'}
@@ -373,6 +374,7 @@ const NuovaDelega = () => {
                             />
 
                             <FormControlLabel
+                              id="enti-selezionati"
                               value="entiSelezionati"
                               control={<Radio />}
                               data-testid="radioSelectedEntities"
@@ -486,6 +488,7 @@ const NuovaDelega = () => {
                       >
                         <Stack>
                           <Button
+                            id="create-button"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
                             variant={'contained'}

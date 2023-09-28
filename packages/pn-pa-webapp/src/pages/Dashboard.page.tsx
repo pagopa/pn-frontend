@@ -117,6 +117,7 @@ const Dashboard = () => {
               {t('subtitle')}
             </Typography>
             <Button
+              id="new-notification-btn"
               variant="contained"
               onClick={handleRouteManualSend}
               aria-label={t('new-notification-button')}

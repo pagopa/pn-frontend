@@ -68,6 +68,7 @@ const SmartFilter = <FormValues extends object>({
 
   const confirmAction = (
     <Button
+      id="confirm-button"
       data-testid="confirmButton"
       variant="outlined"
       type="submit"

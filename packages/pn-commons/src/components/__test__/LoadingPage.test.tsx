@@ -1,10 +1,11 @@
+import React from 'react';
 
-import { render, fireEvent } from "../../test-utils";
+import { render } from '../../test-utils';
 import LoadingPage from '../LoadingPage';
 
 describe('LoadingPage component', () => {
   it('renders with whole layout', () => {
-    const result = render(<LoadingPage renderType="whole"/>);
+    const result = render(<LoadingPage renderType="whole" />);
     const header = result.queryByTestId('header');
     const menu = result.queryByTestId('menu');
     const body = result.queryByTestId('body');
@@ -14,9 +15,9 @@ describe('LoadingPage component', () => {
     expect(body).toBeInTheDocument();
     expect(footer).toBeInTheDocument();
   });
-  
+
   it('renders with part layout - generic', () => {
-    const result = render(<LoadingPage/>);
+    const result = render(<LoadingPage />);
     const title = result.queryByTestId('title');
     const subTitle = result.queryByTestId('subTitle');
     const content = result.queryByTestId('content');
@@ -26,7 +27,14 @@ describe('LoadingPage component', () => {
   });
 
   it('renders with part layout - specific', () => {
-    const result = render(<LoadingPage layout={[{id: '0', xs: 12}, {id: '1', xs: 6}]}/>);
+    const result = render(
+      <LoadingPage
+        layout={[
+          { id: '0', xs: 12 },
+          { id: '1', xs: 6 },
+        ]}
+      />
+    );
     const title = result.queryByTestId('title');
     const subTitle = result.queryByTestId('subTitle');
     const customContent = result.queryByTestId('customContent');

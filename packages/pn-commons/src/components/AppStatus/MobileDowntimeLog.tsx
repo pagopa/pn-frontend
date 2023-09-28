@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { DowntimeLogPage } from '../../models';
 import { CardElement, Item } from '../../types';
 import ItemsCard from '../Data/ItemsCard';
@@ -54,6 +55,7 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
       cardHeader={cardHeader}
       cardBody={cardBody}
       cardData={rows}
+      testId="mobileTableDowntimeLog"
       headerGridProps={{ justifyContent: 'left' }}
     />
   );

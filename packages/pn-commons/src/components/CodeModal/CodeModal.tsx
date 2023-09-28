@@ -1,16 +1,17 @@
-import { ReactNode, useState, memo, useMemo, useCallback } from 'react';
+import { ReactNode, memo, useCallback, useMemo, useState } from 'react';
+
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  DialogContentText,
-  Divider,
-  Typography,
-  Box,
   Alert,
   AlertTitle,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Typography,
 } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
@@ -103,7 +104,7 @@ const CodeModal = memo(
           <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ mt:2, textAlign: textPosition }}>
+          <Box sx={{ mt: 2, textAlign: textPosition }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -113,6 +114,7 @@ const CodeModal = memo(
             {isReadOnly && (
               <CopyToClipboardButton
                 id="copy-code-button"
+                data-testid="copyCodeButton"
                 sx={{ mt: 1.5 }}
                 value={initialValues.join('')}
                 tooltipTitle={getLocalizedOrDefaultLabel(
@@ -126,7 +128,12 @@ const CodeModal = memo(
           <Box sx={{ marginTop: '10px', textAlign: textPosition }}>{codeSectionAdditional}</Box>
           <Divider sx={{ margin: '20px 0' }} />
           {hasError && (
-            <Alert data-testid="errorAlert" severity="error" sx={{ textAlign: textPosition }}>
+            <Alert
+              id="error-alert"
+              data-testid="errorAlert"
+              severity="error"
+              sx={{ textAlign: textPosition }}
+            >
               <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
             </Alert>
@@ -143,6 +150,7 @@ const CodeModal = memo(
         >
           {cancelLabel && cancelCallback && (
             <Button
+              id="code-cancel-button"
               variant="outlined"
               onClick={cancelCallback}
               fullWidth={isMobile}
@@ -154,6 +162,7 @@ const CodeModal = memo(
           )}
           {confirmLabel && confirmCallback && (
             <Button
+              id="code-confirm-button"
               variant="contained"
               data-testid="codeConfirmButton"
               onClick={confirmHandler}

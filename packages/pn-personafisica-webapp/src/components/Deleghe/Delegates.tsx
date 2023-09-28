@@ -130,6 +130,7 @@ const Delegates = () => {
           <Typography variant="h5">{t('deleghe.delegatesTitle')}</Typography>
           <Box>
             <Button
+              id="add-delegation-button"
               variant="outlined"
               onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
               data-testid="add-delegation"

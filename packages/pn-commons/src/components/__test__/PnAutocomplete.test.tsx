@@ -21,9 +21,9 @@ describe('PnAutocomplete Component', () => {
       result.baseElement.querySelector('[role="presentation"][class^="MuiAutocomplete-popper"')
     );
     expect(dropdown).toBeInTheDocument();
-    const dropdownOptionsList = within(dropdown as HTMLElement).queryByRole('listbox');
+    const dropdownOptionsList = within(dropdown as HTMLElement).getByRole('listbox');
     expect(dropdownOptionsList).toBeInTheDocument();
-    const dropdownOptionsListItems = await within(dropdownOptionsList!).queryAllByRole('option');
+    const dropdownOptionsListItems = within(dropdownOptionsList!).getAllByRole('option');
     expect(dropdownOptionsListItems).toHaveLength(2);
     expect(dropdownOptionsListItems[0]).toHaveTextContent('OptionA');
     expect(dropdownOptionsListItems[1]).toHaveTextContent('OptionB');

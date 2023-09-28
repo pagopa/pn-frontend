@@ -48,7 +48,7 @@ function localizeStatus(
   tooltip: string;
   description: string;
 } {
-  const isMultiRecipient = data && data.isMultiRecipient;
+  const isMultiRecipient = data?.isMultiRecipient;
   // eslint-disable-next-line functional/no-let
   let filteredData: any = _.omit(data, ['isMultiRecipient']);
   if (Object.keys(filteredData).length === 0) {
@@ -125,7 +125,7 @@ export function getNotificationStatusInfos(
         { isMultiRecipient }
       );
       // if the deliveryMode is defined, then change the description for a more specific one ...
-      const deliveryMode = statusObject && statusObject.deliveryMode;
+      const deliveryMode = statusObject?.deliveryMode;
       // ... only for single-recipient notifications!
       if (deliveryMode && !isMultiRecipient) {
         const deliveryModeDescription = getLocalizedOrDefaultLabel(
@@ -197,7 +197,7 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED:
-      if (statusObject && statusObject.recipient) {
+      if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,

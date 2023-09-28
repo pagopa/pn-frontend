@@ -125,6 +125,7 @@ const MobileDelegates = () => {
         </Typography>
         <Box mb={2}>
           <Button
+            id="add-delegation-button"
             variant="outlined"
             onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
             sx={{ mb: 1 }}
