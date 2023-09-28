@@ -16,6 +16,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -40,6 +41,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const { getByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -57,6 +59,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -85,6 +88,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
@@ -112,6 +116,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={downloadAttachmentMk}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -137,6 +142,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -171,6 +177,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={payment}
+        isCancelled={false}
         handleDownloadAttachamentPagoPA={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
@@ -184,5 +191,22 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(radioButton).not.toBeInTheDocument();
     expect(payButton).not.toBeDisabled();
+  });
+
+  it('should show alert if notification is cancelled', () => {
+    const { getByTestId, queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={true}
+        handleDownloadAttachamentPagoPA={() => void 0}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
+    const alert = getByTestId('cancelledAlertPayment');
+    const subtitle = queryByTestId('notification-payment-recipient-subtitle');
+
+    expect(alert).toBeInTheDocument();
+    expect(subtitle).not.toBeInTheDocument();
   });
 });

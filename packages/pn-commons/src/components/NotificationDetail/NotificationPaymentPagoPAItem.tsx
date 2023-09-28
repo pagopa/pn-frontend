@@ -20,6 +20,7 @@ interface Props {
   handleReloadPayment: () => void;
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
+  isCancelled: boolean;
 }
 
 const SkeletonCard: React.FC = () => {
@@ -181,6 +182,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   handleReloadPayment,
   handleDeselectPayment,
   isSinglePayment,
+  isCancelled,
 }) => {
   const isMobile = useIsMobile();
 
@@ -288,6 +290,20 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
             {pagoPAItem.noticeCode}
           </Typography>
         </Box>
+        {isCancelled && (
+          <Box lineHeight="1.4rem">
+            <Typography variant="caption" color="text.secondary" mr={0.5}>
+              {getLocalizedOrDefaultLabel('notifications', 'detail.creditor-tax-id')}
+            </Typography>
+            <Typography
+              variant="caption-semibold"
+              color="text.secondary"
+              data-testid="creditorTaxId"
+            >
+              {pagoPAItem.creditorTaxId}
+            </Typography>
+          </Box>
+        )}
 
         {pagoPAItem.dueDate && (
           <Box lineHeight="1.4rem">

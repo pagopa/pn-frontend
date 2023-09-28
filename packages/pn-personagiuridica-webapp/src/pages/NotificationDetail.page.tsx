@@ -293,7 +293,7 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments) {
+    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments ?? []);
     }
   }, [currentRecipient.payments]);
@@ -400,6 +400,7 @@ const NotificationDetail = () => {
                     >
                       <NotificationPaymentRecipient
                         payments={userPayments}
+                        isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
                         handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
                         handleReloadPayment={fetchPaymentsInfo}

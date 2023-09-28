@@ -5,16 +5,20 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   KnownFunctionality,
   LegalFactType,
+  PaidDetails,
   PaymentAttachmentSName,
   PaymentInfoDetail,
   PaymentStatus,
   RecipientType,
+  TimelineCategory,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import {
+  cancelledNotificationDTO,
+  cancelledNotificationToFe,
   notificationDTO,
   notificationToFe,
   paymentsData,
@@ -200,6 +204,44 @@ describe('Notification detail redux state tests', () => {
     expect(state.f24AttachmentUrl).toEqual(url);
   });
 
+  it('should save only payed payments (from timeline) if the notification is canceled', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(cancelledNotificationDTO.iun))
+      .reply(200, cancelledNotificationDTO);
+    const action = await store.dispatch(
+      getReceivedNotification({ iun: cancelledNotificationDTO.iun })
+    );
+
+    expect(action.type).toBe('getReceivedNotification/fulfilled');
+    expect(action.payload).toEqual(cancelledNotificationToFe);
+
+    const state = store.getState().notificationState;
+
+    const payedTimelineEvents = cancelledNotificationToFe.timeline.filter(
+      (item) => item.category === TimelineCategory.PAYMENT
+    );
+
+    const timelineRecipientPayments = recipients[1].payments?.filter((payment) =>
+      payedTimelineEvents.some(
+        (timelineEvent) =>
+          (timelineEvent.details as PaidDetails).creditorTaxId === payment.pagoPA?.creditorTaxId &&
+          (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPA?.noticeCode
+      )
+    );
+
+    if (!timelineRecipientPayments) {
+      expect(state.paymentsData.pagoPaF24).toStrictEqual([]);
+    } else {
+      const payments = populatePaymentsPagoPaF24(
+        cancelledNotificationToFe.timeline,
+        timelineRecipientPayments,
+        []
+      );
+
+      expect(state.paymentsData.pagoPaF24).toStrictEqual(payments);
+    }
+  });
+
   it('Should be able to fetch payment info', async () => {
     const mockedStore = createMockedStore({
       notificationState: {
@@ -296,6 +338,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should NOT be able to fetch payment url', async () => {
+    const initialState = store.getState().notificationState.paymentsData.pagoPaF24;
     const request = {
       paymentNotice: {
         noticeNumber: 'mocked-noticeCode',
@@ -316,7 +359,7 @@ describe('Notification detail redux state tests', () => {
       },
     });
     const state = store.getState().notificationState;
-    expect(state.paymentsData.pagoPaF24).toStrictEqual([]);
+    expect(state.paymentsData.pagoPaF24).toStrictEqual(initialState);
   });
 
   // TODO: convert to new logic
