@@ -14,7 +14,7 @@ import {
   formatTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-} from '../../../utils';
+} from '../../../utility';
 import NotificationDetailTimelineStep from '../NotificationDetailTimelineStep';
 
 // Define mock data for testing
