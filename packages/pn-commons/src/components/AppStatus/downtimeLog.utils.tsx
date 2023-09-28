@@ -23,9 +23,8 @@ const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?:
     ) : (
       <Typography variant="body2">{formatDateTime(date)}</Typography>
     );
-  } else {
-    return <Typography variant="body2">-</Typography>;
   }
+  return <Typography variant="body2">-</Typography>;
 };
 
 export function adaptFieldSpecToMobile(

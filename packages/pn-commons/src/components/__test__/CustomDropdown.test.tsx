@@ -1,6 +1,9 @@
+import React from 'react';
+
+import MenuItem from '@mui/material/MenuItem';
+
 import { render, testSelect } from '../../test-utils';
 import CustomDropdown from '../CustomDropdown';
-import MenuItem from '@mui/material/MenuItem';
 
 const mockDropdownItems = [
   { key: 'mock-id-1', value: 'mock-value-1', label: 'mock-label-1' },
@@ -37,7 +40,7 @@ describe('CustomDropdown component', () => {
         value=""
       />
     );
-    const input = await result.findByPlaceholderText(/Non ci sono elementi/i);
+    const input = result.getByPlaceholderText(/Non ci sono elementi/i);
     expect(input).toBeInTheDocument();
   });
 });

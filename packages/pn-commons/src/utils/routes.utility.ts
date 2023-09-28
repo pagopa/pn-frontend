@@ -37,8 +37,9 @@ function formatQueryParam(key: string, value: ParameterValue) {
  * @returns the URL to call for the given route
  */
 export function compileRoute(route: Route) {
+  // eslint-disable-next-line functional/no-let
   let result = route.prefix ? `/${compilePrefix(route.prefix)}` : '';
-  if (Boolean(route.path)) {
+  if (route.path) {
     result += `/${route.path}`;
   }
   if (route.params) {

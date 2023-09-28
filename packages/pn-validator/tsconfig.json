@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES2020",
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
@@ -27,15 +23,6 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "__mocks__",
-    "dist",
-    "lib",
-    "node_modules",
-    "**/__tests__/*",
-    "**/__test__/*",
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["dist", "lib", "node_modules", "**/__tests__/*", "**/__test__/*"]
 }

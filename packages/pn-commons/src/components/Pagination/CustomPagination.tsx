@@ -104,7 +104,7 @@ export default function CustomPagination({
   };
 
   return (
-    <Grid container sx={sx}>
+    <Grid container sx={sx} data-testid="customPagination">
       <Grid
         item
         xs={4}

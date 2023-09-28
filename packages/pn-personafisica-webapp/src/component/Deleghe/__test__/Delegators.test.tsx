@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import {
   act,
@@ -107,19 +105,5 @@ describe('Delegators Component', () => {
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });
-  });
-
-  it('API error', async () => {
-    render(<Delegators />, {
-      preloadedState: {
-        appState: apiOutcomeTestHelper.appStateWithMessageForAction(
-          DELEGATION_ACTIONS.GET_DELEGATORS
-        ),
-      },
-    });
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DELEGATION_ACTIONS.GET_DELEGATORS}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
   });
 });

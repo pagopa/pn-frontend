@@ -1,73 +1,75 @@
-import { fireEvent, waitFor, RenderResult, screen } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
-import { NotificationDetailDocument } from '../../../types';
-import NotificationDetailDocuments from '../NotificationDetailDocuments';
 import React from 'react';
 
-const documents: Array<NotificationDetailDocument> = [
-  {
-    digests: {
-      sha256: 'mocked-sha',
-    },
-    ref: {
-      key: 'mocked-doc-title',
-      versionToken: 'mocked-versionToken',
-    },
-    contentType: 'mocked-contentType',
-    title: 'mocked-doc-title',
-    docIdx: '0',
-  },
-];
+import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { fireEvent, render, waitFor, within } from '../../../test-utils';
+import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
 describe('NotificationDetailDocuments Component', () => {
   let mockClickFn: jest.Mock;
 
   beforeEach(() => {
     mockClickFn = jest.fn();
-    // render component
-
-    /*  resultNotDownloadableFiles = render(
-      <NotificationDetailDocuments
-        title="Mocked title"
-        documents={documents}
-        clickHandler={mockClickFn}
-        documentsAvailable={false}
-        downloadFilesMessage="mocked"
-      />
-    ); */
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders NotificationDetailDocuments', () => {
-    const resultWithDownloadableFiles = render(
+  it('renders component - no documents', () => {
+    const { queryAllByTestId, getByTestId, container } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={documents}
+        documents={[]}
         clickHandler={mockClickFn}
         documentsAvailable
       />
     );
-    expect(resultWithDownloadableFiles?.container).toHaveTextContent(/Mocked title/i);
-    // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
-    const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
-    expect(documentsButtons).toHaveLength(documents.length);
+    expect(container).toHaveTextContent(/Mocked title/i);
+    const notificationDetailDocuments = queryAllByTestId('notificationDetailDocuments');
+    expect(notificationDetailDocuments).toHaveLength(0);
+    const documentsMessage = getByTestId('documentsMessage');
+    expect(documentsMessage).toHaveTextContent('');
   });
 
-  it('test click on document button', async () => {
-    const resultWithDownloadableFiles = render(
+  it('renders component - with documents', () => {
+    const { getAllByTestId, getByTestId, container } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={documents}
+        documents={notificationToFe.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        downloadFilesMessage="Mocked download message"
+      />
+    );
+    expect(container).toHaveTextContent(/Mocked title/i);
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
+    notificationDetailDocuments.forEach((doc, index) => {
+      const currentDoc = notificationToFe.documents[index];
+      if (currentDoc.title) {
+        expect(doc).toHaveTextContent(currentDoc.title);
+      } else {
+        expect(doc).toHaveTextContent(currentDoc.ref.key);
+      }
+      const documentButton = within(doc).getByTestId('documentButton');
+      expect(documentButton).toBeInTheDocument();
+    });
+    const documentsMessage = getByTestId('documentsMessage');
+    expect(documentsMessage).toHaveTextContent('Mocked download message');
+  });
+
+  it('clicks on document button', async () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationToFe.documents}
         clickHandler={mockClickFn}
         documentsAvailable
       />
     );
-    const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
-    fireEvent.click(documentsButtons![0]);
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    const documentButton = within(notificationDetailDocuments[0]).getByTestId('documentButton');
+    fireEvent.click(documentButton);
     await waitFor(() => {
       expect(mockClickFn).toBeCalledTimes(1);
       expect(mockClickFn).toBeCalledWith('0');
@@ -75,16 +77,42 @@ describe('NotificationDetailDocuments Component', () => {
   });
 
   it('renders documents with disabled download', () => {
-    const resultDisabledFiles = render(
+    const { getAllByTestId } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={documents}
+        documents={notificationToFe.documents}
         clickHandler={mockClickFn}
         documentsAvailable
-        disableDownloads={true}
+        disableDownloads
       />
     );
-    const documentsButtons = resultDisabledFiles?.getByTestId('documentButton');
-    expect(documentsButtons).toHaveAttribute('disabled');
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    notificationDetailDocuments.forEach((doc) => {
+      const button = within(doc).getByTestId('documentButton');
+      expect(button).toHaveAttribute('disabled');
+    });
+  });
+
+  it('renders component - documents not available', () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationToFe.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable={false}
+      />
+    );
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
+    notificationDetailDocuments.forEach((doc, index) => {
+      const currentDoc = notificationToFe.documents[index];
+      if (currentDoc.title) {
+        expect(doc).toHaveTextContent(currentDoc.title);
+      } else {
+        expect(doc).toHaveTextContent(currentDoc.ref.key);
+      }
+      const documentButton = within(doc).queryByTestId('documentButton');
+      expect(documentButton).not.toBeInTheDocument();
+    });
   });
 });

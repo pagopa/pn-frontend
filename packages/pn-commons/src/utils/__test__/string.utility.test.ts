@@ -2,9 +2,9 @@ import { formatFiscalCode, sanitizeString } from '../string.utility';
 
 describe('String utility', () => {
   it('formatFiscalCode', () => {
-    const fiscalCode = 'abc';
+    const fiscalCode = 'mrtMTT91D08F205J';
     const result = formatFiscalCode(fiscalCode);
-    expect(result).toStrictEqual('ABC');
+    expect(result).toStrictEqual('MRTMTT91D08F205J');
   });
 
   it('unescape - no char to sanitize', () => {

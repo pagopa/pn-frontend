@@ -1,10 +1,36 @@
-import { render } from '../../test-utils';
+import React from 'react';
+
+import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import AccessDenied from '../AccessDenied';
 
 describe('AccessDenied Component', () => {
-  it('renders access denied with standard texts', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
+  it('renders access denied with standard texts - logged user', () => {
     // render component
-    const result = render(
+    const { getByRole } = render(
+      <AccessDenied
+        isLogged
+        goToLogin={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        goToHomePage={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
+    const heading = getByRole('heading');
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent('common - access-denied');
+    const redirectButton = getByRole('button');
+    expect(redirectButton).toHaveTextContent('common - button.go-to-home');
+  });
+
+  it('renders access denied with standard texts - not logged user', () => {
+    // render component
+    const { container, getByRole } = render(
       <AccessDenied
         isLogged={false}
         goToLogin={function (): void {
@@ -15,18 +41,19 @@ describe('AccessDenied Component', () => {
         }}
       />
     );
-    const heading = result?.queryByRole('heading');
+    const heading = getByRole('heading');
     expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent(
-      /Non hai le autorizzazioni necessarie per accedere a questa pagina/i
-    );
+    expect(heading).toHaveTextContent('common - not-logged');
+    expect(container).toHaveTextContent('common - not-logged-subtitle');
+    const redirectButton = getByRole('button');
+    expect(redirectButton).toHaveTextContent('common - button.go-to-login');
   });
 
   it('renders access denied with custom texts', () => {
     // render component
-    const result = render(
+    const { getByText } = render(
       <AccessDenied
-        isLogged={false}
+        isLogged
         message="mock-message"
         subtitle="mock-subtitle"
         goToLogin={function (): void {
@@ -37,9 +64,43 @@ describe('AccessDenied Component', () => {
         }}
       />
     );
-    const messageElement = result?.queryByText("mock-message");
-    const subtitleElement = result?.queryByText("mock-subtitle");
+    const messageElement = getByText('mock-message');
+    const subtitleElement = getByText('mock-subtitle');
     expect(messageElement).toBeInTheDocument();
     expect(subtitleElement).toBeInTheDocument();
+  });
+
+  it('clicks on redirect button - not logged user', () => {
+    const goToLogin = jest.fn();
+    // render component
+    const { getByRole } = render(
+      <AccessDenied
+        isLogged={false}
+        goToLogin={goToLogin}
+        goToHomePage={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
+    const redirectButton = getByRole('button');
+    fireEvent.click(redirectButton);
+    expect(goToLogin).toBeCalledTimes(1);
+  });
+
+  it('clicks on redirect button - logged user', () => {
+    const goToHomePage = jest.fn();
+    // render component
+    const { getByRole } = render(
+      <AccessDenied
+        isLogged
+        goToLogin={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        goToHomePage={goToHomePage}
+      />
+    );
+    const redirectButton = getByRole('button');
+    fireEvent.click(redirectButton);
+    expect(goToHomePage).toBeCalledTimes(1);
   });
 });

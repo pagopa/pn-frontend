@@ -61,13 +61,19 @@ export function createAppStatusApi(apiClientProvider: () => AxiosInstance) {
       // pn-validator validation
       const validationResult = new DowntimeLogPageDTOValidator().validate(apiResponse);
       if (validationResult != null) {
-        console.log('Wrong-formed data');
+        if (process.env.NODE_ENV !== 'test') {
+          console.log('Wrong-formed data');
+        }
         throw new BadApiDataException('Wrong-formed data', validationResult);
       }
 
       // extra validation: downtime with fileAvailable but without legalFactId
       if (apiResponse.result.some((downtime) => downtime.fileAvailable && !downtime.legalFactId)) {
-        console.log('Wrong data - a downtime marked as fileAvailable must indicate a legalFactId');
+        if (process.env.NODE_ENV !== 'test') {
+          console.log(
+            'Wrong data - a downtime marked as fileAvailable must indicate a legalFactId'
+          );
+        }
         throw new BadApiDataException(
           'Wrong data - a downtime marked as fileAvailable must indicate a legalFactId',
           {}

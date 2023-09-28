@@ -1,46 +1,21 @@
 import React from 'react';
-import { act, fireEvent, screen, within } from '@testing-library/react';
-import { render } from '../../../test-utils';
-import { DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models';
-import DesktopDowntimeLog from '../DesktopDowntimeLog';
-import { formatDate, formatTime } from '../../../utils';
-const incidentTimestamps = [
-  '2022-10-23T15:50:04Z',
-  '2022-10-23T15:51:12Z',
-  '2022-10-24T08:15:21Z',
-  '2022-10-24T08:15:29Z',
-  '2022-10-28T10:11:09Z',
-];
 
-const exampleDowntimeLogPage: DowntimeLogPage = {
-  downtimes: [
-    {
-      rawFunctionality: KnownFunctionality.NotificationWorkflow,
-      knownFunctionality: KnownFunctionality.NotificationWorkflow,
-      status: DowntimeStatus.KO,
-      startDate: incidentTimestamps[4],
-      fileAvailable: false,
-    },
-    {
-      rawFunctionality: 'NEW_FUNCTIONALITY',
-      status: DowntimeStatus.OK,
-      startDate: incidentTimestamps[2],
-      endDate: incidentTimestamps[3],
-      fileAvailable: false,
-    },
-    {
-      rawFunctionality: KnownFunctionality.NotificationCreate,
-      knownFunctionality: KnownFunctionality.NotificationCreate,
-      status: DowntimeStatus.OK,
-      startDate: incidentTimestamps[0],
-      endDate: incidentTimestamps[1],
-      legalFactId: 'some-legal-fact-id',
-      fileAvailable: true,
-    },
-  ],
-};
+import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
+import { DowntimeStatus, KnownFunctionality } from '../../../models';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  initLocalizationForTest,
+  render,
+  within,
+} from '../../../test-utils';
+import { formatDate } from '../../../utils';
+import { formatTimeWithLegend } from '../../../utils/date.utility';
+import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
 const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
+const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'];
 
 jest.mock('@mui/material', () => {
   const original = jest.requireActual('@mui/material');
@@ -50,208 +25,114 @@ jest.mock('@mui/material', () => {
   };
 });
 
-jest.mock('../../../services/localization.service', () => {
-  const original = jest.requireActual('../../../services/localization.service');
-  return {
-    ...original,
-    getLocalizedOrDefaultLabel: (_: string, key: string) => key,
-  };
-});
+const checkDateField = (date: string, column: HTMLElement) => {
+  const text = date ? `${formatDate(date)},${formatTimeWithLegend(date)}` : '-';
+  expect(column).toHaveTextContent(text);
+};
 
-describe('DesktopDowntimeLog component - with data', () => {
-  /* eslint-disable functional/no-let */
-  let rowComponents: Array<HTMLElement>;
-  let headerRow: HTMLElement;
-  let headerRowColumns: Array<HTMLElement>;
-  let getLegalFactDetailsMock: jest.Mock<any, any>;
-  /* eslint-enable functional/no-let */
+const checkFunctionalityField = (
+  functionality: KnownFunctionality | undefined,
+  rawFunctionality: string,
+  column: HTMLElement
+) => {
+  const text = functionality
+    ? `appStatus - legends.knownFunctionality.${functionality}`
+    : `appStatus - legends.unknownFunctionality - ${JSON.stringify({
+        functionality: rawFunctionality,
+      })}`;
+  expect(column).toHaveTextContent(text);
+};
 
-  beforeEach(async () => {
-    getLegalFactDetailsMock = jest.fn();
-    await act(
-      async () =>
-        void render(
-          <DesktopDowntimeLog
-            downtimeLog={exampleDowntimeLogPage}
-            getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
-          />
-        )
-    );
-    rowComponents = screen.queryAllByRole('row');
-    headerRow = rowComponents[0];
-    headerRowColumns = within(headerRow).queryAllByRole('columnheader');
+const checkLegalFactField = (
+  fileAvailable: boolean | undefined,
+  status: DowntimeStatus,
+  column: HTMLElement
+) => {
+  const text = fileAvailable
+    ? `appStatus - legends.legalFactDownload`
+    : `appStatus - legends.noFileAvailableByStatus.${status}`;
+  expect(column).toHaveTextContent(text);
+  const button = within(column).queryByRole('button');
+  fileAvailable ? expect(button).toBeInTheDocument() : expect(button).not.toBeInTheDocument();
+};
+
+const checkStatusField = (status: DowntimeStatus, column: HTMLElement) => {
+  expect(column).toHaveTextContent(`appStatus - legends.status.${status}`);
+  const statusChip = within(column).getByTestId('downtime-status');
+  expect(statusChip).toHaveStyle({
+    'background-color':
+      status === DowntimeStatus.KO ? fakePalette.error.light : fakePalette.success.light,
+  });
+};
+
+describe('DesktopDowntimeLog component', () => {
+  let result: RenderResult;
+  const getLegalFactDetailsMock = jest.fn();
+
+  beforeAll(() => {
+    initLocalizationForTest();
   });
 
-  it('header row', async () => {
-    // endDate should be immediately after startDate
-    const startDateIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.startDate')
-    );
-    const endDateIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.endDate')
-    );
-    expect(startDateIndex).toBeGreaterThan(-1);
-    expect(endDateIndex).toBeGreaterThan(-1);
-    expect(endDateIndex).toEqual(startDateIndex + 1);
-
-    // legalFactId and status must be present
-    const legalFactIdHeader = within(headerRow).queryByText(
-      'downtimeList.columnHeader.legalFactId'
-    );
-    const statusHeader = within(headerRow).queryByText('downtimeList.columnHeader.status');
-    expect(legalFactIdHeader).toBeInTheDocument();
-    expect(statusHeader).toBeInTheDocument();
-  });
-
-  // expect 4, one for the header, one for each of the three downtimes included
-  it('row count', async () => {
-    expect(rowComponents).toHaveLength(4);
-  });
-
-  it('date values', async () => {
-    const startDateIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.startDate')
-    );
-    const endDateIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.endDate')
-    );
-
-    // first row - start date - date and time in different elements
-    const firstDataRow = rowComponents[1];
-    const firstRowColumns = within(firstDataRow).queryAllByRole('cell');
-    const firstRowStartDate = firstRowColumns[startDateIndex];
-    const startDateComponent1 = within(firstRowStartDate).queryByText(
-      new RegExp(formatDate(incidentTimestamps[4]))
-    );
-    const startHourComponent1 = within(firstRowStartDate).queryByText(
-      new RegExp(formatTime(incidentTimestamps[4]))
-    );
-    expect(startDateComponent1).toBeInTheDocument();
-    expect(startHourComponent1).toBeInTheDocument();
-    expect(startHourComponent1).not.toBe(startDateComponent1);
-
-    // first row - end date - should be just a dash
-    const firstRowEndDate = firstRowColumns[endDateIndex];
-    const slashComponent = within(firstRowEndDate).queryByText('-');
-    expect(slashComponent).toBeInTheDocument();
-
-    // third row - start date - date and time in different elements
-    const thirdDataRow = rowComponents[3];
-    const thirdRowColumns = within(thirdDataRow).queryAllByRole('cell');
-    const thirdRowEndDate = thirdRowColumns[endDateIndex];
-    const endDateComponent3 = within(thirdRowEndDate).queryByText(
-      new RegExp(formatDate(incidentTimestamps[1]))
-    );
-    const endHourComponent3 = within(thirdRowEndDate).queryByText(
-      new RegExp(formatTime(incidentTimestamps[1]))
-    );
-    expect(endDateComponent3).toBeInTheDocument();
-    expect(endHourComponent3).toBeInTheDocument();
-    expect(endHourComponent3).not.toBe(endDateComponent3);
-  });
-
-  it('functionality values', async () => {
-    const functionalityIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.functionality')
-    );
-
-    // first row - known functionality
-    const firstDataRow = rowComponents[1];
-    const firstRowColumns = within(firstDataRow).queryAllByRole('cell');
-    const firstRowFunctionality = firstRowColumns[functionalityIndex];
-    const description1 = within(firstRowFunctionality).queryByText(
-      `legends.knownFunctionality.${KnownFunctionality.NotificationWorkflow}`
-    );
-    expect(description1).toBeInTheDocument();
-
-    // second row - unknown functionality
-    const secondDataRow = rowComponents[2];
-    const secondRowColumns = within(secondDataRow).queryAllByRole('cell');
-    const secondRowFunctionality = secondRowColumns[functionalityIndex];
-    const description2 = within(secondRowFunctionality).queryByText(
-      new RegExp('legends.unknownFunctionality')
-    );
-    expect(description2).toBeInTheDocument();
-
-    // third row - different known functionality
-    const thirdDataRow = rowComponents[3];
-    const thirdRowColumns = within(thirdDataRow).queryAllByRole('cell');
-    const thirdRowFunctionality = thirdRowColumns[functionalityIndex];
-    const description3 = within(thirdRowFunctionality).queryByText(
-      `legends.knownFunctionality.${KnownFunctionality.NotificationCreate}`
-    );
-    expect(description3).toBeInTheDocument();
-  });
-
-  it('legalFactId values', async () => {
-    const legalFactIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.legalFactId')
-    );
-
-    // first row - open downtime
-    const firstDataRow = rowComponents[1];
-    const firstRowColumns = within(firstDataRow).queryAllByRole('cell');
-    const firstRowLegalFact = firstRowColumns[legalFactIndex];
-    const button1 = within(firstRowLegalFact).queryByRole('button');
-    expect(button1).not.toBeInTheDocument();
-    const description1 = within(firstRowLegalFact).queryByText(
-      `legends.noFileAvailableByStatus.${DowntimeStatus.KO}`
-    );
-    expect(description1).toBeInTheDocument();
-
-    // second row - closed downtime no file available
-    const secondDataRow = rowComponents[2];
-    const secondRowColumns = within(secondDataRow).queryAllByRole('cell');
-    const secondRowLegalFact = secondRowColumns[legalFactIndex];
-    const button2 = within(secondRowLegalFact).queryByRole('button');
-    expect(button2).not.toBeInTheDocument();
-    const description2 = within(secondRowLegalFact).queryByText(
-      `legends.noFileAvailableByStatus.${DowntimeStatus.OK}`
-    );
-    expect(description2).toBeInTheDocument();
-
-    // third row - file available
-    const thirdDataRow = rowComponents[3];
-    const thirdRowColumns = within(thirdDataRow).queryAllByRole('cell');
-    const thirdRowLegalFact = thirdRowColumns[legalFactIndex];
-    const button3 = within(thirdRowLegalFact).queryByRole('button');
-    expect(button3).toBeInTheDocument();
-    const description3 = button3 && within(button3).queryByText('legends.legalFactDownload');
-    expect(description3).toBeInTheDocument();
-  });
-
-  it('status values', async () => {
-    const statusIndex = Array.from(headerRowColumns).findIndex((elem) =>
-      within(elem).queryByText('downtimeList.columnHeader.status')
-    );
-
-    // first row - open downtime
-    const firstDataRow = rowComponents[1];
-    const firstRowColumns = within(firstDataRow).queryAllByRole('cell');
-    const firstRowStatus = firstRowColumns[statusIndex];
-    const statusChip1 = within(firstRowStatus).queryByTestId('downtime-status');
-    expect(statusChip1).toHaveStyle({ 'background-color': fakePalette.error.light });
-    const description1 =
-      statusChip1 && within(statusChip1).queryByText(`legends.status.${DowntimeStatus.KO}`);
-    expect(description1).toBeInTheDocument();
-
-    // third row - closed downtime
-    const thirdDataRow = rowComponents[3];
-    const thirdRowColumns = within(thirdDataRow).queryAllByRole('cell');
-    const thirdRowStatus = thirdRowColumns[statusIndex];
-    const statusChip3 = within(thirdRowStatus).queryByTestId('downtime-status');
-    expect(statusChip3).toHaveStyle({ 'background-color': fakePalette.success.light });
-    const description3 =
-      statusChip3 && within(statusChip3).queryByText(`legends.status.${DowntimeStatus.OK}`);
-    expect(description3).toBeInTheDocument();
+  it('renders component', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <DesktopDowntimeLog
+          downtimeLog={exampleDowntimeLogPage}
+          getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
+        />
+      );
+    });
+    // check header
+    const headerRowColumns = result.getAllByTestId('tableHeadCell');
+    headerRowColumns.forEach((column, index) => {
+      expect(column).toHaveTextContent(`appStatus - downtimeList.columnHeader.${columns[index]}`);
+    });
+    // check body
+    const rows = result.getAllByTestId('tableDowntimeLog.row');
+    expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length);
+    rows.forEach((row, index) => {
+      const dataColumns = within(row).getAllByTestId('tableBodyCell');
+      const currentLog = exampleDowntimeLogPage.downtimes[index];
+      dataColumns.forEach((column, jindex) => {
+        if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {
+          checkDateField(currentLog[columns[jindex]], column);
+        }
+        if (columns[jindex] === 'functionality') {
+          checkFunctionalityField(
+            currentLog.knownFunctionality,
+            currentLog.rawFunctionality,
+            column
+          );
+        }
+        if (columns[jindex] === 'legalFactId') {
+          checkLegalFactField(currentLog.fileAvailable, currentLog.status, column);
+        }
+        if (columns[jindex] === 'status') {
+          checkStatusField(currentLog.status, column);
+        }
+      });
+    });
   });
 
   it('download action', async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <DesktopDowntimeLog
+          downtimeLog={exampleDowntimeLogPage}
+          getDowntimeLegalFactDocumentDetails={getLegalFactDetailsMock}
+        />
+      );
+    });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
-    const buttons = screen.queryAllByRole('button');
-    expect(buttons).toHaveLength(1);
-    fireEvent.click(buttons[0]);
+    const rows = result.getAllByTestId('tableDowntimeLog.row');
+    const logWithFile = exampleDowntimeLogPage.downtimes.findIndex((log) => log.fileAvailable);
+    const button = within(rows[logWithFile]).getByRole('button');
+    fireEvent.click(button);
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(1);
-    expect(getLegalFactDetailsMock).toHaveBeenCalledWith('some-legal-fact-id');
+    expect(getLegalFactDetailsMock).toHaveBeenCalledWith(
+      exampleDowntimeLogPage.downtimes[logWithFile].legalFactId
+    );
   });
 });

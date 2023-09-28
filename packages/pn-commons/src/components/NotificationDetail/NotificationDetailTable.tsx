@@ -38,6 +38,7 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
               display: { xs: 'flex', lg: 'table-row' },
               flexDirection: { xs: 'column', lg: 'row' },
             }}
+            data-testid="notificationDetailTableRow"
           >
             <TableCell id={`row-label-${row.id}`} padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
               {row.label}

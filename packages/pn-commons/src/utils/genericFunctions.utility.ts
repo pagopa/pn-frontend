@@ -1,8 +1,9 @@
 import _ from 'lodash';
+
 import { formatFromString } from './date.utility';
 
 export function getValidValue(a: string | number | undefined, b?: string | number): any {
-  return a || (b ? b : '');
+  return a || (b ?? '');
 }
 
 /**

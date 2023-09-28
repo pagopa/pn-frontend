@@ -1,5 +1,10 @@
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { AnalogWorkflowDetails, INotificationDetailTimeline, NotificationDetailRecipient, PhysicalAddress } from '../../types';
+import {
+  AnalogWorkflowDetails,
+  INotificationDetailTimeline,
+  NotificationDetailRecipient,
+  PhysicalAddress,
+} from '../../types';
 
 export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
@@ -45,13 +50,15 @@ export abstract class TimelineStep {
   }
 
   completePhysicalAddressFromStep(step: INotificationDetailTimeline) {
-    return this.completePhysicalAddressFromAddress((step.details as AnalogWorkflowDetails).physicalAddress);
+    return this.completePhysicalAddressFromAddress(
+      (step.details as AnalogWorkflowDetails).physicalAddress
+    );
   }
 
   completePhysicalAddressFromAddress(physicalAddress?: PhysicalAddress) {
-    const zip = physicalAddress && physicalAddress.zip ? ` (${physicalAddress.zip})` : '';
-    const city = physicalAddress && physicalAddress?.municipality ? ` - ${physicalAddress.municipality}` : '';
-    const country = physicalAddress && physicalAddress.foreignState ? ` ${physicalAddress.foreignState}` : '';
+    const zip = physicalAddress?.zip ? ` (${physicalAddress.zip})` : '';
+    const city = physicalAddress?.municipality ? ` - ${physicalAddress.municipality}` : '';
+    const country = physicalAddress?.foreignState ? ` ${physicalAddress.foreignState}` : '';
     return {
       address: physicalAddress ? `${physicalAddress.address}${city}${zip}${country}` : '',
       simpleAddress: physicalAddress ? physicalAddress.address : '',

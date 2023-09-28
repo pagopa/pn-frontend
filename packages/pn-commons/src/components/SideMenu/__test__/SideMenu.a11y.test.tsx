@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import * as React from 'react';
 
+import { sideMenuItems } from '../../../__mocks__/SideMenu.mock';
 import { render } from '../../../test-utils';
 import SideMenu from '../SideMenu';
-import { sideMenuItems } from './test-utils';
 
 expect.extend(toHaveNoViolations);
 

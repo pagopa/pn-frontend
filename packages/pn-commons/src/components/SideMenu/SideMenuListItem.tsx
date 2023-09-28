@@ -60,7 +60,7 @@ const SideMenuListItem = ({
     {item.icon && (
       <ListItemIcon>
         {item.dotBadge ? (
-          <Badge color="primary" variant="dot">
+          <Badge color="primary" variant="dot" id={`sideMenuItem-${item.label}-badge`}>
             <item.icon />
           </Badge>
         ) : (

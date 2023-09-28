@@ -79,6 +79,9 @@ const timelineStepCmp = (
 
 /**
  * Notification detail timeline
+ * This component used to display a timeline of events or notifications,
+ * allowing users to expand and collapse additional details as needed.
+ * The component's behavior and appearance can be customized by passing various props to it.
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
@@ -216,6 +219,7 @@ const NotificationDetailTimelineStep = ({
     <Box data-testid="moreLessButton">
       <ButtonNaked
         id="more-less-timeline-step"
+        data-testid="more-less-timeline-step"
         startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
         onClick={handleShowMoreClick}
       >
@@ -237,16 +241,16 @@ const NotificationDetailTimelineStep = ({
     return timelineStepCmp(
       s.elementId,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatMonthString(s.timestamp)}
         </Typography>
-        <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+        <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
           {formatDay(s.timestamp)}
         </Typography>
       </Fragment>,
       undefined,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatTime(s.timestamp)}
         </Typography>
         <Typography
@@ -274,7 +278,7 @@ const NotificationDetailTimelineStep = ({
                   key={
                     (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId
                   }
-                  data-testid="download-legalfact"
+                  data-testid="download-legalfact-micro"
                 >
                   {getLegalFactLabel(
                     s,

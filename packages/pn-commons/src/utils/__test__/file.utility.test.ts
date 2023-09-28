@@ -1,33 +1,63 @@
-import { parseFileSize } from '../file.utility';
+import { calcBase64String, calcSha256String, calcUnit8Array, parseFileSize } from '../file.utility';
 
-describe('File utility', () => {
-  it('Parse file size (0 bytes)', () => {
-    const result = parseFileSize(0);
-    expect(result).toBe('0 Bytes');
+describe('calcBase64String', () => {
+  it('should convert a file to Base64 string', async () => {
+    const file = new Blob(['Test file content'], { type: 'text/plain' });
+    const base64String = await calcBase64String(file);
+    expect(base64String).toBeDefined();
+    expect(base64String).toContain('mocked-base64String');
   });
 
-  it('Parse file size (200 bytes)', () => {
-    const result = parseFileSize(200);
-    expect(result).toBe('200 Bytes');
+  it('should return mocked Base64 string in test environment', async () => {
+    const file = {}; // Your test file object
+    const base64String = await calcBase64String(file);
+    expect(base64String).toBe('mocked-base64String');
+  });
+});
+
+describe('calcUnit8Array', () => {
+  it('should convert a file to Uint8Array', async () => {
+    const file = new Blob(['Test file content'], { type: 'text/plain' });
+    const unit8Array = await calcUnit8Array(file);
+    expect(unit8Array).toBeDefined();
+    expect(unit8Array).toBeInstanceOf(Uint8Array);
   });
 
-  it('Parse file size (500 KB)', () => {
-    const result = parseFileSize(500 * 1024);
-    expect(result).toBe('500 KB');
+  it('should return an empty Uint8Array in test environment', async () => {
+    const file = {}; // Your test file object
+    const unit8Array = await calcUnit8Array(file);
+    expect(unit8Array).toEqual(new Uint8Array());
+  });
+});
+
+describe('calcSha256String', () => {
+  it('should calculate SHA-256 hash of a file and return hash values', async () => {
+    const file = new Blob(['Test file content'], { type: 'text/plain' });
+    const hashResult = await calcSha256String(file);
+    expect(hashResult).toBeDefined();
+    expect(hashResult).toHaveProperty('hashHex');
+    expect(hashResult).toHaveProperty('hashBase64');
   });
 
-  it('Parse file size (54 MB)', () => {
-    const result = parseFileSize(54 * 1024 ** 2);
-    expect(result).toBe('54 MB');
+  it('should return mocked hash values in test environment', async () => {
+    const file = {}; // Your test file object
+    const hashResult = await calcSha256String(file);
+    expect(hashResult).toEqual({
+      hashHex: 'mocked-hashHex',
+      hashBase64: 'mocked-hashBase64',
+    });
+  });
+});
+
+describe('parseFileSize', () => {
+  it('should format file size in KB, MB, or GB', () => {
+    expect(parseFileSize(1024)).toBe('1 KB');
+    expect(parseFileSize(1024 * 1024)).toBe('1 MB');
+    expect(parseFileSize(1024 * 1024 * 1024)).toBe('1 GB');
+    expect(parseFileSize(123456789)).toBe('117.74 MB');
   });
 
-  it('Parse file size (3 GB)', () => {
-    const result = parseFileSize(3 * 1024 ** 3);
-    expect(result).toBe('3 GB');
-  });
-
-  it('Parse file size (10 TB)', () => {
-    const result = parseFileSize(10 * 1024 ** 4);
-    expect(result).toBe('10 TB');
+  it('should handle zero size', () => {
+    expect(parseFileSize(0)).toBe('0 Bytes');
   });
 });

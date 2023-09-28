@@ -1,14 +1,7 @@
 import React from 'react';
 
 import { mockApiKeysForFE } from '../../../../__mocks__/ApiKeys.mock';
-import {
-  fireEvent,
-  getByTestId,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '../../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../../__test__/test-utils';
 import { ModalApiKeyView } from '../../../../models/ApiKeys';
 import DesktopApiKeys from '../DesktopApiKeys';
 

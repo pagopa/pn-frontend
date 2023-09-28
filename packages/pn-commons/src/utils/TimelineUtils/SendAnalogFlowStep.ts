@@ -105,7 +105,7 @@ export class SendAnalogFlowStep extends TimelineStep {
       : '';
 
     const registeredLetterNumber =
-      (payload.step.details as SendPaperDetails).registeredLetterCode || '';
+      (payload.step.details as SendPaperDetails).registeredLetterCode ?? '';
     const physicalAddress = originatingStep ? this.completePhysicalAddressFromStep(originatingStep) : {};
 
     // eslint-disable-next-line functional/no-let

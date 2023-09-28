@@ -42,6 +42,7 @@ function EmptyState({
   return (
     <Box
       component="div"
+      data-testid="emptyState"
       display="block"
       sx={{
         textAlign: 'center',

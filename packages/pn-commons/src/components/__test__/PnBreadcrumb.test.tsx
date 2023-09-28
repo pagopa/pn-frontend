@@ -1,28 +1,67 @@
-import { fireEvent, render } from '../../test-utils';
+import React from 'react';
+
+import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import PnBreadcrumb from '../PnBreadcrumb';
 
+const mockBackActionHandler = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockBackActionHandler,
+}));
+
 describe('BreadcrumbLink Component', () => {
-  const backActionHandlerMock = jest.fn();
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   it('renders breadcrumb link', () => {
     // render component
     const result = render(
       <PnBreadcrumb
-        goBackAction={backActionHandlerMock}
+        goBackAction={mockBackActionHandler}
         goBackLabel={'mocked-back-label'}
         linkRoute={'mocked-route'}
         linkLabel={'mocked-label'}
         currentLocationLabel={'mocked-current-label'}
       />
     );
-    const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
+    const indietroButton = result.getByTestId('breadcrumb-indietro-button');
     expect(indietroButton).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/mocked-label/i);
     expect(result.container).toHaveTextContent(/mocked-current-label/i);
-    const button = result.container.querySelector('button');
-    expect(button).toHaveTextContent(/mocked-back-label/i);
-    fireEvent.click(button!);
-    expect(backActionHandlerMock).toBeCalledTimes(1);
+    expect(indietroButton).toHaveTextContent(/mocked-back-label/i);
+    fireEvent.click(indietroButton!);
+    expect(mockBackActionHandler).toBeCalledTimes(1);
+  });
+
+  it('renders breadcrumb link - default back button label', () => {
+    // render component
+    const result = render(
+      <PnBreadcrumb
+        goBackAction={mockBackActionHandler}
+        linkRoute={'mocked-route'}
+        linkLabel={'mocked-label'}
+        currentLocationLabel={'mocked-current-label'}
+      />
+    );
+    const indietroButton = result.getByTestId('breadcrumb-indietro-button');
+    expect(indietroButton).toHaveTextContent('common - button.indietro');
+  });
+
+  it('renders breadcrumb link - default back action', () => {
+    // render component
+    const result = render(
+      <PnBreadcrumb
+        linkRoute={'mocked-route'}
+        linkLabel={'mocked-label'}
+        currentLocationLabel={'mocked-current-label'}
+      />
+    );
+    const indietroButton = result.getByTestId('breadcrumb-indietro-button');
+    fireEvent.click(indietroButton!);
+    expect(mockBackActionHandler).toBeCalledTimes(1);
+    expect(mockBackActionHandler).toBeCalledWith(-1);
   });
 
   it('renders breadcrumb - no back button', () => {
@@ -30,14 +69,14 @@ describe('BreadcrumbLink Component', () => {
     const result = render(
       <PnBreadcrumb
         showBackAction={false}
-        goBackAction={backActionHandlerMock}
+        goBackAction={mockBackActionHandler}
         goBackLabel={'mocked-back-label'}
         linkRoute={'mocked-route'}
         linkLabel={'mocked-label'}
         currentLocationLabel={'mocked-current-label'}
       />
     );
-    const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
+    const indietroButton = result.queryByTestId('breadcrumb-indietro-button');
     expect(indietroButton).not.toBeInTheDocument();
   });
 });

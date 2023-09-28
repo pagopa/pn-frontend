@@ -1,14 +1,14 @@
 import { INotificationDetailTimeline, TimelineCategory } from '../../types';
-import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
-import { TimelineStep } from './TimelineStep';
-import { DefaultStep } from './DefaultStep';
-import { SendAnalogFlowStep } from './SendAnalogFlowStep';
 import { AnalogFailureWorkflowStep } from './AnalogFailureWorkflowStep';
+import { DefaultStep } from './DefaultStep';
+import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
+import { SendAnalogFlowStep } from './SendAnalogFlowStep';
 import { SendCourtesyMessageStep } from './SendCourtesyMessageStep';
 import { SendDigitalDomicileStep } from './SendDigitalDomicileStep';
 import { SendDigitalFeedbackStep } from './SendDigitalFeedbackStep';
 import { SendDigitalProgressStep } from './SendDigitalProgressStep';
 import { SendSimpleRegisteredLetterStep } from './SendSimpleRegisteredLetterStep';
+import { TimelineStep } from './TimelineStep';
 import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
 import { NotHandledStep } from './NotHandledStep';
 import { PrepareAnalogDomicileFailureStep } from './PrepareAnalogDomicileFailureStep';

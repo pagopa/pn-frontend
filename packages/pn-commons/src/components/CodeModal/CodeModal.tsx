@@ -114,6 +114,7 @@ const CodeModal = memo(
             {isReadOnly && (
               <CopyToClipboardButton
                 id="copy-code-button"
+                data-testid="copyCodeButton"
                 sx={{ mt: 1.5 }}
                 value={initialValues.join('')}
                 tooltipTitle={getLocalizedOrDefaultLabel(

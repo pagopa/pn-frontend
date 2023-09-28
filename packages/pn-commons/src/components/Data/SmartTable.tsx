@@ -1,12 +1,13 @@
 import { Children, PropsWithChildren, ReactNode, useMemo, useState } from 'react';
+
 import { Box, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
-import { calculatePages, sortArray } from '../../utils';
-import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
 import { CardAction, CardElement, Column, Item, PaginationData, Sort } from '../../types';
-import CustomPagination from '../Pagination/CustomPagination';
+import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
+import { calculatePages, sortArray } from '../../utils';
 import EmptyState, { Props as EmptyStateProps } from '../EmptyState';
+import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';
 import ItemsTable from './ItemsTable';
 import SmartFilter from './SmartFilter';

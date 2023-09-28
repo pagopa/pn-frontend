@@ -1,13 +1,14 @@
 import {
+  ChangeEvent,
+  Fragment,
+  KeyboardEvent,
   memo,
+  useEffect,
   useMemo,
   useRef,
-  KeyboardEvent,
-  Fragment,
   useState,
-  ChangeEvent,
-  useEffect,
 } from 'react';
+
 import { TextField } from '@mui/material';
 
 type Props = {
@@ -29,10 +30,9 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   const inputsRef = useRef(new Array(initialValues.length).fill(undefined));
 
   const inputStyle = useMemo(() => {
-    /* eslint-disable functional/no-let */
+    // eslint-disable-next-line functional/no-let
     let color = isReadOnly ? 'primary.main' : '';
     color = hasError ? 'error.main' : color;
-    /* eslint-enalbe functional/no-let */
     return {
       width: '33px',
       height: '56px',
@@ -95,6 +95,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   };
 
   const changeHandler = (event: ChangeEvent, index: number) => {
+    // eslint-disable-next-line functional/no-let
     let value = String((event.target as HTMLInputElement).value);
     // removed value - i.e. backspace or canc clicked
     if (value === '' && currentValues[index] !== '') {
@@ -137,6 +138,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
             readOnly: isReadOnly,
             pattern: '^[0-9]{1}$',
             inputMode: 'numeric',
+            'data-testid': `code-input-${index}`,
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render, waitFor, screen } from '../../../test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import SmartSort from '../SmartSort';
 
 const sortingHandler = jest.fn();
@@ -21,8 +21,8 @@ const sortFields = [
 ];
 
 describe('Smart Sort Component', () => {
-  it('renders smart sort', () => {
-    const result = render(
+  it('renders component', () => {
+    const { getByTestId } = render(
       <SmartSort
         title="Sort"
         optionsTitle="Options"
@@ -37,7 +37,7 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.queryByTestId('dialogToggle');
+    const dialogToggle = getByTestId('dialogToggle');
     expect(dialogToggle).toBeInTheDocument();
     expect(dialogToggle).toHaveTextContent('Sort');
   });
@@ -58,24 +58,20 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.container.querySelector(
-      '[data-testid="dialogToggle"] button'
-    ) as Element;
-    fireEvent.click(dialogToggle);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog') as Element);
+    const dialogToggle = result.container.querySelector('[data-testid="dialogToggle"] button');
+    fireEvent.click(dialogToggle!);
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
     expect(dialog).toBeInTheDocument();
-    const options = dialog.querySelector('[role="radiogroup"]') as Element;
+    const options = within(dialog).getAllByRole('radiogroup')[0];
     expect(options).toBeInTheDocument();
     for (const field of sortFields) {
-      const optionAsc = options.querySelector(`[aria-label="${field.label} Ascending"]`) as Element;
+      const optionAsc = within(options).getAllByLabelText(`${field.label} Ascending`)[0];
       expect(optionAsc).toBeInTheDocument();
-      const optionDsc = options.querySelector(
-        `[aria-label="${field.label} Descending"]`
-      ) as Element;
+      const optionDsc = within(options).getAllByLabelText(`${field.label} Descending`)[0];
       expect(optionDsc).toBeInTheDocument();
     }
-    const confirmButton = dialog.querySelector('[data-testid="confirmButton"]');
-    const cancelButton = dialog.querySelector('[data-testid="cancelButton"]');
+    const confirmButton = within(dialog).getByTestId('confirmButton');
+    const cancelButton = within(dialog).getByTestId('cancelButton');
     expect(confirmButton).toBeDisabled();
     expect(confirmButton).toHaveTextContent('Sort');
     expect(cancelButton).toBeInTheDocument();
@@ -84,7 +80,7 @@ describe('Smart Sort Component', () => {
   });
 
   it('clicks on confirm button', async () => {
-    const result = render(
+    const { getByTestId, container } = render(
       <SmartSort
         title="Sort"
         optionsTitle="Options"
@@ -99,19 +95,14 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.container.querySelector(
-      '[data-testid="dialogToggle"] button'
-    ) as Element;
+    const dialogToggle = getByTestId('dialogToggleButton');
     fireEvent.click(dialogToggle);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog') as Element);
-    const options = dialog.querySelector('[role="radiogroup"]') as Element;
-    const optionDsc = options.querySelector(`[aria-label="Surname Descending"]`) as Element;
+    let dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const options = within(dialog).getAllByRole('radiogroup')[0];
+    const optionDsc = within(options).getAllByLabelText('Surname Descending')[0];
     fireEvent.click(optionDsc);
-    const confirmButton = await waitFor(() => {
-      const confirmButton = dialog.querySelector('[data-testid="confirmButton"]') as Element;
-      expect(confirmButton).toBeEnabled();
-      return confirmButton;
-    });
+    const confirmButton = await waitFor(() => within(dialog).getByTestId('confirmButton'));
+    expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     expect(sortingHandler).toBeCalledTimes(1);
     expect(sortingHandler).toBeCalledWith({
@@ -120,12 +111,17 @@ describe('Smart Sort Component', () => {
     });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
-      expect(result.container).toHaveTextContent(/Sort1/);
+      expect(container).toHaveTextContent(/Sort1/);
     });
+    // confirm again and check that noting happens
+    fireEvent.click(dialogToggle);
+    dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    fireEvent.click(confirmButton);
+    expect(sortingHandler).toBeCalledTimes(1);
   });
 
   it('clicks on cancel button', async () => {
-    const result = render(
+    const { container, getByTestId } = render(
       <SmartSort
         title="Sort"
         optionsTitle="Options"
@@ -140,12 +136,10 @@ describe('Smart Sort Component', () => {
         onChangeSorting={sortingHandler}
       />
     );
-    const dialogToggle = result.container.querySelector(
-      '[data-testid="dialogToggle"] button'
-    ) as Element;
+    const dialogToggle = getByTestId('dialogToggleButton');
     fireEvent.click(dialogToggle);
-    const dialog = await waitFor(() => screen.queryByTestId('mobileDialog') as Element);
-    const cancelButton = dialog.querySelector('[data-testid="cancelButton"]') as Element;
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const cancelButton = within(dialog).getByTestId('cancelButton');
     fireEvent.click(cancelButton);
     expect(sortingHandler).toBeCalledTimes(1);
     expect(sortingHandler).toBeCalledWith({
@@ -154,7 +148,7 @@ describe('Smart Sort Component', () => {
     });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
-      expect(result.container).not.toHaveTextContent(/Sort1/);
+      expect(container).not.toHaveTextContent(/Sort1/);
     });
   });
 });

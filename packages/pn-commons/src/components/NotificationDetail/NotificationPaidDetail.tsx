@@ -1,4 +1,7 @@
 import { useState } from 'react';
+
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import {
   Accordion,
   AccordionSummary,
@@ -9,11 +12,9 @@ import {
   TableContainer,
   Typography,
 } from '@mui/material';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
-import { PaymentHistory } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { PaymentHistory } from '../../types';
 import { formatEurocentToCurrency, formatFiscalCode } from '../../utils';
 import CustomTableRow from '../CustomTableRow';
 
@@ -36,7 +37,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
   >
     <Table
       aria-label={getLocalizedOrDefaultLabel(
-        'notifiche',
+        'notifications',
         'detail.payment-table-aria-label',
         'Dettaglio pagamenti'
       )}
@@ -45,7 +46,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
         {showRecipientType && paymentDetails.recipientType && (
           <CustomTableRow
             label={getLocalizedOrDefaultLabel(
-              'notifiche',
+              'notifications',
               'detail.payment.recipient-type',
               'Tipo di destinatario'
             )}
@@ -53,12 +54,12 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
             value={
               paymentDetails.recipientType === 'PF'
                 ? getLocalizedOrDefaultLabel(
-                    'notifiche',
+                    'notifications',
                     'detail.payment.natural-person',
                     'Persona fisica'
                   )
                 : getLocalizedOrDefaultLabel(
-                    'notifiche',
+                    'notifications',
                     'detail.payment.legal-person',
                     'Persona giuridica'
                   )
@@ -68,7 +69,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
         {paymentDetails.paymentObject && (
           <CustomTableRow
             label={getLocalizedOrDefaultLabel(
-              'notifiche',
+              'notifications',
               'detail.payment.object',
               'Oggetto del pagamento'
             )}
@@ -78,14 +79,14 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
         )}
         {paymentDetails.amount && paymentDetails.amount !== 0 ? (
           <CustomTableRow
-            label={getLocalizedOrDefaultLabel('notifiche', 'detail.payment.amount', 'Importo')}
+            label={getLocalizedOrDefaultLabel('notifications', 'detail.payment.amount', 'Importo')}
             value={formatEurocentToCurrency(paymentDetails.amount)}
             dataTestId="amount"
           />
         ) : null}
         <CustomTableRow
           label={getLocalizedOrDefaultLabel(
-            'notifiche',
+            'notifications',
             'detail.payment.type',
             'Tipologia di pagamento'
           )}
@@ -93,7 +94,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
             paymentDetails.idF24
               ? 'F24'
               : getLocalizedOrDefaultLabel(
-                  'notifiche',
+                  'notifications',
                   'detail.payment.pagopa-notice',
                   'Avviso pagoPA'
                 )
@@ -102,7 +103,11 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
         />
         {paymentDetails.noticeCode && (
           <CustomTableRow
-            label={getLocalizedOrDefaultLabel('notifiche', 'detail.notice-code', 'Codice Avviso')}
+            label={getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.notice-code',
+              'Codice Avviso'
+            )}
             value={paymentDetails.noticeCode.match(/.{1,4}/g)?.join(' ')}
             dataTestId="noticeCode"
           />
@@ -110,7 +115,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
         {paymentDetails.creditorTaxId && (
           <CustomTableRow
             label={getLocalizedOrDefaultLabel(
-              'notifiche',
+              'notifications',
               'detail.creditor-tax-id',
               'Codice Fiscale Ente'
             )}
@@ -175,7 +180,7 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
                   </Typography>
                   <Typography fontSize="14px" fontWeight="600" color="primary">
                     {getLocalizedOrDefaultLabel(
-                      'notifiche',
+                      'notifications',
                       'payment.show-more',
                       'Mostra dettagli'
                     )}
