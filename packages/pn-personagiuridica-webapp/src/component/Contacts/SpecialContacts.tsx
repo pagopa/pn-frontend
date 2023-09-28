@@ -139,6 +139,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+        .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
         .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
     s_mail: yup.string().when('addressType', {
@@ -146,6 +147,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       then: yup
         .string()
         .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+        .max(254, t('common.too-long-field-error', { ns: 'recapiti', maxLength: 254 }))
         .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
     }),
     s_phone: yup.string().when('addressType', {

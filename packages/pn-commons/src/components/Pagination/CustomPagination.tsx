@@ -126,7 +126,7 @@ export default function CustomPagination({
             'paginator.rows-per-page',
             'Righe per pagina'
           )}
-          data-testid="rows-per-page"
+          id="rows-per-page"
         >
           {size}
         </Button>
@@ -146,6 +146,7 @@ export default function CustomPagination({
         >
           {elementsPerPage.map((ep) => (
             <MenuItem
+              id={`pageSize-${ep}`}
               key={ep}
               data-testid={`pageSize-${ep}`}
               onClick={() => handleChangeElementsPerPage(ep)}

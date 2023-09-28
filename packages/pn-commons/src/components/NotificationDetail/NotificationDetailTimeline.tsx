@@ -165,6 +165,7 @@ const NotificationDetailTimeline = ({
         >
           <Grid item>
             <Typography
+              id="notification-state"
               color="text.primary"
               fontWeight={700}
               textTransform="uppercase"

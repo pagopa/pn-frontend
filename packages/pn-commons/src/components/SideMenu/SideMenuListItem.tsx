@@ -42,6 +42,7 @@ const SideMenuListItem = ({
   onSelect,
 }: Props) => (
   <ListItemButton
+    id={`side-item-${item.label}`}
     selected={selected}
     onClick={() => {
       if (onSelect) {

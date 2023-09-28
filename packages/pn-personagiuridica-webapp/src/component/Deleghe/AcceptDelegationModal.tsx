@@ -166,13 +166,15 @@ const AcceptDelegationModal: React.FC<Props> = ({
             onChange={handleChange}
           >
             <FormControlLabel
+              id="associate-form-no-group"
               value="no-group"
-              control={<Radio data-testid="no-group" />}
+              control={<Radio id="associate-group" data-testid="no-group" />}
               label={t('deleghe.no-group')}
             />
             <FormControlLabel
+              id="associate-form-group"
               value="associate-group"
-              control={<Radio data-testid="associate-group" />}
+              control={<Radio id="associate-group" data-testid="associate-group" />}
               label={t('deleghe.associate-group')}
             />
           </RadioGroup>
@@ -232,6 +234,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
             : t('button.indietro', { ns: 'common' })}
         </Button>
         <Button
+          id="group-confirm-button"
           variant="contained"
           data-testid="groupConfirmButton"
           onClick={() => handleConfirm(code, groupForm.value)}

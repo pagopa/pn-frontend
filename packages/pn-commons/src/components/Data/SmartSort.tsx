@@ -116,6 +116,7 @@ const SmartSort = <TSortOption extends string>({
         <DialogActions>
           <CustomMobileDialogAction closeOnClick>
             <Button
+              id="confirm-button"
               variant="outlined"
               onClick={handleConfirmSort}
               data-testid="confirmButton"

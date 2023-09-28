@@ -69,6 +69,7 @@ function ItemsTable<ColumnId extends string>({
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
         <Table
+          id="notifications-table"
           stickyHeader
           aria-label={
             ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
@@ -118,6 +119,7 @@ function ItemsTable<ColumnId extends string>({
           >
             {rows.map((row, index) => (
               <TableRow
+                id={`${testId}.row`}
                 key={row.id}
                 data-testid={`${testId}.row`}
                 role="row"

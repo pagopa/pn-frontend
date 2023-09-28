@@ -75,6 +75,7 @@ function EmptyState({
         <>
           &nbsp;
           <ButtonNaked
+            id="call-to-action-first"
             data-testid="callToActionFirst"
             onClick={emptyActionCallback}
             sx={{ verticalAlign: 'unset' }}

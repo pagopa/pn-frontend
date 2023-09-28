@@ -100,6 +100,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
         >
           {row.status !== ApiKeyStatus.ROTATED && (
             <MenuItem
+              id="button-view"
               data-testid="buttonView"
               onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
             >
@@ -108,6 +109,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           )}
           {row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED && (
             <MenuItem
+              id="button-rotate"
               data-testid="buttonRotate"
               onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
             >
@@ -116,6 +118,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           )}
           {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && (
             <MenuItem
+              id="button-block"
               data-testid="buttonBlock"
               onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
             >
@@ -124,6 +127,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           )}
           {row.status === ApiKeyStatus.BLOCKED && (
             <MenuItem
+              id="button-delete"
               data-testid="buttonDelete"
               onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
             >
@@ -132,6 +136,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           )}
           {row.status === ApiKeyStatus.BLOCKED && !isApiKeyRotated(apiKeyId) && (
             <MenuItem
+              id="button-enable"
               data-testid="buttonEnable"
               onClick={() => handleModalClick(ModalApiKeyView.ENABLE, apiKeyId)}
             >
@@ -139,6 +144,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
             </MenuItem>
           )}
           <MenuItem
+            id="button-view-groups-id"
             data-testid="buttonViewGroupsId"
             onClick={() => handleModalClick(ModalApiKeyView.VIEW_GROUPS_ID, apiKeyId)}
           >

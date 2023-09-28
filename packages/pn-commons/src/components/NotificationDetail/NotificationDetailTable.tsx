@@ -20,6 +20,7 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
     data-testid="detailTable"
   >
     <Table
+      id="notification-detail-table"
       aria-label={getLocalizedOrDefaultLabel(
         'notifications',
         'detail.table-aria-label',
@@ -42,7 +43,11 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
             <TableCell id={`row-label-${row.id}`} padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
               {row.label}
             </TableCell>
-            <TableCell padding="none" sx={{ pb: 1, pt: { xs: 0, lg: 1 } }}>
+            <TableCell
+              id={`row-value-${row.id}`}
+              padding="none"
+              sx={{ pb: 1, pt: { xs: 0, lg: 1 } }}
+            >
               {row.value}
             </TableCell>
           </TableRow>
