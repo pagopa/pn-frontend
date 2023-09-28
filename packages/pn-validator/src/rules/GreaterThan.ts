@@ -1,7 +1,7 @@
+import { Rule } from '../Rule';
 import { isDate } from '../utility/IsDate';
 import { isDefined } from '../utility/IsDefined';
 import { isNumber } from '../utility/IsNumber';
-import { Rule } from '../Rule';
 
 export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
   private threshold: number | Date;
@@ -15,12 +15,13 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compareNumber = (value: Number | number) => {
     const numberValue = value instanceof Number ? value.valueOf() : value;
+    const thresholdAsNumber = this.threshold as number;
     if (this.equalTo) {
-      return numberValue >= this.threshold
+      return numberValue >= thresholdAsNumber
         ? null
         : `Value must be greater than or equal to ${this.threshold}`;
     }
-    return numberValue > this.threshold ? null : `Value must be greater than ${this.threshold}`;
+    return numberValue > thresholdAsNumber ? null : `Value must be greater than ${this.threshold}`;
   };
 
   private compareDate = (value: Date) => {

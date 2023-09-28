@@ -1,7 +1,7 @@
-import { isDate } from '../utility/IsDate';
-import { isNumber } from '../utility/IsNumber';
-import { isDefined } from '../utility/IsDefined';
 import { Rule } from '../Rule';
+import { isDate } from '../utility/IsDate';
+import { isDefined } from '../utility/IsDefined';
+import { isNumber } from '../utility/IsNumber';
 
 export class LessThan<TModel, TValue> extends Rule<TModel, TValue> {
   private threshold: number | Date;
@@ -15,12 +15,13 @@ export class LessThan<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compareNumber = (value: Number | number) => {
     const numberValue = value instanceof Number ? value.valueOf() : value;
+    const thresholdAsNumber = this.threshold as number;
     if (this.equalTo) {
-      return numberValue <= this.threshold
+      return numberValue <= thresholdAsNumber
         ? null
         : `Value must be less than or equal to ${this.threshold}`;
     }
-    return numberValue < this.threshold ? null : `Value must be less than ${this.threshold}`;
+    return numberValue < thresholdAsNumber ? null : `Value must be less than ${this.threshold}`;
   };
 
   private comapreDate = (value: Date) => {
