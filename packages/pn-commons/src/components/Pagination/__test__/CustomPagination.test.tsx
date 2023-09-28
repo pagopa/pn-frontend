@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render, waitFor, within } from '../../../test-utils';
+import { fireEvent, getById, render, waitFor, within } from '../../../test-utils';
 import CustomPagination from '../CustomPagination';
 import { PaginationData } from '../types';
 
@@ -39,14 +39,14 @@ describe('CustomPagination Component', () => {
   });
 
   it('changes items per page', async () => {
-    const { getByTestId, getAllByRole, getByRole } = render(
+    const { container, getAllByRole, getByRole } = render(
       <CustomPagination
         paginationData={paginationData}
         eventTrackingCallbackPageSize={mockEventTrackingPageSize}
         onPageRequest={handlePageChange}
       />
     );
-    const button = getByTestId('rows-per-page');
+    const button = getById(container, 'rows-per-page');
     expect(button).toHaveTextContent(/50/i);
     fireEvent.click(button);
     const itemsPerPageListContainer = await waitFor(() => getByRole('presentation'));
