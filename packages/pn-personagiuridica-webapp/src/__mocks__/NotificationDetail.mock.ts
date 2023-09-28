@@ -14,13 +14,11 @@ import {
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
-} from '@pagopa-pn/pn-commons';
-import {
   AnalogDetails,
   NotificationDetailPayment,
+  PaidDetails,
   PaymentsData,
-  SendPaperDetails,
-} from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
+} from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
@@ -393,12 +391,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695132',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
-      notificationDate: '2023-08-23T07:45:25Z',
-      deliveryDetailCode: 'RECRN001C',
-      serviceLevel: 'AR_REGISTERED_LETTER',
-      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_1.ATTEMPT_0',
-      registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
-    } as SendPaperDetails,
+      amount: 8000,
+    } as PaidDetails,
   },
 ];
 

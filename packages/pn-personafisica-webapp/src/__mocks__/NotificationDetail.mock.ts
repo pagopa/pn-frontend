@@ -10,6 +10,7 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaidDetails,
   PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
@@ -441,12 +442,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695132',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
-      notificationDate: '2023-08-23T07:45:25Z',
-      deliveryDetailCode: 'RECRN001C',
-      serviceLevel: 'AR_REGISTERED_LETTER',
-      sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_2.ATTEMPT_0',
-      registeredLetterCode: '646577041cdc46a59ad86cd4033e4921',
-    } as SendPaperDetails,
+      amount: 8000,
+    } as PaidDetails,
   },
 ];
 

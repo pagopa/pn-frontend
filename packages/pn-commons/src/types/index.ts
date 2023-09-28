@@ -13,6 +13,7 @@ import { EventsType } from './MixpanelEvents';
 import {
   AarDetails,
   AddressSource,
+  AnalogDetails,
   AnalogWorkflowDetails,
   DigitalDomicileType,
   DigitalWorkflowDetails,
@@ -76,6 +77,7 @@ export {
 };
 export type {
   AarDetails,
+  AnalogDetails,
   AnalogWorkflowDetails,
   AppResponse,
   AppStatusData,
