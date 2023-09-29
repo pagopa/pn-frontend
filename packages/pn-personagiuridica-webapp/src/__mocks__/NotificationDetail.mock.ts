@@ -22,7 +22,7 @@ import {
 
 import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
 
-const payments: Array<NotificationDetailPayment> = [
+export const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '77777777777',
