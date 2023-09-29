@@ -51,6 +51,13 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
 
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    const trimmedValue = e.clipboardData.getData('text').trim();
+    // eslint-disable-next-line functional/immutable-data
+    (e.target as HTMLInputElement).value = trimmedValue;
+    await formikInstance.setFieldValue((e.target as HTMLInputElement).id, trimmedValue, false);
+  };
+
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (formikInstance.errors) {
       formikInstance.setErrors({
@@ -94,6 +101,7 @@ const FilterNotificationsFormBody = ({
         id="recipientId"
         value={formikInstance.values.recipientId}
         onChange={handleChangeTouched}
+        onPaste={handlePaste}
         label={t('filters.fiscal-code-tax-code')}
         name="recipientId"
         error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
@@ -106,6 +114,7 @@ const FilterNotificationsFormBody = ({
         id="iunMatch"
         value={formikInstance.values.iunMatch}
         onChange={handleChangeTouched}
+        onPaste={handlePaste}
         label={t('filters.iun')}
         name="iunMatch"
         error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
