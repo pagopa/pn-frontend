@@ -4,7 +4,7 @@
  */
 
 export async function fetchConfiguration(): Promise<any> {
-  try { 
+  try {
     const res = await fetch('conf/config.json', {
       headers: {
         'Content-Type': 'application/json',
@@ -13,7 +13,9 @@ export async function fetchConfiguration(): Promise<any> {
     });
     return await res.json();
   } catch (e) {
-    console.error(e);
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(e);
+    }
     throw e;
-  }  
+  }
 }

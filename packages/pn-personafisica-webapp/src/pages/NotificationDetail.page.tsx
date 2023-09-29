@@ -28,8 +28,8 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -50,8 +50,8 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -440,18 +440,6 @@ const NotificationDetail = () => {
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
                   disableDownloads={isCancelled.cancellationInTimeline}
                 />
-                {/* TODO decommentare con pn-841
-            <Paper sx={{ p: 3 }} elevation={0}>
-              <HelpNotificationDetails 
-                title="Hai bisogno di aiuto?"
-                subtitle="Se hai domande relative al contenuto della notifica, contatta il"
-                courtName="Tribunale di Milano"
-                phoneNumber="848.800.444"
-                mail="nome.cognome@email.it"
-                website="https://www.tribunale.milano.it/"
-              />              
-            </Paper>
-                */}
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>

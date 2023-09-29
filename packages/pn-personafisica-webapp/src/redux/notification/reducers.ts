@@ -103,7 +103,7 @@ const notificationSlice = createSlice({
             (item) => item.category === TimelineCategory.PAYMENT
           );
 
-          // get only the payments of the current recipient that are in the timeline (by creditorTaxId and noticeCode
+          // get only the payments of the current recipient that are in the timeline (by creditorTaxId and noticeCode)
           const timelineRecipientPayments = paymentsOfRecipient.filter((payment) =>
             timelineEvents.some(
               (timelineEvent) =>
@@ -204,7 +204,7 @@ const notificationSlice = createSlice({
           payment.pagoPA?.noticeCode === noticeCode
       );
 
-      if (paymentInfo && paymentInfo.pagoPA) {
+      if (paymentInfo?.pagoPA) {
         state.paymentsData.pagoPaF24 = [
           ...state.paymentsData.pagoPaF24,
           {

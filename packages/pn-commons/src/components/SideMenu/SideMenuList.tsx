@@ -1,4 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
+
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Box,
   Collapse,
@@ -9,10 +11,9 @@ import {
   ListItemText,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-import { SideMenuItem } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { SideMenuItem } from '../../types';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
@@ -99,6 +100,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                   handleClick(item.label);
                 }}
                 data-testid={`sideMenuItem-${item.label}`}
+                id={`side-item-${item.label}`}
               >
                 {item.icon && (
                   <ListItemIcon>

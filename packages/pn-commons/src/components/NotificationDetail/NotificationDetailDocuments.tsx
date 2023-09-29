@@ -26,15 +26,16 @@ type Props = {
  * @param disableDownloads if notification is cancelled button naked is disabled
  */
 
-const NotificationDetailDocuments = ({
-  title,
-  documents = [],
-  clickHandler,
-  documentsAvailable = true,
-  downloadFilesMessage,
-  disableDownloads = false,
-}: // TODO: remove comment when link ready downloadFilesLink
-Props) => {
+const NotificationDetailDocuments: React.FC<Props> = (
+  {
+    title,
+    documents = [],
+    clickHandler,
+    documentsAvailable = true,
+    downloadFilesMessage,
+    disableDownloads = false,
+  } // TODO: remove comment when link ready downloadFilesLink
+) => {
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
     documents.map((d) => {
       const document = {
@@ -50,12 +51,18 @@ Props) => {
       return (
         <Box key={document.key} data-testid="notificationDetailDocuments">
           {!documentsAvailable ? (
-            <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography
+              sx={{ display: 'flex', alignItems: 'center' }}
+              variant="button"
+              color="text.disabled"
+              fontSize={14}
+            >
               <AttachFileIcon sx={{ mr: 1 }} fontSize="inherit" color="inherit" />
-              {d.title || d.ref.key}
+              {document.name}
             </Typography>
           ) : (
             <ButtonNaked
+              id="document-button"
               data-testid="documentButton"
               color={'primary'}
               startIcon={<AttachFileIcon />}
@@ -90,13 +97,13 @@ Props) => {
   return (
     <>
       <Grid
-        key={'files-section'}
+        key="files-section"
         container
         direction="row"
         justifyContent="space-between"
         alignItems="center"
       >
-        <Grid key={'detail-documents-title'} item sx={{ mb: 3 }}>
+        <Grid key="detail-documents-title" item sx={{ mb: 3 }}>
           <Typography
             id="notification-detail-document-attached"
             color="text.primary"
@@ -115,7 +122,7 @@ Props) => {
         </Grid>
       */}
       </Grid>
-      <Grid key={'detail-documents-message'} item data-testid="documentsMessage">
+      <Grid key="detail-documents-message" item data-testid="documentsMessage">
         <Stack direction="row">
           {downloadFilesMessage && (
             <Typography variant="body2" sx={{ mb: 3 }}>
@@ -127,7 +134,7 @@ Props) => {
         */}
         </Stack>
       </Grid>
-      <Grid key={'download-files-section'} item>
+      <Grid key="download-files-section" item>
         {documents && mapOtherDocuments(documents)}
       </Grid>
     </>

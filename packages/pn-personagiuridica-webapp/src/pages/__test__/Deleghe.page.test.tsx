@@ -11,8 +11,8 @@ import {
   DELEGATIONS_BY_DELEGATOR,
 } from '../../api/delegations/delegations.routes';
 import { GET_GROUPS } from '../../api/external-registries/external-registries-routes';
-import DelegatesByCompany from '../../component/Deleghe/DelegatesByCompany';
-import DelegationsOfTheCompany from '../../component/Deleghe/DelegationsOfTheCompany';
+import DelegatesByCompany from '../../components/Deleghe/DelegatesByCompany';
+import DelegationsOfTheCompany from '../../components/Deleghe/DelegationsOfTheCompany';
 import * as routes from '../../navigation/routes.const';
 import Deleghe from '../Deleghe.page';
 

@@ -1,4 +1,5 @@
 import { PropsWithChildren, useRef, useState } from 'react';
+
 import {
   Button,
   DialogActions,
@@ -8,11 +9,11 @@ import {
   RadioGroup,
 } from '@mui/material';
 
+import { CardSort, Sort } from '../../types';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
+import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
-import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
-import { CardSort, Sort } from '../../types';
 
 type Props<TSortOption> = {
   /** label to show for the sort button */
@@ -115,6 +116,7 @@ const SmartSort = <TSortOption extends string>({
         <DialogActions>
           <CustomMobileDialogAction closeOnClick>
             <Button
+              id="confirm-button"
               variant="outlined"
               onClick={handleConfirmSort}
               data-testid="confirmButton"

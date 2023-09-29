@@ -1,17 +1,18 @@
+import logger from 'redux-logger';
+
 import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { configureStore } from '@reduxjs/toolkit';
-import logger from 'redux-logger';
-import { trackingMiddleware } from "../utils/mixpanel";
-import { getConfiguration } from "../services/configuration.service";
-import userSlice from './auth/reducers';
+
+import { getConfiguration } from '../services/configuration.service';
+import { trackingMiddleware } from '../utility/mixpanel';
 import appStatusSlice from './appStatus/reducers';
+import userSlice from './auth/reducers';
+import contactsSlice from './contact/reducers';
 import dashboardSlice from './dashboard/reducers';
-import notificationSlice from './notification/reducers';
 import delegationsSlice from './delegation/reducers';
 import newDelegationSlice from './newDelegation/reducers';
-import contactsSlice from './contact/reducers';
+import notificationSlice from './notification/reducers';
 import generalInfoSlice from './sidemenu/reducers';
-
 
 export const appReducers = {
   appState: appStateReducer,
@@ -22,7 +23,7 @@ export const appReducers = {
   delegationsState: delegationsSlice.reducer,
   newDelegationState: newDelegationSlice.reducer,
   contactsState: contactsSlice.reducer,
-  generalInfoState: generalInfoSlice.reducer
+  generalInfoState: generalInfoSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {

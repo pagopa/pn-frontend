@@ -1,10 +1,11 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { ApiKeysApi } from '../../api/apiKeys/ApiKeys.api';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { ApiKeyParam, ApiKeyStatusBE, ApiKeys } from '../../models/ApiKeys';
 import { UserGroup } from '../../models/user';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { apikeysMapper } from '../../utils/apikeys.utility';
+import { apikeysMapper } from '../../utility/apikeys.utility';
 
 export enum API_KEYS_ACTIONS {
   GET_API_KEYS = 'getApiKeys',

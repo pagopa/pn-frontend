@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import {
   ExtRegistriesPaymentDetails,
   GetNotificationsParams,
@@ -9,12 +11,11 @@ import {
   PaymentNotice,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { AxiosResponse } from 'axios';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
 import { Delegator } from '../../redux/delegation/types';
-import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
+import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,

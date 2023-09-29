@@ -1,49 +1,47 @@
 import { ErrorInfo, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { useLocation } from 'react-router-dom';
+
+import { People, SupervisedUserCircle } from '@mui/icons-material';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
-import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
-import { People, SupervisedUserCircle } from '@mui/icons-material';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import { Box } from '@mui/material';
-
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
-
 import {
   AppMessage,
   AppResponseMessage,
-  // momentarily commented for pn-5157
+  Layout,
+  ResponseEventDispatcher,
+  SideMenu,
+  SideMenuItem, // momentarily commented for pn-5157
   // AppRouteType,
   appStateActions,
   errorFactoryManager,
   initLocalization,
-  Layout,
-  ResponseEventDispatcher,
-  SideMenu,
-  SideMenuItem,
   useHasPermissions,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
-import * as routes from './navigation/routes.const';
-import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
-import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState } from './redux/store';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
-import { PNRole } from './redux/auth/types';
-import { trackEventByType } from './utils/mixpanel';
-import { TrackEventType } from './utils/events';
-import './utils/onetrust';
-import { PGAppErrorFactory } from './utils/AppError/PGAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
+import Router from './navigation/routes';
+import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { logout } from './redux/auth/actions';
+import { PNRole } from './redux/auth/types';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
+import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
+import { TrackEventType } from './utility/events';
+import { trackEventByType } from './utility/mixpanel';
+import './utility/onetrust';
 
 // Cfr. PN-6096
 // --------------------

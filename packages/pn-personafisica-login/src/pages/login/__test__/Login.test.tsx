@@ -2,10 +2,11 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
+import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { fireEvent, getById, queryById, render } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../../utils/storage';
+import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = jest.fn();

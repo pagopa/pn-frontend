@@ -13,7 +13,7 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../api/delegations/delegations.routes';
-import { DelegationStatus } from '../../utils/status.utility';
+import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({

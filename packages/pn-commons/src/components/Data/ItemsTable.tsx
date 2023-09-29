@@ -14,7 +14,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { Column, Item, Sort } from '../../types';
-import { buttonNakedInheritStyle } from '../../utils';
+import { buttonNakedInheritStyle } from '../../utility';
 
 type Props<ColumnId> = {
   /** Table columns */
@@ -69,19 +69,19 @@ function ItemsTable<ColumnId extends string>({
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
         <Table
+          id="notifications-table"
           stickyHeader
           aria-label={
-            ariaTitle
-              ? ariaTitle
-              : getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
+            ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
           }
           data-testid={testId}
         >
-          <TableHead role="rowgroup">
+          <TableHead role="rowgroup" data-testid="tableHead">
             <TableRow role="row">
               {columns.map((column) => (
                 <TableCell
                   scope="col"
+                  data-testid="tableHeadCell"
                   key={column.id}
                   align={column.align}
                   sx={{
@@ -112,9 +112,14 @@ function ItemsTable<ColumnId extends string>({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody sx={{ backgroundColor: 'background.paper' }} role="rowgroup">
+          <TableBody
+            sx={{ backgroundColor: 'background.paper' }}
+            role="rowgroup"
+            data-testid="tableBody"
+          >
             {rows.map((row, index) => (
               <TableRow
+                id={`${testId}.row`}
                 key={row.id}
                 data-testid={`${testId}.row`}
                 role="row"
@@ -126,6 +131,7 @@ function ItemsTable<ColumnId extends string>({
                     <TableCell
                       key={column.id}
                       role="cell"
+                      data-testid="tableBodyCell"
                       sx={{
                         width: column.width,
                         borderBottom: 'none',

@@ -30,7 +30,7 @@ const StatusTooltip = ({
       tooltipProps={tooltipProps}
     >
       <Chip
-        id="notification-status-tooltip"
+        id={`status-chip-${label}`}
         label={label}
         color={color}
         sx={{ ...chipProps, cursor: 'default' }}

@@ -101,7 +101,8 @@
   "common": {
     "duplicate-contact-title": "Naslov je že prisoten",
     "duplicate-contact-descr": "Stik {{value}} je že prisoten, želite vseeno nadaljevati?",
-    "enti-not-found": "Ni najdenih subjektov"
+    "enti-not-found": "Ni najdenih subjektov",
+    "too-long-field-error": "Napišite največ {{maxLength}} znakov"
   },
   "errors": {
     "invalid_verification_code": {

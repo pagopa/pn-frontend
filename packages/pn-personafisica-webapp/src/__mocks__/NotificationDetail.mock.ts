@@ -20,7 +20,7 @@ import {
   getPagoPaF24Payments,
 } from '@pagopa-pn/pn-commons';
 
-import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
+import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
 
 export const payments: Array<NotificationDetailPayment> = [
   {

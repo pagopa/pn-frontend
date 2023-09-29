@@ -25,6 +25,8 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
+import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -43,11 +45,9 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
-import { ServerResponseErrorCode } from '../utils/AppError/types';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
-import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
-import NotificationPaymentSender from './components/Notifications/NotificationPaymentSender';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }> = (
   notification
