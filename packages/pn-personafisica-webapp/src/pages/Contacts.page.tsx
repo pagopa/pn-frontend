@@ -1,23 +1,24 @@
-import { useEffect, useCallback, useState, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
-import { resetState } from '../redux/contact/reducers';
-import { RootState } from '../redux/store';
-import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/DigitalContactsCodeVerification.context';
-import InsertLegalContact from '../component/Contacts/InsertLegalContact';
-import LegalContactsList from '../component/Contacts/LegalContactsList';
-import IOContact from '../component/Contacts/IOContact';
-import CourtesyContacts from '../component/Contacts/CourtesyContacts';
-import SpecialContacts from '../component/Contacts/SpecialContacts';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import { PROFILO } from '../navigation/routes.const';
+import CourtesyContacts from '../components/Contacts/CourtesyContacts';
+import { DigitalContactsCodeVerificationProvider } from '../components/Contacts/DigitalContactsCodeVerification.context';
+import IOContact from '../components/Contacts/IOContact';
+import InsertLegalContact from '../components/Contacts/InsertLegalContact';
+import LegalContactsList from '../components/Contacts/LegalContactsList';
+import SpecialContacts from '../components/Contacts/SpecialContacts';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { CourtesyChannelType, DigitalAddress } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
+import { PROFILO } from '../navigation/routes.const';
+import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
+import { resetState } from '../redux/contact/reducers';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 
 const Contacts = () => {

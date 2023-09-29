@@ -1,10 +1,12 @@
-import { Box } from '@mui/material';
-import { initLocalization, useMultiEvent, useTracking } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Box } from '@mui/material';
+import { initLocalization, useMultiEvent, useTracking } from '@pagopa-pn/pn-commons';
+
 import Router from './navigation/routes';
-import './utils/onetrust';
-import { getConfiguration } from "./services/configuration.service";
+import { getConfiguration } from './services/configuration.service';
+import './utility/onetrust';
 
 const App = () => {
   const { MIXPANEL_TOKEN, VERSION } = getConfiguration();

@@ -29,7 +29,7 @@ import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utils';
+} from '../../utility';
 
 type Props = {
   timelineStep: NotificationStatusHistory;

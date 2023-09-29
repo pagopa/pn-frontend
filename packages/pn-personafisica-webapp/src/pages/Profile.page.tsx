@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Alert,
   AlertTitle,
@@ -13,12 +15,11 @@ import {
 } from '@mui/material';
 import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
-import { useNavigate } from 'react-router-dom';
+import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { RECAPITI } from '../navigation/routes.const';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Profile = () => {
   const navigate = useNavigate();

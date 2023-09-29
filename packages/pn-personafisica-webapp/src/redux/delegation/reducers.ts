@@ -1,12 +1,12 @@
-import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Sort } from '@pagopa-pn/pn-commons';
+import { PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { sortDelegations } from '../../utils/delegation.utility';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
+import { DelegatesColumn, DelegatorsColumn } from '../../models/Deleghe';
+import { sortDelegations } from '../../utility/delegation.utility';
 import {
+  acceptDelegation,
   getDelegates,
   getDelegators,
-  acceptDelegation,
   rejectDelegation,
   revokeDelegation,
 } from './actions';

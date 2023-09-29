@@ -24,9 +24,9 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import NotificationPayment from '../component/Notifications/NotificationPayment';
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import NotificationPayment from '../components/Notifications/NotificationPayment';
 import * as routes from '../navigation/routes.const';
 import { PNRole } from '../redux/auth/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -45,8 +45,8 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)

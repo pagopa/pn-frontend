@@ -5,7 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Tab, Tabs } from '@mui/material';
 import { TabPanel, TitleBox } from '@pagopa-pn/pn-commons';
 
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
 import { getDelegatesByCompany, getDelegators, getGroups } from '../redux/delegation/actions';
 import { resetState } from '../redux/delegation/reducers';

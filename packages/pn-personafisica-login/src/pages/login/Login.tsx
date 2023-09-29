@@ -11,9 +11,9 @@ import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
-import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../utils/storage';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
+import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({

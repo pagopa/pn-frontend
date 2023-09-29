@@ -1,5 +1,6 @@
+import { AxiosResponse } from 'axios';
+
 import {
-  formatDate,
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
@@ -8,12 +9,12 @@ import {
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
-import { AxiosResponse } from 'axios';
 
-import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
+import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
@@ -41,12 +42,14 @@ export const NotificationsApi = {
    *
    * @returns Promise
    */
-  getReceivedNotifications:
-    (params: GetNotificationsParams & { isDelegatedPage: boolean }): Promise<GetNotificationsResponse> => {
-      const { isDelegatedPage, ...payload } = params;
-      return apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage)).then((response) => {
+  getReceivedNotifications: (
+    params: GetNotificationsParams & { isDelegatedPage: boolean }
+  ): Promise<GetNotificationsResponse> => {
+    const { isDelegatedPage, ...payload } = params;
+    return apiClient
+      .get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage))
+      .then((response) => {
         if (response.data && response.data.resultsPage) {
-
           const notifications = response.data.resultsPage.map((d) => ({
             ...d,
             sentAt: formatDate(d.sentAt),
@@ -83,7 +86,6 @@ export const NotificationsApi = {
         return {} as NotificationDetailForRecipient;
       }
     }),
-
 
   /**
    * Get notification iun and mandate id from aar link

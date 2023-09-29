@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { mixpanelInit } from '../utils/mixpanel.utility';
+import { mixpanelInit } from '../utility/mixpanel.utility';
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
