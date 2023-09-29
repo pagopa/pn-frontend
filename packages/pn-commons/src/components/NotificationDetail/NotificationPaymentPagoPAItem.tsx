@@ -1,7 +1,9 @@
+import { Fragment } from 'react';
+
 import { InfoRounded, Refresh } from '@mui/icons-material';
 import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
-import { Fragment } from 'react';
+
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
@@ -9,8 +11,8 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../types/NotificationDetail';
-import { formatEurocentToCurrency } from '../../utils';
-import { formatDate } from '../../utils/date.utility';
+import { formatEurocentToCurrency } from '../../utility';
+import { formatDate } from '../../utility/date.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
 interface Props {

@@ -8,10 +8,10 @@ import {
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
-import { notificationToFeMultiRecipient } from '../../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
-import { apiClient } from '../../../../api/apiClients';
-import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../../api/notifications/notifications.routes';
+import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
 import NotificationPaymentPagoPa from '../NotificationPaymentPagoPa';
 
 jest.mock('react-i18next', () => ({

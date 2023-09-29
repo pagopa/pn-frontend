@@ -37,7 +37,6 @@ import LoadingPage from './LoadingPage';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailTimeline from './NotificationDetail/NotificationDetailTimeline';
-import NotificationPaidDetail from './NotificationDetail/NotificationPaidDetail';
 import NotificationPaymentRecipient from './NotificationDetail/NotificationPaymentRecipient';
 import NotificationRelatedDowntimes from './NotificationDetail/NotificationRelatedDowntimes';
 import MobileNotificationsSort from './Notifications/MobileNotificationsSort';
@@ -84,7 +83,6 @@ export {
   NotificationRelatedDowntimes,
   MobileNotificationsSort,
   NotificationDetailTimeline,
-  NotificationPaidDetail,
   NotificationPaymentRecipient,
   PnAutocomplete,
   PnBreadcrumb,

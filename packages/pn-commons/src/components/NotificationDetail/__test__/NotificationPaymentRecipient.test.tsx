@@ -3,7 +3,7 @@ import React from 'react';
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
 import { PaymentStatus, PaymentsData } from '../../../types';
-import { getF24Payments, getPagoPaF24Payments } from '../../../utils/notification.utility';
+import { getF24Payments, getPagoPaF24Payments } from '../../../utility/notification.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
 describe('NotificationPaymentRecipient Component', () => {

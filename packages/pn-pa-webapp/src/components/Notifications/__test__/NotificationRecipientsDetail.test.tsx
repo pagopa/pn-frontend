@@ -3,8 +3,8 @@ import React from 'react';
 import {
   notificationToFeMultiRecipient,
   recipients,
-} from '../../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, waitFor, within } from '../../../../__test__/test-utils';
+} from '../../../__mocks__/NotificationDetail.mock';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationRecipientsDetail from '../NotificationRecipientsDetail';
 
 jest.mock('react-i18next', () => ({

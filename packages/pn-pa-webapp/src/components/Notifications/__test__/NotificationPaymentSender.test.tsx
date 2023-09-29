@@ -5,7 +5,7 @@ import { NotificationDetailPayment, NotificationDetailRecipient } from '@pagopa-
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
-} from '../../../../__mocks__/NotificationDetail.mock';
+} from '../../../__mocks__/NotificationDetail.mock';
 import {
   RenderResult,
   act,
@@ -14,7 +14,7 @@ import {
   screen,
   waitFor,
   within,
-} from '../../../../__test__/test-utils';
+} from '../../../__test__/test-utils';
 import NotificationPaymentSender from '../NotificationPaymentSender';
 
 jest.mock('react-i18next', () => ({

@@ -10,10 +10,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useAppDispatch } from '../../../redux/hooks';
-import { getPaymentAttachment } from '../../../redux/notification/actions';
-import { TrackEventType } from '../../../utils/events';
-import { trackEventByType } from '../../../utils/mixpanel';
+import { useAppDispatch } from '../../redux/hooks';
+import { getPaymentAttachment } from '../../redux/notification/actions';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 type Props = {
   iun: string;

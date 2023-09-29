@@ -1,7 +1,9 @@
+import React, { Fragment, memo, useState } from 'react';
+
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import React, { Fragment, memo, useState } from 'react';
+
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
   NotificationDetailPayment,
@@ -11,7 +13,7 @@ import {
   PaymentStatus,
   PaymentsData,
 } from '../../types';
-import { formatEurocentToCurrency } from '../../utils';
+import { formatEurocentToCurrency } from '../../utility';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 

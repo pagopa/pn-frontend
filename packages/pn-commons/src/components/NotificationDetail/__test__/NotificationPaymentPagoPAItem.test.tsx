@@ -1,14 +1,16 @@
 import React from 'react';
+
 import { fireEvent, render, waitFor } from '@testing-library/react';
+
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, recipient } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import {
   PagoPAPaymentFullDetails,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../../types';
-import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../utils';
+import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../utility';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {

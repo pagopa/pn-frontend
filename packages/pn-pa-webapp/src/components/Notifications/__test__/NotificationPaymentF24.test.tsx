@@ -2,8 +2,8 @@ import React from 'react';
 
 import { F24PaymentDetails } from '@pagopa-pn/pn-commons';
 
-import { notificationToFeMultiRecipient } from '../../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, waitFor, within } from '../../../../__test__/test-utils';
+import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationPaymentF24 from '../NotificationPaymentF24';
 
 jest.mock('react-i18next', () => ({
