@@ -1,8 +1,10 @@
 import { ReactNode, RefAttributes } from 'react';
 import { Link, LinkProps, useNavigate } from 'react-router-dom';
-import { Breadcrumbs, Stack, styled, Typography } from '@mui/material';
+
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Breadcrumbs, Stack, Typography, styled } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 const StyledLink = styled(Link)(({ theme }) => ({
@@ -44,6 +46,7 @@ const PnBreadcrumb = ({
     <Stack direction="row" alignItems="center" justifyContent="start" spacing={3}>
       {showBackAction && (
         <ButtonNaked
+          id="breadcrumb-indietro-button"
           color="primary"
           data-testid="breadcrumb-indietro-button"
           startIcon={<ArrowBackIcon />}
@@ -57,6 +60,7 @@ const PnBreadcrumb = ({
           {linkLabel}
         </BreadcrumbLink>
         <Typography
+          id="title-of-page"
           color="text.primary"
           fontWeight={600}
           sx={{ display: 'flex', alignItems: 'center' }}

@@ -8,7 +8,7 @@ import { apiClient } from '../../api/apiClients';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
-import { newNotificationMapper } from '../../utils/notification.utility';
+import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
 
 const mockNavigateFn = jest.fn();
@@ -130,7 +130,7 @@ describe('NewNotification Page without payment', () => {
     });
   });
 
-  it('clicks on stepper and naavigate', async () => {
+  it('clicks on stepper and navigate', async () => {
     // render component
     // because all the step are already deeply tested, we can set the new notification already populated
     await act(async () => {

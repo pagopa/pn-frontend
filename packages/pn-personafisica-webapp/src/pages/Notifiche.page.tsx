@@ -1,31 +1,32 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+
 import { Box } from '@mui/material';
 import {
-  calculatePages,
+  ApiErrorWrapper,
   CustomPagination,
   PaginationData,
   Sort,
   TitleBox,
-  useIsMobile,
-  getNextDay,
+  calculatePages,
   formatToTimezoneString,
-  ApiErrorWrapper,
+  getNextDay,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { useParams } from 'react-router-dom';
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import MobileNotifications from '../components/Notifications/MobileNotifications';
+import { NotificationColumn } from '../models/Notifications';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
+import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import DesktopNotifications from '../component/Notifications/DesktopNotifications';
-import MobileNotifications from '../component/Notifications/MobileNotifications';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import { Delegator } from '../redux/delegation/types';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
-import { NotificationColumn } from '../models/Notifications';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();

@@ -32,11 +32,11 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
-import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
-import { TrackEventType } from './utils/events';
-import { trackEventByType } from './utils/mixpanel';
-import './utils/onetrust';
-import { getMenuItems } from './utils/role.utility';
+import { PAAppErrorFactory } from './utility/AppError/PAAppErrorFactory';
+import { TrackEventType } from './utility/events';
+import { trackEventByType } from './utility/mixpanel';
+import './utility/onetrust';
+import { getMenuItems } from './utility/role.utility';
 
 // Cfr. PN-6096
 // --------------------
@@ -89,7 +89,7 @@ const ActualApp = () => {
        *
        * LINKED TO:
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
-       * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
+       * - BasicMenuItems in packages/pn-pa-webapp/src/utility/__TEST__/role.utilitytest.ts
        */
       { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
       {

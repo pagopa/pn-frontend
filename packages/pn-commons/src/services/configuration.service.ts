@@ -1,4 +1,8 @@
+/* eslint-disable max-classes-per-file */
+
+/* eslint-disable functional/immutable-data */
 import { Validator } from '@pagopa-pn/pn-validator';
+
 import { fetchConfiguration } from './fetch.configuration.service';
 
 class ConfigurationError extends Error {}

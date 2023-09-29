@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
-import { Typography, Box } from '@mui/material';
+
 import { SvgIconComponent } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { KnownSentiment } from '../types';
 import { iconForKnownSentiment } from '../types/EmptyState';
 
@@ -40,6 +42,7 @@ function EmptyState({
   return (
     <Box
       component="div"
+      data-testid="emptyState"
       display="block"
       sx={{
         textAlign: 'center',
@@ -72,6 +75,7 @@ function EmptyState({
         <>
           &nbsp;
           <ButtonNaked
+            id="call-to-action-first"
             data-testid="callToActionFirst"
             onClick={emptyActionCallback}
             sx={{ verticalAlign: 'unset' }}

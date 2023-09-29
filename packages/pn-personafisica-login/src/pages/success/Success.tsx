@@ -13,9 +13,9 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
-import { storageAarOps, storageTypeOps } from '../../utils/storage';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
+import { storageAarOps, storageTypeOps } from '../../utility/storage';
 
 type DisambiguationAccountProps = {
   type: AppRouteType;

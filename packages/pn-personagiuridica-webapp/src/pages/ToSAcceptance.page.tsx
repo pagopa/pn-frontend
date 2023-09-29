@@ -10,7 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { TOSAgreement } from '@pagopa/mui-italia';
 
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
 import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
 import { useAppDispatch } from '../redux/hooks';

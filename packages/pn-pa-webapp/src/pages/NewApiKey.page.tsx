@@ -24,12 +24,12 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { GroupStatus, UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();

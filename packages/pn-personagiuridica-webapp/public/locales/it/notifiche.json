@@ -74,7 +74,6 @@
     "payment": {
       "cancelled-alert-text-payment": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, la lista potrebbe non essere aggiornata.",
       "summary": "Pagamenti",
-
       "summary-in-progress": "Pagamento in corso",
       "amount": "Importo",
       "submit": "Paga",
