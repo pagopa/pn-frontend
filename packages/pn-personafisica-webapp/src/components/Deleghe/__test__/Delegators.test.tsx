@@ -1,15 +1,7 @@
 import React from 'react';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
-import {
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from '../../../__test__/test-utils';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
+import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { Delegator } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegators from '../Delegators';
@@ -19,6 +11,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('Delegators Component', () => {

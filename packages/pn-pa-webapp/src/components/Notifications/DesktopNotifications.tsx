@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ReactNode, useRef } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import {
   Column,
   EmptyState,
@@ -155,25 +155,47 @@ const DesktopNotifications = ({
   };
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-  const EmptyStateProps = {
-    emptyMessage: filtersApplied ? t('empty-state.filter-message') : t('empty-state.message'),
-    emptyActionLabel: filtersApplied
-      ? t('empty-state.filter-action')
-      : t('menu.api-key', { ns: 'common' }),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied
-      ? undefined
-      : {
-          emptyMessage: t('empty-state.secondary-message'),
-          emptyActionLabel: t('empty-state.secondary-action'),
-          emptyActionCallback: () => {
-            onManualSend();
-          },
-        },
-  };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
+
+  const LinkRemoveFilters = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={filterNotificationsRef.current.cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+
+  const LinkApiKey = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-api-keys')}
+      key="api-keys"
+      data-testid="link-api-keys"
+      onClick={onApiKeys}
+    >
+      {children}
+    </Link>
+  );
+
+  const LinkCreateNotification = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-second"
+      aria-label={t('empty-state.aria-label-create-notification')}
+      key="create-notification"
+      data-testid="link-create-notification"
+      onClick={onManualSend}
+    >
+      {children}
+    </Link>
+  );
 
   return (
     <>
@@ -190,7 +212,26 @@ const DesktopNotifications = ({
               testId="notificationsTable"
             />
           ) : (
-            <EmptyState {...EmptyStateProps} />
+            <EmptyState
+              sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
+            >
+              {filtersApplied ? (
+                <Trans
+                  ns={'notifiche'}
+                  i18nKey={'empty-state.filtered'}
+                  components={[<LinkRemoveFilters key={'remove-filters'} />]}
+                />
+              ) : (
+                <Trans
+                  ns={'notifiche'}
+                  i18nKey={'empty-state.no-notifications'}
+                  components={[
+                    <LinkApiKey key={'api-keys'} />,
+                    <LinkCreateNotification key={'create-notification'} />,
+                  ]}
+                />
+              )}
+            </EmptyState>
           )}
         </>
       )}

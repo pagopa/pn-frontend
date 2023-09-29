@@ -13,7 +13,6 @@ import {
   UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
 import { DelegationStatus } from '../../../models/Deleghe';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
 jest.mock('react-i18next', () => ({
@@ -21,6 +20,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 export async function testMultiSelect(

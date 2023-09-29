@@ -3,7 +3,6 @@ import React from 'react';
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import MobileDelegates from '../MobileDelegates';
 
 const mockNavigateFn = jest.fn();
@@ -19,6 +18,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('MobileDelegates Component', () => {

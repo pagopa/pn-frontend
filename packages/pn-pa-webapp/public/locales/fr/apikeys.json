@@ -31,7 +31,7 @@
   "enable-warning": "Si la clé API <strong>{{apiKeyName}}</strong> est activée, elle pourra alors être à nouveau utilisée. Vous pourrez à nouveau la bloquer à tout moment.",
   "delete-warning": "Si la clé API <strong>{{apiKeyName}}</strong> est définitivement supprimée, elle ne pourra plus être activée et réutilisée.",
   "copy-api-key-info": "Copiez le code et saisissez-le sur la plateforme de l'organisme",
-  "empty-message": "Aucune clé API n'a encore été générée pour cet organisme.",
+  "empty-message": "Aucune clé API n'a encore été générée pour cet organisme. <0>Générer clé API</0>.",
   "empty-action-label": "Générer clé API",
   "api-key-copied": "Clé API copiée",
   "group-id-copied": "Identifiant groupe copié",

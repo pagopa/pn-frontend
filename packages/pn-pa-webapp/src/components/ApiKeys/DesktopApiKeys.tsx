@@ -1,9 +1,9 @@
-import { MouseEvent, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { MouseEvent, ReactNode, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { MoreVert } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Link, Menu, MenuItem, Typography } from '@mui/material';
 import {
   Column,
   CustomTagGroup,
@@ -302,6 +302,19 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     setTableKey(tableKey + 1); // This is needed to make ItemsTable to properly update itself.
   }, [apiKeys]);
 
+  const LinkNewApiKey = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.empty-action-label')}
+      key="new-api-key"
+      data-testid="link-new-api-key"
+      onClick={() => navigate(routes.NUOVA_API_KEY)}
+    >
+      {children}
+    </Link>
+  );
+
   return (
     <>
       {apiKeys && apiKeys.length > 0 ? (
@@ -313,12 +326,13 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           ariaTitle={t('table.title')}
         />
       ) : (
-        <EmptyState
-          data-testid="emptyState"
-          emptyMessage={t('empty-message')}
-          emptyActionLabel={t('empty-action-label')}
-          emptyActionCallback={() => navigate(routes.NUOVA_API_KEY)}
-        />
+        <EmptyState data-testid="emptyState">
+          <Trans
+            ns={'apikeys'}
+            i18nKey={'empty-message'}
+            components={[<LinkNewApiKey key={'LinkNewApiKey'} />]}
+          />
+        </EmptyState>
       )}
     </>
   );

@@ -1,9 +1,9 @@
-import { Fragment, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Fragment, ReactNode, useRef } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Link, Typography } from '@mui/material';
 import {
   CardAction,
   CardElement,
@@ -161,32 +161,33 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     return arr;
   }, [] as Array<CardSort<NotificationColumn>>);
 
-  const handleRouteContacts = () => {
-    navigate(routes.RECAPITI);
-  };
-
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
-  const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? t('empty-state.filter-action') : t('empty-state.action'),
-    emptyActionCallback: filtersApplied
-      ? filterNotificationsRef.current.cleanFilters
-      : currentDelegator
-      ? undefined
-      : handleRouteContacts,
-    emptyMessage: filtersApplied
-      ? t('empty-state.filter-message')
-      : currentDelegator
-      ? t('empty-state.delegate', { name: currentDelegator.delegator?.displayName })
-      : t('empty-state.first-message'),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    secondaryMessage:
-      filtersApplied || currentDelegator
-        ? undefined
-        : {
-            emptyMessage: t('empty-state.second-message'),
-          },
-  };
+  const LinkRemoveFilters = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={filterNotificationsRef.current.cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+
+  const LinkRouteContacts = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-route-contacts')}
+      key="route-contacts"
+      data-testid="link-route-contacts"
+      onClick={filterNotificationsRef.current.cleanFilters}
+    >
+      {children}
+    </Link>
+  );
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
@@ -254,7 +255,30 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
           }}
         />
       ) : (
-        <EmptyState {...EmptyStateProps} />
+        <EmptyState
+          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
+        >
+          {filtersApplied && (
+            <Trans
+              ns={'notifiche'}
+              i18nKey={'empty-state.filtered'}
+              components={[<LinkRemoveFilters key={'remove-filters'} />]}
+            />
+          )}
+          {!filtersApplied && currentDelegator ? (
+            <Trans
+              values={{ name: currentDelegator.delegator?.displayName }}
+              ns={'notifiche'}
+              i18nKey={'empty-state.delegates'}
+            />
+          ) : (
+            <Trans
+              ns={'notifiche'}
+              i18nKey={'empty-state.no-notifications'}
+              components={[<LinkRouteContacts key={'route-contacts'} />]}
+            />
+          )}
+        </EmptyState>
       )}
     </Fragment>
   );

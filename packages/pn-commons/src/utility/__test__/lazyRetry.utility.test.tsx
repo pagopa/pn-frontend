@@ -30,7 +30,7 @@ describe('test lazy loading retry', () => {
     await act(async () => {
       result = render(
         <Suspense fallback={'Loading...'}>
-          <LazyComponent emptyMessage={'mocked-empty-message'} />
+          <LazyComponent>mocked-empty-message</LazyComponent>
         </Suspense>
       );
     });

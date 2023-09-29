@@ -24,7 +24,7 @@
     "error_title": "Es ist leider ein Fehler aufgetreten",
     "error_subtitle": "Die Seite konnte nicht geladen werden. Lade sie neu oder versuche es später noch einmal.",
     "error_button": "Seite erneut laden",
-    "no_delegates": "Du hast niemanden zur Anzeige deiner Bescheide bevollmächtigt.",
+    "no_delegates": "Du hast niemanden zur Anzeige deiner Bescheide bevollmächtigt. <0>Vollmacht hinzufügen</0>.",
     "no_delegators": "Du hast keine Vollmachten.",
     "show_code_title": "Bestätigungscode für Vollmacht an {{name}}",
     "show_code_subtitle": "Teile dem Bevollmächtigten diesen Code mit: Dieser muss den Code bei der Annahme der Vollmacht eingeben.",

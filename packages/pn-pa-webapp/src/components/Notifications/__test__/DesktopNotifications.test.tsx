@@ -27,6 +27,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('DesktopNotifications Component', () => {
@@ -43,9 +44,7 @@ describe('DesktopNotifications Component', () => {
     expect(filters).not.toBeInTheDocument();
     const norificationTable = result!.queryByTestId('notificationsTable');
     expect(norificationTable).not.toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(
-      /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
-    );
+    expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
   it('renders component - notification', async () => {
@@ -94,9 +93,7 @@ describe('DesktopNotifications Component', () => {
     );
     const filters = await waitFor(() => result!.queryByTestId('filter-form'));
     expect(filters).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(
-      /empty-state.filter-message empty-state.filter-action/i
-    );
+    expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
   });
 
   it('go to notification detail', async () => {

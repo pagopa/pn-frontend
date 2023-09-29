@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -13,6 +13,7 @@ import {
   Checkbox,
   Chip,
   Grid,
+  Link,
   ListItemText,
   MenuItem,
   TextField,
@@ -341,6 +342,19 @@ const DelegationsOfTheCompany = () => {
     getDelegatorsData();
   }, [filters]);
 
+  const LinkRemoveFilters = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={clearFiltersHandler}
+    >
+      {children}
+    </Link>
+  );
+
   return (
     <Box data-testid="delegationsOfTheCompany">
       <Typography variant="h6" mb={4}>
@@ -362,12 +376,15 @@ const DelegationsOfTheCompany = () => {
               numOfDisplayedPages: Math.min(pagination.nextPagesKey.length + 1, 3),
               onChangePage: handleChangePage,
             }}
-            emptyStateProps={{
-              sentimentIcon: KnownSentiment.DISSATISFIED,
-              emptyMessage: t('deleghe.no_delegators_after_filters'),
-              emptyActionLabel: t('button.annulla filtro', { ns: 'common' }),
-              emptyActionCallback: clearFiltersHandler,
-            }}
+            emptyState={
+              <EmptyState sentimentIcon={KnownSentiment.DISSATISFIED}>
+                <Trans
+                  i18nKey={'deleghe.no_delegators_after_filters'}
+                  ns={'deleghe'}
+                  components={[<LinkRemoveFilters key={'remove-filters'} />]}
+                />
+              </EmptyState>
+            }
           >
             <SmartFilter
               filterLabel={t('button.filtra', { ns: 'common' })}
@@ -462,10 +479,9 @@ const DelegationsOfTheCompany = () => {
             </SmartFilter>
           </SmartTable>
         ) : (
-          <EmptyState
-            sentimentIcon={KnownSentiment.NONE}
-            emptyMessage={t('deleghe.no_delegators', { organizationName: organization.name })}
-          />
+          <EmptyState sentimentIcon={KnownSentiment.NONE}>
+            {t('deleghe.no_delegators', { organizationName: organization.name })}
+          </EmptyState>
         )}
       </ApiErrorWrapper>
     </Box>

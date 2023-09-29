@@ -1,14 +1,7 @@
 import React from 'react';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import {
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
@@ -27,6 +20,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('Delegates Component', () => {

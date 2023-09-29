@@ -274,7 +274,9 @@ const MobileNotifications = ({
           }}
         />
       ) : (
-        <EmptyState {...EmptyStateProps} />
+        <EmptyState sentimentIcon={EmptyStateProps.sentimentIcon}>
+          {EmptyStateProps.emptyMessage}
+        </EmptyState>
       )}
     </Fragment>
   );

@@ -211,7 +211,9 @@ const DesktopNotifications = ({
           onChangeSorting={onChangeSorting}
         />
       ) : (
-        <EmptyState {...EmptyStateProps} />
+        <EmptyState sentimentIcon={EmptyStateProps.sentimentIcon}>
+          {EmptyStateProps.emptyMessage}
+        </EmptyState>
       )}
     </>
   );

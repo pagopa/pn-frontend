@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ReactNode, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Typography } from '@mui/material';
+import { Box, Button, Chip, Link, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CardElement,
@@ -107,6 +107,19 @@ const MobileDelegates = () => {
     setShowCodeModal({ open: false, name: '', code: '' });
   };
 
+  const LinkAddDelegate = ({ children }: { children?: ReactNode }) => (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('deleghe.add')}
+      key="add-delegate"
+      data-testid="link-add-delegate"
+      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+    >
+      {children}
+    </Link>
+  );
+
   return (
     <>
       <CodeModal
@@ -142,11 +155,13 @@ const MobileDelegates = () => {
           {cardData.length ? (
             <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
           ) : (
-            <EmptyState
-              emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-              emptyMessage={t('deleghe.no_delegates')}
-              emptyActionLabel={t('deleghe.add')}
-            />
+            <EmptyState>
+              <Trans
+                i18nKey={'deleghe.no_delegates'}
+                ns={'deleghe'}
+                components={[<LinkAddDelegate key={'add-delegate'} />]}
+              />
+            </EmptyState>
           )}
         </ApiErrorWrapper>
       </Box>

@@ -10,6 +10,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: any) => props.i18nKey,
 }));
 
 const mockHandleModalClick = jest.fn();
