@@ -8,7 +8,7 @@ import {
   pagoPALink,
   postLoginLinks,
   preLoginLinks,
-} from '../../utils/costants';
+} from '../../utility/costants';
 
 type Props = {
   onLanguageChanged?: (langCode: string) => void;

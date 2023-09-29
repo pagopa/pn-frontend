@@ -15,7 +15,7 @@ import './index.css';
 import { initStore, store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import { loadPfConfiguration } from './services/configuration.service';
-import { initOneTrust } from './utils/onetrust';
+import { initOneTrust } from './utility/onetrust';
 
 async function doTheRender() {
   const app = document.getElementById('root');

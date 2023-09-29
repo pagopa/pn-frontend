@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { fireEvent, render, screen } from '../../../test-utils';
-import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
+import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
 import Footer from '../Footer';
 
 const mockOpenFn = jest.fn();

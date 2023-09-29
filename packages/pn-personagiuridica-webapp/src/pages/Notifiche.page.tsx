@@ -1,32 +1,33 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
 import {
-  calculatePages,
+  ApiErrorWrapper,
   CustomPagination,
   PaginationData,
   Sort,
   TitleBox,
-  useIsMobile,
-  getNextDay,
+  calculatePages,
   formatToTimezoneString,
-  ApiErrorWrapper,
+  getNextDay,
   useHasPermissions,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import GroupSelector from '../components/Notifications/GroupSelector';
+import MobileNotifications from '../components/Notifications/MobileNotifications';
+import { NotificationColumn } from '../models/Notifications';
+import { PNRole } from '../redux/auth/types';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import DesktopNotifications from '../component/Notifications/DesktopNotifications';
-import MobileNotifications from '../component/Notifications/MobileNotifications';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import GroupSelector from '../component/Notifications/GroupSelector';
-import { PNRole } from '../redux/auth/types';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
-import { NotificationColumn } from '../models/Notifications';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 type Props = {
   isDelegatedPage?: boolean;

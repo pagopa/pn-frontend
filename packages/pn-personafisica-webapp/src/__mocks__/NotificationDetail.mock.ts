@@ -15,7 +15,7 @@ import {
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
-import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
+import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
 
 const notificationStatusHistory: Array<NotificationStatusHistory> = [
   {

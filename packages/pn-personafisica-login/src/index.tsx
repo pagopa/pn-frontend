@@ -10,7 +10,7 @@ import './i18n';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { loadLoginConfiguration } from './services/configuration.service';
-import { initOneTrust } from './utils/onetrust';
+import { initOneTrust } from './utility/onetrust';
 
 async function doTheRender() {
   const app = document.getElementById('root');

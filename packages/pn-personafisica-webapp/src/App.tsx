@@ -17,8 +17,7 @@ import {
   Layout,
   ResponseEventDispatcher,
   SideMenu,
-  SideMenuItem, // momentarily commented for pn-5157
-  // AppRouteType,
+  SideMenuItem, // AppRouteType,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -38,10 +37,10 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
-import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
-import { TrackEventType } from './utils/events';
-import { trackEventByType } from './utils/mixpanel';
-import './utils/onetrust';
+import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
+import { TrackEventType } from './utility/events';
+import { trackEventByType } from './utility/mixpanel';
+import './utility/onetrust';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [

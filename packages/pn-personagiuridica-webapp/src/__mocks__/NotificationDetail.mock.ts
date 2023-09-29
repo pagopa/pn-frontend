@@ -15,7 +15,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { AnalogDetails } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 
-import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
+import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
 
 const statusHistory: Array<NotificationStatusHistory> = [
   {

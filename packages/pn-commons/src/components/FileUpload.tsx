@@ -27,7 +27,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
-import { calcSha256String, parseFileSize } from '../utils/file.utility';
+import { calcSha256String, parseFileSize } from '../utility/file.utility';
 import CustomTooltip from './CustomTooltip';
 
 type Props = {
