@@ -1,18 +1,19 @@
+import currentLocale from 'date-fns/locale/it';
+import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormikErrors, FormikTouched, FormikValues } from 'formik';
-import currentLocale from 'date-fns/locale/it';
+
 import { Grid, TextField, TextFieldProps } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   CustomDatePicker,
-  DatePickerTypes,
   DATE_FORMAT,
+  DatePickerTypes,
+  formatIun,
   tenYearsAgo,
   today,
   useIsMobile,
-  formatIun,
 } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -43,6 +44,13 @@ const FilterNotificationsFormBody = ({
 }: Props) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
+
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    const trimmedValue = e.clipboardData.getData('text').trim();
+    // eslint-disable-next-line functional/immutable-data
+    (e.target as HTMLInputElement).value = trimmedValue;
+    await formikInstance.setFieldValue((e.target as HTMLInputElement).id, trimmedValue, false);
+  };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (formikInstance.errors) {
@@ -78,6 +86,7 @@ const FilterNotificationsFormBody = ({
           id="iunMatch"
           value={formikInstance.values.iunMatch}
           onChange={handleChangeTouched}
+          onPaste={handlePaste}
           label={t('filters.iun', { ns: 'notifiche' })}
           name="iunMatch"
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
