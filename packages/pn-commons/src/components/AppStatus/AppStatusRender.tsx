@@ -25,6 +25,7 @@ type Props = {
   clearPagination: () => void;
   setPagination: (data: PaginationData) => void;
   actionIds: { GET_CURRENT_STATUS: string; GET_DOWNTIME_LOG_PAGE: string };
+  children?: React.ReactNode;
 };
 
 export const AppStatusRender = (props: Props) => {

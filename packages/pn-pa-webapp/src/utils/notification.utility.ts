@@ -176,7 +176,7 @@ export function getDuplicateValuesByKeys<T>(
   const getValue = (item: T) => {
     let valueByKeys = '';
     for (const element of keys) {
-      valueByKeys += item[element] ?? '';
+      valueByKeys = valueByKeys + item[element] ?? '';
     }
     return valueByKeys;
   };
