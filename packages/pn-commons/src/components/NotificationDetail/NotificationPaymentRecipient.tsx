@@ -21,7 +21,11 @@ type Props = {
   payments: PaymentsData;
   isCancelled: boolean;
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  handleDownloadAttachamentPagoPA: (name: PaymentAttachmentSName) => void;
+  handleDownloadAttachment: (
+    name: PaymentAttachmentSName,
+    recipientIdx: number,
+    attachmentIdx?: number
+  ) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
@@ -29,7 +33,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   isCancelled,
   onPayClick,
-  handleDownloadAttachamentPagoPA,
+  handleDownloadAttachment,
   handleReloadPayment,
 }) => {
   const { pagoPaF24, f24Only } = payments;
@@ -84,6 +88,16 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const handleDeselectPayment = () => {
     setSelectedPayment(null);
+  };
+
+  const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
+    if (selectedPayment && selectedPayment.recipientIdx) {
+      handleDownloadAttachment(
+        attachmentName,
+        selectedPayment.recipientIdx,
+        selectedPayment.attachmentIdx
+      );
+    }
   };
 
   return (
@@ -159,7 +173,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 variant="outlined"
                 data-testid="download-pagoPA-notice-button"
                 disabled={!selectedPayment}
-                onClick={() => handleDownloadAttachamentPagoPA(PaymentAttachmentSName.PAGOPA)}
+                onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
               >
                 <Download fontSize="small" sx={{ mr: 1 }} />
                 {getLocalizedOrDefaultLabel(
@@ -174,7 +188,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   <Typography variant="body2">
                     {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
                   </Typography>
-                  <ButtonNaked color="primary">
+                  <ButtonNaked
+                    color="primary"
+                    onClick={() => downloadAttachment(PaymentAttachmentSName.F24)}
+                  >
                     <Download fontSize="small" sx={{ mr: 1 }} />
                     {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
                   </ButtonNaked>
@@ -195,7 +212,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
           {f24Only.map((f24Item, index) => (
             <Box key={index}>
-              <NotificationPaymentF24Item f24Item={f24Item} />
+              <NotificationPaymentF24Item
+                f24Item={f24Item}
+                handleDownloadAttachment={handleDownloadAttachment}
+              />
             </Box>
           ))}
         </Fragment>

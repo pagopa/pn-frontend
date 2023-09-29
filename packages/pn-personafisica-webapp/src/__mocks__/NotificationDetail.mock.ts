@@ -530,8 +530,8 @@ export const cancelledNotificationDTO: NotificationDetail = {
 };
 
 export const paymentsData: PaymentsData = {
-  pagoPaF24: getPagoPaF24Payments(payments),
-  f24Only: getF24Payments(payments),
+  pagoPaF24: getPagoPaF24Payments(payments, 2),
+  f24Only: getF24Payments(payments, 2),
 };
 
 export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {

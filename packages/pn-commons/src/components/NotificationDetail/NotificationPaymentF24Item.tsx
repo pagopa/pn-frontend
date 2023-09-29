@@ -3,14 +3,29 @@ import { Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { F24PaymentDetails } from '../../types';
+import { F24PaymentDetails, PaymentAttachmentSName } from '../../types';
 
 interface Props {
   f24Item: F24PaymentDetails;
+  handleDownloadAttachment: (
+    name: PaymentAttachmentSName,
+    recipientIdx: number,
+    attachmentIdx?: number
+  ) => void;
 }
 
-const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item }) => {
+const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, handleDownloadAttachment }) => {
   const isMobile = useIsMobile();
+
+  const downloadF24 = () => {
+    if (f24Item.recipientIdx) {
+      handleDownloadAttachment(
+        PaymentAttachmentSName.F24,
+        f24Item.recipientIdx,
+        f24Item.attachmentIdx
+      );
+    }
+  };
   return (
     <Box
       p={2}
@@ -40,7 +55,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item }) => {
         </Typography>
       </Box>
       <Box>
-        <ButtonNaked color="primary">
+        <ButtonNaked color="primary" onClick={downloadF24}>
           <Download fontSize="small" sx={{ mr: 1 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </ButtonNaked>

@@ -479,8 +479,8 @@ export const cancelledNotificationDTO: NotificationDetail = {
 };
 
 export const paymentsData: PaymentsData = {
-  pagoPaF24: getPagoPaF24Payments(payments),
-  f24Only: getF24Payments(payments),
+  pagoPaF24: getPagoPaF24Payments(payments, 1),
+  f24Only: getF24Payments(payments, 1),
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));

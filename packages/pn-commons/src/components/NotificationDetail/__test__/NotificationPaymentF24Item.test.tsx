@@ -9,7 +9,9 @@ describe('NotificationPaymentF24Item Component', () => {
 
   it('renders NotificationPaymentPagoPAItem - should show title of f24Item', () => {
     const item = { ...f24Item, title: 'F24 Rata' };
-    const result = render(<NotificationPaymentF24Item f24Item={item} loading={false} />);
+    const result = render(
+      <NotificationPaymentF24Item f24Item={item} handleDownloadAttachment={() => void 0} />
+    );
 
     expect(result.container).toHaveTextContent(item.title);
   });

@@ -8,8 +8,8 @@ import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
 describe('NotificationPaymentRecipient Component', () => {
   const paymentsData: PaymentsData = {
-    pagoPaF24: getPagoPaF24Payments(payments),
-    f24Only: getF24Payments(payments),
+    pagoPaF24: getPagoPaF24Payments(payments, 0),
+    f24Only: getF24Payments(payments, 0),
   };
 
   it('should render component title and subtitle', () => {
@@ -17,7 +17,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -42,7 +42,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -60,7 +60,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -89,7 +89,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
       />
@@ -117,7 +117,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={downloadAttachmentMk}
+        handleDownloadAttachment={downloadAttachmentMk}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -143,7 +143,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -178,7 +178,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={payment}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -198,7 +198,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={true}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
