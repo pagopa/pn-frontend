@@ -871,20 +871,10 @@ const populateOtherDocuments = (
 
 export const getF24Payments = (
   payments: Array<NotificationDetailPayment>,
-  recipientIdx: number,
-  onlyF24: boolean = true
+  recipientIdx: number
 ): Array<F24PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
-    if (onlyF24) {
-      if (!payment.pagoPA && payment.f24) {
-        // eslint-disable-next-line functional/immutable-data
-        arr.push({
-          ...payment.f24,
-          recipientIdx,
-          attachmentIdx: index,
-        });
-      }
-    } else if (payment.f24) {
+    if (!payment.pagoPA && payment.f24) {
       // eslint-disable-next-line functional/immutable-data
       arr.push({
         ...payment.f24,
@@ -892,6 +882,7 @@ export const getF24Payments = (
         attachmentIdx: index,
       });
     }
+
     return arr;
   }, [] as Array<F24PaymentDetails>);
 

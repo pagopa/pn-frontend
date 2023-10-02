@@ -113,6 +113,10 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
+    const recipientIdx = recipients.findIndex(
+      (recipient) => recipient.taxId === currentRecipient?.taxId
+    );
+
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     const action = await store.dispatch(
       getReceivedNotification({
@@ -123,6 +127,14 @@ describe('Notification detail redux state tests', () => {
     );
     expect(action.type).toBe('getReceivedNotification/fulfilled');
     expect(action.payload).toEqual(notificationToFe);
+
+    const state = store.getState().notificationState;
+    const payments = state.paymentsData.pagoPaF24;
+    expect(payments).not.toHaveLength(0);
+
+    payments.forEach((payment) => {
+      expect(payment.pagoPA?.recipientIdx).toBe(recipientIdx);
+    });
   });
 
   it('Should be able to fetch the notification document', async () => {
@@ -388,30 +400,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
     expect(payload).toStrictEqual(paymentHistory);
     expect(actualState).toStrictEqual(newState);
-  });
-
-  it('Every payment should have recipientIdx', async () => {
-    const recipientIdx = recipients.findIndex(
-      (recipient) => recipient.taxId === currentRecipient?.taxId
-    );
-
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    const action = await store.dispatch(
-      getReceivedNotification({
-        iun: notificationDTO.iun,
-        currentUserTaxId: currentRecipient!.taxId,
-        delegatorsFromStore: [],
-      })
-    );
-
-    expect(action.type).toBe('getReceivedNotification/fulfilled');
-    const state = store.getState().notificationState;
-    const payments = state.paymentsData.pagoPaF24;
-    expect(payments).not.toHaveLength(0);
-
-    payments.forEach((payment) => {
-      expect(payment.pagoPA?.recipientIdx).toBe(recipientIdx);
-    });
   });
 
   it('Every payment should have attachmentIdx', async () => {

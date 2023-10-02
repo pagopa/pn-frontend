@@ -2,7 +2,12 @@ import React from 'react';
 
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
-import { PaymentStatus, PaymentsData } from '../../../types';
+import {
+  PagoPAPaymentFullDetails,
+  PaymentAttachmentSName,
+  PaymentStatus,
+  PaymentsData,
+} from '../../../types';
 import { getF24Payments, getPagoPaF24Payments } from '../../../utility/notification.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
@@ -208,5 +213,42 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(alert).toBeInTheDocument();
     expect(subtitle).not.toBeInTheDocument();
+  });
+
+  it('should call handleDownloadAttachment on download button click', async () => {
+    const handleDownloadAttachment = jest.fn();
+    const payment: PaymentsData = {
+      pagoPaF24: [
+        {
+          ...paymentsData.pagoPaF24[0],
+          pagoPA: {
+            ...paymentsData.pagoPaF24[0].pagoPA,
+            recipientIdx: 1,
+            attachmentIdx: 1,
+          } as PagoPAPaymentFullDetails,
+        },
+      ],
+      f24Only: [],
+    };
+
+    const { getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={payment}
+        isCancelled={false}
+        handleDownloadAttachment={handleDownloadAttachment}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
+    const downloadButton = getByTestId('download-pagoPA-notice-button');
+
+    downloadButton.click();
+
+    expect(handleDownloadAttachment).toBeCalledTimes(1);
+    expect(handleDownloadAttachment).toHaveBeenCalledWith(
+      PaymentAttachmentSName.PAGOPA,
+      payment.pagoPaF24[0].pagoPA?.recipientIdx,
+      payment.pagoPaF24[0].pagoPA?.attachmentIdx
+    );
   });
 });

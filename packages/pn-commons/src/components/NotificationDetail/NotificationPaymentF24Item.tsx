@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Download } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -18,7 +19,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, handleDownloadAt
   const isMobile = useIsMobile();
 
   const downloadF24 = () => {
-    if (f24Item.recipientIdx) {
+    if (!_.isNil(f24Item.recipientIdx)) {
       handleDownloadAttachment(
         PaymentAttachmentSName.F24,
         f24Item.recipientIdx,
@@ -55,7 +56,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, handleDownloadAt
         </Typography>
       </Box>
       <Box>
-        <ButtonNaked color="primary" onClick={downloadF24}>
+        <ButtonNaked color="primary" onClick={downloadF24} data-testid="download-f24-button">
           <Download fontSize="small" sx={{ mr: 1 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </ButtonNaked>
