@@ -2,12 +2,7 @@ import { useEffect } from 'react';
 
 function downloadDocument(url: string) {
   /* eslint-disable functional/immutable-data */
-  const link = document.createElement('a');
-  link.href = url;
-  link.target = '_blank';
-  link.rel = 'noreferrer';
-  link.click();
-  /* eslint-enable functional/immutable-data */
+  window.location.href = url;
 }
 
 type Props = {
@@ -27,7 +22,9 @@ export function useDownloadDocument({ url, clearDownloadAction }: Props) {
   useEffect(() => {
     if (url) {
       downloadDocument(url);
-      clearDownloadAction && clearDownloadAction();
+      if (clearDownloadAction) {
+        clearDownloadAction();
+      }
     }
   }, [url, clearDownloadAction]);
 
