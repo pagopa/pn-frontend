@@ -10,7 +10,8 @@
       "allowBranch": [
         "main",
         "release/*",
-        "develop"
+        "develop",
+        "hotfix/*"
       ]
     }
   }
