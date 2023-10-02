@@ -159,7 +159,7 @@ const DesktopNotifications = ({
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
-      onClick={filterNotificationsRef.current.cleanFilters}
+      onClick={() => navigate(routes.RECAPITI)}
     >
       {children}
     </Link>
