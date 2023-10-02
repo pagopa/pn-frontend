@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -20,7 +20,11 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 export async function testMultiSelect(
@@ -181,6 +185,85 @@ describe('DelegationsOfTheCompany Component', () => {
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
     expect(cancelButton).toBeEnabled();
+  });
+
+  it('filters the results and show empty state', async () => {
+    mock
+      .onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined }), {
+        groups: ['group-2'],
+        status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
+      })
+      .reply(200, {
+        resultsPage: [],
+        moreResult: false,
+        nextPagesKey: [],
+      });
+    mock.onPost(DELEGATIONS_BY_DELEGATE({ size: 10, nextPageKey: undefined })).reply(200, {
+      resultsPage: arrayOfDelegators,
+      moreResult: false,
+      nextPagesKey: [],
+    });
+    const groups = [
+      {
+        id: 'group-1',
+        name: 'Group 1',
+        status: 'ACTIVE',
+      },
+      {
+        id: 'group-2',
+        name: 'Group 2',
+        status: 'ACTIVE',
+      },
+    ];
+    const status = [
+      { id: DelegationStatus.ACTIVE, name: 'deleghe.table.active' },
+      { id: DelegationStatus.PENDING, name: 'deleghe.table.pending' },
+      { id: DelegationStatus.REJECTED, name: 'deleghe.table.rejected' },
+    ];
+    const { container, queryByTestId, getByTestId } = render(<DelegationsOfTheCompany />, {
+      preloadedState: {
+        delegationsState: {
+          ...initialState,
+          delegations: {
+            delegators: arrayOfDelegators,
+          },
+          groups,
+        },
+      },
+    });
+    const form = container.querySelector('form');
+    const cancelButton = within(form!).getByTestId('cancelButton');
+    const confirmButton = within(form!).getByTestId('confirmButton');
+    expect(cancelButton).toBeInTheDocument();
+    expect(cancelButton).toBeDisabled();
+    expect(confirmButton).toBeInTheDocument();
+    expect(confirmButton).toBeDisabled();
+    await testAutocomplete(form!, 'groups', groups, true, 1, false);
+    await testMultiSelect(form!, 'status', status, 0, true);
+    await testMultiSelect(form!, 'status', status, 2, false);
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post.length).toBe(1);
+      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=10');
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        groups: ['group-2'],
+        status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
+      });
+    });
+    let table = queryByTestId('table(notifications)');
+    expect(table).not.toBeInTheDocument();
+    expect(container).toHaveTextContent(/deleghe.no_delegators_after_filters/i);
+    // clicks on empty state action
+    const button = getByTestId('link-remove-filters');
+    fireEvent.click(button);
+    await waitFor(() => {
+      expect(mock.history.post.length).toBe(2);
+      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=10');
+    });
+    expect(container).not.toHaveTextContent(/deleghe.no_delegators_after_filters/i);
+    table = getByTestId('table(notifications)');
+    expect(table).toBeInTheDocument();
   });
 
   it('change pagination size', async () => {

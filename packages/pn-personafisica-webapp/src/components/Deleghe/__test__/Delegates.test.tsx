@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
@@ -20,7 +20,11 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 describe('Delegates Component', () => {
@@ -33,6 +37,11 @@ describe('Delegates Component', () => {
     expect(delegatesTable).not.toBeInTheDocument();
     expect(container).toHaveTextContent(/deleghe.add/i);
     expect(container).toHaveTextContent(/deleghe.no_delegates/i);
+    // clicks on empty state action
+    const button = getByTestId('link-add-delegate');
+    fireEvent.click(button);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
   });
 
   it('navigates to the add delegation page', () => {

@@ -35,6 +35,57 @@ type Props = {
   onApiKeys: () => void;
 };
 
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const LinkApiKey: React.FC<{ onApiKeys: () => void }> = ({ children, onApiKeys }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-api-keys')}
+      key="api-keys"
+      data-testid="link-api-keys"
+      onClick={onApiKeys}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const LinkCreateNotification: React.FC<{ onManualSend: () => void }> = ({
+  children,
+  onManualSend,
+}) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-second"
+      aria-label={t('empty-state.aria-label-create-notification')}
+      key="create-notification"
+      data-testid="link-create-notification"
+      onClick={onManualSend}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const DesktopNotifications = ({
   notifications,
   sort,
@@ -158,45 +209,6 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  const LinkRemoveFilters: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={filterNotificationsRef.current.cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-
-  const LinkApiKey: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-api-keys')}
-      key="api-keys"
-      data-testid="link-api-keys"
-      onClick={onApiKeys}
-    >
-      {children}
-    </Link>
-  );
-
-  const LinkCreateNotification: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-second"
-      aria-label={t('empty-state.aria-label-create-notification')}
-      key="create-notification"
-      data-testid="link-create-notification"
-      onClick={onManualSend}
-    >
-      {children}
-    </Link>
-  );
-
   return (
     <>
       {notifications && (
@@ -219,15 +231,23 @@ const DesktopNotifications = ({
                 <Trans
                   ns={'notifiche'}
                   i18nKey={'empty-state.filtered'}
-                  components={[<LinkRemoveFilters key={'remove-filters'} />]}
+                  components={[
+                    <LinkRemoveFilters
+                      key={'remove-filters'}
+                      cleanFilters={filterNotificationsRef.current.cleanFilters}
+                    />,
+                  ]}
                 />
               ) : (
                 <Trans
                   ns={'notifiche'}
                   i18nKey={'empty-state.no-notifications'}
                   components={[
-                    <LinkApiKey key={'api-keys'} />,
-                    <LinkCreateNotification key={'create-notification'} />,
+                    <LinkApiKey key={'api-keys'} onApiKeys={onApiKeys} />,
+                    <LinkCreateNotification
+                      key={'create-notification'}
+                      onManualSend={onManualSend}
+                    />,
                   ]}
                 />
               )}

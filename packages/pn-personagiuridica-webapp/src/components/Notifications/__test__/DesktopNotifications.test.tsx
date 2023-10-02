@@ -45,7 +45,7 @@ describe('DesktopNotifications Component', () => {
     expect(filters).not.toBeInTheDocument();
     const norificationTable = result!.queryByTestId('notificationsTable');
     expect(norificationTable).not.toBeInTheDocument();
-    expect(result.container).toHaveTextContent(/empty-state.message/i);
+    expect(result.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
   it('renders component - no notification - delegate access', async () => {
@@ -107,7 +107,7 @@ describe('DesktopNotifications Component', () => {
     result!.rerender(<DesktopNotifications notifications={[]} />);
     const filters = await waitFor(() => result!.queryByTestId('filter-form'));
     expect(filters).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(/empty-state.filter-message/i);
+    expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
   });
 
   it('go to notification detail', async () => {

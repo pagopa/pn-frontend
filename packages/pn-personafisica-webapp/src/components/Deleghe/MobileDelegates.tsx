@@ -23,6 +23,25 @@ import { trackEventByType } from '../../utility/mixpanel';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
+const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
+  children,
+  handleAddDelegationClick,
+}) => {
+  const { t } = useTranslation(['deleghe']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('deleghe.add')}
+      key="add-delegate"
+      data-testid="link-add-delegate"
+      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const MobileDelegates = () => {
   const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
@@ -107,19 +126,6 @@ const MobileDelegates = () => {
     setShowCodeModal({ open: false, name: '', code: '' });
   };
 
-  const LinkAddDelegate: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('deleghe.add')}
-      key="add-delegate"
-      data-testid="link-add-delegate"
-      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-    >
-      {children}
-    </Link>
-  );
-
   return (
     <>
       <CodeModal
@@ -159,7 +165,12 @@ const MobileDelegates = () => {
               <Trans
                 i18nKey={'deleghe.no_delegates'}
                 ns={'deleghe'}
-                components={[<LinkAddDelegate key={'add-delegate'} />]}
+                components={[
+                  <LinkAddDelegate
+                    key={'add-delegate'}
+                    handleAddDelegationClick={handleAddDelegationClick}
+                  />,
+                ]}
               />
             </EmptyState>
           )}

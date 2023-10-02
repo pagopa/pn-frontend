@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -21,7 +21,11 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 describe('MobileNotifications Component', () => {
@@ -46,6 +50,11 @@ describe('MobileNotifications Component', () => {
     const norificationCards = result!.queryAllByTestId('itemCard');
     expect(norificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
+    // clicks on empty state action
+    const button = result.getByTestId('link-route-contacts');
+    fireEvent.click(button);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.RECAPITI);
   });
 
   it('renders MobileNotifications - notifications', async () => {

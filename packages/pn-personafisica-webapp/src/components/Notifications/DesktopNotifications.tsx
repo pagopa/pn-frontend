@@ -34,6 +34,39 @@ type Props = {
   currentDelegator?: Delegator;
 };
 
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation('notifiche');
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const LinkRouteContacts: React.FC = ({ children }) => {
+  const { t } = useTranslation('notifiche');
+  const navigate = useNavigate();
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-route-contacts')}
+      key="route-contacts"
+      data-testid="link-route-contacts"
+      onClick={() => navigate(routes.RECAPITI)}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const DesktopNotifications = ({
   notifications,
   sort,
@@ -139,32 +172,6 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  const LinkRemoveFilters: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={filterNotificationsRef.current.cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-
-  const LinkRouteContacts: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-route-contacts')}
-      key="route-contacts"
-      data-testid="link-route-contacts"
-      onClick={() => navigate(routes.RECAPITI)}
-    >
-      {children}
-    </Link>
-  );
-
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     if (currentDelegator) {
@@ -201,16 +208,22 @@ const DesktopNotifications = ({
             <Trans
               ns={'notifiche'}
               i18nKey={'empty-state.filtered'}
-              components={[<LinkRemoveFilters key={'remove-filters'} />]}
+              components={[
+                <LinkRemoveFilters
+                  key={'remove-filters'}
+                  cleanFilters={filterNotificationsRef.current.cleanFilters}
+                />,
+              ]}
             />
           )}
-          {!filtersApplied && currentDelegator ? (
+          {!filtersApplied && currentDelegator && (
             <Trans
               values={{ name: currentDelegator.delegator?.displayName }}
               ns={'notifiche'}
-              i18nKey={'empty-state.delegates'}
+              i18nKey={'empty-state.delegate'}
             />
-          ) : (
+          )}
+          {!filtersApplied && !currentDelegator && (
             <Trans
               ns={'notifiche'}
               i18nKey={'empty-state.no-notifications'}

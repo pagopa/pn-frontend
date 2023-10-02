@@ -60,6 +60,25 @@ const initialEmptyValues: {
   taxId: '',
 };
 
+const LinkRemoveFilters: React.FC<{ clearFiltersHandler: () => void }> = ({
+  children,
+  clearFiltersHandler,
+}) => {
+  const { t } = useTranslation(['deleghe']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={clearFiltersHandler}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const DelegationsOfTheCompany = () => {
   const { t } = useTranslation(['deleghe', 'common']);
   const dispatch = useAppDispatch();
@@ -342,19 +361,6 @@ const DelegationsOfTheCompany = () => {
     getDelegatorsData();
   }, [filters]);
 
-  const LinkRemoveFilters: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={clearFiltersHandler}
-    >
-      {children}
-    </Link>
-  );
-
   return (
     <Box data-testid="delegationsOfTheCompany">
       <Typography variant="h6" mb={4}>
@@ -381,7 +387,12 @@ const DelegationsOfTheCompany = () => {
                 <Trans
                   i18nKey={'deleghe.no_delegators_after_filters'}
                   ns={'deleghe'}
-                  components={[<LinkRemoveFilters key={'remove-filters'} />]}
+                  components={[
+                    <LinkRemoveFilters
+                      key={'remove-filters'}
+                      clearFiltersHandler={clearFiltersHandler}
+                    />,
+                  ]}
                 />
               </EmptyState>
             }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
@@ -13,6 +13,7 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
+import * as routes from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
 const mockNavigateFn = jest.fn();
@@ -28,7 +29,11 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: { i18nKey: string }) => props.i18nKey,
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 describe('DesktopNotifications Component', () => {
@@ -39,11 +44,16 @@ describe('DesktopNotifications Component', () => {
     await act(async () => {
       result = render(<DesktopNotifications notifications={[]} />);
     });
-    const filters = result!.queryByTestId('filter-form');
+    const filters = result.queryByTestId('filter-form');
     expect(filters).not.toBeInTheDocument();
-    const norificationTable = result!.queryByTestId('notificationsTable');
+    const norificationTable = result.queryByTestId('notificationsTable');
     expect(norificationTable).not.toBeInTheDocument();
     expect(result.container).toHaveTextContent(/empty-state.no-notifications/i);
+    // clicks on empty state action
+    const button = result.getByTestId('link-route-contacts');
+    fireEvent.click(button);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.RECAPITI);
   });
 
   it('renders component - no notification - delegate access', async () => {
@@ -53,9 +63,9 @@ describe('DesktopNotifications Component', () => {
         <DesktopNotifications notifications={[]} currentDelegator={arrayOfDelegators[0]} />
       );
     });
-    const filters = result!.queryByTestId('filter-form');
+    const filters = result.queryByTestId('filter-form');
     expect(filters).not.toBeInTheDocument();
-    const norificationTable = result!.queryByTestId('notificationsTable');
+    const norificationTable = result.queryByTestId('notificationsTable');
     expect(norificationTable).not.toBeInTheDocument();
     expect(result.container).toHaveTextContent(/empty-state.delegate/i);
   });
@@ -65,9 +75,9 @@ describe('DesktopNotifications Component', () => {
     await act(async () => {
       result = render(<DesktopNotifications notifications={notificationsToFe.resultsPage} />);
     });
-    const filters = result!.getByTestId('filter-form');
+    const filters = result.getByTestId('filter-form');
     expect(filters).toBeInTheDocument();
-    const norificationTableRows = result!.getAllByTestId('notificationsTable.row');
+    const norificationTableRows = result.getAllByTestId('notificationsTable.row');
     expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
@@ -88,17 +98,17 @@ describe('DesktopNotifications Component', () => {
       });
     });
     // the rerendering must be done to take the useRef updates
-    result!.rerender(<DesktopNotifications notifications={[]} />);
-    const filters = await waitFor(() => result!.queryByTestId('filter-form'));
+    result.rerender(<DesktopNotifications notifications={[]} />);
+    const filters = await waitFor(() => result.queryByTestId('filter-form'));
     expect(filters).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
+    expect(result.container).toHaveTextContent(/empty-state.filtered/i);
   });
 
   it('go to notification detail', async () => {
     await act(async () => {
       result = render(<DesktopNotifications notifications={notificationsToFe.resultsPage} />);
     });
-    const rows = result!.getAllByTestId('notificationsTable.row');
+    const rows = result.getAllByTestId('notificationsTable.row');
     const notificationsTableCell = within(rows[0]).getAllByRole('cell');
     fireEvent.click(notificationsTableCell[0]);
     await waitFor(() => {

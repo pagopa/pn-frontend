@@ -39,7 +39,7 @@ const LinkNewApiKey: React.FC = ({ children }) => {
     <Link
       component={'button'}
       id="call-to-action-first"
-      aria-label={t('empty-state.empty-action-label')}
+      aria-label={t('empty-action-label')}
       key="new-api-key"
       data-testid="link-new-api-key"
       onClick={() => navigate(routes.NUOVA_API_KEY)}

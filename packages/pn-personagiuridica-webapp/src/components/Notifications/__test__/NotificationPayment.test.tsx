@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
   AppResponseMessage,

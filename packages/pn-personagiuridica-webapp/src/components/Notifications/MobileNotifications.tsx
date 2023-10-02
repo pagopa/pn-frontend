@@ -52,6 +52,22 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const MobileNotifications = ({
   notifications,
   sort,
@@ -218,19 +234,6 @@ const MobileNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  const LinkRemoveFilters: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={filterNotificationsRef.current.cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-
   return (
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
@@ -273,7 +276,12 @@ const MobileNotifications = ({
             <Trans
               i18nKey={'empty-state.filtered'}
               ns={'notifiche'}
-              components={[<LinkRemoveFilters key={'remove-filters'} />]}
+              components={[
+                <LinkRemoveFilters
+                  key={'remove-filters'}
+                  cleanFilters={filterNotificationsRef.current.cleanFilters}
+                />,
+              ]}
             />
           )}
           {!filtersApplied && isDelegatedPage && (

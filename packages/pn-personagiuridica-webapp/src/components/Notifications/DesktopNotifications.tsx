@@ -35,6 +35,22 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const DesktopNotifications = ({
   notifications,
   sort,
@@ -178,19 +194,6 @@ const DesktopNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
-  const LinkRemoveFilters: React.FC = ({ children }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.aria-label-remove-filters')}
-      key="remove-filters"
-      data-testid="link-remove-filters"
-      onClick={filterNotificationsRef.current.cleanFilters}
-    >
-      {children}
-    </Link>
-  );
-
   return (
     <>
       <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
@@ -210,7 +213,12 @@ const DesktopNotifications = ({
             <Trans
               i18nKey={'empty-state.filtered'}
               ns={'notifiche'}
-              components={[<LinkRemoveFilters key={'remove-filters'} />]}
+              components={[
+                <LinkRemoveFilters
+                  key={'remove-filters'}
+                  cleanFilters={filterNotificationsRef.current.cleanFilters}
+                />,
+              ]}
             />
           )}
           {!filtersApplied && isDelegatedPage && (
