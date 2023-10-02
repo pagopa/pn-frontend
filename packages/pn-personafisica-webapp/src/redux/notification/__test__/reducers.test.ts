@@ -133,6 +133,12 @@ describe('Notification detail redux state tests', () => {
     expect(payments).not.toHaveLength(0);
 
     payments.forEach((payment) => {
+      const attachmentIdx = payments.findIndex(
+        (paymentMock) =>
+          payment.pagoPA?.noticeCode === paymentMock.pagoPA?.noticeCode &&
+          payment.pagoPA?.creditorTaxId === paymentMock.pagoPA?.creditorTaxId
+      );
+      expect(payment.pagoPA?.attachmentIdx).toBe(attachmentIdx);
       expect(payment.pagoPA?.recipientIdx).toBe(recipientIdx);
     });
   });
@@ -400,44 +406,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
     expect(payload).toStrictEqual(paymentHistory);
     expect(actualState).toStrictEqual(newState);
-  });
-
-  it('Every payment should have attachmentIdx', async () => {
-    const mockedStore = createMockedStore({
-      notificationState: {
-        notification: notificationToFe,
-        timeline: notificationToFe.timeline,
-        paymentsData,
-      },
-    });
-
-    const recipientIdx = recipients.findIndex(
-      (recipient) => recipient.taxId === currentRecipient?.taxId
-    );
-
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    const action = await mockedStore.dispatch(
-      getReceivedNotification({
-        iun: notificationDTO.iun,
-        currentUserTaxId: currentRecipient!.taxId,
-        delegatorsFromStore: [],
-      })
-    );
-
-    expect(action.type).toBe('getReceivedNotification/fulfilled');
-    const state = mockedStore.getState().notificationState;
-    const paymentsFromStore = state.paymentsData.pagoPaF24;
-    expect(paymentsFromStore).not.toHaveLength(0);
-
-    paymentsFromStore.forEach((payment) => {
-      expect(payment.pagoPA?.recipientIdx).toBe(recipientIdx);
-      const attachmentIdx = payments.findIndex(
-        (paymentMock) =>
-          payment.pagoPA?.noticeCode === paymentMock.pagoPA?.noticeCode &&
-          payment.pagoPA?.creditorTaxId === paymentMock.pagoPA?.creditorTaxId
-      );
-      expect(payment.pagoPA?.attachmentIdx).toBe(attachmentIdx);
-    });
   });
 
   it('Should be able to fetch payment url', async () => {
