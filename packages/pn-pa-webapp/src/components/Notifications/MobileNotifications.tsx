@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 import {
   CardAction,
   CardElement,
@@ -38,6 +38,57 @@ type Props = {
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
   onApiKeys: () => void;
+};
+
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const LinkApiKey: React.FC<{ onApiKeys: () => void }> = ({ children, onApiKeys }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-api-keys')}
+      key="api-keys"
+      data-testid="link-api-keys"
+      onClick={onApiKeys}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const LinkCreateNotification: React.FC<{ onManualSend: () => void }> = ({
+  children,
+  onManualSend,
+}) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-second"
+      aria-label={t('empty-state.aria-label-create-notification')}
+      key="create-notification"
+      data-testid="link-create-notification"
+      onClick={onManualSend}
+    >
+      {children}
+    </Link>
+  );
 };
 
 const MobileNotifications = ({
@@ -186,23 +237,6 @@ const MobileNotifications = ({
   }, [] as Array<CardSort<NotificationSortField>>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-  const EmptyStateProps = {
-    emptyMessage: filtersApplied ? t('empty-state.filter-message') : t('empty-state.message'),
-    emptyActionLabel: filtersApplied
-      ? t('empty-state.filter-action')
-      : t('menu.api-key', { ns: 'common' }),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied
-      ? undefined
-      : {
-          emptyMessage: t('empty-state.secondary-message'),
-          emptyActionLabel: t('empty-state.secondary-action'),
-          emptyActionCallback: () => {
-            onManualSend();
-          },
-        },
-  };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
@@ -237,7 +271,31 @@ const MobileNotifications = ({
           }}
         />
       ) : (
-        <EmptyState {...EmptyStateProps} />
+        <EmptyState
+          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
+        >
+          {filtersApplied ? (
+            <Trans
+              ns={'notifiche'}
+              i18nKey={'empty-state.filtered'}
+              components={[
+                <LinkRemoveFilters
+                  key={'remove-filters'}
+                  cleanFilters={filterNotificationsRef.current.cleanFilters}
+                />,
+              ]}
+            />
+          ) : (
+            <Trans
+              ns={'notifiche'}
+              i18nKey={'empty-state.no-notifications'}
+              components={[
+                <LinkApiKey key={'api-keys'} onApiKeys={onApiKeys} />,
+                <LinkCreateNotification key={'create-notification'} onManualSend={onManualSend} />,
+              ]}
+            />
+          )}
+        </EmptyState>
       )}
     </>
   );

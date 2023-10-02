@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, EmptyState, Item, SmartTable, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
 
@@ -16,6 +16,25 @@ import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
+
+const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
+  children,
+  handleAddDelegationClick,
+}) => {
+  const { t } = useTranslation(['deleghe']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('deleghe.add')}
+      key="add-delegate"
+      data-testid="link-add-delegate"
+      onClick={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
+    >
+      {children}
+    </Link>
+  );
+};
 
 const DelegatesByCompany = () => {
   const isMobile = useIsMobile();
@@ -182,11 +201,19 @@ const DelegatesByCompany = () => {
             currentSort={{ orderBy: '', order: 'asc' }}
           ></SmartTable>
         ) : (
-          <EmptyState
-            emptyActionLabel={t('deleghe.add')}
-            emptyMessage={t('deleghe.no_delegates', { organizationName: organization.name })}
-            emptyActionCallback={(_e, source = 'empty_state') => handleAddDelegationClick(source)}
-          />
+          <EmptyState>
+            <Trans
+              i18nKey={'deleghe.no_delegates'}
+              ns={'deleghe'}
+              components={[
+                <LinkAddDelegate
+                  key={'add-delegate'}
+                  handleAddDelegationClick={handleAddDelegationClick}
+                />,
+              ]}
+              values={{ organizationName: organization.name }}
+            />
+          </EmptyState>
         )}
       </ApiErrorWrapper>
     </Box>

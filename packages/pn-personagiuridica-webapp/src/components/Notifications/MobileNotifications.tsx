@@ -1,9 +1,9 @@
 import { Fragment, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Link, Typography } from '@mui/material';
 import {
   CardAction,
   CardElement,
@@ -23,7 +23,6 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
-import { Organization } from '../../redux/auth/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utility/events';
@@ -53,19 +52,21 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-// to avoid cognitive complexity warning - PN-5323
-function mainEmptyMessage(
-  filtersApplied: boolean,
-  isDelegatedPage: boolean,
-  organization: Organization,
-  t: any
-) {
-  return filtersApplied
-    ? t('empty-state.filter-message')
-    : isDelegatedPage
-    ? t('empty-state.delegate', { name: organization.name })
-    : t('empty-state.message', { name: organization.name });
-}
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
 
 const MobileNotifications = ({
   notifications,
@@ -206,12 +207,6 @@ const MobileNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
-  const EmptyStateProps = {
-    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : undefined,
-    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-  };
-
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     if (isDelegatedPage) {
@@ -274,7 +269,36 @@ const MobileNotifications = ({
           }}
         />
       ) : (
-        <EmptyState {...EmptyStateProps} />
+        <EmptyState
+          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
+        >
+          {filtersApplied && (
+            <Trans
+              i18nKey={'empty-state.filtered'}
+              ns={'notifiche'}
+              components={[
+                <LinkRemoveFilters
+                  key={'remove-filters'}
+                  cleanFilters={filterNotificationsRef.current.cleanFilters}
+                />,
+              ]}
+            />
+          )}
+          {!filtersApplied && isDelegatedPage && (
+            <Trans
+              i18nKey={'empty-state.delegate'}
+              ns={'notifiche'}
+              values={{ name: organization.name }}
+            />
+          )}
+          {!filtersApplied && !isDelegatedPage && (
+            <Trans
+              i18nKey={'empty-state.no-notifications'}
+              ns={'notifiche'}
+              values={{ name: organization.name }}
+            />
+          )}
+        </EmptyState>
       )}
     </Fragment>
   );

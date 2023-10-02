@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
@@ -15,6 +15,11 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 jest.mock('react-router-dom', () => ({
@@ -53,6 +58,11 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     expect(addButton).toBeInTheDocument();
     expect(container).toHaveTextContent(/deleghe.add/i);
     expect(container).toHaveTextContent(/deleghe.no_delegates/i);
+    // clicks on empty state action
+    const button = getByTestId('link-add-delegate');
+    fireEvent.click(button);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
   });
 
   it('render table with data', async () => {

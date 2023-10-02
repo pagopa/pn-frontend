@@ -41,11 +41,11 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "message": "L'ente non ha ancora inviato nessuna notifica. Usa le",
-    "secondary-message": "o fai un",
-    "secondary-action": "invio manuale",
-    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
-    "filter-action": "Rimuovi filtri"
+    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
+    "no-notifications": "L'ente non ha ancora inviato nessuna notifica. Usa le <0>API Key</0> o fai un <1>invio manuale</1>.",
+    "aria-label-remove-filters": "Rimuovi filtri",
+    "aria-label-api-keys": "API Key",
+    "aria-label-create-notification": "Invio manuale"
   },
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",

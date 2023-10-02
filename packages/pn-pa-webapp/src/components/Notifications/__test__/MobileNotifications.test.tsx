@@ -21,6 +21,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('MobileNotifications Component', () => {
@@ -51,9 +52,7 @@ describe('MobileNotifications Component', () => {
     expect(filters).not.toBeInTheDocument();
     const norificationCards = result!.queryAllByTestId('itemCard');
     expect(norificationCards).toHaveLength(0);
-    expect(result!.container).toHaveTextContent(
-      /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
-    );
+    expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
   it('renders MobileNotifications - notifications', async () => {
@@ -100,9 +99,7 @@ describe('MobileNotifications Component', () => {
     );
     const filters = await waitFor(() => result!.queryByTestId('dialogToggle'));
     expect(filters).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(
-      /empty-state.filter-message empty-state.filter-action/i
-    );
+    expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
   });
 
   it('clicks on go to detail action', async () => {

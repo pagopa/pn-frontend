@@ -114,10 +114,9 @@ const Delegators = () => {
               testId="delegatorsTable"
             />
           ) : (
-            <EmptyState
-              sentimentIcon={KnownSentiment.NONE}
-              emptyMessage={t('deleghe.no_delegators')}
-            />
+            <EmptyState sentimentIcon={KnownSentiment.NONE}>
+              {t('deleghe.no_delegators')}
+            </EmptyState>
           )}
         </ApiErrorWrapper>
       </Box>
