@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -342,7 +342,7 @@ const DelegationsOfTheCompany = () => {
     getDelegatorsData();
   }, [filters]);
 
-  const LinkRemoveFilters = ({ children }: { children?: ReactNode }) => (
+  const LinkRemoveFilters: React.FC = ({ children }) => (
     <Link
       component={'button'}
       id="call-to-action-first"

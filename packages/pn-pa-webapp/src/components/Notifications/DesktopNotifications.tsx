@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from 'react';
+import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -158,7 +158,7 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  const LinkRemoveFilters = ({ children }: { children?: ReactNode }) => (
+  const LinkRemoveFilters: React.FC = ({ children }) => (
     <Link
       component={'button'}
       id="call-to-action-first"
@@ -171,7 +171,7 @@ const DesktopNotifications = ({
     </Link>
   );
 
-  const LinkApiKey = ({ children }: { children?: ReactNode }) => (
+  const LinkApiKey: React.FC = ({ children }) => (
     <Link
       component={'button'}
       id="call-to-action-first"
@@ -184,7 +184,7 @@ const DesktopNotifications = ({
     </Link>
   );
 
-  const LinkCreateNotification = ({ children }: { children?: ReactNode }) => (
+  const LinkCreateNotification: React.FC = ({ children }) => (
     <Link
       component={'button'}
       id="call-to-action-second"

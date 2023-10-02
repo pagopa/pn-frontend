@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -144,7 +143,7 @@ const DelegatesByCompany = () => {
     }
   };
 
-  const LinkAddDelegate = ({ children }: { children?: ReactNode }) => (
+  const LinkAddDelegate: React.FC = ({ children }) => (
     <Link
       component={'button'}
       id="call-to-action-first"

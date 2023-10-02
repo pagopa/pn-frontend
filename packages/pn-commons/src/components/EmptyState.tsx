@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { SvgIconComponent } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 
@@ -8,11 +6,9 @@ import { iconForKnownSentiment } from '../types/EmptyState';
 
 export type Props = {
   sentimentIcon?: KnownSentiment | SvgIconComponent;
-  /** Secondary Message */
-  children?: ReactNode;
 };
 
-function EmptyState({ sentimentIcon = KnownSentiment.DISSATISFIED, children }: Props) {
+const EmptyState: React.FC<Props> = ({ sentimentIcon = KnownSentiment.DISSATISFIED, children }) => {
   const FinalIcon =
     typeof sentimentIcon === 'string' ? iconForKnownSentiment(sentimentIcon) : sentimentIcon;
   const linksSxProps = {
@@ -52,6 +48,6 @@ function EmptyState({ sentimentIcon = KnownSentiment.DISSATISFIED, children }: P
       </Typography>
     </Box>
   );
-}
+};
 
 export default EmptyState;

@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,10 +32,26 @@ type Props = {
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
+const LinkNewApiKey: React.FC = ({ children }) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation(['apikeys']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.empty-action-label')}
+      key="new-api-key"
+      data-testid="link-new-api-key"
+      onClick={() => navigate(routes.NUOVA_API_KEY)}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
-  const navigate = useNavigate();
   const [rows, setRows] = useState<Array<Item>>([]);
   const [tableKey, setTableKey] = useState(0);
   type ApiKeyContextMenuProps = {
@@ -301,19 +317,6 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     setRows(rowsMap);
     setTableKey(tableKey + 1); // This is needed to make ItemsTable to properly update itself.
   }, [apiKeys]);
-
-  const LinkNewApiKey = ({ children }: { children?: ReactNode }) => (
-    <Link
-      component={'button'}
-      id="call-to-action-first"
-      aria-label={t('empty-state.empty-action-label')}
-      key="new-api-key"
-      data-testid="link-new-api-key"
-      onClick={() => navigate(routes.NUOVA_API_KEY)}
-    >
-      {children}
-    </Link>
-  );
 
   return (
     <>
