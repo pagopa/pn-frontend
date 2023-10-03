@@ -23,6 +23,7 @@ describe('NotificationPaymentF24Item Component', () => {
       <NotificationPaymentF24Item
         f24Item={item}
         handleDownloadAttachment={handleDownloadAttachment}
+        isF24Ready
       />
     );
     const downloadButton = result.getByTestId('download-f24-button');

@@ -27,7 +27,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/v2/notifications/received/mocked-iun');
+    expect(route).toEqual('/delivery/v2.1/notifications/received/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
