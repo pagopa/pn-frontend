@@ -1051,8 +1051,8 @@ describe('parse notification & filters', () => {
 
 describe('Populate pagoPA and F24 payments', () => {
   const paymentsData: PaymentsData = {
-    pagoPaF24: getPagoPaF24Payments(payments),
-    f24Only: getF24Payments(payments),
+    pagoPaF24: getPagoPaF24Payments(payments, 0),
+    f24Only: getF24Payments(payments, 0),
   };
 
   it('return empty array if user payments is an empty array', () => {

@@ -2,14 +2,19 @@ import React from 'react';
 
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
-import { PaymentStatus, PaymentsData } from '../../../types';
+import {
+  PagoPAPaymentFullDetails,
+  PaymentAttachmentSName,
+  PaymentStatus,
+  PaymentsData,
+} from '../../../types';
 import { getF24Payments, getPagoPaF24Payments } from '../../../utility/notification.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
 describe('NotificationPaymentRecipient Component', () => {
   const paymentsData: PaymentsData = {
-    pagoPaF24: getPagoPaF24Payments(payments),
-    f24Only: getF24Payments(payments),
+    pagoPaF24: getPagoPaF24Payments(payments, 0),
+    f24Only: getF24Payments(payments, 0),
   };
 
   it('should render component title and subtitle', () => {
@@ -17,7 +22,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -42,7 +47,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -60,7 +65,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -89,7 +94,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
       />
@@ -117,7 +122,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={downloadAttachmentMk}
+        handleDownloadAttachment={downloadAttachmentMk}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -143,7 +148,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -178,7 +183,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={payment}
         isCancelled={false}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -198,7 +203,7 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={true}
-        handleDownloadAttachamentPagoPA={() => void 0}
+        handleDownloadAttachment={() => void 0}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -208,5 +213,42 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(alert).toBeInTheDocument();
     expect(subtitle).not.toBeInTheDocument();
+  });
+
+  it('should call handleDownloadAttachment on download button click', async () => {
+    const handleDownloadAttachment = jest.fn();
+    const payment: PaymentsData = {
+      pagoPaF24: [
+        {
+          ...paymentsData.pagoPaF24[0],
+          pagoPA: {
+            ...paymentsData.pagoPaF24[0].pagoPA,
+            recipientIdx: 1,
+            attachmentIdx: 1,
+          } as PagoPAPaymentFullDetails,
+        },
+      ],
+      f24Only: [],
+    };
+
+    const { getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={payment}
+        isCancelled={false}
+        handleDownloadAttachment={handleDownloadAttachment}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
+    const downloadButton = getByTestId('download-pagoPA-notice-button');
+
+    downloadButton.click();
+
+    expect(handleDownloadAttachment).toBeCalledTimes(1);
+    expect(handleDownloadAttachment).toHaveBeenCalledWith(
+      PaymentAttachmentSName.PAGOPA,
+      payment.pagoPaF24[0].pagoPA?.recipientIdx,
+      payment.pagoPaF24[0].pagoPA?.attachmentIdx
+    );
   });
 });

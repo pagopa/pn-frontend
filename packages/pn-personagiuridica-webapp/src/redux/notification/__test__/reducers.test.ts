@@ -21,6 +21,7 @@ import {
   cancelledNotificationToFe,
   notificationDTO,
   notificationToFe,
+  payments,
   paymentsData,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
@@ -92,6 +93,8 @@ const initialState = {
 describe('Notification detail redux state tests', () => {
   let mock: MockAdapter;
 
+  const currentRecipient = notificationDTO.recipients.find((rec) => rec.taxId);
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
@@ -112,6 +115,10 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
+    const recipientIdx = recipients.findIndex(
+      (recipient) => recipient.taxId === currentRecipient?.taxId
+    );
+
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     const action = await store.dispatch(
       getReceivedNotification({
@@ -120,6 +127,20 @@ describe('Notification detail redux state tests', () => {
     );
     expect(action.type).toBe('getReceivedNotification/fulfilled');
     expect(action.payload).toEqual(notificationToFe);
+
+    const state = store.getState().notificationState;
+    const payments = state.paymentsData.pagoPaF24;
+    expect(payments).not.toHaveLength(0);
+
+    payments.forEach((payment) => {
+      const attachmentIdx = payments.findIndex(
+        (paymentMock) =>
+          payment.pagoPA?.noticeCode === paymentMock.pagoPA?.noticeCode &&
+          payment.pagoPA?.creditorTaxId === paymentMock.pagoPA?.creditorTaxId
+      );
+      expect(payment.pagoPA?.attachmentIdx).toBe(attachmentIdx);
+      expect(payment.pagoPA?.recipientIdx).toBe(recipientIdx);
+    });
   });
 
   it('Should be able to fetch the notification document', async () => {
@@ -183,9 +204,14 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the pagopa document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const recipientIdx = 1;
     const url = 'http://pagopa-mocked-url.com';
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, { url });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
+    mock
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recipientIdx))
+      .reply(200, { url });
+    const action = await store.dispatch(
+      getPaymentAttachment({ iun, attachmentName, recipientIdx })
+    );
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(action.payload).toEqual({ url });
     const state = store.getState().notificationState;
@@ -195,9 +221,14 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the f24 document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.F24;
+    const recipientIdx = 1;
     const url = 'http://f24-mocked-url.com';
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, { url });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
+    mock
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recipientIdx))
+      .reply(200, { url });
+    const action = await store.dispatch(
+      getPaymentAttachment({ iun, attachmentName, recipientIdx })
+    );
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(action.payload).toEqual({ url });
     const state = store.getState().notificationState;

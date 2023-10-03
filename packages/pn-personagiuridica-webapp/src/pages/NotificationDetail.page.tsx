@@ -208,8 +208,20 @@ const NotificationDetail = () => {
     }
   };
 
-  const handleDownloadAttachamentPagoPA = (name: PaymentAttachmentSName) => {
-    void dispatch(getPaymentAttachment({ iun: notification.iun, attachmentName: name, mandateId }));
+  const handleDownloadAttachment = (
+    name: PaymentAttachmentSName,
+    recipientIdx: number,
+    attachmentIdx?: number
+  ) => {
+    void dispatch(
+      getPaymentAttachment({
+        iun: notification.iun,
+        attachmentName: name,
+        recipientIdx,
+        mandateId,
+        attachmentIdx,
+      })
+    );
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
   };
 
@@ -402,7 +414,7 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
-                        handleDownloadAttachamentPagoPA={handleDownloadAttachamentPagoPA}
+                        handleDownloadAttachment={handleDownloadAttachment}
                         handleReloadPayment={fetchPaymentsInfo}
                       />
                     </ApiErrorWrapper>

@@ -871,31 +871,36 @@ const populateOtherDocuments = (
 
 export const getF24Payments = (
   payments: Array<NotificationDetailPayment>,
+  recipientIdx: number,
   onlyF24: boolean = true
 ): Array<F24PaymentDetails> =>
-  payments.reduce((arr, payment) => {
-    if (onlyF24) {
-      if (!payment.pagoPA && payment.f24) {
-        // eslint-disable-next-line functional/immutable-data
-        arr.push(payment.f24 as F24PaymentDetails);
-      }
-    } else if (payment.f24) {
+  payments.reduce((arr, payment, index) => {
+    if (payment.f24 && ((onlyF24 && !payment.pagoPA) || !onlyF24)) {
       // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.f24 as F24PaymentDetails);
+      arr.push({
+        ...payment.f24,
+        attachmentIdx: index,
+        recipientIdx,
+      });
     }
     return arr;
   }, [] as Array<F24PaymentDetails>);
 
 export const getPagoPaF24Payments = (
   payments: Array<NotificationDetailPayment>,
+  recipientIdx: number,
   withLoading: boolean = false
 ): Array<PaymentDetails> =>
-  payments.reduce((arr, payment) => {
+  payments.reduce((arr, payment, index) => {
     if (payment.pagoPA) {
       // eslint-disable-next-line functional/immutable-data
       arr.push({
-        pagoPA: payment.pagoPA as PagoPAPaymentFullDetails,
-        f24: payment.f24,
+        pagoPA: {
+          ...payment.pagoPA,
+          attachmentIdx: index,
+          recipientIdx,
+        } as PagoPAPaymentFullDetails,
+        f24: payment.f24 ? { ...payment.f24, attachmentIdx: index, recipientIdx } : undefined,
         ...(withLoading && { isLoading: true }),
       });
     }

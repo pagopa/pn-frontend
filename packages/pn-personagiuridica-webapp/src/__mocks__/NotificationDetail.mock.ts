@@ -22,7 +22,7 @@ import {
 
 import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
 
-const payments: Array<NotificationDetailPayment> = [
+export const payments: Array<NotificationDetailPayment> = [
   {
     pagoPA: {
       creditorTaxId: '77777777777',
@@ -479,8 +479,8 @@ export const cancelledNotificationDTO: NotificationDetail = {
 };
 
 export const paymentsData: PaymentsData = {
-  pagoPaF24: getPagoPaF24Payments(payments),
-  f24Only: getF24Payments(payments),
+  pagoPaF24: getPagoPaF24Payments(payments, 1),
+  f24Only: getF24Payments(payments, 1),
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));

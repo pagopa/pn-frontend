@@ -90,9 +90,10 @@ const notificationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
-      const paymentsOfRecipient = action.payload.recipients.find(
+      const recipientIdx = action.payload.recipients.findIndex(
         (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
-      )?.payments;
+      );
+      const paymentsOfRecipient = action.payload.recipients[recipientIdx].payments;
 
       if (paymentsOfRecipient) {
         if (
@@ -116,8 +117,12 @@ const notificationSlice = createSlice({
           const payments = populatePaymentsPagoPaF24(timelineEvents, timelineRecipientPayments, []);
           state.paymentsData.pagoPaF24 = payments;
         } else {
-          const pagoPAPaymentFullDetails = getPagoPaF24Payments(paymentsOfRecipient, true);
-          const f24Payments = getF24Payments(paymentsOfRecipient);
+          const pagoPAPaymentFullDetails = getPagoPaF24Payments(
+            paymentsOfRecipient,
+            recipientIdx,
+            true
+          );
+          const f24Payments = getF24Payments(paymentsOfRecipient, recipientIdx);
 
           if (pagoPAPaymentFullDetails) {
             state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
