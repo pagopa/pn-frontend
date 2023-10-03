@@ -33,11 +33,21 @@ describe('CustomTooltip Component', () => {
       );
     });
     const paragraph = result.getByTestId('testTooltipText');
+    // first check that click doesn't work
+    fireEvent.click(paragraph!);
+    let tooltip = await waitFor(() => result.queryByRole('tooltip'));
+    expect(tooltip).not.toBeInTheDocument();
+    // check hover
     fireEvent.mouseOver(paragraph!);
-    const tooltip = await waitFor(() => result.getByRole('tooltip'));
+    tooltip = await waitFor(() => result.getByRole('tooltip'));
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent(/Mocked content/i);
     expect(mockOnOpenCallback).toBeCalledTimes(1);
+    // again check that click doesn't work
+    fireEvent.click(paragraph!);
+    await waitFor(() => {
+      expect(tooltip).toBeInTheDocument();
+    });
   });
 
   it('toggle tooltip on click', async () => {
@@ -48,9 +58,15 @@ describe('CustomTooltip Component', () => {
       </CustomTooltip>
     );
     const paragraph = container.querySelector('p');
+    // open tooltip
     fireEvent.click(paragraph!);
     const tooltip = await waitFor(() => getByRole('tooltip'));
-    expect(tooltip!).toBeInTheDocument();
-    expect(tooltip!).toHaveTextContent(/Mocked content/i);
+    expect(tooltip).toBeInTheDocument();
+    expect(tooltip).toHaveTextContent(/Mocked content/i);
+    // close tooltip
+    fireEvent.click(paragraph!);
+    await waitFor(() => {
+      expect(tooltip).not.toBeInTheDocument();
+    });
   });
 });
