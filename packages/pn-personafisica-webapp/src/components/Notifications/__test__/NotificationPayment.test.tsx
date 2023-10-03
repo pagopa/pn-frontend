@@ -219,6 +219,9 @@ describe('NotificationPayment component', () => {
       );
     });
     // pay
+    // the download of the attachemnt replace the window.location.href
+    // so we have to update it
+    window.location.href = 'mocked-return-url';
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
