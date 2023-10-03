@@ -1,11 +1,9 @@
-import { ReactNode } from 'react';
 import { Badge, BadgeProps, Box, Button } from '@mui/material';
-import { styled, SxProps, Theme } from '@mui/material/styles';
+import { SxProps, Theme, styled } from '@mui/material/styles';
 
 import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
 
 type Props = {
-  children: ReactNode;
   sx?: SxProps<Theme>;
   hasCounterBadge?: boolean;
   bagdeCount?: number;
@@ -26,7 +24,12 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
  * @param bagdeCount number to display into the counter
  * @param sx style to be addded to the button
  */
-const CustomMobileDialogToggle = ({ children, hasCounterBadge, bagdeCount = 0, sx }: Props) => {
+const CustomMobileDialogToggle: React.FC<Props> = ({
+  children,
+  hasCounterBadge,
+  bagdeCount = 0,
+  sx,
+}) => {
   const { toggleOpen } = useCustomMobileDialogContext();
 
   const handleClickOpen = () => {
@@ -35,11 +38,15 @@ const CustomMobileDialogToggle = ({ children, hasCounterBadge, bagdeCount = 0, s
 
   return (
     <Box data-testid="dialogToggle">
-      <Button onClick={handleClickOpen} sx={sx}>
+      <Button onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
         {children}
       </Button>
       {hasCounterBadge && bagdeCount > 0 && (
-        <StyledBadge badgeContent={bagdeCount} color="secondary"></StyledBadge>
+        <StyledBadge
+          id="dialogToggleBadge"
+          badgeContent={bagdeCount}
+          color="secondary"
+        ></StyledBadge>
       )}
     </Box>
   );

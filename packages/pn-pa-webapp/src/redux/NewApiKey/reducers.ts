@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { UserGroup } from '../../models/user';
 import { saveNewApiKey, getApiKeyUserGroups } from './actions';
 
@@ -22,7 +23,7 @@ const newApiKeySlice = createSlice({
     builder.addCase(getApiKeyUserGroups.fulfilled, (state, action) => {
       state.groups = action.payload;
     });
-  }
+  },
 });
 export const { resetState } = newApiKeySlice.actions;
 export default newApiKeySlice;

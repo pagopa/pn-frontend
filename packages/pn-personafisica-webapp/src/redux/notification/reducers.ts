@@ -1,22 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
 import {
-  NotificationStatus,
+  Downtime,
+  INotificationDetailTimeline,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  INotificationDetailTimeline,
-  NotificationStatusHistory,
-  PhysicalCommunicationType,
   NotificationFeePolicy,
+  NotificationStatus,
+  NotificationStatusHistory,
   PaymentAttachmentSName,
   PaymentInfo,
-  RecipientType,
-  PaymentStatus,
   PaymentInfoDetail,
-  Downtime,
+  PaymentStatus,
+  PhysicalCommunicationType,
+  RecipientType,
 } from '@pagopa-pn/pn-commons';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
-
 import {
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
@@ -60,8 +59,8 @@ const initialState = {
   legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
-  downtimeLegalFactUrl: '',  // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
-                             // analogous for other URLs 
+  downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
+  // analogous for other URLs
   paymentInfo: {} as PaymentInfo,
   downtimeEvents: [] as Array<Downtime>,
 };
@@ -128,7 +127,7 @@ const notificationSlice = createSlice({
       state.downtimeEvents = action.payload.downtimes;
     });
     builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
-      // by the moment we preserve only the URL. 
+      // by the moment we preserve only the URL.
       // if the need of showing the file size arises in the future,
       // we'll probably need to change this in order to keep the whole response from the API call
       // -----------------------
@@ -138,6 +137,7 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } = notificationSlice.actions;
+export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } =
+  notificationSlice.actions;
 
 export default notificationSlice;

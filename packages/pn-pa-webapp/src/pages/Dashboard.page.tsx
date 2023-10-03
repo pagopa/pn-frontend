@@ -1,34 +1,32 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
+import { Box, Button, Typography } from '@mui/material';
 import {
-  calculatePages,
+  ApiErrorWrapper,
   CustomPagination,
   PaginationData,
-  // Sort, // Riabilitare con la issue PN-1124
-  useIsMobile,
+  TitleBox,
+  calculatePages,
   formatToTimezoneString,
   getNextDay,
-  ApiErrorWrapper,
-  TitleBox,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Box, Button, Typography } from '@mui/material';
-
-import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-  DASHBOARD_ACTIONS,
-  getSentNotifications,
-  // setSorting, // Riabilitare con la issue PN-1124
-} from '../redux/dashboard/actions';
-import { setPagination } from '../redux/dashboard/reducers';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
 
 // import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
-import DesktopNotifications from './components/Notifications/DesktopNotifications';
-import MobileNotifications from './components/Notifications/MobileNotifications';
+import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import MobileNotifications from '../components/Notifications/MobileNotifications';
+import * as routes from '../navigation/routes.const';
+import {
+  DASHBOARD_ACTIONS,
+  getSentNotifications, // setSorting, // Riabilitare con la issue PN-1124
+} from '../redux/dashboard/actions';
+import { setPagination } from '../redux/dashboard/reducers';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -119,6 +117,7 @@ const Dashboard = () => {
               {t('subtitle')}
             </Typography>
             <Button
+              id="new-notification-btn"
               variant="contained"
               onClick={handleRouteManualSend}
               aria-label={t('new-notification-button')}

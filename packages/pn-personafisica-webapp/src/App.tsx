@@ -1,50 +1,46 @@
 import { ErrorInfo, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import AltRouteIcon from '@mui/icons-material/AltRoute';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
-import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { Box } from '@mui/material';
-
-import { ProductSwitchItem } from '@pagopa/mui-italia';
-
 import {
   AppMessage,
   AppResponseMessage,
-  // momentarily commented for pn-5157
-  // AppRouteType,
-  appStateActions,
-  errorFactoryManager,
-  initLocalization,
   Layout,
   ResponseEventDispatcher,
   SideMenu,
-  SideMenuItem,
+  SideMenuItem, // AppRouteType,
+  appStateActions,
+  errorFactoryManager,
+  initLocalization,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
+import { ProductSwitchItem } from '@pagopa/mui-italia';
 
-import * as routes from './navigation/routes.const';
-import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
-import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState, store } from './redux/store';
-import { Delegation } from './redux/delegation/types';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
-import { trackEventByType } from './utils/mixpanel';
-import { TrackEventType } from './utils/events';
-import './utils/onetrust';
-import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
-import { setUpInterceptor } from './api/interceptors';
+import Router from './navigation/routes';
+import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { logout } from './redux/auth/actions';
+import { Delegation } from './redux/delegation/types';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
+import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
+import { TrackEventType } from './utility/events';
+import { trackEventByType } from './utility/mixpanel';
+import './utility/onetrust';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -90,7 +86,6 @@ const App = () => {
 };
 
 const ActualApp = () => {
-  setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);

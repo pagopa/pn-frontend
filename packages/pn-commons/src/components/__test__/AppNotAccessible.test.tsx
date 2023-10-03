@@ -1,22 +1,26 @@
 import React from 'react';
 
-import { fireEvent, render } from '../../test-utils';
+import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import AppNotAccessible from '../AppNotAccessible';
 
 describe('AppNotAccessible Component', () => {
   const assistanceClickHandlerMk = jest.fn();
 
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   it('renders component', () => {
-    const result = render(<AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />);
-    expect(result.container).toHaveTextContent('Non è possibile accedere alla piattaforma');
-    expect(result.container).toHaveTextContent(
-      'Riprova tra qualche ora. Se hai bisogno di assistenza scrivici.'
-    );
+    const { container } = render(<AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />);
+    expect(container).toHaveTextContent('common - not-accessible.title');
+    expect(container).toHaveTextContent('common - not-accessible.description');
   });
 
   it('clicks on assistance click', () => {
-    const result = render(<AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />);
-    const assistanceLink = result.queryByTestId('assistance-button');
+    const { getByTestId } = render(
+      <AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />
+    );
+    const assistanceLink = getByTestId('assistance-button');
     fireEvent.click(assistanceLink!);
     expect(assistanceClickHandlerMk).toBeCalledTimes(1);
   });

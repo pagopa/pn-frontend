@@ -1,32 +1,26 @@
+import MockAdapter from 'axios-mock-adapter';
+
+import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
+import { apiClient } from '../../../api/apiClients';
+import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.routes';
+import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { store } from '../../store';
-import { PartyRole, PNRole, User } from '../types';
-import { userResponse } from './test-users';
-import { mockLogin, mockLogout } from './test-utils';
-
-import { ConsentsApi } from '../../../api/consents/Consents.api';
-import { ConsentType } from '../../../models/consents';
 import { acceptPrivacy, acceptToS, getPrivacyApproval, getToSApproval } from '../actions';
+import { PNRole, PartyRole } from '../types';
 
-/**
- * The tests about how the initial state is set based on the values in sessionStorage
- * must lie in separate files, because
- * - in order to set the session storage before the Redux store is initialized, the store must be
- *   imported using a require (rather than import) statement coming *after* the mock session storage values
- *   are set. E.g.
- * - and furthermore, if we include multiple require statements for the same file in the same test file,
- *   the value obtained in the first require is preserved in all the test files, hence to test with
- *   different initial store values (deriving from different settings of the session storage)
- *   we need to put on different test files.
- * -----------------------
- * Carlos Lombardi, 2022.08.06
- */
 describe('Auth redux state tests', () => {
-  const getConsentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
-  const setConsentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
 
   afterAll(() => {
-    getConsentsApiSpy.mockRestore();
-    setConsentsApiSpy.mockRestore();
+    mock.restore();
   });
 
   it('Initial state', () => {
@@ -81,18 +75,14 @@ describe('Auth redux state tests', () => {
 
   it('Should be able to exchange token', async () => {
     const action = await mockLogin();
-    const payload = action.payload as User;
-
     expect(action.type).toBe('exchangeToken/fulfilled');
-    expect(payload).toEqual(userResponse);
+    expect(action.payload).toEqual(userResponse);
   });
 
   it('Should be able to logout', async () => {
     const action = await mockLogout();
-    const payload = action.payload;
-
     expect(action.type).toBe('logout/fulfilled');
-    expect(payload).toEqual({
+    expect(action.payload).toEqual({
       sessionToken: '',
       name: '',
       family_name: '',
@@ -121,130 +111,109 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should fetch ToS approved', async () => {
-    getConsentsApiSpy.mockResolvedValue({
+    const tosMock = {
       recipientId: 'mocked-recipientId',
       consentType: ConsentType.TOS,
       accepted: true,
       isFirstAccept: true,
       consentVersion: 'mocked-version',
-    });
-
-    const stateBefore = store.getState().userState;
-    expect(stateBefore.tosConsent.accepted).toBe(false);
-    expect(stateBefore.fetchedTos).toBe(false);
-
+    };
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, tosMock);
     const action = await store.dispatch(getToSApproval());
-
     expect(action.type).toBe('getToSApproval/fulfilled');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.tosConsent.accepted).toBe(true);
-    expect(stateAfter.tosConsent.isFirstAccept).toBe(true);
-    expect(stateAfter.tosConsent.consentVersion).toBe('mocked-version');
-    expect(stateAfter.fetchedTos).toBe(true);
+    expect(action.payload).toEqual(tosMock);
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(true);
+    expect(store.getState().userState.tosConsent.isFirstAccept).toStrictEqual(true);
+    expect(store.getState().userState.fetchedTos).toStrictEqual(true);
   });
 
-  it('Should fetch ToS not approved', async () => {
-    getConsentsApiSpy.mockRejectedValue({
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.TOS,
-      accepted: false,
-      isFirstAccept: true,
-    });
-
+  it('Should NOT be able to fetch the tos approval', async () => {
+    const tosErrorResponse = { response: { data: 'error-tos', status: 500 } };
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500, 'error-tos');
     const action = await store.dispatch(getToSApproval());
-
     expect(action.type).toBe('getToSApproval/rejected');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.tosConsent.accepted).toBe(false);
-    expect(stateAfter.tosConsent.isFirstAccept).toBe(true);
-    expect(stateAfter.fetchedTos).toBe(true);
+    expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(false);
+    expect(store.getState().userState.tosConsent.isFirstAccept).toStrictEqual(true);
+    expect(store.getState().userState.fetchedTos).toStrictEqual(true);
   });
 
-  it('Should accept ToS', async () => {
-    setConsentsApiSpy.mockResolvedValueOnce('success');
-
+  it('Should be able to fetch tos acceptance', async () => {
+    mock
+      .onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(200);
     const action = await store.dispatch(acceptToS('mocked-version-1'));
-
     expect(action.type).toBe('acceptToS/fulfilled');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.tosConsent.accepted).toBe(true);
+    expect(action.payload).toEqual('success');
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(true);
   });
 
-  it('Should reject ToS', async () => {
-    setConsentsApiSpy.mockRejectedValueOnce('error');
-
+  it('Should NOT be able to fetch tos acceptance', async () => {
+    const tosErrorResponse = { response: { data: undefined, status: 500 } };
+    mock
+      .onPut(SET_CONSENTS(ConsentType.TOS, 'mocked-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(500);
     const action = await store.dispatch(acceptToS('mocked-version-1'));
-
     expect(action.type).toBe('acceptToS/rejected');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.tosConsent.accepted).toBe(false);
+    expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.tosConsent.accepted).toStrictEqual(false);
   });
 
-  it('Should fetch privacy approved', async () => {
-    getConsentsApiSpy.mockResolvedValue({
-      recipientId: 'mocked-recipientId',
+  it('Should be able to fetch the privacy approval', async () => {
+    const tosMock = {
+      recipientId: 'mock-recipient-id',
       consentType: ConsentType.DATAPRIVACY,
       accepted: true,
       isFirstAccept: true,
       consentVersion: 'mocked-version',
-    });
-
-    const stateBefore = store.getState().userState;
-    expect(stateBefore.privacyConsent.accepted).toBe(false);
-    expect(stateBefore.fetchedPrivacy).toBe(false);
-
+    };
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, tosMock);
     const action = await store.dispatch(getPrivacyApproval());
-
     expect(action.type).toBe('getPrivacyApproval/fulfilled');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.privacyConsent.accepted).toBe(true);
-    expect(stateAfter.privacyConsent.isFirstAccept).toBe(true);
-    expect(stateAfter.privacyConsent.consentVersion).toBe('mocked-version');
-    expect(stateAfter.fetchedPrivacy).toBe(true);
+    expect(action.payload).toEqual(tosMock);
+    expect(store.getState().userState.privacyConsent.accepted).toBe(true);
+    expect(store.getState().userState.privacyConsent.isFirstAccept).toBe(true);
+    expect(store.getState().userState.privacyConsent.consentVersion).toBe('mocked-version');
+    expect(store.getState().userState.fetchedPrivacy).toBe(true);
   });
 
-  it('Should fetch Privacy not approved', async () => {
-    getConsentsApiSpy.mockRejectedValue({
-      recipientId: 'mocked-recipientId',
-      consentType: ConsentType.DATAPRIVACY,
-      accepted: false,
-      isFirstAccept: true,
-    });
-
+  it('Should NOT be able to fetch the privacy approval', async () => {
+    const tosErrorResponse = { response: { data: 'error-privacy-approval', status: 500 } };
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(500, 'error-privacy-approval');
     const action = await store.dispatch(getPrivacyApproval());
-
     expect(action.type).toBe('getPrivacyApproval/rejected');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.privacyConsent.accepted).toBe(false);
-    expect(stateAfter.privacyConsent.isFirstAccept).toBe(true);
-    expect(stateAfter.fetchedPrivacy).toBe(true);
+    expect(action.payload).toEqual(tosErrorResponse);
+    expect(store.getState().userState.privacyConsent.accepted).toBe(false);
+    expect(store.getState().userState.privacyConsent.isFirstAccept).toBe(true);
+    expect(store.getState().userState.fetchedPrivacy).toBe(true);
   });
 
-  it('Should accept Privacy', async () => {
-    setConsentsApiSpy.mockResolvedValueOnce('success');
-
-    const action = await store.dispatch(acceptPrivacy('mocked-version-1'));
-
+  it('Should be able to fetch privacy acceptance', async () => {
+    const tosAcceptanceMock = 'success';
+    mock
+      .onPut(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'), {
+        action: ConsentActionType.ACCEPT,
+      })
+      .reply(200);
+    const action = await store.dispatch(acceptPrivacy('mock-version-1'));
     expect(action.type).toBe('acceptPrivacy/fulfilled');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.privacyConsent.accepted).toBe(true);
+    expect(action.payload).toEqual(tosAcceptanceMock);
+    expect(store.getState().userState.privacyConsent.accepted).toBe(true);
   });
 
-  it('Should reject Privacy', async () => {
-    setConsentsApiSpy.mockRejectedValueOnce('error');
-
-    const action = await store.dispatch(acceptPrivacy('mocked-version-1'));
-
+  it('Should NOT be able to fetch privacy acceptance', async () => {
+    const privacyErrorResponse = { response: { data: 'error-privacy-approval', status: 500 } };
+    mock
+      .onPut(SET_CONSENTS(ConsentType.DATAPRIVACY, 'mock-version-1'))
+      .reply(500, 'error-privacy-approval');
+    const action = await store.dispatch(acceptPrivacy('mock-version-1'));
     expect(action.type).toBe('acceptPrivacy/rejected');
-
-    const stateAfter = store.getState().userState;
-    expect(stateAfter.privacyConsent.accepted).toBe(false);
+    expect(action.payload).toEqual(privacyErrorResponse);
+    expect(action.payload).toEqual(privacyErrorResponse);
+    expect(store.getState().userState.privacyConsent.accepted).toStrictEqual(false);
   });
 });

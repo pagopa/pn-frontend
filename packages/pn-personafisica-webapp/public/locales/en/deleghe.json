@@ -24,7 +24,7 @@
     "error_title": "Sorry, something went wrong",
     "error_subtitle": "We were unable to load the page. Reload it, or try again later.",
     "error_button": "Reload page",
-    "no_delegates": "You have not delegated anyone to view your notifications.",
+    "no_delegates": "You have not delegated anyone to view your notifications. <0>Add a delegate</0>.",
     "no_delegators": "You have no delegations.",
     "show_code_title": "Verification code for delegation to {{name}}",
     "show_code_subtitle": "Share this code with the delegate: they will have to enter it when accepting the delegation.",

@@ -1,27 +1,25 @@
 import MockAdapter from 'axios-mock-adapter';
-import {
-  tenYearsAgo,
-  today,
-  LegalFactId,
-  LegalFactType,
-  formatToTimezoneString,
-  getNextDay,
-  NotificationDetailOtherDocument,
-} from '@pagopa-pn/pn-commons';
 
 import {
-  notificationsFromBe,
-  notificationsToFe,
-} from '../../../redux/dashboard/__test__/test-utils';
+  LegalFactId,
+  LegalFactType,
+  NotificationDetailOtherDocument,
+  formatToTimezoneString,
+  getNextDay,
+  tenYearsAgo,
+  today,
+} from '@pagopa-pn/pn-commons';
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
 import {
-  notificationFromBe,
-  notificationToFe,
-} from '../../../redux/notification/__test__/test-utils';
-import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+  notificationDTOMultiRecipient,
+  notificationToFeMultiRecipient,
+} from '../../../__mocks__/NotificationDetail.mock';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
+  CANCEL_NOTIFICATION,
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
@@ -33,10 +31,23 @@ import {
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
+  let mock: MockAdapter;
+
   mockAuthentication();
 
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
+
   it('getSentNotifications', async () => {
-    const mock = new MockAdapter(apiClient);
     mock
       .onGet(
         NOTIFICATIONS_LIST({
@@ -47,7 +58,7 @@ describe('Notifications api tests', () => {
           status: '',
         })
       )
-      .reply(200, notificationsFromBe);
+      .reply(200, notificationsDTO);
     const res = await NotificationsApi.getSentNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
@@ -56,68 +67,54 @@ describe('Notifications api tests', () => {
       status: '',
     });
     expect(res).toStrictEqual(notificationsToFe);
-    mock.reset();
-    mock.restore();
   });
 
-  it('getSentNotification', async () => {
-    const iun = 'mocked-iun';
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
+  it('getSentNotification filtered by iun', async () => {
+    const iun = notificationDTOMultiRecipient.iun;
+    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTOMultiRecipient);
     const res = await NotificationsApi.getSentNotification(iun);
-    expect(res).toStrictEqual(notificationToFe);
-    mock.reset();
-    mock.restore();
+    expect(res).toStrictEqual(notificationToFeMultiRecipient);
   });
 
   it('getSentNotificationDocument', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTOMultiRecipient.iun;
     const documentIndex = '0';
-    const mock = new MockAdapter(apiClient);
     mock
       .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
-    mock.reset();
-    mock.restore();
   });
 
   it('getSentNotificationOtherDocument', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTOMultiRecipient.iun;
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
     };
-    const mock = new MockAdapter(apiClient);
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
         documentId: otherDocument.documentId,
-        documentType: otherDocument.documentType,
       })
-      .reply(200, undefined);
+      .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
-    expect(res).toStrictEqual({ url: '' });
-    mock.reset();
-    mock.restore();
+    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });
 
   it('getSentNotificationLegalfact', async () => {
-    const iun = 'mocked-iun';
+    const iun = notificationDTOMultiRecipient.iun;
     const legalFact: LegalFactId = {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
+      .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
-    expect(res).toStrictEqual({ url: '' });
-    mock.reset();
-    mock.restore();
+    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });
 
   it('getUserGroups', async () => {
-    const mock = new MockAdapter(apiClient);
     mock
       .onGet(GET_USER_GROUPS())
       .reply(200, [{ id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' }]);
@@ -125,12 +122,9 @@ describe('Notifications api tests', () => {
     expect(res).toStrictEqual([
       { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
     ]);
-    mock.reset();
-    mock.restore();
   });
 
   it('preloadNotificationDocument', async () => {
-    const mock = new MockAdapter(apiClient);
     mock
       .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
         { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
@@ -140,16 +134,14 @@ describe('Notifications api tests', () => {
       { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
     ]);
     expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
-    mock.reset();
-    mock.restore();
   });
 
   it('uploadNotificationAttachment', async () => {
     const file = new Uint8Array();
-    const mock = new MockAdapter(externalClient);
-    mock
-      .onPut(`https://mocked-url.com`)
-      .reply(200, void 0, { 'x-amz-version-id': 'mocked-versionToken' });
+    const extMock = new MockAdapter(externalClient);
+    extMock.onPut(`https://mocked-url.com`).reply(200, undefined, {
+      'x-amz-version-id': 'mocked-versionToken',
+    });
     const res = await NotificationsApi.uploadNotificationAttachment(
       'https://mocked-url.com',
       'mocked-sha256',
@@ -158,28 +150,31 @@ describe('Notifications api tests', () => {
       'PUT'
     );
     expect(res).toStrictEqual('mocked-versionToken');
-    mock.reset();
-    mock.restore();
+    extMock.reset();
+    extMock.restore();
   });
 
   it('createNewNotification', async () => {
-    const mock = new MockAdapter(apiClient);
-    // TODO: capire perchè è stato necessario rimuovere il body
-    // per qualche motivo la libreria di mock considera diversi il body passato
-    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
-    // nonostante siano la stessa identica cosa
-    mock.onPost(CREATE_NOTIFICATION()).reply(200, {
+    mock.onPost(CREATE_NOTIFICATION(), newNotificationDTO).reply(200, {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
+    // TODO: capire perchè è stato necessario rimuovere il body
+    // per qualche motivo la libreria di mock considera diversi il body passato
+    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
+    // nonostante siano la stessa identica cosa
     const res = await NotificationsApi.createNewNotification(newNotificationDTO);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-    mock.reset();
-    mock.restore();
+  });
+
+  it('cancelNotification', async () => {
+    mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
+    const res = await NotificationsApi.cancelNotification('mocked-iun');
+    expect(res).toEqual(undefined);
   });
 });

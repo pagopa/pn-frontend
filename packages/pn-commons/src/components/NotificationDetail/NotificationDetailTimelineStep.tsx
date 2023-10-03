@@ -1,18 +1,27 @@
-import { useState, Fragment, ReactNode } from 'react';
-import { Typography, Chip, Box, Button } from '@mui/material';
-import { TimelineConnector } from '@mui/lab';
+import { Fragment, ReactNode, useState } from 'react';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { TimelineConnector } from '@mui/lab';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import {
-  TimelineNotificationItem,
-  TimelineNotificationOppositeContent,
+  ButtonNaked,
   TimelineNotificationContent,
   TimelineNotificationDot,
+  TimelineNotificationItem,
+  TimelineNotificationOppositeContent,
   TimelineNotificationSeparator,
-  ButtonNaked,
 } from '@pagopa/mui-italia';
 
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+  NotificationStatus,
+  NotificationStatusHistory,
+} from '../../types';
 import {
   formatDay,
   formatMonthString,
@@ -20,14 +29,7 @@ import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utils';
-import {
-  LegalFactId,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationStatusHistory,
-  NotificationDetailOtherDocument,
-} from '../../types';
+} from '../../utility';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
@@ -43,6 +45,8 @@ type Props = {
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
   eventTrackingCallbackShowMore?: () => void;
+  disableDownloads?: boolean;
+  isParty?: boolean;
 };
 
 /**
@@ -75,6 +79,9 @@ const timelineStepCmp = (
 
 /**
  * Notification detail timeline
+ * This component used to display a timeline of events or notifications,
+ * allowing users to expand and collapse additional details as needed.
+ * The component's behavior and appearance can be customized by passing various props to it.
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
@@ -86,7 +93,10 @@ const timelineStepCmp = (
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
+ * @param disableDownloads if notification is disabled
+ * @param isParty if is party chip rendered with opacity for status cancellation in progress
  */
+
 const NotificationDetailTimelineStep = ({
   timelineStep,
   recipients,
@@ -98,6 +108,8 @@ const NotificationDetailTimelineStep = ({
   historyButtonLabel,
   historyButtonClickHandler,
   eventTrackingCallbackShowMore,
+  disableDownloads,
+  isParty = true,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -139,10 +151,17 @@ const NotificationDetailTimelineStep = ({
         {formatTime(timelineStep.activeFrom)}
       </Typography>
       <Chip
+        id={`${notificationStatusInfos.label}-status`}
         data-testid="itemStatus"
         label={notificationStatusInfos.label}
         color={position === 'first' ? notificationStatusInfos.color : 'default'}
         size={position === 'first' ? 'medium' : 'small'}
+        sx={{
+          opacity:
+            timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty
+              ? '0.5'
+              : '1',
+        }}
       />
       {showHistoryButton && historyButtonLabel ? (
         <Button
@@ -171,6 +190,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
                 data-testid="download-legalfact"
+                disabled={disableDownloads}
               >
                 {getLegalFactLabel(
                   lf.step,
@@ -199,6 +219,7 @@ const NotificationDetailTimelineStep = ({
     <Box data-testid="moreLessButton">
       <ButtonNaked
         id="more-less-timeline-step"
+        data-testid="more-less-timeline-step"
         startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
         onClick={handleShowMoreClick}
       >
@@ -220,16 +241,16 @@ const NotificationDetailTimelineStep = ({
     return timelineStepCmp(
       s.elementId,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatMonthString(s.timestamp)}
         </Typography>
-        <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+        <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
           {formatDay(s.timestamp)}
         </Typography>
       </Fragment>,
       undefined,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatTime(s.timestamp)}
         </Typography>
         <Typography
@@ -251,13 +272,13 @@ const NotificationDetailTimelineStep = ({
                   fontSize={14}
                   display="inline"
                   variant="button"
-                  color="primary"
-                  sx={{ cursor: 'pointer' }}
+                  color={disableDownloads ? 'text.disabled' : 'primary'}
+                  sx={{ cursor: disableDownloads ? 'default' : 'pointer' }}
                   onClick={() => clickHandler(lf)}
                   key={
                     (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId
                   }
-                  data-testid="download-legalfact"
+                  data-testid="download-legalfact-micro"
                 >
                   {getLegalFactLabel(
                     s,

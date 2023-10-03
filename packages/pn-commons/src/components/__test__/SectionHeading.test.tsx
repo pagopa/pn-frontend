@@ -1,19 +1,21 @@
-import { render, screen } from "@testing-library/react";
-import SectionHeading from "../SectionHeading";
+import React from 'react';
 
-describe("SectionHeading component", () => {
-  it("renders the provided children", () => {
-    const testText = "Test Heading Text";
+import { render, screen } from '../../test-utils';
+import SectionHeading from '../SectionHeading';
+
+describe('SectionHeading component', () => {
+  it('renders the provided children', () => {
+    const testText = 'Test Heading Text';
     render(<SectionHeading>{testText}</SectionHeading>);
     const headingElement = screen.getByText(testText);
     expect(headingElement).toBeInTheDocument();
   });
 
-  it("has the correct font size and weight", () => {
-    const testText = "Test Heading Text";
+  it('has the correct font size and weight', () => {
+    const testText = 'Test Heading Text';
     render(<SectionHeading>{testText}</SectionHeading>);
     const headingElement = screen.getByText(testText);
-    expect(headingElement).toHaveStyle("font-size: 1.5rem");
-    expect(headingElement).toHaveStyle("font-weight: 600");
+    expect(headingElement).toHaveStyle('font-size: 1.5rem');
+    expect(headingElement).toHaveStyle('font-weight: 600');
   });
 });

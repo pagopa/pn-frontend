@@ -14,17 +14,15 @@ type Props = {
   handleLinkClick: (item: SideMenuItem) => void;
 };
 
-
 function renderIcon(Icon: any): JSX.Element | null {
-  if (typeof Icon === "object") {
+  if (typeof Icon === 'object') {
     return <Icon />;
-  } else if (typeof Icon === "function") {
+  } else if (typeof Icon === 'function') {
     return Icon();
   } else {
     return null;
   }
 }
-
 
 /**
  * SideMenu List Item: rappresenta un item nel menu di navigazione laterale. Se goOutside è true al click viene aperta un'altra tab del browser.
@@ -43,38 +41,39 @@ const SideMenuListItem = ({
   handleLinkClick,
   onSelect,
 }: Props) => (
-    <ListItemButton
-      selected={selected}
-      onClick={() => {
-        if (onSelect) {
-          onSelect();
-        }
-        if (goOutside) {
-          window.open(item.route);
-        } else {
-          handleLinkClick(item);
-        }
-      }}
-      sx={style}
-      data-testid={`sideMenuItem-${item.label}`}
-    >
-      {item.icon && (
-        <ListItemIcon>
-          {item.dotBadge ? (
-            <Badge color="primary" variant="dot">
-              <item.icon />
-            </Badge>
-          ) : (
-            renderIcon(item.icon)
-          )}
-        </ListItemIcon>
-      )}
-      <ListItemText primary={item.label} data-testid={`menu-item(${item.label.toLowerCase()})`} />
-      {item.rightBadgeNotification && (
-        <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
-      )}
-      {goOutside && <ExitToApp color="action" />}
-    </ListItemButton>
-  );
+  <ListItemButton
+    id={`side-item-${item.label}`}
+    selected={selected}
+    onClick={() => {
+      if (onSelect) {
+        onSelect();
+      }
+      if (goOutside) {
+        window.open(item.route);
+      } else {
+        handleLinkClick(item);
+      }
+    }}
+    sx={style}
+    data-testid={`sideMenuItem-${item.label}`}
+  >
+    {item.icon && (
+      <ListItemIcon>
+        {item.dotBadge ? (
+          <Badge color="primary" variant="dot" id={`sideMenuItem-${item.label}-badge`}>
+            <item.icon />
+          </Badge>
+        ) : (
+          renderIcon(item.icon)
+        )}
+      </ListItemIcon>
+    )}
+    <ListItemText primary={item.label} data-testid={`menu-item(${item.label.toLowerCase()})`} />
+    {item.rightBadgeNotification && (
+      <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
+    )}
+    {goOutside && <ExitToApp color="action" />}
+  </ListItemButton>
+);
 
 export default SideMenuListItem;

@@ -1,6 +1,8 @@
-import { Tag } from '@pagopa/mui-italia';
-import { Box, BoxProps } from '@mui/material';
 import React from 'react';
+
+import { Box, BoxProps } from '@mui/material';
+import { Tag } from '@pagopa/mui-italia';
+
 import CustomTooltip from '../CustomTooltip';
 
 interface CustomTagGroupProps {
@@ -10,7 +12,6 @@ interface CustomTagGroupProps {
   disableTooltip?: boolean;
   /** callback function when tooltip is opened */
   onOpen?: () => void;
-  children: JSX.Element | Array<JSX.Element>;
 }
 
 const TagIndicator: React.FC<{
@@ -24,12 +25,12 @@ const TagIndicator: React.FC<{
   </Box>
 );
 
-const CustomTagGroup = ({
+const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
   visibleItems,
   disableTooltip = false,
   onOpen,
   children,
-}: CustomTagGroupProps) => {
+}) => {
   const arrayChildren = React.Children.count(children)
     ? (children as Array<JSX.Element>)
     : [children as JSX.Element];

@@ -1,35 +1,33 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { NotificationStatus, NotificationStatusHistory } from '../../types';
+
+import { useDownloadDocument } from '../../hooks';
 import { Downtime } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { formatDate, isToday } from '../../utils';
-import { useDownloadDocument } from '../../hooks';
+import { NotificationStatus, NotificationStatusHistory } from '../../types';
+import { formatDate, isToday } from '../../utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 
 type Props = {
   // the notification history, needed to compute the time range for the downtime events query
   notificationStatusHistory: Array<NotificationStatusHistory>;
-
   // action to obtain and set the downtime events to be shown ...
   fetchDowntimeEvents: (fromDate: string, toDate: string | undefined) => void;
-
   // ... so that such events are passed throught this prop
   downtimeEvents: Array<Downtime>;
-
   // action to obtain and set the legal fact document url ...
   fetchDowntimeLegalFactDocumentDetails: (legalFactId: string) => void;
-
   // ... so that it is passed throught this prop ...
   downtimeLegalFactUrl: string;
-
   // ... and afterwards can be cleaned using this prop
   clearDowntimeLegalFactData: () => void;
-
   // api id for ApiErrorWrapper
   apiId: string;
+  // for disabled downloads
+  disableDownloads?: boolean;
 };
 
 /*
@@ -130,6 +128,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
       cancelledRecord ||
       !acceptedRecord ||
       (acceptedRecord && completedRecord && acceptedRecord.activeFrom > completedRecord.activeFrom);
+
     if (invalidStatusHistory || !acceptedRecord) {
       setShouldFetchEvents(false);
     } else {
@@ -154,7 +153,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
       )}
     >
       {shouldFetchEvents && props.downtimeEvents.length > 0 ? (
-        <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+        <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="downtimesBox">
           <Grid
             key={'downtimes-section'}
             container
@@ -227,6 +226,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                             event.legalFactId as string
                           );
                         }}
+                        disabled={props.disableDownloads}
                       >
                         {getLocalizedOrDefaultLabel(
                           'notifications',

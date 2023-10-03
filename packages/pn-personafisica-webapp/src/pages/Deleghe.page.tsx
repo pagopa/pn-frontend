@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Box, Stack } from '@mui/material';
 import {
   AppResponse,
@@ -7,27 +9,26 @@ import {
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import ConfirmationModal from '../components/Deleghe/ConfirmationModal';
+import Delegates from '../components/Deleghe/Delegates';
+import Delegators from '../components/Deleghe/Delegators';
+import MobileDelegates from '../components/Deleghe/MobileDelegates';
+import MobileDelegators from '../components/Deleghe/MobileDelegators';
+import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import {
-  rejectDelegation,
-  revokeDelegation,
+  acceptDelegation,
   getDelegates,
   getDelegators,
-  acceptDelegation,
+  rejectDelegation,
+  revokeDelegation,
 } from '../redux/delegation/actions';
 import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
-import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
-import MobileDelegates from '../component/Deleghe/MobileDelegates';
-import MobileDelegators from '../component/Deleghe/MobileDelegators';
-import Delegates from '../component/Deleghe/Delegates';
-import Delegators from '../component/Deleghe/Delegators';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
-import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();

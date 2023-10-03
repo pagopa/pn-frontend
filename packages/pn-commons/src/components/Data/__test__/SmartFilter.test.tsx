@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render, waitFor, screen } from '../../../test-utils';
+import { createMatchMedia, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
 const submitHandler = jest.fn();
@@ -23,6 +23,7 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
       initialValues={{ username: '', email: '' }}
     >
       <input
+        data-testid="username"
         id="username"
         name="username"
         key="username"
@@ -30,6 +31,7 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
         onChange={(e) => setUsername(e.target.value)}
       ></input>
       <input
+        data-testid="email"
         id="email"
         name="email"
         type="email"
@@ -42,14 +44,19 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
 };
 
 describe('Smart Filter Component', () => {
-  it('renders smart filters (desktop version)', () => {
-    window.matchMedia = createMatchMedia(2000);
-    const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username');
-    const email = result.container.querySelector('#email');
-    const confirmButton = result.queryByTestId('confirmButton');
-    const cancelButton = result.queryByTestId('cancelButton');
-    const dialogToggle = result.queryByTestId('dialogToggle');
+  const original = window.matchMedia;
+
+  afterAll(() => {
+    window.matchMedia = original;
+  });
+
+  it('renders component (desktop version)', () => {
+    const { getByTestId, queryByTestId } = render(<ExampleForm />);
+    const username = getByTestId('username');
+    const email = getByTestId('email');
+    const confirmButton = getByTestId('confirmButton');
+    const cancelButton = getByTestId('cancelButton');
+    const dialogToggle = queryByTestId('dialogToggle');
     expect(username).toBeInTheDocument();
     expect(email).toBeInTheDocument();
     expect(confirmButton).toBeInTheDocument();
@@ -61,14 +68,36 @@ describe('Smart Filter Component', () => {
     expect(dialogToggle).not.toBeInTheDocument();
   });
 
-  it('renders smart filters (mobile version)', () => {
+  it('clicks on confirm button (desktop version)', async () => {
+    const { getByTestId } = render(<ExampleForm />);
+    const username = getByTestId('username');
+    const email = getByTestId('email');
+    fireEvent.change(username, { target: { value: 'mariorossi' } });
+    fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
+    const confirmButton = await waitFor(() => getByTestId('confirmButton'));
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    expect(submitHandler).toBeCalledTimes(1);
+  });
+
+  it('clicks on cancel button (desktop version)', () => {
+    const { getByTestId } = render(
+      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
+    );
+    const cancelButton = getByTestId('cancelButton');
+    expect(cancelButton).toBeEnabled();
+    fireEvent.click(cancelButton);
+    expect(cancelHandler).toBeCalledTimes(1);
+  });
+
+  it('renders component (mobile version)', () => {
     window.matchMedia = createMatchMedia(800);
-    const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username');
-    const email = result.container.querySelector('#email');
-    const confirmButton = result.queryByTestId('confirmButton');
-    const cancelButton = result.queryByTestId('cancelButton');
-    const dialogToggle = result.queryByTestId('dialogToggle');
+    const { queryByTestId, getByTestId } = render(<ExampleForm />);
+    const username = queryByTestId('username');
+    const email = queryByTestId('email');
+    const confirmButton = queryByTestId('confirmButton');
+    const cancelButton = queryByTestId('cancelButton');
+    const dialogToggle = getByTestId('dialogToggle');
     expect(username).not.toBeInTheDocument();
     expect(email).not.toBeInTheDocument();
     expect(confirmButton).not.toBeInTheDocument();
@@ -77,61 +106,33 @@ describe('Smart Filter Component', () => {
     expect(dialogToggle).toHaveTextContent('Filter');
   });
 
-  it('clicks on confirm button (desktop version)', async () => {
-    window.matchMedia = createMatchMedia(2000);
-    const result = render(<ExampleForm />);
-    const username = result.container.querySelector('#username') as Element;
-    const email = result.container.querySelector('#email') as Element;
-    fireEvent.change(username, { target: { value: 'mariorossi' } });
-    fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
-    const confirmButton = await waitFor(() => result.queryByTestId('confirmButton') as Element);
-    expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
-    expect(submitHandler).toBeCalledTimes(1);
-  });
-
-  it('clicks on cancel button (desktop version)', async () => {
-    window.matchMedia = createMatchMedia(2000);
-    const result = render(
-      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
-    );
-    const cancelButton = result.queryByTestId('cancelButton') as Element;
-    expect(cancelButton).toBeEnabled();
-    fireEvent.click(cancelButton);
-    expect(cancelHandler).toBeCalledTimes(1);
-  });
-
   it('clicks on toggle button (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
-    const result = render(<ExampleForm />);
-    const dialogToggle = result.container.querySelector(
-      '[data-testid="dialogToggle"] button'
-    ) as Element;
+    const { getByTestId } = render(<ExampleForm />);
+    const dialogToggle = getByTestId('dialogToggleButton');
     fireEvent.click(dialogToggle);
-    await waitFor(() => {
-      const dialog = screen.queryByTestId('mobileDialog') as Element;
-      expect(dialog).toBeInTheDocument();
-      const username = dialog.querySelector('#username');
-      const email = dialog.querySelector('#email');
-      const confirmButton = dialog.querySelector('[data-testid="confirmButton"]');
-      const cancelButton = dialog.querySelector('[data-testid="cancelButton"]');
-      expect(username).toBeInTheDocument();
-      expect(email).toBeInTheDocument();
-      expect(confirmButton).toBeInTheDocument();
-      expect(confirmButton).toBeDisabled();
-      expect(confirmButton).toHaveTextContent('Filter');
-      expect(cancelButton).toBeInTheDocument();
-      expect(cancelButton).toBeDisabled();
-      expect(cancelButton).toHaveTextContent('Cancel');
-    });
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    expect(dialog).toBeInTheDocument();
+    const username = within(dialog).getByTestId('username');
+    const email = within(dialog).getByTestId('email');
+    const confirmButton = within(dialog).getByTestId('confirmButton');
+    const cancelButton = within(dialog).getByTestId('cancelButton');
+    expect(username).toBeInTheDocument();
+    expect(email).toBeInTheDocument();
+    expect(confirmButton).toBeInTheDocument();
+    expect(confirmButton).toBeDisabled();
+    expect(confirmButton).toHaveTextContent('Filter');
+    expect(cancelButton).toBeInTheDocument();
+    expect(cancelButton).toBeDisabled();
+    expect(cancelButton).toHaveTextContent('Cancel');
   });
 
   it('renders badge count (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
-    const result = render(
+    const { getByTestId } = render(
       <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
     );
-    const dialogToggle = await waitFor(() => result.queryByTestId('dialogToggle'));
+    const dialogToggle = await waitFor(() => getByTestId('dialogToggle'));
     expect(dialogToggle).toHaveTextContent('2');
   });
 });

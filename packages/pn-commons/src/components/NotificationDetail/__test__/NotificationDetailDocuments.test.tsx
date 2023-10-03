@@ -1,69 +1,118 @@
-import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import React from 'react';
 
-import { render } from '../../../test-utils';
-import { NotificationDetailDocument } from '../../../types';
+import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
-const documents: Array<NotificationDetailDocument> = [
-  {
-    digests: {
-      sha256: 'mocked-sha',
-    },
-    ref: {
-      key: 'mocked-doc-title',
-      versionToken: 'mocked-versionToken'
-    },
-    contentType: 'mocked-contentType',
-    title: 'mocked-doc-title',
-    docIdx: '0'
-  },
-];
-
 describe('NotificationDetailDocuments Component', () => {
-  let resultWithDownloadableFiles: RenderResult | undefined;
-  let resultNotDownloadableFiles: RenderResult | undefined;
   let mockClickFn: jest.Mock;
 
   beforeEach(() => {
     mockClickFn = jest.fn();
-    // render component
-    resultWithDownloadableFiles = render(
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders component - no documents', () => {
+    const { queryAllByTestId, getByTestId, container } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={documents}
+        documents={[]}
         clickHandler={mockClickFn}
         documentsAvailable
       />
     );
-    resultNotDownloadableFiles = render(
+    expect(container).toHaveTextContent(/Mocked title/i);
+    const notificationDetailDocuments = queryAllByTestId('notificationDetailDocuments');
+    expect(notificationDetailDocuments).toHaveLength(0);
+    const documentsMessage = getByTestId('documentsMessage');
+    expect(documentsMessage).toHaveTextContent('');
+  });
+
+  it('renders component - with documents', () => {
+    const { getAllByTestId, getByTestId, container } = render(
       <NotificationDetailDocuments
         title="Mocked title"
-        documents={documents}
+        documents={notificationToFe.documents}
         clickHandler={mockClickFn}
-        documentsAvailable={false}
-        downloadFilesMessage="mocked"
+        documentsAvailable
+        downloadFilesMessage="Mocked download message"
       />
     );
-  });
-  afterEach(() => {
-    resultWithDownloadableFiles = undefined;
-    resultNotDownloadableFiles = undefined;
-    jest.clearAllMocks();
+    expect(container).toHaveTextContent(/Mocked title/i);
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
+    notificationDetailDocuments.forEach((doc, index) => {
+      const currentDoc = notificationToFe.documents[index];
+      if (currentDoc.title) {
+        expect(doc).toHaveTextContent(currentDoc.title);
+      } else {
+        expect(doc).toHaveTextContent(currentDoc.ref.key);
+      }
+      const documentButton = within(doc).getByTestId('documentButton');
+      expect(documentButton).toBeInTheDocument();
+    });
+    const documentsMessage = getByTestId('documentsMessage');
+    expect(documentsMessage).toHaveTextContent('Mocked download message');
   });
 
-  it('renders NotificationDetailDocuments', () => {
-    expect(resultWithDownloadableFiles?.container).toHaveTextContent(/Mocked title/i);
-    // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
-    const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
-    expect(documentsButtons).toHaveLength(documents.length);
-  });
-
-  it('test click on document button', async () => {
-    const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
-    fireEvent.click(documentsButtons![0]);
+  it('clicks on document button', async () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationToFe.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+      />
+    );
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    const documentButton = within(notificationDetailDocuments[0]).getByTestId('documentButton');
+    fireEvent.click(documentButton);
     await waitFor(() => {
       expect(mockClickFn).toBeCalledTimes(1);
       expect(mockClickFn).toBeCalledWith('0');
+    });
+  });
+
+  it('renders documents with disabled download', () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationToFe.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+        disableDownloads
+      />
+    );
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    notificationDetailDocuments.forEach((doc) => {
+      const button = within(doc).getByTestId('documentButton');
+      expect(button).toHaveAttribute('disabled');
+    });
+  });
+
+  it('renders component - documents not available', () => {
+    const { getAllByTestId } = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={notificationToFe.documents}
+        clickHandler={mockClickFn}
+        documentsAvailable={false}
+      />
+    );
+    const notificationDetailDocuments = getAllByTestId('notificationDetailDocuments');
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
+    notificationDetailDocuments.forEach((doc, index) => {
+      const currentDoc = notificationToFe.documents[index];
+      if (currentDoc.title) {
+        expect(doc).toHaveTextContent(currentDoc.title);
+      } else {
+        expect(doc).toHaveTextContent(currentDoc.ref.key);
+      }
+      const documentButton = within(doc).queryByTestId('documentButton');
+      expect(documentButton).not.toBeInTheDocument();
     });
   });
 });

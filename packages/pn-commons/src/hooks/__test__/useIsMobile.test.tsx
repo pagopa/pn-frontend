@@ -1,41 +1,29 @@
-import { useIsMobile } from "../useIsMobile";
-import { render } from "../../test-utils";
-import React from "react";
-import mediaQuery from 'css-mediaquery';
+import React from 'react';
+
+import { createMatchMedia, render } from '../../test-utils';
+import { useIsMobile } from '../useIsMobile';
 
 const Component = () => {
-    const isMobile = useIsMobile();
+  const isMobile = useIsMobile();
 
-    return (
-        <div>{JSON.stringify(isMobile)}</div>
-    )
-}
-
-function createMatchMedia(width: number) {
-    return (query: string): MediaQueryList => ({
-      matches: mediaQuery.match(query, { width }) as boolean,
-      media: '',
-      addListener: () => {},
-      removeListener: () => {},
-      onchange: () => {},
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      dispatchEvent: () => true,
-    });
-  }
+  return <div>{`${isMobile}`}</div>;
+};
 
 describe('test useIsMobile hook', () => {
+  const original = window.matchMedia;
 
-    test('hook should return false', () => {
-        window.matchMedia = createMatchMedia(2000);
-        const result = render(<Component />);
-        expect(result.container).toHaveTextContent('false');
-    });
+  afterAll(() => {
+    window.matchMedia = original;
+  });
 
-    test('hook should return true', () => {
-        window.matchMedia = createMatchMedia(800);
-        const result = render(<Component />);
-        expect(result.container).toHaveTextContent('true');
-    });
-  
+  it('hook should return false', () => {
+    const result = render(<Component />);
+    expect(result.container).toHaveTextContent('false');
+  });
+
+  it('hook should return true', () => {
+    window.matchMedia = createMatchMedia(800);
+    const result = render(<Component />);
+    expect(result.container).toHaveTextContent('true');
+  });
 });

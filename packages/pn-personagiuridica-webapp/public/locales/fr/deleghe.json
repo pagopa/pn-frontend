@@ -24,7 +24,7 @@
     "error_title": "Désolé, une erreur s'est produite",
     "error_subtitle": "Impossible de télécharger la page. Procéder à nouveau au téléchargement ou réessayer plus tard.",
     "error_button": "Télécharger à nouveau la page",
-    "no_delegates": "{{organizationName}} n'a délégué personne à la lecture de ses notifications.",
+    "no_delegates": "{{organizationName}} n'a délégué personne à la lecture de ses notifications. <0>Ajouter une procuration</0>.",
     "no_delegators": "Il n'y a pas de procuration à la charge de {{organizationName}}.",
     "no_delegators_after_filters": "Les filtres que vous avez appliqués n'ont donné aucun résultat. ",
     "show_code_title": "Code de vérification pour la procuration de {{name}}",
@@ -92,7 +92,8 @@
       "verificationCode": "Code de vérification",
       "verificationCodeDescr": "Partagez ce code avec la personne déléguée : elle devra le saisir lors de l'acceptation de la procuration.",
       "submit": "Envoyer la demande",
-      "mandatoryField": "*Champs obligatoires"
+      "mandatoryField": "*Champs obligatoires",
+      "party-not-found": "Aucun organisme trouvé"
     },
     "validation": {
       "fiscalCode": {

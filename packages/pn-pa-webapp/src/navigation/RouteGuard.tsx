@@ -1,10 +1,11 @@
-import { AccessDenied } from '@pagopa-pn/pn-commons';
 import { Outlet, useNavigate } from 'react-router-dom';
+
+import { AccessDenied } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../models/user';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { getHomePage } from '../utils/role.utility';
+import { getHomePage } from '../utility/role.utility';
 import { goToSelfcareLogin } from './navigation.utility';
 
 /**

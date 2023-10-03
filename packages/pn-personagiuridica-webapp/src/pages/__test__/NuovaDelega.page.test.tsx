@@ -1,19 +1,32 @@
+import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 
-import { render, fireEvent, waitFor, mockApi, testAutocomplete } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
-import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
-import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
-import { mockCreateDelegation } from '../../redux/delegation/__test__/test.utils';
-import { createDelegationMapper } from '../../redux/newDelegation/actions';
-import * as trackingFunctions from '../../utils/mixpanel';
-import { TrackEventType } from '../../utils/events';
-import NuovaDelega from '../NuovaDelega.page';
-import { RecipientType } from '@pagopa-pn/pn-commons';
+import { RecipientType, formatDate } from '@pagopa-pn/pn-commons';
+import {
+  testAutocomplete,
+  testFormElements,
+  testInput,
+  testRadio,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 
-jest.mock('../../utils/delegation.utility', () => ({
-  ...jest.requireActual('../../utils/delegation.utility'),
-  generateVCode: () => 'verification code',
+import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
+import { parties } from '../../__mocks__/ExternalRegistry.mock';
+import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
+import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
+import { createDelegationMapper } from '../../redux/newDelegation/actions';
+import NuovaDelega from '../NuovaDelega.page';
+
+const mockNavigateFn = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
+
+jest.mock('../../utility/delegation.utility', () => ({
+  ...jest.requireActual('../../utility/delegation.utility'),
+  generateVCode: () => '34153',
 }));
 
 jest.mock('react-i18next', () => ({
@@ -23,255 +36,213 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockNavigateFn = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn,
-}));
-
-// mock tracking
-const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
-const mockTrackEventFn = jest.fn();
-
-async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
-  fireEvent.change(input!, { target: { value } });
-  await waitFor(() => {
-    expect(input).toHaveValue(value);
-  });
-}
+// Get tomorrow date
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+tomorrow.setHours(0, 0, 0, 0);
+const yesterday = new Date(today);
+yesterday.setDate(yesterday.getDate() - 1);
+yesterday.setHours(0, 0, 0, 0);
 
 describe('NuovaDelega page', () => {
-  const initialState = () => ({
-    preloadedState: {
-      newDelegationState: {
-        created: false,
-        entities: [],
-      },
-    },
-  });
+  let mock: MockAdapter;
 
   beforeEach(() => {
-    createTrackEventSpy.mockImplementation(mockTrackEventFn);
+    mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+  });
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
-    createTrackEventSpy.mockClear();
-    createTrackEventSpy.mockReset();
-  });
-
-  it('renders the component', () => {
-    const result = render(<NuovaDelega />, initialState());
-    expect(result.container).toHaveTextContent(/nuovaDelega.title/i);
-    expect(result.container).toHaveTextContent(/nuovaDelega.subtitle/i);
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    const selectPF = form.querySelector('[data-testid="selectPF"]') as Element;
-    expect(selectPF).toBeInTheDocument();
-    const radio = selectPF.querySelector('[type="radio"]');
-    expect(radio).toBeChecked();
-    const selectPG = form.querySelector('[data-testid="selectPG"]');
-    expect(selectPG).toBeInTheDocument();
-    const name = form.querySelector(`input[name="nome"]`);
-    expect(name).toBeInTheDocument();
-    expect(name).toHaveValue('');
-    const surname = form.querySelector(`input[name="cognome"]`);
-    expect(surname).toBeInTheDocument();
-    expect(surname).toHaveValue('');
-    const fiscalCode = form.querySelector(`input[name="codiceFiscale"]`);
-    expect(fiscalCode).toBeInTheDocument();
-    expect(fiscalCode).toHaveValue('');
-    const radioSelectedEntities = form.querySelector(
-      '[data-testid="radioSelectedEntities"]'
-    ) as Element;
-    expect(radioSelectedEntities).toBeInTheDocument();
-    const radioEntities = radioSelectedEntities.querySelector('[type="radio"]');
-    expect(radioEntities).not.toBeChecked();
-    const entiSelect = form.querySelector('[data-testid="enti"]');
-    expect(entiSelect).not.toBeInTheDocument();
-    const expirationDate = form.querySelector('[data-testid="expirationDate"]') as Element;
-    expect(expirationDate).toBeInTheDocument();
-    const verificationCode = form.querySelector('[data-testid="verificationCode"]');
-    expect(verificationCode).toBeInTheDocument();
-    const createButton = form.querySelector('[data-testid="createButton"]');
-    expect(createButton).toBeInTheDocument();
-  });
-
-  it('navigates to Deleghe page before creation', () => {
-    const result = render(<NuovaDelega />, initialState());
-    const backButton = result.getByTestId('breadcrumb-indietro-button');
-    fireEvent.click(backButton);
-    expect(mockNavigateFn).toBeCalled();
-  });
-
-  it('switch to selected entities radio and call the filling entities function', async () => {
-    const mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(), 200, undefined, []);
-    const result = render(<NuovaDelega />, initialState());
-    const radio = result.getByTestId('radioSelectedEntities');
-    fireEvent.click(radio);
-    await waitFor(() => {
-      expect(mock.history.get.length).toBe(1);
-      expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
-    });
     mock.reset();
+    jest.clearAllMocks();
+  });
+
+  afterAll(() => {
     mock.restore();
   });
 
-  it('switch to selected entities radio and filter entities list', async () => {
-    const entitiesList = [
-      {
-        id: 'entity-a',
-        name: 'Entity A',
-      },
-      {
-        id: 'entity-b',
-        name: 'Entity B',
-      },
-      {
-        id: 'entity-c',
-        name: 'Entity C',
-      },
-    ];
-    let mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(), 200, undefined, entitiesList);
-    mock = mockApi(
-      mock,
-      'GET',
-      GET_ALL_ACTIVATED_PARTIES({ paNameFilter: 'filter' }),
-      200,
-      undefined,
-      [entitiesList[2]]
+  it('renders the component desktop view', async () => {
+    const { container, getAllByTestId, getByTestId } = render(<NuovaDelega />);
+    expect(container).toHaveTextContent(/nuovaDelega.title/i);
+    expect(container).toHaveTextContent(/nuovaDelega.subtitle/i);
+    expect(mock.history.get).toHaveLength(0);
+    // check initial values
+    await testRadio(
+      container,
+      'recipientType',
+      ['nuovaDelega.form.naturalPerson', 'nuovaDelega.form.legalPerson'],
+      0
     );
-    const result = render(<NuovaDelega />, initialState());
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    const radio = result.getByTestId('radioSelectedEntities');
-    fireEvent.click(radio);
-    await waitFor(() => {
-      expect(mock.history.get.length).toBe(1);
-      expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
+    testFormElements(container, 'nome', 'nuovaDelega.form.firstName', '');
+    testFormElements(container, 'cognome', 'nuovaDelega.form.lastName', '');
+    testFormElements(container, 'codiceFiscale', 'nuovaDelega.form.fiscalCode', '');
+    await testRadio(
+      container,
+      'radioSelectedEntities',
+      ['nuovaDelega.form.allEntities', 'nuovaDelega.form.onlySelected'],
+      0
+    );
+    testFormElements(container, 'codiceFiscale', 'nuovaDelega.form.fiscalCode', '');
+    testFormElements(
+      container,
+      'expirationDate',
+      'nuovaDelega.form.endDate',
+      formatDate(tomorrow.toISOString())
+    );
+    const codeDigit = getAllByTestId('codeDigit');
+    const codes = '34153'.split('');
+    codeDigit.forEach((code, index) => {
+      expect(code).toHaveTextContent(codes[index]);
     });
-    await testAutocomplete(form, 'enti', entitiesList, true);
-    await testInput(form, 'enti', 'filter');
+    const createButton = getByTestId('createButton');
+    expect(createButton).toBeEnabled();
+  });
+
+  it('navigates to Deleghe page', () => {
+    const { getByTestId } = render(<NuovaDelega />);
+    const backButton = getByTestId('breadcrumb-indietro-button');
+    fireEvent.click(backButton);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(-1);
+  });
+
+  it('fills the form and calls the create function', async () => {
+    const creationPayload = {
+      ...createDelegationPayload,
+      expirationDate: new Date('01/01/2122'),
+      verificationCode: '34153',
+    };
+    mock.onPost(CREATE_DELEGATION()).reply(200, createDelegationMapper(creationPayload));
+    const { container, getByTestId, getByText } = render(<NuovaDelega />);
+    const form = container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'nome', createDelegationPayload.nome);
+    await testInput(form, 'cognome', createDelegationPayload.cognome);
+    await testInput(form, 'codiceFiscale', createDelegationPayload.codiceFiscale);
+    await testInput(form, 'expirationDate', '01/01/2122');
+    const button = getByTestId('createButton');
+    fireEvent.click(button!);
     await waitFor(() => {
-      expect(mock.history.get.length).toBe(2);
-      expect(mock.history.get[1].url).toContain(
-        'ext-registry/pa/v1/activated-on-pn?paNameFilter=filter'
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
+        createDelegationMapper(creationPayload)
       );
     });
-    await testAutocomplete(form, 'enti', [entitiesList[2]], false);
-    mock.reset();
-    mock.restore();
-  });
-
-  it('fills the form and calls the create function - all entities', async () => {
-    const formData = {
-      selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-      codiceFiscale: 'RSSMRA01A01A111A',
-      nome: 'Mario',
-      cognome: 'Rossi',
-      ragioneSociale: '',
-      selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-      expirationDate: new Date('01/01/2122'),
-      enti: [],
-      verificationCode: 'verification code',
-    };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      CREATE_DELEGATION(),
-      200,
-      createDelegationMapper(formData),
-      mockCreateDelegation
-    );
-    const result = render(<NuovaDelega />, initialState());
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form, 'nome', 'Mario');
-    await testInput(form, 'cognome', 'Rossi');
-    await testInput(form, 'codiceFiscale', 'RSSMRA01A01A111A');
-    await testInput(form, 'expirationDate', '01/01/2122');
-    const button = result.queryByTestId('createButton') as Element;
-    fireEvent.click(button);
     await waitFor(() => {
-      expect(mockTrackEventFn).toBeCalledTimes(1);
-      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
-      expect(mock.history.post.length).toBe(1);
-      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandate');
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(createDelegationMapper(formData));
+      expect(container).toHaveTextContent(/nuovaDelega.createdTitle/i);
+      expect(container).toHaveTextContent(/nuovaDelega.createdDescription/i);
     });
-    mock.reset();
-    mock.restore();
-    expect(result.container).toHaveTextContent(/nuovaDelega.createdTitle/i);
-    expect(result.container).toHaveTextContent(/nuovaDelega.createdDescription/i);
+    const backButton = getByText('nuovaDelega.backToDelegations');
+    fireEvent.click(backButton);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(-1);
   });
 
-  it('fills the form and calls the create function - selected entities', async () => {
-    const entitiesList = [
-      {
-        id: 'entity-a',
-        name: 'Entity A',
-      },
-      {
-        id: 'entity-b',
-        name: 'Entity B',
-      },
-      {
-        id: 'entity-c',
-        name: 'Entity C',
-      },
-    ];
-    let mock = mockApi(apiClient, 'GET', GET_ALL_ACTIVATED_PARTIES(), 200, undefined, entitiesList);
-    const formData = {
-      selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-      codiceFiscale: 'RSSMRA01A01A111A',
-      nome: 'Mario',
-      cognome: 'Rossi',
-      ragioneSociale: '',
+  it('fills form with invalid values', async () => {
+    const { container, getByTestId } = render(<NuovaDelega />);
+    // the form is validate on submit
+    await testInput(container, 'expirationDate', '');
+    const button = getByTestId('createButton');
+    fireEvent.click(button!);
+    // check errors on required field
+    const nameError = container.querySelector('#nome-helper-text');
+    expect(nameError).toHaveTextContent('nuovaDelega.validation.name.required');
+    const surnameError = container.querySelector('#cognome-helper-text');
+    expect(surnameError).toHaveTextContent('nuovaDelega.validation.surname.required');
+    const fiscalCodeError = container.querySelector('#codiceFiscale-helper-text');
+    expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.required');
+    const expirationDateError = container.querySelector('#expirationDate-helper-text');
+    expect(expirationDateError).toHaveTextContent('nuovaDelega.validation.expirationDate.required');
+    // switch to selected entities and check required error
+    await testRadio(
+      container,
+      'radioSelectedEntities',
+      ['nuovaDelega.form.allEntities', 'nuovaDelega.form.onlySelected'],
+      1,
+      true
+    );
+    const entiError = container.querySelector('#enti-helper-text');
+    expect(entiError).toHaveTextContent('nuovaDelega.validation.entiSelected.required');
+    // inser wrong data
+    await testInput(container, 'codiceFiscale', 'wrong-fiscal-code');
+    expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.wrong');
+    await testInput(container, 'expirationDate', formatDate(yesterday.toISOString()));
+    expect(expirationDateError).toHaveTextContent('nuovaDelega.validation.expirationDate.wrong');
+    // switch to persona giuridica
+    await testRadio(
+      container,
+      'recipientType',
+      ['nuovaDelega.form.naturalPerson', 'nuovaDelega.form.legalPerson'],
+      1,
+      true
+    );
+    const name = container.querySelector('input[name="nome"]');
+    expect(name).not.toBeInTheDocument();
+    expect(nameError).not.toBeInTheDocument();
+    const surname = container.querySelector('input[name="cognome"]');
+    expect(surname).not.toBeInTheDocument();
+    expect(surnameError).not.toBeInTheDocument();
+    const businessName = container.querySelector('input[name="ragioneSociale"]');
+    expect(businessName).toBeInTheDocument();
+    // rerun form submission
+    fireEvent.click(button!);
+    const businessNameError = await waitFor(() =>
+      container.querySelector('#ragioneSociale-helper-text')
+    );
+    expect(businessNameError).toHaveTextContent('nuovaDelega.validation.businessName.required');
+  });
+
+  it('add delegation to PG and with entities selected', async () => {
+    const creationPayload = {
+      ...createDelegationPayload,
+      selectPersonaFisicaOrPersonaGiuridica: RecipientType.PG,
+      expirationDate: new Date('01/01/2122'),
+      verificationCode: '34153',
+      enti: [parties[1]],
       selectTuttiEntiOrSelezionati: 'entiSelezionati',
-      expirationDate: new Date('01/01/2122'),
-      enti: [
-        {
-          id: 'entity-a',
-          name: 'Entity A',
-        },
-        {
-          id: 'entity-c',
-          name: 'Entity C',
-        },
-      ],
-      verificationCode: 'verification code',
     };
-    mock = mockApi(
-      mock,
-      'POST',
-      CREATE_DELEGATION(),
-      200,
-      createDelegationMapper(formData),
-      mockCreateDelegation
+    mock.onPost(CREATE_DELEGATION()).reply(200, createDelegationMapper(creationPayload));
+    const { container, getByTestId } = render(<NuovaDelega />);
+    // switch to persona giuridica
+    await testRadio(
+      container,
+      'recipientType',
+      ['nuovaDelega.form.naturalPerson', 'nuovaDelega.form.legalPerson'],
+      1,
+      true
     );
-    const result = render(<NuovaDelega />, initialState());
-    const form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form, 'nome', 'Mario');
-    await testInput(form, 'cognome', 'Rossi');
-    await testInput(form, 'codiceFiscale', 'RSSMRA01A01A111A');
+    const form = container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'ragioneSociale', createDelegationPayload.ragioneSociale);
+    await testInput(form, 'codiceFiscale', createDelegationPayload.codiceFiscale);
     await testInput(form, 'expirationDate', '01/01/2122');
-    const radio = result.getByTestId('radioSelectedEntities');
-    fireEvent.click(radio);
+    // switch to selected entities
+    await testRadio(
+      container,
+      'radioSelectedEntities',
+      ['nuovaDelega.form.allEntities', 'nuovaDelega.form.onlySelected'],
+      1,
+      true
+    );
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toBe(GET_ALL_ACTIVATED_PARTIES());
+    await testAutocomplete(container, 'enti', parties, true, 1);
+    // create delegation
+    const button = getByTestId('createButton');
+    fireEvent.click(button!);
     await waitFor(() => {
-      expect(mock.history.get.length).toBe(1);
-      expect(mock.history.get[0].url).toContain('ext-registry/pa/v1/activated-on-pn');
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
+        createDelegationMapper(creationPayload)
+      );
     });
-    await testAutocomplete(form, 'enti', entitiesList, true, 0, true);
-    await testAutocomplete(form, 'enti', entitiesList, true, 2, true);
-    const button = result.queryByTestId('createButton') as Element;
-    fireEvent.click(button);
     await waitFor(() => {
-      expect(mockTrackEventFn).toBeCalledTimes(1);
-      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
-      expect(mock.history.post.length).toBe(1);
-      expect(mock.history.post[0].url).toContain('mandate/api/v1/mandate');
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(createDelegationMapper(formData));
+      expect(container).toHaveTextContent(/nuovaDelega.createdTitle/i);
+      expect(container).toHaveTextContent(/nuovaDelega.createdDescription/i);
     });
-    mock.reset();
-    mock.restore();
-    expect(result.container).toHaveTextContent(/nuovaDelega.createdTitle/i);
-    expect(result.container).toHaveTextContent(/nuovaDelega.createdDescription/i);
   });
 });

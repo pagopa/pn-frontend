@@ -1,26 +1,25 @@
 /* eslint-disable max-classes-per-file */
+import { Validator } from '@pagopa-pn/pn-validator';
 
-import { Validator } from "@pagopa-pn/pn-validator";
-import { dataRegex } from "../utils";
+import { dataRegex } from '../utility';
 
 /* ------------------------------------------------------------------------
    Types for specific attributes
    ------------------------------------------------------------------------ */
 export enum DowntimeStatus {
-  OK = "OK",
-  KO = "KO",
+  OK = 'OK',
+  KO = 'KO',
 }
 
 export enum KnownFunctionality {
-  NotificationCreate = "NOTIFICATION_CREATE",
-  NotificationVisualization = "NOTIFICATION_VISUALIZATION",
-  NotificationWorkflow = "NOTIFICATION_WORKFLOW",
+  NotificationCreate = 'NOTIFICATION_CREATE',
+  NotificationVisualization = 'NOTIFICATION_VISUALIZATION',
+  NotificationWorkflow = 'NOTIFICATION_WORKFLOW',
 }
 
 export function isKnownFunctionality(functionality: string): boolean {
   return Object.values(KnownFunctionality).includes(functionality as KnownFunctionality);
 }
-
 
 /* ------------------------------------------------------------------------
    Params for API calls
@@ -32,7 +31,6 @@ export interface GetDowntimeHistoryParams {
   page?: string;
   size?: string;
 }
-
 
 /* ------------------------------------------------------------------------
    Internal model
@@ -66,7 +64,7 @@ export interface DowntimeLogPage {
   nextPage?: string;
 }
 
-// use in internal model the same format for legal fact documents 
+// use in internal model the same format for legal fact documents
 // as in the BE response
 export interface LegalFactDocumentDetails {
   filename: string;
@@ -74,14 +72,13 @@ export interface LegalFactDocumentDetails {
   url: string;
 }
 
-
 /* ------------------------------------------------------------------------
    BE responses
    ------------------------------------------------------------------------ */
 
-/** 
+/**
  * Possible errors
- * - functionality not in the expected set 
+ * - functionality not in the expected set
  *   (if possible, taken from the response from /downtime/v1/status)
  *   but in order to verify it, I should be able to access the Redux store
  *   (to avoid re-fetching the set of functionalities each time downtimes are retrieved).
@@ -90,7 +87,7 @@ export interface LegalFactDocumentDetails {
  * - startDate not a valid date
  * - endDate, if present, not a valid date
  */
- export interface DowntimeDTO {
+export interface DowntimeDTO {
   functionality: string;
   status: string;
   startDate: string;
@@ -112,31 +109,28 @@ export interface DowntimeLogPageDTO {
   nextPage?: string;
 }
 
-
-
 /* ------------------------------------------------------------------------
    validation - custom validators
    ------------------------------------------------------------------------ */
 function validateIsoDate(required: boolean) {
   return (value: string | undefined) => {
-    const isOK = value 
-      ? dataRegex.isoDate.test(value) && !Number.isNaN(Date.parse(value)) 
+    const isOK = value
+      ? dataRegex.isoDate.test(value) && !Number.isNaN(Date.parse(value))
       : !required;
-    return isOK ? null : "A date in ISO format is expected";
+    return isOK ? null : 'A date in ISO format is expected';
   };
 }
 
 function validateString(value: string | undefined | null): string | null {
   const isOK = value === undefined || value === null || typeof value === 'string';
-  return isOK ? null : "A string is expected";
+  return isOK ? null : 'A string is expected';
 }
 
 function validateBoolean(value: boolean | undefined | null): string | null {
   const isOK = value === undefined || value === null || typeof value === 'boolean';
-  return isOK ? null : "A boolean is expected";
+  return isOK ? null : 'A boolean is expected';
 }
-    
-    
+
 /* ------------------------------------------------------------------------
     validation - BE response validators
     ------------------------------------------------------------------------ */
@@ -146,7 +140,11 @@ export class BEDowntimeValidator extends Validator<DowntimeDTO> {
     super();
     this.ruleFor('functionality').isString().customValidator(validateString).not().isUndefined();
     // this.ruleFor('functionality').isUndefined(true);
-    this.ruleFor('status').isString().isOneOf(Object.values(DowntimeStatus) as Array<string>).not().isUndefined();
+    this.ruleFor('status')
+      .isString()
+      .isOneOf(Object.values(DowntimeStatus) as Array<string>)
+      .not()
+      .isUndefined();
     this.ruleFor('startDate').isString().customValidator(validateIsoDate(true));
     this.ruleFor('endDate').isString().customValidator(validateIsoDate(false));
     this.ruleFor('legalFactId').isString().customValidator(validateString);
@@ -157,17 +155,25 @@ export class BEDowntimeValidator extends Validator<DowntimeDTO> {
 export class AppStatusDTOValidator extends Validator<AppStatusDTO> {
   constructor() {
     super();
-    this.ruleFor("functionalities").isArray().not().isEmpty().forEachElement(rules => rules.isString().customValidator(validateString));
-    this.ruleFor("openIncidents").isArray().forEachElement(rules => rules.isObject().setValidator(new BEDowntimeValidator()));
+    this.ruleFor('functionalities')
+      .isArray()
+      .not()
+      .isEmpty()
+      .forEachElement((rules) => rules.isString().customValidator(validateString));
+    this.ruleFor('openIncidents')
+      .isArray()
+      .forEachElement((rules) => rules.isObject().setValidator(new BEDowntimeValidator()));
   }
 }
 
 export class DowntimeLogPageDTOValidator extends Validator<DowntimeLogPageDTO> {
   constructor() {
     super();
-    this.ruleFor('result').isArray().forEachElement(rules => rules.isObject().setValidator(new BEDowntimeValidator())).not().isUndefined();
+    this.ruleFor('result')
+      .isArray()
+      .forEachElement((rules) => rules.isObject().setValidator(new BEDowntimeValidator()))
+      .not()
+      .isUndefined();
     this.ruleFor('nextPage').isString().customValidator(validateString);
   }
 }
-
-

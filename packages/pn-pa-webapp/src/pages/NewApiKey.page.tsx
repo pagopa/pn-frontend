@@ -1,33 +1,35 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import {
-  useIsMobile,
-  Prompt,
-  PnBreadcrumb,
-  TitleBox,
-  PnAutocomplete,
-  SectionHeading,
-} from '@pagopa-pn/pn-commons';
 import { useFormik } from 'formik';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+
 import {
   Box,
-  Typography,
-  TextField,
-  Paper,
-  Grid,
   Button,
-  MenuItem,
+  Checkbox,
+  Grid,
   ListItemIcon,
   ListItemText,
-  Checkbox,
+  MenuItem,
+  Paper,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import {
+  PnAutocomplete,
+  PnBreadcrumb,
+  Prompt,
+  SectionHeading,
+  TitleBox,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
+
+import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { GroupStatus, UserGroup } from '../models/user';
-import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
+import * as routes from '../navigation/routes.const';
+import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
@@ -111,7 +113,7 @@ const NewApiKey = () => {
                   subTitle={tkp('page-description')}
                   variantSubTitle="body1"
                 ></TitleBox>
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} data-testid="new-api-key-form">
                   <Typography sx={{ marginTop: 4 }} variant="body2">
                     * {tkp('required-fields')}
                   </Typography>
@@ -141,6 +143,7 @@ const NewApiKey = () => {
                           value={formik.values.groups}
                           options={groups}
                           id="groups"
+                          data-testid="groups"
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
                           renderOption={(props, option) => (
@@ -162,6 +165,7 @@ const NewApiKey = () => {
                     </Paper>
                     <Box mt={3}>
                       <Button
+                        data-testid="submit-new-api-key"
                         id="continue-button"
                         variant="contained"
                         type="submit"

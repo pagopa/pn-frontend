@@ -1,9 +1,9 @@
-import { BooleanRuleValidator } from './../ruleValidators/BooleanRuleValidator';
-import { NumberRuleValidator } from './../ruleValidators/NumberRuleValidator';
-import { StringRuleValidator } from './../ruleValidators/StringRuleValidator';
-import { DateRuleValidator } from './../ruleValidators/DateRuleValidator';
+import { ArrayRuleValidator } from '../ruleValidators/ArrayRuleValidator';
+import { BooleanRuleValidator } from '../ruleValidators/BooleanRuleValidator';
+import { DateRuleValidator } from '../ruleValidators/DateRuleValidator';
+import { NumberRuleValidator } from '../ruleValidators/NumberRuleValidator';
 import { ObjectRuleValidator } from '../ruleValidators/ObjectRuleValidator';
-import { ArrayRuleValidator } from './../ruleValidators/ArrayRuleValidator';
+import { StringRuleValidator } from '../ruleValidators/StringRuleValidator';
 
 // When conditional types act on a generic type, they become distributive when given a union type
 // Surrounding with [], we can avoid this behaviour

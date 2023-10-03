@@ -1,5 +1,5 @@
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -7,14 +7,14 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Box,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { Column, Item, Sort } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { buttonNakedInheritStyle } from '../../utils';
+import { Column, Item, Sort } from '../../types';
+import { buttonNakedInheritStyle } from '../../utility';
 
 type Props<ColumnId> = {
   /** Table columns */
@@ -27,6 +27,8 @@ type Props<ColumnId> = {
   onChangeSorting?: (s: Sort<ColumnId>) => void;
   /** Table title used in aria-label */
   ariaTitle?: string;
+  /** Table test id */
+  testId?: string;
 };
 
 function ItemsTable<ColumnId extends string>({
@@ -35,6 +37,7 @@ function ItemsTable<ColumnId extends string>({
   sort,
   onChangeSorting,
   ariaTitle,
+  testId = 'table(notifications)',
 }: Props<ColumnId>) {
   const sortHandler = (property: ColumnId) => () => {
     if (sort && onChangeSorting) {
@@ -66,19 +69,19 @@ function ItemsTable<ColumnId extends string>({
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
         <Table
+          id="notifications-table"
           stickyHeader
           aria-label={
-            ariaTitle
-              ? ariaTitle
-              : getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
+            ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
           }
-          data-testid="table(notifications)"
+          data-testid={testId}
         >
-          <TableHead role="rowgroup">
+          <TableHead role="rowgroup" data-testid="tableHead">
             <TableRow role="row">
               {columns.map((column) => (
                 <TableCell
                   scope="col"
+                  data-testid="tableHeadCell"
                   key={column.id}
                   align={column.align}
                   sx={{
@@ -93,6 +96,7 @@ function ItemsTable<ColumnId extends string>({
                       active={sort.orderBy === column.id}
                       direction={sort.orderBy === column.id ? sort.order : 'asc'}
                       onClick={sortHandler(column.id)}
+                      data-testid={`${testId}.sort.${column.id}`}
                     >
                       {column.label}
                       {sort.orderBy === column.id && (
@@ -108,11 +112,16 @@ function ItemsTable<ColumnId extends string>({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody sx={{ backgroundColor: 'background.paper' }} role="rowgroup">
+          <TableBody
+            sx={{ backgroundColor: 'background.paper' }}
+            role="rowgroup"
+            data-testid="tableBody"
+          >
             {rows.map((row, index) => (
               <TableRow
+                id={`${testId}.row`}
                 key={row.id}
-                data-testid="table(notifications).row"
+                data-testid={`${testId}.row`}
                 role="row"
                 aria-rowindex={index + 1}
               >
@@ -122,6 +131,7 @@ function ItemsTable<ColumnId extends string>({
                     <TableCell
                       key={column.id}
                       role="cell"
+                      data-testid="tableBodyCell"
                       sx={{
                         width: column.width,
                         borderBottom: 'none',

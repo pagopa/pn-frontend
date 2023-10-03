@@ -1,14 +1,15 @@
 import _ from 'lodash';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
+
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import { useIsMobile } from '../../hooks';
-import { filtersApplied } from '../../utils';
+import { filtersApplied } from '../../utility';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
+import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
-import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
 
 type Props<FormValues> = {
   /** label to show for the filter button */
@@ -67,6 +68,7 @@ const SmartFilter = <FormValues extends object>({
 
   const confirmAction = (
     <Button
+      id="confirm-button"
       data-testid="confirmButton"
       variant="outlined"
       type="submit"

@@ -1,134 +1,343 @@
-import React from 'react';
 import MockAdapter from 'axios-mock-adapter';
-import { Suspense } from 'react';
-import * as redux from 'react-redux';
+import React from 'react';
 
-import i18n from '../i18n';
+import { ThemeProvider } from '@emotion/react';
+import { theme } from '@pagopa/mui-italia';
+
 import App from '../App';
-import * as sidemenuActions from '../redux/sidemenu/actions';
-import { PartyRole, PNRole } from '../redux/auth/types';
+import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
+import { userResponse } from '../__mocks__/Auth.mock';
+import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { apiClient } from '../api/apiClients';
-import { render, act, screen, mockApi } from './test-utils';
+import { GET_CONSENTS } from '../api/consents/consents.routes';
+import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
+import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
+import { DelegationStatus } from '../models/Deleghe';
+import { ConsentType } from '../models/consents';
+import { PNRole, PartyRole } from '../redux/auth/types';
+import { RenderResult, act, render } from './test-utils';
 
-// mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch;
-// questo totale viene verificato in un test
-jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
-jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+  useTranslation: () => ({
+    t: (str: string) => str,
+    i18n: { language: 'it' },
+  }),
+}));
 
-/**
- * Componente che mette App all'interno di un Suspense,
- * necessario per il test che fa solo un render,
- * usato anche nel automatic accessibility test.
- */
+jest.mock('../pages/Notifiche.page', () => () => <div>Generic Page</div>);
+
+const unmockedFetch = global.fetch;
+
 const Component = () => (
-  <Suspense fallback="loading...">
+  <ThemeProvider theme={theme}>
     <App />
-  </Suspense>
+  </ThemeProvider>
 );
 
-const initialState = (token: string) => ({
-  preloadedState: {
-    userState: {
-      user: {
-        fiscal_number: 'mocked-fiscal-number',
-        name: 'mocked-name',
-        family_name: 'mocked-family-name',
-        email: 'mocked-user@mocked-domain.com',
-        sessionToken: token,
-        organization: {
-          id: 'mocked-id',
-          name: 'mocked-organizzation',
-          roles: [
-            {
-              partyRole: PartyRole.MANAGER,
-              role: PNRole.ADMIN,
-            },
-          ],
-        },
-      },
-      tos: true,
+const reduxInitialState = {
+  userState: {
+    user: userResponse,
+    fetchedTos: false,
+    fetchedPrivacy: false,
+    tosConsent: {
+      accepted: false,
+      isFirstAccept: false,
+      currentVersion: 'mocked-version-1',
     },
-    generalInfoState: {
-      pendingDelegators: 0,
+    privacyConsent: {
+      accepted: false,
+      isFirstAccept: false,
+      currentVersion: 'mocked-version-1',
     },
   },
-});
+};
 
-/**
- * Questo test suite si separa in due describe diversi, di tests che hanno una differenza
- * nella inizializzazione di i18n.
- * - per il test che analizza dettagli di comportamento serve settare react.useSuspense = false
- *   per evitare messaggi di ECONNREFUSED, cfr. PN-2038.
- *   Cfr. https://stackoverflow.com/questions/54432861/a-react-component-suspended-while-rendering-but-no-fallback-ui-was-specified .
- * - per i altri test, serve non passare nessun parametro. Se si fa lo stesso setting che per il
- *   caso precedente, appaiono messaggi "A future version of React will block javascript: URLs..."
- *   e "An update to ForwardRef inside a test was not wrapped in act(...)."
- *
- * Lascio la inizializzazione comune nel describe principale.
- * ---------------------------------
- * Carlos, 2022.08.10
- */
 describe('App', () => {
-  let mockUseDispatchFn: jest.Mock;
-  let mockSidemenuInformationActionFn: jest.Mock;
-  let mockDomicileInfoActionFn: jest.Mock;
-  let axiosMock: MockAdapter;
+  let mock: MockAdapter;
+  const original = window.location;
 
-  beforeEach(() => {
-    axiosMock = mockApi(apiClient, 'ANY', '', 200);
-
-    mockSidemenuInformationActionFn = jest.fn();
-    mockDomicileInfoActionFn = jest.fn();
-    mockUseDispatchFn = jest.fn(() => (action: any, state: any) => {
-      console.log({ action, state });
-    });
-
-    // mock actions
-    const getSidemenuInfoActionSpy = jest.spyOn(sidemenuActions, 'getSidemenuInformation');
-    getSidemenuInfoActionSpy.mockImplementation(mockSidemenuInformationActionFn as any);
-    const getDomicileInfoActionSpy = jest.spyOn(sidemenuActions, 'getDomicileInfo');
-    getDomicileInfoActionSpy.mockImplementation(mockDomicileInfoActionFn as any);
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockUseDispatchFn as any);
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+    // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
+    // this causes an error, so we mock to avoid it
+    global.fetch = () =>
+      Promise.resolve({
+        json: () => Promise.resolve([]),
+      }) as Promise<Response>;
   });
 
   afterEach(() => {
-    axiosMock.reset();
-    jest.restoreAllMocks();
+    mock.reset();
+    jest.clearAllMocks();
   });
 
-  /**
-   * Tests che usano Component e inizializzazione "semplice" di i18n.
-   */
-  describe('tests che non analizzano dettagli (test solo di renderizzazione)', () => {
-    beforeEach(() => {
-      void i18n.init();
-    });
-
-    it('Renders SEND', () => {
-      render(<Component />);
-      const loading = screen.getByText(/loading.../i);
-      expect(loading).toBeInTheDocument();
-    });
+  afterAll(() => {
+    mock.restore();
+    global.fetch = unmockedFetch;
   });
 
-  /**
-   * Tests che usano App e inizializzazione di i18n che include react.useSuspense = false.
-   */
-  describe('tests che analizzano dettagli di comportamento (mock alle chiamate)', () => {
-    beforeEach(() => {
-      void i18n.init({
-        react: {
-          useSuspense: false,
+  it('render component - user not logged in', async () => {
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />);
+    });
+    const header = document.querySelector('header');
+    expect(header).toBeInTheDocument();
+    const footer = document.querySelector('footer');
+    expect(footer).toBeInTheDocument();
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    expect(result!.container).toHaveTextContent(
+      'Non hai le autorizzazioni necessarie per accedere a questa pagina'
+    );
+  });
+
+  it('render component - user logged in', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const header = document.querySelector('header');
+    expect(header).toBeInTheDocument();
+    const footer = document.querySelector('footer');
+    expect(footer).toBeInTheDocument();
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).toBeInTheDocument();
+    expect(result!.container).toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(5);
+  });
+
+  it('sidemenu not included if error in API call to fetch TOS', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(5);
+  });
+
+  it('sidemenu not included if error in API call to fetch PRIVACY', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(500);
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(5);
+  });
+
+  it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: false,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: false,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.queryByTestId('side-menu');
+    expect(sideMenu).not.toBeInTheDocument();
+    const tosPage = result!.queryByTestId('tos-acceptance-page');
+    expect(tosPage).toBeInTheDocument();
+    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(mock.history.get).toHaveLength(5);
+  });
+
+  it('sidemenu items if user is admin', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to notifications + link to delegated notifications + link to app status + link to delegations +
+    // link to contacts + 2 links to selfcare + collapsible menu that contains the first two links
+    expect(sideMenuItems).toHaveLength(8);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).toBeInTheDocument();
+  });
+
+  it('sidemenu items if user is a group admin', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(COUNT_DELEGATORS(DelegationStatus.PENDING)).reply(200, 3);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            user: {
+              ...userResponse,
+              hasGroup: true,
+            },
+          },
         },
       });
     });
+    expect(mock.history.get).toHaveLength(4);
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to delegated notifications + link to app status + link to delegations +
+    // 2 links to selfcare
+    expect(sideMenuItems).toHaveLength(5);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).not.toBeInTheDocument();
+  });
 
-    it('Dispatches proper actions when session token is not empty', async () => {
-      await act(async () => void render(<App />, initialState('mocked-session-token')));
-      expect(mockUseDispatchFn).toBeCalledTimes(3);
-      expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
-      expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
+  it('sidemenu items if user is an operator', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
     });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            user: {
+              ...userResponse,
+              organization: {
+                ...userResponse.organization,
+                roles: [
+                  {
+                    partyRole: PartyRole.MANAGER,
+                    role: PNRole.OPERATOR,
+                  },
+                ],
+              },
+            },
+          },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(3);
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to notifications + link to delegated notifications + link to app status +
+    // 2 links to selfcare + collapsible menu that contains the first two links
+    expect(sideMenuItems).toHaveLength(6);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).toBeInTheDocument();
+  });
+
+  it('sidemenu items if user is a group operator', async () => {
+    mock.onGet(GET_CONSENTS(ConsentType.DATAPRIVACY)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.DATAPRIVACY,
+      accepted: true,
+    });
+    mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(200, {
+      recipientId: userResponse.uid,
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    let result: RenderResult;
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            user: {
+              ...userResponse,
+              organization: {
+                ...userResponse.organization,
+                roles: [
+                  {
+                    partyRole: PartyRole.MANAGER,
+                    role: PNRole.OPERATOR,
+                  },
+                ],
+              },
+              hasGroup: true,
+            },
+          },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(3);
+    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
+    // link to delegated notifications + link to app status +
+    // 2 links to selfcare
+    expect(sideMenuItems).toHaveLength(4);
+    const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
+    expect(collapsibleMenu).not.toBeInTheDocument();
   });
 });

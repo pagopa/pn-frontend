@@ -1,31 +1,38 @@
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { digitalAddresses } from '../../../redux/contact/__test__/test-utils';
-import { LegalChannelType, CourtesyChannelType } from '../../../models/contacts';
-import { mockApi } from '../../../__test__/test-utils';
+import MockAdapter from 'axios-mock-adapter';
+
+import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { digitalAddresses, digitalAddressesInvalid } from '../../../__mocks__/Contacts.mock';
+import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { apiClient } from '../../apiClients';
 import { ContactsApi } from '../Contacts.api';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from '../contacts.routes';
 
 describe('Contacts api tests', () => {
+  let mock: MockAdapter;
+
   mockAuthentication();
 
-  it('getDigitalAddresses', async () => {
-    const mock = mockApi(apiClient, 'GET', CONTACTS_LIST(), 200, undefined, digitalAddresses);
-    const res = await ContactsApi.getDigitalAddresses();
-    expect(res).toStrictEqual(digitalAddresses);
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
     mock.reset();
+  });
+
+  afterAll(() => {
     mock.restore();
   });
 
-  it('createOrUpdateDigitalAddress (email to verify)', async () => {
+  it('getDigitalAddresses', async () => {
+    mock.onGet(CONTACTS_LIST()).reply(200, digitalAddressesInvalid);
+    const res = await ContactsApi.getDigitalAddresses();
+    expect(res).toStrictEqual(digitalAddresses);
+  });
+
+  it('createOrUpdateDigitalAddress (pec to verify)', async () => {
     const body = { value: 'a@a.it' };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
-      200,
-      body
-    );
+    mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), body).reply(200);
     const res = await ContactsApi.createOrUpdateLegalAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -33,20 +40,13 @@ describe('Contacts api tests', () => {
       body
     );
     expect(res).toStrictEqual(undefined);
-    mock.reset();
-    mock.restore();
   });
 
-  it('createOrUpdateDigitalAddress (email to validate)', async () => {
+  it('createOrUpdateDigitalAddress (pec to validate)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
-      200,
-      body,
-      { result: 'PEC_VALIDATION_REQUIRED' }
-    );
+    mock
+      .onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), body)
+      .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
     const res = await ContactsApi.createOrUpdateLegalAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -62,19 +62,11 @@ describe('Contacts api tests', () => {
       senderId: 'mocked-senderId',
       senderName: undefined,
     });
-    mock.reset();
-    mock.restore();
   });
 
-  it('createOrUpdateDigitalAddress (email verified)', async () => {
+  it('createOrUpdateDigitalAddress (pec verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
-      204,
-      body
-    );
+    mock.onPost(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC), body).reply(204);
     const res = await ContactsApi.createOrUpdateLegalAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -90,32 +82,17 @@ describe('Contacts api tests', () => {
       senderId: 'mocked-senderId',
       senderName: undefined,
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('deleteLegalAddress', async () => {
-    const mock = mockApi(
-      apiClient,
-      'DELETE',
-      LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC),
-      204
-    );
+    mock.onDelete(LEGAL_CONTACT('mocked-senderId', LegalChannelType.PEC)).reply(204);
     const res = await ContactsApi.deleteLegalAddress('mocked-senderId', LegalChannelType.PEC);
     expect(res).toStrictEqual('mocked-senderId');
-    mock.reset();
-    mock.restore();
   });
 
   it('createOrUpdateCourtesyAddress (email to verify)', async () => {
-    const body = { value: 'a@a.it', verificationCode: '12345' };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL),
-      200,
-      body
-    );
+    const body = { value: 'a@a.it' };
+    mock.onPost(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL), body).reply(200);
     const res = await ContactsApi.createOrUpdateCourtesyAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -123,19 +100,11 @@ describe('Contacts api tests', () => {
       body
     );
     expect(res).toStrictEqual(undefined);
-    mock.reset();
-    mock.restore();
   });
 
   it('createOrUpdateCourtesyAddress (email verified)', async () => {
     const body = { value: 'a@a.it', verificationCode: '12345' };
-    const mock = mockApi(
-      apiClient,
-      'POST',
-      COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL),
-      204,
-      body
-    );
+    mock.onPost(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL), body).reply(204);
     const res = await ContactsApi.createOrUpdateCourtesyAddress(
       'mocked-recipientId',
       'mocked-senderId',
@@ -150,23 +119,14 @@ describe('Contacts api tests', () => {
       senderId: 'mocked-senderId',
       senderName: undefined,
     });
-    mock.reset();
-    mock.restore();
   });
 
   it('deleteCourtesyAddress', async () => {
-    const mock = mockApi(
-      apiClient,
-      'DELETE',
-      COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL),
-      204
-    );
+    mock.onDelete(COURTESY_CONTACT('mocked-senderId', CourtesyChannelType.EMAIL)).reply(204);
     const res = await ContactsApi.deleteCourtesyAddress(
       'mocked-senderId',
       CourtesyChannelType.EMAIL
     );
     expect(res).toStrictEqual('mocked-senderId');
-    mock.reset();
-    mock.restore();
   });
 });

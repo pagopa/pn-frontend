@@ -16,13 +16,7 @@ export enum AUTH_ACTIONS {
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  async (spidToken: string, { rejectWithValue }) => {
-    try {
-      return await AuthApi.exchangeToken(spidToken);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((spidToken: string) => AuthApi.exchangeToken(spidToken))
 );
 
 /**

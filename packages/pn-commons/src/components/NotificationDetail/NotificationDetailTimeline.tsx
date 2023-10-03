@@ -1,16 +1,17 @@
 import { Fragment, useState } from 'react';
-import { Typography, Grid, Drawer, Box } from '@mui/material';
+
 import CloseIcon from '@mui/icons-material/Close';
+import { Box, Drawer, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import {
   LegalFactId,
-  NotificationStatusHistory,
-  NotificationDetailRecipient,
   NotificationDetailOtherDocument,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
 } from '../../types';
-import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -25,6 +26,8 @@ type Props = {
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
   eventTrackingCallbackShowMore?: () => void;
+  disableDownloads?: boolean;
+  isParty?: boolean;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -38,7 +41,14 @@ const CustomDrawer = styled(Drawer)(() => ({
 }));
 
 /**
- * Notification detail timeline
+ * This component is responsible for rendering a timeline of notification details, 
+ * and it provides options to view the full timeline in a drawer for mobile users.
+ * The component's render function returns a JSX structure that includes:
+ * A grid container with a title.
+ * A timeline of notification details (timelineComponent) based on the statusHistory prop.
+ * A custom drawer component (CustomDrawer) that can be opened or closed by clicking an 
+ * icon. The drawer contains a copy of the timeline content, and its visibility 
+ * is controlled by the state variable.
  * @param recipients list of recipients
  * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
@@ -47,6 +57,8 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
+ * @param disableDownloads for disable downloads
+ * @param isParty for specific render of notification
  */
 const NotificationDetailTimeline = ({
   recipients,
@@ -57,6 +69,8 @@ const NotificationDetailTimeline = ({
   showMoreButtonLabel,
   showLessButtonLabel,
   eventTrackingCallbackShowMore,
+  disableDownloads = false,
+  isParty = true,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -89,12 +103,20 @@ const NotificationDetailTimeline = ({
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
+      disableDownloads={disableDownloads}
+      isParty={isParty}
     />
   ));
 
   return (
     <Fragment>
-      <Grid container direction="row" justifyContent="space-between" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        data-testid="NotificationDetailTimeline"
+      >
         <Grid item>
           <Typography
             id="notification-state"
@@ -112,6 +134,9 @@ const NotificationDetailTimeline = ({
           <Button startIcon={<DownloadIcon />}>Scarica tutti gli allegati</Button>
         </Grid> */}
       </Grid>
+      {/* 
+      If is mobile, then render a small preview of timeline with the possibility to open the customDrawer
+      */}
       <TimelineNotification>
         {isMobile && statusHistory.length > 0 ? (
           <NotificationDetailTimelineStep
@@ -122,21 +147,25 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
+            disableDownloads={disableDownloads}
+            isParty={isParty}
           />
         ) : (
           timelineComponent
         )}
       </TimelineNotification>
-      <CustomDrawer anchor="bottom" open={state} onClose={toggleHistoryDrawer}>
+      <CustomDrawer anchor="bottom" open={state} onClose={toggleHistoryDrawer} data-testid="notification-history-drawer">
         <Grid
           container
           direction="row"
           justifyContent="space-between"
           alignItems="center"
           sx={{ p: 3 }}
+          data-testid="notification-history-drawer-content"
         >
           <Grid item>
             <Typography
+              id="notification-state"
               color="text.primary"
               fontWeight={700}
               textTransform="uppercase"
@@ -147,6 +176,7 @@ const NotificationDetailTimeline = ({
           </Grid>
           <Grid item>
             <CloseIcon
+              data-testid="notification-drawer-close"
               onClick={toggleHistoryDrawer}
               sx={{
                 color: 'action.active',

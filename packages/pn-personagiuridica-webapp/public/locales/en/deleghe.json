@@ -24,7 +24,7 @@
     "error_title": "Sorry, something went wrong",
     "error_subtitle": "We were unable to load the page. Reload it, or try again later.",
     "error_button": "Reload page",
-    "no_delegates": "{{organizationName}} has not delegated anyone to the reading of its notifications.",
+    "no_delegates": "{{organizationName}} has not delegated anyone to the reading of its notifications. <0>Add a delegate</0>.",
     "no_delegators": "There is no delegation to be borne by {{organizationName}}.",
     "no_delegators_after_filters": "The filters you added did not yield any results.",
     "show_code_title": "Verification code for delegation to {{name}}",
@@ -92,7 +92,8 @@
       "verificationCode": "Verification code",
       "verificationCodeDescr": "Share this code with the delegate: they will have to enter it when accepting the delegation.",
       "submit": "Submit request",
-      "mandatoryField": "Mandatory fields*"
+      "mandatoryField": "Mandatory fields*",
+      "party-not-found": "No entity found"
     },
     "validation": {
       "fiscalCode": {
