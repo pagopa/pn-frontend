@@ -1,8 +1,8 @@
 import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import {
   Column,
   EmptyState,
@@ -18,7 +18,6 @@ import {
 
 import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
-import { Organization } from '../../redux/auth/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utility/events';
@@ -36,19 +35,21 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
-// to avoid cognitive complexity warning - PN-5323
-function mainEmptyMessage(
-  filtersApplied: boolean,
-  isDelegatedPage: boolean,
-  organization: Organization,
-  t: any
-) {
-  return filtersApplied
-    ? t('empty-state.filter-message')
-    : isDelegatedPage
-    ? t('empty-state.delegate', { name: organization.name })
-    : t('empty-state.message', { name: organization.name });
-}
+const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+  const { t } = useTranslation(['notifiche']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-state.aria-label-remove-filters')}
+      key="remove-filters"
+      data-testid="link-remove-filters"
+      onClick={cleanFilters}
+    >
+      {children}
+    </Link>
+  );
+};
 
 const DesktopNotifications = ({
   notifications,
@@ -178,12 +179,6 @@ const DesktopNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
-  const EmptyStateProps = {
-    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : undefined,
-    emptyMessage: mainEmptyMessage(filtersApplied, isDelegatedPage, organization, t),
-    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
-  };
-
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   // Navigation handlers
@@ -211,7 +206,36 @@ const DesktopNotifications = ({
           onChangeSorting={onChangeSorting}
         />
       ) : (
-        <EmptyState {...EmptyStateProps} />
+        <EmptyState
+          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
+        >
+          {filtersApplied && (
+            <Trans
+              i18nKey={'empty-state.filtered'}
+              ns={'notifiche'}
+              components={[
+                <LinkRemoveFilters
+                  key={'remove-filters'}
+                  cleanFilters={filterNotificationsRef.current.cleanFilters}
+                />,
+              ]}
+            />
+          )}
+          {!filtersApplied && isDelegatedPage && (
+            <Trans
+              i18nKey={'empty-state.delegate'}
+              ns={'notifiche'}
+              values={{ name: organization.name }}
+            />
+          )}
+          {!filtersApplied && !isDelegatedPage && (
+            <Trans
+              i18nKey={'empty-state.no-notifications'}
+              ns={'notifiche'}
+              values={{ name: organization.name }}
+            />
+          )}
+        </EmptyState>
       )}
     </>
   );

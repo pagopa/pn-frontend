@@ -1,9 +1,9 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { MoreVert } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Link, Menu, MenuItem, Typography } from '@mui/material';
 import {
   Column,
   CustomTagGroup,
@@ -32,10 +32,26 @@ type Props = {
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
+const LinkNewApiKey: React.FC = ({ children }) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation(['apikeys']);
+  return (
+    <Link
+      component={'button'}
+      id="call-to-action-first"
+      aria-label={t('empty-action-label')}
+      key="new-api-key"
+      data-testid="link-new-api-key"
+      onClick={() => navigate(routes.NUOVA_API_KEY)}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
-  const navigate = useNavigate();
   const [rows, setRows] = useState<Array<Item>>([]);
   const [tableKey, setTableKey] = useState(0);
   type ApiKeyContextMenuProps = {
@@ -313,12 +329,13 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           ariaTitle={t('table.title')}
         />
       ) : (
-        <EmptyState
-          data-testid="emptyState"
-          emptyMessage={t('empty-message')}
-          emptyActionLabel={t('empty-action-label')}
-          emptyActionCallback={() => navigate(routes.NUOVA_API_KEY)}
-        />
+        <EmptyState data-testid="emptyState">
+          <Trans
+            ns={'apikeys'}
+            i18nKey={'empty-message'}
+            components={[<LinkNewApiKey key={'LinkNewApiKey'} />]}
+          />
+        </EmptyState>
       )}
     </>
   );

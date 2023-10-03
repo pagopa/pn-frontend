@@ -34,10 +34,10 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "message": "Non ci sono notifiche per {{name}}.",
+    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>",
+    "no-notifications": "Non ci sono notifiche per {{name}}.",
     "delegate": "Non ci sono notifiche in delega a {{name}} da leggere.",
-    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
-    "filter-action": "Rimuovi filtri"
+    "aria-label-remove-filters": "Rimuovi filtri"
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"

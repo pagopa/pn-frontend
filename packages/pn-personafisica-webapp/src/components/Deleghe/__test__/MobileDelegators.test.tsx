@@ -2,7 +2,6 @@ import React from 'react';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { render, screen } from '../../../__test__/test-utils';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import MobileDelegators from '../MobileDelegators';
 
 jest.mock('react-i18next', () => ({
@@ -10,6 +9,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('MobileDelegators Component', () => {
