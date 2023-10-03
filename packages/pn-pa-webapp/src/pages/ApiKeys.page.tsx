@@ -264,9 +264,11 @@ const ApiKeys = () => {
               <ApiKeyModal
                 title={t('block-api-key')}
                 subTitle={
-                  <Trans i18nKey="block-warning1" values={{ apiKeyName: modal.apiKey?.name }}>
-                    {t('block-warning1', { apiKeyName: modal.apiKey?.name })}
-                  </Trans>
+                  <Trans
+                    i18nKey="block-warning1"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
                 }
                 content={<Typography>{t('block-warning2')}</Typography>}
                 closeButtonLabel={t('cancel-button')}
@@ -279,9 +281,11 @@ const ApiKeys = () => {
               <ApiKeyModal
                 title={t('enable-api-key')}
                 subTitle={
-                  <Trans i18nKey="enable-warning" values={{ apiKeyName: modal.apiKey?.name }}>
-                    {t('enable-warning', { apiKeyName: modal.apiKey?.name })}
-                  </Trans>
+                  <Trans
+                    i18nKey="enable-warning"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
                 }
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
@@ -293,9 +297,11 @@ const ApiKeys = () => {
               <ApiKeyModal
                 title={t('rotate-api-key')}
                 subTitle={
-                  <Trans i18nKey="rotate-warning-1" values={{ apiKeyName: modal.apiKey?.name }}>
-                    {t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}
-                  </Trans>
+                  <Trans
+                    i18nKey="rotate-warning1"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
                 }
                 content={<Typography>{t('rotate-warning2')}</Typography>}
                 closeButtonLabel={t('cancel-button')}
@@ -308,9 +314,11 @@ const ApiKeys = () => {
               <ApiKeyModal
                 title={t('delete-api-key')}
                 subTitle={
-                  <Trans i18nKey="delete-warning" values={{ apiKeyName: modal.apiKey?.name }}>
-                    {t('delete-warning', { apiKeyName: modal.apiKey?.name })}
-                  </Trans>
+                  <Trans
+                    i18nKey="delete-warning"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
                 }
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
