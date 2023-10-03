@@ -17,6 +17,7 @@ import {
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -75,6 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [isF24Ready, setIsF24Ready] = useState(true);
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -111,7 +113,12 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.pagopaAttachmentUrl
   );
 
-  useDownloadDocument({ url: pagopaAttachmentUrl });
+  const f24AttachmentUrl = useAppSelector(
+    (state: RootState) => state.notificationState.f24AttachmentUrl
+  );
+
+  useDownloadDocument({ url: pagopaAttachmentUrl.url });
+  useDownloadDocument({ url: f24AttachmentUrl.url });
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -212,6 +219,8 @@ const NotificationDetail = () => {
     recipientIdx: number,
     attachmentIdx?: number
   ) => {
+    console.log('download');
+    setIsF24Ready(false);
     void dispatch(
       getPaymentAttachment({
         iun: notification.iun,
@@ -220,7 +229,19 @@ const NotificationDetail = () => {
         mandateId,
         attachmentIdx,
       })
-    );
+    ).then((res) => {
+      if (name === PaymentAttachmentSName.F24 && (res.payload as PaymentAttachment).retryAfter) {
+        console.log('retryAfter', (res.payload as PaymentAttachment).retryAfter);
+        // TODO eseguire solo una volta (?)
+        // const retryAfter = (res.payload as any).retryAfter;
+        // setTimeout(() => {
+        //   handleDownloadAttachment(name, recipientIdx, attachmentIdx);
+        // }, retryAfter);
+      }
+      if (name === PaymentAttachmentSName.F24 && (res.payload as PaymentAttachment).url) {
+        setIsF24Ready(true);
+      }
+    });
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
   };
 
@@ -414,6 +435,7 @@ const NotificationDetail = () => {
                         onPayClick={onPayClick}
                         handleDownloadAttachment={handleDownloadAttachment}
                         handleReloadPayment={fetchPaymentsInfo}
+                        isF24Ready={isF24Ready}
                       />
                     </ApiErrorWrapper>
                   </Paper>

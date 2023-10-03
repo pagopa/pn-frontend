@@ -7,7 +7,7 @@ import { apiClient } from './apiClients';
 export const setUpInterceptor = (store: EnhancedStore) => {
   apiClient.interceptors.request.use(
     (config) => {
-      if (config.url === '/delivery/v2/notifications/received/PXPX-PQZU-PHPQ-202306-M-1') {
+      if (config.url === '/delivery/v2.1/notifications/received/PXPX-PQZU-PHPQ-202306-M-1') {
         return Promise.reject({ error: true, type: 'delivery' });
       }
       if (config.url === '/ext-registry/pagopa/v2/paymentinfo') {
@@ -15,6 +15,15 @@ export const setUpInterceptor = (store: EnhancedStore) => {
           setTimeout(() => reject({ error: true, type: 'ext-registry' }), 4000)
         );
       }
+      if (
+        config.url ===
+        '/delivery/notifications/received/DAPQ-LWQV-DKQH-202308-A-1/attachments/payment/2/F24?attachmentIdx=4'
+      ) {
+        return new Promise((_resolve, reject) =>
+          setTimeout(() => reject({ error: true, type: 'delivery-f24' }), 4000)
+        );
+      }
+
       /* eslint-disable functional/immutable-data */
       const token: string = store.getState().userState.user.sessionToken;
       if (token && config.headers) {
@@ -34,6 +43,17 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         }
         if (error.type === 'ext-registry') {
           return { data: paymentInfo };
+        }
+        if (error.type === 'delivery-f24') {
+          return {
+            data: {
+              filename: 'Rata 1 F24.pdf',
+              contentLength: 10,
+              contenType: 'application/pdf',
+              sha256: 'sha256',
+              url: 'https://www.africau.edu/images/default/sample.pdf',
+            },
+          };
         }
       }
       return error;

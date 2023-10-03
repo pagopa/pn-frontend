@@ -5,6 +5,7 @@ import {
   LegalFactDocumentDetails,
   LegalFactId,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentAttachmentNameType,
   PaymentDetails,
   PaymentNotice,
@@ -71,7 +72,7 @@ export const getReceivedNotificationDocument = createAsyncThunk<
 );
 
 export const getPaymentAttachment = createAsyncThunk<
-  { url: string },
+  PaymentAttachment,
   {
     iun: string;
     attachmentName: PaymentAttachmentNameType;
@@ -96,7 +97,10 @@ export const getPaymentAttachment = createAsyncThunk<
         params.mandateId,
         params.attachmentIdx
       )
-  )
+  ),
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
+  }
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<

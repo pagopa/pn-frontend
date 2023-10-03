@@ -28,6 +28,7 @@ type Props = {
     attachmentIdx?: number
   ) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
+  isF24Ready?: boolean;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -36,6 +37,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   onPayClick,
   handleDownloadAttachment,
   handleReloadPayment,
+  isF24Ready,
 }) => {
   const { pagoPaF24, f24Only } = payments;
 
@@ -216,6 +218,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               <NotificationPaymentF24Item
                 f24Item={f24Item}
                 handleDownloadAttachment={handleDownloadAttachment}
+                isF24Ready={isF24Ready}
               />
             </Box>
           ))}

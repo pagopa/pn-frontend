@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import { Download } from '@mui/icons-material';
-import { Box, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
+import _ from 'lodash';
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { F24PaymentDetails, PaymentAttachmentSName } from '../../types';
@@ -13,10 +13,21 @@ interface Props {
     recipientIdx: number,
     attachmentIdx?: number
   ) => void;
+  isF24Ready?: boolean;
 }
 
-const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, handleDownloadAttachment }) => {
+const NotificationPaymentF24Item: React.FC<Props> = ({
+  f24Item,
+  handleDownloadAttachment,
+  isF24Ready,
+}) => {
   const isMobile = useIsMobile();
+
+  // const messages = [
+  //   'detail.payment.download-f24-in-progress',
+  //   'download-f24-waiting',
+  //   'download-f24-ongoing',
+  // ];
 
   const downloadF24 = () => {
     if (!_.isNil(f24Item.recipientIdx)) {
@@ -27,6 +38,27 @@ const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, handleDownloadAt
       );
     }
   };
+
+  const getElement = () => {
+    if (isF24Ready) {
+      return (
+        <ButtonNaked color="primary" onClick={downloadF24} data-testid="download-f24-button">
+          <Download fontSize="small" sx={{ mr: 1 }} />
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
+        </ButtonNaked>
+      );
+    }
+
+    return (
+      <Box display="flex" alignItems="center" justifyContent="center" gap={0.5}>
+        <Typography variant="caption" color="text.secondary">
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24-in-progress')}
+        </Typography>
+        <CircularProgress size="1.125rem" role="loadingSpinner" sx={{ color: 'text.secondary' }} />
+      </Box>
+    );
+  };
+
   return (
     <Box
       p={2}
@@ -55,12 +87,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({ f24Item, handleDownloadAt
           PDF
         </Typography>
       </Box>
-      <Box>
-        <ButtonNaked color="primary" onClick={downloadF24} data-testid="download-f24-button">
-          <Download fontSize="small" sx={{ mr: 1 }} />
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
-        </ButtonNaked>
-      </Box>
+      <Box>{getElement()}</Box>
     </Box>
   );
 };

@@ -8,6 +8,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
+  PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentInfoDetail,
@@ -63,8 +64,18 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
-  pagopaAttachmentUrl: '',
-  f24AttachmentUrl: '',
+  pagopaAttachmentUrl: {
+    filename: '',
+    contentLength: 0,
+    contenType: '',
+    sha256: '',
+  } as PaymentAttachment,
+  f24AttachmentUrl: {
+    filename: '',
+    contentLength: 0,
+    contenType: '',
+    sha256: '',
+  } as PaymentAttachment,
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
   paymentsData: {
@@ -157,9 +168,9 @@ const notificationSlice = createSlice({
       if (action.payload.url) {
         const attachmentName = action.meta.arg.attachmentName;
         if (attachmentName === PaymentAttachmentSName.PAGOPA) {
-          state.pagopaAttachmentUrl = action.payload.url;
+          state.pagopaAttachmentUrl = action.payload;
         } else if (attachmentName === PaymentAttachmentSName.F24) {
-          state.f24AttachmentUrl = action.payload.url;
+          state.f24AttachmentUrl = action.payload;
         }
       }
     });
