@@ -24,7 +24,7 @@
     "error_title": "Es ist leider ein Fehler aufgetreten",
     "error_subtitle": "Die Seite konnte nicht geladen werden. Lade sie neu oder versuche es später noch einmal.",
     "error_button": "Seite erneut laden",
-    "no_delegates": "{{organizationName}} hat niemanden dazu bevollmächtigt, Bescheide zu lesen.",
+    "no_delegates": "{{organizationName}} hat niemanden dazu bevollmächtigt, Bescheide zu lesen. <0>Vollmacht hinzufügen</0>.",
     "no_delegators": "Keine Vollmacht für {{organizationName}} vorhanden.",
     "no_delegators_after_filters": "Die hinzugefügten Filter lieferten keine Ergebnisse.",
     "show_code_title": "Bestätigungscode für Vollmacht an {{name}}",

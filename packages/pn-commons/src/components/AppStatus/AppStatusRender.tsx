@@ -194,10 +194,9 @@ export const AppStatusRender = (props: Props) => {
               />
             )
           ) : (
-            <EmptyState
-              sentimentIcon={KnownSentiment.SATISFIED}
-              emptyMessage={downtimeListEmptyMessage}
-            />
+            <EmptyState sentimentIcon={KnownSentiment.SATISFIED}>
+              {downtimeListEmptyMessage}
+            </EmptyState>
           )}
           {downtimeLogPage && downtimeLogPage.downtimes.length > 0 && (
             <CustomPagination

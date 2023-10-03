@@ -28,12 +28,11 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
+    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "first-message": "Non hai ricevuto nessuna notifica.",
-    "action": "Vai ai tuoi recapiti",
-    "second-message": "e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
-    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
-    "filter-action": "Rimuovi filtri"
+    "no-notifications": "Non hai ricevuto nessuna notifica. <0>Vai ai tuoi recapiti</0> e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.",
+    "aria-label-remove-filters": "Rimuovi filtri",
+    "aria-label-route-contacts": "Vai ai tuoi recapiti"
   },
   "from-qrcode": {
     "not-found": "Link alla notifica non trovato"

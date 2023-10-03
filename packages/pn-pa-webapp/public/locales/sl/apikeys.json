@@ -31,7 +31,7 @@
   "enable-warning": "Če aktivirate ključ API <strong>{{apiKeyName}}</strong>, ga lahko znova uporabite. Lahko ga kadar koli znova zaklenete.",
   "delete-warning": "Če trajno izbrišete ključ API <strong>{{apiKeyName}}</strong>, ga ni mogoče znova aktivirati in uporabiti.",
   "copy-api-key-info": "Kopirajte kodo in jo vnesite v platformo subjekta",
-  "empty-message": "Za ta subjekt še ni bil ustvarjen noben ključ API.",
+  "empty-message": "Za ta subjekt še ni bil ustvarjen noben ključ API. <0>Ustvari ključ API</0>.",
   "empty-action-label": "Ustvari ključ API",
   "api-key-copied": "Ključ API je kopiran",
   "group-id-copied": "ID skupine je kopiran",
