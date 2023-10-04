@@ -15,7 +15,7 @@ const StyledStack = styled(Stack)`
   padding: 16px;
 `;
 
-const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId }) => {
+const ApiError: React.FC<React.PropsWithChildren<ApiErrorProps>> = ({ onClick, mt = 0, mainText, apiId }) => {
 
   const dataTestId = `api-error${apiId ? `-${apiId}` : ''}`;
   const text =

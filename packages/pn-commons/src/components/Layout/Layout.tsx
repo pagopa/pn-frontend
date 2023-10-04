@@ -1,4 +1,4 @@
-import { ErrorInfo, ReactNode } from 'react';
+import { ErrorInfo } from 'react';
 
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
@@ -9,7 +9,7 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
 type Props = {
-  children?: ReactNode;
+  children?: React.ReactNode;
   /** Logout/exit action to apply */
   onExitAction?: () => void;
   /** Side Menu  */

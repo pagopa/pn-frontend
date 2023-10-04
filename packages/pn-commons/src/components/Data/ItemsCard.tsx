@@ -42,7 +42,7 @@ const cardStyle = {
   },
 };
 
-const ItemsCard: React.FC<Props> = ({
+const ItemsCard: React.FC<React.PropsWithChildren<Props>> = ({
   cardHeader,
   cardBody,
   cardData,

@@ -15,7 +15,7 @@ type Props = {
   eventTrackingCallback?: (target: string) => void;
 };
 
-const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }) => {
+const SideMenu: FC<React.PropsWithChildren<Props>> = ({ menuItems, selfCareItems, eventTrackingCallback }) => {
   const [state, setState] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();

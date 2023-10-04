@@ -5,7 +5,7 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
-const TabPanel: React.FC<TabPanelProps> = ({ index, value, children }) => (
+const TabPanel: React.FC<React.PropsWithChildren<TabPanelProps>> = ({ index, value, children }) => (
   <Box
     role="tabpanel"
     hidden={value !== index}

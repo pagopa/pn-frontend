@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-const NotificationBadge: React.FC<{ numberOfNotification: number }> = ({
+const NotificationBadge: React.FC<React.PropsWithChildren<{ numberOfNotification: number }>> = ({
   numberOfNotification,
 }) => (
   <Box

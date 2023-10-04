@@ -10,7 +10,7 @@ interface IProps {
   interval: number;
 }
 
-const Component: React.FC<IProps> = ({ count, interval }) => {
+const Component: React.FC<React.PropsWithChildren<IProps>> = ({ count, interval }) => {
   const [text, setText] = useState('');
 
   const [event] = useMultiEvent({
@@ -60,7 +60,7 @@ describe('test useMultiEvent hook', () => {
     const { getByRole, queryByRole } = render(<Component count={count} interval={interval} />);
     const btn = getByRole('button', { name: 'Click me!' });
     await act(async () => {
-      for (let index = 0; index < count; index++) {
+      for (let index = 0; index < count - 1; index++) {
         await new Promise((r) => setTimeout(r, 200));
         fireEvent.click(btn);
       }

@@ -9,7 +9,7 @@ interface Props {
   notification: NotificationDetail;
 }
 
-const Component: React.FC<Props> = ({ notification }) => {
+const Component: React.FC<React.PropsWithChildren<Props>> = ({ notification }) => {
   const { cancellationInProgress, cancellationInTimeline, cancelled } = useIsCancelled({
     notification,
   });

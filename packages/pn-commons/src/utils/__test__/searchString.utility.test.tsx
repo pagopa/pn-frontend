@@ -5,7 +5,7 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from '../sea
 
 const setValueMock = jest.fn();
 
-const Component: React.FC = () => {
+const Component: React.FC<React.PropsWithChildren<unknown>> = () => {
   const handleSearchStringChangeInput = useSearchStringChangeInput(10);
   return (
     <input

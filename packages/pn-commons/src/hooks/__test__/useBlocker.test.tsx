@@ -2,7 +2,7 @@ import type { Transition } from 'history';
 import React from 'react';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
 
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 
 import { useBlocker } from '../useBlocker';
 

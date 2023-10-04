@@ -17,7 +17,7 @@ const SpecialContactsContext = createContext<
   ISpecialContactsContext | undefined
   >(undefined);
 
-const SpecialContactsProvider: FC<ReactNode> = ({ children }) => {
+const SpecialContactsProvider: FC<React.PropsWithChildren<ReactNode>> = ({ children }) => {
   const [contextEditMode, setContextEditMode] = useState<boolean>(false);
 
   return (

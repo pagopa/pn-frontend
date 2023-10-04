@@ -17,7 +17,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const CopyToClipboard: React.FC<Props> = ({
+const CopyToClipboard: React.FC<React.PropsWithChildren<Props>> = ({
   getValue,
   text,
   tooltipMode,

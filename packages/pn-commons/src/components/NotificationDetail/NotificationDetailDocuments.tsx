@@ -26,7 +26,7 @@ type Props = {
  * @param disableDownloads if notification is cancelled button naked is disabled
  */
 
-const NotificationDetailDocuments: React.FC<Props> = (
+const NotificationDetailDocuments: React.FC<React.PropsWithChildren<Props>> = (
   {
     title,
     documents = [],

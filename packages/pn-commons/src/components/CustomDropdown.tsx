@@ -36,7 +36,7 @@ type Props = {
   emptyItemLabel?: string;
 };
 
-const CustomDropdown: React.FC<Props> = ({
+const CustomDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   id,
   value,

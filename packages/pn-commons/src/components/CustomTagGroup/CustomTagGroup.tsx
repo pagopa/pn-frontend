@@ -14,18 +14,18 @@ interface CustomTagGroupProps {
   onOpen?: () => void;
 }
 
-const TagIndicator: React.FC<{
+const TagIndicator: React.FC<React.PropsWithChildren<{
   boxProps?: BoxProps;
   arrayChildren: Array<JSX.Element>;
   visibleItems: number;
   dataTestId: string;
-}> = ({ boxProps, arrayChildren, visibleItems, dataTestId }) => (
+}>> = ({ boxProps, arrayChildren, visibleItems, dataTestId }) => (
   <Box {...boxProps} sx={{ cursor: 'pointer', display: 'inline-block' }} data-testid={dataTestId}>
     <Tag value={`+${arrayChildren.length - visibleItems}`} />
   </Box>
 );
 
-const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
+const CustomTagGroup: React.FC<React.PropsWithChildren<CustomTagGroupProps>> = ({
   visibleItems,
   disableTooltip = false,
   onOpen,

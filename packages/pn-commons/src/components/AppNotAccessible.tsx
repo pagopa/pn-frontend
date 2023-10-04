@@ -7,7 +7,7 @@ type Props = {
   onAssistanceClick: () => void;
 };
 
-const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => (
+const AppNotAccessible: React.FC<React.PropsWithChildren<Props>> = ({ onAssistanceClick }) => (
   <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
     <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
       <IllusInProgress />

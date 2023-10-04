@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { act } from '../../test-utils';
 import { useProcess } from '../useProcess';
@@ -48,15 +48,16 @@ describe('useProcess Hook', () => {
 
   it('should perform a step with an async action', async () => {
     const asyncAction = jest.fn(() => Promise.resolve());
-    const { result, waitForNextUpdate } = renderHook(() => useProcess(['Step1']));
+    const { result } = renderHook(() => useProcess(['Step1']));
     act(() => {
       result.current.performStep('Step1', asyncAction);
     });
     expect(result.current.currentSituation.step).toBe('Step1');
     expect(result.current.currentSituation.isActive).toBeTruthy();
-    await waitForNextUpdate(); // Wait for the async action to complete
-    expect(asyncAction).toHaveBeenCalled();
-    expect(result.current.currentSituation.isActive).toBeFalsy();
+    await waitFor(() => {
+      expect(asyncAction).toHaveBeenCalled();
+      expect(result.current.currentSituation.isActive).toBeFalsy();
+    }); // Wait for the async action to complete
   });
 
   it('should check if the process is finished', () => {

@@ -28,7 +28,7 @@ type Props = {
 /**
  * TitleBox element. It renders a Title (default variant is h1) and a subtitle (default variant is h5)
  */
-const TitleBox: React.FC<Props> = ({
+const TitleBox: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   titleButton,
   subTitle,
