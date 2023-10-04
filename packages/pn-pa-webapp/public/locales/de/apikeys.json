@@ -31,7 +31,7 @@
   "enable-warning": "Wenn du den API-Schlüssel <strong>{{apiKeyName}}</strong> aktivierst, kann er erneut verwendet werden. Er kann jederzeit erneut gesperrt werden.",
   "delete-warning": "Wenn du den API-Schlüssel <strong>{{apiKeyName}}</strong> endgültig löschst, kann er nicht erneut aktiviert und verwendet werden.",
   "copy-api-key-info": "Kopiere den Code und gib ihn auf der Plattform der Körperschaft ein",
-  "empty-message": "Es wurde noch keine API-Key für diese Körperschaft generiert.",
+  "empty-message": "Es wurde noch keine API-Key für diese Körperschaft generiert. <0>API-Schlüssel generieren</0>.",
   "empty-action-label": "API-Schlüssel generieren",
   "api-key-copied": "API-Schlüssel kopiert",
   "group-id-copied": "Gruppen-ID kopiert",

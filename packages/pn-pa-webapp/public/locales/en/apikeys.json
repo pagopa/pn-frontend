@@ -31,7 +31,7 @@
   "enable-warning": "If you activate the API key <strong>{{apiKeyName}}</strong>, it can be used again. You can lock it again at any time.",
   "delete-warning": "If you permanently delete the API key <strong>{{apiKeyName}}</strong>, it cannot be activated and used again.",
   "copy-api-key-info": "Copy the code and enter it in the organisation's platform",
-  "empty-message": "No API key has been generated for this organisation yet.",
+  "empty-message": "No API key has been generated for this organisation yet. <0>Generate API key</0>.",
   "empty-action-label": "Generate API key",
   "api-key-copied": "API key copied",
   "group-id-copied": "Group ID copied",

@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 
-import { mixpanelInit } from '../../utils/mixpanel.utility';
+import { mixpanelInit } from '../../utility/mixpanel.utility';
 import { useTracking } from '../useTracking';
 
 global.OneTrust = {
@@ -8,7 +8,7 @@ global.OneTrust = {
 };
 
 // Mock the mixpanelInit function
-jest.mock('../../utils/mixpanel.utility', () => ({
+jest.mock('../../utility/mixpanel.utility', () => ({
   mixpanelInit: jest.fn(),
 }));
 

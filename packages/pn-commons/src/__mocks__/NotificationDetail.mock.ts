@@ -15,7 +15,7 @@ import {
   TimelineCategory,
 } from '../types';
 import { NotificationDetailTimelineDetails } from '../types/NotificationDetail';
-import { parseNotificationDetail } from '../utils';
+import { parseNotificationDetail } from '../utility';
 
 function getOneRecipientNotification(): NotificationDetail {
   const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);

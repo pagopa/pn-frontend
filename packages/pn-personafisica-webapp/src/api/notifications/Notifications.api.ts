@@ -1,5 +1,6 @@
+import { AxiosResponse } from 'axios';
+
 import {
-  formatDate,
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
@@ -8,13 +9,13 @@ import {
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
-import { AxiosResponse } from 'axios';
 
-import { Delegator } from '../../redux/delegation/types';
-import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
+import { Delegator } from '../../redux/delegation/types';
+import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
@@ -28,14 +29,12 @@ import {
   NOTIFICATION_PAYMENT_URL,
 } from './notifications.routes';
 
-
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
   }
   return { url: '' };
 };
-
 
 export const NotificationsApi = {
   /**

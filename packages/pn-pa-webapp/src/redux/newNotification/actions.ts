@@ -11,7 +11,7 @@ import {
   PaymentObject,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import { newNotificationMapper } from '../../utils/notification.utility';
+import { newNotificationMapper } from '../../utility/notification.utility';
 import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export enum NEW_NOTIFICATION_ACTIONS {

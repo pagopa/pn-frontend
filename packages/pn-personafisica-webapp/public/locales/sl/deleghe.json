@@ -24,7 +24,7 @@
     "error_title": "Žal, nekaj je šlo narobe",
     "error_subtitle": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova kasneje.",
     "error_button": "Znova naloži stran",
-    "no_delegates": "Za ogled vaših obvestil niste pooblastili nikogar.",
+    "no_delegates": "Za ogled vaših obvestil niste pooblastili nikogar. <0>Dodaj pooblastilo</0>.",
     "no_delegators": "Nimate pooblastil pod vašo odgovornostjo.",
     "show_code_title": "Koda za preverjanje pooblastila za {{name}}",
     "show_code_subtitle": "To kodo delite s pooblaščencem: ta jo bo moral vnesti ob sprejemu pooblastila.",

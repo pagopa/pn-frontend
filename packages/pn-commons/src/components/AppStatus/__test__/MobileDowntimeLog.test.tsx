@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { exampleDowntimeLogPage, incidentTimestamps } from '../../../__mocks__/AppStatus.mock';
+import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
 import {
   RenderResult,
@@ -10,8 +10,8 @@ import {
   render,
   within,
 } from '../../../test-utils';
-import { formatDate } from '../../../utils';
-import { formatTimeWithLegend } from '../../../utils/date.utility';
+import { formatDate } from '../../../utility';
+import { formatTimeWithLegend } from '../../../utility/date.utility';
 import MobileDowntimeLog from '../MobileDowntimeLog';
 
 const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };

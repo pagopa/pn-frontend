@@ -10,8 +10,8 @@ import {
   render,
   within,
 } from '../../../test-utils';
-import { formatDate } from '../../../utils';
-import { formatTimeWithLegend } from '../../../utils/date.utility';
+import { formatDate } from '../../../utility';
+import { formatTimeWithLegend } from '../../../utility/date.utility';
 import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
 const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };

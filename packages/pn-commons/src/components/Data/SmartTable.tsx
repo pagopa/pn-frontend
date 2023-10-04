@@ -5,8 +5,7 @@ import { Box, Grid } from '@mui/material';
 import { useIsMobile } from '../../hooks';
 import { CardAction, CardElement, Column, Item, PaginationData, Sort } from '../../types';
 import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
-import { calculatePages, sortArray } from '../../utils';
-import EmptyState, { Props as EmptyStateProps } from '../EmptyState';
+import { calculatePages, sortArray } from '../../utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';
 import ItemsTable from './ItemsTable';
@@ -40,8 +39,8 @@ type Props<ColumnId> = {
     currentPage: number;
     onChangePage: (paginationData: PaginationData) => void;
   };
-  /** empty state props */
-  emptyStateProps?: EmptyStateProps;
+  /** EmptyState component */
+  emptyState?: ReactNode;
 };
 
 function getCardElements<ColumnId extends string>(
@@ -105,7 +104,7 @@ const SmartTable = <ColumnId extends string>({
   actions,
   children,
   pagination,
-  emptyStateProps,
+  emptyState,
 }: PropsWithChildren<Props<ColumnId>>) => {
   const isMobile = useIsMobile();
   const [sort, setSort] = useState<Sort<ColumnId> | undefined>(currentSort);
@@ -192,7 +191,7 @@ const SmartTable = <ColumnId extends string>({
             }
           />
         )}
-        {rowData.length === 0 && <EmptyState {...emptyStateProps} />}
+        {rowData.length === 0 && emptyState}
       </>
     );
   }
@@ -236,7 +235,7 @@ const SmartTable = <ColumnId extends string>({
           }
         />
       )}
-      {rowData.length === 0 && <EmptyState {...emptyStateProps} />}
+      {rowData.length === 0 && emptyState}
     </>
   );
 };

@@ -15,7 +15,7 @@ import {
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { PaymentHistory } from '../../types';
-import { formatEurocentToCurrency, formatFiscalCode } from '../../utils';
+import { formatEurocentToCurrency, formatFiscalCode } from '../../utility';
 import CustomTableRow from '../CustomTableRow';
 
 type NotificationPaidDetailProps = {
