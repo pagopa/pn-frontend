@@ -17,7 +17,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
       }
       if (
         config.url ===
-        '/delivery/notifications/received/DAPQ-LWQV-DKQH-202308-A-1/attachments/payment/2/F24?attachmentIdx=4'
+        '/delivery/notifications/received/DAPQ-LWQV-DKQH-202308-A-1/attachments/payment/F24?attachmentIdx=4'
       ) {
         return new Promise((_resolve, reject) =>
           setTimeout(() => reject({ error: true, type: 'delivery-f24' }), 2000)
