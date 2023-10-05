@@ -199,7 +199,7 @@ describe('NotificationPayment component', () => {
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent(/473,50\b/);
+    await waitFor(() => expect(amount).toHaveTextContent(/473,50\b/));
     const submitButton = getByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(submitButton).toBeInTheDocument();
     const divider = getByRole('separator');
@@ -254,7 +254,7 @@ describe('NotificationPayment component', () => {
     expect(title).toBeInTheDocument();
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent(/473,50\b/);
+    await waitFor(() => expect(amount).toHaveTextContent(/473,50\b/));
     const submitButton = queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(submitButton).not.toBeInTheDocument();
     const alert = getByTestId('messageAlert');
@@ -297,23 +297,23 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get[0].url).toContain(
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
+      const title = getByRole('heading', { name: 'detail.payment.summary' });
+      expect(title).toBeInTheDocument();
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent('');
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+      const alert = getByTestId('messageAlert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent('detail.payment.error-domain-unknown');
+      const errorCode = getByText('PPT_STAZIONE_INT_PA_ERRORE_RESPONSE');
+      expect(errorCode).toBeInTheDocument();
+      const copyLink = getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
+      expect(copyLink).toBeInTheDocument();
+      const button = getByRole('button', { name: /detail.payment.contact-support/ });
+      expect(button).toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
-    const alert = getByTestId('messageAlert');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('detail.payment.error-domain-unknown');
-    const errorCode = getByText('PPT_STAZIONE_INT_PA_ERRORE_RESPONSE');
-    expect(errorCode).toBeInTheDocument();
-    const copyLink = getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
-    expect(copyLink).toBeInTheDocument();
-    const button = getByRole('button', { name: /detail.payment.contact-support/ });
-    expect(button).toBeInTheDocument();
   });
 
   it('payment in FAILED status and PAYMENT_UNAVAILABLE detail', async () => {
@@ -339,23 +339,23 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get[0].url).toContain(
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
+      const title = getByRole('heading', { name: 'detail.payment.summary' });
+      expect(title).toBeInTheDocument();
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent('');
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+      const alert = getByTestId('messageAlert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent('detail.payment.error-payment-unavailable');
+      const errorCode = getByText('PPT_INTERMEDIARIO_PSP_SCONOSCIUTO');
+      expect(errorCode).toBeInTheDocument();
+      const copyLink = getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
+      expect(copyLink).toBeInTheDocument();
+      const button = getByRole('button', { name: /detail.payment.contact-support/ });
+      expect(button).toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
-    const alert = getByTestId('messageAlert');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('detail.payment.error-payment-unavailable');
-    const errorCode = getByText('PPT_INTERMEDIARIO_PSP_SCONOSCIUTO');
-    expect(errorCode).toBeInTheDocument();
-    const copyLink = getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
-    expect(copyLink).toBeInTheDocument();
-    const button = getByRole('button', { name: /detail.payment.contact-support/ });
-    expect(button).toBeInTheDocument();
   });
 
   it('payment in FAILED status and PAYMENT_UNKNOWN detail', async () => {
@@ -382,23 +382,23 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get[0].url).toContain(
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
+      const title = getByRole('heading', { name: 'detail.payment.summary' });
+      expect(title).toBeInTheDocument();
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent('');
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+      const alert = getByTestId('messageAlert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent('detail.payment.error-payment-unknown');
+      const errorCode = getByText('PAA_PAGAMENTO_SCONOSCIUTO');
+      expect(errorCode).toBeInTheDocument();
+      const copyLink = getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
+      expect(copyLink).toBeInTheDocument();
+      const button = getByRole('button', { name: /detail.payment.contact-support/ });
+      expect(button).toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
-    const alert = getByTestId('messageAlert');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('detail.payment.error-payment-unknown');
-    const errorCode = getByText('PAA_PAGAMENTO_SCONOSCIUTO');
-    expect(errorCode).toBeInTheDocument();
-    const copyLink = getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
-    expect(copyLink).toBeInTheDocument();
-    const button = getByRole('button', { name: /detail.payment.contact-support/ });
-    expect(button).toBeInTheDocument();
   });
 
   it('payment in FAILED status and GENERIC_ERROR detail', async () => {
@@ -422,21 +422,21 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get[0].url).toContain(
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
+      const title = getByRole('heading', { name: 'detail.payment.summary' });
+      expect(title).toBeInTheDocument();
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent('');
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+      const alert = getByTestId('messageAlert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent('detail.payment.error-generic');
+      const copyLink = getByRole('button', { name: /detail.payment.contact-support/ });
+      expect(copyLink).toBeInTheDocument();
+      const button = getByRole('button', { name: /detail.payment.reload-page/ });
+      expect(button).toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
-    const alert = getByTestId('messageAlert');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('detail.payment.error-generic');
-    const copyLink = getByRole('button', { name: /detail.payment.contact-support/ });
-    expect(copyLink).toBeInTheDocument();
-    const button = getByRole('button', { name: /detail.payment.reload-page/ });
-    expect(button).toBeInTheDocument();
   });
 
   it('payment in FAILED status and PAYMENT_CANCELED detail', async () => {
@@ -460,19 +460,19 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get[0].url).toContain(
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
+      const title = getByRole('heading', { name: 'detail.payment.summary' });
+      expect(title).toBeInTheDocument();
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent('');
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+      const alert = getByTestId('messageAlert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent('detail.payment.error-canceled');
+      const button = queryByRole('button');
+      expect(button).not.toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
-    const alert = getByTestId('messageAlert');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('detail.payment.error-canceled');
-    const button = queryByRole('button');
-    expect(button).not.toBeInTheDocument();
   });
 
   it('payment in FAILED status and PAYMENT_EXPIRED detail', async () => {
@@ -496,19 +496,19 @@ describe('NotificationPayment component', () => {
       expect(mock.history.get[0].url).toContain(
         NOTIFICATION_PAYMENT_INFO(payment?.creditorTaxId!, payment?.noticeCode!)
       );
+      const title = getByRole('heading', { name: 'detail.payment.summary' });
+      expect(title).toBeInTheDocument();
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent('');
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+      const alert = getByTestId('messageAlert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent('detail.payment.error-expired');
+      const button = queryByRole('button');
+      expect(button).not.toBeInTheDocument();
     });
-    const title = getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
-    const alert = getByTestId('messageAlert');
-    expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('detail.payment.error-expired');
-    const button = queryByRole('button');
-    expect(button).not.toBeInTheDocument();
   });
 
   it('renders payment when notification is CANCELLED', async () => {

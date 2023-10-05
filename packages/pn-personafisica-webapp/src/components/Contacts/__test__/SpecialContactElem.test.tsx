@@ -127,8 +127,10 @@ describe('SpecialContactElem Component', () => {
     expect(newButtons![0]).toHaveTextContent('button.salva');
     expect(newButtons![0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: 'new.bad.-pec-123]@456.it' } });
-    await waitFor(() => expect(input!).toHaveValue('new.bad.-pec-123]@456.it'));
-    expect(newButtons![0]).toBeDisabled();
+    await waitFor(() => {
+      expect(input!).toHaveValue('new.bad.-pec-123]@456.it');
+      expect(newButtons![0]).toBeDisabled();
+    });
     let inputError = result?.container.querySelector(`#mocked-senderId_pec-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
@@ -206,8 +208,10 @@ describe('SpecialContactElem Component', () => {
     expect(newButtons![0]).toHaveTextContent('button.salva');
     expect(newButtons![0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: 'new.bad.-mail-123]@456.it' } });
-    await waitFor(() => expect(input!).toHaveValue('new.bad.-mail-123]@456.it'));
-    expect(newButtons![0]).toBeDisabled();
+    await waitFor(() => {
+      expect(input!).toHaveValue('new.bad.-mail-123]@456.it');
+      expect(newButtons![0]).toBeDisabled();
+    });
     let inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
@@ -285,8 +289,10 @@ describe('SpecialContactElem Component', () => {
     expect(newButtons![0]).toHaveTextContent('button.salva');
     expect(newButtons![0]).toBeEnabled();
     fireEvent.change(input!, { target: { value: '123456789' } });
-    await waitFor(() => expect(input!).toHaveValue('123456789'));
-    expect(newButtons![0]).toBeDisabled();
+    await waitFor(() => {
+      expect(input!).toHaveValue('123456789');
+      expect(newButtons![0]).toBeDisabled();
+    });
     let inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');

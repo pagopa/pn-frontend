@@ -1,6 +1,5 @@
-import React from 'react';
-
 import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import {
@@ -381,8 +380,9 @@ describe('SpecialContacts Component', () => {
         value: pecValue,
         verificationCode: '01234',
       });
+      expect(dialog).not.toBeInTheDocument();
     });
-    expect(dialog).not.toBeInTheDocument();
+
     const addresses = {
       legal: [
         ...digitalAddresses.legal,
@@ -469,8 +469,8 @@ describe('SpecialContacts Component', () => {
         value: mailValue,
         verificationCode: '01234',
       });
+      expect(dialog).not.toBeInTheDocument();
     });
-    expect(dialog).not.toBeInTheDocument();
     const addresses = {
       legal: digitalAddresses.legal,
       courtesy: [

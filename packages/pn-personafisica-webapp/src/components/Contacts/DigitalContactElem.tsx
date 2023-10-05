@@ -65,7 +65,7 @@ type DialogProps = {
   confirmHandler: () => void;
 };
 
-const DeleteDialog: React.FC<DialogProps> = ({
+const DeleteDialog: React.FC<React.PropsWithChildren<DialogProps>> = ({
   showModal,
   handleModalClose,
   removeModalTitle,

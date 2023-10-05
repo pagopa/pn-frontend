@@ -260,7 +260,9 @@ describe('Deleghe page', () => {
     });
     acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
-    const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
-    expect(error).toBeInTheDocument();
+    await waitFor(() => {
+      const error = within(dialog!).queryByTestId('errorAlert');
+      expect(error).toBeInTheDocument();
+    });
   });
 });

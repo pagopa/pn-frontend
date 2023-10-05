@@ -11,7 +11,7 @@ interface Props {
   contacts: Array<DigitalAddress>;
 }
 
-const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
+const CourtesyContactsList: React.FC<React.PropsWithChildren<Props>> = ({ recipientId, contacts }) => {
   const phoneContact = useMemo(
     () =>
       contacts.find(

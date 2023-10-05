@@ -23,7 +23,7 @@ enum IOContactStatus {
   DISABLED = 'disabled',
 }
 
-const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
+const IOContact: React.FC<React.PropsWithChildren<Props>> = ({ recipientId, contact }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -18,6 +18,8 @@ import { loadPfConfiguration } from './services/configuration.service';
 import { initOneTrust } from './utility/onetrust';
 
 async function doTheRender() {
+  const container = document.getElementById('root');
+  const root = createRoot(container!);
   try {
     // load config from JSON file
     await loadPfConfiguration();
@@ -29,9 +31,9 @@ async function doTheRender() {
     // move initialization of the Axios interceptor - PN-7557
     setUpInterceptor(store);
 
-    ReactDOM.render(
-      <React.StrictMode>
-        <Provider store={store}>
+    root.render(
+      <Provider store={store}>
+        <React.StrictMode>
           <BrowserRouter>
             <ThemeProvider theme={theme}>
               <CssBaseline />
@@ -40,9 +42,8 @@ async function doTheRender() {
               </Suspense>
             </ThemeProvider>
           </BrowserRouter>
-        </Provider>
-      </React.StrictMode>,
-      document.getElementById('root')
+        </React.StrictMode>
+      </Provider>
     );
 
     // If you want to start measuring performance in your app, pass a function
@@ -52,13 +53,12 @@ async function doTheRender() {
   } catch (e) {
     console.error(e);
 
-    ReactDOM.render(
+    root.render(
       <React.StrictMode>
         <div style={{ fontSize: 20, marginLeft: '2rem' }}>
           Problems loading configuration - see console
         </div>
-      </React.StrictMode>,
-      document.getElementById('root')
+      </React.StrictMode>
     );
   }
 }

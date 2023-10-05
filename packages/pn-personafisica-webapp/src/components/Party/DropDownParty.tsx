@@ -5,7 +5,7 @@ type DropDownPartyProps = {
   name: string;
 };
 
-const DropDownPartyMenuItem: React.FC<DropDownPartyProps> = ({ name }) => (
+const DropDownPartyMenuItem: React.FC<React.PropsWithChildren<DropDownPartyProps>> = ({ name }) => (
   <Grid container spacing={2} direction="row" justifyContent="flex-start" alignItems="center">
     <Grid item md="auto" xs={2}>
       <Avatar sx={{ backgroundColor: '#F5F5F5' }}>

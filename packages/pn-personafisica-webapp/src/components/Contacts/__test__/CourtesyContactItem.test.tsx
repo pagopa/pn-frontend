@@ -33,18 +33,22 @@ describe('CourtesyContactItem component', () => {
           />
         </DigitalContactsCodeVerificationProvider>
       );
-      const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-      // set invalid values
-      fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-      await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
-      const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
-      fireEvent.change(input!, { target: { value: '' } });
-      await waitFor(() => expect(input!).toHaveValue(''));
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
-      const button = result.getByRole('button');
-      expect(button).toHaveTextContent('courtesy-contacts.phone-add');
-      expect(button).toBeDisabled();
+      await waitFor(() => {
+        const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+        // set invalid values
+        fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
+        expect(input!).toHaveValue(INPUT_INVALID_PHONE);
+        const inputError = result.container.querySelector(
+          `#${CourtesyFieldType.PHONE}-helper-text`
+        );
+        expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+        fireEvent.change(input!, { target: { value: '' } });
+        expect(input!).toHaveValue('');
+        expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+        const button = result.getByRole('button');
+        expect(button).toHaveTextContent('courtesy-contacts.phone-add');
+        expect(button).toBeDisabled();
+      });
     });
 
     it('type in an invalid number while in "edit mode"', async () => {
@@ -65,8 +69,10 @@ describe('CourtesyContactItem component', () => {
       expect(input).toHaveValue(INPUT_VALID_PHONE);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-      await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
-      expect(saveButton).toBeDisabled();
+      await waitFor(() => {
+        expect(input).toHaveValue(INPUT_INVALID_PHONE);
+        expect(saveButton).toBeDisabled();
+      });
       const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
     });
@@ -118,8 +124,10 @@ describe('CourtesyContactItem component', () => {
       expect(input).toHaveValue(VALID_EMAIL);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
-      await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
-      expect(saveButton).toBeDisabled();
+      await waitFor(() => {
+        expect(input).toHaveValue(INVALID_EMAIL);
+        expect(saveButton).toBeDisabled();
+      });
       const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
     });

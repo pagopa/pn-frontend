@@ -82,7 +82,7 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
-const ReloadPaymentInfoButton: React.FC<{ fetchPaymentInfo: () => void }> = ({
+const ReloadPaymentInfoButton: React.FC<React.PropsWithChildren<{ fetchPaymentInfo: () => void }>> = ({
   children,
   fetchPaymentInfo,
 }) => (
@@ -97,7 +97,7 @@ const ReloadPaymentInfoButton: React.FC<{ fetchPaymentInfo: () => void }> = ({
   </Link>
 );
 
-const SupportButton: React.FC<{ contactSupportClick: () => void }> = ({
+const SupportButton: React.FC<React.PropsWithChildren<{ contactSupportClick: () => void }>> = ({
   children,
   contactSupportClick,
 }) => (
@@ -111,7 +111,7 @@ const SupportButton: React.FC<{ contactSupportClick: () => void }> = ({
   </Link>
 );
 
-const NotificationPayment: React.FC<Props> = ({
+const NotificationPayment: React.FC<React.PropsWithChildren<Props>> = ({
   iun,
   notificationPayment,
   mandateId,
