@@ -17,7 +17,7 @@ import { trackEventByType } from '../../utility/mixpanel';
 import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
-const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
+const LinkAddDelegate: React.FC<React.PropsWithChildren<{ handleAddDelegationClick: (source: string) => void }>> = ({
   children,
   handleAddDelegationClick,
 }) => {

@@ -52,7 +52,7 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => void }>> = ({ children, cleanFilters }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link

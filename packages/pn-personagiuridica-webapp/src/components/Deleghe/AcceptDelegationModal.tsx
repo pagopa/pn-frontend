@@ -37,7 +37,7 @@ type Props = {
   handleConfirm: (code: Array<string>, groups: Array<{ id: string; name: string }>) => void;
 };
 
-const AcceptDelegationModal: React.FC<Props> = ({
+const AcceptDelegationModal: React.FC<React.PropsWithChildren<Props>> = ({
   isEditMode,
   open,
   name,

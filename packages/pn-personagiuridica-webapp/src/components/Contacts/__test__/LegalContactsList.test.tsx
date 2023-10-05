@@ -306,15 +306,17 @@ describe('LegalContactsList Component', () => {
     // add invalid values
     fireEvent.change(input!, { target: { value: 'mail-errata' } });
     await waitFor(() => expect(input!).toHaveValue('mail-errata'));
-    let errorMessage = form?.querySelector('#pec-helper-text');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
-    const newButtons = form?.querySelectorAll('button');
-    expect(newButtons![0]).toBeDisabled();
-    fireEvent.change(input!, { target: { value: '' } });
-    await waitFor(() => expect(input!).toHaveValue(''));
-    errorMessage = form?.querySelector('#pec-helper-text');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
+    await waitFor(() => {
+      let errorMessage = form?.querySelector('#pec-helper-text');
+      expect(errorMessage).toBeInTheDocument();
+      expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
+      const newButtons = form?.querySelectorAll('button');
+      expect(newButtons![0]).toBeDisabled();
+      fireEvent.change(input!, { target: { value: '' } });
+      expect(input!).toHaveValue('');
+      errorMessage = form?.querySelector('#pec-helper-text');
+      expect(errorMessage).toBeInTheDocument();
+      expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
+    });
   });
 });

@@ -60,7 +60,7 @@ const initialEmptyValues: {
   taxId: '',
 };
 
-const LinkRemoveFilters: React.FC<{ clearFiltersHandler: () => void }> = ({
+const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ clearFiltersHandler: () => void }>> = ({
   children,
   clearFiltersHandler,
 }) => {

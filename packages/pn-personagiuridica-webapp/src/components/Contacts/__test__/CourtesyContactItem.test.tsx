@@ -39,11 +39,15 @@ describe('CourtesyContactItem component', () => {
       // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
       await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
-      const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
-      fireEvent.change(input!, { target: { value: '' } });
-      await waitFor(() => expect(input!).toHaveValue(''));
-      expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      await waitFor(() => {
+        const inputError = result.container.querySelector(
+          `#${CourtesyFieldType.PHONE}-helper-text`
+        );
+        expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+        fireEvent.change(input!, { target: { value: '' } });
+        expect(input!).toHaveValue('');
+        expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
+      });
       const button = result.getByRole('button');
       expect(button).toHaveTextContent('courtesy-contacts.phone-add');
       expect(button).toBeDisabled();
@@ -67,8 +71,10 @@ describe('CourtesyContactItem component', () => {
       expect(input).toHaveValue(INPUT_VALID_PHONE);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-      await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
-      expect(saveButton).toBeDisabled();
+      await waitFor(() => {
+        expect(input).toHaveValue(INPUT_INVALID_PHONE);
+        expect(saveButton).toBeDisabled();
+      });
       const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
     });

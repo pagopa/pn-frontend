@@ -12,7 +12,7 @@ type Props = {
   onGroupSelection: (id: string) => void;
 };
 
-const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
+const GroupSelector: React.FC<React.PropsWithChildren<Props>> = ({ currentGroup, onGroupSelection }) => {
   const { t } = useTranslation(['notifiche']);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

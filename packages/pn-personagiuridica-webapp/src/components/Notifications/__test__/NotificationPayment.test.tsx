@@ -198,9 +198,11 @@ describe('NotificationPayment component', () => {
     });
     const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent(/473,50\b/);
+    await waitFor(() => {
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent(/473,50\b/);
+    });
     const submitButton = getByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(submitButton).toBeInTheDocument();
     const divider = getByRole('separator');
@@ -253,9 +255,11 @@ describe('NotificationPayment component', () => {
     });
     const title = getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
-    const amount = getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent(/473,50\b/);
+    await waitFor(() => {
+      const amount = getByRole('heading', { name: 'detail.payment.amount' });
+      expect(amount).toBeInTheDocument();
+      expect(amount).toHaveTextContent(/473,50\b/);
+    });
     const submitButton = queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(submitButton).not.toBeInTheDocument();
     const alert = getByTestId('messageAlert');
@@ -304,8 +308,10 @@ describe('NotificationPayment component', () => {
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
+    await waitFor(() => {
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+    });
     const alert = getByTestId('messageAlert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('detail.payment.error-domain-unknown');
@@ -346,8 +352,10 @@ describe('NotificationPayment component', () => {
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
+    await waitFor(() => {
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+    });
     const alert = getByTestId('messageAlert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('detail.payment.error-payment-unavailable');
@@ -389,8 +397,10 @@ describe('NotificationPayment component', () => {
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
+    await waitFor(() => {
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+    });
     const alert = getByTestId('messageAlert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('detail.payment.error-payment-unknown');
@@ -429,8 +439,10 @@ describe('NotificationPayment component', () => {
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
+    await waitFor(() => {
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+    });
     const alert = getByTestId('messageAlert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('detail.payment.error-generic');
@@ -467,8 +479,10 @@ describe('NotificationPayment component', () => {
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
+    await waitFor(() => {
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+    });
     const alert = getByTestId('messageAlert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('detail.payment.error-canceled');
@@ -503,8 +517,10 @@ describe('NotificationPayment component', () => {
     const amount = getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
     expect(amount).toHaveTextContent('');
-    const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
-    expect(submitButton).not.toBeInTheDocument();
+    await waitFor(() => {
+      const submitButton = queryByRole('button', { name: /detail.payment.submit\b/ });
+      expect(submitButton).not.toBeInTheDocument();
+    });
     const alert = getByTestId('messageAlert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('detail.payment.error-expired');

@@ -31,13 +31,16 @@ describe('InsertLegalContact component', () => {
     expect(cardBody).toHaveTextContent('legal-contacts.description');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     expect(pecInput!).toHaveValue('');
-    const button = await waitFor(() => result.getByRole('button', { name: 'button.conferma' }));
-    expect(button).toBeDisabled();
+    await waitFor(() => {
+      const button = result.getByRole('button', { name: 'button.conferma' });
+      expect(button).toBeDisabled();
+    });
     const disclaimer = result.getByTestId('legal-contact-disclaimer');
     expect(disclaimer).toBeInTheDocument();
   });
 
   it('checks invalid pec', async () => {
+    let errorMessage: HTMLElement | null;
     const result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
@@ -47,9 +50,11 @@ describe('InsertLegalContact component', () => {
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     fireEvent.change(pecInput!, { target: { value: 'mail-errata' } });
     await waitFor(() => expect(pecInput!).toHaveValue('mail-errata'));
-    let errorMessage = cardBody?.querySelector('#pec-helper-text');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
+    await waitFor(() => {
+      errorMessage = cardBody?.querySelector('#pec-helper-text');
+      expect(errorMessage).toBeInTheDocument();
+      expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
+    });
     fireEvent.change(pecInput!, { target: { value: '' } });
     await waitFor(() => expect(pecInput!).toHaveValue(''));
     errorMessage = cardBody?.querySelector('#pec-helper-text');
