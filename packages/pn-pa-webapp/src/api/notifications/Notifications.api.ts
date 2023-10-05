@@ -179,15 +179,20 @@ export const NotificationsApi = {
    * Gets current user specified Payment Attachment
    * @param  {string} iun
    * @param  {PaymentAttachmentNameType} attachmentName
-   * @param  {string} mandateId
+   * @param  {number} recIndex
+   * @param  {number} attachmentIdx
    * @returns Promise
    */
   getPaymentAttachment: (
     iun: string,
-    attachmentName: PaymentAttachmentNameType
+    attachmentName: PaymentAttachmentNameType,
+    recIndex: number,
+    attachmentIdx?: number
   ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
+      .get<{ url: string }>(
+        NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, recIndex, attachmentIdx)
+      )
       .then((response) => getDownloadUrl(response)),
 
   /**

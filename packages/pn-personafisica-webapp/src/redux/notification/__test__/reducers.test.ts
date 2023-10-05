@@ -15,15 +15,16 @@ import {
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import {
   cancelledNotificationDTO,
   cancelledNotificationToFe,
   notificationDTO,
   notificationToFe,
-  payments,
   paymentsData,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
+import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
@@ -47,8 +48,6 @@ import {
   getReceivedNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { createMockedStore } from '../../../__test__/test-utils';
 
 const initialState = {
   loading: false,

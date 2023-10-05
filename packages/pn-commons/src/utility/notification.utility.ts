@@ -871,7 +871,7 @@ const populateOtherDocuments = (
 
 export const getF24Payments = (
   payments: Array<NotificationDetailPayment>,
-  recipientIdx: number,
+  recIndex: number,
   onlyF24: boolean = true
 ): Array<F24PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
@@ -880,7 +880,7 @@ export const getF24Payments = (
       arr.push({
         ...payment.f24,
         attachmentIdx: index,
-        recipientIdx,
+        recIndex,
       });
     }
     return arr;
@@ -888,7 +888,7 @@ export const getF24Payments = (
 
 export const getPagoPaF24Payments = (
   payments: Array<NotificationDetailPayment>,
-  recipientIdx: number,
+  recIndex: number,
   withLoading: boolean = false
 ): Array<PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
@@ -898,9 +898,9 @@ export const getPagoPaF24Payments = (
         pagoPA: {
           ...payment.pagoPA,
           attachmentIdx: index,
-          recipientIdx,
+          recIndex,
         } as PagoPAPaymentFullDetails,
-        f24: payment.f24 ? { ...payment.f24, attachmentIdx: index, recipientIdx } : undefined,
+        f24: payment.f24 ? { ...payment.f24, attachmentIdx: index, recIndex } : undefined,
         ...(withLoading && { isLoading: true }),
       });
     }

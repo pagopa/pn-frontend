@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { Chip, Grid, Typography } from '@mui/material';
@@ -25,17 +26,25 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 
-  // TODO: l'api di apgamento non è corretta perchè prevede solo il caso in cui si abbia un solo pagamento
   const dowloadHandler = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
-    dispatch(getPaymentAttachment({ iun, attachmentName: PaymentAttachmentSName.PAGOPA }))
-      .unwrap()
-      .then((res) => {
-        if (res.url) {
-          downloadDocument(res.url, isMobile);
-        }
-      })
-      .catch(() => {});
+    if (!_.isNil(payment.recIndex)) {
+      trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
+      dispatch(
+        getPaymentAttachment({
+          iun,
+          attachmentName: PaymentAttachmentSName.PAGOPA,
+          recIndex: payment.recIndex,
+          attachmentIdx: payment.attachmentIdx,
+        })
+      )
+        .unwrap()
+        .then((res) => {
+          if (res.url) {
+            downloadDocument(res.url, isMobile);
+          }
+        })
+        .catch(() => {});
+    }
   };
 
   return (

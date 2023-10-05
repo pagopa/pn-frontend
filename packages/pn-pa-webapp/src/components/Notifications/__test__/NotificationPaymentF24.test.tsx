@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { F24PaymentDetails } from '@pagopa-pn/pn-commons';
+import { getF24Payments } from '@pagopa-pn/pn-commons';
 
 import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
@@ -13,13 +13,11 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const f24Payments =
-  notificationToFeMultiRecipient.recipients[0].payments?.reduce((arr, item) => {
-    if (item.f24) {
-      arr.push(item.f24);
-    }
-    return arr;
-  }, [] as Array<F24PaymentDetails>) ?? [];
+const f24Payments = getF24Payments(
+  notificationToFeMultiRecipient.recipients[0].payments ?? [],
+  0,
+  false
+);
 
 describe('NotificationPaymentF24 Component', () => {
   it('renders component - no remaining items', () => {
@@ -40,9 +38,10 @@ describe('NotificationPaymentF24 Component', () => {
   it('renders component - remaining items', async () => {
     const f24LotPayments = [
       ...f24Payments,
-      ...f24Payments.map((f24) => ({
+      ...f24Payments.map((f24, index) => ({
         ...f24,
         description: f24.title.split('').reverse().join(''),
+        attachmentIdx: f24Payments.length + index,
       })),
     ];
     const { queryAllByTestId, queryByTestId } = render(

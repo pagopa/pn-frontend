@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
   GetNotificationsParams,
   LegalFactId,
@@ -165,8 +167,10 @@ export function NOTIFICATION_PAYMENT_ATTACHMENT(
       [API_NOTIFICATIONS_RECIPIENT_INDEX_PARAMETER]: recipientIdx.toString(),
     },
     query: {
-      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
-      [API_NOTIFICATIONS_ATTACHMENT_IDX_PARAMETER]: attachmentIdx || '',
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId ?? '',
+      [API_NOTIFICATIONS_ATTACHMENT_IDX_PARAMETER]: !_.isNil(attachmentIdx)
+        ? attachmentIdx.toString()
+        : '',
     },
   });
 }
