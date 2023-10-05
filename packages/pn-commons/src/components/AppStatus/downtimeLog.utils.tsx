@@ -4,8 +4,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 
 import { CardElement, Column, DowntimeLogPage, DowntimeStatus, Item } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { formatDate, formatDateTime, formatTimeWithLegend } from '../../utility/date.utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export function booleanStringToBoolean(booleanString: string): boolean {
   return booleanString.toLowerCase() === 'true';

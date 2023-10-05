@@ -1,5 +1,5 @@
 import { SendPaperDetails, TimelineCategory } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 const SEND_ANALOG_FEEDBACK_OK_DETAIL_CODES = [

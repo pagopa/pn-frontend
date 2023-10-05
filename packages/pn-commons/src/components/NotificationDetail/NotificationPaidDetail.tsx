@@ -14,8 +14,8 @@ import {
 } from '@mui/material';
 
 import { PaymentHistory } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { formatEurocentToCurrency, formatFiscalCode } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CustomTableRow from '../CustomTableRow';
 
 type NotificationPaidDetailProps = {

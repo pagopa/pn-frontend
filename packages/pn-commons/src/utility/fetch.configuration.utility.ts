@@ -1,5 +1,5 @@
 /*
- * this function is defined in a file separate from configuration.service.ts
+ * this function is defined in a file separate from configuration.utility.ts
  * just to ease its mocking when testing loadConfiguration and getConfiguration.
  */
 

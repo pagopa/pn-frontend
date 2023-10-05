@@ -1,5 +1,6 @@
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
+import { Configuration } from './configuration.utility';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
@@ -23,6 +24,7 @@ import { calcUnit8Array } from './file.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
+import { initLocalization } from './localization.utility';
 import {
   getLegalFactLabel,
   getNotificationAllowedStatus,
@@ -38,6 +40,7 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from './sear
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
+import { interceptDispatch, trackEvent } from './tracking.utility';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -98,4 +101,8 @@ export {
   calcUnit8Array,
   lazyRetry,
   waitForElement,
+  initLocalization,
+  trackEvent,
+  interceptDispatch,
+  Configuration,
 };

@@ -4,7 +4,7 @@ import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 
 import { A11yPaginationLabelsTypes, PaginationData } from '../../models/Pagination';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   /** The actual paginationData */

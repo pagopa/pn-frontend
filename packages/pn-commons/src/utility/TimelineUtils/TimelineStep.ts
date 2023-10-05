@@ -4,7 +4,7 @@ import {
   NotificationDetailRecipient,
   PhysicalAddress,
 } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export interface TimelineStepPayload {
   step: INotificationDetailTimeline;

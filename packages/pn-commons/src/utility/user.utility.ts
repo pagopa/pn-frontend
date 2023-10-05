@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import { BasicUser } from '../models/User';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { dataRegex } from './string.utility';
 
 /**

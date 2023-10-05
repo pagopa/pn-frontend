@@ -1,7 +1,7 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models';
 import { PrepareAnalogDomicileFailureDetails } from '../../../models/NotificationDetail';
-import { initLocalization } from '../../../services/localization.service';
+import { initLocalization } from '../../../utility/localization.utility';
 import { PrepareAnalogDomicileFailureStep } from '../PrepareAnalogDomicileFailureStep';
 
 const physicalAddress = {

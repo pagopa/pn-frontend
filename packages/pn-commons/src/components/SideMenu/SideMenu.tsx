@@ -6,7 +6,7 @@ import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@
 
 import { useIsMobile } from '../../hooks';
 import { SideMenuItem } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuList from './SideMenuList';
 
 type Props = {

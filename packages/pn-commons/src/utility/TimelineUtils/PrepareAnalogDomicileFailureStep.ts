@@ -1,5 +1,5 @@
 import { PrepareAnalogDomicileFailureDetails } from '../../models/NotificationDetail';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class PrepareAnalogDomicileFailureStep extends TimelineStep {

@@ -13,8 +13,8 @@ import { visuallyHidden } from '@mui/utils';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { Column, Item, Sort } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { buttonNakedInheritStyle } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props<ColumnId> = {
   /** Table columns */

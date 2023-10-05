@@ -1,4 +1,4 @@
-import { getLocalizedOrDefaultLabel, initLocalization } from '../localization.service';
+import { getLocalizedOrDefaultLabel, initLocalization } from '../localization.utility';
 
 describe('localization service', () => {
   it('localize label (default label)', () => {

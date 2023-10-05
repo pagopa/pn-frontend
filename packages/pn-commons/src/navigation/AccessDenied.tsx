@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
   isLogged: boolean;

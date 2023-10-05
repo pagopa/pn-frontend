@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 const NotFound = () => (
   <div>

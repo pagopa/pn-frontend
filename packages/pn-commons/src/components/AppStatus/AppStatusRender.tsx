@@ -10,8 +10,8 @@ import {
   KnownSentiment,
 } from '../../models';
 import { PaginationData } from '../../models/Pagination';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { formatDateTime } from '../../utility/date.utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 import EmptyState from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';

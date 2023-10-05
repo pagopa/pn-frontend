@@ -1,6 +1,6 @@
 import { Validator } from '@pagopa-pn/pn-validator';
 
-import { Configuration } from '../configuration.service';
+import { Configuration } from '../configuration.utility';
 
 let mockFetchConfigurationResult: any;
 

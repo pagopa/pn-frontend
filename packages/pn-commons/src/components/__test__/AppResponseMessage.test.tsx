@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { AppResponse, ServerResponseErrorCode } from '../../models/AppResponse';
-import { createAppMessage } from '../../services/message.service';
 import { render, waitFor } from '../../test-utils';
 import { AppResponsePublisher } from '../../utility';
+import { createAppMessage } from '../../utility/message.utility';
 import AppResponseMessage from '../AppResponseMessage';
 
 describe('AppResponseMessage Component', () => {

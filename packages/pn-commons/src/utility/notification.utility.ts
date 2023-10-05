@@ -25,8 +25,8 @@ import {
   ViewedDetails,
 } from '../models';
 import { AppIoCourtesyMessageEventType } from '../models/NotificationDetail';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { formatDate } from '../utility';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
