@@ -12,7 +12,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
       }
       if (config.url === '/ext-registry/pagopa/v2/paymentinfo') {
         return new Promise((_resolve, reject) =>
-          setTimeout(() => reject({ error: true, type: 'ext-registry' }), 4000)
+          setTimeout(() => reject({ error: true, type: 'ext-registry' }), 2000)
         );
       }
       if (
@@ -20,7 +20,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         '/delivery/notifications/received/DAPQ-LWQV-DKQH-202308-A-1/attachments/payment/2/F24?attachmentIdx=4'
       ) {
         return new Promise((_resolve, reject) =>
-          setTimeout(() => reject({ error: true, type: 'delivery-f24' }), 4000)
+          setTimeout(() => reject({ error: true, type: 'delivery-f24' }), 2000)
         );
       }
 
@@ -51,7 +51,8 @@ export const setUpInterceptor = (store: EnhancedStore) => {
               contentLength: 10,
               contenType: 'application/pdf',
               sha256: 'sha256',
-              url: 'https://www.africau.edu/images/default/sample.pdf',
+              // url: 'https://www.africau.edu/images/default/sample.pdf',
+              retryAfter: 14000,
             },
           };
         }

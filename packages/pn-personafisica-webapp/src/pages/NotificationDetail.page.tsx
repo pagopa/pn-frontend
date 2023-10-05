@@ -17,7 +17,6 @@ import {
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -53,6 +52,7 @@ import {
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
+import { getConfiguration } from '../services/configuration.service';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -76,7 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const [isF24Ready, setIsF24Ready] = useState(true);
+  const { F24_DOWNLOAD_WAIT_TIME } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -214,36 +214,17 @@ const NotificationDetail = () => {
     }
   };
 
-  const handleDownloadAttachment = (
-    name: PaymentAttachmentSName,
-    recipientIdx: number,
-    attachmentIdx?: number
-  ) => {
-    console.log('download');
-    setIsF24Ready(false);
-    void dispatch(
+  // const [maxTimeError, setMaxTimeError] = useState<string>('');
+
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
+    dispatch(
       getPaymentAttachment({
         iun: notification.iun,
         attachmentName: name,
-        recipientIdx,
         mandateId,
         attachmentIdx,
       })
-    ).then((res) => {
-      if (name === PaymentAttachmentSName.F24 && (res.payload as PaymentAttachment).retryAfter) {
-        console.log('retryAfter', (res.payload as PaymentAttachment).retryAfter);
-        // TODO eseguire solo una volta (?)
-        // const retryAfter = (res.payload as any).retryAfter;
-        // setTimeout(() => {
-        //   handleDownloadAttachment(name, recipientIdx, attachmentIdx);
-        // }, retryAfter);
-      }
-      if (name === PaymentAttachmentSName.F24 && (res.payload as PaymentAttachment).url) {
-        setIsF24Ready(true);
-      }
-    });
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
-  };
+    ).unwrap();
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
@@ -433,9 +414,9 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
-                        handleDownloadAttachment={handleDownloadAttachment}
                         handleReloadPayment={fetchPaymentsInfo}
-                        isF24Ready={isF24Ready}
+                        getPaymentAttachmentAction={getPaymentAttachmentAction}
+                        timerF24={F24_DOWNLOAD_WAIT_TIME}
                       />
                     </ApiErrorWrapper>
                   </Paper>

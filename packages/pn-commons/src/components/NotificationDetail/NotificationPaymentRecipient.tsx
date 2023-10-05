@@ -3,10 +3,11 @@ import React, { Fragment, memo, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { downloadDocument } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
+  F24PaymentDetails,
   NotificationDetailPayment,
   PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
@@ -21,23 +22,22 @@ import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 type Props = {
   payments: PaymentsData;
   isCancelled: boolean;
-  onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  handleDownloadAttachment: (
+  timerF24: number;
+  getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
-    recipientIdx: number,
     attachmentIdx?: number
-  ) => void;
+  ) => Promise<any>;
+  onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
-  isF24Ready?: boolean;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   isCancelled,
+  timerF24,
+  getPaymentAttachmentAction,
   onPayClick,
-  handleDownloadAttachment,
   handleReloadPayment,
-  isF24Ready,
 }) => {
   const { pagoPaF24, f24Only } = payments;
 
@@ -95,10 +95,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
     if (selectedPayment && !_.isNil(selectedPayment.recipientIdx)) {
-      handleDownloadAttachment(
-        attachmentName,
-        selectedPayment.recipientIdx,
-        selectedPayment.attachmentIdx
+      void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx).then(
+        (response) => {
+          if (response.url) {
+            downloadDocument(response.url, false);
+          }
+        }
       );
     }
   };
@@ -187,17 +189,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               {selectedPayment &&
               pagoPaF24.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
                 ?.f24 ? (
-                <Box display="flex" justifyContent="space-between" data-testid="f24-download">
-                  <Typography variant="body2">
-                    {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
-                  </Typography>
-                  <ButtonNaked
-                    color="primary"
-                    onClick={() => downloadAttachment(PaymentAttachmentSName.F24)}
-                  >
-                    <Download fontSize="small" sx={{ mr: 1 }} />
-                    {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
-                  </ButtonNaked>
+                <Box key="attachment" data-testid="f24-download">
+                  <NotificationPaymentF24Item
+                    f24Item={
+                      pagoPaF24.find(
+                        (payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode
+                      )?.f24 as F24PaymentDetails
+                    }
+                    getPaymentAttachmentAction={getPaymentAttachmentAction}
+                    isPagoPaAttachment
+                    timerF24={timerF24}
+                  />
                 </Box>
               ) : null}
             </Fragment>
@@ -217,8 +219,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             <Box key={index}>
               <NotificationPaymentF24Item
                 f24Item={f24Item}
-                handleDownloadAttachment={handleDownloadAttachment}
-                isF24Ready={isF24Ready}
+                getPaymentAttachmentAction={getPaymentAttachmentAction}
+                timerF24={timerF24}
               />
             </Box>
           ))}

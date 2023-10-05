@@ -11,5 +11,6 @@
   "URL_FE_LOGIN": "https://login.dev.notifichedigitali.it/",
   "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it/",
   "DELEGATIONS_TO_PG_ENABLED": true,
-  "WORK_IN_PROGRESS": false
+  "WORK_IN_PROGRESS": false,
+  "F24_DOWNLOAD_WAIT_TIME": 15000
 }
