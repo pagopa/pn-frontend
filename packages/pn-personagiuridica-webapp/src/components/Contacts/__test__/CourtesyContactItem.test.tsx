@@ -127,8 +127,10 @@ describe('CourtesyContactItem component', () => {
       expect(input).toHaveValue(VALID_EMAIL);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
-      await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
-      expect(saveButton).toBeDisabled();
+      await waitFor(() => {
+        expect(input).toHaveValue(INVALID_EMAIL);
+        expect(saveButton).toBeDisabled();
+      });
       const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
     });
