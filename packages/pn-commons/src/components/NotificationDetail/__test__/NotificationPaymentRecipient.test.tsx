@@ -17,12 +17,15 @@ describe('NotificationPaymentRecipient Component', () => {
     f24Only: getF24Payments(payments, 0),
   };
 
+  const F24TIMER = 15000;
+
   it('should render component title and subtitle', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachment={() => void 0}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -47,7 +50,8 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachment={() => void 0}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -65,7 +69,8 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachment={() => void 0}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -94,8 +99,9 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachment={() => void 0}
-        onPayClick={payClickMk}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
     );
@@ -115,40 +121,13 @@ describe('NotificationPaymentRecipient Component', () => {
     });
   });
 
-  it('should dispatch action on download pagoPA notice button click', async () => {
-    const downloadAttachmentMk = jest.fn();
-
-    const result = render(
-      <NotificationPaymentRecipient
-        payments={paymentsData}
-        isCancelled={false}
-        handleDownloadAttachment={downloadAttachmentMk}
-        onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
-      />
-    );
-
-    const downloadButton = result.getByTestId('download-pagoPA-notice-button');
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as HTMLInputElement;
-
-    if (!radioButton) return;
-
-    fireEvent.click(radioButton);
-    fireEvent.click(downloadButton);
-
-    await waitFor(() => {
-      expect(downloadAttachmentMk).toBeCalledTimes(1);
-    });
-  });
-
   it('Should disable pay button when deselect a payment', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
-        handleDownloadAttachment={() => void 0}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -183,7 +162,8 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={payment}
         isCancelled={false}
-        handleDownloadAttachment={() => void 0}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -203,7 +183,8 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={true}
-        handleDownloadAttachment={() => void 0}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -216,7 +197,9 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleDownloadAttachment on download button click', async () => {
-    const handleDownloadAttachment = jest.fn();
+    const handleDownloadAttachment = jest.fn(() =>
+      Promise.resolve({ url: 'https://mocked-url.com' })
+    );
     const payment: PaymentsData = {
       pagoPaF24: [
         {
@@ -235,7 +218,8 @@ describe('NotificationPaymentRecipient Component', () => {
       <NotificationPaymentRecipient
         payments={payment}
         isCancelled={false}
-        handleDownloadAttachment={handleDownloadAttachment}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={handleDownloadAttachment}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -247,7 +231,6 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(handleDownloadAttachment).toBeCalledTimes(1);
     expect(handleDownloadAttachment).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
-      payment.pagoPaF24[0].pagoPA?.recipientIdx,
       payment.pagoPaF24[0].pagoPA?.attachmentIdx
     );
   });

@@ -49,8 +49,6 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
           // eslint-disable-next-line functional/immutable-data
           interval.current = setInterval(() => {
-            console.log('interval');
-            console.log(downloadingMessage);
             if (downloadingMessage === 'detail.payment.download-f24-in-progress') {
               setDownloadingMessage('detail.payment.download-f24-waiting');
             } else if (downloadingMessage === 'detail.payment.download-f24-waiting') {
@@ -96,8 +94,6 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     },
     []
   );
-
-  console.log(downloadingMessage);
 
   const getElement = () => {
     if (!downloadingMessage) {
