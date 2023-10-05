@@ -209,14 +209,14 @@ const NotificationDetail = () => {
 
   const handleDownloadAttachment = (
     name: PaymentAttachmentSName,
-    recipientIdx: number,
+    recIndex: number,
     attachmentIdx?: number
   ) => {
     void dispatch(
       getPaymentAttachment({
         iun: notification.iun,
         attachmentName: name,
-        recipientIdx,
+        recIndex,
         mandateId,
         attachmentIdx,
       })

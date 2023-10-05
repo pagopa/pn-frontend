@@ -12,9 +12,9 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -110,14 +110,14 @@ describe('Notifications api tests', () => {
   it('getPaymentAttachment', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
-    const recipientIdx = 1;
+    const recIndex = 1;
     mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recipientIdx))
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex))
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getPaymentAttachment(
       iun,
       attachmentName as PaymentAttachmentNameType,
-      recipientIdx
+      recIndex
     );
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });

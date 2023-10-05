@@ -72,7 +72,7 @@ export const getPaymentAttachment = createAsyncThunk<
   {
     iun: string;
     attachmentName: PaymentAttachmentNameType;
-    recipientIdx: number;
+    recIndex: number;
     mandateId?: string;
     attachmentIdx?: number;
   }
@@ -82,14 +82,14 @@ export const getPaymentAttachment = createAsyncThunk<
     (params: {
       iun: string;
       attachmentName: PaymentAttachmentNameType;
-      recipientIdx: number;
+      recIndex: number;
       mandateId?: string;
       attachmentIdx?: number;
     }) =>
       NotificationsApi.getPaymentAttachment(
         params.iun,
         params.attachmentName,
-        params.recipientIdx,
+        params.recIndex,
         params.mandateId,
         params.attachmentIdx
       )

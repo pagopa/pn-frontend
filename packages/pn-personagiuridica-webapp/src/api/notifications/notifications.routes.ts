@@ -1,9 +1,9 @@
 import {
-  compileRoute,
-  formatFiscalCode,
   GetNotificationsParams,
   LegalFactId,
   NotificationDetailOtherDocument,
+  compileRoute,
+  formatFiscalCode,
 } from '@pagopa-pn/pn-commons';
 
 // Prefixes
@@ -155,7 +155,7 @@ export function NOTIFICATION_DETAIL_LEGALFACT(
 export function NOTIFICATION_PAYMENT_ATTACHMENT(
   iun: string,
   attachmentName: string,
-  recipientIdx: number,
+  recIndex: number,
   mandateId?: string,
   attachmentIdx?: number
 ) {
@@ -165,7 +165,7 @@ export function NOTIFICATION_PAYMENT_ATTACHMENT(
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
       [API_NOTIFICATIONS_ATTACHMENT_NAME_PARAMETER]: attachmentName,
-      [API_NOTIFICATIONS_RECIPIENT_INDEX_PARAMETER]: recipientIdx.toString(),
+      [API_NOTIFICATIONS_RECIPIENT_INDEX_PARAMETER]: recIndex.toString(),
     },
     query: {
       [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
