@@ -5,7 +5,6 @@ import {
   LegalFactDocumentDetails,
   LegalFactId,
   NotificationDetailOtherDocument,
-  PaymentAttachment,
   PaymentAttachmentNameType,
   PaymentDetails,
   PaymentNotice,
@@ -72,7 +71,7 @@ export const getReceivedNotificationDocument = createAsyncThunk<
 );
 
 export const getPaymentAttachment = createAsyncThunk<
-  PaymentAttachment,
+  { url: string },
   {
     iun: string;
     attachmentName: PaymentAttachmentNameType;

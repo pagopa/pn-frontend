@@ -109,17 +109,6 @@ const NotificationDetail = () => {
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
-  const pagopaAttachmentUrl = useAppSelector(
-    (state: RootState) => state.notificationState.pagopaAttachmentUrl
-  );
-
-  const f24AttachmentUrl = useAppSelector(
-    (state: RootState) => state.notificationState.f24AttachmentUrl
-  );
-
-  useDownloadDocument({ url: pagopaAttachmentUrl.url });
-  useDownloadDocument({ url: f24AttachmentUrl.url });
-
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;

@@ -52,9 +52,9 @@ describe('Notifications routes', () => {
   });
 
   it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {
-    const route = NOTIFICATION_PAYMENT_ATTACHMENT('mocked-iun', 'mocked-attachmentName', 0);
+    const route = NOTIFICATION_PAYMENT_ATTACHMENT('mocked-iun', 'mocked-attachmentName');
     expect(route).toEqual(
-      '/delivery/notifications/received/mocked-iun/attachments/payment/0/mocked-attachmentName'
+      '/delivery/notifications/received/mocked-iun/attachments/payment/mocked-attachmentName'
     );
   });
 
