@@ -15,7 +15,7 @@ type Props = {
   sx?: SxProps;
 };
 
-const FormTextField: React.FC<Props> = ({
+const FormTextField: React.FC<React.PropsWithChildren<Props>> = ({
   keyName,
   label,
   values,

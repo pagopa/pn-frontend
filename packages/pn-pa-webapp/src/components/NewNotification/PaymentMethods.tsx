@@ -29,7 +29,7 @@ type PaymentBoxProps = {
   fileUploaded?: NewNotificationDocument;
 };
 
-const PaymentBox: React.FC<PaymentBoxProps> = ({
+const PaymentBox: React.FC<React.PropsWithChildren<PaymentBoxProps>> = ({
   id,
   title,
   onFileUploaded,
@@ -86,7 +86,7 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
  * Last step of the notification creation, where the user configures the payments
  * @returns
  */
-const PaymentMethods: React.FC<Props> = ({
+const PaymentMethods: React.FC<React.PropsWithChildren<Props>> = ({
   notification,
   onConfirm,
   isCompleted,

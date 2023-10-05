@@ -290,7 +290,9 @@ describe('Recipient Component with payment enabled', () => {
     // identical taxId
     await testInput(form!, 'recipients[0].taxId', newNotification.recipients[0].taxId);
     await testInput(form!, 'recipients[1].taxId', newNotification.recipients[0].taxId);
-    expect(taxIdError).toHaveTextContent('identical-fiscal-codes-error');
+    await waitFor(() => {
+      expect(taxIdError).toHaveTextContent('identical-fiscal-codes-error');
+    });
     // identical creditorTaxId and noticeCode
     await testInput(
       form!,
@@ -304,8 +306,10 @@ describe('Recipient Component with payment enabled', () => {
     );
     await testInput(form!, 'recipients[0].noticeCode', newNotification.recipients[0].noticeCode);
     await testInput(form!, 'recipients[1].noticeCode', newNotification.recipients[0].noticeCode);
-    const noticeCodeError = form.querySelector('[id="recipients[1].noticeCode-helper-text"]');
-    expect(noticeCodeError).toHaveTextContent('identical-notice-codes-error');
+    await waitFor(() => {
+      const noticeCodeError = form.querySelector('[id="recipients[1].noticeCode-helper-text"]');
+      expect(noticeCodeError).toHaveTextContent('identical-notice-codes-error');
+    });
     // remove second recipient and check that the form returns valid
     const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
     fireEvent.click(deleteIcon![1]);
@@ -359,7 +363,9 @@ describe('Recipient Component with payment enabled', () => {
     await waitFor(() => {
       expect(result?.container).not.toHaveTextContent(/title 2/i);
     });
-    expect(submitButton).toBeEnabled();
+    await waitFor(() => {
+      expect(submitButton).toBeEnabled();
+    });
     fireEvent.click(submitButton!);
     await waitFor(() => {
       const state = testStore.getState();

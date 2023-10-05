@@ -39,7 +39,7 @@ type AttachmentBoxProps = {
 
 const MAX_NUMBER_OF_ATTACHMENTS = 10;
 
-const AttachmentBox: React.FC<AttachmentBoxProps> = ({
+const AttachmentBox: React.FC<React.PropsWithChildren<AttachmentBoxProps>> = ({
   id,
   title,
   sx,
@@ -122,7 +122,7 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments: React.FC<Props> = ({
+const Attachments: React.FC<React.PropsWithChildren<Props>> = ({
   onConfirm,
   onPreviousStep,
   attachmentsData,

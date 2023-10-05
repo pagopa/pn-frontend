@@ -32,7 +32,7 @@ type Props = {
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
-const LinkNewApiKey: React.FC = ({ children }) => {
+const LinkNewApiKey: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['apikeys']);
   return (

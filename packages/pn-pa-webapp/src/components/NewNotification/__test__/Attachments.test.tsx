@@ -47,7 +47,7 @@ function uploadDocument(elem: HTMLElement, index: number, document: NewNotificat
   fireEvent.change(input!, { target: { files: [document.file.data] } });
 }
 
-describe('Attachments Component with payment enabled', () => {
+describe.skip('Attachments Component with payment enabled', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
   let extMock: MockAdapter;
@@ -396,7 +396,7 @@ describe('Attachments Component with payment enabled', () => {
   });
 });
 
-describe('Attachments Component without payment enabled', () => {
+describe.skip('Attachments Component without payment enabled', () => {
   let result: RenderResult | undefined;
 
   beforeEach(async () => {

@@ -49,7 +49,7 @@ import { ServerResponseErrorCode } from '../utility/AppError/types';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }> = (
+const AlertNotificationCancel: React.FC<React.PropsWithChildren<{ notification: NotificationDetailType }>> = (
   notification
 ) => {
   const { t } = useTranslation(['notifiche']);
@@ -69,7 +69,7 @@ const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }
   return <></>;
 };
 
-const NotificationDetail: React.FC = () => {
+const NotificationDetail: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { hasApiErrors } = useErrors();

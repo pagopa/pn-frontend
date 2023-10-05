@@ -75,7 +75,7 @@ type Props = {
   forwardedRef: ForwardedRef<unknown>;
 };
 
-const Recipient: React.FC<Props> = ({
+const Recipient: React.FC<React.PropsWithChildren<Props>> = ({
   paymentMode,
   onConfirm,
   onPreviousStep,

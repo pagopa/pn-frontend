@@ -55,9 +55,9 @@ const newNotificationRecipientsMapper = (
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
       ? {
-          type: recipient.type,
-          address: recipient.digitalDomicile,
-        }
+        type: recipient.type,
+        address: recipient.digitalDomicile,
+      }
       : undefined;
     const parsedRecipient: NotificationDetailRecipient = {
       denomination:
@@ -176,7 +176,7 @@ export function getDuplicateValuesByKeys<T>(
   const getValue = (item: T) => {
     let valueByKeys = '';
     for (const element of keys) {
-      valueByKeys += item[element] ?? '';
+      valueByKeys = valueByKeys + item[element] ?? '';
     }
     return valueByKeys;
   };

@@ -20,7 +20,7 @@ type Props = {
   payment: boolean;
 };
 
-const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConfirm, payment }) => {
+const ConfirmCancellationDialog: React.FC<React.PropsWithChildren<Props>> = ({ showModal, onClose, onConfirm, payment }) => {
   const { t } = useTranslation(['notifiche']);
 
   const [checked, setChecked] = useState(false);
