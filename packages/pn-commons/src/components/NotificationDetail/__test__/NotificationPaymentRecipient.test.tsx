@@ -223,7 +223,7 @@ describe('NotificationPaymentRecipient Component', () => {
           ...paymentsData.pagoPaF24[0],
           pagoPA: {
             ...paymentsData.pagoPaF24[0].pagoPA,
-            recipientIdx: 1,
+            recIndex: 1,
             attachmentIdx: 1,
           } as PagoPAPaymentFullDetails,
         },
@@ -247,7 +247,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(handleDownloadAttachment).toBeCalledTimes(1);
     expect(handleDownloadAttachment).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
-      payment.pagoPaF24[0].pagoPA?.recipientIdx,
+      payment.pagoPaF24[0].pagoPA?.recIndex,
       payment.pagoPaF24[0].pagoPA?.attachmentIdx
     );
   });

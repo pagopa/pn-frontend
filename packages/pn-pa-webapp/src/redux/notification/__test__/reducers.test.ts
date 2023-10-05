@@ -1,9 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { apiClient } from '../../../api/apiClients';
-import {
-  CANCEL_NOTIFICATION,
-  NOTIFICATION_PAYMENT_ATTACHMENT,
-} from '../../../api/notifications/notifications.routes';
 
 import {
   KnownFunctionality,
@@ -22,11 +17,14 @@ import {
   notificationDTOMultiRecipient,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
+import { apiClient } from '../../../api/apiClients';
 import {
+  CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
 } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import {
@@ -152,15 +150,15 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the pagopa document', async () => {
     const iun = notificationDTOMultiRecipient.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const recIndex = 1;
     const url = 'http://mocked-url.com';
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, { url });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, { url });
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
     const payload = action.payload;
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(payload).toEqual({ url });
   });
 
-  // TODO: convert to new logic
   it('Should be able to fetch the downtimes events', async () => {
     const mockRequest = {
       startDate: '2022-10-23T15:50:04Z',

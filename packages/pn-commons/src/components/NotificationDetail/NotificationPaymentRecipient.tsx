@@ -24,7 +24,7 @@ type Props = {
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleDownloadAttachment: (
     name: PaymentAttachmentSName,
-    recipientIdx: number,
+    recIndex: number,
     attachmentIdx?: number
   ) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
@@ -92,10 +92,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
-    if (selectedPayment && !_.isNil(selectedPayment.recipientIdx)) {
+    if (selectedPayment && !_.isNil(selectedPayment.recIndex)) {
       handleDownloadAttachment(
         attachmentName,
-        selectedPayment.recipientIdx,
+        selectedPayment.recIndex,
         selectedPayment.attachmentIdx
       );
     }

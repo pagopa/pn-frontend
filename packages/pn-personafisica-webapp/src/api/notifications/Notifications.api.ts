@@ -152,7 +152,7 @@ export const NotificationsApi = {
    * Gets current user specified Payment Attachment
    * @param  {string} iun
    * @param  {PaymentAttachmentNameType} attachmentName
-   * @param  {number} recipientIdx
+   * @param  {number} recIndex
    * @param  {string} mandateId
    * @param  {number} attachmentIdx
    * @returns Promise
@@ -160,7 +160,7 @@ export const NotificationsApi = {
   getPaymentAttachment: (
     iun: string,
     attachmentName: PaymentAttachmentNameType,
-    recipientIdx: number,
+    recIndex: number,
     mandateId?: string,
     attachmentIdx?: number
   ): Promise<{ url: string }> =>
@@ -169,7 +169,7 @@ export const NotificationsApi = {
         NOTIFICATION_PAYMENT_ATTACHMENT(
           iun,
           attachmentName as string,
-          recipientIdx,
+          recIndex,
           mandateId,
           attachmentIdx
         )
