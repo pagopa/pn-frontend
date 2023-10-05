@@ -1,6 +1,6 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
-import { TimelineCategory } from '../../../types';
 import { SendAnalogFlowStep } from '../SendAnalogFlowStep';
 import { TimelineStepPayload } from '../TimelineStep';
 

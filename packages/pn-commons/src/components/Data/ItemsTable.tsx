@@ -12,8 +12,8 @@ import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { Column, Item, Sort } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { Column, Item, Sort } from '../../types';
 import { buttonNakedInheritStyle } from '../../utility';
 
 type Props<ColumnId> = {

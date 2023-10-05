@@ -1,4 +1,4 @@
-import { IAppMessage } from '../../types';
+import { IAppMessage } from '../../models';
 import { createAppMessage } from '../message.service';
 
 const _genericMessage: IAppMessage = {

@@ -3,9 +3,8 @@ import { useCallback } from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 
-import { DowntimeLogPage, DowntimeStatus } from '../../models';
+import { CardElement, Column, DowntimeLogPage, DowntimeStatus, Item } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { CardElement, Column, Item } from '../../types';
 import { formatDate, formatDateTime, formatTimeWithLegend } from '../../utility/date.utility';
 
 export function booleanStringToBoolean(booleanString: string): boolean {

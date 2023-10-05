@@ -1,4 +1,4 @@
-import { AppResponseError, ErrorMessage, ServerResponseError } from '../../types/AppResponse';
+import { AppResponseError, ErrorMessage, ServerResponseError } from '../../models/AppResponse';
 
 abstract class AppError {
   protected code: string;

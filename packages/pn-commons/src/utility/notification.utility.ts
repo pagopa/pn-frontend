@@ -5,7 +5,6 @@
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
   AarDetails,
   DigitalDomicileType,
@@ -24,8 +23,9 @@ import {
   SendPaperDetails,
   TimelineCategory,
   ViewedDetails,
-} from '../types';
-import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
+} from '../models';
+import { AppIoCourtesyMessageEventType } from '../models/NotificationDetail';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { formatDate } from '../utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -646,7 +646,7 @@ function populateMacroStep(
       status.steps!.push({ ...step, hidden: true });
       // add legal facts for ANALOG_FAILURE_WORKFLOW steps with linked generatedAarUrl
       // since the AAR for such steps must be shown in timeline exactly the same way as legalFacts.
-      // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+      // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
     } else if (
       step.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW &&
       (step.details as AarDetails).generatedAarUrl

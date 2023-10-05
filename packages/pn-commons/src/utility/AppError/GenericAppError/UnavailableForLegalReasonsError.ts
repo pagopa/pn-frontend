@@ -1,5 +1,5 @@
+import { ServerResponseError } from '../../../models/AppResponse';
 import { getLocalizedOrDefaultLabel } from '../../../services/localization.service';
-import { ServerResponseError } from '../../../types/AppResponse';
 import AppError from '../AppError';
 
 export class UnavailableForLegalReasonsError extends AppError {

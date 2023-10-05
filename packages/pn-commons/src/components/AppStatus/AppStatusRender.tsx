@@ -3,14 +3,18 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 
 import { useDownloadDocument, useIsMobile } from '../../hooks';
-import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
+import {
+  AppStatusData,
+  GetDowntimeHistoryParams,
+  KnownFunctionality,
+  KnownSentiment,
+} from '../../models';
+import { PaginationData } from '../../models/Pagination';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { AppStatusData, KnownSentiment } from '../../types';
 import { formatDateTime } from '../../utility/date.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 import EmptyState from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';
-import { PaginationData } from '../Pagination/types';
 import TitleBox from '../TitleBox';
 import { AppStatusBar } from './AppStatusBar';
 import DesktopDowntimeLog from './DesktopDowntimeLog';

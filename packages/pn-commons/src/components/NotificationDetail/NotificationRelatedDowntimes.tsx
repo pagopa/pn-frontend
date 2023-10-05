@@ -5,9 +5,8 @@ import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useDownloadDocument } from '../../hooks';
-import { Downtime } from '../../models';
+import { Downtime, NotificationStatus, NotificationStatusHistory } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { NotificationStatus, NotificationStatusHistory } from '../../types';
 import { formatDate, isToday } from '../../utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 

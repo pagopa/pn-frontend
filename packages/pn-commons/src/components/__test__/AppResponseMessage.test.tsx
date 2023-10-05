@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { AppResponse, ServerResponseErrorCode } from '../../models/AppResponse';
 import { createAppMessage } from '../../services/message.service';
 import { render, waitFor } from '../../test-utils';
-import { AppResponse, ServerResponseErrorCode } from '../../types/AppResponse';
 import { AppResponsePublisher } from '../../utility';
 import AppResponseMessage from '../AppResponseMessage';
 

@@ -1,7 +1,9 @@
 // leave default import for mixpanel, using named once it won't work
-import mixpanel from "mixpanel-browser";
-import { AnyAction, Dispatch, PayloadAction } from "@reduxjs/toolkit";
-import { EventsType } from "../types/MixpanelEvents";
+import mixpanel from 'mixpanel-browser';
+
+import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
+
+import { EventsType } from '../models/MixpanelEvents';
 
 /**
  * Function that tracks event
@@ -26,7 +28,12 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 }
 
 export const interceptDispatch =
-  (next: Dispatch<AnyAction>, trackEventType: { [s: number]: string }, events: EventsType, nodeEnv: string) =>
+  (
+    next: Dispatch<AnyAction>,
+    trackEventType: { [s: number]: string },
+    events: EventsType,
+    nodeEnv: string
+  ) =>
   (action: PayloadAction<any, string>): any => {
     if (action.type in events) {
       const idx = Object.values(trackEventType).indexOf(action.type as string);
@@ -35,10 +42,10 @@ export const interceptDispatch =
 
       const eventParameters = attributes
         ? {
-          category: events[action.type].category,
-          action: events[action.type].action,
-          attributes,
-        }
+            category: events[action.type].category,
+            action: events[action.type].action,
+            attributes,
+          }
         : events[action.type];
       trackEvent(eventKey, nodeEnv, eventParameters);
     }

@@ -13,8 +13,8 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-} from '../types';
-import { NotificationDetailTimelineDetails } from '../types/NotificationDetail';
+} from '../models';
+import { NotificationDetailTimelineDetails } from '../models/NotificationDetail';
 import { parseNotificationDetail } from '../utility';
 
 function getOneRecipientNotification(): NotificationDetail {

@@ -1,9 +1,8 @@
-import { getLocalizedOrDefaultLabel } from "../../../services/localization.service";
-import { ServerResponseError } from "../../../types/AppResponse";
-import AppError from "../AppError";
+import { ServerResponseError } from '../../../models/AppResponse';
+import { getLocalizedOrDefaultLabel } from '../../../services/localization.service';
+import AppError from '../AppError';
 
 export class UnauthorizedAppError extends AppError {
-
   constructor(error: ServerResponseError) {
     super(error);
   }
@@ -11,15 +10,15 @@ export class UnauthorizedAppError extends AppError {
   getMessage() {
     return {
       title: getLocalizedOrDefaultLabel(
-        "common",
-        "errors.unauthorized.title",
-        "Utente non autorizzato"
+        'common',
+        'errors.unauthorized.title',
+        'Utente non autorizzato'
       ),
       content: getLocalizedOrDefaultLabel(
-        "common",
-        "errors.unauthorized.message",
+        'common',
+        'errors.unauthorized.message',
         "L'utente corrente non ha le autorizzazioni."
-      )
+      ),
     };
   }
 }

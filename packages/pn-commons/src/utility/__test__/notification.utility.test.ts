@@ -7,9 +7,8 @@ import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
-import { initLocalization } from '../../services';
-import { initLocalizationForTest } from '../../test-utils';
 import {
+  AarDetails,
   DigitalDomicileType,
   LegalFactType,
   NotificationDeliveryMode,
@@ -19,12 +18,11 @@ import {
   RecipientType,
   SendDigitalDetails,
   TimelineCategory,
-} from '../../types';
-import {
-  AarDetails,
-  AppIoCourtesyMessageEventType,
   ViewedDetails,
-} from '../../types/NotificationDetail';
+} from '../../models';
+import { AppIoCourtesyMessageEventType } from '../../models/NotificationDetail';
+import { initLocalization } from '../../services';
+import { initLocalizationForTest } from '../../test-utils';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
 import { formatDate } from '../date.utility';
 import {

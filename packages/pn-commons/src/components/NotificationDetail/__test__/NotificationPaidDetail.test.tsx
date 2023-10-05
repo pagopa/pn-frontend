@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
+import { PaymentHistory, RecipientType } from '../../../models';
 import { fireEvent, initLocalizationForTest, render, within } from '../../../test-utils';
-import { PaymentHistory, RecipientType } from '../../../types';
 import { formatEurocentToCurrency, formatFiscalCode } from '../../../utility';
 import NotificationPaidDetail from '../NotificationPaidDetail';
 

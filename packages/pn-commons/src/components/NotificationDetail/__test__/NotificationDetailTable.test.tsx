@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { NotificationDetailTableRow } from '../../../models';
 import { render, within } from '../../../test-utils';
-import { NotificationDetailTableRow } from '../../../types';
 import NotificationDetailTable from '../NotificationDetailTable';
 
 describe('NotificationDetailTable Component', () => {
