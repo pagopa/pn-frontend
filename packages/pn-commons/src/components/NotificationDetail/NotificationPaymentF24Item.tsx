@@ -1,7 +1,7 @@
 import { Download, InfoRounded } from '@mui/icons-material';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import _ from 'lodash';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { downloadDocument, useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
@@ -87,11 +87,9 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   }, []);
 
   const downloadF24 = () => {
-    if (!_.isNil(f24Item.recipientIdx)) {
-      setMaxTimeError(null);
-      setDownloadingMessage('detail.payment.download-f24-in-progress');
-      void getDownloadF24Status(f24Item, 0);
-    }
+    setMaxTimeError(null);
+    setDownloadingMessage('detail.payment.download-f24-in-progress');
+    void getDownloadF24Status(f24Item, 0);
   };
 
   useEffect(

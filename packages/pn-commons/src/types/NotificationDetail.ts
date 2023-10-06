@@ -274,14 +274,13 @@ export interface PagoPAPaymentDetails {
   noticeCode: string;
   attachment?: NotificationDetailDocument;
   applyCost: boolean;
-  recipientIdx?: number; // only fe
   attachmentIdx?: number; // only fe
 }
 
 export interface F24PaymentDetails {
   title: string;
   applyCost: boolean;
-  recipientIdx?: number; // only fe
+  recIndex?: number; // only fe
   attachmentIdx?: number; // only fe
   metadataAttachment: Attachment;
 }

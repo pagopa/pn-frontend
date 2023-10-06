@@ -10,6 +10,7 @@ import {
   PaymentDetails,
   RecipientType,
   getF24Payments,
+  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -55,28 +56,42 @@ const renderSelectValue = (
 const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline }) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
-  const [paymentHistory, setPaymentHistory] = useState<Array<PaymentDetails>>(
+  const [paymentDetails, setPaymentDetails] = useState<Array<PaymentDetails>>(
     recipients.length === 1
-      ? populatePaymentsPagoPaF24(timeline, recipients[0].payments ?? [], [])
+      ? populatePaymentsPagoPaF24(
+          timeline,
+          getPagoPaF24Payments(recipients[0].payments ?? [], 0, false),
+          []
+        )
       : []
   );
-  const [f24PaymentHistory, setF24PaymentHistory] = useState<Array<F24PaymentDetails>>(
-    recipients.length === 1 ? getF24Payments(recipients[0].payments ?? [], false) : []
+  const [f24PaymentDetails, setF24PaymentDetails] = useState<Array<F24PaymentDetails>>(
+    recipients.length === 1 ? getF24Payments(recipients[0].payments ?? [], 0, false) : []
   );
 
   const recipientSelectionHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setRecipientSelected(event.target.value);
-    const paymentsOfRecipient = recipients.find(
+    const recipientIndex = recipients.findIndex(
       (recipient) => recipient.taxId === event.target.value
-    )?.payments;
-    if (!paymentsOfRecipient) {
+    );
+    if (recipientIndex === -1 || !recipients[recipientIndex].payments) {
       return;
     }
-    setPaymentHistory(populatePaymentsPagoPaF24(timeline, paymentsOfRecipient, []));
-    setF24PaymentHistory(getF24Payments(paymentsOfRecipient, false));
+    setPaymentDetails(
+      populatePaymentsPagoPaF24(
+        timeline,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        getPagoPaF24Payments(recipients[recipientIndex].payments!, recipientIndex, false),
+        []
+      )
+    );
+    setF24PaymentDetails(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      getF24Payments(recipients[recipientIndex].payments!, recipientIndex, false)
+    );
   };
 
-  const pagoPAPaymentFullDetails = paymentHistory.reduce((arr, payment) => {
+  const pagoPAPaymentFullDetails = paymentDetails.reduce((arr, payment) => {
     if (payment.pagoPA) {
       // eslint-disable-next-line functional/immutable-data
       arr.push(payment.pagoPA);
@@ -89,14 +104,14 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       <Typography variant="h6">{t('payment.title', { ns: 'notifiche' })}</Typography>
       {recipients.length === 1 && (
         <Typography variant="body2" my={2}>
-          {f24PaymentHistory.length > 0 && pagoPAPaymentFullDetails.length === 0
+          {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length === 0
             ? t('payment.subtitle-single-f24', { ns: 'notifiche' })
             : t('payment.subtitle-single', { ns: 'notifiche' })}
         </Typography>
       )}
       {recipients.length > 1 && (
         <Typography variant="body2" my={2}>
-          {f24PaymentHistory.length > 0 &&
+          {f24PaymentDetails.length > 0 &&
           pagoPAPaymentFullDetails.length === 0 &&
           recipientSelected
             ? t('payment.subtitle-multiple-f24', { ns: 'notifiche' })
@@ -128,11 +143,11 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
         pagoPAPaymentFullDetails.map((payment) => (
           <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
         ))}
-      {f24PaymentHistory.length > 0 && pagoPAPaymentFullDetails.length > 0 && (
+      {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length > 0 && (
         <Divider sx={{ my: 2 }} />
       )}
-      {f24PaymentHistory.length > 0 && (
-        <NotificationPaymentF24 iun={iun} payments={f24PaymentHistory} />
+      {f24PaymentDetails.length > 0 && (
+        <NotificationPaymentF24 iun={iun} payments={f24PaymentDetails} />
       )}
     </Paper>
   );

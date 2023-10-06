@@ -1,11 +1,12 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
+
 import { notificationDTOMultiRecipient } from '../__mocks__/NotificationDetail.mock';
 import { apiClient } from './apiClients';
 
 export const setUpInterceptor = (store: EnhancedStore) => {
   apiClient.interceptors.request.use(
     (config) => {
-      if (config.url === '/delivery/v2.0/notifications/sent/TJUN-ATLX-UNQN-202307-L-1') {
+      if (config.url === '/delivery/v2.1/notifications/sent/TJUN-ATLX-UNQN-202307-L-1') {
         return Promise.reject({ error: true, type: 'delivery' });
       }
       /* eslint-disable functional/immutable-data */

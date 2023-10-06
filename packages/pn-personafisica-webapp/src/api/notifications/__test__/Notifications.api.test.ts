@@ -12,9 +12,9 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {

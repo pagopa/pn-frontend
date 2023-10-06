@@ -115,10 +115,26 @@ export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
 
 export const getPaymentAttachment = createAsyncThunk<
   { url: string },
-  { iun: string; attachmentName: PaymentAttachmentNameType }
+  {
+    iun: string;
+    attachmentName: PaymentAttachmentNameType;
+    recIndex: number;
+    attachmentIdx?: number;
+  }
 >(
   'getPaymentAttachment',
-  performThunkAction((params: { iun: string; attachmentName: PaymentAttachmentNameType }) =>
-    NotificationsApi.getPaymentAttachment(params.iun, params.attachmentName)
+  performThunkAction(
+    (params: {
+      iun: string;
+      attachmentName: PaymentAttachmentNameType;
+      recIndex: number;
+      attachmentIdx?: number;
+    }) =>
+      NotificationsApi.getPaymentAttachment(
+        params.iun,
+        params.attachmentName,
+        params.recIndex,
+        params.attachmentIdx
+      )
   )
 );

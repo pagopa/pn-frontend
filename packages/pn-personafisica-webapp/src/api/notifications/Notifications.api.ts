@@ -153,7 +153,7 @@ export const NotificationsApi = {
    * Gets current user specified Payment Attachment
    * @param  {string} iun
    * @param  {PaymentAttachmentNameType} attachmentName
-   * @param  {number} recipientIdx
+   * @param  {number} recIndex
    * @param  {string} mandateId
    * @param  {number} attachmentIdx
    * @returns Promise

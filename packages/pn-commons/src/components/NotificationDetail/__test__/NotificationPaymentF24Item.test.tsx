@@ -1,5 +1,7 @@
-import { render } from '@testing-library/react';
 import React from 'react';
+
+import { render } from '@testing-library/react';
+
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { F24PaymentDetails, PaymentAttachmentSName } from '../../../types';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
@@ -40,7 +42,7 @@ describe('NotificationPaymentF24Item Component', () => {
       .fn()
       .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: jest.fn() }));
 
-    const item = { ...f24Item, attachmentIdx: 1, recipientIdx: 1 };
+    const item = { ...f24Item, attachmentIdx: 1 };
     const result = render(
       <NotificationPaymentF24Item
         f24Item={item}

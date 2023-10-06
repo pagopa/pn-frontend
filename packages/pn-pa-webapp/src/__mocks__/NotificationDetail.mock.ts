@@ -452,11 +452,11 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
       applyCost: false,
       metadataAttachment: {
         digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlB=',
         },
         contentType: 'application/pdf',
         ref: {
-          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38e.pdf',
           versionToken: 'v1',
         },
       },
@@ -468,11 +468,11 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
       applyCost: false,
       metadataAttachment: {
         digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlC=',
         },
         contentType: 'application/pdf',
         ref: {
-          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38f.pdf',
           versionToken: 'v1',
         },
       },
@@ -484,11 +484,11 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
       applyCost: false,
       metadataAttachment: {
         digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlD=',
         },
         contentType: 'application/pdf',
         ref: {
-          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38g.pdf',
           versionToken: 'v1',
         },
       },

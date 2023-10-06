@@ -203,7 +203,7 @@ describe('NotificationPaymentRecipient Component', () => {
           ...paymentsData.pagoPaF24[0],
           pagoPA: {
             ...paymentsData.pagoPaF24[0].pagoPA,
-            recipientIdx: 1,
+            recIndex: 1,
             attachmentIdx: 1,
           } as PagoPAPaymentFullDetails,
         },

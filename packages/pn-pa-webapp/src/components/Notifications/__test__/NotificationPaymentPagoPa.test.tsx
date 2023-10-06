@@ -5,6 +5,7 @@ import {
   PaymentAttachmentSName,
   PaymentStatus,
   downloadDocument,
+  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -74,12 +75,48 @@ describe('NotificationPaymentPagoPa Component', () => {
     expect(paymentChip).toBeInTheDocument();
   });
 
-  it('dowload payment attachment - success', async () => {
+  it('dowload payment attachment', async () => {
     const iun = notificationToFeMultiRecipient.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationToFeMultiRecipient.timeline,
+      getPagoPaF24Payments(notificationToFeMultiRecipient.recipients[1].payments ?? [], 1, false),
+      []
+    );
     mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
+      .onGet(
+        NOTIFICATION_PAYMENT_ATTACHMENT(
+          iun,
+          attachmentName,
+          paymentHistory[0].pagoPA?.recIndex!,
+          paymentHistory[0].pagoPA?.attachmentIdx
+        )
+      )
       .reply(200, { url: 'http://mocked-url.com' });
+    const { getByRole } = render(
+      <NotificationPaymentPagoPa
+        iun={notificationToFeMultiRecipient.iun}
+        payment={paymentHistory[0].pagoPA!}
+      />
+    );
+    const dowloadButton = getByRole('button');
+    fireEvent.click(dowloadButton!);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+      expect(mock.history.get[0].url).toBe(
+        NOTIFICATION_PAYMENT_ATTACHMENT(
+          iun,
+          attachmentName,
+          paymentHistory[0].pagoPA?.recIndex!,
+          paymentHistory[0].pagoPA?.attachmentIdx
+        )
+      );
+      expect(downloadDocument).toBeCalledTimes(1);
+      expect(downloadDocument).toBeCalledWith('http://mocked-url.com', false);
+    });
+  });
+
+  it('dowload payment attachment - no recIndex', async () => {
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFeMultiRecipient.timeline,
       notificationToFeMultiRecipient.recipients[1].payments ?? [],
@@ -94,10 +131,8 @@ describe('NotificationPaymentPagoPa Component', () => {
     const dowloadButton = getByRole('button');
     fireEvent.click(dowloadButton!);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(1);
-      expect(mock.history.get[0].url).toBe(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName));
-      expect(downloadDocument).toBeCalledTimes(1);
-      expect(downloadDocument).toBeCalledWith('http://mocked-url.com', false);
+      expect(mock.history.get).toHaveLength(0);
+      expect(downloadDocument).toBeCalledTimes(0);
     });
   });
 });

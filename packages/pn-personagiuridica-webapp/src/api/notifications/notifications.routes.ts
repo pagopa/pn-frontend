@@ -1,9 +1,9 @@
 import {
-  compileRoute,
-  formatFiscalCode,
   GetNotificationsParams,
   LegalFactId,
   NotificationDetailOtherDocument,
+  compileRoute,
+  formatFiscalCode,
 } from '@pagopa-pn/pn-commons';
 
 // Prefixes

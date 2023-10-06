@@ -133,7 +133,7 @@ describe('Notification detail redux state tests', () => {
           payment.pagoPA?.creditorTaxId === paymentMock.pagoPA?.creditorTaxId
       );
       expect(payment.pagoPA?.attachmentIdx).toBe(attachmentIdx);
-      expect(payment.pagoPA?.recipientIdx).toBe(recipientIdx);
+      expect(payment.pagoPA?.recIndex).toBe(recipientIdx);
     });
   });
 

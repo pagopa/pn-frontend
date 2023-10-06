@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Fragment, memo, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
@@ -98,7 +97,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
-    if (selectedPayment && !_.isNil(selectedPayment.recipientIdx)) {
+    if (selectedPayment) {
       void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx)
         .unwrap()
         .then((response) => {
