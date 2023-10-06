@@ -203,8 +203,6 @@ const NotificationDetail = () => {
     }
   };
 
-  // const [maxTimeError, setMaxTimeError] = useState<string>('');
-
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
       getPaymentAttachment({
@@ -213,7 +211,7 @@ const NotificationDetail = () => {
         mandateId,
         attachmentIdx,
       })
-    ).unwrap();
+    );
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {

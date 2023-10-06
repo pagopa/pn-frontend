@@ -7,6 +7,7 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentAttachmentNameType,
   PaymentNotice,
   formatDate,
@@ -158,12 +159,12 @@ export const NotificationsApi = {
     attachmentName: PaymentAttachmentNameType,
     mandateId?: string,
     attachmentIdx?: number
-  ): Promise<{ url: string }> =>
+  ): Promise<PaymentAttachment> =>
     apiClient
-      .get<{ url: string }>(
+      .get<PaymentAttachment>(
         NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, mandateId, attachmentIdx)
       )
-      .then((response) => getDownloadUrl(response)),
+      .then((response) => response.data),
 
   /**
    * Gets current user's notification payment info

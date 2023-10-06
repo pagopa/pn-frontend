@@ -10,6 +10,7 @@ import {
   F24PaymentDetails,
   NotificationDetailPayment,
   PagoPAPaymentFullDetails,
+  PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentStatus,
@@ -26,7 +27,10 @@ type Props = {
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
-  ) => Promise<any>;
+  ) => {
+    abort: (reason?: string) => void;
+    unwrap: () => Promise<PaymentAttachment>;
+  };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
@@ -95,13 +99,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
     if (selectedPayment && !_.isNil(selectedPayment.recipientIdx)) {
-      void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx).then(
-        (response) => {
+      void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx)
+        .unwrap()
+        .then((response) => {
           if (response.url) {
             downloadDocument(response.url, false);
           }
-        }
-      );
+        });
     }
   };
 

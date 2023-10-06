@@ -2,10 +2,10 @@ import { Download, InfoRounded } from '@mui/icons-material';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { downloadDocument, useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { F24PaymentDetails, PaymentAttachmentSName } from '../../types';
+import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../types';
 
 interface Props {
   f24Item: F24PaymentDetails;
@@ -14,7 +14,10 @@ interface Props {
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
-  ) => Promise<any>;
+  ) => {
+    abort: (reason?: string) => void;
+    unwrap: () => Promise<PaymentAttachment>;
+  };
 }
 
 const NotificationPaymentF24Item: React.FC<Props> = ({
@@ -27,15 +30,21 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   const [maxTimeError, setMaxTimeError] = useState<string | null>(null);
   const timer = useRef<NodeJS.Timeout>();
   const interval = useRef<NodeJS.Timeout>();
+  const action = useRef<{
+    abort: (reason?: string) => void;
+    unwrap: () => Promise<PaymentAttachment>;
+  }>();
 
   const [downloadingMessage, setDownloadingMessage] = useState<string | null>(null);
 
-  const getDownloadF24Status = async (f24Item: F24PaymentDetails, attempt: number) => {
+  const getDownloadF24Status = useCallback(async (f24Item: F24PaymentDetails, attempt: number) => {
     try {
-      const response = await getPaymentAttachmentAction(
+      // eslint-disable-next-line functional/immutable-data
+      action.current = getPaymentAttachmentAction(
         PaymentAttachmentSName.F24,
         f24Item.attachmentIdx
       );
+      const response = await action.current.unwrap();
 
       if (response.url) {
         setDownloadingMessage(null);
@@ -46,15 +55,17 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
       if (response.retryAfter) {
         if (attempt === 0) {
           const timeout = Math.min(response.retryAfter, timerF24);
-
+          // eslint-disable-next-line functional/no-let
+          let step = 0;
           // eslint-disable-next-line functional/immutable-data
           interval.current = setInterval(() => {
-            if (downloadingMessage === 'detail.payment.download-f24-in-progress') {
+            if (step === 0) {
               setDownloadingMessage('detail.payment.download-f24-waiting');
-            } else if (downloadingMessage === 'detail.payment.download-f24-waiting') {
+              step = 1;
+            } else if (step === 1) {
               setDownloadingMessage('detail.payment.download-f24-ongoing');
             }
-          }, timeout / 2 - 1);
+          }, (timeout - 1000) / 2);
 
           // eslint-disable-next-line functional/immutable-data
           timer.current = setTimeout(() => {
@@ -73,7 +84,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
       setMaxTimeError('detail.payment.f24-download-error');
       setDownloadingMessage(null);
     }
-  };
+  }, []);
 
   const downloadF24 = () => {
     if (!_.isNil(f24Item.recipientIdx)) {
@@ -85,6 +96,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
   useEffect(
     () => () => {
+      action.current?.abort();
       if (timer.current) {
         clearTimeout(timer.current);
       }

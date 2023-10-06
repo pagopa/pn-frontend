@@ -197,9 +197,6 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleDownloadAttachment on download button click', async () => {
-    const handleDownloadAttachment = jest.fn(() =>
-      Promise.resolve({ url: 'https://mocked-url.com' })
-    );
     const payment: PaymentsData = {
       pagoPaF24: [
         {
@@ -214,12 +211,16 @@ describe('NotificationPaymentRecipient Component', () => {
       f24Only: [],
     };
 
+    const getPaymentAttachmentActionMk = jest
+      .fn()
+      .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0) }));
+
     const { getByTestId } = render(
       <NotificationPaymentRecipient
         payments={payment}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={handleDownloadAttachment}
+        getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
       />
@@ -228,8 +229,8 @@ describe('NotificationPaymentRecipient Component', () => {
 
     downloadButton.click();
 
-    expect(handleDownloadAttachment).toBeCalledTimes(1);
-    expect(handleDownloadAttachment).toHaveBeenCalledWith(
+    expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
       payment.pagoPaF24[0].pagoPA?.attachmentIdx
     );

@@ -36,23 +36,24 @@ describe('NotificationPaymentF24Item Component', () => {
   });
 
   it('should call function handleDownloadAttachment when click on download button', () => {
-    const handleDownloadAttachment = jest.fn(() =>
-      Promise.resolve({ url: 'https://mocked-url.com' })
-    );
+    const getPaymentAttachmentActionMk = jest
+      .fn()
+      .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: jest.fn() }));
+
     const item = { ...f24Item, attachmentIdx: 1, recipientIdx: 1 };
     const result = render(
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
-        getPaymentAttachmentAction={handleDownloadAttachment}
+        getPaymentAttachmentAction={getPaymentAttachmentActionMk}
       />
     );
     const downloadButton = result.getByTestId('download-f24-button');
 
     downloadButton.click();
 
-    expect(handleDownloadAttachment).toHaveBeenCalledTimes(1);
-    expect(handleDownloadAttachment).toHaveBeenCalledWith(
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
       item.attachmentIdx
     );

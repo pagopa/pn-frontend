@@ -10,6 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentDetails,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
@@ -68,7 +69,7 @@ export const getReceivedNotificationDocument = createAsyncThunk<
 );
 
 export const getPaymentAttachment = createAsyncThunk<
-  { url: string },
+  PaymentAttachment,
   {
     iun: string;
     attachmentName: PaymentAttachmentNameType;

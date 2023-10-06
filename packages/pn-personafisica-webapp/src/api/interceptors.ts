@@ -20,7 +20,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
         '/delivery/notifications/received/DAPQ-LWQV-DKQH-202308-A-1/attachments/payment/F24?attachmentIdx=4'
       ) {
         return new Promise((_resolve, reject) =>
-          setTimeout(() => reject({ error: true, type: 'delivery-f24' }), 2000)
+          setTimeout(() => reject({ error: true, type: 'delivery-f24' }), 5000)
         );
       }
 
@@ -52,7 +52,7 @@ export const setUpInterceptor = (store: EnhancedStore) => {
               contenType: 'application/pdf',
               sha256: 'sha256',
               // url: 'https://www.africau.edu/images/default/sample.pdf',
-              retryAfter: 14000,
+              retryAfter: 15000,
             },
           };
         }
