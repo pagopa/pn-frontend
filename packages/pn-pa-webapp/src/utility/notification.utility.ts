@@ -55,9 +55,9 @@ const newNotificationRecipientsMapper = (
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
       ? {
-        type: recipient.type,
-        address: recipient.digitalDomicile,
-      }
+          type: recipient.type,
+          address: recipient.digitalDomicile,
+        }
       : undefined;
     const parsedRecipient: NotificationDetailRecipient = {
       denomination:
@@ -169,14 +169,19 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   return newNotificationParsed;
 }
 
+// This model is needed to force the call of the getDuplicateValuesByKeys with ONLY keys that are of type string
+type ExtractStringPropertyNames<T> = {
+  [K in keyof T]: T[K] extends string ? K : never;
+}[keyof T];
+
 export function getDuplicateValuesByKeys<T>(
   objectsList: Array<T>,
-  keys: Array<keyof T>
+  keys: Array<ExtractStringPropertyNames<T>>
 ): Array<string> {
   const getValue = (item: T) => {
     let valueByKeys = '';
-    for (const element of keys) {
-      valueByKeys = valueByKeys + item[element] ?? '';
+    for (const key of keys) {
+      valueByKeys += (item[key] as string) ?? '';
     }
     return valueByKeys;
   };
