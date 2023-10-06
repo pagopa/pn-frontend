@@ -5,7 +5,7 @@ import { AppRouteType } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageTypeOps } from '../../../utils/storage';
+import { storageAarOps, storageTypeOps } from '../../../utility/storage';
 import SuccessPage from '../Success';
 
 const mockLocationAssign = jest.fn();

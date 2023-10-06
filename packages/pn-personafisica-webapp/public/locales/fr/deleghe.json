@@ -24,7 +24,7 @@
     "error_title": "Désolé, une erreur s'est produite",
     "error_subtitle": "Impossible de télécharger la page. Procéder à nouveau au téléchargement ou réessayer plus tard.",
     "error_button": "Télécharger à nouveau la page",
-    "no_delegates": "Vous n'avez délégué personne à la consultation de vos notifications.",
+    "no_delegates": "Vous n'avez délégué personne à la consultation de vos notifications. <0>Ajouter une procuration</0>.",
     "no_delegators": "Vous n'avez pas de procurations à votre charge.",
     "show_code_title": "Code de vérification pour la procuration de {{name}}",
     "show_code_subtitle": "Partagez ce code avec la personne déléguée : elle devra le saisir lors de l'acceptation de la procuration.",

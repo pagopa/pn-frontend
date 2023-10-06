@@ -3,10 +3,10 @@ import React from 'react';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { Downtime, DowntimeStatus, KnownFunctionality } from '../../../models';
-import { RenderResult, initLocalizationForTest, render, screen, within } from '../../../test-utils';
+import { Downtime } from '../../../models';
+import { RenderResult, initLocalizationForTest, render, within } from '../../../test-utils';
 import { IAppMessage, NotificationStatus, NotificationStatusHistory } from '../../../types';
-import { formatDate, isToday } from '../../../utils';
+import { formatDate, isToday } from '../../../utility';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 
 const fakePalette = {

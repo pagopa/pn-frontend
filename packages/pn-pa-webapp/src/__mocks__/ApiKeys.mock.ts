@@ -1,6 +1,6 @@
 import { ApiKeyStatus, ApiKeys } from '../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../models/user';
-import { apikeysMapper } from '../utils/apikeys.utility';
+import { apikeysMapper } from '../utility/apikeys.utility';
 
 export const mockGroups: Array<UserGroup> = [
   {

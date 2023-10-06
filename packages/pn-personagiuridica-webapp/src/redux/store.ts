@@ -4,7 +4,7 @@ import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { configureStore } from '@reduxjs/toolkit';
 
 import { getConfiguration } from '../services/configuration.service';
-import { trackingMiddleware } from '../utils/mixpanel';
+import { trackingMiddleware } from '../utility/mixpanel';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
 import contactsSlice from './contact/reducers';

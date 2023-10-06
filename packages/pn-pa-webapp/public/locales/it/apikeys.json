@@ -31,7 +31,7 @@
   "enable-warning": "Se attivi l'API Key <strong>{{apiKeyName}}</strong>, questa potrà essere nuovamente utilizzata. Puoi bloccarla di nuovo in qualsiasi momento.",
   "delete-warning": "Se elimini definitivamente l'API Key <strong>{{apiKeyName}}</strong>, questa non potrà essere nuovamente attivata e utilizzata.",
   "copy-api-key-info": "Copia il codice e inseriscilo nella piattaforma dell'ente.",
-  "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
+  "empty-message": "Non è stata ancora generata nessuna API Key per questo ente. <0>Genera API Key</0>.",
   "empty-action-label": "Genera API Key",
   "group-id": "Group ID",
   "api-key-copied": "API Key copiata",

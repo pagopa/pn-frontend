@@ -33,7 +33,7 @@ export const productsList: Array<ProductSwitchItem> = [
   {
     id: '1',
     title: `Product 2`,
-    productUrl: 'http://www.product.com',
+    productUrl: 'https://www.product.com',
     linkType: LinkType.EXTERNAL,
   },
 ];

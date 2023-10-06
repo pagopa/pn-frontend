@@ -1,21 +1,22 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
 import { AppNotAccessible, NotFound } from '@pagopa-pn/pn-commons';
 
-import Dashboard from '../pages/Dashboard.page';
-import NewNotification from '../pages/NewNotification.page';
-import ApiKeys from '../pages/ApiKeys.page';
-import NewApiKey from '../pages/NewApiKey.page';
 // import Statistics from '../pages/Statistics.page';
+import { PNRole } from '../models/user';
+import ApiKeys from '../pages/ApiKeys.page';
+import AppStatus from '../pages/AppStatus.page';
+import Dashboard from '../pages/Dashboard.page';
+import NewApiKey from '../pages/NewApiKey.page';
+import NewNotification from '../pages/NewNotification.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
-import { PNRole } from '../models/user';
-import AppStatus from '../pages/AppStatus.page';
 import { getConfiguration } from '../services/configuration.service';
-import * as routes from './routes.const';
-import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
+import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
+import * as routes from './routes.const';
 
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
@@ -38,8 +39,8 @@ function Router() {
              * Commented out because beyond MVP scope
              *
              * LINKED TO:
-             * - "const BasicMenuItems" in packages/pn-pa-webapp/src/utils/role.utility.ts
-             * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
+             * - "const BasicMenuItems" in packages/pn-pa-webapp/src/utility/role.utility.ts
+             * - BasicMenuItems in packages/pn-pa-webapp/src/utility/__TEST__/role.utilitytest.ts
              *
              * <Route path={routes.API_KEYS} element={<ApiKeys />} />
              * */}

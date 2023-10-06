@@ -3,6 +3,7 @@ import React from 'react';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
 import { Item, Sort } from '../../../types';
 import { SmartTableAction, SmartTableData } from '../../../types/SmartTable';
+import EmptyState from '../../EmptyState';
 import SmartFilter from '../SmartFilter';
 import SmartTable from '../SmartTable';
 
@@ -258,12 +259,14 @@ describe('Smart Table Component', () => {
         currentSort={sort}
         onChangeSorting={handleSort}
         actions={smartActions}
+        emptyState={<EmptyState>empty-state-message</EmptyState>}
       />
     );
     const table = queryByTestId('table(notifications)');
     expect(table).not.toBeInTheDocument();
     const emptyState = getByTestId('emptyState');
     expect(emptyState).toBeInTheDocument();
+    expect(emptyState).toHaveTextContent('empty-state-messa');
   });
 
   it('renders smart table (mobile version)', () => {
