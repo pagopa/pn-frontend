@@ -15,24 +15,29 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compareNumber = (value: Number | number) => {
     const numberValue = value instanceof Number ? value.valueOf() : value;
-    const thresholdAsNumber = this.threshold as number;
+    if (!isNumber(this.threshold)) {
+      throw new TypeError('Threshold must be of type number');
+    }
     if (this.equalTo) {
-      return numberValue >= thresholdAsNumber
+      return numberValue >= this.threshold
         ? null
         : `Value must be greater than or equal to ${this.threshold}`;
     }
-    return numberValue > thresholdAsNumber ? null : `Value must be greater than ${this.threshold}`;
+    return numberValue > this.threshold ? null : `Value must be greater than ${this.threshold}`;
   };
 
   private compareDate = (value: Date) => {
-    if (this.equalTo) {
-      return value.getTime() >= (this.threshold as Date).getTime()
-        ? null
-        : `Value must be greater than or equal to ${(this.threshold as Date).toISOString()}`;
+    if (!isDate(this.threshold)) {
+      throw new TypeError('Threshold must be of type Date');
     }
-    return value.getTime() > (this.threshold as Date).getTime()
+    if (this.equalTo) {
+      return value.getTime() >= this.threshold.getTime()
+        ? null
+        : `Value must be greater than or equal to ${this.threshold.toISOString()}`;
+    }
+    return value.getTime() > this.threshold.getTime()
       ? null
-      : `Value must be greater than ${(this.threshold as Date).toISOString()}`;
+      : `Value must be greater than ${this.threshold.toISOString()}`;
   };
 
   public valueValidator = (value: TValue) => {
