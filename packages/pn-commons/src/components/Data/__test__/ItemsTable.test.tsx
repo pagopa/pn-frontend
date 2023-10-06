@@ -3,6 +3,11 @@ import React from 'react';
 import { fireEvent, render, within } from '../../../test-utils';
 import { Column, Item, Sort } from '../../../types';
 import ItemsTable from '../ItemsTable';
+import ItemsTableBody from '../ItemsTable/ItemsTableBody';
+import ItemsTableBodyCell from '../ItemsTable/ItemsTableBodyCell';
+import ItemsTableBodyRow from '../ItemsTable/ItemsTableBodyRow';
+import ItemsTableHeader from '../ItemsTable/ItemsTableHeader';
+import ItemsTableHeaderCell from '../ItemsTable/ItemsTableHeaderCell';
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
@@ -37,9 +42,34 @@ const sort: Sort<'column-1'> = {
   order: 'asc',
 };
 
+const RenderItemsTable: React.FC = () => (
+  <ItemsTable testId="table-test">
+    <ItemsTableHeader testId="tableHead">
+      {columns.map((column) => (
+        <ItemsTableHeaderCell
+          key={column.id}
+          testId="table-test"
+          sort={sort}
+          column={column}
+          handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
+        />
+      ))}
+    </ItemsTableHeader>
+    <ItemsTableBody testId="tableBody">
+      {rows.map((row, index) => (
+        <ItemsTableBodyRow key={row.id} testId="table-test" index={index}>
+          {columns.map((column) => (
+            <ItemsTableBodyCell column={column} key={column.id} testId="tableBodyCell" row={row} />
+          ))}
+        </ItemsTableBodyRow>
+      ))}
+    </ItemsTableBody>
+  </ItemsTable>
+);
+
 describe('Items Table Component', () => {
   it('renders component (with rows)', () => {
-    const { getByRole } = render(<ItemsTable columns={columns} rows={rows} testId="table-test" />);
+    const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
     // check header
     expect(table).toHaveAttribute('aria-label', 'Tabella di item');
@@ -63,9 +93,7 @@ describe('Items Table Component', () => {
   });
 
   it('sorts a column', () => {
-    const { getByRole } = render(
-      <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleSort} />
-    );
+    const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
     const tableHead = within(table).getByTestId('tableHead');
     const firstColumn = within(tableHead).getAllByTestId('tableHeadCell')[0];
@@ -77,9 +105,7 @@ describe('Items Table Component', () => {
   });
 
   it('click on a column', () => {
-    const { getByRole } = render(
-      <ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />
-    );
+    const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
     const tableBody = within(table).getByTestId('tableBody');
     const firstRow = within(tableBody).getAllByTestId('table-test.row')[0];
@@ -90,9 +116,7 @@ describe('Items Table Component', () => {
   });
 
   it('disable accessibility navigation on a column', () => {
-    const { getByRole } = render(
-      <ItemsTable columns={columns} rows={rows} sort={sort} testId="table-test" />
-    );
+    const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
     const tableBody = within(table).getByTestId('tableBody');
     const firstRow = within(tableBody).getAllByTestId('table-test.row');

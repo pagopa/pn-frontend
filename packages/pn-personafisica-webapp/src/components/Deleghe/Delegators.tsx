@@ -7,6 +7,11 @@ import {
   EmptyState,
   Item,
   ItemsTable,
+  ItemsTableBody,
+  ItemsTableBodyCell,
+  ItemsTableBodyRow,
+  ItemsTableHeader,
+  ItemsTableHeaderCell,
   KnownSentiment,
   Sort,
 } from '@pagopa-pn/pn-commons';
@@ -106,13 +111,33 @@ const Delegators = () => {
           mainText={t('deleghe.delegatorsApiErrorMessage')}
         >
           {rows.length > 0 ? (
-            <ItemsTable
-              columns={delegatorsColumns}
-              rows={rows}
-              sort={sortDelegators}
-              onChangeSorting={handleChangeSorting}
-              testId="delegatorsTable"
-            />
+            <ItemsTable testId="delegatorsTable">
+              <ItemsTableHeader testId="tableHead">
+                {delegatorsColumns.map((column) => (
+                  <ItemsTableHeaderCell
+                    sort={sortDelegators}
+                    handleClick={handleChangeSorting}
+                    key={column.id}
+                    testId="delegatorsTable"
+                    column={column}
+                  />
+                ))}
+              </ItemsTableHeader>
+              <ItemsTableBody testId="tableBody">
+                {rows.map((row, index) => (
+                  <ItemsTableBodyRow key={row.id} testId="delegatorsTable" index={index}>
+                    {delegatorsColumns.map((column) => (
+                      <ItemsTableBodyCell
+                        column={column}
+                        key={column.id}
+                        testId="tableBodyCell"
+                        row={row}
+                      />
+                    ))}
+                  </ItemsTableBodyRow>
+                ))}
+              </ItemsTableBody>
+            </ItemsTable>
           ) : (
             <EmptyState sentimentIcon={KnownSentiment.NONE}>
               {t('deleghe.no_delegators')}

@@ -9,6 +9,11 @@ import { calculatePages, sortArray } from '../../utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';
 import ItemsTable from './ItemsTable';
+import ItemsTableBody from './ItemsTable/ItemsTableBody';
+import ItemsTableBodyCell from './ItemsTable/ItemsTableBodyCell';
+import ItemsTableBodyRow from './ItemsTable/ItemsTableBodyRow';
+import ItemsTableHeader from './ItemsTable/ItemsTableHeader';
+import ItemsTableHeaderCell from './ItemsTable/ItemsTableHeaderCell';
 import SmartFilter from './SmartFilter';
 import SmartSort from './SmartSort';
 
@@ -41,6 +46,10 @@ type Props<ColumnId> = {
   };
   /** EmptyState component */
   emptyState?: ReactNode;
+  /** SmartTable test id */
+  testId?: string;
+  /** Table title used in aria-label */
+  ariaTitle?: string;
 };
 
 function getCardElements<ColumnId extends string>(
@@ -105,6 +114,8 @@ const SmartTable = <ColumnId extends string>({
   children,
   pagination,
   emptyState,
+  testId,
+  ariaTitle,
 }: PropsWithChildren<Props<ColumnId>>) => {
   const isMobile = useIsMobile();
   const [sort, setSort] = useState<Sort<ColumnId> | undefined>(currentSort);
@@ -211,7 +222,32 @@ const SmartTable = <ColumnId extends string>({
     <>
       <Box mb={3}>{filters}</Box>
       {rowData.length > 0 && (
-        <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
+        <ItemsTable testId={testId} ariaTitle={ariaTitle}>
+          <ItemsTableHeader testId="tableHead">
+            {columns.map((column) => (
+              <ItemsTableHeaderCell
+                sort={sort}
+                handleClick={handleSorting}
+                key={column.id}
+                column={column}
+              />
+            ))}
+          </ItemsTableHeader>
+          <ItemsTableBody testId="tableBody">
+            {rowData.map((row, index) => (
+              <ItemsTableBodyRow key={row.id} testId={testId} index={index}>
+                {columns.map((column) => (
+                  <ItemsTableBodyCell
+                    column={column}
+                    key={column.id}
+                    testId="tableBodyCell"
+                    row={row}
+                  />
+                ))}
+              </ItemsTableBodyRow>
+            ))}
+          </ItemsTableBody>
+        </ItemsTable>
       )}
       {rowData.length > 0 && pagination && (
         <CustomPagination

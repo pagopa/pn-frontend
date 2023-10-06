@@ -10,8 +10,13 @@ import {
   Column,
   EmptyState,
   Item,
+  ItemsTable,
+  ItemsTableBody,
+  ItemsTableBodyCell,
+  ItemsTableBodyRow,
+  ItemsTableHeader,
+  ItemsTableHeaderCell,
   Sort,
-  ItemsTable as Table,
 } from '@pagopa-pn/pn-commons';
 
 import { DelegatesColumn } from '../../models/Deleghe';
@@ -165,13 +170,33 @@ const Delegates = () => {
         >
           <>
             {rows.length > 0 ? (
-              <Table
-                columns={delegatesColumns}
-                rows={rows}
-                sort={sortDelegates}
-                onChangeSorting={handleChangeSorting}
-                testId="delegatesTable"
-              />
+              <ItemsTable testId="delegatesTable">
+                <ItemsTableHeader testId="tableHead">
+                  {delegatesColumns.map((column) => (
+                    <ItemsTableHeaderCell
+                      sort={sortDelegates}
+                      key={column.id}
+                      testId="delegatesTable"
+                      column={column}
+                      handleClick={handleChangeSorting}
+                    />
+                  ))}
+                </ItemsTableHeader>
+                <ItemsTableBody testId="tableBody">
+                  {rows.map((row, index) => (
+                    <ItemsTableBodyRow key={row.id} testId="delegatesTable" index={index}>
+                      {delegatesColumns.map((column) => (
+                        <ItemsTableBodyCell
+                          column={column}
+                          key={column.id}
+                          testId="tableBodyCell"
+                          row={row}
+                        />
+                      ))}
+                    </ItemsTableBodyRow>
+                  ))}
+                </ItemsTableBody>
+              </ItemsTable>
             ) : (
               <EmptyState>
                 <Trans

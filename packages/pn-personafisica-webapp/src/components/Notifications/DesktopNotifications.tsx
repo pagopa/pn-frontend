@@ -8,6 +8,11 @@ import {
   EmptyState,
   Item,
   ItemsTable,
+  ItemsTableBody,
+  ItemsTableBodyCell,
+  ItemsTableBodyRow,
+  ItemsTableHeader,
+  ItemsTableHeaderCell,
   KnownSentiment,
   Notification,
   NotificationStatus,
@@ -193,13 +198,33 @@ const DesktopNotifications = ({
         currentDelegator={currentDelegator}
       />
       {rows.length ? (
-        <ItemsTable
-          columns={columns}
-          rows={rows}
-          sort={sort}
-          onChangeSorting={onChangeSorting}
-          testId="notificationsTable"
-        />
+        <ItemsTable testId="notificationsTable">
+          <ItemsTableHeader testId="tableHead">
+            {columns.map((column) => (
+              <ItemsTableHeaderCell
+                key={column.id}
+                testId="notificationsTable"
+                sort={sort}
+                column={column}
+                handleClick={onChangeSorting}
+              />
+            ))}
+          </ItemsTableHeader>
+          <ItemsTableBody testId="tableBody">
+            {rows.map((row, index) => (
+              <ItemsTableBodyRow key={row.id} testId="notificationsTable" index={index}>
+                {columns.map((column) => (
+                  <ItemsTableBodyCell
+                    column={column}
+                    key={column.id}
+                    testId="tableBodyCell"
+                    row={row}
+                  />
+                ))}
+              </ItemsTableBodyRow>
+            ))}
+          </ItemsTableBody>
+        </ItemsTable>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

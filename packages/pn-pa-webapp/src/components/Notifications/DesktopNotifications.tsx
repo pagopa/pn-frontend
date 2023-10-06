@@ -8,6 +8,11 @@ import {
   EmptyState,
   Item,
   ItemsTable,
+  ItemsTableBody,
+  ItemsTableBodyCell,
+  ItemsTableBodyRow,
+  ItemsTableHeader,
+  ItemsTableHeaderCell,
   KnownSentiment,
   Notification,
   NotificationStatus,
@@ -215,14 +220,33 @@ const DesktopNotifications = ({
         <>
           <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
-            <ItemsTable
-              columns={columns}
-              sort={sort}
-              rows={rows}
-              onChangeSorting={onChangeSorting}
-              ariaTitle={t('table.title')}
-              testId="notificationsTable"
-            />
+            <ItemsTable ariaTitle={t('table.title')} testId="notificationsTable">
+              <ItemsTableHeader testId="tableHead">
+                {columns.map((column) => (
+                  <ItemsTableHeaderCell
+                    key={column.id}
+                    testId="notificationsTable"
+                    sort={sort}
+                    column={column}
+                    handleClick={onChangeSorting}
+                  />
+                ))}
+              </ItemsTableHeader>
+              <ItemsTableBody testId="tableBody">
+                {rows.map((row, index) => (
+                  <ItemsTableBodyRow key={row.id} testId="notificationsTable" index={index}>
+                    {columns.map((column) => (
+                      <ItemsTableBodyCell
+                        column={column}
+                        key={column.id}
+                        testId="tableBodyCell"
+                        row={row}
+                      />
+                    ))}
+                  </ItemsTableBodyRow>
+                ))}
+              </ItemsTableBody>
+            </ItemsTable>
           ) : (
             <EmptyState
               sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

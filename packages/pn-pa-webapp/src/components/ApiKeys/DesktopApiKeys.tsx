@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,11 @@ import {
   EmptyState,
   Item,
   ItemsTable,
+  ItemsTableBody,
+  ItemsTableBodyCell,
+  ItemsTableBodyRow,
+  ItemsTableHeader,
+  ItemsTableHeaderCell,
   StatusTooltip,
   formatDate,
 } from '@pagopa-pn/pn-commons';
@@ -52,11 +57,21 @@ const LinkNewApiKey: React.FC = ({ children }) => {
 const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
-  const [rows, setRows] = useState<Array<Item>>([]);
-  const [tableKey, setTableKey] = useState(0);
   type ApiKeyContextMenuProps = {
     row: Item;
   };
+
+  const rows: Array<Item> = apiKeys.map((n: ApiKey<UserGroup>, index) => ({
+    ...n,
+    id: index.toString(),
+  }));
+  /* useMemo(() => {
+    console.log('called useMemo');
+    return apiKeys.map((n: ApiKey<UserGroup>, index) => ({
+      ...n,
+      id: index.toString(),
+    }));
+  }, [apiKeys]); */
 
   /**
    * Checks if status history of a api key contains a status set as ROTATED
@@ -288,7 +303,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
             }}
           >
             <StatusTooltip
-              label={label}
+              label={t(label)}
               tooltip={tooltip}
               color={color}
               eventTrackingCallback={handleEventTrackingTooltip}
@@ -309,25 +324,30 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     },
   ];
 
-  useEffect(() => {
-    const rowsMap: Array<Item> = apiKeys.map((n: ApiKey<UserGroup>, index) => ({
-      ...n,
-      id: index.toString(),
-    }));
-    setRows(rowsMap);
-    setTableKey(tableKey + 1); // This is needed to make ItemsTable to properly update itself.
-  }, [apiKeys]);
-
   return (
     <>
       {apiKeys && apiKeys.length > 0 ? (
-        <ItemsTable
-          key={tableKey}
-          testId="tableApiKeys"
-          columns={columns}
-          rows={rows}
-          ariaTitle={t('table.title')}
-        />
+        <ItemsTable testId="tableApiKeys" ariaTitle={t('table.title')}>
+          <ItemsTableHeader testId="tableHead">
+            {columns.map((column) => (
+              <ItemsTableHeaderCell key={column.id} testId="tableApiKeys" column={column} />
+            ))}
+          </ItemsTableHeader>
+          <ItemsTableBody testId="tableBody">
+            {rows.map((row, index) => (
+              <ItemsTableBodyRow key={row.id} testId="tableApiKeys" index={index}>
+                {columns.map((column) => (
+                  <ItemsTableBodyCell
+                    column={column}
+                    key={column.id}
+                    testId="tableBodyCell"
+                    row={row}
+                  />
+                ))}
+              </ItemsTableBodyRow>
+            ))}
+          </ItemsTableBody>
+        </ItemsTable>
       ) : (
         <EmptyState data-testid="emptyState">
           <Trans

@@ -22,6 +22,11 @@ import CustomTagGroup from './CustomTagGroup/CustomTagGroup';
 import CustomTooltip from './CustomTooltip';
 import ItemsCard from './Data/ItemsCard';
 import ItemsTable from './Data/ItemsTable';
+import ItemsTableBody from './Data/ItemsTable/ItemsTableBody';
+import ItemsTableBodyCell from './Data/ItemsTable/ItemsTableBodyCell';
+import ItemsTableBodyRow from './Data/ItemsTable/ItemsTableBodyRow';
+import ItemsTableHeader from './Data/ItemsTable/ItemsTableHeader';
+import ItemsTableHeaderCell from './Data/ItemsTable/ItemsTableHeaderCell';
 import SmartFilter from './Data/SmartFilter';
 import SmartTable from './Data/SmartTable';
 import DisclaimerModal from './DisclaimerModal';
@@ -66,6 +71,11 @@ export {
   SideMenu,
   TabPanel,
   ItemsTable,
+  ItemsTableBody,
+  ItemsTableBodyCell,
+  ItemsTableBodyRow,
+  ItemsTableHeader,
+  ItemsTableHeaderCell,
   EmptyState,
   ApiError,
   ApiErrorWrapper,
