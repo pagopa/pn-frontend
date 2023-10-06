@@ -127,7 +127,7 @@ export const preLoginLinks = (
         },
         {
           ...getFooterLinkLabels('company', 'Società trasparente'),
-          href: 'https://pagopa.portaleamministrazionetrasparente.it',
+          href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina0_home-page.html',
           linkType: 'internal',
         },
         {
@@ -137,7 +137,7 @@ export const preLoginLinks = (
         },
         {
           ...getFooterLinkLabels('321-model', 'Modello 231'),
-          href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls',
+          href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html',
           linkType: 'internal',
         },
       ],
