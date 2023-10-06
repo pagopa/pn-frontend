@@ -1,6 +1,6 @@
+import { Configuration } from '../services/configuration.service';
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
-import { Configuration } from './configuration.utility';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
@@ -40,7 +40,6 @@ import { searchStringLimitReachedText, useSearchStringChangeInput } from './sear
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { buttonNakedInheritStyle } from './styles.utility';
-import { interceptDispatch, trackEvent } from './tracking.utility';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -102,7 +101,5 @@ export {
   lazyRetry,
   waitForElement,
   initLocalization,
-  trackEvent,
-  interceptDispatch,
   Configuration,
 };

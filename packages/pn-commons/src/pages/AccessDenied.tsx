@@ -10,16 +10,22 @@ type Props = {
   subtitle?: string;
 };
 
-const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: Props) => {
+const AccessDenied: React.FC<Props> = ({
+  isLogged,
+  goToLogin,
+  goToHomePage,
+  message,
+  subtitle,
+}) => {
   const finalMessage =
-    message ||
+    message ??
     getLocalizedOrDefaultLabel(
       'common',
       isLogged ? 'access-denied' : 'not-logged',
       'Non hai le autorizzazioni necessarie per accedere a questa pagina'
     );
   const finalSubTitle =
-    subtitle || (isLogged ? '' : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', ''));
+    subtitle ?? (isLogged ? '' : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', ''));
 
   return (
     <Stack
