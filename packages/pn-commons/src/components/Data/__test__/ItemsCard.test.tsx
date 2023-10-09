@@ -3,6 +3,13 @@ import React from 'react';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import { CardAction, CardElement, Item } from '../../../types';
 import ItemsCard from '../ItemsCard';
+import ItemsCardAction from '../ItemsCard/ItemsCardAction';
+import ItemsCardActions from '../ItemsCard/ItemsCardActions';
+import ItemsCardBody from '../ItemsCard/ItemsCardBody';
+import ItemsCardContent from '../ItemsCard/ItemsCardContent';
+import ItemsCardContents from '../ItemsCard/ItemsCardContents';
+import ItemsCardHeader from '../ItemsCard/ItemsCardHeader';
+import ItemsCardHeaderTitle from '../ItemsCard/ItemsCardHeaderTitle';
 
 const clickActionMockFn = jest.fn();
 
@@ -44,16 +51,47 @@ const cardActions: Array<CardAction> = [
   { id: 'action-1', component: <div>Mocked action</div>, onClick: clickActionMockFn },
 ];
 
+const RenderItemsCard: React.FC = () => (
+  <ItemsCard>
+    {cardData.map((data) => (
+      <ItemsCardBody key={data.id} testId="itemCard">
+        <ItemsCardHeader>
+          <ItemsCardHeaderTitle
+            cardHeader={cardHeader}
+            item={data}
+            headerGridProps={{
+              direction: { xs: 'row', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
+            }}
+          />
+        </ItemsCardHeader>
+        <ItemsCardContents>
+          {cardBody.map((body) => (
+            <ItemsCardContent key={body.id} body={body}>
+              {body.getLabel(data[body.id], data)}
+            </ItemsCardContent>
+          ))}
+        </ItemsCardContents>
+        <ItemsCardActions>
+          {cardActions &&
+            cardActions.map((action) => (
+              <ItemsCardAction
+                testId="cardAction"
+                key={action.id}
+                handleOnClick={() => action.onClick(data)}
+              >
+                {action.component}
+              </ItemsCardAction>
+            ))}
+        </ItemsCardActions>
+      </ItemsCardBody>
+    ))}
+  </ItemsCard>
+);
+
 describe('Items Card Component', () => {
   it('renders component (with data)', () => {
-    const { queryAllByTestId } = render(
-      <ItemsCard
-        cardHeader={cardHeader}
-        cardBody={cardBody}
-        cardData={cardData}
-        cardActions={cardActions}
-      />
-    );
+    const { queryAllByTestId } = render(<RenderItemsCard />);
     const notificationsCards = queryAllByTestId('itemCard');
     expect(notificationsCards).toHaveLength(cardData.length);
     notificationsCards.forEach((card, index) => {
@@ -76,14 +114,7 @@ describe('Items Card Component', () => {
   });
 
   it('clicks on action', async () => {
-    const { queryAllByTestId } = render(
-      <ItemsCard
-        cardHeader={cardHeader}
-        cardBody={cardBody}
-        cardData={cardData}
-        cardActions={cardActions}
-      />
-    );
+    const { queryAllByTestId } = render(<RenderItemsCard />);
     const notificationsCards = queryAllByTestId('itemCard');
     const cardActionsEl = within(notificationsCards[0]).getByTestId('cardAction');
     fireEvent.click(cardActionsEl!);

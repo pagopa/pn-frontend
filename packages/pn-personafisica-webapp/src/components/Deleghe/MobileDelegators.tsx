@@ -7,6 +7,11 @@ import {
   EmptyState,
   Item,
   ItemsCard,
+  ItemsCardBody,
+  ItemsCardContent,
+  ItemsCardContents,
+  ItemsCardHeader,
+  ItemsCardHeaderTitle,
   KnownSentiment,
 } from '@pagopa-pn/pn-commons';
 
@@ -96,7 +101,29 @@ const MobileDelegators = () => {
         reloadAction={() => dispatch(getDelegators())}
       >
         {delegators.length > 0 ? (
-          <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+          <ItemsCard>
+            {cardData.map((data) => (
+              <ItemsCardBody key={data.id}>
+                <ItemsCardHeader>
+                  <ItemsCardHeaderTitle
+                    cardHeader={cardHeader}
+                    item={data}
+                    headerGridProps={{
+                      direction: { xs: 'row', sm: 'row' },
+                      alignItems: { xs: 'flex-start', sm: 'center' },
+                    }}
+                  />
+                </ItemsCardHeader>
+                <ItemsCardContents>
+                  {cardBody.map((body) => (
+                    <ItemsCardContent key={body.id} body={body}>
+                      {body.getLabel(data[body.id], data)}
+                    </ItemsCardContent>
+                  ))}
+                </ItemsCardContents>
+              </ItemsCardBody>
+            ))}
+          </ItemsCard>
         ) : (
           <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('deleghe.no_delegators')}</EmptyState>
         )}

@@ -11,6 +11,11 @@ import {
   EmptyState,
   Item,
   ItemsCard,
+  ItemsCardBody,
+  ItemsCardContent,
+  ItemsCardContents,
+  ItemsCardHeader,
+  ItemsCardHeaderTitle,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
@@ -159,7 +164,29 @@ const MobileDelegates = () => {
           reloadAction={() => dispatch(getDelegates())}
         >
           {cardData.length ? (
-            <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+            <ItemsCard>
+              {cardData.map((data) => (
+                <ItemsCardBody key={data.id}>
+                  <ItemsCardHeader>
+                    <ItemsCardHeaderTitle
+                      cardHeader={cardHeader}
+                      item={data}
+                      headerGridProps={{
+                        direction: { xs: 'row', sm: 'row' },
+                        alignItems: { xs: 'flex-start', sm: 'center' },
+                      }}
+                    />
+                  </ItemsCardHeader>
+                  <ItemsCardContents>
+                    {cardBody.map((body) => (
+                      <ItemsCardContent key={body.id} body={body}>
+                        {body.getLabel(data[body.id], data)}
+                      </ItemsCardContent>
+                    ))}
+                  </ItemsCardContents>
+                </ItemsCardBody>
+              ))}
+            </ItemsCard>
           ) : (
             <EmptyState>
               <Trans

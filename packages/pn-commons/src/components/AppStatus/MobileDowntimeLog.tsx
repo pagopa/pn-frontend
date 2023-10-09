@@ -3,6 +3,11 @@ import { useMemo } from 'react';
 import { DowntimeLogPage } from '../../models';
 import { CardElement, Item } from '../../types';
 import ItemsCard from '../Data/ItemsCard';
+import ItemsCardBody from '../Data/ItemsCard/ItemsCardBody';
+import ItemsCardContent from '../Data/ItemsCard/ItemsCardContent';
+import ItemsCardContents from '../Data/ItemsCard/ItemsCardContents';
+import ItemsCardHeader from '../Data/ItemsCard/ItemsCardHeader';
+import ItemsCardHeaderTitle from '../Data/ItemsCard/ItemsCardHeaderTitle';
 import { adaptFieldSpecToMobile, useFieldSpecs } from './downtimeLog.utils';
 
 type Props = {
@@ -51,13 +56,26 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
   const rows: Array<Item> = getRows(downtimeLog);
 
   return (
-    <ItemsCard
-      cardHeader={cardHeader}
-      cardBody={cardBody}
-      cardData={rows}
-      testId="mobileTableDowntimeLog"
-      headerGridProps={{ justifyContent: 'left' }}
-    />
+    <ItemsCard testId="mobileTableDowntimeLog">
+      {rows.map((data) => (
+        <ItemsCardBody key={data.id}>
+          <ItemsCardHeader>
+            <ItemsCardHeaderTitle
+              cardHeader={cardHeader}
+              item={data}
+              headerGridProps={{ justifyContent: 'left' }}
+            />
+          </ItemsCardHeader>
+          <ItemsCardContents>
+            {cardBody.map((body) => (
+              <ItemsCardContent key={body.id} body={body}>
+                {body.getLabel(data[body.id], data)}
+              </ItemsCardContent>
+            ))}
+          </ItemsCardContents>
+        </ItemsCardBody>
+      ))}
+    </ItemsCard>
   );
 };
 

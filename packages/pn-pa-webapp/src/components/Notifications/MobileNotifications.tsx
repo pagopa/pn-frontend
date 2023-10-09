@@ -12,6 +12,13 @@ import {
   EmptyState,
   Item,
   ItemsCard,
+  ItemsCardAction,
+  ItemsCardActions,
+  ItemsCardBody,
+  ItemsCardContent,
+  ItemsCardContents,
+  ItemsCardHeader,
+  ItemsCardHeaderTitle,
   KnownSentiment,
   MobileNotificationsSort,
   Notification,
@@ -260,16 +267,41 @@ const MobileNotifications = ({
         </Grid>
       </Grid>
       {cardData.length ? (
-        <ItemsCard
-          cardData={cardData}
-          cardHeader={cardHeader}
-          cardBody={cardBody}
-          cardActions={cardActions}
-          headerGridProps={{
-            direction: { xs: 'row', sm: 'row' },
-            alignItems: { xs: 'flex-start', sm: 'center' },
-          }}
-        />
+        <ItemsCard>
+          {cardData.map((data) => (
+            <ItemsCardBody key={data.id}>
+              <ItemsCardHeader>
+                <ItemsCardHeaderTitle
+                  cardHeader={cardHeader}
+                  item={data}
+                  headerGridProps={{
+                    direction: { xs: 'row', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                  }}
+                />
+              </ItemsCardHeader>
+              <ItemsCardContents>
+                {cardBody.map((body) => (
+                  <ItemsCardContent key={body.id} body={body}>
+                    {body.getLabel(data[body.id], data)}
+                  </ItemsCardContent>
+                ))}
+              </ItemsCardContents>
+              <ItemsCardActions>
+                {cardActions &&
+                  cardActions.map((action) => (
+                    <ItemsCardAction
+                      testId="cardAction"
+                      key={action.id}
+                      handleOnClick={() => action.onClick(data)}
+                    >
+                      {action.component}
+                    </ItemsCardAction>
+                  ))}
+              </ItemsCardActions>
+            </ItemsCardBody>
+          ))}
+        </ItemsCard>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

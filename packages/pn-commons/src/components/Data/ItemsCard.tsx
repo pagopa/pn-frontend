@@ -1,32 +1,12 @@
-import { Fragment } from 'react';
+import React from 'react';
 
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Grid,
-  GridProps,
-  SxProps,
-  Typography,
-} from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 
-import { CardAction, CardElement, Item } from '../../types';
+import ItemsCardBody from './ItemsCard/ItemsCardBody';
 
 type Props = {
-  /* Card header elements */
-  cardHeader: [CardElement, CardElement | null];
-  /* Card body elements */
-  cardBody: Array<CardElement>;
-  /* Card data */
-  cardData: Array<Item>;
-  /* Card actions */
-  cardActions?: Array<CardAction>;
   /** Custom style */
   sx?: SxProps;
-  /** Custom header grid props */
-  headerGridProps?: GridProps;
   /** Cards test id */
   testId?: string;
 };
@@ -42,92 +22,15 @@ const cardStyle = {
   },
 };
 
-const ItemsCard: React.FC<Props> = ({
-  cardHeader,
-  cardBody,
-  cardData,
-  cardActions,
-  sx,
-  headerGridProps,
-  testId = 'mobileCards',
-}) => {
-  const cardHeaderTitle = (item: Item) => (
-    <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
-      <Grid
-        item
-        sx={{ fontSize: '14px', fontWeight: 400 }}
-        data-testid="cardHeaderLeft"
-        {...cardHeader[0].gridProps}
-      >
-        {cardHeader[0].getLabel(item[cardHeader[0].id], item)}
-      </Grid>
-      {cardHeader[1] && (
-        <Grid
-          item
-          sx={{ fontSize: '14px', fontWeight: 400, textAlign: 'right' }}
-          data-testid="cardHeaderRight"
-          {...cardHeader[1].gridProps}
-        >
-          {cardHeader[1].getLabel(item[cardHeader[1].id], item)}
-        </Grid>
-      )}
-    </Grid>
-  );
-
+const ItemsCard: React.FC<Props> = ({ sx, testId = 'mobileCards', children }) => {
+  const cardBodies = children
+    ? React.Children.toArray(children).filter(
+        (child) => (child as JSX.Element).type === ItemsCardBody
+      )
+    : [];
   return (
     <Box sx={{ ...cardStyle, ...sx }} data-testid={testId}>
-      {cardData.map((data) => (
-        <Card
-          key={data.id}
-          raised
-          data-testid="itemCard"
-          sx={{
-            mb: 2,
-            p: 3,
-          }}
-        >
-          <CardHeader title={cardHeaderTitle(data)} className="card-header" />
-          <CardContent sx={{ padding: 0, mt: 2, ':last-child': { padding: 0 } }}>
-            {cardBody.map((body) => (
-              <Box key={body.id} sx={{ mb: 2 }}>
-                {(!body.hideIfEmpty ||
-                  (body.hideIfEmpty && body.getLabel(data[body.id], data))) && (
-                  <Fragment>
-                    <Typography
-                      sx={{ fontWeight: 'bold' }}
-                      variant="caption"
-                      data-testid="cardBodyLabel"
-                    >
-                      {body.label}
-                    </Typography>
-                    {!body.notWrappedInTypography && (
-                      <Typography variant="body2" data-testid="cardBodyValue">
-                        {body.getLabel(data[body.id], data)}
-                      </Typography>
-                    )}
-                    {body.notWrappedInTypography && (
-                      <div data-testid="cardBodyValue">{body.getLabel(data[body.id], data)}</div>
-                    )}
-                  </Fragment>
-                )}
-              </Box>
-            ))}
-          </CardContent>
-          <CardActions disableSpacing className="card-actions">
-            {cardActions &&
-              cardActions.map((action) => (
-                <Box
-                  key={action.id}
-                  onClick={() => action.onClick(data)}
-                  data-testid="cardAction"
-                  sx={{ ml: 'auto' }}
-                >
-                  {action.component}
-                </Box>
-              ))}
-          </CardActions>
-        </Card>
-      ))}
+      {cardBodies}
     </Box>
   );
 };

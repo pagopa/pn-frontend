@@ -21,6 +21,13 @@ import CustomTableRow from './CustomTableRow';
 import CustomTagGroup from './CustomTagGroup/CustomTagGroup';
 import CustomTooltip from './CustomTooltip';
 import ItemsCard from './Data/ItemsCard';
+import ItemsCardAction from './Data/ItemsCard/ItemsCardAction';
+import ItemsCardActions from './Data/ItemsCard/ItemsCardActions';
+import ItemsCardBody from './Data/ItemsCard/ItemsCardBody';
+import ItemsCardContent from './Data/ItemsCard/ItemsCardContent';
+import ItemsCardContents from './Data/ItemsCard/ItemsCardContents';
+import ItemsCardHeader from './Data/ItemsCard/ItemsCardHeader';
+import ItemsCardHeaderTitle from './Data/ItemsCard/ItemsCardHeaderTitle';
 import ItemsTable from './Data/ItemsTable';
 import ItemsTableBody from './Data/ItemsTable/ItemsTableBody';
 import ItemsTableBodyCell from './Data/ItemsTable/ItemsTableBodyCell';
@@ -84,6 +91,13 @@ export {
   MobileNotificationsSort,
   SessionModal,
   ItemsCard,
+  ItemsCardHeader,
+  ItemsCardContent,
+  ItemsCardContents,
+  ItemsCardAction,
+  ItemsCardActions,
+  ItemsCardBody,
+  ItemsCardHeaderTitle,
   DisclaimerModal,
   CustomMobileDialog,
   CustomMobileDialogToggle,

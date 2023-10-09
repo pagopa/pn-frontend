@@ -8,6 +8,13 @@ import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
 import { calculatePages, sortArray } from '../../utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';
+import ItemsCardAction from './ItemsCard/ItemsCardAction';
+import ItemsCardActions from './ItemsCard/ItemsCardActions';
+import ItemsCardBody from './ItemsCard/ItemsCardBody';
+import ItemsCardContent from './ItemsCard/ItemsCardContent';
+import ItemsCardContents from './ItemsCard/ItemsCardContents';
+import ItemsCardHeader from './ItemsCard/ItemsCardHeader';
+import ItemsCardHeaderTitle from './ItemsCard/ItemsCardHeaderTitle';
 import ItemsTable from './ItemsTable';
 import ItemsTableBody from './ItemsTable/ItemsTableBody';
 import ItemsTableBodyCell from './ItemsTable/ItemsTableBodyCell';
@@ -173,12 +180,41 @@ const SmartTable = <ColumnId extends string>({
           </Grid>
         </Grid>
         {rowData.length > 0 && (
-          <ItemsCard
-            cardHeader={cardHeader}
-            cardBody={cardBody}
-            cardData={rowData}
-            cardActions={cardActions}
-          />
+          <ItemsCard>
+            {rowData.map((data) => (
+              <ItemsCardBody key={data.id}>
+                <ItemsCardHeader>
+                  <ItemsCardHeaderTitle
+                    cardHeader={cardHeader}
+                    item={data}
+                    headerGridProps={{
+                      direction: { xs: 'row', sm: 'row' },
+                      alignItems: { xs: 'flex-start', sm: 'center' },
+                    }}
+                  />
+                </ItemsCardHeader>
+                <ItemsCardContents>
+                  {cardBody.map((body) => (
+                    <ItemsCardContent key={body.id} body={body}>
+                      {body.getLabel(data[body.id], data)}
+                    </ItemsCardContent>
+                  ))}
+                </ItemsCardContents>
+                <ItemsCardActions>
+                  {cardActions &&
+                    cardActions.map((action) => (
+                      <ItemsCardAction
+                        testId="cardAction"
+                        key={action.id}
+                        handleOnClick={() => action.onClick(data)}
+                      >
+                        {action.component}
+                      </ItemsCardAction>
+                    ))}
+                </ItemsCardActions>
+              </ItemsCardBody>
+            ))}
+          </ItemsCard>
         )}
         {rowData.length > 0 && pagination && (
           <CustomPagination
