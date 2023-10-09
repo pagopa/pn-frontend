@@ -210,8 +210,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </>
       )}
 
-      {!isCancelled && (
-        <Fragment>
+      {!isCancelled && f24Only.length && (
+        <Box data-testid="f24only-box">
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
             <Typography variant="overline" mt={3}>
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
@@ -227,7 +227,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               />
             </Box>
           ))}
-        </Fragment>
+        </Box>
       )}
     </Box>
   );

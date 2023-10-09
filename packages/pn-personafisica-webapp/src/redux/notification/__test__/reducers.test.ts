@@ -6,6 +6,7 @@ import {
   KnownFunctionality,
   LegalFactType,
   PaidDetails,
+  PaymentAttachmentSName,
   PaymentStatus,
   RecipientType,
   TimelineCategory,
@@ -30,6 +31,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../../../api/notifications/notifications.routes';
@@ -39,6 +41,7 @@ import {
   getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
+  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -193,6 +196,28 @@ describe('Notification detail redux state tests', () => {
     const state = store.getState().notificationState;
     expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
+  });
+
+  it('Should be able to fetch the pagopa document', async () => {
+    const iun = notificationDTO.iun;
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
+    mock
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
+      .reply(200, { url: 'http://pagopa-mocked-url.com' });
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
+    expect(action.type).toBe('getPaymentAttachment/fulfilled');
+    expect(action.payload).toEqual({ url: 'http://pagopa-mocked-url.com' });
+  });
+
+  it('Should be able to fetch the f24 document', async () => {
+    const iun = notificationDTO.iun;
+    const attachmentName = PaymentAttachmentSName.F24;
+    mock
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
+      .reply(200, { url: 'http://f24-mocked-url.com' });
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
+    expect(action.type).toBe('getPaymentAttachment/fulfilled');
+    expect(action.payload).toEqual({ url: 'http://f24-mocked-url.com' });
   });
 
   it('should save only payed payments (from timeline) if the notification is canceled', async () => {

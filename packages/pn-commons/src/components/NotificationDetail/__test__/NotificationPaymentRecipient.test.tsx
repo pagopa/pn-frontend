@@ -235,4 +235,59 @@ describe('NotificationPaymentRecipient Component', () => {
       payment.pagoPaF24[0].pagoPA?.attachmentIdx
     );
   });
+
+  it('should show f24 as attachment', () => {
+    const payments: PaymentsData = {
+      pagoPaF24: [
+        {
+          ...paymentsData.pagoPaF24[0],
+          pagoPA: {
+            ...paymentsData.pagoPaF24[0].pagoPA,
+            recIndex: 1,
+            attachmentIdx: 1,
+          } as PagoPAPaymentFullDetails,
+        },
+      ],
+      f24Only: [],
+    };
+
+    const result = render(
+      <NotificationPaymentRecipient
+        payments={payments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
+
+    expect(result.queryByTestId('f24only-box')).not.toBeInTheDocument();
+  });
+
+  it('should show the correct box if is a F24 only payment', () => {
+    const payments: PaymentsData = {
+      pagoPaF24: [],
+      f24Only: [
+        {
+          ...paymentsData.f24Only[0],
+          attachmentIdx: 1,
+        },
+      ],
+    };
+
+    const result = render(
+      <NotificationPaymentRecipient
+        payments={payments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleReloadPayment={() => void 0}
+      />
+    );
+
+    expect(result.getByTestId('f24only-box')).toBeInTheDocument();
+    expect(result.queryByTestId('pagopa-item')).not.toBeInTheDocument();
+  });
 });

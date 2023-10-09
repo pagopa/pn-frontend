@@ -117,7 +117,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
     return (
       <Box display="flex" alignItems="center" justifyContent="center" gap={0.5}>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" color="text.secondary" data-testid="f24-download-message">
           {getLocalizedOrDefaultLabel('notifications', downloadingMessage)}
         </Typography>
         <CircularProgress size="1.125rem" role="loadingSpinner" sx={{ color: 'text.secondary' }} />
@@ -154,7 +154,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           </Typography>
         )}
         {maxTimeError && (
-          <Box display="flex" alignItems="center" gap={0.5}>
+          <Box display="flex" alignItems="center" gap={0.5} data-testid="f24-maxTime-error">
             <InfoRounded
               sx={{
                 color: 'error.dark',
