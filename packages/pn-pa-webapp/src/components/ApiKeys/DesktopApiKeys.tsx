@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -277,7 +277,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       getCellLabel(value: string, row: Item) {
         const { label, tooltip, color } = getApiKeyStatusInfos(
           value as ApiKeyStatus,
-          row.statusHistory as Array<ApiKeyStatusHistory>
+          row.statusHistory as React.ReactNode as Array<ApiKeyStatusHistory>
         );
         return (
           <Box

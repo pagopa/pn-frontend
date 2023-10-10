@@ -43,7 +43,7 @@ export interface SmartTableData<ColumnId> {
   id: ColumnId;
   label: string;
   getValue(
-    value: string | number | Array<string | ReactNode>,
+    value: string | number | Array<string | object | ReactNode>,
     data?: Item,
     isMobile?: boolean
   ): ReactNode;

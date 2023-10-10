@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
-import { ChangeEvent, Fragment } from 'react';
+import React, { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Grid, TextField, TextFieldProps } from '@mui/material';
@@ -90,7 +90,9 @@ const FilterNotificationsFormBody = ({
           label={t('filters.iun', { ns: 'notifiche' })}
           name="iunMatch"
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
-          helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
+          helperText={
+            (formikInstance.touched.iunMatch && formikInstance.errors.iunMatch) as React.ReactNode
+          }
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"

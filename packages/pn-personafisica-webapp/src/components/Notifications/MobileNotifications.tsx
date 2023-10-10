@@ -51,7 +51,10 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => void }>> = ({ children, cleanFilters }) => {
+const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => void }>> = ({
+  children,
+  cleanFilters,
+}) => {
   const { t } = useTranslation('notifiche');
   return (
     <Link
@@ -67,7 +70,7 @@ const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => 
   );
 };
 
-const LinkRouteContacts: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+const LinkRouteContacts: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   return (
@@ -106,12 +109,16 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                 {badge}
               </Typography>
               <Typography display="inline" variant="body2">
-                {row.sentAt}
+                <>{row.sentAt}</>
               </Typography>
             </Fragment>
           );
         }
-        return <Typography variant="body2">{row.sentAt}</Typography>;
+        return (
+          <Typography variant="body2">
+            <>{row.sentAt}</>
+          </Typography>
+        );
       },
       gridProps: {
         xs: 4,

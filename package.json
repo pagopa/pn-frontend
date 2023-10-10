@@ -44,6 +44,7 @@
     "**/react-scripts/react-dev-utils/loader-utils": "^3.2.1",
     "**/recursive-readdir": "^2.2.3",
     "**/terser": "^5.16.1",
-    "**/react-scripts/react-dev-utils/fork-ts-checker-webpack-plugin": "6.5.3"
+    "**/react-scripts/react-dev-utils/fork-ts-checker-webpack-plugin": "6.5.3",
+    "**/@types/react": "^18.2.24"
   }
 }

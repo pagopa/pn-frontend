@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FC, ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { FC, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
@@ -60,7 +60,7 @@ const DigitalContactsCodeVerificationContext = createContext<
   IDigitalContactsCodeVerificationContext | undefined
 >(undefined);
 
-const DigitalContactsCodeVerificationProvider: FC<React.PropsWithChildren<ReactNode>> = ({ children }) => {
+const DigitalContactsCodeVerificationProvider: FC<React.PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses

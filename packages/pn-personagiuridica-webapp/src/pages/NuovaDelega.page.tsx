@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -292,7 +292,7 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
                                 error={Boolean(getError(touched.nome, errors.nome))}
-                                helperText={getError(touched.nome, errors.nome)}
+                                helperText={getError(touched.nome, errors.nome) as React.ReactNode}
                                 fullWidth
                               />
                             )}
@@ -308,7 +308,9 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
                                 error={Boolean(getError(touched.cognome, errors.cognome))}
-                                helperText={getError(touched.cognome, errors.cognome)}
+                                helperText={
+                                  getError(touched.cognome, errors.cognome) as React.ReactNode
+                                }
                                 fullWidth
                               />
                             )}
@@ -325,7 +327,12 @@ const NuovaDelega = () => {
                                 error={Boolean(
                                   getError(touched.ragioneSociale, errors.ragioneSociale)
                                 )}
-                                helperText={getError(touched.ragioneSociale, errors.ragioneSociale)}
+                                helperText={
+                                  getError(
+                                    touched.ragioneSociale,
+                                    errors.ragioneSociale
+                                  ) as React.ReactNode
+                                }
                                 fullWidth
                               />
                             )}
@@ -342,7 +349,9 @@ const NuovaDelega = () => {
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
                         error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
-                        helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
+                        helperText={
+                          getError(touched.codiceFiscale, errors.codiceFiscale) as React.ReactNode
+                        }
                         fullWidth
                       />
                       <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
@@ -412,7 +421,9 @@ const NuovaDelega = () => {
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
                                       error={Boolean(getError(touched.enti, errors.enti))}
-                                      helperText={getError(touched.enti, errors.enti)}
+                                      helperText={
+                                        getError(touched.enti, errors.enti) as React.ReactNode
+                                      }
                                     />
                                   )}
                                 />
@@ -455,10 +466,12 @@ const NuovaDelega = () => {
                                   error={Boolean(
                                     getError(touched.expirationDate, errors.expirationDate)
                                   )}
-                                  helperText={getError(
-                                    touched.expirationDate,
-                                    errors.expirationDate
-                                  )}
+                                  helperText={
+                                    getError(
+                                      touched.expirationDate,
+                                      errors.expirationDate
+                                    ) as React.ReactNode
+                                  }
                                 />
                               )}
                               disablePast={true}
