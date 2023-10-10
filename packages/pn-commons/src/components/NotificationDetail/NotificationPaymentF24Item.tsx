@@ -1,8 +1,9 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { Download, InfoRounded } from '@mui/icons-material';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { downloadDocument, useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../types';
@@ -48,7 +49,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
       if (response.url) {
         setDownloadingMessage(null);
-        downloadDocument(response.url, false);
+        downloadDocument(response.url);
         return;
       }
 
@@ -63,6 +64,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
               setDownloadingMessage('detail.payment.download-f24-waiting');
               step = 1;
             } else if (step === 1) {
+              step = 2;
               setDownloadingMessage('detail.payment.download-f24-ongoing');
             }
           }, (timeout - 1000) / 2);

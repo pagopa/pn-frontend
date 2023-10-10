@@ -7,7 +7,6 @@ import {
   PaymentAttachmentSName,
   PaymentStatus,
   downloadDocument,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -24,7 +23,6 @@ type Props = {
 const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
 
   const dowloadHandler = () => {
     if (!_.isNil(payment.recIndex)) {
@@ -40,7 +38,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
         .unwrap()
         .then((res) => {
           if (res.url) {
-            downloadDocument(res.url, isMobile);
+            downloadDocument(res.url);
           }
         })
         .catch(() => {});

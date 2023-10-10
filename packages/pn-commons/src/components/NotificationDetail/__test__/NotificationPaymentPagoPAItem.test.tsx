@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { fireEvent, render, waitFor } from '@testing-library/react';
-
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { fireEvent, render, waitFor } from '../../../test-utils';
 import {
   PagoPAPaymentFullDetails,
   PaymentDetails,

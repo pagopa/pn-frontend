@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
-import { render } from '@testing-library/react';
 
+import { render } from '../../__test__/test-utils';
 import PrivacyPolicyPage from '../PrivacyPolicy.page';
 
 jest.mock('../../services/configuration.service', () => {

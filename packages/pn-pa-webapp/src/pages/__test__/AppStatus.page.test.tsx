@@ -11,7 +11,6 @@ import {
   formatDate,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
-import '@testing-library/react';
 
 import { currentStatusDTO, downtimesDTO, openIncidents } from '../../__mocks__/AppStatus.mock';
 import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';

@@ -102,7 +102,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         .unwrap()
         .then((response) => {
           if (response.url) {
-            downloadDocument(response.url, false);
+            downloadDocument(response.url);
           }
         });
     }
