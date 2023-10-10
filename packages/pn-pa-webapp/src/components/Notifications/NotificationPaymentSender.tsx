@@ -92,9 +92,9 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
   };
 
   const pagoPAPaymentFullDetails = paymentDetails.reduce((arr, payment) => {
-    if (payment.pagoPA) {
+    if (payment.pagoPa) {
       // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.pagoPA);
+      arr.push(payment.pagoPa);
     }
     return arr;
   }, [] as Array<PagoPAPaymentFullDetails>);

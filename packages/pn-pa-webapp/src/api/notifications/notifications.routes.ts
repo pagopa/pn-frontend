@@ -160,7 +160,6 @@ export function NOTIFICATION_PAYMENT_ATTACHMENT(
   recIndex: number,
   attachmentIdx?: number
 ) {
-  console.log(attachmentIdx);
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_PAYMENT_ATTACHMENT_PATH,

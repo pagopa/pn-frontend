@@ -66,7 +66,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_PAYMENT_INFO', () => {
     const route = NOTIFICATION_PAYMENT_INFO();
-    expect(route).toEqual('/ext-registry/pagopa/v2/paymentinfo');
+    expect(route).toEqual('/ext-registry/pagopa/v2.1/paymentinfo');
   });
 
   it('should compile NOTIFICATION_PAYMENT_URL', () => {

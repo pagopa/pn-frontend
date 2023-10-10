@@ -79,7 +79,7 @@ describe('NotificationPaymentSender Component', () => {
     const recipientsSelect = queryByTestId('recipients-select');
     expect(recipientsSelect).not.toBeInTheDocument();
     const paymentItems = getAllByTestId('payment-item');
-    expect(paymentItems).toHaveLength(getPaymentsCount(0, notificationToFe.recipients, 'pagoPA'));
+    expect(paymentItems).toHaveLength(getPaymentsCount(0, notificationToFe.recipients, 'pagoPa'));
   });
 
   it('renders component - multi recipient', () => {
@@ -116,7 +116,7 @@ describe('NotificationPaymentSender Component', () => {
     let paymentItems = result?.queryAllByTestId('payment-item');
     let f24Items = result?.queryAllByTestId('f24');
     expect(paymentItems).toHaveLength(
-      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'pagoPA')
+      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'pagoPa')
     );
     expect(f24Items).toHaveLength(
       getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'f24')
@@ -125,7 +125,7 @@ describe('NotificationPaymentSender Component', () => {
     paymentItems = result?.queryAllByTestId('payment-item');
     f24Items = result?.queryAllByTestId('f24');
     expect(paymentItems).toHaveLength(
-      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPA')
+      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPa')
     );
     expect(f24Items).toHaveLength(
       getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'f24')

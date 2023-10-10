@@ -131,11 +131,11 @@ describe('Notification detail redux state tests', () => {
     payments.forEach((payment) => {
       const attachmentIdx = payments.findIndex(
         (paymentMock) =>
-          payment.pagoPA?.noticeCode === paymentMock.pagoPA?.noticeCode &&
-          payment.pagoPA?.creditorTaxId === paymentMock.pagoPA?.creditorTaxId
+          payment.pagoPa?.noticeCode === paymentMock.pagoPa?.noticeCode &&
+          payment.pagoPa?.creditorTaxId === paymentMock.pagoPa?.creditorTaxId
       );
-      expect(payment.pagoPA?.attachmentIdx).toBe(attachmentIdx);
-      expect(payment.pagoPA?.recIndex).toBe(recipientIdx);
+      expect(payment.pagoPa?.attachmentIdx).toBe(attachmentIdx);
+      expect(payment.pagoPa?.recIndex).toBe(recipientIdx);
     });
   });
 
@@ -237,8 +237,8 @@ describe('Notification detail redux state tests', () => {
     const timelineRecipientPayments = recipients[1].payments?.filter((payment) =>
       payedTimelineEvents.some(
         (timelineEvent) =>
-          (timelineEvent.details as PaidDetails).creditorTaxId === payment.pagoPA?.creditorTaxId &&
-          (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPA?.noticeCode
+          (timelineEvent.details as PaidDetails).creditorTaxId === payment.pagoPa?.creditorTaxId &&
+          (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPa?.noticeCode
       )
     );
 

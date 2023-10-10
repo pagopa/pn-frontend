@@ -3,12 +3,7 @@ import React from 'react';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
-import {
-  PagoPAPaymentFullDetails,
-  PaymentAttachmentSName,
-  PaymentStatus,
-  PaymentsData,
-} from '../../../types';
+import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../types';
 import {
   getF24Payments,
   getPagoPaF24Payments,
@@ -53,7 +48,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).toHaveTextContent('detail.payment.subtitle');
     expect(f24Download).not.toBeInTheDocument();
     expect(pagoPABox).toHaveLength(
-      paymentsData.pagoPaF24.filter((payment) => payment.pagoPA).length
+      paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length
     );
     expect(downloadPagoPANotice).toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
@@ -116,9 +111,9 @@ describe('NotificationPaymentRecipient Component', () => {
     await waitFor(() => {
       expect(payClickMk).toBeCalledTimes(1);
       expect(payClickMk).toBeCalledWith(
-        paymentsData.pagoPaF24[0].pagoPA!.noticeCode,
-        paymentsData.pagoPaF24[0].pagoPA!.creditorTaxId,
-        paymentsData.pagoPaF24[0].pagoPA!.amount
+        paymentsData.pagoPaF24[0].pagoPa!.noticeCode,
+        paymentsData.pagoPaF24[0].pagoPa!.creditorTaxId,
+        paymentsData.pagoPaF24[0].pagoPa!.amount
       );
     });
   });
@@ -192,7 +187,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
-      paymentsData.pagoPaF24[0].pagoPA?.attachmentIdx
+      paymentsData.pagoPaF24[0].pagoPa?.attachmentIdx
     );
     // TODO: completare anche gli step seguenti, sempre adottando il metodo della findIndex di sopra
     // download linked f24

@@ -36,7 +36,7 @@ function getOneRecipientNotification(): NotificationDetail {
 
 export const payments: Array<NotificationDetailPayment> = [
   {
-    pagoPA: {
+    pagoPa: {
       noticeCode: '302011686772695132',
       creditorTaxId: '77777777777',
       applyCost: true,
@@ -53,7 +53,7 @@ export const payments: Array<NotificationDetailPayment> = [
     },
   },
   {
-    pagoPA: {
+    pagoPa: {
       noticeCode: '302011686772695133',
       creditorTaxId: '77777777777',
       applyCost: true,

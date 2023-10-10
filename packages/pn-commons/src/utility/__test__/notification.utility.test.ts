@@ -1063,7 +1063,7 @@ describe('Populate pagoPA and F24 payments', () => {
   it('With empty timeline it should return the mapped array with only external registry info', () => {
     const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       return {
-        pagoPA: item.pagoPA ? { ...item.pagoPA, ...paymentInfo[index] } : undefined,
+        pagoPa: item.pagoPa ? { ...item.pagoPa, ...paymentInfo[index] } : undefined,
         f24: item.f24,
       } as PaymentDetails;
     });
@@ -1078,8 +1078,8 @@ describe('Populate pagoPA and F24 payments', () => {
 
     paymentsData.pagoPaF24.forEach((item, index) => {
       if (
-        singlePaymentInfo?.creditorTaxId === item.pagoPA?.creditorTaxId &&
-        singlePaymentInfo.noticeCode === item.pagoPA?.noticeCode
+        singlePaymentInfo?.creditorTaxId === item.pagoPa?.creditorTaxId &&
+        singlePaymentInfo.noticeCode === item.pagoPa?.noticeCode
       ) {
         const checkoutSucceded =
           paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
@@ -1094,16 +1094,16 @@ describe('Populate pagoPA and F24 payments', () => {
         res = [
           ...res,
           {
-            pagoPA: { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent },
+            pagoPa: { ...item.pagoPa, ...paymentInfo[index], ...timelineEvent },
             f24: item.f24,
           } as PaymentDetails,
         ];
       }
-      if (!item.pagoPA && item.f24) {
+      if (!item.pagoPa && item.f24) {
         res = [
           ...res,
           {
-            pagoPA: undefined,
+            pagoPa: undefined,
             f24: item.f24,
           } as PaymentDetails,
         ];
@@ -1125,19 +1125,19 @@ describe('Populate pagoPA and F24 payments', () => {
       const timelineEvent = notificationToFe.timeline.find(
         (event) =>
           event.category === TimelineCategory.PAYMENT &&
-          (event.details as PaidDetails).creditorTaxId === item.pagoPA?.creditorTaxId &&
-          (event.details as PaidDetails).noticeCode === item.pagoPA?.noticeCode
+          (event.details as PaidDetails).creditorTaxId === item.pagoPa?.creditorTaxId &&
+          (event.details as PaidDetails).noticeCode === item.pagoPa?.noticeCode
       )?.details;
 
-      const pagoPAPayment = item.pagoPA
-        ? ({ ...item.pagoPA, ...timelineEvent } as PagoPAPaymentFullDetails)
+      const pagoPAPayment = item.pagoPa
+        ? ({ ...item.pagoPa, ...timelineEvent } as PagoPAPaymentFullDetails)
         : undefined;
       if (timelineEvent && pagoPAPayment) {
         pagoPAPayment.status = PaymentStatus.SUCCEEDED;
       }
 
       return {
-        pagoPA: pagoPAPayment,
+        pagoPa: pagoPAPayment,
         f24: item.f24,
       } as PaymentDetails;
     });
@@ -1154,7 +1154,7 @@ describe('Populate pagoPA and F24 payments', () => {
   it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
     const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
-        item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
+        item.pagoPa && paymentInfo[index].status === PaymentStatus.SUCCEEDED
           ? paymentInfo[index]
           : undefined;
 
@@ -1166,8 +1166,8 @@ describe('Populate pagoPA and F24 payments', () => {
       )?.details;
 
       return {
-        pagoPA: item.pagoPA
-          ? { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent }
+        pagoPa: item.pagoPa
+          ? { ...item.pagoPa, ...paymentInfo[index], ...timelineEvent }
           : undefined,
         f24: item.f24,
       } as PaymentDetails;
@@ -1190,7 +1190,7 @@ describe('Populate pagoPA and F24 payments', () => {
 
     const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
-        item.pagoPA && paymentInfo[index].status === PaymentStatus.SUCCEEDED
+        item.pagoPa && paymentInfo[index].status === PaymentStatus.SUCCEEDED
           ? paymentInfo[index]
           : undefined;
 
@@ -1202,8 +1202,8 @@ describe('Populate pagoPA and F24 payments', () => {
       )?.details;
 
       return {
-        pagoPA: item.pagoPA
-          ? { ...item.pagoPA, ...paymentInfo[index], ...timelineEvent }
+        pagoPa: item.pagoPa
+          ? { ...item.pagoPa, ...paymentInfo[index], ...timelineEvent }
           : undefined,
         f24: item.f24,
       } as PaymentDetails;

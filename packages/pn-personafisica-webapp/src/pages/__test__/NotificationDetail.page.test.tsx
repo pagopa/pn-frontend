@@ -549,8 +549,8 @@ describe('NotificationDetail Page', () => {
     fireEvent.click(payButton);
 
     const values = paymentHistory.find(
-      (payment) => payment.pagoPA?.noticeCode === radioButton.value
-    )?.pagoPA;
+      (payment) => payment.pagoPa?.noticeCode === radioButton.value
+    )?.pagoPa;
 
     if (!values) return;
 

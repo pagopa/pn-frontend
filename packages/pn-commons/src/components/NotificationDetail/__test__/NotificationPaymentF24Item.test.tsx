@@ -60,7 +60,7 @@ const getPaymentAttachment = createAsyncThunk<
 });
 
 describe('NotificationPaymentF24Item Component', () => {
-  const f24Item = payments.find((item) => !item.pagoPA && item.f24)?.f24 as F24PaymentDetails;
+  const f24Item = payments.find((item) => !item.pagoPa && item.f24)?.f24 as F24PaymentDetails;
   const TIMERF24 = 5000;
   let store;
 

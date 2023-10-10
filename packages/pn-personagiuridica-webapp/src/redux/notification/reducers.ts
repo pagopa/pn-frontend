@@ -105,8 +105,8 @@ const notificationSlice = createSlice({
             timelineEvents.some(
               (timelineEvent) =>
                 (timelineEvent.details as PaidDetails).creditorTaxId ===
-                  payment.pagoPA?.creditorTaxId &&
-                (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPA?.noticeCode
+                  payment.pagoPa?.creditorTaxId &&
+                (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPa?.noticeCode
             )
           );
 
@@ -161,8 +161,8 @@ const notificationSlice = createSlice({
           const paymentInfo = action.payload[0];
           const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
             (payment) =>
-              payment.pagoPA?.creditorTaxId === paymentInfo.pagoPA?.creditorTaxId &&
-              payment.pagoPA?.noticeCode === paymentInfo.pagoPA?.noticeCode
+              payment.pagoPa?.creditorTaxId === paymentInfo.pagoPa?.creditorTaxId &&
+              payment.pagoPa?.noticeCode === paymentInfo.pagoPa?.noticeCode
           );
           if (paymentInfoIndex !== -1) {
             state.paymentsData.pagoPaF24[paymentInfoIndex] = paymentInfo;
@@ -176,8 +176,8 @@ const notificationSlice = createSlice({
       if (action.meta.arg.paymentInfoRequest.length === 1) {
         const payment = state.paymentsData.pagoPaF24.find(
           (payment) =>
-            payment.pagoPA?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
-            payment.pagoPA?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
+            payment.pagoPa?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
+            payment.pagoPa?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
         );
 
         if (payment) {
@@ -191,17 +191,17 @@ const notificationSlice = createSlice({
       const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
       const paymentInfo = state.paymentsData.pagoPaF24.find(
         (payment) =>
-          payment.pagoPA?.creditorTaxId === creditorTaxId &&
-          payment.pagoPA?.noticeCode === noticeCode
+          payment.pagoPa?.creditorTaxId === creditorTaxId &&
+          payment.pagoPa?.noticeCode === noticeCode
       );
 
-      if (paymentInfo && paymentInfo.pagoPA) {
+      if (paymentInfo && paymentInfo.pagoPa) {
         state.paymentsData.pagoPaF24 = [
           ...state.paymentsData.pagoPaF24,
           {
             ...paymentInfo?.f24,
-            pagoPA: {
-              ...paymentInfo?.pagoPA,
+            pagoPa: {
+              ...paymentInfo?.pagoPa,
               status: PaymentStatus.FAILED,
               detail: PaymentInfoDetail.GENERIC_ERROR,
             },
