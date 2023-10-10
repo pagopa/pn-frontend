@@ -36,6 +36,7 @@ const SkeletonCard: React.FC = () => {
       alignItems={isMobile ? 'flex-start' : 'center'}
       flexDirection={isMobile ? 'column-reverse' : 'row'}
       sx={{ backgroundColor: '#FAFAFA' }}
+      data-testid="skeleton-card"
     >
       <Box display="flex" gap={1} flexDirection="column" flex="1 0 0">
         <Skeleton

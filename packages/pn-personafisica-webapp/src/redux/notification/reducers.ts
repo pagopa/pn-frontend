@@ -150,7 +150,6 @@ const notificationSlice = createSlice({
       }
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
-      console.log('getNotificationPaymentInfo.fulfilled', action);
       if (action.payload) {
         // Not single payment reload
         if (action.payload.length > 1) {

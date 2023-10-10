@@ -8,15 +8,23 @@ import {
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationStatus,
+  PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
-import { notificationDTO, notificationToFe } from '../../__mocks__/NotificationDetail.mock';
+import {
+  notificationDTO,
+  notificationToFe,
+  paymentsData,
+} from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
@@ -24,6 +32,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
@@ -569,5 +578,66 @@ describe('NotificationDetail Page', () => {
     // check domicile banner
     const addDomicileBanner = result?.queryByTestId('addDomicileBanner');
     expect(addDomicileBanner).not.toBeInTheDocument();
+  });
+
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      paymentInfo
+    );
+
+    act(() => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          notificationState: {
+            notification: notificationToFe,
+            paymentsData: {
+              pagoPaF24: getPagoPaF24Payments(paymentHistory, 1),
+              f24Only: getF24Payments(paymentHistory, 1),
+            },
+            downtimeEvents: [],
+          },
+        },
+      });
+    });
+
+    const payButton = result?.getByTestId('pay-button');
+
+    const requiredPaymentIndex = paymentHistory.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+
+    const requiredPayment = paymentHistory[requiredPaymentIndex];
+
+    const item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+
+    await waitFor(() => {
+      fireEvent.click(payButton!);
+    });
+
+    mock
+      .onPost(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.abstract,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(200, {
+        url: 'https://mocked-url.com',
+      });
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
+    });
   });
 });

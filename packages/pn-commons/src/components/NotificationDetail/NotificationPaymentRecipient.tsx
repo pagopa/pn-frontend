@@ -194,7 +194,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   <NotificationPaymentF24Item
                     f24Item={
                       pagoPaF24.find(
-                        (payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode
+                        (payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode
                       )?.f24 as F24PaymentDetails
                     }
                     getPaymentAttachmentAction={getPaymentAttachmentAction}

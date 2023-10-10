@@ -339,6 +339,20 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(creditorTaxId).toBeInTheDocument();
     expect(creditorTaxId).toHaveTextContent(pagoPAItem.creditorTaxId);
   });
-});
 
-// TODO: aggiungere caso di test loading=true e verificare che venga mostrato lo skeleton e non tutto il resto
+  it('should show only skeleton when loading is true', () => {
+    const { getByTestId } = render(
+      <NotificationPaymentPagoPAItem
+        pagoPAItem={pagoPAItem}
+        loading={true}
+        isSelected={false}
+        handleReloadPayment={() => void 0}
+        handleDeselectPayment={() => void 0}
+        isCancelled={true}
+      />
+    );
+
+    const skeleton = getByTestId('skeleton-card');
+    expect(skeleton).toBeInTheDocument();
+  });
+});
