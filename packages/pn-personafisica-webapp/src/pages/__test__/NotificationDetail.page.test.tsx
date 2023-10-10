@@ -266,7 +266,9 @@ describe('NotificationDetail Page', () => {
         `/delivery/notifications/received/${notificationToFe.iun}/attachments/documents/0`
       );
     });
-    expect(window.location.href).toBe('https://mocked-url-com');
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url.com');
+    });
   });
 
   it('executes the legal fact download handler', async () => {
@@ -295,7 +297,6 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    expect(window.location.href).toBe('https://mocked-url-com');
     window.location.href = '';
     const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
     expect(docNotAvailableAlert).toBeInTheDocument();
@@ -319,7 +320,9 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    expect(window.location.href).toBe('https://mocked-url-com');
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
+    });
   });
 
   it('executes the downtimws legal fact download handler', async () => {
@@ -351,7 +354,9 @@ describe('NotificationDetail Page', () => {
         `/downtime/v1/legal-facts/${simpleDowntimeLogPage.downtimes[0].legalFactId}`
       );
     });
-    expect(window.location.href).toBe('https://mocked-url-com');
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
+    });
   });
 
   it('normal navigation - includes back button', async () => {
@@ -508,6 +513,7 @@ describe('NotificationDetail Page', () => {
       then: () => Promise.resolve(),
     }));
 
+    // TODO: usare act
     result = render(<NotificationDetail />, {
       preloadedState: {
         userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },

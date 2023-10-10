@@ -35,17 +35,24 @@ const AppStatusWithErrorHandling = () => (
 
 describe('AppStatus page', () => {
   let mock: MockAdapter;
+  const original = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '' },
+    });
   });
 
   afterEach(() => {
     mock.reset();
+    window.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
   /*
    * The intent of the "OK" test is to verify somehow that the result of the API calls
@@ -195,9 +202,9 @@ describe('AppStatus page', () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
     });
-    // TODO: aggiungere controllo che la funzione di download venga chiamata.
-    // Al momento si usa un hook che è in ascolto sul cambio di stato di redux
-    // vorrei rimuovere questa dipendenza e richiamare la funzione di download direttamente nel then del dipatch
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://www.mocked-url.com');
+    });
   });
 
   it('Desktop - change pagination and size', async () => {
