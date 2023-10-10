@@ -54,21 +54,21 @@ describe('NotificationPaymentPagoPa Component', () => {
     const { container, queryByTestId, rerender } = render(
       <NotificationPaymentPagoPa
         iun={notificationToFeMultiRecipient.iun}
-        payment={paymentHistory[0].pagoPA!}
+        payment={paymentHistory[0].pagoPa!}
       />
     );
     expect(container).toHaveTextContent('detail.notice-code');
-    expect(container).toHaveTextContent(paymentHistory[0].pagoPA?.noticeCode!);
+    expect(container).toHaveTextContent(paymentHistory[0].pagoPa?.noticeCode!);
     expect(container).toHaveTextContent('payment.pagopa-notice');
     // payment without status succeded
     let paymentChip = queryByTestId('payment-succeded');
     expect(paymentChip).not.toBeInTheDocument();
     // payment with status succeded
-    paymentHistory[0].pagoPA!.status = PaymentStatus.SUCCEEDED;
+    paymentHistory[0].pagoPa!.status = PaymentStatus.SUCCEEDED;
     rerender(
       <NotificationPaymentPagoPa
         iun={notificationToFeMultiRecipient.iun}
-        payment={paymentHistory[0].pagoPA!}
+        payment={paymentHistory[0].pagoPa!}
       />
     );
     paymentChip = queryByTestId('payment-succeded');
@@ -88,15 +88,15 @@ describe('NotificationPaymentPagoPa Component', () => {
         NOTIFICATION_PAYMENT_ATTACHMENT(
           iun,
           attachmentName,
-          paymentHistory[0].pagoPA?.recIndex!,
-          paymentHistory[0].pagoPA?.attachmentIdx
+          paymentHistory[0].pagoPa?.recIndex!,
+          paymentHistory[0].pagoPa?.attachmentIdx
         )
       )
       .reply(200, { url: 'http://mocked-url.com' });
     const { getByRole } = render(
       <NotificationPaymentPagoPa
         iun={notificationToFeMultiRecipient.iun}
-        payment={paymentHistory[0].pagoPA!}
+        payment={paymentHistory[0].pagoPa!}
       />
     );
     const dowloadButton = getByRole('button');
@@ -107,8 +107,8 @@ describe('NotificationPaymentPagoPa Component', () => {
         NOTIFICATION_PAYMENT_ATTACHMENT(
           iun,
           attachmentName,
-          paymentHistory[0].pagoPA?.recIndex!,
-          paymentHistory[0].pagoPA?.attachmentIdx
+          paymentHistory[0].pagoPa?.recIndex!,
+          paymentHistory[0].pagoPa?.attachmentIdx
         )
       );
       expect(downloadDocument).toBeCalledTimes(1);
@@ -125,7 +125,7 @@ describe('NotificationPaymentPagoPa Component', () => {
     const { getByRole } = render(
       <NotificationPaymentPagoPa
         iun={notificationToFeMultiRecipient.iun}
-        payment={paymentHistory[0].pagoPA!}
+        payment={paymentHistory[0].pagoPa!}
       />
     );
     const dowloadButton = getByRole('button');

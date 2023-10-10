@@ -27,7 +27,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/v2/notifications/received/mocked-iun');
+    expect(route).toEqual('/delivery/v2.1/notifications/received/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
@@ -60,7 +60,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_PAYMENT_INFO', () => {
     const route = NOTIFICATION_PAYMENT_INFO();
-    expect(route).toEqual('/ext-registry/pagopa/v2/paymentinfo');
+    expect(route).toEqual('/ext-registry/pagopa/v2.1/paymentinfo');
   });
 
   it('should compile NOTIFICATION_PAYMENT_URL', () => {

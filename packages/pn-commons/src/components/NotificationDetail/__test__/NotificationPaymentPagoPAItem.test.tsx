@@ -20,7 +20,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     paymentInfo
   );
 
-  const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentFullDetails;
+  const pagoPAItem = pagoPAItems.find((item) => item.pagoPa)?.pagoPa as PagoPAPaymentFullDetails;
 
   it('renders NotificationPaymentPagoPAItem - should show radio button when status is REQUIRED', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };

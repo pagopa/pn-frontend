@@ -42,11 +42,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(
-    isSinglePayment ? pagoPaF24[0].pagoPA ?? null : null
+    isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null
   );
 
   const allPaymentsIsPaid = pagoPaF24.every(
-    (payment) => payment.pagoPA?.status === PaymentStatus.SUCCEEDED
+    (payment) => payment.pagoPa?.status === PaymentStatus.SUCCEEDED
   );
 
   const getTitle = () => {
@@ -83,7 +83,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     const radioSelection = event.target.value;
 
     setSelectedPayment(
-      pagoPaF24.find((item) => item.pagoPA?.noticeCode === radioSelection)?.pagoPA || null
+      pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa || null
     );
   };
 
@@ -131,12 +131,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         <>
           <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
             {pagoPaF24.map((payment, index) =>
-              payment.pagoPA ? (
+              payment.pagoPa ? (
                 <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
                   <NotificationPaymentPagoPAItem
-                    pagoPAItem={payment.pagoPA}
+                    pagoPAItem={payment.pagoPa}
                     loading={payment.isLoading ?? false}
-                    isSelected={payment.pagoPA.noticeCode === selectedPayment?.noticeCode}
+                    isSelected={payment.pagoPa.noticeCode === selectedPayment?.noticeCode}
                     handleReloadPayment={() => handleReloadPayment([payment])}
                     handleDeselectPayment={handleDeselectPayment}
                     isSinglePayment={isSinglePayment}
@@ -183,7 +183,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 )}
               </Button>
               {selectedPayment &&
-              pagoPaF24.find((payment) => payment.pagoPA?.noticeCode === selectedPayment.noticeCode)
+              pagoPaF24.find((payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode)
                 ?.f24 ? (
                 <Box display="flex" justifyContent="space-between" data-testid="f24-download">
                   <Typography variant="body2">

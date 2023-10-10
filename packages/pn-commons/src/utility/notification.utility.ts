@@ -875,7 +875,7 @@ export const getF24Payments = (
   onlyF24: boolean = true
 ): Array<F24PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
-    if (payment.f24 && ((onlyF24 && !payment.pagoPA) || !onlyF24)) {
+    if (payment.f24 && ((onlyF24 && !payment.pagoPa) || !onlyF24)) {
       // eslint-disable-next-line functional/immutable-data
       arr.push({
         ...payment.f24,
@@ -892,11 +892,11 @@ export const getPagoPaF24Payments = (
   withLoading: boolean = false
 ): Array<PaymentDetails> =>
   payments.reduce((arr, payment, index) => {
-    if (payment.pagoPA) {
+    if (payment.pagoPa) {
       // eslint-disable-next-line functional/immutable-data
       arr.push({
-        pagoPA: {
-          ...payment.pagoPA,
+        pagoPa: {
+          ...payment.pagoPa,
           attachmentIdx: index,
           recIndex,
         } as PagoPAPaymentFullDetails,
@@ -930,7 +930,7 @@ export const populatePaymentsPagoPaF24 = (
 
   // 2. populate payment history array with the informations from timeline and related recipients
   for (const userPayment of pagoPaF24Payemnts) {
-    if (!userPayment.pagoPA) {
+    if (!userPayment.pagoPa) {
       continue;
     }
 
@@ -938,8 +938,8 @@ export const populatePaymentsPagoPaF24 = (
       checkoutPayments.length &&
       checkoutPayments?.findIndex(
         (payment) =>
-          payment.creditorTaxId === userPayment.pagoPA?.creditorTaxId &&
-          payment.noticeCode === userPayment.pagoPA?.noticeCode
+          payment.creditorTaxId === userPayment.pagoPa?.creditorTaxId &&
+          payment.noticeCode === userPayment.pagoPa?.noticeCode
       ) === -1
     ) {
       continue;
@@ -948,16 +948,16 @@ export const populatePaymentsPagoPaF24 = (
     // 3. Get payment by creditorTaxId and noticeCode from checkout
     const checkoutPayment = checkoutPayments.find(
       (p) =>
-        p.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
-        p.noticeCode === userPayment?.pagoPA?.noticeCode
+        p.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
+        p.noticeCode === userPayment?.pagoPa?.noticeCode
     );
 
     const timelineEvent = paymentTimelineStep.find((item) => {
       const paymentDetails = item.details as PaidDetails;
 
       return (
-        paymentDetails.creditorTaxId === userPayment?.pagoPA?.creditorTaxId &&
-        paymentDetails.noticeCode === userPayment?.pagoPA?.noticeCode
+        paymentDetails.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
+        paymentDetails.noticeCode === userPayment?.pagoPa?.noticeCode
       );
     })?.details;
 
@@ -968,7 +968,7 @@ export const populatePaymentsPagoPaF24 = (
     }
 
     const pagoPAPayment = {
-      ...userPayment.pagoPA,
+      ...userPayment.pagoPa,
       ...checkoutPayment,
       ...timelineEvent,
     };
@@ -979,7 +979,7 @@ export const populatePaymentsPagoPaF24 = (
     }
 
     paymentDetails.push({
-      pagoPA: pagoPAPayment,
+      pagoPa: pagoPAPayment,
       f24: userPayment.f24,
     } as PaymentDetails);
   }

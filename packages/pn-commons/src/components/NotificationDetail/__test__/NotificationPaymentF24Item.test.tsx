@@ -7,7 +7,7 @@ import { F24PaymentDetails, PaymentAttachmentSName } from '../../../types';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
 
 describe('NotificationPaymentF24Item Component', () => {
-  const f24Item = payments.find((item) => !item.pagoPA && item.f24)?.f24 as F24PaymentDetails;
+  const f24Item = payments.find((item) => !item.pagoPa && item.f24)?.f24 as F24PaymentDetails;
 
   it('renders NotificationPaymentPagoPAItem - should show title of f24Item', () => {
     const item = { ...f24Item, title: 'F24 Rata' };

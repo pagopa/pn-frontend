@@ -38,7 +38,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).toHaveTextContent('detail.payment.subtitle');
     expect(f24Download).not.toBeInTheDocument();
     expect(pagoPABox).toHaveLength(
-      paymentsData.pagoPaF24.filter((payment) => payment.pagoPA).length
+      paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length
     );
   });
 
@@ -221,8 +221,8 @@ describe('NotificationPaymentRecipient Component', () => {
       pagoPaF24: [
         {
           ...paymentsData.pagoPaF24[0],
-          pagoPA: {
-            ...paymentsData.pagoPaF24[0].pagoPA,
+          pagoPa: {
+            ...paymentsData.pagoPaF24[0].pagoPa,
             recIndex: 1,
             attachmentIdx: 1,
           } as PagoPAPaymentFullDetails,
@@ -247,8 +247,8 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(handleDownloadAttachment).toBeCalledTimes(1);
     expect(handleDownloadAttachment).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
-      payment.pagoPaF24[0].pagoPA?.recIndex,
-      payment.pagoPaF24[0].pagoPA?.attachmentIdx
+      payment.pagoPaF24[0].pagoPa?.recIndex,
+      payment.pagoPaF24[0].pagoPa?.attachmentIdx
     );
   });
 });

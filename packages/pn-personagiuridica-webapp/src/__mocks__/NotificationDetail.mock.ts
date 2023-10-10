@@ -24,7 +24,7 @@ import { parseNotificationDetailForRecipient } from '../utility/notification.uti
 
 export const payments: Array<NotificationDetailPayment> = [
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695132',
       applyCost: true,
@@ -41,7 +41,7 @@ export const payments: Array<NotificationDetailPayment> = [
     },
   },
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695133',
       applyCost: true,
@@ -72,14 +72,14 @@ export const payments: Array<NotificationDetailPayment> = [
     },
   },
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695134',
       applyCost: false,
     },
   },
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695135',
       applyCost: false,

@@ -40,7 +40,7 @@ export type PagoPAPaymentFullDetails = PagoPAPaymentDetails &
   ExtRegistriesPaymentDetails;
 
 export interface PaymentDetails {
-  pagoPA?: PagoPAPaymentFullDetails;
+  pagoPa?: PagoPAPaymentFullDetails;
   f24?: F24PaymentDetails;
   isLoading?: boolean; // only fe
 }
@@ -277,7 +277,7 @@ export interface F24PaymentDetails {
 }
 
 export interface NotificationDetailPayment {
-  pagoPA?: PagoPAPaymentDetails;
+  pagoPa?: PagoPAPaymentDetails;
   f24?: F24PaymentDetails;
 }
 

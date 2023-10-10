@@ -134,11 +134,11 @@ describe('Notification detail redux state tests', () => {
     payments.forEach((payment) => {
       const attachmentIdx = payments.findIndex(
         (paymentMock) =>
-          payment.pagoPA?.noticeCode === paymentMock.pagoPA?.noticeCode &&
-          payment.pagoPA?.creditorTaxId === paymentMock.pagoPA?.creditorTaxId
+          payment.pagoPa?.noticeCode === paymentMock.pagoPa?.noticeCode &&
+          payment.pagoPa?.creditorTaxId === paymentMock.pagoPa?.creditorTaxId
       );
-      expect(payment.pagoPA?.attachmentIdx).toBe(attachmentIdx);
-      expect(payment.pagoPA?.recIndex).toBe(recipientIdx);
+      expect(payment.pagoPa?.attachmentIdx).toBe(attachmentIdx);
+      expect(payment.pagoPa?.recIndex).toBe(recipientIdx);
     });
   });
 
@@ -251,8 +251,8 @@ describe('Notification detail redux state tests', () => {
     const timelineRecipientPayments = currentRecipient?.payments?.filter((payment) =>
       payedTimelineEvents.some(
         (timelineEvent) =>
-          (timelineEvent.details as PaidDetails).creditorTaxId === payment.pagoPA?.creditorTaxId &&
-          (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPA?.noticeCode
+          (timelineEvent.details as PaidDetails).creditorTaxId === payment.pagoPa?.creditorTaxId &&
+          (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPa?.noticeCode
       )
     );
 
@@ -342,10 +342,10 @@ describe('Notification detail redux state tests', () => {
 
     const newState = actualState.map((payment) => {
       if (
-        payment.pagoPA?.creditorTaxId === failedPayment?.creditorTaxId &&
-        payment.pagoPA?.noticeCode === failedPayment?.noticeCode
+        payment.pagoPa?.creditorTaxId === failedPayment?.creditorTaxId &&
+        payment.pagoPa?.noticeCode === failedPayment?.noticeCode
       ) {
-        return { ...payment, pagoPA: { ...payment.pagoPA, status: PaymentStatus.SUCCEEDED } };
+        return { ...payment, pagoPa: { ...payment.pagoPa, status: PaymentStatus.SUCCEEDED } };
       }
       return payment;
     });

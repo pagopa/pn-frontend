@@ -285,10 +285,10 @@ const NotificationDetail = () => {
   const fetchPaymentsInfo = useCallback(
     (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
       const paymentInfoRequest = payments.reduce((acc: any, payment) => {
-        if (payment.pagoPA && Object.keys(payment.pagoPA).length > 0) {
+        if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
           acc.push({
-            noticeCode: payment.pagoPA.noticeCode,
-            creditorTaxId: payment.pagoPA.creditorTaxId,
+            noticeCode: payment.pagoPa.noticeCode,
+            creditorTaxId: payment.pagoPa.creditorTaxId,
           });
         }
         return acc;

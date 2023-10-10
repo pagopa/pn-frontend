@@ -395,7 +395,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
 
 const paymentsPagoPa: Array<NotificationDetailPayment> = [
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011689142547191',
       applyCost: true,
@@ -412,7 +412,7 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
     },
   },
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011689142547192',
       applyCost: true,
@@ -432,7 +432,7 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
 
 const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
   {
-    pagoPA: {
+    pagoPa: {
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695133',
       applyCost: true,
