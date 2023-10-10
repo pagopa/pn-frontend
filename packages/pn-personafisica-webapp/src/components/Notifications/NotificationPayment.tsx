@@ -444,10 +444,9 @@ const NotificationPayment: React.FC<Props> = ({
         );
       case MessageActionType.COPY_TO_CLIPBOARD:
         return (
-          <CopyToClipboard
-            getValue={() => message.errorCode || ''}
-            text={t('detail.payment.copy-to-clipboard', { ns: 'notifiche' })}
-          />
+          <CopyToClipboard getValue={() => message.errorCode || ''}>
+            {t('detail.payment.copy-to-clipboard', { ns: 'notifiche' })}
+          </CopyToClipboard>
         );
       default:
         return;

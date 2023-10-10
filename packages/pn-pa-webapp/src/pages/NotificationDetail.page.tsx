@@ -332,14 +332,11 @@ const NotificationDetail: React.FC = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}>
-                <TimedMessage
-                  timeout={timeoutMessage}
-                  message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  }
-                />
+                <TimedMessage timeout={timeoutMessage}>
+                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>
+                </TimedMessage>
                 <NotificationDetailTimeline
                   recipients={recipients}
                   statusHistory={notification.notificationStatusHistory}

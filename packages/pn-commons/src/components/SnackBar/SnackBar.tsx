@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, AlertTitle, IconButton, Snackbar } from '@mui/material';
+import { Alert, IconButton, Snackbar } from '@mui/material';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MessageType } from '../../types/MessageType';
@@ -11,10 +11,6 @@ type Props = {
   open: boolean;
   /** message type (error, success, info, warning) */
   type: MessageType;
-  /** title to be shown */
-  title?: React.ReactNode;
-  /** message to be shown */
-  message: React.ReactNode;
   /** A closing delay: if specified the sneakbar would close itself */
   closingDelay?: number;
   /** onClose action */
@@ -22,15 +18,14 @@ type Props = {
   variant?: 'outlined' | 'standard' | 'filled';
 };
 
-const SnackBar = ({
-  title,
-  message,
+const SnackBar: React.FC<Props> = ({
+  children,
   open,
   type,
   closingDelay,
   onClose,
   variant = 'outlined',
-}: Props) => {
+}) => {
   const [openStatus, setOpenStatus] = useState(open);
   const isMobile = useIsMobile();
 
@@ -50,6 +45,7 @@ const SnackBar = ({
       return () => clearTimeout(timer);
     }
     // since it returns in a conditional branch, it must return in all cases
+    // eslint-disable-next-line sonarjs/no-redundant-jump
     return;
   }, []);
 
@@ -88,8 +84,7 @@ const SnackBar = ({
               }}
               variant={variant}
             >
-              {title && <AlertTitle id={`alert-api-status}`}>{title}</AlertTitle>}
-              {message}
+              {children}
             </Alert>
           </Snackbar>
         </div>

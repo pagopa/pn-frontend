@@ -10,7 +10,6 @@ interface Props {
   /** callback used to retrieve the text to be copied */
   getValue: () => string;
   /** an optional text to be displayed near the "copy to clipboard" icon */
-  text?: string;
   tooltipMode?: boolean;
   tooltip?: string;
   tooltipBefore?: string;
@@ -19,7 +18,7 @@ interface Props {
 
 const CopyToClipboard: React.FC<Props> = ({
   getValue,
-  text,
+  children,
   tooltipMode,
   tooltip = '',
   tooltipBefore = '',
@@ -68,7 +67,7 @@ const CopyToClipboard: React.FC<Props> = ({
         </Tooltip>
       )}
       {!copied && <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />}
-      {text}
+      {children}
     </Button>
   );
 };

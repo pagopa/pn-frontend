@@ -20,11 +20,9 @@ describe('CopyToClipboard component', () => {
 
   it('renders properly and works as expected', async () => {
     const { getByTestId, getByRole, getByText } = render(
-      <CopyToClipboard
-        getValue={() => 'text-to-be-copied'}
-        text="text-to-be-displayed"
-        tooltipMode
-      />
+      <CopyToClipboard getValue={() => 'text-to-be-copied'} tooltipMode>
+        text-to-be-displayed
+      </CopyToClipboard>
     );
     const copy_button = getByRole('button', { name: /text-to-be-displayed/ });
     expect(copy_button).toBeInTheDocument();
