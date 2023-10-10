@@ -171,9 +171,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               >
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
                 &nbsp;
-                {selectedPayment && selectedPayment.amount
-                  ? formatEurocentToCurrency(selectedPayment.amount)
-                  : null}
+                {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
 
               <Button
@@ -210,7 +208,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </>
       )}
 
-      {!isCancelled && f24Only.length && (
+      {!isCancelled && f24Only.length > 0 && (
         <Box data-testid="f24only-box">
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
             <Typography variant="overline" mt={3}>

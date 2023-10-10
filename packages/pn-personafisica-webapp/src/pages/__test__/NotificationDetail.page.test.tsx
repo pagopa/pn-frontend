@@ -73,9 +73,14 @@ describe('NotificationDetail Page', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
+  const original = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '' },
+    });
   });
 
   afterEach(() => {
@@ -84,10 +89,12 @@ describe('NotificationDetail Page', () => {
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
+    window.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -259,6 +266,7 @@ describe('NotificationDetail Page', () => {
         `/delivery/notifications/received/${notificationToFe.iun}/attachments/documents/0`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
   });
 
   it('executes the legal fact download handler', async () => {
@@ -287,6 +295,8 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
+    window.location.href = '';
     const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
@@ -309,6 +319,7 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
   });
 
   it('executes the downtimws legal fact download handler', async () => {
@@ -340,6 +351,7 @@ describe('NotificationDetail Page', () => {
         `/downtime/v1/legal-facts/${simpleDowntimeLogPage.downtimes[0].legalFactId}`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
   });
 
   it('normal navigation - includes back button', async () => {
@@ -489,6 +501,7 @@ describe('NotificationDetail Page', () => {
     );
   });
 
+  // TODO: rimuovere il mock del dispatch e integrare la nuova logica tramite mock adapter
   it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
     const mockDispatchFn = jest.fn(() => ({
       unwrap: () => Promise.resolve(),
@@ -523,6 +536,7 @@ describe('NotificationDetail Page', () => {
       '[data-testid="radio-button"] input'
     ) as HTMLInputElement;
 
+    // TODO: togliere return oppure sostituirlo con fail(messaggio)
     if (!radioButton) return;
 
     fireEvent.click(radioButton);

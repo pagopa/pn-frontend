@@ -6,6 +6,7 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentAttachmentNameType,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
@@ -114,7 +115,7 @@ export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
 );
 
 export const getPaymentAttachment = createAsyncThunk<
-  { url: string },
+  PaymentAttachment,
   {
     iun: string;
     attachmentName: PaymentAttachmentNameType;

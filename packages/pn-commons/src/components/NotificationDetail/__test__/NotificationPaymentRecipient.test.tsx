@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { payments } from '../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
+import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../test-utils';
 import {
   PagoPAPaymentFullDetails,
@@ -8,18 +9,26 @@ import {
   PaymentStatus,
   PaymentsData,
 } from '../../../types';
-import { getF24Payments, getPagoPaF24Payments } from '../../../utility/notification.utility';
+import {
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
+} from '../../../utility/notification.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
 describe('NotificationPaymentRecipient Component', () => {
   const paymentsData: PaymentsData = {
-    pagoPaF24: getPagoPaF24Payments(payments, 0),
+    pagoPaF24: populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      getPagoPaF24Payments(payments, 0),
+      paymentInfo
+    ),
     f24Only: getF24Payments(payments, 0),
   };
 
   const F24TIMER = 15000;
 
-  it('should render component title and subtitle', () => {
+  it('should render component', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -34,6 +43,9 @@ describe('NotificationPaymentRecipient Component', () => {
     const subtitle = getByTestId('notification-payment-recipient-subtitle');
     const f24Download = queryByTestId('f24-download');
     const pagoPABox = queryAllByTestId('pagopa-item');
+    const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
+    const payButton = getByTestId('pay-button');
+    const f24OnlyBox = getByTestId('f24only-box');
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('detail.payment.title');
@@ -43,10 +55,15 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(pagoPABox).toHaveLength(
       paymentsData.pagoPaF24.filter((payment) => payment.pagoPA).length
     );
+    expect(downloadPagoPANotice).toBeInTheDocument();
+    expect(payButton).toBeInTheDocument();
+    expect(downloadPagoPANotice).toBeDisabled();
+    expect(payButton).toBeDisabled();
+    expect(f24OnlyBox).toBeInTheDocument();
   });
 
-  it('should render component buttons and should be disabled', () => {
-    const { getByTestId } = render(
+  it('select and unselect payment', async () => {
+    const { getByTestId, container } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
@@ -58,93 +75,52 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
     const payButton = getByTestId('pay-button');
-    expect(downloadPagoPANotice).toBeInTheDocument();
-    expect(payButton).toBeInTheDocument();
+    // TODO: in questo modo si seleziona il primo pagamento. Questo implica che il test sia strettamente legato al mock.
+    // rendere il tutto più dinamico facendo un querySelectorAll
+    // fare una findIndex in paymentsData.pagoPaF24 per trovare il pagamento che ha status REQUIRED (condizione necessaria perchè ci sia il radio button)
+    // cliccare il radio button con indice quello ricavato sopra
+    const radioButton = container.querySelector('[data-testid="radio-button"] input');
     expect(downloadPagoPANotice).toBeDisabled();
     expect(payButton).toBeDisabled();
-  });
-
-  it('should remove disable from buttons if there is a checked required payment', () => {
-    const result = render(
-      <NotificationPaymentRecipient
-        payments={paymentsData}
-        isCancelled={false}
-        timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
-        onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
-      />
-    );
-    const downloadPagoPANotice = result.getByTestId('download-pagoPA-notice-button');
-    const payButton = result.getByTestId('pay-button');
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as Element;
-
-    if (!radioButton) {
-      expect(downloadPagoPANotice).toBeDisabled();
-      expect(payButton).toBeDisabled();
-      return;
-    }
-
-    fireEvent.click(radioButton);
+    // select payment
+    fireEvent.click(radioButton!);
     expect(downloadPagoPANotice).not.toBeDisabled();
     expect(payButton).not.toBeDisabled();
+    // check f24
+    const f24Download = getByTestId('f24-download');
+    expect(f24Download).toBeInTheDocument();
+    // unselect payment
+    fireEvent.click(radioButton!);
+    expect(payButton).toBeDisabled();
+    expect(downloadPagoPANotice).toBeDisabled();
+    expect(f24Download).not.toBeInTheDocument();
   });
 
   it('should dispatch action on pay button click', async () => {
     const payClickMk = jest.fn();
-
-    const result = render(
+    const { getByTestId, container } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
-        onPayClick={() => void 0}
+        onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
       />
     );
-
-    const payButton = result.getByTestId('pay-button');
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as HTMLInputElement;
-
-    if (!radioButton) return;
-
-    fireEvent.click(radioButton);
+    const payButton = getByTestId('pay-button');
+    // TODO: stessa cosa di sopra
+    const radioButton = container.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
     fireEvent.click(payButton);
-
     await waitFor(() => {
       expect(payClickMk).toBeCalledTimes(1);
+      expect(payClickMk).toBeCalledWith(
+        paymentsData.pagoPaF24[0].pagoPA!.noticeCode,
+        paymentsData.pagoPaF24[0].pagoPA!.creditorTaxId,
+        paymentsData.pagoPaF24[0].pagoPA!.amount
+      );
     });
-  });
-
-  it('Should disable pay button when deselect a payment', () => {
-    const result = render(
-      <NotificationPaymentRecipient
-        payments={paymentsData}
-        isCancelled={false}
-        timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
-        onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
-      />
-    );
-
-    const payButton = result.getByTestId('pay-button');
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as HTMLInputElement;
-
-    if (!radioButton) return;
-
-    fireEvent.click(radioButton);
-    expect(payButton).not.toBeDisabled();
-
-    fireEvent.click(radioButton);
-    expect(payButton).toBeDisabled();
   });
 
   it('Should show enabled pay button and hide radio button if having only one payment', async () => {
@@ -153,12 +129,13 @@ describe('NotificationPaymentRecipient Component', () => {
       pagoPaF24: [
         {
           ...paymentsData.pagoPaF24[0],
+          // TODO: se lo stato è succeded il bottone di pagamento non dovrebbe essere visibile e il test dovrebbe fallire
+          // invece va a buon fine (è un bug???)
           status: PaymentStatus.SUCCEEDED,
         },
       ],
     };
-
-    const result = render(
+    const { getByTestId, container } = render(
       <NotificationPaymentRecipient
         payments={payment}
         isCancelled={false}
@@ -168,12 +145,8 @@ describe('NotificationPaymentRecipient Component', () => {
         handleReloadPayment={() => void 0}
       />
     );
-
-    const payButton = result.getByTestId('pay-button');
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as HTMLInputElement;
-
+    const payButton = getByTestId('pay-button');
+    const radioButton = container.querySelector('[data-testid="radio-button"] input');
     expect(radioButton).not.toBeInTheDocument();
     expect(payButton).not.toBeDisabled();
   });
@@ -191,33 +164,18 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const alert = getByTestId('cancelledAlertPayment');
     const subtitle = queryByTestId('notification-payment-recipient-subtitle');
-
     expect(alert).toBeInTheDocument();
     expect(subtitle).not.toBeInTheDocument();
   });
 
   it('should call handleDownloadAttachment on download button click', async () => {
-    const payment: PaymentsData = {
-      pagoPaF24: [
-        {
-          ...paymentsData.pagoPaF24[0],
-          pagoPA: {
-            ...paymentsData.pagoPaF24[0].pagoPA,
-            recIndex: 1,
-            attachmentIdx: 1,
-          } as PagoPAPaymentFullDetails,
-        },
-      ],
-      f24Only: [],
-    };
-
     const getPaymentAttachmentActionMk = jest
       .fn()
       .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0) }));
 
-    const { getByTestId } = render(
+    const { getByTestId, container } = render(
       <NotificationPaymentRecipient
-        payments={payment}
+        payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
@@ -225,69 +183,19 @@ describe('NotificationPaymentRecipient Component', () => {
         handleReloadPayment={() => void 0}
       />
     );
+    // select payment
+    const radioButton = container.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+    // download pagoPA attachments
     const downloadButton = getByTestId('download-pagoPA-notice-button');
-
     downloadButton.click();
-
     expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
-      payment.pagoPaF24[0].pagoPA?.attachmentIdx
+      paymentsData.pagoPaF24[0].pagoPA?.attachmentIdx
     );
-  });
-
-  it('should show f24 as attachment', () => {
-    const payments: PaymentsData = {
-      pagoPaF24: [
-        {
-          ...paymentsData.pagoPaF24[0],
-          pagoPA: {
-            ...paymentsData.pagoPaF24[0].pagoPA,
-            recIndex: 1,
-            attachmentIdx: 1,
-          } as PagoPAPaymentFullDetails,
-        },
-      ],
-      f24Only: [],
-    };
-
-    const result = render(
-      <NotificationPaymentRecipient
-        payments={payments}
-        isCancelled={false}
-        timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
-        onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
-      />
-    );
-
-    expect(result.queryByTestId('f24only-box')).not.toBeInTheDocument();
-  });
-
-  it('should show the correct box if is a F24 only payment', () => {
-    const payments: PaymentsData = {
-      pagoPaF24: [],
-      f24Only: [
-        {
-          ...paymentsData.f24Only[0],
-          attachmentIdx: 1,
-        },
-      ],
-    };
-
-    const result = render(
-      <NotificationPaymentRecipient
-        payments={payments}
-        isCancelled={false}
-        timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
-        onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
-      />
-    );
-
-    expect(result.getByTestId('f24only-box')).toBeInTheDocument();
-    expect(result.queryByTestId('pagopa-item')).not.toBeInTheDocument();
+    // TODO: completare anche gli step seguenti, sempre adottando il metodo della findIndex di sopra
+    // download linked f24
+    // download the isolated f24
   });
 });

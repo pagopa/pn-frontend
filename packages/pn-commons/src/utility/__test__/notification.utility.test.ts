@@ -1213,4 +1213,6 @@ describe('Populate pagoPA and F24 payments', () => {
 
     expect(mappedPayments).toStrictEqual(res);
   });
+
+  // TODO: testare anche getF24Payments e getPagoPaF24Payments
 });

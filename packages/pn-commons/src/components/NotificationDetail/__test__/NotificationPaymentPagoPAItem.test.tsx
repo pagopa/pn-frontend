@@ -22,8 +22,13 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   const pagoPAItem = pagoPAItems.find((item) => item.pagoPA)?.pagoPA as PagoPAPaymentFullDetails;
 
   it('renders NotificationPaymentPagoPAItem - should show radio button when status is REQUIRED', () => {
-    const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
-    const result = render(
+    const item = {
+      ...pagoPAItem,
+      status: PaymentStatus.REQUIRED,
+      applyCost: false,
+      amount: undefined,
+    };
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -33,13 +38,21 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const radioButton = result.getByTestId('radio-button');
+    const radioButton = getByTestId('radio-button');
     expect(radioButton).toBeInTheDocument();
+    // no caption
+    const caption = queryByTestId('apply-costs-caption');
+    expect(caption).not.toBeInTheDocument();
+    // no chip
+    const chip = queryByTestId(/statusChip-detail\.payment\.status\.\w+/);
+    expect(chip).not.toBeInTheDocument();
+    // no amount
+    const amountContainer = queryByTestId('payment-amount');
+    expect(amountContainer).not.toBeInTheDocument();
   });
 
   it('renders NotificationPaymentPagoPAItem - should show caption if applyCost is true', () => {
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={{ ...pagoPAItem, amount: 999, applyCost: true }}
         loading={false}
@@ -49,14 +62,14 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const caption = result.getByTestId('apply-costs-caption');
+    const caption = getByTestId('apply-costs-caption');
     expect(caption).toBeInTheDocument();
+    expect(caption).toHaveTextContent('detail.payment.included-costs');
   });
 
   it('renders NotificationPaymentPagoPAItem - should show badge when status is SUCCEEDED and not show radio', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.SUCCEEDED };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -66,10 +79,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const chip = result.getByTestId('statusChip-detail.payment.status.succeded');
-    const radio = result.queryByTestId('radio-button');
-
+    const chip = getByTestId('statusChip-detail.payment.status.succeded');
+    const radio = queryByTestId('radio-button');
     expect(radio).not.toBeInTheDocument();
     expect(chip).toBeInTheDocument();
   });
@@ -80,7 +91,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.PAYMENT_EXPIRED,
     };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -90,17 +101,15 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const chip = result.getByTestId('statusChip-detail.payment.status.failed');
-    const radio = result.queryByTestId('radio-button');
-
+    const chip = getByTestId('statusChip-detail.payment.status.failed');
+    const radio = queryByTestId('radio-button');
     expect(radio).not.toBeInTheDocument();
     expect(chip).toBeInTheDocument();
   });
 
   it('renders NotificationPaymentPagoPAItem - should show badge when status is INPROGRESS and not show radio', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.INPROGRESS };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -110,10 +119,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const chip = result.getByTestId('statusChip-detail.payment.status.inprogress');
-    const radio = result.queryByTestId('radio-button');
-
+    const chip = getByTestId('statusChip-detail.payment.status.inprogress');
+    const radio = queryByTestId('radio-button');
     expect(radio).not.toBeInTheDocument();
     expect(chip).toBeInTheDocument();
   });
@@ -121,7 +128,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   it('renders NotificationPaymentPagoPAItem - should show amount if present', () => {
     const amount = 1000;
     const item = { ...pagoPAItem, amount };
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -131,36 +138,16 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-    const amountContainer = result.getByTestId('payment-amount');
+    const amountContainer = getByTestId('payment-amount');
     expect(amountContainer).toHaveTextContent(
       formatEurocentToCurrency(amount).replace(/\u00a0/g, ' ')
     );
   });
 
-  it('renders NotificationPaymentPagoPAItem - radio button should be checked if isSelected', () => {
-    const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
-    const result = render(
-      <NotificationPaymentPagoPAItem
-        pagoPAItem={item}
-        loading={false}
-        isSelected={true}
-        handleReloadPayment={() => void 0}
-        handleDeselectPayment={() => void 0}
-        isCancelled={false}
-      />
-    );
-
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as Element;
-
-    expect(radioButton).toBeChecked();
-  });
-
   it('Should call handleDeselectPayment when radio button is selected and is clicked', async () => {
     const item = { ...pagoPAItem, status: PaymentStatus.REQUIRED };
     const handleDeselectPaymentMk = jest.fn();
-    const result = render(
+    const { container } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -170,12 +157,9 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as Element;
-
-    fireEvent.click(radioButton);
+    const radioButton = container.querySelector('[data-testid="radio-button"] input');
+    expect(radioButton).toBeChecked();
+    fireEvent.click(radioButton!);
     expect(handleDeselectPaymentMk).toBeCalledTimes(1);
   });
 
@@ -186,7 +170,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       detail: PaymentInfoDetail.GENERIC_ERROR,
     };
     const handleReloadPaymentMk = jest.fn();
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -196,10 +180,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const reloadButton = result.getByTestId('reload-button');
+    const reloadButton = getByTestId('reload-button');
     fireEvent.click(reloadButton);
-
     await waitFor(() => {
       expect(handleReloadPaymentMk).toBeCalledTimes(1);
     });
@@ -211,7 +193,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.PAYMENT_CANCELED,
     };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -221,11 +203,9 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const chip = result.getByTestId('statusChip-detail.payment.status.canceled');
-    const radio = result.queryByTestId('radio-button');
-    const reloadButton = result.queryByTestId('reload-button');
-
+    const chip = getByTestId('statusChip-detail.payment.status.canceled');
+    const radio = queryByTestId('radio-button');
+    const reloadButton = queryByTestId('reload-button');
     expect(chip).toBeInTheDocument();
     expect(radio).not.toBeInTheDocument();
     expect(reloadButton).not.toBeInTheDocument();
@@ -237,7 +217,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.GENERIC_ERROR,
     };
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -247,10 +227,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const message = result.getByTestId('generic-error-message');
-    const reloadButton = result.getByTestId('reload-button');
-
+    const message = getByTestId('generic-error-message');
+    const reloadButton = getByTestId('reload-button');
     expect(reloadButton).toBeInTheDocument();
     expect(message).toHaveTextContent('detail.payment.error.generic-error');
   });
@@ -261,7 +239,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
     };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -271,10 +249,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const errorMessage = result.getByTestId('assistence-error-message');
-    const reloadButton = result.queryByTestId('reload-button');
-
+    const errorMessage = getByTestId('assistence-error-message');
+    const reloadButton = queryByTestId('reload-button');
     expect(reloadButton).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('detail.payment.error.notice-error');
     expect(errorMessage).toHaveTextContent('detail.payment.error.assistence');
@@ -286,7 +262,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.DOMAIN_UNKNOWN,
     };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -296,10 +272,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const errorMessage = result.getByTestId('assistence-error-message');
-    const reloadButton = result.queryByTestId('reload-button');
-
+    const errorMessage = getByTestId('assistence-error-message');
+    const reloadButton = queryByTestId('reload-button');
     expect(reloadButton).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('detail.payment.error.notice-error');
     expect(errorMessage).toHaveTextContent('detail.payment.error.assistence');
@@ -311,7 +285,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.PAYMENT_UNKNOWN,
     };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -321,10 +295,8 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const errorMessage = result.getByTestId('assistence-error-message');
-    const reloadButton = result.queryByTestId('reload-button');
-
+    const errorMessage = getByTestId('assistence-error-message');
+    const reloadButton = queryByTestId('reload-button');
     expect(reloadButton).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('detail.payment.error.notice-error');
     expect(errorMessage).toHaveTextContent('detail.payment.error.assistence');
@@ -336,7 +308,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.PAYMENT_DUPLICATED,
     };
-    const result = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -346,16 +318,14 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-
-    const errorMessage = result.getByTestId('payment-duplicated-message');
-    const reloadButton = result.queryByTestId('reload-button');
-
+    const errorMessage = getByTestId('payment-duplicated-message');
+    const reloadButton = queryByTestId('reload-button');
     expect(reloadButton).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('detail.payment.error.duplicated');
   });
 
   it('should show creditorTaxId if notification is Cancelled', () => {
-    const result = render(
+    const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={pagoPAItem}
         loading={false}
@@ -365,8 +335,10 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={true}
       />
     );
-
-    const creditorTaxId = result.getByTestId('creditorTaxId');
+    const creditorTaxId = getByTestId('creditorTaxId');
     expect(creditorTaxId).toBeInTheDocument();
+    expect(creditorTaxId).toHaveTextContent(pagoPAItem.creditorTaxId);
   });
 });
+
+// TODO: aggiungere caso di test loading=true e verificare che venga mostrato lo skeleton e non tutto il resto

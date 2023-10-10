@@ -6,6 +6,7 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentAttachmentNameType,
   formatDate,
   parseNotificationDetail,
@@ -188,12 +189,12 @@ export const NotificationsApi = {
     attachmentName: PaymentAttachmentNameType,
     recIndex: number,
     attachmentIdx?: number
-  ): Promise<{ url: string }> =>
+  ): Promise<PaymentAttachment> =>
     apiClient
-      .get<{ url: string }>(
+      .get<PaymentAttachment>(
         NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, recIndex, attachmentIdx)
       )
-      .then((response) => getDownloadUrl(response)),
+      .then((response) => response.data),
 
   /**
    * Cancel notification

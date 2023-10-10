@@ -15,6 +15,7 @@ import {
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, notificationToFe } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -27,7 +28,6 @@ import {
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
-import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 
 const mockNavigateFn = jest.fn();
 let mockIsDelegate = false;
@@ -73,9 +73,14 @@ describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
+  const original = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '' },
+    });
   });
 
   afterEach(() => {
@@ -83,10 +88,12 @@ describe('NotificationDetail Page', () => {
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
+    window.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -260,6 +267,7 @@ describe('NotificationDetail Page', () => {
         `/delivery/notifications/received/${notificationToFe.iun}/attachments/documents/0`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
   });
 
   it('executes the legal fact download handler', async () => {
@@ -290,6 +298,8 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
+    window.location.href = '';
     const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
@@ -312,6 +322,7 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
   });
 
   it('executes the downtimws legal fact download handler', async () => {
@@ -346,6 +357,7 @@ describe('NotificationDetail Page', () => {
         `/downtime/v1/legal-facts/${simpleDowntimeLogPage.downtimes[0].legalFactId}`
       );
     });
+    expect(window.location.href).toBe('https://mocked-url-com');
   });
 
   it('normal navigation - includes back button', async () => {
