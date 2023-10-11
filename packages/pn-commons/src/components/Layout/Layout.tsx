@@ -47,6 +47,8 @@ type Props = {
   showFooter?: boolean;
   /** Shows or hides terms of service */
   hasTermsOfService?: boolean;
+  /** Base Url of Selfcare for token-exchange */
+  selfcareBaseUrl?: string;
 };
 
 export default function Layout({
@@ -70,6 +72,7 @@ export default function Layout({
   showHeader = true,
   showFooter = true,
   hasTermsOfService,
+  selfcareBaseUrl
 }: Props) {
   return (
     <ErrorBoundary
@@ -95,6 +98,7 @@ export default function Layout({
               onAssistanceClick={onAssistanceClick}
               eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
               isLogged={isLogged}
+              selfcareBaseUrl={selfcareBaseUrl}
             />
           )}
           <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>

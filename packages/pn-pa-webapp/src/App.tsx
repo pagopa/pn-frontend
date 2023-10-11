@@ -77,6 +77,7 @@ const ActualApp = () => {
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
   const sessionToken = loggedUser.sessionToken;
+  const {SELFCARE_BASE_URL} = getConfiguration();
 
   const configuration = useMemo(() => getConfiguration(), []);
 
@@ -226,6 +227,7 @@ const ActualApp = () => {
         })
       ),
   });
+  
 
   return (
     <>
@@ -262,6 +264,7 @@ const ActualApp = () => {
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
+        selfcareBaseUrl={SELFCARE_BASE_URL}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}

@@ -35,6 +35,8 @@ type HeaderProps = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
+  /** Base Url of Selfcare for token-exchange */
+  selfcareBaseUrl?: string;
 };
 
 const Header = ({
@@ -49,12 +51,14 @@ const Header = ({
   onAssistanceClick,
   eventTrackingCallbackProductSwitch,
   isLogged,
+  selfcareBaseUrl
 }: HeaderProps) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
     label: 'PagoPA S.p.A.',
     title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
   };
+  
 
   const handleProductSelection = (product: ProductEntity) => {
     if (eventTrackingCallbackProductSwitch) {
@@ -75,6 +79,12 @@ const Header = ({
       sessionStorage.clear();
     }
   };
+  const handlePartySelection = (party: PartyEntity) => {
+    console.log(party);
+    window.location.assign(
+      `${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=prod-pn`
+    )
+  }
 
   const enableHeaderProduct =
     showHeaderProduct &&
@@ -98,6 +108,7 @@ const Header = ({
           productsList={productsList}
           partyList={partyList}
           onSelectedProduct={handleProductSelection}
+          onSelectedParty={handlePartySelection}
         />
       )}
     </AppBar>
@@ -105,3 +116,4 @@ const Header = ({
 };
 
 export default Header;
+
