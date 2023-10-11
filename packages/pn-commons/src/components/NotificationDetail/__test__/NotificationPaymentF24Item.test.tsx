@@ -207,7 +207,7 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(window.location.href).toBe(downloadUrl);
   });
 
-  it('shoudl show error when interval is finished', async () => {
+  it('should show error when interval is finished', async () => {
     jest.useFakeTimers();
     let result;
     const item = { ...f24Item, attachmentIdx: 1 };
@@ -246,7 +246,7 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
   });
 
-  it('shoudl show error when api goes in error', async () => {
+  it('should show error when api goes in error', async () => {
     jest.useFakeTimers();
     let result;
     const item = { ...f24Item, attachmentIdx: 1 };
@@ -267,5 +267,34 @@ describe('NotificationPaymentF24Item Component', () => {
     const error = await waitFor(() => result.getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
+  });
+
+  it('should show applyCost caption if is present and only if is not a PagoPA attachment', () => {
+    const item = { ...f24Item, applyCost: true };
+    const { getByTestId } = render(
+      <NotificationPaymentF24Item
+        f24Item={item}
+        timerF24={TIMERF24}
+        getPaymentAttachmentAction={jest.fn()}
+      />
+    );
+
+    const caption = getByTestId('f24-apply-costs-caption');
+    expect(caption).toBeInTheDocument();
+  });
+
+  it('should not show applyCost caption if is presente but is a PagoPA attachment', () => {
+    const item = { ...f24Item, applyCost: true };
+    const { queryByTestId } = render(
+      <NotificationPaymentF24Item
+        f24Item={item}
+        timerF24={TIMERF24}
+        getPaymentAttachmentAction={jest.fn()}
+        isPagoPaAttachment
+      />
+    );
+
+    const caption = queryByTestId('f24-apply-costs-caption');
+    expect(caption).not.toBeInTheDocument();
   });
 });
