@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useState } from 'react';
+import React, { Fragment, memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
@@ -46,9 +46,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
-  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(
-    isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null
-  );
+  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(null);
 
   const allPaymentsIsPaid = pagoPaF24.every(
     (payment) => payment.pagoPa?.status === PaymentStatus.SUCCEEDED
@@ -107,6 +105,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         });
     }
   };
+
+  useEffect(() => {
+    setSelectedPayment(isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null);
+  }, [payments]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
