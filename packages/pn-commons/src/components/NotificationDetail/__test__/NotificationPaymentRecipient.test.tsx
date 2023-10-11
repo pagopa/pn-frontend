@@ -169,12 +169,12 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it.skip('should call handleDownloadAttachment on download button click', async () => {
+  it('should call handleDownloadAttachment on download button click', async () => {
     const getPaymentAttachmentActionMk = jest
       .fn()
-      .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0) }));
+      .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
 
-    const { getByTestId, queryAllByTestId, container } = render(
+    const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
@@ -201,16 +201,6 @@ describe('NotificationPaymentRecipient Component', () => {
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.attachmentIdx
     );
 
-    // TODO: in questo modo si seleziona il primo pagamento. Questo implica che il test sia strettamente legato al mock.
-    // rendere il tutto più dinamico facendo un querySelectorAll
-    // fare una findIndex in paymentsData.pagoPaF24 per trovare il pagamento che ha status REQUIRED (condizione necessaria perchè ci sia il radio button)
-    // cliccare il radio button con indice quello ricavato sopra
-
-    await waitFor(() => {
-      fireEvent.click(radioButton!);
-    });
-
-    console.log(container.innerHTML);
     const attachedF24 = getByTestId('f24-download');
     const attachedF24DownloadButton = attachedF24.querySelector(
       '[data-testid="download-f24-button"]'
