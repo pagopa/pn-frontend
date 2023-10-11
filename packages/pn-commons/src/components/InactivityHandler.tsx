@@ -1,14 +1,13 @@
-import { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 type Props = {
   /** Inactivity timer (in milliseconds) */
   inactivityTimer: number;
   /** Callback called when timer expires */
   onTimerExpired: () => void;
-  children: ReactNode;
 };
 
-const InactivityHandler = ({ inactivityTimer, children, onTimerExpired }: Props) => {
+const InactivityHandler: React.FC<Props> = ({ inactivityTimer, children, onTimerExpired }) => {
   const [initTimeout, setInitTimeout] = useState(true);
 
   const resetTimer = () => setInitTimeout(!initTimeout);

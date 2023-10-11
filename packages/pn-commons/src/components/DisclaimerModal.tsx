@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react';
+
 import {
   Box,
   Button,
@@ -8,27 +10,26 @@ import {
   DialogTitle,
   FormControlLabel,
 } from '@mui/material';
-import { useMemo, useState } from 'react';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+
 import { useIsMobile } from '../hooks';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
   onConfirm: () => void;
   onCancel: () => void;
   confirmLabel: string;
   title?: string;
-  content?: string;
   checkboxLabel?: string;
 };
 
-const DisclaimerModal = ({
+const DisclaimerModal: React.FC<Props> = ({
   onConfirm,
   onCancel,
   confirmLabel,
   title,
-  content,
+  children,
   checkboxLabel,
-}: Props) => {
+}) => {
   const isMobile = useIsMobile();
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const [checked, setChecked] = useState(false);
@@ -42,7 +43,7 @@ const DisclaimerModal = ({
     <Dialog open={true} data-testid="disclaimerDialog">
       {title && <DialogTitle sx={{ p: 4, pb: 2 }}>{title}</DialogTitle>}
       <DialogContent sx={{ p: 4 }}>
-        {content && <Box>{content}</Box>}
+        {children && <Box>{children}</Box>}
         {checkboxLabel && (
           <Box sx={{ mt: 2, ml: 0.5 }}>
             <FormControlLabel

@@ -76,13 +76,9 @@ const SessionGuardRender = () => {
 
   const renderIfInitialized = () =>
     isUnauthorizedUser || hasTosApiErrors || isClosedSession ? (
-      <SessionModal
-        open
-        title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
-        handleClose={goToSelfcareLogin}
-        initTimeout
-      />
+      <SessionModal open title={goodbyeMessage.title} handleClose={goToSelfcareLogin} initTimeout>
+        {goodbyeMessage.message}
+      </SessionModal>
     ) : isAnonymousUser || getConfiguration().DISABLE_INACTIVITY_HANDLER ? (
       <Outlet />
     ) : (

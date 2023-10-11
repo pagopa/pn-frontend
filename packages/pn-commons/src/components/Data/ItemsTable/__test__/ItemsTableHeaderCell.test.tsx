@@ -4,8 +4,6 @@ import { Typography } from '@mui/material';
 
 import { fireEvent, render } from '../../../../test-utils';
 import { Item, Sort } from '../../../../types';
-import ItemsTable from '../../ItemsTable';
-import ItemsTableHeader from '../ItemsTableHeader';
 import ItemsTableHeaderCell from '../ItemsTableHeaderCell';
 
 describe('ItemsTableHeaderCell', () => {
@@ -29,27 +27,31 @@ describe('ItemsTableHeaderCell', () => {
 
   it('render component', () => {
     const { container } = render(
-      <ItemsTable>
-        <ItemsTableHeader>
-          <ItemsTableHeaderCell column={mockColumn} />
-        </ItemsTableHeader>
-      </ItemsTable>
+      <table>
+        <thead>
+          <tr>
+            <ItemsTableHeaderCell column={mockColumn} />
+          </tr>
+        </thead>
+      </table>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
   });
 
   it('click cell event', () => {
     const { getByTestId } = render(
-      <ItemsTable>
-        <ItemsTableHeader>
-          <ItemsTableHeaderCell
-            sort={mockSort}
-            testId="cell"
-            column={mockColumn}
-            handleClick={() => mockFn()}
-          />
-        </ItemsTableHeader>
-      </ItemsTable>
+      <table>
+        <thead>
+          <tr>
+            <ItemsTableHeaderCell
+              sort={mockSort}
+              testId="cell"
+              column={mockColumn}
+              handleClick={() => mockFn()}
+            />
+          </tr>
+        </thead>
+      </table>
     );
 
     const cell = getByTestId('cell.sort.name');

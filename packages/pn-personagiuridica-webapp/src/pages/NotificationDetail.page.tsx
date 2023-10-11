@@ -11,6 +11,10 @@ import {
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailTable,
+  NotificationDetailTableBody,
+  NotificationDetailTableBodyRow,
+  NotificationDetailTableCell,
+  NotificationDetailTableContents,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationRelatedDowntimes,
@@ -23,6 +27,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/services/localization.service';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -315,7 +320,34 @@ const NotificationDetail = () => {
                     {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
                   </Alert>
                 )}
-                <NotificationDetailTable rows={detailTableRows} />
+                <NotificationDetailTable>
+                  <NotificationDetailTableContents
+                    label={getLocalizedOrDefaultLabel(
+                      'notifications',
+                      'detail.table-aria-label',
+                      'Dettaglio notifica'
+                    )}
+                  >
+                    <NotificationDetailTableBody>
+                      {detailTableRows.map((row) => (
+                        <NotificationDetailTableBodyRow key={row.id}>
+                          <NotificationDetailTableCell
+                            id={`row-label-${row.id}`}
+                            cellProps={{ py: { xs: 0, lg: 1 } }}
+                          >
+                            {row.label}
+                          </NotificationDetailTableCell>
+                          <NotificationDetailTableCell
+                            id={`row-value-${row.id}`}
+                            cellProps={{ pb: 1, pt: { xs: 0, lg: 1 } }}
+                          >
+                            {row.value}
+                          </NotificationDetailTableCell>
+                        </NotificationDetailTableBodyRow>
+                      ))}
+                    </NotificationDetailTableBody>
+                  </NotificationDetailTableContents>
+                </NotificationDetailTable>
                 {currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
                     iun={notification.iun}

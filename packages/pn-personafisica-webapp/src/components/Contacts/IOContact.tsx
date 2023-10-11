@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Box, Stack, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+
 import CheckIcon from '@mui/icons-material/Check';
-import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Box, Stack, Typography } from '@mui/material';
 import { DisclaimerModal } from '@pagopa-pn/pn-commons';
+import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
 
 import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
-import { useAppDispatch } from '../../redux/hooks';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
@@ -136,21 +137,23 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
         <DisclaimerModal
           onConfirm={enableIO}
           title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
-          content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
           checkboxLabel={t('io-contact.enable-modal.checkbox', { ns: 'recapiti' })}
           confirmLabel={t('io-contact.enable-modal.confirm', { ns: 'recapiti' })}
           onCancel={() => setIsConfirmModalOpen(false)}
-        />
+        >
+          {t('io-contact.enable-modal.content', { ns: 'recapiti' })}
+        </DisclaimerModal>
       )}
       {status === IOContactStatus.ENABLED && isConfirmModalOpen && (
         <DisclaimerModal
           onConfirm={disableIO}
           title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
-          content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
           checkboxLabel={t('io-contact.disable-modal.checkbox', { ns: 'recapiti' })}
           confirmLabel={t('io-contact.disable-modal.confirm', { ns: 'recapiti' })}
           onCancel={() => setIsConfirmModalOpen(false)}
-        />
+        >
+          {t('io-contact.disable-modal.content', { ns: 'recapiti' })}
+        </DisclaimerModal>
       )}
     </DigitalContactsCard>
   );

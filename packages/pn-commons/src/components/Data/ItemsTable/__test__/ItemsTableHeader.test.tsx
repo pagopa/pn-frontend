@@ -4,7 +4,6 @@ import { Typography } from '@mui/material';
 
 import { render } from '../../../../test-utils';
 import { Item } from '../../../../types';
-import ItemsTable from '../../ItemsTable';
 import ItemsTableHeader from '../ItemsTableHeader';
 import ItemsTableHeaderCell from '../ItemsTableHeaderCell';
 
@@ -24,11 +23,11 @@ describe('ItemsTableHeaderCell', () => {
 
   it('render component', () => {
     const { container } = render(
-      <ItemsTable>
+      <table>
         <ItemsTableHeader>
           <ItemsTableHeaderCell column={mockColumn} />
         </ItemsTableHeader>
-      </ItemsTable>
+      </table>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
   });

@@ -276,8 +276,9 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           onCancel={() => setDisclaimerOpen(false)}
           confirmLabel={t('button.conferma')}
           checkboxLabel={t('button.capito')}
-          content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
-        />
+        >
+          {t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
+        </DisclaimerModal>
       )}
       {!_.isEqual(modalProps, initialProps) && (
         <CodeModal

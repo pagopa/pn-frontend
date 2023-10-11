@@ -4,8 +4,6 @@ import { Typography } from '@mui/material';
 
 import { render } from '../../../../test-utils';
 import { Item } from '../../../../types';
-import ItemsTable from '../../ItemsTable';
-import ItemsTableBody from '../ItemsTableBody';
 import ItemsTableBodyCell from '../ItemsTableBodyCell';
 import ItemsTableBodyRow from '../ItemsTableBodyRow';
 
@@ -29,13 +27,13 @@ describe('ItemsTableBodyCell', () => {
 
   it('render component', () => {
     const { container } = render(
-      <ItemsTable>
-        <ItemsTableBody>
+      <table>
+        <tbody>
           <ItemsTableBodyRow index={1}>
             <ItemsTableBodyCell column={mockColumn} row={mockRow} />
           </ItemsTableBodyRow>
-        </ItemsTableBody>
-      </ItemsTable>
+        </tbody>
+      </table>
     );
     expect(container).toHaveTextContent(/mock-column-value/);
   });

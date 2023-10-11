@@ -86,12 +86,13 @@ const SessionGuardRender = () => {
       <SessionModal
         open
         title={goodbyeMessage.title}
-        message={goodbyeMessage.message}
         // momentarily commented for pn-5157
         // handleClose={() => goToLoginPortal(AppRouteType.PF)}
         handleClose={() => goToLoginPortal()}
         initTimeout
-      />
+      >
+        {goodbyeMessage.message}
+      </SessionModal>
     ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
       <Outlet />
     ) : (

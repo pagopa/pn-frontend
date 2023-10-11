@@ -7,12 +7,18 @@ import {
   NotificationDetail,
   NotificationDetailRecipient,
   NotificationDetailTable,
+  NotificationDetailTableAction,
+  NotificationDetailTableBody,
+  NotificationDetailTableBodyRow,
+  NotificationDetailTableCell,
+  NotificationDetailTableContents,
   NotificationDetailTableRow,
   TimelineCategory,
   dataRegex,
   formatEurocentToCurrency,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
+import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/services/localization.service';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import { TrackEventType } from '../../utility/events';
@@ -183,24 +189,52 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
 
   return (
     <>
-      <NotificationDetailTable rows={detailTableRows}>
+      <NotificationDetailTable>
+        <NotificationDetailTableContents
+          label={getLocalizedOrDefaultLabel(
+            'notifications',
+            'detail.table-aria-label',
+            'Dettaglio notifica'
+          )}
+        >
+          <NotificationDetailTableBody>
+            {detailTableRows.map((row) => (
+              <NotificationDetailTableBodyRow key={row.id}>
+                <NotificationDetailTableCell
+                  id={`row-label-${row.id}`}
+                  cellProps={{ py: { xs: 0, lg: 1 } }}
+                >
+                  {row.label}
+                </NotificationDetailTableCell>
+                <NotificationDetailTableCell
+                  id={`row-value-${row.id}`}
+                  cellProps={{ pb: 1, pt: { xs: 0, lg: 1 } }}
+                >
+                  {row.value}
+                </NotificationDetailTableCell>
+              </NotificationDetailTableBodyRow>
+            ))}
+          </NotificationDetailTableBody>
+        </NotificationDetailTableContents>
         {!cancellationInProgress && !cancelled && (
-          <Button
-            variant="outlined"
-            sx={{
-              my: {
-                xs: 3,
-                md: 2,
-              },
-              borderColor: 'error.dark',
-              outlineColor: 'error.dark',
-              color: 'error.dark',
-            }}
-            onClick={openModal}
-            data-testid="cancelNotificationBtn"
-          >
-            {t('detail.cancel-notification', { ns: 'notifiche' })}
-          </Button>
+          <NotificationDetailTableAction>
+            <Button
+              variant="outlined"
+              sx={{
+                my: {
+                  xs: 3,
+                  md: 2,
+                },
+                borderColor: 'error.dark',
+                outlineColor: 'error.dark',
+                color: 'error.dark',
+              }}
+              onClick={openModal}
+              data-testid="cancelNotificationBtn"
+            >
+              {t('detail.cancel-notification', { ns: 'notifiche' })}
+            </Button>
+          </NotificationDetailTableAction>
         )}
       </NotificationDetailTable>
       <ConfirmCancellationDialog

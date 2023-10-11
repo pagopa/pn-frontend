@@ -12,7 +12,9 @@ describe('test SessionModal component', () => {
 
   it('renders the component without confirm button', () => {
     const { baseElement } = render(
-      <SessionModal open title={'Test title'} message={'test message'} />
+      <SessionModal open title={'Test title'}>
+        test message
+      </SessionModal>
     );
     expect(baseElement).toHaveTextContent(/test title/i);
     expect(baseElement).toHaveTextContent(/test message/i);
@@ -20,13 +22,9 @@ describe('test SessionModal component', () => {
 
   it('renders the full component with custom label', () => {
     const { baseElement } = render(
-      <SessionModal
-        open
-        title={'Test title'}
-        message={'test message'}
-        onConfirm={() => {}}
-        onConfirmLabel={'Confirm'}
-      />
+      <SessionModal open title={'Test title'} onConfirm={() => {}} onConfirmLabel={'Confirm'}>
+        test message
+      </SessionModal>
     );
     expect(baseElement).toHaveTextContent(/test title/i);
     expect(baseElement).toHaveTextContent(/test message/i);
@@ -35,7 +33,9 @@ describe('test SessionModal component', () => {
 
   it('renders the full component with default label', () => {
     const { baseElement } = render(
-      <SessionModal open title={'Test title'} message={'test message'} onConfirm={() => {}} />
+      <SessionModal open title={'Test title'} onConfirm={() => {}}>
+        test message
+      </SessionModal>
     );
     expect(baseElement).toHaveTextContent(/test title/i);
     expect(baseElement).toHaveTextContent(/test message/i);
@@ -49,12 +49,13 @@ describe('test SessionModal component', () => {
       <SessionModal
         open
         title={'Test title'}
-        message={'test message'}
         onConfirm={() => {}}
         onConfirmLabel={'Confirm'}
         initTimeout
         handleClose={mockCloseHandler}
-      />
+      >
+        test message
+      </SessionModal>
     );
     // wait timeout
     await act(() => new Promise((t) => setTimeout(t, 3000)));
@@ -64,13 +65,9 @@ describe('test SessionModal component', () => {
   it('renders the full component in mobile view', () => {
     window.matchMedia = createMatchMedia(800);
     const { baseElement } = render(
-      <SessionModal
-        open
-        title={'Test title'}
-        message={'test message'}
-        onConfirm={() => {}}
-        onConfirmLabel={'Confirm'}
-      />
+      <SessionModal open title={'Test title'} onConfirm={() => {}} onConfirmLabel={'Confirm'}>
+        test message
+      </SessionModal>
     );
     expect(baseElement).toHaveTextContent(/test title/i);
     expect(baseElement).toHaveTextContent(/test message/i);

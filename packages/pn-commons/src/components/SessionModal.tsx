@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode, useEffect } from 'react';
+import { MouseEventHandler, useEffect } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContentText, DialogTitle } from '@mui/material';
 
@@ -7,7 +7,6 @@ import { useIsMobile } from '../hooks';
 type Props = {
   open: boolean;
   title: string;
-  message: ReactNode;
   onConfirm?: MouseEventHandler<HTMLButtonElement>;
   onConfirmLabel?: string;
   handleClose?: () => void;
@@ -27,15 +26,15 @@ let timeout: NodeJS.Timeout;
  * @param handleClose action to perform when closing modal when clicking outside of it
  * @param initTimeout init timeout after which modal close
  */
-const SessionModal = ({
+const SessionModal: React.FC<Props> = ({
   open,
   title,
-  message,
   onConfirm,
   onConfirmLabel = 'Riprova',
   handleClose,
   initTimeout = false,
-}: Props) => {
+  children,
+}) => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -68,7 +67,7 @@ const SessionModal = ({
     >
       <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
       <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
-        {message}
+        {children}
       </DialogContentText>
       <DialogActions
         sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}

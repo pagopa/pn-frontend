@@ -4,10 +4,7 @@ import { Typography } from '@mui/material';
 
 import { fireEvent, render } from '../../../../test-utils';
 import { Item } from '../../../../types';
-import ItemsTable from '../../ItemsTable';
-import ItemsTableBody from '../ItemsTableBody';
 import ItemsTableBodyCell from '../ItemsTableBodyCell';
-import ItemsTableBodyRow from '../ItemsTableBodyRow';
 
 describe('ItemsTableBodyCell', () => {
   const mockColumn = {
@@ -29,26 +26,26 @@ describe('ItemsTableBodyCell', () => {
 
   it('render component', () => {
     const { container } = render(
-      <ItemsTable>
-        <ItemsTableBody>
-          <ItemsTableBodyRow index={1}>
+      <table>
+        <tbody>
+          <tr>
             <ItemsTableBodyCell column={mockColumn} row={mockRow} />
-          </ItemsTableBodyRow>
-        </ItemsTableBody>
-      </ItemsTable>
+          </tr>
+        </tbody>
+      </table>
     );
     expect(container).toHaveTextContent(/mock-column-value/);
   });
 
   it('click cell event', () => {
     const { getByTestId } = render(
-      <ItemsTable>
-        <ItemsTableBody>
-          <ItemsTableBodyRow index={1}>
+      <table>
+        <tbody>
+          <tr>
             <ItemsTableBodyCell testId="cell" column={mockColumn} row={mockRow} />
-          </ItemsTableBodyRow>
-        </ItemsTableBody>
-      </ItemsTable>
+          </tr>
+        </tbody>
+      </table>
     );
     const cell = getByTestId('cell');
     fireEvent.click(cell);
