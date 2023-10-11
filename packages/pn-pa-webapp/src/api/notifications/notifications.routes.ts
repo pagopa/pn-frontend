@@ -150,6 +150,7 @@ export function NOTIFICATION_PRELOAD_DOCUMENT() {
 export function CREATE_NOTIFICATION() {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
+    version: API_VERSION_SEGMENT_2_1,
     path: API_NOTIFICATIONS_REQUESTS,
   });
 }
