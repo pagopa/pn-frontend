@@ -104,6 +104,10 @@ const NotificationDetail: React.FC = () => {
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
 
+  const checkIfNotificationHasPayments = notification.recipients.some(
+    (recipient) => recipient.payments && recipient.payments.length > 0
+  );
+
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
@@ -283,11 +287,13 @@ const NotificationDetail: React.FC = () => {
                   notification={notification}
                   onCancelNotification={handleCancelNotification}
                 />
-                <NotificationPaymentSender
-                  iun={notification.iun}
-                  recipients={recipients}
-                  timeline={notification.timeline}
-                />
+                {checkIfNotificationHasPayments && (
+                  <NotificationPaymentSender
+                    iun={notification.iun}
+                    recipients={recipients}
+                    timeline={notification.timeline}
+                  />
+                )}
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
