@@ -3,6 +3,7 @@ import ApiError from './ApiError';
 
 interface ApiErrorWrapperCommonProps {
   apiId?: string;
+  children?: React.ReactNode;
 }
 
 interface ApiErrorWrapperProps extends ApiErrorWrapperCommonProps {
@@ -15,7 +16,7 @@ interface ApiErrorWrapperGeneralProps extends ApiErrorWrapperCommonProps {
   errorComponent: JSX.Element;
 }
 
-export const ApiErrorWrapperGeneral: React.FC<React.PropsWithChildren<ApiErrorWrapperGeneralProps>> = ({
+export const ApiErrorWrapperGeneral: React.FC<ApiErrorWrapperGeneralProps> = ({
   apiId,
   children,
   errorComponent,
@@ -41,7 +42,7 @@ export const ApiErrorWrapperGeneral: React.FC<React.PropsWithChildren<ApiErrorWr
  * @param {string | undefined } mainText Main text to show user if the api fails. Default is 'Non siamo riusciti a recuperare questi dati.'
  * @returns {any}
  */
-const ApiErrorWrapper: React.FC<React.PropsWithChildren<ApiErrorWrapperProps>> = ({
+const ApiErrorWrapper: React.FC<ApiErrorWrapperProps> = ({
   apiId,
   children,
   reloadAction,

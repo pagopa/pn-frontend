@@ -3,7 +3,7 @@ import { CustomMobileDialogProvider } from './CustomMobileDialog.context';
 /**
  * Container for mobile version of the dialog
  */
-const CustomMobileDialog: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => (
+const CustomMobileDialog: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <CustomMobileDialogProvider>{children}</CustomMobileDialogProvider>
 );
 

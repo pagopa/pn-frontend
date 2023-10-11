@@ -29,6 +29,7 @@ type Props = {
   headerGridProps?: GridProps;
   /** Cards test id */
   testId?: string;
+  children?: React.ReactNode;
 };
 
 const cardStyle = {
@@ -42,7 +43,7 @@ const cardStyle = {
   },
 };
 
-const ItemsCard: React.FC<React.PropsWithChildren<Props>> = ({
+const ItemsCard: React.FC<Props> = ({
   cardHeader,
   cardBody,
   cardData,

@@ -5,9 +5,10 @@ import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
   onAssistanceClick: () => void;
+  children?: React.ReactNode;
 };
 
-const AppNotAccessible: React.FC<React.PropsWithChildren<Props>> = ({ onAssistanceClick }) => (
+const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => (
   <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
     <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
       <IllusInProgress />

@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { TextField, SxProps, MenuItem } from '@mui/material';
+
+import { MenuItem, SxProps, TextField } from '@mui/material';
 
 type Props = {
   /** id */
@@ -34,9 +35,10 @@ type Props = {
   emptyItemKey?: string;
   /** map label string for empty item (default: '------') */
   emptyItemLabel?: string;
+  children?: React.ReactNode;
 };
 
-const CustomDropdown: React.FC<React.PropsWithChildren<Props>> = ({
+const CustomDropdown: React.FC<Props> = ({
   children,
   id,
   value,

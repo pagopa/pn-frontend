@@ -7,6 +7,7 @@ type Props = {
   sx?: SxProps<Theme>;
   hasCounterBadge?: boolean;
   bagdeCount?: number;
+  children?: React.ReactNode;
 };
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -24,7 +25,7 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
  * @param bagdeCount number to display into the counter
  * @param sx style to be addded to the button
  */
-const CustomMobileDialogToggle: React.FC<React.PropsWithChildren<Props>> = ({
+const CustomMobileDialogToggle: React.FC<Props> = ({
   children,
   hasCounterBadge,
   bagdeCount = 0,

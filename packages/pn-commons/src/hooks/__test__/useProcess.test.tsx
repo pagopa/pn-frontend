@@ -1,5 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
-
+import { renderHook, waitFor } from '../../test-utils';
 import { act } from '../../test-utils';
 import { useProcess } from '../useProcess';
 

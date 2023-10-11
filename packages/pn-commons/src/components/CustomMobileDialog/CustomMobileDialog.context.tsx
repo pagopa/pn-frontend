@@ -7,9 +7,7 @@ interface ICustomMobileDialogContext {
 
 const CustomMobileDialogContext = createContext<ICustomMobileDialogContext | undefined>(undefined);
 
-const CustomMobileDialogProvider: FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = ({
-  children,
-}) => {
+const CustomMobileDialogProvider: FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {

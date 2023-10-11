@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, createContext, useContext, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, createContext, useContext, useState } from 'react';
 
 interface ISpecialContactsContext {
   contextEditMode: boolean;
@@ -7,7 +7,7 @@ interface ISpecialContactsContext {
 
 const SpecialContactsContext = createContext<ISpecialContactsContext | undefined>(undefined);
 
-const SpecialContactsProvider: FC<React.PropsWithChildren> = ({ children }) => {
+const SpecialContactsProvider: FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [contextEditMode, setContextEditMode] = useState<boolean>(false);
 
   return (

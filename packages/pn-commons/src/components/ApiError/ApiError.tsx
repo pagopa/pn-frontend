@@ -1,5 +1,8 @@
-import { Stack, styled, Typography } from '@mui/material';
+import React from 'react';
+
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import { Stack, Typography, styled } from '@mui/material';
+
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type ApiErrorProps = {
@@ -7,6 +10,7 @@ type ApiErrorProps = {
   mt?: number;
   mainText?: string;
   apiId?: string;
+  children?: React.ReactNode;
 };
 
 const StyledStack = styled(Stack)`
@@ -15,8 +19,7 @@ const StyledStack = styled(Stack)`
   padding: 16px;
 `;
 
-const ApiError: React.FC<React.PropsWithChildren<ApiErrorProps>> = ({ onClick, mt = 0, mainText, apiId }) => {
-
+const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId }) => {
   const dataTestId = `api-error${apiId ? `-${apiId}` : ''}`;
   const text =
     mainText ||

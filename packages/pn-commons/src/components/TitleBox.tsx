@@ -23,12 +23,13 @@ type Props = {
   sx?: SxProps<Theme>;
   /** a11y for component */
   ariaLabel?: string;
+  children?: React.ReactNode;
 };
 
 /**
  * TitleBox element. It renders a Title (default variant is h1) and a subtitle (default variant is h5)
  */
-const TitleBox: React.FC<React.PropsWithChildren<Props>> = ({
+const TitleBox: React.FC<Props> = ({
   title,
   titleButton,
   subTitle,

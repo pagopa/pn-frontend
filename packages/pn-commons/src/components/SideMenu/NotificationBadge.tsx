@@ -2,9 +2,12 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-const NotificationBadge: React.FC<React.PropsWithChildren<{ numberOfNotification: number }>> = ({
-  numberOfNotification,
-}) => (
+type Props = {
+  numberOfNotification: number;
+  children?: React.ReactNode;
+};
+
+const NotificationBadge: React.FC<Props> = ({ numberOfNotification }) => (
   <Box
     sx={{
       width: '23px',

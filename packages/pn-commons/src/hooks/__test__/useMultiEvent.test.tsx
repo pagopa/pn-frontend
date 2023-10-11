@@ -8,9 +8,10 @@ import { useMultiEvent } from '../useMultiEvent';
 interface IProps {
   count: number;
   interval: number;
+  children?: React.ReactNode;
 }
 
-const Component: React.FC<React.PropsWithChildren<IProps>> = ({ count, interval }) => {
+const Component: React.FC<IProps> = ({ count, interval }) => {
   const [text, setText] = useState('');
 
   const [event] = useMultiEvent({

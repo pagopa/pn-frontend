@@ -1,11 +1,13 @@
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 
 interface TabPanelProps {
   index: number;
   value: number;
+  children?: React.ReactNode;
 }
-const TabPanel: React.FC<React.PropsWithChildren<TabPanelProps>> = ({ index, value, children }) => (
+const TabPanel: React.FC<TabPanelProps> = ({ index, value, children }) => (
   <Box
     role="tabpanel"
     hidden={value !== index}
