@@ -24,8 +24,13 @@ describe('localization service', () => {
   });
 
   it('localize label when there is no available translation (default label)', () => {
-    initLocalization((namespace, path) => '');
+    initLocalization(() => '');
     const label = getLocalizedOrDefaultLabel('notifications', 'mocked.path', 'default label');
     expect(label).toBe('default label');
+  });
+
+  it('localize label when no deafult is specified (path)', () => {
+    const label = getLocalizedOrDefaultLabel('', 'mocked.path');
+    expect(label).toBe('mocked.path');
   });
 });

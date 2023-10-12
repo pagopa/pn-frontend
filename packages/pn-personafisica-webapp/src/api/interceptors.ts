@@ -1,4 +1,5 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
+
 import { apiClient } from './apiClients';
 
 export const setUpInterceptor = (store: EnhancedStore) => {

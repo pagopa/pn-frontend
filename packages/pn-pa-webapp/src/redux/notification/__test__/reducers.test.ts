@@ -1,8 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
-import { apiClient } from '../../../api/apiClients';
-import { CANCEL_NOTIFICATION } from '../../../api/notifications/notifications.routes';
 
-import { KnownFunctionality, LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import {
+  KnownFunctionality,
+  LegalFactType,
+  NotificationDetail,
+  PaymentAttachmentSName,
+} from '@pagopa-pn/pn-commons';
 import {
   DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
@@ -14,17 +17,21 @@ import {
   notificationDTOMultiRecipient,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
+import { apiClient } from '../../../api/apiClients';
 import {
+  CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
 } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import {
   cancelNotification,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
+  getPaymentAttachment,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
@@ -59,18 +66,6 @@ const initialState = {
 
 describe('Notification detail redux state tests', () => {
   let mock: MockAdapter;
-
-  beforeEach(() => {
-    mock = new MockAdapter(apiClient);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  afterAll(() => {
-    mock.restore();
-  });
 
   mockAuthentication();
 
@@ -150,6 +145,18 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
     expect(payload).toEqual(mockResponse);
+  });
+
+  it('Should be able to fetch the pagopa document', async () => {
+    const iun = notificationDTOMultiRecipient.iun;
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const recIndex = 1;
+    const url = 'http://mocked-url.com';
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, { url });
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
+    const payload = action.payload;
+    expect(action.type).toBe('getPaymentAttachment/fulfilled');
+    expect(payload).toEqual({ url });
   });
 
   it('Should be able to fetch the downtimes events', async () => {

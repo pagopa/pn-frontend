@@ -1,17 +1,22 @@
 import {
   Downtime,
+  F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationDetailDocument,
   NotificationDetailRecipient,
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PaymentAttachmentSName,
-  PaymentInfo,
+  PaidDetails,
+  PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
   PhysicalCommunicationType,
   RecipientType,
+  TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -21,7 +26,6 @@ import {
   getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
-  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -57,11 +61,12 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
-  pagopaAttachmentUrl: '',
-  f24AttachmentUrl: '',
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
-  paymentInfo: {} as PaymentInfo,
+  paymentsData: {
+    pagoPaF24: [] as Array<PaymentDetails>,
+    f24Only: [] as Array<F24PaymentDetails>,
+  },
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -81,6 +86,49 @@ const notificationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
+      const recipientIdx = action.payload.recipients.findIndex(
+        (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
+      );
+      const paymentsOfRecipient = action.payload.recipients[recipientIdx].payments;
+
+      if (paymentsOfRecipient) {
+        if (
+          action.payload.notificationStatus === NotificationStatus.CANCELLED ||
+          action.payload.notificationStatus === NotificationStatus.CANCELLATION_IN_PROGRESS
+        ) {
+          const timelineEvents = action.payload.timeline.filter(
+            (item) => item.category === TimelineCategory.PAYMENT
+          );
+
+          // get only the payments of the current recipient that are in the timeline (by creditorTaxId and noticeCode)
+          const timelineRecipientPayments = paymentsOfRecipient.filter((payment) =>
+            timelineEvents.some(
+              (timelineEvent) =>
+                (timelineEvent.details as PaidDetails).creditorTaxId ===
+                  payment.pagoPa?.creditorTaxId &&
+                (timelineEvent.details as PaidDetails).noticeCode === payment.pagoPa?.noticeCode
+            )
+          );
+
+          const payments = populatePaymentsPagoPaF24(timelineEvents, timelineRecipientPayments, []);
+          state.paymentsData.pagoPaF24 = payments;
+        } else {
+          const pagoPAPaymentFullDetails = getPagoPaF24Payments(
+            paymentsOfRecipient,
+            recipientIdx,
+            true
+          );
+          const f24Payments = getF24Payments(paymentsOfRecipient, recipientIdx);
+
+          if (pagoPAPaymentFullDetails) {
+            state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
+          }
+
+          if (f24Payments) {
+            state.paymentsData.f24Only = f24Payments;
+          }
+        }
+      }
       state.notification = action.payload;
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
@@ -101,27 +149,65 @@ const notificationSlice = createSlice({
         state.legalFactDownloadRetryAfter = action.payload.retryAfter;
       }
     });
-    builder.addCase(getPaymentAttachment.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        const attachmentName = action.meta.arg.attachmentName;
-        if (attachmentName === PaymentAttachmentSName.PAGOPA) {
-          state.pagopaAttachmentUrl = action.payload.url;
-        } else if (attachmentName === PaymentAttachmentSName.F24) {
-          state.f24AttachmentUrl = action.payload.url;
+    builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
+      if (action.payload) {
+        // Not single payment reload
+        if (action.payload.length > 1) {
+          state.paymentsData.pagoPaF24 = action.payload;
+          return;
+        }
+
+        if (action.payload.length === 1) {
+          const paymentInfo = action.payload[0];
+          const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
+            (payment) =>
+              payment.pagoPa?.creditorTaxId === paymentInfo.pagoPa?.creditorTaxId &&
+              payment.pagoPa?.noticeCode === paymentInfo.pagoPa?.noticeCode
+          );
+          if (paymentInfoIndex !== -1) {
+            state.paymentsData.pagoPaF24[paymentInfoIndex] = paymentInfo;
+            return;
+          }
+          state.paymentsData.pagoPaF24 = action.payload;
         }
       }
     });
-    builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.paymentInfo = action.payload;
+    builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
+      if (action.meta.arg.paymentInfoRequest.length === 1) {
+        const payment = state.paymentsData.pagoPaF24.find(
+          (payment) =>
+            payment.pagoPa?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
+            payment.pagoPa?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
+        );
+
+        if (payment) {
+          payment.isLoading = true;
+          return;
+        }
       }
     });
-    builder.addCase(getNotificationPaymentUrl.rejected, (state) => {
-      state.paymentInfo = {
-        ...state.paymentInfo,
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.GENERIC_ERROR,
-      };
+    builder.addCase(getNotificationPaymentUrl.rejected, (state, action) => {
+      const noticeCode = action.meta.arg.paymentNotice.noticeNumber;
+      const creditorTaxId = action.meta.arg.paymentNotice.fiscalCode;
+      const paymentInfo = state.paymentsData.pagoPaF24.find(
+        (payment) =>
+          payment.pagoPa?.creditorTaxId === creditorTaxId &&
+          payment.pagoPa?.noticeCode === noticeCode
+      );
+
+      if (paymentInfo?.pagoPa) {
+        state.paymentsData.pagoPaF24 = [
+          ...state.paymentsData.pagoPaF24,
+          {
+            ...paymentInfo?.f24,
+            pagoPa: {
+              ...paymentInfo?.pagoPa,
+              status: PaymentStatus.FAILED,
+              detail: PaymentInfoDetail.GENERIC_ERROR,
+            },
+          },
+        ];
+      }
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.downtimes;

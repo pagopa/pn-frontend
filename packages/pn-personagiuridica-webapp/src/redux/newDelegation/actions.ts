@@ -1,13 +1,13 @@
+import { RecipientType, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { RecipientType, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import {
+  CreateDelegationProps,
+  CreateDelegationResponse,
   DelegationParty,
   NewDelegationFormProps,
-  CreateDelegationResponse,
-  CreateDelegationProps,
   Person,
 } from '../../models/Deleghe';
 import { FilterPartiesParams, Party } from '../../models/party';
@@ -66,5 +66,8 @@ export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams
     } catch (e) {
       return rejectWithValue(e);
     }
+  },
+  {
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
   }
 );

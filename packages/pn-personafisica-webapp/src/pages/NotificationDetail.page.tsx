@@ -6,14 +6,19 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
+  ApiErrorWrapper,
   GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
+  NotificationDetailPayment,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
+  NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  PaymentAttachmentSName,
+  PaymentDetails,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
@@ -25,13 +30,15 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import NotificationPayment from '../components/Notifications/NotificationPayment';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   getDowntimeEvents,
   getDowntimeLegalFactDocumentDetails,
+  getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
+  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -43,6 +50,7 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
@@ -68,6 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const { F24_DOWNLOAD_WAIT_TIME } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -85,8 +94,6 @@ const NotificationDetail = () => {
   const isCancelled = useIsCancelled({ notification });
   const currentRecipient = notification?.currentRecipient;
 
-  const noticeCode = currentRecipient?.payment?.noticeCode;
-  const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -99,6 +106,9 @@ const NotificationDetail = () => {
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
+
+  const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;
@@ -143,6 +153,9 @@ const NotificationDetail = () => {
       label: row.label,
       value: row.value,
     }));
+
+  const checkIfUserHasPayments: boolean =
+    !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
@@ -190,6 +203,39 @@ const NotificationDetail = () => {
     }
   };
 
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
+    dispatch(
+      getPaymentAttachment({
+        iun: notification.iun,
+        attachmentName: name,
+        mandateId,
+        attachmentIdx,
+      })
+    );
+
+  const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
+    if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      dispatch(
+        getNotificationPaymentUrl({
+          paymentNotice: {
+            noticeNumber: noticeCode,
+            fiscalCode: creditorTaxId,
+            amount,
+            companyName: notification.senderDenomination,
+            description: notification.subject,
+          },
+          returnUrl: window.location.href,
+        })
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
+    }
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
+  };
+
   const hasNotificationReceivedApiError = hasApiErrors(
     NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
   );
@@ -225,6 +271,34 @@ const NotificationDetail = () => {
       ).then(() => setPageReady(true));
     }
   }, []);
+
+  const fetchPaymentsInfo = useCallback(
+    (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
+      const paymentInfoRequest = payments.reduce((acc: any, payment) => {
+        if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
+          acc.push({
+            noticeCode: payment.pagoPa.noticeCode,
+            creditorTaxId: payment.pagoPa.creditorTaxId,
+          });
+        }
+        return acc;
+      }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
+
+      void dispatch(
+        getNotificationPaymentInfo({
+          taxId: currentRecipient.taxId,
+          paymentInfoRequest,
+        })
+      );
+    },
+    [currentRecipient.payments]
+  );
+
+  useEffect(() => {
+    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
+      fetchPaymentsInfo(currentRecipient.payments ?? []);
+    }
+  }, [currentRecipient.payments]);
 
   useEffect(() => {
     fetchReceivedNotification();
@@ -314,17 +388,27 @@ const NotificationDetail = () => {
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
-                {currentRecipient?.payment && creditorTaxId && noticeCode && (
-                  <NotificationPayment
-                    iun={notification.iun}
-                    paymentHistory={notification.paymentHistory}
-                    senderDenomination={notification.senderDenomination}
-                    subject={notification.subject}
-                    notificationPayment={currentRecipient.payment}
-                    mandateId={mandateId}
-                    notificationIsCancelled={isCancelled.cancellationInTimeline}
-                  />
+                {checkIfUserHasPayments && (
+                  <Paper sx={{ p: 3 }} elevation={0}>
+                    <ApiErrorWrapper
+                      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
+                      reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
+                      mainText={t('detail.payment.message-error-fetch-payment', {
+                        ns: 'notifiche',
+                      })}
+                    >
+                      <NotificationPaymentRecipient
+                        payments={userPayments}
+                        isCancelled={isCancelled.cancelled}
+                        onPayClick={onPayClick}
+                        handleReloadPayment={fetchPaymentsInfo}
+                        getPaymentAttachmentAction={getPaymentAttachmentAction}
+                        timerF24={F24_DOWNLOAD_WAIT_TIME}
+                      />
+                    </ApiErrorWrapper>
+                  </Paper>
                 )}
+
                 {!mandateId && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
