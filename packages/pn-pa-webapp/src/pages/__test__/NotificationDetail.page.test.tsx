@@ -427,4 +427,23 @@ describe('NotificationDetail Page', () => {
     const downtimesBox = result?.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();
   });
+
+  it('should not show the payment history box if there are no payments', async () => {
+    const recipientsWithoutPayments = notificationDTO.recipients.map((recipient) => ({
+      ...recipient,
+      payments: [],
+    }));
+
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      recipients: recipientsWithoutPayments,
+    });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+    const paymentsTable = result?.queryByTestId('paymentInfoBox');
+    expect(paymentsTable).not.toBeInTheDocument();
+  });
 });

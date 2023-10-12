@@ -78,8 +78,6 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
-  pagopaAttachmentUrl: '',
-  f24AttachmentUrl: '',
   paymentsData: {
     pagoPaF24: [],
     f24Only: [],
@@ -203,29 +201,23 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the pagopa document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
-    const recIndex = 1;
     mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex))
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
       .reply(200, { url: 'http://pagopa-mocked-url.com' });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(action.payload).toEqual({ url: 'http://pagopa-mocked-url.com' });
-    const state = store.getState().notificationState;
-    expect(state.pagopaAttachmentUrl).toEqual('http://pagopa-mocked-url.com');
   });
 
   it('Should be able to fetch the f24 document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.F24;
-    const recIndex = 1;
     mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex))
+      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
       .reply(200, { url: 'http://f24-mocked-url.com' });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(action.payload).toEqual({ url: 'http://f24-mocked-url.com' });
-    const state = store.getState().notificationState;
-    expect(state.f24AttachmentUrl).toEqual('http://f24-mocked-url.com');
   });
 
   it('should save only payed payments (from timeline) if the notification is canceled', async () => {

@@ -50,6 +50,7 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
@@ -75,6 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const { F24_DOWNLOAD_WAIT_TIME } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -106,12 +108,6 @@ const NotificationDetail = () => {
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
-
-  const pagopaAttachmentUrl = useAppSelector(
-    (state: RootState) => state.notificationState.pagopaAttachmentUrl
-  );
-
-  useDownloadDocument({ url: pagopaAttachmentUrl });
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -207,22 +203,15 @@ const NotificationDetail = () => {
     }
   };
 
-  const handleDownloadAttachment = (
-    name: PaymentAttachmentSName,
-    recIndex: number,
-    attachmentIdx?: number
-  ) => {
-    void dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
+    dispatch(
       getPaymentAttachment({
         iun: notification.iun,
         attachmentName: name,
-        recIndex,
         mandateId,
         attachmentIdx,
       })
     );
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
-  };
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
@@ -412,8 +401,9 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
-                        handleDownloadAttachment={handleDownloadAttachment}
                         handleReloadPayment={fetchPaymentsInfo}
+                        getPaymentAttachmentAction={getPaymentAttachmentAction}
+                        timerF24={F24_DOWNLOAD_WAIT_TIME}
                       />
                     </ApiErrorWrapper>
                   </Paper>

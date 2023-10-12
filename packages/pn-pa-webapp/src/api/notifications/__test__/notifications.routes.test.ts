@@ -65,7 +65,7 @@ describe('Notifications routes', () => {
 
   it('should compile CREATE_NOTIFICATION', () => {
     const route = CREATE_NOTIFICATION();
-    expect(route).toEqual('/delivery/requests');
+    expect(route).toEqual('/delivery/v2.1/requests');
   });
 
   it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {

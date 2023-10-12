@@ -8,8 +8,11 @@ import {
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationStatus,
+  PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -23,11 +26,13 @@ import {
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
@@ -36,6 +41,7 @@ import NotificationDetail from '../NotificationDetail.page';
 const mockNavigateFn = jest.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
+const mockAssignFn = jest.fn();
 
 // mock imports
 jest.mock('react-router-dom', () => ({
@@ -73,9 +79,14 @@ describe('NotificationDetail Page', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
+  const original = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '', assign: mockAssignFn },
+    });
   });
 
   afterEach(() => {
@@ -84,10 +95,12 @@ describe('NotificationDetail Page', () => {
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
+    window.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -138,7 +151,6 @@ describe('NotificationDetail Page', () => {
     const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check payment box
-    // TODO Aggiungere data test id
     const paymentData = result?.getByTestId('paymentInfoBox');
     expect(paymentData).toBeInTheDocument();
     // check downtimes box
@@ -259,6 +271,9 @@ describe('NotificationDetail Page', () => {
         `/delivery/notifications/received/${notificationToFe.iun}/attachments/documents/0`
       );
     });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url.com');
+    });
   });
 
   it('executes the legal fact download handler', async () => {
@@ -287,6 +302,7 @@ describe('NotificationDetail Page', () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
+    window.location.href = '';
     const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
@@ -308,6 +324,9 @@ describe('NotificationDetail Page', () => {
       expect(mock.history.get[3].url).toContain(
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -339,6 +358,9 @@ describe('NotificationDetail Page', () => {
       expect(mock.history.get[2].url).toContain(
         `/downtime/v1/legal-facts/${simpleDowntimeLogPage.downtimes[0].legalFactId}`
       );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -490,52 +512,60 @@ describe('NotificationDetail Page', () => {
   });
 
   it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
-    const mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-      then: () => Promise.resolve(),
-    }));
-
-    result = render(<NotificationDetail />, {
-      preloadedState: {
-        userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        notificationState: {
-          notification: notificationToFe,
-          paymentsData: {
-            pagoPaF24: paymentsData.pagoPaF24,
-            f24Only: paymentsData.f24Only,
-          },
-          downtimeEvents: [],
-        },
-      },
-    });
-
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
       paymentInfo
     );
-
-    const paymentTitle = screen.getByTestId('notification-payment-recipient-title').textContent;
-    expect(result.container).toHaveTextContent(paymentTitle || '');
-
-    const payButton = screen.getByTestId('pay-button');
-    const radioButton = result.container.querySelector(
-      '[data-testid="radio-button"] input'
-    ) as HTMLInputElement;
-
-    if (!radioButton) return;
-
-    fireEvent.click(radioButton);
-    fireEvent.click(payButton);
-
-    const values = paymentHistory.find(
-      (payment) => payment.pagoPa?.noticeCode === radioButton.value
-    )?.pagoPa;
-
-    if (!values) return;
-
+    const requiredPaymentIndex = paymentHistory.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+    const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock
+      .onPost(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.subject,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(200, {
+        checkoutUrl: 'https://mocked-url.com',
+      });
+    // render component
+    act(() => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          notificationState: {
+            notification: notificationToFe,
+            paymentsData: {
+              pagoPaF24: getPagoPaF24Payments(paymentHistory, 1),
+              f24Only: getF24Payments(paymentHistory, 1),
+            },
+            downtimeEvents: [],
+          },
+        },
+      });
+    });
+    const payButton = result?.getByTestId('pay-button');
+    const item = result?.getAllByTestId('pagopa-item')[requiredPaymentIndex];
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
     await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(4);
+      expect(payButton).toBeEnabled();
+    });
+    fireEvent.click(payButton!);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
+    });
+    await waitFor(() => {
+      expect(mockAssignFn).toBeCalledTimes(1);
+      expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
   });
 });

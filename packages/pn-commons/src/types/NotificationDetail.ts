@@ -260,6 +260,15 @@ export enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
+export interface PaymentAttachment {
+  filename: string;
+  contenType: string;
+  contentLength: number;
+  sha256: string;
+  url?: string;
+  retryAfter?: number;
+}
+
 export interface PagoPAPaymentDetails {
   creditorTaxId: string;
   noticeCode: string;

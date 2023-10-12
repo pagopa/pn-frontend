@@ -1,14 +1,15 @@
-import _ from 'lodash';
-import React, { Fragment, memo, useState } from 'react';
+import React, { Fragment, memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { downloadDocument } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
+  F24PaymentDetails,
   NotificationDetailPayment,
   PagoPAPaymentFullDetails,
+  PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentStatus,
@@ -21,29 +22,31 @@ import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 type Props = {
   payments: PaymentsData;
   isCancelled: boolean;
-  onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  handleDownloadAttachment: (
+  timerF24: number;
+  getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
-    recIndex: number,
     attachmentIdx?: number
-  ) => void;
+  ) => {
+    abort: (reason?: string) => void;
+    unwrap: () => Promise<PaymentAttachment>;
+  };
+  onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
   handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   isCancelled,
+  timerF24,
+  getPaymentAttachmentAction,
   onPayClick,
-  handleDownloadAttachment,
   handleReloadPayment,
 }) => {
   const { pagoPaF24, f24Only } = payments;
 
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
-  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(
-    isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null
-  );
+  const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(null);
 
   const allPaymentsIsPaid = pagoPaF24.every(
     (payment) => payment.pagoPa?.status === PaymentStatus.SUCCEEDED
@@ -92,14 +95,20 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
-    if (selectedPayment && !_.isNil(selectedPayment.recIndex)) {
-      handleDownloadAttachment(
-        attachmentName,
-        selectedPayment.recIndex,
-        selectedPayment.attachmentIdx
-      );
+    if (selectedPayment) {
+      void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx)
+        .unwrap()
+        .then((response) => {
+          if (response.url) {
+            downloadDocument(response.url);
+          }
+        });
     }
   };
+
+  useEffect(() => {
+    setSelectedPayment(isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null);
+  }, [payments]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
@@ -164,9 +173,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               >
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
                 &nbsp;
-                {selectedPayment && selectedPayment.amount
-                  ? formatEurocentToCurrency(selectedPayment.amount)
-                  : null}
+                {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
 
               <Button
@@ -185,17 +192,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               {selectedPayment &&
               pagoPaF24.find((payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode)
                 ?.f24 ? (
-                <Box display="flex" justifyContent="space-between" data-testid="f24-download">
-                  <Typography variant="body2">
-                    {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
-                  </Typography>
-                  <ButtonNaked
-                    color="primary"
-                    onClick={() => downloadAttachment(PaymentAttachmentSName.F24)}
-                  >
-                    <Download fontSize="small" sx={{ mr: 1 }} />
-                    {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
-                  </ButtonNaked>
+                <Box key="attachment" data-testid="f24-download">
+                  <NotificationPaymentF24Item
+                    f24Item={
+                      pagoPaF24.find(
+                        (payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode
+                      )?.f24 as F24PaymentDetails
+                    }
+                    getPaymentAttachmentAction={getPaymentAttachmentAction}
+                    isPagoPaAttachment
+                    timerF24={timerF24}
+                  />
                 </Box>
               ) : null}
             </Fragment>
@@ -203,8 +210,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </>
       )}
 
-      {!isCancelled && (
-        <Fragment>
+      {!isCancelled && f24Only.length > 0 && (
+        <Box data-testid="f24only-box">
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
             <Typography variant="overline" mt={3}>
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
@@ -215,11 +222,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             <Box key={index}>
               <NotificationPaymentF24Item
                 f24Item={f24Item}
-                handleDownloadAttachment={handleDownloadAttachment}
+                getPaymentAttachmentAction={getPaymentAttachmentAction}
+                timerF24={timerF24}
               />
             </Box>
           ))}
-        </Fragment>
+        </Box>
       )}
     </Box>
   );

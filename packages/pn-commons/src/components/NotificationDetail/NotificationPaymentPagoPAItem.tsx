@@ -36,6 +36,7 @@ const SkeletonCard: React.FC = () => {
       alignItems={isMobile ? 'flex-start' : 'center'}
       flexDirection={isMobile ? 'column-reverse' : 'row'}
       sx={{ backgroundColor: '#FAFAFA' }}
+      data-testid="skeleton-card"
     >
       <Box display="flex" gap={1} flexDirection="column" flex="1 0 0">
         <Skeleton
@@ -261,6 +262,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
 
   return (
     <Box
+      id={`paymentPagoPa-${pagoPAItem.noticeCode}`}
       px={2}
       py={isMobile ? 2 : 1}
       gap={1}

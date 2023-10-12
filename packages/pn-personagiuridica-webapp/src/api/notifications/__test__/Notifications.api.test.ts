@@ -93,14 +93,12 @@ describe('Notifications api tests', () => {
   it('getPaymentAttachment', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
-    const recIndex = 0;
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, {
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, {
       url: 'http://mocked-url.com',
     });
     const res = await NotificationsApi.getPaymentAttachment(
       iun,
-      attachmentName as PaymentAttachmentNameType,
-      recIndex
+      attachmentName as PaymentAttachmentNameType
     );
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });

@@ -25,6 +25,7 @@ import {
 import {
   AarDetails,
   AppIoCourtesyMessageEventType,
+  F24PaymentDetails,
   INotificationDetailTimeline,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -44,6 +45,7 @@ import {
   parseNotificationDetail,
   populatePaymentsPagoPaF24,
 } from '../notification.utility';
+import exp from 'constants';
 
 function testNotificationStatusInfos(
   expectedColor:
@@ -1212,5 +1214,48 @@ describe('Populate pagoPA and F24 payments', () => {
     const mappedPayments = populatePaymentsPagoPaF24(timeline, paymentsData.pagoPaF24, paymentInfo);
 
     expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('should populate the F24 payments with recipientIdx using getF24Payments', () => {
+    const onlyF24 = true;
+    const recIndex = 2;
+
+    const res = payments.reduce((arr, payment, index) => {
+      if (payment.f24 && ((onlyF24 && !payment.pagoPa) || !onlyF24)) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push({
+          ...payment.f24,
+          attachmentIdx: index,
+          recIndex,
+        });
+      }
+      return arr;
+    }, [] as Array<F24PaymentDetails>);
+
+    const f24Payments = getF24Payments(payments, recIndex, onlyF24);
+
+    expect(f24Payments).toStrictEqual(res);
+  });
+
+  it('should populate the PagoPa payments with recipientIdx using getPagoPaF24Payments', () => {
+    const recIndex = 1;
+    const res = payments.reduce((arr, payment, index) => {
+      if (payment.pagoPa) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push({
+          pagoPa: {
+            ...payment.pagoPa,
+            attachmentIdx: index,
+            recIndex,
+          } as PagoPAPaymentFullDetails,
+          f24: payment.f24 ? { ...payment.f24, attachmentIdx: index, recIndex } : undefined,
+        });
+      }
+      return arr;
+    }, [] as Array<PaymentDetails>);
+
+    const pagoPaF24Payments = getPagoPaF24Payments(payments, recIndex);
+
+    expect(pagoPaF24Payments).toStrictEqual(res);
   });
 });

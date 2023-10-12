@@ -7,7 +7,6 @@ import {
   LegalFactType,
   PaidDetails,
   PaymentAttachmentSName,
-  PaymentInfoDetail,
   PaymentStatus,
   RecipientType,
   TimelineCategory,
@@ -22,7 +21,6 @@ import {
   cancelledNotificationToFe,
   notificationDTO,
   notificationToFe,
-  payments,
   paymentsData,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
@@ -80,8 +78,6 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
-  pagopaAttachmentUrl: '',
-  f24AttachmentUrl: '',
   paymentsData: {
     pagoPaF24: [],
     f24Only: [],
@@ -204,27 +200,21 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the pagopa document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
-    const recIndex = 1;
     const url = 'http://pagopa-mocked-url.com';
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, { url });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, { url });
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(action.payload).toEqual({ url });
-    const state = store.getState().notificationState;
-    expect(state.pagopaAttachmentUrl).toEqual(url);
   });
 
   it('Should be able to fetch the f24 document', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.F24;
-    const recIndex = 1;
     const url = 'http://f24-mocked-url.com';
-    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, { url });
-    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName, recIndex }));
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, { url });
+    const action = await store.dispatch(getPaymentAttachment({ iun, attachmentName }));
     expect(action.type).toBe('getPaymentAttachment/fulfilled');
     expect(action.payload).toEqual({ url });
-    const state = store.getState().notificationState;
-    expect(state.f24AttachmentUrl).toEqual(url);
   });
 
   it('should save only payed payments (from timeline) if the notification is canceled', async () => {
@@ -385,7 +375,6 @@ describe('Notification detail redux state tests', () => {
     expect(state.paymentsData.pagoPaF24).toStrictEqual(initialState);
   });
 
-  // TODO: convert to new logic
   it('Should be able to fetch the downtimes events', async () => {
     const mockRequest = {
       startDate: '2022-10-23T15:50:04Z',
@@ -407,7 +396,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.payload).toEqual(simpleDowntimeLogPage);
   });
 
-  // TODO: convert to new logic
   it('Should be able to fetch the downtimes legal fact details', async () => {
     const response = {
       filename: 'mocked-filename',

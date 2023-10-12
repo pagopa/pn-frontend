@@ -8,7 +8,6 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
-  PaymentAttachmentSName,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
@@ -27,7 +26,6 @@ import {
   getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
-  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -63,8 +61,6 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
-  pagopaAttachmentUrl: '',
-  f24AttachmentUrl: '',
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
   paymentsData: {
@@ -151,16 +147,6 @@ const notificationSlice = createSlice({
       }
       if (action.payload.retryAfter) {
         state.legalFactDownloadRetryAfter = action.payload.retryAfter;
-      }
-    });
-    builder.addCase(getPaymentAttachment.fulfilled, (state, action) => {
-      if (action.payload.url) {
-        const attachmentName = action.meta.arg.attachmentName;
-        if (attachmentName === PaymentAttachmentSName.PAGOPA) {
-          state.pagopaAttachmentUrl = action.payload.url;
-        } else if (attachmentName === PaymentAttachmentSName.F24) {
-          state.f24AttachmentUrl = action.payload.url;
-        }
       }
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {

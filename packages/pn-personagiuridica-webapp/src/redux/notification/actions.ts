@@ -10,6 +10,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import {
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentDetails,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
@@ -68,11 +69,10 @@ export const getReceivedNotificationDocument = createAsyncThunk<
 );
 
 export const getPaymentAttachment = createAsyncThunk<
-  { url: string },
+  PaymentAttachment,
   {
     iun: string;
     attachmentName: PaymentAttachmentNameType;
-    recIndex: number;
     mandateId?: string;
     attachmentIdx?: number;
   }
@@ -82,18 +82,19 @@ export const getPaymentAttachment = createAsyncThunk<
     (params: {
       iun: string;
       attachmentName: PaymentAttachmentNameType;
-      recIndex: number;
       mandateId?: string;
       attachmentIdx?: number;
     }) =>
       NotificationsApi.getPaymentAttachment(
         params.iun,
         params.attachmentName,
-        params.recIndex,
         params.mandateId,
         params.attachmentIdx
       )
-  )
+  ),
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
+  }
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<

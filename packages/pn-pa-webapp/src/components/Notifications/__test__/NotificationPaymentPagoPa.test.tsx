@@ -112,7 +112,7 @@ describe('NotificationPaymentPagoPa Component', () => {
         )
       );
       expect(downloadDocument).toBeCalledTimes(1);
-      expect(downloadDocument).toBeCalledWith('http://mocked-url.com', false);
+      expect(downloadDocument).toBeCalledWith('http://mocked-url.com');
     });
   });
 
