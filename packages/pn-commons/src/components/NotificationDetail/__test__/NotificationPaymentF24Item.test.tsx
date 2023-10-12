@@ -89,7 +89,7 @@ describe('NotificationPaymentF24Item Component', () => {
   ) => store.dispatch(getPaymentAttachment({ name, attachmentIdx, downloadStatus }));
 
   it('renders component - should show title of f24Item', () => {
-    const item = { ...f24Item, title: 'F24 Rata' };
+    const item = { ...f24Item, applyCost: true };
     const { container, getByTestId } = render(
       <NotificationPaymentF24Item
         f24Item={item}
@@ -100,11 +100,14 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(container).toHaveTextContent(item.title);
     const downloadBtn = getByTestId('download-f24-button');
     expect(downloadBtn).toBeInTheDocument();
+    // applyCost caption
+    const caption = getByTestId('f24-apply-costs-caption');
+    expect(caption).toBeInTheDocument();
   });
 
   it('should show the correct label if is a PagoPA attachment', () => {
-    const item = { ...f24Item, title: 'F24 Rata' };
-    const { container, getByTestId } = render(
+    const item = { ...f24Item, applyCost: true };
+    const { container, getByTestId, queryByTestId } = render(
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
@@ -115,6 +118,9 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(container).toHaveTextContent('detail.payment.download-f24');
     const downloadBtn = getByTestId('download-f24-button');
     expect(downloadBtn).toBeInTheDocument();
+    // if payment is an attachment, the applyCost caption must be not shown
+    const caption = queryByTestId('f24-apply-costs-caption');
+    expect(caption).not.toBeInTheDocument();
   });
 
   it('should call function handleDownloadAttachment when click on download button', () => {
@@ -267,34 +273,5 @@ describe('NotificationPaymentF24Item Component', () => {
     const error = await waitFor(() => result.getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
-  });
-
-  it('should show applyCost caption if is present and only if is not a PagoPA attachment', () => {
-    const item = { ...f24Item, applyCost: true };
-    const { getByTestId } = render(
-      <NotificationPaymentF24Item
-        f24Item={item}
-        timerF24={TIMERF24}
-        getPaymentAttachmentAction={jest.fn()}
-      />
-    );
-
-    const caption = getByTestId('f24-apply-costs-caption');
-    expect(caption).toBeInTheDocument();
-  });
-
-  it('should not show applyCost caption if is presente but is a PagoPA attachment', () => {
-    const item = { ...f24Item, applyCost: true };
-    const { queryByTestId } = render(
-      <NotificationPaymentF24Item
-        f24Item={item}
-        timerF24={TIMERF24}
-        getPaymentAttachmentAction={jest.fn()}
-        isPagoPaAttachment
-      />
-    );
-
-    const caption = queryByTestId('f24-apply-costs-caption');
-    expect(caption).not.toBeInTheDocument();
   });
 });

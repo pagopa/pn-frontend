@@ -2,7 +2,7 @@ import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, waitFor } from '../../../test-utils';
+import { fireEvent, getById, queryById, render, waitFor } from '../../../test-utils';
 import {
   PagoPAPaymentFullDetails,
   PaymentDetails,
@@ -21,14 +21,14 @@ describe('NotificationPaymentPagoPAItem Component', () => {
 
   const pagoPAItem = pagoPAItems.find((item) => item.pagoPa)?.pagoPa as PagoPAPaymentFullDetails;
 
-  it('renders NotificationPaymentPagoPAItem - should show radio button when status is REQUIRED', () => {
+  it('renders component - should show radio button when status is REQUIRED', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.REQUIRED,
       applyCost: false,
       amount: undefined,
     };
-    const { getByTestId, queryByTestId } = render(
+    const { container, getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
@@ -38,6 +38,9 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
+    const box = getById(container, `paymentPagoPa-${pagoPAItem.noticeCode}`);
+    expect(box).toBeInTheDocument();
+    // radio
     const radioButton = getByTestId('radio-button');
     expect(radioButton).toBeInTheDocument();
     // no caption
@@ -49,9 +52,12 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     // no amount
     const amountContainer = queryByTestId('payment-amount');
     expect(amountContainer).not.toBeInTheDocument();
+    // no skeleton
+    const skeleton = queryByTestId('skeleton-card');
+    expect(skeleton).not.toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show caption if applyCost is true', () => {
+  it('renders component - should show caption if applyCost is true', () => {
     const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={{ ...pagoPAItem, amount: 999, applyCost: true }}
@@ -67,7 +73,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(caption).toHaveTextContent('detail.payment.included-costs');
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show badge when status is SUCCEEDED and not show radio', () => {
+  it('renders component - should show badge when status is SUCCEEDED and not show radio', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.SUCCEEDED };
     const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
@@ -85,7 +91,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(chip).toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show badge when status is FAILED (expired) and not show radio', () => {
+  it('renders component - should show badge when status is FAILED (expired) and not show radio', () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
@@ -107,7 +113,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(chip).toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show badge when status is INPROGRESS and not show radio', () => {
+  it('renders component - should show badge when status is INPROGRESS and not show radio', () => {
     const item = { ...pagoPAItem, status: PaymentStatus.INPROGRESS };
     const { getByTestId, queryByTestId } = render(
       <NotificationPaymentPagoPAItem
@@ -125,7 +131,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(chip).toBeInTheDocument();
   });
 
-  it('renders NotificationPaymentPagoPAItem - should show amount if present', () => {
+  it('renders component - should show amount if present', () => {
     const amount = 1000;
     const item = { ...pagoPAItem, amount };
     const { getByTestId } = render(
@@ -341,7 +347,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
   });
 
   it('should show only skeleton when loading is true', () => {
-    const { getByTestId } = render(
+    const { container, getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={pagoPAItem}
         loading={true}
@@ -351,7 +357,10 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={true}
       />
     );
-
+    // no payment box
+    const box = queryById(container, `paymentPagoPa-${pagoPAItem.noticeCode}`);
+    expect(box).not.toBeInTheDocument();
+    // skeleton
     const skeleton = getByTestId('skeleton-card');
     expect(skeleton).toBeInTheDocument();
   });

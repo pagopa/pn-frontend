@@ -41,6 +41,7 @@ import NotificationDetail from '../NotificationDetail.page';
 const mockNavigateFn = jest.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
+const mockAssignFn = jest.fn();
 
 // mock imports
 jest.mock('react-router-dom', () => ({
@@ -88,7 +89,7 @@ describe('NotificationDetail Page', () => {
     mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
-      value: { href: '' },
+      value: { href: '', assign: mockAssignFn },
     });
   });
 
@@ -586,7 +587,25 @@ describe('NotificationDetail Page', () => {
       paymentsData.pagoPaF24,
       paymentInfo
     );
-
+    const requiredPaymentIndex = paymentHistory.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+    const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock
+      .onPost(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.subject,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(200, {
+        checkoutUrl: 'https://mocked-url.com',
+      });
+    // render component
     act(() => {
       result = render(<NotificationDetail />, {
         preloadedState: {
@@ -602,42 +621,21 @@ describe('NotificationDetail Page', () => {
         },
       });
     });
-
     const payButton = result?.getByTestId('pay-button');
-
-    const requiredPaymentIndex = paymentHistory.findIndex(
-      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
-    );
-
-    const requiredPayment = paymentHistory[requiredPaymentIndex];
-
     const item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
-
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-
     await waitFor(() => {
-      fireEvent.click(payButton!);
+      expect(payButton).toBeEnabled();
     });
-
-    mock
-      .onPost(NOTIFICATION_PAYMENT_URL(), {
-        paymentNotice: {
-          noticeNumber: requiredPayment.pagoPa?.noticeCode,
-          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
-          amount: requiredPayment.pagoPa?.amount,
-          companyName: notificationToFe.senderDenomination,
-          description: notificationToFe.abstract,
-        },
-        returnUrl: window.location.href,
-      })
-      .reply(200, {
-        url: 'https://mocked-url.com',
-      });
-
+    fireEvent.click(payButton!);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
       expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
+    });
+    await waitFor(() => {
+      expect(mockAssignFn).toBeCalledTimes(1);
+      expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
   });
 });

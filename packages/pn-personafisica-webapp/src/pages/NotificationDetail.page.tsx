@@ -50,9 +50,9 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
-import { getConfiguration } from '../services/configuration.service';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)

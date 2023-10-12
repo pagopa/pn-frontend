@@ -375,7 +375,6 @@ describe('Notification detail redux state tests', () => {
     expect(state.paymentsData.pagoPaF24).toStrictEqual(initialState);
   });
 
-  // TODO: convert to new logic
   it('Should be able to fetch the downtimes events', async () => {
     const mockRequest = {
       startDate: '2022-10-23T15:50:04Z',
@@ -397,7 +396,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.payload).toEqual(simpleDowntimeLogPage);
   });
 
-  // TODO: convert to new logic
   it('Should be able to fetch the downtimes legal fact details', async () => {
     const response = {
       filename: 'mocked-filename',

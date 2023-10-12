@@ -2,7 +2,7 @@ import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, waitFor } from '../../../test-utils';
+import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../types';
 import {
   getF24Payments,
@@ -174,7 +174,7 @@ describe('NotificationPaymentRecipient Component', () => {
       .fn()
       .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
 
-    const { getByTestId, queryAllByTestId } = render(
+    const { getByTestId, getAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
@@ -187,9 +187,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const paymentIndex = paymentsData.pagoPaF24.findIndex(
       (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED && payment.f24
     );
-
-    const item = queryAllByTestId('pagopa-item')[paymentIndex];
-
+    const item = getAllByTestId('pagopa-item')[paymentIndex];
     const radioButton = item.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
     // download pagoPA attachments
@@ -200,25 +198,19 @@ describe('NotificationPaymentRecipient Component', () => {
       PaymentAttachmentSName.PAGOPA,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.attachmentIdx
     );
-
+    // dowload attached f24
     const attachedF24 = getByTestId('f24-download');
-    const attachedF24DownloadButton = attachedF24.querySelector(
-      '[data-testid="download-f24-button"]'
-    );
-    fireEvent.click(attachedF24DownloadButton!);
+    const attachedF24DownloadButton = within(attachedF24).getByTestId('download-f24-button');
+    fireEvent.click(attachedF24DownloadButton);
     expect(getPaymentAttachmentActionMk).toBeCalledTimes(2);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
       paymentsData.pagoPaF24[paymentIndex].f24!.attachmentIdx
     );
-
     // download isolated f24
-    const isolatedF24Item = queryAllByTestId('f24only-box')[0];
-    const isolatedF24RadioButton = isolatedF24Item.querySelector(
-      '[data-testid="download-f24-button"]'
-    );
-
-    fireEvent.click(isolatedF24RadioButton!);
+    const isolatedF24Item = getByTestId('f24only-box');
+    const isolatedF24RadioButton = within(isolatedF24Item).getAllByTestId('download-f24-button');
+    fireEvent.click(isolatedF24RadioButton[0]);
     expect(getPaymentAttachmentActionMk).toBeCalledTimes(3);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,

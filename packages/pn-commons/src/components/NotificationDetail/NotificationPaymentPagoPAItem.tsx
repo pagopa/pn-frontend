@@ -262,6 +262,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
 
   return (
     <Box
+      id={`paymentPagoPa-${pagoPAItem.noticeCode}`}
       px={2}
       py={isMobile ? 2 : 1}
       gap={1}
