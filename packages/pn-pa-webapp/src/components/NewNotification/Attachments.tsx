@@ -35,11 +35,12 @@ type AttachmentBoxProps = {
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
+  children?: React.ReactNode;
 };
 
 const MAX_NUMBER_OF_ATTACHMENTS = 10;
 
-const AttachmentBox: React.FC<React.PropsWithChildren<AttachmentBoxProps>> = ({
+const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   id,
   title,
   sx,
@@ -122,7 +123,7 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments: React.FC<React.PropsWithChildren<Props>> = ({
+const Attachments: React.FC<Props> = ({
   onConfirm,
   onPreviousStep,
   attachmentsData,

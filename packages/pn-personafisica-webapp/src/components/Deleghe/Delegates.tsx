@@ -26,10 +26,12 @@ import { trackEventByType } from '../../utility/mixpanel';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
-const LinkAddDelegate: React.FC<React.PropsWithChildren<{ handleAddDelegationClick: (source: string) => void }>> = ({
-  children,
-  handleAddDelegationClick,
-}) => {
+type Props = {
+  handleAddDelegationClick: (source: string) => void;
+  children?: React.ReactNode;
+};
+
+const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <Link

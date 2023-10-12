@@ -40,6 +40,11 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
+type LinkRemoveFiltersProps = {
+  cleanFilters: () => void;
+  children?: React.ReactNode;
+};
+
 /**
  * Refers to PN-1741
  * The following line has been added for the solely purpose of preventing
@@ -52,10 +57,7 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => void }>> = ({
-  children,
-  cleanFilters,
-}) => {
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link

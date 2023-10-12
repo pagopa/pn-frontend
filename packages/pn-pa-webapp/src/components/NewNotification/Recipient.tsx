@@ -73,9 +73,10 @@ type Props = {
   onPreviousStep?: () => void;
   recipientsData?: Array<NewNotificationRecipient>;
   forwardedRef: ForwardedRef<unknown>;
+  children?: React.ReactNode;
 };
 
-const Recipient: React.FC<React.PropsWithChildren<Props>> = ({
+const Recipient: React.FC<Props> = ({
   paymentMode,
   onConfirm,
   onPreviousStep,

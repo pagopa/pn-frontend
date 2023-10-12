@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import DownloadIcon from '@mui/icons-material/Download';
@@ -82,7 +82,17 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
-const ReloadPaymentInfoButton: React.FC<React.PropsWithChildren<{ fetchPaymentInfo: () => void }>> = ({
+type ReloadPaymentInfoButtonProps = {
+  fetchPaymentInfo: () => void;
+  children?: React.ReactNode;
+};
+
+type SupportButtonProps = {
+  contactSupportClick: () => void;
+  children?: React.ReactNode;
+};
+
+const ReloadPaymentInfoButton: React.FC<ReloadPaymentInfoButtonProps> = ({
   children,
   fetchPaymentInfo,
 }) => (
@@ -97,10 +107,7 @@ const ReloadPaymentInfoButton: React.FC<React.PropsWithChildren<{ fetchPaymentIn
   </Link>
 );
 
-const SupportButton: React.FC<React.PropsWithChildren<{ contactSupportClick: () => void }>> = ({
-  children,
-  contactSupportClick,
-}) => (
+const SupportButton: React.FC<SupportButtonProps> = ({ children, contactSupportClick }) => (
   <Link
     key="support-button"
     sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
@@ -111,7 +118,7 @@ const SupportButton: React.FC<React.PropsWithChildren<{ contactSupportClick: () 
   </Link>
 );
 
-const NotificationPayment: React.FC<React.PropsWithChildren<Props>> = ({
+const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
   mandateId,

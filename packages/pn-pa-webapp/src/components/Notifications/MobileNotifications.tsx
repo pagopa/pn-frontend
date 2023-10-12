@@ -38,9 +38,25 @@ type Props = {
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
   onApiKeys: () => void;
+  children?: React.ReactNode;
 };
 
-const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => void }>> = ({ children, cleanFilters }) => {
+type LinkRemoveFiltersProps = {
+  cleanFilters: () => void;
+  children?: React.ReactNode;
+};
+
+type LinkApiKeyProps = {
+  onApiKeys: () => void;
+  children?: React.ReactNode;
+};
+
+type LinkCreateNotificationProps = {
+  onManualSend: () => void;
+  children?: React.ReactNode;
+};
+
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link
@@ -56,7 +72,7 @@ const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => 
   );
 };
 
-const LinkApiKey: React.FC<React.PropsWithChildren<{ onApiKeys: () => void }>> = ({ children, onApiKeys }) => {
+const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link
@@ -72,7 +88,7 @@ const LinkApiKey: React.FC<React.PropsWithChildren<{ onApiKeys: () => void }>> =
   );
 };
 
-const LinkCreateNotification: React.FC<React.PropsWithChildren<{ onManualSend: () => void }>> = ({
+const LinkCreateNotification: React.FC<LinkCreateNotificationProps> = ({
   children,
   onManualSend,
 }) => {

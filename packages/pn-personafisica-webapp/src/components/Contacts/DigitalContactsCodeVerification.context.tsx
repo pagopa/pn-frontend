@@ -60,7 +60,9 @@ const DigitalContactsCodeVerificationContext = createContext<
   IDigitalContactsCodeVerificationContext | undefined
 >(undefined);
 
-const DigitalContactsCodeVerificationProvider: FC<React.PropsWithChildren> = ({ children }) => {
+const DigitalContactsCodeVerificationProvider: FC<{ children?: React.ReactNode }> = ({
+  children,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses

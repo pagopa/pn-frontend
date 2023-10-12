@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';

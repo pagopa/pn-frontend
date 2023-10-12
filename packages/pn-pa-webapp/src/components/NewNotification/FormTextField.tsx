@@ -13,9 +13,10 @@ type Props = {
   handleBlur?: any;
   width?: number;
   sx?: SxProps;
+  children?: React.ReactNode;
 };
 
-const FormTextField: React.FC<React.PropsWithChildren<Props>> = ({
+const FormTextField: React.FC<Props> = ({
   keyName,
   label,
   values,

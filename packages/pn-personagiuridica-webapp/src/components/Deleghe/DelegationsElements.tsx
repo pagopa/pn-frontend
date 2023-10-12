@@ -56,9 +56,24 @@ type Props = {
   userLogged?: User;
   row?: Item;
   onAction?: (data: any) => void;
+  children?: React.ReactNode;
 };
 
-export const Menu: React.FC<React.PropsWithChildren<Props>> = ({ menuType, id, userLogged, row, onAction }) => {
+type OrganizationsListProps = {
+  organizations: Array<string>;
+  textVariant?: Variant;
+  visibleItems?: number;
+  children?: React.ReactNode;
+};
+
+type AcceptButtonProps = {
+  id: string;
+  name: string;
+  onAccept: () => void;
+  children?: React.ReactNode;
+};
+
+export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const dispatch = useAppDispatch();
@@ -279,11 +294,11 @@ export const Menu: React.FC<React.PropsWithChildren<Props>> = ({ menuType, id, u
   );
 };
 
-export const OrganizationsList: React.FC<React.PropsWithChildren<{
-  organizations: Array<string>;
-  textVariant?: Variant;
-  visibleItems?: number;
-}>> = ({ organizations, textVariant, visibleItems }) => {
+export const OrganizationsList: React.FC<OrganizationsListProps> = ({
+  organizations,
+  textVariant,
+  visibleItems,
+}) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <>
@@ -309,11 +324,7 @@ export const OrganizationsList: React.FC<React.PropsWithChildren<{
   );
 };
 
-export const AcceptButton: React.FC<React.PropsWithChildren<{ id: string; name: string; onAccept: () => void }>> = ({
-  id,
-  name,
-  onAccept,
-}) => {
+export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }) => {
   const { t } = useTranslation(['deleghe']);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,9 +30,10 @@ import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 type Props = {
   apiKeys: Array<ApiKey<UserGroup>>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
+  children?: React.ReactNode;
 };
 
-const LinkNewApiKey: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+const LinkNewApiKey: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['apikeys']);
   return (
@@ -277,7 +278,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       getCellLabel(value: string, row: Item) {
         const { label, tooltip, color } = getApiKeyStatusInfos(
           value as ApiKeyStatus,
-          row.statusHistory as React.ReactNode as Array<ApiKeyStatusHistory>
+          row.statusHistory as Array<ApiKeyStatusHistory>
         );
         return (
           <Box

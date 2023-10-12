@@ -49,9 +49,12 @@ import { ServerResponseErrorCode } from '../utility/AppError/types';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-const AlertNotificationCancel: React.FC<React.PropsWithChildren<{ notification: NotificationDetailType }>> = (
-  notification
-) => {
+type Props = {
+  notification: NotificationDetailType;
+  children?: React.ReactNode;
+};
+
+const AlertNotificationCancel: React.FC<Props> = (notification) => {
   const { t } = useTranslation(['notifiche']);
   const { cancelled, cancellationInProgress } = useIsCancelled(notification);
   if (cancelled || cancellationInProgress) {
@@ -69,7 +72,7 @@ const AlertNotificationCancel: React.FC<React.PropsWithChildren<{ notification: 
   return <></>;
 };
 
-const NotificationDetail: React.FC<React.PropsWithChildren<unknown>> = () => {
+const NotificationDetail: React.FC<{ children?: React.ReactNode }> = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { hasApiErrors } = useErrors();

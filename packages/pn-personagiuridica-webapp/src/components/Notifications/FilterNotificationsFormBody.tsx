@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
-import React, { ChangeEvent, Fragment } from 'react';
+import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Grid, TextField, TextFieldProps } from '@mui/material';

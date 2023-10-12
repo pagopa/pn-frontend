@@ -22,9 +22,10 @@ import ConfirmCancellationDialog from './ConfirmCancellationDialog';
 type Props = {
   notification: NotificationDetail;
   onCancelNotification: () => void;
+  children?: React.ReactNode;
 };
 
-const NotificationDetailTableSender: React.FC<React.PropsWithChildren<Props>> = ({ notification, onCancelNotification }) => {
+const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancelNotification }) => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const { cancellationInProgress, cancelled } = useIsCancelled({ notification });

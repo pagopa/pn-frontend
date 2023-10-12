@@ -56,6 +56,7 @@ interface Props {
   paymentHistory?: Array<PaymentHistory>;
   senderDenomination?: string;
   notificationIsCancelled?: boolean;
+  children?: React.ReactNode;
 }
 
 interface PrimaryAction {
@@ -82,7 +83,17 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
-const ReloadPaymentInfoButton: React.FC<React.PropsWithChildren<{ fetchPaymentInfo: () => void }>> = ({
+type ReloadPaymentInfoButtonProps = {
+  fetchPaymentInfo: () => void;
+  children?: React.ReactNode;
+};
+
+type SupportButtonProps = {
+  contactSupportClick: () => void;
+  children?: React.ReactNode;
+};
+
+const ReloadPaymentInfoButton: React.FC<React.PropsWithChildren<ReloadPaymentInfoButtonProps>> = ({
   children,
   fetchPaymentInfo,
 }) => (
@@ -97,10 +108,7 @@ const ReloadPaymentInfoButton: React.FC<React.PropsWithChildren<{ fetchPaymentIn
   </Link>
 );
 
-const SupportButton: React.FC<React.PropsWithChildren<{ contactSupportClick: () => void }>> = ({
-  children,
-  contactSupportClick,
-}) => (
+const SupportButton: React.FC<SupportButtonProps> = ({ children, contactSupportClick }) => (
   <Link
     key="support-button"
     sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
@@ -111,7 +119,7 @@ const SupportButton: React.FC<React.PropsWithChildren<{ contactSupportClick: () 
   </Link>
 );
 
-const NotificationPayment: React.FC<React.PropsWithChildren<Props>> = ({
+const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
   mandateId,

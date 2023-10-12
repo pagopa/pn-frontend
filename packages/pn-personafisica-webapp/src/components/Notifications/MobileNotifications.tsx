@@ -37,6 +37,12 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumn>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
+  children?: React.ReactNode;
+};
+
+type LinkRemoveFiltersProps = {
+  cleanFilters: () => void;
+  children?: React.ReactNode;
 };
 
 /**
@@ -51,10 +57,7 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => void }>> = ({
-  children,
-  cleanFilters,
-}) => {
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
   const { t } = useTranslation('notifiche');
   return (
     <Link
@@ -70,7 +73,7 @@ const LinkRemoveFilters: React.FC<React.PropsWithChildren<{ cleanFilters: () => 
   );
 };
 
-const LinkRouteContacts: React.FC<React.PropsWithChildren> = ({ children }) => {
+const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   return (

@@ -10,9 +10,10 @@ import DigitalContactsCard from './DigitalContactsCard';
 interface Props {
   recipientId: string;
   contacts: Array<DigitalAddress>;
+  children?: React.ReactNode;
 }
 
-const CourtesyContacts: React.FC<React.PropsWithChildren<Props>> = ({ recipientId, contacts }) => {
+const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
   return (

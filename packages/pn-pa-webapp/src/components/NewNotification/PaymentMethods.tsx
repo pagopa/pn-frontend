@@ -27,9 +27,10 @@ type PaymentBoxProps = {
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
+  children?: React.ReactNode;
 };
 
-const PaymentBox: React.FC<React.PropsWithChildren<PaymentBoxProps>> = ({
+const PaymentBox: React.FC<PaymentBoxProps> = ({
   id,
   title,
   onFileUploaded,
@@ -86,7 +87,7 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
  * Last step of the notification creation, where the user configures the payments
  * @returns
  */
-const PaymentMethods: React.FC<React.PropsWithChildren<Props>> = ({
+const PaymentMethods: React.FC<Props> = ({
   notification,
   onConfirm,
   isCompleted,
