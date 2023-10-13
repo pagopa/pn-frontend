@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { PartyEntity } from '@pagopa/mui-italia';
 import { Party } from '../../models/party';
 import { apiClient } from '../apiClients';
 
@@ -22,10 +23,20 @@ export const ExternalRegistriesAPI = {
       .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
       .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
   
-  getInstitutions: (): Promise<Institution> =>
+
+  getInstitutions: (): Promise<Array<PartyEntity>> =>
     apiClient
     .get<Array<Institution>>(GET_INSTITUTIONS())
-    .then((response: AxiosResponse<Array<Institution>>) => response.data[0]),
+    .then((response: AxiosResponse<Array<Institution>>) => response.data.map((institution)=> (
+        {
+          id: institution.id,
+          name: institution.description,
+          productRole: institution.userProductRoles[0],
+          logoUrl: undefined
+        }
+      )
+      
+    )),
   
   getInstitutionProducts: (institutionId: string): Promise<Product> =>
     apiClient

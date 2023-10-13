@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 
+import { PartyEntity } from '@pagopa/mui-italia';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -14,11 +15,13 @@ import {
   acceptPrivacy,
   acceptToS,
   exchangeToken,
+  getInstitutions,
   getPrivacyApproval,
   getToSApproval,
   logout,
 } from './actions';
 import { User } from './types';
+
 
 const roleMatcher = yup.object({
   role: yup.string().oneOf(Object.values(PNRole)),
@@ -81,6 +84,7 @@ const userSlice = createSlice({
       isFirstAccept: false,
       consentVersion: '',
     },
+    institutions: [] as Array<PartyEntity>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -143,6 +147,9 @@ const userSlice = createSlice({
     });
     builder.addCase(acceptPrivacy.rejected, (state) => {
       state.privacyConsent.accepted = false;
+    });
+    builder.addCase(getInstitutions.fulfilled, (state, action) => {
+      state.institutions = action.payload;
     });
   },
 });

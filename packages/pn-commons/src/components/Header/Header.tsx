@@ -37,6 +37,8 @@ type HeaderProps = {
   isLogged?: boolean;
   /** Base Url of Selfcare for token-exchange */
   selfcareBaseUrl?: string;
+  /** Product Id of Selfcare for token-exchange */
+  selfcareSendProdId?: string;
 };
 
 const Header = ({
@@ -51,7 +53,8 @@ const Header = ({
   onAssistanceClick,
   eventTrackingCallbackProductSwitch,
   isLogged,
-  selfcareBaseUrl
+  selfcareBaseUrl,
+  selfcareSendProdId
 }: HeaderProps) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -80,9 +83,10 @@ const Header = ({
     }
   };
   const handlePartySelection = (party: PartyEntity) => {
+    console.log(`${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=${selfcareSendProdId}`);
     console.log(party);
     window.location.assign(
-      `${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=prod-pn`
+      `${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=${selfcareSendProdId}`
     )
   }
 

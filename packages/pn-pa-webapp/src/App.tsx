@@ -23,7 +23,7 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -36,7 +36,8 @@ import { TrackEventType } from './utility/events';
 import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
-import { logout } from './redux/auth/actions';
+// import { ExternalRegistriesAPI } from './api/external-registries/External-registries.api';
+import { getInstitutions, logout } from './redux/auth/actions';
 
 // Cfr. PN-6096
 // --------------------
@@ -78,7 +79,6 @@ const ActualApp = () => {
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
   const sessionToken = loggedUser.sessionToken;
-  const {SELFCARE_BASE_URL} = getConfiguration();
 
   const configuration = useMemo(() => getConfiguration(), []);
 
@@ -131,6 +131,7 @@ const ActualApp = () => {
     return items;
   }, [role, idOrganization, currentStatus, i18n.language]);
 
+  console.log(loggedUser);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -140,8 +141,7 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  
-
+  const {SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID} = getConfiguration();
   // TODO: get products list from be (?)
   const productsList: Array<ProductSwitchItem> = useMemo(
     () => [
@@ -161,42 +161,15 @@ const ActualApp = () => {
     [idOrganization, i18n.language]
   );
 
+  const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   
-  const partyList: Array<PartyEntity> = useMemo(
-    () => [
-      {
-        id: '0',
-        name: loggedUserOrganizationParty?.name,
-        // productRole: role?.role,
-        productRole: t(`roles.${role?.role}`),
-        logoUrl: undefined,
-        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
-        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
-        // ------------------
-        // Carlos Lombardi, 2022.07.28
-        // logoUrl: <AccountBalanceIcon />
-      },
-      {
-          id: "56ed074c-13b6-4d61-ba49-221953e6b60f",
-          name: "Comune di Sappada",
-          productRole: "ADMIN",
-          logoUrl: undefined
-      },
-      {
-          id: "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
-          name: "Comune di Palermo",
-          productRole: "ADMIN",
-          logoUrl: undefined
-      }
-    ],
-    [role, loggedUserOrganizationParty, i18n.language]
-  );
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
+      void dispatch(getInstitutions());
     }
   }, [sessionToken, getCurrentAppStatus]);
 
@@ -279,11 +252,12 @@ const ActualApp = () => {
         }
         productsList={productsList}
         productId={'0'}
-        partyList={partyList}
-        selfcareBaseUrl={SELFCARE_BASE_URL}
+        partyList={institutions}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        selfcareBaseUrl={SELFCARE_BASE_URL}
+        selfcareSendProdId={SELFCARE_SEND_PROD_ID}
         isLogged={!!sessionToken}
       >
         <AppMessage />
