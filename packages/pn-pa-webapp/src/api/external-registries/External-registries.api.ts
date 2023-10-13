@@ -2,7 +2,9 @@ import { AxiosResponse } from 'axios';
 import { Party } from '../../models/party';
 import { apiClient } from '../apiClients';
 
-import { GET_PARTY_FOR_ORGANIZATION } from './external-registries-routes';
+import { Institution } from '../../models/Institutions';
+import { Product } from '../../models/Products';
+import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS, GET_PARTY_FOR_ORGANIZATION } from './external-registries-routes';
 
 export const ExternalRegistriesAPI = {
   /**
@@ -19,4 +21,15 @@ export const ExternalRegistriesAPI = {
     apiClient
       .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
       .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
+  
+  getInstitutions: (): Promise<Institution> =>
+    apiClient
+    .get<Array<Institution>>(GET_INSTITUTIONS())
+    .then((response: AxiosResponse<Array<Institution>>) => response.data[0]),
+  
+  getInstitutionProducts: (institutionId: string): Promise<Product> =>
+    apiClient
+    .get<Array<Product>>(GET_INSTITUTION_PRODUCTS(institutionId))
+    .then((response: AxiosResponse<Array<Product>>) => response.data[0])
 };
+

@@ -28,7 +28,6 @@ import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -37,6 +36,7 @@ import { TrackEventType } from './utility/events';
 import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
+import { logout } from './redux/auth/actions';
 
 // Cfr. PN-6096
 // --------------------
@@ -48,6 +48,7 @@ const App = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+
     if (!isInitialized) {
       setIsInitialized(true);
       // init localization
@@ -139,6 +140,8 @@ const ActualApp = () => {
     [loggedUser]
   );
 
+  
+
   // TODO: get products list from be (?)
   const productsList: Array<ProductSwitchItem> = useMemo(
     () => [
@@ -158,6 +161,7 @@ const ActualApp = () => {
     [idOrganization, i18n.language]
   );
 
+  
   const partyList: Array<PartyEntity> = useMemo(
     () => [
       {
@@ -172,6 +176,18 @@ const ActualApp = () => {
         // Carlos Lombardi, 2022.07.28
         // logoUrl: <AccountBalanceIcon />
       },
+      {
+          id: "56ed074c-13b6-4d61-ba49-221953e6b60f",
+          name: "Comune di Sappada",
+          productRole: "ADMIN",
+          logoUrl: undefined
+      },
+      {
+          id: "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
+          name: "Comune di Palermo",
+          productRole: "ADMIN",
+          logoUrl: undefined
+      }
     ],
     [role, loggedUserOrganizationParty, i18n.language]
   );
