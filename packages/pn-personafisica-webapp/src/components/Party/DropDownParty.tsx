@@ -3,7 +3,6 @@ import { Avatar, Grid, Typography } from '@mui/material';
 
 type DropDownPartyProps = {
   name: string;
-  children?: React.ReactNode;
 };
 
 const DropDownPartyMenuItem: React.FC<DropDownPartyProps> = ({ name }) => (

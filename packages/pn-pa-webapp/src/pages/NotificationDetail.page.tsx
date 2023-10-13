@@ -51,7 +51,6 @@ import { trackEventByType } from '../utility/mixpanel';
 
 type Props = {
   notification: NotificationDetailType;
-  children?: React.ReactNode;
 };
 
 const AlertNotificationCancel: React.FC<Props> = (notification) => {
@@ -72,7 +71,7 @@ const AlertNotificationCancel: React.FC<Props> = (notification) => {
   return <></>;
 };
 
-const NotificationDetail: React.FC<{ children?: React.ReactNode }> = () => {
+const NotificationDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { hasApiErrors } = useErrors();

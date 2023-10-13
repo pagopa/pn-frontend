@@ -15,7 +15,6 @@ import DigitalContactsCard from './DigitalContactsCard';
 interface Props {
   recipientId: string;
   contact: DigitalAddress | null | undefined;
-  children?: React.ReactNode;
 }
 
 enum IOContactStatus {

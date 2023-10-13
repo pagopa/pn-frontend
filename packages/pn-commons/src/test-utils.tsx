@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Store, configureStore } from '@reduxjs/toolkit';
-import '@testing-library/jest-dom';
 import {
   Matcher,
   MatcherOptions,

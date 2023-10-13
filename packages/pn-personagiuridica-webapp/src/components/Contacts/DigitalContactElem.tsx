@@ -63,7 +63,6 @@ type DialogProps = {
   removeModalBody: string;
   blockDelete?: boolean;
   confirmHandler: () => void;
-  children?: React.ReactNode;
 };
 
 const DeleteDialog: React.FC<DialogProps> = ({

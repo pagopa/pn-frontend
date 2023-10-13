@@ -15,7 +15,6 @@ interface Props {
   tooltip?: string;
   tooltipBefore?: string;
   disabled?: boolean;
-  children?: React.ReactNode;
 }
 
 const CopyToClipboard: React.FC<Props> = ({

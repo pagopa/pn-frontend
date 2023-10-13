@@ -27,7 +27,6 @@ type PaymentBoxProps = {
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
-  children?: React.ReactNode;
 };
 
 const PaymentBox: React.FC<PaymentBoxProps> = ({

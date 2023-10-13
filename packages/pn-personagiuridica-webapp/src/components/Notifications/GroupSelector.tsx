@@ -11,7 +11,6 @@ import { RootState } from '../../redux/store';
 type Props = {
   currentGroup: string;
   onGroupSelection: (id: string) => void;
-  children?: React.ReactNode;
 };
 
 const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {

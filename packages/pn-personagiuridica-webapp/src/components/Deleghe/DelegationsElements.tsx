@@ -56,21 +56,18 @@ type Props = {
   userLogged?: User;
   row?: Item;
   onAction?: (data: any) => void;
-  children?: React.ReactNode;
 };
 
 type OrganizationsListProps = {
   organizations: Array<string>;
   textVariant?: Variant;
   visibleItems?: number;
-  children?: React.ReactNode;
 };
 
 type AcceptButtonProps = {
   id: string;
   name: string;
   onAccept: () => void;
-  children?: React.ReactNode;
 };
 
 export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction }) => {

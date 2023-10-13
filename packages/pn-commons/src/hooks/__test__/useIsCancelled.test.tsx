@@ -7,7 +7,6 @@ import { useIsCancelled } from '../useIsCancelled';
 
 interface Props {
   notification: NotificationDetail;
-  children?: React.ReactNode;
 }
 
 const Component: React.FC<Props> = ({ notification }) => {

@@ -197,9 +197,7 @@ describe('NotificationPaymentF24Item Component', () => {
     act(() => {
       jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     });
-    await waitFor(() =>
-      expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting')
-    );
+    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
     act(() => {
       jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
@@ -241,9 +239,7 @@ describe('NotificationPaymentF24Item Component', () => {
     act(() => {
       jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     });
-    await waitFor(() =>
-      expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting')
-    );
+    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
     act(() => {
       jest.advanceTimersByTime((retryAfterDelay - 1000) / 2);

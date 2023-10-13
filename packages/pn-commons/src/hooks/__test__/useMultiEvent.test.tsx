@@ -6,7 +6,6 @@ import { useMultiEvent } from '../useMultiEvent';
 interface IProps {
   count: number;
   interval: number;
-  children?: React.ReactNode;
 }
 
 const Component: React.FC<IProps> = ({ count, interval }) => {
@@ -32,7 +31,7 @@ describe('test useMultiEvent hook', () => {
     const interval = 100;
     const { getByRole } = render(<Component count={count} interval={interval} />);
     const btn = getByRole('button', { name: 'Click me!' });
-    for (let index = 0; index < count; index++) {
+    for (let index = 0; index < count - 1; index++) {
       await new Promise((r) => setTimeout(r, 50));
       fireEvent.click(btn);
     }

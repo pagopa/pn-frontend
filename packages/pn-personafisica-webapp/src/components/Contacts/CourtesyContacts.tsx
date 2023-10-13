@@ -10,7 +10,6 @@ import DigitalContactsCard from './DigitalContactsCard';
 interface Props {
   recipientId: string;
   contacts: Array<DigitalAddress>;
-  children?: React.ReactNode;
 }
 
 const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {

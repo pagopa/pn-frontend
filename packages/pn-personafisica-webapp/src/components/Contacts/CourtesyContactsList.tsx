@@ -9,7 +9,6 @@ import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 interface Props {
   recipientId: string;
   contacts: Array<DigitalAddress>;
-  children?: React.ReactNode;
 }
 
 const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {

@@ -13,7 +13,6 @@ type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
   eventTrackingCallback?: (target: string) => void;
-  children?: React.ReactNode;
 };
 
 const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }) => {

@@ -29,7 +29,6 @@ type Props = {
   headerGridProps?: GridProps;
   /** Cards test id */
   testId?: string;
-  children?: React.ReactNode;
 };
 
 const cardStyle = {

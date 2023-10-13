@@ -13,7 +13,6 @@ type Props = {
   handleBlur?: any;
   width?: number;
   sx?: SxProps;
-  children?: React.ReactNode;
 };
 
 const FormTextField: React.FC<Props> = ({

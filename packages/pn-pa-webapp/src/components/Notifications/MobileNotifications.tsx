@@ -38,7 +38,6 @@ type Props = {
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
   onApiKeys: () => void;
-  children?: React.ReactNode;
 };
 
 type LinkRemoveFiltersProps = {

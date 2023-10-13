@@ -32,7 +32,6 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumn>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
-  children?: React.ReactNode;
 };
 
 type LinkRemoveFiltersProps = {

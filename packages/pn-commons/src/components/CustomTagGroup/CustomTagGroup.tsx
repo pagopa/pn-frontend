@@ -12,6 +12,7 @@ interface CustomTagGroupProps {
   disableTooltip?: boolean;
   /** callback function when tooltip is opened */
   onOpen?: () => void;
+  /** tags list */
   children?: React.ReactNode;
 }
 

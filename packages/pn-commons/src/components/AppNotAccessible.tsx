@@ -5,7 +5,6 @@ import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
   onAssistanceClick: () => void;
-  children?: React.ReactNode;
 };
 
 const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => (

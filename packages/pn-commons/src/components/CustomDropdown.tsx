@@ -35,6 +35,7 @@ type Props = {
   emptyItemKey?: string;
   /** map label string for empty item (default: '------') */
   emptyItemLabel?: string;
+  /** dropdown items */
   children?: React.ReactNode;
 };
 

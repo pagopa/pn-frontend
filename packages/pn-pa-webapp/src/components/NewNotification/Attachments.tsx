@@ -35,7 +35,6 @@ type AttachmentBoxProps = {
   ) => void;
   onRemoveFile: (id: string) => void;
   fileUploaded?: NewNotificationDocument;
-  children?: React.ReactNode;
 };
 
 const MAX_NUMBER_OF_ATTACHMENTS = 10;

@@ -18,7 +18,6 @@ type Props = {
   onClose: MouseEventHandler<HTMLButtonElement>;
   onConfirm: MouseEventHandler<HTMLButtonElement>;
   payment: boolean;
-  children?: React.ReactNode;
 };
 
 const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConfirm, payment }) => {

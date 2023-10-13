@@ -4,7 +4,6 @@ import { Box, Typography } from '@mui/material';
 
 type Props = {
   numberOfNotification: number;
-  children?: React.ReactNode;
 };
 
 const NotificationBadge: React.FC<Props> = ({ numberOfNotification }) => (

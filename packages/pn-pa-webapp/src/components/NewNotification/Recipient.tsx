@@ -73,7 +73,6 @@ type Props = {
   onPreviousStep?: () => void;
   recipientsData?: Array<NewNotificationRecipient>;
   forwardedRef: ForwardedRef<unknown>;
-  children?: React.ReactNode;
 };
 
 const Recipient: React.FC<Props> = ({

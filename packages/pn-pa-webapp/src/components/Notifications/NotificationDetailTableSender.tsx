@@ -22,7 +22,6 @@ import NotificationRecipientsDetail from './NotificationRecipientsDetail';
 type Props = {
   notification: NotificationDetail;
   onCancelNotification: () => void;
-  children?: React.ReactNode;
 };
 
 const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancelNotification }) => {
