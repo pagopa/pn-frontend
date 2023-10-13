@@ -188,9 +188,9 @@ describe('Dashboard Page', () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/sent');
-      rows = result?.getAllByTestId('notificationsTable.row');
-      expect(rows).toHaveLength(2);
     });
+    rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(2);
   });
 
   it('changes page', async () => {
@@ -229,10 +229,10 @@ describe('Dashboard Page', () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/sent');
-      rows = result?.getAllByTestId('notificationsTable.row');
-      expect(rows).toHaveLength(1);
-      expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
     });
+    rows = result?.getAllByTestId('notificationsTable.row');
+    expect(rows).toHaveLength(1);
+    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('filter', async () => {
