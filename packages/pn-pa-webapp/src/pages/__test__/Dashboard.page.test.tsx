@@ -190,7 +190,7 @@ describe('Dashboard Page', () => {
       expect(mock.history.get[1].url).toContain('/notifications/sent');
     });
     rows = result?.getAllByTestId('notificationsTable.row');
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(4);
   });
 
   it('changes page', async () => {
