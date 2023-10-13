@@ -66,7 +66,7 @@ describe('NewApiKey component', () => {
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
   });
 
-  it.only('empty and invalid form', async () => {
+  it('empty and invalid form', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
     await act(async () => {
       result = render(<NewApiKey />);
