@@ -2,8 +2,8 @@
   "name": "send-monorepo",
   "private": true,
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
-    "lerna": "^6.5.1"
+    "@craco/craco": "^7.0.0",
+    "lerna": "^6.4.1"
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
@@ -43,8 +43,6 @@
     "**/file-loader/loader-utils": "^2.0.4",
     "**/react-scripts/react-dev-utils/loader-utils": "^3.2.1",
     "**/recursive-readdir": "^2.2.3",
-    "**/terser": "^5.19.4",
-    "**/webpack": "^5.76.0",
-    "**/react-scripts": "^5.0.1"
+    "**/terser": "^5.16.1"
   }
 }

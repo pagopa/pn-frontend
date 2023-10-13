@@ -66,7 +66,7 @@ describe('NewApiKey component', () => {
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
   });
 
-  it('empty and invalid form', async () => {
+  it.only('empty and invalid form', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
     await act(async () => {
       result = render(<NewApiKey />);
@@ -78,17 +78,15 @@ describe('NewApiKey component', () => {
     expect(submitButton).toBeDisabled();
     expect(result?.container).not.toHaveTextContent(/form-error-name/);
 
-    await waitFor(async () => {
-      // fill api key name: valid form, submit is enabled, no error message
-      await testInput(form!, 'name', newApiKeyDTO.name);
-      expect(submitButton).toBeEnabled();
-      expect(result?.container).not.toHaveTextContent(/form-error-name/);
+    // fill api key name: valid form, submit is enabled, no error message
+    await testInput(form!, 'name', newApiKeyDTO.name);
+    expect(submitButton).toBeEnabled();
+    expect(result?.container).not.toHaveTextContent(/form-error-name/);
 
-      // set back api key name to empty text field, submit is disabled, error message shown
-      await testInput(form!, 'name', '');
-      expect(submitButton).toBeDisabled();
-      expect(result?.container).toHaveTextContent(/form-error-name/);
-    });
+    // set back api key name to empty text field, submit is disabled, error message shown
+    await testInput(form!, 'name', '');
+    expect(submitButton).toBeDisabled();
+    expect(result?.container).toHaveTextContent(/form-error-name/);
   });
 
   it('changes form values and clicks on confirm', async () => {

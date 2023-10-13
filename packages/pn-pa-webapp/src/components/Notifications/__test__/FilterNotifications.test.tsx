@@ -93,11 +93,9 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-    });
-    await waitFor(() => {
       form = result?.container.querySelector('form') as HTMLFormElement;
-      expect(form).toBeInTheDocument();
     });
+    expect(form).toBeInTheDocument();
     testFormElements(form!, 'recipientId', 'filters.fiscal-code-tax-code', '');
     testFormElements(form!, 'startDate', 'filters.data_da', '');
     testFormElements(form!, 'endDate', 'filters.data_a', '');
@@ -114,8 +112,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     await testInput(form!, 'recipientId', 'mocked-recipientId');
   });
 
@@ -123,8 +121,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     await testInput(form!, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
   });
 
@@ -132,8 +130,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     await testInput(form!, 'startDate', '23/02/2022');
     await testCalendar(form!, 'startDate');
   });
@@ -142,8 +140,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     await testInput(form!, 'endDate', '23/02/2022');
     await testCalendar(form!, 'endDate');
   });
@@ -152,8 +150,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     expect(form!.querySelector(`input[name="status"]`)).toBeInTheDocument();
     await testSelect(form!, 'status', localizedNotificationStatus, 2);
   });
@@ -162,8 +160,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
@@ -202,8 +200,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -229,8 +227,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -248,16 +246,16 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
-      expect(form!).toHaveTextContent('filters.errors.iun');
     });
+    expect(form!).toHaveTextContent('filters.errors.iun');
   });
 
   it('test invalid date range - end before start', async () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
@@ -283,8 +281,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     const todayM = new Date();
     const oneMonthAhead = new Date(new Date().setMonth(todayM.getMonth() + 1));
     todayM.setHours(0, 0, 0, 0);
@@ -310,8 +308,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
+      form = result?.container.querySelector('form') as HTMLFormElement;
     });
-    await waitFor(() => (form = result?.container.querySelector('form') as HTMLFormElement));
     const button = result!.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     expect(form).not.toBeInTheDocument(); // the desktop form

@@ -7,7 +7,7 @@ import { useBlocker } from '../useBlocker';
 
 const blocker = jest.fn();
 
-describe.skip('useBlocker', () => {
+describe('useBlocker', () => {
   let navigator;
 
   beforeEach(() => {
