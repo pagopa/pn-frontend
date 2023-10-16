@@ -52,9 +52,9 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
-import { getConfiguration } from '../services/configuration.service';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -78,7 +78,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME } = getConfiguration();
+  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -406,6 +406,7 @@ const NotificationDetail = () => {
                         handleReloadPayment={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
+                        landingSiteUrl={LANDING_SITE_URL}
                       />
                     </ApiErrorWrapper>
                   </Paper>
