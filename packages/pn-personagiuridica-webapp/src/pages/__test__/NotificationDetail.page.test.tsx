@@ -8,14 +8,23 @@ import {
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationStatus,
+  PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
-import { notificationDTO, notificationToFe } from '../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
+import {
+  notificationDTO,
+  notificationToFe,
+  paymentsData,
+} from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
@@ -23,6 +32,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
@@ -31,6 +41,7 @@ import NotificationDetail from '../NotificationDetail.page';
 const mockNavigateFn = jest.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
+const mockAssignFn = jest.fn();
 
 // mock imports
 jest.mock('react-router-dom', () => ({
@@ -72,9 +83,14 @@ describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
+  const original = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '', assign: mockAssignFn },
+    });
   });
 
   afterEach(() => {
@@ -82,25 +98,22 @@ describe('NotificationDetail Page', () => {
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
+    window.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
+
+  const paymentInfoRequest = paymentInfo.map((payment) => ({
+    creditorTaxId: payment.creditorTaxId,
+    noticeCode: payment.noticeCode,
+  }));
 
   it('renders NotificationDetail page', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -112,15 +125,11 @@ describe('NotificationDetail Page', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.post).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toBe(
-      NOTIFICATION_PAYMENT_INFO(
-        notificationDTO.recipients[1].payment?.creditorTaxId!,
-        notificationDTO.recipients[1].payment?.noticeCode!
-      )
-    );
-    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
@@ -148,7 +157,7 @@ describe('NotificationDetail Page', () => {
     const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check payment box
-    const paymentData = result?.getByTestId('paymentData');
+    const paymentData = result?.getByTestId('paymentInfoBox');
     expect(paymentData).toBeInTheDocument();
     // check downtimes box
     const downtimesBox = result?.getByTestId('downtimesBox');
@@ -200,31 +209,17 @@ describe('NotificationDetail Page', () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
       .reply(200, { ...notificationDTO, documentsAvailable: false });
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.post).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toBe(
-      NOTIFICATION_PAYMENT_INFO(
-        notificationDTO.recipients[1].payment?.creditorTaxId!,
-        notificationDTO.recipients[1].payment?.noticeCode!
-      )
-    );
-    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     // check documents box
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage!) {
@@ -253,17 +248,7 @@ describe('NotificationDetail Page', () => {
 
   it('executes the document download handler', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(notificationToFe.iun, '0')).reply(200, {
@@ -282,30 +267,24 @@ describe('NotificationDetail Page', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
     const documentButton = result?.getAllByTestId('documentButton');
     fireEvent.click(documentButton![0]);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(4);
-      expect(mock.history.get[3].url).toContain(
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.get[2].url).toContain(
         `/delivery/notifications/received/${notificationToFe.iun}/attachments/documents/0`
       );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url.com');
     });
   });
 
   it('executes the legal fact download handler', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     mock
@@ -322,12 +301,12 @@ describe('NotificationDetail Page', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
     const legalFactButton = result?.getAllByTestId('download-legalfact');
     fireEvent.click(legalFactButton![0]);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(4);
-      expect(mock.history.get[3].url).toContain(
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toContain(
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
@@ -348,26 +327,19 @@ describe('NotificationDetail Page', () => {
     expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton![0]);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(5);
-      expect(mock.history.get[4].url).toContain(
+      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get[3].url).toContain(
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
     });
   });
 
   it('executes the downtimws legal fact download handler', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     mock
@@ -386,31 +358,25 @@ describe('NotificationDetail Page', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.post).toHaveLength(1);
     const downtimesBox = result?.getByTestId('downtimesBox');
     const legalFactDowntimesButton = downtimesBox?.querySelectorAll('button');
     fireEvent.click(legalFactDowntimesButton![0]);
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(4);
-      expect(mock.history.get[3].url).toContain(
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toContain(
         `/downtime/v1/legal-facts/${simpleDowntimeLogPage.downtimes[0].legalFactId}`
       );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
     });
   });
 
   it('normal navigation - includes back button', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -432,17 +398,7 @@ describe('NotificationDetail Page', () => {
   it('navigation from QR code - does not include back button', async () => {
     mockIsFromQrCode = true;
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -488,17 +444,7 @@ describe('NotificationDetail Page', () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun, delegator?.mandateId))
       .reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -509,15 +455,9 @@ describe('NotificationDetail Page', () => {
       });
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toBe(
-      NOTIFICATION_PAYMENT_INFO(
-        notificationDTO.recipients[1].payment?.creditorTaxId!,
-        notificationDTO.recipients[1].payment?.noticeCode!
-      )
-    );
-    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
@@ -545,7 +485,7 @@ describe('NotificationDetail Page', () => {
     const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check payment box
-    const paymentData = result?.getByTestId('paymentData');
+    const paymentData = result?.getByTestId('paymentInfoBox');
     expect(paymentData).toBeInTheDocument();
     // check downtimes box
     const downtimesBox = result?.getByTestId('downtimesBox');
@@ -560,17 +500,7 @@ describe('NotificationDetail Page', () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun, delegator?.mandateId))
       .reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -593,17 +523,7 @@ describe('NotificationDetail Page', () => {
   it('renders NotificationDetail page with user with groups logged', async () => {
     mockIsDelegate = false;
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -619,15 +539,11 @@ describe('NotificationDetail Page', () => {
       });
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.post).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    expect(mock.history.get[1].url).toBe(
-      NOTIFICATION_PAYMENT_INFO(
-        notificationDTO.recipients[1].payment?.creditorTaxId!,
-        notificationDTO.recipients[1].payment?.noticeCode!
-      )
-    );
-    expect(mock.history.get[2].url).toContain('/downtime/v1/history');
+    expect(mock.history.get[1].url).toContain('/downtime/v1/history');
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
@@ -655,7 +571,7 @@ describe('NotificationDetail Page', () => {
     const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check payment box
-    const paymentData = result?.getByTestId('paymentData');
+    const paymentData = result?.getByTestId('paymentInfoBox');
     expect(paymentData).toBeInTheDocument();
     // check downtimes box
     const downtimesBox = result?.getByTestId('downtimesBox');
@@ -663,5 +579,63 @@ describe('NotificationDetail Page', () => {
     // check domicile banner
     const addDomicileBanner = result?.queryByTestId('addDomicileBanner');
     expect(addDomicileBanner).not.toBeInTheDocument();
+  });
+
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      paymentInfo
+    );
+    const requiredPaymentIndex = paymentHistory.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+    );
+    const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock
+      .onPost(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice: {
+          noticeNumber: requiredPayment.pagoPa?.noticeCode,
+          fiscalCode: requiredPayment.pagoPa?.creditorTaxId,
+          amount: requiredPayment.pagoPa?.amount,
+          companyName: notificationToFe.senderDenomination,
+          description: notificationToFe.subject,
+        },
+        returnUrl: window.location.href,
+      })
+      .reply(200, {
+        checkoutUrl: 'https://mocked-url.com',
+      });
+    // render component
+    act(() => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          notificationState: {
+            notification: notificationToFe,
+            paymentsData: {
+              pagoPaF24: getPagoPaF24Payments(paymentHistory, 1),
+              f24Only: getF24Payments(paymentHistory, 1),
+            },
+            downtimeEvents: [],
+          },
+        },
+      });
+    });
+    const payButton = result?.getByTestId('pay-button');
+    const item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+    await waitFor(() => {
+      expect(payButton).toBeEnabled();
+    });
+    fireEvent.click(payButton!);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
+    });
+    await waitFor(() => {
+      expect(mockAssignFn).toBeCalledTimes(1);
+      expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
+    });
   });
 });

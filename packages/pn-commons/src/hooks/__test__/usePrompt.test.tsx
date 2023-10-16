@@ -1,9 +1,7 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
 
-import { waitFor } from '@testing-library/react';
-
-import { fireEvent, render } from '../../test-utils';
+import { fireEvent, render, waitFor } from '../../test-utils';
 import { usePrompt } from '../usePrompt';
 
 const mockConfirm = jest.fn();

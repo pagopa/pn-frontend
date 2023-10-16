@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-function downloadDocument(url: string) {
+export function downloadDocument(url: string) {
   /* eslint-disable functional/immutable-data */
   window.location.href = url;
 }

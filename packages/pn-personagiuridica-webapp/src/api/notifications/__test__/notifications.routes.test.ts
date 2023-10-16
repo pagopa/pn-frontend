@@ -25,13 +25,15 @@ describe('Notifications routes', () => {
   });
 
   it('should compile NOTIFICATIONS_LIST in case is delegated is true', () => {
-    const route = NOTIFICATIONS_LIST({
+    const route = NOTIFICATIONS_LIST(
+      {
         startDate: 'start-date',
         endDate: 'end-date',
         recipientId: 'recipient-id',
         iunMatch: 'iun-match',
       },
-      true);
+      true
+    );
     expect(route).toEqual(
       '/delivery/notifications/received/delegated?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
     );
@@ -39,7 +41,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/notifications/received/mocked-iun');
+    expect(route).toEqual('/delivery/v2.1/notifications/received/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
@@ -57,12 +59,14 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {
     const route = NOTIFICATION_PAYMENT_ATTACHMENT('mocked-iun', 'mocked-attachmentName');
-    expect(route).toEqual('/delivery/notifications/received/mocked-iun/attachments/payment/mocked-attachmentName');
+    expect(route).toEqual(
+      '/delivery/notifications/received/mocked-iun/attachments/payment/mocked-attachmentName'
+    );
   });
 
   it('should compile NOTIFICATION_PAYMENT_INFO', () => {
-    const route = NOTIFICATION_PAYMENT_INFO('mocked-taxId', 'mocked-noticeCode');
-    expect(route).toEqual('/ext-registry/pagopa/v1/paymentinfo/mocked-taxId/mocked-noticeCode');
+    const route = NOTIFICATION_PAYMENT_INFO();
+    expect(route).toEqual('/ext-registry/pagopa/v2.1/paymentinfo');
   });
 
   it('should compile NOTIFICATION_PAYMENT_URL', () => {

@@ -190,7 +190,7 @@ describe('Dashboard Page', () => {
       expect(mock.history.get[1].url).toContain('/notifications/sent');
     });
     rows = result?.getAllByTestId('notificationsTable.row');
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(4);
   });
 
   it('changes page', async () => {
@@ -261,7 +261,7 @@ describe('Dashboard Page', () => {
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     let rows = result?.getAllByTestId('notificationsTable.row');
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(4);
     rows?.forEach((row, index) => {
       expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
     });
