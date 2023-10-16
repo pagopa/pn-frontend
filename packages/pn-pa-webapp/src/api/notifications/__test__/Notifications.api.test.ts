@@ -4,11 +4,14 @@ import {
   LegalFactId,
   LegalFactType,
   NotificationDetailOtherDocument,
+  PaymentAttachmentNameType,
+  PaymentAttachmentSName,
   formatToTimezoneString,
   getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
+
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
 import {
@@ -27,6 +30,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -160,10 +164,6 @@ describe('Notifications api tests', () => {
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-    // TODO: capire perchè è stato necessario rimuovere il body
-    // per qualche motivo la libreria di mock considera diversi il body passato
-    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
-    // nonostante siano la stessa identica cosa
     const res = await NotificationsApi.createNewNotification(newNotificationDTO);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',
@@ -176,5 +176,21 @@ describe('Notifications api tests', () => {
     mock.onPut(CANCEL_NOTIFICATION('mocked-iun')).reply(200);
     const res = await NotificationsApi.cancelNotification('mocked-iun');
     expect(res).toEqual(undefined);
+  });
+
+  it('getPaymentAttachment', async () => {
+    const iun = notificationDTOMultiRecipient.iun;
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
+    const recIndex = 1;
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName, recIndex)).reply(200, {
+      url: 'http://mocked-url.com',
+    });
+
+    const res = await NotificationsApi.getPaymentAttachment(
+      iun,
+      attachmentName as PaymentAttachmentNameType,
+      recIndex
+    );
+    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
   });
 });

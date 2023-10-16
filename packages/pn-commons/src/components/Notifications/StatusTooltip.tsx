@@ -1,5 +1,6 @@
 import { Fragment, ReactNode } from 'react';
 
+import { SxProps, TooltipProps } from '@mui/material';
 import Chip from '@mui/material/Chip';
 
 import CustomTooltip from '../CustomTooltip';
@@ -9,11 +10,15 @@ const StatusTooltip = ({
   label,
   color,
   eventTrackingCallback,
+  tooltipProps,
+  chipProps,
 }: {
   tooltip: string | ReactNode;
   label: string;
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   eventTrackingCallback?: () => void;
+  tooltipProps?: Partial<TooltipProps>;
+  chipProps?: SxProps;
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
@@ -22,12 +27,13 @@ const StatusTooltip = ({
       openOnClick={false}
       tooltipContent={tooltipContent}
       onOpen={eventTrackingCallback}
+      tooltipProps={tooltipProps}
     >
       <Chip
         id={`status-chip-${label}`}
         label={label}
         color={color}
-        sx={{ cursor: 'default' }}
+        sx={{ ...chipProps, cursor: 'default' }}
         data-testid={`statusChip-${label}`}
       />
     </CustomTooltip>

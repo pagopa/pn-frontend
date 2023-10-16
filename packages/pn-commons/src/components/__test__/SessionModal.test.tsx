@@ -45,7 +45,7 @@ describe('test SessionModal component', () => {
   it('check that close function is called after timeout', async () => {
     window.matchMedia = createMatchMedia(800);
     const mockCloseHandler = jest.fn();
-    const { baseElement } = render(
+    render(
       <SessionModal
         open
         title={'Test title'}

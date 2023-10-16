@@ -4,6 +4,7 @@ import {
   LegalFactId,
   LegalFactType,
   PaymentAttachmentNameType,
+  PaymentAttachmentSName,
   formatToTimezoneString,
   getNextDay,
   tenYearsAgo,
@@ -11,6 +12,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../apiClients';
@@ -107,7 +109,7 @@ describe('Notifications api tests', () => {
 
   it('getPaymentAttachment', async () => {
     const iun = notificationDTO.iun;
-    const attachmentName = 'mocked-attachmentName';
+    const attachmentName = PaymentAttachmentSName.PAGOPA;
     mock
       .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
       .reply(200, { url: 'http://mocked-url.com' });
@@ -119,17 +121,13 @@ describe('Notifications api tests', () => {
   });
 
   it('getNotificationPaymentInfo', async () => {
-    const taxId = 'mocked-taxId';
-    const noticeCode = 'mocked-noticeCode';
-    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
-    const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
-    expect(res).toStrictEqual({
-      status: 'SUCCEEDED',
-      amount: 10,
-    });
+    const paymentInfoRequest = paymentInfo.map((payment) => ({
+      creditorTaxId: payment.creditorTaxId,
+      noticeCode: payment.noticeCode,
+    }));
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
+    const res = await NotificationsApi.getNotificationPaymentInfo(paymentInfoRequest);
+    expect(res).toStrictEqual(paymentInfo);
   });
 
   it('getNotificationPaymentUrl', async () => {
@@ -146,9 +144,7 @@ describe('Notifications api tests', () => {
         },
         returnUrl: 'mocked-return-url',
       })
-      .reply(200, {
-        checkoutUrl: 'mocked-url',
-      });
+      .reply(200, { checkoutUrl: 'mocked-url' });
     const res = await NotificationsApi.getNotificationPaymentUrl(
       {
         noticeNumber: noticeCode,

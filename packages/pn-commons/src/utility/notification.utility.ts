@@ -18,14 +18,22 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
-  PaymentHistory,
+  PaymentDetails,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
   ViewedDetails,
 } from '../types';
-import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
+import {
+  AppIoCourtesyMessageEventType,
+  ExtRegistriesPaymentDetails,
+  F24PaymentDetails,
+  NotificationDetailPayment,
+  NotificationDetailTimelineDetails,
+  PagoPAPaymentFullDetails,
+  PaymentStatus,
+} from '../types/NotificationDetail';
 import { formatDate } from '../utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -861,42 +869,122 @@ const populateOtherDocuments = (
   return [];
 };
 
-/**
- * Populate payment history array before send notification to fe.
- * @param  {Array<INotificationDetailTimeline>} timeline
- * @param  {Array<NotificationDetailRecipient>} recipients
- * @returns Array<NotificationDetailDocument>
- */
-const populatePaymentHistory = (
-  timeline: Array<INotificationDetailTimeline>,
-  recipients: Array<NotificationDetailRecipient>
-): Array<PaymentHistory> => {
-  const paymentHistory: Array<PaymentHistory> = [];
-  // get all timeline steps that have category payment
-  const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
-  // populate payment history array with the informations from timeline and related recipients
-  if (paymentTimelineStep.length > 0) {
-    for (const payment of paymentTimelineStep) {
-      const recIndex = payment.details.recIndex;
-      if (recIndex !== null && recIndex !== undefined) {
-        // For the accesses from recipient apps (cittadino / impresa)
-        // the API response will probably (in some future) include only the info about the requester recipient,
-        // i.e. recipients will be an array with exactly one element, disregarding how many recipients are included
-        // in the notification being requested.
-        // In that case, we don't consider the recIndex indicated in each timeline step,
-        // but otherwise take all steps as related with the only recipient included in the API response.
-        const recipient = recipients.length === 1 ? recipients[0] : recipients[recIndex];
-        /* eslint-disable-next-line functional/immutable-data */
-        paymentHistory.push({
-          ...(payment.details as PaidDetails),
-          recipientDenomination: recipient.denomination,
-          recipientTaxId: recipient.taxId,
-        });
-      }
+export const getF24Payments = (
+  payments: Array<NotificationDetailPayment>,
+  recIndex: number,
+  onlyF24: boolean = true
+): Array<F24PaymentDetails> =>
+  payments.reduce((arr, payment, index) => {
+    if (payment.f24 && ((onlyF24 && !payment.pagoPa) || !onlyF24)) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push({
+        ...payment.f24,
+        attachmentIdx: index,
+        recIndex,
+      });
     }
+    return arr;
+  }, [] as Array<F24PaymentDetails>);
+
+export const getPagoPaF24Payments = (
+  payments: Array<NotificationDetailPayment>,
+  recIndex: number,
+  withLoading: boolean = false
+): Array<PaymentDetails> =>
+  payments.reduce((arr, payment, index) => {
+    if (payment.pagoPa) {
+      // eslint-disable-next-line functional/immutable-data
+      arr.push({
+        pagoPa: {
+          ...payment.pagoPa,
+          attachmentIdx: index,
+          recIndex,
+        } as PagoPAPaymentFullDetails,
+        f24: payment.f24 ? { ...payment.f24, attachmentIdx: index, recIndex } : undefined,
+        ...(withLoading && { isLoading: true }),
+      });
+    }
+    return arr;
+  }, [] as Array<PaymentDetails>);
+
+/**
+ * Populate only pagoPA (with eventual f24 associated) payment history array before send notification to fe.
+ * @param  {Array<INotificationDetailTimeline>} timeline
+ * @param  {Array<PaymentDetails>} pagoPaF24Payemnts
+ * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
+ * @returns Array<PaymentDetails>
+ */
+export const populatePaymentsPagoPaF24 = (
+  timeline: Array<INotificationDetailTimeline>,
+  pagoPaF24Payemnts: Array<PaymentDetails> | Array<NotificationDetailPayment>,
+  checkoutPayments: Array<ExtRegistriesPaymentDetails>
+): Array<PaymentDetails> => {
+  const paymentDetails: Array<PaymentDetails> = [];
+
+  if (!pagoPaF24Payemnts || pagoPaF24Payemnts.length === 0) {
+    return [];
   }
 
-  return paymentHistory;
+  // 1. Get all timeline steps that have category payment
+  const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
+
+  // 2. populate payment history array with the informations from timeline and related recipients
+  for (const userPayment of pagoPaF24Payemnts) {
+    if (!userPayment.pagoPa) {
+      continue;
+    }
+
+    if (
+      checkoutPayments.length &&
+      checkoutPayments?.findIndex(
+        (payment) =>
+          payment.creditorTaxId === userPayment.pagoPa?.creditorTaxId &&
+          payment.noticeCode === userPayment.pagoPa?.noticeCode
+      ) === -1
+    ) {
+      continue;
+    }
+
+    // 3. Get payment by creditorTaxId and noticeCode from checkout
+    const checkoutPayment = checkoutPayments.find(
+      (p) =>
+        p.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
+        p.noticeCode === userPayment?.pagoPa?.noticeCode
+    );
+
+    const timelineEvent = paymentTimelineStep.find((item) => {
+      const paymentDetails = item.details as PaidDetails;
+
+      return (
+        paymentDetails.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
+        paymentDetails.noticeCode === userPayment?.pagoPa?.noticeCode
+      );
+    })?.details;
+
+    if (timelineEvent) {
+      (Object.keys(timelineEvent) as Array<keyof NotificationDetailTimelineDetails>).forEach(
+        (key) => (timelineEvent[key] === undefined ? delete timelineEvent[key] : {})
+      );
+    }
+
+    const pagoPAPayment = {
+      ...userPayment.pagoPa,
+      ...checkoutPayment,
+      ...timelineEvent,
+    };
+
+    if (timelineEvent && !checkoutPayment) {
+      // from timeline we have only succeded payments
+      pagoPAPayment.status = PaymentStatus.SUCCEEDED;
+    }
+
+    paymentDetails.push({
+      pagoPa: pagoPAPayment,
+      f24: userPayment.f24,
+    } as PaymentDetails);
+  }
+
+  return paymentDetails;
 };
 
 function timelineElementMustBeShown(t: INotificationDetailTimeline): boolean {
@@ -943,10 +1031,6 @@ export function parseNotificationDetail(
   const parsedNotification = {
     ...notificationDetail,
     otherDocuments: populateOtherDocuments(notificationDetail),
-    paymentHistory: populatePaymentHistory(
-      notificationDetail.timeline,
-      notificationDetail.recipients
-    ),
     sentAt: formatDate(notificationDetail.sentAt),
   };
   insertCancelledStatusInTimeline(parsedNotification);

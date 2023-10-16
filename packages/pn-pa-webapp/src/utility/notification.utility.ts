@@ -74,10 +74,10 @@ const newNotificationRecipientsMapper = (
     }
     if (paymentMethod !== PaymentModel.NOTHING) {
       // eslint-disable-next-line functional/immutable-data
-      parsedRecipient.payment = {
-        creditorTaxId: recipient.creditorTaxId,
-        noticeCode: recipient.noticeCode,
-      };
+      // parsedRecipient.payment = {
+      //   creditorTaxId: recipient.creditorTaxId,
+      //   noticeCode: recipient.noticeCode,
+      // };
     }
     return parsedRecipient;
   });
@@ -131,11 +131,15 @@ const newNotificationPaymentDocumentsMapper = (
         paymentDocuments[r.taxId].f24standard as NewNotificationDocument
       );
     }
+    // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
+    // Andrea Cimini - 16/08/2023
+    /*
     r.payment = {
       ...documents,
       creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
       noticeCode: r.payment?.noticeCode,
     };
+    */
     /* eslint-enable functional/immutable-data */
     return r;
   });

@@ -6,6 +6,8 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
+  PaymentAttachmentNameType,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -110,4 +112,30 @@ export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<
 >(
   NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
   performThunkAction((legalFactId: string) => AppStatusApi.getLegalFactDetails(legalFactId))
+);
+
+export const getPaymentAttachment = createAsyncThunk<
+  PaymentAttachment,
+  {
+    iun: string;
+    attachmentName: PaymentAttachmentNameType;
+    recIndex: number;
+    attachmentIdx?: number;
+  }
+>(
+  'getPaymentAttachment',
+  performThunkAction(
+    (params: {
+      iun: string;
+      attachmentName: PaymentAttachmentNameType;
+      recIndex: number;
+      attachmentIdx?: number;
+    }) =>
+      NotificationsApi.getPaymentAttachment(
+        params.iun,
+        params.attachmentName,
+        params.recIndex,
+        params.attachmentIdx
+      )
+  )
 );

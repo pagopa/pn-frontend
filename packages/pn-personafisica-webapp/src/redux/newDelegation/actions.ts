@@ -66,5 +66,8 @@ export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams
     } catch (e) {
       return rejectWithValue(e);
     }
+  },
+  {
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
   }
 );
