@@ -3,6 +3,7 @@
   "description": "Pagina di login di SEND per il cittadino",
   "version": "2.1.0",
   "private": true,
+  "homepage": "auth",
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
