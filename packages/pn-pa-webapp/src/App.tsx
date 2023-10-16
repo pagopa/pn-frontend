@@ -24,6 +24,7 @@ import {
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -161,7 +162,13 @@ const ActualApp = () => {
   );
 
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
-  
+  const institutionsList: Array<PartySwitchItem> = useMemo(
+    () => institutions.map( (institution) => ({
+      ...institution,
+      productRole: t(`roles.${institution.productRole}`)
+    })),
+    [institutions]
+  );
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
@@ -252,7 +259,7 @@ const ActualApp = () => {
         productsList={productsList}
         productId={'0'}
         partyId={idOrganization}
-        partyList={institutions}
+        partyList={institutionsList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
