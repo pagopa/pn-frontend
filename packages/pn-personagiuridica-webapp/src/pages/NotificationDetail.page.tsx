@@ -283,6 +283,9 @@ const NotificationDetail = () => {
         return acc;
       }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
+      if (paymentInfoRequest.length === 0) {
+        return;
+      }
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
