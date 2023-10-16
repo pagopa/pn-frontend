@@ -92,7 +92,7 @@ export const appStateSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(isLoading, (state, action) => {
-        if (!action.meta.arg || !action.meta.arg.blockLoading) {
+        if (!action.meta || !action.meta.blockLoading) {
           state.loading.result = true;
         }
       })

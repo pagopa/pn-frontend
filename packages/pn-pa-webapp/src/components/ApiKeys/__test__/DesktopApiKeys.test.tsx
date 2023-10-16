@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { mockApiKeysForFE } from '../../../__mocks__/ApiKeys.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { ModalApiKeyView } from '../../../models/ApiKeys';
+import * as routes from '../../../navigation/routes.const';
 import DesktopApiKeys from '../DesktopApiKeys';
+
+const mockNavigateFn = jest.fn();
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components!.map((c) => c)}
+    </>
+  ),
+}));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
 }));
 
 const mockHandleModalClick = jest.fn();
@@ -21,8 +34,13 @@ const defaultProps = {
 
 describe('DesktopApiKeys component', () => {
   it('render component without API keys list', async () => {
-    const { container } = render(<DesktopApiKeys {...defaultProps} apiKeys={[]} />);
+    const { container, getByTestId } = render(<DesktopApiKeys {...defaultProps} apiKeys={[]} />);
     expect(container).toHaveTextContent(/empty-message/i);
+    // clicks on empty state action
+    const button = getByTestId('link-new-api-key');
+    fireEvent.click(button);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_API_KEY);
   });
 
   it('render component with API keys list', async () => {

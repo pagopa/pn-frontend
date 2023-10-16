@@ -1,9 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
+  formatDate,
   formatToTimezoneString,
   getNextDay,
   tenYearsAgo,
@@ -11,7 +12,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { notificationsDTO } from '../../__mocks__/Notifications.mock';
+import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
@@ -31,6 +32,11 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 describe('Notifiche Page', () => {
@@ -76,6 +82,52 @@ describe('Notifiche Page', () => {
     expect(itemsPerPageSelector).toBeInTheDocument();
     const pageSelector = result?.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
+  });
+
+  it('render page without notifications after filtering and remove filters', async () => {
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+          size: 10,
+        })
+      )
+      .reply(200, notificationsDTO);
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(tenYearsAgo)),
+          size: 10,
+        })
+      )
+      .reply(200, emptyNotificationsFromBe);
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toContain('/notifications/received');
+    // filter
+    const form = result?.container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'startDate', formatDate(tenYearsAgo.toISOString()));
+    await testInput(form, 'endDate', formatDate(tenYearsAgo.toISOString()));
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/notifications/received');
+    });
+    expect(result?.container).toHaveTextContent(/empty-state.filtered/);
+    // remove filters
+    const routeContactsBtn = result?.getByTestId('link-remove-filters');
+    fireEvent.click(routeContactsBtn!);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[1].url).toContain('/notifications/received');
+    });
+    expect(result?.container).not.toHaveTextContent(/empty-state.filtered/);
   });
 
   it('change pagination', async () => {

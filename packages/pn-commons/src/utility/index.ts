@@ -24,11 +24,14 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import {
+  getF24Payments,
   getLegalFactLabel,
   getNotificationAllowedStatus,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
+  getPagoPaF24Payments,
   parseNotificationDetail,
+  populatePaymentsPagoPaF24,
 } from './notification.utility';
 import { compileOneTrustPath } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
@@ -89,13 +92,16 @@ export {
   ResponseEventDispatcher,
   AppError,
   AppErrorFactory,
-  errorFactoryManager,
   UnknownAppError,
-  sanitizeString,
-  compileOneTrustPath,
   buttonNakedInheritStyle,
-  sortArray,
   calcUnit8Array,
+  compileOneTrustPath,
+  errorFactoryManager,
+  getF24Payments,
+  getPagoPaF24Payments,
   lazyRetry,
+  populatePaymentsPagoPaF24,
+  sanitizeString,
+  sortArray,
   waitForElement,
 };

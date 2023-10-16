@@ -74,10 +74,10 @@ const newNotificationRecipientsMapper = (
     }
     if (paymentMethod !== PaymentModel.NOTHING) {
       // eslint-disable-next-line functional/immutable-data
-      parsedRecipient.payment = {
-        creditorTaxId: recipient.creditorTaxId,
-        noticeCode: recipient.noticeCode,
-      };
+      // parsedRecipient.payment = {
+      //   creditorTaxId: recipient.creditorTaxId,
+      //   noticeCode: recipient.noticeCode,
+      // };
     }
     return parsedRecipient;
   });
@@ -131,11 +131,15 @@ const newNotificationPaymentDocumentsMapper = (
         paymentDocuments[r.taxId].f24standard as NewNotificationDocument
       );
     }
+    // Con l'introduzione dei multi pagamenti (pn-7336), è necessario apportare delle modifiche anche in fase di creazione
+    // Andrea Cimini - 16/08/2023
+    /*
     r.payment = {
       ...documents,
       creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
       noticeCode: r.payment?.noticeCode,
     };
+    */
     /* eslint-enable functional/immutable-data */
     return r;
   });
@@ -169,14 +173,19 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   return newNotificationParsed;
 }
 
+// This model is needed to force the call of the getDuplicateValuesByKeys with ONLY keys that are of type string
+type ExtractStringPropertyNames<T> = {
+  [K in keyof T]: T[K] extends string ? K : never;
+}[keyof T];
+
 export function getDuplicateValuesByKeys<T>(
   objectsList: Array<T>,
-  keys: Array<keyof T>
+  keys: Array<ExtractStringPropertyNames<T>>
 ): Array<string> {
   const getValue = (item: T) => {
     let valueByKeys = '';
-    for (const element of keys) {
-      valueByKeys += item[element] ?? '';
+    for (const key of keys) {
+      valueByKeys += (item[key] as string) ?? '';
     }
     return valueByKeys;
   };
