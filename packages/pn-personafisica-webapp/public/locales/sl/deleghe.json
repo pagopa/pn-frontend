@@ -1,0 +1,130 @@
+{
+  "deleghe": {
+    "title": "Pooblastila",
+    "close": "Zapri",
+    "description": "Tukaj lahko upravljate svoje pooblaščence in pooblastila pod vašo odgovornostjo. Prvi so fizične ali pravne osebe, ki ste jih pooblastili za ogled in upravljanje vaših obvestil, drugi pa tisti, ki so vas pooblastili.",
+    "delegatesTitle": "Vaši pooblaščenci",
+    "delegatorsTitle": "Pooblastila pod vašo odgovornostjo",
+    "delegatorsApiErrorMessage": "Podatkov v zvezi s poobastili pod vašo odgovornostjo ni bilo mogoče pridobiti.",
+    "delegationStart": "Začetek pooblastila",
+    "delegationEnd": "Konec pooblastila",
+    "empty_state": "Za ogled vaših obvestil niste pooblastili nobene osebe.",
+    "accept_title": "Vnesite potrditveno kodo",
+    "accept_description": "Če želite sprejeti pooblastilo, vnesite kodo, ki jo je {{name}} dal v skupno rabo z vami.",
+    "add": "Dodaj pooblastilo",
+    "invalid_code": "Neveljavna koda za preverjanje",
+    "revoke": "Preklic",
+    "reject": "Zavrni",
+    "accept": "Sprejmi",
+    "show": "Prikaži kodo",
+    "revocation_question": "Ali res želite preklicati pooblastilo?",
+    "rejection_question": "Ali res želite zavrniti pooblastilo?",
+    "confirm_revocation": "Prekliči pooblastilo",
+    "confirm_rejection": "Zavrni pooblastilo",
+    "error_title": "Žal, nekaj je šlo narobe",
+    "error_subtitle": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova kasneje.",
+    "error_button": "Znova naloži stran",
+    "no_delegates": "Za ogled vaših obvestil niste pooblastili nikogar. <0>Dodaj pooblastilo</0>.",
+    "no_delegators": "Nimate pooblastil pod vašo odgovornostjo.",
+    "show_code_title": "Koda za preverjanje pooblastila za {{name}}",
+    "show_code_subtitle": "To kodo delite s pooblaščencem: ta jo bo moral vnesti ob sprejemu pooblastila.",
+    "verification_code": "Koda za preverjanje",
+    "table": {
+      "name": "Ime",
+      "email": "E-pošta",
+      "delegationStart": "Začetek pooblastila",
+      "delegationEnd": "Konec pooblastila",
+      "permissions": "Dovoljenja",
+      "status": "Stanje",
+      "showCode": "Prikaži kodo",
+      "revoke": "Preklic",
+      "reject": "Zavrni",
+      "accept": "Sprejmi",
+      "notificationsFrom": "Obvestila s strani:",
+      "allNotifications": "Vsa obvestila",
+      "active": "Aktiviraj",
+      "pending": "Čakanje na potrditev"
+    }
+  },
+  "nuovaDelega": {
+    "breadcrumb": "Novo pooblastilo",
+    "backToDelegations": "Nazaj na pooblastila",
+    "createdTitle": "Vaša zahteva za pooblastilo je bila uspešno ustvarjena",
+    "createdDescription": "Kodo za preverjanje delite s pooblaščencem: ta jo bo moral vnesti ob prvem dostopu v SEND in sprejeti vašo zahtevo.",
+    "title": "Vaša pooblastila",
+    "subtitle": "Vnesite podatke pravne osebe, na katero želite prenesti upravljanje obvestil",
+    "form": {
+      "personType": "Pravna oseba*:",
+      "naturalPerson": "Fizična oseba",
+      "legalPerson": "Pravna oseba",
+      "firstName": "Ime*",
+      "lastName": "Priimek*",
+      "fiscalCode": "Davčna številka*",
+      "email": "Elektronska pošta*",
+      "businessName": "Ime podjetja*",
+      "viewFrom": "Ogledali si boste lahko obvestila s strani*:",
+      "allEntities": "Vsi subjekti",
+      "onlySelected": "Samo izbrani subjekti",
+      "selectEntities": "Izberite subjekte",
+      "endDate": "Konec pooblastila",
+      "verificationCode": "Koda za preverjanje",
+      "verificationCodeDescr": "To kodo delite s pooblaščencem: ta jo bo moral vnesti ob sprejemu pooblastila.",
+      "submit": "Pošlji zahtevo",
+      "mandatoryField": "Obvezna polja*",
+      "party-not-found": "Ni najdenih subjektov"
+    },
+    "validation": {
+      "fiscalCode": {
+        "required": "Davčna številka je obvezna",
+        "wrong": "Vnesena davčna številka ni pravilna"
+      },
+      "email": {
+        "wrong": "E-pošta ni pravilno oblikovana",
+        "required": "E-poštni naslov je obvezen"
+      },
+      "name": {
+        "required": "Ime je obvezno"
+      },
+      "surname": {
+        "required": "Priimek je obvezen"
+      },
+      "businessName": {
+        "required": "Ime podjetja je obvezno"
+      },
+      "expirationDate": {
+        "required": "Datum zaključka pooblastila je obvezen",
+        "wrong": "Nepravilen datum"
+      }
+    }
+  },
+  "errors": {
+    "not_found": {
+      "title": "Napaka",
+      "message": "Pooblastila ni bilo mogoče najti"
+    },
+    "already_exists": {
+      "title": "Pooblastilo je že prisotno",
+      "message": "Oseba, ki ste jo navedli, že ima pooblastilo za ta subjekt."
+    },
+    "not_acceptable": {
+      "title": "Neveljavno pooblastilo",
+      "message": "Vneseno pooblastilo ni veljavno"
+    },
+    "delegate_himself": {
+      "title": "Napaka pri vnosu pooblastila",
+      "message": "Ne morete pooblastiti sami sebe"
+    },
+    "invalid_verification_code": {
+      "title": "Neveljavna koda",
+      "message": "Neveljavna koda za preverjanje"
+    },
+    "fiscal_code": {
+      "title": "Neveljavna davčna številka",
+      "message": "Vnesena davčna številka ni veljavna "
+    },
+    "invalid_parameter": {
+      "title": "Neveljavni podatki",
+      "message": "Eden ali več vnesenih podatkov ni veljaven"
+    }
+  }
+}

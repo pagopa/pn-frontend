@@ -1,0 +1,121 @@
+{
+  "title": "Kontaktni podatki",
+  "subtitle-1": "Tukaj lahko navedete in spremenite digitalne kontaktne podatke, na katere bo {{recipient}} prejemal obvestila. Če iščete podatke o podjetju, ",
+  "subtitle-2": ".",
+  "subtitle-link": "jih najdete tukaj",
+  "general-contacts-title": "Splošni kontaktni podatki",
+  "special-contacts-title": "Drugi kontaktni podatki",
+  "alert-dialog-EMAIL": "Če podjetje nima PEC in eden od njegovih uporabnikov dostopa do obvestila na SEND v 5 dneh (120 urah) od pošiljanja e-poštnega sporočila, potrdilo o prejemu ne bo poslano s priporočenim pismom.",
+  "alert-dialog-SMS": "Če podjetje nima PEC in eden od njegovih uporabnikov dostopa do obvestila na SEND v 5 dneh (120 urah) od pošiljanja SMS-a, potrdilo o prejemu ne bo poslano s priporočenim pismom.",
+  "legal-contacts": {
+    "title": "",
+    "subtitle": "Pravni kontakt",
+    "subtitle-2": "Pravni kontakt",
+    "description": "Če obstaja obvestilo za podjetje, se potrdilo o prejemu pošlje na ta naslov. Če želite prebrati obvestilo in plačati vse morebitne stroške, je potrebno dostopati do platforme.",
+    "description-2": "Prejmite potrdila o prejemu obvestil v vaš PEC. Dostopajte v SEND, da jih preberete in plačate morebitne pristojbine.",
+    "link-aar": "Kaj je potrdilo o prejemu?",
+    "link-pec": "Povežite PEC",
+    "link-pec-placeholder": "Naslov PEC",
+    "valid-pec": "Neveljaven naslov PEC",
+    "pec-verify": "Preveri PEC",
+    "pec-verify-descr": "Kodo smo poslali na navedeni naslov PEC. Koda velja <strong>10 minut</strong>.",
+    "insert-code": "Vstavi kodo",
+    "pec-new-code": "Je niste prejeli? Preverite, ali ste vnesli pravilen PEC ali",
+    "new-code-link": "ustvarite novo",
+    "pec-added-successfully": "PEC je bil uspešno povezan",
+    "pec-added": "Povezan PEC",
+    "remove-pec-title": "Odstrani PEC",
+    "remove-pec-message": "Ali ste prepričani, da želite odstraniti naslov PEC {{value}}?",
+    "disclaimer-message": "To je glavni naslov, na katerega bo podjetje prejemalo potrdila o prejemu. Če ga vnesete, ne boste več prejemali priporočenih pisem.",
+    "disclaimer-link": "Izvedite več",
+    "block-remove-pec-title": "Ne morete izbrisati PEC",
+    "block-remove-pec-message": "Če želite to narediti, morate najprej izbrisati vse naslove PEC, ki ste jih navedli v razdelku \"Drugi kontaktni podatki\".",
+    "validation-cancel-title": "Ali želite preklicati preverjanje?",
+    "validation-cancel-content": "Če prekličete preverjanje, boste morali vnesti nov PEC in znova zagnati postopek.",
+    "validation-in-progress": "Preverjanje v teku",
+    "validation-progress-title": "Hvala, zdaj smo mi na vrsti",
+    "validation-progress-content": "Preverjamo, ali je naslov, ki ste ga vnesli, veljaven PEC za prejemanje obvestil iz javne uprave. Rezultat preverjanja boste prejeli po e-pošti.",
+    "disclaimer-message-unavailable": "Prenesite aplikacijo IO, dostopajte in se prepričajte, da je storitev \"Digitalna obvestila\" v SEND aktivna",
+    "enabled": "Aktivno",
+    "disabled": "Ni aktivno",
+    "enable-modal": {
+      "title": "Ali želite aktivirati storitev \"Digitalna obvestila\" na IO?",
+      "checkbox": "Razumem",
+      "confirm": "Aktiviraj storitev",
+      "content": "Če nimate PEC in dostopate do obvestila v 5 dneh (120 urah) od pošiljanja sporočila, potrdila o prejemu ne boste prejeli s priporočeno pošto."
+    },
+    "disable-modal": {
+      "title": "Ali želite deaktivirati storitev \"Digitalna obvestila\" na IO?",
+      "checkbox": "",
+      "confirm": "Onemogoči storitev",
+      "content": "Ko prejmete obvestilo, ne boste več prejeli sporočila v aplikaciji."
+    }
+  },
+  "courtesy-contacts": {
+    "title": "",
+    "subtitle": "E-pošta ali SMS",
+    "description": "Če obstaja obvestilo za podjetje, se pošlje sporočilo tem stikom. Če želite prebrati obvestilo in plačati vse morebitne stroške, je potrebno dostopati do platforme.",
+    "link-phone-placeholder": "Mobilni telefon",
+    "link-email-placeholder": "E-pošta",
+    "phone-add": "Obvestite me prek SMS-a",
+    "email-add": "Obvestite me prek e-pošte",
+    "email-verify": "Preveri e-pošto",
+    "email-verify-descr": "Kodo smo poslali na navedeni e-poštni naslov. Koda velja <strong>10 minut</strong>.",
+    "phone-verify": "Preveri številko",
+    "phone-verify-descr": "Kodo smo poslali na navedeno mobilno številko. Koda velja <strong>10 minut</strong>.",
+    "insert-code": "Vstavi kodo",
+    "email-new-code": "Je niste prejeli? Preverite, ali ste vnesli pravilen e-poštni naslov ali",
+    "phone-new-code": "Je niste prejeli? Preverite, ali ste vnesli pravilno številko mobilnega telefona ali",
+    "new-code-link": "ustvarite novo kodo",
+    "email-added": "E-poštni naslov",
+    "phone-added": "Mobilni telefon",
+    "valid-email": "Neveljaven e-poštni naslov",
+    "valid-phone": "Neveljavna številka mobilnega telefona",
+    "email-added-successfully": "E-poštni naslov je bil uspešno dodan",
+    "phone-added-successfully": "Številka mobilnega telefona je bila uspešno dodana",
+    "remove-email-title": "Odstrani e-naslov",
+    "remove-email-message": "Ali ste prepričani, da želite odstraniti e-poštni naslov {{value}}?",
+    "remove-phone-title": "Odstrani mobilni telefon",
+    "remove-phone-message": "Ali ste prepričani, da želite odstraniti številko mobilnega telefona {{value}}?",
+    "block-remove-email-title": "Ne morete izbrisati e-pošte",
+    "block-remove-email-message": "Če želite to narediti, morate najprej izbrisati vse e-poštne naslove, ki ste jih navedli v razdelku \"Drugi kontaktni podatki\".",
+    "block-remove-phone-title": "Telefonske številke ne morete izbrisati",
+    "block-remove-phone-message": "Če želite to narediti, morate najprej izbrisati vse telefonske številke, ki ste jih navedli v razdelku \"Drugi kontaktni podatki\".",
+    "disclaimer-message": "Če podjetje ni dosegljivo prek PEC in njegov uporabnik takoj prebere obvestilo, potrdila o prejemu ne bo prejel s priporočenim pismom.",
+    "disclaimer-link": "Izvedite več"
+  },
+  "special-contacts": {
+    "subtitle": "Če želite, da so obvestila nekaterih subjektov naslovljena na različne naslove, jih lahko tukaj označite in zamenjate tiste glavne.",
+    "required-fields": "*Obvezna polja",
+    "associated": "Že povezani",
+    "sender": "Subjekt",
+    "address-type": "Vrsta naslova",
+    "pec": "Naslov PEC",
+    "phone": "Mobilni telefon",
+    "mail": "E-poštni naslov",
+    "pec-already-exists": "Ta subjekt je že povezan z naslovom PEC. Če pritisnete \"Nadaljuj\", bo nadomeščen s tistim, ki ste ga pravkar navedli.",
+    "phone-already-exists": "Ta subjekt je že povezan z mobilno številko. Če pritisnete \"Nadaljuj\", bo nadomeščen s tistim, ki ste ga pravkar navedli.",
+    "email-already-exists": "Ta subjekt je že povezan z e-poštnim naslovom. Če pritisnete \"Nadaljuj\", bo nadomeščen s tistim, ki ste ga pravkar navedli.",
+    "fetch-party-error": "Podatkov, potrebnih za ustvarjanje novega naslova, ni bilo mogoče pridobiti."
+  },
+  "common": {
+    "duplicate-contact-title": "Naslov je že prisoten",
+    "duplicate-contact-descr": "Stik {{value}} je že prisoten, želite vseeno nadaljevati?",
+    "enti-not-found": "Ni najdenih subjektov",
+    "too-long-field-error": "Napišite največ {{maxLength}} znakov"
+  },
+  "errors": {
+    "invalid_verification_code": {
+      "title": "Koda je napačna",
+      "message": "Preverite in ponovno vnesite ali ustvarite drugo."
+    },
+    "retry_limit_code": {
+      "title": "Izvedli ste preveč poskusov",
+      "message": "Prevečkrat ste vnesli napačno kodo. Če želite poskusiti znova, pritisnite \"Prekliči\", se prepričajte, da je stik pravilen in vnesite novo kodo."
+    },
+    "expired_verification_code": {
+      "title": "Koda je potekla",
+      "message": "Ustvarite novo in jo vnesite."
+    }
+  }
+}
