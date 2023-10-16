@@ -131,7 +131,6 @@ const ActualApp = () => {
     return items;
   }, [role, idOrganization, currentStatus, i18n.language]);
 
-  console.log(loggedUser);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -252,6 +251,7 @@ const ActualApp = () => {
         }
         productsList={productsList}
         productId={'0'}
+        partyId={idOrganization}
         partyList={institutions}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}

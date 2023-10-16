@@ -19,6 +19,8 @@ type HeaderProps = {
   showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
+  /** Current institution */
+  partyId?: string;
   /** List of available parties */
   partyList?: Array<PartyEntity>;
   /** Logout/exit action to apply */
@@ -46,6 +48,7 @@ const Header = ({
   productsList,
   showHeaderProduct = true,
   productId,
+  partyId,
   partyList,
   loggedUser,
   enableDropdown,
@@ -83,8 +86,6 @@ const Header = ({
     }
   };
   const handlePartySelection = (party: PartyEntity) => {
-    console.log(`${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=${selfcareSendProdId}`);
-    console.log(party);
     window.location.assign(
       `${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=${selfcareSendProdId}`
     )
@@ -108,7 +109,9 @@ const Header = ({
       />
       {enableHeaderProduct && (
         <HeaderProduct
+          key={partyId}
           productId={productId}
+          partyId={partyId}
           productsList={productsList}
           partyList={partyList}
           onSelectedProduct={handleProductSelection}

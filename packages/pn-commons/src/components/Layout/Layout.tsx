@@ -22,6 +22,8 @@ type Props = {
   showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
+  /** Current institution */
+  partyId?: string;
   /** List of available parties */
   partyList?: Array<PartyEntity>;
   /** current logged user */
@@ -61,6 +63,7 @@ export default function Layout({
   productsList,
   showHeaderProduct,
   productId,
+  partyId,
   partyList,
   loggedUser,
   enableUserDropdown,
@@ -94,6 +97,7 @@ export default function Layout({
               productsList={productsList}
               showHeaderProduct={showHeaderProduct}
               productId={productId}
+              partyId={partyId}
               partyList={partyList}
               loggedUser={loggedUser}
               enableDropdown={enableUserDropdown}
