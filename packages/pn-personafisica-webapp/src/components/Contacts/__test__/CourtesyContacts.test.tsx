@@ -137,8 +137,8 @@ describe('CourtesyContacts Component', () => {
         value: '+39' + phoneValue,
         verificationCode: '01234',
       });
-      expect(dialog).not.toBeInTheDocument();
     });
+    expect(dialog).not.toBeInTheDocument();
     expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultPhoneAddress,
@@ -192,12 +192,12 @@ describe('CourtesyContacts Component', () => {
     const editButton = result.getByRole('button', { name: 'button.modifica' });
     fireEvent.click(editButton);
     const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => {
-      fireEvent.change(input!, { target: { value: phoneValue } });
       expect(input!).toHaveValue(phoneValue);
-      const saveButton = result.getByRole('button', { name: 'button.salva' });
-      fireEvent.click(saveButton);
     });
+    const saveButton = result.getByRole('button', { name: 'button.salva' });
+    fireEvent.click(saveButton);
     // Confirms the disclaimer dialog
     const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
     fireEvent.click(disclaimerCheckbox);
@@ -216,8 +216,8 @@ describe('CourtesyContacts Component', () => {
         value: phoneValue,
         verificationCode: '01234',
       });
-      expect(dialog).not.toBeInTheDocument();
     });
+    expect(dialog).not.toBeInTheDocument();
     expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultPhoneAddress,
@@ -342,8 +342,8 @@ describe('CourtesyContacts Component', () => {
         value: mailValue,
         verificationCode: '01234',
       });
-      expect(dialog).not.toBeInTheDocument();
     });
+    expect(dialog).not.toBeInTheDocument();
     expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultEmailAddress,
@@ -419,8 +419,8 @@ describe('CourtesyContacts Component', () => {
         value: emailValue,
         verificationCode: '01234',
       });
-      expect(dialog).not.toBeInTheDocument();
     });
+    expect(dialog).not.toBeInTheDocument();
     expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultEmailAddress,

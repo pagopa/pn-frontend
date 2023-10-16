@@ -59,7 +59,7 @@ function renderComponent(
       notificationStatusHistory={history}
       apiId="getDowntimeEvents"
       clearDowntimeLegalFactData={() => {}}
-      downtimeLegalFactUrl="mock-url"
+      downtimeLegalFactUrl=""
       fetchDowntimeLegalFactDocumentDetails={() => {}}
     />,
     setApiError ? mockErrorState : undefined

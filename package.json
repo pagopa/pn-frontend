@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@types/node": "*",
-    "autoprefixer": "^10.0.2",
     "postcss": "^8.1.0",
     "react": "18.2.0",
     "typescript": "^5.2.2"

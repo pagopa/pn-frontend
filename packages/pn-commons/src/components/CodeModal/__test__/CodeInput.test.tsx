@@ -82,6 +82,7 @@ describe('CodeInput Component', () => {
     });
     // change the value of the input and check that it is updated correctly
     // set the cursor position to the end
+    // TO-FIX: this line causes the error "not wrappend in act". With act, the error disappear, but why?
     (codeInputs[2] as HTMLInputElement).focus();
     (codeInputs[2] as HTMLInputElement).setSelectionRange(1, 1);
     // when we try to edit an input, we insert a second value and after, based on cursor position, we change the value
@@ -107,7 +108,7 @@ describe('CodeInput Component', () => {
 
   it('keyboard events', async () => {
     // render component
-    const { getAllByTestId, container } = render(
+    const { getAllByTestId } = render(
       <CodeInput initialValues={new Array(5).fill('1')} onChange={handleChangeMock} />
     );
     // focus on first input and moove to the next
