@@ -78,7 +78,6 @@ async function setFormValues(
   iunMatch !== '' && (await testInput(form, 'iunMatch', iunMatch));
 }
 
-// These tests have to be skipped because of the update of the testing-library/react package
 describe('Filter Notifications Table Component', () => {
   let result: RenderResult | undefined;
   let form: HTMLFormElement | undefined;
