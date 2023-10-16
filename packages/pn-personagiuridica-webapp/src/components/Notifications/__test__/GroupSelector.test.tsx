@@ -40,10 +40,10 @@ describe('GroupSelector component', () => {
     );
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(1);
-      const menuButton = getByTestId('groupSelectorButton');
-      expect(menuButton).toHaveTextContent('Group 1');
-      fireEvent.click(menuButton);
     });
+    const menuButton = getByTestId('groupSelectorButton');
+    expect(menuButton).toHaveTextContent('Group 1');
+    fireEvent.click(menuButton);
     const dropdown = await waitFor(() => screen.getByRole('presentation'));
     expect(dropdown).toBeInTheDocument();
     const menuItems = within(dropdown).getAllByRole('menuitem');

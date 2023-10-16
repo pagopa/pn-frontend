@@ -166,7 +166,10 @@ describe('CourtesyContacts Component', () => {
     });
   });
 
-  //16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade untill the new test will be implemented with vitest
+  /**
+   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
+   *   until the testing framework is changed (vitest);
+   */
   it.skip('override an existing phone number with a new one', async () => {
     const phoneValue = '+393333333334';
     mock
@@ -301,7 +304,10 @@ describe('CourtesyContacts Component', () => {
     });
   });
 
-  //16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade untill the new test will be implemented with vitest
+  /**
+   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
+   *   until the testing framework is changed (vitest);
+   */
   it.skip('add new email', async () => {
     const mailValue = 'nome.cognome@mail.it';
     mock
@@ -373,7 +379,10 @@ describe('CourtesyContacts Component', () => {
     });
   });
 
-  //16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade untill the new test will be implemented with vitest
+  /**
+   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
+   *   until the testing framework is changed (vitest);
+   */
   it.skip('override an existing email with a new one', async () => {
     const emailValue = 'nome.cognome-modified@mail.com';
     mock
