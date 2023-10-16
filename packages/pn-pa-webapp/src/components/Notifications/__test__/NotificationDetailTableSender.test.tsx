@@ -31,7 +31,7 @@ describe('NotificationDetailTableSender Component', () => {
     expect(cancelNotificationBtn).toBeInTheDocument();
     const recipientRow = getByTestId('recipientRow');
     expect(recipientRow).toHaveTextContent(notificationToFe.recipients[0].denomination);
-    const recipientsRow = getAllByTestId('recipientsRow');
+    const recipientsRow = getAllByTestId('recipients');
     expect(recipientsRow).toHaveLength(1);
     expect(recipientsRow[0]).toHaveTextContent(notificationToFe.recipients[0].taxId);
   });
@@ -50,11 +50,11 @@ describe('NotificationDetailTableSender Component', () => {
     expect(cancelNotificationBtn).toBeInTheDocument();
     const recipientRow = queryByTestId('recipientRow');
     expect(recipientRow).not.toBeInTheDocument();
-    const recipientsRow = getAllByTestId('recipientsRow');
+    const recipientsRow = getAllByTestId('recipients');
     expect(recipientsRow).toHaveLength(notificationToFeMultiRecipient.recipients.length);
     recipientsRow.forEach((row, index) => {
       expect(row).toHaveTextContent(
-        `${notificationToFeMultiRecipient.recipients[index].taxId} - ${notificationToFeMultiRecipient.recipients[index].denomination}`
+        `${notificationToFeMultiRecipient.recipients[index].denomination} - ${notificationToFeMultiRecipient.recipients[index].taxId}`
       );
     });
   });

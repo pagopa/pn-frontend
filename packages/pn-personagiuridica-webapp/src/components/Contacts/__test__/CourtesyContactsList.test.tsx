@@ -1,9 +1,7 @@
 import * as React from 'react';
 
-import { act } from '@testing-library/react';
-
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { RenderResult, render } from '../../../__test__/test-utils';
+import { RenderResult, act, render } from '../../../__test__/test-utils';
 import { CourtesyChannelType } from '../../../models/contacts';
 import { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContactsList from '../CourtesyContactsList';

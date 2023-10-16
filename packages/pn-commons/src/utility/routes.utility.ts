@@ -11,6 +11,7 @@ interface QueryParameters {
 interface Route {
   prefix: string | Array<string>;
   path?: string;
+  version?: string;
   params?: Parameters;
   query?: QueryParameters;
 }
@@ -39,6 +40,9 @@ function formatQueryParam(key: string, value: ParameterValue) {
 export function compileRoute(route: Route) {
   // eslint-disable-next-line functional/no-let
   let result = route.prefix ? `/${compilePrefix(route.prefix)}` : '';
+  if (route.version) {
+    result += `/${route.version}`;
+  }
   if (route.path) {
     result += `/${route.path}`;
   }

@@ -1,10 +1,8 @@
 import { fail } from 'assert';
 import * as React from 'react';
 
-import { RenderResult, act } from '@testing-library/react';
-
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { axe, render } from '../../../__test__/test-utils';
+import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
 import CourtesyContactsList from '../CourtesyContactsList';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 

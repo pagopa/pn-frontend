@@ -5,16 +5,19 @@ import {
   LegalFactDocumentDetails,
   LegalFactId,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentAttachmentNameType,
-  PaymentInfo,
+  PaymentDetails,
   PaymentNotice,
   performThunkAction,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+import { RootState } from '../store';
 import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
@@ -69,24 +72,65 @@ export const getReceivedNotificationDocument = createAsyncThunk<
 );
 
 export const getPaymentAttachment = createAsyncThunk<
-  { url: string },
-  { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string }
+  PaymentAttachment,
+  {
+    iun: string;
+    attachmentName: PaymentAttachmentNameType;
+    mandateId?: string;
+    attachmentIdx?: number;
+  }
 >(
   'getPaymentAttachment',
   performThunkAction(
-    (params: { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string }) =>
-      NotificationsApi.getPaymentAttachment(params.iun, params.attachmentName, params.mandateId)
-  )
+    (params: {
+      iun: string;
+      attachmentName: PaymentAttachmentNameType;
+      mandateId?: string;
+      attachmentIdx?: number;
+    }) =>
+      NotificationsApi.getPaymentAttachment(
+        params.iun,
+        params.attachmentName,
+        params.mandateId,
+        params.attachmentIdx
+      )
+  ),
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
+  }
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  PaymentInfo,
-  { noticeCode: string; taxId: string }
+  Array<PaymentDetails>,
+  { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
+  { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
-  performThunkAction((params: { noticeCode: string; taxId: string }) =>
-    NotificationsApi.getNotificationPaymentInfo(params.noticeCode, params.taxId)
-  )
+  async (
+    params: {
+      taxId: string;
+      paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
+    },
+    { rejectWithValue, getState }
+  ) => {
+    try {
+      const { notificationState } = getState();
+      const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
+        params.paymentInfoRequest
+      );
+
+      return populatePaymentsPagoPaF24(
+        notificationState.notification.timeline,
+        notificationState.paymentsData.pagoPaF24,
+        paymentInfo
+      );
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
+  }
 );
 
 export const getNotificationPaymentUrl = createAsyncThunk<
