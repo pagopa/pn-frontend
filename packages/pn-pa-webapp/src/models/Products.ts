@@ -1,17 +1,17 @@
 export interface Product {
-    createdAt:             Date;
-    depictImageUrl:        string;
-    description:           string;
-    id:                    string;
+    createdAt: Date;
+    depictImageUrl: string;
+    description: string;
+    id: string;
     identityTokenAudience: string;
-    logo:                  string;
-    logoBgColor:           string;
-    parentId:              string;
-    roleManagementURL:     string;
-    roleMappings:          RoleMappings;
-    title:                 string;
-    urlBO:                 string;
-    urlPublic:             string;
+    logo: string;
+    logoBgColor: string;
+    parentId: string;
+    roleManagementURL: string;
+    roleMappings: RoleMappings;
+    title: string;
+    urlBO: string;
+    urlPublic: string;
 }
 
 export interface RoleMappings {
@@ -22,11 +22,11 @@ export interface RoleMappings {
 
 export interface AdditionalProp {
     multiroleAllowed: boolean;
-    roles:            Role[];
+    roles: Role[];
 }
 
 export interface Role {
-    code:        string;
+    code: string;
     description: string;
-    label:       string;
+    label: string;
 }

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { PartyEntity } from '@pagopa/mui-italia';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -16,6 +16,7 @@ import {
   acceptToS,
   exchangeToken,
   getInstitutions,
+  getProductsOfInstitution,
   getPrivacyApproval,
   getToSApproval,
   logout,
@@ -85,6 +86,7 @@ const userSlice = createSlice({
       consentVersion: '',
     },
     institutions: [] as Array<PartyEntity>,
+    productsOfInstitution: [] as Array<ProductSwitchItem>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -150,6 +152,9 @@ const userSlice = createSlice({
     });
     builder.addCase(getInstitutions.fulfilled, (state, action) => {
       state.institutions = action.payload;
+    });
+    builder.addCase(getProductsOfInstitution.fulfilled, (state, action) => {
+      state.productsOfInstitution = action.payload;
     });
   },
 });

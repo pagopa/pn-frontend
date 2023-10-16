@@ -23,8 +23,8 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
+import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -38,7 +38,7 @@ import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
 // import { ExternalRegistriesAPI } from './api/external-registries/External-registries.api';
-import { getInstitutions, logout } from './redux/auth/actions';
+import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 
 // Cfr. PN-6096
 // --------------------
@@ -141,29 +141,20 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const {SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID} = getConfiguration();
-  // TODO: get products list from be (?)
-  const productsList: Array<ProductSwitchItem> = useMemo(
-    () => [
-      {
-        id: '1',
-        title: t('header.reserved-area'),
-        productUrl: `${configuration.SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
-        linkType: 'external',
-      },
-      {
-        id: '0',
-        title: t('header.notification-platform'),
-        productUrl: '',
-        linkType: 'internal',
-      },
-    ],
-    [idOrganization, i18n.language]
-  );
+  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
+
+  const reservedArea: ProductSwitchItem = {
+    id: 'selfcare',
+    title: t('header.reserved-area'),
+    productUrl: '',
+    linkType: 'external',
+  };
+  const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
+  const productsList = [reservedArea, ...products];
 
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const institutionsList: Array<PartySwitchItem> = useMemo(
-    () => institutions.map( (institution) => ({
+    () => institutions.map((institution) => ({
       ...institution,
       productRole: t(`roles.${institution.productRole}`)
     })),
@@ -177,7 +168,11 @@ const ActualApp = () => {
       void dispatch(getCurrentAppStatus());
       void dispatch(getInstitutions());
     }
-  }, [sessionToken, getCurrentAppStatus]);
+    if (idOrganization) {
+      void dispatch(getProductsOfInstitution(idOrganization));
+    }
+  }, [sessionToken, getCurrentAppStatus, idOrganization]);
+
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -222,7 +217,7 @@ const ActualApp = () => {
         })
       ),
   });
-  
+
 
   return (
     <>
@@ -257,7 +252,7 @@ const ActualApp = () => {
           !isPrivacyPage
         }
         productsList={productsList}
-        productId={'0'}
+        productId={SELFCARE_SEND_PROD_ID}
         partyId={idOrganization}
         partyList={institutionsList}
         loggedUser={jwtUser}

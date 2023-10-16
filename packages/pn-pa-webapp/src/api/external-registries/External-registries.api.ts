@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { PartyEntity } from '@pagopa/mui-italia';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Party } from '../../models/party';
 import { apiClient } from '../apiClients';
 
@@ -22,12 +22,12 @@ export const ExternalRegistriesAPI = {
     apiClient
       .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
       .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
-  
+
 
   getInstitutions: (): Promise<Array<PartyEntity>> =>
     apiClient
-    .get<Array<Institution>>(GET_INSTITUTIONS())
-    .then((response: AxiosResponse<Array<Institution>>) => response.data.map((institution)=> (
+      .get<Array<Institution>>(GET_INSTITUTIONS())
+      .then((response: AxiosResponse<Array<Institution>>) => response.data.map((institution) => (
         {
           id: institution.id,
           name: institution.description,
@@ -35,12 +35,20 @@ export const ExternalRegistriesAPI = {
           logoUrl: undefined
         }
       )
-      
-    )),
-  
-  getInstitutionProducts: (institutionId: string): Promise<Product> =>
+
+      )),
+
+  getInstitutionProducts: (institutionId: string): Promise<Array<ProductSwitchItem>> =>
     apiClient
-    .get<Array<Product>>(GET_INSTITUTION_PRODUCTS(institutionId))
-    .then((response: AxiosResponse<Array<Product>>) => response.data[0])
+      .get<Array<Product>>(GET_INSTITUTION_PRODUCTS(institutionId))
+      .then((response: AxiosResponse<Array<Product>>) => response.data.map((product) => (
+        {
+          id: product.id,
+          title: product.title,
+          productUrl: product.urlBO,
+          /* TODO */
+          linkType: 'internal',
+        }
+      )))
 };
 

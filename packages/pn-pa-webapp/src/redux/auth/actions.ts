@@ -1,7 +1,7 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { PartyEntity } from '@pagopa/mui-italia';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
@@ -47,7 +47,12 @@ export const getOrganizationParty = createAsyncThunk<Party, string>(
 
 export const getInstitutions = createAsyncThunk<Array<PartyEntity>>(
   'getInstitutions',
-  performThunkAction(()=> ExternalRegistriesAPI.getInstitutions())
+  performThunkAction(() => ExternalRegistriesAPI.getInstitutions())
+);
+
+export const getProductsOfInstitution = createAsyncThunk<Array<ProductSwitchItem>, string>(
+  'getProductsOfInstitution',
+  performThunkAction((institutionId: string) => ExternalRegistriesAPI.getInstitutionProducts(institutionId))
 );
 
 /**
