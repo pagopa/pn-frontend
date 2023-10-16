@@ -33,6 +33,7 @@ export default function ConfirmationModal({
 
   return (
     <Dialog
+      id="confirmation-dialog"
       fullScreen={fullScreen}
       open={open}
       onClose={onClose}

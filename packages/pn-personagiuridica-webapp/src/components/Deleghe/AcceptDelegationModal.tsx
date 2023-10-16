@@ -166,7 +166,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
             onChange={handleChange}
           >
             <FormControlLabel
-              id="associate-form-no-group"
+              id="associate-form-group"
               value="no-group"
               control={<Radio id="associate-group" data-testid="no-group" />}
               label={t('deleghe.no-group')}
@@ -181,7 +181,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         </FormControl>
         {associateGroup && (
           <PnAutocomplete
-            id="groups"
+            id="input-group"
             size="small"
             fullWidth
             options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}

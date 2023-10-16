@@ -31,6 +31,7 @@ export default function ConfirmationModal({
 
   return (
     <Dialog
+      id="confirmation-dialog"
       fullScreen={fullScreen}
       open={open}
       onClose={handleClose}
@@ -42,7 +43,7 @@ export default function ConfirmationModal({
           <Grid container item mt={4}>
             <Grid item xs={10}>
               <Typography
-                id="confirmation-dialog-delegations"
+                id="confirmation-dialog-title"
                 variant="h5"
                 sx={{ fontSize: '18px', fontWeight: '600' }}
               >
