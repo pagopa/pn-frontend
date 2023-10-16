@@ -2,8 +2,7 @@ import type { Transition } from 'history';
 import React from 'react';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
 
-import { renderHook } from '@testing-library/react-hooks';
-
+import { renderHook } from '../../test-utils';
 import { useBlocker } from '../useBlocker';
 
 const blocker = jest.fn();

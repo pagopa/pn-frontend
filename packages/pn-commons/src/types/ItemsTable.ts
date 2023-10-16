@@ -14,12 +14,12 @@ export interface Column<ColumnId> {
   width: string;
   align?: Align;
   sortable?: boolean;
-  getCellLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
+  getCellLabel(value: string | number | Array<string | object | ReactNode>, row?: Item): ReactNode;
   onClick?(row: Item, column: Column<ColumnId>): void;
   disableAccessibility?: boolean;
 }
 
 export interface Item {
   id: string;
-  [key: string]: string | number | Array<string | ReactNode>;
+  [key: string]: string | number | Array<string | object | ReactNode>;
 }

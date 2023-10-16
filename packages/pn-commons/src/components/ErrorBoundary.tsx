@@ -9,6 +9,7 @@ type Props = {
   sx?: SxProps;
   printError?: boolean;
   eventTrackingCallback?: (error: Error, errorInfo: ErrorInfo) => void;
+  children?: React.ReactNode;
 };
 
 type State = { hasError: boolean };

@@ -1,10 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { renderHook } from '@testing-library/react-hooks';
-
 import { appStateActions } from '../../redux/slices/appStateSlice';
-import { createTestStore } from '../../test-utils';
+import { createTestStore, renderHook } from '../../test-utils';
 import { useErrors } from '../useErrors';
 
 const TestStoreProvider = ({ children, store }) => {

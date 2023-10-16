@@ -35,7 +35,12 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
-const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+type LinkRemoveFiltersProps = {
+  cleanFilters: () => void;
+  children?: React.ReactNode;
+};
+
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
   const { t } = useTranslation(['notifiche']);
   return (
     <Link

@@ -19,6 +19,7 @@ type Props = {
   closingDelay?: number;
   /** onClose action */
   onClose?: () => void;
+  /** variant */
   variant?: 'outlined' | 'standard' | 'filled';
 };
 

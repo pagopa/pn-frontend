@@ -5,6 +5,7 @@ import { NotificationDetailTableRow } from '../../types';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;
+  children?: React.ReactNode;
 };
 
 /**

@@ -39,6 +39,11 @@ type Props = {
   currentDelegator?: Delegator;
 };
 
+type LinkRemoveFiltersProps = {
+  cleanFilters: () => void;
+  children?: React.ReactNode;
+};
+
 /**
  * Refers to PN-1741
  * The following line has been added for the solely purpose of preventing
@@ -51,7 +56,7 @@ type Props = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, cleanFilters }) => {
+const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => {
   const { t } = useTranslation('notifiche');
   return (
     <Link
@@ -67,7 +72,7 @@ const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, c
   );
 };
 
-const LinkRouteContacts: React.FC = ({ children }) => {
+const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   return (
@@ -106,12 +111,16 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                 {badge}
               </Typography>
               <Typography display="inline" variant="body2">
-                {row.sentAt}
+                <>{row.sentAt}</>
               </Typography>
             </Fragment>
           );
         }
-        return <Typography variant="body2">{row.sentAt}</Typography>;
+        return (
+          <Typography variant="body2">
+            <>{row.sentAt}</>
+          </Typography>
+        );
       },
       gridProps: {
         xs: 4,

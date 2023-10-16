@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Box, Stack, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+
 import CheckIcon from '@mui/icons-material/Check';
-import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Box, Stack, Typography } from '@mui/material';
 import { DisclaimerModal } from '@pagopa-pn/pn-commons';
+import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
 
 import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
-import { useAppDispatch } from '../../redux/hooks';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {

@@ -17,10 +17,12 @@ import { trackEventByType } from '../../utility/mixpanel';
 import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
-const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
-  children,
-  handleAddDelegationClick,
-}) => {
+type Props = {
+  handleAddDelegationClick: (source: string) => void;
+  children?: React.ReactNode;
+};
+
+const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <Link
@@ -66,7 +68,11 @@ const DelegatesByCompany = () => {
         sortable: true,
       },
       getValue(value) {
-        return <Typography fontWeight={'bold'}>{value}</Typography>;
+        return (
+          <Typography fontWeight={'bold'}>
+            <>{value}</>
+          </Typography>
+        );
       },
       cardConfiguration: {
         position: 'body',
@@ -80,7 +86,7 @@ const DelegatesByCompany = () => {
         width: '11%',
       },
       getValue(value) {
-        return value;
+        return <>{value}</>;
       },
       cardConfiguration: {
         position: 'body',
@@ -94,7 +100,7 @@ const DelegatesByCompany = () => {
         sortable: true,
       },
       getValue(value) {
-        return value;
+        return <>{value}</>;
       },
       cardConfiguration: {
         position: 'body',

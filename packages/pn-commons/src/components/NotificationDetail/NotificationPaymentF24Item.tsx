@@ -98,9 +98,13 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     () => () => {
       action.current?.abort();
       if (timer.current) {
+        // eslint-disable-next-line functional/immutable-data
+        timer.current = undefined;
         clearTimeout(timer.current);
       }
       if (interval.current) {
+        // eslint-disable-next-line functional/immutable-data
+        interval.current = undefined;
         clearInterval(interval.current);
       }
     },

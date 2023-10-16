@@ -10,13 +10,7 @@ const snackBarProps = {
 
 const renderSnackBar = (open: boolean, type: MessageType, closingDelay?: number) =>
   render(
-    <SnackBar
-      open={open}
-      message={snackBarProps.message}
-      type={type}
-      closingDelay={closingDelay}
-      id={'mocked-id'}
-    />
+    <SnackBar open={open} message={snackBarProps.message} type={type} closingDelay={closingDelay} />
   );
 
 describe('SnackBar Component', () => {
@@ -45,16 +39,14 @@ describe('SnackBar Component', () => {
   });
 
   it('closes snack bar after delay', async () => {
+    jest.useFakeTimers();
     const { getByTestId } = renderSnackBar(true, MessageType.INFO, 400);
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
-    await waitFor(
-      () => {
-        expect(snackBarContainer).not.toBeInTheDocument();
-      },
-      {
-        timeout: 400,
-      }
-    );
+    // wait...
+    jest.advanceTimersByTime(500);
+    await waitFor(() => {
+      expect(snackBarContainer).not.toBeInTheDocument();
+    });
   });
 });

@@ -32,9 +32,8 @@
   },
   "dependencies": {
     "@types/node": "*",
-    "autoprefixer": "^10.0.2",
     "postcss": "^8.1.0",
-    "react": "17.0.2",
+    "react": "18.2.0",
     "typescript": "^5.2.2"
   },
   "resolutions": {
@@ -43,7 +42,6 @@
     "**/file-loader/loader-utils": "^2.0.4",
     "**/react-scripts/react-dev-utils/loader-utils": "^3.2.1",
     "**/recursive-readdir": "^2.2.3",
-    "**/terser": "^5.16.1",
-    "**/react-scripts/react-dev-utils/fork-ts-checker-webpack-plugin": "6.5.3"
+    "**/terser": "^5.16.1"
   }
 }
