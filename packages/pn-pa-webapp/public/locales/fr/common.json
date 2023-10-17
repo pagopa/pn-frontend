@@ -8,14 +8,15 @@
     "exit": "Quitter",
     "continue": "Continuer",
     "send": "Envoyer",
-    "go-to-home": "Retourner à la page d'accueil",
-    "go-to-login": "Se connecter"
+    "go-to-home": "Retour à l’accueil",
+    "go-to-login": "Se connecter",
+    "close": "Fermer"
   },
   "menu": {
     "notifications": "Notifications",
     "users": "Utilisateurs",
     "groups": "Groupes",
-    "api-key": "Clés API",
+    "api-key": "API Key",
     "statistics": "Statistiques",
     "app-status": "État de la plateforme",
     "aria-label": "plateforme-notifications navigation principale",
@@ -23,38 +24,38 @@
   },
   "header": {
     "logout": "Quitter",
-    "pago-pa-link": "Site de PagoPA S.p.A.",
-    "reserved-area": "Area Riservata",
-    "notification-platform": "SEND - Servizio Notifiche Digitali"
+    "pago-pa-link": "Site de PagoPA S.p.A.",
+    "reserved-area": "Espace réservé",
+    "notification-platform": "SEND - Service de Notifications Numériques"
   },
   "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "En acceptant, vous acceptez les <0>Conditions d’utilisation</0> du service et confirmez avoir lu la <1>Politique sur le respect de la vie privée</1>.",
+    "title": "SEND - Service de Notifications Numériques",
+    "switch-label": "En accédant, vous acceptez les <0>Conditions générales d’utilisation</0> du service et confirmez que vous avez lu la <1>Politique de confidentialité</1>.",
     "button": "Se connecter"
   },
   "table": {
-    "aria-label": "Tableau des articles"
+    "aria-label": "Tableau des éléments"
   },
   "paginator": {
-    "aria-label": "Menu Pages",
+    "aria-label": "Menu pagination",
     "first": "premier élément",
     "last": "dernier élément",
     "page": "page",
     "next": "Passer à la page suivante",
-    "previous": "Retourner à la page précédente",
+    "previous": "Aller à la page précédente",
     "selected": "élément sélectionné",
     "rows-per-page": "Lignes par page"
   },
   "toast": {
-    "aria-label": "Icône de clôture toast"
+    "aria-label": "Icône de fermeture de toast"
   },
   "date-picker": {
-    "left-arrow": "Passer au mois précédent",
-    "right-arrow": "Passer au mois suivant",
-    "switch-to-year": "mode Calendrier activé, passer au mode de Choix de l'année",
-    "switch-to-calendar": "mode Choix de l'année activé, passer au mode Calendrier",
+    "left-arrow": "Aller au mois précédent",
+    "right-arrow": "Aller au mois suivant",
+    "switch-to-year": "mode calendrier actif, passez au mode de choix de l’année",
+    "switch-to-calendar": "mode de choix de l’année active, passez en mode calendrier",
     "select-date": "Choisir la date",
-    "date-selected": "Choisissez la date. La date sélectionnée est {{date}}"
+    "date-selected": "Choisissez la date, la date sélectionnée est {{date}} "
   },
   "date-time": {
     "today-uppercase-initial": "Aujourd’hui",
@@ -62,54 +63,54 @@
   },
   "error-boundary": {
     "title": "Une erreur s’est produite",
-    "description": "Impossible de télécharger la page. Procéder à nouveau au téléchargement ou réessayer plus tard.",
-    "action": "Télécharger à nouveau la page"
+    "description": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
+    "action": "Rechargement de la page"
   },
   "not-accessible": {
-    "title": "Impossible d'accéder à la plateforme",
-    "description": "Réessayer dans quelques heures. Si vous avez besoin d'aide,",
-    "action": "écrivez-nous"
+    "title": "Impossible d’accéder à la plateforme",
+    "description": "SEND est actuellement en phase de test et n’est pas encore disponible. Si vous êtes un Organisme et que vous avez complété l’adhésion, vous recevrez des mises à jour concernant la date d’activation de la plateforme. Pour plus d’informations sur l’initiative,",
+    "action": "visitez le site dédié"
   },
-  "access-denied": "Vous ne disposez pas des autorisations nécessaires pour accéder à cette page",
-  "not-logged": "Accédez à l'Espace réservé",
-  "not-logged-subtitle": "Pour utiliser SEND, connectez-vous à l'Espace réservé avec SPID ou CIE. Puis appuyez sur « Gérer » sur la carte correspondante.",
+  "access-denied": "Vous n’avez pas les autorisations nécessaires pour accéder à cette page",
+  "not-logged": "Accéder à l’espace privé",
+  "not-logged-subtitle": "Pour utiliser SEND, connectez-vous à l’Espace Réservé avec SPID ou CIE. Ensuite, appuyez sur « Gérer » dans la carte correspondante.",
   "not-found": {
-    "title": "Erreur 404, la page que vous cherchez n’existe pas",
-    "descpription": "Vous êtes ici par erreur, essayez d'utiliser la navigation."
+    "title": "404 : La page que vous cherchez n’existe pas",
+    "descpription": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
   },
   "leaving-app": {
-    "title": "Vous êtes sur le point de quitter SEND",
-    "message": "Vous allez être redirigé(e)"
+    "title": "Vous quittez SEND",
+    "message": "Vous serez redirigé(e)"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problèmes pour accéder à SEND",
+    "title": "Problèmes d’accès dans SEND",
     "message": "Réessayer plus tard"
   },
   "messages": {
     "404-title": "Ressource introuvable",
-    "404-message": "Une erreur s’est produite. Merci de réessayer plus tard",
+    "404-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
     "403-title": "Votre session a expiré",
     "403-message": "Entrez et connectez-vous avec SPID ou CIE.",
     "401-title": "Utilisateur non autorisé",
-    "401-message": "L'utilisateur actuel ne dispose pas des autorisations",
-    "451-title": "Plateforme non accessible",
-    "451-message": "Impossible d'accéder à la plateforme",
+    "401-message": "L’utilisateur actuel n’a pas les autorisations",
+    "451-title": "Plateforme inaccessible",
+    "451-message": "Impossible d’accéder à la plateforme",
     "500-title": "Le service n’est pas disponible",
-    "500-message": "En raison d'un problème temporaire de service, votre demande n'a pas pu être envoyée. Merci de réessayer plus tard.",
-    "lacking-grants-for-app-title": "Vous n'êtes pas autorisé(e) à vous connecter",
-    "generic-token-exchange-problem": "Impossible de finaliser la connexion",
-    "error-in-initial-info-loading": "Nous n'avons pas pu récupérer les informations nécessaires au démarrage de l'application",
-    "invalid-token-title": "Vous ne pouvez pas vous connecter en raison d'un problème technique - jeton invalide",
+    "500-message": "En raison d’un problème temporaire du service, votre demande n’a pas été envoyée. Veuillez réessayer plus tard.",
+    "lacking-grants-for-app-title": "Vous n’êtes pas autorisé à accéder",
+    "generic-token-exchange-problem": "Impossible de terminer l’accès",
+    "error-in-initial-info-loading": "Nous n’avons pas pu récupérer les données nécessaires au démarrage de l’application",
+    "invalid-token-title": "Vous ne pouvez pas vous connecter en raison d’un problème technique - jeton non valide",
     "generic-title": "Erreur générique",
-    "generic-message": "Une erreur s’est produite. Merci de réessayer plus tard",
-    "generic-api-error-main-text": "Nous n'avons pas pu récupérer ces informations.",
-    "generic-api-error-action-text": "Recharger"
+    "generic-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
+    "generic-api-error-main-text": "Nous n’avons pas pu récupérer ces données.",
+    "generic-api-error-action-text": "Rechargez"
   },
   "footer": {
-    "go-to-pagopa": "Lien : passer au site de PagoPA S.p.A.",
-    "go-to": "Cliquer sur le lien",
+    "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
+    "go-to": "Clique sur le lien",
     "who": "À propos de nous",
-    "work": "Carrière",
+    "work": "Travaille avec nous",
     "certifications": "Certifications",
     "security": "Sécurité des informations",
     "personal-data": "Droit à la protection des données personnelles",
@@ -117,32 +118,38 @@
     "terms-conditions": "Conditions générales",
     "company": "Société transparente",
     "disclosure": "Politique de divulgation responsable",
-    "321-model": "Formulaire 231",
+    "321-model": "Modèle 231",
     "accessibility": "Accessibilité",
     "social": "Lien : va sur le site {{social}} de PagoPA S.p.A.",
     "resources": "Ressources",
-    "follow": "Suivez-nous sur",
-    "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
-    "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code d'identification fiscale et n° de TVA 15376371009"
+    "follow": "Suis-nous sur",
+    "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
+    "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009"
   },
   "required-fields": "*Champs obligatoires",
   "required-field": "Champ obligatoire",
   "required": "obligatoire",
-  "too-long-field-error": "Saisir {{maxLength}} caractères max",
-  "no-spaces-at-edges": "Espaces invalides au début/à la fin",
-  "invalid": "invalide",
+  "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères",
+  "too-short-field-error": "Écrire un minimum de {{minLength}} caractères",
+  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin",
+  "invalid": "Non valide",
   "upload-file": {
     "or": "ou",
-    "select-from-pc": "le sélectionner à partir de votre ordinateur",
+    "select-from-pc": "sélectionnez-le à partir de votre ordinateur",
+    "select-from-mobile": "Charger un document",
     "loading": "Chargement en cours...",
     "sending": "Envoi en cours...",
     "hash-code": "Code de hachage",
-    "hash-code-descr": "Le code de hachage est un code alphanumérique unique utilisé pour identifier un fichier spécifique",
+    "hash-code-descr": "Le code de hachage est un code alphanumérique unique utilisé pour identifier un fichier donné",
     "ext-not-supported": "Extension de fichier non prise en charge. Réessayer avec un autre fichier.",
-    "loading-error": "Une erreur s'est produite lors du chargement du fichier. Merci de réessayer."
+    "file-size-exceeded": "Le fichier sélectionné dépasse la taille maximale de {{limit}}.",
+    "loading-error": "Une erreur s’est produite lors du chargement du fichier. Veuillez réessayer."
   },
   "roles": {
-    "operator": "Personne de contact pour les opérations",
-    "admin": "Personne de contact pour l'administration"
+    "operator": "Personne de contact opérationnel",
+    "admin": "Administrateur"
+  },
+  "attachments": {
+    "remove-attachment": "Supprimer la pièce jointe"
   }
 }

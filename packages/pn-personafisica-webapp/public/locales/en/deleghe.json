@@ -2,39 +2,38 @@
   "deleghe": {
     "title": "Delegates",
     "close": "Close",
-    "description": "Here, you can manage your delegates and delegations. The former are the natural or legal persons you have authorised to view and manage your notifications, the latter are those who have authorised you.",
+    "description": "Here you can manage your delegates and your proxies. The first are the natural or legal persons you have authorised to view and manage your notifications, the second are those who have authorised you.",
     "delegatesTitle": "Your delegates",
-    "delegatorsTitle": "Delegations to be borne by you",
-    "delegatorsApiErrorMessage": "We were unable to retrieve the delegation data for you.",
-    "delegationStart": "Delegation start date",
-    "delegationEnd": "Delegation end date",
+    "delegatorsTitle": "Delegations borne by you",
+    "delegatorsApiErrorMessage": "We were unable to retrieve data regarding your delegates.",
+    "delegationStart": "Start of delegation",
+    "delegationEnd": "End of delegation",
     "empty_state": "You have not delegated anyone to view your notifications.",
     "accept_title": "Please enter the verification code",
-    "accept_description": "To accept the proxy, enter the code {{name}} shared with you.",
-    "add": "Add a delegate",
-    "invalid_code": "Invalid verification code",
+    "accept_description": "To accept the delegation, enter the code that {{name}} shared with you.",
+    "add": "Add a delegation",
     "revoke": "Revoke",
     "reject": "Decline",
     "accept": "Accept",
     "show": "Show code",
     "revocation_question": "Do you really want to revoke the delegation?",
     "rejection_question": "Do you really want to decline the delegation?",
-    "confirm_revocation": "Revoke delegation",
-    "confirm_rejection": "Decline delegation",
+    "confirm_revocation": "Revoke the delegation",
+    "confirm_rejection": "Decline the delegation",
     "error_title": "Sorry, something went wrong",
-    "error_subtitle": "We were unable to load the page. Reload it, or try again later.",
+    "error_subtitle": "We were unable to load the page. Please reload it, or try again later.",
     "error_button": "Reload page",
-    "no_delegates": "You have not delegated anyone to view your notifications. <0>Add a delegate</0>.",
+    "no_delegates": "You have not delegated anyone to view your notifications. <0>Add a delegation</0>",
     "no_delegators": "You have no delegations.",
-    "show_code_title": "Verification code for delegation to {{name}}",
-    "show_code_subtitle": "Share this code with the delegate: they will have to enter it when accepting the delegation.",
+    "show_code_title": "Verification code for delegation to {{name}} ",
+    "show_code_subtitle": "Share this code with the delegate: they will have to enter it upon the acceptance of the delegation.",
     "verification_code": "Verification code",
+    "code_copied": "Code copied",
     "table": {
       "name": "Name",
-      "email": "Email",
-      "delegationStart": "Delegation start date",
-      "delegationEnd": "Delegation end date",
-      "permissions": "Permits",
+      "delegationStart": "Start of delegation",
+      "delegationEnd": "End of delegation",
+      "permissions": "Permissions",
       "status": "Status",
       "showCode": "Show code",
       "revoke": "Revoke",
@@ -48,51 +47,48 @@
   },
   "nuovaDelega": {
     "breadcrumb": "New delegation",
-    "backToDelegations": "Back to delegations",
-    "createdTitle": "Your delegation request has been successfully created",
-    "createdDescription": "Share the verification code with the delegate: they will have to enter it on the first login to SEND and accept your request.",
-    "title": "Your delegations",
-    "subtitle": "Enter the data of the legal entity to which you want to delegate the management of your notifications",
+    "backToDelegations": "Back to delegates",
+    "createdTitle": "Delegate request created",
+    "createdDescription": "Share the verification code with the delegate: they will have to enter it upon first logging in to SEND and accept your request.",
+    "title": "Add a delegation",
+    "subtitle": "Enter the data of the natural or legal person to whom you want to delegate the reading of your notifications.",
     "form": {
       "personType": "Legal entity*:",
       "naturalPerson": "Natural person",
       "legalPerson": "Legal person",
       "firstName": "First name*",
       "lastName": "Surname*",
-      "fiscalCode": "Tax code*",
-      "email": "Email*",
+      "fiscalCode": "Tax Code*",
       "businessName": "Company Name*",
-      "viewFrom": "You can view notifications from*:",
+      "viewFrom": "You will be able to view notifications from*:",
       "allEntities": "All organisations",
-      "onlySelected": "Only selected organisations",
-      "selectEntities": "Select organisations",
-      "endDate": "Delegate term",
+      "onlySelected": "Selected organisations only",
+      "selectEntities": "Select organisations*",
+      "date-duration": "Period of validity of the delegation*",
+      "endDate": "End of delegation",
       "verificationCode": "Verification code",
-      "verificationCodeDescr": "Share this code with the delegate: they will have to enter it when accepting the delegation.",
+      "verificationCodeDescr": "Share this code with the delegate: they will have to enter it upon the acceptance of the delegation.",
       "submit": "Submit request",
-      "mandatoryField": "Mandatory fields*",
-      "party-not-found": "No entity found"
+      "mandatoryField": "Required fields *",
+      "party-not-found": "No organisations found"
     },
     "validation": {
       "fiscalCode": {
-        "required": "Tax Code is required",
+        "required": "The Tax Code is required",
         "wrong": "The Tax Code entered is incorrect"
       },
-      "email": {
-        "wrong": "Email not formatted correctly",
-        "required": "Email required"
-      },
       "name": {
-        "required": "Name is mandatory"
+        "required": "First name is required"
       },
       "surname": {
-        "required": "Last name is required"
+        "required": "Surname is required"
       },
       "businessName": {
         "required": "Company name is required"
       },
+      "entiSelected": { "required": "Please select at least one organisation" },
       "expirationDate": {
-        "required": "The delegation end date is required",
+        "required": "Delegation end date is required",
         "wrong": "Incorrect date"
       }
     }
@@ -102,25 +98,29 @@
       "title": "Error",
       "message": "Delegation not found"
     },
+    "delivery_mandate_not_found": {
+      "title": "Error",
+      "message": "This delegation is no longer active."
+    },
     "already_exists": {
       "title": "Delegation already present",
-      "message": "The person you indicated already has a delegate for this organisation."
+      "message": "The person you indicated already has a delegate. Delete it and create a new one."
     },
     "not_acceptable": {
-      "title": "Delegation is invalid",
-      "message": "The delegation entered is not valid"
+      "title": "Invalid delegation",
+      "message": "Invalid delegation entered"
     },
     "delegate_himself": {
-      "title": "Delegate entry error",
+      "title": "Delegation entry error",
       "message": "You cannot delegate yourself"
     },
     "invalid_verification_code": {
-      "title": "Invalid code",
-      "message": "Invalid verification code"
+      "title": "Wrong code",
+      "message": "Please check and re-enter"
     },
     "fiscal_code": {
       "title": "Invalid tax code",
-      "message": "The tax code entered is not valid "
+      "message": "The tax code is not valid "
     },
     "invalid_parameter": {
       "title": "Invalid data",
