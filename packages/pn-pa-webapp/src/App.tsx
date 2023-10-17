@@ -37,7 +37,6 @@ import { TrackEventType } from './utility/events';
 import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
-// import { ExternalRegistriesAPI } from './api/external-registries/External-registries.api';
 import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 
 // Cfr. PN-6096

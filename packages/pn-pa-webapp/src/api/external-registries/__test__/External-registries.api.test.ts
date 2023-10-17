@@ -5,8 +5,7 @@ import { Party } from '../../../models/party';
 import { apiClient } from '../../apiClients';
 import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS, GET_PARTY_FOR_ORGANIZATION } from '../external-registries-routes';
 import { ExternalRegistriesAPI } from '../External-registries.api';
-import { partyListDTO, productsListDTO } from '../../../__mocks__/User.mock';
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { institutionsList, institutionsDTO, productsList, productsDTO } from '../../../__mocks__/User.mock';
 
 describe('External registries api tests', () => {
   mockAuthentication();
@@ -23,34 +22,18 @@ describe('External registries api tests', () => {
 
   it('getInstitutions', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(GET_INSTITUTIONS()).reply(200, partyListDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsDTO);
     const res = await ExternalRegistriesAPI.getInstitutions();
-    const institutions: Array<PartyEntity> = partyListDTO.map((institution) => (
-      {
-        id: institution.id,
-        name: institution.description,
-        productRole: institution.userProductRoles[0],
-        logoUrl: undefined
-      }
-    ));
-    expect(res).toStrictEqual(institutions);
+    expect(res).toStrictEqual(institutionsList);
     mock.reset();
     mock.restore();
   });
 
   it('getInstitutionProducts', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsListDTO);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsDTO);
     const res = await ExternalRegistriesAPI.getInstitutionProducts('1');
-    const products: Array<ProductSwitchItem> = productsListDTO.map((product) => (
-      {
-        id: product.id,
-        title: product.title,
-        productUrl: product.urlBO,
-        linkType: 'internal'
-      }
-    ));
-    expect(res).toStrictEqual(products);
+    expect(res).toStrictEqual(productsList);
     mock.reset();
     mock.restore();
   });

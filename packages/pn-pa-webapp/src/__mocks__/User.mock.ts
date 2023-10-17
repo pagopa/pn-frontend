@@ -1,9 +1,11 @@
+import { PartyEntity, ProductSwitchItem } from "@pagopa/mui-italia";
+
 enum LinkType {
     INTERNAL = 'internal',
     EXTERNAL = 'external',
 }
 
-export const productsListDTO = [
+export const productsDTO = [
     {
         id: '0',
         title: `Product 1`,
@@ -16,7 +18,16 @@ export const productsListDTO = [
     },
 ];
 
-export const partyListDTO = [
+export const productsList: Array<ProductSwitchItem> = productsDTO.map((product) => (
+    {
+        id: product.id,
+        title: product.title,
+        productUrl: product.urlBO,
+        linkType: 'internal'
+    }
+));
+
+export const institutionsDTO = [
     {
         id: '0',
         description: `Party 1`,
@@ -28,3 +39,12 @@ export const partyListDTO = [
         userProductRoles: ['Role 2']
     },
 ];
+
+export const institutionsList: Array<PartyEntity> = institutionsDTO.map((institution) => (
+    {
+        id: institution.id,
+        name: institution.description,
+        productRole: institution.userProductRoles[0],
+        logoUrl: undefined
+    }
+));
