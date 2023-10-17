@@ -47,6 +47,8 @@ const reduxInitialState = {
       isFirstAccept: false,
       currentVersion: 'mocked-version-1',
     },
+    institutions: [],
+    productsOfInstitution: []
   },
 };
 
@@ -111,7 +113,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
     expect(result!.container).toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if error in API call to fetch TOS', async () => {
@@ -129,7 +131,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if error in API call to fetch PRIVACY', async () => {
@@ -147,7 +149,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
@@ -171,6 +173,6 @@ describe('App', () => {
     const tosPage = result!.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 });
