@@ -12,6 +12,7 @@ const providers = [
   'teamsystemid',
   'ehtid',
   'infocamereid',
+  'intesiid',
 ];
 
 describe('IDPS utility test', () => {
