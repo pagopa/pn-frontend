@@ -11,6 +11,7 @@ type Props = {
   onConfirmLabel?: string;
   handleClose?: () => void;
   initTimeout?: boolean;
+  children?: React.ReactNode;
 };
 
 /* eslint-disable functional/no-let */

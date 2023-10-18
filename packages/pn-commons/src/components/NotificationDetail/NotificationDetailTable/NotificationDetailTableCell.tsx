@@ -4,6 +4,7 @@ type Props = {
   id?: string;
   cellProps?: SxProps;
   testId?: string;
+  children?: React.ReactNode;
 };
 
 const NotificationDetailTableCell: React.FC<Props> = ({ children, id, cellProps, testId }) => (

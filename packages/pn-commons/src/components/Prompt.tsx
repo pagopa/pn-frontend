@@ -19,6 +19,7 @@ type Props = {
   eventTrackingCallbackPromptOpened: () => void;
   eventTrackingCallbackCancel: () => void;
   eventTrackingCallbackConfirm: () => void;
+  children?: React.ReactNode;
 };
 
 const Prompt: React.FC<Props> = ({

@@ -6,6 +6,7 @@ import NotificationDetailTableBodyRow from './NotificationDetailTableBodyRow';
 
 type Props = {
   testId?: string;
+  children?: React.ReactNode;
 };
 
 const NotificationDetailTableBody: React.FC<Props> = ({ testId, children }) => {

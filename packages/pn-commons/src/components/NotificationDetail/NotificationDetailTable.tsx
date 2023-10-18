@@ -8,6 +8,7 @@ import NotificationDetailTableContents from './NotificationDetailTable/Notificat
 type Props = {
   testId?: string;
   id?: string;
+  children?: React.ReactNode;
 };
 
 /**

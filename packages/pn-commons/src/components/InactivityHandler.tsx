@@ -5,6 +5,7 @@ type Props = {
   inactivityTimer: number;
   /** Callback called when timer expires */
   onTimerExpired: () => void;
+  children?: React.ReactNode;
 };
 
 const InactivityHandler: React.FC<Props> = ({ inactivityTimer, children, onTimerExpired }) => {

@@ -16,6 +16,7 @@ type Props = {
   /** onClose action */
   onClose?: () => void;
   variant?: 'outlined' | 'standard' | 'filled';
+  children?: React.ReactNode;
 };
 
 const SnackBar: React.FC<Props> = ({

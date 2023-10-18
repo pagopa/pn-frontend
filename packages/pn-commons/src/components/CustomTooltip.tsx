@@ -10,6 +10,7 @@ type Props = {
   openOnClick: boolean;
   sx?: SxProps;
   onOpen?: () => void;
+  children: JSX.Element;
 };
 
 const CustomTooltip: React.FC<Props> = ({ openOnClick, tooltipContent, children, sx, onOpen }) => {
@@ -42,7 +43,7 @@ const CustomTooltip: React.FC<Props> = ({ openOnClick, tooltipContent, children,
           enterTouchDelay={0}
           onOpen={onOpen}
         >
-          {cloneElement(children as JSX.Element, {
+          {cloneElement(children, {
             onClick: handleTooltipOpen,
           })}
         </Tooltip>

@@ -8,6 +8,7 @@ type Props = {
   testId?: string;
   id?: string;
   label?: string;
+  children?: React.ReactNode;
 };
 const NotificationDetailTableContents: React.FC<Props> = ({
   children,

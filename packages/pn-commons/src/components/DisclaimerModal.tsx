@@ -20,6 +20,7 @@ type Props = {
   confirmLabel: string;
   title?: string;
   checkboxLabel?: string;
+  children?: React.ReactNode;
 };
 
 const DisclaimerModal: React.FC<Props> = ({

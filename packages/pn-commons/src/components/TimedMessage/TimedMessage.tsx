@@ -7,6 +7,7 @@ interface TimedMessageProps {
   timeout: number;
   /** Callback function when timeout reachs end */
   callback?: () => void;
+  children?: React.ReactNode;
 }
 
 const TimedMessage: React.FC<TimedMessageProps> = ({ timeout = 0, callback, children }) => {

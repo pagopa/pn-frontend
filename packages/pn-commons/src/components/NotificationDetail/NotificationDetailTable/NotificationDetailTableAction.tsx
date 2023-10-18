@@ -1,5 +1,10 @@
 import { Fragment } from 'react';
 
-const NotificationDetailTableAction: React.FC = ({ children }) => <Fragment>{children}</Fragment>;
+type Props = {
+  children: JSX.Element;
+};
+const NotificationDetailTableAction: React.FC<Props> = ({ children }) => (
+  <Fragment>{children}</Fragment>
+);
 
 export default NotificationDetailTableAction;
