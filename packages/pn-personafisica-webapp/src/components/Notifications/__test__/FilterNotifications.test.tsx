@@ -8,6 +8,7 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 import {
+  createEvent,
   createMatchMedia,
   testFormElements,
   testInput,
@@ -106,6 +107,22 @@ describe('Filter Notifications Table Component', () => {
       form = result.container.querySelector('form') as HTMLFormElement;
     });
     await testInput(form!, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
+  });
+
+  it('test iunMatch input onPaste event', async () => {
+    // render component
+    await act(async () => {
+      result = render(<FilterNotifications showFilters />);
+      form = result.container.querySelector('form') as HTMLFormElement;
+    });
+    const inputIunMatch = form!.querySelector(`input[name="iunMatch"]`);
+    const paste = createEvent.paste(inputIunMatch!, {
+      clipboardData: {
+        getData: () => ' MOCK-EDIU-NMAT-CH ',
+      },
+    });
+    fireEvent(inputIunMatch!, paste);
+    expect(inputIunMatch!).toHaveValue('MOCK-EDIU-NMAT-CH');
   });
 
   it('test startDate input', async () => {
