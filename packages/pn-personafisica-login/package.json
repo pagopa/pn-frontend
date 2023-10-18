@@ -7,7 +7,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.14.13",
+    "@mui/material": "5.14.5",
     "@pagopa-pn/pn-commons": "^2.1.0",
     "@pagopa/mui-italia": "^1.0.1",
     "@types/node": "^16.18.58",
