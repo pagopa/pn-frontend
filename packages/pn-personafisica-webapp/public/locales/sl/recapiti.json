@@ -47,21 +47,21 @@
   "io-contact": {
     "title": "",
     "subtitle": "Aplikacija IO",
-    "description": "Aktivirajte storitev \"Digitalna obvestila\": ko prejmete obvestilo, vam v aplikaciji pošljemo sporočilo, kjer ga lahko preberete in plačate morebitne stroške. Tukaj prejmete tudi vsa pomembna sporočila.",
+    "description": "Aktivirajte storitev \"Notifiche Digitali\": ko prejmete obvestilo, vam v aplikaciji pošljemo sporočilo, kjer ga lahko preberete in plačate morebitne stroške. Tukaj prejmete tudi vsa pomembna sporočila.",
     "disclaimer-message": "Če nimate potrjenega e-poštnega naslova, takoj preberite obvestilo: ne boste prejeli priporočenega pisma v papirni obliki in prihranili boste čas in denar.",
     "disclaimer-link": "Izvedite več",
     "switch-label": "Obvestite me s sporočilom v IO",
-    "disclaimer-message-unavailable": "Prenesite aplikacijo IO, se prijavite in se prepričajte, da je storitev \"Digitalna obvestila\" aktivna.",
+    "disclaimer-message-unavailable": "Prenesite aplikacijo IO, se prijavite in se prepričajte, da je storitev \"Notifiche Digitali\" aktivna.",
     "enabled": "Aktivno",
     "disabled": "Ni aktivno",
     "enable-modal": {
-      "title": "Ali želite aktivirati storitev \"Digitalna obvestila\" v IO?",
+      "title": "Ali želite aktivirati storitev \"Notifiche Digitali\" v IO?",
       "checkbox": "Razumem",
       "confirm": "Aktiviraj storitev",
       "content": "Če nimate potrjenega e-poštnega naslova in dostopate do obvestila v roku 5 dni (120 ur) od pošiljanja sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti."
     },
     "disable-modal": {
-      "title": "Ali želite deaktivirati storitev \"Digitalna obvestila\" v IO?",
+      "title": "Ali želite deaktivirati storitev \"Notifiche Digitali\" v IO?",
       "checkbox": "",
       "confirm": "Deaktiviraj storitev",
       "content": "Ko prejmete obvestilo, ne boste več prejeli sporočila v aplikaciji."

@@ -26,10 +26,10 @@
     "logout": "Izhod",
     "pago-pa-link": "Spletna stran PagoPA S.p.A.",
     "reserved-area": "Rezervirano območje",
-    "notification-platform": "SEND - Storitev digitalnega obveščanja"
+    "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
-    "title": "SEND - Storitev digitalnega obveščanja",
+    "title": "SEND - Servizio Notifiche Digitali",
     "switch-label": "S prijavo se strinjate s <0>Pogoji in določili uporabe</0> storitve in potrjujete, da ste prebrali <1>Pravilnik o zasebnosti</1>.",
     "button": "Prijava"
   },

@@ -65,7 +65,7 @@
     "add_domicile_APPIO": "Aktivirajte storitev",
     "domicile_PEC": "Ali imate potrjen e-poštni naslov? Dodajte ga in ne boste več prejemali papirne priporočene pošte.",
     "domicile_EMAIL": "Dodajte svoj e-poštni naslov: poslali vam bomo sporočilo vsakič, ko prejmete obvestilo.",
-    "domicile_APPIO": "Ali imate aplikacijo IO? Aktivirajte storitev \"Digitalna obvestila\", da si ogledate in plačate obvestila neposredno v aplikaciji.",
+    "domicile_APPIO": "Ali imate aplikacijo IO? Aktivirajte storitev \"Notifiche Digitali\", da si ogledate in plačate obvestila neposredno v aplikaciji.",
     "cancelled-alert-text": "To obvestilo je preklical pošiljatelj. Vsebino lahko prezrete.",
     "disclaimer-link": "Izvedite več",
     "payment": {

@@ -47,21 +47,21 @@
   "io-contact": {
     "title": "",
     "subtitle": "IO-App",
-    "description": "Aktiviere den Dienst „Digitale Benachrichtigungen“: Wenn ein Bescheid für dich vorliegt, senden wir dir eine Nachricht in der App, in der du ihn lesen und eventuelle Gebühren bezahlen kannst. Hier erhältst du auch wichtige Mitteilungen.",
+    "description": "Aktiviere den Dienst „Notifiche Digitali“: Wenn ein Bescheid für dich vorliegt, senden wir dir eine Nachricht in der App, in der du ihn lesen und eventuelle Gebühren bezahlen kannst. Hier erhältst du auch wichtige Mitteilungen.",
     "disclaimer-message": "Wenn du keine PEC hast, lies bitte sofort den Bescheid: Du bekommst kein Einschreiben in Papierform und sparst Zeit und Geld.",
     "disclaimer-link": "Mehr erfahren",
     "switch-label": "Benachrichtige mich mit IO-Nachricht",
-    "disclaimer-message-unavailable": "Lade die IO-App herunter, melde dich an und stelle sicher, dass der Dienst „Digitale Benachrichtigungen“ von SEND aktiviert ist.",
+    "disclaimer-message-unavailable": "Lade die IO-App herunter, melde dich an und stelle sicher, dass der Dienst „Notifiche Digitali“ von SEND aktiviert ist.",
     "enabled": "Aktiv",
     "disabled": "Nicht aktiv",
     "enable-modal": {
-      "title": "Möchtest du den Dienst „Digitale Bescheide“ auf IO aktivieren?",
+      "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO aktivieren?",
       "checkbox": "Verstanden",
       "confirm": "Dienst aktivieren",
       "content": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb 5 Tagen (120 Stunden) nach Versand der Nachricht aufrufen, erhältst du keine Benachrichtigung über den Empfang per Einschreiben."
     },
     "disable-modal": {
-      "title": "Möchtest du den Dienst „Digitale Bescheide“ auf IO deaktivieren?",
+      "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO deaktivieren?",
       "checkbox": "",
       "confirm": "Dienst deaktivieren",
       "content": "Wenn du den Bescheid aufgerufen hast, bekommst du keine Nachricht mehr in der App."

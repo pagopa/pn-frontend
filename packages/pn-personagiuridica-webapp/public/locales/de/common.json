@@ -34,13 +34,13 @@
   "header": {
     "product": {
       "organization-dashboard": "Dein Unternehmen",
-      "notification-platform": "SEND - Dienst für digitale Bescheide"
+      "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
     "logout": "Abmelden",
     "pago-pa-link": "Website von PagoPA S.p.A."
   },
   "tos": {
-    "title": "SEND - Dienst für digitale Bescheide",
+    "title": "SEND - Servizio Notifiche Digitali",
     "body": "Um darauf zuzugreifen, lese und akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
     "redo-body": "Die Nutzungsbedingungen für den Dienst und die Datenschutzerklärung haben sich geändert. Um zuzugreifen, akzeptiere und bestätige, dass du die neuen Versionen gelesen hast.",
     "switch-label": "Ich akzeptiere die <1>Nutzungsbedingungen</1> und bestätige, dass ich die<0>Datenschutzerklärung</0> gelesen habe",

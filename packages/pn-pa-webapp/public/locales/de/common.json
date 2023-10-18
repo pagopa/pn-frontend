@@ -26,10 +26,10 @@
     "logout": "Abmelden",
     "pago-pa-link": "Website von PagoPA S.p.A.",
     "reserved-area": "Area Riservata",
-    "notification-platform": "SEND - Dienst für digitale Bescheide"
+    "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
-    "title": "SEND - Dienst für digitale Bescheide",
+    "title": "SEND - Servizio Notifiche Digitali",
     "switch-label": "Mit dem Zugriff akzeptierst du die <0>Nutzungsbedingungen</0> des Dienstes und bestätigst, dass du die <1>Datenschutzerklärung</1> gelesen hast.",
     "button": "Anmelden"
   },

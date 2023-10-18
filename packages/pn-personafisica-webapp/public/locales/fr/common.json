@@ -32,7 +32,7 @@
     "pago-pa-link": "Site de PagoPA S.p.A."
   },
   "tos": {
-    "title": "SEND - Service de Notifications Numériques",
+    "title": "SEND - Servizio Notifiche Digitali",
     "body": "Pour y accéder, vous devez accepter les conditions d’utilisation du service et lire la politique de confidentialité.",
     "redo-body": "Les conditions d’utilisation du service et la politique de confidentialité ont changé. Pour accéder, vous devez accepter et confirmer avoir lu les nouvelles versions.",
     "switch-label": "J’accepte les <1>Conditions générales d’utilisation</1> et je confirme avoir lu la <0>Politique de confidentialité</0>",

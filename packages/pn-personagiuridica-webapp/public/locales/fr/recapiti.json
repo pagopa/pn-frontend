@@ -40,13 +40,13 @@
     "enabled": "Actif",
     "disabled": "Non actif",
     "enable-modal": {
-      "title": "Voulez-vous activer le service « Notifications numériques » sur IO ?",
+      "title": "Voulez-vous activer le service « Notifiche Digitali » sur IO ?",
       "checkbox": "J'ai compris",
       "confirm": "Activer le service",
       "content": "Si vous ne disposez pas de PEC et que vous accédez à la notification dans les 5 jours (120 heures) suivant l’envoi du message, vous ne recevrez pas d’accusé de réception par courrier recommandé."
     },
     "disable-modal": {
-      "title": "Voulez-vous désactiver le service « Notifications numériques » sur IO ?",
+      "title": "Voulez-vous désactiver le service « Notifiche Digitali » sur IO ?",
       "checkbox": "",
       "confirm": "Désactiver le service",
       "content": "Lorsque vous recevez une notification, vous ne recevrez plus de message dans l’application."

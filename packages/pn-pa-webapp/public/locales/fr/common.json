@@ -26,10 +26,10 @@
     "logout": "Quitter",
     "pago-pa-link": "Site de PagoPA S.p.A.",
     "reserved-area": "Espace réservé",
-    "notification-platform": "SEND - Service de Notifications Numériques"
+    "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
-    "title": "SEND - Service de Notifications Numériques",
+    "title": "SEND - Servizio Notifiche Digitali",
     "switch-label": "En accédant, vous acceptez les <0>Conditions générales d’utilisation</0> du service et confirmez que vous avez lu la <1>Politique de confidentialité</1>.",
     "button": "Se connecter"
   },

@@ -40,13 +40,13 @@
     "enabled": "Aktiv",
     "disabled": "Nicht aktiv",
     "enable-modal": {
-      "title": "Möchtest du den Dienst „Digitale Bescheide“ auf IO aktivieren?",
+      "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO aktivieren?",
       "checkbox": "Verstanden",
       "confirm": "Dienst aktivieren",
       "content": "Solltest du keine PEC-Adresse haben und den Bescheid innerhalb von 5 Tagen (120 Stunden) nach Versand der Nachricht aufrufen, erhältst du keine Empfangsbestätigung per Einschreiben."
     },
     "disable-modal": {
-      "title": "Möchtest du den Dienst „Digitale Bescheide“ auf IO deaktivieren?",
+      "title": "Möchtest du den Dienst „Notifiche Digitali“ auf IO deaktivieren?",
       "checkbox": "",
       "confirm": "Dienst deaktivieren",
       "content": "Wenn du einen Bescheid erhältst, bekommst du keine Nachricht mehr in der App."

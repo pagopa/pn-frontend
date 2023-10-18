@@ -47,21 +47,21 @@
   "io-contact": {
     "title": "",
     "subtitle": "IO app",
-    "description": "Activate the \"Digital Notifications\" service: when there is a notification for you, we send you a message in the app, where you can read it and pay any expenses. Here, you will also receive any important communications.",
+    "description": "Activate the \"Notifiche Digitali\" service: when there is a notification for you, we send you a message in the app, where you can read it and pay any expenses. Here, you will also receive any important communications.",
     "disclaimer-message": "If you do not have a certified email address, read the notification immediately: you will not receive the registered mail and you will save time and money.",
     "disclaimer-link": "Find out more",
     "switch-label": "Notify me with a message on IO",
-    "disclaimer-message-unavailable": "Download the IO app, log in and make sure SEND's \"Digital Notifications\" service is active.",
+    "disclaimer-message-unavailable": "Download the IO app, log in and make sure SEND's \"Notifiche Digitali\" service is active.",
     "enabled": "Active",
     "disabled": "Inactive",
     "enable-modal": {
-      "title": "Do you want to activate the \"Digital Notifications\" service on IO?",
+      "title": "Do you want to activate the \"Notifiche Digitali\" service on IO?",
       "checkbox": "OK, I got it",
       "confirm": "Activate service",
       "content": "If you do not have a certified email and access the notification within 5 days (120 hours) of sending the message, you will not receive the acknowledgement of receipt by registered mail."
     },
     "disable-modal": {
-      "title": "Do you want to deactivate the \"Digital Notifications\" service on IO?",
+      "title": "Do you want to deactivate the \"Notifiche Digitali\" service on IO?",
       "checkbox": "",
       "confirm": "Deactivate service",
       "content": "When you receive a notification, you will no longer receive an in-app message."

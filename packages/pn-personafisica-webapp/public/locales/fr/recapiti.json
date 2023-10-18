@@ -47,21 +47,21 @@
   "io-contact": {
     "title": "",
     "subtitle": "Application IO",
-    "description": "Activez le service « Notifications numériques » : lorsque vous recevez une notification, nous vous envoyons un message dans l’application, où vous pouvez la lire et payer les frais éventuels. Ici, vous recevez également d’éventuelles communications importantes.",
+    "description": "Activez le service « Notifiche Digitali » : lorsque vous recevez une notification, nous vous envoyons un message dans l’application, où vous pouvez la lire et payer les frais éventuels. Ici, vous recevez également d’éventuelles communications importantes.",
     "disclaimer-message": "Si vous ne disposez pas de PEC, lisez immédiatement la notification : vous ne recevrez pas la lettre recommandée papier et vous économiserez du temps et de l’argent.",
     "disclaimer-link": "En savoir plus",
     "switch-label": "Prévenez-moi avec un message sur IO",
-    "disclaimer-message-unavailable": "Téléchargez l’application IO, connectez-vous et assurez-vous que le service « Notifications numériques » de SEND est actif.",
+    "disclaimer-message-unavailable": "Téléchargez l’application IO, connectez-vous et assurez-vous que le service « Notifiche Digitali » de SEND est actif.",
     "enabled": "Actif",
     "disabled": "Non actif",
     "enable-modal": {
-      "title": "Voulez-vous activer le service « Notifications numériques » sur IO ?",
+      "title": "Voulez-vous activer le service « Notifiche Digitali » sur IO ?",
       "checkbox": "J'ai compris",
       "confirm": "Activer le service",
       "content": "Si vous ne disposez pas de PEC et que vous accédez à la notification dans les 5 jours (120 heures) suivant l’envoi du message, vous ne recevrez pas d’avis de réception par lettre recommandée."
     },
     "disable-modal": {
-      "title": "Voulez-vous désactiver le service « Notifications numériques » sur IO ?",
+      "title": "Voulez-vous désactiver le service « Notifiche Digitali » sur IO ?",
       "checkbox": "",
       "confirm": "Désactiver le service",
       "content": "Lorsque vous recevez une notification, vous ne recevrez plus de message dans l’application."

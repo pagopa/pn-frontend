@@ -40,13 +40,13 @@
     "enabled": "Aktivno",
     "disabled": "Ni aktivno",
     "enable-modal": {
-      "title": "Ali želite aktivirati storitev \"Digitalna obvestila\" v IO?",
+      "title": "Ali želite aktivirati storitev \"Notifiche digitali\" v IO?",
       "checkbox": "Razumem",
       "confirm": "Aktiviraj storitev",
       "content": "Če nimate potrjenega e-poštnega naslova in dostopate do obvestila v roku 5 dni (120 ur) od pošiljanja sporočila, potrdila o prejemu ne boste prejeli po priporočeni pošti."
     },
     "disable-modal": {
-      "title": "Ali želite deaktivirati storitev \"Digitalna obvestila\" v IO?",
+      "title": "Ali želite deaktivirati storitev \"Notifiche digitali\" v IO?",
       "checkbox": "",
       "confirm": "Deaktiviraj storitev",
       "content": "Ko prejmete obvestilo, ne boste več prejeli sporočila v aplikaciji."

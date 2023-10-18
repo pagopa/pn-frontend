@@ -40,13 +40,13 @@
     "enabled": "Active",
     "disabled": "Inactive",
     "enable-modal": {
-      "title": "Do you want to activate the \"Digital Notifications\" service on IO?",
+      "title": "Do you want to activate the \"Notifiche Digitali\" service on IO?",
       "checkbox": "OK, I understand",
       "confirm": "Activate service",
       "content": "If you do not have a certified email and access the notification within 5 days (120 hours) of the message being sent, you will not receive the acknowledgement of receipt by registered mail."
     },
     "disable-modal": {
-      "title": "Do you want to deactivate the \"Digital Notifications\" service on IO?",
+      "title": "Do you want to deactivate the \"Notifiche Digitali\" service on IO?",
       "checkbox": "",
       "confirm": "Deactivate service",
       "content": "When you receive a notification, you will no longer receive an in-app message."
