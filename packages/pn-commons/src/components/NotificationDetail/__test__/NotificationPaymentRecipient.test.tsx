@@ -2,8 +2,8 @@ import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
+import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
-import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../types';
 import {
   getF24Payments,
   getPagoPaF24Payments,
@@ -32,6 +32,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
+        landingSiteUrl=""
       />
     );
     const title = getByTestId('notification-payment-recipient-title');
@@ -58,7 +59,7 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('select and unselect payment', async () => {
-    const { getByTestId, queryAllByTestId, container } = render(
+    const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
@@ -66,6 +67,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
+        landingSiteUrl=""
       />
     );
     const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
@@ -104,6 +106,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
+        landingSiteUrl=""
       />
     );
     const payButton = getByTestId('pay-button');
@@ -144,6 +147,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
+        landingSiteUrl=""
       />
     );
     const payButton = queryByTestId('pay-button');
@@ -161,6 +165,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
+        landingSiteUrl=""
       />
     );
     const alert = getByTestId('cancelledAlertPayment');
@@ -182,6 +187,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
+        landingSiteUrl=""
       />
     );
     const paymentIndex = paymentsData.pagoPaF24.findIndex(
