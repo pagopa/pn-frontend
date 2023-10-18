@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { NotificationStatus } from './NotificationStatus';
 
+/** Notification Detail */
 export interface NotificationDetail {
   idempotenceToken?: string;
   paProtocolNumber: string;
@@ -27,13 +28,22 @@ export interface NotificationDetail {
   amount?: number;
   // only fe
   otherDocuments?: Array<NotificationDetailDocument>;
-  paymentHistory?: Array<PaymentHistory>;
 }
 
-export type PaymentHistory = PaidDetails & {
-  recipientDenomination: string;
-  recipientTaxId: string;
+export type PaymentsData = {
+  pagoPaF24: Array<PaymentDetails>;
+  f24Only: Array<F24PaymentDetails>;
 };
+
+export type PagoPAPaymentFullDetails = PagoPAPaymentDetails &
+  PaidDetails &
+  ExtRegistriesPaymentDetails;
+
+export interface PaymentDetails {
+  pagoPa?: PagoPAPaymentFullDetails;
+  f24?: F24PaymentDetails;
+  isLoading?: boolean; // only fe
+}
 
 export type NotificationDetailTimelineDetails =
   | BaseDetails
@@ -206,10 +216,8 @@ export interface PaidDetails extends BaseDetails {
   paymentSourceChannel: string;
   recipientType: RecipientType;
   amount?: number;
-  creditorTaxId?: string;
-  idF24?: string;
-  noticeCode?: string;
-  paymentObject?: string;
+  creditorTaxId: string;
+  noticeCode: string;
 }
 
 // PN-1647
@@ -224,10 +232,10 @@ export interface NotificationDetailRecipient {
   denomination: string;
   digitalDomicile?: DigitalAddress;
   physicalAddress?: PhysicalAddress;
-  payment?: NotificationDetailPayment;
+  payments?: Array<NotificationDetailPayment>;
 }
 
-export interface NotificationDetailDocument {
+export interface Attachment {
   digests: {
     sha256: string;
   };
@@ -236,6 +244,9 @@ export interface NotificationDetailDocument {
     key: string;
     versionToken: string;
   };
+}
+
+export interface NotificationDetailDocument extends Attachment {
   title?: string;
   requiresAck?: boolean;
   docIdx?: string;
@@ -249,40 +260,34 @@ export enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
-export interface NotificationDetailPayment {
-  noticeCode?: string;
-  noticeCodeAlternative?: string;
+export interface PaymentAttachment {
+  filename: string;
+  contenType: string;
+  contentLength: number;
+  sha256: string;
+  url?: string;
+  retryAfter?: number;
+}
+
+export interface PagoPAPaymentDetails {
   creditorTaxId: string;
-  pagoPaForm?: NotificationDetailDocument;
-  f24flatRate?: NotificationDetailDocument;
-  f24standard?: NotificationDetailDocument;
+  noticeCode: string;
+  attachment?: NotificationDetailDocument;
+  applyCost: boolean;
+  attachmentIdx?: number; // only fe
 }
 
-export enum PaymentStatus {
-  REQUIRED = 'REQUIRED',
-  SUCCEEDED = 'SUCCEEDED',
-  INPROGRESS = 'IN_PROGRESS',
-  FAILED = 'FAILURE',
+export interface F24PaymentDetails {
+  title: string;
+  applyCost: boolean;
+  recIndex?: number; // only fe
+  attachmentIdx?: number; // only fe
+  metadataAttachment: Attachment;
 }
 
-export enum PaymentInfoDetail {
-  PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
-  PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
-  DOMAIN_UNKNOWN = 'DOMAIN_UNKNOWN', // Creditor institution error
-  PAYMENT_ONGOING = 'PAYMENT_ONGOING', // Payment on going
-  PAYMENT_EXPIRED = 'PAYMENT_EXPIRED', // Payment expired
-  PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
-  PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
-  GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
-}
-
-export interface PaymentInfo {
-  status: PaymentStatus;
-  detail?: PaymentInfoDetail;
-  detail_v2?: string;
-  errorCode?: string;
-  amount?: number;
-  url: string;
+export interface NotificationDetailPayment {
+  pagoPa?: PagoPAPaymentDetails;
+  f24?: F24PaymentDetails;
 }
 
 export interface PaymentNotice {
@@ -443,3 +448,35 @@ export type AnalogDetails =
   | SendPaperDetails
   | AnalogWorkflowDetails
   | PublicRegistryResponseDetails;
+
+/** External Registries  */
+export enum PaymentInfoDetail {
+  PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
+  PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
+  DOMAIN_UNKNOWN = 'DOMAIN_UNKNOWN', // Creditor institution error
+  PAYMENT_ONGOING = 'PAYMENT_ONGOING', // Payment on going
+  PAYMENT_EXPIRED = 'PAYMENT_EXPIRED', // Payment expired
+  PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
+  PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
+  GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
+}
+
+export enum PaymentStatus {
+  REQUIRED = 'REQUIRED',
+  SUCCEEDED = 'SUCCEEDED',
+  INPROGRESS = 'IN_PROGRESS',
+  FAILED = 'FAILURE',
+}
+
+export interface ExtRegistriesPaymentDetails {
+  creditorTaxId: string;
+  noticeCode: string;
+  status: PaymentStatus;
+  amount?: number;
+  causaleVersamento?: string;
+  dueDate?: string;
+  detail?: PaymentInfoDetail;
+  detail_v2?: string;
+  errorCode?: string;
+  url?: string;
+}

@@ -122,5 +122,8 @@ export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterParti
     } catch (e) {
       return rejectWithValue(e);
     }
+  },
+  {
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
   }
 );

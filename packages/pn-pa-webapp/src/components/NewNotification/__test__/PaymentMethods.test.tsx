@@ -1,10 +1,15 @@
 import React from 'react';
 import * as redux from 'react-redux';
 
-import { RenderResult, act, fireEvent, waitFor, within } from '@testing-library/react';
-
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
-import { render } from '../../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { PaymentObject } from '../../../models/NewNotification';
 import * as actions from '../../../redux/newNotification/actions';
 import PaymentMethods from '../PaymentMethods';

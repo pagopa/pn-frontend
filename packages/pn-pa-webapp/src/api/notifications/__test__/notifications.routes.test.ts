@@ -9,6 +9,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -28,7 +29,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/v2.0/notifications/sent/mocked-iun');
+    expect(route).toEqual('/delivery/v2.1/notifications/sent/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
@@ -64,11 +65,18 @@ describe('Notifications routes', () => {
 
   it('should compile CREATE_NOTIFICATION', () => {
     const route = CREATE_NOTIFICATION();
-    expect(route).toEqual('/delivery/requests');
+    expect(route).toEqual('/delivery/v2.1/requests');
+  });
+
+  it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {
+    const route = NOTIFICATION_PAYMENT_ATTACHMENT('mocked-iun', 'mocked-attachmentName', 0);
+    expect(route).toEqual(
+      '/delivery/notifications/sent/mocked-iun/attachments/payment/0/mocked-attachmentName'
+    );
   });
 
   it('should compile CANCEL_NOTIFICATION', () => {
     const route = CANCEL_NOTIFICATION('mocked-iun');
-    expect(route).toEqual('/delivery-push/v2.0/notifications/cancel/mocked-iun');
+    expect(route).toEqual('/delivery-push/v2.1/notifications/cancel/mocked-iun');
   });
 });

@@ -13,8 +13,9 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
+  NotificationDetailPayment,
+  NotificationDetailTimelineDetails,
 } from '../models';
-import { NotificationDetailTimelineDetails } from '../models/NotificationDetail';
 import { parseNotificationDetail } from '../utility';
 
 function getOneRecipientNotification(): NotificationDetail {
@@ -30,6 +31,73 @@ function getOneRecipientNotification(): NotificationDetail {
   }
   return oneRecipientNotification;
 }
+
+export const payments: Array<NotificationDetailPayment> = [
+  {
+    pagoPa: {
+      noticeCode: '302011686772695132',
+      creditorTaxId: '77777777777',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38c.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695133',
+      creditorTaxId: '77777777777',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+    f24: {
+      title: 'F24 seconda rata TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlR=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38q.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    f24: {
+      title: 'F24 terza terza TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlu=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38n.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+];
 
 const recipients: Array<NotificationDetailRecipient> = [
   {
@@ -50,20 +118,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MI',
       foreignState: 'ITALIA',
     },
-    payment: {
-      noticeCode: '302011692956029088',
-      creditorTaxId: '77777777777',
-      pagoPaForm: {
-        digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-        },
-        contentType: 'application/pdf',
-        ref: {
-          key: 'PN_NOTIFICATION_ATTACHMENTS-2c5f6aaa594f4f0e803efbddf5232c1d.pdf',
-          versionToken: 'v1',
-        },
-      },
-    },
+    payments: [payments[0]],
   },
   {
     recipientType: RecipientType.PF,
@@ -83,20 +138,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MI',
       foreignState: 'ITALIA',
     },
-    payment: {
-      noticeCode: '302011692956029096',
-      creditorTaxId: '77777777777',
-      pagoPaForm: {
-        digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
-        },
-        contentType: 'application/pdf',
-        ref: {
-          key: 'PN_NOTIFICATION_ATTACHMENTS-25cc3a14c824a3e8fdd751d6ce7b7df.pdf',
-          versionToken: 'v1',
-        },
-      },
-    },
+    payments: [payments[1]],
   },
   {
     recipientType: RecipientType.PG,
@@ -112,20 +154,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MI',
       foreignState: 'ITALIA',
     },
-    payment: {
-      noticeCode: '302181677459720267',
-      creditorTaxId: '77777777777',
-      pagoPaForm: {
-        digests: {
-          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlR=',
-        },
-        contentType: 'application/pdf',
-        ref: {
-          key: 'PN_NOTIFICATION_ATTACHMENTS-25cc3a14c824a3e8fdd751d6ce7b7d2.pdf',
-          versionToken: 'v1',
-        },
-      },
-    },
+    payments: [payments[2]],
   },
 ];
 
@@ -502,11 +531,9 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 1,
       recipientType: RecipientType.PF,
-      paymentObject: 'Multone esagerato',
       creditorTaxId: '77777777777',
       noticeCode: '302011692956029096',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
-      idF24: 'aw345s',
     },
   },
   {
