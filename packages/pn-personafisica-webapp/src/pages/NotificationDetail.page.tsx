@@ -76,7 +76,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME } = getConfiguration();
+  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -284,6 +284,9 @@ const NotificationDetail = () => {
         return acc;
       }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
 
+      if (paymentInfoRequest.length === 0) {
+        return;
+      }
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
@@ -404,6 +407,7 @@ const NotificationDetail = () => {
                         handleReloadPayment={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
+                        landingSiteUrl={LANDING_SITE_URL}
                       />
                     </ApiErrorWrapper>
                   </Paper>
