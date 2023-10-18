@@ -86,6 +86,7 @@ const Header = ({
       return
     }
 
+    console.log(product);
     window.location.assign(
       `${selfcareBaseUrl}/token-exchange?institutionId=${partyId}&productId=${product.id}`
     )

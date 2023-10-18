@@ -18,7 +18,7 @@ export const userLoggedData = {
   uid: '00000000-0000-0000-0000-000000000000',
 };
 
-enum LinkType {
+export enum LinkType {
   INTERNAL = 'internal',
   EXTERNAL = 'external',
 }
