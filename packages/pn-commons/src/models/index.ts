@@ -1,4 +1,5 @@
 import { DatePickerTypes } from '../components/CustomDatePicker';
+import PrivateRoute from '../navigation/PrivateRoute';
 import { IAppMessage } from './AppMessage';
 import { AppResponse, ErrorMessage, ServerResponseError } from './AppResponse';
 import {
@@ -92,7 +93,8 @@ export {
   DowntimeStatus,
   isKnownFunctionality,
   KnownFunctionality,
-  AppIoCourtesyMessageEventType
+  AppIoCourtesyMessageEventType,
+  PrivateRoute,
 };
 export type {
   AnalogWorkflowDetails,
@@ -153,5 +155,5 @@ export type {
   PaymentDetails,
   PaymentsData,
   ExtRegistriesPaymentDetails,
-  NotificationDetailTimelineDetails
+  NotificationDetailTimelineDetails,
 };

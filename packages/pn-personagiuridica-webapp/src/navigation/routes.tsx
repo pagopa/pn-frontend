@@ -37,8 +37,7 @@ const handleAssistanceClick = () => {
 
 function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
-  const currentRoles =
-    organization && organization.roles ? organization.roles.map((role) => role.role) : [];
+  const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>

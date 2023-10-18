@@ -3,8 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
-import { ApiErrorWrapper, EmptyState, Item, SmartTable, useIsMobile } from '@pagopa-pn/pn-commons';
-import { SmartTableData } from '@pagopa-pn/pn-commons/src/types/SmartTable';
+import {
+  ApiErrorWrapper,
+  EmptyState,
+  Item,
+  SmartTable,
+  SmartTableData,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
