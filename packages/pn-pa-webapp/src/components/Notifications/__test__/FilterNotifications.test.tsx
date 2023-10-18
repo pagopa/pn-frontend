@@ -8,6 +8,7 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 import {
+  createEvent,
   createMatchMedia,
   testFormElements,
   testInput,
@@ -114,6 +115,22 @@ describe('Filter Notifications Table Component', () => {
       form = result.container.querySelector('form') as HTMLFormElement;
     });
     await testInput(form!, 'recipientId', 'mocked-recipientId');
+  });
+
+  it('test recipientId input onPaste event', async () => {
+    // render component
+    await act(async () => {
+      result = render(<FilterNotifications showFilters />);
+      form = result.container.querySelector('form') as HTMLFormElement;
+    });
+    const inputRecipientId = form!.querySelector(`input[name="recipientId"]`);
+    const paste = createEvent.paste(inputRecipientId!, {
+      clipboardData: {
+        getData: () => ' mocked-recipientId ',
+      },
+    });
+    fireEvent(inputRecipientId!, paste);
+    expect(inputRecipientId!).toHaveValue('mocked-recipientId');
   });
 
   it('test iunMatch input', async () => {
