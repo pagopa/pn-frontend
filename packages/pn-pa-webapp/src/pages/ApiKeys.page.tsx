@@ -31,16 +31,19 @@ import { RootState } from '../redux/store';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
+import { getConfiguration } from '../services/configuration.service';
+
 const SubTitle = () => {
   const { t } = useTranslation(['apikeys']);
+  const { API_B2B_LINK } = getConfiguration();
   return (
     <Fragment>
       {t('subtitle.text1')}
-      <Link target="_blank" href={process.env.REACT_APP_OPEN_API_SEND_NEW_NOTIFICATION_URL}>
+      <Link target="_blank" href={`https://petstore.swagger.io/?url=${API_B2B_LINK}#/NewNotification/sendNewNotification`}>
         {t('subtitle.text2')}
       </Link>
       {t('subtitle.text3')}
-      <Link target="_blank" href={process.env.REACT_APP_OPEN_API_GET_NOTIFICATION_INFO_URL}>
+      <Link target="_blank" href={`https://petstore.swagger.io/?url=${API_B2B_LINK}#/SenderReadB2B/retrieveNotificationRequestStatus`}>
         {t('subtitle.text4')}
       </Link>
       {t('subtitle.text5')}
