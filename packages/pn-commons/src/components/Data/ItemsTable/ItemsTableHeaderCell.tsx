@@ -3,23 +3,27 @@ import { PropsWithChildren } from 'react';
 import { Box, TableCell, TableCellProps, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
-import { Column, Sort } from '../../../types';
+import { Sort } from '../../../types';
 
-type Props<ColumnId> = {
+export interface IItemsTableHeaderCellProps<ColumnId> {
   testId?: string;
   sort?: Sort<ColumnId>;
   cellProps?: TableCellProps;
   handleClick?: (s: Sort<ColumnId>) => void;
-  column: Column<ColumnId>;
-};
+  columnId: ColumnId;
+  children?: React.ReactNode;
+  sortable?: boolean;
+}
 
 const ItemsTableHeaderCell = <ColumnId extends string>({
-  testId = 'table(notifications)',
+  testId = 'headerCell',
   sort,
   cellProps,
   handleClick,
-  column,
-}: PropsWithChildren<Props<ColumnId>>) => {
+  sortable,
+  columnId,
+  children,
+}: PropsWithChildren<IItemsTableHeaderCellProps<ColumnId>>) => {
   const sortHandler = (property: ColumnId) => () => {
     if (sort && handleClick) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
@@ -30,30 +34,30 @@ const ItemsTableHeaderCell = <ColumnId extends string>({
     <TableCell
       {...cellProps}
       scope="col"
-      data-testid="tableHeadCell"
+      data-testid={testId}
       sx={{
         ...cellProps?.sx,
         borderBottom: 'none',
         fontWeight: 600,
       }}
-      sortDirection={sort && sort.orderBy === column.id ? sort.order : false}
+      sortDirection={sort && sort.orderBy === columnId ? sort.order : false}
     >
-      {sort && column.sortable ? (
+      {sort && sortable ? (
         <TableSortLabel
-          active={sort.orderBy === column.id}
-          direction={sort.orderBy === column.id ? sort.order : 'asc'}
-          onClick={sortHandler(column.id)}
-          data-testid={`${testId}.sort.${column.id}`}
+          active={sort.orderBy === columnId}
+          direction={sort.orderBy === columnId ? sort.order : 'asc'}
+          onClick={sortHandler(columnId)}
+          data-testid={`${testId}.sort.${columnId}`}
         >
-          {column.label}
-          {sort.orderBy === column.id && (
+          {children}
+          {sort.orderBy === columnId && (
             <Box component="span" sx={visuallyHidden}>
               {sort.order === 'desc' ? 'sorted descending' : 'sorted ascending'}
             </Box>
           )}
         </TableSortLabel>
       ) : (
-        column.label
+        children
       )}
     </TableCell>
   );

@@ -208,11 +208,13 @@ const DesktopNotifications = ({
             {columns.map((column) => (
               <ItemsTableHeaderCell
                 key={column.id}
-                testId="notificationsTable"
                 sort={sort}
-                column={column}
+                columnId={column.id}
+                sortable={column.sortable}
                 handleClick={onChangeSorting}
-              />
+              >
+                {column.label}
+              </ItemsTableHeaderCell>
             ))}
           </ItemsTableHeader>
           <ItemsTableBody testId="tableBody">
@@ -220,11 +222,17 @@ const DesktopNotifications = ({
               <ItemsTableBodyRow key={row.id} testId="notificationsTable" index={index}>
                 {columns.map((column) => (
                   <ItemsTableBodyCell
-                    column={column}
+                    disableAccessibility={column.disableAccessibility}
                     key={column.id}
-                    testId="tableBodyCell"
-                    row={row}
-                  />
+                    onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                    cellProps={{
+                      width: column.width,
+                      align: column.align,
+                      cursor: column.onClick ? 'pointer' : 'auto',
+                    }}
+                  >
+                    {column.getCellLabel(row[column.id as keyof Item], row)}
+                  </ItemsTableBodyCell>
                 ))}
               </ItemsTableBodyRow>
             ))}

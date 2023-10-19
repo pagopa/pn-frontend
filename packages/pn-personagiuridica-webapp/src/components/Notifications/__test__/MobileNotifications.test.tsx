@@ -46,7 +46,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     expect(norificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
@@ -58,7 +58,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     expect(norificationCards).toHaveLength(0);
     expect(result.container).toHaveTextContent(/empty-state.delegate/i);
   });
@@ -70,7 +70,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
     expect(result.container).not.toHaveTextContent('table.destinatario');
   });
@@ -84,7 +84,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
     expect(result.container).toHaveTextContent('table.destinatario');
   });
@@ -116,7 +116,7 @@ describe('MobileNotifications Component', () => {
     await act(async () => {
       result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
     });
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     const notificationsCardButton = norificationCards[1].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
@@ -138,7 +138,7 @@ describe('MobileNotifications Component', () => {
         />
       );
     });
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     const notificationsCardButton = norificationCards[1].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {

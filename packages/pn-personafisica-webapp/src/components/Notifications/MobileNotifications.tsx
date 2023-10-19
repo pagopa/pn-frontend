@@ -205,7 +205,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
-    console.log('calling handleRowClick with parameter ', row);
     if (currentDelegator) {
       navigate(
         routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)

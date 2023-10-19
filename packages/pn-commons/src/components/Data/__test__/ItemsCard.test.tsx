@@ -52,9 +52,9 @@ const cardActions: Array<CardAction> = [
 ];
 
 const RenderItemsCard: React.FC = () => (
-  <ItemsCard>
+  <ItemsCard testId="itemsCard">
     {cardData.map((data) => (
-      <ItemsCardBody key={data.id} testId="itemCard">
+      <ItemsCardBody key={data.id}>
         <ItemsCardHeader>
           <ItemsCardHeaderTitle
             cardHeader={cardHeader}
@@ -92,7 +92,7 @@ const RenderItemsCard: React.FC = () => (
 describe('Items Card Component', () => {
   it('renders component (with data)', () => {
     const { queryAllByTestId } = render(<RenderItemsCard />);
-    const notificationsCards = queryAllByTestId('itemCard');
+    const notificationsCards = queryAllByTestId('itemsCard.body');
     expect(notificationsCards).toHaveLength(cardData.length);
     notificationsCards.forEach((card, index) => {
       const cardHeaderLeft = within(card).getByTestId('cardHeaderLeft');
@@ -105,7 +105,7 @@ describe('Items Card Component', () => {
         expect(label).toHaveTextContent(cardBody[j].label);
         expect(cardBodyValue[j]).toHaveTextContent(cardData[index][cardBody[j].id].toString());
       });
-      const cardActionsEl = within(card).getAllByTestId('cardAction');
+      const cardActionsEl = within(card).getAllByTestId('itemsCard.body.actions.action');
       expect(cardActionsEl).toHaveLength(cardActions.length);
       cardActionsEl.forEach((action) => {
         expect(action).toHaveTextContent(/Mocked action/i);
@@ -115,8 +115,10 @@ describe('Items Card Component', () => {
 
   it('clicks on action', async () => {
     const { queryAllByTestId } = render(<RenderItemsCard />);
-    const notificationsCards = queryAllByTestId('itemCard');
-    const cardActionsEl = within(notificationsCards[0]).getByTestId('cardAction');
+    const notificationsCards = queryAllByTestId('itemsCard.body');
+    const cardActionsEl = within(notificationsCards[0]).getByTestId(
+      'itemsCard.body.actions.action'
+    );
     fireEvent.click(cardActionsEl!);
     await waitFor(() => {
       expect(clickActionMockFn).toBeCalledTimes(1);

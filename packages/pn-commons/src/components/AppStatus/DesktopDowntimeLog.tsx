@@ -57,7 +57,14 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
     <ItemsTable testId="tableDowntimeLog">
       <ItemsTableHeader testId="tableHead">
         {columns.map((column) => (
-          <ItemsTableHeaderCell key={column.id} testId="tableDowntimeLog" column={column} />
+          <ItemsTableHeaderCell
+            key={column.id}
+            testId="tableDowntimeLog"
+            columnId={column.id}
+            sortable={column.sortable}
+          >
+            {column.label}
+          </ItemsTableHeaderCell>
         ))}
       </ItemsTableHeader>
       <ItemsTableBody testId="tableBody">
@@ -65,11 +72,18 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
           <ItemsTableBodyRow key={row.id} testId="tableDowntimeLog" index={index}>
             {columns.map((column) => (
               <ItemsTableBodyCell
-                column={column}
+                disableAccessibility={column.disableAccessibility}
                 key={column.id}
                 testId="tableBodyCell"
-                row={row}
-              />
+                onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                cellProps={{
+                  width: column.width,
+                  align: column.align,
+                  cursor: column.onClick ? 'pointer' : 'auto',
+                }}
+              >
+                {column.getCellLabel(row[column.id as keyof Item], row)}
+              </ItemsTableBodyCell>
             ))}
           </ItemsTableBodyRow>
         ))}

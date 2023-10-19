@@ -6,6 +6,7 @@ import { useIsMobile } from '../../hooks';
 import { CardAction, CardElement, Column, Item, PaginationData, Sort } from '../../types';
 import { SmartTableAction, SmartTableData } from '../../types/SmartTable';
 import { calculatePages, sortArray } from '../../utility';
+import { IEmptyStateProps } from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';
 import ItemsCard from './ItemsCard';
 import ItemsCardAction from './ItemsCard/ItemsCardAction';
@@ -21,7 +22,7 @@ import ItemsTableBodyCell from './ItemsTable/ItemsTableBodyCell';
 import ItemsTableBodyRow from './ItemsTable/ItemsTableBodyRow';
 import ItemsTableHeader from './ItemsTable/ItemsTableHeader';
 import ItemsTableHeaderCell from './ItemsTable/ItemsTableHeaderCell';
-import SmartFilter from './SmartFilter';
+import SmartFilter, { ISmartFilterProps } from './SmartFilter';
 import SmartSort from './SmartSort';
 
 type Props<ColumnId> = {
@@ -52,11 +53,12 @@ type Props<ColumnId> = {
     onChangePage: (paginationData: PaginationData) => void;
   };
   /** EmptyState component */
-  emptyState?: ReactNode;
+  emptyState?: React.ReactElement<IEmptyStateProps>;
   /** SmartTable test id */
   testId?: string;
   /** Table title used in aria-label */
   ariaTitle?: string;
+  children?: React.ReactElement<ISmartFilterProps<string>>;
 };
 
 function getCardElements<ColumnId extends string>(
@@ -259,14 +261,17 @@ const SmartTable = <ColumnId extends string>({
       <Box mb={3}>{filters}</Box>
       {rowData.length > 0 && (
         <ItemsTable testId={testId} ariaTitle={ariaTitle}>
-          <ItemsTableHeader testId="tableHead">
+          <ItemsTableHeader>
             {columns.map((column) => (
               <ItemsTableHeaderCell
-                sort={sort}
-                handleClick={handleSorting}
                 key={column.id}
-                column={column}
-              />
+                sort={sort}
+                columnId={column.id}
+                sortable={column.sortable}
+                handleClick={handleSorting}
+              >
+                {column.label}
+              </ItemsTableHeaderCell>
             ))}
           </ItemsTableHeader>
           <ItemsTableBody testId="tableBody">
@@ -274,11 +279,18 @@ const SmartTable = <ColumnId extends string>({
               <ItemsTableBodyRow key={row.id} testId={testId} index={index}>
                 {columns.map((column) => (
                   <ItemsTableBodyCell
-                    column={column}
+                    disableAccessibility={column.disableAccessibility}
                     key={column.id}
                     testId="tableBodyCell"
-                    row={row}
-                  />
+                    onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                    cellProps={{
+                      width: column.width,
+                      align: column.align,
+                      cursor: column.onClick ? 'pointer' : 'auto',
+                    }}
+                  >
+                    {column.getCellLabel(row[column.id as keyof Item], row)}
+                  </ItemsTableBodyCell>
                 ))}
               </ItemsTableBodyRow>
             ))}

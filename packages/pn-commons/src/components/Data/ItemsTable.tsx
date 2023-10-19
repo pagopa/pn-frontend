@@ -4,14 +4,17 @@ import { Table, TableContainer } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import ItemsTableBody from './ItemsTable/ItemsTableBody';
-import ItemsTableHeader from './ItemsTable/ItemsTableHeader';
+import ItemsTableBody, { IItemsTableBodyProps } from './ItemsTable/ItemsTableBody';
+import ItemsTableHeader, { IItemsTableHeaderProps } from './ItemsTable/ItemsTableHeader';
 
 type Props = {
   /** Table title used in aria-label */
   ariaTitle?: string;
   /** Table test id */
   testId?: string;
+  children?:
+    | Array<React.ReactElement<IItemsTableBodyProps>>
+    | Array<React.ReactElement<IItemsTableHeaderProps>>;
 };
 
 const ItemsTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', children }) => {
@@ -35,15 +38,19 @@ const ItemsTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)
 
   // TODO: gestire colore grigio di sfondo con variabile tema
   const header = children
-    ? React.Children.toArray(children).filter(
-        (child) => (child as JSX.Element).type === ItemsTableHeader
-      )
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsTableHeader)
+        .map((child: any) =>
+          React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+        )
     : [];
 
   const body = children
-    ? React.Children.toArray(children).filter(
-        (child) => (child as JSX.Element).type === ItemsTableBody
-      )
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsTableBody)
+        .map((child: any) =>
+          React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
+        )
     : [];
 
   return (

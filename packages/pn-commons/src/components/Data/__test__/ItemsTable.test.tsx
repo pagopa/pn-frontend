@@ -44,22 +44,30 @@ const sort: Sort<'column-1'> = {
 
 const RenderItemsTable: React.FC = () => (
   <ItemsTable testId="table-test">
-    <ItemsTableHeader testId="tableHead">
+    <ItemsTableHeader>
       {columns.map((column) => (
         <ItemsTableHeaderCell
           key={column.id}
-          testId="table-test"
+          columnId={column.id}
           sort={sort}
-          column={column}
+          sortable={column.sortable}
           handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
-        />
+        >
+          {column.label}
+        </ItemsTableHeaderCell>
       ))}
     </ItemsTableHeader>
-    <ItemsTableBody testId="tableBody">
+    <ItemsTableBody>
       {rows.map((row, index) => (
         <ItemsTableBodyRow key={row.id} testId="table-test" index={index}>
           {columns.map((column) => (
-            <ItemsTableBodyCell column={column} key={column.id} testId="tableBodyCell" row={row} />
+            <ItemsTableBodyCell
+              key={column.id}
+              disableAccessibility={column.disableAccessibility}
+              onClick={() => column.onClick && column.onClick(row, column)}
+            >
+              {column.getCellLabel(row[column.id as keyof Item], row)}
+            </ItemsTableBodyCell>
           ))}
         </ItemsTableBodyRow>
       ))}
@@ -73,18 +81,18 @@ describe('Items Table Component', () => {
     const table = getByRole('table');
     // check header
     expect(table).toHaveAttribute('aria-label', 'Tabella di item');
-    const tableHead = within(table).getByTestId('tableHead');
-    const tableColumns = within(tableHead).getAllByTestId('tableHeadCell');
+    const tableHead = within(table).getByTestId('table-test.header');
+    const tableColumns = within(tableHead).getAllByTestId('table-test.header.cell');
     expect(tableColumns).toHaveLength(columns.length);
     tableColumns.forEach((column, i) => {
       expect(column).toHaveTextContent(columns[i].label);
     });
     // check body
-    const tableBody = within(table).getByTestId('tableBody');
-    const tableRows = within(tableBody).getAllByTestId('table-test.row');
+    const tableBody = within(table).getByTestId('table-test.body');
+    const tableRows = within(tableBody).getAllByTestId('table-test.body.row');
     expect(tableRows).toHaveLength(rows.length);
     tableRows.forEach((row, i) => {
-      const tableColumns = within(row).getAllByTestId('tableBodyCell');
+      const tableColumns = within(row).getAllByTestId('table-test.body.row.cell');
       expect(tableColumns).toHaveLength(columns.length);
       tableColumns.forEach((column, j) => {
         expect(column).toHaveTextContent(rows[i][columns[j].id].toString());
@@ -95,8 +103,8 @@ describe('Items Table Component', () => {
   it('sorts a column', () => {
     const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
-    const tableHead = within(table).getByTestId('tableHead');
-    const firstColumn = within(tableHead).getAllByTestId('tableHeadCell')[0];
+    const tableHead = within(table).getByTestId('table-test.header');
+    const firstColumn = within(tableHead).getAllByTestId('table-test.header.cell')[0];
     const sortButton = within(firstColumn).getByRole('button');
     expect(sortButton).toBeInTheDocument();
     fireEvent.click(sortButton);
@@ -107,9 +115,9 @@ describe('Items Table Component', () => {
   it('click on a column', () => {
     const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
-    const tableBody = within(table).getByTestId('tableBody');
-    const firstRow = within(tableBody).getAllByTestId('table-test.row')[0];
-    const tableColumns = within(firstRow).getAllByTestId('tableBodyCell');
+    const tableBody = within(table).getByTestId('table-test.body');
+    const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
+    const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
     fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
     expect(handleColumnClick).toBeCalledTimes(1);
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
@@ -118,9 +126,9 @@ describe('Items Table Component', () => {
   it('disable accessibility navigation on a column', () => {
     const { getByRole } = render(<RenderItemsTable />);
     const table = getByRole('table');
-    const tableBody = within(table).getByTestId('tableBody');
-    const firstRow = within(tableBody).getAllByTestId('table-test.row');
-    const tableColumns = within(firstRow![0]).getAllByTestId('tableBodyCell');
+    const tableBody = within(table).getByTestId('table-test.body');
+    const firstRow = within(tableBody).getAllByTestId('table-test.body.row');
+    const tableColumns = within(firstRow![0]).getAllByTestId('table-test.body.row.cell');
     const button = within(tableColumns[2]).getAllByRole('button')[0];
     expect(button).toHaveAttribute('tabIndex', '-1');
   });

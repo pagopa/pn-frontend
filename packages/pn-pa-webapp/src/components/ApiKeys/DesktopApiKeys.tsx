@@ -65,13 +65,6 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     ...n,
     id: index.toString(),
   }));
-  /* useMemo(() => {
-    console.log('called useMemo');
-    return apiKeys.map((n: ApiKey<UserGroup>, index) => ({
-      ...n,
-      id: index.toString(),
-    }));
-  }, [apiKeys]); */
 
   /**
    * Checks if status history of a api key contains a status set as ROTATED
@@ -328,21 +321,29 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     <>
       {apiKeys && apiKeys.length > 0 ? (
         <ItemsTable testId="tableApiKeys" ariaTitle={t('table.title')}>
-          <ItemsTableHeader testId="tableHead">
+          <ItemsTableHeader>
             {columns.map((column) => (
-              <ItemsTableHeaderCell key={column.id} testId="tableApiKeys" column={column} />
+              <ItemsTableHeaderCell key={column.id} columnId={column.id} sortable={column.sortable}>
+                {column.label}
+              </ItemsTableHeaderCell>
             ))}
           </ItemsTableHeader>
-          <ItemsTableBody testId="tableBody">
+          <ItemsTableBody>
             {rows.map((row, index) => (
-              <ItemsTableBodyRow key={row.id} testId="tableApiKeys" index={index}>
+              <ItemsTableBodyRow key={row.id} index={index}>
                 {columns.map((column) => (
                   <ItemsTableBodyCell
-                    column={column}
+                    disableAccessibility={column.disableAccessibility}
                     key={column.id}
-                    testId="tableBodyCell"
-                    row={row}
-                  />
+                    onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                    cellProps={{
+                      width: column.width,
+                      align: column.align,
+                      cursor: column.onClick ? 'pointer' : 'auto',
+                    }}
+                  >
+                    {column.getCellLabel(row[column.id as keyof Item], row)}
+                  </ItemsTableBodyCell>
                 ))}
               </ItemsTableBodyRow>
             ))}

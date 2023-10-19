@@ -89,20 +89,22 @@ describe('Smart Table Component', () => {
     );
     const table = getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
-    const columns = getAllByTestId('tableHeadCell');
+    const columns = getAllByTestId('table(notifications).header.cell');
     columns.forEach((column, i) => {
       expect(column).toHaveTextContent(smartCfg[i].label);
-      const sort = within(column).queryByTestId(`table(notifications).sort.${smartCfg[i].id}`);
+      const sort = within(column).queryByTestId(
+        `table(notifications).header.cell.sort.${smartCfg[i].id}`
+      );
       if (smartCfg[i].tableConfiguration.sortable) {
         expect(sort).toBeInTheDocument();
       } else {
         expect(sort).not.toBeInTheDocument();
       }
     });
-    const rows = within(table).getAllByTestId('table(notifications).row');
+    const rows = within(table).getAllByTestId('table(notifications).body.row');
     expect(rows).toHaveLength(data.length);
     rows.forEach((row, index) => {
-      const cells = within(row).getAllByTestId('tableBodyCell');
+      const cells = within(row).getAllByTestId('table(notifications).body.row.cell');
       const current = data[index];
       cells.forEach((cell, jindex) => {
         expect(cell).toHaveTextContent(current[smartCfg[jindex].id] as string);
@@ -195,13 +197,15 @@ describe('Smart Table Component', () => {
     const table = getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
     const sortableColumn = smartCfg.find((cfg) => cfg.tableConfiguration.sortable);
-    const sortToggle = within(table).getByTestId(`table(notifications).sort.${sortableColumn!.id}`);
+    const sortToggle = within(table).getByTestId(
+      `table(notifications).header.cell.sort.${sortableColumn!.id}`
+    );
     fireEvent.click(sortToggle);
     expect(handleSort).toBeCalledTimes(1);
     const clickableColumnIdx = smartCfg.findIndex((cfg) => cfg.tableConfiguration.onClick);
-    const rows = within(table).getAllByTestId('table(notifications).row');
+    const rows = within(table).getAllByTestId('table(notifications).body.row');
     // we can take the row we want
-    const cells = within(rows[0]).getAllByTestId('tableBodyCell');
+    const cells = within(rows[0]).getAllByTestId('table(notifications).body.row.cell');
     fireEvent.click(cells[clickableColumnIdx]);
     expect(handleColumnClick).toBeCalledTimes(1);
   });
@@ -213,12 +217,14 @@ describe('Smart Table Component', () => {
     let table = getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
     const sortableColumn = smartCfg.find((cfg) => cfg.tableConfiguration.sortable);
-    const sortToggle = within(table).getByTestId(`table(notifications).sort.${sortableColumn!.id}`);
+    const sortToggle = within(table).getByTestId(
+      `table(notifications).header.cell.sort.${sortableColumn!.id}`
+    );
     fireEvent.click(sortToggle);
     // beacuse already ordered, nothing change
-    let rows = await waitFor(() => within(table).getAllByTestId('table(notifications).row'));
+    let rows = await waitFor(() => within(table).getAllByTestId('table(notifications).body.row'));
     rows.forEach((row, index) => {
-      const cells = within(row).getAllByTestId('tableBodyCell');
+      const cells = within(row).getAllByTestId('table(notifications).body.row.cell');
       const current = data[index];
       cells.forEach((cell, jindex) => {
         expect(cell).toHaveTextContent(current[smartCfg[jindex].id] as string);
@@ -227,10 +233,10 @@ describe('Smart Table Component', () => {
     // sort descendig
     fireEvent.click(sortToggle);
     table = getByTestId('table(notifications)');
-    rows = await waitFor(() => within(table).getAllByTestId('table(notifications).row'));
+    rows = await waitFor(() => within(table).getAllByTestId('table(notifications).body.row'));
     const sortedData = [...data].reverse();
     rows.forEach((row, index) => {
-      const cells = within(row).getAllByTestId('tableBodyCell');
+      const cells = within(row).getAllByTestId('table(notifications).body.row.cell');
       const current = sortedData[index];
       cells.forEach((cell, jindex) => {
         expect(cell).toHaveTextContent(current[smartCfg[jindex].id] as string);
@@ -246,7 +252,7 @@ describe('Smart Table Component', () => {
     expect(table).toBeInTheDocument();
     const sortableColumn = smartCfg.find((cfg) => cfg.tableConfiguration.sortable);
     const sortToggle = within(table).queryByTestId(
-      `table(notifications).sort.${sortableColumn!.id}`
+      `table(notifications).header.cell.sort.${sortableColumn!.id}`
     );
     expect(sortToggle).not.toBeInTheDocument();
   });
@@ -284,7 +290,7 @@ describe('Smart Table Component', () => {
     expect(mobileCards).toBeInTheDocument();
     const cardHeaders = getAllByTestId('cardHeaderLeft');
     expect(cardHeaders).toHaveLength(data.length);
-    const cardActions = getAllByTestId('cardAction');
+    const cardActions = getAllByTestId('mobileCards.body.actions.action');
     expect(cardActions).toHaveLength(data.length);
     cardHeaders.forEach((cardHeader, index) => {
       expect(cardHeader).toHaveTextContent(data[index]['column-1'] as string);

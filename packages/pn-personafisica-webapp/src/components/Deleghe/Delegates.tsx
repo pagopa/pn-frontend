@@ -174,12 +174,14 @@ const Delegates = () => {
                 <ItemsTableHeader testId="tableHead">
                   {delegatesColumns.map((column) => (
                     <ItemsTableHeaderCell
-                      sort={sortDelegates}
                       key={column.id}
-                      testId="delegatesTable"
-                      column={column}
+                      sort={sortDelegates}
+                      columnId={column.id}
+                      sortable={column.sortable}
                       handleClick={handleChangeSorting}
-                    />
+                    >
+                      {column.label}
+                    </ItemsTableHeaderCell>
                   ))}
                 </ItemsTableHeader>
                 <ItemsTableBody testId="tableBody">
@@ -187,11 +189,16 @@ const Delegates = () => {
                     <ItemsTableBodyRow key={row.id} testId="delegatesTable" index={index}>
                       {delegatesColumns.map((column) => (
                         <ItemsTableBodyCell
-                          column={column}
+                          disableAccessibility={column.disableAccessibility}
                           key={column.id}
-                          testId="tableBodyCell"
-                          row={row}
-                        />
+                          cellProps={{
+                            width: column.width,
+                            align: column.align,
+                            cursor: column.onClick ? 'pointer' : 'auto',
+                          }}
+                        >
+                          {column.getCellLabel(row[column.id as keyof Item], row)}
+                        </ItemsTableBodyCell>
                       ))}
                     </ItemsTableBodyRow>
                   ))}

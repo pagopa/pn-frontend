@@ -11,7 +11,7 @@ import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAc
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
 
-type Props<FormValues> = {
+export interface ISmartFilterProps<FormValues> {
   /** label to show for the filter button */
   filterLabel: string;
   /** label to show for the cancel button */
@@ -26,7 +26,8 @@ type Props<FormValues> = {
   formValues: FormValues;
   /** initial form values */
   initialValues: FormValues;
-};
+  children?: React.ReactNode;
+}
 
 const useStyles = makeStyles({
   helperTextFormat: {
@@ -47,7 +48,7 @@ const SmartFilter = <FormValues extends object>({
   formIsValid,
   formValues,
   initialValues,
-}: PropsWithChildren<Props<FormValues>>) => {
+}: PropsWithChildren<ISmartFilterProps<FormValues>>) => {
   const isMobile = useIsMobile();
   const classes = useStyles();
   const currentFilters = useRef<FormValues>(formValues);

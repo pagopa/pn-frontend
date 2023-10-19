@@ -2,29 +2,42 @@ import React from 'react';
 
 import { Card } from '@mui/material';
 
-import ItemsCardActions from './ItemsCardActions';
-import ItemsCardContents from './ItemsCardContents';
-import ItemsCardHeader from './ItemsCardHeader';
+import ItemsCardActions, { IItemsCardActionsProps } from './ItemsCardActions';
+import ItemsCardContents, { IItemsCardContentsProps } from './ItemsCardContents';
+import ItemsCardHeader, { IItemsCardHeaderProps } from './ItemsCardHeader';
 
-type Props = {
+export interface IItemsCardBodyProps {
   testId?: string;
-};
+  children?:
+    | Array<React.ReactElement<IItemsCardHeaderProps>>
+    | React.ReactElement<IItemsCardHeaderProps>
+    | Array<React.ReactElement<IItemsCardContentsProps>>
+    | React.ReactElement<IItemsCardContentsProps>
+    | Array<React.ReactElement<IItemsCardActionsProps>>
+    | React.ReactElement<IItemsCardActionsProps>;
+}
 
-const ItemsCardBody: React.FC<Props> = ({ testId = 'itemCard', children }) => {
+const ItemsCardBody: React.FC<IItemsCardBodyProps> = ({ testId = 'itemCard', children }) => {
   const header = children
-    ? React.Children.toArray(children).filter(
-        (child) => (child as JSX.Element).type === ItemsCardHeader
-      )
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsCardHeader)
+        .map((child: any) =>
+          React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+        )
     : [];
-  const body = children
-    ? React.Children.toArray(children).filter(
-        (child) => (child as JSX.Element).type === ItemsCardContents
-      )
+  const contents = children
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsCardContents)
+        .map((child: any) =>
+          React.cloneElement(child, { ...child.props, testId: `${testId}.contents` })
+        )
     : [];
   const actions = children
-    ? React.Children.toArray(children).filter(
-        (child) => (child as JSX.Element).type === ItemsCardActions
-      )
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsCardActions)
+        .map((child: any) =>
+          React.cloneElement(child, { ...child.props, testId: `${testId}.actions` })
+        )
     : [];
   return (
     <Card
@@ -36,7 +49,7 @@ const ItemsCardBody: React.FC<Props> = ({ testId = 'itemCard', children }) => {
       }}
     >
       {header}
-      {body}
+      {contents}
       {actions}
     </Card>
   );

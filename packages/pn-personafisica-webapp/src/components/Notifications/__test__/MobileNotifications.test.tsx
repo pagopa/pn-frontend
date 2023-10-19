@@ -47,7 +47,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     expect(norificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
     // clicks on empty state action
@@ -64,7 +64,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards.body');
     expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
@@ -95,7 +95,7 @@ describe('MobileNotifications Component', () => {
     await act(async () => {
       result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
     });
-    const norificationCards = result!.getAllByTestId('itemCard');
+    const norificationCards = result!.getAllByTestId('mobileCards.body');
     const notificationsCardButton = norificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {

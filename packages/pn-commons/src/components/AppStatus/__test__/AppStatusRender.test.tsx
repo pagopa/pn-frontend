@@ -194,7 +194,7 @@ describe('AppStatusRender component', () => {
         />
       );
     });
-    let rows = result.getAllByTestId('tableDowntimeLog.row');
+    let rows = result.getAllByTestId('tableDowntimeLog.body.row');
     expect(rows).toHaveLength(1);
     // change size
     const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
@@ -255,7 +255,7 @@ describe('AppStatusRender component', () => {
         setPagination={setPagination}
       />
     );
-    rows = result.getAllByTestId('tableDowntimeLog.row');
+    rows = result.getAllByTestId('tableDowntimeLog.body.row');
     expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length - 1);
     // check that no extra calls are done
     expect(fetchCurrentStatus).toBeCalledTimes(2);
@@ -281,7 +281,7 @@ describe('AppStatusRender component', () => {
         />
       );
     });
-    let rows = result.getAllByTestId('tableDowntimeLog.row');
+    let rows = result.getAllByTestId('tableDowntimeLog.body.row');
     expect(rows).toHaveLength(1);
     // change page
     const pageSelector = result.getByTestId('pageSelector');
@@ -341,7 +341,7 @@ describe('AppStatusRender component', () => {
         setPagination={setPagination}
       />
     );
-    rows = result.getAllByTestId('tableDowntimeLog.row');
+    rows = result.getAllByTestId('tableDowntimeLog.body.row');
     expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length - 1);
     // check that no extra calls are done
     expect(fetchCurrentStatus).toBeCalledTimes(2);

@@ -2,24 +2,27 @@ import React from 'react';
 
 import { CardActions } from '@mui/material';
 
-import ItemsCardAction from './ItemsCardAction';
+import ItemsCardAction, { IItemsCardActionProps } from './ItemsCardAction';
 
-type Props = {
+export interface IItemsCardActionsProps {
   testId?: string;
   disableSpacing?: boolean;
   className?: string;
-};
+  children?: Array<React.ReactElement<IItemsCardActionProps>>;
+}
 
-const ItemsCardActions: React.FC<Props> = ({
+const ItemsCardActions: React.FC<IItemsCardActionsProps> = ({
   testId,
   disableSpacing = true,
   className = 'card-actions',
   children,
 }) => {
   const actions = children
-    ? React.Children.toArray(children).filter(
-        (child) => (child as JSX.Element).type === ItemsCardAction
-      )
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsCardAction)
+        .map((child: any) =>
+          React.cloneElement(child, { ...child.props, testId: `${testId}.action` })
+        )
     : [];
   return (
     <CardActions disableSpacing={disableSpacing} data-testid={testId} className={className}>

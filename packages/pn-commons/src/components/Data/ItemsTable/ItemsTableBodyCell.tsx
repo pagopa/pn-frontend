@@ -1,51 +1,43 @@
-import { PropsWithChildren } from 'react';
-
-import { Box, TableCell, TableCellProps } from '@mui/material';
+import { Box, SxProps, TableCell } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { Column, Item } from '../../../types';
 import { buttonNakedInheritStyle } from '../../../utility';
 
-type Props<ColumnId> = {
+export interface IItemsTableBodyCellProps {
   testId?: string;
-  cellProps?: TableCellProps;
-  column: Column<ColumnId>;
-  row: Item;
-};
+  cellProps?: SxProps;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  disableAccessibility?: boolean;
+}
 
-const ItemsTableBodyCell = <ColumnId extends string>({
-  testId,
+const ItemsTableBodyCell: React.FC<IItemsTableBodyCellProps> = ({
+  testId = 'cell',
   cellProps,
-  column,
-  row,
-}: PropsWithChildren<Props<ColumnId>>) => {
-  const cellValue = column.getCellLabel(row[column.id as keyof Item], row);
-  return (
-    <TableCell
-      role="cell"
-      data-testid={testId}
-      sx={{
-        ...cellProps?.sx,
-        width: column.width,
-        align: column.align,
-        borderBottom: 'none',
-        cursor: column.onClick ? 'pointer' : 'auto',
-      }}
-      onClick={() => column.onClick && column.onClick(row, column)}
-    >
-      {column.onClick && (
-        <>
-          {/* Even there is a onClick function on the TableCell, leave ButtonNaked below as is.
+  children,
+  onClick,
+  disableAccessibility,
+}) => (
+  <TableCell
+    role="cell"
+    data-testid={testId}
+    sx={{
+      ...cellProps!,
+      borderBottom: 'none',
+    }}
+    onClick={onClick}
+  >
+    {onClick && (
+      <>
+        {/* Even there is a onClick function on the TableCell, leave ButtonNaked below as is.
             This makes spacebar key with accessibility to trigger the onClick function.
             The ButtonNaked "inherits" the onClick action from the outer TableCell, so that is not necessary to replicate it. */}
-          <ButtonNaked tabIndex={column.disableAccessibility ? -1 : 0} sx={buttonNakedInheritStyle}>
-            {cellValue}
-          </ButtonNaked>
-        </>
-      )}
-      {!column.onClick && <Box tabIndex={column.disableAccessibility ? -1 : 0}>{cellValue}</Box>}
-    </TableCell>
-  );
-};
-
+        <ButtonNaked tabIndex={disableAccessibility ? -1 : 0} sx={buttonNakedInheritStyle}>
+          {children}
+        </ButtonNaked>
+      </>
+    )}
+    {!onClick && <Box tabIndex={disableAccessibility ? -1 : 0}>{children}</Box>}
+  </TableCell>
+);
 export default ItemsTableBodyCell;

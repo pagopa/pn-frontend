@@ -84,7 +84,7 @@ describe('MobileDowntimeLog component', () => {
         />
       );
     });
-    const itemCards = result.getAllByTestId('itemCard');
+    const itemCards = result.getAllByTestId('mobileTableDowntimeLog.body');
     expect(itemCards).toHaveLength(exampleDowntimeLogPage.downtimes.length);
     itemCards.forEach((card, index) => {
       const currentLog = exampleDowntimeLogPage.downtimes[index];
@@ -124,7 +124,7 @@ describe('MobileDowntimeLog component', () => {
       );
     });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
-    const itemCards = result.getAllByTestId('itemCard');
+    const itemCards = result.getAllByTestId('mobileTableDowntimeLog.body');
     const logWithFile = exampleDowntimeLogPage.downtimes.findIndex((log) => log.fileAvailable);
     const button = within(itemCards[logWithFile]).getByRole('button');
     fireEvent.click(button);

@@ -1,11 +1,16 @@
 import { CardHeader } from '@mui/material';
 
-type Props = {
+import { IItemsCardHeaderTitleProps } from './ItemsCardHeaderTitle';
+
+export interface IItemsCardHeaderProps {
   testId?: string;
   className?: string;
-};
-const ItemsCardHeader: React.FC<Props> = ({ testId, className = 'card-header', children }) => (
-  <CardHeader data-testid={testId} className={className} title={children} />
-);
+  children?: React.ReactElement<IItemsCardHeaderTitleProps>;
+}
+const ItemsCardHeader: React.FC<IItemsCardHeaderProps> = ({
+  testId,
+  className = 'card-header',
+  children,
+}) => <CardHeader data-testid={testId} className={className} title={children} />;
 
 export default ItemsCardHeader;

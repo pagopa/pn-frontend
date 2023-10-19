@@ -199,27 +199,35 @@ const DesktopNotifications = ({
       />
       {rows.length ? (
         <ItemsTable testId="notificationsTable">
-          <ItemsTableHeader testId="tableHead">
+          <ItemsTableHeader>
             {columns.map((column) => (
               <ItemsTableHeaderCell
                 key={column.id}
-                testId="notificationsTable"
                 sort={sort}
-                column={column}
+                columnId={column.id}
+                sortable={column.sortable}
                 handleClick={onChangeSorting}
-              />
+              >
+                {column.label}
+              </ItemsTableHeaderCell>
             ))}
           </ItemsTableHeader>
-          <ItemsTableBody testId="tableBody">
+          <ItemsTableBody>
             {rows.map((row, index) => (
-              <ItemsTableBodyRow key={row.id} testId="notificationsTable" index={index}>
+              <ItemsTableBodyRow key={row.id} index={index}>
                 {columns.map((column) => (
                   <ItemsTableBodyCell
-                    column={column}
+                    disableAccessibility={column.disableAccessibility}
                     key={column.id}
-                    testId="tableBodyCell"
-                    row={row}
-                  />
+                    onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                    cellProps={{
+                      width: column.width,
+                      align: column.align,
+                      cursor: column.onClick ? 'pointer' : 'auto',
+                    }}
+                  >
+                    {column.getCellLabel(row[column.id as keyof Item], row)}
+                  </ItemsTableBodyCell>
                 ))}
               </ItemsTableBodyRow>
             ))}

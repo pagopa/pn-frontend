@@ -2,13 +2,18 @@ import { Grid, GridProps } from '@mui/material';
 
 import { CardElement, Item } from '../../../types';
 
-type Props = {
+export interface IItemsCardHeaderTitleProps {
   item: Item;
   headerGridProps?: GridProps;
   cardHeader: [CardElement, CardElement | null];
-};
+  children?: React.ReactNode;
+}
 
-const ItemsCardHeaderTitle: React.FC<Props> = ({ item, headerGridProps, cardHeader }) => (
+const ItemsCardHeaderTitle: React.FC<IItemsCardHeaderTitleProps> = ({
+  item,
+  headerGridProps,
+  cardHeader,
+}) => (
   <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
     <Grid
       item

@@ -154,7 +154,7 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
     const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
@@ -166,7 +166,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
   });
 
@@ -195,7 +195,7 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
@@ -207,7 +207,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
@@ -237,7 +237,7 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
     rows?.forEach((row, index) => {
       expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
@@ -252,7 +252,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
@@ -302,7 +302,7 @@ describe('Notifiche Page', () => {
     expect(mock.history.get[0].url).toContain('/notifications/received');
     const filterForm = result?.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
-    const notificationsCards = result?.getAllByTestId('itemCard');
+    const notificationsCards = result?.getAllByTestId('mobileCards.body');
     expect(notificationsCards).toHaveLength(notificationsDTO.resultsPage.length);
     const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();

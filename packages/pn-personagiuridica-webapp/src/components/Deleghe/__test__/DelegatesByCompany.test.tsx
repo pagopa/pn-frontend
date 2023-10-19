@@ -78,7 +78,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     expect(container).not.toHaveTextContent(/deleghe.no_delegates/i);
     const table = getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('table(notifications).body.row');
     expect(rows).toHaveLength(arrayOfDelegates.length);
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
@@ -153,7 +153,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
     });
     const table = getByTestId('table(notifications)');
     expect(table).toBeInTheDocument();
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('table(notifications).body.row');
     expect(rows).toHaveLength(arrayOfDelegates.length - 1);
     // the index + 1 is because wie revoke the first delegation
     rows.forEach((row, index) => {

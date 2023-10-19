@@ -115,12 +115,14 @@ const Delegators = () => {
               <ItemsTableHeader testId="tableHead">
                 {delegatorsColumns.map((column) => (
                   <ItemsTableHeaderCell
-                    sort={sortDelegators}
-                    handleClick={handleChangeSorting}
                     key={column.id}
-                    testId="delegatorsTable"
-                    column={column}
-                  />
+                    sort={sortDelegators}
+                    columnId={column.id}
+                    sortable={column.sortable}
+                    handleClick={handleChangeSorting}
+                  >
+                    {column.label}
+                  </ItemsTableHeaderCell>
                 ))}
               </ItemsTableHeader>
               <ItemsTableBody testId="tableBody">
@@ -128,11 +130,16 @@ const Delegators = () => {
                   <ItemsTableBodyRow key={row.id} testId="delegatorsTable" index={index}>
                     {delegatorsColumns.map((column) => (
                       <ItemsTableBodyCell
-                        column={column}
+                        disableAccessibility={column.disableAccessibility}
                         key={column.id}
-                        testId="tableBodyCell"
-                        row={row}
-                      />
+                        cellProps={{
+                          width: column.width,
+                          align: column.align,
+                          cursor: column.onClick ? 'pointer' : 'auto',
+                        }}
+                      >
+                        {column.getCellLabel(row[column.id as keyof Item], row)}
+                      </ItemsTableBodyCell>
                     ))}
                   </ItemsTableBodyRow>
                 ))}

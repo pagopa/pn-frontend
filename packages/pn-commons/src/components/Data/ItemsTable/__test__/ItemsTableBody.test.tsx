@@ -20,9 +20,11 @@ describe('ItemsTableBody', () => {
     onClick: () => mockFn(),
   };
 
-  const mockRow: Item = {
-    id: 'name',
-  };
+  const mockRow: Array<Item> = [
+    {
+      id: 'name',
+    },
+  ];
 
   const mockFn = jest.fn();
 
@@ -31,7 +33,9 @@ describe('ItemsTableBody', () => {
       <table>
         <ItemsTableBody>
           <ItemsTableBodyRow index={1}>
-            <ItemsTableBodyCell column={mockColumn} row={mockRow} />
+            <ItemsTableBodyCell>
+              {mockColumn.getCellLabel(mockRow[mockColumn.id as keyof Item], mockRow[0])}
+            </ItemsTableBodyCell>
           </ItemsTableBodyRow>
         </ItemsTableBody>
       </table>

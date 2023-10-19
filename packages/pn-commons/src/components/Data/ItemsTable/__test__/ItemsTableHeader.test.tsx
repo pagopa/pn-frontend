@@ -25,7 +25,14 @@ describe('ItemsTableHeaderCell', () => {
     const { container } = render(
       <table>
         <ItemsTableHeader>
-          <ItemsTableHeaderCell column={mockColumn} />
+          <ItemsTableHeaderCell
+            key={mockColumn.id}
+            testId="notificationsTable"
+            columnId={mockColumn.id}
+            sortable={mockColumn.sortable}
+          >
+            {mockColumn.label}
+          </ItemsTableHeaderCell>
         </ItemsTableHeader>
       </table>
     );

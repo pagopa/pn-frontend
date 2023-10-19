@@ -1,14 +1,15 @@
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 import { Box, Typography } from '@mui/material';
 
 import { CardElement } from '../../../types';
 
-type Props = {
+export interface IItemsCardContentProps {
   body: CardElement;
-};
+  children?: React.ReactNode;
+}
 
-const ItemsCardContent: React.FC<Props> = ({ body, children }) => (
+const ItemsCardContent: React.FC<IItemsCardContentProps> = ({ body, children }) => (
   <Box sx={{ mb: 2 }}>
     {(!body.hideIfEmpty || (body.hideIfEmpty && children)) && (
       <Fragment>

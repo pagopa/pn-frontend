@@ -7,6 +7,8 @@ import { Item, Sort } from '../../../../types';
 import ItemsTableHeaderCell from '../ItemsTableHeaderCell';
 
 describe('ItemsTableHeaderCell', () => {
+  const mockFn = jest.fn();
+
   const mockColumn = {
     id: 'name',
     label: 'mock-column-label',
@@ -23,14 +25,19 @@ describe('ItemsTableHeaderCell', () => {
     orderBy: 'name',
   };
 
-  const mockFn = jest.fn();
-
   it('render component', () => {
     const { container } = render(
       <table>
         <thead>
           <tr>
-            <ItemsTableHeaderCell column={mockColumn} />
+            <ItemsTableHeaderCell
+              sort={mockSort}
+              key={mockColumn.id}
+              columnId={mockColumn.id}
+              sortable={mockColumn.sortable}
+            >
+              {mockColumn.label}
+            </ItemsTableHeaderCell>
           </tr>
         </thead>
       </table>
@@ -44,17 +51,19 @@ describe('ItemsTableHeaderCell', () => {
         <thead>
           <tr>
             <ItemsTableHeaderCell
+              key={mockColumn.id}
               sort={mockSort}
-              testId="cell"
-              column={mockColumn}
-              handleClick={() => mockFn()}
-            />
+              columnId={mockColumn.id}
+              sortable={mockColumn.sortable}
+              handleClick={mockFn(mockSort.orderBy)}
+            >
+              {mockColumn.label}
+            </ItemsTableHeaderCell>
           </tr>
         </thead>
       </table>
     );
-
-    const cell = getByTestId('cell.sort.name');
+    const cell = getByTestId('headerCell');
 
     fireEvent.click(cell);
     expect(mockFn).toBeCalledTimes(1);
