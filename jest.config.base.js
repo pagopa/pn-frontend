@@ -1,0 +1,12 @@
+module.exports = {
+  testEnvironment: "jsdom",
+  roots: ["src"],
+  moduleNameMapper: {
+    "src/(.*)": "<rootDir>/src/$1",
+    "\\.(css|less|sass|scss)$": "identity-obj-proxy",
+  },
+  transform: {
+    "^.+\\.(?:ts|tsx)?$": "babel-jest",
+  },
+  clearMocks: true,
+};

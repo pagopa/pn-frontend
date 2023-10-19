@@ -6,9 +6,8 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "start:mini-test": "lerna exec --scope mini-test -- yarn dev",
     "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
-    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn dev",
+    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
     "start:pg": "lerna exec --scope @pagopa-pn/pn-personagiuridica-webapp -- yarn start",
     "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn start",
     "build:pa": "lerna run build --include-dependencies --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-commons",
@@ -29,5 +28,13 @@
     "packages": [
       "packages/**"
     ]
+  },
+  "dependencies": {
+    "@types/node": "*",
+    "react": "18.2.0",
+    "typescript": "^5.2.2"
+  },
+  "resolutions": {
+    "**/tsconfig-paths": "^4.1.2"
   }
 }

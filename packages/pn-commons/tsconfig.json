@@ -35,6 +35,5 @@
     "**/__test__/*",
     "src/test-utils.tsx",
     "src/setupTests.ts"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  ]
 }
