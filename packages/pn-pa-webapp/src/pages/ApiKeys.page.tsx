@@ -39,12 +39,10 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('subtitle.text1')}
-      <Link target="_blank" href={`https://petstore.swagger.io/?url=${API_B2B_LINK}#/NewNotification/sendNewNotification`}>
+      <Link target="_blank" href={`${API_B2B_LINK}`}>
         {t('subtitle.text2')}
-      </Link>
-      {t('subtitle.text3')}
-      <Link target="_blank" href={`https://petstore.swagger.io/?url=${API_B2B_LINK}#/SenderReadB2B/retrieveNotificationRequestStatus`}>
-        {t('subtitle.text4')}
+        {t('subtitle.text3')}
+        {t('subtitle.text4')} 
       </Link>
       {t('subtitle.text5')}
     </Fragment>
