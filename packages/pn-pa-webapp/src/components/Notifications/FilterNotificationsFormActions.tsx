@@ -2,10 +2,9 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
-const useStyles = makeStyles({
+const style = {
   searchButton: {
     height: '43px !important',
     marginRight: '8px !important',
@@ -15,7 +14,7 @@ const useStyles = makeStyles({
     padding: '0 16px !important',
     minWidth: '130px !important',
   },
-});
+};
 
 type Props = {
   filtersApplied: boolean;
@@ -30,7 +29,6 @@ const FilterNotificationsFormActions = ({
   isInDialog = false,
   isInitialSearch,
 }: Props) => {
-  const classes = useStyles();
   const { t } = useTranslation(['common']);
 
   const confirmAction = (
@@ -40,7 +38,7 @@ const FilterNotificationsFormActions = ({
       variant="outlined"
       type="submit"
       size="small"
-      className={classes.searchButton}
+      sx={style.searchButton}
       disabled={isInitialSearch && !filtersApplied}
     >
       {t('button.filtra')}
@@ -50,7 +48,7 @@ const FilterNotificationsFormActions = ({
   const cancelAction = (
     <Button
       data-testid="cancelButton"
-      className={classes.cancelButton}
+      sx={style.cancelButton}
       size="small"
       onClick={cleanFilters}
       disabled={!filtersApplied}

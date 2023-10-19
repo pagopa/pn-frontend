@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { useIsMobile } from '../../hooks';
 import { filtersApplied } from '../../utility';
@@ -28,12 +27,12 @@ type Props<FormValues> = {
   initialValues: FormValues;
 };
 
-const useStyles = makeStyles({
+const style = {
   helperTextFormat: {
     // Use existing space / prevents shifting content below field
     alignItems: 'flex',
   },
-});
+};
 
 /**
  * SmartFilter show filter in desktop view and dialog in mobile view.
@@ -49,7 +48,6 @@ const SmartFilter = <FormValues extends object>({
   initialValues,
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
-  const classes = useStyles();
   const currentFilters = useRef<FormValues>(formValues);
   const isPreviousSearch = _.isEqual(formValues, currentFilters.current);
   const filtersCount = filtersApplied(currentFilters.current, initialValues);
@@ -117,7 +115,7 @@ const SmartFilter = <FormValues extends object>({
   return (
     <form onSubmit={submitHandler}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} className={classes.helperTextFormat} alignItems="center">
+        <Grid container spacing={1} sx={style.helperTextFormat} alignItems="center">
           {children}
           <Grid item lg="auto" xs={12}>
             {confirmAction}

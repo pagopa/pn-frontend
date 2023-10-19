@@ -8,7 +8,6 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.14.5",
-    "@mui/styles": "5.11.2",
     "@mui/system": "5.10.8",
     "@mui/x-date-pickers": "5.0.13",
     "@pagopa-pn/pn-commons": "^2.1.0",
