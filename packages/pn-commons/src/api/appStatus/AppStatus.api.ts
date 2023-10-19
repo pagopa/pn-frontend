@@ -3,12 +3,10 @@ import { AxiosInstance } from 'axios';
 import {
   AppCurrentStatus,
   AppStatusDTO,
-  AppStatusDTOValidator,
   Downtime,
   DowntimeDTO,
   DowntimeLogPage,
   DowntimeLogPageDTO,
-  DowntimeLogPageDTOValidator,
   DowntimeStatus,
   FunctionalityStatus,
   GetDowntimeHistoryParams,
@@ -16,6 +14,7 @@ import {
   LegalFactDocumentDetails,
   isKnownFunctionality,
 } from '../../models';
+import { AppStatusDTOValidator, DowntimeLogPageDTOValidator } from '../../validators';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from './appStatus.routes';
 
 export class BadApiDataException extends Error {

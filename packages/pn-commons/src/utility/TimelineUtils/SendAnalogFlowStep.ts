@@ -1,5 +1,5 @@
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { SendPaperDetails, TimelineCategory } from '../../types';
+import { SendPaperDetails, TimelineCategory } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 const SEND_ANALOG_FEEDBACK_OK_DETAIL_CODES = [
@@ -106,7 +106,9 @@ export class SendAnalogFlowStep extends TimelineStep {
 
     const registeredLetterNumber =
       (payload.step.details as SendPaperDetails).registeredLetterCode ?? '';
-    const physicalAddress = originatingStep ? this.completePhysicalAddressFromStep(originatingStep) : {};
+    const physicalAddress = originatingStep
+      ? this.completePhysicalAddressFromStep(originatingStep)
+      : {};
 
     // eslint-disable-next-line functional/no-let
     let description = getLocalizedOrDefaultLabel(

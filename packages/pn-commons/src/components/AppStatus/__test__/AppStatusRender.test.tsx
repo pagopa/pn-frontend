@@ -2,6 +2,7 @@ import React from 'react';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { KnownFunctionality } from '../../../models';
+import { AppStatusData } from '../../../models';
 import {
   RenderResult,
   act,
@@ -12,7 +13,6 @@ import {
   screen,
   waitFor,
 } from '../../../test-utils';
-import { AppStatusData } from '../../../types';
 import { formatDateTime } from '../../../utility/date.utility';
 import { apiOutcomeTestHelper } from '../../../utility/test.utility';
 import { AppStatusRender } from '../AppStatusRender';

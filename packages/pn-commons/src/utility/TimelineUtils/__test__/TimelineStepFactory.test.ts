@@ -1,7 +1,5 @@
-import _ from 'lodash';
-
 import { getTimelineElem } from '../../../__mocks__/NotificationDetail.mock';
-import { TimelineCategory } from '../../../types';
+import { TimelineCategory } from '../../../models';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
 import { DefaultStep } from '../DefaultStep';
 import { NotHandledStep } from '../NotHandledStep';

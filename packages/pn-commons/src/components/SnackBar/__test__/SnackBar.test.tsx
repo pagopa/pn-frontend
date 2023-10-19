@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { MessageType } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
-import { MessageType } from '../../../types';
 import SnackBar from '../SnackBar';
 
 const snackBarProps = {

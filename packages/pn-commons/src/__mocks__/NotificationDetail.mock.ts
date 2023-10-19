@@ -13,11 +13,9 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-} from '../types';
-import {
   NotificationDetailPayment,
   NotificationDetailTimelineDetails,
-} from '../types/NotificationDetail';
+} from '../models';
 import { parseNotificationDetail } from '../utility';
 
 function getOneRecipientNotification(): NotificationDetail {

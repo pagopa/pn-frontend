@@ -11,7 +11,7 @@ import {
   NotificationDetailOtherDocument,
   NotificationDetailRecipient,
   NotificationStatusHistory,
-} from '../../types';
+} from '../../models';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   title: string;
   // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+  // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
   clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
   historyButtonLabel: string;
   showMoreButtonLabel: string;
@@ -41,13 +41,13 @@ const CustomDrawer = styled(Drawer)(() => ({
 }));
 
 /**
- * This component is responsible for rendering a timeline of notification details, 
+ * This component is responsible for rendering a timeline of notification details,
  * and it provides options to view the full timeline in a drawer for mobile users.
  * The component's render function returns a JSX structure that includes:
  * A grid container with a title.
  * A timeline of notification details (timelineComponent) based on the statusHistory prop.
- * A custom drawer component (CustomDrawer) that can be opened or closed by clicking an 
- * icon. The drawer contains a copy of the timeline content, and its visibility 
+ * A custom drawer component (CustomDrawer) that can be opened or closed by clicking an
+ * icon. The drawer contains a copy of the timeline content, and its visibility
  * is controlled by the state variable.
  * @param recipients list of recipients
  * @param statusHistory notification macro-status history
@@ -154,7 +154,12 @@ const NotificationDetailTimeline = ({
           timelineComponent
         )}
       </TimelineNotification>
-      <CustomDrawer anchor="bottom" open={state} onClose={toggleHistoryDrawer} data-testid="notification-history-drawer">
+      <CustomDrawer
+        anchor="bottom"
+        open={state}
+        onClose={toggleHistoryDrawer}
+        data-testid="notification-history-drawer"
+      >
         <Grid
           container
           direction="row"

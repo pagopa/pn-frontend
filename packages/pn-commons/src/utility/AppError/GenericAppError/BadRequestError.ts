@@ -1,5 +1,5 @@
-import { getLocalizedOrDefaultLabel } from '../../../services/localization.service';
-import { ServerResponseError } from '../../../types/AppResponse';
+import { ServerResponseError } from '../../../models/AppResponse';
+import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import AppError from '../AppError';
 
 export class BadRequestAppError extends AppError {
@@ -10,14 +10,14 @@ export class BadRequestAppError extends AppError {
   getMessage() {
     return {
       title: getLocalizedOrDefaultLabel(
-        "common",
-        "errors.bad_request.title",
+        'common',
+        'errors.bad_request.title',
         "Errore nell'invio dei dati"
       ),
       content: getLocalizedOrDefaultLabel(
-        "common",
-        "errors.bad_request.message",
-        "Il formato della richiesta non è valido."
+        'common',
+        'errors.bad_request.message',
+        'Il formato della richiesta non è valido.'
       ),
     };
   }

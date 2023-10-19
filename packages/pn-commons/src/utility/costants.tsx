@@ -1,6 +1,6 @@
 import { FooterLinksType, Languages, PreLoginFooterLinksType } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 declare const OneTrust: any;
 

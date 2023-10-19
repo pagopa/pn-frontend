@@ -1,6 +1,6 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
-import { TimelineCategory } from '../../../types';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
 
 const timelineElem = getTimelineElem(TimelineCategory.ANALOG_FAILURE_WORKFLOW, {});
