@@ -2,19 +2,19 @@ import React from 'react';
 
 import { TableRow } from '@mui/material';
 
-import ItemsTableBodyCell, { IItemsTableBodyCellProps } from './ItemsTableBodyCell';
+import PnTableBodyCell, { IPnTableBodyCellProps } from './PnTableBodyCell';
 
-export interface IItemsTableBodyRowProps {
+export interface IPnTableBodyRowProps {
   testId?: string;
   index: number;
   children?:
-    | Array<React.ReactElement<IItemsTableBodyCellProps>>
-    | React.ReactElement<IItemsTableBodyCellProps>;
+    | Array<React.ReactElement<IPnTableBodyCellProps>>
+    | React.ReactElement<IPnTableBodyCellProps>;
 }
-const ItemsTableBodyRow: React.FC<IItemsTableBodyRowProps> = ({ children, index, testId }) => {
+const PnTableBodyRow: React.FC<IPnTableBodyRowProps> = ({ children, index, testId }) => {
   const columns = children
     ? React.Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === ItemsTableBodyCell)
+        .filter((child) => (child as JSX.Element).type === PnTableBodyCell)
         .map((child: any) =>
           React.cloneElement(child, { ...child.props, testId: `${testId}.cell` })
         )
@@ -26,4 +26,4 @@ const ItemsTableBodyRow: React.FC<IItemsTableBodyRowProps> = ({ children, index,
   );
 };
 
-export default ItemsTableBodyRow;
+export default PnTableBodyRow;

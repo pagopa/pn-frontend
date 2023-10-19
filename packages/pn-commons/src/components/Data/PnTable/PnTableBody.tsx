@@ -2,19 +2,19 @@ import React from 'react';
 
 import { TableBody } from '@mui/material';
 
-import ItemsTableBodyRow, { IItemsTableBodyRowProps } from './ItemsTableBodyRow';
+import PnTableBodyRow, { IPnTableBodyRowProps } from './PnTableBodyRow';
 
-export interface IItemsTableBodyProps {
+export interface IPnTableBodyProps {
   testId?: string;
   children?:
-    | Array<React.ReactElement<IItemsTableBodyRowProps>>
-    | React.ReactElement<IItemsTableBodyRowProps>;
+    | Array<React.ReactElement<IPnTableBodyRowProps>>
+    | React.ReactElement<IPnTableBodyRowProps>;
 }
 
-const ItemsTableBody: React.FC<IItemsTableBodyProps> = ({ testId, children }) => {
+const PnTableBody: React.FC<IPnTableBodyProps> = ({ testId, children }) => {
   const rows = children
     ? React.Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === ItemsTableBodyRow)
+        .filter((child) => (child as JSX.Element).type === PnTableBodyRow)
         .map((child: any) => React.cloneElement(child, { ...child.props, testId: `${testId}.row` }))
     : [];
   return (
@@ -24,4 +24,4 @@ const ItemsTableBody: React.FC<IItemsTableBodyProps> = ({ testId, children }) =>
   );
 };
 
-export default ItemsTableBody;
+export default PnTableBody;

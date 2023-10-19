@@ -3,7 +3,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { buttonNakedInheritStyle } from '../../../utility';
 
-export interface IItemsTableBodyCellProps {
+export interface IPnTableBodyCellProps {
   testId?: string;
   cellProps?: SxProps;
   onClick?: () => void;
@@ -11,7 +11,7 @@ export interface IItemsTableBodyCellProps {
   disableAccessibility?: boolean;
 }
 
-const ItemsTableBodyCell: React.FC<IItemsTableBodyCellProps> = ({
+const PnTableBodyCell: React.FC<IPnTableBodyCellProps> = ({
   testId = 'cell',
   cellProps,
   children,
@@ -40,4 +40,4 @@ const ItemsTableBodyCell: React.FC<IItemsTableBodyCellProps> = ({
     {!onClick && <Box tabIndex={disableAccessibility ? -1 : 0}>{children}</Box>}
   </TableCell>
 );
-export default ItemsTableBodyCell;
+export default PnTableBodyCell;

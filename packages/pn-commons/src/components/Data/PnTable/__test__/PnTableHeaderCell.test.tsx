@@ -4,9 +4,9 @@ import { Typography } from '@mui/material';
 
 import { fireEvent, render } from '../../../../test-utils';
 import { Item, Sort } from '../../../../types';
-import ItemsTableHeaderCell from '../ItemsTableHeaderCell';
+import PnTableHeaderCell from '../PnTableHeaderCell';
 
-describe('ItemsTableHeaderCell', () => {
+describe('PnTableHeaderCell', () => {
   const mockFn = jest.fn();
 
   const mockColumn = {
@@ -30,14 +30,14 @@ describe('ItemsTableHeaderCell', () => {
       <table>
         <thead>
           <tr>
-            <ItemsTableHeaderCell
+            <PnTableHeaderCell
               sort={mockSort}
               key={mockColumn.id}
               columnId={mockColumn.id}
               sortable={mockColumn.sortable}
             >
               {mockColumn.label}
-            </ItemsTableHeaderCell>
+            </PnTableHeaderCell>
           </tr>
         </thead>
       </table>
@@ -50,7 +50,7 @@ describe('ItemsTableHeaderCell', () => {
       <table>
         <thead>
           <tr>
-            <ItemsTableHeaderCell
+            <PnTableHeaderCell
               key={mockColumn.id}
               sort={mockSort}
               columnId={mockColumn.id}
@@ -58,7 +58,7 @@ describe('ItemsTableHeaderCell', () => {
               handleClick={mockFn(mockSort.orderBy)}
             >
               {mockColumn.label}
-            </ItemsTableHeaderCell>
+            </PnTableHeaderCell>
           </tr>
         </thead>
       </table>

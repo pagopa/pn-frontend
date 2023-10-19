@@ -4,8 +4,8 @@ import { Table, TableContainer } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import ItemsTableBody, { IItemsTableBodyProps } from './ItemsTable/ItemsTableBody';
-import ItemsTableHeader, { IItemsTableHeaderProps } from './ItemsTable/ItemsTableHeader';
+import PnTableBody, { IPnTableBodyProps } from './PnTable/PnTableBody';
+import PnTableHeader, { IPnTableHeaderProps } from './PnTable/PnTableHeader';
 
 type Props = {
   /** Table title used in aria-label */
@@ -13,11 +13,11 @@ type Props = {
   /** Table test id */
   testId?: string;
   children?:
-    | Array<React.ReactElement<IItemsTableBodyProps>>
-    | Array<React.ReactElement<IItemsTableHeaderProps>>;
+    | Array<React.ReactElement<IPnTableBodyProps>>
+    | Array<React.ReactElement<IPnTableHeaderProps>>;
 };
 
-const ItemsTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', children }) => {
+const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', children }) => {
   // Table style
   const Root = styled('div')(
     () => `
@@ -39,7 +39,7 @@ const ItemsTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)
   // TODO: gestire colore grigio di sfondo con variabile tema
   const header = children
     ? React.Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === ItemsTableHeader)
+        .filter((child) => (child as JSX.Element).type === PnTableHeader)
         .map((child: any) =>
           React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
         )
@@ -47,7 +47,7 @@ const ItemsTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)
 
   const body = children
     ? React.Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === ItemsTableBody)
+        .filter((child) => (child as JSX.Element).type === PnTableBody)
         .map((child: any) =>
           React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
         )
@@ -72,4 +72,4 @@ const ItemsTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)
   );
 };
 
-export default ItemsTable;
+export default PnTable;

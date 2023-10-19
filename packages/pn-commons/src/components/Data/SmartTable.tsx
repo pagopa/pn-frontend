@@ -16,12 +16,12 @@ import ItemsCardContent from './ItemsCard/ItemsCardContent';
 import ItemsCardContents from './ItemsCard/ItemsCardContents';
 import ItemsCardHeader from './ItemsCard/ItemsCardHeader';
 import ItemsCardHeaderTitle from './ItemsCard/ItemsCardHeaderTitle';
-import ItemsTable from './ItemsTable';
-import ItemsTableBody from './ItemsTable/ItemsTableBody';
-import ItemsTableBodyCell from './ItemsTable/ItemsTableBodyCell';
-import ItemsTableBodyRow from './ItemsTable/ItemsTableBodyRow';
-import ItemsTableHeader from './ItemsTable/ItemsTableHeader';
-import ItemsTableHeaderCell from './ItemsTable/ItemsTableHeaderCell';
+import PnTable from './PnTable';
+import PnTableBody from './PnTable/PnTableBody';
+import PnTableBodyCell from './PnTable/PnTableBodyCell';
+import PnTableBodyRow from './PnTable/PnTableBodyRow';
+import PnTableHeader from './PnTable/PnTableHeader';
+import PnTableHeaderCell from './PnTable/PnTableHeaderCell';
 import SmartFilter, { ISmartFilterProps } from './SmartFilter';
 import SmartSort from './SmartSort';
 
@@ -260,10 +260,10 @@ const SmartTable = <ColumnId extends string>({
     <>
       <Box mb={3}>{filters}</Box>
       {rowData.length > 0 && (
-        <ItemsTable testId={testId} ariaTitle={ariaTitle}>
-          <ItemsTableHeader>
+        <PnTable testId={testId} ariaTitle={ariaTitle}>
+          <PnTableHeader>
             {columns.map((column) => (
-              <ItemsTableHeaderCell
+              <PnTableHeaderCell
                 key={column.id}
                 sort={sort}
                 columnId={column.id}
@@ -271,14 +271,14 @@ const SmartTable = <ColumnId extends string>({
                 handleClick={handleSorting}
               >
                 {column.label}
-              </ItemsTableHeaderCell>
+              </PnTableHeaderCell>
             ))}
-          </ItemsTableHeader>
-          <ItemsTableBody testId="tableBody">
+          </PnTableHeader>
+          <PnTableBody testId="tableBody">
             {rowData.map((row, index) => (
-              <ItemsTableBodyRow key={row.id} testId={testId} index={index}>
+              <PnTableBodyRow key={row.id} testId={testId} index={index}>
                 {columns.map((column) => (
-                  <ItemsTableBodyCell
+                  <PnTableBodyCell
                     disableAccessibility={column.disableAccessibility}
                     key={column.id}
                     testId="tableBodyCell"
@@ -290,12 +290,12 @@ const SmartTable = <ColumnId extends string>({
                     }}
                   >
                     {column.getCellLabel(row[column.id as keyof Item], row)}
-                  </ItemsTableBodyCell>
+                  </PnTableBodyCell>
                 ))}
-              </ItemsTableBodyRow>
+              </PnTableBodyRow>
             ))}
-          </ItemsTableBody>
-        </ItemsTable>
+          </PnTableBody>
+        </PnTable>
       )}
       {rowData.length > 0 && pagination && (
         <CustomPagination

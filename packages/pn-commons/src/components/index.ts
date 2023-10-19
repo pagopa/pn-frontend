@@ -28,12 +28,12 @@ import ItemsCardContent from './Data/ItemsCard/ItemsCardContent';
 import ItemsCardContents from './Data/ItemsCard/ItemsCardContents';
 import ItemsCardHeader from './Data/ItemsCard/ItemsCardHeader';
 import ItemsCardHeaderTitle from './Data/ItemsCard/ItemsCardHeaderTitle';
-import ItemsTable from './Data/ItemsTable';
-import ItemsTableBody from './Data/ItemsTable/ItemsTableBody';
-import ItemsTableBodyCell from './Data/ItemsTable/ItemsTableBodyCell';
-import ItemsTableBodyRow from './Data/ItemsTable/ItemsTableBodyRow';
-import ItemsTableHeader from './Data/ItemsTable/ItemsTableHeader';
-import ItemsTableHeaderCell from './Data/ItemsTable/ItemsTableHeaderCell';
+import PnTable from './Data/PnTable';
+import PnTableBody from './Data/PnTable/PnTableBody';
+import PnTableBodyCell from './Data/PnTable/PnTableBodyCell';
+import PnTableBodyRow from './Data/PnTable/PnTableBodyRow';
+import PnTableHeader from './Data/PnTable/PnTableHeader';
+import PnTableHeaderCell from './Data/PnTable/PnTableHeaderCell';
 import SmartFilter from './Data/SmartFilter';
 import SmartTable from './Data/SmartTable';
 import DisclaimerModal from './DisclaimerModal';
@@ -82,12 +82,12 @@ export {
   AppResponseMessage,
   SideMenu,
   TabPanel,
-  ItemsTable,
-  ItemsTableBody,
-  ItemsTableBodyCell,
-  ItemsTableBodyRow,
-  ItemsTableHeader,
-  ItemsTableHeaderCell,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
   EmptyState,
   ApiError,
   ApiErrorWrapper,

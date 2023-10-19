@@ -5,7 +5,7 @@ import { visuallyHidden } from '@mui/utils';
 
 import { Sort } from '../../../types';
 
-export interface IItemsTableHeaderCellProps<ColumnId> {
+export interface IPnTableHeaderCellProps<ColumnId> {
   testId?: string;
   sort?: Sort<ColumnId>;
   cellProps?: TableCellProps;
@@ -15,7 +15,7 @@ export interface IItemsTableHeaderCellProps<ColumnId> {
   sortable?: boolean;
 }
 
-const ItemsTableHeaderCell = <ColumnId extends string>({
+const PnTableHeaderCell = <ColumnId extends string>({
   testId = 'headerCell',
   sort,
   cellProps,
@@ -23,7 +23,7 @@ const ItemsTableHeaderCell = <ColumnId extends string>({
   sortable,
   columnId,
   children,
-}: PropsWithChildren<IItemsTableHeaderCellProps<ColumnId>>) => {
+}: PropsWithChildren<IPnTableHeaderCellProps<ColumnId>>) => {
   const sortHandler = (property: ColumnId) => () => {
     if (sort && handleClick) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
@@ -63,4 +63,4 @@ const ItemsTableHeaderCell = <ColumnId extends string>({
   );
 };
 
-export default ItemsTableHeaderCell;
+export default PnTableHeaderCell;

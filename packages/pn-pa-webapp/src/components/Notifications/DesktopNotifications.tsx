@@ -7,15 +7,15 @@ import {
   Column,
   EmptyState,
   Item,
-  ItemsTable,
-  ItemsTableBody,
-  ItemsTableBodyCell,
-  ItemsTableBodyRow,
-  ItemsTableHeader,
-  ItemsTableHeaderCell,
   KnownSentiment,
   Notification,
   NotificationStatus,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
   Sort,
   StatusTooltip,
   getNotificationStatusInfos,
@@ -220,10 +220,10 @@ const DesktopNotifications = ({
         <>
           <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
-            <ItemsTable ariaTitle={t('table.title')} testId="notificationsTable">
-              <ItemsTableHeader>
+            <PnTable ariaTitle={t('table.title')} testId="notificationsTable">
+              <PnTableHeader>
                 {columns.map((column) => (
-                  <ItemsTableHeaderCell
+                  <PnTableHeaderCell
                     key={column.id}
                     sort={sort}
                     columnId={column.id}
@@ -231,14 +231,14 @@ const DesktopNotifications = ({
                     handleClick={onChangeSorting}
                   >
                     {column.label}
-                  </ItemsTableHeaderCell>
+                  </PnTableHeaderCell>
                 ))}
-              </ItemsTableHeader>
-              <ItemsTableBody testId="tableBody">
+              </PnTableHeader>
+              <PnTableBody testId="tableBody">
                 {rows.map((row, index) => (
-                  <ItemsTableBodyRow key={row.id} index={index}>
+                  <PnTableBodyRow key={row.id} index={index}>
                     {columns.map((column) => (
-                      <ItemsTableBodyCell
+                      <PnTableBodyCell
                         disableAccessibility={column.disableAccessibility}
                         key={column.id}
                         onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
@@ -249,12 +249,12 @@ const DesktopNotifications = ({
                         }}
                       >
                         {column.getCellLabel(row[column.id as keyof Item], row)}
-                      </ItemsTableBodyCell>
+                      </PnTableBodyCell>
                     ))}
-                  </ItemsTableBodyRow>
+                  </PnTableBodyRow>
                 ))}
-              </ItemsTableBody>
-            </ItemsTable>
+              </PnTableBody>
+            </PnTable>
           ) : (
             <EmptyState
               sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

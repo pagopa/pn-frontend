@@ -2,12 +2,12 @@ import React from 'react';
 
 import { fireEvent, render, within } from '../../../test-utils';
 import { Column, Item, Sort } from '../../../types';
-import ItemsTable from '../ItemsTable';
-import ItemsTableBody from '../ItemsTable/ItemsTableBody';
-import ItemsTableBodyCell from '../ItemsTable/ItemsTableBodyCell';
-import ItemsTableBodyRow from '../ItemsTable/ItemsTableBodyRow';
-import ItemsTableHeader from '../ItemsTable/ItemsTableHeader';
-import ItemsTableHeaderCell from '../ItemsTable/ItemsTableHeaderCell';
+import PnTable from '../PnTable';
+import PnTableBody from '../PnTable/PnTableBody';
+import PnTableBodyCell from '../PnTable/PnTableBodyCell';
+import PnTableBodyRow from '../PnTable/PnTableBodyRow';
+import PnTableHeader from '../PnTable/PnTableHeader';
+import PnTableHeaderCell from '../PnTable/PnTableHeaderCell';
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();
@@ -42,11 +42,11 @@ const sort: Sort<'column-1'> = {
   order: 'asc',
 };
 
-const RenderItemsTable: React.FC = () => (
-  <ItemsTable testId="table-test">
-    <ItemsTableHeader>
+const RenderPnTable: React.FC = () => (
+  <PnTable testId="table-test">
+    <PnTableHeader>
       {columns.map((column) => (
-        <ItemsTableHeaderCell
+        <PnTableHeaderCell
           key={column.id}
           columnId={column.id}
           sort={sort}
@@ -54,30 +54,30 @@ const RenderItemsTable: React.FC = () => (
           handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
         >
           {column.label}
-        </ItemsTableHeaderCell>
+        </PnTableHeaderCell>
       ))}
-    </ItemsTableHeader>
-    <ItemsTableBody>
+    </PnTableHeader>
+    <PnTableBody>
       {rows.map((row, index) => (
-        <ItemsTableBodyRow key={row.id} testId="table-test" index={index}>
+        <PnTableBodyRow key={row.id} testId="table-test" index={index}>
           {columns.map((column) => (
-            <ItemsTableBodyCell
+            <PnTableBodyCell
               key={column.id}
               disableAccessibility={column.disableAccessibility}
               onClick={() => column.onClick && column.onClick(row, column)}
             >
               {column.getCellLabel(row[column.id as keyof Item], row)}
-            </ItemsTableBodyCell>
+            </PnTableBodyCell>
           ))}
-        </ItemsTableBodyRow>
+        </PnTableBodyRow>
       ))}
-    </ItemsTableBody>
-  </ItemsTable>
+    </PnTableBody>
+  </PnTable>
 );
 
 describe('Items Table Component', () => {
   it('renders component (with rows)', () => {
-    const { getByRole } = render(<RenderItemsTable />);
+    const { getByRole } = render(<RenderPnTable />);
     const table = getByRole('table');
     // check header
     expect(table).toHaveAttribute('aria-label', 'Tabella di item');
@@ -101,7 +101,7 @@ describe('Items Table Component', () => {
   });
 
   it('sorts a column', () => {
-    const { getByRole } = render(<RenderItemsTable />);
+    const { getByRole } = render(<RenderPnTable />);
     const table = getByRole('table');
     const tableHead = within(table).getByTestId('table-test.header');
     const firstColumn = within(tableHead).getAllByTestId('table-test.header.cell')[0];
@@ -113,7 +113,7 @@ describe('Items Table Component', () => {
   });
 
   it('click on a column', () => {
-    const { getByRole } = render(<RenderItemsTable />);
+    const { getByRole } = render(<RenderPnTable />);
     const table = getByRole('table');
     const tableBody = within(table).getByTestId('table-test.body');
     const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
@@ -124,7 +124,7 @@ describe('Items Table Component', () => {
   });
 
   it('disable accessibility navigation on a column', () => {
-    const { getByRole } = render(<RenderItemsTable />);
+    const { getByRole } = render(<RenderPnTable />);
     const table = getByRole('table');
     const tableBody = within(table).getByTestId('table-test.body');
     const firstRow = within(tableBody).getAllByTestId('table-test.body.row');

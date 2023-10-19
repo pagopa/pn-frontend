@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
+
 import { GridProps } from '@mui/material';
 
-import { Item } from './ItemsTable';
+import { Item } from './PnTable';
 
 export interface CardElement {
   id: string;

@@ -4,10 +4,10 @@ import { Typography } from '@mui/material';
 
 import { render } from '../../../../test-utils';
 import { Item } from '../../../../types';
-import ItemsTableHeader from '../ItemsTableHeader';
-import ItemsTableHeaderCell from '../ItemsTableHeaderCell';
+import PnTableHeader from '../PnTableHeader';
+import PnTableHeaderCell from '../PnTableHeaderCell';
 
-describe('ItemsTableHeaderCell', () => {
+describe('PnTableHeaderCell', () => {
   const mockColumn = {
     id: 'name',
     label: 'mock-column-label',
@@ -24,16 +24,16 @@ describe('ItemsTableHeaderCell', () => {
   it('render component', () => {
     const { container } = render(
       <table>
-        <ItemsTableHeader>
-          <ItemsTableHeaderCell
+        <PnTableHeader>
+          <PnTableHeaderCell
             key={mockColumn.id}
             testId="notificationsTable"
             columnId={mockColumn.id}
             sortable={mockColumn.sortable}
           >
             {mockColumn.label}
-          </ItemsTableHeaderCell>
-        </ItemsTableHeader>
+          </PnTableHeaderCell>
+        </PnTableHeader>
       </table>
     );
     expect(container).toHaveTextContent(/mock-column-label/);

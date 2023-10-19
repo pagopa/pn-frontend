@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
+
 import { GridProps } from '@mui/material';
 
-import { Align, Column, Item } from './ItemsTable';
+import { Align, Column, Item } from './PnTable';
 
 /**
  * @typedef TableConfiguration configuration for the table view

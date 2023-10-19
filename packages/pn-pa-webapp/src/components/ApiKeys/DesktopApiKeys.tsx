@@ -10,12 +10,12 @@ import {
   CustomTooltip,
   EmptyState,
   Item,
-  ItemsTable,
-  ItemsTableBody,
-  ItemsTableBodyCell,
-  ItemsTableBodyRow,
-  ItemsTableHeader,
-  ItemsTableHeaderCell,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
   StatusTooltip,
   formatDate,
 } from '@pagopa-pn/pn-commons';
@@ -320,19 +320,19 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   return (
     <>
       {apiKeys && apiKeys.length > 0 ? (
-        <ItemsTable testId="tableApiKeys" ariaTitle={t('table.title')}>
-          <ItemsTableHeader>
+        <PnTable testId="tableApiKeys" ariaTitle={t('table.title')}>
+          <PnTableHeader>
             {columns.map((column) => (
-              <ItemsTableHeaderCell key={column.id} columnId={column.id} sortable={column.sortable}>
+              <PnTableHeaderCell key={column.id} columnId={column.id} sortable={column.sortable}>
                 {column.label}
-              </ItemsTableHeaderCell>
+              </PnTableHeaderCell>
             ))}
-          </ItemsTableHeader>
-          <ItemsTableBody>
+          </PnTableHeader>
+          <PnTableBody>
             {rows.map((row, index) => (
-              <ItemsTableBodyRow key={row.id} index={index}>
+              <PnTableBodyRow key={row.id} index={index}>
                 {columns.map((column) => (
-                  <ItemsTableBodyCell
+                  <PnTableBodyCell
                     disableAccessibility={column.disableAccessibility}
                     key={column.id}
                     onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
@@ -343,12 +343,12 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
                     }}
                   >
                     {column.getCellLabel(row[column.id as keyof Item], row)}
-                  </ItemsTableBodyCell>
+                  </PnTableBodyCell>
                 ))}
-              </ItemsTableBodyRow>
+              </PnTableBodyRow>
             ))}
-          </ItemsTableBody>
-        </ItemsTable>
+          </PnTableBody>
+        </PnTable>
       ) : (
         <EmptyState data-testid="emptyState">
           <Trans

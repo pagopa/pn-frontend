@@ -7,7 +7,6 @@ import { AppStatusData } from './AppStatus';
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { CardAction, CardElement, CardSort } from './ItemsCard';
-import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
 import { EventsType } from './MixpanelEvents';
 import {
@@ -49,6 +48,7 @@ import {
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
+import { Column, Item, Sort } from './PnTable';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';

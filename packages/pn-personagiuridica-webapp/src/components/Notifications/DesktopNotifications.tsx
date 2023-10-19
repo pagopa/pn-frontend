@@ -7,15 +7,15 @@ import {
   Column,
   EmptyState,
   Item,
-  ItemsTable,
-  ItemsTableBody,
-  ItemsTableBodyCell,
-  ItemsTableBodyRow,
-  ItemsTableHeader,
-  ItemsTableHeaderCell,
   KnownSentiment,
   Notification,
   NotificationStatus,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
   Sort,
   StatusTooltip,
   getNotificationStatusInfos,
@@ -203,10 +203,10 @@ const DesktopNotifications = ({
     <>
       <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
-        <ItemsTable testId="notificationsTable">
-          <ItemsTableHeader testId="tableHead">
+        <PnTable testId="notificationsTable">
+          <PnTableHeader testId="tableHead">
             {columns.map((column) => (
-              <ItemsTableHeaderCell
+              <PnTableHeaderCell
                 key={column.id}
                 sort={sort}
                 columnId={column.id}
@@ -214,14 +214,14 @@ const DesktopNotifications = ({
                 handleClick={onChangeSorting}
               >
                 {column.label}
-              </ItemsTableHeaderCell>
+              </PnTableHeaderCell>
             ))}
-          </ItemsTableHeader>
-          <ItemsTableBody testId="tableBody">
+          </PnTableHeader>
+          <PnTableBody testId="tableBody">
             {rows.map((row, index) => (
-              <ItemsTableBodyRow key={row.id} testId="notificationsTable" index={index}>
+              <PnTableBodyRow key={row.id} testId="notificationsTable" index={index}>
                 {columns.map((column) => (
-                  <ItemsTableBodyCell
+                  <PnTableBodyCell
                     disableAccessibility={column.disableAccessibility}
                     key={column.id}
                     onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
@@ -232,12 +232,12 @@ const DesktopNotifications = ({
                     }}
                   >
                     {column.getCellLabel(row[column.id as keyof Item], row)}
-                  </ItemsTableBodyCell>
+                  </PnTableBodyCell>
                 ))}
-              </ItemsTableBodyRow>
+              </PnTableBodyRow>
             ))}
-          </ItemsTableBody>
-        </ItemsTable>
+          </PnTableBody>
+        </PnTable>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

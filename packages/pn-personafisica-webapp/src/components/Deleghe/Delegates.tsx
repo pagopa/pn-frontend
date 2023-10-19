@@ -10,12 +10,12 @@ import {
   Column,
   EmptyState,
   Item,
-  ItemsTable,
-  ItemsTableBody,
-  ItemsTableBodyCell,
-  ItemsTableBodyRow,
-  ItemsTableHeader,
-  ItemsTableHeaderCell,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
   Sort,
 } from '@pagopa-pn/pn-commons';
 
@@ -170,10 +170,10 @@ const Delegates = () => {
         >
           <>
             {rows.length > 0 ? (
-              <ItemsTable testId="delegatesTable">
-                <ItemsTableHeader testId="tableHead">
+              <PnTable testId="delegatesTable">
+                <PnTableHeader testId="tableHead">
                   {delegatesColumns.map((column) => (
-                    <ItemsTableHeaderCell
+                    <PnTableHeaderCell
                       key={column.id}
                       sort={sortDelegates}
                       columnId={column.id}
@@ -181,14 +181,14 @@ const Delegates = () => {
                       handleClick={handleChangeSorting}
                     >
                       {column.label}
-                    </ItemsTableHeaderCell>
+                    </PnTableHeaderCell>
                   ))}
-                </ItemsTableHeader>
-                <ItemsTableBody testId="tableBody">
+                </PnTableHeader>
+                <PnTableBody testId="tableBody">
                   {rows.map((row, index) => (
-                    <ItemsTableBodyRow key={row.id} testId="delegatesTable" index={index}>
+                    <PnTableBodyRow key={row.id} testId="delegatesTable" index={index}>
                       {delegatesColumns.map((column) => (
-                        <ItemsTableBodyCell
+                        <PnTableBodyCell
                           disableAccessibility={column.disableAccessibility}
                           key={column.id}
                           cellProps={{
@@ -198,12 +198,12 @@ const Delegates = () => {
                           }}
                         >
                           {column.getCellLabel(row[column.id as keyof Item], row)}
-                        </ItemsTableBodyCell>
+                        </PnTableBodyCell>
                       ))}
-                    </ItemsTableBodyRow>
+                    </PnTableBodyRow>
                   ))}
-                </ItemsTableBody>
-              </ItemsTable>
+                </PnTableBody>
+              </PnTable>
             ) : (
               <EmptyState>
                 <Trans

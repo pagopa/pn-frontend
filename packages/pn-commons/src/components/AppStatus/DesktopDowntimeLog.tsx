@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 
 import { DowntimeLogPage } from '../../models';
 import { Column, Item } from '../../types';
-import ItemsTable from '../Data/ItemsTable';
-import ItemsTableBody from '../Data/ItemsTable/ItemsTableBody';
-import ItemsTableBodyCell from '../Data/ItemsTable/ItemsTableBodyCell';
-import ItemsTableBodyRow from '../Data/ItemsTable/ItemsTableBodyRow';
-import ItemsTableHeader from '../Data/ItemsTable/ItemsTableHeader';
-import ItemsTableHeaderCell from '../Data/ItemsTable/ItemsTableHeaderCell';
+import PnTable from '../Data/PnTable';
+import PnTableBody from '../Data/PnTable/PnTableBody';
+import PnTableBodyCell from '../Data/PnTable/PnTableBodyCell';
+import PnTableBodyRow from '../Data/PnTable/PnTableBodyRow';
+import PnTableHeader from '../Data/PnTable/PnTableHeader';
+import PnTableHeaderCell from '../Data/PnTable/PnTableHeaderCell';
 import { DowntimeLogColumn, useFieldSpecs } from './downtimeLog.utils';
 
 type Props = {
@@ -54,24 +54,24 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
   const rows: Array<Item> = getRows(downtimeLog);
 
   return (
-    <ItemsTable testId="tableDowntimeLog">
-      <ItemsTableHeader testId="tableHead">
+    <PnTable testId="tableDowntimeLog">
+      <PnTableHeader testId="tableHead">
         {columns.map((column) => (
-          <ItemsTableHeaderCell
+          <PnTableHeaderCell
             key={column.id}
             testId="tableDowntimeLog"
             columnId={column.id}
             sortable={column.sortable}
           >
             {column.label}
-          </ItemsTableHeaderCell>
+          </PnTableHeaderCell>
         ))}
-      </ItemsTableHeader>
-      <ItemsTableBody testId="tableBody">
+      </PnTableHeader>
+      <PnTableBody testId="tableBody">
         {rows.map((row, index) => (
-          <ItemsTableBodyRow key={row.id} testId="tableDowntimeLog" index={index}>
+          <PnTableBodyRow key={row.id} testId="tableDowntimeLog" index={index}>
             {columns.map((column) => (
-              <ItemsTableBodyCell
+              <PnTableBodyCell
                 disableAccessibility={column.disableAccessibility}
                 key={column.id}
                 testId="tableBodyCell"
@@ -83,12 +83,12 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
                 }}
               >
                 {column.getCellLabel(row[column.id as keyof Item], row)}
-              </ItemsTableBodyCell>
+              </PnTableBodyCell>
             ))}
-          </ItemsTableBodyRow>
+          </PnTableBodyRow>
         ))}
-      </ItemsTableBody>
-    </ItemsTable>
+      </PnTableBody>
+    </PnTable>
   );
 };
 

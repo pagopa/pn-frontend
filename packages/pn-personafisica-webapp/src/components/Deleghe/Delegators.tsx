@@ -6,13 +6,13 @@ import {
   Column,
   EmptyState,
   Item,
-  ItemsTable,
-  ItemsTableBody,
-  ItemsTableBodyCell,
-  ItemsTableBodyRow,
-  ItemsTableHeader,
-  ItemsTableHeaderCell,
   KnownSentiment,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
   Sort,
 } from '@pagopa-pn/pn-commons';
 
@@ -111,10 +111,10 @@ const Delegators = () => {
           mainText={t('deleghe.delegatorsApiErrorMessage')}
         >
           {rows.length > 0 ? (
-            <ItemsTable testId="delegatorsTable">
-              <ItemsTableHeader testId="tableHead">
+            <PnTable testId="delegatorsTable">
+              <PnTableHeader testId="tableHead">
                 {delegatorsColumns.map((column) => (
-                  <ItemsTableHeaderCell
+                  <PnTableHeaderCell
                     key={column.id}
                     sort={sortDelegators}
                     columnId={column.id}
@@ -122,14 +122,14 @@ const Delegators = () => {
                     handleClick={handleChangeSorting}
                   >
                     {column.label}
-                  </ItemsTableHeaderCell>
+                  </PnTableHeaderCell>
                 ))}
-              </ItemsTableHeader>
-              <ItemsTableBody testId="tableBody">
+              </PnTableHeader>
+              <PnTableBody testId="tableBody">
                 {rows.map((row, index) => (
-                  <ItemsTableBodyRow key={row.id} testId="delegatorsTable" index={index}>
+                  <PnTableBodyRow key={row.id} testId="delegatorsTable" index={index}>
                     {delegatorsColumns.map((column) => (
-                      <ItemsTableBodyCell
+                      <PnTableBodyCell
                         disableAccessibility={column.disableAccessibility}
                         key={column.id}
                         cellProps={{
@@ -139,12 +139,12 @@ const Delegators = () => {
                         }}
                       >
                         {column.getCellLabel(row[column.id as keyof Item], row)}
-                      </ItemsTableBodyCell>
+                      </PnTableBodyCell>
                     ))}
-                  </ItemsTableBodyRow>
+                  </PnTableBodyRow>
                 ))}
-              </ItemsTableBody>
-            </ItemsTable>
+              </PnTableBody>
+            </PnTable>
           ) : (
             <EmptyState sentimentIcon={KnownSentiment.NONE}>
               {t('deleghe.no_delegators')}
