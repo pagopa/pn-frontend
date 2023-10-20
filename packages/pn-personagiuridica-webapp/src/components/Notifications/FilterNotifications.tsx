@@ -33,13 +33,6 @@ type Props = {
   showFilters: boolean;
 };
 
-const style = {
-  helperTextFormat: {
-    // Use existing space / prevents shifting content below field
-    alignItems: 'flex',
-  },
-};
-
 const initialEmptyValues = {
   startDate: tenYearsAgo,
   endDate: today,
@@ -198,7 +191,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} sx={style.helperTextFormat}>
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            // Use existing space / prevents shifting content below field
+            alignItems: 'flex',
+          }}
+        >
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}

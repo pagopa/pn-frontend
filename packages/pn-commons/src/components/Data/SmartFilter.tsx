@@ -27,13 +27,6 @@ type Props<FormValues> = {
   initialValues: FormValues;
 };
 
-const style = {
-  helperTextFormat: {
-    // Use existing space / prevents shifting content below field
-    alignItems: 'flex',
-  },
-};
-
 /**
  * SmartFilter show filter in desktop view and dialog in mobile view.
  */
@@ -115,7 +108,7 @@ const SmartFilter = <FormValues extends object>({
   return (
     <form onSubmit={submitHandler}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} sx={style.helperTextFormat} alignItems="center">
+        <Grid container spacing={1} sx={{ alignItems: 'flex' }} alignItems="center">
           {children}
           <Grid item lg="auto" xs={12}>
             {confirmAction}

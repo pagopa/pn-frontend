@@ -23,11 +23,9 @@ type Props = {
 };
 
 const style = {
-  root: {
-    maxWidth: '90vw',
-    ['@media only screen and (max-width: 1200px)']: {
-      width: '300px',
-    },
+  maxWidth: '90vw',
+  ['@media only screen and (max-width: 1200px)']: {
+    width: '300px',
   },
 };
 
@@ -77,7 +75,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           'menu.aria-label',
           'piattaforma-notifiche navigazione principale'
         )}
-        sx={style.root}
+        sx={style}
       >
         {menuItems.map((item: SideMenuItem, index: number) =>
           item.children ? (
@@ -162,7 +160,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
             'menu.aria-label-inner',
             'piattaforma-notifiche navigazione mittente'
           )}
-          sx={style.root}
+          sx={style}
         >
           {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem
