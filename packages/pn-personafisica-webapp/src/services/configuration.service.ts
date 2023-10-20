@@ -69,7 +69,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
 
 export function getConfiguration(): PfConfiguration {
   const configurationFromFile = Configuration.get<PfConfigurationFromFile>();
-  const IS_DEVELOP = import.meta.env.MODE === 'development';
+  const IS_DEVELOP = process.env.NODE_ENV === 'development';
   const VERSION = import.meta.env.VITE_APP_VERSION ?? '';
   return {
     ...configurationFromFile,

@@ -4,12 +4,13 @@
     "module": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
-    "noEmit": true,
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "lib",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -32,7 +33,7 @@
     "node_modules",
     "**/__tests__/*",
     "**/__test__/*",
+    "src/test-utils.tsx",
     "src/setupTests.ts"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  ]
 }
