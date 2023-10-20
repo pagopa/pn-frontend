@@ -11,6 +11,8 @@ import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, render } from './test-utils';
+import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS } from '../api/external-registries/external-registries-routes';
+import { institutionsList, productsList } from '../__mocks__/User.mock';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -101,6 +103,8 @@ describe('App', () => {
       consentType: ConsentType.TOS,
       accepted: true,
     });
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     let result: RenderResult;
     await act(async () => {

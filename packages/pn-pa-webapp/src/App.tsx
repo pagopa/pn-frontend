@@ -71,6 +71,9 @@ const ActualApp = () => {
   const loggedUserOrganizationParty = loggedUser.organization;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
+  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
+  const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
+  const institutions = useAppSelector((state: RootState) => state.userState.institutions);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -140,24 +143,23 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
-
-  const reservedArea: ProductSwitchItem = {
-    id: 'selfcare',
-    title: t('header.reserved-area'),
-    productUrl: '',
-    linkType: 'external',
-  };
-  const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
+  const reservedArea: ProductSwitchItem = useMemo(
+    () => ({
+      id: 'selfcare',
+      title: t('header.reserved-area'),
+      productUrl: '',
+      linkType: 'external',
+    }), [i18n.language]
+  );
+  
   const productsList = [reservedArea, ...products];
 
-  const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const institutionsList: Array<PartySwitchItem> = useMemo(
     () => institutions.map((institution) => ({
       ...institution,
       productRole: t(`roles.${institution.productRole}`)
     })),
-    [institutions]
+    [institutions, i18n.language]
   );
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);

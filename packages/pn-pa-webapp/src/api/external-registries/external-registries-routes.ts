@@ -37,7 +37,8 @@ export function GET_INSTITUTIONS() {
   return compileRoute({
     prefix: API_EXTERNAL_REGISTRIES_PREFIX,
     path: API_GET_INSTITUTIONS,
-  })
+    version: API_VERSION_SEGMENT
+  });
 }
 
 export function GET_INSTITUTION_PRODUCTS(institutionId: string) {
@@ -47,5 +48,5 @@ export function GET_INSTITUTION_PRODUCTS(institutionId: string) {
     params: {
       [API_INSTITUTION_ID_PARAMETER]: institutionId
     }
-  })
+  });
 }

@@ -65,11 +65,15 @@ const Header = ({
     title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
   };
 
+   const trackEvent = (url: string) => {
+    if (eventTrackingCallbackProductSwitch) {
+      eventTrackingCallbackProductSwitch(url);
+    }
+  };
+
   const handleProductSelection = (product: ProductSwitchItem) => {
     if (!partyId) return
-    if (eventTrackingCallbackProductSwitch) {
-      eventTrackingCallbackProductSwitch(product.title);
-    }
+    let url: string;
     /** Here is necessary to clear sessionStorage otherwise when navigating throgh Area Riservata
     * We enter in a state when the user was previously logged in but Area Riservata and PN require
     * another token-exchange. Since the user "seems" to be logged in due to the presence of the old token
@@ -82,14 +86,16 @@ const Header = ({
     sessionStorage.clear();
 
     if (product.id === 'selfcare') {
-      window.location.assign(`${selfcareBaseUrl}/dashboard/${partyId}`)
+      url = `${selfcareBaseUrl}/dashboard/${partyId}`;
+      window.location.assign(url);
+      trackEvent(url);
       return
     }
 
-    console.log(product);
-    window.location.assign(
-      `${selfcareBaseUrl}/token-exchange?institutionId=${partyId}&productId=${product.id}`
-    )
+    url = `${selfcareBaseUrl}/token-exchange?institutionId=${partyId}&productId=${product.id}`;
+    window.location.assign(url);
+    trackEvent(url);
+
   }
 
   const handlePartySelection = (party: PartyEntity) => {

@@ -19,8 +19,7 @@ const OrganizationPartyGuard = () => {
 
   const fetchOrganizationParty = useCallback(async() => {
     if (idOrganization) {
-      const response = await dispatch(getOrganizationParty(idOrganization));
-      console.log(response)
+      await dispatch(getOrganizationParty(idOrganization));
     }
   }, [idOrganization]);
 
