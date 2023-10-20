@@ -6,7 +6,7 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
+    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn dev",
     "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn dev",
     "start:pg": "lerna exec --scope @pagopa-pn/pn-personagiuridica-webapp -- yarn start",
     "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn start",

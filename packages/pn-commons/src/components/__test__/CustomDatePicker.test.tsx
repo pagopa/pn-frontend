@@ -13,7 +13,7 @@ const WrappedCustomDatePicker = () => {
     <LocalizationProvider
       id="startDate"
       name="startDate"
-      dateAdapter={AdapterDateFns}
+      dateAdapter={AdapterDateFns as any}
       adapterLocale={currentLocale}
     >
       <CustomDatePicker

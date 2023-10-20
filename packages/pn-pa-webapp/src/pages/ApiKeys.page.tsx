@@ -36,11 +36,11 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('subtitle.text1')}
-      <Link target="_blank" href={process.env.REACT_APP_OPEN_API_SEND_NEW_NOTIFICATION_URL}>
+      <Link target="_blank" href={import.meta.env.VITE_OPEN_API_SEND_NEW_NOTIFICATION_URL}>
         {t('subtitle.text2')}
       </Link>
       {t('subtitle.text3')}
-      <Link target="_blank" href={process.env.REACT_APP_OPEN_API_GET_NOTIFICATION_INFO_URL}>
+      <Link target="_blank" href={import.meta.env.VITE_OPEN_API_GET_NOTIFICATION_INFO_URL}>
         {t('subtitle.text4')}
       </Link>
       {t('subtitle.text5')}

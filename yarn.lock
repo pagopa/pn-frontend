@@ -2925,29 +2925,6 @@
     jss-plugin-vendor-prefixer "^10.9.2"
     prop-types "^15.8.1"
 
-"@mui/styles@5.11.2":
-  version "5.11.2"
-  resolved "https://registry.npmjs.org/@mui/styles/-/styles-5.11.2.tgz"
-  integrity sha512-Yg6+PMPV4Mx1UJHow2e/nND2bQNWS1H38zrkJxlucXfaR0+aglO6u8R/OXmVspDj+Z5YW5B27lxRDvxCQN9nGw==
-  dependencies:
-    "@babel/runtime" "^7.20.7"
-    "@emotion/hash" "^0.9.0"
-    "@mui/private-theming" "^5.11.2"
-    "@mui/types" "^7.2.3"
-    "@mui/utils" "^5.11.2"
-    clsx "^1.2.1"
-    csstype "^3.1.1"
-    hoist-non-react-statics "^3.3.2"
-    jss "^10.9.2"
-    jss-plugin-camel-case "^10.9.2"
-    jss-plugin-default-unit "^10.9.2"
-    jss-plugin-global "^10.9.2"
-    jss-plugin-nested "^10.9.2"
-    jss-plugin-props-sort "^10.9.2"
-    jss-plugin-rule-value-function "^10.9.2"
-    jss-plugin-vendor-prefixer "^10.9.2"
-    prop-types "^15.8.1"
-
 "@mui/system@5.10.8":
   version "5.10.8"
   resolved "https://registry.npmjs.org/@mui/system/-/system-5.10.8.tgz"
