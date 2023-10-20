@@ -6,10 +6,10 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.16",
+    "@mui/icons-material": "^5.14.3",
     "@mui/material": "5.14.5",
     "@pagopa-pn/pn-commons": "^2.1.0",
-    "@pagopa/mui-italia": "^1.0.1",
+    "@pagopa/mui-italia": "^1.0.2",
     "@types/node": "^16.18.58",
     "@types/react": "^18.2.24",
     "@types/react-dom": "^18.2.8",
