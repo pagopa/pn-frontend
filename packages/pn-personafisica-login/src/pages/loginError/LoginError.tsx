@@ -5,8 +5,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Dialog, Typography } from '@mui/material';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 const handleError = (queryParams: string) => {
   if (process.env.NODE_ENV !== 'test') {

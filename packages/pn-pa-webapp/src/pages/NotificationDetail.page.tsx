@@ -14,7 +14,6 @@ import {
   NotificationDetailOtherDocument,
   NotificationDetailTimeline,
   NotificationDetail as NotificationDetailType,
-  NotificationPaidDetail,
   NotificationRelatedDowntimes,
   PnBreadcrumb,
   TimedMessage,
@@ -26,6 +25,8 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
+import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -44,10 +45,9 @@ import {
   resetState,
 } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
-import { ServerResponseErrorCode } from '../utils/AppError/types';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
-import NotificationDetailTableSender from './components/Notifications/NotificationDetailTableSender';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }> = (
   notification
@@ -94,7 +94,6 @@ const NotificationDetail: React.FC = () => {
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
   const { recipients } = notification;
-
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
    * in pn-commons (hence cannot access the i18n files) used in this page
@@ -104,6 +103,10 @@ const NotificationDetail: React.FC = () => {
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
+
+  const checkIfNotificationHasPayments = notification.recipients.some(
+    (recipient) => recipient.payments && recipient.payments.length > 0
+  );
 
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
@@ -284,20 +287,12 @@ const NotificationDetail: React.FC = () => {
                   notification={notification}
                   onCancelNotification={handleCancelNotification}
                 />
-                {notification.paymentHistory && notification.paymentHistory.length > 0 && (
-                  <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
-                    <Typography variant="h5">{t('payment.title', { ns: 'notifiche' })}</Typography>
-                    {notification.paymentHistory.length === 1 && (
-                      <Typography>{t('payment.subtitle-single', { ns: 'notifiche' })}</Typography>
-                    )}
-                    {notification.paymentHistory.length > 1 && (
-                      <Typography>{t('payment.subtitle-multiple', { ns: 'notifiche' })}</Typography>
-                    )}
-                    <NotificationPaidDetail
-                      paymentDetailsList={notification.paymentHistory}
-                      isSender
-                    />
-                  </Paper>
+                {checkIfNotificationHasPayments && (
+                  <NotificationPaymentSender
+                    iun={notification.iun}
+                    recipients={recipients}
+                    timeline={notification.timeline}
+                  />
                 )}
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments

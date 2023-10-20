@@ -14,6 +14,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
+import ApiKeyModal from '../components/ApiKeys/ApiKeyModal';
+import DesktopApiKeys from '../components/ApiKeys/DesktopApiKeys';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import { UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
@@ -26,10 +28,8 @@ import {
 import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utils/events';
-import { trackEventByType } from '../utils/mixpanel';
-import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
-import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const SubTitle = () => {
   const { t } = useTranslation(['apikeys']);
@@ -264,9 +264,11 @@ const ApiKeys = () => {
               <ApiKeyModal
                 title={t('block-api-key')}
                 subTitle={
-                  <Trans i18nKey="block-warning1" values={{ apiKeyName: modal.apiKey?.name }}>
-                    {t('block-warning1', { apiKeyName: modal.apiKey?.name })}
-                  </Trans>
+                  <Trans
+                    i18nKey="block-warning1"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
                 }
                 content={<Typography>{t('block-warning2')}</Typography>}
                 closeButtonLabel={t('cancel-button')}
@@ -278,7 +280,13 @@ const ApiKeys = () => {
             {modal.view === ModalApiKeyView.ENABLE && (
               <ApiKeyModal
                 title={t('enable-api-key')}
-                subTitle={t('enable-warning', { apiKeyName: modal.apiKey?.name })}
+                subTitle={
+                  <Trans
+                    i18nKey="enable-warning"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('enable-button')}
@@ -288,7 +296,13 @@ const ApiKeys = () => {
             {modal.view === ModalApiKeyView.ROTATE && (
               <ApiKeyModal
                 title={t('rotate-api-key')}
-                subTitle={t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}
+                subTitle={
+                  <Trans
+                    i18nKey="rotate-warning1"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
                 content={<Typography>{t('rotate-warning2')}</Typography>}
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
@@ -299,7 +313,13 @@ const ApiKeys = () => {
             {modal.view === ModalApiKeyView.DELETE && (
               <ApiKeyModal
                 title={t('delete-api-key')}
-                subTitle={t('delete-warning', { apiKeyName: modal.apiKey?.name })}
+                subTitle={
+                  <Trans
+                    i18nKey="delete-warning"
+                    ns="apikeys"
+                    values={{ apiKeyName: modal.apiKey?.name }}
+                  />
+                }
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('delete-button')}

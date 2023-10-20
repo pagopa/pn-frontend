@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import React from 'react';
 
-import { render } from '../../../test-utils';
+import { RenderResult, fireEvent, render, waitFor } from '../../../test-utils';
 import {
   CustomMobileDialogProvider,
   useCustomMobileDialogContext,
@@ -16,13 +16,15 @@ const Component = () => {
   return (
     <div>
       <div>{`Status: ${open}`}</div>
-      <button onClick={() => toggleOpen()}>Click me</button>
+      <button data-testid="buttonTest" onClick={() => toggleOpen()}>
+        Click me
+      </button>
     </div>
   );
 };
 
 describe('CustomMobileDialog Context', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   beforeEach(() => {
     // render component
@@ -33,17 +35,13 @@ describe('CustomMobileDialog Context', () => {
     );
   });
 
-  afterEach(() => {
-    result = undefined;
-  });
-
   it('uses CustomMobileDialog Context', () => {
-    expect(result?.container).toHaveTextContent('Status: false');
+    expect(result.container).toHaveTextContent('Status: false');
   });
 
   it('changes CustomMobileDialog Context', async () => {
-    const button = result?.container.querySelector('button');
+    const button = result.getByTestId('buttonTest');
     fireEvent.click(button!);
-    await waitFor(() => expect(result?.container).toHaveTextContent('Status: true'));
+    await waitFor(() => expect(result.container).toHaveTextContent('Status: true'));
   });
 });

@@ -25,8 +25,8 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('../../utils/delegation.utility', () => ({
-  ...jest.requireActual('../../utils/delegation.utility'),
+jest.mock('../../utility/delegation.utility', () => ({
+  ...jest.requireActual('../../utility/delegation.utility'),
   generateVCode: () => '34153',
 }));
 

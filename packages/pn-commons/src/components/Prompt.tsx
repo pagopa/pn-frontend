@@ -11,7 +11,7 @@ import {
 
 import { useIsMobile } from '../hooks';
 import { usePrompt } from '../hooks/usePrompt';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 const Prompt = ({
   title,

@@ -3,14 +3,18 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 
 import { useDownloadDocument, useIsMobile } from '../../hooks';
-import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { AppStatusData, KnownSentiment } from '../../types';
-import { formatDateTime } from '../../utils/date.utility';
+import {
+  AppStatusData,
+  GetDowntimeHistoryParams,
+  KnownFunctionality,
+  KnownSentiment,
+} from '../../models';
+import { PaginationData } from '../../models/Pagination';
+import { formatDateTime } from '../../utility/date.utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 import EmptyState from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';
-import { PaginationData } from '../Pagination/types';
 import TitleBox from '../TitleBox';
 import { AppStatusBar } from './AppStatusBar';
 import DesktopDowntimeLog from './DesktopDowntimeLog';
@@ -47,7 +51,7 @@ export const AppStatusRender = (props: Props) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const isMobile = useIsMobile();
   useDownloadDocument({
-    url: legalFactDocumentData && legalFactDocumentData.url,
+    url: legalFactDocumentData?.url,
     clearDownloadAction: clearLegalFactDocument,
   });
 
@@ -193,10 +197,9 @@ export const AppStatusRender = (props: Props) => {
               />
             )
           ) : (
-            <EmptyState
-              sentimentIcon={KnownSentiment.SATISFIED}
-              emptyMessage={downtimeListEmptyMessage}
-            />
+            <EmptyState sentimentIcon={KnownSentiment.SATISFIED}>
+              {downtimeListEmptyMessage}
+            </EmptyState>
           )}
           {downtimeLogPage && downtimeLogPage.downtimes.length > 0 && (
             <CustomPagination

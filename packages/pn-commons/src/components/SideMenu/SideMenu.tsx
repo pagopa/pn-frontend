@@ -1,11 +1,12 @@
 import { FC, Fragment, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Menu } from '@mui/icons-material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { SideMenuItem } from '../../types';
+import { Menu } from '@mui/icons-material';
+import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+
 import { useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { SideMenuItem } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuList from './SideMenuList';
 
 type Props = {
@@ -33,7 +34,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
         index: menuItemIndex,
         label: items[menuItemIndex].label,
         route: items[menuItemIndex].route || '',
-        parent
+        parent,
       };
     }
     // find if there is a menu item that has route as a part of current one
@@ -48,14 +49,17 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
     });
     if (menuItemIndex > -1) {
       if (items[menuItemIndex].children && items[menuItemIndex].children?.length) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return findMenuItemSelectedRecursive(items[menuItemIndex].children!, items[menuItemIndex].label);
+        return findMenuItemSelectedRecursive(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          items[menuItemIndex].children!,
+          items[menuItemIndex].label
+        );
       }
       return {
         index: menuItemIndex,
         label: items[menuItemIndex].label,
         route: items[menuItemIndex].route || '',
-        parent
+        parent,
       };
     }
     return null;
@@ -89,7 +93,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
       setState(false);
     }
     if (!item.notSelectable) {
-      if (item.route && item.route.length > 0) { 
+      if (item.route && item.route.length > 0) {
         navigate(item.route);
       } else if (item.action) {
         item.action();
@@ -103,6 +107,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
       display="flex"
       flexDirection="column"
       bgcolor={'common.white'}
+      data-testid="sideMenu"
     >
       <Box alignItems="left" display="flex" flexDirection="column">
         {isMobile ? (
@@ -110,7 +115,11 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
             <List
               role="navigation"
               component="nav"
-              aria-label={getLocalizedOrDefaultLabel('common', 'menu.aria-label', 'piattaforma-notifiche navigazione principale')}
+              aria-label={getLocalizedOrDefaultLabel(
+                'common',
+                'menu.aria-label',
+                'piattaforma-notifiche navigazione principale'
+              )}
               sx={{
                 boxShadow:
                   '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05)',

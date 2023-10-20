@@ -5,34 +5,26 @@ import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useDownloadDocument } from '../../hooks';
-import { Downtime } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { NotificationStatus, NotificationStatusHistory } from '../../types';
-import { formatDate, isToday } from '../../utils';
+import { Downtime, NotificationStatus, NotificationStatusHistory } from '../../models';
+import { formatDate, isToday } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 
 type Props = {
   // the notification history, needed to compute the time range for the downtime events query
   notificationStatusHistory: Array<NotificationStatusHistory>;
-
   // action to obtain and set the downtime events to be shown ...
   fetchDowntimeEvents: (fromDate: string, toDate: string | undefined) => void;
-
   // ... so that such events are passed throught this prop
   downtimeEvents: Array<Downtime>;
-
   // action to obtain and set the legal fact document url ...
   fetchDowntimeLegalFactDocumentDetails: (legalFactId: string) => void;
-
   // ... so that it is passed throught this prop ...
   downtimeLegalFactUrl: string;
-
   // ... and afterwards can be cleaned using this prop
   clearDowntimeLegalFactData: () => void;
-
   // api id for ApiErrorWrapper
   apiId: string;
-
   // for disabled downloads
   disableDownloads?: boolean;
 };
@@ -135,6 +127,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
       cancelledRecord ||
       !acceptedRecord ||
       (acceptedRecord && completedRecord && acceptedRecord.activeFrom > completedRecord.activeFrom);
+
     if (invalidStatusHistory || !acceptedRecord) {
       setShouldFetchEvents(false);
     } else {

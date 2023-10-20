@@ -1,10 +1,17 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { AppResponse } from '../models/AppResponse';
 import { appStateActions } from '../redux';
-import { AppResponse } from '../types/AppResponse';
-import { AppResponsePublisher } from '../utils/AppResponse';
+import { AppResponsePublisher } from '../utility/AppResponse';
 
+/**
+ * AppResponseMessage that subscribes to error messages using an AppResponsePublisher
+ * and dispatches those error messages to the Redux store using useDispatch from react-redux.
+ * This component is designed to display error messages in your React application.
+ * Make sure that you have the necessary Redux setup and reducers in place for this code to work correctly.
+ * @returns {any}
+ */
 const AppResponseMessage = () => {
   const dispatch = useDispatch();
 

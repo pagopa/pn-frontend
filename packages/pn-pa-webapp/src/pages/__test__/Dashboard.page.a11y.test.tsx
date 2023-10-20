@@ -9,7 +9,6 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import '@testing-library/react';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';

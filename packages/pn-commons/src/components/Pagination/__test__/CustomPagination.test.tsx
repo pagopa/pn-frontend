@@ -1,9 +1,8 @@
 import React from 'react';
-import { fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
-import { render } from '../../../test-utils';
+import { PaginationData } from '../../../models/Pagination';
+import { fireEvent, getById, render, waitFor, within } from '../../../test-utils';
 import CustomPagination from '../CustomPagination';
-import { PaginationData } from '../types';
 
 let paginationData: PaginationData = {
   page: 0,
@@ -15,21 +14,7 @@ const handlePageChange = jest.fn();
 const mockEventTrackingPageSize = jest.fn();
 
 describe('CustomPagination Component', () => {
-  let result: RenderResult | undefined;
-
-  beforeEach(() => {
-    // render component
-    result = render(
-      <CustomPagination
-        paginationData={paginationData}
-        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
-        onPageRequest={handlePageChange}
-      />
-    );
-  });
-
   afterEach(() => {
-    result = undefined;
     handlePageChange.mockClear();
     paginationData = {
       page: 0,
@@ -38,41 +23,55 @@ describe('CustomPagination Component', () => {
     };
   });
 
-  it('renders custom pagination', async () => {
-    const itemsPerPageSelector = await result?.findByTestId('itemsPerPageSelector');
+  it('renders custom pagination', () => {
+    // render component
+    const { getByTestId } = render(
+      <CustomPagination
+        paginationData={paginationData}
+        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
+        onPageRequest={handlePageChange}
+      />
+    );
+    const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = await result?.findByTestId('pageSelector');
+    const pageSelector = getByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
 
   it('changes items per page', async () => {
-    const itemsPerPageSelector = await result?.findByTestId('itemsPerPageSelector');
-    const button = itemsPerPageSelector?.querySelector('button');
+    const { container, getAllByRole, getByRole } = render(
+      <CustomPagination
+        paginationData={paginationData}
+        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
+        onPageRequest={handlePageChange}
+      />
+    );
+    const button = getById(container, 'rows-per-page');
     expect(button).toHaveTextContent(/50/i);
-    await waitFor(() => {
-      fireEvent.click(button!);
-    });
-
-    const itemsPerPageListContainer = await screen.findByRole('presentation');
+    fireEvent.click(button);
+    const itemsPerPageListContainer = await waitFor(() => getByRole('presentation'));
     expect(itemsPerPageListContainer).toBeInTheDocument();
-    const itemsPerPageList = await screen.findAllByRole('menuitem');
+    const itemsPerPageList = getAllByRole('menuitem');
     expect(itemsPerPageList).toHaveLength(3);
+    fireEvent.click(itemsPerPageList![1]);
     await waitFor(() => {
-      fireEvent.click(itemsPerPageList[1]!);
-    });
-    expect(button).toHaveTextContent(/20/i);
-    expect(handlePageChange).toBeCalledTimes(1);
-    expect(mockEventTrackingPageSize).toBeCalledTimes(1);
-    expect(handlePageChange).toBeCalledWith({
-      page: 0,
-      size: 20,
-      totalElements: 500,
+      expect(button).toHaveTextContent(/20/i);
+      expect(handlePageChange).toBeCalledTimes(1);
+      expect(mockEventTrackingPageSize).toBeCalledTimes(1);
+      expect(handlePageChange).toBeCalledWith({
+        page: 0,
+        size: 20,
+        totalElements: 500,
+      });
     });
   });
 
   it('changes page', async () => {
-    const pageSelector = await result?.findByTestId('pageSelector');
-    let pageButtons = pageSelector?.querySelectorAll('button');
+    const { getByTestId } = render(
+      <CustomPagination paginationData={paginationData} onPageRequest={handlePageChange} />
+    );
+    const pageSelector = getByTestId('pageSelector');
+    const pageButtons = within(pageSelector!).getAllByRole('button');
     // depends on mui pagination
     // for 10 pages we have: < 1 2 3 4 5 ... 10 >
     expect(pageButtons).toHaveLength(8);
@@ -82,14 +81,14 @@ describe('CustomPagination Component', () => {
     expect(pageButtons![4]).toHaveTextContent(/4/i);
     expect(pageButtons![5]).toHaveTextContent(/5/i);
     expect(pageButtons![6]).toHaveTextContent(/10/i);
+    fireEvent.click(pageButtons![5]);
     await waitFor(() => {
-      fireEvent.click(pageButtons![5]);
-    });
-    expect(handlePageChange).toBeCalledTimes(1);
-    expect(handlePageChange).toBeCalledWith({
-      page: 4,
-      size: 50,
-      totalElements: 500,
+      expect(handlePageChange).toBeCalledTimes(1);
+      expect(handlePageChange).toBeCalledWith({
+        page: 4,
+        size: 50,
+        totalElements: 500,
+      });
     });
   });
 });

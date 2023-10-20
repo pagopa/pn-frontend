@@ -1,6 +1,7 @@
-import { Stack, styled, Typography } from '@mui/material';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { Stack, Typography, styled } from '@mui/material';
+
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type ApiErrorProps = {
   onClick?: () => void;
@@ -16,6 +17,7 @@ const StyledStack = styled(Stack)`
 `;
 
 const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId }) => {
+  const dataTestId = `api-error${apiId ? `-${apiId}` : ''}`;
   const text =
     mainText ||
     getLocalizedOrDefaultLabel(
@@ -35,7 +37,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId })
       direction={'row'}
       justifyContent={'center'}
       alignItems={'center'}
-      data-testid={`api-error${apiId ? `-${apiId}` : ''}`}
+      data-testid={dataTestId}
     >
       <ReportGmailerrorredIcon
         fontSize={'small'}

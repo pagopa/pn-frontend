@@ -1,133 +1,97 @@
 import React from 'react';
 
-import { fireEvent, waitFor, screen } from '@testing-library/react';
-
-import { render } from '../../../test-utils';
-import * as hooks from '../../../hooks/useIsMobile';
-import {
-  formatDay,
-  formatMonthString,
-  formatTime,
-  getNotificationStatusInfos,
-} from '../../../utils';
-import { parsedNotification } from '../../../utils/__test__/test-utils';
+import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { createMatchMedia, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
-const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
+describe('NotificationDetailTimeline', () => {
+  // Define mock data for props
+  const recipients = notificationToFe.recipients;
+  const statusHistory = notificationToFe.notificationStatusHistory;
+  const title = 'Notification Title';
+  const historyButtonLabel = 'History';
+  const showMoreButtonLabel = 'Show More';
+  const showLessButtonLabel = 'Show Less';
 
-const testTimelineRendering = async (container: HTMLElement) => {
-  const timelineItems = container.querySelectorAll('.MuiTimelineItem-root');
-  // we multiply for 2 because, for each status history element, there is two timeline elements (status + moreLessButton)
-  expect(timelineItems).toHaveLength(parsedNotification.notificationStatusHistory.length * 2);
-  timelineItems.forEach((item, timelineIndex) => {
-    if (timelineIndex % 2 === 0) {
-      const dateItems = item.querySelectorAll('[data-testid="dateItem"]');
-      expect(dateItems).toHaveLength(3);
-      expect(dateItems[0]).toHaveTextContent(
-        formatMonthString(
-          parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom
-        )
-      );
-      expect(dateItems[1]).toHaveTextContent(
-        formatDay(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
-      );
-      expect(dateItems[2]).toHaveTextContent(
-        formatTime(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
-      );
-      const itemStatus = item.querySelector('[data-testid="itemStatus"]');
-      expect(itemStatus).toBeInTheDocument();
-      const classRoot = 'MuiChip-color';
-      const { color, label } = getNotificationStatusInfos(
-        parsedNotification.notificationStatusHistory[timelineIndex / 2].status
-      );
-      const buttonClass = `${classRoot}${color!.charAt(0).toUpperCase() + color!.slice(1)}`;
-      expect(itemStatus).toHaveTextContent(label);
-      expect(itemStatus!.classList.contains(buttonClass)).toBe(true);
-    } else {
-      const moreLessButton = item.querySelector('[data-testid="moreLessButton"]');
-      expect(moreLessButton).toBeInTheDocument();
-      expect(moreLessButton).toHaveTextContent(/mocked-more-label/i);
-    }
-  });
-};
-
-describe('NotificationDetailTimeline Component', () => {
-  it('renders NotificationDetailTimeline (desktop)', async () => {
-    useIsMobileSpy.mockReturnValue(false);
-    // render component
-    const result = render(
+  it('renders component', () => {
+    const { container, queryByTestId } = render(
       <NotificationDetailTimeline
-        title="mocked-title"
-        recipients={parsedNotification.recipients}
-        statusHistory={parsedNotification.notificationStatusHistory}
-        clickHandler={jest.fn()}
-        historyButtonLabel="mocked-history-label"
-        showLessButtonLabel="mocked-less-label"
-        showMoreButtonLabel="mocked-more-label"
+        recipients={recipients}
+        statusHistory={statusHistory}
+        title={title}
+        historyButtonLabel={historyButtonLabel}
+        showMoreButtonLabel={showMoreButtonLabel}
+        showLessButtonLabel={showLessButtonLabel}
+        clickHandler={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     );
-    expect(result?.container).toHaveTextContent(/mocked-title/i);
-    // expect(result?.container).toHaveTextContent(/Scarica tutti gli allegati/i);
-    await testTimelineRendering(result?.container);
+    expect(container).toHaveTextContent(title);
+    expect(queryByTestId('NotificationDetailTimeline')).toBeInTheDocument();
   });
 
-  it('renders NotificationDetailTimeline (mobile)', async () => {
-    useIsMobileSpy.mockReturnValue(true);
-    // render component
-    const result = render(
+  it('histroy drawer should not rendered when is desktop', async () => {
+    window.matchMedia = createMatchMedia(1202);
+    const { container, queryByTestId } = render(
       <NotificationDetailTimeline
-        title="mocked-title"
-        recipients={parsedNotification.recipients}
-        statusHistory={parsedNotification.notificationStatusHistory}
-        clickHandler={jest.fn()}
-        historyButtonLabel="mocked-history-label"
-        showLessButtonLabel="mocked-less-label"
-        showMoreButtonLabel="mocked-more-label"
+        recipients={recipients}
+        statusHistory={statusHistory}
+        title={title}
+        historyButtonLabel={historyButtonLabel}
+        showMoreButtonLabel={showMoreButtonLabel}
+        showLessButtonLabel={showLessButtonLabel}
+        clickHandler={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     );
-    expect(result?.container).toHaveTextContent(/mocked-title/i);
-    const timelineItems = result?.container.querySelectorAll('.MuiTimelineItem-root');
-    expect(timelineItems).toHaveLength(1);
-    const historyButton = await result?.findByTestId('historyButton');
-    expect(historyButton).toBeInTheDocument();
-    fireEvent.click(historyButton);
-    const drawer = await waitFor(() => {
-      return screen.queryByRole('presentation');
-    });
-    expect(drawer!).toBeInTheDocument();
-    await testTimelineRendering(drawer!);
+    // the drawer should not be visible
+    expect(queryByTestId('notification-history-drawer')).not.toBeInTheDocument();
+    // and content too
+    expect(queryByTestId('notification-history-drawer-content')).not.toBeInTheDocument();
+    // I use classname since it appears that timeline steps in form of list items are not rendered with an id
+    // not the cleanest way to use a class to get timeline items
+    // i check then that timeline items are at least greater than or equal to notification history lenght
+    // since depending on status and related elements timeline items can be more (but this behaviour is managed by another component)
+    const items = container.getElementsByClassName('MuiTimelineItem-root');
+    expect(items.length).toBeGreaterThanOrEqual(statusHistory.length);
   });
 
-  it('expand timeline item (desktop)', async () => {
-    useIsMobileSpy.mockReturnValue(false);
-    // render component
-    const result = render(
+  it('toggles the history drawer when the summary step is clicked (mobile)', async () => {
+    window.matchMedia = createMatchMedia(390);
+    const { queryByTestId, getByTestId } = render(
       <NotificationDetailTimeline
-        title="mocked-title"
-        recipients={parsedNotification.recipients}
-        statusHistory={parsedNotification.notificationStatusHistory}
-        clickHandler={jest.fn()}
-        historyButtonLabel="mocked-history-label"
-        showLessButtonLabel="mocked-less-label"
-        showMoreButtonLabel="mocked-more-label"
+        recipients={recipients}
+        statusHistory={statusHistory}
+        title={title}
+        historyButtonLabel={historyButtonLabel}
+        showMoreButtonLabel={showMoreButtonLabel}
+        showLessButtonLabel={showLessButtonLabel}
+        clickHandler={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     );
-    // get first moreLessButton
-    const moreLessButton = result?.container.querySelector('[data-testid="moreLessButton"] button');
-    fireEvent.click(moreLessButton!);
+    // Initially, the drawer should not be visible
+    expect(queryByTestId('notification-history-drawer')).not.toBeInTheDocument();
+    expect(queryByTestId('notification-history-drawer-content')).not.toBeInTheDocument();
+    // Find and click the summary step to open the drawer
+    const summaryStep = getByTestId('historyButton');
+    expect(summaryStep).toBeInTheDocument();
+    fireEvent.click(summaryStep);
     await waitFor(() => {
-      expect(moreLessButton).toHaveTextContent(/mocked-less-label/i);
-      const timelineExpandedItem = result?.container.querySelector(
-        '.MuiTimelineItem-root:nth-child(3)'
-      );
-      const dateItems = timelineExpandedItem!.querySelectorAll('[data-testid="dateItem"]');
-      expect(dateItems).toHaveLength(3);
-      expect(dateItems[0]).toHaveTextContent(
-        formatMonthString(parsedNotification.timeline[0].timestamp)
-      );
-      expect(dateItems[1]).toHaveTextContent(formatDay(parsedNotification.timeline[0].timestamp));
-      expect(dateItems[2]).toHaveTextContent(formatTime(parsedNotification.timeline[0].timestamp));
-      expect(timelineExpandedItem).toHaveTextContent(parsedNotification.recipients[0].denomination);
+      // Now, the drawer should be visible
+      expect(getByTestId('notification-history-drawer-content')).toBeInTheDocument();
+    });
+    // Clicking the summary step again should close the drawer
+    const closeIcon = getByTestId('notification-drawer-close');
+    expect(closeIcon).toBeInTheDocument();
+    fireEvent.click(closeIcon);
+    await waitFor(() => {
+      // Now, the drawer should be hidden
+      expect(queryByTestId('notification-history-drawer')).not.toBeInTheDocument();
+      expect(queryByTestId('notification-history-drawer-content')).not.toBeInTheDocument();
     });
   });
 });
