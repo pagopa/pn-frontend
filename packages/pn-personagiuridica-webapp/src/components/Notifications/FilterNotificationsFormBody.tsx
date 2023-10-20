@@ -103,8 +103,8 @@ const FilterNotificationsFormBody = ({
         <LocalizationProvider
           id="startDate"
           name="startDate"
-          dateAdapter={AdapterDateFns}
-          adapterLocale={currentLocale as any}
+          dateAdapter={AdapterDateFns as any}
+          adapterLocale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
