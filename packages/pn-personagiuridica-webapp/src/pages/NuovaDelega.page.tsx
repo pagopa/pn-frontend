@@ -443,7 +443,7 @@ const NuovaDelega = () => {
                           >
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
-                              inputFormat={DATE_FORMAT}
+                              format={DATE_FORMAT}
                               value={values.expirationDate && new Date(values.expirationDate)}
                               minDate={tomorrow}
                               onChange={(value: DatePickerTypes) => {
@@ -451,29 +451,25 @@ const NuovaDelega = () => {
                                 setFieldValue('expirationDate', value);
                               }}
                               shouldDisableDate={isToday}
-                              renderInput={(params) => (
-                                <TextField
-                                  id="expirationDate"
-                                  name="expirationDate"
-                                  {...params}
-                                  aria-label="Data termine delega" // aria-label for (TextField + Button) Group
-                                  inputProps={{
-                                    ...params.inputProps,
+                              slotProps={{
+                                textField: {
+                                  id: 'expirationDate',
+                                  name: 'expirationDate',
+                                  'aria-label': 'Data termine delega',
+                                  inputProps: {
                                     inputMode: 'text',
                                     'aria-label': 'Inserisci la data di termine della delega',
                                     type: 'text',
-                                  }}
-                                  error={Boolean(
+                                  },
+                                  error: Boolean(
                                     getError(touched.expirationDate, errors.expirationDate)
-                                  )}
-                                  helperText={
-                                    getError(
-                                      touched.expirationDate,
-                                      errors.expirationDate
-                                    ) as React.ReactNode
-                                  }
-                                />
-                              )}
+                                  ),
+                                  helperText: getError(
+                                    touched.expirationDate,
+                                    errors.expirationDate
+                                  ) as React.ReactNode,
+                                },
+                              }}
                               disablePast={true}
                             />
                           </LocalizationProvider>
