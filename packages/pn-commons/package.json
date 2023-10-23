@@ -10,7 +10,6 @@
     "@mui/material": "5.14.5",
     "@mui/system": "^5.14.5",
     "@mui/x-date-pickers": "^6.10.1",
-    "@octokit/core": "^4.1.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/node": "^16.18.58",
     "@types/react": "^18.2.24",

@@ -13,7 +13,7 @@ interface SectionHeadingProps {
  * @param {SectionHeadingProps} props - The props object.
  * @returns {JSX.Element} The rendered section heading.
  */
-const SectionHeading: React.FC<SectionHeadingProps> = (props: SectionHeadingProps): JSX.Element => (
+const SectionHeading: React.FC<SectionHeadingProps> = (props: SectionHeadingProps) => (
   <Typography
     id="title-heading-section"
     component="h3"
