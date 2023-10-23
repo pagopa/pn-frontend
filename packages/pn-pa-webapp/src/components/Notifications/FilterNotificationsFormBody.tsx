@@ -209,26 +209,6 @@ const FilterNotificationsFormBody = ({
               sx: { marginBottom: isMobile ? '20px' : '0' },
             },
           }}
-          // slots={{
-          //   textField: (params) => (
-          //     <TextField
-          //       id="endDate"
-          //       name="endDate"
-          //       size="small"
-          //       {...params}
-          //       aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
-          //       inputProps={{
-          //         ...params.inputProps,
-          //         inputMode: 'text',
-          //         'aria-label': t('filters.data_a-input-aria-label'),
-          //         type: 'text',
-          //         placeholder: 'gg/mm/aaaa',
-          //       }}
-          //       fullWidth={isMobile}
-          //       sx={{ marginBottom: isMobile ? '20px' : '0' }}
-          //     />
-          //   ),
-          // }}
           disableFuture={true}
           minDate={startDate ? startDate : tenYearsAgo}
         />
