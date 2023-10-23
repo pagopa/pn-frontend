@@ -1,29 +1,37 @@
 {
   "loginPage": {
     "title": "How do you want to log in?",
-    "description": "Select the mode you prefer.",
+    "description": "Select your preferred mode.",
     "loginBox": {
       "title": "Login",
       "spidLogin": "Log in with SPID",
       "cieLogin": "Log in with CIE"
-    },
-    "hintText": "Don't have a SPID? <1>Learn more</1>",
-    "privacyAndCondition": "By authenticating you declare that you have read and understood the <0>Privacy Policy </0> and the <1>Terms and Conditions of Use</1> of the Area Riservata."
+    }
   },
   "spidSelect": {
     "title": "Choose your SPID",
-    "hintText": "Don't have a SPID?<1> Learn more</1>",
+    "hintText": "Don't have an SPID?<0> Find out more</0>",
     "cancelButton": "Cancel"
   },
   "loginError": {
-    "title": "Sorry, something went wrong. ",
-    "message": "Due to a system error, the procedure cannot be completed.<1 />Please try again later."
+    "title": "Due to a system error, the procedure cannot be completed.",
+    "message": "Due to a system error, the procedure cannot be completed.<1 />Please try again later.",
+    "code": {
+      "error_19": "You have entered an incorrect username or password too many times; please try again in a few minutes or contact your SPID identity provider to change your credentials.",
+      "error_20": "For security reasons, a login with a second authentication factor is required: contact your SPID identity provider to find out how to use it.",
+      "error_21": "It's been too long since you started the process of logging in: start from the beginning.",
+      "error_22": "To use the platform, you must consent to the submission of certain data. Renter the data and give your consent.",
+      "error_23": "Your SPID identity has been suspended or revoked. To reactivate your account, please contact your SPID identity provider.",
+      "error_25": "You have cancelled the login operation: you can try again whenever you want.",
+      "error_30": "The type of SPID identity you used is different from the one requested by the Service Provider. Re-enter the information using the correct identity.",
+      "error_1001": "Access denied: You are not of the minimum age required to use the platform."
+    }
   },
   "disambiguationPage": {
     "title": "Which profile do you want to log in with?",
-    "subTitle": "We will redirect you according to your choice.",
+    "subTitle": "We will redirect you based on your choice.",
     "pf": "Private citizen",
-    "pg": "Legal person",
+    "pg": "Legal person/entity",
     "button": "Login"
   }
 }
