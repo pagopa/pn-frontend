@@ -22,6 +22,8 @@ type Props = {
   showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
+  /** Current institution */
+  partyId?: string;
   /** List of available parties */
   partyList?: Array<PartyEntity>;
   /** current logged user */
@@ -47,6 +49,10 @@ type Props = {
   showFooter?: boolean;
   /** Shows or hides terms of service */
   hasTermsOfService?: boolean;
+  /** Base Url of Selfcare for token-exchange */
+  selfcareBaseUrl?: string;
+/** Product Id of Selfcare for token-exchange */
+  selfcareSendProdId?: string;
 };
 
 export default function Layout({
@@ -57,6 +63,7 @@ export default function Layout({
   productsList,
   showHeaderProduct,
   productId,
+  partyId,
   partyList,
   loggedUser,
   enableUserDropdown,
@@ -70,6 +77,8 @@ export default function Layout({
   showHeader = true,
   showFooter = true,
   hasTermsOfService,
+  selfcareBaseUrl,
+  selfcareSendProdId
 }: Props) {
   return (
     <ErrorBoundary
@@ -88,6 +97,7 @@ export default function Layout({
               productsList={productsList}
               showHeaderProduct={showHeaderProduct}
               productId={productId}
+              partyId={partyId}
               partyList={partyList}
               loggedUser={loggedUser}
               enableDropdown={enableUserDropdown}
@@ -95,6 +105,8 @@ export default function Layout({
               onAssistanceClick={onAssistanceClick}
               eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
               isLogged={isLogged}
+              selfcareBaseUrl={selfcareBaseUrl}
+              selfcareSendProdId={selfcareSendProdId}
             />
           )}
           <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
