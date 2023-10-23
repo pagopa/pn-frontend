@@ -3,9 +3,9 @@
   "subtitle": {
     "text1": "SEND offers APIs for ",
     "text2": "sending notifications",
-    "text3": "and ",
+    "text3": " and ",
     "text4": "access to information",
-    "text5": "about their status. Here you can generate and manage API Keys to be used to authenticate the organisation's requests."
+    "text5": " about their status. Here you can generate and manage API Keys to be used to authenticate the organisation's requests."
   },
   "error-fecth-api-keys": "Could not retrieve list of API Keys",
   "api-key-succesfully-generated": "API Key successfully generated!",
