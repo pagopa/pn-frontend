@@ -7,12 +7,15 @@ import { theme } from '@pagopa/mui-italia';
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
+import { institutionsList, productsList } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
+import {
+  GET_INSTITUTIONS,
+  GET_INSTITUTION_PRODUCTS,
+} from '../api/external-registries/external-registries-routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, render } from './test-utils';
-import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS } from '../api/external-registries/external-registries-routes';
-import { institutionsList, productsList } from '../__mocks__/User.mock';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -50,7 +53,7 @@ const reduxInitialState = {
       currentVersion: 'mocked-version-1',
     },
     institutions: [],
-    productsOfInstitution: []
+    productsOfInstitution: [],
   },
 };
 
@@ -128,6 +131,8 @@ describe('App', () => {
     });
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -146,6 +151,8 @@ describe('App', () => {
       accepted: true,
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -168,6 +175,8 @@ describe('App', () => {
       accepted: false,
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });

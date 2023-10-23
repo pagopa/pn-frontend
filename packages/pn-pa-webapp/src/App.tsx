@@ -23,12 +23,13 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -37,7 +38,6 @@ import { TrackEventType } from './utility/events';
 import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
-import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 
 // Cfr. PN-6096
 // --------------------
@@ -49,7 +49,6 @@ const App = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-
     if (!isInitialized) {
       setIsInitialized(true);
       // init localization
@@ -74,6 +73,8 @@ const ActualApp = () => {
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
+
+  const [productsList, setProductsList] = useState<Array<ProductEntity>>([]);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -143,22 +144,22 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const reservedArea: ProductSwitchItem = useMemo(
+  const reservedArea: ProductEntity = useMemo(
     () => ({
       id: 'selfcare',
       title: t('header.reserved-area'),
       productUrl: '',
       linkType: 'external',
-    }), [i18n.language]
+    }),
+    [i18n.language]
   );
-  
-  const productsList = [reservedArea, ...products];
 
   const institutionsList: Array<PartySwitchItem> = useMemo(
-    () => institutions.map((institution) => ({
-      ...institution,
-      productRole: t(`roles.${institution.productRole}`)
-    })),
+    () =>
+      institutions.map((institution) => ({
+        ...institution,
+        productRole: t(`roles.${institution.productRole}`),
+      })),
     [institutions, i18n.language]
   );
 
@@ -174,6 +175,11 @@ const ActualApp = () => {
     }
   }, [sessionToken, getCurrentAppStatus, idOrganization]);
 
+  useEffect(() => {
+    if (products.length) {
+      setProductsList([reservedArea, ...products]);
+    }
+  }, [products]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -218,7 +224,6 @@ const ActualApp = () => {
         })
       ),
   });
-
 
   return (
     <>

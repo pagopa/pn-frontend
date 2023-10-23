@@ -18,7 +18,7 @@ const userActions = [
   {
     id: 'mocked-action-2',
     label: 'Mocked Action 2',
-    onClick: () => { },
+    onClick: () => {},
     icon: '',
   },
 ];
@@ -84,7 +84,14 @@ describe('Header Component', () => {
   it('renders header (checking switch product)', async () => {
     sessionStorage.setItem('fake-item', 'prova');
     // render component
-    const { container } = render(<Header productsList={productsList} selfcareBaseUrl='dev.selfcare' loggedUser={loggedUser} partyId='1' />);
+    const { container } = render(
+      <Header
+        productsList={productsList}
+        selfcareBaseUrl="dev.selfcare"
+        loggedUser={loggedUser}
+        partyId="1"
+      />
+    );
     expect(sessionStorage.getItem('fake-item')).not.toBeNull();
     const headers = container.querySelectorAll('.MuiContainer-root');
     const productButton = headers[1].querySelector('[role="button"]');
@@ -95,18 +102,30 @@ describe('Header Component', () => {
     const products = productDropdown!.querySelectorAll('li');
     fireEvent.click(products[1]);
     expect(assignFn).toBeCalledTimes(1);
-    expect(assignFn).toBeCalledWith(`dev.selfcare/token-exchange?institutionId=1&productId=${productsList[1].id}`);
+    expect(assignFn).toBeCalledWith(
+      `dev.selfcare/token-exchange?institutionId=1&productId=${productsList[1].id}`
+    );
     expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
   it('renders header (check switching to selfcare)', async () => {
-    const productsWithSelfcare = [...productsList, {
-      id: 'selfcare',
-      title: 'Area Riservata',
-      productUrl: '',
-      linkType: LinkType.EXTERNAL,
-    }];
-    const { container } = render(<Header productsList={productsWithSelfcare} selfcareBaseUrl='dev.selfcare' loggedUser={loggedUser} partyId='1' />);
+    const productsWithSelfcare = [
+      ...productsList,
+      {
+        id: 'selfcare',
+        title: 'Area Riservata',
+        productUrl: '',
+        linkType: LinkType.EXTERNAL,
+      },
+    ];
+    const { container } = render(
+      <Header
+        productsList={productsWithSelfcare}
+        selfcareBaseUrl="dev.selfcare"
+        loggedUser={loggedUser}
+        partyId="1"
+      />
+    );
     const headers = container.querySelectorAll('.MuiContainer-root');
     const productButton = headers[1].querySelector('[role="button"]');
     sessionStorage.setItem('fake-item', 'prova');
@@ -115,17 +134,27 @@ describe('Header Component', () => {
     const productDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(productDropdown).toBeInTheDocument();
     const products = productDropdown!.querySelectorAll('li');
-    const selfcareProductIndex = productsWithSelfcare.findIndex((product) => product.id === 'selfcare');
+    const selfcareProductIndex = productsWithSelfcare.findIndex(
+      (product) => product.id === 'selfcare'
+    );
     fireEvent.click(products[selfcareProductIndex]);
     expect(assignFn).toBeCalledTimes(1);
     expect(assignFn).toBeCalledWith(`dev.selfcare/dashboard/1`);
     expect(sessionStorage.getItem('fake-item')).toBeNull();
-  })
+  });
 
   it('renders header (checking switch institution)', async () => {
     sessionStorage.setItem('fake-item', 'prova');
     // render component
-    const { container } = render(<Header productsList={productsList} partyList={partyList} selfcareSendProdId="1" selfcareBaseUrl='dev.selfcare' loggedUser={loggedUser} />);
+    const { container } = render(
+      <Header
+        productsList={productsList}
+        partyList={partyList}
+        selfcareSendProdId="1"
+        selfcareBaseUrl="dev.selfcare"
+        loggedUser={loggedUser}
+      />
+    );
     expect(sessionStorage.getItem('fake-item')).not.toBeNull();
     const headers = container.querySelectorAll('.MuiContainer-root');
     const partyButton = headers[1].querySelectorAll('[role="button"]')[1];
@@ -136,7 +165,9 @@ describe('Header Component', () => {
     const parties = partyDropdown!.querySelectorAll('[role="button"]');
     fireEvent.click(parties[0]);
     expect(assignFn).toBeCalledTimes(1);
-    expect(assignFn).toBeCalledWith(`dev.selfcare/token-exchange?institutionId=${partyList[0].id}&productId=1`);
+    expect(assignFn).toBeCalledWith(
+      `dev.selfcare/token-exchange?institutionId=${partyList[0].id}&productId=1`
+    );
     expect(sessionStorage.getItem('fake-item')).toBe('prova');
   });
 
@@ -208,6 +239,24 @@ describe('Header Component', () => {
     await waitFor(() => expect(partyDrawer).not.toBeInTheDocument());
     expect(headers[1]).toHaveTextContent(partyList[1].name);
     expect(headers[1]).toHaveTextContent(partyList[1].productRole);
+  });
+
+  it('should show parentName (AOO/UO) on PartySwitch when present', async () => {
+    const partyWithParent = partyList.find((party) => party.parentName);
+    const { container } = render(
+      <Header
+        productsList={productsList}
+        selfcareBaseUrl="dev.selfcare"
+        loggedUser={loggedUser}
+        partyId={partyWithParent?.id}
+        enableDropdown
+        userActions={userActions}
+        partyList={partyList}
+      />
+    );
+
+    const headers = container.querySelectorAll('.MuiContainer-root');
+    expect(headers[1]).toHaveTextContent(partyWithParent?.parentName as string);
   });
 
   it('clicks on assistanceEmail when value is passed', async () => {

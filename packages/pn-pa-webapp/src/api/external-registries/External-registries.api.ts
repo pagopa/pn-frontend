@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { Institution } from '../../models/Institutions';
 import { Product } from '../../models/Products';
@@ -37,10 +37,11 @@ export const ExternalRegistriesAPI = {
           name: institution.description,
           productRole: institution.userProductRoles[0],
           logoUrl: undefined,
+          parentName: institution.rootParent?.description,
         }))
       ),
 
-  getInstitutionProducts: (institutionId: string): Promise<Array<ProductSwitchItem>> =>
+  getInstitutionProducts: (institutionId: string): Promise<Array<ProductEntity>> =>
     apiClient
       .get<Array<Product>>(GET_INSTITUTION_PRODUCTS(institutionId))
       .then((response: AxiosResponse<Array<Product>>) =>
@@ -48,8 +49,7 @@ export const ExternalRegistriesAPI = {
           id: product.id,
           title: product.title,
           productUrl: product.urlBO,
-          /* TODO */
-          linkType: 'internal',
+          linkType: 'external',
         }))
       ),
 };

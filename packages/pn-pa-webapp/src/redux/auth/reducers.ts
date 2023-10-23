@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import {
   adaptedTokenExchangeError,
   basicInitialUserData,
@@ -8,6 +7,7 @@ import {
   basicUserDataMatcherContents,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { PNRole, PartyRole } from '../../models/user';
@@ -16,13 +16,12 @@ import {
   acceptToS,
   exchangeToken,
   getInstitutions,
-  getProductsOfInstitution,
   getPrivacyApproval,
+  getProductsOfInstitution,
   getToSApproval,
   logout,
 } from './actions';
 import { User } from './types';
-
 
 const roleMatcher = yup.object({
   role: yup.string().oneOf(Object.values(PNRole)),
@@ -86,7 +85,7 @@ const userSlice = createSlice({
       consentVersion: '',
     },
     institutions: [] as Array<PartyEntity>,
-    productsOfInstitution: [] as Array<ProductSwitchItem>,
+    productsOfInstitution: [] as Array<ProductEntity>,
   },
   reducers: {},
   extraReducers: (builder) => {

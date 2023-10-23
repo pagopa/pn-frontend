@@ -1,50 +1,51 @@
-import { PartyEntity, ProductSwitchItem } from "@pagopa/mui-italia";
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 enum LinkType {
-    INTERNAL = 'internal',
-    EXTERNAL = 'external',
+  INTERNAL = 'internal',
+  EXTERNAL = 'external',
 }
 
 export const productsDTO = [
-    {
-        id: '0',
-        title: `Product 1`,
-        urlBO: '',
-    },
-    {
-        id: '1',
-        title: `Product 2`,
-        urlBO: 'https://www.product.com',
-    },
+  {
+    id: '0',
+    title: `Product 1`,
+    urlBO: '',
+  },
+  {
+    id: '1',
+    title: `Product 2`,
+    urlBO: 'https://www.product.com',
+  },
 ];
 
-export const productsList: Array<ProductSwitchItem> = productsDTO.map((product) => (
-    {
-        id: product.id,
-        title: product.title,
-        productUrl: product.urlBO,
-        linkType: 'internal'
-    }
-));
+export const productsList: Array<ProductEntity> = productsDTO.map((product) => ({
+  id: product.id,
+  title: product.title,
+  productUrl: product.urlBO,
+  linkType: 'internal',
+}));
 
 export const institutionsDTO = [
-    {
-        id: '0',
-        description: `Party 1`,
-        userProductRoles: ['Role 1']
+  {
+    id: '0',
+    description: `Party 1`,
+    userProductRoles: ['Role 1'],
+  },
+  {
+    id: '1',
+    description: `Party 2`,
+    userProductRoles: ['Role 2'],
+    rootParent: {
+      id: '2',
+      description: 'Root Party 2',
     },
-    {
-        id: '1',
-        description: `Party 2`,
-        userProductRoles: ['Role 2']
-    },
+  },
 ];
 
-export const institutionsList: Array<PartyEntity> = institutionsDTO.map((institution) => (
-    {
-        id: institution.id,
-        name: institution.description,
-        productRole: institution.userProductRoles[0],
-        logoUrl: undefined
-    }
-));
+export const institutionsList: Array<PartyEntity> = institutionsDTO.map((institution) => ({
+  id: institution.id,
+  name: institution.description,
+  productRole: institution.userProductRoles[0],
+  logoUrl: undefined,
+  parentName: institution.rootParent?.description,
+}));

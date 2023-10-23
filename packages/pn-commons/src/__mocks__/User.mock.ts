@@ -1,4 +1,4 @@
-import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { ProductEntity } from '@pagopa/mui-italia';
 
 export const noUserLoggedData = {
   sessionToken: '',
@@ -23,7 +23,7 @@ export enum LinkType {
   EXTERNAL = 'external',
 }
 
-export const productsList: Array<ProductSwitchItem> = [
+export const productsList: Array<ProductEntity> = [
   {
     id: '0',
     title: `Product 1`,
@@ -41,15 +41,16 @@ export const productsList: Array<ProductSwitchItem> = [
 export const partyList = [
   {
     id: '0',
-    name: `Party 1`,
+    name: 'Party 1',
     productRole: 'Role 1',
-    logoUrl: ``,
+    logoUrl: '',
   },
   {
     id: '1',
-    name: `Party 2`,
+    name: 'Party 2',
     productRole: 'Role 2',
-    logoUrl: ``,
+    logoUrl: '',
+    parentName: 'Root Party 2',
   },
 ];
 
