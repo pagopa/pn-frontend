@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react';
+
 import {
   Box,
   Button,
@@ -8,9 +10,9 @@ import {
   DialogTitle,
   FormControlLabel,
 } from '@mui/material';
-import { useMemo, useState } from 'react';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+
 import { useIsMobile } from '../hooks';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
   onConfirm: () => void;

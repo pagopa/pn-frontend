@@ -4,7 +4,6 @@ import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 
 import { downloadDocument } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
   F24PaymentDetails,
   NotificationDetailPayment,
@@ -14,8 +13,9 @@ import {
   PaymentDetails,
   PaymentStatus,
   PaymentsData,
-} from '../../types';
+} from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 

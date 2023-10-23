@@ -5,8 +5,8 @@ import { Menu } from '@mui/icons-material';
 import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { SideMenuItem } from '../../types';
+import { SideMenuItem } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuList from './SideMenuList';
 
 type Props = {

@@ -90,6 +90,12 @@ export const getIDPS = (
       name: 'InfoCamere S.C.p.A.',
       imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-infocamereid.png',
     },
+    {
+      identifier: 'Intesi Group SPID',
+      entityId: 'intesiid',
+      name: 'Intesi Group S.p.A',
+      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-intesigroupspid.png',
+    },
     ...(testEnabled ? [testProvider] : []),
     ...(validatorEnabled ? [validatorProvider] : []),
   ],

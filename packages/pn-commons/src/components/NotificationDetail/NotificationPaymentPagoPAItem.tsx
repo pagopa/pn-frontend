@@ -5,14 +5,10 @@ import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import {
-  PagoPAPaymentFullDetails,
-  PaymentInfoDetail,
-  PaymentStatus,
-} from '../../types/NotificationDetail';
+import { PagoPAPaymentFullDetails, PaymentInfoDetail, PaymentStatus } from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { formatDate } from '../../utility/date.utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
 interface Props {

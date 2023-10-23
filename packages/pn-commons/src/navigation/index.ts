@@ -1,6 +1,3 @@
-import NotFound from './NotFound';
-import AccessDenied from './AccessDenied';
-import CourtesyPage from './CourtesyPage';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from '../navigation/PrivateRoute';
 
-export { NotFound, AccessDenied, CourtesyPage, PrivateRoute };
+export { PrivateRoute };

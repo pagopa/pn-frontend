@@ -3,8 +3,8 @@ import { ChangeEvent, useState } from 'react';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { A11yPaginationLabelsTypes, PaginationData } from './types';
+import { A11yPaginationLabelsTypes, PaginationData } from '../../models/Pagination';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   /** The actual paginationData */
