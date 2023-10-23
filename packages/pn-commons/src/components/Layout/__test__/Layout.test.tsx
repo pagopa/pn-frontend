@@ -4,8 +4,8 @@ import { Email } from '@mui/icons-material';
 
 import { loggedUser, productsList } from '../../../__mocks__/User.mock';
 import SideMenu from '../../../components/SideMenu/SideMenu';
+import { SideMenuItem } from '../../../models';
 import { render } from '../../../test-utils';
-import { SideMenuItem } from '../../../types';
 import Layout from '../Layout';
 
 const menuItems: Array<SideMenuItem> = [

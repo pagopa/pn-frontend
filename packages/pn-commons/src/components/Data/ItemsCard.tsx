@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { CardAction, CardElement, Item } from '../../types';
+import { CardAction, CardElement, Item } from '../../models';
 
 type Props = {
   /* Card header elements */

@@ -1,4 +1,4 @@
-import { SendDigitalDetails } from '../../types';
+import { SendDigitalDetails } from '../../models';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalFeedbackStep extends TimelineStep {
@@ -7,7 +7,7 @@ export class SendDigitalFeedbackStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-error',
-          payload.isMultiRecipient, 
+          payload.isMultiRecipient,
           'Invio via PEC non riuscito',
           `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
             (payload.step.details as SendDigitalDetails).digitalAddress?.address
@@ -22,7 +22,7 @@ export class SendDigitalFeedbackStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-digital-success',
-        payload.isMultiRecipient, 
+        payload.isMultiRecipient,
         'Invio via PEC riuscito',
         `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
           (payload.step.details as SendDigitalDetails).digitalAddress?.address

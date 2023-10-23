@@ -1,16 +1,15 @@
-import {
-  HTTPStatusCode,
-  ServerResponseError,
-} from "../../types/AppResponse";
-import AppError from "./AppError";
-import UnknownAppError from "./UnknownAppError";
-import GenericAppErrorFactory from "./GenericAppError/GenericAppErrorFactory";
+import { HTTPStatusCode, ServerResponseError } from '../../models/AppResponse';
+import AppError from './AppError';
+import GenericAppErrorFactory from './GenericAppError/GenericAppErrorFactory';
+import UnknownAppError from './UnknownAppError';
 
 class AppErrorFactory {
-  protected getCustomError: (error: ServerResponseError) => AppError = (error: ServerResponseError) => new UnknownAppError(error);
+  protected getCustomError: (error: ServerResponseError) => AppError = (
+    error: ServerResponseError
+  ) => new UnknownAppError(error);
 
   public create(error: ServerResponseError | HTTPStatusCode): AppError {
-    if(typeof error !== 'object') {
+    if (typeof error !== 'object') {
       return GenericAppErrorFactory.create(error);
     }
 

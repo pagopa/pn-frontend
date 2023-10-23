@@ -3,9 +3,9 @@ import React from 'react';
 import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
+import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../../models';
 import { appStateReducer } from '../../../redux';
 import { act, fireEvent, render, waitFor } from '../../../test-utils';
-import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../../types';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
 
 function createTestStore() {

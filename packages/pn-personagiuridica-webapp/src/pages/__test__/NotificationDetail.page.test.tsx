@@ -130,7 +130,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/notifications/received');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
-    expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
     const notificationDetailTable = result?.getByTestId('notificationDetailTable');
@@ -458,7 +458,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/received');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
-    expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
     const notificationDetailTable = result?.getByTestId('notificationDetailTable');
@@ -544,7 +544,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/notifications/received');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
-    expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check summary table
     const notificationDetailTable = result?.getByTestId('notificationDetailTable');

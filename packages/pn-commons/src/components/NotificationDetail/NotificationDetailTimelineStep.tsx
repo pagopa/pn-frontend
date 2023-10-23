@@ -21,7 +21,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-} from '../../types';
+} from '../../models';
 import {
   formatDay,
   formatMonthString,
@@ -36,7 +36,7 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+  // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
   clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;

@@ -3,9 +3,13 @@ import React from 'react';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { Downtime } from '../../../models';
+import {
+  Downtime,
+  IAppMessage,
+  NotificationStatus,
+  NotificationStatusHistory,
+} from '../../../models';
 import { RenderResult, initLocalizationForTest, render, within } from '../../../test-utils';
-import { IAppMessage, NotificationStatus, NotificationStatusHistory } from '../../../types';
 import { formatDate, isToday } from '../../../utility';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 

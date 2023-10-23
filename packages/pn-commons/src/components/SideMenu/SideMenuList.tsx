@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { SideMenuItem } from '../../types';
+import { SideMenuItem } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {

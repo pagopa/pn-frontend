@@ -1,7 +1,7 @@
 import DateFnsAdapter from '@date-io/date-fns';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
-import { DatePickerTypes } from '../types';
+import { DatePickerTypes } from '../models';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 const dateFns = new DateFnsAdapter();
 export const DATE_FORMAT = 'dd/MM/yyyy';

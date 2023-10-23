@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
-const NotFound = () => (
-  <div>
+const NotFound: React.FC = () => (
+  <>
     <Typography align="center" color="textPrimary" variant="h4" data-testid="notFoundTitle">
       {getLocalizedOrDefaultLabel(
         'common',
@@ -23,6 +23,6 @@ const NotFound = () => (
         'Sei qui per errore, prova ad usare la navigazione.'
       )}
     </Typography>
-  </div>
+  </>
 );
 export default NotFound;
