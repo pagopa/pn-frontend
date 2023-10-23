@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { AppResponse } from '../models/AppResponse';
 import { appStateActions } from '../redux';
-import { AppResponse } from '../types/AppResponse';
 import { AppResponsePublisher } from '../utility/AppResponse';
 
 /**

@@ -1,10 +1,5 @@
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
-enum LinkType {
-  INTERNAL = 'internal',
-  EXTERNAL = 'external',
-}
-
 export const productsDTO = [
   {
     id: '0',
@@ -22,7 +17,7 @@ export const productsList: Array<ProductEntity> = productsDTO.map((product) => (
   id: product.id,
   title: product.title,
   productUrl: product.urlBO,
-  linkType: 'internal',
+  linkType: 'external',
 }));
 
 export const institutionsDTO = [

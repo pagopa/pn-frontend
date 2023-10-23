@@ -1,28 +1,28 @@
 {
   "appStatus": {
     "title": "État de la plateforme",
-    "subtitle": "Vérifier le fonctionnement de SEND, visualiser l'historique des dysfonctionnements et télécharger les attestations opposables aux tiers correspondantes. Chaque attestation certifie la présence d'un dysfonctionnement : elle pourrait vous être utile dans le cas où une notification vous étant destinée était impliquée.",
+    "subtitle": "Il vérifie le fonctionnement de SEND, affiche l’historique des dysfonctionnements et télécharge les attestations correspondantes opposables à des tiers. Chaque attestation certifie un dysfonctionnement : cela pourrait vous être utile dans le cas où cela impliquerait une notification qui vous est destinée.",
     "statusDescription": {
       "ok": "Tous les services de SEND sont opérationnels.",
-      "not-ok": "Un dysfonctionnement est en cours. Pour plus de détails, consulter le tableau ci-dessous."
+      "not-ok": "Il y a un dysfonctionnement en cours. Pour plus de détails, consultez le tableau ci-dessous."
     },
-    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }}"
+    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }} "
   },
   "downtimeList": {
     "title": "Historique des dysfonctionnements",
     "columnHeader": {
       "startDate": "Date de début",
       "endDate": "Date de fin",
-      "functionality": "Service impliqué",
-      "legalFactId": "Attestations opposables aux tiers",
+      "functionality": "Service concerné",
+      "legalFactId": "Attestations opposables à des tiers",
       "status": "État"
     },
-    "emptyMessage": "Aucun dysfonctionnement n'a été enregistré"
+    "emptyMessage": "Aucun dysfonctionnement n’a été enregistré"
   },
   "legends": {
     "knownFunctionality": {
       "NOTIFICATION_CREATE": "Envoi des notifications",
-      "NOTIFICATION_VISUALIZATION": "Affichage des notifications et téléchargement des pièces jointes",
+      "NOTIFICATION_VISUALIZATION": "Affichage des notifications et téléchargements des pièces jointes",
       "NOTIFICATION_WORKFLOW": "Changement d'état des notifications"
     },
     "unknownFunctionality": "Service inconnu ({{functionality}})",
@@ -31,9 +31,9 @@
       "KO": "En cours"
     },
     "noFileAvailableByStatus": {
-      "OK": "L'attestation sera bientôt disponible",
-      "KO": "L'attestation sera disponible une fois le dysfonctionnement résolu"
+      "OK": "L’attestation sera disponible sous peu",
+      "KO": "L’attestation sera disponible à la fin du dysfonctionnement"
     },
-    "legalFactDownload": "Télécharger l'attestation"
+    "legalFactDownload": "Télécharger l’attestation"
   }
 }

@@ -1,5 +1,5 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { TimelineCategory } from '../../../types';
+import { TimelineCategory } from '../../../models';
 import { NotHandledStep } from '../NotHandledStep';
 
 const timelineElem = getTimelineElem(TimelineCategory.NOT_HANDLED, {

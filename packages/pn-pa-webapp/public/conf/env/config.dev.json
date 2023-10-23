@@ -12,5 +12,6 @@
   "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
   "IS_PAYMENT_ENABLED": false,
   "WORK_IN_PROGRESS": false,
-  "SELFCARE_SEND_PROD_ID": "prod-pn-dev"
+  "SELFCARE_SEND_PROD_ID": "prod-pn-dev",
+  "API_B2B_LINK":"https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/pn-openapi-prod/docs/openapi/api-external-b2b-pa-bundle.yaml"
 }

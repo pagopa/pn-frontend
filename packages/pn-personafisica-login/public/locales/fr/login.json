@@ -1,29 +1,37 @@
 {
   "loginPage": {
-    "title": "Comment souhaitez-vous vous connecter ?",
-    "description": "Sélectionner le mode que vous préférez.",
+    "title": "Comment voulez-vous y accéder ?",
+    "description": "Sélectionnez le mode que vous préférez.",
     "loginBox": {
       "title": "Se connecter",
-      "spidLogin": "Se connecter avec SPID",
-      "cieLogin": "Se connecter avec CIE"
-    },
-    "hintText": "Vous ne disposez pas de SPID ? <1>En savoir plus</1>",
-    "privacyAndCondition": "En vous authentifiant, vous déclarez avoir lu et compris la <0>Politique sur le respect de la vie privée</0> et les <1>Conditions d’utilisation</1> de l'Espace réservé."
+      "spidLogin": "Connectez-vous avec SPID",
+      "cieLogin": "Entrez avec CIE"
+    }
   },
   "spidSelect": {
-    "title": "Choisir votre SPID",
-    "hintText": "Vous ne disposez pas de SPID ? <1>En savoir plus</1>",
+    "title": "Choisissez votre SPID",
+    "hintText": "Vous n’avez pas de SPID ?<0> En savoir plus</0>",
     "cancelButton": "Annuler"
   },
   "loginError": {
-    "title": "Désolé, une erreur s'est produite. ",
-    "message": "En raison d'une erreur du système, il n'a pas été possible de terminer la procédure.<1 />Nous vous demandons de bien vouloir réessayer plus tard."
+    "title": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure.",
+    "message": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure.<1 />Veuillez réessayer plus tard.",
+    "code": {
+      "error_19": "Vous avez saisi trop souvent un nom d’utilisateur ou un mot de passe incorrect : réessayez dans quelques minutes ou contactez votre fournisseur d’identité SPID pour modifier vos informations d’identification.",
+      "error_20": "Pour des raisons de sécurité, une connexion avec un deuxième facteur d’authentification est requise : contactez votre fournisseur d’identité SPID pour comprendre comment il est utilisé.",
+      "error_21": "Trop de temps s’est écoulé depuis que vous avez commencé la procédure de connexion : recommencez depuis le début.",
+      "error_22": "Pour utiliser la plateforme, vous devez consentir à l’envoi de certaines données. Entrez à nouveau et donnez votre consentement.",
+      "error_23": "Votre identité SPID est suspendue ou révoquée. Pour réactiver votre compte, contactez votre fournisseur d’identité SPID.",
+      "error_25": "Vous avez annulé l’opération de connexion : vous pouvez réessayer quand vous le souhaitez.",
+      "error_30": "Le type d’identité SPID que vous avez utilisé est différent de celui requis par le fournisseur de services. Entrez à nouveau en utilisant le bon type.",
+      "error_1001": "Accès refusé : vous n’avez pas l’âge minimum requis pour utiliser la plateforme."
+    }
   },
   "disambiguationPage": {
-    "title": "Avec quel profil souhaitez-vous vous connecter ?",
+    "title": "Avec quel profil souhaitez-vous accéder ?",
     "subTitle": "Nous vous redirigerons en fonction de votre choix.",
-    "pf": "Particulier",
-    "pg": "Personne morale",
+    "pf": "Citoyen privé",
+    "pg": "Personnalité juridique",
     "button": "Se connecter"
   }
 }

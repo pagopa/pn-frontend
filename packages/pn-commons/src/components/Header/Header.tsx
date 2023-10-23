@@ -11,8 +11,8 @@ import {
   UserAction,
 } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { pagoPALink } from '../../utility/costants';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type HeaderProps = {
   /** List of available products */

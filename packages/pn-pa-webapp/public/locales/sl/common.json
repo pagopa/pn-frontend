@@ -4,12 +4,13 @@
     "annulla filtro": "Odstrani filtre",
     "indietro": "Nazaj",
     "annulla": "Prekliči",
-    "enter": "Vstop",
+    "enter": "Dostop",
     "exit": "Izhod",
-    "continue": "Nadaljuj",
+    "continue": "Nadaljujte",
     "send": "Pošlji",
     "go-to-home": "Nazaj na domačo stran",
-    "go-to-login": "Dostopaj"
+    "go-to-login": "Prijava",
+    "close": "Zapri"
   },
   "menu": {
     "notifications": "Obvestila",
@@ -18,41 +19,41 @@
     "api-key": "Ključ API",
     "statistics": "Statistični podatki",
     "app-status": "Stanje platforme",
-    "aria-label": "glavna navigacija na plataformi za obvestila",
-    "aria-label-inner": "navigacija pošiljatelja na platformi za obvestila"
+    "aria-label": "platforma-obvestila glavna navigacija",
+    "aria-label-inner": "platforma-obvestila navigacija pošiljatelja"
   },
   "header": {
     "logout": "Izhod",
     "pago-pa-link": "Spletna stran PagoPA S.p.A.",
-    "reserved-area": "Area Riservata",
+    "reserved-area": "Rezervirano območje",
     "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "Z dostopom se strinjate s <0>Pogoji in določili uporabe</0> storitve in potrjujete, da ste prebrali <1>Izjavo o zasebnosti</1>.",
-    "button": "Dostopaj"
+    "switch-label": "S prijavo se strinjate s <0>Pogoji in določili uporabe</0> storitve in potrjujete, da ste prebrali <1>Pravilnik o zasebnosti</1>.",
+    "button": "Prijava"
   },
   "table": {
     "aria-label": "Tabela artiklov"
   },
   "paginator": {
-    "aria-label": "Meni s stranmi",
+    "aria-label": "Meni strani",
     "first": "prvi element",
     "last": "zadnji element",
     "page": "stran",
     "next": "Pojdi na naslednjo stran",
     "previous": "Pojdi na prejšnjo stran",
-    "selected": "izbrani element",
+    "selected": "izbrani artikel",
     "rows-per-page": "Vrstice na stran"
   },
   "toast": {
-    "aria-label": "Ikona toast ključavnice"
+    "aria-label": "Ikona za toast zapiranje"
   },
   "date-picker": {
     "left-arrow": "Pojdi na prejšnji mesec",
     "right-arrow": "Pojdi na naslednji mesec",
-    "switch-to-year": "način koledarja aktiven, preklopite na način izbire leta",
-    "switch-to-calendar": "način izbire leta aktiven, preklopite na koledarski način",
+    "switch-to-year": "aktiven način koledarja, preklopite na način izbire leta",
+    "switch-to-calendar": "aktiven način izbire leta, preklopite v način koledarja",
     "select-date": "Izberite datum",
     "date-selected": "Izberite datum, izbrani datum je {{date}}"
   },
@@ -62,48 +63,48 @@
   },
   "error-boundary": {
     "title": "Nekaj je šlo narobe",
-    "description": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova kasneje.",
-    "action": "Znova naloži stran"
+    "description": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova pozneje.",
+    "action": "Ponovno naloži stran"
   },
   "not-accessible": {
     "title": "Dostop do platforme ni mogoč",
-    "description": "Poskusite znova čez nekaj ur. Če potrebujete pomoč,",
-    "action": "nam pišite"
+    "description": "SEND se trenutno nahaja v fazi preizkušanja in še ni na voljo. Če ste organizacija in ste zaključili članstvo, boste prejeli posodobitve glede datuma aktivacije platforme. Za več informacij o pobudi",
+    "action": "obiščite namensko spletno mesto"
   },
   "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
-  "not-logged": "Dostopaj do rezerviranega območja",
-  "not-logged-subtitle": "Če želite uporabljati SEND, se prijavite v rezervirano območje s SPID ali CIE. Nato pritisnite \"Upravljanje\" na ustrezni kartici.",
+  "not-logged": "Dostop do rezerviranega območja",
+  "not-logged-subtitle": "Če želite uporabiti SEND, dostopajte do omejenega območja s SPID ali CIE. Nato na ustrezni kartici pritisnite \"Upravljaj\".",
   "not-found": {
     "title": "404: Stran, ki jo iščete, ne obstaja",
-    "descpription": "Tukaj ste pomotoma, poskusite uporabiti navigacijo."
+    "descpription": "Tukaj ste po pomoti, poskusite uporabiti navigacijo."
   },
   "leaving-app": {
     "title": "Zapuščate SEND",
     "message": "Preusmerjeni boste"
   },
   "error-when-fetching-tos-status": {
-    "title": "Težave pri dostopu do SEND",
-    "message": "Poskusite znova kasneje"
+    "title": "Težave pri prijavi v SEND",
+    "message": "Poskusite znova pozneje"
   },
   "messages": {
-    "404-title": "Vira ni bilo mogoče najti",
-    "404-message": "Prišlo je do napake. Poskusite znova kasneje",
+    "404-title": "Vira ni mogoče najti",
+    "404-message": "Prišlo je do napake. Poskusite znova pozneje",
     "403-title": "Seja je potekla",
-    "403-message": "Vstopite s SPID ali CIE.",
+    "403-message": "Vstopite in se prijavite s SPID ali CIE.",
     "401-title": "Nepooblaščen uporabnik",
     "401-message": "Trenutni uporabnik nima dovoljenj",
     "451-title": "Platforma ni dostopna",
     "451-message": "Dostop do platforme ni mogoč",
     "500-title": "Storitev ni na voljo",
-    "500-message": "Zaradi začasne težave s storitvijo vaša zahteva ni bila poslana. Poskusite znova kasneje.",
+    "500-message": "Vaša zahteva ni bila poslana zaradi začasne težave s storitvijo. Poskusite znova pozneje.",
     "lacking-grants-for-app-title": "Nimate dovoljenja za dostop",
-    "generic-token-exchange-problem": "Dostopa ni bilo mogoče dokončati",
+    "generic-token-exchange-problem": "Prijave ni bilo mogoče dokončati",
     "error-in-initial-info-loading": "Podatkov, potrebnih za zagon aplikacije, ni bilo mogoče pridobiti",
-    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave – neveljaven žeton",
-    "generic-title": "Generična napaka",
-    "generic-message": "Prišlo je do napake. Poskusite znova kasneje",
+    "invalid-token-title": "Ne morete se prijaviti zaradi tehnične težave - neveljaven žeton",
+    "generic-title": "Splošna napaka",
+    "generic-message": "Prišlo je do napake. Poskusite znova pozneje",
     "generic-api-error-main-text": "Teh podatkov ni bilo mogoče pridobiti.",
-    "generic-api-error-action-text": "Znova naloži"
+    "generic-api-error-action-text": "Naloži znova"
   },
   "footer": {
     "go-to-pagopa": "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A.",
@@ -117,11 +118,11 @@
     "terms-conditions": "Pogoji in določila",
     "company": "Pregledna družba",
     "disclosure": "Politika odgovornega razkritja",
-    "321-model": "Model 231",
+    "321-model": "Obrazec 231",
     "accessibility": "Dostopnost",
     "social": "Povezava: pojdi na spletno mesto {{social}} družbe PagoPA S.p.A.",
     "resources": "Viri",
-    "follow": "Sledi nam na",
+    "follow": "Spremljajte nas na",
     "legal-part-1": "delniška družba z enim družbenikom – v celoti vplačan osnovni kapital 1.000.000 EUR – sedež v Rimu, Piazza Colonna 370",
     "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009"
   },
@@ -129,20 +130,26 @@
   "required-field": "Obvezno polje",
   "required": "obvezno",
   "too-long-field-error": "Napišite največ {{maxLength}} znakov",
-  "no-spaces-at-edges": "Neveljavni presledki na začetku/koncu",
+  "too-short-field-error": "Napišite najmanj {{minLength}} znakov",
+  "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu",
   "invalid": "neveljavno",
   "upload-file": {
     "or": "ali",
-    "select-from-pc": "izberite ga iz vašega računalnika",
-    "loading": "Nalaganje v teku...",
-    "sending": "Pošiljanje v teku...",
-    "hash-code": "Hash koda",
-    "hash-code-descr": "Hash koda je edinstvena alfanumerična koda, ki se uporablja za identifikacijo določene datoteke",
-    "ext-not-supported": "Nepodprta končnica datoteke. Poskusite znova z drugo datoteko.",
-    "loading-error": "Pri nalaganju datoteke je prišlo do napake. Prosimo, poskusite znota."
+    "select-from-pc": "izberite ga iz računalnika",
+    "select-from-mobile": "Naložite dokument",
+    "loading": "Nalaganje v teku ...",
+    "sending": "Pošiljanje ...",
+    "hash-code": "Koda razpršitve",
+    "hash-code-descr": "Koda razpršitve je edinstvena alfanumerična koda, ki se uporablja za identifikacijo določene datoteke",
+    "ext-not-supported": "Končnica datoteke ni podprta. Poskusite znova z drugo datoteko.",
+    "file-size-exceeded": "Izbrana datoteka presega največjo velikost {{limit}}.",
+    "loading-error": "Pri nalaganju datoteke je prišlo do napake. Poskusite ponovno."
   },
   "roles": {
     "operator": "Operativna kontaktna oseba",
-    "admin": "Upravna kontaktna oseba"
+    "admin": "Upravitelj"
+  },
+  "attachments": {
+    "remove-attachment": "Zbriši prilogo"
   }
 }

@@ -1,29 +1,29 @@
 {
   "appStatus": {
     "title": "Stanje platforme",
-    "subtitle": "Preverite delovanje SEND, si oglejte zgodovino motenj in prenesite ustrezna potrdila, izvršljiva proti tretjim osebam.",
+    "subtitle": "Preverite delovanje SEND, oglejte si zgodovino motenj in prenesite povezana potrdila, ki so izvršljiva proti tretjim osebam.",
     "statusDescription": {
       "ok": "Vse storitve SEND delujejo.",
-      "not-ok": "Dogaja se motnja. Za več podrobnosti glejte spodnjo tabelo."
+      "not-ok": "Motnja je v teku. Za več podrobnosti si oglejte spodnjo tabelo."
     },
-    "lastCheckLegend": "Nazadnje posodobljeno – {{ lastCheckTimestamp }}"
+    "lastCheckLegend": "Nazadnje posodobljeno - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
-    "title": "Zgodovina storitev",
+    "title": "Zgodovina motenj",
     "columnHeader": {
-      "startDate": "Začetni datum",
-      "endDate": "Končni datum",
+      "startDate": "Datum začetka",
+      "endDate": "Datum konca",
       "functionality": "Vključena storitev",
       "legalFactId": "Potrdila, izvršljiva proti tretjim osebam",
       "status": "Stanje"
     },
-    "emptyMessage": "Ni bilo zabeleženih motenj"
+    "emptyMessage": "Ni zabeleženih motenj"
   },
   "legends": {
     "knownFunctionality": {
       "NOTIFICATION_CREATE": "Pošiljanje obvestil",
-      "NOTIFICATION_VISUALIZATION": "Ogled obvestil in prenos prilog",
-      "NOTIFICATION_WORKFLOW": "Sprememba stanja obvestil"
+      "NOTIFICATION_VISUALIZATION": "Ogled prenosov obvestil in prilog",
+      "NOTIFICATION_WORKFLOW": "Sprememba stanja obvestila"
     },
     "unknownFunctionality": "Neznana storitev ({{functionality}})",
     "status": {

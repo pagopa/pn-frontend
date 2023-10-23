@@ -1,4 +1,4 @@
-import { fetchConfiguration } from '../fetch.configuration.service';
+import { fetchConfiguration } from '../fetch.configuration.utility';
 
 let mockFetchConfigurationResult: any;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { ServerResponse, ServerResponseErrorCode } from '../../../models/AppResponse';
 import { render } from '../../../test-utils';
-import { ServerResponse, ServerResponseErrorCode } from '../../../types/AppResponse';
 import { createAppResponseError, createAppResponseSuccess } from '../AppResponse';
 import AppResponsePublisher, { ResponseEventDispatcher } from '../AppResponsePublisher';
 

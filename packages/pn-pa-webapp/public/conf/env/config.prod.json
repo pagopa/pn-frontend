@@ -12,6 +12,7 @@
     "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
     "IS_PAYMENT_ENABLED": false,
     "WORK_IN_PROGRESS": false,
-    "SELFCARE_SEND_PROD_ID": "prod-pn"
+    "SELFCARE_SEND_PROD_ID": "prod-pn",
+    "API_B2B_LINK":"https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/pn-openapi-prod/docs/openapi/api-external-b2b-pa-bundle.yaml"
   }
   

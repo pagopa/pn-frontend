@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
+import { AppResponse, AppResponseOutcome } from '../../models/AppResponse';
 
 type CallBackFunction = (err: AppResponse) => void | boolean;
 
