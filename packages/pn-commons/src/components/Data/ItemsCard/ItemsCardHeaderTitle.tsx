@@ -1,6 +1,6 @@
 import { Grid, GridProps } from '@mui/material';
 
-import { CardElement, Item } from '../../../types';
+import { CardElement, Item } from '../../../models';
 
 export interface IItemsCardHeaderTitleProps {
   item: Item;

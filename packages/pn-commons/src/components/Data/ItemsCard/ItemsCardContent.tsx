@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-import { CardElement } from '../../../types';
+import { CardElement } from '../../../models';
 
 export interface IItemsCardContentProps {
   body: CardElement;

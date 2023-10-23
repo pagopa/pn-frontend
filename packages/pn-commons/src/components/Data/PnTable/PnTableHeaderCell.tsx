@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react';
 import { Box, TableCell, TableCellProps, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
-import { Sort } from '../../../types';
+import { Sort } from '../../../models';
 
 export interface IPnTableHeaderCellProps<ColumnId> {
   testId?: string;

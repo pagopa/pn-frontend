@@ -17,7 +17,6 @@ import {
   formatEurocentToCurrency,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/services/localization.service';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import { TrackEventType } from '../../utility/events';
@@ -143,13 +142,7 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   return (
     <>
       <NotificationDetailTable>
-        <NotificationDetailTableContents
-          label={getLocalizedOrDefaultLabel(
-            'notifications',
-            'detail.table-aria-label',
-            'Dettaglio notifica'
-          )}
-        >
+        <NotificationDetailTableContents label={t('detail.table-aria-label', { ns: 'notifiche' })}>
           <NotificationDetailTableBody>
             {detailTableRows.map((row) => (
               <NotificationDetailTableBodyRow key={row.id}>
