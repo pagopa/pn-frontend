@@ -121,8 +121,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result?.container.querySelector('form') as HTMLFormElement;
     const inputRecipientId = form!.querySelector(`input[name="recipientId"]`);
     const paste = createEvent.paste(inputRecipientId!, {
       clipboardData: {
