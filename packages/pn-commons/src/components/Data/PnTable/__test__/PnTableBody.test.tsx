@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Typography } from '@mui/material';
 
+import { Item } from '../../../../models';
 import { render } from '../../../../test-utils';
-import { Item } from '../../../../types';
 import PnTableBody from '../PnTableBody';
 import PnTableBodyCell from '../PnTableBodyCell';
 import PnTableBodyRow from '../PnTableBodyRow';

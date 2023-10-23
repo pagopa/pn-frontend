@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { CardElement, Item } from '../../../../models';
 import { render } from '../../../../test-utils';
-import { CardElement, Item } from '../../../../types';
 import ItemsCardHeaderTitle from '../ItemsCardHeaderTitle';
 
 const cardHeader: [CardElement, CardElement] = [

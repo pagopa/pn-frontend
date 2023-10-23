@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Typography } from '@mui/material';
 
+import { Item, Sort } from '../../../../models';
 import { fireEvent, render } from '../../../../test-utils';
-import { Item, Sort } from '../../../../types';
 import PnTableHeaderCell from '../PnTableHeaderCell';
 
 describe('PnTableHeaderCell', () => {

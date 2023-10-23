@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { CardElement } from '../../../../models';
 import { render } from '../../../../test-utils';
-import { CardElement } from '../../../../types';
 import ItemsCardBody from '../ItemsCardBody';
 import ItemsCardContent from '../ItemsCardContent';
 import ItemsCardContents from '../ItemsCardContents';
