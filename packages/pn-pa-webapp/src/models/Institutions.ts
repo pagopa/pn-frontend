@@ -22,24 +22,24 @@ export interface Institution {
   zipCode: string;
 }
 
-export interface AssistanceContacts {
+interface AssistanceContacts {
   supportEmail: string;
   supportPhone: string;
 }
 
-export interface CompanyInformations {
+interface CompanyInformations {
   businessRegisterPlace: string;
   rea: string;
   shareCapital: string;
 }
 
-export interface DpoData {
+interface DpoData {
   address: string;
   email: string;
   pec: string;
 }
 
-export interface PspData {
+interface PspData {
   abiCode: string;
   businessRegisterNumber: string;
   legalRegisterName: string;
@@ -47,7 +47,7 @@ export interface PspData {
   vatNumberGroup: boolean;
 }
 
-export interface RootParent {
+interface RootParent {
   description: string;
   id: string;
 }

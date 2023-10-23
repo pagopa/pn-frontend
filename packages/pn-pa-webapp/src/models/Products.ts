@@ -14,18 +14,18 @@ export interface Product {
   urlPublic: string;
 }
 
-export interface RoleMappings {
+interface RoleMappings {
   additionalProp1: AdditionalProp;
   additionalProp2: AdditionalProp;
   additionalProp3: AdditionalProp;
 }
 
-export interface AdditionalProp {
+interface AdditionalProp {
   multiroleAllowed: boolean;
   roles: Array<Role>;
 }
 
-export interface Role {
+interface Role {
   code: string;
   description: string;
   label: string;
