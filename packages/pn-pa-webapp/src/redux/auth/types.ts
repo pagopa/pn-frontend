@@ -18,7 +18,7 @@ export interface Organization {
   subUnitType?: string | null;
   aooParent?: string | null;
   rootParent?: {
-    id?: string;
-    description?: string;
+    id?: string | null;
+    description?: string | null;
   }
 }

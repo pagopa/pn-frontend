@@ -37,8 +37,8 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
   subUnitCode: yup.string().nullable(),
   subUnitType: yup.string().nullable(),
   rootParent: yup.object({
-    id: yup.string(),
-    description: yup.string(),
+    id: yup.string().nullable(),
+    description: yup.string().nullable(),
   }).notRequired()
 });
 
