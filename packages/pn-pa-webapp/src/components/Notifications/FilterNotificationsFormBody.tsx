@@ -157,26 +157,6 @@ const FilterNotificationsFormBody = ({
               sx: { marginBottom: isMobile ? '20px' : '0' },
             },
           }}
-          // slotProps={{
-          //   textField: (params) => (
-          //     <TextField
-          //       id="startDate"
-          //       name="startDate"
-          //       size="small"
-          //       {...params}
-          //       aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
-          //       inputProps={{
-          //         ...params.inputProps,
-          //         inputMode: 'text',
-          //         'aria-label': t('filters.data_da-input-aria-label'),
-          //         type: 'text',
-          //         placeholder: 'gg/mm/aaaa',
-          //       }}
-          //       fullWidth={isMobile}
-          //       sx={{ marginBottom: isMobile ? '20px' : '0' }}
-          //     />
-          //   ),
-          // }}
           disableFuture={true}
           minDate={tenYearsAgo}
           maxDate={endDate ? endDate : undefined}
