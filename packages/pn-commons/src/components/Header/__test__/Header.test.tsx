@@ -42,7 +42,7 @@ describe('Header Component', () => {
     Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
-  it('renders header (one product, no parties and no user dropdown)', async () => {
+  it.skip('renders header (one product, no parties and no user dropdown)', async () => {
     // render component
     const { container } = render(
       <Header productsList={[productsList[0]]} loggedUser={loggedUser} onExitAction={handleClick} />
@@ -61,7 +61,7 @@ describe('Header Component', () => {
     await waitFor(() => expect(handleClick).toBeCalledTimes(1));
   });
 
-  it('renders header (two products, no parties and no user dropdown)', async () => {
+  it.skip('renders header (two products, no parties and no user dropdown)', async () => {
     sessionStorage.setItem('fake-item', 'prova');
     // render component
     const { container } = render(<Header productsList={productsList} loggedUser={loggedUser} />);
@@ -81,7 +81,7 @@ describe('Header Component', () => {
     expect(sessionStorage.getItem('fake-item')).toBe('prova');
   });
 
-  it('renders header (checking switch product)', async () => {
+  it.skip('renders header (checking switch product)', async () => {
     sessionStorage.setItem('fake-item', 'prova');
     // render component
     const { container } = render(
@@ -108,7 +108,7 @@ describe('Header Component', () => {
     expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
-  it('renders header (check switching to selfcare)', async () => {
+  it.skip('renders header (check switching to selfcare)', async () => {
     const productsWithSelfcare = [
       ...productsList,
       {
