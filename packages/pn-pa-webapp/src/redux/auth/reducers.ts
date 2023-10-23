@@ -7,6 +7,7 @@ import {
   basicUserDataMatcherContents,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { PNRole, PartyRole, Role } from '../../models/user';
@@ -14,7 +15,9 @@ import {
   acceptPrivacy,
   acceptToS,
   exchangeToken,
+  getInstitutions,
   getPrivacyApproval,
+  getProductsOfInstitution,
   getToSApproval,
   logout,
 } from './actions';
@@ -89,6 +92,8 @@ const userSlice = createSlice({
       isFirstAccept: false,
       consentVersion: '',
     },
+    institutions: [] as Array<PartyEntity>,
+    productsOfInstitution: [] as Array<ProductEntity>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -151,6 +156,12 @@ const userSlice = createSlice({
     });
     builder.addCase(acceptPrivacy.rejected, (state) => {
       state.privacyConsent.accepted = false;
+    });
+    builder.addCase(getInstitutions.fulfilled, (state, action) => {
+      state.institutions = action.payload;
+    });
+    builder.addCase(getProductsOfInstitution.fulfilled, (state, action) => {
+      state.productsOfInstitution = action.payload;
     });
   },
 });

@@ -38,6 +38,7 @@ const LinkNewApiKey: React.FC = ({ children }) => {
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-first"
       aria-label={t('empty-action-label')}
       key="new-api-key"

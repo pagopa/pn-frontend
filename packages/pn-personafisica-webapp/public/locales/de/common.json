@@ -4,116 +4,116 @@
     "annulla filtro": "Filter entfernen",
     "indietro": "Zurück",
     "associa": "Zuordnen",
-    "capito": "Ich habe es verstanden",
+    "capito": "Verstanden",
     "conferma": "Bestätigen",
     "annulla": "Abbrechen",
     "modifica": "Bearbeiten",
     "salva": "Speichern",
     "elimina": "Löschen",
-    "enter": "Besuchen",
+    "enter": "Zugreifen",
     "exit": "Abmelden",
     "close": "Schließen",
     "enable": "Aktivieren",
     "disable": "Deaktivieren",
-    "go-to-home": "Zur Startseite gehen",
-    "go-to-login": "Zugriff"
+    "go-to-home": "Zur Startseite",
+    "go-to-login": "Anmelden"
   },
   "menu": {
     "notifiche": "Bescheide",
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Deine Anschriften",
-    "app-status": "Status der Plattform",
-    "aria-label": "Plattform-Bescheide Hauptmenü",
-    "aria-label-inner": "Plattform-Bescheide Navigation Empfänger"
+    "app-status": "Plattformstatus",
+    "aria-label": "Plattform-Bescheide Hauptnavigation",
+    "aria-label-inner": "Plattform-Bescheide Hauptnavigation"
   },
   "header": {
     "logout": "Abmelden",
     "pago-pa-link": "Website von PagoPA S.p.A."
   },
   "tos": {
-    "title": "SEND - Digitaler Dienst für die Zustellung von Bescheiden",
-    "body": "Um darauf zuzugreifen, lese und akzeptiere die Datenschutzerklärung und die Nutzungsbedingungen.",
-    "redo-body": "Die Datenschutzerklärung und die Nutzungsbedingungen haben sich geändert. Zum Anmelden, bitte die neue Version lesen und akzeptieren.",
-    "switch-label": "Ich akzeptiere die <0>Datenschutzerklärung</0> und die <1>Allgemeinen Geschäftsbedingungen</1> von SEND",
-    "button": "Zugriff"
+    "title": "SEND - Servizio Notifiche Digitali",
+    "body": "Um darauf zuzugreifen, lese und akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
+    "redo-body": "Die Nutzungsbedingungen für den Dienst und die Datenschutzerklärung haben sich geändert. Um zuzugreifen, akzeptiere und bestätige, dass du die neuen Versionen gelesen hast.",
+    "switch-label": "Ich akzeptiere die <1>Nutzungsbedingungen</1> und bestätige, dass ich die <0>Datenschutzerklärung</0> gelesen habe",
+    "button": "Anmelden"
   },
   "table": {
-    "aria-label": "Tabelle Elemente"
+    "aria-label": "Item-Tabelle"
   },
   "paginator": {
-    "aria-label": "Menü Seitenaufstellung",
-    "first": "erstes Element",
-    "last": "letztes Element",
+    "aria-label": "Menü Seite",
+    "first": "Erstes Element",
+    "last": "Letztes Element",
     "page": "Seite",
-    "next": "Weiter zur nächsten Seite",
-    "previous": "Zurück zur vorherigen Seite",
-    "selected": "Element ausgewählt",
+    "next": "Zur nächsten Seite",
+    "previous": "Zur vorherigen Seite",
+    "selected": "ausgewähltes Element",
     "rows-per-page": "Zeilen pro Seite"
   },
   "toast": {
-    "aria-label": "Symbol für das Schließen von Toast"
+    "aria-label": "Symbol zum Schließen von Toast"
   },
   "date-picker": {
     "left-arrow": "Zum Vormonat",
     "right-arrow": "Zum nächsten Monat",
-    "switch-to-year": "Kalendermodus aktiv, wechseln zum Modus Wahl des Jahres",
-    "switch-to-calendar": "Modus Wahl des Jahres aktiv, wechseln zum Kalendermodus",
-    "select-date": "Datum auswählen",
-    "date-selected": "Datum auswählen, das ausgewählte Datum ist {{date}}"
+    "switch-to-year": "Kalendermodus aktiv, wechselt in den Jahreswahlmodus",
+    "switch-to-calendar": "Jahreswahlmodus aktiv, wechselt in den Kalendermodus",
+    "select-date": "Datum wählen",
+    "date-selected": "Datum wählen, das gewählte Datum ist {{date}}"
   },
   "date-time": {
     "today-uppercase-initial": "Heute",
-    "hour-of-day": "Uhrzeit"
+    "hour-of-day": "Stunden"
   },
   "error-boundary": {
     "title": "Etwas ist schiefgelaufen",
-    "description": "Die Seite konnte nicht geladen werden. Lade sie neu oder versuche es später noch einmal.",
-    "action": "Seite erneut laden"
+    "description": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
+    "action": "Seite neu laden"
   },
   "not-accessible": {
-    "title": "Auf die Plattform kann nicht zugegriffen werden",
-    "description": "Versuche es in einigen Stunden noch mal. Wenn du Hilfe brauchst,",
-    "action": "schreibe uns"
+    "title": "Der Zugriff auf die Plattform ist nicht möglich",
+    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Weitere Informationen dazu ",
+    "action": "auf der entsprechenden Website"
   },
   "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
-  "not-logged": "Zugriff auf SEND",
-  "not-logged-subtitle": "Um deine Bescheide anzuzeigen und zu verwalten, melde dich mit SPID oder CIE an.",
+  "not-logged": "Auf SEND zugreifen",
+  "not-logged-subtitle": "Anmeldung mit SPID oder CIE, um Bescheide anzuzeigen oder zu verwalten.",
   "not-found": {
-    "title": "404: Die gesuchte Seite ist nicht vorhanden",
-    "descpription": "Du bist aus Versehen hier gelandet, benutze die Navigation."
+    "title": "404: Die gesuchte Seite existiert nicht",
+    "descpription": "Du bist versehentlich hier gelandet, benutze die Navigation."
   },
   "leaving-app": {
     "title": "Du verlässt SEND",
-    "message": "Du wirst umgeleitet"
+    "message": "Du wirst weitergeleitet"
   },
   "error-when-fetching-tos-status": {
-    "title": "Probleme beim Anmelden bei SEND",
-    "message": "Bitte versuche es später noch einmal"
+    "title": "Probleme beim Zugriff auf SEND",
+    "message": "Bitte später erneut versuchen"
   },
   "messages": {
     "404-title": "Quelle nicht gefunden",
     "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "403-title": "Deine Sitzung ist abgelaufen",
-    "403-message": "Logge dich mit SPID oder CIE ein.",
+    "403-title": "Sitzung abgelaufen",
+    "403-message": "Melde dich mit SPID oder CIE an.",
     "401-title": "Unberechtigter Benutzer",
     "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
-    "451-title": "Plattform nicht erreichbar",
-    "451-message": "Auf die Plattform kann nicht zugegriffen werden",
-    "500-title": "Der Dienst ist nicht verfügbar",
-    "500-message": "Aufgrund einer vorübergehenden Störung konnte deine Anfrage nicht gesendet werden. Versuche es später noch einmal.",
-    "lacking-grants-for-app-title": "Du bist für den Zugriff nicht berechtigt",
-    "invalid-token-title": "Aufgrund eines technisches Problem ist kein Zugriff möglich - ungültiger Token",
-    "generic-token-exchange-problem": "Der Zugriff konnte nicht abgeschlossen werden",
+    "451-title": "Plattform nicht zugänglich",
+    "451-message": "Der Zugriff auf die Plattform ist nicht möglich",
+    "500-title": "Dienst nicht erreichbar",
+    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal.",
+    "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt",
+    "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
+    "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
     "generic-title": "Allgemeiner Fehler",
     "generic-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "generic-api-error-main-text": "Es ist uns nicht gelungen, diese Daten wiederherzustellen.",
+    "generic-api-error-main-text": "Wir konnten diese Daten nicht wiederherstellen.",
     "generic-api-error-action-text": "Erneut laden"
   },
   "footer": {
     "go-to-pagopa": "Link: Gehe auf die Website von PagoPA S.p.A.",
     "go-to": "Zum Link",
-    "privacy-info": "Informativa Privacy",
+    "privacy-info": "Datenschutzerklärung",
     "who": "Über uns",
     "work": "Karriere",
     "certifications": "Zertifizierungen",
@@ -122,16 +122,18 @@
     "cookie": "Cookie-Einstellungen",
     "terms-conditions": "Allgemeine Geschäftsbedingungen",
     "company": "Transparente Gesellschaft",
-    "disclosure": "Offenlegungsgrundsätze",
-    "321-model": "Formular 231",
+    "disclosure": "Responsible Disclosure Policy",
+    "321-model": "Vordruck 231",
     "accessibility": "Zugänglichkeit",
     "social": "Link: Gehe auf die Website {{social}} von PagoPA S.p.A.",
     "resources": "Quellen",
     "follow": "Folge uns auf",
     "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 - Nr. des Eintrags im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009"
+    "legal-part-2": "PLZ 00187 – Eintrag im Handelsregister von Rom Nr., Steuernummer und USt-IdNr. 15376371009"
   },
   "required-fields": "* Pflichtfelder",
+  "required-field": "Pflichtfeld",
+  "too-long-field-error": "Maximal {{maxLength}} Zeichen",
   "validation": {
     "search-pattern-length-limit": "Suche max. {{maxLength}} Zeichen",
     "invalid-characters-not-inserted": "Ungültige Zeichen wurden nicht eingegeben."
@@ -139,31 +141,31 @@
   "errors": {
     "bad_request": {
       "title": "Fehler beim Senden der Daten",
-      "message": "Das Format der Anfrage ist ungültig."
+      "message": "Format der Anfrage ungültig."
     },
     "unauthorized": {
       "title": "Unberechtigter Benutzer",
       "message": "Der aktuelle Benutzer hat keine Berechtigungen."
     },
     "unavailable_legal_reasons": {
-      "title": "Plattform nicht erreichbar",
-      "message": "Auf die Plattform kann nicht zugegriffen werden"
+      "title": "Plattform nicht zugänglich",
+      "message": "Der Zugriff auf die Plattform ist nicht möglich"
     },
     "forbidden": {
-      "title": "Deine Sitzung ist abgelaufen",
-      "message": "Logge dich mit SPID oder CIE ein."
+      "title": "Sitzung abgelaufen",
+      "message": "Melde dich mit SPID oder CIE an."
     },
     "not_found": {
       "title": "Quelle nicht gefunden",
-      "message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen."
     },
     "internal_server": {
-      "title": "Der Dienst ist nicht verfügbar",
-      "message": "Aufgrund einer vorübergehenden Störung konnte deine Anfrage nicht gesendet werden. Versuche es später noch einmal."
+      "title": "Dienst nicht erreichbar",
+      "message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal."
     },
     "unhandled": {
       "title": "Allgemeiner Fehler",
-      "message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen."
     },
     "unknown": {
       "title": "Fehler",
