@@ -7,10 +7,18 @@ export interface User extends BasicUser {
 }
 
 export interface Organization {
+  parentDescription?: string;
   id: string;
   roles: Array<Role>;
   fiscal_code: string; // organization fiscal code
   groups?: Array<string>;
   hasGroups?: boolean;
   name: string;
+  subUnitCode?: string;
+  subUnitType?: string;
+  aooParent?: string;
+  rootParent?: {
+    id: string;
+    description: string;
+  }
 }
