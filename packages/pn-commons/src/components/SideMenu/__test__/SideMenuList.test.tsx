@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { selfcareMenuItems, sideMenuItems } from '../../../__mocks__/SideMenu.mock';
+import { SideMenuItem } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
-import { SideMenuItem } from '../../../types';
 import SideMenuList from '../SideMenuList';
 
 async function testMenuItem(

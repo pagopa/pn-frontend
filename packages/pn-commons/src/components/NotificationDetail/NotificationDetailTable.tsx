@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { NotificationDetailTableRow } from '../../types';
+import { NotificationDetailTableRow } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;

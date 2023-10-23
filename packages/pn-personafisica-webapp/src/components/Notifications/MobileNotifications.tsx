@@ -61,6 +61,7 @@ const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFi
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-first"
       aria-label={t('empty-state.aria-label-remove-filters')}
       key="remove-filters"
@@ -78,6 +79,7 @@ const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children 
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-first"
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"

@@ -9,7 +9,7 @@ import {
   RadioGroup,
 } from '@mui/material';
 
-import { CardSort, Sort } from '../../types';
+import { CardSort, Sort } from '../../models';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';

@@ -1,3 +1,4 @@
+import { Configuration } from '../services/configuration.service';
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
@@ -23,6 +24,7 @@ import { calcUnit8Array } from './file.utility';
 import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
+import { initLocalization } from './localization.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -104,4 +106,6 @@ export {
   sanitizeString,
   sortArray,
   waitForElement,
+  initLocalization,
+  Configuration,
 };

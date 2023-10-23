@@ -5,7 +5,7 @@ import { alpha } from '@mui/material/styles';
 
 import { useIsMobile } from '../../hooks';
 import { AppCurrentStatus } from '../../models';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
   const theme = useTheme();

@@ -11,8 +11,8 @@ import {
   ListItemText,
 } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { SideMenuItem } from '../../types';
+import { SideMenuItem } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
