@@ -60,8 +60,9 @@ class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> 
 export function getConfiguration(): LoginConfiguration {
   const configurationFromFile = Configuration.get<LoginConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const VERSION = process.env.REACT_APP_VERSION ?? '';
-  const BASE_URL = process.env.PUBLIC_URL;
+  const VERSION = import.meta.env.VITE_APP_VERSION ?? '';
+  // const BASE_URL = process.env.PUBLIC_URL;
+  const BASE_URL = '';
 
   return {
     ...configurationFromFile,

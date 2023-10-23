@@ -8,6 +8,7 @@ module.exports = {
   },
   transform: {
     "^.+\\.(?:ts|tsx)?$": "babel-jest",
+    "\\.svg$": "<rootDir>/../../svgTransformerForTests.js",
   },
   clearMocks: true,
 };
