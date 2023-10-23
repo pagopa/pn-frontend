@@ -34,7 +34,7 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats: essayez avec des filtres différents. <0>Supprimer les filtres</0>",
+    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer les filtres</0>",
     "no-notifications": "Il n’y a pas de notifications pour {{name}}.",
     "delegate": "Il n’y a pas de notifications mandatées à {{name}} à lire.",
     "aria-label-remove-filters": "Supprimer les filtres"
