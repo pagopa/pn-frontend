@@ -3,7 +3,7 @@ import { Component, ErrorInfo } from 'react';
 import { Box, Button, SxProps, Typography } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
   sx?: SxProps;

@@ -12,10 +12,96 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
+  getF24Payments,
+  getPagoPaF24Payments,
+  AnalogDetails,
+  NotificationDetailPayment,
+  PaidDetails,
+  PaymentsData,
 } from '@pagopa-pn/pn-commons';
-import { AnalogDetails } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 
 import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
+
+export const payments: Array<NotificationDetailPayment> = [
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695132',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38c.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695133',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+    f24: {
+      title: 'F24 seconda rata TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695134',
+      applyCost: false,
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695135',
+      applyCost: false,
+    },
+  },
+  {
+    f24: {
+      title: 'F24 prima rata F24',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38d.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+];
 
 const statusHistory: Array<NotificationStatusHistory> = [
   {
@@ -294,9 +380,23 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 1,
     },
   },
+  {
+    elementId: 'NOTIFICATION_PAID.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_1',
+    timestamp: '2023-05-10T12:00:27.251102669Z',
+    legalFactsIds: [],
+    category: TimelineCategory.PAYMENT,
+    details: {
+      recIndex: 1,
+      recipientType: RecipientType.PG,
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695132',
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
+      amount: 8000,
+    } as PaidDetails,
+  },
 ];
 
-const recipients: Array<NotificationDetailRecipient> = [
+export const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
   } as NotificationDetailRecipient,
@@ -314,30 +414,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       province: 'MESSINA',
       foreignState: 'ITALIA',
     },
-    payment: {
-      creditorTaxId: '77777777777',
-      noticeCode: '302181677769720267',
-      pagoPaForm: {
-        digests: {
-          sha256: 'mocked-pagopa-sha256',
-        },
-        contentType: 'application/pdf',
-        ref: {
-          key: 'mocked-pagopa-key',
-          versionToken: 'mockedVersionToken',
-        },
-      },
-      f24flatRate: {
-        digests: {
-          sha256: 'mocked-f24-sha256',
-        },
-        contentType: 'application/pdf',
-        ref: {
-          key: 'mocked-f24-key',
-          versionToken: 'mockedVersionToken',
-        },
-      },
-    },
+    payments,
   },
   {
     recipientType: RecipientType.PG,
@@ -377,4 +454,42 @@ export const notificationDTO: NotificationDetail = {
   timeline,
 };
 
+export const cancelledNotificationDTO: NotificationDetail = {
+  ...notificationDTO,
+  notificationStatus: NotificationStatus.CANCELLED,
+  timeline: [
+    ...notificationDTO.timeline,
+    {
+      elementId: 'NOTIFICATION_CANCELLED.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_1',
+      timestamp: '2023-05-09T18:42:27.109686054Z',
+      category: TimelineCategory.NOTIFICATION_CANCELLED,
+      details: {
+        recIndex: 1,
+      },
+    },
+  ],
+  notificationStatusHistory: [
+    ...notificationDTO.notificationStatusHistory,
+    {
+      status: NotificationStatus.CANCELLED,
+      activeFrom: '2023-05-09T18:42:27.109686054Z',
+      relatedTimelineElements: ['NOTIFICATION_CANCELLED.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_1'],
+    },
+  ],
+};
+
+export const paymentsData: PaymentsData = {
+  pagoPaF24: getPagoPaF24Payments(payments, 1),
+  f24Only: getF24Payments(payments, 1),
+};
+
 export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
+
+export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
+  const notification = { ...notificationDTO, ...overrideObj };
+  return parseNotificationDetailForRecipient(notification);
+};
+
+export const cancelledNotificationToFe = parseNotificationDetailForRecipient(
+  _.cloneDeep(cancelledNotificationDTO)
+);

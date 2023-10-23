@@ -3,8 +3,8 @@ import React from 'react';
 import BalconyIcon from '@mui/icons-material/Balcony';
 import { Button } from '@mui/material';
 
+import { KnownSentiment } from '../../models';
 import { fireEvent, render } from '../../test-utils';
-import { KnownSentiment } from '../../types';
 import EmptyState from '../EmptyState';
 
 describe('EmptyState component', () => {

@@ -19,6 +19,7 @@ interface PfConfigurationFromFile {
   // this will be removed when delegations to pg works correctly
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS?: boolean;
+  F24_DOWNLOAD_WAIT_TIME: number;
 }
 
 interface PfConfiguration extends PfConfigurationFromFile {
@@ -38,6 +39,7 @@ interface PfConfiguration extends PfConfigurationFromFile {
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS: boolean;
+  F24_DOWNLOAD_WAIT_TIME: number;
 }
 
 class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
@@ -57,6 +59,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
+    this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
   }
 
   makeRequired(rule: StringRuleValidator<PfConfigurationFromFile, string>): void {
@@ -86,6 +89,7 @@ export function getConfiguration(): PfConfiguration {
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
+    F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
   };
 }
 

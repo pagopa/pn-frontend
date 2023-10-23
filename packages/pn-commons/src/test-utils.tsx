@@ -18,7 +18,7 @@ import {
 } from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
-import { initLocalization } from './services/localization.service';
+import { initLocalization } from './utility/localization.utility';
 
 type NavigationRouter = 'default' | 'none';
 

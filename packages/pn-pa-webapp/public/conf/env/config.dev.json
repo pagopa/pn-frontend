@@ -9,7 +9,8 @@
   "ONE_TRUST_DRAFT_MODE": false,
   "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
   "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
-  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it/",
+  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
   "IS_PAYMENT_ENABLED": false,
-  "WORK_IN_PROGRESS": false
+  "WORK_IN_PROGRESS": false,
+  "API_B2B_LINK":"https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/pn-openapi-prod/docs/openapi/api-external-b2b-pa-bundle.yaml"
 }

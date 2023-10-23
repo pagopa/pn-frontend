@@ -1,37 +1,47 @@
 import _ from 'lodash';
 
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
   getTimelineElem,
   notificationDTO,
   notificationDTOMultiRecipient,
   notificationToFe,
   notificationToFeMultiRecipient,
+  payments,
 } from '../../__mocks__/NotificationDetail.mock';
-import { initLocalization } from '../../services';
-import { initLocalizationForTest } from '../../test-utils';
 import {
+  AarDetails,
+  AppIoCourtesyMessageEventType,
   DigitalDomicileType,
+  F24PaymentDetails,
+  INotificationDetailTimeline,
   LegalFactType,
   NotificationDeliveryMode,
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  PagoPAPaymentFullDetails,
+  PaidDetails,
+  PaymentDetails,
+  PaymentStatus,
+  PaymentsData,
   RecipientType,
   SendDigitalDetails,
   TimelineCategory,
-} from '../../types';
-import {
-  AarDetails,
-  AppIoCourtesyMessageEventType,
   ViewedDetails,
-} from '../../types/NotificationDetail';
+} from '../../models';
+import { initLocalizationForTest } from '../../test-utils';
+import { initLocalization } from '../../utility';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
 import { formatDate } from '../date.utility';
 import {
+  getF24Payments,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
+  getPagoPaF24Payments,
   parseNotificationDetail,
+  populatePaymentsPagoPaF24,
 } from '../notification.utility';
 
 function testNotificationStatusInfos(
@@ -716,34 +726,6 @@ describe('parse notification & filters', () => {
     });
   });
 
-  it('check filling of the paymentHistory', () => {
-    // no PAYMENT -> empty paymentHistory
-    const noPAYMENTNotification = {
-      ..._.cloneDeep(notificationDTOMultiRecipient),
-      timeline: notificationDTOMultiRecipient.timeline.filter(
-        (tm) => tm.category !== TimelineCategory.PAYMENT
-      ),
-    };
-    let calculatedParsedNotification = parseNotificationDetail(noPAYMENTNotification);
-    expect(calculatedParsedNotification.paymentHistory).toHaveLength(0);
-    // PAYMENT -> filled paymentHistory
-    const PAYMENTTimelineElems = notificationDTOMultiRecipient.timeline.filter(
-      (tm) => tm.category === TimelineCategory.PAYMENT
-    );
-    calculatedParsedNotification = parseNotificationDetail(
-      _.cloneDeep(notificationDTOMultiRecipient)
-    );
-    expect(calculatedParsedNotification.paymentHistory).toHaveLength(PAYMENTTimelineElems.length);
-    PAYMENTTimelineElems.forEach((payment, index) => {
-      expect(calculatedParsedNotification.paymentHistory![index]).toStrictEqual({
-        ...payment.details,
-        recipientDenomination:
-          notificationDTOMultiRecipient.recipients[payment.details.recIndex!].denomination,
-        recipientTaxId: notificationDTOMultiRecipient.recipients[payment.details.recIndex!].taxId,
-      });
-    });
-  });
-
   it('insert cancellation status', () => {
     const cancellationInProgressNotification = {
       ..._.cloneDeep(notificationDTO),
@@ -1063,5 +1045,214 @@ describe('parse notification & filters', () => {
         (viewedElement.details as ViewedDetails).delegateInfo!.taxId
       })`
     );
+  });
+});
+
+describe('Populate pagoPA and F24 payments', () => {
+  const paymentsData: PaymentsData = {
+    pagoPaF24: getPagoPaF24Payments(payments, 0),
+    f24Only: getF24Payments(payments, 0),
+  };
+
+  it('return empty array if user payments is an empty array', () => {
+    const mappedPayments = populatePaymentsPagoPaF24(notificationToFe.timeline, [], paymentInfo);
+    expect(mappedPayments).toStrictEqual([]);
+  });
+
+  it('With empty timeline it should return the mapped array with only external registry info', () => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
+      return {
+        pagoPa: item.pagoPa ? { ...item.pagoPa, ...paymentInfo[index] } : undefined,
+        f24: item.f24,
+      } as PaymentDetails;
+    });
+
+    const mappedPayments = populatePaymentsPagoPaF24([], paymentsData.pagoPaF24, paymentInfo);
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('When populatePaymentHistory receive only one payment from checkout it should map only this payment', () => {
+    let res: Array<PaymentDetails> = [];
+    let singlePaymentInfo = paymentInfo[0];
+
+    paymentsData.pagoPaF24.forEach((item, index) => {
+      if (
+        singlePaymentInfo?.creditorTaxId === item.pagoPa?.creditorTaxId &&
+        singlePaymentInfo.noticeCode === item.pagoPa?.noticeCode
+      ) {
+        const checkoutSucceded =
+          paymentInfo[index].status === PaymentStatus.SUCCEEDED ? paymentInfo[index] : undefined;
+
+        const timelineEvent = notificationToFe.timeline.find(
+          (event) =>
+            event.category === TimelineCategory.PAYMENT &&
+            (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+            (event.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+        )?.details;
+
+        res = [
+          ...res,
+          {
+            pagoPa: { ...item.pagoPa, ...paymentInfo[index], ...timelineEvent },
+            f24: item.f24,
+          } as PaymentDetails,
+        ];
+      }
+      if (!item.pagoPa && item.f24) {
+        res = [
+          ...res,
+          {
+            pagoPa: undefined,
+            f24: item.f24,
+          } as PaymentDetails,
+        ];
+      }
+    });
+
+    const mappedPayments = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      [singlePaymentInfo]
+    );
+
+    expect(mappedPayments).toHaveLength(res.length);
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('With empty external registry it should return the mapped array with only timeline info', () => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
+      const timelineEvent = notificationToFe.timeline.find(
+        (event) =>
+          event.category === TimelineCategory.PAYMENT &&
+          (event.details as PaidDetails).creditorTaxId === item.pagoPa?.creditorTaxId &&
+          (event.details as PaidDetails).noticeCode === item.pagoPa?.noticeCode
+      )?.details;
+
+      const pagoPAPayment = item.pagoPa
+        ? ({ ...item.pagoPa, ...timelineEvent } as PagoPAPaymentFullDetails)
+        : undefined;
+      if (timelineEvent && pagoPAPayment) {
+        pagoPAPayment.status = PaymentStatus.SUCCEEDED;
+      }
+
+      return {
+        pagoPa: pagoPAPayment,
+        f24: item.f24,
+      } as PaymentDetails;
+    });
+
+    const mappedPayments = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      []
+    );
+
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
+      const checkoutSucceded =
+        item.pagoPa && paymentInfo[index].status === PaymentStatus.SUCCEEDED
+          ? paymentInfo[index]
+          : undefined;
+
+      const timelineEvent = notificationToFe.timeline.find(
+        (event) =>
+          event.category === TimelineCategory.PAYMENT &&
+          (event.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+          (event.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+      )?.details;
+
+      return {
+        pagoPa: item.pagoPa
+          ? { ...item.pagoPa, ...paymentInfo[index], ...timelineEvent }
+          : undefined,
+        f24: item.f24,
+      } as PaymentDetails;
+    });
+
+    const mappedPayments = populatePaymentsPagoPaF24(
+      notificationToFe.timeline,
+      paymentsData.pagoPaF24,
+      paymentInfo
+    );
+
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('If timeline has some undefined keys it should return the mapped array with the ext registry values of the undefined timeline keys', () => {
+    const timeline: INotificationDetailTimeline[] = notificationToFe.timeline.map((item) => ({
+      ...item,
+      amount: undefined,
+    }));
+
+    const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
+      const checkoutSucceded =
+        item.pagoPa && paymentInfo[index].status === PaymentStatus.SUCCEEDED
+          ? paymentInfo[index]
+          : undefined;
+
+      const timelineEvent = notificationToFe.timeline.find(
+        (item) =>
+          item.category === TimelineCategory.PAYMENT &&
+          (item.details as PaidDetails).creditorTaxId === checkoutSucceded?.creditorTaxId &&
+          (item.details as PaidDetails).noticeCode === checkoutSucceded.noticeCode
+      )?.details;
+
+      return {
+        pagoPa: item.pagoPa
+          ? { ...item.pagoPa, ...paymentInfo[index], ...timelineEvent }
+          : undefined,
+        f24: item.f24,
+      } as PaymentDetails;
+    });
+
+    const mappedPayments = populatePaymentsPagoPaF24(timeline, paymentsData.pagoPaF24, paymentInfo);
+
+    expect(mappedPayments).toStrictEqual(res);
+  });
+
+  it('should populate the F24 payments with recipientIdx using getF24Payments', () => {
+    const onlyF24 = true;
+    const recIndex = 2;
+
+    const res = payments.reduce((arr, payment, index) => {
+      if (payment.f24 && ((onlyF24 && !payment.pagoPa) || !onlyF24)) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push({
+          ...payment.f24,
+          attachmentIdx: index,
+          recIndex,
+        });
+      }
+      return arr;
+    }, [] as Array<F24PaymentDetails>);
+
+    const f24Payments = getF24Payments(payments, recIndex, onlyF24);
+
+    expect(f24Payments).toStrictEqual(res);
+  });
+
+  it('should populate the PagoPa payments with recipientIdx using getPagoPaF24Payments', () => {
+    const recIndex = 1;
+    const res = payments.reduce((arr, payment, index) => {
+      if (payment.pagoPa) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push({
+          pagoPa: {
+            ...payment.pagoPa,
+            attachmentIdx: index,
+            recIndex,
+          } as PagoPAPaymentFullDetails,
+          f24: payment.f24 ? { ...payment.f24, attachmentIdx: index, recIndex } : undefined,
+        });
+      }
+      return arr;
+    }, [] as Array<PaymentDetails>);
+
+    const pagoPaF24Payments = getPagoPaF24Payments(payments, recIndex);
+
+    expect(pagoPaF24Payments).toStrictEqual(res);
   });
 });

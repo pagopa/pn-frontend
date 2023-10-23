@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, TableContainer } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnTableBody, { IPnTableBodyProps } from './PnTable/PnTableBody';
 import PnTableHeader, { IPnTableHeaderProps } from './PnTable/PnTableHeader';
 

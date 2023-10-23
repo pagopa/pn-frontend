@@ -1,8 +1,7 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 
-import { KnownSentiment } from '../types';
-import { iconForKnownSentiment } from '../types/EmptyState';
+import { KnownSentiment, iconForKnownSentiment } from '../models/EmptyState';
 
 export interface IEmptyStateProps {
   sentimentIcon?: KnownSentiment | SvgIconComponent;

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { DowntimeLogPage } from '../../models';
-import { Column, Item } from '../../types';
+import { Column, DowntimeLogPage, Item } from '../../models';
 import PnTable from '../Data/PnTable';
 import PnTableBody from '../Data/PnTable/PnTableBody';
 import PnTableBodyCell from '../Data/PnTable/PnTableBodyCell';

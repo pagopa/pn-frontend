@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { CardAction, CardElement, Item } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
-import { CardAction, CardElement, Item } from '../../../types';
 import ItemsCard from '../ItemsCard';
 import ItemsCardAction from '../ItemsCard/ItemsCardAction';
 import ItemsCardActions from '../ItemsCard/ItemsCardActions';

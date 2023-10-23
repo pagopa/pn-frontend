@@ -1,4 +1,4 @@
-import { useDownloadDocument } from './useDownloadDocument';
+import { downloadDocument, useDownloadDocument } from './useDownloadDocument';
 import { useErrors } from './useErrors';
 import { useHasPermissions } from './useHasPermissions';
 import { useIsCancelled } from './useIsCancelled';
@@ -21,5 +21,6 @@ export {
   useProcess,
   useRewriteLinks,
   useHasPermissions,
+  downloadDocument,
   useIsCancelled,
 };

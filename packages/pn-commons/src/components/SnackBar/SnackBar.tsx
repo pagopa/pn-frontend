@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Alert, IconButton, Snackbar } from '@mui/material';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
-import { MessageType } from '../../types/MessageType';
+import { MessageType } from '../../models/MessageType';
 
 type Props = {
   /** whether the sneakbar should be open or not */

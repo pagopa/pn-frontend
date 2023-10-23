@@ -45,6 +45,7 @@ const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, c
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-first"
       aria-label={t('empty-state.aria-label-remove-filters')}
       key="remove-filters"
@@ -61,6 +62,7 @@ const LinkApiKey: React.FC<{ onApiKeys: () => void }> = ({ children, onApiKeys }
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-first"
       aria-label={t('empty-state.aria-label-api-keys')}
       key="api-keys"
@@ -80,6 +82,7 @@ const LinkCreateNotification: React.FC<{ onManualSend: () => void }> = ({
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-second"
       aria-label={t('empty-state.aria-label-create-notification')}
       key="create-notification"

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { DowntimeLogPage } from '../../models';
-import { CardElement, Item } from '../../types';
+import { CardElement, DowntimeLogPage, Item } from '../../models';
 import ItemsCard from '../Data/ItemsCard';
 import ItemsCardBody from '../Data/ItemsCard/ItemsCardBody';
 import ItemsCardContent from '../Data/ItemsCard/ItemsCardContent';

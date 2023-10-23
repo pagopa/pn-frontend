@@ -1,8 +1,7 @@
 import React from 'react';
 
+import { Item, SmartTableAction, SmartTableData, Sort } from '../../../models';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
-import { Item, Sort } from '../../../types';
-import { SmartTableAction, SmartTableData } from '../../../types/SmartTable';
 import EmptyState from '../../EmptyState';
 import SmartFilter from '../SmartFilter';
 import SmartTable from '../SmartTable';

@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { NotificationDetailTableRow } from '../../../models';
 import { fireEvent, render, within } from '../../../test-utils';
-import { NotificationDetailTableRow } from '../../../types';
 import NotificationDetailTable from '../NotificationDetailTable';
 import NotificationDetailTableAction from '../NotificationDetailTable/NotificationDetailTableAction';
 import NotificationDetailTableBody from '../NotificationDetailTable/NotificationDetailTableBody';

@@ -5,7 +5,6 @@ import { Box, Button } from '@mui/material';
 import {
   INotificationDetailTimeline,
   NotificationDetail,
-  NotificationDetailRecipient,
   NotificationDetailTable,
   NotificationDetailTableAction,
   NotificationDetailTableBody,
@@ -24,6 +23,7 @@ import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import ConfirmCancellationDialog from './ConfirmCancellationDialog';
+import NotificationRecipientsDetail from './NotificationRecipientsDetail';
 
 type Props = {
   notification: NotificationDetail;
@@ -35,10 +35,6 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   const [showModal, setShowModal] = useState(false);
   const { cancellationInProgress, cancelled } = useIsCancelled({ notification });
   const { recipients } = notification;
-  const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-  const recipientsWithAltNoticeCode = recipients.filter(
-    (recipient) => recipient.payment?.noticeCodeAlternative
-  );
   const withPayment =
     notification.timeline.findIndex(
       (el: INotificationDetailTimeline) => el.category === TimelineCategory.PAYMENT
@@ -56,29 +52,6 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   const handleModalCloseAndProceed = () => {
     setShowModal(false);
     onCancelNotification();
-  };
-
-  const getRecipientsNoticeCodeField = (
-    filteredRecipients: Array<NotificationDetailRecipient>,
-    alt: boolean = false
-  ): ReactNode => {
-    if (filteredRecipients.length > 1) {
-      return filteredRecipients.map((recipient) => (
-        <Box key={recipient.taxId} fontWeight={600}>
-          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
-          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
-        </Box>
-      ));
-    }
-
-    return (
-      <Box fontWeight={600}>
-        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
-        {alt
-          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
-          : filteredRecipients[0]?.payment?.noticeCode}
-      </Box>
-    );
   };
 
   const getTaxIdLabel = (taxId: string): string =>
@@ -111,17 +84,7 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
           ? t('detail.recipients', { ns: 'notifiche' })
           : t(getTaxIdLabel(recipients[0]?.taxId), { ns: 'notifiche' }),
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: (
-        <>
-          {recipients.map((recipient) => (
-            <Box key={recipient.taxId} fontWeight={600} data-testid="recipientsRow">
-              {recipients.length > 1
-                ? `${recipient.taxId} - ${recipient.denomination}`
-                : recipient.taxId}
-            </Box>
-          ))}
-        </>
-      ),
+      value: <NotificationRecipientsDetail recipients={recipients} iun={notification.iun} />,
     },
     {
       label: t('detail.date', { ns: 'notifiche' }),
@@ -157,16 +120,6 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
       label: t('detail.cancelled-iun', { ns: 'notifiche' }),
       rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
-      label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
-    },
-    {
-      label: t('detail.secondary-notice-code', { ns: 'notifiche' }),
-      rawValue: recipientsWithAltNoticeCode.join(', '),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
     },
     {
       label: t('detail.groups', { ns: 'notifiche' }),

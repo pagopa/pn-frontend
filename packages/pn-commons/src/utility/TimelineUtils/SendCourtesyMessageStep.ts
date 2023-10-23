@@ -1,14 +1,9 @@
-import {
-  DigitalDomicileType,
-  SendCourtesyMessageDetails,
-} from '../../types';
+import { DigitalDomicileType, SendCourtesyMessageDetails } from '../../models';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendCourtesyMessageStep extends TimelineStep {
-  getTimelineStepInfo(
-    payload: TimelineStepPayload
-  ):  TimelineStepInfo| null {
-     /* eslint-disable-next-line functional/no-let */
+  getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
+    /* eslint-disable-next-line functional/no-let */
     let type = 'sms';
     const digitalType = (payload.step?.details as SendCourtesyMessageDetails).digitalAddress.type;
     if (digitalType === DigitalDomicileType.EMAIL) {
@@ -23,7 +18,7 @@ export class SendCourtesyMessageStep extends TimelineStep {
         payload.isMultiRecipient,
         'Invio del messaggio di cortesia',
         `È in corso l'invio del messaggio di cortesia a ${payload.recipient?.denomination} tramite ${type}`,
-        { ...this.nameAndTaxId(payload), type, }
+        { ...this.nameAndTaxId(payload), type }
       ),
     };
   }

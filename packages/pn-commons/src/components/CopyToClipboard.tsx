@@ -57,7 +57,7 @@ const CopyToClipboard: React.FC<Props> = ({
     <Button
       component={Link}
       color="primary"
-      sx={alertButtonStyle}
+      sx={{ ...alertButtonStyle }}
       onClick={doCopyToClipboard}
       disabled={disabled}
       aria-label={copied ? tooltip : tooltipBefore}

@@ -68,4 +68,12 @@ describe('Routes utility', () => {
     });
     expect(route).toEqual('/prefix');
   });
+
+  it('Route with version', () => {
+    const route = compileRoute({
+      prefix: 'prefix',
+      version: 'v1',
+    });
+    expect(route).toEqual('/prefix/v1');
+  });
 });

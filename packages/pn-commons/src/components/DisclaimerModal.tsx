@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
   onConfirm: () => void;
