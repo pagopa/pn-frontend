@@ -87,20 +87,20 @@ describe('CodeInput Component', () => {
     (codeInputs[2] as HTMLInputElement).setSelectionRange(1, 1);
     // when we try to edit an input, we insert a second value and after, based on cursor position, we change the value
     // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
-    userEvent.keyboard('4');
+    await userEvent.keyboard('4');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('4');
     });
     // move the cursor at the start of the input and try to edit again
     (codeInputs[2] as HTMLInputElement).focus();
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
-    userEvent.keyboard('3');
+    await userEvent.keyboard('3');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('3');
     });
     // delete the value
     (codeInputs[2] as HTMLInputElement).focus();
-    userEvent.keyboard('{Backspace}');
+    await userEvent.keyboard('{Backspace}');
 
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('');
