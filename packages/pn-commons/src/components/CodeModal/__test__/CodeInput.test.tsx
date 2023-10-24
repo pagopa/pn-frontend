@@ -100,7 +100,8 @@ describe('CodeInput Component', () => {
     });
     // delete the value
     (codeInputs[2] as HTMLInputElement).focus();
-    userEvent.keyboard('[Backspace]');
+    userEvent.keyboard('{Backspace}');
+
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('');
     });

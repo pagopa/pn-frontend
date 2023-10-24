@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import {
   CustomMobileDialog,
   CustomMobileDialogContent,
@@ -33,13 +32,6 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 type Props = {
   showFilters: boolean;
 };
-
-const useStyles = makeStyles({
-  helperTextFormat: {
-    // Use existing space / prevents shifting content below field
-    alignItems: 'flex',
-  },
-});
 
 const initialEmptyValues = {
   startDate: tenYearsAgo,
@@ -76,7 +68,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
-  const classes = useStyles();
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
@@ -200,7 +191,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} className={classes.helperTextFormat}>
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            // Use existing space / prevents shifting content below field
+            alignItems: 'flex',
+          }}
+        >
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}
