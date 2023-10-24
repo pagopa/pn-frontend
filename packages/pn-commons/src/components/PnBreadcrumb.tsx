@@ -5,7 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Breadcrumbs, Stack, Typography, styled } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -56,7 +56,7 @@ const PnBreadcrumb = ({
         </ButtonNaked>
       )}
       <Breadcrumbs aria-label="breadcrumb">
-        <BreadcrumbLink to={linkRoute} {...linkProps}>
+        <BreadcrumbLink to={linkRoute} data-testid="breadcrumb-link" {...linkProps}>
           {linkLabel}
         </BreadcrumbLink>
         <Typography

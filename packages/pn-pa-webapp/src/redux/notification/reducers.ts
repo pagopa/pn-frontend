@@ -1,22 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
 import {
-  NotificationStatus,
+  Downtime,
+  INotificationDetailTimeline,
   NotificationDetail,
   NotificationDetailDocument,
   NotificationDetailRecipient,
-  INotificationDetailTimeline,
+  NotificationFeePolicy,
+  NotificationStatus,
   NotificationStatusHistory,
   PhysicalCommunicationType,
-  NotificationFeePolicy,
-  Downtime,
 } from '@pagopa-pn/pn-commons';
+import { createSlice } from '@reduxjs/toolkit';
+
 import {
+  getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
-  getDowntimeEvents,
-  getDowntimeLegalFactDocumentDetails,
 } from './actions';
 
 const initialState = {

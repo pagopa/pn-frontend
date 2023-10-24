@@ -68,6 +68,7 @@ const LinkRemoveFilters: React.FC<{ clearFiltersHandler: () => void }> = ({
   return (
     <Link
       component={'button'}
+      variant="body1"
       id="call-to-action-first"
       aria-label={t('empty-state.aria-label-remove-filters')}
       key="remove-filters"

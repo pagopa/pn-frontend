@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { DowntimeLogPage } from '../../models';
-import { Column, Item } from '../../types';
+import { Column, DowntimeLogPage, Item } from '../../models';
 import ItemsTable from '../Data/ItemsTable';
 import { DowntimeLogColumn, useFieldSpecs } from './downtimeLog.utils';
 

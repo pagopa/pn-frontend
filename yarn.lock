@@ -4817,10 +4817,10 @@
   dependencies:
     "@octokit/openapi-types" "^14.0.0"
 
-"@pagopa/mui-italia@^0.9.10":
-  version "0.9.10"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.9.10.tgz#61f1af9b62a6f0478f613700f66b5e66f5b42037"
-  integrity sha512-l29RUNILS14FpsQhO7Iq4dwO6Bhz4E3tSF8HP41wJ3MDlAE8t4amt/d+qUtTOewI+F1+P6u/2t/0LRJg4usPpQ==
+"@pagopa/mui-italia@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.11.0.tgz#5a40ea3c15d80ad0704354f8789b3ef020f06feb"
+  integrity sha512-2Me71btcIOVuy64OhWQxBKrGz0hW42kCrBaCjCXQ9UOYCD/I3BRUHpdwoL84P1jbbglc1FVvD5vr/Y2Wh1aUxg==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"

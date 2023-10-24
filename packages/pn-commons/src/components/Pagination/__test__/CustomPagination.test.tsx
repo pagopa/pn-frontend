@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { PaginationData } from '../../../models/Pagination';
 import { fireEvent, getById, render, waitFor, within } from '../../../test-utils';
 import CustomPagination from '../CustomPagination';
-import { PaginationData } from '../types';
 
 let paginationData: PaginationData = {
   page: 0,

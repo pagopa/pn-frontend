@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-import { act, fireEvent } from '@testing-library/react';
-
-import { render } from '../../test-utils';
+import { act, fireEvent, render } from '../../test-utils';
 import { useMultiEvent } from '../useMultiEvent';
 
 interface IProps {

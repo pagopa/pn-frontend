@@ -9,7 +9,8 @@
   "SELFCARE_BASE_URL": "https://imprese.dev.notifichedigitali.it",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
   "URL_FE_LOGIN": "https://imprese.dev.notifichedigitali.it/auth/login",
-  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it/",
+  "LANDING_SITE_URL": "https://www.dev.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
-  "WORK_IN_PROGRESS": false
+  "WORK_IN_PROGRESS": false,
+  "F24_DOWNLOAD_WAIT_TIME": 15000
 }

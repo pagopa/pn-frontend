@@ -52,6 +52,7 @@ const FilterNotificationsFormBody = ({
   const localizedNotificationStatus = getNotificationAllowedStatus();
 
   const handlePaste = async (e: React.ClipboardEvent) => {
+    e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
     // eslint-disable-next-line functional/immutable-data
     (e.target as HTMLInputElement).value = trimmedValue;

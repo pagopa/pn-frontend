@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
-import { render } from '@testing-library/react';
 
+import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import PrivacyPolicy from '../PrivacyPolicy';
 

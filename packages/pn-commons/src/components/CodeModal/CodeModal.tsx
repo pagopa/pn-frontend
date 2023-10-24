@@ -16,7 +16,7 @@ import {
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CodeInput from './CodeInput';
 
 type Props = {

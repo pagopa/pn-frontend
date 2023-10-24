@@ -12,9 +12,9 @@ import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { Column, Item, Sort } from '../../types';
+import { Column, Item, Sort } from '../../models';
 import { buttonNakedInheritStyle } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props<ColumnId> = {
   /** Table columns */

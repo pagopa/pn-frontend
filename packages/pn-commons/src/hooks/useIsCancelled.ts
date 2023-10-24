@@ -1,4 +1,4 @@
-import { NotificationDetail, NotificationStatus, TimelineCategory } from '../types';
+import { NotificationDetail, NotificationStatus, TimelineCategory } from '../models';
 
 interface Props {
   notification: NotificationDetail;

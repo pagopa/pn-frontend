@@ -1,7 +1,7 @@
 {
   "button": {
     "filtra": "Filter",
-    "annulla filtro": "Remove filters",
+    "annulla filtro": "Reset filters",
     "indietro": "Back",
     "annulla": "Cancel",
     "enter": "Enter",
@@ -9,52 +9,53 @@
     "continue": "Continue",
     "send": "Send",
     "go-to-home": "Back to the home page",
-    "go-to-login": "Login"
+    "go-to-login": "Log in",
+    "close": "Close"
   },
   "menu": {
     "notifications": "Notifications",
     "users": "Users",
     "groups": "Groups",
-    "api-key": "API key",
+    "api-key": "API Key",
     "statistics": "Statistics",
     "app-status": "Platform status",
-    "aria-label": "main navigation notifications platform",
-    "aria-label-inner": "sender navigation notifications platform"
+    "aria-label": "platform-notifications main navigation",
+    "aria-label-inner": "platform-notifications sender navigation"
   },
   "header": {
     "logout": "Exit",
-    "pago-pa-link": "Website of PagoPA S.p.A.",
+    "pago-pa-link": "PagoPA S.p.A. website",
     "reserved-area": "Area Riservata",
     "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "By logging in, you accept the <0>Terms and Conditions of Use</0> of the service, and you confirm that you have read the <1>Privacy Policy </1>.",
-    "button": "Login"
+    "switch-label": "By logging in, you agree to the <0>Terms and Conditions of Use</0> of the service and confirm that you have read the <1>Privacy Policy </1>.",
+    "button": "Log in"
   },
   "table": {
     "aria-label": "Item table"
   },
   "paginator": {
     "aria-label": "Pagination Menu",
-    "first": "first item",
-    "last": "last item",
+    "first": "first element",
+    "last": "last element",
     "page": "page",
-    "next": "Go to the next page",
-    "previous": "Go to the previous page",
+    "next": "Go to next page",
+    "previous": "Go to previous page",
     "selected": "selected item",
     "rows-per-page": "Lines per page"
   },
   "toast": {
-    "aria-label": "Toast closure icon"
+    "aria-label": "Toast close icon"
   },
   "date-picker": {
     "left-arrow": "Go to the previous month",
     "right-arrow": "Go to the next month",
     "switch-to-year": "calendar mode active, switch to year selection mode",
     "switch-to-calendar": "year selection mode active, switch to calendar mode",
-    "select-date": "Add date",
-    "date-selected": "Choose date, the selected date is {{date}}"
+    "select-date": "Choose date",
+    "date-selected": "Choose date, the selected date is {{date}} "
   },
   "date-time": {
     "today-uppercase-initial": "Today",
@@ -62,17 +63,17 @@
   },
   "error-boundary": {
     "title": "Something went wrong",
-    "description": "We were unable to load the page. Reload it, or try again later.",
+    "description": "We were unable to load the page. Please reload it, or try again later.",
     "action": "Reload page"
   },
   "not-accessible": {
-    "title": "The platform cannot be accessed",
-    "description": "Please try again in a few hours. Need some help?",
-    "action": "write to us"
+    "title": "Cannot access the platform",
+    "description": "SEND is currently being tested and is not yet available. If you are an organisation and have completed your membership, you will receive updates regarding the date of activation of the platform. For more information on the initiative,",
+    "action": "visit the dedicated website"
   },
-  "access-denied": "You do not have permission to access this page",
+  "access-denied": "You do not have the necessary permissions to access this page",
   "not-logged": "Log in to the Area Riservata",
-  "not-logged-subtitle": "To use SEND, log in to the Area Riservata with your SPID or CIE. Then, press \"Manage\" on the corresponding card.",
+  "not-logged-subtitle": "To use SEND, access the Area Riservata with your SPID or CIE. Then, press \"Manage\" on the corresponding card.",
   "not-found": {
     "title": "404: The page you are looking for does not exist",
     "descpription": "You are here by mistake, try using navigation."
@@ -82,7 +83,7 @@
     "message": "You will be redirected"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problems logging into SEND",
+    "title": "Issues logging into SEND",
     "message": "Please try again later"
   },
   "messages": {
@@ -91,14 +92,14 @@
     "403-title": "Your session has timed out",
     "403-message": "Enter and log in with SPID or CIE.",
     "401-title": "Unauthorised user",
-    "401-message": "The current user does not have permission",
+    "401-message": "Current user does not have permissions",
     "451-title": "Platform not accessible",
-    "451-message": "The platform cannot be accessed",
+    "451-message": "Cannot access the platform",
     "500-title": "Service not available",
-    "500-message": "Due to a temporary service issue, your request has not been sent. Please try again later.",
+    "500-message": "Due to a temporary service issue, your request has not been submitted. Please come back later.",
     "lacking-grants-for-app-title": "You are not authorised to log in",
-    "generic-token-exchange-problem": "The login could not be completed",
-    "error-in-initial-info-loading": "We were unable to retrieve the data needed to start the application",
+    "generic-token-exchange-problem": "Login could not be completed",
+    "error-in-initial-info-loading": "We were unable to retrieve data needed to start the application",
     "invalid-token-title": "You cannot log in due to a technical issue – invalid token",
     "generic-title": "Generic error",
     "generic-message": "An error has occurred. Please try again later",
@@ -117,7 +118,7 @@
     "terms-conditions": "Terms and Conditions",
     "company": "Transparent company",
     "disclosure": "Responsible Disclosure Policy",
-    "321-model": "231 form",
+    "321-model": "Form 231",
     "accessibility": "Accessibility",
     "social": "Link: go to the website {{social}} of PagoPA S.p.A.",
     "resources": "Resources",
@@ -128,21 +129,27 @@
   "required-fields": "*Required fields",
   "required-field": "Required field",
   "required": "required",
-  "too-long-field-error": "Write max {{maxLength}} characters",
-  "no-spaces-at-edges": "Invalid spaces at start/end",
-  "invalid": "Invalid",
+  "too-long-field-error": "Write maximum {{maxLength}} characters",
+  "too-short-field-error": "Write minimum {{minLength}} characters",
+  "no-spaces-at-edges": "Delete spaces at the beginning or end",
+  "invalid": "invalid",
   "upload-file": {
     "or": "or",
     "select-from-pc": "select it from your computer",
+    "select-from-mobile": "Upload a document",
     "loading": "Loading...",
     "sending": "Sending...",
     "hash-code": "Hash code",
-    "hash-code-descr": "The hash code is a unique alphanumeric code used to identify a particular file",
-    "ext-not-supported": "File extension is not supported. Try again with another file.",
+    "hash-code-descr": "The hash code is a unique alphanumeric code used to identify a certain file",
+    "ext-not-supported": "File extension is not supported. Please try again with another file.",
+    "file-size-exceeded": "The selected file exceeds the maximum size of {{limit}}.",
     "loading-error": "An error occurred while uploading the file. Please try again."
   },
   "roles": {
     "operator": "Operational contact person",
-    "admin": "Administrative contact"
+    "admin": "Administrator"
+  },
+  "attachments": {
+    "remove-attachment": "Delete attachment"
   }
 }

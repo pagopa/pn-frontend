@@ -6,7 +6,7 @@
   "footer": {
     "go-to-pagopa": "Link: Gehe auf die Website von PagoPA S.p.A.",
     "go-to": "Zum Link",
-    "privacy-info": "Informativa Privacy",
+    "privacy-info": "Datenschutzerklärung",
     "who": "Über uns",
     "work": "Karriere",
     "certifications": "Zertifizierungen",
@@ -15,13 +15,13 @@
     "cookie": "Cookie-Einstellungen",
     "terms-conditions": "Allgemeine Geschäftsbedingungen",
     "company": "Transparente Gesellschaft",
-    "disclosure": "Offenlegungsgrundsätze",
-    "321-model": "Formular 231",
+    "disclosure": "Responsible Disclosure Policy",
+    "321-model": "Modell 231",
     "accessibility": "Zugänglichkeit",
     "social": "Link: Gehe auf die Website {{social}} von PagoPA S.p.A.",
     "resources": "Quellen",
     "follow": "Folge uns auf",
     "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 - Nr. des Eintrags im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009"
+    "legal-part-2": "PLZ 00187 – Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009"
   }
 }
