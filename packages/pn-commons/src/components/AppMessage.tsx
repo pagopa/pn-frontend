@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { IAppMessage, MessageType } from '../models';
 import { appStateActions, appStateSelectors } from '../redux';
-import { IAppMessage, MessageType } from '../types';
 import SnackBar from './SnackBar/SnackBar';
 
 type EnqueuedMessage = {

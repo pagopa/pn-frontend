@@ -17,9 +17,9 @@ const OrganizationPartyGuard = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
 
-  const fetchOrganizationParty = useCallback(() => {
+  const fetchOrganizationParty = useCallback(async() => {
     if (idOrganization) {
-      void dispatch(getOrganizationParty(idOrganization));
+      await dispatch(getOrganizationParty(idOrganization));
     }
   }, [idOrganization]);
 

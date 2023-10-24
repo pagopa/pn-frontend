@@ -5,8 +5,8 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { downloadDocument, useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../types';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
 
 interface Props {
   f24Item: F24PaymentDetails;

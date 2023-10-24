@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { IAppMessage } from '../../models';
 import { act, render } from '../../test-utils';
-import { IAppMessage } from '../../types';
 import AppMessage from '../AppMessage';
 
 const errors: Array<IAppMessage> = [

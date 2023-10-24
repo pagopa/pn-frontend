@@ -1,9 +1,7 @@
-import React from 'react';
-
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { Stack, Typography, styled } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type ApiErrorProps = {
   onClick?: () => void;

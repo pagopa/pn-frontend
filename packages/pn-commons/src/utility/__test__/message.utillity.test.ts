@@ -1,5 +1,5 @@
-import { IAppMessage } from '../../types';
-import { createAppMessage } from '../message.service';
+import { IAppMessage } from '../../models';
+import { createAppMessage } from '../message.utility';
 
 const _genericMessage: IAppMessage = {
   id: '1',

@@ -4,7 +4,6 @@ import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
 
 import { downloadDocument } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import {
   F24PaymentDetails,
   NotificationDetailPayment,
@@ -14,8 +13,9 @@ import {
   PaymentDetails,
   PaymentStatus,
   PaymentsData,
-} from '../../types';
+} from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
@@ -23,6 +23,7 @@ type Props = {
   payments: PaymentsData;
   isCancelled: boolean;
   timerF24: number;
+  landingSiteUrl: string;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -38,6 +39,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
   isCancelled,
   timerF24,
+  landingSiteUrl,
   getPaymentAttachmentAction,
   onPayClick,
   handleReloadPayment,
@@ -52,9 +54,20 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     (payment) => payment.pagoPa?.status === PaymentStatus.SUCCEEDED
   );
 
+  const FAQ_NOTIFICATION_COSTS = '/faq#costi-di-notifica';
+  const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
+
+  const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
+  const cancelledNotificationFAQ = `${landingSiteUrl}${FAQ_NOTIFICATION_CANCELLED_REFUND}`;
+
   const getTitle = () => {
     const FaqLink = (
-      <Link href={void 0} target="_blank" fontWeight="bold" sx={{ cursor: 'pointer' }}>
+      <Link
+        href={notificationCostsFaqLink}
+        target="_blank"
+        fontWeight="bold"
+        sx={{ cursor: 'pointer' }}
+      >
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how')}
       </Link>
     );
@@ -120,7 +133,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         <Alert tabIndex={0} data-testid="cancelledAlertPayment" severity="info">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
           &nbsp;
-          <Link href={void 0} target="_blank" fontWeight="bold" sx={{ cursor: 'pointer' }}>
+          <Link
+            href={cancelledNotificationFAQ}
+            target="_blank"
+            fontWeight="bold"
+            sx={{ cursor: 'pointer' }}
+          >
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.disclaimer-link')}
           </Link>
         </Alert>

@@ -1,14 +1,18 @@
-import { SendDigitalDetails } from '../../types';
+import { SendDigitalDetails } from '../../models';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalProgressStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     const deliveryDetailCode = (payload.step.details as SendDigitalDetails).deliveryDetailCode;
-    if (deliveryDetailCode === 'C008' || deliveryDetailCode === 'C010' || deliveryDetailCode === 'DP10') {
+    if (
+      deliveryDetailCode === 'C008' ||
+      deliveryDetailCode === 'C010' ||
+      deliveryDetailCode === 'DP10'
+    ) {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-progress-error',
-          payload.isMultiRecipient, 
+          payload.isMultiRecipient,
           'Invio via PEC non preso in carico',
           `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
             (payload.step.details as SendDigitalDetails).digitalAddress?.address
@@ -23,7 +27,7 @@ export class SendDigitalProgressStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-progress-success',
-          payload.isMultiRecipient, 
+          payload.isMultiRecipient,
           'Invio via PEC preso in carico',
           `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
             (payload.step.details as SendDigitalDetails).digitalAddress?.address

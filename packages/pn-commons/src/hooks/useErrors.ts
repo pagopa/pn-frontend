@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
+import { IAppMessage } from '../models';
 import { appStateSelectors } from '../redux';
-import { IAppMessage } from '../types';
 
 /**
  * A custom React hook for handling and checking API errors in the application state.

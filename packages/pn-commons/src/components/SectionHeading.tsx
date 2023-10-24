@@ -1,18 +1,10 @@
-import { makeStyles } from '@mui/styles';
+import React, { ReactNode } from 'react';
+
 import Typography from '@mui/material/Typography';
-import { ReactNode } from 'react';
 
 interface SectionHeadingProps {
   children: ReactNode;
 }
-
-const useStyles = makeStyles(() => ({
-  root: {
-    fontSize: '1.5rem',
-    fontWeight: 600,
-    marginTop: 0,
-  },
-}));
 
 /**
  * Renders a section heading with the style of an H6 element using an H3 element.
@@ -21,13 +13,15 @@ const useStyles = makeStyles(() => ({
  * @param {SectionHeadingProps} props - The props object.
  * @returns {JSX.Element} The rendered section heading.
  */
-function SectionHeading(props: SectionHeadingProps): JSX.Element {
-  const classes = useStyles();
-  return (
-    <Typography id="title-heading-section" component="h3" variant="h6" className={classes.root}>
-      {props.children}
-    </Typography>
-  );
-}
+const SectionHeading: React.FC<SectionHeadingProps> = (props: SectionHeadingProps) => (
+  <Typography
+    id="title-heading-section"
+    component="h3"
+    variant="h6"
+    sx={{ fontSize: '1.5rem', fontWeight: 600, marginTop: 0 }}
+  >
+    {props.children}
+  </Typography>
+);
 
 export default SectionHeading;

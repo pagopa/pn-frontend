@@ -1,4 +1,4 @@
-import { AnalogWorkflowDetails } from '../../types';
+import { AnalogWorkflowDetails } from '../../models';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendSimpleRegisteredLetterStep extends TimelineStep {
@@ -6,7 +6,7 @@ export class SendSimpleRegisteredLetterStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-simple-registered-letter',
-        payload.isMultiRecipient, 
+        payload.isMultiRecipient,
         'Invio via raccomandata semplice',
         `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
           (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address

@@ -22,25 +22,25 @@ describe('Footer Component', () => {
 
   it('renders footer', () => {
     // render component
-    const { getAllByRole } = render(<Footer loggedUser={true} />);
-    const buttons = getAllByRole('button');
-    expect(buttons).toHaveLength(5);
+    const { getAllByRole, getByRole } = render(<Footer loggedUser={true} />);
+    const buttons = getAllByRole('link');
+    expect(buttons).toHaveLength(4);
     buttons.forEach((button, index) => {
       if (index === 0) {
         expect(button).toHaveTextContent('PagoPA');
         expect(button).toHaveAttribute('aria-label', pagoPALink().ariaLabel);
-      } else if (index === 4) {
-        expect(button).toHaveTextContent(LANGUAGES.it.it); // language 'it' is default selected
       } else {
         expect(button).toHaveTextContent(postLoginLinks()[index - 1].label);
         expect(button).toHaveAttribute('aria-label', postLoginLinks()[index - 1].ariaLabel);
       }
     });
+    const dropdownLanguageButton = getByRole('button');
+    expect(dropdownLanguageButton).toBeInTheDocument();
   });
 
   it('clicks on company link', () => {
     const { getAllByRole } = render(<Footer loggedUser={true} />);
-    const buttons = getAllByRole('button');
+    const buttons = getAllByRole('link');
     fireEvent.click(buttons[0]);
     const localizedPagoPALink = pagoPALink();
     expect(mockOpenFn).toBeCalledTimes(1);
@@ -49,14 +49,13 @@ describe('Footer Component', () => {
 
   it('shows languages dropdown', async () => {
     const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const { getAllByRole } = render(
+    const { getByRole } = render(
       <Footer
         loggedUser={true}
         eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}
       />
     );
-    const buttons = getAllByRole('button');
-    const dropdownLanguageButton = buttons[4];
+    const dropdownLanguageButton = getByRole('button');
     const languageKeys = Object.keys(LANGUAGES);
     // This array represents how the options labels should sequentially change when you click the option.
     const expectedLanguagesLabels = new Array();

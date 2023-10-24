@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { Column, Item, Sort } from '../../../models';
 import { fireEvent, render, within } from '../../../test-utils';
-import { Column, Item, Sort } from '../../../types';
 import ItemsTable from '../ItemsTable';
 
 const handleSort = jest.fn();

@@ -1,4 +1,4 @@
-import { ServerResponse, ServerResponseErrorCode } from '../../../types/AppResponse';
+import { ServerResponse, ServerResponseErrorCode } from '../../../models/AppResponse';
 import { createAppResponseError, createAppResponseSuccess } from '../AppResponse';
 
 describe('Creation of AppResponse objects', () => {

@@ -1,12 +1,12 @@
-import { ServerResponseErrorCode } from '../../../types/AppResponse';
+import { ServerResponseErrorCode } from '../../../models/AppResponse';
 import AppError from '../AppError';
 import { BadRequestAppError } from './BadRequestError';
 import { ForbiddenAppError } from './ForbiddenAppError';
 import { InternalServerAppError } from './InternalServerAppError';
 import { NotFoundAppError } from './NotFoundAppError';
 import { UnauthorizedAppError } from './UnauthorizedAppError';
-import { UnhandledAppError } from './UnhandledAppError';
 import { UnavailableForLegalReasonsError } from './UnavailableForLegalReasonsError';
+import { UnhandledAppError } from './UnhandledAppError';
 
 class GenericAppErrorFactory {
   static create(status: number | string): AppError {

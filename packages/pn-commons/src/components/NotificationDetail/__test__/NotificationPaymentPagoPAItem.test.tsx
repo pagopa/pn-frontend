@@ -2,13 +2,13 @@ import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, getById, queryById, render, waitFor } from '../../../test-utils';
 import {
   PagoPAPaymentFullDetails,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
-} from '../../../types';
+} from '../../../models';
+import { fireEvent, getById, queryById, render, waitFor } from '../../../test-utils';
 import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../utility';
 import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
 

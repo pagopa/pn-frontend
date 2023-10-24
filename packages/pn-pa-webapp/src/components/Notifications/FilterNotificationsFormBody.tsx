@@ -52,6 +52,7 @@ const FilterNotificationsFormBody = ({
   const localizedNotificationStatus = getNotificationAllowedStatus();
 
   const handlePaste = async (e: React.ClipboardEvent) => {
+    e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
     // eslint-disable-next-line functional/immutable-data
     (e.target as HTMLInputElement).value = trimmedValue;
@@ -129,15 +130,10 @@ const FilterNotificationsFormBody = ({
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
         inputProps={{ maxLength: 25 }}
       />
-      <LocalizationProvider
-        id="startDate"
-        name="startDate"
-        dateAdapter={AdapterDateFns as any}
-        adapterLocale={currentLocale}
-      >
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
         <CustomDatePicker
           label={t('filters.data_da')}
-          inputFormat={DATE_FORMAT}
+          format={DATE_FORMAT}
           value={startDate}
           onChange={(value: DatePickerTypes) => {
             const value2 = value || tenYearsAgo;
@@ -146,39 +142,30 @@ const FilterNotificationsFormBody = ({
               trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
             });
           }}
-          renderInput={(params) => (
-            <TextField
-              id="startDate"
-              name="startDate"
-              size="small"
-              {...params}
-              aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
-              inputProps={{
-                ...params.inputProps,
+          slotProps={{
+            textField: {
+              id: 'startDate',
+              name: 'startDate',
+              size: 'small',
+              inputProps: {
                 inputMode: 'text',
-                'aria-label': t('filters.data_da-input-aria-label'),
-                type: 'text',
                 placeholder: 'gg/mm/aaaa',
-              }}
-              fullWidth={isMobile}
-              sx={{ marginBottom: isMobile ? '20px' : '0' }}
-            />
-          )}
+                type: 'text',
+                'aria-label': t('filters.data_da-input-aria-label'),
+              },
+              fullWidth: isMobile,
+              sx: { marginBottom: isMobile ? '20px' : '0' },
+            },
+          }}
           disableFuture={true}
           minDate={tenYearsAgo}
           maxDate={endDate ? endDate : undefined}
         />
       </LocalizationProvider>
-      <LocalizationProvider
-        id="endDate"
-        name="endDate"
-        dateAdapter={AdapterDateFns as any}
-        onChange={formikInstance.handleChange}
-        adapterLocale={currentLocale}
-      >
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
         <CustomDatePicker
           label={t('filters.data_a')}
-          inputFormat={DATE_FORMAT}
+          format={DATE_FORMAT}
           value={endDate}
           onChange={(value: DatePickerTypes) => {
             const value2 = value || today;
@@ -187,24 +174,22 @@ const FilterNotificationsFormBody = ({
               setEndDate(value2);
             });
           }}
-          renderInput={(params) => (
-            <TextField
-              id="endDate"
-              name="endDate"
-              size="small"
-              {...params}
-              aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
-              inputProps={{
-                ...params.inputProps,
+          slotProps={{
+            textField: {
+              id: 'endDate',
+              name: 'endDate',
+              size: 'small',
+              'aria-label': t('filters.data_a-aria-label'),
+              inputProps: {
                 inputMode: 'text',
-                'aria-label': t('filters.data_a-input-aria-label'),
-                type: 'text',
                 placeholder: 'gg/mm/aaaa',
-              }}
-              fullWidth={isMobile}
-              sx={{ marginBottom: isMobile ? '20px' : '0' }}
-            />
-          )}
+                type: 'text',
+                'aria-label': t('filters.data_a-input-aria-label'),
+              },
+              fullWidth: isMobile,
+              sx: { marginBottom: isMobile ? '20px' : '0' },
+            },
+          }}
           disableFuture={true}
           minDate={startDate ? startDate : tenYearsAgo}
         />

@@ -1,7 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import React from 'react';
 
-import { TextField } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
@@ -10,25 +9,18 @@ import CustomDatePicker from '../CustomDatePicker';
 
 const WrappedCustomDatePicker = () => {
   return (
-    <LocalizationProvider
-      id="startDate"
-      name="startDate"
-      dateAdapter={AdapterDateFns as any}
-      adapterLocale={currentLocale}
-    >
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
       <CustomDatePicker
         label={'DatePicker'}
         onChange={() => {}}
         value={new Date()}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            inputProps={{
-              ...params.inputProps,
+        slotProps={{
+          textField: {
+            inputProps: {
               placeholder: 'datepickerinput',
-            }}
-          />
-        )}
+            },
+          },
+        }}
       />
     </LocalizationProvider>
   );

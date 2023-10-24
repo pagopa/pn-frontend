@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, theme } from '../../../test-utils';
 import {
   INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailOtherDocument,
   NotificationStatus,
-} from '../../../types';
+} from '../../../models';
+import { fireEvent, render, theme } from '../../../test-utils';
 import {
   formatDay,
   formatMonthString,

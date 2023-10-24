@@ -9,31 +9,29 @@ import {
   notificationToFeMultiRecipient,
   payments,
 } from '../../__mocks__/NotificationDetail.mock';
-import { initLocalization } from '../../services';
-import { initLocalizationForTest } from '../../test-utils';
 import {
+  AarDetails,
+  AppIoCourtesyMessageEventType,
   DigitalDomicileType,
+  F24PaymentDetails,
+  INotificationDetailTimeline,
   LegalFactType,
   NotificationDeliveryMode,
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-  RecipientType,
-  SendDigitalDetails,
-  TimelineCategory,
-} from '../../types';
-import {
-  AarDetails,
-  AppIoCourtesyMessageEventType,
-  F24PaymentDetails,
-  INotificationDetailTimeline,
   PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentDetails,
   PaymentStatus,
   PaymentsData,
+  RecipientType,
+  SendDigitalDetails,
+  TimelineCategory,
   ViewedDetails,
-} from '../../types/NotificationDetail';
+} from '../../models';
+import { initLocalizationForTest } from '../../test-utils';
+import { initLocalization } from '../../utility';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
 import { formatDate } from '../date.utility';
 import {
@@ -45,7 +43,6 @@ import {
   parseNotificationDetail,
   populatePaymentsPagoPaF24,
 } from '../notification.utility';
-import exp from 'constants';
 
 function testNotificationStatusInfos(
   expectedColor:
