@@ -1,5 +1,5 @@
 {
   "title": "Statistiques",
-  "subtitle": "Explorer les statistiques d'utilisation de SEND de la part de {{organization}}. Les informations figurant dans l'aperçu se réfèrent à l'ensemble de la période d'utilisation de la plateforme.",
-  "export_all": "Tout exporter"
+  "subtitle": "Explorez les statistiques d’utilisation de SEND par {{organization}}. Les données de l’aperçu se rapportent à l’ensemble de la période d’utilisation de la plateforme.",
+  "export_all": "Exporter tous"
 }
