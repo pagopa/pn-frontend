@@ -9,6 +9,7 @@
   "SELFCARE_BASE_URL": "https://imprese.uat.notifichedigitali.it",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
   "URL_FE_LOGIN": "https://imprese.uat.notifichedigitali.it/auth/login",
+  "URL_FE_LOGOUT": "https://imprese.uat.notifichedigitali.it/auth/logout",
   "LANDING_SITE_URL": "https://www.uat.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,

@@ -16,8 +16,7 @@ import {
   Layout,
   ResponseEventDispatcher,
   SideMenu,
-  SideMenuItem, // momentarily commented for pn-5157
-  // AppRouteType,
+  SideMenuItem,
   appStateActions,
   errorFactoryManager,
   initLocalization,
@@ -261,8 +260,6 @@ const ActualApp = () => {
 
   const handleUserLogout = () => {
     void dispatch(logout());
-    // momentarily commented for pn-5157
-    // goToLoginPortal(AppRouteType.PG);
     goToLoginPortal();
   };
 
