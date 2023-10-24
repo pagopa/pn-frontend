@@ -25,7 +25,7 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { ProductEntity } from '@pagopa/mui-italia';
 
 import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
@@ -43,7 +43,7 @@ import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 
 // TODO: get products list from be (?)
-const productsList: Array<ProductSwitchItem> = [
+const productsList: Array<ProductEntity> = [
   {
     id: '0',
     title: `SEND - Servizio Notifiche Digitali`,

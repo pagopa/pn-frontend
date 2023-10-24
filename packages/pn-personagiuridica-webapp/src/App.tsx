@@ -25,7 +25,7 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
@@ -97,7 +97,7 @@ const ActualApp = () => {
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   // TODO: get products list from be (?)
-  const productsList: Array<ProductSwitchItem> = useMemo(
+  const productsList: Array<ProductEntity> = useMemo(
     () => [
       {
         id: '1',

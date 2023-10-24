@@ -15,6 +15,7 @@ interface PaConfigurationFromFile {
   IS_PAYMENT_ENABLED?: boolean;
   MIXPANEL_TOKEN?: string;
   WORK_IN_PROGRESS?: boolean;
+  SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
 }
 
@@ -31,6 +32,7 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   IS_PAYMENT_ENABLED: boolean;
   MIXPANEL_TOKEN: string;
   WORK_IN_PROGRESS: boolean;
+  SELFCARE_SEND_PROD_ID: string;
   API_B2B_LINK: string;
 }
 
@@ -52,6 +54,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
+    this.ruleFor('SELFCARE_SEND_PROD_ID').isString();
     this.ruleFor('API_B2B_LINK').isString();
   }
 
@@ -78,6 +81,7 @@ export function getConfiguration(): PaConfiguration {
     IS_PAYMENT_ENABLED: Boolean(configurationFromFile.IS_PAYMENT_ENABLED),
     MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
+    SELFCARE_SEND_PROD_ID: configurationFromFile.SELFCARE_SEND_PROD_ID,
     API_B2B_LINK: configurationFromFile.API_B2B_LINK || ''
   };
 }
