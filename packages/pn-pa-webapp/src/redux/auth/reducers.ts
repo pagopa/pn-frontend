@@ -10,7 +10,7 @@ import {
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PNRole, PartyRole } from '../../models/user';
+import { PNRole, PartyRole, Role } from '../../models/user';
 import {
   acceptPrivacy,
   acceptToS,
@@ -21,20 +21,28 @@ import {
   getToSApproval,
   logout,
 } from './actions';
-import { User } from './types';
+import { Organization, User } from './types';
 
-const roleMatcher = yup.object({
-  role: yup.string().oneOf(Object.values(PNRole)),
-  partyRole: yup.string().oneOf(Object.values(PartyRole)),
+const roleMatcher: yup.SchemaOf<Role> = yup.object({
+  role: yup.mixed<PNRole>().required(),
+  partyRole: yup.mixed<PartyRole>().required(),
 });
 
-const organizationMatcher = yup.object({
-  id: yup.string(),
-  roles: yup.array().of(roleMatcher),
-  fiscal_code: yup.string().matches(dataRegex.pIva),
-  groups: yup.array().of(yup.string()),
-  name: yup.string(),
+const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
+  id: yup.string().required(),
+  roles: yup.array().of(roleMatcher).required(),
+  fiscal_code: yup.string().matches(dataRegex.pIva).required(),
+  groups: yup.array().of(yup.string()).notRequired(),
+  name: yup.string().required(),
   hasGroups: yup.boolean(),
+  parentDescription: yup.string().nullable(),
+  aooParent: yup.string().nullable(),
+  subUnitCode: yup.string().nullable(),
+  subUnitType: yup.string().nullable(),
+  rootParent: yup.object({
+    id: yup.string().nullable(),
+    description: yup.string().nullable(),
+  }).notRequired()
 });
 
 const userDataMatcher = yup
