@@ -137,7 +137,7 @@ export function adaptedTokenExchangeError(originalError: any) {
   };
 }
 
-export function removeNullProperties<T extends object>(obj: T): T {
+export function removeNullProperties<T extends BasicUser>(obj: T): T {
   const newObj = {} as T;
 
   for (const [key, value] of Object.entries(obj)) {

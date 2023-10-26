@@ -6,6 +6,7 @@ import {
   adaptedTokenExchangeError,
   basicInitialUserData,
   basicUserDataMatcherContents,
+  removeNullProperties,
 } from '../user.utility';
 
 const userDataMatcher = yup.object(basicUserDataMatcherContents).noUnknown(true);
@@ -89,5 +90,42 @@ describe('user utility', () => {
         },
       },
     });
+  });
+
+  it('removeNullProperties - remove null properties', () => {
+    const objectWithNull = {
+      sessionToken: 'token',
+      name: 'name',
+      family_name: 'familyName',
+      fiscal_number: '123',
+      email: 'email@email',
+      uid: '12345',
+      telephone: null,
+      organization: {
+        id: '1',
+        description: null,
+      },
+      roles: [
+        {
+          role: 'admin',
+          displayRole: null,
+        },
+      ],
+    };
+
+    const objectWithoutNull = {
+      sessionToken: 'token',
+      name: 'name',
+      family_name: 'familyName',
+      fiscal_number: '123',
+      email: 'email@email',
+      uid: '12345',
+      organization: { id: '1' },
+      roles: [{ role: 'admin' }],
+    };
+
+    const result = removeNullProperties(objectWithNull);
+
+    expect(result).toStrictEqual(objectWithoutNull);
   });
 });
