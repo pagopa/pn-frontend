@@ -1,4 +1,5 @@
 import { BasicUser } from '@pagopa-pn/pn-commons';
+
 import { Role } from '../../models/user';
 
 export interface User extends BasicUser {
@@ -19,6 +20,6 @@ export interface Organization {
   aooParent?: string | null;
   rootParent?: {
     id?: string | null;
-    description?: string | null;
-  }
+    description?: string;
+  };
 }

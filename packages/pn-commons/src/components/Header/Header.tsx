@@ -11,6 +11,7 @@ import {
   UserAction,
 } from '@pagopa/mui-italia';
 
+import { PartyEntityWithUrl } from '../../models/Institutions';
 import { pagoPALink } from '../../utility/costants';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -41,8 +42,6 @@ type HeaderProps = {
   isLogged?: boolean;
   /** Base Url of Selfcare for token-exchange */
   selfcareBaseUrl?: string;
-  /** Product Id of Selfcare for token-exchange */
-  selfcareSendProdId?: string;
 };
 
 const Header = ({
@@ -59,7 +58,6 @@ const Header = ({
   eventTrackingCallbackProductSwitch,
   isLogged,
   selfcareBaseUrl,
-  selfcareSendProdId,
 }: HeaderProps) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -104,16 +102,14 @@ const Header = ({
     trackEvent(url);
   };
 
-  const handlePartySelection = (party: PartyEntity) => {
-    window.location.assign(
-      `${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=${selfcareSendProdId}`
-    );
+  const handlePartySelection = (party: PartyEntityWithUrl) => {
+    window.location.assign(party.entityUrl);
   };
 
   const enableHeaderProduct = showHeaderProduct && (isLogged || isLogged === undefined);
 
   useEffect(() => {
-    if ((productsList && productsList.length > 0) && (partyList && partyList.length > 0)) {
+    if (productsList && productsList.length > 0 && partyList && partyList.length > 0) {
       setIsHeaderReady(true);
     }
   }, [productsList, partyList]);
@@ -137,7 +133,7 @@ const Header = ({
           productsList={productsList}
           partyList={partyList}
           onSelectedProduct={handleProductSelection}
-          onSelectedParty={handlePartySelection}
+          onSelectedParty={(party) => handlePartySelection(party as PartyEntityWithUrl)}
         />
       )}
     </AppBar>

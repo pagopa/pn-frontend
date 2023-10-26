@@ -44,6 +44,7 @@ export const partyList = [
     name: 'Party 1',
     productRole: 'Role 1',
     logoUrl: '',
+    entityUrl: 'www.party1.com',
   },
   {
     id: '1',
@@ -51,6 +52,7 @@ export const partyList = [
     productRole: 'Role 2',
     logoUrl: '',
     parentName: 'Root Party 2',
+    entityUrl: 'www.party2.com',
   },
 ];
 

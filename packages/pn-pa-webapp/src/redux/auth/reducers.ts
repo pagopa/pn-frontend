@@ -39,10 +39,12 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
   aooParent: yup.string().nullable(),
   subUnitCode: yup.string().nullable(),
   subUnitType: yup.string().nullable(),
-  rootParent: yup.object({
-    id: yup.string().nullable(),
-    description: yup.string().nullable(),
-  }).notRequired()
+  rootParent: yup
+    .object({
+      id: yup.string().nullable(),
+      description: yup.string().notRequired(),
+    })
+    .notRequired(),
 });
 
 const userDataMatcher = yup

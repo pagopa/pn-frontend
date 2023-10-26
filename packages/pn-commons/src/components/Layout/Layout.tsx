@@ -51,8 +51,6 @@ type Props = {
   hasTermsOfService?: boolean;
   /** Base Url of Selfcare for token-exchange */
   selfcareBaseUrl?: string;
-/** Product Id of Selfcare for token-exchange */
-  selfcareSendProdId?: string;
 };
 
 export default function Layout({
@@ -78,7 +76,6 @@ export default function Layout({
   showFooter = true,
   hasTermsOfService,
   selfcareBaseUrl,
-  selfcareSendProdId
 }: Props) {
   return (
     <ErrorBoundary
@@ -106,7 +103,6 @@ export default function Layout({
               eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
               isLogged={isLogged}
               selfcareBaseUrl={selfcareBaseUrl}
-              selfcareSendProdId={selfcareSendProdId}
             />
           )}
           <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
