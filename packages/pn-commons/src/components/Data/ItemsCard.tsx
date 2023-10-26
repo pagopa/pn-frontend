@@ -29,8 +29,10 @@ const ItemsCard: React.FC<Props> = ({ sx, testId = 'mobileCards', children }) =>
   const cardBodies = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === ItemsCardBody)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
+            : child
         )
     : [];
   return (

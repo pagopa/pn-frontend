@@ -1,41 +1,20 @@
 import React from 'react';
 
-import { Typography } from '@mui/material';
-
-import { Item } from '../../../../models';
 import { render } from '../../../../test-utils';
 import PnTableHeader from '../PnTableHeader';
 import PnTableHeaderCell from '../PnTableHeaderCell';
 
 describe('PnTableHeaderCell', () => {
-  const mockColumn = {
-    id: 'name',
-    label: 'mock-column-label',
-    width: '30%',
-    sortable: false,
-    getCellLabel(value: string, row: Item) {
-      return <Typography>mock-column-value</Typography>;
-    },
-    onClick: () => mockFn(),
-  };
-
-  const mockFn = jest.fn();
-
   it('render component', () => {
-    const { container } = render(
+    const { container, queryAllByRole } = render(
       <table>
         <PnTableHeader>
-          <PnTableHeaderCell
-            key={mockColumn.id}
-            testId="notificationsTable"
-            columnId={mockColumn.id}
-            sortable={mockColumn.sortable}
-          >
-            {mockColumn.label}
-          </PnTableHeaderCell>
+          <PnTableHeaderCell columnId={'mock-column-id'}>mock-column-label</PnTableHeaderCell>
         </PnTableHeader>
       </table>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
+    const buttons = queryAllByRole('button');
+    expect(buttons).toHaveLength(0);
   });
 });

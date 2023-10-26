@@ -1,16 +1,36 @@
-import { CardHeader } from '@mui/material';
+import React from 'react';
 
-import { IItemsCardHeaderTitleProps } from './ItemsCardHeaderTitle';
+import { CardHeader, Grid, GridProps } from '@mui/material';
+
+import ItemsCardHeaderTitle, { IItemsCardHeaderTitleProps } from './ItemsCardHeaderTitle';
 
 export interface IItemsCardHeaderProps {
   testId?: string;
-  className?: string;
-  children?: React.ReactElement<IItemsCardHeaderTitleProps>;
+  headerGridProps?: GridProps;
+  children?:
+    | React.ReactElement<IItemsCardHeaderTitleProps>
+    | [
+        React.ReactElement<IItemsCardHeaderTitleProps>,
+        React.ReactElement<IItemsCardHeaderTitleProps> | null
+      ];
 }
 const ItemsCardHeader: React.FC<IItemsCardHeaderProps> = ({
   testId,
-  className = 'card-header',
   children,
-}) => <CardHeader data-testid={testId} className={className} title={children} />;
+  headerGridProps,
+}) => {
+  const cells = children
+    ? React.Children.toArray(children)
+        .filter((child) => (child as JSX.Element).type === ItemsCardHeaderTitle)
+        .map((child) =>
+          React.isValidElement(child) ? React.cloneElement(child, { ...child.props }) : child
+        )
+    : [];
+  return (
+    <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
+      <CardHeader data-testid={testId} className={'card-header'} title={cells} />
+    </Grid>
+  );
+};
 
 export default ItemsCardHeader;

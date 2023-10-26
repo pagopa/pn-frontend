@@ -20,8 +20,10 @@ const ItemsCardActions: React.FC<IItemsCardActionsProps> = ({
   const actions = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === ItemsCardAction)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.action` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.action` })
+            : child
         )
     : [];
   return (

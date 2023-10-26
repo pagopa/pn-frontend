@@ -3,22 +3,11 @@ import React from 'react';
 import { Typography } from '@mui/material';
 
 import { Item, Sort } from '../../../../models';
-import { fireEvent, render } from '../../../../test-utils';
+import { fireEvent, queryByRole, queryByTestId, render } from '../../../../test-utils';
 import PnTableHeaderCell from '../PnTableHeaderCell';
 
 describe('PnTableHeaderCell', () => {
   const mockFn = jest.fn();
-
-  const mockColumn = {
-    id: 'name',
-    label: 'mock-column-label',
-    width: '30%',
-    sortable: true,
-    getCellLabel(value: string, row: Item) {
-      return <Typography>mock-column-value</Typography>;
-    },
-    onClick: () => mockFn(),
-  };
 
   const mockSort: Sort<string> = {
     order: 'asc',
@@ -26,23 +15,20 @@ describe('PnTableHeaderCell', () => {
   };
 
   it('render component', () => {
-    const { container } = render(
+    const { container, queryByTestId } = render(
       <table>
         <thead>
           <tr>
-            <PnTableHeaderCell
-              sort={mockSort}
-              key={mockColumn.id}
-              columnId={mockColumn.id}
-              sortable={mockColumn.sortable}
-            >
-              {mockColumn.label}
+            <PnTableHeaderCell sort={mockSort} columnId={'mock-column-id'} sortable={false}>
+              mock-column-label
             </PnTableHeaderCell>
           </tr>
         </thead>
       </table>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
+    const cell = queryByTestId('headerCell.sort.mock-column-id');
+    expect(cell).not.toBeInTheDocument();
   });
 
   it('click cell event', () => {
@@ -51,19 +37,18 @@ describe('PnTableHeaderCell', () => {
         <thead>
           <tr>
             <PnTableHeaderCell
-              key={mockColumn.id}
               sort={mockSort}
-              columnId={mockColumn.id}
-              sortable={mockColumn.sortable}
+              columnId={'mock-column-id'}
+              sortable={true}
               handleClick={mockFn(mockSort.orderBy)}
             >
-              {mockColumn.label}
+              mock-column-label
             </PnTableHeaderCell>
           </tr>
         </thead>
       </table>
     );
-    const cell = getByTestId('headerCell');
+    const cell = getByTestId('headerCell.sort.mock-column-id');
 
     fireEvent.click(cell);
     expect(mockFn).toBeCalledTimes(1);

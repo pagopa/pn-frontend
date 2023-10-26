@@ -119,6 +119,7 @@ const MobileNotifications = ({
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'sentAt',
+      position: 'left',
       label: t('table.date'),
       getLabel(value: string) {
         return <Typography>{value}</Typography>;
@@ -130,6 +131,7 @@ const MobileNotifications = ({
     },
     {
       id: 'notificationStatus',
+      position: 'right',
       label: t('table.status'),
       getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
@@ -273,15 +275,26 @@ const MobileNotifications = ({
         <ItemsCard>
           {cardData.map((data) => (
             <ItemsCardBody key={data.id}>
-              <ItemsCardHeader>
+              <ItemsCardHeader
+                headerGridProps={{
+                  direction: { xs: 'row', sm: 'row' },
+                  alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+              >
                 <ItemsCardHeaderTitle
-                  cardHeader={cardHeader}
-                  item={data}
-                  headerGridProps={{
-                    direction: { xs: 'row', sm: 'row' },
-                    alignItems: { xs: 'flex-start', sm: 'center' },
-                  }}
-                />
+                  key={cardHeader[0].id}
+                  gridProps={cardHeader[0].gridProps}
+                  position={cardHeader[0].position}
+                >
+                  {cardHeader[0].getLabel(data[cardHeader[0].id], data)}
+                </ItemsCardHeaderTitle>
+                <ItemsCardHeaderTitle
+                  key={cardHeader[1].id}
+                  gridProps={cardHeader[1].gridProps}
+                  position={cardHeader[1].position}
+                >
+                  {cardHeader[1].getLabel(data[cardHeader[1].id], data)}
+                </ItemsCardHeaderTitle>
               </ItemsCardHeader>
               <ItemsCardContents>
                 {cardBody.map((body) => (

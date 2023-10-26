@@ -21,22 +21,28 @@ const ItemsCardBody: React.FC<IItemsCardBodyProps> = ({ testId = 'itemCard', chi
   const header = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === ItemsCardHeader)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+            : child
         )
     : [];
   const contents = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === ItemsCardContents)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.contents` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.contents` })
+            : child
         )
     : [];
   const actions = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === ItemsCardActions)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.actions` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.actions` })
+            : child
         )
     : [];
   return (

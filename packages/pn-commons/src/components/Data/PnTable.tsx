@@ -40,8 +40,10 @@ const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', 
   const header = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableHeader)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+            : child
         )
     : [];
 

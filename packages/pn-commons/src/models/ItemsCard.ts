@@ -6,6 +6,7 @@ import { Item } from './PnTable';
 
 export interface CardElement {
   id: string;
+  position?: string;
   label: string;
   getLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
   notWrappedInTypography?: boolean;

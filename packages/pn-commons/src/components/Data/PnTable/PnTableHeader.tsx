@@ -15,8 +15,10 @@ const PnTableHeader: React.FC<IPnTableHeaderProps> = ({ testId, children }) => {
   const columns = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableHeaderCell)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.cell` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.cell` })
+            : child
         )
     : [];
   return (

@@ -195,13 +195,21 @@ const SmartTable = <ColumnId extends string>({
               <ItemsCardBody key={data.id}>
                 <ItemsCardHeader>
                   <ItemsCardHeaderTitle
-                    cardHeader={cardHeader}
-                    item={data}
-                    headerGridProps={{
-                      direction: { xs: 'row', sm: 'row' },
-                      alignItems: { xs: 'flex-start', sm: 'center' },
-                    }}
-                  />
+                    key={cardHeader[0].id}
+                    gridProps={cardHeader[0].gridProps}
+                    position={cardHeader[0].position}
+                  >
+                    {cardHeader[0].getLabel(data[cardHeader[0].id], data)}
+                  </ItemsCardHeaderTitle>
+                  {cardHeader[1] && (
+                    <ItemsCardHeaderTitle
+                      key={cardHeader[1].id}
+                      gridProps={cardHeader[1].gridProps}
+                      position={cardHeader[1].position}
+                    >
+                      {cardHeader[1].getLabel(data[cardHeader[1].id], data)}
+                    </ItemsCardHeaderTitle>
+                  )}
                 </ItemsCardHeader>
                 <ItemsCardContents>
                   {cardBody.map((body) => (
