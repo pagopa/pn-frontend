@@ -119,7 +119,7 @@ const CodeModal = memo(
                 value={initialValues.join('')}
                 tooltipTitle={getLocalizedOrDefaultLabel(
                   'delegations',
-                  'code_copied',
+                  'deleghe.code_copied',
                   'Codice copiato'
                 )}
               />
