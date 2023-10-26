@@ -77,6 +77,6 @@ describe('Notifications routes', () => {
 
   it('should compile CANCEL_NOTIFICATION', () => {
     const route = CANCEL_NOTIFICATION('mocked-iun');
-    expect(route).toEqual('/delivery-push/v2.1/notifications/cancel/mocked-iun');
+    expect(route).toEqual('/delivery-push/v2.0/notifications/cancel/mocked-iun');
   });
 });
