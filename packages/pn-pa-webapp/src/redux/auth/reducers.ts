@@ -35,13 +35,13 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
   groups: yup.array().of(yup.string()).notRequired(),
   name: yup.string().required(),
   hasGroups: yup.boolean(),
-  parentDescription: yup.string().nullable(),
-  aooParent: yup.string().nullable(),
-  subUnitCode: yup.string().nullable(),
-  subUnitType: yup.string().nullable(),
+  parentDescription: yup.string().notRequired(),
+  aooParent: yup.string().notRequired(),
+  subUnitCode: yup.string().notRequired(),
+  subUnitType: yup.string().notRequired(),
   rootParent: yup
     .object({
-      id: yup.string().nullable(),
+      id: yup.string().notRequired(),
       description: yup.string().notRequired(),
     })
     .notRequired(),

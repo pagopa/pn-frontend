@@ -8,18 +8,18 @@ export interface User extends BasicUser {
 }
 
 export interface Organization {
-  parentDescription?: string | null;
+  parentDescription?: string;
   id: string;
   roles: Array<Role>;
   fiscal_code: string; // organization fiscal code
   groups?: Array<string>;
   hasGroups?: boolean;
   name: string;
-  subUnitCode?: string | null;
-  subUnitType?: string | null;
-  aooParent?: string | null;
+  subUnitCode?: string;
+  subUnitType?: string;
+  aooParent?: string;
   rootParent?: {
-    id?: string | null;
+    id?: string;
     description?: string;
   };
 }

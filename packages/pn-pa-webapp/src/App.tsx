@@ -89,18 +89,22 @@ const ActualApp = () => {
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
 
-  const productsList = products ? [reservedArea, ...products] : [reservedArea];
-  const productId = products ? SELFCARE_SEND_PROD_ID : reservedArea.id;
-  const institutionsList = institutions
-    ? institutions
-    : [
-        {
-          id: idOrganization,
-          name: loggedUserOrganizationParty.name,
+  const productsList = products.length > 0 ? [reservedArea, ...products] : [reservedArea];
+  const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : reservedArea.id;
+  const institutionsList =
+    institutions.length > 0
+      ? institutions.map((institution) => ({
+          ...institution,
           productRole: t(`roles.${role.role}`),
-          parentName: loggedUserOrganizationParty?.rootParent?.description,
-        },
-      ];
+        }))
+      : [
+          {
+            id: idOrganization,
+            name: loggedUserOrganizationParty.name,
+            productRole: t(`roles.${role.role}`),
+            parentName: loggedUserOrganizationParty?.rootParent?.description,
+          },
+        ];
 
   const sessionToken = loggedUser.sessionToken;
 

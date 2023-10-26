@@ -136,3 +136,25 @@ export function adaptedTokenExchangeError(originalError: any) {
     },
   };
 }
+
+export function removeNullProperties<T extends object>(obj: T): T {
+  const newObj = {} as T;
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (value !== null) {
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        // eslint-disable-next-line functional/immutable-data
+        newObj[key as keyof T] = removeNullProperties(value);
+      } else if (Array.isArray(value)) {
+        // eslint-disable-next-line functional/immutable-data
+        newObj[key as keyof T] = value.map((item) =>
+          typeof item === 'object' ? removeNullProperties(item) : item
+        ) as T[keyof T]; // add type assertion here
+      } else {
+        // eslint-disable-next-line functional/immutable-data
+        newObj[key as keyof T] = value;
+      }
+    }
+  }
+  return newObj;
+}

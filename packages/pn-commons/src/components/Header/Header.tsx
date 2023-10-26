@@ -109,7 +109,7 @@ const Header = ({
   const enableHeaderProduct = showHeaderProduct && (isLogged || isLogged === undefined);
 
   useEffect(() => {
-    if (productsList && productsList.length > 0 && partyList && partyList.length > 0) {
+    if (productsList && productsList.length > 0) {
       setIsHeaderReady(true);
     }
   }, [productsList, partyList]);
