@@ -37,18 +37,21 @@ export default function ConfirmationModal({
       aria-labelledby="responsive-dialog-title"
       data-testid="confirmationDialog"
     >
-      <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
-        <Box mx={3} sx={{ height: '100%' }}>
+      <Grid
+        container
+        direction="column"
+        sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}
+        xs={10}
+      >
+        <Box mx={3}>
           <Grid container item mt={4}>
-            <Grid item xs={10}>
-              <Typography
-                id="confirmation-dialog-delegations"
-                variant="h5"
-                sx={{ fontSize: '18px', fontWeight: '600' }}
-              >
-                {title}
-              </Typography>
-            </Grid>
+            <Typography
+              id="confirmation-dialog-delegations"
+              variant="h5"
+              sx={{ fontSize: '18px', fontWeight: '600' }}
+            >
+              {title}
+            </Typography>
           </Grid>
 
           <Stack
@@ -56,7 +59,7 @@ export default function ConfirmationModal({
             justifyContent={'flex-end'}
             alignItems={'center'}
             ml={'auto'}
-            pb={isMobile ? 4 : 0}
+            pb={4}
           >
             <Grid
               item
