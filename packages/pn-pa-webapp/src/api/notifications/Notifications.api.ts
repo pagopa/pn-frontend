@@ -44,13 +44,7 @@ export const NotificationsApi = {
   getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
       if (response.data?.resultsPage) {
-        const notifications = response.data.resultsPage.map((d) => ({
-          ...d,
-        }));
-        return {
-          ...response.data,
-          resultsPage: notifications,
-        };
+        return response.data;
       }
       return {
         resultsPage: [],

@@ -50,13 +50,7 @@ export const NotificationsApi = {
       .get<GetNotificationsResponse>(NOTIFICATIONS_LIST(payload, isDelegatedPage))
       .then((response) => {
         if (response.data && response.data.resultsPage) {
-          const notifications = response.data.resultsPage.map((d) => ({
-            ...d,
-          }));
-          return {
-            ...response.data,
-            resultsPage: notifications,
-          };
+          return response.data;
         }
         return {
           resultsPage: [],
