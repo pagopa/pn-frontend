@@ -27,13 +27,13 @@ export const productsList: Array<ProductEntity> = [
   {
     id: '0',
     title: `Product 1`,
-    productUrl: '',
+    productUrl: 'https://www.product1.com',
     linkType: LinkType.INTERNAL,
   },
   {
     id: '1',
     title: `Product 2`,
-    productUrl: 'https://www.product.com',
+    productUrl: 'https://www.product2.com',
     linkType: LinkType.EXTERNAL,
   },
 ];

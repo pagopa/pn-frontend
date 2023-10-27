@@ -66,35 +66,13 @@ describe('Header Component', () => {
     await waitFor(() => expect(handleClick).toBeCalledTimes(1));
   });
 
-  it('renders header (two products, no parties and no user dropdown)', async () => {
-    sessionStorage.setItem('fake-item', 'prova');
-    // render component
-    const { container } = render(
-      <Header productsList={productsList} loggedUser={loggedUser} productId={productsList[0].id} />
-    );
-    expect(sessionStorage.getItem('fake-item')).not.toBeNull();
-    const headers = container.querySelectorAll('.MuiContainer-root');
-    const productButton = headers[1].querySelector('[role="button"]');
-    expect(productButton).toBeInTheDocument();
-    fireEvent.click(productButton!);
-    const productDropdown = await waitFor(() => screen.queryByRole('presentation'));
-    expect(productDropdown).toBeInTheDocument();
-    const products = productDropdown!.querySelectorAll('li');
-    expect(products).toHaveLength(2);
-    expect(products[0]).toHaveTextContent(productsList[0].title);
-    expect(products[1]).toHaveTextContent(productsList[1].title);
-    fireEvent.click(products[1]);
-    expect(assignFn).toBeCalledTimes(0);
-    expect(sessionStorage.getItem('fake-item')).toBe('prova');
-  });
-
   it('renders header (checking switch product)', async () => {
     sessionStorage.setItem('fake-item', 'prova');
     // render component
     const { container } = render(
       <Header
         productsList={productsList}
-        selfcareBaseUrl="dev.selfcare"
+        partyList={partyList}
         loggedUser={loggedUser}
         partyId="1"
         productId={productsList[0].id}
@@ -108,11 +86,9 @@ describe('Header Component', () => {
     const productDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(productDropdown).toBeInTheDocument();
     const products = productDropdown!.querySelectorAll('li');
-    fireEvent.click(products[1]);
+    await waitFor(() => fireEvent.click(products[1]));
     expect(assignFn).toBeCalledTimes(1);
-    expect(assignFn).toBeCalledWith(
-      `dev.selfcare/token-exchange?institutionId=1&productId=${productsList[1].id}`
-    );
+    expect(assignFn).toBeCalledWith(productsList[1].productUrl);
     expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
@@ -122,15 +98,15 @@ describe('Header Component', () => {
       {
         id: 'selfcare',
         title: 'Area Riservata',
-        productUrl: '',
+        productUrl: 'dev.selfcare/dashboard/1',
         linkType: LinkType.EXTERNAL,
       },
     ];
     const { container } = render(
       <Header
         productsList={productsWithSelfcare}
-        selfcareBaseUrl="dev.selfcare"
         loggedUser={loggedUser}
+        partyList={partyList}
         partyId="1"
         productId={productsWithSelfcare[0].id}
       />
@@ -146,9 +122,9 @@ describe('Header Component', () => {
     const selfcareProductIndex = productsWithSelfcare.findIndex(
       (product) => product.id === 'selfcare'
     );
-    fireEvent.click(products[selfcareProductIndex]);
+    await waitFor(() => fireEvent.click(products[selfcareProductIndex]));
     expect(assignFn).toBeCalledTimes(1);
-    expect(assignFn).toBeCalledWith(`dev.selfcare/dashboard/1`);
+    expect(assignFn).toBeCalledWith(productsWithSelfcare[selfcareProductIndex].productUrl);
     expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
@@ -160,7 +136,6 @@ describe('Header Component', () => {
         productsList={productsList}
         partyList={partyList}
         partyId={partyList[0].id}
-        selfcareBaseUrl="dev.selfcare"
         loggedUser={loggedUser}
         productId={productsList[0].id}
       />
@@ -257,7 +232,6 @@ describe('Header Component', () => {
     const { container } = render(
       <Header
         productsList={productsList}
-        selfcareBaseUrl="dev.selfcare"
         loggedUser={loggedUser}
         partyId={partyWithParent?.id}
         enableDropdown
