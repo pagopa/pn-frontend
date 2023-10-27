@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { AppBar } from '@mui/material';
 import {
   HeaderAccount,
@@ -65,8 +63,6 @@ const Header = ({
     title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
   };
 
-  const [isHeaderReady, setIsHeaderReady] = useState(false);
-
   const trackEvent = (url: string) => {
     if (eventTrackingCallbackProductSwitch) {
       eventTrackingCallbackProductSwitch(url);
@@ -106,13 +102,11 @@ const Header = ({
     window.location.assign(party.entityUrl);
   };
 
-  const enableHeaderProduct = showHeaderProduct && (isLogged || isLogged === undefined);
-
-  useEffect(() => {
-    if (productsList && productsList.length > 0) {
-      setIsHeaderReady(true);
-    }
-  }, [productsList, partyList]);
+  const enableHeaderProduct =
+    showHeaderProduct &&
+    (isLogged || isLogged === undefined) &&
+    productsList &&
+    productsList.length > 0;
 
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
@@ -125,7 +119,7 @@ const Header = ({
         enableDropdown={enableDropdown}
         userActions={userActions}
       />
-      {enableHeaderProduct && isHeaderReady && (
+      {enableHeaderProduct && (
         <HeaderProduct
           key={partyId}
           productId={productId}
