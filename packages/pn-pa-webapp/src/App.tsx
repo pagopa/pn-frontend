@@ -23,7 +23,7 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductEntity } from '@pagopa/mui-italia';
+import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -89,8 +89,19 @@ const ActualApp = () => {
   const role = loggedUserOrganizationParty?.roles[0];
   const idOrganization = loggedUserOrganizationParty?.id;
 
-  const productsList = products.length > 0 ? [reservedArea, ...products] : [reservedArea];
-  const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : reservedArea.id;
+  const productsList =
+    products.length > 0
+      ? [reservedArea, ...products]
+      : [
+          reservedArea,
+          {
+            id: '0',
+            title: t('header.notification-platform'),
+            productUrl: '',
+            linkType: 'internal' as LinkType,
+          },
+        ];
+  const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
   const institutionsList =
     institutions.length > 0
       ? institutions.map((institution) => ({
