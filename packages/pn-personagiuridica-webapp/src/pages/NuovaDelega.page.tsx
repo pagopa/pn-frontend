@@ -438,7 +438,7 @@ const NuovaDelega = () => {
                         </Typography>
                         <FormControl fullWidth>
                           <LocalizationProvider
-                            dateAdapter={AdapterDateFns as any}
+                            dateAdapter={AdapterDateFns}
                             adapterLocale={currentLocale}
                           >
                             <CustomDatePicker
