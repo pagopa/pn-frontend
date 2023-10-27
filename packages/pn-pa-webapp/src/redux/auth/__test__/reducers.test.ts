@@ -1,14 +1,29 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
+import {
+  institutionsDTO,
+  institutionsList,
+  productsDTO,
+  productsList,
+} from '../../../__mocks__/User.mock';
 import { apiClient } from '../../../api/apiClients';
 import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.routes';
+import {
+  GET_INSTITUTIONS,
+  GET_INSTITUTION_PRODUCTS,
+} from '../../../api/external-registries/external-registries-routes';
 import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { PNRole, PartyRole } from '../../../models/user';
 import { store } from '../../store';
-import { acceptPrivacy, acceptToS, getInstitutions, getPrivacyApproval, getProductsOfInstitution, getToSApproval } from '../actions';
-import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS } from '../../../api/external-registries/external-registries-routes';
-import { institutionsDTO, institutionsList, productsDTO, productsList } from '../../../__mocks__/User.mock';
+import {
+  acceptPrivacy,
+  acceptToS,
+  getInstitutions,
+  getPrivacyApproval,
+  getProductsOfInstitution,
+  getToSApproval,
+} from '../actions';
 
 describe('Auth redux state tests', () => {
   // eslint-disable-next-line functional/no-let
@@ -33,24 +48,24 @@ describe('Auth redux state tests', () => {
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
-          email: '',
-          name: '',
-          uid: '',
-          sessionToken: '',
-          family_name: '',
-          fiscal_number: '',
-          organization: {
-            id: '',
-            roles: [
-              {
-                role: PNRole.ADMIN,
-                partyRole: PartyRole.MANAGER,
-              },
-            ],
-            fiscal_code: '',
+            email: '',
+            name: '',
+            uid: '',
+            sessionToken: '',
+            family_name: '',
+            fiscal_number: '',
+            organization: {
+              id: '',
+              roles: [
+                {
+                  role: PNRole.ADMIN,
+                  partyRole: PartyRole.MANAGER,
+                },
+              ],
+              fiscal_code: '',
+            },
+            desired_exp: 0,
           },
-          desired_exp: 0,
-        },
       isUnauthorizedUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
@@ -68,7 +83,7 @@ describe('Auth redux state tests', () => {
       isClosedSession: false,
       isForbiddenUser: false,
       institutions: [],
-      productsOfInstitution: []
+      productsOfInstitution: [],
     });
   });
 
@@ -230,9 +245,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch institutions', async () => {
-    mock
-      .onGet(GET_INSTITUTIONS())
-      .reply(200, institutionsDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsDTO);
     const action = await store.dispatch(getInstitutions());
     expect(action.type).toBe('getInstitutions/fulfilled');
     expect(action.payload).toEqual(institutionsList);
@@ -240,12 +253,16 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch productsInstitution', async () => {
-    mock
-      .onGet(GET_INSTITUTION_PRODUCTS('1'))
-      .reply(200, productsDTO);
+    const institutionId = '1';
+    const products = productsList.map((product) => ({
+      ...product,
+      productUrl: `mock-selfcare.base/token-exchange?institutionId=${institutionId}&productId=mock-prod-id`,
+    }));
+
+    mock.onGet(GET_INSTITUTION_PRODUCTS(institutionId)).reply(200, productsDTO);
     const action = await store.dispatch(getProductsOfInstitution('1'));
     expect(action.type).toBe('getProductsOfInstitution/fulfilled');
-    expect(action.payload).toEqual(productsList);
-    expect(store.getState().userState.productsOfInstitution).toStrictEqual(productsList);
+    expect(action.payload).toEqual(products);
+    expect(store.getState().userState.productsOfInstitution).toStrictEqual(products);
   });
 });
