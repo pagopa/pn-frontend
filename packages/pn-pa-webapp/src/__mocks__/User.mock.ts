@@ -1,5 +1,7 @@
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
+import { getConfiguration } from '../services/configuration.service';
+
 export const productsDTO = [
   {
     id: '0',
@@ -43,4 +45,5 @@ export const institutionsList: Array<PartyEntity> = institutionsDTO.map((institu
   productRole: institution.userProductRoles[0],
   logoUrl: undefined,
   parentName: institution.rootParent?.description,
+  entityUrl: `mock-selfcare.base/token-exchange?institutionId=${institution.id}&productId=mock-prod-id`,
 }));
