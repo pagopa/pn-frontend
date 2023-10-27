@@ -1,29 +1,37 @@
 {
   "loginPage": {
-    "title": "Wie möchtest du zugreifen?",
-    "description": "Wähle deinen bevorzugten Modus aus.",
+    "title": "Wie möchtest du dich anmelden?",
+    "description": "Wähle deine bevorzugte Methode.",
     "loginBox": {
-      "title": "Zugriff",
-      "spidLogin": "Zugriff mit SPID",
-      "cieLogin": "Zugriff mit CIE"
-    },
-    "hintText": "Du hast kein SPID? <1>Mehr erfahren</1>",
-    "privacyAndCondition": "Mit der Authentifizierung erklärst du, die <0>Datenschutzerklärung</0> und die <1>Allgemeinen Geschäftsbedingungen</1> der Area Riservata gelesen und verstanden zu haben."
+      "title": "Anmelden",
+      "spidLogin": "Mit SPID anmelden",
+      "cieLogin": "Mit CIE anmelden"
+    }
   },
   "spidSelect": {
     "title": "Wähle deinen SPID-Anbieter",
-    "hintText": "Du hast kein SPID?<1> Mehr erfahren</1>",
+    "hintText": "Du besitzt keine SPID-Zugangsdaten?<0> Mehr erfahren</0>",
     "cancelButton": "Abbrechen"
   },
   "loginError": {
-    "title": "Es ist leider ein Fehler aufgetreten.",
-    "message": "Aufgrund eines Systemfehlers ist es nicht möglich, den Vorgang abzuschließen.<1 />Bitte versuche es später erneut."
+    "title": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden.",
+    "message": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden.<1 />Bitte versuche es später noch einmal.",
+    "code": {
+      "error_19": "Du hast zu oft einen falschen Benutzernamen oder ein falsches Passwort eingegeben: Bitte versuche es in einigen Minuten erneut oder wende dich an deinen SPID-Identitätsanbieter, um deine Anmeldeinformationen zu ändern.",
+      "error_20": "Aus Sicherheitsgründen ist ein Login mit einem zweiten Authentifizierungsfaktor erforderlich: Wende dich an deinen SPID-Identitätsanbieter, um zu erfahren, wie dieser verwendet wird.",
+      "error_21": "Seit deinem Anmeldeversuch ist zu viel Zeit vergangen: Beginne von vorne.",
+      "error_22": "Um die Plattform nutzen zu können, ist es notwendig, der Übermittlung einiger Daten zuzustimmen. Melde dich erneut an und erteile deine Einwilligung.",
+      "error_23": "Deine SPID-Identität wird gesperrt oder widerrufen. Um dein Konto zu reaktivieren, wende dich bitte an deinen SPID-Identitätsanbieter.",
+      "error_25": "Du hast den Login-Vorgang abgebrochen: Du kannst diesen jederzeit erneut durchführen.",
+      "error_30": "Die von dir verwendete SPID-Identität unterscheidet sich von der vom Service Provider geforderten Art. Melde dich erneut mit der richtigen an.",
+      "error_1001": "Zugriff verweigert: Du hast nicht das erforderliche Mindestalter, um die Plattform zu nutzen."
+    }
   },
   "disambiguationPage": {
-    "title": "Mit welchem Profil möchtest du zugreifen?",
-    "subTitle": "Wir werden dich entsprechend deiner Wahl umleiten.",
+    "title": "Mit welchem Profil möchtest du dich anmelden?",
+    "subTitle": "Wir leiten dich nach deiner Wahl weiter.",
     "pf": "Privatperson",
     "pg": "Juristische Person",
-    "button": "Zugriff"
+    "button": "Anmelden"
   }
 }

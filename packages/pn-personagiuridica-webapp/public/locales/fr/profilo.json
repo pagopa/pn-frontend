@@ -1,14 +1,14 @@
 {
-  "title": "Informations vous concernant",
-  "subtitle": "Ces informations sont extraites de votre SPID ou CIE et ne sont pas modifiables.",
+  "title": "Vos données",
+  "subtitle": "Ces données sont issues de votre SPID ou CIE et ne sont pas modifiables.",
   "profile": {
     "name": "Prénom",
-    "family_name": "Nom",
-    "fiscal_number": "Code d'identification fiscale"
+    "family_name": "Nom de famille",
+    "fiscal_number": "Code fiscal"
   },
   "alert-redirect-to-contacts": {
-    "title": "Souhaitez-vous gérer vos coordonnées ?",
-    "message": "Saisissez, affichez ou modifiez les coordonnées auxquelles vous souhaitez recevoir les notifications et communications de SEND.",
-    "action-text": "Cliquez sur vos coordonnées"
+    "title": "Vous souhaitez gérer vos coordonnées ?",
+    "message": "Saisissez, affichez ou modifiez les coordonnées auxquelles vous souhaitez recevoir les notifications et les communications de SEND.",
+    "action-text": "Accédez à vos coordonnées"
   }
 }

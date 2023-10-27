@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
+
+
+### Features
+
+* **pn-4392:** added switch institutions and products to PA ([#1020](https://github.com/pagopa/pn-frontend/issues/1020)) ([4d3f23e](https://github.com/pagopa/pn-frontend/commit/4d3f23ed841238910ab9590f10b4c5153454be84))
+* **pn-7317:** Multipagamento, pagamento di notifica annullata ([#1017](https://github.com/pagopa/pn-frontend/issues/1017)) ([d9d2f27](https://github.com/pagopa/pn-frontend/commit/d9d2f27727cb5a6ed10194c8abb848c847b17aa5)), closes [#932](https://github.com/pagopa/pn-frontend/issues/932) [#933](https://github.com/pagopa/pn-frontend/issues/933) [#937](https://github.com/pagopa/pn-frontend/issues/937) [#939](https://github.com/pagopa/pn-frontend/issues/939) [#941](https://github.com/pagopa/pn-frontend/issues/941) [#944](https://github.com/pagopa/pn-frontend/issues/944) [#954](https://github.com/pagopa/pn-frontend/issues/954) [#956](https://github.com/pagopa/pn-frontend/issues/956) [#957](https://github.com/pagopa/pn-frontend/issues/957) [#952](https://github.com/pagopa/pn-frontend/issues/952) [#968](https://github.com/pagopa/pn-frontend/issues/968) [#966](https://github.com/pagopa/pn-frontend/issues/966) [#969](https://github.com/pagopa/pn-frontend/issues/969) [#970](https://github.com/pagopa/pn-frontend/issues/970) [#940](https://github.com/pagopa/pn-frontend/issues/940) [#973](https://github.com/pagopa/pn-frontend/issues/973) [#971](https://github.com/pagopa/pn-frontend/issues/971) [#958](https://github.com/pagopa/pn-frontend/issues/958) [#961](https://github.com/pagopa/pn-frontend/issues/961)
+* **Pn-7410:** new translations including notification canceling and multipayment ([#1021](https://github.com/pagopa/pn-frontend/issues/1021)) ([54e1396](https://github.com/pagopa/pn-frontend/commit/54e1396db701526d2f02d425522f352da5c9ce37))
+* **pn-7487:** Refactored pn-commons tests ([#974](https://github.com/pagopa/pn-frontend/issues/974)) ([9104b3b](https://github.com/pagopa/pn-frontend/commit/9104b3b0640abd7ca2cfc45127973feda7e7a69e))
+* **pn-7747:** restructured project folders and files ([#994](https://github.com/pagopa/pn-frontend/issues/994)) ([84019fc](https://github.com/pagopa/pn-frontend/commit/84019fc476b053b72d284a6733cd6a5b581ec48f))
+* **pn-8129:** deleted the config.json files for those obsolete environments ([#1016](https://github.com/pagopa/pn-frontend/issues/1016)) ([c291ddd](https://github.com/pagopa/pn-frontend/commit/c291dddc250df0e2ee6eed19eed1ced7793f0b49))
+* **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([d838cf4](https://github.com/pagopa/pn-frontend/commit/d838cf416b8763a7c573f6ece10c1b363301f4de))
+
+
+
+
+
+## [2.1.1](https://github.com/pagopa/pn-frontend/compare/v2.1.0...v2.1.1) (2023-10-19)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
 # [2.1.0](https://github.com/pagopa/pn-frontend/compare/v2.1.0-RC.5...v2.1.0) (2023-09-28)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

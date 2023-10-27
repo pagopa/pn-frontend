@@ -1,10 +1,10 @@
 {
   "button": {
     "filtra": "Filter",
-    "annulla filtro": "Remove filters",
+    "annulla filtro": "Reset filters",
     "indietro": "Back",
     "associa": "Associate",
-    "capito": "I understand",
+    "capito": "OK, I got it",
     "conferma": "Confirm",
     "annulla": "Cancel",
     "modifica": "Edit",
@@ -16,51 +16,51 @@
     "enable": "Activate",
     "disable": "Deactivate",
     "go-to-home": "Go to the home page",
-    "go-to-login": "Login"
+    "go-to-login": "Log in"
   },
   "menu": {
     "notifiche": "Notifications",
     "deleghe": "Delegates",
     "profilo": "Your data",
-    "contacts": "Your contact details",
+    "contacts": "Your contact information",
     "app-status": "Platform status",
-    "aria-label": "main navigation notifications platform",
-    "aria-label-inner": "recipient navigation notifications platform"
+    "aria-label": "platform-notifications main navigation",
+    "aria-label-inner": "platform-notifications recipient navigation"
   },
   "header": {
     "logout": "Exit",
-    "pago-pa-link": "Website of PagoPA S.p.A."
+    "pago-pa-link": "PagoPA S.p.A. website"
   },
   "tos": {
-    "title": "SEND – Digital Notifications Service",
-    "body": "To access, read and accept the Privacy Policy and the Terms and Conditions of Use.",
-    "redo-body": "The Privacy Policy and the Terms and Conditions of Use have changed. To log in, read and accept the new version.",
-    "switch-label": "I accept the SEND <0>Privacy Policy</0> and the <1>Terms and Conditions of Use</1>",
-    "button": "Login"
+    "title": "SEND - Servizio Notifiche Digitali",
+    "body": "To log in, accept the Terms and Conditions of Service and read the Privacy Policy.",
+    "redo-body": "The Terms and Conditions of Service and Privacy Policy have changed. To log in, you must agree and confirm that you have read the new versions.",
+    "switch-label": "I accept the <1>Terms and Conditions of Use</1> and confirm that I have read the <0>Privacy Policy </0>",
+    "button": "Log in"
   },
   "table": {
     "aria-label": "Item table"
   },
   "paginator": {
     "aria-label": "Pagination Menu",
-    "first": "first item",
-    "last": "last item",
+    "first": "first element",
+    "last": "last element",
     "page": "page",
-    "next": "Go to the next page",
-    "previous": "Go to the previous page",
+    "next": "Go to next page",
+    "previous": "Go to previous page",
     "selected": "selected item",
     "rows-per-page": "Lines per page"
   },
   "toast": {
-    "aria-label": "Toast closure icon"
+    "aria-label": "Toast close icon"
   },
   "date-picker": {
     "left-arrow": "Go to the previous month",
     "right-arrow": "Go to the next month",
     "switch-to-year": "calendar mode active, switch to year selection mode",
     "switch-to-calendar": "year selection mode active, switch to calendar mode",
-    "select-date": "Add date",
-    "date-selected": "Choose date, the selected date is {{date}}"
+    "select-date": "Choose date",
+    "date-selected": "Choose date, the selected date is {{date}} "
   },
   "date-time": {
     "today-uppercase-initial": "Today",
@@ -68,17 +68,17 @@
   },
   "error-boundary": {
     "title": "Something went wrong",
-    "description": "We were unable to load the page. Reload it, or try again later.",
+    "description": "We were unable to load the page. Please reload it, or try again later.",
     "action": "Reload page"
   },
   "not-accessible": {
-    "title": "The platform cannot be accessed",
-    "description": "Please try again in a few hours. Need some help?",
-    "action": "write to us"
+    "title": "Cannot access the platform",
+    "description": "SEND is currently being tested and is not yet available. For more information on the initiative,",
+    "action": "visit the dedicated website"
   },
-  "access-denied": "You do not have permission to access this page",
+  "access-denied": "You do not have the necessary permissions to access this page",
   "not-logged": "Log in to SEND",
-  "not-logged-subtitle": "To see and manage your notifications, log in with your SPID or CIE.",
+  "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
   "not-found": {
     "title": "404: The page you are looking for does not exist",
     "descpription": "You are here by mistake, try using navigation."
@@ -88,7 +88,7 @@
     "message": "You will be redirected"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problems logging into SEND",
+    "title": "Issues logging into SEND",
     "message": "Please try again later"
   },
   "messages": {
@@ -97,14 +97,14 @@
     "403-title": "Your session has timed out",
     "403-message": "Enter and log in with SPID or CIE.",
     "401-title": "Unauthorised user",
-    "401-message": "The current user does not have permission",
+    "401-message": "Current user does not have permissions",
     "451-title": "Platform not accessible",
-    "451-message": "The platform cannot be accessed",
+    "451-message": "Cannot access the platform",
     "500-title": "Service not available",
-    "500-message": "Due to a temporary service issue, your request has not been sent. Please try again later.",
+    "500-message": "Due to a temporary service issue, your request has not been submitted. Please come back later.",
     "lacking-grants-for-app-title": "You are not authorised to log in",
     "invalid-token-title": "You cannot log in due to a technical issue – invalid token",
-    "generic-token-exchange-problem": "The login could not be completed",
+    "generic-token-exchange-problem": "Login could not be completed",
     "generic-title": "Generic error",
     "generic-message": "An error has occurred. Please try again later",
     "generic-api-error-main-text": "We were unable to retrieve this data.",
@@ -113,7 +113,7 @@
   "footer": {
     "go-to-pagopa": "Link: go to the website of PagoPA S.p.A.",
     "go-to": "Go to link",
-    "privacy-info": "Informativa Privacy",
+    "privacy-info": "Privacy Policy",
     "who": "About us",
     "work": "Work with us",
     "certifications": "Certifications",
@@ -123,7 +123,7 @@
     "terms-conditions": "Terms and Conditions",
     "company": "Transparent company",
     "disclosure": "Responsible Disclosure Policy",
-    "321-model": "231 form",
+    "321-model": "Form 231",
     "accessibility": "Accessibility",
     "social": "Link: go to the website {{social}} of PagoPA S.p.A.",
     "resources": "Resources",
@@ -132,22 +132,24 @@
     "legal-part-2": "CAP 00187 – Reg. no. in the Rome Business Register, Tax code and VAT number 15376371009"
   },
   "required-fields": "*Required fields",
+  "required-field": "Required field",
+  "too-long-field-error": "Write maximum {{maxLength}} characters",
   "validation": {
-    "search-pattern-length-limit": "max {{maxLength}} characters search",
+    "search-pattern-length-limit": "Search max {{maxLength}} characters",
     "invalid-characters-not-inserted": "Invalid characters have not been entered."
   },
   "errors": {
     "bad_request": {
       "title": "Error sending data",
-      "message": "Request format is invalid."
+      "message": "The request format is invalid."
     },
     "unauthorized": {
       "title": "Unauthorised user",
-      "message": "The current user does not have permission."
+      "message": "The current user does not have permissions."
     },
     "unavailable_legal_reasons": {
       "title": "Platform not accessible",
-      "message": "The platform cannot be accessed"
+      "message": "Cannot access the platform"
     },
     "forbidden": {
       "title": "Your session has timed out",
@@ -159,7 +161,7 @@
     },
     "internal_server": {
       "title": "Service not available",
-      "message": "Due to a temporary service issue, your request has not been sent. Please try again later."
+      "message": "Due to a temporary service issue, your request has not been submitted. Please come back later."
     },
     "unhandled": {
       "title": "Generic error",
