@@ -27,6 +27,7 @@ const API_NOTIFICATIONS_PRELOAD = 'preload';
 const API_NOTIFICATIONS_REQUESTS = 'requests';
 const API_NOTIFICATIONS_PA = 'pa';
 const API_VERSION_SEGMENT = 'v1';
+const API_VERSION_SEGMENT_2_0 = 'v2.0';
 const API_VERSION_SEGMENT_2_1 = 'v2.1';
 const API_NOTIFICATIONS_GROUPS = 'groups';
 const API_NOTIFICATIONS_PAYMENT = 'payment';
@@ -181,7 +182,7 @@ export function CANCEL_NOTIFICATION(iun: string) {
   return compileRoute({
     prefix: API_DELIVERY_PUSH_PREFIX,
     path: API_NOTIFICATION_CANCEL_NOTIFICATION,
-    version: API_VERSION_SEGMENT_2_1,
+    version: API_VERSION_SEGMENT_2_0,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
     },
