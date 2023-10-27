@@ -1,9 +1,6 @@
 import React from 'react';
 
-import { Typography } from '@mui/material';
-
-import { Item } from '../../../../models';
-import { fireEvent, queryAllByRole, queryByTestId, render } from '../../../../test-utils';
+import { fireEvent, render } from '../../../../test-utils';
 import PnTableBodyCell from '../PnTableBodyCell';
 
 describe('PnTableBodyCell', () => {

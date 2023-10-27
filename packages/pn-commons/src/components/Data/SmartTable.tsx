@@ -85,6 +85,7 @@ function getCardElements<ColumnId extends string>(
         getLabel: (value: string | number | Array<string | ReactNode>, data?: Item) =>
           cfg.getValue(value, data, true),
         gridProps: cfg.cardConfiguration.gridProps,
+        position: cfg.cardConfiguration.position,
       });
     } else if (cfg.cardConfiguration.position === 'body') {
       cardBody.push({

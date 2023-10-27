@@ -24,14 +24,11 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
     getRows,
   } = fieldSpecs;
 
-  const cardHeader: [CardElement, CardElement | null] = useMemo(
-    () => [
-      {
-        ...adaptFieldSpecToMobile(getStatusFieldSpec()),
-        label: '',
-      },
-      null,
-    ],
+  const cardHeader: CardElement = useMemo(
+    () => ({
+      ...adaptFieldSpecToMobile(getStatusFieldSpec()),
+      label: '',
+    }),
     [getStatusFieldSpec]
   );
 
@@ -60,21 +57,12 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
         <ItemsCardBody key={data.id}>
           <ItemsCardHeader>
             <ItemsCardHeaderTitle
-              key={cardHeader[0].id}
-              gridProps={cardHeader[0].gridProps}
-              position={cardHeader[0].position}
+              key={cardHeader.id}
+              gridProps={cardHeader.gridProps}
+              position={cardHeader.position}
             >
-              {cardHeader[0].getLabel(data[cardHeader[0].id], data)}
+              {cardHeader.getLabel(data[cardHeader.id], data)}
             </ItemsCardHeaderTitle>
-            {cardHeader[1] && (
-              <ItemsCardHeaderTitle
-                key={cardHeader[1].id}
-                gridProps={cardHeader[1].gridProps}
-                position={cardHeader[1].position}
-              >
-                {cardHeader[1].getLabel(data[cardHeader[1].id], data)}
-              </ItemsCardHeaderTitle>
-            )}
           </ItemsCardHeader>
           <ItemsCardContents>
             {cardBody.map((body) => (

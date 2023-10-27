@@ -9,7 +9,7 @@ type Props = {
   sx?: SxProps;
   /** Cards test id */
   testId?: string;
-  children?:
+  children:
     | Array<React.ReactElement<IItemsCardBodyProps>>
     | React.ReactElement<IItemsCardBodyProps>;
 };

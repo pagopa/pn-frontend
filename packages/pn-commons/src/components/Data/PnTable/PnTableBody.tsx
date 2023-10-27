@@ -6,7 +6,7 @@ import PnTableBodyRow, { IPnTableBodyRowProps } from './PnTableBodyRow';
 
 export interface IPnTableBodyProps {
   testId?: string;
-  children?:
+  children:
     | Array<React.ReactElement<IPnTableBodyRowProps>>
     | React.ReactElement<IPnTableBodyRowProps>;
 }

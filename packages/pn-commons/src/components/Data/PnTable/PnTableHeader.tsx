@@ -6,7 +6,7 @@ import PnTableHeaderCell, { IPnTableHeaderCellProps } from './PnTableHeaderCell'
 
 export interface IPnTableHeaderProps {
   testId?: string;
-  children?:
+  children:
     | Array<React.ReactElement<IPnTableHeaderCellProps<string>>>
     | React.ReactElement<IPnTableHeaderCellProps<string>>;
 }

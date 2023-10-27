@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 export interface IItemsCardActionProps {
   testId?: string;
   handleOnClick?: () => void;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const ItemsCardAction: React.FC<IItemsCardActionProps> = ({ testId, children, handleOnClick }) => (

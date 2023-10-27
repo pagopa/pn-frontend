@@ -6,7 +6,7 @@ import { CardElement } from '../../../models';
 
 export interface IItemsCardContentProps {
   body: CardElement;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const ItemsCardContent: React.FC<IItemsCardContentProps> = ({ body, children }) => (

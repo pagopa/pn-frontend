@@ -6,7 +6,7 @@ import ItemsCardContent, { IItemsCardContentProps } from './ItemsCardContent';
 
 export interface IItemsCardContentsProps {
   testId?: string;
-  children?:
+  children:
     | Array<React.ReactElement<IItemsCardContentProps>>
     | React.ReactElement<IItemsCardContentProps>;
 }

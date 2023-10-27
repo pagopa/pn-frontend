@@ -7,14 +7,14 @@ import ItemsCardAction, { IItemsCardActionProps } from './ItemsCardAction';
 export interface IItemsCardActionsProps {
   testId?: string;
   disableSpacing?: boolean;
-  className?: string;
-  children?: Array<React.ReactElement<IItemsCardActionProps>>;
+  children?:
+    | React.ReactElement<IItemsCardActionProps>
+    | Array<React.ReactElement<IItemsCardActionProps>>;
 }
 
 const ItemsCardActions: React.FC<IItemsCardActionsProps> = ({
   testId,
   disableSpacing = true,
-  className = 'card-actions',
   children,
 }) => {
   const actions = children
@@ -27,7 +27,7 @@ const ItemsCardActions: React.FC<IItemsCardActionsProps> = ({
         )
     : [];
   return (
-    <CardActions disableSpacing={disableSpacing} data-testid={testId} className={className}>
+    <CardActions disableSpacing={disableSpacing} data-testid={testId} className={'card-actions'}>
       {actions}
     </CardActions>
   );

@@ -7,7 +7,7 @@ import ItemsCardHeaderTitle, { IItemsCardHeaderTitleProps } from './ItemsCardHea
 export interface IItemsCardHeaderProps {
   testId?: string;
   headerGridProps?: GridProps;
-  children?:
+  children:
     | React.ReactElement<IItemsCardHeaderTitleProps>
     | [
         React.ReactElement<IItemsCardHeaderTitleProps>,
@@ -26,10 +26,17 @@ const ItemsCardHeader: React.FC<IItemsCardHeaderProps> = ({
           React.isValidElement(child) ? React.cloneElement(child, { ...child.props }) : child
         )
     : [];
+
   return (
-    <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
-      <CardHeader data-testid={testId} className={'card-header'} title={cells} />
-    </Grid>
+    <CardHeader
+      data-testid={testId}
+      className={'card-header'}
+      title={
+        <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
+          {cells}
+        </Grid>
+      }
+    />
   );
 };
 

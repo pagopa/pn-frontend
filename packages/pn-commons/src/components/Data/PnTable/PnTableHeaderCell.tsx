@@ -1,5 +1,3 @@
-import { PropsWithChildren } from 'react';
-
 import { Box, TableCell, TableCellProps, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
@@ -11,7 +9,7 @@ export interface IPnTableHeaderCellProps<ColumnId> {
   cellProps?: TableCellProps;
   handleClick?: (s: Sort<ColumnId>) => void;
   columnId: ColumnId;
-  children?: React.ReactNode;
+  children: React.ReactNode;
   sortable?: boolean;
 }
 
@@ -23,7 +21,7 @@ const PnTableHeaderCell = <ColumnId extends string>({
   sortable,
   columnId,
   children,
-}: PropsWithChildren<IPnTableHeaderCellProps<ColumnId>>) => {
+}: IPnTableHeaderCellProps<ColumnId>) => {
   const sortHandler = (property: ColumnId) => () => {
     if (sort && handleClick) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';

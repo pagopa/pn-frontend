@@ -12,9 +12,8 @@ type Props = {
   ariaTitle?: string;
   /** Table test id */
   testId?: string;
-  children?:
-    | Array<React.ReactElement<IPnTableBodyProps>>
-    | Array<React.ReactElement<IPnTableHeaderProps>>;
+  /** Table children (body and header) */
+  children: [React.ReactElement<IPnTableHeaderProps>, React.ReactElement<IPnTableBodyProps>];
 };
 
 const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', children }) => {
@@ -50,8 +49,10 @@ const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', 
   const body = children
     ? React.Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableBody)
-        .map((child: any) =>
-          React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
+        .map((child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
+            : child
         )
     : [];
 

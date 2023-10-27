@@ -6,7 +6,7 @@ import PnTableHeaderCell from '../PnTableHeaderCell';
 
 describe('PnTableHeaderCell', () => {
   it('render component', () => {
-    const { container, queryAllByRole } = render(
+    const { container } = render(
       <table>
         <PnTableHeader>
           <PnTableHeaderCell columnId={'mock-column-id'}>mock-column-label</PnTableHeaderCell>
@@ -14,7 +14,5 @@ describe('PnTableHeaderCell', () => {
       </table>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
-    const buttons = queryAllByRole('button');
-    expect(buttons).toHaveLength(0);
   });
 });

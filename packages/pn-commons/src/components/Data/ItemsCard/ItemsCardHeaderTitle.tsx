@@ -2,7 +2,7 @@ import { Grid, GridProps } from '@mui/material';
 
 export interface IItemsCardHeaderTitleProps {
   gridProps?: GridProps;
-  children?: React.ReactNode;
+  children: React.ReactNode;
   position?: string;
 }
 
