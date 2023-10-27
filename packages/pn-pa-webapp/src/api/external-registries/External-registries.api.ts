@@ -51,7 +51,11 @@ export const ExternalRegistriesAPI = {
         response.data.map((product) => ({
           id: product.id,
           title: product.title,
-          productUrl: product.urlBO,
+          productUrl: `${
+            getConfiguration().SELFCARE_BASE_URL
+          }/token-exchange?institutionId=${institutionId}&productId=${
+            getConfiguration().SELFCARE_SEND_PROD_ID
+          }`,
           linkType: 'external',
         }))
       ),

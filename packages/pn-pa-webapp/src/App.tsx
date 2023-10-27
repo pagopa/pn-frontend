@@ -67,6 +67,9 @@ const ActualApp = () => {
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = loggedUser.organization;
+  // TODO check if it can exist more than one role on user
+  const role = loggedUserOrganizationParty?.roles[0];
+  const idOrganization = loggedUserOrganizationParty?.id;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
@@ -79,15 +82,11 @@ const ActualApp = () => {
     () => ({
       id: 'selfcare',
       title: t('header.reserved-area'),
-      productUrl: '',
+      productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
       linkType: 'external',
     }),
     [i18n.language]
   );
-
-  // TODO check if it can exist more than one role on user
-  const role = loggedUserOrganizationParty?.roles[0];
-  const idOrganization = loggedUserOrganizationParty?.id;
 
   const productsList =
     products.length > 0
@@ -274,7 +273,6 @@ const ActualApp = () => {
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        selfcareBaseUrl={SELFCARE_BASE_URL}
         isLogged={!!sessionToken}
       >
         <AppMessage />

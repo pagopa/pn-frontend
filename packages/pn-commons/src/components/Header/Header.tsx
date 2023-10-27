@@ -38,8 +38,6 @@ type HeaderProps = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
-  /** Base Url of Selfcare for token-exchange */
-  selfcareBaseUrl?: string;
 };
 
 const Header = ({
@@ -55,7 +53,6 @@ const Header = ({
   onAssistanceClick,
   eventTrackingCallbackProductSwitch,
   isLogged,
-  selfcareBaseUrl,
 }: HeaderProps) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -63,39 +60,24 @@ const Header = ({
     title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
   };
 
-  const trackEvent = (url: string) => {
-    if (eventTrackingCallbackProductSwitch) {
-      eventTrackingCallbackProductSwitch(url);
-    }
-  };
-
   const handleProductSelection = (product: ProductEntity) => {
-    if (!partyId) {
-      return;
+    if (eventTrackingCallbackProductSwitch) {
+      eventTrackingCallbackProductSwitch(product.productUrl);
     }
-    // eslint-disable-next-line functional/no-let
-    let url: string;
-    /** Here is necessary to clear sessionStorage otherwise when navigating throgh Area Riservata
-     * We enter in a state when the user was previously logged in but Area Riservata and PN require
-     * another token-exchange. Since the user "seems" to be logged in due to the presence of the old token
-     * in session storage, the token-exchange doesn't happen and the application enters in a blank state
-     * Further analysis is required when the navigation from PN will be allowed also to other products and
-     * not only to Area Reservata
-     *
-     * Carlotta Dimatteo 07/11/2022
-     */
-    sessionStorage.clear();
-
-    if (product.id === 'selfcare') {
-      url = `${selfcareBaseUrl}/dashboard/${partyId}`;
-      window.location.assign(url);
-      trackEvent(url);
-      return;
+    if (product.productUrl) {
+      /* eslint-disable-next-line functional/immutable-data */
+      window.location.href = product.productUrl;
+      /** Here is necessary to clear sessionStorage otherwise when navigating throgh Area Riservata
+       * We enter in a state when the user was previously logged in but Area Riservata and PN require
+       * another token-exchange. Since the user "seems" to be logged in due to the presence of the old token
+       * in session storage, the token-exchange doesn't happen and the application enters in a blank state
+       * Further analysis is required when the navigation from PN will be allowed also to other products and
+       * not only to Area Reservata
+       *
+       * Carlotta Dimatteo 07/11/2022
+       */
+      sessionStorage.clear();
     }
-
-    url = `${selfcareBaseUrl}/token-exchange?institutionId=${partyId}&productId=${product.id}`;
-    window.location.assign(url);
-    trackEvent(url);
   };
 
   const handlePartySelection = (party: PartyEntityWithUrl) => {
