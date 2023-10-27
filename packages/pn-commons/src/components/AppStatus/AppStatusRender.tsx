@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Box, Stack, Typography } from '@mui/material';
 
@@ -95,14 +95,14 @@ export const AppStatusRender = (props: Props) => {
     setPagination(paginationData);
   };
 
-  const lastCheckTimestampFormatted = useMemo(() => {
+  const lastCheckTimestampFormatted = () => {
     if (currentStatus) {
       const dateAndTime = formatDateTime(currentStatus.lastCheckTimestamp);
       return `${dateAndTime}`;
     } else {
       return '';
     }
-  }, [currentStatus]);
+  };
 
   // resultPages includes one element per page, *including the first page*
   // check the comments in the reducer
@@ -126,7 +126,7 @@ export const AppStatusRender = (props: Props) => {
     'appStatus',
     'appStatus.lastCheckLegend',
     'Timestamp ultima verifica',
-    { lastCheckTimestamp: lastCheckTimestampFormatted }
+    { lastCheckTimestamp: lastCheckTimestampFormatted() }
   );
   const downtimeListTitle = getLocalizedOrDefaultLabel(
     'appStatus',
