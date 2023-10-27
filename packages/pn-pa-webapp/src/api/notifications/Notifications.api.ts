@@ -8,7 +8,6 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
-  formatDate,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
@@ -47,7 +46,6 @@ export const NotificationsApi = {
       if (response.data?.resultsPage) {
         const notifications = response.data.resultsPage.map((d) => ({
           ...d,
-          sentAt: formatDate(d.sentAt),
         }));
         return {
           ...response.data,
