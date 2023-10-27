@@ -14,7 +14,6 @@ interface PfConfigurationFromFile {
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
   URL_FE_LOGIN: string;
-  URL_FE_LOGOUT: string;
   URL_CHECKOUT: string;
   LANDING_SITE_URL: string;
   // this will be removed when delegations to pg works correctly
@@ -36,6 +35,7 @@ interface PfConfiguration extends PfConfigurationFromFile {
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL: string;
   VERSION: string;
+  URL_FE_LOGOUT: string;
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS: boolean;
@@ -47,7 +47,6 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
     super();
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('URL_FE_LOGOUT').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
@@ -85,6 +84,7 @@ export function getConfiguration(): PfConfiguration {
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
+    URL_FE_LOGOUT: `${configurationFromFile.URL_FE_LOGIN}logout`,
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),

@@ -9,7 +9,6 @@
   "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
   "URL_FE_LOGIN": "https://login.uat.notifichedigitali.it/",
-  "URL_FE_LOGOUT": "https://login.uat.notifichedigitali.it/logout",
   "LANDING_SITE_URL": "https://www.uat.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,
   "WORK_IN_PROGRESS": false,
