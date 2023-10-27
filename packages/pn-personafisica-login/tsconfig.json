@@ -10,7 +10,7 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
