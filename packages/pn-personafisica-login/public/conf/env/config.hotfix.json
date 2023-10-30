@@ -1,13 +1,12 @@
 {
-    "SPID_TEST_ENV_ENABLED": true,
-    "SPID_VALIDATOR_ENV_ENABLED": false,
-    "SPID_CIE_ENTITY_ID": "xx_servizicie_test",
-    "URL_API_LOGIN": "https://hub-login.spid.hotfix.notifichedigitali.it",
-    "PF_URL": "https://cittadini.hotfix.notifichedigitali.it",
-    "PG_URL": "https://imprese.hotfix.notifichedigitali.it/auth/login",
-    "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
-    "MIXPANEL_TOKEN": "ba1f5101fe34a61bb125cbfe587780d8",
-    "ONE_TRUST_DRAFT_MODE": false,
-    "ONE_TRUST_PP": "133242e7-ad9a-45e5-a417-b7a50c746899",
-    "OT_DOMAIN_ID": "ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test"
+  "SPID_TEST_ENV_ENABLED": true,
+  "SPID_VALIDATOR_ENV_ENABLED": false,
+  "SPID_CIE_ENTITY_ID": "xx_servizicie_test",
+  "URL_API_LOGIN": "https://hub-login.spid.hotfix.notifichedigitali.it",
+  "PF_URL": "https://cittadini.hotfix.notifichedigitali.it",
+  "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
+  "MIXPANEL_TOKEN": "ba1f5101fe34a61bb125cbfe587780d8",
+  "ONE_TRUST_DRAFT_MODE": false,
+  "ONE_TRUST_PP": "133242e7-ad9a-45e5-a417-b7a50c746899",
+  "OT_DOMAIN_ID": "ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test"
 }

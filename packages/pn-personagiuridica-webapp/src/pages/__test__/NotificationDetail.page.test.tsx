@@ -11,6 +11,7 @@ import {
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
+  formatDate,
   getF24Payments,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
@@ -140,7 +141,7 @@ describe('NotificationDetail Page', () => {
     expect(tableRows![1]).toHaveTextContent(
       `detail.recipient${notificationToFe.recipients[1].denomination}`
     );
-    expect(tableRows![2]).toHaveTextContent(`detail.date${notificationToFe.sentAt}`);
+    expect(tableRows![2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
@@ -468,7 +469,7 @@ describe('NotificationDetail Page', () => {
     expect(tableRows![1]).toHaveTextContent(
       `detail.recipient${notificationToFe.recipients[1].denomination}`
     );
-    expect(tableRows![2]).toHaveTextContent(`detail.date${notificationToFe.sentAt}`);
+    expect(tableRows![2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
@@ -554,7 +555,7 @@ describe('NotificationDetail Page', () => {
     expect(tableRows![1]).toHaveTextContent(
       `detail.recipient${notificationToFe.recipients[1].denomination}`
     );
-    expect(tableRows![2]).toHaveTextContent(`detail.date${notificationToFe.sentAt}`);
+    expect(tableRows![2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
