@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "BUILD_PATH='./build/auth' craco build",
     "test": "craco test --watchAll=false",
     "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "craco eject",
