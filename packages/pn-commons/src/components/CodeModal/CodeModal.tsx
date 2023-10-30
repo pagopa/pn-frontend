@@ -134,7 +134,9 @@ const CodeModal = memo(
               severity="error"
               sx={{ textAlign: textPosition }}
             >
-              <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
+              <AlertTitle data-testid="CodeModal error title" id="codeModalErrorTitle">
+                {errorTitle}
+              </AlertTitle>
               {errorMessage}
             </Alert>
           )}
