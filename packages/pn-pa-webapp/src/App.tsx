@@ -23,12 +23,13 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { ProductEntity } from '@pagopa/mui-italia';
+import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { logout } from './redux/auth/actions';
+import { getInstitutions, getProductsOfInstitution, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -69,6 +70,11 @@ const ActualApp = () => {
   const loggedUserOrganizationParty = loggedUser.organization;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
+  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
+  const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
+  const institutions = useAppSelector((state: RootState) => state.userState.institutions);
+
+  const [productsList, setProductsList] = useState<Array<ProductEntity>>([]);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -138,41 +144,23 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  // TODO: get products list from be (?)
-  const productsList: Array<ProductSwitchItem> = useMemo(
-    () => [
-      {
-        id: '1',
-        title: t('header.reserved-area'),
-        productUrl: `${configuration.SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
-        linkType: 'external',
-      },
-      {
-        id: '0',
-        title: t('header.notification-platform'),
-        productUrl: '',
-        linkType: 'internal',
-      },
-    ],
-    [idOrganization, i18n.language]
+  const reservedArea: ProductEntity = useMemo(
+    () => ({
+      id: 'selfcare',
+      title: t('header.reserved-area'),
+      productUrl: '',
+      linkType: 'external',
+    }),
+    [i18n.language]
   );
 
-  const partyList: Array<PartyEntity> = useMemo(
-    () => [
-      {
-        id: '0',
-        name: loggedUserOrganizationParty?.name,
-        // productRole: role?.role,
-        productRole: t(`roles.${role?.role}`),
-        logoUrl: undefined,
-        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
-        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
-        // ------------------
-        // Carlos Lombardi, 2022.07.28
-        // logoUrl: <AccountBalanceIcon />
-      },
-    ],
-    [role, loggedUserOrganizationParty, i18n.language]
+  const institutionsList: Array<PartySwitchItem> = useMemo(
+    () =>
+      institutions.map((institution) => ({
+        ...institution,
+        productRole: t(`roles.${institution.productRole}`),
+      })),
+    [institutions, i18n.language]
   );
 
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
@@ -180,8 +168,18 @@ const ActualApp = () => {
   useEffect(() => {
     if (sessionToken) {
       void dispatch(getCurrentAppStatus());
+      void dispatch(getInstitutions());
     }
-  }, [sessionToken, getCurrentAppStatus]);
+    if (idOrganization) {
+      void dispatch(getProductsOfInstitution(idOrganization));
+    }
+  }, [sessionToken, getCurrentAppStatus, idOrganization]);
+
+  useEffect(() => {
+    if (products.length) {
+      setProductsList([reservedArea, ...products]);
+    }
+  }, [products]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -260,11 +258,14 @@ const ActualApp = () => {
           !isPrivacyPage
         }
         productsList={productsList}
-        productId={'0'}
-        partyList={partyList}
+        productId={SELFCARE_SEND_PROD_ID}
+        partyId={idOrganization}
+        partyList={institutionsList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        selfcareBaseUrl={SELFCARE_BASE_URL}
+        selfcareSendProdId={SELFCARE_SEND_PROD_ID}
         isLogged={!!sessionToken}
       >
         <AppMessage />

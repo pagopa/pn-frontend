@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { CardSort, Sort } from '../../../models';
 import {
   fireEvent,
   getById,
@@ -9,7 +10,6 @@ import {
   waitFor,
   within,
 } from '../../../test-utils';
-import { CardSort, Sort } from '../../../types';
 import MobileNotificationsSort from '../MobileNotificationsSort';
 
 type MockOrderByFields = 'mocked-field-1' | 'mocked-field-2' | '';

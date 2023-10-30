@@ -1,8 +1,6 @@
-import _ from 'lodash';
-
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { DigitalDomicileType, TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
-import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
 describe('SendDigitalFeedbackStep', () => {

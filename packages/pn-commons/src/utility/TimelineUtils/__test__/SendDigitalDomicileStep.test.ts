@@ -1,6 +1,6 @@
 import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { DigitalDomicileType, TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
-import { DigitalDomicileType, TimelineCategory } from '../../../types';
 import { SendDigitalDomicileStep } from '../SendDigitalDomicileStep';
 
 describe('SendDigitalDomicileStep', () => {

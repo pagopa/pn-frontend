@@ -1,4 +1,4 @@
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
   dateIsDefined,
   formatDate,

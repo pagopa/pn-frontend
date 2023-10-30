@@ -1,38 +1,38 @@
 {
   "appStatus": {
-    "title": "Status der Plattform",
-    "subtitle": "Überprüfe die Funktion von SEND, rufe die Historie der Störungen auf und lade die jeweiligen Bescheinigungen, die Dritten gegenüber eingewendet werden können, herunter. Jede Bescheinigung zertifiziert eine Störung: Dies kann hilfreich sein, wenn ein Bescheid betroffen ist, der dir zugestellt werden soll.",
+    "title": "Plattformstatus",
+    "subtitle": "Überprüft die Funktionsweise von SEND, zeigt die Historie der Fehlfunktionen an und lädt die entsprechenden Bescheide herunter, die Dritten gegenüber eingewendet werden können. Jeder Beleg bescheinigt eine Fehlfunktion: Von Nutzen, wenn er einen an dich gerichteten Bescheid betrifft.",
     "statusDescription": {
-      "ok": "Alle Dienste von SEND sind betriebsbereit.",
-      "not-ok": "Es gibt eine Störung. Weitere Details in der Tabelle unten."
+      "ok": "Alle SEND-Dienste sind betriebsbereit.",
+      "not-ok": "Es ist eine Störung aufgetreten. Weitere Details in der Tabelle unten."
     },
-    "lastCheckLegend": "Letzte Aktualisierung - {{ lastCheckTimestamp }}"
+    "lastCheckLegend": "Zuletzt aktualisiert - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
-    "title": "Historie der Störungen",
+    "title": "Fehlerhistorie",
     "columnHeader": {
-      "startDate": "Datum Beginn",
+      "startDate": "Datum Anfang",
       "endDate": "Datum Ende",
-      "functionality": "Involvierter Dienst",
-      "legalFactId": "Bescheinigungen, die Dritten gegenüber eingewendet werden können",
-      "status": "Status"
+      "functionality": "Betroffener Dienst",
+      "legalFactId": "Bescheinigungen einwendbar gegenüber Dritten",
+      "status": "Staat"
     },
-    "emptyMessage": "Es wurden keine Störungen festgestellt"
+    "emptyMessage": "Es wurden keine Fehlfunktionen aufgezeichnet"
   },
   "legends": {
     "knownFunctionality": {
-      "NOTIFICATION_CREATE": "Senden der Bescheide",
-      "NOTIFICATION_VISUALIZATION": "Anzeige der Bescheide und beigefügte Downloads",
-      "NOTIFICATION_WORKFLOW": "Ändern des Status der Bescheide"
+      "NOTIFICATION_CREATE": "Versand von Bescheiden",
+      "NOTIFICATION_VISUALIZATION": "Anzeige von Bescheiden und Herunterladen von Anhängen",
+      "NOTIFICATION_WORKFLOW": "Änderung des Status der Bescheide"
     },
     "unknownFunctionality": "Unbekannter Dienst ({{functionality}})",
     "status": {
-      "OK": "Gelöst",
+      "OK": "Behoben",
       "KO": "Läuft"
     },
     "noFileAvailableByStatus": {
-      "OK": "Die Bescheinigung wird in Kürze verfügbar sein",
-      "KO": "Die Bescheinigung wird am Ende der Störung verfügbar sein"
+      "OK": "Bescheinigung in Kürze verfügbar",
+      "KO": "Bescheinigung nach Beheben der Störung verfügbar"
     },
     "legalFactDownload": "Bescheinigung herunterladen"
   }

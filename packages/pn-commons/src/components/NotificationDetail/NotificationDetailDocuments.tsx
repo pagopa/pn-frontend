@@ -3,7 +3,7 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NotificationDetailDocument, NotificationDetailOtherDocument } from '../../types';
+import { NotificationDetailDocument, NotificationDetailOtherDocument } from '../../models';
 
 type Props = {
   title: string;

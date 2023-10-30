@@ -7,8 +7,13 @@ import { theme } from '@pagopa/mui-italia';
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
+import { institutionsList, productsList } from '../__mocks__/User.mock';
 import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
+import {
+  GET_INSTITUTIONS,
+  GET_INSTITUTION_PRODUCTS,
+} from '../api/external-registries/external-registries-routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, render } from './test-utils';
 
@@ -47,6 +52,8 @@ const reduxInitialState = {
       isFirstAccept: false,
       currentVersion: 'mocked-version-1',
     },
+    institutions: [],
+    productsOfInstitution: [],
   },
 };
 
@@ -99,6 +106,8 @@ describe('App', () => {
       consentType: ConsentType.TOS,
       accepted: true,
     });
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     let result: RenderResult;
     await act(async () => {
@@ -111,7 +120,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
     expect(result!.container).toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if error in API call to fetch TOS', async () => {
@@ -122,6 +131,8 @@ describe('App', () => {
     });
     mock.onGet(GET_CONSENTS(ConsentType.TOS)).reply(500);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -129,7 +140,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if error in API call to fetch PRIVACY', async () => {
@@ -140,6 +151,8 @@ describe('App', () => {
       accepted: true,
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -147,7 +160,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
@@ -162,6 +175,8 @@ describe('App', () => {
       accepted: false,
     });
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
+    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -171,6 +186,6 @@ describe('App', () => {
     const tosPage = result!.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(5);
   });
 });

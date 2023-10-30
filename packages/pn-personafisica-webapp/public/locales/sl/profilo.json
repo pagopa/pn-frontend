@@ -1,6 +1,6 @@
 {
   "title": "Vaši podatki",
-  "subtitle": "Ti podatki so pridobljeni iz vašega SPID ali CIE in jih ni mogoče urejati.",
+  "subtitle": "Ti podatki so vzeti iz vašega SPID ali CIE in jih ni mogoče urejati.",
   "profile": {
     "name": "Ime",
     "family_name": "Priimek",
@@ -8,7 +8,7 @@
   },
   "alert-redirect-to-contacts": {
     "title": "Ali želite upravljati svoje kontaktne podatke?",
-    "message": "Vnesite, si oglejte ali uredite kontaktne podatke, na katere želite prejemati obvestila in sporočila iz SEND.",
+    "message": "Vnesite, si oglejte ali uredite kontaktne podatke, na katere želite prejemati obvestila in sporočila s strani SEND.",
     "action-text": "Pojdite na svoje kontaktne podatke"
   }
 }
