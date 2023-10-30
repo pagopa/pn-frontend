@@ -47,8 +47,4 @@ export const emptyNotificationsFromBe: GetNotificationsResponse = {
 
 export const notificationsToFe: GetNotificationsResponse = {
   ...notificationsDTO,
-  resultsPage: notificationsDTO.resultsPage.map((r) => ({
-    ...r,
-    sentAt: formatDate(r.sentAt),
-  })),
 };
