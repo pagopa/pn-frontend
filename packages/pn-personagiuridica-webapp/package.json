@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personagiuridica-webapp",
   "description": "SEND per la persona giuridica",
-  "version": "2.1.1",
+  "version": "2.2.0-RC.1",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -9,7 +9,7 @@
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.10.9",
     "@mui/x-date-pickers": "5.0.13",
-    "@pagopa-pn/pn-commons": "^2.1.1",
+    "@pagopa-pn/pn-commons": "^2.2.0-RC.1",
     "@pagopa/mui-italia": "^0.11.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",

@@ -22,6 +22,7 @@ import {
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
+  formatDate,
   useDownloadDocument,
   useErrors,
   useHasPermissions,
@@ -128,8 +129,8 @@ const NotificationDetail = () => {
     },
     {
       label: t('detail.date', { ns: 'notifiche' }),
-      rawValue: notification.sentAt,
-      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
+      rawValue: formatDate(notification.sentAt),
+      value: <Box fontWeight={600}>{formatDate(notification.sentAt)}</Box>,
     },
     {
       label: t('detail.payment-terms', { ns: 'notifiche' }),
