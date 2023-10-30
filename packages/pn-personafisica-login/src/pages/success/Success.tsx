@@ -26,8 +26,6 @@ const SuccessPage = () => {
     if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
       window.location.replace(`${redirectUrl}${sanitizeString(token)}`);
     }
-
-    return redirectUrl;
   }, [aar, token]);
 
   useEffect(() => {
