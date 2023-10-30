@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AppRouteType } from '@pagopa-pn/pn-commons';
-
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageTypeOps } from '../../../utility/storage';
+import { storageAarOps } from '../../../utility/storage';
 import SuccessPage from '../Success';
 
 const mockLocationAssign = jest.fn();
@@ -33,7 +31,6 @@ describe('test login page', () => {
   });
 
   it('test redirect', () => {
-    storageTypeOps.write(AppRouteType.PF);
     render(
       <BrowserRouter>
         <SuccessPage />
@@ -44,7 +41,6 @@ describe('test login page', () => {
   });
 
   it('test redirect - aar', () => {
-    storageTypeOps.write(AppRouteType.PF);
     storageAarOps.write('aar-token');
     render(
       <BrowserRouter>
@@ -59,7 +55,6 @@ describe('test login page', () => {
   });
 
   it('test redirect - aar with xss attack', () => {
-    storageTypeOps.write(AppRouteType.PF);
     storageAarOps.write('<script>malicious code</script>aar-malicious-token');
     render(
       <BrowserRouter>

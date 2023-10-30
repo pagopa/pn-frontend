@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../../utility/storage';
+import { storageAarOps, storageSpidSelectedOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = jest.fn();
@@ -16,7 +16,6 @@ let mockSearchParams = true;
 function mockCreateMockedSearchParams() {
   const mockedSearchParams = new URLSearchParams();
   if (mockSearchParams) {
-    mockedSearchParams.set(AppRouteParams.TYPE, AppRouteType.PF);
     mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
   }
   return mockedSearchParams;
@@ -46,7 +45,6 @@ describe('test login page', () => {
   afterEach(() => {
     storageAarOps.delete();
     storageSpidSelectedOps.delete();
-    storageTypeOps.delete();
   });
 
   afterAll(() => {
@@ -67,7 +65,6 @@ describe('test login page', () => {
     expect(cieButton).toBeInTheDocument();
     const spidSelect = queryById(container, 'spidSelect');
     expect(spidSelect).not.toBeInTheDocument();
-    expect(storageTypeOps.read()).toBe(AppRouteType.PF);
     expect(storageAarOps.read()).toBe('fake-aar-token');
   });
 
@@ -106,7 +103,6 @@ describe('test login page', () => {
         <Login />
       </BrowserRouter>
     );
-    expect(storageTypeOps.read()).toBeUndefined();
     expect(storageAarOps.read()).toBeUndefined();
   });
 });
