@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "5.14.5",
-    "@pagopa-pn/pn-commons": "^2.1.0",
+    "@mui/system": "^5.14.5",
     "@pagopa/mui-italia": "^1.0.2",
     "@types/node": "^16.18.58",
     "@types/react": "^18.2.24",
@@ -23,11 +23,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test --watchAll=false",
-    "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
-    "eject": "craco eject",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "tsc && jest --watchAll=false",
+    "test:coverage": "tsc && jest --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
     "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
@@ -52,8 +52,10 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
@@ -61,6 +63,9 @@
     "@types/jest": "^28.0.0",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "@vitejs/plugin-react": "^4.0.3",
+    "babel-jest": "^27.5.1",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-functional": "^3.7.2",
@@ -68,10 +73,13 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-sonarjs": "^0.10.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.5.1",
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.4.1",
-    "react-scripts": "^5.0.1",
     "sonarqube-scanner": "^3.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite": "^4.4.5",
+    "whatwg-fetch": "^3.6.2"
   }
 }

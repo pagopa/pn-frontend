@@ -67,7 +67,7 @@ describe('ApiErrorWrapper', () => {
 
         const reloadItemComponent = screen.getByText(reloadText);
         expect(reloadItemComponent).toBeInTheDocument();
-        userEvent.click(reloadItemComponent);
+        await userEvent.click(reloadItemComponent);
 
         await waitFor(() => {
             expect(reloadActionMock).toHaveBeenCalled();
@@ -84,7 +84,7 @@ describe('ApiErrorWrapper', () => {
 
         const reloadItemComponent = screen.getByText(reloadText);
         expect(reloadItemComponent).toBeInTheDocument();
-        userEvent.click(reloadItemComponent);
+        await userEvent.click(reloadItemComponent);
 
         await waitFor(() => {
             expect(window.location.reload).toHaveBeenCalled();

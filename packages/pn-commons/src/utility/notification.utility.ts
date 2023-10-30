@@ -31,7 +31,7 @@ import {
   PagoPAPaymentFullDetails,
   PaymentStatus,
 } from '../models';
-import { formatDate } from '../utility';
+import { formatDate } from '../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';

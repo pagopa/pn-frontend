@@ -7,5 +7,8 @@ export * from './redux';
 export * from './utility';
 export * from './validators';
 export * from './services';
+
 // TODO: questo export crea problemi nei test di pf e pg. Capire perchè e indagare il codice in setupTests
-// export { testSelect, testAutocomplete } from './test-utils';
+// export { 
+//     createMatchMedia, testAutocomplete, testFormElements, testInput, testRadio, testSelect,
+// } from './test-utils';

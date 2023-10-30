@@ -66,7 +66,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
 export function getConfiguration(): PaConfiguration {
   const configurationFromFile = Configuration.get<PaConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const APP_VERSION = process.env.REACT_APP_VERSION ?? '';
+  const APP_VERSION = import.meta.env.VITE_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
