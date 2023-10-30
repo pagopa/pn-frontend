@@ -4,7 +4,7 @@
   "profile": {
     "name": "Name",
     "family_name": "Surname",
-    "fiscal_number": "Tax code"
+    "fiscal_number": "Fiscal code"
   },
   "alert-redirect-to-contacts": {
     "title": "Do you want to manage your contact details?",
