@@ -38,7 +38,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "tsc && jest --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:a11y": "jest --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:all": "jest --watchAll=false",

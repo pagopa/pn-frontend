@@ -37,7 +37,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc",
+    "build": "vite build",
+    "preview": "vite preview --host=selfcare.dev.notifichedigitali.it --port=443",
     "test": "tsc && jest --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:a11y": "jest test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:all": "jest test --watchAll=false",

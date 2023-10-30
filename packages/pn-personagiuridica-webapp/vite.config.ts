@@ -11,6 +11,13 @@ export default defineConfig(({mode}) => {
       host: env.HOST,
       https: true,
       port: 443,
-    }
+    },
+    build: {
+      outDir: 'build',
+      assetsDir: 'static',
+    },
+    preview: {
+      port: 443,
+    },
   };
 });

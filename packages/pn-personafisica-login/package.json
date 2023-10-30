@@ -24,7 +24,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "tsc && jest --watchAll=false",
     "test:coverage": "tsc && jest --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
