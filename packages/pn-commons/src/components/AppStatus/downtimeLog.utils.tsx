@@ -15,15 +15,21 @@ export function booleanStringToBoolean(booleanString: string): boolean {
 const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?: boolean }) => {
   if (date) {
     return inTwoLines ? (
-      <Stack direction="column">
+      <Stack direction="column" id="containerDate">
         <Typography variant="body2">{formatDate(date)},</Typography>
         <Typography variant="body2">{formatTimeWithLegend(date)}</Typography>
       </Stack>
     ) : (
-      <Typography variant="body2">{formatDateTime(date)}</Typography>
+      <Typography variant="body2" id="dateDisservizio">
+        {formatDateTime(date)}
+      </Typography>
     );
   }
-  return <Typography variant="body2">-</Typography>;
+  return (
+    <Typography variant="body2" id="dateNull">
+      -
+    </Typography>
+  );
 };
 
 export function adaptFieldSpecToMobile(
@@ -72,28 +78,35 @@ export function useFieldSpecs({
 
   const getFunctionalityFieldSpec = useCallback(
     (): Omit<Column<DowntimeLogColumn>, 'width'> => ({
-      id: 'functionality',
       label: getLocalizedOrDefaultLabel(
         'appStatus',
         'downtimeList.columnHeader.functionality',
         'Servizio coinvolto'
       ),
       sortable: false,
+      id: 'functionality',
       getCellLabel(_: string, i: Item) {
-        return i.knownFunctionality
-          ? getLocalizedOrDefaultLabel(
+        return i.knownFunctionality ? (
+          <Typography id={`functionality-${i.knownFunctionality}`}>
+            {getLocalizedOrDefaultLabel(
               'appStatus',
               `legends.knownFunctionality.${i.knownFunctionality}`,
               'Nome del servizio ben conosciuto'
-            )
-          : getLocalizedOrDefaultLabel(
+            )}
+          </Typography>
+        ) : (
+          <Typography id={`functionality-${i.knownFunctionality}`}>
+            {getLocalizedOrDefaultLabel(
               'appStatus',
               'legends.unknownFunctionality',
               'Un servizio sconosciuto',
               { functionality: i.rawFunctionality }
-            );
+            )}
+          </Typography>
+        );
       },
     }),
+
     []
   );
 
@@ -113,6 +126,7 @@ export function useFieldSpecs({
               sx={{ px: 0 }}
               startIcon={<DownloadIcon />}
               data-testid="download-legal-fact"
+              id="buttonLegalFact"
               onClick={() => {
                 void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
               }}
@@ -122,7 +136,11 @@ export function useFieldSpecs({
           );
         } else {
           return (
-            <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+            <Typography
+              id="errorDownloadLegalFact"
+              variant="body2"
+              sx={{ color: theme.palette.text.secondary }}
+            >
               {getLocalizedOrDefaultLabel(
                 'appStatus',
                 `legends.noFileAvailableByStatus.${i.status}`,
@@ -144,6 +162,7 @@ export function useFieldSpecs({
       getCellLabel(value: string) {
         return (
           <Chip
+            id="downTimeStatus"
             data-testid="downtime-status"
             label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${value}`, 'Status')}
             sx={{
