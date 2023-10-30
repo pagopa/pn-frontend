@@ -70,6 +70,5 @@ export function compileRoute(route: Route) {
 }
 
 export enum AppRouteParams {
-  TYPE = 'type',
   AAR = 'aar',
 }
