@@ -1,6 +1,6 @@
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
-import { getConfiguration } from '../services/configuration.service';
+import { userResponse } from './Auth.mock';
 
 export const productsDTO = [
   {
@@ -18,7 +18,7 @@ export const productsDTO = [
 export const productsList: Array<ProductEntity> = productsDTO.map((product) => ({
   id: product.id,
   title: product.title,
-  productUrl: product.urlBO,
+  productUrl: `mock-selfcare.base/token-exchange?institutionId=${userResponse.organization.id}&productId=mock-prod-id`,
   linkType: 'external',
 }));
 

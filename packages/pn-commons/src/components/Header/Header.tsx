@@ -81,7 +81,9 @@ const Header = ({
   };
 
   const handlePartySelection = (party: PartyEntityWithUrl) => {
-    window.location.assign(party.entityUrl);
+    if (party.entityUrl) {
+      window.location.assign(party.entityUrl);
+    }
   };
 
   const enableHeaderProduct =

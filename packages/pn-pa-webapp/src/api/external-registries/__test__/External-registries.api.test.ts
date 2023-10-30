@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { mockAuthentication, userResponse } from '../../../__mocks__/Auth.mock';
 import {
   institutionsDTO,
   institutionsList,
@@ -47,14 +47,8 @@ describe('External registries api tests', () => {
   });
 
   it('getInstitutionProducts', async () => {
-    const institutionId = '1';
-    const products = productsList.map((product) => ({
-      ...product,
-      productUrl: `mock-selfcare.base/token-exchange?institutionId=${institutionId}&productId=mock-prod-id`,
-    }));
-
-    mock.onGet(GET_INSTITUTION_PRODUCTS(institutionId)).reply(200, productsDTO);
-    const res = await ExternalRegistriesAPI.getInstitutionProducts('1');
-    expect(res).toStrictEqual(products);
+    mock.onGet(GET_INSTITUTION_PRODUCTS(userResponse.organization.id)).reply(200, productsDTO);
+    const res = await ExternalRegistriesAPI.getInstitutionProducts(userResponse.organization.id);
+    expect(res).toStrictEqual(productsList);
   });
 });

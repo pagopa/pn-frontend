@@ -27,7 +27,7 @@ export const productsList: Array<ProductEntity> = [
   {
     id: '0',
     title: `Product 1`,
-    productUrl: 'https://www.product1.com',
+    productUrl: '',
     linkType: LinkType.INTERNAL,
   },
   {
@@ -44,7 +44,7 @@ export const partyList = [
     name: 'Party 1',
     productRole: 'Role 1',
     logoUrl: '',
-    entityUrl: 'www.party1.com',
+    entityUrl: '',
   },
   {
     id: '1',

@@ -55,5 +55,5 @@ interface RootParent {
 }
 
 export interface PartyEntityWithUrl extends PartyEntity {
-  entityUrl: string;
+  entityUrl: string; // only fe
 }

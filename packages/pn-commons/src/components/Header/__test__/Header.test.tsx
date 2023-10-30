@@ -66,6 +66,28 @@ describe('Header Component', () => {
     await waitFor(() => expect(handleClick).toBeCalledTimes(1));
   });
 
+  it('renders header (checking product without productUrl)', async () => {
+    sessionStorage.setItem('fake-item', 'prova');
+    // render component
+    const { container } = render(
+      <Header productsList={productsList} loggedUser={loggedUser} productId={productsList[0].id} />
+    );
+    expect(sessionStorage.getItem('fake-item')).not.toBeNull();
+    const headers = container.querySelectorAll('.MuiContainer-root');
+    const productButton = headers[1].querySelector('[role="button"]');
+    expect(productButton).toBeInTheDocument();
+    fireEvent.click(productButton!);
+    const productDropdown = await waitFor(() => screen.queryByRole('presentation'));
+    expect(productDropdown).toBeInTheDocument();
+    const products = productDropdown!.querySelectorAll('li');
+    expect(products).toHaveLength(2);
+    expect(products[0]).toHaveTextContent(productsList[0].title);
+    expect(products[1]).toHaveTextContent(productsList[1].title);
+    fireEvent.click(products[0]);
+    expect(assignFn).toBeCalledTimes(0);
+    expect(sessionStorage.getItem('fake-item')).toBe('prova');
+  });
+
   it('renders header (checking switch product)', async () => {
     sessionStorage.setItem('fake-item', 'prova');
     // render component
@@ -86,7 +108,7 @@ describe('Header Component', () => {
     const productDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(productDropdown).toBeInTheDocument();
     const products = productDropdown!.querySelectorAll('li');
-    await waitFor(() => fireEvent.click(products[1]));
+    fireEvent.click(products[1]);
     expect(assignFn).toBeCalledTimes(1);
     expect(assignFn).toBeCalledWith(productsList[1].productUrl);
     expect(sessionStorage.getItem('fake-item')).toBeNull();
@@ -122,13 +144,14 @@ describe('Header Component', () => {
     const selfcareProductIndex = productsWithSelfcare.findIndex(
       (product) => product.id === 'selfcare'
     );
-    await waitFor(() => fireEvent.click(products[selfcareProductIndex]));
+    fireEvent.click(products[selfcareProductIndex]);
     expect(assignFn).toBeCalledTimes(1);
     expect(assignFn).toBeCalledWith(productsWithSelfcare[selfcareProductIndex].productUrl);
     expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
   it('renders header (checking switch institution)', async () => {
+    const partyIndex = partyList.findIndex((party) => party.entityUrl);
     sessionStorage.setItem('fake-item', 'prova');
     // render component
     const { container } = render(
@@ -148,10 +171,33 @@ describe('Header Component', () => {
     const partyDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(partyDropdown).toBeInTheDocument();
     const parties = partyDropdown!.querySelectorAll('[role="button"]');
-    fireEvent.click(parties[0]);
+    fireEvent.click(parties[partyIndex]);
     expect(assignFn).toBeCalledTimes(1);
-    expect(assignFn).toBeCalledWith(partyList[0].entityUrl);
+    expect(assignFn).toBeCalledWith(partyList[partyIndex].entityUrl);
     expect(sessionStorage.getItem('fake-item')).toBe('prova');
+  });
+
+  it('renders header (checking institution without entityUrl)', async () => {
+    const partyWithoutEntityUrl = partyList.findIndex((party) => !party.entityUrl);
+    // render component
+    const { container } = render(
+      <Header
+        productsList={productsList}
+        partyList={partyList}
+        partyId={partyList[partyWithoutEntityUrl].id}
+        loggedUser={loggedUser}
+        productId={productsList[0].id}
+      />
+    );
+    const headers = container.querySelectorAll('.MuiContainer-root');
+    const partyButton = headers[1].querySelectorAll('[role="button"]')[1];
+    expect(partyButton).toBeInTheDocument();
+    fireEvent.click(partyButton!);
+    const partyDropdown = await waitFor(() => screen.queryByRole('presentation'));
+    expect(partyDropdown).toBeInTheDocument();
+    const parties = partyDropdown!.querySelectorAll('[role="button"]');
+    fireEvent.click(parties[partyWithoutEntityUrl]);
+    expect(assignFn).toBeCalledTimes(0);
   });
 
   it('renders header (two products, no parties and user dropdown)', async () => {
