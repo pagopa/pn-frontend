@@ -93,7 +93,7 @@ describe('test login page', () => {
     fireEvent.click(cieButton!);
     expect(mockAssign).toBeCalledTimes(1);
     expect(mockAssign).toBeCalledWith(
-      `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+      `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
     expect(storageSpidSelectedOps.read()).toBe(SPID_CIE_ENTITY_ID);
   });
