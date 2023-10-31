@@ -221,13 +221,8 @@ export const postLoginLinks = (
   termsOfServiceHref?: string
 ): Array<FooterLinksType> => [
   {
-    label: 'Informativa Privacy',
+    ...getFooterLinkLabels('privacy-info', 'Informativa Privacy'),
     href: privacyPolicyHref || `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
-    ariaLabel: `${getLocalizedOrDefaultLabel(
-      'common',
-      'footer.go-to',
-      'Vai al link'
-    )}: Informativa Privacy`,
     linkType: 'internal',
   },
   {
