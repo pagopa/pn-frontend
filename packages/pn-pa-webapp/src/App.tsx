@@ -23,8 +23,7 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductEntity } from '@pagopa/mui-italia';
-import { PartySwitchItem } from '@pagopa/mui-italia/dist/components/PartySwitch';
+import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
@@ -68,20 +67,52 @@ const ActualApp = () => {
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = loggedUser.organization;
+  // TODO check if it can exist more than one role on user
+  const role = loggedUserOrganizationParty?.roles[0];
+  const idOrganization = loggedUserOrganizationParty?.id;
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
-
-  const [productsList, setProductsList] = useState<Array<ProductEntity>>([]);
-
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
 
-  // TODO check if it can exist more than one role on user
-  const role = loggedUserOrganizationParty?.roles[0];
-  const idOrganization = loggedUserOrganizationParty?.id;
+  const reservedArea: ProductEntity = {
+    id: 'selfcare',
+    title: t('header.reserved-area'),
+    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
+    linkType: 'external',
+  };
+
+  const productsList =
+    products.length > 0
+      ? [reservedArea, ...products]
+      : [
+          reservedArea,
+          {
+            id: '0',
+            title: t('header.notification-platform'),
+            productUrl: '',
+            linkType: 'internal' as LinkType,
+          },
+        ];
+  const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
+  const institutionsList =
+    institutions.length > 0
+      ? institutions.map((institution) => ({
+          ...institution,
+          productRole: t(`roles.${role.role}`),
+        }))
+      : [
+          {
+            id: idOrganization,
+            name: loggedUserOrganizationParty.name,
+            productRole: t(`roles.${role.role}`),
+            parentName: loggedUserOrganizationParty?.rootParent?.description,
+          },
+        ];
+
   const sessionToken = loggedUser.sessionToken;
 
   const configuration = useMemo(() => getConfiguration(), []);
@@ -144,25 +175,6 @@ const ActualApp = () => {
     [loggedUser]
   );
 
-  const reservedArea: ProductEntity = useMemo(
-    () => ({
-      id: 'selfcare',
-      title: t('header.reserved-area'),
-      productUrl: '',
-      linkType: 'external',
-    }),
-    [i18n.language]
-  );
-
-  const institutionsList: Array<PartySwitchItem> = useMemo(
-    () =>
-      institutions.map((institution) => ({
-        ...institution,
-        productRole: t(`roles.${institution.productRole}`),
-      })),
-    [institutions, i18n.language]
-  );
-
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
@@ -174,12 +186,6 @@ const ActualApp = () => {
       void dispatch(getProductsOfInstitution(idOrganization));
     }
   }, [sessionToken, getCurrentAppStatus, idOrganization]);
-
-  useEffect(() => {
-    if (products.length) {
-      setProductsList([reservedArea, ...products]);
-    }
-  }, [products]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -258,14 +264,12 @@ const ActualApp = () => {
           !isPrivacyPage
         }
         productsList={productsList}
-        productId={SELFCARE_SEND_PROD_ID}
+        productId={productId}
         partyId={idOrganization}
         partyList={institutionsList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        selfcareBaseUrl={SELFCARE_BASE_URL}
-        selfcareSendProdId={SELFCARE_SEND_PROD_ID}
         isLogged={!!sessionToken}
       >
         <AppMessage />

@@ -33,7 +33,7 @@ export const productsList: Array<ProductEntity> = [
   {
     id: '1',
     title: `Product 2`,
-    productUrl: 'https://www.product.com',
+    productUrl: 'https://www.product2.com',
     linkType: LinkType.EXTERNAL,
   },
 ];
@@ -44,6 +44,7 @@ export const partyList = [
     name: 'Party 1',
     productRole: 'Role 1',
     logoUrl: '',
+    entityUrl: '',
   },
   {
     id: '1',
@@ -51,6 +52,7 @@ export const partyList = [
     productRole: 'Role 2',
     logoUrl: '',
     parentName: 'Root Party 2',
+    entityUrl: 'www.party2.com',
   },
 ];
 
