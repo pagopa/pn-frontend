@@ -15,6 +15,7 @@ export default defineConfig(({mode}) => {
     build: {
       outDir: 'build',
       assetsDir: 'static',
+      target: 'ES2020',
     },
     preview: {
       port: 443,
