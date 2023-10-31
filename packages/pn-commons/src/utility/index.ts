@@ -38,7 +38,7 @@ import {
 import { compileOneTrustPath } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
 import { performThunkAction } from './redux.utility';
-import { AppRouteParams, AppRouteType, compileRoute } from './routes.utility';
+import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
@@ -77,7 +77,6 @@ export {
   dataRegex,
   storageOpsBuilder,
   compileRoute,
-  AppRouteType,
   AppRouteParams,
   today,
   tenYearsAgo,

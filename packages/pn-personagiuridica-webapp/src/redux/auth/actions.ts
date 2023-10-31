@@ -1,9 +1,10 @@
 import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
 import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
-import { PartyRole, PNRole, User } from './types';
+import { PNRole, PartyRole, User } from './types';
 
 export enum AUTH_ACTIONS {
   GET_TOS_APPROVAL = 'getToSApproval',

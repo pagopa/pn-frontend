@@ -1,7 +1,6 @@
-// momentarily commented for pn-5157
-// import { AccessDenied, AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
-import { AccessDenied, AppRouteParams } from '@pagopa-pn/pn-commons';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+
+import { AccessDenied, AppRouteParams } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -18,8 +17,6 @@ const RouteGuard = () => {
       <AccessDenied
         isLogged={false}
         goToHomePage={() => navigate(routes.NOTIFICHE, { replace: true })}
-        // momentarily commented for pn-5157
-        // goToLogin={() => goToLoginPortal(AppRouteType.PF, params.get(AppRouteParams.AAR))}
         goToLogin={() => goToLoginPortal(params.get(AppRouteParams.AAR))}
       />
     );
