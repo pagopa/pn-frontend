@@ -174,7 +174,7 @@ describe('Header Component', () => {
     fireEvent.click(parties[partyIndex]);
     expect(assignFn).toBeCalledTimes(1);
     expect(assignFn).toBeCalledWith(partyList[partyIndex].entityUrl);
-    expect(sessionStorage.getItem('fake-item')).toBe('prova');
+    expect(sessionStorage.getItem('fake-item')).toBeNull();
   });
 
   it('renders header (checking institution without entityUrl)', async () => {
