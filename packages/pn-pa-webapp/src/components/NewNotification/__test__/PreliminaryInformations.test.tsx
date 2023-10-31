@@ -45,7 +45,7 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
+// prova
 jest.mock('../../../services/configuration.service', () => {
   return {
     ...jest.requireActual('../../../services/configuration.service'),
