@@ -75,18 +75,15 @@ const ActualApp = () => {
   const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
-
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-  const reservedArea: ProductEntity = useMemo(
-    () => ({
-      id: 'selfcare',
-      title: t('header.reserved-area'),
-      productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
-      linkType: 'external',
-    }),
-    [i18n.language]
-  );
+
+  const reservedArea: ProductEntity = {
+    id: 'selfcare',
+    title: t('header.reserved-area'),
+    productUrl: `${SELFCARE_BASE_URL}/dashboard/${idOrganization}`,
+    linkType: 'external',
+  };
 
   const productsList =
     products.length > 0
