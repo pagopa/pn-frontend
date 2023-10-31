@@ -7,31 +7,30 @@ import _ from 'lodash';
 
 import {
   AarDetails,
+  AppIoCourtesyMessageEventType,
   DigitalDomicileType,
+  ExtRegistriesPaymentDetails,
+  F24PaymentDetails,
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDeliveryMode,
   NotificationDetail,
   NotificationDetailDocument,
+  NotificationDetailPayment,
   NotificationDetailRecipient,
+  NotificationDetailTimelineDetails,
   NotificationStatus,
   NotificationStatusHistory,
+  PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentDetails,
+  PaymentStatus,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
   ViewedDetails,
-  AppIoCourtesyMessageEventType,
-  ExtRegistriesPaymentDetails,
-  F24PaymentDetails,
-  NotificationDetailPayment,
-  NotificationDetailTimelineDetails,
-  PagoPAPaymentFullDetails,
-  PaymentStatus,
 } from '../models';
-import { formatDate } from '../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -1029,7 +1028,6 @@ export function parseNotificationDetail(
   const parsedNotification = {
     ...notificationDetail,
     otherDocuments: populateOtherDocuments(notificationDetail),
-    sentAt: formatDate(notificationDetail.sentAt),
   };
   insertCancelledStatusInTimeline(parsedNotification);
   /* eslint-disable functional/immutable-data */

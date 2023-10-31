@@ -34,8 +34,8 @@ interface PfConfiguration extends PfConfigurationFromFile {
   OT_DOMAIN_ID: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL: string;
-  URL_FE_LOGOUT: string;
   VERSION: string;
+  URL_FE_LOGOUT: string;
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS: boolean;

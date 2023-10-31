@@ -13,6 +13,7 @@ import {
   NotificationStatus,
   Sort,
   StatusTooltip,
+  formatDate,
   getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 
@@ -106,7 +107,7 @@ const DesktopNotifications = ({
       width: '11%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
-        return value;
+        return formatDate(value);
       },
       onClick(row: Item) {
         handleRowClick(row);

@@ -15,7 +15,6 @@ beforeAll(async () => {
     OT_DOMAIN_ID: 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test',
     PAGOPA_HELP_EMAIL: 'destinatari-send@assistenza.pagopa.it',
     PF_URL: 'https://cittadini.dev.notifichedigitali.it',
-    PG_URL: 'https://imprese.dev.notifichedigitali.it',
     PUBLIC_URL: '',
     SPID_TEST_ENV_ENABLED: true,
     SPID_VALIDATOR_ENV_ENABLED: true,
