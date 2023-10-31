@@ -48,7 +48,7 @@ const FilterNotificationsFormBody = ({
   setEndDate,
 }: Props) => {
   const isMobile = useIsMobile();
-  const { t } = useTranslation(['notifiche']);
+  const { t, i18n } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
 
   const handlePaste = async (e: React.ClipboardEvent) => {
@@ -132,6 +132,7 @@ const FilterNotificationsFormBody = ({
         adapterLocale={currentLocale}
       >
         <CustomDatePicker
+          language={i18n.language}
           label={t('filters.data_da')}
           inputFormat={DATE_FORMAT}
           value={startDate}
@@ -173,6 +174,7 @@ const FilterNotificationsFormBody = ({
         adapterLocale={currentLocale}
       >
         <CustomDatePicker
+          language={i18n.language}
           label={t('filters.data_a')}
           inputFormat={DATE_FORMAT}
           value={endDate}

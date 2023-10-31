@@ -69,7 +69,7 @@ const getError = <TTouch, TError>(
 ) => fieldTouched && fieldError;
 
 const NuovaDelega = () => {
-  const { t } = useTranslation(['deleghe', 'common']);
+  const { t, i18n } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -431,6 +431,7 @@ const NuovaDelega = () => {
                             adapterLocale={currentLocale}
                           >
                             <CustomDatePicker
+                              language={i18n.language}
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
                               value={values.expirationDate && new Date(values.expirationDate)}
