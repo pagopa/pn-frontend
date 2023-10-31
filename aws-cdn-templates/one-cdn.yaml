@@ -73,12 +73,6 @@ Conditions:
       - !Not [!Equals [!Ref Name, ""]]
       - !Equals [!Select [0, !Split [webapp-pf-cdn-, !Ref Name]], ""]
 
-  # Is Portale PF Login site if name startsWith 'webapp-pfl-cdn-'
-  IsPortalePfLogin:
-    Fn::And:
-      - !Not [!Equals [!Ref Name, ""]]
-      - !Equals [!Select [0, !Split [webapp-pfl-cdn-, !Ref Name]], ""]
-
   # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
   IsPortalePg:
     Fn::And:
@@ -393,8 +387,7 @@ Resources:
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
           FunctionAssociations: !Ref "AWS::NoValue"
-        DefaultRootObject:
-          !If [IsPortalePfLogin, "auth/index.html", "index.html"]
+        DefaultRootObject: "index.html"
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
