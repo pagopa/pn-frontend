@@ -233,7 +233,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
           <Button
-            id={`${type}-button`}
+            id={`courtesy-${type}-button`}
             variant="outlined"
             disabled={!formik.isValid}
             fullWidth
