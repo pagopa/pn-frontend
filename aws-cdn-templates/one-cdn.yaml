@@ -9,6 +9,10 @@ Parameters:
     Description: "Domain for webapp"
     Type: String
 
+  LoginWebDomain:
+    Description: "Domain for login webapp"
+    Type: String
+
   WebDomainReferenceToSite:
     Description: true if the website must be reachable using the WebDomain
     Type: String
@@ -429,7 +433,7 @@ Resources:
               - !Ref "AWS::NoValue"
           - Fn::If:
               - IsPortalePf
-              - DomainName: "login.dev.notifichedigitali.it"
+              - DomainName: !Ref LoginWebDomain
                 Id: "pn-Login-PF"
                 CustomOriginConfig:
                   OriginProtocolPolicy: "https-only"
