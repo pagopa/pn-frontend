@@ -72,7 +72,7 @@ const NotificationDetail = () => {
    * ---------------------------------
    * Carlos Lombardi, 2023.02.03
    */
-  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+  const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
@@ -463,6 +463,7 @@ const NotificationDetail = () => {
                   }
                 />
                 <NotificationDetailTimeline
+                  language={i18n.language}
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}
                   title={t('detail.timeline-title', { ns: 'notifiche' })}

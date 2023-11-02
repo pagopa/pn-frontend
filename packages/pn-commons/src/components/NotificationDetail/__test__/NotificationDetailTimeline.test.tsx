@@ -4,6 +4,13 @@ import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { createMatchMedia, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    i18n: { language: 'it' },
+  }),
+}));
+
 describe('NotificationDetailTimeline', () => {
   // Define mock data for props
   const recipients = notificationToFe.recipients;
