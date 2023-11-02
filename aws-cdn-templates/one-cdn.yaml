@@ -398,10 +398,12 @@ Resources:
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: !If [IsPortalePfLogin, "auth/index.html", "index.html"]
+            ResponsePagePath:
+              !If [IsPortalePfLogin, "/auth/index.html", "/index.html"]
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: !If [IsPortalePfLogin, "auth/index.html", "index.html"]
+            ResponsePagePath:
+              !If [IsPortalePfLogin, "/auth/index.html", "/index.html"]
         Origins:
           - DomainName: !Sub "${S3BucketForWebsiteContent.RegionalDomainName}"
             Id: !Sub "S3-${S3BucketForWebsiteContent}"
