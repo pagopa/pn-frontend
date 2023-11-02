@@ -22,7 +22,7 @@ async function doTheRender() {
 
     ReactDOM.render(
       <React.StrictMode>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Suspense fallback={'loading...'}>
