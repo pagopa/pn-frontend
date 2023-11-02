@@ -1,11 +1,6 @@
-import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import {
-  storageAarOps,
-  storageOnSuccessOps,
-  storageSpidSelectedOps,
-  storageTypeOps,
-} from '../storage';
+import { storageAarOps, storageOnSuccessOps, storageSpidSelectedOps } from '../storage';
 
 describe('storage utility test', () => {
   it('storageOnSuccessOps', () => {
@@ -14,17 +9,6 @@ describe('storage utility test', () => {
     expect(storageOnSuccessOps.read()).toBe('test');
     storageOnSuccessOps.delete();
     expect(sessionStorage.getItem('LOGIN:onSuccess')).toBeNull();
-  });
-
-  it('storageTypeOps', () => {
-    storageTypeOps.write(AppRouteType.PF);
-    expect(sessionStorage.getItem(AppRouteParams.TYPE)).toBe(AppRouteType.PF);
-    expect(storageTypeOps.read()).toBe(AppRouteType.PF);
-    storageTypeOps.write(AppRouteType.PG);
-    expect(sessionStorage.getItem(AppRouteParams.TYPE)).toBe(AppRouteType.PG);
-    expect(storageTypeOps.read()).toBe(AppRouteType.PG);
-    storageTypeOps.delete();
-    expect(sessionStorage.getItem(AppRouteParams.TYPE)).toBeNull();
   });
 
   it('storageAarOps', () => {

@@ -1,9 +1,9 @@
 {
   "title": "Notifications",
-  "subtitle": "Here, you will find all the notifications sent by the organisation. You can filter them by Tax Code, IUN Code, send date and status.",
+  "subtitle": "Here, you will find all the notifications sent by the organisation. You can filter them by Fiscal Code, IUN Code, send date and status.",
   "new-notification-button": "Send a notification",
   "filters": {
-    "fiscal-code-tax-code": "Tax Code",
+    "fiscal-code-tax-code": "Fiscal Code",
     "iun": "IUN code",
     "data_da": "From",
     "data_da-aria-label": "Search start date",
@@ -60,8 +60,8 @@
     "sender": "Sender",
     "recipient": "Recipient",
     "recipients": "Recipients",
-    "tax-id-citizen-recipient": "Recipient Tax Code",
-    "tax-id-organization-recipient": "Recipient Tax Code",
+    "tax-id-citizen-recipient": "Recipient Fiscal Code",
+    "tax-id-organization-recipient": "Recipient Fiscal Code",
     "date": "Date sent",
     "payment-terms": "To be paid by",
     "amount": "Amount",
@@ -395,7 +395,7 @@
       "recipient": {
         "title": "Recipients",
         "fiscal-code-error": "Value entered is incorrect",
-        "identical-fiscal-codes-error": "There is already a recipient with this Tax Code. Please insert a different one.",
+        "identical-fiscal-codes-error": "There is already a recipient with this Fiscal Code. Please insert a different one.",
         "identical-notice-codes-error": "There is already a recipient with this Notice Code. Please insert a different one.",
         "notice-code-error": "Enter an 18-digit numeric code",
         "pec-error": "Invalid PEC address",
@@ -406,9 +406,9 @@
         "surname": "Surname",
         "legal-person": "Legal person",
         "business-name": "Company name",
-        "recipient-citizen-tax-id": "Recipient Tax Code",
-        "recipient-organization-tax-id": "Recipient Tax Code",
-        "creditor-fiscal-code": "Tax Code of the credit institution",
+        "recipient-citizen-tax-id": "Recipient Fiscal Code",
+        "recipient-organization-tax-id": "Recipient Fiscal Code",
+        "creditor-fiscal-code": "Fiscal Code of the credit institution",
         "notice-code": "Notice code",
         "add-digital-domicile": "Add a digital address",
         "back-to-preliminary-informations": "Back to Preliminary Information",
@@ -459,8 +459,8 @@
     },
     "errors": {
       "fiscal_code": {
-        "title": "Invalid tax code",
-        "message": "Tax code for one or more recipients is invalid"
+        "title": "Invalid fiscal code",
+        "message": "Fiscal code for one or more recipients is invalid"
       },
       "invalid_parameter": {
         "title": "Invalid data",

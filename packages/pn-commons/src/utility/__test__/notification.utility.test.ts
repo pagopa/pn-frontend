@@ -646,10 +646,6 @@ describe('parse notification & filters', () => {
       _.cloneDeep(notificationDTOMultiRecipient)
     );
     expect(calculatedParsedNotification).toStrictEqual(notificationToFeMultiRecipient);
-    // check sentAt date format
-    expect(calculatedParsedNotification.sentAt).toBe(
-      formatDate(notificationDTOMultiRecipient.sentAt)
-    );
     // check the order
     let previousStepTimestamp: string | null = null;
     for (const status of calculatedParsedNotification.notificationStatusHistory) {

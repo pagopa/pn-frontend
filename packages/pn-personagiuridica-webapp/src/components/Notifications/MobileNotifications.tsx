@@ -17,6 +17,7 @@ import {
   NotificationStatus,
   Sort,
   StatusTooltip,
+  formatDate,
   getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -101,12 +102,12 @@ const MobileNotifications = ({
                 {badge}
               </Typography>
               <Typography display="inline" variant="body2">
-                {row.sentAt}
+                {formatDate(row.sentAt as string)}
               </Typography>
             </Fragment>
           );
         }
-        return <Typography variant="body2">{row.sentAt}</Typography>;
+        return <Typography variant="body2">{formatDate(row.sentAt as string)}</Typography>;
       },
       gridProps: {
         xs: 4,
