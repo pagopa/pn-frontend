@@ -31,7 +31,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -66,7 +66,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -105,7 +105,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={payClickMk}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -146,7 +146,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -164,7 +164,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -186,7 +186,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
