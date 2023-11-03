@@ -44,7 +44,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   landingSiteUrl,
   getPaymentAttachmentAction,
   onPayClick,
-  handleFetchPaymentsInfo, // Maybe rename this props to fetchPayments or something like that
+  handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
   const [paginationData, setPaginationData] = useState<PaginationData>({
@@ -58,10 +58,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     (paginationData.page + 1) * paginationData.size
   );
 
-  const isSinglePayment =
-    pagoPaF24.length === 1 &&
-    pagoPaF24[0].pagoPa?.status === PaymentStatus.REQUIRED &&
-    !isCancelled;
+  const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
+  const hasRequiredPayment = pagoPaF24.some(
+    (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+  );
 
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(null);
 
@@ -134,11 +134,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  // const handlePaginate = (paginationData: PaginationData) => {
-  //   setPaginationData(paginationData);
-  //   handleChangePage(paginationData);
-  // };
-
   const handlePaginate = (paginationData: PaginationData) => {
     setPaginationData(paginationData);
     const payments = pagoPaF24.slice(
@@ -149,7 +144,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    setSelectedPayment(isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null);
+    setSelectedPayment(isSinglePayment && hasRequiredPayment ? pagoPaF24[0].pagoPa ?? null : null);
   }, [payments]);
 
   return (
@@ -204,7 +199,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           </RadioGroup>
 
           {paginationData.totalElements > paginationData.size && (
-            <Box width="full" display="flex" justifyContent="right">
+            <Box width="full" display="flex" justifyContent="right" data-testid="pagination-box">
               <CustomPagination
                 hideSizeSelector
                 paginationData={paginationData}

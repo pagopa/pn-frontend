@@ -521,6 +521,7 @@ describe('NotificationDetail Page', () => {
       (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
     );
     const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     mock
       .onPost(NOTIFICATION_PAYMENT_URL(), {
@@ -537,31 +538,25 @@ describe('NotificationDetail Page', () => {
         checkoutUrl: 'https://mocked-url.com',
       });
 
-    act(() => {
+    await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
           userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-          notificationState: {
-            notification: notificationToFe,
-            paymentsData: {
-              pagoPaF24: getPagoPaF24Payments(paymentHistory, 1),
-              f24Only: getF24Payments(paymentHistory, 1),
-            },
-            downtimeEvents: [],
-          },
         },
       });
     });
 
     const payButton = result?.getByTestId('pay-button');
 
+    let item;
     await waitFor(() => {
-      const item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
-      expect(item).toBeInTheDocument();
-
-      const radioButton = item?.querySelector('[data-testid="radio-button"] input');
-      fireEvent.click(radioButton!);
+      item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
     });
+
+    expect(item).toBeInTheDocument();
+
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
 
     expect(payButton).toBeEnabled();
 
