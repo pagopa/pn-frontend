@@ -1,4 +1,3 @@
-import currentLocale from 'date-fns/locale/it';
 import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +20,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   CourtesyPage,
   CustomDatePicker,
@@ -426,45 +423,37 @@ const NuovaDelega = () => {
                           {t('nuovaDelega.form.date-duration')}
                         </Typography>
                         <FormControl fullWidth>
-                          <LocalizationProvider
-                            dateAdapter={AdapterDateFns}
-                            adapterLocale={currentLocale}
-                          >
-                            <CustomDatePicker
-                              language={i18n.language}
-                              label={t('nuovaDelega.form.endDate')}
-                              inputFormat={DATE_FORMAT}
-                              value={values.expirationDate && new Date(values.expirationDate)}
-                              minDate={tomorrow}
-                              onChange={(value: DatePickerTypes) => {
-                                setFieldTouched('expirationDate', true, false);
-                                setFieldValue('expirationDate', value);
-                              }}
-                              shouldDisableDate={isToday}
-                              renderInput={(params) => (
-                                <TextField
-                                  id="expirationDate"
-                                  name="expirationDate"
-                                  {...params}
-                                  aria-label="Data termine delega" // aria-label for (TextField + Button) Group
-                                  inputProps={{
-                                    ...params.inputProps,
-                                    inputMode: 'text',
-                                    'aria-label': 'Inserisci la data di termine della delega',
-                                    type: 'text',
-                                  }}
-                                  error={Boolean(
-                                    getError(touched.expirationDate, errors.expirationDate)
-                                  )}
-                                  helperText={getError(
-                                    touched.expirationDate,
-                                    errors.expirationDate
-                                  )}
-                                />
-                              )}
-                              disablePast={true}
-                            />
-                          </LocalizationProvider>
+                          <CustomDatePicker
+                            language={i18n.language}
+                            label={t('nuovaDelega.form.endDate')}
+                            inputFormat={DATE_FORMAT}
+                            value={values.expirationDate && new Date(values.expirationDate)}
+                            minDate={tomorrow}
+                            onChange={(value: DatePickerTypes) => {
+                              setFieldTouched('expirationDate', true, false);
+                              setFieldValue('expirationDate', value);
+                            }}
+                            shouldDisableDate={isToday}
+                            renderInput={(params) => (
+                              <TextField
+                                id="expirationDate"
+                                name="expirationDate"
+                                {...params}
+                                aria-label="Data termine delega" // aria-label for (TextField + Button) Group
+                                inputProps={{
+                                  ...params.inputProps,
+                                  inputMode: 'text',
+                                  'aria-label': 'Inserisci la data di termine della delega',
+                                  type: 'text',
+                                }}
+                                error={Boolean(
+                                  getError(touched.expirationDate, errors.expirationDate)
+                                )}
+                                helperText={getError(touched.expirationDate, errors.expirationDate)}
+                              />
+                            )}
+                            disablePast={true}
+                          />
                         </FormControl>
                       </Box>
                       <Divider sx={{ my: 3 }} />

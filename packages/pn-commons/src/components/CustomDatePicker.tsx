@@ -1,8 +1,11 @@
 import { de, enGB, fr, it, sl } from 'date-fns/locale';
 
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  DesktopDatePicker,
+  DesktopDatePickerProps,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DesktopDatePicker, DesktopDatePickerProps } from '@mui/x-date-pickers/DesktopDatePicker';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
