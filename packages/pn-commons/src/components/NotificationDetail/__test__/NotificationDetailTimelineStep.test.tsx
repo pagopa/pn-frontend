@@ -45,13 +45,6 @@ const checkDateItem = (index: number, dateItem: HTMLElement, date: string) => {
   }
 };
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    i18n: { language: 'it' },
-  }),
-}));
-
 describe('NotificationDetailTimelineStep', () => {
   it('renders the macro step correctly', () => {
     const { getAllByTestId, getByTestId } = render(
