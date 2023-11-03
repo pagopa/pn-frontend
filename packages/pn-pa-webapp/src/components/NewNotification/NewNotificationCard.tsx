@@ -2,7 +2,7 @@ import { Fragment, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
-import { SectionHeading } from '@pagopa-pn/pn-commons';
+import { SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
   children: ReactNode;
@@ -26,6 +26,7 @@ const NewNotificationCard = ({
   previousStepOnClick,
 }: Props) => {
   const { t } = useTranslation(['common', 'notifiche']);
+  const isMobile = useIsMobile();
 
   return (
     <Fragment>
@@ -43,7 +44,7 @@ const NewNotificationCard = ({
       {noPaper && <Box>{children}</Box>}
       <Box
         display="flex"
-        flexDirection="row-reverse"
+        flexDirection={isMobile ? 'column' : 'row-reverse'}
         justifyContent="space-between"
         alignItems="center"
         sx={{ marginTop: '40px', marginBottom: '20px' }}
@@ -54,6 +55,7 @@ const NewNotificationCard = ({
           type="submit"
           disabled={isContinueDisabled}
           data-testid="step-submit"
+          fullWidth={isMobile}
         >
           {submitLabel || t('button.continue')}
         </Button>
@@ -64,6 +66,8 @@ const NewNotificationCard = ({
             type="button"
             onClick={previousStepOnClick}
             data-testid="previous-step"
+            fullWidth={isMobile}
+            sx={{ marginTop: isMobile ? 2 : 0 }}
           >
             {previousStepLabel}
           </Button>
