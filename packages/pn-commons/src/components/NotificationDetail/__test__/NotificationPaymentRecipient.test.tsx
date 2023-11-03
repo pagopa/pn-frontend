@@ -42,20 +42,22 @@ describe('NotificationPaymentRecipient Component', () => {
     const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
     const payButton = getByTestId('pay-button');
     const f24OnlyBox = getByTestId('f24only-box');
+    const paginationBox = getByTestId('pagination-box');
+
+    const pageLength = paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length;
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('detail.payment.title');
     expect(subtitle).toBeInTheDocument();
     expect(subtitle).toHaveTextContent('detail.payment.subtitle');
     expect(f24Download).not.toBeInTheDocument();
-    expect(pagoPABox).toHaveLength(
-      paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length
-    );
+    expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
     expect(downloadPagoPANotice).toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
     expect(downloadPagoPANotice).toBeDisabled();
     expect(payButton).toBeDisabled();
     expect(f24OnlyBox).toBeInTheDocument();
+    expect(paginationBox).toBeInTheDocument();
   });
 
   it('select and unselect payment', async () => {
@@ -222,5 +224,47 @@ describe('NotificationPaymentRecipient Component', () => {
       PaymentAttachmentSName.F24,
       paymentsData.f24Only[0].attachmentIdx
     );
+  });
+
+  it('should not show pagination box if there are no more than 5 pagopa payments ', () => {
+    const payments = {
+      pagoPaF24: [...paymentsData.pagoPaF24.slice(0, 2)],
+      f24Only: [...paymentsData.f24Only],
+    };
+    const { queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={payments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+    const paginationBox = queryByTestId('pagination-box');
+    expect(paginationBox).not.toBeInTheDocument();
+  });
+
+  it('should call handleFetchPaymentsInfo on pagination click', async () => {
+    const fetchPaymentsInfoMk = jest.fn();
+    const result = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={fetchPaymentsInfoMk}
+        landingSiteUrl=""
+      />
+    );
+
+    const pageSelector = result.getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    // the buttons are < 1 2 >
+    fireEvent.click(pageButtons[2]);
+
+    expect(fetchPaymentsInfoMk).toBeCalledTimes(1);
   });
 });

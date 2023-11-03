@@ -593,7 +593,9 @@ describe('NotificationDetail Page', () => {
     );
     const requiredPayment = paymentHistory[requiredPaymentIndex];
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
+      .reply(200, paymentInfo);
     mock
       .onPost(NOTIFICATION_PAYMENT_URL(), {
         paymentNotice: {
@@ -641,5 +643,54 @@ describe('NotificationDetail Page', () => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
+  });
+
+  it('should show correct paginated payments', async () => {
+    let paginationData = {
+      page: 0,
+      size: 5,
+      totalElements: notificationDTO.recipients[2].payments?.length,
+    };
+
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, paginationData.size))
+      .reply(200, paymentInfo);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    // check that the first 5 payments are shown
+    const pagoPaItems = result?.queryAllByTestId('pagopa-item');
+    expect(pagoPaItems).toHaveLength(5);
+
+    const pageSelector = result?.getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    // the buttons are < 1 2 >
+    fireEvent.click(pageButtons![2]);
+    paginationData = {
+      ...paginationData,
+      page: 1,
+    };
+
+    // intercept the next request
+    const secondPagePaymentInfoRequest = paymentInfoRequest.slice(
+      paginationData.page * paginationData.size,
+      (paginationData.page + 1) * paginationData.size
+    );
+
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+    });
+
+    // check that the other payments are shown
+    const secondPageItems = result?.queryAllByTestId('pagopa-item');
+    expect(secondPageItems).toHaveLength(secondPagePaymentInfoRequest.length);
   });
 });
