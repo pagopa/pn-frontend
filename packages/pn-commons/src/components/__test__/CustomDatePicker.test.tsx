@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TextField } from '@mui/material';
 
-import { fireEvent, render, screen, waitFor } from '../../test-utils';
+import { fireEvent, render, screen } from '../../test-utils';
 import { DATE_FORMAT } from '../../utility';
 import CustomDatePicker from '../CustomDatePicker';
 
@@ -24,6 +24,7 @@ const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
     )}
   />
 );
+
 describe('test CustomDatePicker component', () => {
   it('renders the component', () => {
     const { getByPlaceholderText, container } = render(<RenderDatePicker />);
@@ -56,15 +57,12 @@ describe('test CustomDatePicker languages', () => {
       month: 'januar',
     },
   ];
-  beforeEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-  });
-  it.each(languages)('check january month to be $month in $language', async (language) => {
+
+  it.each(languages)('check january month to be $month in $language', (language) => {
     const { container, getByRole } = render(<RenderDatePicker language={language.language} />);
     expect(container).toHaveTextContent(/datepicker/i);
     const button = getByRole('button');
-    await waitFor(() => fireEvent.click(button));
+    fireEvent.click(button);
     const regExMonth = new RegExp(`${language.month}`, 'i');
     expect(screen.getByText(regExMonth)).toBeInTheDocument();
   });
