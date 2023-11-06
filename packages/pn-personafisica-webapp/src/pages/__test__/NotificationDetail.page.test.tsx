@@ -550,10 +550,7 @@ describe('NotificationDetail Page', () => {
 
     const payButton = result?.getByTestId('pay-button');
 
-    let item;
-    await waitFor(() => {
-      item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
-    });
+    const item = await waitFor(() => result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex]);
 
     expect(item).toBeInTheDocument();
 
