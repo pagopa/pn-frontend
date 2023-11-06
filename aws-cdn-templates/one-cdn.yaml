@@ -400,7 +400,12 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-          FunctionAssociations: !Ref "AWS::NoValue"
+          FunctionAssociations:
+            Fn::If:
+              - IsPortalePfLogin
+              - EventType: viewer-request
+                FunctionARN: !GetAtt RedirectFunction.FunctionMetadata.FunctionARN
+              - !Ref "AWS::NoValue"
         DefaultRootObject:
           !If [IsPortalePfLogin, "auth/index.html", "index.html"]
         CustomErrorResponses:
@@ -599,7 +604,7 @@ Resources:
         Runtime: cloudfront-js-1.0
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
 
-  LoginRedirectFunction:
+  RedirectFunction:
     Condition: IsPortalePf
     Type: AWS::CloudFront::Function
     Properties:
