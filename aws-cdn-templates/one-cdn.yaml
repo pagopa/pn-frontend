@@ -13,8 +13,8 @@ Parameters:
     Description: "Domain for sub cdn"
     Type: String
 
-  SubWebDomain:
-    Description: "Domain for sub webapp"
+  RootWebDomain:
+    Description: "Domain for root webapp"
     Type: String
 
   WebDomainReferenceToSite:
@@ -605,7 +605,7 @@ Resources:
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
 
   RedirectFunction:
-    Condition: IsPortalePf
+    Condition: IsPortalePfLogin
     Type: AWS::CloudFront::Function
     Properties:
       AutoPublish: true
@@ -613,7 +613,7 @@ Resources:
         function handler(event) {
           var request = event.request;
           var headers = request.headers;
-          var domain = ${SubWebDomain};
+          var domain = ${WebDomain};
           var uri = request.uri;
 
           if (headers.host.value === domain) {
@@ -621,7 +621,7 @@ Resources:
               statusCode: 301,
               statusDescription: "Moved Permanently",
               headers: {
-                  location: { value: "https://${WebDomain}/auth" + uri },
+                  location: { value: "https://${RootWebDomain}/auth" + uri },
               },
             };
           }
@@ -631,7 +631,7 @@ Resources:
       FunctionConfig:
         Comment: "Redirect the request from a sub-domain CloudFront Distribution to the root one"
         Runtime: cloudfront-js-1.0
-      Name: !Sub "${AWS::StackName}-RedirectSudDomainRequest"
+      Name: !Sub "${AWS::StackName}-RedirectSubDomainRequest"
 
   # Alarms
   TooManyRequestsAlarm:
