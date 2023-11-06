@@ -613,7 +613,7 @@ Resources:
         function handler(event) {
           var request = event.request;
           var headers = request.headers;
-          var domain = ${WebDomain};
+          var domain = "${WebDomain}";
           var uri = request.uri;
 
           if (headers.host.value === domain) {
