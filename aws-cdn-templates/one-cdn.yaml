@@ -609,7 +609,7 @@ Resources:
     Type: AWS::CloudFront::Function
     Properties:
       AutoPublish: true
-      FunctionCode: |
+      FunctionCode: !Sub |
         function handler(event) {
           var request = event.request;
           var headers = request.headers;
