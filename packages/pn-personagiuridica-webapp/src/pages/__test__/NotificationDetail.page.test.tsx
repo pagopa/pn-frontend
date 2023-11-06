@@ -620,22 +620,15 @@ describe('NotificationDetail Page', () => {
     });
 
     const payButton = result?.getByTestId('pay-button');
-
-    const item = await waitFor(() => result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex]);
-
+    const item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
     expect(item).toBeInTheDocument();
-
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-
     expect(payButton).toBeEnabled();
-
     fireEvent.click(payButton!);
-
     expect(mock.history.post).toHaveLength(2);
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
-
     await waitFor(() => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
