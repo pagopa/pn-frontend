@@ -30,9 +30,6 @@ import {
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { getContactEventType } from '../../utility/contacts.utility';
-import { EventActions, TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 
 type ModalProps = {
   labelRoot: string;
@@ -117,14 +114,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
     /* eslint-disable functional/no-let */
     let actionToBeDispatched;
-    let eventTypeByChannel;
-    /* eslint-enable functional/no-let */
     if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
       actionToBeDispatched = createOrUpdateLegalAddress;
-      eventTypeByChannel = TrackEventType.CONTACT_LEGAL_CONTACT;
     } else {
       actionToBeDispatched = createOrUpdateCourtesyAddress;
-      eventTypeByChannel = getContactEventType(modalProps.digitalDomicileType);
     }
     if (!actionToBeDispatched) {
       return;
@@ -138,7 +131,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       code: verificationCode,
     };
 
-    trackEventByType(eventTypeByChannel, { action: EventActions.ADD });
     void dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {

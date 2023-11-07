@@ -49,8 +49,6 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { generateVCode } from '../utility/delegation.utility';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
@@ -68,7 +66,6 @@ const NuovaDelega = () => {
 
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);

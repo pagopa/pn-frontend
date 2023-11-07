@@ -25,8 +25,6 @@ import { setMandateId, setPagination, setSorting } from '../redux/dashboard/redu
 import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -81,17 +79,12 @@ const Notifiche = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   // Sort handlers
   const handleChangeSorting = (s: Sort<NotificationColumn>) => {
     dispatch(setSorting(s));
-  };
-
-  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
   useEffect(() => {
@@ -135,7 +128,6 @@ const Notifiche = () => {
               }}
               onPageRequest={handleChangePage}
               pagesToShow={pagesToShow}
-              eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
               sx={
                 isMobile
                   ? {

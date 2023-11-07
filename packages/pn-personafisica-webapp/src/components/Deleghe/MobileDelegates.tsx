@@ -18,8 +18,6 @@ import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
@@ -118,9 +116,8 @@ const MobileDelegates = () => {
     },
   ];
 
-  const handleAddDelegationClick = (source: string) => {
+  const handleAddDelegationClick = () => {
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
@@ -147,7 +144,7 @@ const MobileDelegates = () => {
           <Button
             id="add-delegation-button"
             variant="outlined"
-            onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+            onClick={() => handleAddDelegationClick()}
             sx={{ mb: 1 }}
             data-testid="add-delegation"
           >

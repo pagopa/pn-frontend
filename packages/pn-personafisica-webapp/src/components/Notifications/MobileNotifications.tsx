@@ -25,8 +25,6 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
@@ -92,10 +90,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'notificationReadStatus',
@@ -129,14 +123,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
           row.notificationStatus as NotificationStatus,
           { recipients: row.recipients as Array<string> }
         );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
+        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
       },
       gridProps: {
         xs: 8,
@@ -208,8 +195,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const cardActions: Array<CardAction> = [

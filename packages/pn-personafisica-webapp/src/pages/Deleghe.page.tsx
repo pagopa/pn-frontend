@@ -27,8 +27,6 @@ import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/del
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -70,7 +68,6 @@ const Deleghe = () => {
   const handleAccept = async (code: Array<string>) => {
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
     void dispatch(getSidemenuInformation());
-    trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
   const retrieveData = async () => {

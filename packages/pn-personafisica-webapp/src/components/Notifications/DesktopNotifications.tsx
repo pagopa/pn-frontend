@@ -20,8 +20,6 @@ import {
 import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
@@ -79,10 +77,6 @@ const DesktopNotifications = ({
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
-
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
 
   const columns: Array<Column<NotificationColumn>> = [
     {
@@ -152,14 +146,7 @@ const DesktopNotifications = ({
           row.notificationStatus as NotificationStatus,
           { recipients: row.recipients as Array<string> }
         );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
+        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
       },
       onClick(row: Item) {
         handleRowClick(row);
@@ -184,8 +171,6 @@ const DesktopNotifications = ({
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   return (

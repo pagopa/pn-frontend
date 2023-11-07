@@ -18,8 +18,6 @@ import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -31,7 +29,6 @@ const Profile = () => {
     : { textAlign: 'center', minWidth: 'max-content' };
 
   const handleRedirectToContactsPage = () => {
-    trackEventByType(TrackEventType.USER_VIEW_CONTACTS_PROFILE);
     navigate(RECAPITI);
   };
 

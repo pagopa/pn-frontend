@@ -1,4 +1,4 @@
-import { ErrorInfo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -23,7 +23,6 @@ import {
   initLocalization,
   useMultiEvent,
   useTracking,
-  useUnload,
 } from '@pagopa-pn/pn-commons';
 import { ProductEntity } from '@pagopa/mui-italia';
 
@@ -38,8 +37,6 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
-import { TrackEventType } from './utility/events';
-import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 
 // TODO: get products list from be (?)
@@ -99,7 +96,6 @@ const ActualApp = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
-  const source = path[path.length - 1];
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
@@ -120,7 +116,6 @@ const ActualApp = () => {
       id: 'profile',
       label: t('menu.profilo'),
       onClick: () => {
-        trackEventByType(TrackEventType.USER_VIEW_PROFILE);
         navigate(routes.PROFILO);
       },
       icon: <SettingsIcon fontSize="small" color="inherit" />,
@@ -135,10 +130,6 @@ const ActualApp = () => {
       ? [profiloAction, logoutAction]
       : [logoutAction];
   }, [tosConsent, privacyConsent, i18n.language]);
-
-  useUnload(() => {
-    trackEventByType(TrackEventType.APP_UNLOAD);
-  });
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
@@ -226,24 +217,8 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
-  };
-
-  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
-    trackEventByType(TrackEventType.APP_CRASH, {
-      route: source,
-      stacktrace: { error: e, errorInfo: eInfo },
-    });
-  };
-
-  const handleEventTrackingCallbackFooterChangeLanguage = () => {
-    trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
-  };
-
-  const handleEventTrackingCallbackProductSwitch = (target: string) => {
-    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
 
   const [clickVersion] = useMultiEvent({
@@ -267,19 +242,7 @@ const ActualApp = () => {
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
-        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-        eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-        eventTrackingCallbackProductSwitch={(target) =>
-          handleEventTrackingCallbackProductSwitch(target)
-        }
-        sideMenu={
-          <SideMenu
-            menuItems={menuItems}
-            eventTrackingCallback={(target) =>
-              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-            }
-          />
-        }
+        sideMenu={<SideMenu menuItems={menuItems} />}
         showSideMenu={
           !!sessionToken &&
           tosConsent &&
