@@ -29,7 +29,7 @@
     "no_delegators": "Non c'è nessuna delega a carico di {{organizationName}}.",
     "no_delegators_after_filters": "I filtri che hai aggiunto non hanno dato nessun risultato. <0>Rimuovi filtri</0>.",
     "show_code_title": "Codice di verifica per la delega a {{name}}",
-    "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
+    "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega. Il codice è valido per 7 giorni dalla creazione della richiesta di delega.",
     "verification_code": "Codice di verifica",
     "code_copied": "Codice copiato",
     "tab_aria_label": "Tab deleghe",
@@ -99,7 +99,7 @@
       "date-duration": "Periodo di validità della delega*",
       "endDate": "Termine delega",
       "verificationCode": "Codice di verifica",
-      "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
+      "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega. Il codice è valido per 7 giorni dalla creazione della richiesta di delega.",
       "submit": "Invia la richiesta",
       "mandatoryField": "Campi obbligatori*",
       "party-not-found": "Nessun ente trovato"
