@@ -7,7 +7,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "test": "jest",
+    "test": "vitest --run",
     "test:coverage": "jest --watchAll=false --ci --coverage",
     "sonar": "node sonarqube-scanner.js"
   },
@@ -24,9 +24,9 @@
     "eslint-plugin-functional": "^3.7.2",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-sonarjs": "^0.10.0",
-    "jest": "^27.5.1",
     "jest-sonar-reporter": "^2.0.0",
-    "sonarqube-scanner": "^3.0.0"
+    "sonarqube-scanner": "^3.0.0",
+    "vitest": "0.34.6"
   },
   "jest": {
     "testResultsProcessor": "jest-sonar-reporter"

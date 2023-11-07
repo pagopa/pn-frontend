@@ -1,33 +1,34 @@
+import { vi } from 'vitest';
 import { Between } from '../../rules/Between';
 import { GreaterThan } from '../../rules/GreaterThan';
 import { LessThan } from '../../rules/LessThan';
 import { NumberRuleValidator } from '../NumberRuleValidator';
 
-const pushRuleMk = jest.fn();
+const pushRuleMk = vi.fn();
 const dummyRuleValidator = new NumberRuleValidator(pushRuleMk);
 
-jest.mock('../../rules/LessThan', () => {
+vi.mock('../../rules/LessThan', () => {
     return {
-        LessThan: jest.fn()
+        LessThan: vi.fn()
     }
 });
 
-jest.mock('../../rules/GreaterThan', () => {
+vi.mock('../../rules/GreaterThan', () => {
     return {
-        GreaterThan: jest.fn()
+        GreaterThan: vi.fn()
     }
 });
 
-jest.mock('../../rules/Between', () => {
+vi.mock('../../rules/Between', () => {
     return {
-        Between: jest.fn()
+        Between: vi.fn()
     }
 });
 
 describe('Test NumberRuleValidator', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('check if methods exist', () => {

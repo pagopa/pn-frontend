@@ -1,26 +1,27 @@
+import { vi } from 'vitest';
 import { GreaterThan } from '../../rules/GreaterThan';
 import { LessThan } from '../../rules/LessThan';
 import { DateRuleValidator } from '../DateRuleValidator';
 
-const pushRuleMk = jest.fn();
+const pushRuleMk = vi.fn();
 const dummyRuleValidator = new DateRuleValidator(pushRuleMk);
 
-jest.mock('../../rules/LessThan', () => {
+vi.mock('../../rules/LessThan', () => {
     return {
-        LessThan: jest.fn()
+        LessThan: vi.fn()
     }
 });
 
-jest.mock('../../rules/GreaterThan', () => {
+vi.mock('../../rules/GreaterThan', () => {
     return {
-        GreaterThan: jest.fn()
+        GreaterThan: vi.fn()
     }
 });
 
 describe('Test DateRuleValidator', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('check if methods exist', () => {
