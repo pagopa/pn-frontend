@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* intesigroup idp data and added relaystate ([85c2e37](https://github.com/pagopa/pn-frontend/commit/85c2e37837ea5389ff75f08928df4effd2a1b8c3))
+
+
+### Features
+
+* **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([f22cf57](https://github.com/pagopa/pn-frontend/commit/f22cf57e8c9a46fc6a90234bef5d498a01cb841c))
+
+
+
+
+
 ## [2.1.1](https://github.com/pagopa/pn-frontend/compare/v2.1.0...v2.1.1) (2023-10-19)
 
 
