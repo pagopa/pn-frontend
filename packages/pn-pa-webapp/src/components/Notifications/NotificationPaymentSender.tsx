@@ -3,9 +3,11 @@ import { TFunction, useTranslation } from 'react-i18next';
 
 import { Box, Divider, MenuItem, Paper, TextField, Typography } from '@mui/material';
 import {
+  CustomPagination,
   F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
+  PaginationData,
   PagoPAPaymentFullDetails,
   PaymentDetails,
   RecipientType,
@@ -89,15 +91,30 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       getF24Payments(recipients[recipientIndex].payments!, recipientIndex, false)
     );
+    setPaginationData({
+      ...paginationData,
+      totalElements: recipients[recipientIndex].payments!.length,
+    });
   };
 
-  const pagoPAPaymentFullDetails = paymentDetails.reduce((arr, payment) => {
-    if (payment.pagoPa) {
-      // eslint-disable-next-line functional/immutable-data
-      arr.push(payment.pagoPa);
-    }
-    return arr;
-  }, [] as Array<PagoPAPaymentFullDetails>);
+  const [paginationData, setPaginationData] = useState<PaginationData>({
+    page: 0,
+    size: 5,
+    totalElements: paymentDetails.length,
+  });
+
+  const pagoPAPaymentFullDetails = paymentDetails
+    .reduce((arr, payment) => {
+      if (payment.pagoPa) {
+        // eslint-disable-next-line functional/immutable-data
+        arr.push(payment.pagoPa);
+      }
+      return arr;
+    }, [] as Array<PagoPAPaymentFullDetails>)
+    .slice(
+      paginationData.page * paginationData.size,
+      (paginationData.page + 1) * paginationData.size
+    );
 
   return (
     <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="paymentInfoBox">
@@ -143,6 +160,15 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
         pagoPAPaymentFullDetails.map((payment) => (
           <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
         ))}
+      {paginationData.totalElements > paginationData.size && (
+        <Box width="full" display="flex" justifyContent="right" mt={1} data-testid="pagination-box">
+          <CustomPagination
+            hideSizeSelector
+            paginationData={paginationData}
+            onPageRequest={setPaginationData}
+          />
+        </Box>
+      )}
       {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length > 0 && (
         <Divider sx={{ my: 2 }} />
       )}
