@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 
-import { Button, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { Button, DialogTitle, Typography } from '@mui/material';
+import { PnDialogActions, PnDialogContent, useIsMobile } from '@pagopa-pn/pn-commons';
 
 export type ApiKeyModalProps = {
   title: string;
@@ -33,7 +33,7 @@ const ApiKeyModal = ({
           {title}
         </DialogTitle>
       )}
-      <DialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
+      <PnDialogContent>
         {subTitle && !subTitleAtBottom && (
           <Typography
             id="subtitle-top"
@@ -50,8 +50,8 @@ const ApiKeyModal = ({
             {subTitle}
           </Typography>
         )}
-      </DialogContent>
-      <DialogActions
+      </PnDialogContent>
+      <PnDialogActions
         disableSpacing={isMobile}
         sx={{
           textAlign: textPosition,
@@ -81,7 +81,7 @@ const ApiKeyModal = ({
             {actionButtonLabel}
           </Button>
         )}
-      </DialogActions>
+      </PnDialogActions>
     </>
   );
 };
