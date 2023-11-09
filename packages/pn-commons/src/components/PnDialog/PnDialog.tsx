@@ -1,10 +1,11 @@
 import { Children, cloneElement, isValidElement, useMemo } from 'react';
+
 import { Dialog, DialogProps, DialogTitle } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
 import { ReactComponent } from '../../models/PnDialog';
-import PnDialogContent from './PnDialogContent';
 import PnDialogActions from './PnDialogActions';
+import PnDialogContent from './PnDialogContent';
 
 const PnDialog: React.FC<DialogProps> = (props) => {
   const isMobile = useIsMobile();
@@ -30,7 +31,7 @@ const PnDialog: React.FC<DialogProps> = (props) => {
   );
 
   return (
-    <Dialog {...props} data-testid="dialog">
+    <Dialog data-testid="dialog" {...props}>
       {title && enrichedTitle}
       {content}
       {actions}
