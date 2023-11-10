@@ -79,13 +79,20 @@ export const Menu = (props: any) => {
   return (
     <>
       <IconButton
+        id="delegation-menu-icon"
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label="Delegation Menu Icon"
       >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
-      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">
+      <MUIMenu
+        id="delegation-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        data-testid="delegationMenu"
+      >
         {getMenuItemElements()}
       </MUIMenu>
     </>
