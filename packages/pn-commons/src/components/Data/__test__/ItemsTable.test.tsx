@@ -1,11 +1,12 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { Column, Item, Sort } from '../../../models';
 import { fireEvent, render, within } from '../../../test-utils';
 import ItemsTable from '../ItemsTable';
 
-const handleSort = jest.fn();
-const handleColumnClick = jest.fn();
+const handleSort = vi.fn();
+const handleColumnClick = vi.fn();
 
 const columns: Array<Column<'column-1' | 'column-2' | 'column-3'>> = [
   {

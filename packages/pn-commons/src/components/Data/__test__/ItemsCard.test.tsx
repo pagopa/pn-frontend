@@ -1,10 +1,11 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { CardAction, CardElement, Item } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import ItemsCard from '../ItemsCard';
 
-const clickActionMockFn = jest.fn();
+const clickActionMockFn = vi.fn();
 
 const cardHeader: [CardElement, CardElement] = [
   { id: 'column-1', label: 'Column 1', getLabel: (value: string) => value },

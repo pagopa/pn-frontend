@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import AccessDenied from '../AccessDenied';
@@ -71,7 +72,7 @@ describe('AccessDenied Component', () => {
   });
 
   it('clicks on redirect button - not logged user', () => {
-    const goToLogin = jest.fn();
+    const goToLogin = vi.fn();
     // render component
     const { getByRole } = render(
       <AccessDenied
@@ -88,7 +89,7 @@ describe('AccessDenied Component', () => {
   });
 
   it('clicks on redirect button - logged user', () => {
-    const goToHomePage = jest.fn();
+    const goToHomePage = vi.fn();
     // render component
     const { getByRole } = render(
       <AccessDenied

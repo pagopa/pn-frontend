@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { CardSort, Sort } from '../../../models';
 import {
@@ -36,11 +37,11 @@ const sort: Sort<MockOrderByFields> = {
   order: 'asc',
 };
 
-const onChangeSortingMk = jest.fn();
+const onChangeSortingMk = vi.fn();
 
 describe('MobileNotifications Component', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders MobileNotificationsSort (closed)', () => {

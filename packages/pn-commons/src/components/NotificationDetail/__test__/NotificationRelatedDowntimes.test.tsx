@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
@@ -19,15 +20,15 @@ const fakePalette = {
   text: { primary: '#AAAAAA', secondary: '#BBBBBB' },
 };
 
-jest.mock('@mui/material', () => {
-  const original = jest.requireActual('@mui/material');
+vi.mock('@mui/material', async () => {
+  const original = await vi.importActual('@mui/material') as any;
   return {
     ...original,
     useTheme: () => ({ ...original.useTheme(), palette: fakePalette }),
   };
 });
 
-const fetchDowntimeEventsMock = jest.fn();
+const fetchDowntimeEventsMock = vi.fn();
 
 const errors: Array<IAppMessage> = [
   {
@@ -124,7 +125,7 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('normal history - one complete downtime, one not finished, one finished but yet without link', () => {

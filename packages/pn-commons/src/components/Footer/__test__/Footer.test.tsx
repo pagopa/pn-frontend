@@ -1,10 +1,11 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render, screen } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
 import Footer from '../Footer';
 
-const mockOpenFn = jest.fn();
+const mockOpenFn = vi.fn();
 
 describe('Footer Component', () => {
   const original = window.open;
@@ -48,7 +49,7 @@ describe('Footer Component', () => {
   });
 
   it('shows languages dropdown', async () => {
-    const mockEventTrackingCallbackChangeLanguage = jest.fn();
+    const mockEventTrackingCallbackChangeLanguage = vi.fn();
     const { getByRole } = render(
       <Footer
         loggedUser={true}

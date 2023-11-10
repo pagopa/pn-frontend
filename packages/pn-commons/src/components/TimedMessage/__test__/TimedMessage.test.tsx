@@ -1,10 +1,11 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { RenderResult, act, render } from '../../../test-utils';
 import TimedMessage from '../TimedMessage';
 
 describe('TimedMessage component', () => {
-  const callbackFn = jest.fn();
+  const callbackFn = vi.fn();
 
   let result: RenderResult;
 

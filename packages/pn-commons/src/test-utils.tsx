@@ -66,13 +66,15 @@ const customRender = (
     preloadedState,
     renderOptions,
     navigationRouter = 'default',
+    alreadyCreatedStore,
   }: {
     preloadedState?: any;
     renderOptions?: Omit<RenderOptions, 'wrapper'>;
     navigationRouter?: NavigationRouter;
+    alreadyCreatedStore?: any;
   } = {}
 ) => {
-  const testStore = createTestStore(preloadedState);
+  const testStore = alreadyCreatedStore || createTestStore(preloadedState);
   return {
     ...render(ui, {
       wrapper: ({ children }) => (

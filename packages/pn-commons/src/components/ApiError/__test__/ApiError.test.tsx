@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 import ApiError from '../ApiError';
 import { render, screen, fireEvent } from '../../../test-utils';
 
@@ -17,7 +18,7 @@ describe('ApiError', () => {
     });
 
     it('calls onClick callback when action text is clicked', () => {
-        const onClickMock = jest.fn();
+        const onClickMock = vi.fn();
 
         render(<ApiError onClick={onClickMock} />);
 

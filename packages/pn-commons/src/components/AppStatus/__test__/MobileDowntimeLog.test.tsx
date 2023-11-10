@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
@@ -16,8 +17,8 @@ import MobileDowntimeLog from '../MobileDowntimeLog';
 
 const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
 
-jest.mock('@mui/material', () => {
-  const original = jest.requireActual('@mui/material');
+vi.mock('@mui/material', async () => {
+  const original = await vi.importActual('@mui/material') as any;
   return {
     ...original,
     useTheme: () => ({ palette: { ...original.useTheme().palette, ...fakePalette } }),
@@ -68,7 +69,7 @@ const checkLegalFactField = (
 
 describe('MobileDowntimeLog component', () => {
   let result: RenderResult;
-  const getLegalFactDetailsMock = jest.fn();
+  const getLegalFactDetailsMock = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();

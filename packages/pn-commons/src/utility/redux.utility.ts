@@ -87,7 +87,7 @@ function parseError(e: any) {
   );
  * 
  * Infatti la versione semplificata è perfettamente funzionante, 
- * *ma* se un un test si vuole moccare NotificationsApi.getReceivedNotifications, il mock di jest.spyOn
+ * *ma* se un un test si vuole moccare NotificationsApi.getReceivedNotifications, il mock di vi.spyOn
  * non si applica se getReceivedNotifications viene utilizzata in questo modo.
  * Un po' frustrante a mio avviso, ma è proprio così.
  *

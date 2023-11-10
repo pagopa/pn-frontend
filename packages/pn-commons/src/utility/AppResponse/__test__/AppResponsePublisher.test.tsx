@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { ServerResponse, ServerResponseErrorCode } from '../../../models/AppResponse';
 import { render } from '../../../test-utils';
@@ -6,8 +7,8 @@ import { createAppResponseError, createAppResponseSuccess } from '../AppResponse
 import AppResponsePublisher, { ResponseEventDispatcher } from '../AppResponsePublisher';
 
 describe('AppResponsePublisher', () => {
-  const callbackLow = jest.fn();
-  const callbackHight = jest.fn();
+  const callbackLow = vi.fn();
+  const callbackHight = vi.fn();
 
   const action = 'Event';
 
