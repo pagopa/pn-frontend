@@ -305,7 +305,6 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     // fare un check iun e timestamp. Se ritorna true non fare il fetch
-    // const isValid = checkIunAndTimestamp(notification.iun, new Date().toISOString());
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       const areValid = checkIunAndTimestamp(notification.iun, new Date().toISOString());
       const payments = getPaymentsFromCache();
@@ -313,7 +312,6 @@ const NotificationDetail = () => {
         fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
         return;
       }
-      // fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
 
