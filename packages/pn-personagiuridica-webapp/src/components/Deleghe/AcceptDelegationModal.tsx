@@ -168,7 +168,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
             <FormControlLabel
               id="associate-form-group"
               value="no-group"
-              control={<Radio id="associate-group" data-testid="no-group" />}
+              control={<Radio id="associate-no-group" data-testid="no-group" />}
               label={t('deleghe.no-group')}
             />
             <FormControlLabel
