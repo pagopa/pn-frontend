@@ -37,6 +37,14 @@ import {
 } from './notification.utility';
 import { compileOneTrustPath } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
+import {
+  checkIunAndTimestamp,
+  clearPaymentCache,
+  getPaymentCache,
+  getPaymentsFromCache,
+  setPaymentCache,
+  setPaymentsInCache,
+} from './paymentCaching.utility';
 import { performThunkAction } from './redux.utility';
 import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
@@ -107,4 +115,10 @@ export {
   waitForElement,
   initLocalization,
   Configuration,
+  getPaymentCache,
+  setPaymentCache,
+  clearPaymentCache,
+  checkIunAndTimestamp,
+  getPaymentsFromCache,
+  setPaymentsInCache,
 };

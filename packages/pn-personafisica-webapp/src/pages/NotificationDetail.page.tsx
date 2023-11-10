@@ -19,10 +19,13 @@ import {
   NotificationRelatedDowntimes,
   PaymentAttachmentSName,
   PaymentDetails,
+  PaymentsData,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
+  checkIunAndTimestamp,
   formatDate,
+  getPaymentsFromCache,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -109,6 +112,8 @@ const NotificationDetail = () => {
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+
+  const [paymentToShow, setPaymentToShow] = useState<PaymentsData | null>(null);
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -299,10 +304,25 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
+    // fare un check iun e timestamp. Se ritorna true non fare il fetch
+    // const isValid = checkIunAndTimestamp(notification.iun, new Date().toISOString());
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
+      const areValid = checkIunAndTimestamp(notification.iun, new Date().toISOString());
+      const payments = getPaymentsFromCache();
+      if (!areValid || !payments) {
+        fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
+        return;
+      }
+      // fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
+
+  useEffect(() => {
+    const payments = getPaymentsFromCache();
+    if (payments) {
+      setPaymentToShow(payments);
+    }
+  }, []);
 
   useEffect(() => {
     fetchReceivedNotification();
@@ -402,11 +422,13 @@ const NotificationDetail = () => {
                       })}
                     >
                       <NotificationPaymentRecipient
-                        payments={userPayments}
+                        payments={paymentToShow ?? userPayments}
+                        // payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
                         handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
+                        totalElements={currentRecipient.payments?.length ?? 0}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}
                       />

@@ -11,12 +11,14 @@ import {
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
+  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
+  setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -152,7 +154,15 @@ const notificationSlice = createSlice({
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
         const paymentInfo = action.payload;
-        for (const payment of paymentInfo) {
+        // eslint-disable-next-line functional/no-let
+        let pageNumber = 0;
+        // eslint-disable-next-line functional/no-let
+        let payments = {
+          pagoPaF24: [],
+          f24Only: [],
+        } as PaymentsData;
+
+        paymentInfo.forEach((payment) => {
           const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
             (paymentData) =>
               paymentData.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId &&
@@ -160,8 +170,29 @@ const notificationSlice = createSlice({
           );
           if (paymentInfoIndex !== -1) {
             state.paymentsData.pagoPaF24[paymentInfoIndex] = payment;
+
+            const indexOfPayment = state.notification.recipients[0].payments?.findIndex(
+              (recPayment) =>
+                recPayment.pagoPa?.noticeCode === payment.pagoPa?.noticeCode &&
+                recPayment.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId
+            );
+            if (indexOfPayment !== undefined) {
+              pageNumber = Math.floor(indexOfPayment / 5);
+
+              payments = {
+                pagoPaF24: [
+                  ...payments.pagoPaF24,
+                  {
+                    ...payment,
+                  },
+                ],
+                f24Only: state.paymentsData.f24Only,
+              };
+            }
           }
-        }
+        });
+
+        setPaymentsInCache(payments, pageNumber);
       }
     });
     builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {

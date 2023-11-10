@@ -17,6 +17,10 @@ import {
 } from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import {
+  deletePropertiesInPaymentCache,
+  setPaymentCache,
+} from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
@@ -26,6 +30,7 @@ type Props = {
   isCancelled: boolean;
   timerF24: number;
   landingSiteUrl: string;
+  totalElements: number;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -42,6 +47,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   isCancelled,
   timerF24,
   landingSiteUrl,
+  totalElements,
   getPaymentAttachmentAction,
   onPayClick,
   handleFetchPaymentsInfo,
@@ -50,7 +56,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [paginationData, setPaginationData] = useState<PaginationData>({
     page: 0,
     size: 5,
-    totalElements: payments.pagoPaF24.length,
+    totalElements,
   });
 
   const paginatedPayments = pagoPaF24.slice(
@@ -116,10 +122,18 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setSelectedPayment(
       pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa || null
     );
+    setPaymentCache({
+      currentPayment: {
+        noticeCode: radioSelection,
+        creditorTaxId: pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa
+          ?.creditorTaxId,
+      },
+    });
   };
 
   const handleDeselectPayment = () => {
     setSelectedPayment(null);
+    deletePropertiesInPaymentCache(['currentPayment']);
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
