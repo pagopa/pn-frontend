@@ -109,7 +109,7 @@ const isTimestampWithin5Minutes = (timestamp1: string, timestamp2: string): bool
   const diff = Math.abs(date1.getTime() - date2.getTime());
   const minutes = Math.floor(diff / 1000 / 60);
 
-  return minutes <= 5;
+  return minutes <= 2;
 };
 
 // Check if IUN exists in cache, if exists check if timestamp is timestamp is 5 minute newer than the one in cache
