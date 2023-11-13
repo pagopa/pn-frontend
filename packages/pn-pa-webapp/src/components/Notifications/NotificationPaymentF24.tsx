@@ -52,7 +52,6 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
           {t('payment.f24-attached')}
         </Typography>
       </Box>
-      {/* Box should start a new line */}
       <Box display="flex" flexWrap="wrap" alignItems="center">
         <CollapsedList
           maxNumberOfItems={5}
