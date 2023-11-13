@@ -7,7 +7,7 @@ export type PaymentCache = {
   timestamp: string;
   currentPayment?: {
     noticeCode: string;
-    creditorTaxId?: string;
+    creditorTaxId: string;
   };
   currentPaymentPage?: number;
   paymentsPage: Array<PaymentsPage>;
@@ -23,16 +23,11 @@ export const getPaymentCache = (): PaymentCache | null => {
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
 };
 
-export const getPaymentsFromCache = (page?: number): PaymentsData | null => {
+export const getPaymentsFromCache = (): Array<PaymentsPage> | null => {
   const paymentCache = getPaymentCache();
 
   if (paymentCache?.paymentsPage) {
-    if (page) {
-      const paymentsPage = paymentCache.paymentsPage.find((p) => p.page === page);
-      return paymentsPage ? paymentsPage.payments : null;
-    }
-
-    return paymentCache.paymentsPage[0].payments;
+    return paymentCache.paymentsPage;
   }
 
   return null;
@@ -117,7 +112,6 @@ const isTimestampWithin5Minutes = (timestamp1: string, timestamp2: string): bool
 // If IUN not exists in cache or timestamp is older than 5 minutes, set IUN and timestamp in cache and return void
 export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
   const paymentCache = getPaymentCache();
-
   if (
     paymentCache &&
     paymentCache.iun === iun &&
@@ -129,4 +123,22 @@ export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
   clearPaymentCache();
   setPaymentCache({ iun, timestamp });
   return false;
+};
+
+export const checkIfPaymentsIsAlreadyInCache = (
+  paymentsInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>
+): boolean => {
+  const payments = getPaymentsFromCache();
+  if (!payments) {
+    return false;
+  }
+  return paymentsInfoRequest.every((paymentInfo) =>
+    payments.some((cachedPayments) =>
+      cachedPayments.payments.pagoPaF24.some(
+        (cachedPayment) =>
+          cachedPayment.pagoPa?.noticeCode === paymentInfo.noticeCode &&
+          cachedPayment.pagoPa?.creditorTaxId === paymentInfo.creditorTaxId
+      )
+    )
+  );
 };

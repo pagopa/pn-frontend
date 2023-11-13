@@ -19,18 +19,19 @@ import {
   NotificationRelatedDowntimes,
   PaymentAttachmentSName,
   PaymentDetails,
-  PaymentsData,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
+  checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
   formatDate,
-  getPaymentsFromCache,
+  getPaymentCache,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { deletePropertiesInPaymentCache } from '@pagopa-pn/pn-commons/src/utility/paymentCaching.utility';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -112,8 +113,6 @@ const NotificationDetail = () => {
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
-
-  const [paymentToShow, setPaymentToShow] = useState<PaymentsData | null>(null);
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -293,6 +292,14 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
+
+      if (
+        checkIunAndTimestamp(notification.iun, new Date().toISOString()) &&
+        checkIfPaymentsIsAlreadyInCache(paymentInfoRequest)
+      ) {
+        return;
+      }
+
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
@@ -304,21 +311,23 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    // fare un check iun e timestamp. Se ritorna true non fare il fetch
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      const areValid = checkIunAndTimestamp(notification.iun, new Date().toISOString());
-      const payments = getPaymentsFromCache();
-      if (!areValid || !payments) {
-        fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
-        return;
-      }
+      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
 
   useEffect(() => {
-    const payments = getPaymentsFromCache();
-    if (payments) {
-      setPaymentToShow(payments);
+    const currentPayment = getPaymentCache()?.currentPayment;
+
+    if (currentPayment) {
+      void dispatch(
+        getNotificationPaymentInfo({
+          taxId: currentRecipient.taxId,
+          paymentInfoRequest: [currentPayment],
+        })
+      );
+
+      deletePropertiesInPaymentCache(['currentPayment']);
     }
   }, []);
 
@@ -420,8 +429,7 @@ const NotificationDetail = () => {
                       })}
                     >
                       <NotificationPaymentRecipient
-                        payments={paymentToShow ?? userPayments}
-                        // payments={userPayments}
+                        payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
                         handleFetchPaymentsInfo={fetchPaymentsInfo}

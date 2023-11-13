@@ -125,8 +125,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setPaymentCache({
       currentPayment: {
         noticeCode: radioSelection,
-        creditorTaxId: pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa
-          ?.creditorTaxId,
+        creditorTaxId:
+          pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa
+            ?.creditorTaxId ?? '',
       },
     });
   };
@@ -154,6 +155,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       paginationData.page * paginationData.size,
       (paginationData.page + 1) * paginationData.size
     );
+    setPaymentCache({ currentPaymentPage: paginationData.page });
     handleFetchPaymentsInfo(payments ?? []);
   };
 

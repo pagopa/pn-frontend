@@ -15,8 +15,11 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
+  checkIfPaymentsIsAlreadyInCache,
+  checkIunAndTimestamp,
   getF24Payments,
   getPagoPaF24Payments,
+  getPaymentsFromCache,
   populatePaymentsPagoPaF24,
   setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
@@ -87,6 +90,7 @@ const notificationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       const recipientIdx = action.payload.recipients.findIndex(
         (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
@@ -115,6 +119,25 @@ const notificationSlice = createSlice({
           const payments = populatePaymentsPagoPaF24(timelineEvents, timelineRecipientPayments, []);
           state.paymentsData.pagoPaF24 = payments;
         } else {
+          const havePaymentInCache = checkIfPaymentsIsAlreadyInCache(
+            paymentsOfRecipient.map((payment) => ({
+              noticeCode: payment.pagoPa!.noticeCode,
+              creditorTaxId: payment.pagoPa!.creditorTaxId,
+            }))
+          );
+          const isIunValid = checkIunAndTimestamp(action.payload.iun, new Date().toISOString());
+          if (isIunValid && havePaymentInCache) {
+            const payments = getPaymentsFromCache();
+            payments?.forEach((payment) => {
+              state.paymentsData.pagoPaF24 = [
+                ...state.paymentsData.pagoPaF24,
+                ...payment.payments.pagoPaF24,
+              ];
+            });
+            state.notification = action.payload;
+            return;
+          }
+
           const pagoPAPaymentFullDetails = getPagoPaF24Payments(
             paymentsOfRecipient,
             recipientIdx,
@@ -158,8 +181,8 @@ const notificationSlice = createSlice({
         let pageNumber = 0;
         // eslint-disable-next-line functional/no-let
         let payments = {
-          pagoPaF24: [],
-          f24Only: [],
+          pagoPaF24: [] as Array<PaymentDetails>,
+          f24Only: [] as Array<F24PaymentDetails>,
         } as PaymentsData;
 
         paymentInfo.forEach((payment) => {
@@ -176,7 +199,7 @@ const notificationSlice = createSlice({
                 recPayment.pagoPa?.noticeCode === payment.pagoPa?.noticeCode &&
                 recPayment.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId
             );
-            if (indexOfPayment !== undefined) {
+            if (indexOfPayment !== undefined && indexOfPayment !== -1) {
               pageNumber = Math.floor(indexOfPayment / 5);
 
               payments = {
