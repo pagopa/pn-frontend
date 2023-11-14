@@ -19,6 +19,7 @@ export default defineConfig(({mode}) => {
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
+        exclude: ['**/*.a11y.test.ts', '**/*.a11y.test.tsx', 'src/models/**'],
       },
     },
     server: {

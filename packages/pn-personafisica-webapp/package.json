@@ -44,7 +44,7 @@
     "test:fast": "vitest --run",
     "test:a11y": "vitest --run --config ./vite.config.a11y.ts",
     "test:all": "vitest --run --config ./vite.config.all.ts",
-    "test:coverage": "tsc && jest --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\" --coveragePathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$|.src.models\"",
+    "test:coverage": "tsc && vitest run --coverage",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
     "sonar": "node sonarqube-scanner.js"

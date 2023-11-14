@@ -33,7 +33,7 @@ const createStore = (logReduxActions?: boolean) => {
     reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
-        (array, middleware) => (middleware ? array.concat(middleware) : array),
+        (array, middleware) => (middleware ? array.concat(middleware) : array) as any,
         getDefaultMiddleware({ serializableCheck: false })
       ),
   });
