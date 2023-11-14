@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -26,8 +27,7 @@ import {
   paymentsData,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
-import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { getApiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -39,14 +39,14 @@ import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
-const mockAssignFn = jest.fn();
+const mockAssignFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useParams: () =>
     mockIsDelegate
       ? { id: 'DAPQ-LWQV-DKQH-202308-A-1', mandateId: '5' }
@@ -55,7 +55,7 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -83,7 +83,7 @@ describe('NotificationDetail Page', () => {
   const original = window.location;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
@@ -92,7 +92,7 @@ describe('NotificationDetail Page', () => {
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;

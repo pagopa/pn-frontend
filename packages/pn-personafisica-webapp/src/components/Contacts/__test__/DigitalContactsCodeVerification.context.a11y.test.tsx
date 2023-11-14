@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
@@ -20,7 +21,7 @@ import {
   showDialog,
 } from './DigitalContactsCodeVerification.context.test-utils';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -39,15 +40,15 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('does not have basic accessibility issues (code modal)', async () => {
-    jest.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
@@ -65,7 +66,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
   });
 
   it('does not have basic accessibility issues (pec to verify)', async () => {
-    jest
+    vi
       .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce(void 0)
       .mockResolvedValueOnce({ pecValid: false } as DigitalAddress);
@@ -97,7 +98,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
   });
 
   it('does not have basic accessibility issues (try to add an already existing contact)', async () => {
-    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>

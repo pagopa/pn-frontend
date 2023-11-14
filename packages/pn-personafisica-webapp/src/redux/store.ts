@@ -47,6 +47,10 @@ export function initStore(logReduxActions?: boolean): void {
   store = createStore(logReduxActions);
 }
 
+export function getStore() {
+  return store;
+}
+
 // Infer the `RootState` and `AppDispatch` types from the store itself
 // export type RootState = ReturnType<typeof store.getState>;
 export type RootState = ReturnType<ReturnType<typeof createStore>['getState']>;

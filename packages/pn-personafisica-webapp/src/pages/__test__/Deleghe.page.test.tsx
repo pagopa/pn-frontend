@@ -1,11 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -16,7 +17,7 @@ import {
 import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -30,7 +31,7 @@ describe('Deleghe page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

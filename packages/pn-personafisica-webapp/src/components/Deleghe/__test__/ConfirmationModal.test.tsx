@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import ConfirmationModal from '../ConfirmationModal';
 
-const mockCancelFunction = jest.fn();
-const mockConfirmFunction = jest.fn();
+const mockCancelFunction = vi.fn();
+const mockConfirmFunction = vi.fn();
 
 describe('ConfirmationModal Component', () => {
   it('renders the component', () => {

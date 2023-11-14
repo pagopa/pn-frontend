@@ -10,6 +10,10 @@ import { RootState, appReducers } from '../redux/store';
 
 let testStore: EnhancedStore<RootState>;
 
+function getTestStore() {
+  return testStore;
+}
+
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
   <BrowserRouter>
     <Provider store={testStore}>{children}</Provider>
@@ -52,5 +56,5 @@ const createMockedStore = (preloadedState: any) =>
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore, testStore };
+export { customRender as render, createMockedStore, testStore, getTestStore };
 export { axe };

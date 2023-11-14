@@ -200,6 +200,14 @@ const NuovaDelega = () => {
           </Fragment>
         }
         currentLocationLabel={t('nuovaDelega.breadcrumb')}
+        // In fact this setting is superfluous since this is the default behavior for the goBackAction in PnBreadcrumb.
+        // We set it here explicitly to avoid an error in the test, due to the fact that using vitest,
+        // the import of packages inside components defined in pn-commons (in this case PnBreadcrumb) 
+        // seems to be outside the scope of vi.mock (in this case we mock react-router-dom)
+        // --------------------------------------
+        // Carlos Lombardi, 2023-11-14
+        // --------------------------------------
+        goBackAction={() => navigate(-1)}
       />
       <TitleBox
         title={t('nuovaDelega.title')}

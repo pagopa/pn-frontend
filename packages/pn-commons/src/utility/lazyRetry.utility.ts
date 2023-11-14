@@ -8,16 +8,10 @@ export const lazyRetry = <T extends ComponentType<any>>(
     const hasRefreshed = JSON.parse(sessionStorage.getItem('retry-lazy-refreshed') ?? 'false');
     // try to import the component
     try {
-      console.log('----------- lazyRetry - 1');
       const component = await componentImport();
-      console.log('----------- lazyRetry - 2');
       sessionStorage.removeItem('retry-lazy-refreshed'); // success so remove the refresh
-      console.log('----------- lazyRetry - 3');
       return component;
     } catch (error) {
-      console.log('----------- lazyRetry - 4');
-      console.log(error);
-      console.log(hasRefreshed);
       if (!hasRefreshed) {
         // not been refreshed yet
         sessionStorage.setItem('retry-lazy-refreshed', 'true'); // we are now going to refresh

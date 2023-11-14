@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
@@ -9,7 +10,7 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
-import { apiClient } from '../api/apiClients';
+import { getApiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
@@ -17,7 +18,7 @@ import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -26,7 +27,7 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
+vi.mock('../pages/Notifiche.page', () => ({default: () => <div>Generic Page</div>}));
 
 const unmockedFetch = global.fetch;
 
@@ -58,7 +59,7 @@ describe('App - accessbility tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -77,7 +78,11 @@ describe('App - accessbility tests', () => {
   });
 
   it('Test if automatic accessibility tests passes - user not logged in', async () => {
-    const { container } = render(<Component />);
+    let container;
+    await act(async () => {
+      const renderResult = render(<Component />);
+      container = renderResult.container;
+    });
     const result = await axe(container);
     expect(result).toHaveNoViolations();
   });

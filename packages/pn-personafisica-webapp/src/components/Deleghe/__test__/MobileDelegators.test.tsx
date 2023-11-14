@@ -1,10 +1,11 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
-import { render, screen } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import MobileDelegators from '../MobileDelegators';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

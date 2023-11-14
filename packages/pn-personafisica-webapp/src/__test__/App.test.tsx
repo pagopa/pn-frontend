@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React, { Suspense } from 'react';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
@@ -9,7 +10,7 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
-import { apiClient } from '../api/apiClients';
+import { getApiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
@@ -20,13 +21,13 @@ import {
   fireEvent,
   render,
   screen,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -35,8 +36,8 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../pages/Notifiche.page', () => () => <div>Generic Page</div>);
-jest.mock('../pages/Profile.page', () => () => <div>Profile Page</div>);
+vi.mock('../pages/Notifiche.page', () => ({default: () => <div>Generic Page</div>}));
+vi.mock('../pages/Profile.page', () => ({default: () => <div>Profile Page</div>}));
 
 const unmockedFetch = global.fetch;
 
@@ -72,7 +73,7 @@ describe('App', () => {
   const original = window.location;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -83,7 +84,7 @@ describe('App', () => {
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -164,14 +165,14 @@ describe('App', () => {
     });
     Object.defineProperty(window, 'location', {
       writable: true,
-      value: { href: '', replace: jest.fn() },
+      value: { href: '', replace: vi.fn() },
     });
     fireEvent.click(userButton!);
     menu = await waitFor(() => screen.getByRole('presentation'));
     menuItems = within(menu).getAllByRole('menuitem');
     fireEvent.click(menuItems[1]);
     await waitFor(() => {
-      expect(testStore.getState().userState.user.sessionToken).toBe('');
+      expect(getTestStore().getState().userState.user.sessionToken).toBe('');
     });
     Object.defineProperty(window, 'location', { writable: true, value: original });
   });
