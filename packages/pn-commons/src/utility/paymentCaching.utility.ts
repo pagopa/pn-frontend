@@ -45,33 +45,27 @@ export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
 };
 
 export const setPaymentsInCache = (payments: PaymentsData, page: number): void => {
-  const paymentCache = getPaymentCache();
+  const paymentCache = getPaymentsFromCache();
 
   if (paymentCache) {
-    if (!paymentCache.paymentsPage) {
-      // eslint-disable-next-line functional/immutable-data
-      paymentCache.paymentsPage = [
-        {
-          page,
-          payments,
-        },
-      ];
-    } else {
-      const paymentsPage = paymentCache.paymentsPage.find((p) => p.page === page);
+    const newPaymentCache = [...paymentCache];
 
-      if (paymentsPage) {
-        // eslint-disable-next-line functional/immutable-data
-        paymentsPage.payments = payments;
-      } else {
-        // eslint-disable-next-line functional/immutable-data
-        paymentCache.paymentsPage.push({
-          page,
-          payments,
-        });
-      }
+    const paymentsPage = newPaymentCache.find((p) => p.page === page);
+
+    if (paymentsPage) {
+      // eslint-disable-next-line functional/immutable-data
+      paymentsPage.payments = {
+        ...paymentsPage.payments,
+        pagoPaF24: [...paymentsPage.payments.pagoPaF24, ...payments.pagoPaF24],
+      };
+    } else {
+      // eslint-disable-next-line functional/immutable-data
+      newPaymentCache.push({ page, payments });
     }
 
-    sessionStorage.setItem(PAYMENT_CACHE_KEY, JSON.stringify(paymentCache));
+    setPaymentCache({ paymentsPage: newPaymentCache });
+  } else {
+    setPaymentCache({ paymentsPage: [{ page, payments }] });
   }
 };
 
@@ -132,6 +126,7 @@ export const checkIfPaymentsIsAlreadyInCache = (
   if (!payments) {
     return false;
   }
+
   return paymentsInfoRequest.every((paymentInfo) =>
     payments.some((cachedPayments) =>
       cachedPayments.payments.pagoPaF24.some(

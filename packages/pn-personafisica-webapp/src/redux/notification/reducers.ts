@@ -126,6 +126,7 @@ const notificationSlice = createSlice({
             }))
           );
           const isIunValid = checkIunAndTimestamp(action.payload.iun, new Date().toISOString());
+
           if (isIunValid && havePaymentInCache) {
             const payments = getPaymentsFromCache();
             payments?.forEach((payment) => {
@@ -177,13 +178,6 @@ const notificationSlice = createSlice({
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
         const paymentInfo = action.payload;
-        // eslint-disable-next-line functional/no-let
-        let pageNumber = 0;
-        // eslint-disable-next-line functional/no-let
-        let payments = {
-          pagoPaF24: [] as Array<PaymentDetails>,
-          f24Only: [] as Array<F24PaymentDetails>,
-        } as PaymentsData;
 
         paymentInfo.forEach((payment) => {
           const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
@@ -200,22 +194,17 @@ const notificationSlice = createSlice({
                 recPayment.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId
             );
             if (indexOfPayment !== undefined && indexOfPayment !== -1) {
-              pageNumber = Math.floor(indexOfPayment / 5);
+              const pageNumber = Math.floor(indexOfPayment / 5);
 
-              payments = {
-                pagoPaF24: [
-                  ...payments.pagoPaF24,
-                  {
-                    ...payment,
-                  },
-                ],
-                f24Only: state.paymentsData.f24Only,
-              };
+              const paymentsPage = {
+                pagoPaF24: [{ ...payment }],
+                f24Only: [],
+              } as PaymentsData;
+
+              setPaymentsInCache(paymentsPage, pageNumber);
             }
           }
         });
-
-        setPaymentsInCache(payments, pageNumber);
       }
     });
     builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
