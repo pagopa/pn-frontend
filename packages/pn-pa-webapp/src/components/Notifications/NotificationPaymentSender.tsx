@@ -70,6 +70,11 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
   const [f24PaymentDetails, setF24PaymentDetails] = useState<Array<F24PaymentDetails>>(
     recipients.length === 1 ? getF24Payments(recipients[0].payments ?? [], 0, false) : []
   );
+  const [paginationData, setPaginationData] = useState<PaginationData>({
+    page: 0,
+    size: 5,
+    totalElements: paymentDetails.length,
+  });
 
   const recipientSelectionHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setRecipientSelected(event.target.value);
@@ -96,12 +101,6 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       totalElements: recipients[recipientIndex].payments!.length,
     });
   };
-
-  const [paginationData, setPaginationData] = useState<PaginationData>({
-    page: 0,
-    size: 5,
-    totalElements: paymentDetails.length,
-  });
 
   const pagoPAPaymentFullDetails = paymentDetails
     .reduce((arr, payment) => {
