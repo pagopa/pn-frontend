@@ -159,6 +159,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
             sx={{
               wordBreak: 'break-word',
             }}
+            id={f.id}
           >
             {(f.component as any).props.value}
           </Typography>

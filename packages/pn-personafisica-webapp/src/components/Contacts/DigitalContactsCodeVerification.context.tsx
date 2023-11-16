@@ -353,13 +353,19 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       </Dialog>
       <Dialog open={pecValidationOpen} data-testid="validationDialog">
         <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
-          {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
+          <Typography variant="h5" id="validationPecProgressTitle">
+            {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
+          </Typography>
         </DialogTitle>
         <DialogContent sx={{ px: 4 }}>
           {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
         </DialogContent>
         <DialogActions sx={{ pb: 4, px: 4 }}>
-          <Button onClick={() => setPecValidationOpen(false)} variant="contained">
+          <Button
+            id="confirmDialog"
+            onClick={() => setPecValidationOpen(false)}
+            variant="contained"
+          >
             {t('button.conferma')}
           </Button>
         </DialogActions>

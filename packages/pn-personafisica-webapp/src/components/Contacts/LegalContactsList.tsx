@@ -156,7 +156,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             <Box display="flex" flexDirection="row" mt={2.5}>
               <Box display="flex" flexDirection="row" mr={1}>
                 <WatchLaterIcon fontSize="small" />
-                <Typography fontWeight="bold" variant="body2" ml={1}>
+                <Typography id="validationPecProgress" fontWeight="bold" variant="body2" ml={1}>
                   {t('legal-contacts.validation-in-progress', { ns: 'recapiti' })}
                 </Typography>
               </Box>
