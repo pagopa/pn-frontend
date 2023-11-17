@@ -27,7 +27,8 @@ export const getPaymentsFromCache = (): Array<PaymentsPage> | null => {
   const paymentCache = getPaymentCache();
 
   if (paymentCache?.paymentsPage) {
-    return paymentCache.paymentsPage;
+    // eslint-disable-next-line functional/immutable-data
+    return paymentCache.paymentsPage.sort((a, b) => a.page - b.page);
   }
 
   return null;
