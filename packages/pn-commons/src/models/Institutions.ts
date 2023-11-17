@@ -1,3 +1,5 @@
+import { PartyEntity } from '@pagopa/mui-italia';
+
 export interface Institution {
   address: string;
   aooParentCode: string;
@@ -50,4 +52,8 @@ interface PspData {
 interface RootParent {
   description: string;
   id: string;
+}
+
+export interface PartyEntityWithUrl extends PartyEntity {
+  entityUrl: string; // only fe
 }

@@ -1,26 +1,35 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { mockAuthentication, userResponse } from '../../../__mocks__/Auth.mock';
+import {
+  institutionsDTO,
+  institutionsList,
+  productsDTO,
+  productsList,
+} from '../../../__mocks__/User.mock';
 import { Party } from '../../../models/party';
 import { apiClient } from '../../apiClients';
-import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS, GET_PARTY_FOR_ORGANIZATION } from '../external-registries-routes';
 import { ExternalRegistriesAPI } from '../External-registries.api';
-import { institutionsList, institutionsDTO, productsList, productsDTO } from '../../../__mocks__/User.mock';
+import {
+  GET_INSTITUTIONS,
+  GET_INSTITUTION_PRODUCTS,
+  GET_PARTY_FOR_ORGANIZATION,
+} from '../external-registries-routes';
 
 describe('External registries api tests', () => {
   let mock: MockAdapter;
 
   mockAuthentication();
 
-  beforeAll(()=> {
+  beforeAll(() => {
     mock = new MockAdapter(apiClient);
   });
 
-  afterEach(()=> {
+  afterEach(() => {
     mock.reset();
   });
-  
-  afterAll(()=> {
+
+  afterAll(() => {
     mock.restore();
   });
 
@@ -38,9 +47,8 @@ describe('External registries api tests', () => {
   });
 
   it('getInstitutionProducts', async () => {
-    mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsDTO);
-    const res = await ExternalRegistriesAPI.getInstitutionProducts('1');
+    mock.onGet(GET_INSTITUTION_PRODUCTS(userResponse.organization.id)).reply(200, productsDTO);
+    const res = await ExternalRegistriesAPI.getInstitutionProducts(userResponse.organization.id);
     expect(res).toStrictEqual(productsList);
   });
-
 });

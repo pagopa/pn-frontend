@@ -1,5 +1,3 @@
-// momentarily commented for pn-5157
-// import { AppRouteType } from '@pagopa-pn/pn-commons';
 import { getConfiguration } from '../../services/configuration.service';
 import { goToLoginPortal } from '../navigation.utility';
 
@@ -24,12 +22,8 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal', () => {
-    // momentarily commented for pn-5157
-    // goToLoginPortal(AppRouteType.PG);
     goToLoginPortal();
     expect(replaceFn).toBeCalledTimes(1);
-    // momentarily commented for pn-5157
-    // expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG`);
     expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`);
   });
 

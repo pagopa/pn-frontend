@@ -1,4 +1,5 @@
 import { Children, cloneElement, isValidElement, useMemo } from 'react';
+
 import { Button, DialogActions, DialogActionsProps } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
@@ -17,7 +18,7 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
       ? cloneElement(button, {
           ...button.props,
           fullWidth: isMobile,
-          sx: { ...button.props.sx, marginTop: isMobile && index > 0 ? '10px' : 0 },
+          sx: { ...button.props.sx, marginBottom: isMobile && index > 0 ? 2 : 0 },
         })
       : button
   );
@@ -29,7 +30,7 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
       disableSpacing={isMobile}
       sx={{
         textAlign: textPosition,
-        flexDirection: isMobile ? 'column' : 'row',
+        flexDirection: isMobile ? 'column-reverse' : 'row',
         p: isMobile ? 3 : 4,
         pt: 2,
       }}

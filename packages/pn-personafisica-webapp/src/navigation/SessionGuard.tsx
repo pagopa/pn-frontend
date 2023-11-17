@@ -6,8 +6,7 @@ import {
   AppResponsePublisher,
   InactivityHandler,
   LoadingPage,
-  SessionModal, // momentarily commented for pn-5157
-  // AppRouteType,
+  SessionModal,
   appStateActions,
   useErrors,
   useProcess,
@@ -86,8 +85,6 @@ const SessionGuardRender = () => {
       <SessionModal
         open
         title={goodbyeMessage.title}
-        // momentarily commented for pn-5157
-        // handleClose={() => goToLoginPortal(AppRouteType.PF)}
         handleClose={() => goToLoginPortal()}
         initTimeout
       >

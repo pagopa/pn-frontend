@@ -84,8 +84,6 @@ const SessionGuardRender = () => {
       <SessionModal
         open
         title={goodbyeMessage.title}
-        // momentarily commented for pn-5157
-        // handleClose={() => goToLoginPortal(AppRouteType.PG)}
         handleClose={() => goToLoginPortal()}
         initTimeout
       >

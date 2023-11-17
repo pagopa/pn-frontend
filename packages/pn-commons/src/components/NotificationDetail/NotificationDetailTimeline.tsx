@@ -28,6 +28,7 @@ type Props = {
   eventTrackingCallbackShowMore?: () => void;
   disableDownloads?: boolean;
   isParty?: boolean;
+  language?: string;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -59,6 +60,7 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param eventTrackingCallbackShowMore event tracking callback
  * @param disableDownloads for disable downloads
  * @param isParty for specific render of notification
+ * @param language used to translate months in timeline
  */
 const NotificationDetailTimeline = ({
   recipients,
@@ -71,6 +73,7 @@ const NotificationDetailTimeline = ({
   eventTrackingCallbackShowMore,
   disableDownloads = false,
   isParty = true,
+  language = 'it',
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -105,6 +108,7 @@ const NotificationDetailTimeline = ({
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
       disableDownloads={disableDownloads}
       isParty={isParty}
+      language={language}
     />
   ));
 

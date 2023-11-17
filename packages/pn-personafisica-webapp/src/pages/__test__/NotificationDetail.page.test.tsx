@@ -11,6 +11,7 @@ import {
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
+  formatDate,
   getF24Payments,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
@@ -58,6 +59,7 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
@@ -134,7 +136,7 @@ describe('NotificationDetail Page', () => {
     expect(tableRows![1]).toHaveTextContent(
       `detail.recipient${notificationToFe.recipients[2].denomination}`
     );
-    expect(tableRows![2]).toHaveTextContent(`detail.date${notificationToFe.sentAt}`);
+    expect(tableRows![2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
@@ -456,7 +458,7 @@ describe('NotificationDetail Page', () => {
     expect(tableRows![1]).toHaveTextContent(
       `detail.recipient${notificationToFe.recipients[2].denomination}`
     );
-    expect(tableRows![2]).toHaveTextContent(`detail.date${notificationToFe.sentAt}`);
+    expect(tableRows![2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');

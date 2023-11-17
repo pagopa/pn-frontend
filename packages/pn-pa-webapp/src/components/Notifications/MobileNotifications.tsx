@@ -25,6 +25,7 @@ import {
   NotificationStatus,
   Sort,
   StatusTooltip,
+  formatDate,
   getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, Tag } from '@pagopa/mui-italia';
@@ -122,7 +123,7 @@ const MobileNotifications = ({
       position: 'left',
       label: t('table.date'),
       getLabel(value: string) {
-        return <Typography>{value}</Typography>;
+        return <Typography>{formatDate(value)}</Typography>;
       },
       gridProps: {
         xs: 4,

@@ -18,9 +18,12 @@ export function dateIsDefined(date: Date | null | undefined) {
   return date && !isNaN(date.getTime());
 }
 
-export function formatMonthString(dateString: string): string {
+export function formatMonthString(dateString: string, language?: string): string {
   const date = new Date(dateString);
-  return date.toLocaleString('default', { month: 'long' }).toUpperCase().substring(0, 3);
+  return date
+    .toLocaleString(language ? language : 'it', { month: 'long' })
+    .toUpperCase()
+    .substring(0, 3);
 }
 
 export function formatTimeWithLegend(dateString: string): string {
