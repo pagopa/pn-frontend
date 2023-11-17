@@ -31,7 +31,6 @@ type Props = {
   isCancelled: boolean;
   timerF24: number;
   landingSiteUrl: string;
-  totalElements: number;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -48,7 +47,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   isCancelled,
   timerF24,
   landingSiteUrl,
-  totalElements,
   getPaymentAttachmentAction,
   onPayClick,
   handleFetchPaymentsInfo,
@@ -58,7 +56,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [paginationData, setPaginationData] = useState<PaginationData>({
     page: pageFromCache ?? 0,
     size: 5,
-    totalElements,
+    totalElements: payments.pagoPaF24.length,
   });
 
   const paginatedPayments = pagoPaF24.slice(

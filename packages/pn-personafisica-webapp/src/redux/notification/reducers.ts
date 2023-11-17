@@ -121,8 +121,8 @@ const notificationSlice = createSlice({
         } else {
           const havePaymentInCache = checkIfPaymentsIsAlreadyInCache(
             paymentsOfRecipient.map((payment) => ({
-              noticeCode: payment.pagoPa!.noticeCode,
-              creditorTaxId: payment.pagoPa!.creditorTaxId,
+              noticeCode: payment.pagoPa?.noticeCode,
+              creditorTaxId: payment.pagoPa?.creditorTaxId,
             }))
           );
           const isIunValid = checkIunAndTimestamp(action.payload.iun, new Date().toISOString());

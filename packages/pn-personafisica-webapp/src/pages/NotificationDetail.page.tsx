@@ -434,7 +434,6 @@ const NotificationDetail = () => {
                         onPayClick={onPayClick}
                         handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
-                        totalElements={currentRecipient.payments?.length ?? 0}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}
                       />

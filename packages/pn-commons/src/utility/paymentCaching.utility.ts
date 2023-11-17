@@ -1,4 +1,4 @@
-import { PaymentsData } from '../models';
+import { PaymentStatus, PaymentsData } from '../models';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
@@ -118,10 +118,27 @@ export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
 };
 
 export const checkIfPaymentsIsAlreadyInCache = (
-  paymentsInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>
+  paymentsInfoRequest: Array<{ noticeCode?: string; creditorTaxId?: string }>
 ): boolean => {
   const payments = getPaymentsFromCache();
   if (!payments) {
+    return false;
+  }
+
+  // check if paymentsInfoRequest has length 1 and this payments status is === 'FAILED', if so return false
+  if (
+    paymentsInfoRequest.length === 1 &&
+    paymentsInfoRequest[0].noticeCode &&
+    paymentsInfoRequest[0].creditorTaxId &&
+    payments.some((cachedPayments) =>
+      cachedPayments.payments.pagoPaF24.some(
+        (cachedPayment) =>
+          cachedPayment.pagoPa?.noticeCode === paymentsInfoRequest[0].noticeCode &&
+          cachedPayment.pagoPa?.creditorTaxId === paymentsInfoRequest[0].creditorTaxId &&
+          cachedPayment.pagoPa?.status === PaymentStatus.FAILED
+      )
+    )
+  ) {
     return false;
   }
 
