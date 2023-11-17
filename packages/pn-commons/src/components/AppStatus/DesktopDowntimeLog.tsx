@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 
-import { Column, DowntimeLogPage, Item } from '../../models';
+import { Column, Downtime, DowntimeLogPage } from '../../models';
 import PnTable from '../Data/PnTable';
 import PnTableBody from '../Data/PnTable/PnTableBody';
 import PnTableBodyCell from '../Data/PnTable/PnTableBodyCell';
 import PnTableBodyRow from '../Data/PnTable/PnTableBodyRow';
 import PnTableHeader from '../Data/PnTable/PnTableHeader';
 import PnTableHeaderCell from '../Data/PnTable/PnTableHeaderCell';
-import { DowntimeLogColumn, useFieldSpecs } from './downtimeLog.utils';
+import { DowntimeCell, useFieldSpecs } from './downtimeLog.utils';
 
 type Props = {
   downtimeLog: DowntimeLogPage;
@@ -15,42 +15,36 @@ type Props = {
 };
 
 const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }: Props) => {
-  const fieldSpecs = useFieldSpecs({ getDowntimeLegalFactDocumentDetails });
-  const {
-    getDateFieldSpec,
-    getFunctionalityFieldSpec,
-    getLegalFactIdFieldSpec,
-    getStatusFieldSpec,
-    getRows,
-  } = fieldSpecs;
+  const fieldSpecs = useFieldSpecs();
+  const { getField, getRows } = fieldSpecs;
 
-  const columns: Array<Column<DowntimeLogColumn>> = useMemo(
+  const columns: Array<Column<Downtime>> = useMemo(
     () => [
       {
-        ...getDateFieldSpec('startDate', true),
+        ...getField('startDate'),
         width: '15%',
       },
       {
-        ...getDateFieldSpec('endDate', true),
+        ...getField('endDate'),
         width: '15%',
       },
       {
-        ...getFunctionalityFieldSpec(),
+        ...getField('knownFunctionality'),
         width: '30%',
       },
       {
-        ...getLegalFactIdFieldSpec(),
+        ...getField('legalFactId'),
         width: '30%',
       },
       {
-        ...getStatusFieldSpec(),
+        ...getField('status'),
         width: '15%',
       },
     ],
-    [getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec, getStatusFieldSpec]
+    [getField]
   );
 
-  const rows: Array<Item> = getRows(downtimeLog);
+  const rows = getRows(downtimeLog);
 
   return (
     <PnTable testId="tableDowntimeLog">
@@ -71,7 +65,6 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
           <PnTableBodyRow key={row.id} testId="tableDowntimeLog" index={index}>
             {columns.map((column) => (
               <PnTableBodyCell
-                disableAccessibility={column.disableAccessibility}
                 key={column.id}
                 testId="tableBodyCell"
                 onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
@@ -81,7 +74,12 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
                   cursor: column.onClick ? 'pointer' : 'auto',
                 }}
               >
-                {column.getCellLabel(row[column.id as keyof Item], row)}
+                <DowntimeCell
+                  row={row}
+                  column={column}
+                  inTwoLines
+                  getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
+                />
               </PnTableBodyCell>
             ))}
           </PnTableBodyRow>

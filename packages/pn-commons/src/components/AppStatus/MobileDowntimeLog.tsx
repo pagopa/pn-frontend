@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 
-import { CardElement, DowntimeLogPage, Item } from '../../models';
+import { CardElement, Downtime, DowntimeLogPage } from '../../models';
 import ItemsCard from '../Data/ItemsCard';
 import ItemsCardBody from '../Data/ItemsCard/ItemsCardBody';
 import ItemsCardContent from '../Data/ItemsCard/ItemsCardContent';
 import ItemsCardContents from '../Data/ItemsCard/ItemsCardContents';
 import ItemsCardHeader from '../Data/ItemsCard/ItemsCardHeader';
 import ItemsCardHeaderTitle from '../Data/ItemsCard/ItemsCardHeaderTitle';
-import { adaptFieldSpecToMobile, useFieldSpecs } from './downtimeLog.utils';
+import { DowntimeCell, useFieldSpecs } from './downtimeLog.utils';
 
 type Props = {
   downtimeLog: DowntimeLogPage;
@@ -15,59 +15,57 @@ type Props = {
 };
 
 const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }: Props) => {
-  const fieldSpecs = useFieldSpecs({ getDowntimeLegalFactDocumentDetails });
-  const {
-    getDateFieldSpec,
-    getFunctionalityFieldSpec,
-    getLegalFactIdFieldSpec,
-    getStatusFieldSpec,
-    getRows,
-  } = fieldSpecs;
+  const fieldSpecs = useFieldSpecs();
+  const { getField, getRows } = fieldSpecs;
 
-  const cardHeader: CardElement = useMemo(
-    () => ({
-      ...adaptFieldSpecToMobile(getStatusFieldSpec()),
-      label: '',
-    }),
-    [getStatusFieldSpec]
-  );
+  const cardHeader: CardElement<Downtime> = useMemo(() => getField('status'), [getField]);
 
-  const cardBody: Array<CardElement> = useMemo(
+  const cardBody: Array<CardElement<Downtime>> = useMemo(
     () => [
       {
-        ...adaptFieldSpecToMobile(getDateFieldSpec('startDate', false)),
+        ...getField('startDate'),
         notWrappedInTypography: true,
       },
       {
-        ...adaptFieldSpecToMobile(getDateFieldSpec('endDate', false)),
+        ...getField('endDate'),
         notWrappedInTypography: true,
       },
-      adaptFieldSpecToMobile(getFunctionalityFieldSpec()),
-      { ...adaptFieldSpecToMobile(getLegalFactIdFieldSpec()), notWrappedInTypography: true },
+      getField('knownFunctionality'),
+      { ...getField('legalFactId'), notWrappedInTypography: true },
     ],
-    [getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec]
+    [getField]
   );
 
   /* eslint-disable-next-line sonarjs/no-identical-functions */
-  const rows: Array<Item> = getRows(downtimeLog);
+  const rows = getRows(downtimeLog);
 
   return (
     <ItemsCard testId="mobileTableDowntimeLog">
-      {rows.map((data) => (
-        <ItemsCardBody key={data.id}>
+      {rows.map((row) => (
+        <ItemsCardBody key={row.id}>
           <ItemsCardHeader>
             <ItemsCardHeaderTitle
               key={cardHeader.id}
               gridProps={cardHeader.gridProps}
               position={cardHeader.position}
             >
-              {cardHeader.getLabel(data[cardHeader.id], data)}
+              <DowntimeCell
+                row={row}
+                column={cardHeader}
+                inTwoLines
+                getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
+              />
             </ItemsCardHeaderTitle>
           </ItemsCardHeader>
           <ItemsCardContents>
             {cardBody.map((body) => (
               <ItemsCardContent key={body.id} body={body}>
-                {body.getLabel(data[body.id], data)}
+                <DowntimeCell
+                  row={row}
+                  column={body}
+                  inTwoLines
+                  getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
+                />
               </ItemsCardContent>
             ))}
           </ItemsCardContents>

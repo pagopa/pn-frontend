@@ -69,7 +69,7 @@ import {
 import { NotificationStatus } from './NotificationStatus';
 import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
 import { PaginationData } from './Pagination';
-import { Column, Item, Sort } from './PnTable';
+import { Column, Row, Sort } from './PnTable';
 import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
@@ -113,7 +113,7 @@ export type {
   GetNotificationsResponse,
   IAppMessage,
   INotificationDetailTimeline,
-  Item,
+  Row,
   LegalFactId,
   NotificationDetailOtherDocument,
   NotHandledDetails,

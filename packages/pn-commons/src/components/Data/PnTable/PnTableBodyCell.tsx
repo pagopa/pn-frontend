@@ -19,7 +19,7 @@ const PnTableBodyCell: React.FC<IPnTableBodyCellProps> = ({
   disableAccessibility,
 }) => (
   <TableCell
-    role="cell"
+    scope="col"
     data-testid={testId}
     sx={{
       ...cellProps!,

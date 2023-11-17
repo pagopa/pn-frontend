@@ -8,18 +8,15 @@ export interface Sort<OrderByOption> {
   order: Order;
 }
 
-export interface Column<ColumnId> {
-  id: ColumnId;
+export interface Column<T> {
+  id: keyof T;
   label: string;
   width: string;
   align?: Align;
   sortable?: boolean;
-  getCellLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
-  onClick?(row: Item, column: Column<ColumnId>): void;
+  getCellLabel?(value: string | number | Array<string | ReactNode>, row?: Row<T>): ReactNode;
+  onClick?(row: Row<T>, column: Column<T>): void;
   disableAccessibility?: boolean;
 }
 
-export interface Item {
-  id: string;
-  [key: string]: string | number | Array<string | ReactNode>;
-}
+export type Row<T> = T & { id: string };

@@ -4,11 +4,6 @@ import AppMessage from './AppMessage';
 import AppNotAccessible from './AppNotAccessible';
 import AppResponseMessage from './AppResponseMessage';
 import { AppStatusRender } from './AppStatus/AppStatusRender';
-import {
-  DowntimeLogColumn,
-  adaptFieldSpecToMobile,
-  useFieldSpecs,
-} from './AppStatus/downtimeLog.utils';
 import CodeModal from './CodeModal/CodeModal';
 import CollapsedList from './CollapsedList';
 import CopyToClipboard from './CopyToClipboard';
@@ -128,8 +123,6 @@ export {
   TabPanel,
   TimedMessage,
   TitleBox,
-  adaptFieldSpecToMobile,
-  useFieldSpecs,
   useSpecialContactsContext,
   CollapsedList,
   PnDialog,
@@ -149,5 +142,3 @@ export {
   ItemsCardBody,
   ItemsCardHeaderTitle,
 };
-
-export type { DowntimeLogColumn };

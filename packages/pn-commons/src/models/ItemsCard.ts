@@ -2,13 +2,13 @@ import { ReactNode } from 'react';
 
 import { GridProps } from '@mui/material';
 
-import { Item } from './PnTable';
+import { Row } from './PnTable';
 
-export interface CardElement {
-  id: string;
+export interface CardElement<T> {
+  id: keyof T;
   position?: string;
   label: string;
-  getLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
+  getLabel?(value: string | number | Array<string | ReactNode>, row?: Row<T>): ReactNode;
   notWrappedInTypography?: boolean;
   hideIfEmpty?: boolean;
   gridProps?: GridProps;
@@ -21,8 +21,8 @@ export interface CardSort<OrderByOption> {
   value: 'asc' | 'desc';
 }
 
-export interface CardAction {
+export interface CardAction<T> {
   id: string;
   component: ReactNode;
-  onClick(cardData: Item): void;
+  onClick(cardData: Row<T>): void;
 }
