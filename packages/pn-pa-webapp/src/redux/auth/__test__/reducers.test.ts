@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { PNRole, PartyRole } from '../../../models/user';
@@ -15,7 +15,7 @@ describe('Auth redux state tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

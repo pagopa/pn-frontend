@@ -18,3 +18,15 @@ export function initAxiosClients() {
 }
 
 export const externalClient = axios.create();
+
+export function getApiClient() { 
+  return apiClient;
+}
+
+export function getAuthClient() {
+  return authClient;
+}
+
+export function getExternalClient() {
+  return externalClient;
+}

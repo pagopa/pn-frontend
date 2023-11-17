@@ -16,3 +16,11 @@ export function initAxiosClients() {
     baseURL: getConfiguration().API_BASE_URL,
   });
 }
+
+export function getApiClient() { 
+  return apiClient;
+}
+
+export function getAuthClient() {
+  return authClient;
+}

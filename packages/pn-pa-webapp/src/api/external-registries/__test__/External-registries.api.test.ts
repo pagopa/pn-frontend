@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { Party } from '../../../models/party';
-import { apiClient } from '../../apiClients';
+import { getApiClient } from '../../apiClients';
 import { GET_INSTITUTIONS, GET_INSTITUTION_PRODUCTS, GET_PARTY_FOR_ORGANIZATION } from '../external-registries-routes';
 import { ExternalRegistriesAPI } from '../External-registries.api';
 import { institutionsList, institutionsDTO, productsList, productsDTO } from '../../../__mocks__/User.mock';
@@ -13,7 +13,7 @@ describe('External registries api tests', () => {
   mockAuthentication();
 
   beforeAll(()=> {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(()=> {

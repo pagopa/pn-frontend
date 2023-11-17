@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
@@ -21,7 +22,7 @@ import {
   showDialog,
 } from './DigitalContactsCodeVerification.context.test-utils';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -41,15 +42,15 @@ describe('DigitalContactsCodeVerification Context', () => {
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('code modal', async () => {
-    jest.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
@@ -79,7 +80,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('validation modal - pec to verify', async () => {
-    jest
+    vi
       .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce(void 0)
       .mockResolvedValueOnce({ pecValid: false } as DigitalAddress);
@@ -113,7 +114,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('validation modal - pec verified', async () => {
-    jest
+    vi
       .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce(void 0)
       .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
@@ -139,7 +140,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('disclaimer modal', async () => {
-    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>
@@ -168,7 +169,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('already existing contact modal', async () => {
-    jest.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateCourtesyAddress').mockResolvedValueOnce(void 0);
     // render component
     result = render(
       <DigitalContactsCodeVerificationProvider>

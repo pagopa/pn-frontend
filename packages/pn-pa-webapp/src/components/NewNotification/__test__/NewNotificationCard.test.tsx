@@ -1,12 +1,13 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import NewNotificationCard from '../NewNotificationCard';
 
-const mockStepBackFn = jest.fn();
+const mockStepBackFn = vi.fn();
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -14,6 +15,10 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('NewNotificationCard Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+  
   it('renders NewNotificationCard (no title and no subtitle)', () => {
     // render component
     const { queryByTestId } = render(

@@ -1,5 +1,6 @@
 import React from 'react';
 import * as redux from 'react-redux';
+import { vi } from 'vitest';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
@@ -15,7 +16,7 @@ import * as actions from '../../../redux/newNotification/actions';
 import PaymentMethods from '../PaymentMethods';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -34,20 +35,20 @@ function uploadDocument(elem: HTMLElement) {
 // Tutto il blocco di test su PaymentMethods è skippato
 describe.skip('PaymentMethods Component', () => {
   let result: RenderResult;
-  let mockDispatchFn: jest.Mock;
-  let mockActionFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
+  let mockDispatchFn: vi.Mock;
+  let mockActionFn: vi.Mock;
+  const confirmHandlerMk = vi.fn();
 
   beforeEach(async () => {
     // mock action
-    mockActionFn = jest.fn();
-    const actionSpy = jest.spyOn(actions, 'uploadNotificationPaymentDocument');
+    mockActionFn = vi.fn();
+    const actionSpy = vi.spyOn(actions, 'uploadNotificationPaymentDocument');
     actionSpy.mockImplementation(mockActionFn);
     // mock dispatch
-    mockDispatchFn = jest.fn(() => ({
+    mockDispatchFn = vi.fn(() => ({
       unwrap: () => Promise.resolve(),
     }));
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+    const useDispatchSpy = vi.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // render component
     await act(async () => {
@@ -62,6 +63,10 @@ describe.skip('PaymentMethods Component', () => {
     });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+  
   it('renders PaymentMethods', () => {
     expect(result.container).toHaveTextContent(
       `${newNotification.recipients[0].firstName} ${newNotification.recipients[0].lastName}`

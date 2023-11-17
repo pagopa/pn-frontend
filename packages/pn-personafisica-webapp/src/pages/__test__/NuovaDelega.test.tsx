@@ -107,6 +107,8 @@ describe('NuovaDelega page', () => {
   // Cfr the comment in NuovaDelega.page.tsx, when using PnBreadcrumb,
   // about the inability of vi.mock to affect imports inside files in pn-commons
   // (in other terms, pn-commons seems to be outside the scope of vi.mock)
+  //
+  // Done analogously in pn-personagiuridica-webapp
   // --------------------------------------
   // Carlos Lombardi, 2023-11-14
   // --------------------------------------

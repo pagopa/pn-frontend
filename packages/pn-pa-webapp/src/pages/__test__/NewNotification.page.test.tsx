@@ -1,35 +1,36 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const mockIsPaymentEnabledGetter = jest.fn();
-jest.mock('../../services/configuration.service', () => {
+const mockIsPaymentEnabledGetter = vi.fn();
+vi.mock('../../services/configuration.service', async () => {
   return {
-    ...jest.requireActual('../../services/configuration.service'),
+    ...(await vi.importActual('../../services/configuration.service')) as any,
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
@@ -41,7 +42,7 @@ describe('NewNotification Page without payment', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   beforeEach(() => {
@@ -52,6 +53,7 @@ describe('NewNotification Page without payment', () => {
   afterEach(() => {
     result = undefined;
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {

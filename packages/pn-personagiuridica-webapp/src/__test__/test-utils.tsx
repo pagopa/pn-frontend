@@ -74,7 +74,11 @@ const createMockedStore = (preloadedState: any) =>
 
 expect.extend(toHaveNoViolations);
 
+function getTestStore() {
+  return testStore;
+}
+
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
-export { axe, createMockedStore, customRender as render, testStore };
+export { axe, createMockedStore, customRender as render, testStore, getTestStore };

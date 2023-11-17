@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { RecipientType, formatDate } from '@pagopa-pn/pn-commons';
 import {
@@ -12,24 +13,24 @@ import {
 import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
 
-const mockNavigateFn = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigateFn = vi.fn();
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('../../utility/delegation.utility', () => ({
-  ...jest.requireActual('../../utility/delegation.utility'),
+vi.mock('../../utility/delegation.utility', async () => ({
+  ...(await vi.importActual('../../utility/delegation.utility')) as any,
   generateVCode: () => '34153',
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -53,12 +54,12 @@ describe('NuovaDelega page', () => {
   });
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -102,6 +103,14 @@ describe('NuovaDelega page', () => {
     expect(createButton).toBeEnabled();
   });
 
+  // Cfr the comment in NuovaDelega.page.tsx, when using PnBreadcrumb,
+  // about the inability of vi.mock to affect imports inside files in pn-commons
+  // (in other terms, pn-commons seems to be outside the scope of vi.mock)
+  //
+  // Done analogously in pn-personafisica-webapp
+  // --------------------------------------
+  // Carlos Lombardi, 2023-11-17
+  // --------------------------------------
   it('navigates to Deleghe page', () => {
     const { getByTestId } = render(<NuovaDelega />);
     const backButton = getByTestId('breadcrumb-indietro-button');

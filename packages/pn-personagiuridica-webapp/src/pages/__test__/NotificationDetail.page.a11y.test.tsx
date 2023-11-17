@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { DOWNTIME_HISTORY } from '@pagopa-pn/pn-commons';
 
@@ -8,7 +9,7 @@ import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_PAYMENT_INFO,
@@ -18,15 +19,15 @@ import NotificationDetail from '../NotificationDetail.page';
 let mockIsDelegate = false;
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useParams: () =>
     mockIsDelegate
       ? { id: 'DAPQ-LWQV-DKQH-202308-A-1', mandateId: '5' }
       : { id: 'DAPQ-LWQV-DKQH-202308-A-1' },
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -42,12 +43,12 @@ describe('NotificationDetail Page - accessibility tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mock.reset();
     mockIsDelegate = false;
   });

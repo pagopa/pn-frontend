@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import {
   notificationToFe,
@@ -7,14 +8,14 @@ import {
 import { render } from '../../../__test__/test-utils';
 import NotificationDetailTableSender from '../NotificationDetailTableSender';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const mockCancelHandler = jest.fn();
+const mockCancelHandler = vi.fn();
 
 describe('NotificationDetailTableSender Component', () => {
   it('renders component - one recipient', () => {

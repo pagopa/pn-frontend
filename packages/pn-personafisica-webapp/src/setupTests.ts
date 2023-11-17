@@ -5,9 +5,9 @@
 import matchers from "@testing-library/jest-dom/matchers"; 
 import { expect } from 'vitest';
 
-const { Configuration } = await import('@pagopa-pn/pn-commons');
-const { initStore } = await import('./redux/store');
-const { initAxiosClients } = await import('./api/apiClients');
+import { Configuration } from '@pagopa-pn/pn-commons';
+import { initStore } from './redux/store';
+import { initAxiosClients } from './api/apiClients';
 
 
 // inject jest-dom matchers into vitest, 

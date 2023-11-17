@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -13,11 +14,11 @@ import {
   notificationDTOMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import { NOTIFICATION_DETAIL } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -29,7 +30,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

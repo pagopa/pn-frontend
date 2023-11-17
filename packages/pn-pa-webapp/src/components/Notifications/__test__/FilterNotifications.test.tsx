@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import {
   formatDate,
@@ -21,13 +22,13 @@ import {
   fireEvent,
   render,
   screen,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -195,7 +196,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
         startDate: formatToTimezoneString(nineYearsAgo),
         endDate: formatToTimezoneString(oneYearAgo),
         recipientId: 'RSSMRA80A01H501U',
@@ -208,7 +209,7 @@ describe('Filter Notifications Table Component', () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -234,7 +235,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form!).toHaveTextContent('filters.errors.fiscal-code');
   });
@@ -262,7 +263,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form!).toHaveTextContent('filters.errors.iun');
   });
@@ -290,7 +291,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -316,7 +317,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -359,7 +360,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
         startDate: formatToTimezoneString(nineYearsAgo),
         endDate: formatToTimezoneString(oneYearAgo),
         recipientId: 'RSSMRA80A01H501U',
@@ -380,6 +381,6 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
     });
-    expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+    expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
   });
 });

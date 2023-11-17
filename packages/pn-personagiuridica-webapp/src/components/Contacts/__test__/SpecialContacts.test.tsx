@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import {
@@ -17,11 +18,11 @@ import {
   fireEvent,
   render,
   screen,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT, LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
@@ -29,7 +30,7 @@ import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -81,7 +82,7 @@ describe('SpecialContacts Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
@@ -401,7 +402,7 @@ describe('SpecialContacts Component', () => {
       ],
       courtesy: digitalAddresses.courtesy,
     };
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(getTestStore().getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result?.rerender(
       <DigitalContactsCodeVerificationProvider>
@@ -485,7 +486,7 @@ describe('SpecialContacts Component', () => {
         ...digitalAddresses.courtesy.slice(1),
       ],
     };
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(getTestStore().getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
     // simulate rerendering due to redux changes
     result?.rerender(
@@ -539,7 +540,7 @@ describe('SpecialContacts Component', () => {
       legal: digitalAddresses.legal,
       courtesy: [...digitalAddresses.courtesy.slice(1)],
     };
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(getTestStore().getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result?.rerender(
       <DigitalContactsCodeVerificationProvider>

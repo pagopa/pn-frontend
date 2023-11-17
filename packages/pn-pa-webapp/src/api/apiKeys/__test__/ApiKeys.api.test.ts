@@ -4,7 +4,7 @@ import { mockApiKeysDTO } from '../../../__mocks__/ApiKeys.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/NewApiKey.mock';
 import { ApiKeySetStatus } from '../../../models/ApiKeys';
-import { apiClient } from '../../apiClients';
+import { getApiClient } from '../../apiClients';
 import { ApiKeysApi } from '../ApiKeys.api';
 import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
 
@@ -15,7 +15,7 @@ describe('Api keys api tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

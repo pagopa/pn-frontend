@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material';
 import {
   AppResponseMessage,
   DOWNTIME_HISTORY,
@@ -14,11 +15,11 @@ import { theme } from '@pagopa/mui-italia';
 
 import { currentStatusDTO, downtimesDTO, openIncidents } from '../../__mocks__/AppStatus.mock';
 import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string, data: any) => `${str} - ${JSON.stringify(data)}`,
@@ -38,7 +39,7 @@ describe('AppStatus page', () => {
   const original = window.location;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '' },
