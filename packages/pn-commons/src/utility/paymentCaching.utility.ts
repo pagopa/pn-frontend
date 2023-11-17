@@ -102,9 +102,6 @@ const isTimestampWithin5Minutes = (timestamp1: string, timestamp2: string): bool
   return minutes <= 2;
 };
 
-// Check if IUN exists in cache, if exists check if timestamp is timestamp is 5 minute newer than the one in cache
-// If these 2 conditions are true, return void
-// If IUN not exists in cache or timestamp is older than 5 minutes, set IUN and timestamp in cache and return void
 export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
   const paymentCache = getPaymentCache();
   if (

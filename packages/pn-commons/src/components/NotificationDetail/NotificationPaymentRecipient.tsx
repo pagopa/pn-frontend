@@ -19,6 +19,7 @@ import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
   deletePropertiesInPaymentCache,
+  getPaymentCache,
   setPaymentCache,
 } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
@@ -53,8 +54,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
+  const pageFromCache = getPaymentCache()?.currentPaymentPage;
   const [paginationData, setPaginationData] = useState<PaginationData>({
-    page: 0,
+    page: pageFromCache ?? 0,
     size: 5,
     totalElements,
   });
