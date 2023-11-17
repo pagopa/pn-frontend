@@ -12,11 +12,12 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
 } from '../models';
-import { parseNotificationDetail } from '../utility';
+import { getF24Payments, getPagoPaF24Payments, parseNotificationDetail } from '../utility';
 
 function getOneRecipientNotification(): NotificationDetail {
   const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
@@ -640,3 +641,8 @@ export const getTimelineElem = (
   timestamp: '2023-08-25T11:38:05.392Z',
   details,
 });
+
+export const paymentsData: PaymentsData = {
+  pagoPaF24: getPagoPaF24Payments(payments, 2),
+  f24Only: getF24Payments(payments, 2),
+};

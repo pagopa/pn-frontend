@@ -88,7 +88,7 @@ export const clearPaymentCache = (): void => {
 };
 
 // Timestamp is in ISO format
-const isTimestampWithin5Minutes = (timestamp1: string, timestamp2: string): boolean => {
+export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string): boolean => {
   const date1 = new Date(timestamp1);
   const date2 = new Date(timestamp2);
 
@@ -107,7 +107,7 @@ export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
   if (
     paymentCache &&
     paymentCache.iun === iun &&
-    isTimestampWithin5Minutes(paymentCache.timestamp, timestamp)
+    isTimestampWithin2Minutes(paymentCache.timestamp, timestamp)
   ) {
     return true;
   }
