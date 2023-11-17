@@ -1,19 +1,24 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import { storageAarOps, storageOnSuccessOps } from '../../../utility/storage';
 import Logout from '../Logout';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useNavigate: () => mockNavigateFn,
 }));
 
 describe('Logout page', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('test logout', () => {
     storageOnSuccessOps.write('ON_SUCCESS');
     storageAarOps.write('aar-test');

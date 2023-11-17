@@ -12,6 +12,19 @@ export default defineConfig(({mode}) => {
       https: true,
       port: 443,
     },
+    test: {
+      globals: true,
+      setupFiles: './src/setupTests.ts',
+      environment: 'jsdom',
+      reporters: ['vitest-sonar-reporter', 'default'],
+      outputFile: 'test-report.xml',
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'json', 'html'],
+        exclude: [ 'src/models/**'],
+        reportOnFailure: true,
+      },
+    },
     build: {
       outDir: 'build',
       assetsDir: 'static',

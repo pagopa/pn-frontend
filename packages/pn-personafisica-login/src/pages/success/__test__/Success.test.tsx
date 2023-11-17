@@ -1,15 +1,16 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import { storageAarOps } from '../../../utility/storage';
 import SuccessPage from '../Success';
 
-const mockLocationAssign = jest.fn();
+const mockLocationAssign = vi.fn();
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
