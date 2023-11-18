@@ -146,7 +146,7 @@ const Contacts = () => {
               </Stack>
               {(digitalAddresses.legal.length > 0 || courtesyContactsNotEmpty()) && (
                 <Stack spacing={2}>
-                  <Typography variant="h5" fontWeight={600} fontSize={28}>
+                  <Typography id="specialContact" variant="h5" fontWeight={600} fontSize={28}>
                     {t('special-contacts-title')}
                   </Typography>
                   <SpecialContacts

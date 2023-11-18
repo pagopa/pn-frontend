@@ -438,6 +438,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 }
                 color="primary"
                 data-testid="addSpecialButton"
+                id="addSpecialButton"
               >
                 {t('button.associa')}
               </ButtonNaked>

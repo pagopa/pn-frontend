@@ -371,7 +371,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 {addressTypes
                   .filter((a) => a.show)
                   .map((a) => (
-                    <MenuItem id={a.id} key={a.id} value={a.id}>
+                    <MenuItem id={`dropdown-${a.id}`} key={a.id} value={a.id}>
                       {a.value}
                     </MenuItem>
                   ))}
@@ -438,6 +438,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 }
                 color="primary"
                 data-testid="addSpecialButton"
+                id="addSpecialButton"
               >
                 {t('button.associa')}
               </ButtonNaked>

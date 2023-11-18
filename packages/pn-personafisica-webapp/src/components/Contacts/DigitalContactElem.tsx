@@ -78,7 +78,12 @@ const DeleteDialog: React.FC<DialogProps> = ({
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
 
   const deleteModalActions = blockDelete ? (
-    <Button onClick={handleModalClose} variant="outlined" sx={{ width: isMobile ? '100%' : null }}>
+    <Button
+      id="closeModalButton"
+      onClick={handleModalClose}
+      variant="outlined"
+      sx={{ width: isMobile ? '100%' : null }}
+    >
       {t('button.close')}
     </Button>
   ) : (
@@ -87,10 +92,16 @@ const DeleteDialog: React.FC<DialogProps> = ({
         onClick={handleModalClose}
         variant="outlined"
         sx={isMobile ? { width: '100%', mt: 2 } : null}
+        id="buttonAnnulla"
       >
         {t('button.annulla')}
       </Button>
-      <Button onClick={confirmHandler} variant="contained" sx={{ width: isMobile ? '100%' : null }}>
+      <Button
+        id="buttonConferma"
+        onClick={confirmHandler}
+        variant="contained"
+        sx={{ width: isMobile ? '100%' : null }}
+      >
         {t('button.conferma')}
       </Button>
     </>
@@ -239,10 +250,16 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   onClick={toggleEdit}
                   sx={{ mr: 2 }}
                   disabled={editDisabled}
+                  id="modifyContact"
                 >
                   {t('button.modifica')}
                 </ButtonNaked>
-                <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
+                <ButtonNaked
+                  id="cancelContact"
+                  color="primary"
+                  onClick={removeHandler}
+                  disabled={editDisabled}
+                >
                   {t('button.elimina')}
                 </ButtonNaked>
               </>
@@ -254,6 +271,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   type="button"
                   onClick={editHandler}
                   sx={{ mr: 2 }}
+                  id="saveModifyButton"
                 >
                   {t('button.salva')}
                 </ButtonNaked>

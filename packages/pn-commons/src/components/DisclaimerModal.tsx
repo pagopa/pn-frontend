@@ -70,6 +70,7 @@ const DisclaimerModal = ({
         }}
       >
         <Button
+          id="cancelButton"
           variant="outlined"
           onClick={onCancel}
           fullWidth={isMobile}
@@ -78,6 +79,7 @@ const DisclaimerModal = ({
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </Button>
         <Button
+          id="confirmButton"
           variant="contained"
           onClick={onConfirm}
           disabled={disabledConfirm}
