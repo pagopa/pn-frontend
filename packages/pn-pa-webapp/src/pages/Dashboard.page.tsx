@@ -10,7 +10,8 @@ import {
   TitleBox,
   calculatePages,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
+  getStartOfDay,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -88,7 +89,8 @@ const Dashboard = () => {
     void dispatch(
       getSentNotifications({
         ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
+        endDate: formatToTimezoneString(getEndOfDay(new Date(params.endDate))),
+        startDate: formatToTimezoneString(getStartOfDay(new Date(params.startDate))),
       })
     );
   }, [filters, pagination.size, pagination.page, sort]);

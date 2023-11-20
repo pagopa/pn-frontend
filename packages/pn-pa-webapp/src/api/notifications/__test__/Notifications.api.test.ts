@@ -7,7 +7,7 @@ import {
   PaymentAttachmentNameType,
   PaymentAttachmentSName,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -56,7 +56,7 @@ describe('Notifications api tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           iunMatch: '',
           recipientId: '',
           status: '',
@@ -65,7 +65,7 @@ describe('Notifications api tests', () => {
       .reply(200, notificationsDTO);
     const res = await NotificationsApi.getSentNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      endDate: formatToTimezoneString(getEndOfDay(today)),
       iunMatch: '',
       recipientId: '',
       status: '',

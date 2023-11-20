@@ -10,7 +10,7 @@ import {
   TitleBox,
   calculatePages,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
   useHasPermissions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -88,7 +88,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     void dispatch(
       getReceivedNotifications({
         ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
+        endDate: formatToTimezoneString(getEndOfDay(new Date(params.endDate))),
       })
     ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);

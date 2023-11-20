@@ -10,7 +10,7 @@ import {
   formatTimeWithLegend,
   formatToSlicedISOString,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
   isToday,
   minutesBeforeNow,
 } from '../date.utility';
@@ -99,7 +99,7 @@ describe('Date utility', () => {
   });
 
   it('return next day', () => {
-    const nextDay = getNextDay(date);
+    const nextDay = getEndOfDay(date);
     const expectedNextDay = new Date(date);
     expectedNextDay.setDate(expectedNextDay.getDate() + 1);
     expect(nextDay).toStrictEqual(expectedNextDay);

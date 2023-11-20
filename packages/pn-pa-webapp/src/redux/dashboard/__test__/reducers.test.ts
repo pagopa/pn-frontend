@@ -1,15 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import {
-  formatToTimezoneString,
-  getNextDay,
   GetNotificationsResponse,
   NotificationStatus,
+  formatToTimezoneString,
+  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 
-import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
@@ -62,7 +63,7 @@ describe('Dashboard redux state tests', () => {
   it('Should be able to fetch the notifications list', async () => {
     const mockRequest = {
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      endDate: formatToTimezoneString(getEndOfDay(today)),
       status: '',
       recipientId: '',
       iunMatch: '',

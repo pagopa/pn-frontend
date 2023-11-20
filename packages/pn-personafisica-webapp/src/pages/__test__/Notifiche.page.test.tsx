@@ -6,7 +6,7 @@ import {
   ResponseEventDispatcher,
   formatDate,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -63,7 +63,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
@@ -90,7 +90,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
@@ -99,7 +99,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(tenYearsAgo)),
+          endDate: formatToTimezoneString(getEndOfDay(tenYearsAgo)),
           size: 10,
         })
       )
@@ -136,7 +136,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
@@ -145,7 +145,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 20,
         })
       )
@@ -176,7 +176,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
@@ -185,7 +185,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
           nextPagesKey: notificationsDTO.nextPagesKey[0],
         })
@@ -218,7 +218,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
@@ -227,7 +227,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
           iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         })
@@ -263,7 +263,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
@@ -289,7 +289,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(getEndOfDay(today)),
           size: 10,
         })
       )
