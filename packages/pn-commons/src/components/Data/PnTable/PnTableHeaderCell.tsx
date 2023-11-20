@@ -3,17 +3,17 @@ import { visuallyHidden } from '@mui/utils';
 
 import { Sort } from '../../../models';
 
-export interface IPnTableHeaderCellProps<ColumnId> {
+interface Props<T> {
   testId?: string;
-  sort?: Sort<ColumnId>;
+  sort?: Sort<T>;
   cellProps?: TableCellProps;
-  handleClick?: (s: Sort<ColumnId>) => void;
-  columnId: ColumnId;
+  handleClick?: (s: Sort<T>) => void;
+  columnId: keyof T;
   children: React.ReactNode;
   sortable?: boolean;
 }
 
-const PnTableHeaderCell = <ColumnId extends string>({
+const PnTableHeaderCell = <T,>({
   testId = 'headerCell',
   sort,
   cellProps,
@@ -21,13 +21,14 @@ const PnTableHeaderCell = <ColumnId extends string>({
   sortable,
   columnId,
   children,
-}: IPnTableHeaderCellProps<ColumnId>) => {
-  const sortHandler = (property: ColumnId) => () => {
+}: Props<T>) => {
+  const sortHandler = (property: keyof T) => () => {
     if (sort && handleClick) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
       handleClick({ order: isAsc ? 'desc' : 'asc', orderBy: property });
     }
   };
+
   return (
     <TableCell
       {...cellProps}
@@ -45,7 +46,7 @@ const PnTableHeaderCell = <ColumnId extends string>({
           active={sort.orderBy === columnId}
           direction={sort.orderBy === columnId ? sort.order : 'asc'}
           onClick={sortHandler(columnId)}
-          data-testid={`${testId}.sort.${columnId}`}
+          data-testid={`${testId}.sort.${columnId.toString()}`}
         >
           {children}
           {sort.orderBy === columnId && (

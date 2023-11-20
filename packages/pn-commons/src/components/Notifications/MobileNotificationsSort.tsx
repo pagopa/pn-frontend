@@ -15,12 +15,12 @@ import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAc
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
 
-type Props<OrderByOption> = {
-  sortFields: Array<CardSort<OrderByOption>>;
+type Props<T> = {
+  sortFields: Array<CardSort<T>>;
   /** Card sort */
-  sort: Sort<OrderByOption>;
+  sort: Sort<T>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting: (s: Sort<OrderByOption>) => void;
+  onChangeSorting: (s: Sort<T>) => void;
   /** Title of the dialog */
   title: string;
   /** Title of the options section */
@@ -29,15 +29,17 @@ type Props<OrderByOption> = {
   cancelLabel: string;
 };
 
-const MobileNotificationsSort = <OrderByOption extends string>({
+const MobileNotificationsSort = <T,>({
   sortFields,
   sort,
   onChangeSorting,
   title,
   optionsTitle,
   cancelLabel,
-}: Props<OrderByOption>) => {
-  const [sortValue, setSortValue] = useState(sort ? `${sort.orderBy}-${sort.order}` : '');
+}: Props<T>) => {
+  const [sortValue, setSortValue] = useState(
+    sort ? `${sort.orderBy.toString()}-${sort.order}` : ''
+  );
   const prevSort = useRef(sortValue);
   const isSorted = sort.orderBy !== '';
 
@@ -57,9 +59,7 @@ const MobileNotificationsSort = <OrderByOption extends string>({
 
   const handleCancelSort = () => {
     setSortValue('');
-    // why the "as OrderByOption" is needed - cfr. https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type
-    // Carlos Lombardi, 2022.08.01
-    onChangeSorting({ order: 'asc', orderBy: '' as OrderByOption });
+    onChangeSorting({ order: 'asc', orderBy: '' });
   };
 
   return (

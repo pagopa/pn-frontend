@@ -10,19 +10,18 @@ import {
   CardSort,
   CustomTagGroup,
   EmptyState,
-  Item,
-  ItemsCard,
-  ItemsCardAction,
-  ItemsCardActions,
-  ItemsCardBody,
-  ItemsCardContent,
-  ItemsCardContents,
-  ItemsCardHeader,
-  ItemsCardHeaderTitle,
   KnownSentiment,
   MobileNotificationsSort,
   Notification,
   NotificationStatus,
+  PnCard,
+  PnCardActions,
+  PnCardContent,
+  PnCardContentItem,
+  PnCardHeader,
+  PnCardHeaderTitle,
+  PnCardsList,
+  Row,
   Sort,
   StatusTooltip,
   formatDate,
@@ -102,6 +101,23 @@ const LinkCreateNotification: React.FC<{ onManualSend: () => void }> = ({
   );
 };
 
+const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+  const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
+    recipients: data.recipients,
+  });
+  return (
+    <StatusTooltip
+      label={label}
+      tooltip={tooltip}
+      color={color}
+      eventTrackingCallback={handleEventTrackingTooltip}
+    ></StatusTooltip>
+  );
+};
+
 const MobileNotifications = ({
   notifications,
   sort,
@@ -113,18 +129,11 @@ const MobileNotifications = ({
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche', 'common']);
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
-  const cardHeader: [CardElement, CardElement] = [
+  const cardHeader: [CardElement<Notification>, CardElement<Notification>] = [
     {
       id: 'sentAt',
       position: 'left',
       label: t('table.date'),
-      getLabel(value: string) {
-        return <Typography>{formatDate(value)}</Typography>;
-      },
       gridProps: {
         xs: 4,
         sm: 5,
@@ -134,20 +143,6 @@ const MobileNotifications = ({
       id: 'notificationStatus',
       position: 'right',
       label: t('table.status'),
-      getLabel(_, row: Item) {
-        const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus,
-          { recipients: row.recipients as Array<string> }
-        );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
-      },
       gridProps: {
         xs: 8,
         sm: 7,
@@ -155,7 +150,7 @@ const MobileNotifications = ({
     },
   ];
 
-  const cardBody: Array<CardElement> = [
+  const cardBody: Array<CardElement<Notification>> = [
     {
       id: 'recipients',
       label: t('table.recipient'),
@@ -166,7 +161,7 @@ const MobileNotifications = ({
           </Typography>
         ));
       },
-      notWrappedInTypography: true,
+      wrappedInTypography: false,
     },
     {
       id: 'subject',
@@ -197,18 +192,18 @@ const MobileNotifications = ({
         ) : null;
       },
       hideIfEmpty: true,
-      notWrappedInTypography: true,
+      wrappedInTypography: true,
     },
   ];
 
   // Navigation handlers
-  const handleRowClick = (row: Item) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+  const handleRowClick = (row: Row<Notification>) => {
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
-  const cardActions: Array<CardAction> = [
+  const cardActions: Array<CardAction<Notification>> = [
     {
       id: 'go-to-detail',
       component: (
@@ -220,7 +215,7 @@ const MobileNotifications = ({
     },
   ];
 
-  const cardData: Array<Item> = notifications.map((n: Notification, i: number) => ({
+  const cardData: Array<Row<Notification>> = notifications.map((n: Notification, i: number) => ({
     ...n,
     id: i.toString(),
   }));
@@ -273,52 +268,39 @@ const MobileNotifications = ({
         </Grid>
       </Grid>
       {cardData.length ? (
-        <ItemsCard>
+        <PnCardsList>
           {cardData.map((data) => (
-            <ItemsCardBody key={data.id}>
-              <ItemsCardHeader
+            <PnCard key={data.id}>
+              <PnCardHeader
                 headerGridProps={{
                   direction: { xs: 'row', sm: 'row' },
                   alignItems: { xs: 'flex-start', sm: 'center' },
                 }}
               >
-                <ItemsCardHeaderTitle
-                  key={cardHeader[0].id}
-                  gridProps={cardHeader[0].gridProps}
-                  position={cardHeader[0].position}
-                >
-                  {cardHeader[0].getLabel(data[cardHeader[0].id], data)}
-                </ItemsCardHeaderTitle>
-                <ItemsCardHeaderTitle
-                  key={cardHeader[1].id}
+                <PnCardHeaderTitle key="sentAt" gridProps={cardHeader[0].gridProps} position="left">
+                  <Typography>{formatDate(data.sentAt)}</Typography>
+                </PnCardHeaderTitle>
+                <PnCardHeaderTitle
+                  key="notificationStatus"
                   gridProps={cardHeader[1].gridProps}
-                  position={cardHeader[1].position}
+                  position="right"
                 >
-                  {cardHeader[1].getLabel(data[cardHeader[1].id], data)}
-                </ItemsCardHeaderTitle>
-              </ItemsCardHeader>
-              <ItemsCardContents>
+                  <NotificationStatusChip data={data} />
+                </PnCardHeaderTitle>
+              </PnCardHeader>
+              <PnCardContent>
                 {cardBody.map((body) => (
-                  <ItemsCardContent key={body.id} body={body}>
+                  <PnCardContentItem key={body.id} label={body.label}>
                     {body.getLabel(data[body.id], data)}
-                  </ItemsCardContent>
+                  </PnCardContentItem>
                 ))}
-              </ItemsCardContents>
-              <ItemsCardActions>
-                {cardActions &&
-                  cardActions.map((action) => (
-                    <ItemsCardAction
-                      testId="cardAction"
-                      key={action.id}
-                      handleOnClick={() => action.onClick(data)}
-                    >
-                      {action.component}
-                    </ItemsCardAction>
-                  ))}
-              </ItemsCardActions>
-            </ItemsCardBody>
+              </PnCardContent>
+              <PnCardActions>
+                {cardActions && cardActions.map((action) => action.component)}
+              </PnCardActions>
+            </PnCard>
           ))}
-        </ItemsCard>
+        </PnCardsList>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

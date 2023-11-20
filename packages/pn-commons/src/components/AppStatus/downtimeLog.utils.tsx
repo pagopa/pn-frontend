@@ -93,7 +93,7 @@ export function useFieldSpecs() {
     }
     if (fieldId === 'knownFunctionality') {
       return {
-        id: 'rawFunctionality',
+        id: 'knownFunctionality',
         label: getLocalizedOrDefaultLabel('appStatus', 'downtimeList.columnHeader.functionality'),
       };
     }

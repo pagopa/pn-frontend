@@ -3,7 +3,7 @@ import { Item, formatDate } from '@pagopa-pn/pn-commons';
 import { Delegation, Person } from '../redux/delegation/types';
 
 /**
- * Maps Delegation object to Item, in order to be visualised in an ItemsCard or PnTable component
+ * Maps Delegation object to Item, in order to be visualised in an PnCardsList or PnTable component
  * @param  {Array<Delegation>} delegations
  * @param  {boolean} isDelegator
  * @returns Array<Item>

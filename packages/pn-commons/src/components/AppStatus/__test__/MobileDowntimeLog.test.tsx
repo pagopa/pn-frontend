@@ -8,21 +8,12 @@ import {
   fireEvent,
   initLocalizationForTest,
   render,
+  theme,
   within,
 } from '../../../test-utils';
 import { formatDate } from '../../../utility';
 import { formatTimeWithLegend } from '../../../utility/date.utility';
 import MobileDowntimeLog from '../MobileDowntimeLog';
-
-const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
-
-jest.mock('@mui/material', () => {
-  const original = jest.requireActual('@mui/material');
-  return {
-    ...original,
-    useTheme: () => ({ palette: { ...original.useTheme().palette, ...fakePalette } }),
-  };
-});
 
 const data = ['startDate', 'endDate', 'functionality', 'legalFactId'];
 
@@ -31,7 +22,7 @@ const checkStatusField = (status: DowntimeStatus, cardElem: HTMLElement) => {
   const statusChip = within(cardElem).getByTestId('downtime-status');
   expect(statusChip).toHaveStyle({
     'background-color':
-      status === DowntimeStatus.KO ? fakePalette.error.light : fakePalette.success.light,
+      status === DowntimeStatus.KO ? theme.palette.error.light : theme.palette.success.light,
   });
 };
 

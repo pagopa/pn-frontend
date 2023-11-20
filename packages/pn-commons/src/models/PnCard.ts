@@ -8,21 +8,20 @@ export interface CardElement<T> {
   id: keyof T;
   position?: string;
   label: string;
-  getLabel?(value: string | number | Array<string | ReactNode>, row?: Row<T>): ReactNode;
-  notWrappedInTypography?: boolean;
-  hideIfEmpty?: boolean;
+  getLabel?(value: Row<T>[keyof T], row?: Row<T>): ReactNode;
+  wrappedInTypography?: boolean;
   gridProps?: GridProps;
 }
 
-export interface CardSort<OrderByOption> {
+export interface CardSort<T> {
   id: string;
-  field: OrderByOption;
+  field: keyof T;
   label: string;
   value: 'asc' | 'desc';
 }
 
 export interface CardAction<T> {
   id: string;
-  component: ReactNode;
+  component: JSX.Element;
   onClick(cardData: Row<T>): void;
 }

@@ -1,16 +1,12 @@
 import { Grid, GridProps } from '@mui/material';
 
-export interface IItemsCardHeaderTitleProps {
+interface Props {
   gridProps?: GridProps;
   children: React.ReactNode;
   position?: string;
 }
 
-const ItemsCardHeaderTitle: React.FC<IItemsCardHeaderTitleProps> = ({
-  children,
-  gridProps,
-  position = 'left',
-}) => (
+const PnCardHeaderItem: React.FC<Props> = ({ children, gridProps, position = 'left' }) => (
   <Grid
     item
     sx={{ textAlign: position, fontSize: '14px', fontWeight: 400 }}
@@ -21,4 +17,4 @@ const ItemsCardHeaderTitle: React.FC<IItemsCardHeaderTitleProps> = ({
   </Grid>
 );
 
-export default ItemsCardHeaderTitle;
+export default PnCardHeaderItem;

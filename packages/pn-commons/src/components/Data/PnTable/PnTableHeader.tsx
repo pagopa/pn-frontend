@@ -1,26 +1,33 @@
-import React from 'react';
+import { Children, cloneElement, isValidElement } from 'react';
 
 import { TableHead, TableRow } from '@mui/material';
 
-import PnTableHeaderCell, { IPnTableHeaderCellProps } from './PnTableHeaderCell';
+import PnTableHeaderCell from './PnTableHeaderCell';
 
-export interface IPnTableHeaderProps {
+interface Props {
   testId?: string;
-  children:
-    | Array<React.ReactElement<IPnTableHeaderCellProps<string>>>
-    | React.ReactElement<IPnTableHeaderCellProps<string>>;
+  children: React.ReactNode;
 }
 
-const PnTableHeader: React.FC<IPnTableHeaderProps> = ({ testId, children }) => {
+const PnTableHeader: React.FC<Props> = ({ testId, children }) => {
   const columns = children
-    ? React.Children.toArray(children)
+    ? Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableHeaderCell)
         .map((child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child, { ...child.props, testId: `${testId}.cell` })
+          isValidElement(child)
+            ? cloneElement(child, { ...child.props, testId: `${testId}.cell` })
             : child
         )
     : [];
+
+  if (columns.length === 0) {
+    throw new Error('PnTableHeader must have at least one child');
+  }
+
+  if (columns.length < Children.toArray(children).length) {
+    throw new Error('PnTableHeader must have only children of type PnTableHeaderCell');
+  }
+
   return (
     <TableHead role="rowgroup" data-testid={testId}>
       <TableRow role="row">{columns}</TableRow>

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { GridProps } from '@mui/material';
 
-import { Align, Column, Item } from './PnTable';
+import { Align, Column, Row } from './PnTable';
 
 /**
  * @typedef TableConfiguration configuration for the table view
@@ -11,25 +11,23 @@ import { Align, Column, Item } from './PnTable';
  * @prop {Align} align alignment into the table cell
  * @prop {Function} onClick function called when user click on cell
  */
-interface TableConfiguration<ColumnId> {
+interface TableConfiguration<T> {
   width: string;
   sortable?: boolean;
   align?: Align;
-  onClick?: (row: Item, column: Column<ColumnId>) => void;
+  onClick?: (row: Row<T>, column: Column<T>) => void;
 }
 
 /**
  * @typedef CardConfiguration configuration for the card view
  * @prop {('header' | 'body')} position position of the field into the card
  * @prop {GridProps} gridProps style properties to override custom ones
- * @prop {boolean} notWrappedInTypography element will be not enclosed in a Typrography element
- * @prop {boolean} hideIfEmpty element will be not shown if empty
+ * @prop {boolean} wrappedInTypography element will be not enclosed in a Typrography element
  */
 interface CardConfiguration {
   position: 'header' | 'body';
   gridProps?: GridProps;
-  notWrappedInTypography?: boolean;
-  hideIfEmpty?: boolean;
+  wrappedInTypography?: boolean;
 }
 
 /**
@@ -40,28 +38,24 @@ interface CardConfiguration {
  * @prop {TableConfiguration} tableConfiguration field configuration for the table view
  * @prop {CardConfiguration} cardConfiguration field configuration for the card view
  */
-export interface SmartTableData<ColumnId> {
-  id: ColumnId;
+export interface SmartTableData<T> {
+  id: keyof T;
   label: string;
-  getValue(
-    value: string | number | Array<string | ReactNode>,
-    data?: Item,
-    isMobile?: boolean
-  ): ReactNode;
-  tableConfiguration: TableConfiguration<ColumnId>;
+  getValue(value: Row<T>[keyof T], data?: Row<T>, isMobile?: boolean): ReactNode;
+  tableConfiguration: TableConfiguration<T>;
   cardConfiguration: CardConfiguration;
 }
 
 /**
  * @typedef SmartTableData SmartTable data structure
  * @prop {string} id id of the action
- * @prop {ReactNode} component component to render for the action
+ * @prop {JSX.Element} component component to render for the action
  * @prop {Function} onClick function called when user click on action
  * @prop {('table' | 'card' | 'everywhere')} position position of the action
  */
-export interface SmartTableAction {
+export interface SmartTableAction<T> {
   id: string;
-  component: ReactNode;
-  onClick(data: Item): void;
+  component: JSX.Element;
+  onClick(data: Row<T>): void;
   position: 'table' | 'card' | 'everywhere';
 }

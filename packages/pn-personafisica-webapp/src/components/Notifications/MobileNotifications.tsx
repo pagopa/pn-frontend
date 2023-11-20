@@ -10,18 +10,18 @@ import {
   CardSort,
   EmptyState,
   Item,
-  ItemsCard,
   ItemsCardAction,
-  ItemsCardActions,
-  ItemsCardBody,
-  ItemsCardContent,
-  ItemsCardContents,
-  ItemsCardHeader,
-  ItemsCardHeaderTitle,
   KnownSentiment,
   MobileNotificationsSort,
   Notification,
   NotificationStatus,
+  PnCard,
+  PnCardActions,
+  PnCardContent,
+  PnCardContentItem,
+  PnCardHeader,
+  PnCardHeaderTitle,
+  PnCardsList,
   Sort,
   StatusTooltip,
   formatDate,
@@ -261,11 +261,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         </Grid>
       </Grid>
       {cardData.length ? (
-        <ItemsCard>
+        <PnCardsList>
           {cardData.map((data) => (
-            <ItemsCardBody key={data.id}>
-              <ItemsCardHeader>
-                <ItemsCardHeaderTitle
+            <PnCard key={data.id}>
+              <PnCardHeader>
+                <PnCardHeaderTitle
                   cardHeader={cardHeader}
                   item={data}
                   headerGridProps={{
@@ -273,15 +273,15 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                     alignItems: { xs: 'flex-start', sm: 'center' },
                   }}
                 />
-              </ItemsCardHeader>
-              <ItemsCardContents>
+              </PnCardHeader>
+              <PnCardContent>
                 {cardBody.map((body) => (
-                  <ItemsCardContent key={body.id} body={body}>
+                  <PnCardContentItem key={body.id} body={body}>
                     {body.getLabel(data[body.id], data)}
-                  </ItemsCardContent>
+                  </PnCardContentItem>
                 ))}
-              </ItemsCardContents>
-              <ItemsCardActions>
+              </PnCardContent>
+              <PnCardActions>
                 {cardActions &&
                   cardActions.map((action) => (
                     <ItemsCardAction
@@ -292,10 +292,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                       {action.component}
                     </ItemsCardAction>
                   ))}
-              </ItemsCardActions>
-            </ItemsCardBody>
+              </PnCardActions>
+            </PnCard>
           ))}
-        </ItemsCard>
+        </PnCardsList>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

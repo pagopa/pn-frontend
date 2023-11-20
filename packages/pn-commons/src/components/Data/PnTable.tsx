@@ -1,11 +1,11 @@
-import React from 'react';
+import { Children, cloneElement, isValidElement } from 'react';
 
 import { Table, TableContainer } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
-import PnTableBody, { IPnTableBodyProps } from './PnTable/PnTableBody';
-import PnTableHeader, { IPnTableHeaderProps } from './PnTable/PnTableHeader';
+import PnTableBody from './PnTable/PnTableBody';
+import PnTableHeader from './PnTable/PnTableHeader';
 
 type Props = {
   /** Table title used in aria-label */
@@ -13,10 +13,10 @@ type Props = {
   /** Table test id */
   testId?: string;
   /** Table children (body and header) */
-  children: [React.ReactElement<IPnTableHeaderProps>, React.ReactElement<IPnTableBodyProps>];
+  children: React.ReactNode;
 };
 
-const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', children }) => {
+const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table', children }) => {
   // Table style
   const Root = styled('div')(
     () => `
@@ -35,26 +35,41 @@ const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', 
     `
   );
 
-  // TODO: gestire colore grigio di sfondo con variabile tema
   const header = children
-    ? React.Children.toArray(children)
+    ? Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableHeader)
         .map((child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child, { ...child.props, testId: `${testId}.header` })
+          isValidElement(child)
+            ? cloneElement(child, { ...child.props, testId: `${testId}.header` })
             : child
         )
     : [];
 
   const body = children
-    ? React.Children.toArray(children)
+    ? Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableBody)
         .map((child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child, { ...child.props, testId: `${testId}.body` })
+          isValidElement(child)
+            ? cloneElement(child, { ...child.props, testId: `${testId}.body` })
             : child
         )
     : [];
+
+  if (header.length === 0 && body.length === 0) {
+    throw new Error('PnTable must have at least one child');
+  }
+
+  if (header.length === 0) {
+    throw new Error('PnTable must have one child of type PnTableHeader');
+  }
+
+  if (body.length === 0) {
+    throw new Error('PnTable must have one child of type PnTableBody');
+  }
+
+  if (body.length + header.length < Children.toArray(children).length) {
+    throw new Error('PnTable must have only children of type PnTableHeader and PnTableBody');
+  }
 
   return (
     <Root>
@@ -62,9 +77,7 @@ const PnTable: React.FC<Props> = ({ ariaTitle, testId = 'table(notifications)', 
         <Table
           id="notifications-table"
           stickyHeader
-          aria-label={
-            ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
-          }
+          aria-label={ariaTitle ?? getLocalizedOrDefaultLabel('common', 'table.aria-label')}
           data-testid={testId}
         >
           {header}

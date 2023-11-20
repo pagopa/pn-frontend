@@ -1,26 +1,33 @@
-import React from 'react';
+import { Children, cloneElement, isValidElement } from 'react';
 
 import { TableRow } from '@mui/material';
 
-import PnTableBodyCell, { IPnTableBodyCellProps } from './PnTableBodyCell';
+import PnTableBodyCell from './PnTableBodyCell';
 
-export interface IPnTableBodyRowProps {
+interface Props {
   testId?: string;
   index: number;
-  children?:
-    | Array<React.ReactElement<IPnTableBodyCellProps>>
-    | React.ReactElement<IPnTableBodyCellProps>;
+  children: React.ReactNode;
 }
-const PnTableBodyRow: React.FC<IPnTableBodyRowProps> = ({ children, index, testId }) => {
+const PnTableBodyRow: React.FC<Props> = ({ children, index, testId }) => {
   const columns = children
-    ? React.Children.toArray(children)
+    ? Children.toArray(children)
         .filter((child) => (child as JSX.Element).type === PnTableBodyCell)
         .map((child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child, { ...child.props, testId: `${testId}.cell` })
+          isValidElement(child)
+            ? cloneElement(child, { ...child.props, testId: `${testId}.cell` })
             : child
         )
     : [];
+
+  if (columns.length === 0) {
+    throw new Error('PnTableBodyRow must have at least one child');
+  }
+
+  if (columns.length < Children.toArray(children).length) {
+    throw new Error('PnTableBodyRow must have only children of type PnTableBodyCell');
+  }
+
   return (
     <TableRow id={testId} data-testid={testId} role="row" aria-rowindex={index + 1}>
       {columns}

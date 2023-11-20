@@ -8,13 +8,7 @@ describe('PnTableBodyCell', () => {
 
   it('render component', () => {
     const { container, queryByTestId } = render(
-      <table>
-        <tbody>
-          <tr>
-            <PnTableBodyCell>mocke-cell-content</PnTableBodyCell>
-          </tr>
-        </tbody>
-      </table>
+      <PnTableBodyCell>mocke-cell-content</PnTableBodyCell>
     );
     expect(container).toHaveTextContent(/mocke-cell-content/);
     const buttons = queryByTestId('cell.button');
@@ -23,13 +17,7 @@ describe('PnTableBodyCell', () => {
 
   it('click cell event', () => {
     const { getByTestId } = render(
-      <table>
-        <tbody>
-          <tr>
-            <PnTableBodyCell onClick={() => mockFn()}>mocke-cell-content</PnTableBodyCell>
-          </tr>
-        </tbody>
-      </table>
+      <PnTableBodyCell onClick={() => mockFn()}>mocke-cell-content</PnTableBodyCell>
     );
     const cell = getByTestId('cell.button');
     fireEvent.click(cell);

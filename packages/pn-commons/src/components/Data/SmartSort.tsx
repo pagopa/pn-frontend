@@ -15,7 +15,7 @@ import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAc
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
 
-type Props<TSortOption> = {
+type Props<T> = {
   /** label to show for the sort button */
   title: string;
   /** label to shoe for the options title */
@@ -27,14 +27,14 @@ type Props<TSortOption> = {
   /** localized descending label */
   dscLabel: string;
   /** current sort */
-  sort: Sort<TSortOption>;
+  sort: Sort<T>;
   /** list of available sort fields */
-  sortFields: Array<{ id: string; label: string }>;
+  sortFields: Array<{ id: keyof T; label: string }>;
   /** the function to be invoked if the user change sorting */
-  onChangeSorting: (s: Sort<TSortOption>) => void;
+  onChangeSorting: (s: Sort<T>) => void;
 };
 
-const SmartSort = <TSortOption extends string>({
+const SmartSort = <T,>({
   title,
   optionsTitle,
   cancelLabel,
@@ -43,29 +43,31 @@ const SmartSort = <TSortOption extends string>({
   sort,
   sortFields,
   onChangeSorting,
-}: PropsWithChildren<Props<TSortOption>>) => {
-  const [sortValue, setSortValue] = useState(sort.orderBy ? `${sort.orderBy}-${sort.order}` : '');
+}: PropsWithChildren<Props<T>>) => {
+  const [sortValue, setSortValue] = useState(
+    sort.orderBy ? `${sort.orderBy.toString()}-${sort.order}` : ''
+  );
   const prevSort = useRef<string>(sortValue);
   const isSorted = sortValue !== '';
   const fields = sortFields.reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
       {
-        id: `${item.id}-asc`,
+        id: `${item.id.toString()}-asc`,
         label: `${item.label} ${ascLabel}`,
-        field: item.id as TSortOption,
+        field: item.id,
         value: 'asc',
       },
       {
-        id: `${item.id}-desc`,
+        id: `${item.id.toString()}-desc`,
         label: `${item.label} ${dscLabel}`,
-        field: item.id as TSortOption,
+        field: item.id,
         value: 'desc',
       }
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort<TSortOption>>);
+  }, [] as Array<CardSort<T>>);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sortSelected = (event.target as HTMLInputElement).value;
@@ -83,7 +85,7 @@ const SmartSort = <TSortOption extends string>({
 
   const handleCancelSort = () => {
     setSortValue('');
-    onChangeSorting({ order: 'asc', orderBy: '' as TSortOption });
+    onChangeSorting({ order: 'asc', orderBy: '' });
   };
 
   return (

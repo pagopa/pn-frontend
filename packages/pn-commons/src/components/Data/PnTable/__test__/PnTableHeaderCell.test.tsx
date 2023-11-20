@@ -7,47 +7,38 @@ import PnTableHeaderCell from '../PnTableHeaderCell';
 describe('PnTableHeaderCell', () => {
   const mockFn = jest.fn();
 
-  const mockSort: Sort<string> = {
+  type Item = {
+    'mock-column-id': string;
+  };
+
+  const mockSort: Sort<Item> = {
     order: 'asc',
-    orderBy: 'name',
+    orderBy: 'mock-column-id',
   };
 
   it('render component', () => {
     const { container, queryByTestId } = render(
-      <table>
-        <thead>
-          <tr>
-            <PnTableHeaderCell sort={mockSort} columnId={'mock-column-id'} sortable={false}>
-              mock-column-label
-            </PnTableHeaderCell>
-          </tr>
-        </thead>
-      </table>
+      <PnTableHeaderCell columnId={'mock-column-id'}>mock-column-label</PnTableHeaderCell>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
     const sortBtn = queryByTestId('headerCell.sort.mock-column-id');
     expect(sortBtn).not.toBeInTheDocument();
   });
 
-  it('click cell event', () => {
+  it('sort', () => {
     const { getByTestId } = render(
-      <table>
-        <thead>
-          <tr>
-            <PnTableHeaderCell
-              sort={mockSort}
-              columnId={'mock-column-id'}
-              sortable={true}
-              handleClick={mockFn(mockSort.orderBy)}
-            >
-              mock-column-label
-            </PnTableHeaderCell>
-          </tr>
-        </thead>
-      </table>
+      <PnTableHeaderCell
+        sort={mockSort}
+        columnId={'mock-column-id'}
+        sortable={true}
+        handleClick={mockFn(mockSort.orderBy)}
+      >
+        mock-column-label
+      </PnTableHeaderCell>
     );
     const sortBtn = getByTestId('headerCell.sort.mock-column-id');
     fireEvent.click(sortBtn);
     expect(mockFn).toBeCalledTimes(1);
+    expect(mockFn).toBeCalledWith('mock-column-id');
   });
 });

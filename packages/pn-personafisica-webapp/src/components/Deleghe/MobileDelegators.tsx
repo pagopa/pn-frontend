@@ -6,13 +6,13 @@ import {
   CardElement,
   EmptyState,
   Item,
-  ItemsCard,
-  ItemsCardBody,
-  ItemsCardContent,
-  ItemsCardContents,
-  ItemsCardHeader,
-  ItemsCardHeaderTitle,
   KnownSentiment,
+  PnCard,
+  PnCardContent,
+  PnCardContentItem,
+  PnCardHeader,
+  PnCardHeaderTitle,
+  PnCardsList,
 } from '@pagopa-pn/pn-commons';
 
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
@@ -101,11 +101,11 @@ const MobileDelegators = () => {
         reloadAction={() => dispatch(getDelegators())}
       >
         {delegators.length > 0 ? (
-          <ItemsCard>
+          <PnCardsList>
             {cardData.map((data) => (
-              <ItemsCardBody key={data.id}>
-                <ItemsCardHeader>
-                  <ItemsCardHeaderTitle
+              <PnCard key={data.id}>
+                <PnCardHeader>
+                  <PnCardHeaderTitle
                     cardHeader={cardHeader}
                     item={data}
                     headerGridProps={{
@@ -113,17 +113,17 @@ const MobileDelegators = () => {
                       alignItems: { xs: 'flex-start', sm: 'center' },
                     }}
                   />
-                </ItemsCardHeader>
-                <ItemsCardContents>
+                </PnCardHeader>
+                <PnCardContent>
                   {cardBody.map((body) => (
-                    <ItemsCardContent key={body.id} body={body}>
+                    <PnCardContentItem key={body.id} body={body}>
                       {body.getLabel(data[body.id], data)}
-                    </ItemsCardContent>
+                    </PnCardContentItem>
                   ))}
-                </ItemsCardContents>
-              </ItemsCardBody>
+                </PnCardContent>
+              </PnCard>
             ))}
-          </ItemsCard>
+          </PnCardsList>
         ) : (
           <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('deleghe.no_delegators')}</EmptyState>
         )}

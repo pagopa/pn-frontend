@@ -6,7 +6,6 @@ import { Link, Typography } from '@mui/material';
 import {
   Column,
   EmptyState,
-  Item,
   KnownSentiment,
   Notification,
   NotificationStatus,
@@ -16,6 +15,7 @@ import {
   PnTableBodyRow,
   PnTableHeader,
   PnTableHeaderCell,
+  Row,
   Sort,
   StatusTooltip,
   formatDate,
@@ -23,7 +23,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
-import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
@@ -32,9 +31,9 @@ import FilterNotifications from './FilterNotifications';
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<NotificationColumn>;
+  sort?: Sort<Notification>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
+  onChangeSorting?: (s: Sort<Notification>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -110,7 +109,7 @@ const DesktopNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
 
-  const columns: Array<Column<NotificationColumn>> = [
+  const columns: Array<Column<Notification>> = [
     {
       id: 'sentAt',
       label: t('table.date'),
@@ -119,7 +118,7 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return formatDate(value);
       },
-      onClick(row: Item) {
+      onClick(row) {
         handleRowClick(row);
       },
     },
@@ -135,7 +134,7 @@ const DesktopNotifications = ({
           </Typography>
         ));
       },
-      onClick(row: Item) {
+      onClick(row) {
         handleRowClick(row);
       },
     },
@@ -146,7 +145,7 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Item) {
+      onClick(row) {
         handleRowClick(row);
       },
     },
@@ -157,7 +156,7 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item) {
+      onClick(row) {
         handleRowClick(row);
       },
     },
@@ -174,7 +173,7 @@ const DesktopNotifications = ({
           )
         );
       },
-      onClick(row: Item) {
+      onClick(row) {
         handleRowClick(row);
       },
     },
@@ -196,19 +195,19 @@ const DesktopNotifications = ({
           />
         );
       },
-      onClick(row: Item) {
+      onClick(row) {
         handleRowClick(row);
       },
     },
   ];
 
-  const rows: Array<Item> = notifications.map((n: Notification, i: number) => ({
+  const rows = notifications.map((n: Notification, i: number) => ({
     ...n,
     id: i.toString(),
   }));
 
   // Navigation handlers
-  const handleRowClick = (row: Item) => {
+  const handleRowClick = (row: Row<Notification>) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);

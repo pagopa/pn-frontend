@@ -20,7 +20,6 @@ import {
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
-import { CardAction, CardElement, CardSort } from './ItemsCard';
 import { MessageType } from './MessageType';
 import { EventsType } from './MixpanelEvents';
 import {
@@ -69,10 +68,11 @@ import {
 import { NotificationStatus } from './NotificationStatus';
 import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
 import { PaginationData } from './Pagination';
+import { CardAction, CardElement, CardSort } from './PnCard';
 import { Column, Row, Sort } from './PnTable';
 import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
-import { SmartTableData } from './SmartTable';
+import { SmartTableAction, SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
 
 export {
@@ -142,6 +142,7 @@ export type {
   ServerResponseError,
   ErrorMessage,
   SmartTableData,
+  SmartTableAction,
   PhysicalAddress,
   DowntimeDTO,
   AppStatusDTO,

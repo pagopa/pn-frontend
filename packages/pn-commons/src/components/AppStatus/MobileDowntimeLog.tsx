@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
 import { CardElement, Downtime, DowntimeLogPage } from '../../models';
-import ItemsCard from '../Data/ItemsCard';
-import ItemsCardBody from '../Data/ItemsCard/ItemsCardBody';
-import ItemsCardContent from '../Data/ItemsCard/ItemsCardContent';
-import ItemsCardContents from '../Data/ItemsCard/ItemsCardContents';
-import ItemsCardHeader from '../Data/ItemsCard/ItemsCardHeader';
-import ItemsCardHeaderTitle from '../Data/ItemsCard/ItemsCardHeaderTitle';
+import PnCard from '../Data/PnCard/PnCard';
+import PnCardContent from '../Data/PnCard/PnCardContent';
+import PnCardContentItem from '../Data/PnCard/PnCardContentItem';
+import PnCardHeader from '../Data/PnCard/PnCardHeader';
+import PnCardHeaderTitle from '../Data/PnCard/PnCardHeaderItem';
+import PnCardsList from '../Data/PnCardsList';
 import { DowntimeCell, useFieldSpecs } from './downtimeLog.utils';
 
 type Props = {
@@ -24,27 +24,26 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
     () => [
       {
         ...getField('startDate'),
-        notWrappedInTypography: true,
+        wrappedInTypography: false,
       },
       {
         ...getField('endDate'),
-        notWrappedInTypography: true,
+        wrappedInTypography: true,
       },
       getField('knownFunctionality'),
-      { ...getField('legalFactId'), notWrappedInTypography: true },
+      { ...getField('legalFactId'), wrappedInTypography: false },
     ],
     [getField]
   );
 
-  /* eslint-disable-next-line sonarjs/no-identical-functions */
   const rows = getRows(downtimeLog);
 
   return (
-    <ItemsCard testId="mobileTableDowntimeLog">
+    <PnCardsList testId="mobileTableDowntimeLog">
       {rows.map((row) => (
-        <ItemsCardBody key={row.id}>
-          <ItemsCardHeader>
-            <ItemsCardHeaderTitle
+        <PnCard key={row.id}>
+          <PnCardHeader>
+            <PnCardHeaderTitle
               key={cardHeader.id}
               gridProps={cardHeader.gridProps}
               position={cardHeader.position}
@@ -55,23 +54,27 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
                 inTwoLines
                 getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
               />
-            </ItemsCardHeaderTitle>
-          </ItemsCardHeader>
-          <ItemsCardContents>
+            </PnCardHeaderTitle>
+          </PnCardHeader>
+          <PnCardContent>
             {cardBody.map((body) => (
-              <ItemsCardContent key={body.id} body={body}>
+              <PnCardContentItem
+                key={body.id}
+                wrappedInTypography={body.wrappedInTypography}
+                label={body.label}
+              >
                 <DowntimeCell
                   row={row}
                   column={body}
-                  inTwoLines
+                  inTwoLines={false}
                   getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
                 />
-              </ItemsCardContent>
+              </PnCardContentItem>
             ))}
-          </ItemsCardContents>
-        </ItemsCardBody>
+          </PnCardContent>
+        </PnCard>
       ))}
-    </ItemsCard>
+    </PnCardsList>
   );
 };
 

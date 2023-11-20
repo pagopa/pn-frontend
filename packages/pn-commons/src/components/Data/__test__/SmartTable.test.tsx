@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Item, SmartTableAction, SmartTableData, Sort } from '../../../models';
+import { Row, SmartTableAction, SmartTableData, Sort } from '../../../models';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
 import EmptyState from '../../EmptyState';
 import SmartFilter from '../SmartFilter';
@@ -11,7 +11,13 @@ const handleColumnClick = jest.fn();
 const clickActionMockFn = jest.fn();
 const handleChangePagination = jest.fn();
 
-const smartCfg: Array<SmartTableData<'column-1' | 'column-2' | 'column-3'>> = [
+type Item = {
+  'column-1': string;
+  'column-2': string;
+  'column-3': string;
+};
+
+const smartCfg: Array<SmartTableData<Item>> = [
   {
     id: 'column-1',
     label: 'Column 1',
@@ -49,21 +55,21 @@ const smartCfg: Array<SmartTableData<'column-1' | 'column-2' | 'column-3'>> = [
   },
 ];
 
-const data: Array<Item> = [
+const data: Array<Row<Item>> = [
   { id: 'row-1', 'column-1': 'Row 1-1', 'column-2': 'Row 1-2', 'column-3': 'Row 1-3' },
   { id: 'row-2', 'column-1': 'Row 2-1', 'column-2': 'Row 2-2', 'column-3': 'Row 2-3' },
   { id: 'row-3', 'column-1': 'Row 3-1', 'column-2': 'Row 3-2', 'column-3': 'Row 3-3' },
 ];
 
-const sort: Sort<'column-1'> = {
+const sort: Sort<Item> = {
   orderBy: 'column-1',
   order: 'asc',
 };
 
-const smartActions: Array<SmartTableAction> = [
+const smartActions: Array<SmartTableAction<Item>> = [
   {
     id: 'action-1',
-    component: <div>Mocked action</div>,
+    component: <div data-testid="mockedAction">Mocked action</div>,
     onClick: clickActionMockFn,
     position: 'card',
   },
@@ -86,27 +92,25 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('table');
     expect(table).toBeInTheDocument();
-    const columns = getAllByTestId('table(notifications).header.cell');
+    const columns = getAllByTestId('table.header.cell');
     columns.forEach((column, i) => {
       expect(column).toHaveTextContent(smartCfg[i].label);
-      const sort = within(column).queryByTestId(
-        `table(notifications).header.cell.sort.${smartCfg[i].id}`
-      );
+      const sort = within(column).queryByTestId(`table.header.cell.sort.${smartCfg[i].id}`);
       if (smartCfg[i].tableConfiguration.sortable) {
         expect(sort).toBeInTheDocument();
       } else {
         expect(sort).not.toBeInTheDocument();
       }
     });
-    const rows = within(table).getAllByTestId('table(notifications).body.row');
+    const rows = within(table).getAllByTestId('table.body.row');
     expect(rows).toHaveLength(data.length);
     rows.forEach((row, index) => {
-      const cells = within(row).getAllByTestId('table(notifications).body.row.cell');
+      const cells = within(row).getAllByTestId('table.body.row.cell');
       const current = data[index];
       cells.forEach((cell, jindex) => {
-        expect(cell).toHaveTextContent(current[smartCfg[jindex].id] as string);
+        expect(cell).toHaveTextContent(current[smartCfg[jindex].id]);
         const button = within(cell).queryByRole('button');
         if (smartCfg[jindex].tableConfiguration.onClick) {
           expect(button).toBeInTheDocument();
@@ -193,18 +197,16 @@ describe('Smart Table Component', () => {
         actions={smartActions}
       />
     );
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('table');
     expect(table).toBeInTheDocument();
     const sortableColumn = smartCfg.find((cfg) => cfg.tableConfiguration.sortable);
-    const sortToggle = within(table).getByTestId(
-      `table(notifications).header.cell.sort.${sortableColumn!.id}`
-    );
+    const sortToggle = within(table).getByTestId(`table.header.cell.sort.${sortableColumn!.id}`);
     fireEvent.click(sortToggle);
     expect(handleSort).toBeCalledTimes(1);
     const clickableColumnIdx = smartCfg.findIndex((cfg) => cfg.tableConfiguration.onClick);
-    const rows = within(table).getAllByTestId('table(notifications).body.row');
+    const rows = within(table).getAllByTestId('table.body.row');
     // we can take the row we want
-    const cells = within(rows[0]).getAllByTestId('table(notifications).body.row.cell');
+    const cells = within(rows[0]).getAllByTestId('table.body.row.cell');
     fireEvent.click(cells[clickableColumnIdx]);
     expect(handleColumnClick).toBeCalledTimes(1);
   });
@@ -213,32 +215,30 @@ describe('Smart Table Component', () => {
     const { getByTestId } = render(
       <SmartTable conf={smartCfg} data={data} actions={smartActions} currentSort={sort} />
     );
-    let table = getByTestId('table(notifications)');
+    let table = getByTestId('table');
     expect(table).toBeInTheDocument();
     const sortableColumn = smartCfg.find((cfg) => cfg.tableConfiguration.sortable);
-    const sortToggle = within(table).getByTestId(
-      `table(notifications).header.cell.sort.${sortableColumn!.id}`
-    );
+    const sortToggle = within(table).getByTestId(`table.header.cell.sort.${sortableColumn!.id}`);
     fireEvent.click(sortToggle);
     // beacuse already ordered, nothing change
-    let rows = await waitFor(() => within(table).getAllByTestId('table(notifications).body.row'));
+    let rows = await waitFor(() => within(table).getAllByTestId('table.body.row'));
     rows.forEach((row, index) => {
-      const cells = within(row).getAllByTestId('table(notifications).body.row.cell');
+      const cells = within(row).getAllByTestId('table.body.row.cell');
       const current = data[index];
       cells.forEach((cell, jindex) => {
-        expect(cell).toHaveTextContent(current[smartCfg[jindex].id] as string);
+        expect(cell).toHaveTextContent(current[smartCfg[jindex].id]);
       });
     });
     // sort descendig
     fireEvent.click(sortToggle);
-    table = getByTestId('table(notifications)');
-    rows = await waitFor(() => within(table).getAllByTestId('table(notifications).body.row'));
+    table = getByTestId('table');
+    rows = await waitFor(() => within(table).getAllByTestId('table.body.row'));
     const sortedData = [...data].reverse();
     rows.forEach((row, index) => {
-      const cells = within(row).getAllByTestId('table(notifications).body.row.cell');
+      const cells = within(row).getAllByTestId('table.body.row.cell');
       const current = sortedData[index];
       cells.forEach((cell, jindex) => {
-        expect(cell).toHaveTextContent(current[smartCfg[jindex].id] as string);
+        expect(cell).toHaveTextContent(current[smartCfg[jindex].id]);
       });
     });
   });
@@ -247,12 +247,10 @@ describe('Smart Table Component', () => {
     const { getByTestId } = render(
       <SmartTable conf={smartCfg} data={data} actions={smartActions} />
     );
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('table');
     expect(table).toBeInTheDocument();
     const sortableColumn = smartCfg.find((cfg) => cfg.tableConfiguration.sortable);
-    const sortToggle = within(table).queryByTestId(
-      `table(notifications).header.cell.sort.${sortableColumn!.id}`
-    );
+    const sortToggle = within(table).queryByTestId(`table.header.cell.sort.${sortableColumn!.id}`);
     expect(sortToggle).not.toBeInTheDocument();
   });
 
@@ -267,7 +265,7 @@ describe('Smart Table Component', () => {
         emptyState={<EmptyState>empty-state-message</EmptyState>}
       />
     );
-    const table = queryByTestId('table(notifications)');
+    const table = queryByTestId('table');
     expect(table).not.toBeInTheDocument();
     const emptyState = getByTestId('emptyState');
     expect(emptyState).toBeInTheDocument();
@@ -289,10 +287,10 @@ describe('Smart Table Component', () => {
     expect(mobileCards).toBeInTheDocument();
     const cardHeaders = getAllByTestId('cardHeaderLeft');
     expect(cardHeaders).toHaveLength(data.length);
-    const cardActions = getAllByTestId('mobileCards.body.actions.action');
+    const cardActions = getAllByTestId('mockedAction');
     expect(cardActions).toHaveLength(data.length);
     cardHeaders.forEach((cardHeader, index) => {
-      expect(cardHeader).toHaveTextContent(data[index]['column-1'] as string);
+      expect(cardHeader).toHaveTextContent(data[index]['column-1']);
     });
     const action = cardActions[0];
     expect(action).toHaveTextContent('Mocked action');

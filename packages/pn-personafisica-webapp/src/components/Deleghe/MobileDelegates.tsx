@@ -10,12 +10,12 @@ import {
   CodeModal,
   EmptyState,
   Item,
-  ItemsCard,
-  ItemsCardBody,
-  ItemsCardContent,
-  ItemsCardContents,
-  ItemsCardHeader,
-  ItemsCardHeaderTitle,
+  PnCard,
+  PnCardContent,
+  PnCardContentItem,
+  PnCardHeader,
+  PnCardHeaderTitle,
+  PnCardsList,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
@@ -165,11 +165,11 @@ const MobileDelegates = () => {
           reloadAction={() => dispatch(getDelegates())}
         >
           {cardData.length ? (
-            <ItemsCard>
+            <PnCardsList>
               {cardData.map((data) => (
-                <ItemsCardBody key={data.id}>
-                  <ItemsCardHeader>
-                    <ItemsCardHeaderTitle
+                <PnCard key={data.id}>
+                  <PnCardHeader>
+                    <PnCardHeaderTitle
                       cardHeader={cardHeader}
                       item={data}
                       headerGridProps={{
@@ -177,17 +177,17 @@ const MobileDelegates = () => {
                         alignItems: { xs: 'flex-start', sm: 'center' },
                       }}
                     />
-                  </ItemsCardHeader>
-                  <ItemsCardContents>
+                  </PnCardHeader>
+                  <PnCardContent>
                     {cardBody.map((body) => (
-                      <ItemsCardContent key={body.id} body={body}>
+                      <PnCardContentItem key={body.id} body={body}>
                         {body.getLabel(data[body.id], data)}
-                      </ItemsCardContent>
+                      </PnCardContentItem>
                     ))}
-                  </ItemsCardContents>
-                </ItemsCardBody>
+                  </PnCardContent>
+                </PnCard>
               ))}
-            </ItemsCard>
+            </PnCardsList>
           ) : (
             <EmptyState>
               <Trans
