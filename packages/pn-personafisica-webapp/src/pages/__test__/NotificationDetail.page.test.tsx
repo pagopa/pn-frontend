@@ -90,7 +90,7 @@ describe('NotificationDetail Page', () => {
   });
 
   afterEach(() => {
-    result = undefined;
+    sessionStorage.removeItem('payments');
     jest.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
