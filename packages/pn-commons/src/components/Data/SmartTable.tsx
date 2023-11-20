@@ -14,7 +14,6 @@ import {
 } from '../../models';
 import { SmartTableAction } from '../../models/SmartTable';
 import { calculatePages, sortArray } from '../../utility';
-import { IEmptyStateProps } from '../EmptyState';
 import CustomPagination from '../Pagination/CustomPagination';
 import PnCard from './PnCard/PnCard';
 import PnCardActions from './PnCard/PnCardActions';
@@ -29,7 +28,7 @@ import PnTableBodyCell from './PnTable/PnTableBodyCell';
 import PnTableBodyRow from './PnTable/PnTableBodyRow';
 import PnTableHeader from './PnTable/PnTableHeader';
 import PnTableHeaderCell from './PnTable/PnTableHeaderCell';
-import SmartFilter, { ISmartFilterProps } from './SmartFilter';
+import SmartFilter from './SmartFilter';
 import SmartSort from './SmartSort';
 
 type Props<T> = {
@@ -60,12 +59,11 @@ type Props<T> = {
     onChangePage: (paginationData: PaginationData) => void;
   };
   /** EmptyState component */
-  emptyState?: React.ReactElement<IEmptyStateProps>;
+  emptyState?: React.ReactNode;
   /** SmartTable test id */
   testId?: string;
   /** Table title used in aria-label */
   ariaTitle?: string;
-  children?: React.ReactElement<ISmartFilterProps<string>>;
 };
 
 function getCardElements<T>(conf: Array<SmartTableData<T>>, actions?: Array<SmartTableAction<T>>) {
