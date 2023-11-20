@@ -19,7 +19,7 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
       ip: false,
       // names of properties/superproperties which should never
       // be sent with track() calls
-      property_blacklist: [],
+      property_blacklist: ["$current_url", "$initial_referrer", "$referrer"],
       debug: true,
       // function called after mixpanel has finished loading
       loaded(mixpanel: Mixpanel) {
