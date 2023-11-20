@@ -3,12 +3,12 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { buttonNakedInheritStyle } from '../../../utility';
 
-interface Props {
+type Props = {
   testId?: string;
   cellProps?: SxProps;
   onClick?: () => void;
   children?: React.ReactNode;
-}
+};
 
 const PnTableBodyCell: React.FC<Props> = ({ testId = 'cell', cellProps, children, onClick }) => (
   <TableCell

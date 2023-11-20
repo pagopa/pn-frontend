@@ -6,10 +6,10 @@ import PnCardActions from './PnCardActions';
 import PnCardContent from './PnCardContent';
 import PnCardHeader from './PnCardHeader';
 
-interface Props {
+type Props = {
   testId?: string;
   children: React.ReactNode;
-}
+};
 
 const PnCard: React.FC<Props> = ({ testId = 'itemCard', children }) => {
   const header = children

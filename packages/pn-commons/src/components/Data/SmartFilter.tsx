@@ -11,7 +11,7 @@ import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAc
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
 
-interface Props<FormValues> {
+type Props<FormValues> = {
   /** label to show for the filter button */
   filterLabel: string;
   /** label to show for the cancel button */
@@ -26,7 +26,7 @@ interface Props<FormValues> {
   formValues: FormValues;
   /** initial form values */
   initialValues: FormValues;
-}
+};
 
 const useStyles = makeStyles({
   helperTextFormat: {

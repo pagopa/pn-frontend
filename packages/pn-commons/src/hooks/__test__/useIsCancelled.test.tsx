@@ -5,9 +5,9 @@ import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../
 import { render } from '../../test-utils';
 import { useIsCancelled } from '../useIsCancelled';
 
-interface Props {
+type Props = {
   notification: NotificationDetail;
-}
+};
 
 const Component: React.FC<Props> = ({ notification }) => {
   const { cancellationInProgress, cancellationInTimeline, cancelled } = useIsCancelled({

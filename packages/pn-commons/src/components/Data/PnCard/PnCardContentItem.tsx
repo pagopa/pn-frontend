@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-interface Props {
+type Props = {
   children: React.ReactNode;
   label: React.ReactNode;
   wrappedInTypography?: boolean;
-}
+};
 
 const PnCardContentItem: React.FC<Props> = ({ children, label, wrappedInTypography = true }) => (
   <>

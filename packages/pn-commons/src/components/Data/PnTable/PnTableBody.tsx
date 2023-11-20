@@ -4,10 +4,10 @@ import { TableBody } from '@mui/material';
 
 import PnTableBodyRow from './PnTableBodyRow';
 
-interface Props {
+type Props = {
   testId?: string;
   children: React.ReactNode;
-}
+};
 
 const PnTableBody: React.FC<Props> = ({ testId, children }) => {
   const rows = children

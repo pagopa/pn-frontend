@@ -5,10 +5,10 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { downloadDocument, useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
-interface Props {
+type Props = {
   f24Item: F24PaymentDetails;
   timerF24: number;
   isPagoPaAttachment?: boolean;
@@ -19,7 +19,7 @@ interface Props {
     abort: (reason?: string) => void;
     unwrap: () => Promise<PaymentAttachment>;
   };
-}
+};
 
 const NotificationPaymentF24Item: React.FC<Props> = ({
   f24Item,

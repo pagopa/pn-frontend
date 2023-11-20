@@ -3,7 +3,7 @@ import { visuallyHidden } from '@mui/utils';
 
 import { Sort } from '../../../models';
 
-interface Props<T> {
+type Props<T> = {
   testId?: string;
   sort?: Sort<T>;
   cellProps?: TableCellProps;
@@ -11,7 +11,7 @@ interface Props<T> {
   columnId: keyof T;
   children: React.ReactNode;
   sortable?: boolean;
-}
+};
 
 const PnTableHeaderCell = <T,>({
   testId = 'headerCell',

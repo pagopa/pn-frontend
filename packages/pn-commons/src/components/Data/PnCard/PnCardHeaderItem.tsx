@@ -1,10 +1,10 @@
 import { Grid, GridProps } from '@mui/material';
 
-interface Props {
+type Props = {
   gridProps?: GridProps;
   children: React.ReactNode;
   position?: string;
-}
+};
 
 const PnCardHeaderItem: React.FC<Props> = ({ children, gridProps, position = 'left' }) => (
   <Grid

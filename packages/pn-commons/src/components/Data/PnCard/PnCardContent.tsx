@@ -4,10 +4,10 @@ import { Box, CardContent } from '@mui/material';
 
 import PnCardContentItem from './PnCardContentItem';
 
-interface Props {
+type Props = {
   testId?: string;
   children: React.ReactNode;
-}
+};
 
 const PnCardContent: React.FC<Props> = ({ testId, children }) => {
   const contentItems = children

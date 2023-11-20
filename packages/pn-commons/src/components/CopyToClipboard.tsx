@@ -6,7 +6,7 @@ import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
 
-interface Props {
+type Props = {
   /** callback used to retrieve the text to be copied */
   getValue: () => string;
   /** an optional text to be displayed near the "copy to clipboard" icon */
@@ -15,7 +15,7 @@ interface Props {
   tooltipBefore?: string;
   disabled?: boolean;
   children?: React.ReactNode;
-}
+};
 
 const CopyToClipboard: React.FC<Props> = ({
   getValue,

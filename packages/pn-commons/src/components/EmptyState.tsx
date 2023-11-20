@@ -3,9 +3,9 @@ import { Box, Typography } from '@mui/material';
 
 import { KnownSentiment, iconForKnownSentiment } from '../models/EmptyState';
 
-interface Props {
+type Props = {
   sentimentIcon?: KnownSentiment | SvgIconComponent;
-}
+};
 
 const EmptyState: React.FC<Props> = ({ sentimentIcon = KnownSentiment.DISSATISFIED, children }) => {
   const FinalIcon =

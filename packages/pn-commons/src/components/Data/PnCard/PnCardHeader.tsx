@@ -4,11 +4,11 @@ import { CardHeader, Grid, GridProps } from '@mui/material';
 
 import PnCardHeaderItem from './PnCardHeaderItem';
 
-interface Props {
+type Props = {
   testId?: string;
   headerGridProps?: GridProps;
   children: React.ReactNode;
-}
+};
 const PnCardHeader: React.FC<Props> = ({ testId, children, headerGridProps }) => {
   const cells = children
     ? Children.toArray(children).filter((child) => (child as JSX.Element).type === PnCardHeaderItem)
