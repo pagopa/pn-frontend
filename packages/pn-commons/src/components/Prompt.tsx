@@ -1,17 +1,13 @@
 import { ReactNode, useEffect } from 'react';
 
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
 import { usePrompt } from '../hooks/usePrompt';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import PnDialog from './PnDialog/PnDialog';
+import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 const Prompt = ({
   title,
@@ -45,7 +41,7 @@ const Prompt = ({
 
   return (
     <>
-      <Dialog
+      <PnDialog
         onClose={cancelNavigation}
         open={showPrompt}
         maxWidth={'xs'}
@@ -55,10 +51,10 @@ const Prompt = ({
         <DialogTitle sx={{ p: isMobile ? 3 : 4, pb: 2, textAlign: textPosition }}>
           {title}
         </DialogTitle>
-        <DialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
+        <PnDialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
           <DialogContentText>{message}</DialogContentText>
-        </DialogContent>
-        <DialogActions
+        </PnDialogContent>
+        <PnDialogActions
           disableSpacing={isMobile}
           sx={{
             textAlign: textPosition,
@@ -81,8 +77,8 @@ const Prompt = ({
           >
             {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
           </Button>
-        </DialogActions>
-      </Dialog>
+        </PnDialogActions>
+      </PnDialog>
       {children}
     </>
   );

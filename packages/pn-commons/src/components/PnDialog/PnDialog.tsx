@@ -17,8 +17,8 @@ const PnDialog: React.FC<DialogProps> = (props) => {
 
   const enrichedTitle = isValidElement(title)
     ? cloneElement(title, {
+        sx: { textAlign: textPosition, p: isMobile ? 3 : 4, pb: 2, ...title.props.sx },
         ...title.props,
-        sx: { ...title.props.sx, textAlign: textPosition, p: isMobile ? 3 : 4, pb: 2 },
       })
     : title;
 

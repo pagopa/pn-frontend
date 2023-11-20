@@ -1,8 +1,10 @@
 import { MouseEventHandler, ReactNode, useEffect } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
+import PnDialog from './PnDialog/PnDialog';
+import PnDialogActions from './PnDialog/PnDialogActions';
 
 type Props = {
   open: boolean;
@@ -60,7 +62,7 @@ const SessionModal = ({
   }, []);
 
   return (
-    <Dialog
+    <PnDialog
       open={open}
       onClose={handleClose}
       aria-labelledby="session-dialog-title"
@@ -70,7 +72,7 @@ const SessionModal = ({
       <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
         {message}
       </DialogContentText>
-      <DialogActions
+      <PnDialogActions
         sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}
       >
         {onConfirm && (
@@ -78,8 +80,8 @@ const SessionModal = ({
             {onConfirmLabel}
           </Button>
         )}
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 

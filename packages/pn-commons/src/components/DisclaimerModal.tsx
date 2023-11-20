@@ -1,18 +1,12 @@
 import { useMemo, useState } from 'react';
 
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-} from '@mui/material';
+import { Box, Button, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import PnDialog from './PnDialog/PnDialog';
+import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   onConfirm: () => void;
@@ -41,9 +35,9 @@ const DisclaimerModal = ({
   };
 
   return (
-    <Dialog open={true} data-testid="disclaimerDialog">
+    <PnDialog open={true} data-testid="disclaimerDialog">
       {title && <DialogTitle sx={{ p: 4, pb: 2 }}>{title}</DialogTitle>}
-      <DialogContent sx={{ p: 4 }}>
+      <PnDialogContent sx={{ p: 4 }}>
         {content && <Box>{content}</Box>}
         {checkboxLabel && (
           <Box sx={{ mt: 2, ml: 0.5 }}>
@@ -59,8 +53,8 @@ const DisclaimerModal = ({
             />
           </Box>
         )}
-      </DialogContent>
-      <DialogActions
+      </PnDialogContent>
+      <PnDialogActions
         disableSpacing={isMobile}
         sx={{
           textAlign: textPosition,
@@ -87,8 +81,8 @@ const DisclaimerModal = ({
         >
           {confirmLabel}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 

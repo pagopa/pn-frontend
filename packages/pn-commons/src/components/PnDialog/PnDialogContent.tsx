@@ -1,8 +1,9 @@
 import { Children, cloneElement, isValidElement, useMemo } from 'react';
+
 import { DialogContent, DialogContentProps, DialogContentText } from '@mui/material';
 
-import { ReactComponent } from '../../models/PnDialog';
 import { useIsMobile } from '../../hooks';
+import { ReactComponent } from '../../models/PnDialog';
 
 const PnDialogContent: React.FC<DialogContentProps> = (props) => {
   const isMobile = useIsMobile();
@@ -18,16 +19,16 @@ const PnDialogContent: React.FC<DialogContentProps> = (props) => {
 
   const enrichedSubTitle = isValidElement(subtitle)
     ? cloneElement(subtitle, {
+        sx: { textAlign: textPosition, ...subtitle.props.sx },
         ...subtitle.props,
-        sx: { ...subtitle.props.sx, textAlign: textPosition },
       })
     : subtitle;
 
   return (
     <DialogContent
-      {...props}
       data-testid="dialog-content"
-      sx={{ ...props.sx, p: isMobile ? 3 : 4, textAlign: textPosition }}
+      sx={{ p: isMobile ? 3 : 4, textAlign: textPosition, ...props.sx }}
+      {...props}
     >
       {subtitle && enrichedSubTitle}
       {othersChildren}

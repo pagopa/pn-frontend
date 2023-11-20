@@ -5,9 +5,6 @@ import {
   AlertTitle,
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
@@ -17,6 +14,9 @@ import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import PnDialog from '../PnDialog/PnDialog';
+import PnDialogActions from '../PnDialog/PnDialogActions';
+import PnDialogContent from '../PnDialog/PnDialogContent';
 import CodeInput from './CodeInput';
 
 type Props = {
@@ -85,7 +85,7 @@ const CodeModal = memo(
     };
 
     return (
-      <Dialog
+      <PnDialog
         open={open}
         // onClose={handleClose}
         aria-labelledby="dialog-title"
@@ -96,7 +96,7 @@ const CodeModal = memo(
         <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
           {title}
         </DialogTitle>
-        <DialogContent sx={{ px: 4 }}>
+        <PnDialogContent sx={{ px: 4 }}>
           <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
             {subtitle}
           </DialogContentText>
@@ -138,8 +138,8 @@ const CodeModal = memo(
               {errorMessage}
             </Alert>
           )}
-        </DialogContent>
-        <DialogActions
+        </PnDialogContent>
+        <PnDialogActions
           disableSpacing={isMobile}
           sx={{
             textAlign: textPosition,
@@ -172,8 +172,8 @@ const CodeModal = memo(
               {confirmLabel}
             </Button>
           )}
-        </DialogActions>
-      </Dialog>
+        </PnDialogActions>
+      </PnDialog>
     );
   }
 );

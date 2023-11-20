@@ -10,17 +10,8 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-  Typography,
-} from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { Button, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
+import { PnDialog, PnDialogActions, PnDialogContent, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { AsyncThunk } from '@reduxjs/toolkit';
 
@@ -96,7 +87,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
     </>
   );
   return (
-    <Dialog
+    <PnDialog
       open={showModal}
       onClose={handleModalClose}
       aria-labelledby="dialog-title"
@@ -105,10 +96,10 @@ const DeleteDialog: React.FC<DialogProps> = ({
       <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
         {removeModalTitle}
       </DialogTitle>
-      <DialogContent sx={{ px: 4 }}>
+      <PnDialogContent sx={{ px: 4 }}>
         <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
-      </DialogContent>
-      <DialogActions
+      </PnDialogContent>
+      <PnDialogActions
         disableSpacing={isMobile}
         sx={{
           textAlign: textPosition,
@@ -118,8 +109,8 @@ const DeleteDialog: React.FC<DialogProps> = ({
         }}
       >
         {deleteModalActions}
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 
