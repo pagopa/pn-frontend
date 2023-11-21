@@ -73,18 +73,24 @@ const DeleteDialog: React.FC<DialogProps> = ({
       {t('button.close')}
     </Button>
   ) : (
-    <>
+    [
       <Button
+        key="cancel"
         onClick={handleModalClose}
         variant="outlined"
         sx={isMobile ? { width: '100%', mt: 2 } : null}
       >
         {t('button.annulla')}
-      </Button>
-      <Button onClick={confirmHandler} variant="contained" sx={{ width: isMobile ? '100%' : null }}>
+      </Button>,
+      <Button
+        key="confirm"
+        onClick={confirmHandler}
+        variant="contained"
+        sx={{ width: isMobile ? '100%' : null }}
+      >
         {t('button.conferma')}
-      </Button>
-    </>
+      </Button>,
+    ]
   );
   return (
     <PnDialog

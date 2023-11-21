@@ -160,8 +160,7 @@ describe('DigitalContactElem Component', () => {
     });
   });
 
-  // TO-FIX: Why it doesn't render the dialog-actions buttons?
-  it.skip('remove contact', async () => {
+  it('remove contact', async () => {
     jest.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
     // render component
     await act(async () => {
