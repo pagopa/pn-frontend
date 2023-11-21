@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.1...v2.2.2-RC.0) (2023-11-21)
+
+
+### Bug Fixes
+
+* **PN-8735:** Fix overflow of f24 items on notification payment box of PA ([#1060](https://github.com/pagopa/pn-frontend/issues/1060)) ([752f47d](https://github.com/pagopa/pn-frontend/commit/752f47ddaed29919f0da4d90d1f978dcd26dd74f))
+
+
+
+
+
 ## [2.2.1](https://github.com/pagopa/pn-frontend/compare/v2.1.4...v2.2.1) (2023-11-21)
 
 
