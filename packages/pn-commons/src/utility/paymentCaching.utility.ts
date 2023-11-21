@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { PaymentCache, PaymentStatus, PaymentsCachePage, PaymentsData } from '../models';
 
 export const PAYMENT_CACHE_KEY = 'payments';
@@ -38,10 +40,14 @@ export const setPaymentsInCache = (payments: PaymentsData, page: number): void =
     const paymentsPage = newPaymentCache.find((p) => p.page === page);
 
     if (paymentsPage) {
+      console.log(payments.pagoPaF24, paymentsPage.payments.pagoPaF24);
       // eslint-disable-next-line functional/immutable-data
       paymentsPage.payments = {
-        ...paymentsPage.payments,
-        pagoPaF24: [...paymentsPage.payments.pagoPaF24, ...payments.pagoPaF24],
+        pagoPaF24: _.uniqBy(
+          [...paymentsPage.payments.pagoPaF24, ...payments.pagoPaF24],
+          (payment) => payment.pagoPa?.noticeCode
+        ),
+        f24Only: [...paymentsPage.payments.f24Only, ...payments.f24Only],
       };
     } else {
       // eslint-disable-next-line functional/immutable-data
