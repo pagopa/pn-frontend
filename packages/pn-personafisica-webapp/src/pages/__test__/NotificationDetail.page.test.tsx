@@ -8,6 +8,7 @@ import {
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationStatus,
+  PaymentCache,
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
@@ -654,11 +655,11 @@ describe('NotificationDetail Page', () => {
 
     const date = new Date();
     const isoDate = new Date(date.setMinutes(date.getMinutes() - 3)).toISOString();
-    const payment2 = {
+    const cacheWithOldDate = {
       ...cachedPayments,
       timestamp: isoDate,
     };
-    sessionStorage.setItem('payments', JSON.stringify(payment2));
+    sessionStorage.setItem('payments', JSON.stringify(cacheWithOldDate));
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -672,5 +673,37 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
   });
 
-  it('should fetch only currentPayment if is present in cache', async () => {});
+  it('should fetch only currentPayment if is present in cache', async () => {
+    const cacheWithCurrentPayment = {
+      ...cachedPayments,
+      currentPayment: {
+        creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId,
+        noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode,
+      },
+    } as PaymentCache;
+    sessionStorage.setItem('payments', JSON.stringify(cacheWithCurrentPayment));
+
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), [
+        {
+          creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId,
+          noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode,
+        },
+      ])
+      .reply(200, paymentInfo);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
+    const paymentCache = getPaymentCache();
+    expect(paymentCache?.currentPayment).toBeUndefined();
+  });
 });
