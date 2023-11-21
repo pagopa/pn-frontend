@@ -12,6 +12,7 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaymentCache,
   PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
@@ -645,4 +646,26 @@ export const getTimelineElem = (
 export const paymentsData: PaymentsData = {
   pagoPaF24: getPagoPaF24Payments(payments, 2),
   f24Only: getF24Payments(payments, 2),
+};
+
+export const cachedPayments: PaymentCache = {
+  iun: notificationDTO.iun,
+  timestamp: new Date().toISOString(),
+  currentPaymentPage: 0,
+  paymentsPage: [
+    {
+      page: 0,
+      payments: {
+        ...paymentsData,
+        pagoPaF24: paymentsData.pagoPaF24.slice(0, 5),
+      },
+    },
+    {
+      page: 1,
+      payments: {
+        ...paymentsData,
+        pagoPaF24: paymentsData.pagoPaF24.slice(5, 10),
+      },
+    },
+  ],
 };

@@ -4,6 +4,7 @@ import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
+import { getPaymentCache } from '../../../utility';
 import {
   getF24Payments,
   getPagoPaF24Payments,
@@ -61,6 +62,7 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('select and unselect payment', async () => {
+    let paymentCache = getPaymentCache();
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -88,14 +90,22 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(radioButton!);
     expect(downloadPagoPANotice).not.toBeDisabled();
     expect(payButton).not.toBeDisabled();
+    paymentCache = getPaymentCache();
+    expect(paymentCache?.currentPayment).not.toBeNull();
+    expect(paymentCache?.currentPayment).toEqual({
+      noticeCode: paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
+      creditorTaxId: paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
+    });
     // check f24
     const f24Download = getByTestId('f24-download');
     expect(f24Download).toBeInTheDocument();
     // unselect payment
     fireEvent.click(radioButton!);
+    paymentCache = getPaymentCache();
     expect(payButton).toBeDisabled();
     expect(downloadPagoPANotice).toBeDisabled();
     expect(f24Download).not.toBeInTheDocument();
+    expect(paymentCache?.currentPayment).toBeUndefined();
   });
 
   it('should dispatch action on pay button click', async () => {

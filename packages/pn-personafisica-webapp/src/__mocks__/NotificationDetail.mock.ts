@@ -11,6 +11,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
   PaidDetails,
+  PaymentCache,
   PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
@@ -564,3 +565,25 @@ export const cancelledNotificationToFe = parseNotificationDetailForRecipient(
   recipients[2].taxId,
   []
 );
+
+export const cachedPayments: PaymentCache = {
+  iun: notificationDTO.iun,
+  timestamp: new Date().toISOString(),
+  currentPaymentPage: 0,
+  paymentsPage: [
+    {
+      page: 0,
+      payments: {
+        ...paymentsData,
+        pagoPaF24: paymentsData.pagoPaF24.slice(0, 5),
+      },
+    },
+    {
+      page: 1,
+      payments: {
+        ...paymentsData,
+        pagoPaF24: paymentsData.pagoPaF24.slice(5, 10),
+      },
+    },
+  ],
+};

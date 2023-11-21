@@ -1,29 +1,13 @@
-import { PaymentStatus, PaymentsData } from '../models';
+import { PaymentCache, PaymentStatus, PaymentsCachePage, PaymentsData } from '../models';
 
 export const PAYMENT_CACHE_KEY = 'payments';
-
-export type PaymentCache = {
-  iun: string;
-  timestamp: string;
-  currentPayment?: {
-    noticeCode: string;
-    creditorTaxId: string;
-  };
-  currentPaymentPage?: number;
-  paymentsPage: Array<PaymentsPage>;
-};
-
-export type PaymentsPage = {
-  page: number;
-  payments: PaymentsData;
-};
 
 export const getPaymentCache = (): PaymentCache | null => {
   const paymentCache = sessionStorage.getItem(PAYMENT_CACHE_KEY);
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
 };
 
-export const getPaymentsFromCache = (): Array<PaymentsPage> | null => {
+export const getPaymentsFromCache = (): Array<PaymentsCachePage> | null => {
   const paymentCache = getPaymentCache();
 
   if (paymentCache?.paymentsPage) {

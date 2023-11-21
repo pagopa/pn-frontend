@@ -71,6 +71,7 @@ import {
 import { NotificationStatus } from './NotificationStatus';
 import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
 import { PaginationData } from './Pagination';
+import { PaymentCache, PaymentsCachePage } from './PaymentCache';
 import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
@@ -163,4 +164,6 @@ export type {
   Institution,
   PartyEntityWithUrl,
   Product,
+  PaymentCache,
+  PaymentsCachePage,
 };

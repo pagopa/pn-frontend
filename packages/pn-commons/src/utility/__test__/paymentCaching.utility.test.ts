@@ -1,8 +1,5 @@
-import { paymentsData } from '../../__mocks__/NotificationDetail.mock';
-import { PaymentsData } from '../../models';
+import { cachedPayments, paymentsData } from '../../__mocks__/NotificationDetail.mock';
 import {
-  PaymentCache,
-  PaymentsPage,
   checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
   clearPaymentCache,
@@ -11,33 +8,11 @@ import {
   getPaymentsFromCache,
   isTimestampWithin2Minutes,
   setPaymentCache,
-  setPaymentsInCache,
 } from '../paymentCaching.utility';
 
 describe('Payment caching utility', () => {
-  const paymentItem: PaymentCache = {
-    iun: 'ARJP-NLZG-WETM-202311-J-1',
-    timestamp: '2023-11-17T14:13:53.165Z',
-    paymentsPage: [
-      {
-        page: 0,
-        payments: {
-          ...paymentsData,
-          pagoPaF24: paymentsData.pagoPaF24.slice(0, 5),
-        },
-      },
-      {
-        page: 1,
-        payments: {
-          ...paymentsData,
-          pagoPaF24: paymentsData.pagoPaF24.slice(5, 10),
-        },
-      },
-    ],
-  };
-
   beforeEach(() => {
-    sessionStorage.setItem('payments', JSON.stringify(paymentItem));
+    sessionStorage.setItem('payments', JSON.stringify(cachedPayments));
   });
 
   afterEach(() => {
@@ -46,17 +21,17 @@ describe('Payment caching utility', () => {
 
   it('should return the correct payment item', () => {
     const paymentCache = getPaymentCache();
-    expect(paymentCache).toEqual(paymentItem);
+    expect(paymentCache).toEqual(cachedPayments);
   });
 
   it('getPaymentsFromCache should return paymentsPage sorted by page', () => {
     const paymentsFromCache = getPaymentsFromCache();
-    expect(paymentsFromCache).toEqual(paymentItem.paymentsPage);
+    expect(paymentsFromCache).toEqual(cachedPayments.paymentsPage);
   });
 
   it('setPaymentCache should update the item in sessionStorage', () => {
     const newPaymentItem = {
-      ...paymentItem,
+      ...cachedPayments,
       iun: 'ARJP-NLZG-WETM-202311-J-2',
     };
     setPaymentCache(newPaymentItem);
@@ -66,9 +41,9 @@ describe('Payment caching utility', () => {
 
   it('should set a new elements in the paymentsPage array', () => {
     const newPaymentItem = {
-      ...paymentItem,
+      ...cachedPayments,
       paymentsPage: [
-        ...paymentItem.paymentsPage,
+        ...cachedPayments.paymentsPage,
         {
           page: 2,
           payments: {
@@ -85,12 +60,12 @@ describe('Payment caching utility', () => {
 
   it('should delete a property in the payment cache', () => {
     const paymentCache = getPaymentCache();
-    expect(paymentCache).toEqual(paymentItem);
+    expect(paymentCache).toEqual(cachedPayments);
 
     deletePropertiesInPaymentCache(['iun']);
 
     const result = {
-      ...paymentItem,
+      ...cachedPayments,
       iun: undefined,
     };
 
@@ -120,21 +95,21 @@ describe('Payment caching utility', () => {
 
   it('checkIunAndTimestamp should return false if iun is different from cache', () => {
     const iun = 'ARJP-NLZG-WETM-202311-J-2';
-    const timestamp = paymentItem.timestamp;
+    const timestamp = cachedPayments.timestamp;
     const result = checkIunAndTimestamp(iun, timestamp);
     expect(result).toEqual(false);
   });
 
   it('checkIunAndTimestamp should return false if timestamp is not within 2 minutes', () => {
-    const iun = paymentItem.iun;
+    const iun = cachedPayments.iun;
     const timestamp = '2023-11-17T14:50:53.165Z';
     const result = checkIunAndTimestamp(iun, timestamp);
     expect(result).toEqual(false);
   });
 
   it('checkIunAndTimestamp should return true if iun is equal to cache and timestamp is within 2 minutes', () => {
-    const iun = paymentItem.iun;
-    const timestamp = paymentItem.timestamp;
+    const iun = cachedPayments.iun;
+    const timestamp = cachedPayments.timestamp;
     const result = checkIunAndTimestamp(iun, timestamp);
     expect(result).toEqual(true);
   });
