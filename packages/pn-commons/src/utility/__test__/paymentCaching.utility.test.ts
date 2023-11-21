@@ -1,4 +1,5 @@
 import { cachedPayments, paymentsData } from '../../__mocks__/NotificationDetail.mock';
+import { PaymentsData } from '../../models';
 import {
   checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
@@ -8,6 +9,7 @@ import {
   getPaymentsFromCache,
   isTimestampWithin2Minutes,
   setPaymentCache,
+  setPaymentsInCache,
 } from '../paymentCaching.utility';
 
 describe('Payment caching utility', () => {
@@ -132,9 +134,93 @@ describe('Payment caching utility', () => {
         creditorTaxId: '123456789',
       },
     ];
-
     const result = checkIfPaymentsIsAlreadyInCache(paymentInfoRequest);
-
     expect(result).toEqual(false);
   });
+
+  it('setPaymentsCache should set the payments if cache is empty', () => {
+    sessionStorage.removeItem('payments');
+    const page = 1;
+    const payments = paymentsData;
+
+    setPaymentsInCache(payments, page);
+
+    const paymentCache = getPaymentCache();
+
+    expect(paymentCache).toEqual({
+      paymentsPage: [
+        {
+          page,
+          payments
+        },
+      ],
+    });
+  });
+
+  it('setPaymentsCache should create a new page if page is not in cache', () => {
+    const page = 2;
+    const payments = {
+      pagoPaF24: [
+        {
+          pagoPa: {
+            noticeCode: '123456789',
+            creditorTaxId: '123456789',
+          },
+        }
+      ]
+    } as PaymentsData;
+    setPaymentsInCache(payments, page);
+    const paymentCache = getPaymentCache();
+
+    expect(paymentCache).toEqual({
+      ...cachedPayments,
+      paymentsPage: [
+        ...cachedPayments.paymentsPage,
+        {
+          page,
+          payments
+        },
+      ],
+    });
+  });
+
+  it.only('setPaymentsCache should update the page if page is already in cache', () => {
+    const page = 1;
+    const payments = {
+      ...cachedPayments.paymentsPage[page].payments,
+      pagoPaF24: [
+        {
+          pagoPa: {
+            noticeCode: '123456789',
+            creditorTaxId: '123456789',
+          },
+        }
+      ]
+    } as PaymentsData;
+
+    setPaymentsInCache(payments, page);
+    const paymentCache = getPaymentCache();
+    console.log('PRIMA:', JSON.stringify(paymentCache, null, 2));
+    console.log('EQUALS:', JSON.stringify({
+      ...cachedPayments,
+      paymentsPage: [
+        ...cachedPayments.paymentsPage,
+        {
+          page,
+          payments
+        },
+      ],
+    }, null, 2));
+
+    expect(paymentCache).toEqual({
+      ...cachedPayments,
+      paymentsPage: [
+        ...cachedPayments.paymentsPage,
+        {
+          page,
+          payments
+        },
+      ],
+    });
+  })
 });
