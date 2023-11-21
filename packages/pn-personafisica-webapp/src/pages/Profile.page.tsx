@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,17 +19,24 @@ import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['profilo']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
+  useEffect(() => {
+    trackEventByType(TrackEventType.SEND_PROFILE);
+  }, []);
+
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
 
   const handleRedirectToContactsPage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'profilo' });
     navigate(RECAPITI);
   };
 

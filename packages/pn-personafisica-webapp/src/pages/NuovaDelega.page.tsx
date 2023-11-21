@@ -49,6 +49,8 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { generateVCode } from '../utility/delegation.utility';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
@@ -63,8 +65,31 @@ const NuovaDelega = () => {
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
+  type CreatedDelegation = {
+    person_type: string;
+    mandate_type: string;
+  };
+  const [createdDelegation, setCreatedDelegation] = useState<CreatedDelegation | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (createdDelegation && created) {
+      trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_SUCCESS, createdDelegation);
+    }
+  }, [createdDelegation, created]);
 
   const handleSubmit = (values: NewDelegationFormProps) => {
+    setCreatedDelegation({
+      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
+      mandate_type: values.selectTuttiEntiOrSelezionati,
+    });
+
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION, {
+      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
+      mandate_type:
+        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+    });
     void dispatch(createDelegation(values));
   };
   const handleDelegationsClick = () => {
@@ -158,6 +183,10 @@ const NuovaDelega = () => {
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_DATA_INPUT);
+  }, []);
+
+  useEffect(() => {
     if (loadAllEntities) {
       void dispatch(getAllEntities({}));
     }
@@ -183,9 +212,15 @@ const NuovaDelega = () => {
 
   const getOptionLabel = (option: Party) => option.name || '';
 
+  const handleGoBackAction = () => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_BACK);
+    navigate(routes.DELEGHE);
+  };
+
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
+        goBackAction={handleGoBackAction}
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>

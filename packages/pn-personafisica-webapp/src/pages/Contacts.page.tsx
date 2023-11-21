@@ -12,7 +12,7 @@ import InsertLegalContact from '../components/Contacts/InsertLegalContact';
 import LegalContactsList from '../components/Contacts/LegalContactsList';
 import SpecialContacts from '../components/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { CourtesyChannelType, DigitalAddress } from '../models/contacts';
+import { CourtesyChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE } from '../navigation/externalRoutes.const';
 import { PROFILO } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
@@ -20,6 +20,8 @@ import { resetState } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Contacts = () => {
   const navigate = useNavigate();
@@ -47,7 +49,27 @@ const Contacts = () => {
     return () => void dispatch(resetState());
   }, []);
 
+  useEffect(() => {
+    if (pageReady) {
+      trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, {
+        PEC_exists: digitalAddresses.legal.length > 0,
+        email_exists:
+          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
+            .length > 0,
+        telephone_exists:
+          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS)
+            .length > 0,
+        appIO_status: contactIO
+          ? contactIO.value === IOAllowedValues.ENABLED
+            ? 'activated'
+            : 'deactivated'
+          : 'nd',
+      });
+    }
+  }, [pageReady]);
+
   const handleRedirectToProfilePage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_PROFILE, { source: 'tuoi_recapiti' });
     navigate(PROFILO);
   };
 

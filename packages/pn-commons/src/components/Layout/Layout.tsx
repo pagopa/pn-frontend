@@ -41,6 +41,8 @@ type Props = {
   /** Track product switch action */
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
+  eventTrackingCallbackRefreshPage?: () => void;
+  /** event on refresh page click button */
   onAssistanceClick?: () => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
@@ -68,6 +70,7 @@ export default function Layout({
   eventTrackingCallbackAppCrash,
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
+  eventTrackingCallbackRefreshPage,
   onAssistanceClick,
   isLogged,
   showHeader = true,
@@ -78,6 +81,7 @@ export default function Layout({
     <ErrorBoundary
       sx={{ height: 'calc(100vh - 5px)' }}
       eventTrackingCallback={eventTrackingCallbackAppCrash}
+      eventTrackingCallbackRefreshPage={eventTrackingCallbackRefreshPage}
     >
       {/* calc fixes the layout discrepancy given by the version box */}
       <Stack

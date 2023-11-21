@@ -5,9 +5,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Dialog, Typography } from '@mui/material';
 
 import { getConfiguration } from '../../services/configuration.service';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
-const handleError = (queryParams: string) => {
+const handleError = (queryParams: string, errorMessage: string) => {
   if (process.env.NODE_ENV !== 'test') {
+    trackEventByType(TrackEventType.SEND_LOGIN_FAILURE, { reason: errorMessage });
     console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
   }
 };
@@ -64,7 +67,7 @@ const LoginError = () => {
 
   // log error
   useEffect(() => {
-    handleError(window.location.search);
+    handleError(window.location.search, errorCode!);
   }, []);
 
   useEffect(() => {

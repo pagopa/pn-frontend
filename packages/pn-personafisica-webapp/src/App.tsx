@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -24,6 +24,7 @@ import {
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
+import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
 import { goToLoginPortal } from './navigation/navigation.utility';
@@ -37,6 +38,8 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
+import { TrackEventType } from './utility/events';
+import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
 
 // TODO: get products list from be (?)
@@ -116,6 +119,7 @@ const ActualApp = () => {
       id: 'profile',
       label: t('menu.profilo'),
       onClick: () => {
+        trackEventByType(TrackEventType.SEND_VIEW_PROFILE, { source: 'user_menu' });
         navigate(routes.PROFILO);
       },
       icon: <SettingsIcon fontSize="small" color="inherit" />,
@@ -236,6 +240,47 @@ const ActualApp = () => {
     goToLoginPortal();
   };
 
+  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
+    trackEventByType(TrackEventType.SEND_GENERIC_ERROR, {
+      reason: { error: e, errorInfo: eInfo },
+    });
+  };
+
+  const handleEventTrackingCallbackRefreshPage = () => {
+    enum RefreshPageType {
+      LISTA_NOTIFICHE = 'LISTA_NOTIFICHE',
+      DETTAGLIO_NOTIFICA = 'DETTAGLIO_NOTIFICA',
+      LISTA_DELEGHE = 'LISTA_DELEGHE',
+      STATUS_PAGE = 'STATUS_PAGE',
+      RECAPITI = 'RECAPITI',
+    }
+
+    // eslint-disable-next-line functional/no-let
+    let pageType: RefreshPageType | undefined;
+    if (window.location.href.indexOf('/dettaglio') !== -1) {
+      pageType = RefreshPageType.DETTAGLIO_NOTIFICA;
+    } else if (window.location.href.indexOf('/notifiche') !== -1) {
+      pageType = RefreshPageType.LISTA_NOTIFICHE;
+    } else if (window.location.href.indexOf('/deleghe') !== -1) {
+      pageType = RefreshPageType.LISTA_DELEGHE;
+    } else if (window.location.href.indexOf('/recapiti') !== -1) {
+      pageType = RefreshPageType.RECAPITI;
+    } else if (window.location.href.indexOf('/app-status') !== -1) {
+      pageType = RefreshPageType.STATUS_PAGE;
+    }
+    if (pageType) {
+      trackEventByType(TrackEventType.SEND_REFRESH_PAGE, { page: pageType });
+    }
+  };
+
+  const handleEventTrackingToastErrorMessages = (error: AppResponseError, traceid?: string) => {
+    trackEventByType(TrackEventType.SEND_TOAST_ERROR, {
+      reason: error.code,
+      traceid,
+      page_name: window.location.href,
+    });
+  };
+
   return (
     <>
       <ResponseEventDispatcher />
@@ -264,10 +309,14 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
         hasTermsOfService={true}
+        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+        eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
       >
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
-        <AppResponseMessage />
+        <AppResponseMessage
+          eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
+        />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

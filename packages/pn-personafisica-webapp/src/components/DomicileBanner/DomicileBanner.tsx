@@ -9,8 +9,14 @@ import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
-const DomicileBanner = () => {
+type Props = {
+  source?: string;
+};
+
+const DomicileBanner: React.FC<Props> = ({ source = 'home_notifiche' }) => {
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -24,6 +30,7 @@ const DomicileBanner = () => {
   }, [closeDomicileBanner]);
 
   const handleAddDomicile = useCallback(() => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source });
     navigate(routes.RECAPITI);
   }, []);
 

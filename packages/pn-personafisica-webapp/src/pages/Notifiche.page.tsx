@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
+  NotificationStatus,
   PaginationData,
   Sort,
   TitleBox,
@@ -25,6 +26,8 @@ import { setMandateId, setPagination, setSorting } from '../redux/dashboard/redu
 import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -76,6 +79,48 @@ const Notifiche = () => {
       })
     ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
+
+  const isNewNotification = (value: string) => {
+    switch (value) {
+      case NotificationStatus.VIEWED:
+      case NotificationStatus.PAID:
+      case NotificationStatus.CANCELLED:
+        return false;
+      default:
+        return true;
+    }
+  };
+
+  useEffect(() => {
+    if (notifications) {
+      trackEventByType(
+        currentDelegator
+          ? TrackEventType.SEND_NOTIFICATION_DELEGATED
+          : TrackEventType.SEND_YOUR_NOTIFICATION,
+        {
+          delegate: !!currentDelegator,
+          page_number: pagination.page,
+          total_count: notifications.length,
+          unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
+          delivered_count: notifications.filter(
+            (n) => n.notificationStatus === NotificationStatus.DELIVERED
+          ).length,
+          opened_count: notifications.filter(
+            (n) => n.notificationStatus === NotificationStatus.VIEWED
+          ).length,
+          expired_count: notifications.filter(
+            (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+          ).length,
+          not_found_count: notifications.filter(
+            (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
+          ).length,
+          cancelled_count: notifications.filter(
+            (n) => n.notificationStatus === NotificationStatus.CANCELLED
+          ).length,
+        }
+      );
+    }
+  }, [notifications]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {

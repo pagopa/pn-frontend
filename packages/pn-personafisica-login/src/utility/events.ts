@@ -5,12 +5,22 @@ import { EventsType } from '@pagopa-pn/pn-commons';
 // Remove PLACEHOLDER when PN-7437 stars.
 
 export enum TrackEventType {
-  PLACEHOLDER = 'PLACEHOLDER',
+  SEND_LOGIN = 'SEND_LOGIN',
+  SEND_IDP_SELECTED = 'SEND_IDP_SELECTED',
+  SEND_LOGIN_FAILURE = 'SEND_LOGIN_FAILURE',
 }
 
 export const events: EventsType = {
-  [TrackEventType.PLACEHOLDER]: {
-    category: 'placeholder',
-    action: 'placeholder',
+  [TrackEventType.SEND_LOGIN]: {
+    category: 'UX',
+    action: 'view login page',
+  },
+  [TrackEventType.SEND_IDP_SELECTED]: {
+    category: 'UX',
+    action: 'select IDP provider',
+  },
+  [TrackEventType.SEND_LOGIN_FAILURE]: {
+    category: 'TECH',
+    action: 'login failed',
   },
 };

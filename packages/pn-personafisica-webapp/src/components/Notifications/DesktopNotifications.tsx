@@ -20,6 +20,8 @@ import {
 import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
@@ -53,6 +55,10 @@ const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, c
 const LinkRouteContacts: React.FC = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
+  const goToContactsPage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'home_notifiche' });
+    navigate(routes.RECAPITI);
+  };
   return (
     <Link
       component={'button'}
@@ -61,7 +67,7 @@ const LinkRouteContacts: React.FC = ({ children }) => {
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
-      onClick={() => navigate(routes.RECAPITI)}
+      onClick={goToContactsPage}
     >
       {children}
     </Link>

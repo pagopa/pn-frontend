@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import SpidBig from '../../assets/spid_big.svg';
 import { getConfiguration } from '../../services/configuration.service';
 import { IdentityProvider, getIDPS } from '../../utility/IDPS';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { shuffleList } from '../../utility/utils';
 
 const SpidSelect = ({ onBack }: { onBack: () => void }) => {
@@ -21,6 +23,10 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
 
   const getSPID = (IDP: IdentityProvider) => {
     window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
+    trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
+      SPID_IDP_NAME: IDP.name,
+      SPID_IDP_ID: IDP.entityId,
+    });
   };
 
   return (

@@ -21,6 +21,8 @@ import { setDelegatesSorting } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
@@ -119,6 +121,7 @@ const Delegates = () => {
   ];
 
   const handleAddDelegationClick = () => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_START);
     navigate(routes.NUOVA_DELEGA);
   };
 

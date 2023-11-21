@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
@@ -11,6 +11,8 @@ import { AppRouteParams, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { getConfiguration } from '../../services/configuration.service';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { storageAarOps, storageSpidSelectedOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
@@ -34,11 +36,19 @@ const Login = () => {
     storageAarOps.write(aar);
   }
 
+  useEffect(() => {
+    trackEventByType(TrackEventType.SEND_LOGIN);
+  }, []);
+
   const goCIE = () => {
     storageSpidSelectedOps.write(SPID_CIE_ENTITY_ID);
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
+    trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
+      SPID_IDP_NAME: 'CIE',
+      SPID_IDP_ID: SPID_CIE_ENTITY_ID,
+    });
   };
 
   if (showIDPS) {

@@ -24,9 +24,13 @@ import {
   revokeDelegation,
 } from '../redux/delegation/actions';
 import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
+import { Delegation } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
+import { DelegationStatus } from '../utility/status.utility';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -55,8 +59,10 @@ const Deleghe = () => {
 
   const handleConfirmClick = () => {
     if (type === 'delegates') {
+      trackEventByType(TrackEventType.SEND_MANDATE_REVOKED);
       void dispatch(revokeDelegation(id));
     } else {
+      trackEventByType(TrackEventType.SEND_MANDATE_REJECTED);
       void dispatch(rejectDelegation(id));
     }
   };
@@ -66,15 +72,40 @@ const Deleghe = () => {
   };
 
   const handleAccept = async (code: Array<string>) => {
+    trackEventByType(TrackEventType.SEND_MANDATE_ACCEPTED);
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
     void dispatch(getSidemenuInformation());
   };
+
+  const delegates = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegates
+  );
+
+  const delegators = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegators
+  );
 
   const retrieveData = async () => {
     await dispatch(getDelegates());
     await dispatch(getDelegators());
     setPageReady(true);
   };
+
+  const getDelegatorsDelegationCounts = (
+    delegates: Array<Delegation>,
+    delegators: Array<Delegation>
+  ) => ({
+    total_mandates_given_count: delegates.length,
+    pending_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.PENDING)
+      .length,
+    active_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.ACTIVE)
+      .length,
+    total_mandates_received_count: delegators.length,
+    pending_mandates_received_count: delegators.filter((d) => d.status === DelegationStatus.PENDING)
+      .length,
+    active_mandates_received_count: delegators.filter((d) => d.status === DelegationStatus.ACTIVE)
+      .length,
+  });
 
   useEffect(() => {
     void retrieveData();
@@ -83,9 +114,19 @@ const Deleghe = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (pageReady) {
+      trackEventByType(
+        TrackEventType.SEND_YOUR_MANDATES,
+        getDelegatorsDelegationCounts(delegates, delegators)
+      );
+    }
+  }, [pageReady]);
+
   const handleAcceptDelegationError = useCallback((errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
     setErrorMessage(error?.message);
+    trackEventByType(TrackEventType.SEND_MANDATE_ACCEPT_CODE_ERROR);
   }, []);
 
   useEffect(() => {

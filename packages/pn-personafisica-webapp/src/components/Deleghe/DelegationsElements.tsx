@@ -9,6 +9,8 @@ import { Tag } from '@pagopa/mui-italia';
 
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
 import { useAppDispatch } from '../../redux/hooks';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -22,6 +24,7 @@ export const Menu = (props: any) => {
   };
 
   const handleOpenVerificationCodeModal = () => {
+    trackEventByType(TrackEventType.SEND_SHOW_MANDATE_CODE);
     props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
     setAnchorEl(null);
   };
