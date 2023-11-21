@@ -17,15 +17,9 @@ import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
-
-const mockNavigateFn = vi.fn();
+import { Route, Routes } from 'react-router-dom';
 
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
-  useNavigate: () => mockNavigateFn,
-}));
-
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -122,21 +116,39 @@ describe('NewApiKey component', () => {
   });
 
   it('clicks on the breadcrumb button', async () => {
+    // simulate a current URL
+    window.history.pushState({}, '', '/new-api-key');
+
+    // render using an ad-hoc router
     await act(async () => {
-      result = render(<NewApiKey />);
+      result = render(<>
+        <Routes>
+          <Route path='/new-api-key' element={<NewApiKey />} />
+          <Route path={routes.API_KEYS} element={<div data-testid="mock-api-keys-page">hello</div>} />
+        </Routes>
+      </>);
     });
+    // the mocked ApiKeys page does not appear before we click the corresponding link
+    const mockApiKeysPageBefore = result?.queryByTestId('mock-api-keys-page');
+    expect(mockApiKeysPageBefore).not.toBeInTheDocument();
+
+    // simulate click on the breadcrumb link ...
     const links = result?.getAllByRole('link');
     expect(links![0]).toHaveTextContent(/title/i);
     expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
     fireEvent.click(links![0]);
-    // prompt must be shown
+
+    // ... hence prompt must be shown
     const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
     const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
+    expect(confirmExitBtn).toBeInTheDocument();
     fireEvent.click(confirmExitBtn);
+
+    // after clicking the "confirm" button in the prompt, the mocked ApiKeys page should be rendered
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
+      const mockApiKeysPageAfter = result?.queryByTestId('mock-api-keys-page');
+      expect(mockApiKeysPageAfter).toBeInTheDocument();
     });
-  });
+});
 });

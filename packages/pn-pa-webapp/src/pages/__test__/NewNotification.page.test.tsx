@@ -11,14 +11,15 @@ import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
+import { Route, Routes } from 'react-router-dom';
 
-const mockNavigateFn = vi.fn();
+// const mockNavigateFn = vi.fn();
 
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
-  useNavigate: () => mockNavigateFn,
-}));
+// // mock imports
+// vi.mock('react-router-dom', async () => ({
+//   ...(await vi.importActual('react-router-dom')) as any,
+//   useNavigate: () => mockNavigateFn,
+// }));
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -85,50 +86,82 @@ describe('NewNotification Page without payment', () => {
   });
 
   it('clicks on the breadcrumb button', async () => {
-    // render component
+    // insert one entry into the history, so the initial render will refer 
+    // to the path /new-notification
+    window.history.pushState({}, '', '/new-notification');
+
+    // render with an ad-hoc router, will render initially NewNotification 
+    // since it corresponds to the top of the mocked history stack
     await act(async () => {
-      result = render(<NewNotification />, {
-        preloadedState: {
-          userState: { user: userResponse },
-        },
-      });
+      result = render(
+        <Routes>
+          <Route path={routes.DASHBOARD} element={<div data-testid="mocked-dashboard">hello</div>} />
+          <Route path='/new-notification' element={<NewNotification />} />
+        </Routes>, 
+        { preloadedState: { userState: { user: userResponse } } }
+      );
     });
+
+    // before clicking link - mocked dashboard not present
+    const mockedPageBefore = result?.queryByTestId('mocked-dashboard');
+    expect(mockedPageBefore).not.toBeInTheDocument();
+    
+    // simulate clicking the link
     const links = result?.getAllByRole('link');
     expect(links![0]).toHaveTextContent(/new-notification.breadcrumb-root/i);
     expect(links![0]).toHaveAttribute('href', routes.DASHBOARD);
     fireEvent.click(links![0]);
+
     // prompt must be shown
     const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
     const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
     fireEvent.click(confirmExitBtn);
+
+    // after clicking link - mocked dashboard present
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.DASHBOARD);
+      const mockedPageAfter = result?.queryByTestId('mocked-dashboard');
+      expect(mockedPageAfter).toBeInTheDocument();
     });
   });
 
   it('clicks on api keys button', async () => {
-    // render component
+    // insert one entry into the history, so the initial render will refer 
+    // to the path /new-notification
+    window.history.pushState({}, '', '/new-notification');
+
+    // render with an ad-hoc router, will render initially NewNotification 
+    // since it corresponds to the top of the mocked history stack
     await act(async () => {
-      result = render(<NewNotification />, {
-        preloadedState: {
-          userState: { user: userResponse },
-        },
-      });
+      result = render(
+        <Routes>
+          <Route path={routes.API_KEYS} element={<div data-testid="mocked-api-keys-page">hello</div>} />
+          <Route path='/new-notification' element={<NewNotification />} />
+        </Routes>, 
+        { preloadedState: { userState: { user: userResponse } } }
+      );
     });
+
+    // before clicking link - mocked api keys page not present
+    const mockedPageBefore = result?.queryByTestId('mocked-api-keys-page');
+    expect(mockedPageBefore).not.toBeInTheDocument();
+    
+    // simulate clicking the link
     const links = result?.getAllByRole('link');
     expect(links![1]).toHaveTextContent(/menu.api-key/i);
     expect(links![1]).toHaveAttribute('href', routes.API_KEYS);
+
     fireEvent.click(links![1]);
     // prompt must be shown
     const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
     const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
     fireEvent.click(confirmExitBtn);
+
+    // after clicking link - mocked api keys page present
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
+      const mockedPageAfter = result?.queryByTestId('mocked-api-keys-page');
+      expect(mockedPageAfter).toBeInTheDocument();
     });
   });
 

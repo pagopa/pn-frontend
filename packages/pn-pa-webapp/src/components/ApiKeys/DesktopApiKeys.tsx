@@ -279,7 +279,8 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       getCellLabel(value: string, row: Item) {
         const { label, tooltip, color } = getApiKeyStatusInfos(
           value as ApiKeyStatus,
-          row.statusHistory as Array<ApiKeyStatusHistory>
+          row.statusHistory as Array<ApiKeyStatusHistory>,
+          t
         );
         return (
           <Box

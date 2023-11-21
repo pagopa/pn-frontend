@@ -24,7 +24,6 @@ import {
   act,
   fireEvent,
   render,
-  screen,
   waitFor,
   within,
 } from '../../__test__/test-utils';
@@ -37,14 +36,12 @@ import {
 } from '../../api/notifications/notifications.routes';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
-
-const mockNavigateFn = vi.fn();
+import { Route, Routes } from 'react-router-dom';
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual('react-router-dom')) as any,
   useParams: () => ({ id: 'RTRD-UDGU-QTQY-202308-P-1' }),
-  useNavigate: () => mockNavigateFn,
 }));
 
 vi.mock('react-i18next', () => ({
@@ -262,12 +259,36 @@ describe('NotificationDetail Page', () => {
   });
 
   it('clicks on the back button - mono recipient', async () => {
+    // insert two entries into the history, so the initial render will refer to the path /
+    // and when the back button is pressed and so navigate(-1) is invoked,
+    // the path will change to /mock-path
+    window.history.pushState({}, '', '/mock-path');
+    window.history.pushState({}, '', '/');
+
+    // render with an ad-hoc router 
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<>
+        <Routes>
+          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+        </Routes>
+        <NotificationDetail />
+      </>);
     });
+
+    // before pressing "back" button - mocked page not present
+    const mockedPageBefore = result?.queryByTestId('mocked-page');
+    expect(mockedPageBefore).not.toBeInTheDocument();
+
+    // simulate press of "back" button
     const backButton = result?.getByRole('button', { name: /indietro/i });
+    expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton!);
-    expect(mockNavigateFn).toBeCalledTimes(1);
+
+    // after pressing "back" button - mocked page present
+    await waitFor(() => {
+      const mockedPageAfter = result?.queryByTestId('mocked-page');
+      expect(mockedPageAfter).toBeInTheDocument();
+    });
   });
 
   it('errors on api call - mono recipient', async () => {

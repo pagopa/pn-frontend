@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
@@ -9,22 +8,22 @@ import { GroupStatus, UserGroup } from '../models/user';
 
 function LocalizeStatus(
   status: string,
-  history: Array<ApiKeyStatusHistory>
+  history: Array<ApiKeyStatusHistory>,
+  translationFunction: any
 ): {
   label: string;
   tooltip: ReactNode;
   description: string;
 } {
-  const { t } = useTranslation(['apikeys']);
   return {
-    label: t(`status.${status}`),
-    tooltip: TooltipApiKey(history),
-    description: t(`status.${status}-description`),
+    label: translationFunction(`status.${status}`),
+    tooltip: TooltipApiKey(history, translationFunction),
+    description: translationFunction(`status.${status}-description`),
   };
 }
 
-export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
-  const { t } = useTranslation(['apikeys']);
+// eslint-disable-next-line arrow-body-style
+export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>, translationFunction: any) => {
   return (
     <Box
       sx={{
@@ -38,7 +37,7 @@ export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
           const output = (p: string, h: ApiKeyStatusHistory) => (
             <Box sx={{ textAlign: 'left' }} key={index}>
               <Box>
-                {t(`tooltip.${p}`)} {formatDate(h.date)}
+                {translationFunction(`tooltip.${p}`)} {formatDate(h.date)}
               </Box>
             </Box>
           );
@@ -64,7 +63,8 @@ export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
 
 export function getApiKeyStatusInfos(
   status: ApiKeyStatus,
-  statusHistory: Array<ApiKeyStatusHistory>
+  statusHistory: Array<ApiKeyStatusHistory>,
+  translationFunction: any,
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -75,17 +75,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...LocalizeStatus('enabled', statusHistory),
+        ...LocalizeStatus('enabled', statusHistory, translationFunction),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...LocalizeStatus('blocked', statusHistory),
+        ...LocalizeStatus('blocked', statusHistory, translationFunction),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...LocalizeStatus('rotated', statusHistory),
+        ...LocalizeStatus('rotated', statusHistory, translationFunction),
       };
     default:
       return {
