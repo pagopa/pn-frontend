@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.1.1](https://github.com/pagopa/pn-frontend/compare/v2.1.0...v2.1.1) (2023-10-19)
+
+
+### Bug Fixes
+
+* **PN-8290:** modified api b2b link ([f756e48](https://github.com/pagopa/pn-frontend/commit/f756e483f0411f6fa1aba2e51ff16270a5a19cf0))
+
+
+
+
+
 # [2.1.0](https://github.com/pagopa/pn-frontend/compare/v2.1.0-RC.5...v2.1.0) (2023-09-28)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

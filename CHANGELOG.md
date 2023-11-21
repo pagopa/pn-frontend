@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+
+### Bug Fixes
+
+* fix correct mixpanel utility, removed old one ([cd83106](https://github.com/pagopa/pn-frontend/commit/cd831063da0cca6352da04d79f4c870896537259))
+
+
+
+
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+
+### Bug Fixes
+
+* added mixpanel property to blacklist ([41093d0](https://github.com/pagopa/pn-frontend/commit/41093d07dbdf9a428d167d9fd237786b826c4c2d))
+
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* intesigroup idp data and added relaystate ([85c2e37](https://github.com/pagopa/pn-frontend/commit/85c2e37837ea5389ff75f08928df4effd2a1b8c3))
+
+
+### Features
+
+* **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([f22cf57](https://github.com/pagopa/pn-frontend/commit/f22cf57e8c9a46fc6a90234bef5d498a01cb841c))
+
+
+
+
+
+## [2.1.1](https://github.com/pagopa/pn-frontend/compare/v2.1.0...v2.1.1) (2023-10-19)
+
+
+### Bug Fixes
+
+* **PN-8290:** modified api b2b link ([f756e48](https://github.com/pagopa/pn-frontend/commit/f756e483f0411f6fa1aba2e51ff16270a5a19cf0))
+
+
+
+
+
 # [2.1.0](https://github.com/pagopa/pn-frontend/compare/v2.1.0-RC.5...v2.1.0) (2023-09-28)
 
 **Note:** Version bump only for package send-monorepo

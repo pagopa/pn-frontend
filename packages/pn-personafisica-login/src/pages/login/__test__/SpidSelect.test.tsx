@@ -45,7 +45,7 @@ describe('test spid select page', () => {
       fireEvent.click(spidButton);
       expect(mockAssign).toBeCalledTimes(index + 1);
       expect(mockAssign).toBeCalledWith(
-        `${URL_API_LOGIN}/login?entityID=${element.entityId}&authLevel=SpidL2`
+        `${URL_API_LOGIN}/login?entityID=${element.entityId}&authLevel=SpidL2&RelayState=send`
       );
     });
     const requestForSpid = getById(container, 'requestForSpid');
