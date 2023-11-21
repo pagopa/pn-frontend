@@ -50,6 +50,7 @@ const DisclaimerModal = ({
             <FormControlLabel
               control={
                 <Checkbox
+                  id="checkbox-agree"
                   checked={checked}
                   onChange={handleChange}
                   data-testid="disclaimer-checkbox"

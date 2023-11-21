@@ -154,7 +154,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           ref={digitalElemRef}
           fields={[
             {
-              id: `value-${type}`,
+              id: `courtesyContatcs-${formik.values[type]}`,
               component: (
                 <TextField
                   id={type}
