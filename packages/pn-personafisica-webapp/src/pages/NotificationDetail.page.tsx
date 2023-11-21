@@ -7,6 +7,7 @@ import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
+  EventDowntimeType,
   GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
@@ -301,26 +302,23 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      );
+      )
+        .unwrap()
+        .catch(() => trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_ERROR));
     },
     [currentRecipient.payments]
   );
 
   const sendEventTrackCallbackNotificationDetail = () => {
-    enum DowntimeType {
-      NOT_DISSERVICE = 'not_disservice',
-      COMPLETED = 'completed',
-      IN_PROGRESS = 'in_progress',
-    }
     // eslint-disable-next-line functional/no-let
-    let typeDowntime: DowntimeType;
+    let typeDowntime: EventDowntimeType;
     if (downtimeEvents.length === 0) {
-      typeDowntime = DowntimeType.NOT_DISSERVICE;
+      typeDowntime = EventDowntimeType.NOT_DISSERVICE;
     } else {
       typeDowntime =
         downtimeEvents.filter((downtime) => !!downtime.endDate).length === downtimeEvents.length
-          ? DowntimeType.COMPLETED
-          : DowntimeType.IN_PROGRESS;
+          ? EventDowntimeType.COMPLETED
+          : EventDowntimeType.IN_PROGRESS;
     }
 
     trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, {

@@ -5,6 +5,7 @@ import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material'
 
 import { downloadDocument } from '../../hooks';
 import {
+  EventPaymentStatusType,
   F24PaymentDetails,
   NotificationDetailPayment,
   PagoPAPaymentFullDetails,
@@ -19,17 +20,6 @@ import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
-
-type TrackEventPaymentStatus = {
-  page_number: number;
-  count_payment: number;
-  count_unpaid: number;
-  count_paid: number;
-  count_error: number;
-  count_expired: number;
-  count_canceled: number;
-  count_revoked: number;
-};
 
 type Props = {
   payments: PaymentsData;
@@ -50,7 +40,7 @@ type Props = {
   handleTrackDownloadPaymentNotice?: () => void;
   handleTrackDownloadF24?: () => void;
   handleTrackDownloadF24Success?: () => void;
-  handleTrackPaymentStatus?: (paymentStatus: TrackEventPaymentStatus) => void;
+  handleTrackPaymentStatus?: (paymentStatus: EventPaymentStatusType) => void;
   handleTrackDownloadF24Timeout?: () => void;
 };
 
@@ -134,6 +124,32 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setSelectedPayment(null);
   };
 
+  // some of following properties in function getPaymentStatus are set to -1
+  // because of still missing features (or not implemented anymore)
+  const getPaymentsStatus = (): EventPaymentStatusType => ({
+    page_number: -1,
+    count_payment: pagoPaF24.length,
+    count_canceled: pagoPaF24.filter(
+      (f) =>
+        f.pagoPa?.status === PaymentStatus.FAILED &&
+        f.pagoPa.detail === PaymentInfoDetail.PAYMENT_CANCELED
+    ).length,
+    count_error: pagoPaF24.filter(
+      (f) =>
+        f.pagoPa?.status === PaymentStatus.FAILED &&
+        f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
+        f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
+    ).length,
+    count_expired: pagoPaF24.filter(
+      (f) =>
+        f.pagoPa?.status === PaymentStatus.FAILED &&
+        f.pagoPa.detail === PaymentInfoDetail.PAYMENT_EXPIRED
+    ).length,
+    count_paid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length,
+    count_revoked: -1,
+    count_unpaid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.REQUIRED).length,
+  });
+
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
     if (selectedPayment) {
       if (handleTrackDownloadPaymentNotice) {
@@ -151,31 +167,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   useEffect(() => {
     setSelectedPayment(isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null);
-    // some of following properties are set to -1 because of still missing features (or not implemented anymore)
     if (handleTrackPaymentStatus) {
-      handleTrackPaymentStatus({
-        page_number: -1,
-        count_payment: pagoPaF24.length,
-        count_canceled: pagoPaF24.filter(
-          (f) =>
-            f.pagoPa?.status === PaymentStatus.FAILED &&
-            f.pagoPa.detail === PaymentInfoDetail.PAYMENT_CANCELED
-        ).length,
-        count_error: pagoPaF24.filter(
-          (f) =>
-            f.pagoPa?.status === PaymentStatus.FAILED &&
-            f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
-            f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
-        ).length,
-        count_expired: pagoPaF24.filter(
-          (f) =>
-            f.pagoPa?.status === PaymentStatus.FAILED &&
-            f.pagoPa.detail === PaymentInfoDetail.PAYMENT_EXPIRED
-        ).length,
-        count_paid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length,
-        count_revoked: -1,
-        count_unpaid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.REQUIRED).length,
-      });
+      handleTrackPaymentStatus(getPaymentsStatus());
     }
   }, [payments]);
 

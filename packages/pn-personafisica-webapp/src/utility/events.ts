@@ -1,4 +1,4 @@
-import { EventsType } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventsType } from '@pagopa-pn/pn-commons';
 
 // All the events are been removed by request of PN-8114 because will be filled again by PN-7437.
 // I added a temporary "PLACEHOLDER" to prevent mixpanel errors in mixpanel.ts
@@ -32,7 +32,6 @@ export enum TrackEventType {
   SEND_ADD_MANDATE_UX_CONVERSION = 'SEND_ADD_MANDATE_UX_CONVERSION',
   SEND_ADD_MANDATE_UX_SUCCESS = 'SEND_ADD_MANDATE_UX_SUCCESS',
   SEND_SHOW_MANDATE_CODE = 'SEND_SHOW_MANDATE_CODE',
-  SEND_EDIT_MANDATE = 'SEND_EDIT_MANDATE',
   SEND_MANDATE_REVOKED = 'SEND_MANDATE_REVOKED',
   SEND_MANDATE_REJECTED = 'SEND_MANDATE_REJECTED',
   SEND_MANDATE_ACCEPTED = 'SEND_MANDATE_ACCEPTED',
@@ -65,227 +64,223 @@ export enum TrackEventType {
 
 export const events: EventsType = {
   [TrackEventType.SEND_VIEW_PROFILE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on view user data',
   },
   [TrackEventType.SEND_PROFILE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view user data',
   },
   [TrackEventType.SEND_VIEW_CONTACT_DETAILS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on go contacts page',
   },
   [TrackEventType.SEND_YOUR_NOTIFICATION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view notifications page',
   },
   [TrackEventType.SEND_NOTIFICATION_DELEGATED]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view notifications page as delegate',
   },
   [TrackEventType.SEND_NOTIFICATION_DETAIL]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view notification detail page',
   },
   [TrackEventType.SEND_PAYMENT_STATUS]: {
-    category: 'TECH',
+    category: EventCategory.TECH,
     action: 'view payment status in notification detail page',
   },
   [TrackEventType.SEND_PAYMENT_DETAIL_ERROR]: {
-    category: 'KO',
+    category: EventCategory.KO,
     action: 'failed to load payment status in notification detail page',
   },
   [TrackEventType.SEND_PAYMENT_DETAIL_REFRESH]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on reload payment status',
   },
   [TrackEventType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on more info',
   },
   [TrackEventType.SEND_MULTIPAYMENT_MORE_INFO]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on more info in multipayment status',
   },
   [TrackEventType.SEND_PAYMENT_LIST_CHANGE_PAGE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on change page or size in payment list',
   },
   [TrackEventType.SEND_F24_DOWNLOAD]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on download F24 document',
   },
   [TrackEventType.SEND_F24_DOWNLOAD_SUCCESS]: {
-    category: 'TECH',
+    category: EventCategory.TECH,
     action: 'download F24 document success',
   },
   [TrackEventType.SEND_DOWNLOAD_ATTACHMENT]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on download attached document',
   },
   [TrackEventType.SEND_DOWNLOAD_RECEIPT_NOTICE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on download recepit notice',
   },
   [TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on download certificate opposable to 3rd parties',
   },
   [TrackEventType.SEND_DOWNLOAD_PAYMENT_NOTICE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on download payment notice',
   },
   [TrackEventType.SEND_START_PAYMENT]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on pay in detailed notification',
   },
   [TrackEventType.SEND_NOTIFICATION_STATUS_DETAIL]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on accordion status details',
   },
   [TrackEventType.SEND_YOUR_MANDATES]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view delegates page',
   },
   [TrackEventType.SEND_ADD_MANDATE_START]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on add delegation',
   },
   [TrackEventType.SEND_ADD_MANDATE_BACK]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on back button in add new delegation page',
   },
   [TrackEventType.SEND_ADD_MANDATE_DATA_INPUT]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view add new delegation page',
   },
   [TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on submit button in add new delegation page',
   },
   [TrackEventType.SEND_ADD_MANDATE_UX_SUCCESS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view add new delegation success page',
   },
   [TrackEventType.SEND_SHOW_MANDATE_CODE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on show otp code of delegation',
   },
-  [TrackEventType.SEND_EDIT_MANDATE]: {
-    category: 'UX',
-    action: 'click on edit delegation',
-  },
   [TrackEventType.SEND_MANDATE_REVOKED]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on revoke delegation',
   },
   [TrackEventType.SEND_MANDATE_REJECTED]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on reject delegation',
   },
   [TrackEventType.SEND_MANDATE_ACCEPTED]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on accept delegation',
   },
   [TrackEventType.SEND_MANDATE_ACCEPT_CODE_ERROR]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'wrong delegation code',
   },
   [TrackEventType.SEND_YOUR_CONTACT_DETAILS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view contacts page',
   },
   [TrackEventType.SEND_ADD_PEC_START]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on confirm in pec card',
   },
   [TrackEventType.SEND_ADD_PEC_UX_CONVERSION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on confirm in pec otp code',
   },
   [TrackEventType.SEND_ADD_PEC_CODE_ERROR]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'wrong pec otp code',
   },
   [TrackEventType.SEND_ADD_PEC_UX_SUCCESS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'pec added successfully',
   },
   [TrackEventType.SEND_ACTIVE_IO_START]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on enable IO app',
   },
   [TrackEventType.SEND_ACTIVE_IO_UX_CONVERSION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on enable IO app modal',
   },
   [TrackEventType.SEND_ACTIVE_IO_UX_SUCCESS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'enable IO app successfully',
   },
   [TrackEventType.SEND_DEACTIVE_IO_START]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on disable IO app',
   },
   [TrackEventType.SEND_DEACTIVE_IO_UX_CONVERSION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on disable IO app modal',
   },
   [TrackEventType.SEND_DEACTIVE_IO_UX_SUCCESS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'disable IO app successfully',
   },
   [TrackEventType.SEND_ADD_SMS_START]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on confirm in sms card',
   },
   [TrackEventType.SEND_ADD_SMS_UX_CONVERSION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on confirm in sms otp code',
   },
   [TrackEventType.SEND_ADD_SMS_CODE_ERROR]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'wrong sms otp code',
   },
   [TrackEventType.SEND_ADD_SMS_UX_SUCCESS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'sms added successfully',
   },
   [TrackEventType.SEND_ADD_EMAIL_START]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on confirm in email card',
   },
   [TrackEventType.SEND_ADD_EMAIL_UX_CONVERSION]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on confirm in email otp code',
   },
   [TrackEventType.SEND_ADD_EMAIL_CODE_ERROR]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'wrong email otp code',
   },
   [TrackEventType.SEND_ADD_EMAIL_UX_SUCCESS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'email added successfully',
   },
   [TrackEventType.SEND_SERVICE_STATUS]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'view platform status page',
   },
   [TrackEventType.SEND_REFRESH_PAGE]: {
-    category: 'UX',
+    category: EventCategory.UX,
     action: 'click on refresh page',
   },
   [TrackEventType.SEND_TOAST_ERROR]: {
-    category: 'KO',
+    category: EventCategory.KO,
     action: 'API error',
   },
   [TrackEventType.SEND_GENERIC_ERROR]: {
-    category: 'KO',
+    category: EventCategory.KO,
     action: 'somewhat gone wrong',
   },
   [TrackEventType.SEND_F24_DOWNLOAD_TIMEOUT]: {
-    category: 'TECH',
+    category: EventCategory.TECH,
     action: 'timeout of F24 document download',
   },
 };

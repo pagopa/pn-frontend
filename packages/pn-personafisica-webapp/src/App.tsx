@@ -27,7 +27,7 @@ import {
 import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
-import { goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentPage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -247,27 +247,7 @@ const ActualApp = () => {
   };
 
   const handleEventTrackingCallbackRefreshPage = () => {
-    enum RefreshPageType {
-      LISTA_NOTIFICHE = 'LISTA_NOTIFICHE',
-      DETTAGLIO_NOTIFICA = 'DETTAGLIO_NOTIFICA',
-      LISTA_DELEGHE = 'LISTA_DELEGHE',
-      STATUS_PAGE = 'STATUS_PAGE',
-      RECAPITI = 'RECAPITI',
-    }
-
-    // eslint-disable-next-line functional/no-let
-    let pageType: RefreshPageType | undefined;
-    if (window.location.href.indexOf('/dettaglio') !== -1) {
-      pageType = RefreshPageType.DETTAGLIO_NOTIFICA;
-    } else if (window.location.href.indexOf('/notifiche') !== -1) {
-      pageType = RefreshPageType.LISTA_NOTIFICHE;
-    } else if (window.location.href.indexOf('/deleghe') !== -1) {
-      pageType = RefreshPageType.LISTA_DELEGHE;
-    } else if (window.location.href.indexOf('/recapiti') !== -1) {
-      pageType = RefreshPageType.RECAPITI;
-    } else if (window.location.href.indexOf('/app-status') !== -1) {
-      pageType = RefreshPageType.STATUS_PAGE;
-    }
+    const pageType = getCurrentPage(pathname);
     if (pageType) {
       trackEventByType(TrackEventType.SEND_REFRESH_PAGE, { page: pageType });
     }
@@ -277,7 +257,7 @@ const ActualApp = () => {
     trackEventByType(TrackEventType.SEND_TOAST_ERROR, {
       reason: error.code,
       traceid,
-      page_name: window.location.href,
+      page_name: getCurrentPage(pathname),
     });
   };
 

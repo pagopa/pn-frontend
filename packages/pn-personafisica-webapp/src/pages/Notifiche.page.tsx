@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
+  EventNotificationsListType,
   NotificationStatus,
   PaginationData,
   Sort,
@@ -91,33 +92,34 @@ const Notifiche = () => {
     }
   };
 
+  const getEventNotifications = (): EventNotificationsListType => ({
+    delegate: !!currentDelegator,
+    page_number: pagination.page,
+    total_count: notifications.length,
+    unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
+    delivered_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.DELIVERED
+    ).length,
+    opened_count: notifications.filter((n) => n.notificationStatus === NotificationStatus.VIEWED)
+      .length,
+    expired_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+    ).length,
+    not_found_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
+    ).length,
+    cancelled_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.CANCELLED
+    ).length,
+  });
+
   useEffect(() => {
     if (notifications) {
       trackEventByType(
         currentDelegator
           ? TrackEventType.SEND_NOTIFICATION_DELEGATED
           : TrackEventType.SEND_YOUR_NOTIFICATION,
-        {
-          delegate: !!currentDelegator,
-          page_number: pagination.page,
-          total_count: notifications.length,
-          unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
-          delivered_count: notifications.filter(
-            (n) => n.notificationStatus === NotificationStatus.DELIVERED
-          ).length,
-          opened_count: notifications.filter(
-            (n) => n.notificationStatus === NotificationStatus.VIEWED
-          ).length,
-          expired_count: notifications.filter(
-            (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
-          ).length,
-          not_found_count: notifications.filter(
-            (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
-          ).length,
-          cancelled_count: notifications.filter(
-            (n) => n.notificationStatus === NotificationStatus.CANCELLED
-          ).length,
-        }
+        getEventNotifications()
       );
     }
   }, [notifications]);
