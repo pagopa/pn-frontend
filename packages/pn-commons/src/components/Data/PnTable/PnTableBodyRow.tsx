@@ -9,6 +9,7 @@ type Props = {
   index: number;
   children: React.ReactNode;
 };
+
 const PnTableBodyRow: React.FC<Props> = ({ children, index, testId }) => {
   const columns = children
     ? Children.toArray(children)

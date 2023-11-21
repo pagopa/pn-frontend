@@ -24,14 +24,14 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
     () => [
       {
         ...getField('startDate'),
-        wrappedInTypography: false,
+        wrapValueInTypography: false,
       },
       {
         ...getField('endDate'),
-        wrappedInTypography: true,
+        wrapValueInTypography: false,
       },
       getField('knownFunctionality'),
-      { ...getField('legalFactId'), wrappedInTypography: false },
+      { ...getField('legalFactId'), wrapValueInTypography: false },
     ],
     [getField]
   );
@@ -60,7 +60,7 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
             {cardBody.map((body) => (
               <PnCardContentItem
                 key={body.id}
-                wrappedInTypography={body.wrappedInTypography}
+                wrapValueInTypography={body.wrapValueInTypography}
                 label={body.label}
               >
                 <DowntimeCell

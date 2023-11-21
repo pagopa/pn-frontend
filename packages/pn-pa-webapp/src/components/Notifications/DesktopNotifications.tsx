@@ -2,13 +2,12 @@ import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
 import {
   Column,
   EmptyState,
   KnownSentiment,
   Notification,
-  NotificationStatus,
   PnTable,
   PnTableBody,
   PnTableBodyCell,
@@ -17,16 +16,13 @@ import {
   PnTableHeaderCell,
   Row,
   Sort,
-  StatusTooltip,
-  formatDate,
-  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import FilterNotifications from './FilterNotifications';
+import NotificationsDataSwitch from './NotificationsDataSwitch';
 
 type Props = {
   notifications: Array<Notification>;
@@ -105,99 +101,39 @@ const DesktopNotifications = ({
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche']);
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
   const columns: Array<Column<Notification>> = [
     {
       id: 'sentAt',
       label: t('table.date'),
       width: '11%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string) {
-        return formatDate(value);
-      },
-      onClick(row) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'recipients',
       label: t('table.recipient'),
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: Array<string>) {
-        return value.map((v) => (
-          <Typography key={v} variant="body2">
-            {v}
-          </Typography>
-        ));
-      },
-      onClick(row) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'subject',
       label: t('table.subject'),
       width: '23%',
-      getCellLabel(value: string) {
-        return value.length > 65 ? value.substring(0, 65) + '...' : value;
-      },
-      onClick(row) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'iun',
       label: t('table.iun'),
       width: '20%',
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'group',
       label: t('table.groups'),
       width: '15%',
-      getCellLabel(value: string) {
-        return (
-          value && (
-            <TagGroup visibleItems={4}>
-              <Tag value={value} />
-            </TagGroup>
-          )
-        );
-      },
-      onClick(row) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
       width: '18%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string, i: Item) {
-        const { label, tooltip, color } = getNotificationStatusInfos(value as NotificationStatus, {
-          recipients: i.recipients as Array<string>,
-        });
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          />
-        );
-      },
-      onClick(row) {
-        handleRowClick(row);
-      },
     },
   ];
 
@@ -242,16 +178,14 @@ const DesktopNotifications = ({
                   <PnTableBodyRow key={row.id} index={index}>
                     {columns.map((column) => (
                       <PnTableBodyCell
-                        disableAccessibility={column.disableAccessibility}
                         key={column.id}
-                        onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                        onClick={() => handleRowClick(row)}
                         cellProps={{
                           width: column.width,
-                          align: column.align,
-                          cursor: column.onClick ? 'pointer' : 'auto',
+                          cursor: 'pointer',
                         }}
                       >
-                        {column.getCellLabel(row[column.id as keyof Item], row)}
+                        <NotificationsDataSwitch data={row} type={column.id} />
                       </PnTableBodyCell>
                     ))}
                   </PnTableBodyRow>

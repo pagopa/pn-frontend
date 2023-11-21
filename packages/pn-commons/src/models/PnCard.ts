@@ -9,7 +9,7 @@ export interface CardElement<T> {
   position?: string;
   label: string;
   getLabel?(value: Row<T>[keyof T], row?: Row<T>): ReactNode;
-  wrappedInTypography?: boolean;
+  wrapValueInTypography?: boolean;
   gridProps?: GridProps;
 }
 

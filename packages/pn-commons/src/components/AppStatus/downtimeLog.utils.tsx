@@ -75,7 +75,7 @@ export const DowntimeCell = ({
   return (
     <Chip
       data-testid="downtime-status"
-      label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${row.status}`, 'Status')}
+      label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${row.status}`)}
       sx={{
         backgroundColor: row.status === DowntimeStatus.OK ? 'success.light' : 'error.light',
       }}

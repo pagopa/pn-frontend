@@ -16,7 +16,7 @@ const PnCardActions: React.FC<IPnCardActionsProps> = ({
   const actions = children
     ? Children.toArray(children).map((child) =>
         isValidElement(child) ? (
-          <Box sx={{ ml: 'auto' }} data-testid={`${testId}.action`}>
+          <Box sx={{ ml: 'auto' }} data-testid={`${testId}.action`} key={child.key}>
             {cloneElement(child)}
           </Box>
         ) : (

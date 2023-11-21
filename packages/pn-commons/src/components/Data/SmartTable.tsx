@@ -85,7 +85,7 @@ function getCardElements<T>(conf: Array<SmartTableData<T>>, actions?: Array<Smar
         id: cfg.id,
         label: cfg.label,
         getLabel: (value: Row<T>[keyof T], data?: Row<T>) => cfg.getValue(value, data, true),
-        wrappedInTypography: cfg.cardConfiguration.wrappedInTypography,
+        wrapValueInTypography: cfg.cardConfiguration.wrapValueInTypography,
       });
     }
     if (cfg.tableConfiguration.sortable) {

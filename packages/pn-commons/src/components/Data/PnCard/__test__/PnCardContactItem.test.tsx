@@ -16,7 +16,7 @@ describe('PnCardContactItem', () => {
 
   it('render component - no typography', () => {
     const { getByTestId } = render(
-      <PnCardContentItem label="mocked-card-label" wrappedInTypography={false}>
+      <PnCardContentItem label="mocked-card-label" wrapValueInTypography={false}>
         mocked-card-content
       </PnCardContentItem>
     );
