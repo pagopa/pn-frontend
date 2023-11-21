@@ -349,10 +349,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
           {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
-        <PnDialogContent sx={{ px: 4 }}>
-          {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+        <PnDialogContent>
+          <DialogContentText>
+            {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+          </DialogContentText>
         </PnDialogContent>
-        <PnDialogActions sx={{ pb: 4, px: 4 }}>
+        <PnDialogActions>
           <Button onClick={() => setPecValidationOpen(false)} variant="contained">
             {t('button.conferma')}
           </Button>

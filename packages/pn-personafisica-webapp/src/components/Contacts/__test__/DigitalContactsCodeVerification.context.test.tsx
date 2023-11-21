@@ -103,9 +103,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     const validationDialog = result.getByTestId('validationDialog');
     expect(validationDialog).toBeInTheDocument();
     expect(validationDialog).toHaveTextContent('legal-contacts.validation-progress-title');
-    expect(validationDialog).toHaveTextContent(
-      'legal-contacts.validation-progress-titlebutton.conferma'
-    );
+    expect(validationDialog).toHaveTextContent('legal-contacts.validation-progress-content');
     // close dialog
     const button = validationDialog.querySelector('button');
     fireEvent.click(button!);

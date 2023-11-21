@@ -5,6 +5,7 @@ import { Button, DialogContentText, DialogTitle } from '@mui/material';
 import { useIsMobile } from '../hooks';
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   open: boolean;
@@ -69,9 +70,14 @@ const SessionModal = ({
       data-testid="session-modal"
     >
       <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
-      <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
-        {message}
-      </DialogContentText>
+      <PnDialogContent>
+        <DialogContentText
+          id="session-dialog-description"
+          sx={{ textAlign: 'center', px: 3, pb: 1 }}
+        >
+          {message}
+        </DialogContentText>
+      </PnDialogContent>
       <PnDialogActions
         sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}
       >
