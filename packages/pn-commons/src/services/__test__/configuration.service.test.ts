@@ -1,23 +1,10 @@
 import { Validator } from '@pagopa-pn/pn-validator';
+
 import { Configuration } from '../configuration.service';
 
 let mockFetchConfigurationResult: any;
 
-jest.mock('../fetch.configuration.service', () => {
-  const originalModule = jest.requireActual('../fetch.configuration.service');
-
-  //Mock the default export and named export 'foo'
-  return {
-    ...originalModule,
-    fetchConfiguration: async () => {
-      if (mockFetchConfigurationResult) {
-        return Promise.resolve(mockFetchConfigurationResult);
-      } else {
-        throw new Error('fetch.error');
-      }
-    },
-  };
-});
+const unmockedFetch = global.fetch;
 
 interface TestConfiguration {
   a: number;
@@ -35,11 +22,28 @@ function getTestConfiguration(): TestConfiguration {
 }
 
 describe('configuration service', () => {
+  beforeAll(() => {
+    global.fetch = () => {
+      if (mockFetchConfigurationResult) {
+        return Promise.resolve({
+          json: () => Promise.resolve(mockFetchConfigurationResult),
+        }) as Promise<Response>;
+      }
+      throw new Error('fetch.error');
+    };
+  });
+
   beforeEach(() => Configuration.clear());
+
+  afterAll(() => {
+    global.fetch = unmockedFetch;
+  });
 
   it('fetchConfiguration lauches error', async () => {
     mockFetchConfigurationResult = undefined;
-    await expect(Configuration.load(new TestConfigurationValidator())).rejects.toThrow('fetch.error');
+    await expect(Configuration.load(new TestConfigurationValidator())).rejects.toThrow(
+      'fetch.error'
+    );
   });
 
   it('wrong config contents - does not match the validator rules', async () => {
@@ -69,5 +73,22 @@ describe('configuration service', () => {
     await Configuration.load(new TestConfigurationValidator());
     const config = getTestConfiguration();
     expect(config.a).toBe(42);
+  });
+
+  it('set configuration for testing', () => {
+    Configuration.setForTest({ a: 67 });
+    const config = getTestConfiguration();
+    expect(config.a).toBe(67);
+  });
+
+  it('clear configuration', async () => {
+    mockFetchConfigurationResult = { a: 42 };
+    await Configuration.load(new TestConfigurationValidator());
+    const config = getTestConfiguration();
+    expect(config.a).toBe(42);
+    Configuration.clear();
+    expect(() => getTestConfiguration()).toThrow(
+      'loadConfiguration must be called before any call to getConfiguration'
+    );
   });
 });

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { storageAarOps, storageOnSuccessOps, storageTypeOps } from '../../utils/storage';
-import { getConfiguration } from "../../services/configuration.service";
+import { getConfiguration } from '../../services/configuration.service';
+import { storageAarOps, storageOnSuccessOps } from '../../utility/storage';
 
 const Logout = () => {
   const { ROUTE_LOGIN } = getConfiguration();
@@ -11,7 +11,6 @@ const Logout = () => {
 
   useEffect(() => {
     storageOnSuccessOps.delete();
-    storageTypeOps.delete();
     storageAarOps.delete();
 
     navigate(ROUTE_LOGIN + searchParams);

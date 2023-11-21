@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
+
 import {
   Button,
   DialogActions,
@@ -8,11 +9,11 @@ import {
   RadioGroup,
 } from '@mui/material';
 
-import { CardSort, Sort } from '../../types';
+import { CardSort, Sort } from '../../models';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
-import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
-import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
+import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
+import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
 
 type Props<OrderByOption> = {
   sortFields: Array<CardSort<OrderByOption>>;
@@ -26,10 +27,16 @@ type Props<OrderByOption> = {
   optionsTitle: string;
   /** Label of the cancel button */
   cancelLabel: string;
-
 };
 
-const MobileNotificationsSort = <OrderByOption extends string>({ sortFields, sort, onChangeSorting, title, optionsTitle, cancelLabel }: Props<OrderByOption>) => {
+const MobileNotificationsSort = <OrderByOption extends string>({
+  sortFields,
+  sort,
+  onChangeSorting,
+  title,
+  optionsTitle,
+  cancelLabel,
+}: Props<OrderByOption>) => {
   const [sortValue, setSortValue] = useState(sort ? `${sort.orderBy}-${sort.order}` : '');
   const prevSort = useRef(sortValue);
   const isSorted = sort.orderBy !== '';
@@ -73,7 +80,12 @@ const MobileNotificationsSort = <OrderByOption extends string>({ sortFields, sor
             value={sortValue}
           >
             {sortFields.map((f) => (
-              <FormControlLabel key={f.id} value={f.id} control={<Radio aria-label={f.label}/>} label={f.label} />
+              <FormControlLabel
+                key={f.id}
+                value={f.id}
+                control={<Radio aria-label={f.label} />}
+                label={f.label}
+              />
             ))}
           </RadioGroup>
         </DialogContent>

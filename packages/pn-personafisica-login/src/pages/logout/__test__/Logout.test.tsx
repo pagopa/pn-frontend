@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AppRouteType } from '@pagopa-pn/pn-commons';
-
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageOnSuccessOps, storageTypeOps } from '../../../utils/storage';
+import { storageAarOps, storageOnSuccessOps } from '../../../utility/storage';
 import Logout from '../Logout';
 
 const mockNavigateFn = jest.fn();
@@ -18,7 +16,6 @@ jest.mock('react-router-dom', () => ({
 describe('Logout page', () => {
   it('test logout', () => {
     storageOnSuccessOps.write('ON_SUCCESS');
-    storageTypeOps.write(AppRouteType.PF);
     storageAarOps.write('aar-test');
     render(
       <BrowserRouter>
@@ -26,7 +23,6 @@ describe('Logout page', () => {
       </BrowserRouter>
     );
     expect(storageOnSuccessOps.read()).toBeUndefined();
-    expect(storageTypeOps.read()).toBeUndefined();
     expect(storageAarOps.read()).toBeUndefined();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);

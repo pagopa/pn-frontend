@@ -25,8 +25,8 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('../../utils/delegation.utility', () => ({
-  ...jest.requireActual('../../utils/delegation.utility'),
+jest.mock('../../utility/delegation.utility', () => ({
+  ...jest.requireActual('../../utility/delegation.utility'),
   generateVCode: () => '34153',
 }));
 
@@ -34,6 +34,7 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 

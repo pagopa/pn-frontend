@@ -1,29 +1,37 @@
 {
   "loginPage": {
-    "title": "Kako želite dostopati?",
+    "title": "Kako se želite prijaviti?",
     "description": "Izberite želeni način.",
     "loginBox": {
-      "title": "Dostopaj",
-      "spidLogin": "Dostopaj s SPID",
-      "cieLogin": "Dostopaj s CIE"
-    },
-    "hintText": "Nimate SPID? <1>Izvedite več</1>",
-    "privacyAndCondition": "Z avtentikacijo izjavljate, da ste prebrali in razumeli <0>Izjavo o zasebnosti</0> in <1>Pogoje in določila uporabe</1> Rezerviranega območja."
+      "title": "Prijava",
+      "spidLogin": "Vstopite s SPID",
+      "cieLogin": "Vstopite s CIE"
+    }
   },
   "spidSelect": {
     "title": "Izberite svoj SPID",
-    "hintText": "Nimate SPID?<1>Izvedite več</1>",
+    "hintText": "Nimate SPID?<0> Izvedite več</0>",
     "cancelButton": "Prekliči"
   },
   "loginError": {
-    "title": "Žal, nekaj je šlo narobe.",
-    "message": "Zaradi sistemske napake postopka ni mogoče dokončati.<1 />Poskusite znova kasneje."
+    "title": "Zaradi sistemske napake postopka ni mogoče dokončati.",
+    "message": "Zaradi sistemske napake postopka ni mogoče dokončati.<1 />Poskusite znova pozneje.",
+    "code": {
+      "error_19": "Prevečkrat ste vnesli napačno uporabniško ime ali geslo. Poskusite znova čez nekaj minut ali se obrnite na ponudnika identitete SPID, da spremenite svoje poverilnice.",
+      "error_20": "Iz varnostnih razlogov je potrebna prijava z drugim faktorjem preverjanja pristnosti: če želite izvedeti, kako ga uporabljati, se obrnite na ponudnika identitete SPID.",
+      "error_21": "Preveč časa je minilo, odkar ste začeli s prijavo: začnite od začetka.",
+      "error_22": "Če želite uporabljati platformo, se morate strinjati s predložitvijo določenih podatkov. Vnesite znova in podajte svoje soglasje.",
+      "error_23": "Vaša identiteta SPID je začasno prekinjena ali preklicana. Če želite ponovno aktivirati račun, se obrnite na ponudnika identitete SPID.",
+      "error_25": "Preklicali ste postopek prijave: lahko poskusite znova, kadar koli želite.",
+      "error_30": "Vrsta identitete SPID, ki ste jo uporabili, se razlikuje od tiste, ki jo zahteva ponudnik storitev. Vstopite ponovno z uporabo pravilne identitete.",
+      "error_1001": "Dostop zavrnjen: niste dovolj stari, da bi lahko uporabljali platformo."
+    }
   },
   "disambiguationPage": {
-    "title": "S katerim profilom želite dostopati?",
+    "title": "S katerim profilom se želite prijaviti?",
     "subTitle": "Preusmerili vas bomo na podlagi vaše izbire.",
-    "pf": "Zasebni državljan",
+    "pf": "Fizična oseba",
     "pg": "Pravna oseba",
-    "button": "Dostopaj"
+    "button": "Prijava"
   }
 }

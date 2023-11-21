@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { IllusInProgress } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
   onAssistanceClick: () => void;

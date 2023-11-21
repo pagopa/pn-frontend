@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
   AppResponseMessage,
@@ -30,7 +30,13 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
+  Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
+    <>
+      {props.i18nKey} {props.components!.map((c) => c)}
+    </>
+  ),
 }));
 
 describe('Dashboard Page', () => {
@@ -67,7 +73,7 @@ describe('Dashboard Page', () => {
     expect(result?.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const newNotificationBtn = result?.queryByTestId('callToActionSecond');
+    const newNotificationBtn = result?.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
@@ -114,7 +120,7 @@ describe('Dashboard Page', () => {
     expect(result?.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const apiKeysBtn = result?.queryByTestId('callToActionFirst');
+    const apiKeysBtn = result?.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
@@ -185,7 +191,7 @@ describe('Dashboard Page', () => {
       expect(mock.history.get[1].url).toContain('/notifications/sent');
     });
     rows = result?.getAllByTestId('notificationsTable.row');
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(4);
   });
 
   it('changes page', async () => {
@@ -256,7 +262,7 @@ describe('Dashboard Page', () => {
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     let rows = result?.getAllByTestId('notificationsTable.row');
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(4);
     rows?.forEach((row, index) => {
       expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
     });

@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { NotificationDetailTableRow } from '../../types';
+import { NotificationDetailTableRow } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;
@@ -38,6 +38,7 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
               display: { xs: 'flex', lg: 'table-row' },
               flexDirection: { xs: 'column', lg: 'row' },
             }}
+            data-testid="notificationDetailTableRow"
           >
             <TableCell id={`row-label-${row.id}`} padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
               {row.label}

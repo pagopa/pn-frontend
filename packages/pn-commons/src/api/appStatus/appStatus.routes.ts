@@ -1,5 +1,5 @@
-import { GetDowntimeHistoryParams } from "../../models";
-import { compileRoute } from "../../utils";
+import { GetDowntimeHistoryParams } from '../../models';
+import { compileRoute } from '../../utility';
 
 const API_DOWNTIME_PREFIX = 'downtime';
 const API_VERSION_SEGMENT = 'v1';
@@ -31,7 +31,7 @@ export function DOWNTIME_HISTORY(params: GetDowntimeHistoryParams) {
 
   const conditionallyAddParam = (name: string, value: any) => {
     if (value != null) {
-      queryParams[name] = value;      
+      queryParams[name] = value;
     }
   };
 
@@ -53,6 +53,6 @@ export function DOWNTIME_LEGAL_FACT_DETAILS(legalFactId: string) {
     path: API_DOWNTIME_LEGAL_FACT_DETAILS_PATH,
     params: {
       [API_DOWNTIME_LEGAL_FACT_ID_PARAMETER]: legalFactId,
-    }
+    },
   });
 }

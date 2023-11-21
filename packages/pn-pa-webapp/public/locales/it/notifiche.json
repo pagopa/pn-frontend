@@ -19,9 +19,15 @@
   },
   "payment": {
     "title": "Pagamenti",
-    "subtitle-single": "Il destinatario ha effettuato un pagamento. Ecco i dettagli:",
-    "subtitle-multiple": "Questi destinatari hanno effettuato un pagamento:",
-    "show-more": "Mostra dettagli"
+    "subtitle-single": "Qui puoi monitorare lo stato di pagamento degli avvisi pagoPA allegati alla notifica.",
+    "subtitle-single-f24": "Qui puoi vedere i modelli F24 allegati alla notifica.",
+    "subtitle-multiple": "Per vedere lo stato di pagamento degli avvisi pagoPA allegati alla notifica, seleziona un destinatario.",
+    "subtitle-multiple-f24": "Per vedere i modelli F24 allegati alla notifica, seleziona un destinatario.",
+    "pagopa-notice": "Avviso pagoPA",
+    "paid": "Pagato",
+    "f24-attached": "Modelli F24 allegati",
+    "attachments": "allegati",
+    "f24-dialog-title": "Modelli F24 allegati alla notifica {{iun}}"
   },
   "table": {
     "title": "Tabella delle notifiche",
@@ -41,11 +47,11 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "message": "L'ente non ha ancora inviato nessuna notifica. Usa le",
-    "secondary-message": "o fai un",
-    "secondary-action": "invio manuale",
-    "filter-message": "Non abbiamo trovato risultati: prova con dei filtri diversi.",
-    "filter-action": "Rimuovi filtri"
+    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
+    "no-notifications": "L'ente non ha ancora inviato nessuna notifica. Usa le <0>API Key</0> o fai un <1>invio manuale</1>.",
+    "aria-label-remove-filters": "Rimuovi filtri",
+    "aria-label-api-keys": "API Key",
+    "aria-label-create-notification": "Invio manuale"
   },
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
@@ -62,7 +68,6 @@
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "notice-code": "Codice Avviso",
-    "secondary-notice-code": "Codice Avviso Alternativo",
     "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
@@ -95,6 +100,7 @@
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
     "show-less": "Vedi meno dettagli",
+    "show-all": "Vedi tutti",
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
       "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
@@ -303,7 +309,10 @@
       "datePrefix": "il ",
       "legalFactDownload": "Attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
-    }
+    },
+    "recipients-dialog-title": "Destinatari della notifica {{iun}}",
+    "physical-person": "Persona fisica",
+    "legal-person": "Persona giuridica"
   },
   "status": {
     "recipient": "destinatario",

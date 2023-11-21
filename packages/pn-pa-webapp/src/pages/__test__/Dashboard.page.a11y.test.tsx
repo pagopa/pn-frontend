@@ -9,7 +9,6 @@ import {
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
-import '@testing-library/react';
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
@@ -21,6 +20,7 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 

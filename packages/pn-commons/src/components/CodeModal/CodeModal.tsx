@@ -16,7 +16,7 @@ import {
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CodeInput from './CodeInput';
 
 type Props = {
@@ -114,11 +114,12 @@ const CodeModal = memo(
             {isReadOnly && (
               <CopyToClipboardButton
                 id="copy-code-button"
+                data-testid="copyCodeButton"
                 sx={{ mt: 1.5 }}
                 value={initialValues.join('')}
                 tooltipTitle={getLocalizedOrDefaultLabel(
                   'delegations',
-                  'code_copied',
+                  'deleghe.code_copied',
                   'Codice copiato'
                 )}
               />

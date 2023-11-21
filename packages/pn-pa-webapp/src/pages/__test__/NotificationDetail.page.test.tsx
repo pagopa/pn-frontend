@@ -50,6 +50,7 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
@@ -61,7 +62,7 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
   return timelineElementDigitalSuccessWorkflow.legalFactsIds![0] as LegalFactId;
 };
 
-describe('NotificationDetail Page (one recipient)', () => {
+describe('NotificationDetail Page', () => {
   const mockLegalIds = getLegalFactIds(notificationDTO, 0);
 
   let result: RenderResult | undefined;
@@ -107,10 +108,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     // format date beacuse in UI the date is formatted
     expect(tableRows![3]).toHaveTextContent(`detail.date${formatDate(notificationDTO.sentAt)}`);
     expect(tableRows![4]).toHaveTextContent(`detail.iun${notificationDTO.iun}`);
-    expect(tableRows![5]).toHaveTextContent(
-      `detail.notice-code${notificationDTO.recipients[0].payment?.creditorTaxId} - ${notificationDTO.recipients[0].payment?.noticeCode}`
-    );
-    expect(tableRows![6]).toHaveTextContent(`detail.groups${notificationDTO.group}`);
+    expect(tableRows![5]).toHaveTextContent(`detail.groups${notificationDTO.group}`);
     // check documents box
     let notificationDocumentLength: number;
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
@@ -132,11 +130,8 @@ describe('NotificationDetail Page (one recipient)', () => {
     const NotificationDetailTimeline = result?.getByTestId('NotificationDetailTimeline');
     expect(NotificationDetailTimeline).toBeInTheDocument();
     // check payment history box
-    const timelinePayments = notificationDTO.timeline.filter(
-      (elem) => elem.category === TimelineCategory.PAYMENT
-    );
-    const paymentsTable = result?.getAllByTestId('paymentTable');
-    expect(paymentsTable).toHaveLength(timelinePayments.length);
+    const paymentsTable = result?.getByTestId('paymentInfoBox');
+    expect(paymentsTable).toBeInTheDocument();
     // check downtimes box
     const downtimesBox = result?.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();
@@ -403,33 +398,18 @@ describe('NotificationDetail Page (one recipient)', () => {
     notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
       expect(tableRows![1]).toHaveTextContent(
         index === 0
-          ? `detail.recipients${recipient.taxId} - ${recipient.denomination}`
-          : `${recipient.taxId} - ${recipient.denomination}`
+          ? `detail.recipients${recipient.denomination} - ${recipient.taxId}`
+          : `${recipient.denomination} - ${recipient.taxId}`
       );
     });
     expect(tableRows![2]).toHaveTextContent(
       `detail.date${formatDate(notificationDTOMultiRecipient.sentAt)}`
     );
     expect(tableRows![3]).toHaveTextContent(`detail.iun${notificationDTOMultiRecipient.iun}`);
-    notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
-      expect(tableRows![4]).toHaveTextContent(
-        index === 0
-          ? `detail.notice-code${recipient.taxId} - ${recipient.payment?.creditorTaxId} - ${recipient.payment?.noticeCode}`
-          : `${recipient.taxId} - ${recipient.payment?.creditorTaxId} - ${recipient.payment?.noticeCode}`
-      );
-    });
-    expect(tableRows![5]).toHaveTextContent(`detail.groups${notificationDTOMultiRecipient.group}`);
+    expect(tableRows![4]).toHaveTextContent(`detail.groups${notificationDTOMultiRecipient.group}`);
     // check payment history box
-    const timelinePayments = notificationDTOMultiRecipient.timeline.filter(
-      (elem) => elem.category === TimelineCategory.PAYMENT
-    );
-    const paymentsTable = result?.getAllByTestId('paymentTable');
-    expect(paymentsTable).toHaveLength(timelinePayments.length);
-    for (const recipient of notificationDTOMultiRecipient.recipients) {
-      expect(result?.container).toHaveTextContent(
-        `${recipient.taxId} - ${recipient.payment?.creditorTaxId} - ${recipient.payment?.noticeCode}`
-      );
-    }
+    const paymentsTable = result?.getByTestId('paymentInfoBox');
+    expect(paymentsTable).toBeInTheDocument();
     // check documents box
     let notificationDocumentLength: number;
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
@@ -447,5 +427,24 @@ describe('NotificationDetail Page (one recipient)', () => {
     // check downtimes box
     const downtimesBox = result?.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();
+  });
+
+  it('should not show the payment history box if there are no payments', async () => {
+    const recipientsWithoutPayments = notificationDTO.recipients.map((recipient) => ({
+      ...recipient,
+      payments: [],
+    }));
+
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      recipients: recipientsWithoutPayments,
+    });
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+    const paymentsTable = result?.queryByTestId('paymentInfoBox');
+    expect(paymentsTable).not.toBeInTheDocument();
   });
 });

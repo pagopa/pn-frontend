@@ -1,56 +1,72 @@
 import React from 'react';
 
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-
-import { render } from '../../test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../test-utils';
 import CustomTooltip from '../CustomTooltip';
 
 describe('CustomTooltip Component', () => {
-  it('renders custom tooltip', () => {
+  let result: RenderResult;
+
+  it('renders custom tooltip', async () => {
     // render component
-    const result = render(
-      <CustomTooltip tooltipContent="Mocked content" openOnClick={false}>
-        <p>Mocked Text</p>
-      </CustomTooltip>
-    );
+    await act(async () => {
+      result = render(
+        <CustomTooltip tooltipContent="Mocked content" openOnClick={false}>
+          <p>Mocked Text</p>
+        </CustomTooltip>
+      );
+    });
     expect(result?.container).toHaveTextContent(/Mocked Text/i);
   });
 
   it('toggle tooltip on hover', async () => {
     // render component
     const mockOnOpenCallback = jest.fn();
-    const result = render(
-      <CustomTooltip
-        tooltipContent="Mocked content"
-        openOnClick={false}
-        onOpen={mockOnOpenCallback}
-      >
-        <p>Mocked Text</p>
-      </CustomTooltip>
-    );
-    const paragraph = result.container.querySelector('p');
-    await waitFor(() => {
-      fireEvent.mouseOver(paragraph!);
+    await act(async () => {
+      result = render(
+        <CustomTooltip
+          tooltipContent="Mocked content"
+          openOnClick={false}
+          onOpen={mockOnOpenCallback}
+        >
+          <p data-testid="testTooltipText">Mocked Text</p>
+        </CustomTooltip>
+      );
     });
-    const tooltip = await screen.findByRole('tooltip');
+    const paragraph = result.getByTestId('testTooltipText');
+    // first check that click doesn't work
+    fireEvent.click(paragraph!);
+    let tooltip = await waitFor(() => result.queryByRole('tooltip'));
+    expect(tooltip).not.toBeInTheDocument();
+    // check hover
+    fireEvent.mouseOver(paragraph!);
+    tooltip = await waitFor(() => result.getByRole('tooltip'));
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent(/Mocked content/i);
     expect(mockOnOpenCallback).toBeCalledTimes(1);
+    // again check that click doesn't work
+    fireEvent.click(paragraph!);
+    await waitFor(() => {
+      expect(tooltip).toBeInTheDocument();
+    });
   });
 
   it('toggle tooltip on click', async () => {
     // render component
-    const result = render(
+    const { container, getByRole } = render(
       <CustomTooltip tooltipContent="Mocked content" openOnClick={true}>
         <p>Mocked Text</p>
       </CustomTooltip>
     );
-    const paragraph = result.container.querySelector('p');
+    const paragraph = container.querySelector('p');
+    // open tooltip
+    fireEvent.click(paragraph!);
+    const tooltip = await waitFor(() => getByRole('tooltip'));
+    expect(tooltip).toBeInTheDocument();
+    expect(tooltip).toHaveTextContent(/Mocked content/i);
+    // close tooltip
+    fireEvent.click(paragraph!);
     await waitFor(() => {
-      fireEvent.click(paragraph!);
+      expect(tooltip).not.toBeInTheDocument();
     });
-    const tooltip = screen.queryByRole('tooltip');
-    expect(tooltip!).toBeInTheDocument();
-    expect(tooltip!).toHaveTextContent(/Mocked content/i);
   });
 });

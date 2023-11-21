@@ -7,13 +7,13 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { TrackEventType } from '../../utils/events';
-import { trackEventByType } from '../../utils/mixpanel';
-import { storageAarOps, storageSpidSelectedOps, storageTypeOps } from '../../utils/storage';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
+import { storageAarOps, storageSpidSelectedOps } from '../../utility/storage';
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -29,13 +29,8 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
-  const type = params.get(AppRouteParams.TYPE);
   const aar = params.get(AppRouteParams.AAR);
   const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL } = getConfiguration();
-
-  if (type !== null && type !== '' && (type === AppRouteType.PF || type === AppRouteType.PG)) {
-    storageTypeOps.write(type);
-  }
 
   if (aar !== null && aar !== '') {
     storageAarOps.write(aar);

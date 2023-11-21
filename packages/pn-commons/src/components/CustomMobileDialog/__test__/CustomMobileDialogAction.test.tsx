@@ -1,36 +1,50 @@
-import { fireEvent, RenderResult } from '@testing-library/react';
+import React from 'react';
 
-import { render } from '../../../test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
+import CustomMobileDialog from '../CustomMobileDialog';
 import CustomMobileDialogAction from '../CustomMobileDialogAction';
-import * as customContext from '../CustomMobileDialog.context';
+import CustomMobileDialogContent from '../CustomMobileDialogContent';
+import CustomMobileDialogToggle from '../CustomMobileDialogToggle';
 
 describe('CustomMobileDialogAction Component', () => {
-  let result: RenderResult | undefined;
-  const contextMockedFn = jest.fn();
-
-  beforeEach(() => {
-    // mock custom hook
-    const customHookSpy = jest.spyOn(customContext, 'useCustomMobileDialogContext');
-    customHookSpy.mockReturnValue({ open: true, toggleOpen: contextMockedFn });
-    // render component
-    result = render(
-      <CustomMobileDialogAction closeOnClick>Mocked action</CustomMobileDialogAction>
+  it('renders component', async () => {
+    const { container } = render(
+      <CustomMobileDialog>
+        <CustomMobileDialogToggle hasCounterBadge>
+          mocked dialog toggle title
+        </CustomMobileDialogToggle>
+        <CustomMobileDialogContent title="Mocked title">
+          <CustomMobileDialogAction closeOnClick>Mocked action</CustomMobileDialogAction>
+        </CustomMobileDialogContent>
+      </CustomMobileDialog>
     );
-  });
-
-  afterEach(() => {
-    result = undefined;
-    jest.resetAllMocks();
-  });
-
-  it('renders CustomMobileDialogAction', () => {
-    const button = result?.queryByTestId('dialogAction');
-    expect(button).toHaveTextContent(/Mocked action/i);
-  });
-
-  it('clicks on action', () => {
-    const button = result?.queryByTestId('dialogAction');
+    // open dialog
+    const button = container.querySelector('button');
     fireEvent.click(button!);
-    expect(contextMockedFn).toBeCalledTimes(1);
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const action = within(dialog).getByTestId('dialogAction');
+    expect(action).toHaveTextContent(/Mocked action/i);
+  });
+
+  it('clicks on action and close modal', async () => {
+    const { container } = render(
+      <CustomMobileDialog>
+        <CustomMobileDialogToggle hasCounterBadge>
+          mocked dialog toggle title
+        </CustomMobileDialogToggle>
+        <CustomMobileDialogContent title="Mocked title">
+          <CustomMobileDialogAction closeOnClick>Mocked action</CustomMobileDialogAction>
+        </CustomMobileDialogContent>
+      </CustomMobileDialog>
+    );
+    // open dialog
+    const button = container.querySelector('button');
+    fireEvent.click(button!);
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    const action = within(dialog).getByTestId('dialogAction');
+    fireEvent.click(action);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
   });
 });

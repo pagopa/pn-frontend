@@ -1,20 +1,21 @@
+import { AxiosResponse } from 'axios';
+
 import {
-  formatDate,
+  ExtRegistriesPaymentDetails,
   GetNotificationsParams,
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
+  PaymentAttachment,
   PaymentAttachmentNameType,
-  PaymentInfo,
   PaymentNotice,
 } from '@pagopa-pn/pn-commons';
-import { AxiosResponse } from 'axios';
 
-import { Delegator } from '../../redux/delegation/types';
-import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { NotificationId } from '../../models/Notifications';
+import { Delegator } from '../../redux/delegation/types';
+import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
@@ -28,14 +29,12 @@ import {
   NOTIFICATION_PAYMENT_URL,
 } from './notifications.routes';
 
-
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
   }
   return { url: '' };
 };
-
 
 export const NotificationsApi = {
   /**
@@ -47,14 +46,7 @@ export const NotificationsApi = {
   getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
       if (response.data && response.data.resultsPage) {
-        const notifications = response.data.resultsPage.map((d) => ({
-          ...d,
-          sentAt: formatDate(d.sentAt),
-        }));
-        return {
-          ...response.data,
-          resultsPage: notifications,
-        };
+        return response.data;
       }
       return {
         resultsPage: [],
@@ -153,29 +145,32 @@ export const NotificationsApi = {
    * Gets current user specified Payment Attachment
    * @param  {string} iun
    * @param  {PaymentAttachmentNameType} attachmentName
+   * @param  {number} recIndex
    * @param  {string} mandateId
+   * @param  {number} attachmentIdx
    * @returns Promise
    */
   getPaymentAttachment: (
     iun: string,
     attachmentName: PaymentAttachmentNameType,
-    mandateId?: string
-  ): Promise<{ url: string }> =>
+    mandateId?: string,
+    attachmentIdx?: number
+  ): Promise<PaymentAttachment> =>
     apiClient
-      .get<{ url: string }>(
-        NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, mandateId)
+      .get<PaymentAttachment>(
+        NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, mandateId, attachmentIdx)
       )
-      .then((response) => getDownloadUrl(response)),
+      .then((response) => response.data),
 
   /**
    * Gets current user's notification payment info
-   * @param  {string} noticeCode
-   * @param  {string} taxId
    * @returns Promise
    */
-  getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
+  getNotificationPaymentInfo: (
+    params: Array<{ noticeCode: string; creditorTaxId: string }>
+  ): Promise<Array<ExtRegistriesPaymentDetails>> =>
     apiClient
-      .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .post<Array<ExtRegistriesPaymentDetails>>(NOTIFICATION_PAYMENT_INFO(), params)
       .then((response) => response.data),
 
   /**

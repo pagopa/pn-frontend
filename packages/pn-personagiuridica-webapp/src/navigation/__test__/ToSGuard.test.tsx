@@ -2,10 +2,8 @@ import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { act, screen } from '@testing-library/react';
-
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { render } from '../../__test__/test-utils';
+import { act, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { GET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentType } from '../../models/consents';

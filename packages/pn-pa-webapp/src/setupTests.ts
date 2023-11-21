@@ -22,6 +22,7 @@ beforeAll(async () => {
     APP_VERSION: 'mock-version',
     SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
     SELFCARE_BASE_URL: 'mock-selfcare.base',
+    SELFCARE_SEND_PROD_ID: 'mock-prod-id',
     IS_PAYMENT_ENABLED: false,
     MIXPANEL_TOKEN: 'DUMMY',
   });

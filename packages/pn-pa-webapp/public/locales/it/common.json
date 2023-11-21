@@ -9,7 +9,8 @@
     "continue": "Continua",
     "send": "Invia",
     "go-to-home": "Torna alla home page",
-    "go-to-login": "Accedi"
+    "go-to-login": "Accedi",
+    "close": "Chiudi"
   },
   "menu": {
     "notifications": "Notifiche",
@@ -112,6 +113,7 @@
     "work": "Lavora con noi",
     "certifications": "Certificazioni",
     "security": "Sicurezza delle informazioni",
+    "privacy-info": "Informativa Privacy",
     "personal-data": "Diritto alla protezione dei dati personali",
     "cookie": "Preferenze Cookie",
     "terms-conditions": "Termini e Condizioni",

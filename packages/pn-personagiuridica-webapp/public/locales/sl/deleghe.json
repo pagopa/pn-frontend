@@ -1,50 +1,51 @@
 {
   "deleghe": {
-    "title": "Pooblastila",
+    "title": "Prenosi pooblastil",
     "close": "Zapri",
-    "description": "Tukaj lahko upravljate pooblaščence podjetja in pooblastila, ki so pod vašo odgovornostjo. Prvi so tisti, ki jih podjetje pooblasti za branje svojih obvestil. Druga so pooblastila, ki so zaupana podjetju.",
+    "description": "Tukaj lahko upravljate pooblaščence podjetja in prenose pooblastil na podjetje. Prvi so tisti, ki jih podjetje pooblasti za branje svojih obvestil. Drugi so prenosi pooblastil na podjetje.",
     "delegatesTitle": "Pooblaščenci podjetja",
-    "delegatorsTitle": "Pooblastila, ki so pod odgovornostjo podjetja",
-    "delegatorsApiErrorMessage": "Podatkov v zvezi s poobastili pod vašo odgovornostjo ni bilo mogoče pridobiti.",
-    "delegationStart": "Začetek pooblastila",
-    "delegationEnd": "Konec pooblastila",
+    "delegatorsTitle": "Prenos pooblastil na podjetje",
+    "delegatorsApiErrorMessage": "Podatkov o prenosu pooblastil na vas ni bilo mogoče pridobiti.",
+    "delegationStart": "Začetek prenosa pooblastila",
+    "delegationEnd": "Konec prenosa pooblastila",
     "accept_title": "Vnesite potrditveno kodo",
-    "accept_description": "Če želite sprejeti pooblastilo, vnesite kodo, ki jo je {{name}} dal v skupno rabo z vami.",
-    "add": "Dodaj pooblastilo",
-    "revoke": "Preklic",
+    "accept_description": "Če želite sprejeti prenešeno pooblastilo, vnesite kodo, ki jo je {{name}} delil z vami.",
+    "add": "Dodajte prenos pooblastila",
+    "revoke": "Prekliči",
     "reject": "Zavrni",
     "accept": "Sprejmi",
+    "update": "Spremeni",
     "show": "Prikaži kodo",
-    "revocation_question": "Ali želite preklicati pooblastilo za {{delegate}}? ",
-    "rejection_question": "Ali želite zavrniti pooblastilo s strani {{delegator}}?",
-    "confirm_revocation": "Prekliči pooblastilo",
-    "confirm_rejection": "Zavrni pooblastilo",
-    "subtitle_rejection": "Če ga zavrnete, ne boste mogli prebrati obvestil s strani {{delegator}}.",
-    "subtitle_revocation": "Ne boste več mogli brati obvestil s strani {{recipient}}.",
+    "revocation_question": "Ali želite preklicati prenos pooblastila na {{delegate}}? ",
+    "rejection_question": "Ali želite zavrniti prenos pooblastila s strani {{delegator}}?",
+    "confirm_revocation": "Prekliči prenos pooblastila",
+    "confirm_rejection": "Zavrni prenos pooblastila",
+    "subtitle_rejection": "Če zavrnete, ne boste mogli prebrati obvestil {{delegator}}.",
+    "subtitle_revocation": "Ne bo več mogel brati obvestil osebe {{recipient}}.",
     "error_title": "Žal, nekaj je šlo narobe",
-    "error_subtitle": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova kasneje.",
-    "error_button": "Znova naloži stran",
-    "no_delegates": "{{organizationName}} ni nikogar pooblastil za branje svojih obvestil.",
-    "no_delegators": "Ni nobenega pooblastila pod odgovornostjo {{organizationName}}.",
-    "no_delegators_after_filters": "Filtri, ki ste jih uporabili, niso dali nobenih rezultatov.",
-    "show_code_title": "Koda za preverjanje pooblastila za {{name}}",
-    "show_code_subtitle": "To kodo delite s pooblaščencem: ta jo bo moral vnesti ob sprejemu pooblastila.",
+    "error_subtitle": "Strani ni bilo mogoče naložiti. Ponovno jo naložite ali poskusite znova pozneje.",
+    "error_button": "Ponovno naloži stran",
+    "no_delegates": "{{organizationName}} ni nikogar pooblastil/-a za branje svojih obvestil. <0>Dodajte prenos pooblastila</0>.",
+    "no_delegators": "Ni nobenega prenosa pooblastila na {{organizationName}}.",
+    "no_delegators_after_filters": "Filtri, ki ste jih dodali, niso dali nobenih rezultatov. <0>Odstranite filtre</0>.",
+    "show_code_title": "Potrditvena koda za prenos pooblastila na {{name}}",
+    "show_code_subtitle": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila.",
     "verification_code": "Koda za preverjanje",
-    "tab_aria_label": "Zavihek za pooblastila",
+    "code_copied": "Koda je kopirana",
+    "tab_aria_label": "Zavihek prenosa pooblastil",
     "tab_delegati": "Pooblaščenci podjetja",
-    "tab_deleghe": "Pooblastila, ki so pod odgovornostjo podjetja",
+    "tab_deleghe": "Prenos pooblastil na podjetje",
     "table": {
       "name": "Ime",
-      "email": "E-pošta",
-      "delegationStart": "Začetek pooblastila",
-      "delegationEnd": "Konec pooblastila",
+      "delegationStart": "Začetek prenosa pooblastila",
+      "delegationEnd": "Konec prenosa pooblastila",
       "permissions": "Dovoljenja",
       "status": "Stanje",
       "showCode": "Prikaži kodo",
-      "revoke": "Preklic",
+      "revoke": "Prekliči",
       "reject": "Zavrni",
       "accept": "Sprejmi",
-      "notificationsFrom": "Obvestila s strani:",
+      "notificationsFrom": "Obvestila od:",
       "allNotifications": "Vsa obvestila",
       "active": "Aktiviraj",
       "pending": "Čakanje na potrditev",
@@ -52,57 +53,61 @@
       "groups": "Skupine",
       "group": "Skupina",
       "no-group-found": "Ni najdenih skupin",
-      "no-name-found": "Ni najdenih imen",
-      "menu-aria-label": "Meni z dejanji"
+      "menu-aria-label": "Meni dejanj",
+      "tax-id": "Davčna številka"
     },
-    "accept-delegation": "Sprejmi pooblastilo",
-    "associate-groups-title": "Ali želite dodeliti pooblasilo skupini?",
-    "associate-groups-subtitle": "Skrbnik skupine bo lahko upravljal pooblastilo. Uporabniki v skupini bodo lahko prebrali samo obvestila v zvezi s tem pooblastilom.",
-    "no-group": "Ne dodelite skupini",
-    "associate-group": "Dodelite skupini",
+    "accept-delegation": "Sprejmi prenos pooblastila",
+    "associate-groups-title": "Ali želite prenesti pooblastilo skupini?",
+    "edit-groups-title": "Uredite skupino, kateri je bilo preneseno pooblastilo",
+    "associate-groups-subtitle": "Skrbnik skupine bo lahko upravljal prenos pooblastila. Uporabniki v skupini bodo lahko prebrali samo obvestila, povezana s tem prenosom pooblastila.",
+    "no-group": "Ne dodeli skupini",
+    "associate-group": "Dodeli skupini",
     "select-group": "Izberite skupino*",
-    "accepted-successfully": "Pooblastilo je bilo sprejeto",
-    "accepted-error": "Zaradi napake pooblastilo ni bilo sprejeto. Pritisnite Prekliči in poskusite znova.",
-    "revoke-successfully": "Pooblastilo preklicano.",
-    "reject-successfully": "Pooblastilo zavrnjeno.",
-    "revoke-error": "Prišlo je do napake in pooblastilo ni bilo preklicano. Poskusite znova.",
-    "reject-error": "Prišlo je do napake in pooblastilo ni bilo zavrnjeno. Poskusite znova."
+    "accepted-successfully": "Prenos pooblastila je bil sprejet",
+    "accepted-error": "Zaradi napake prenos pooblastila ni bil sprejet. Pritisnite Prekliči in poskusite znova.",
+    "updated-successfully": "Spremenjena skupina",
+    "updated-error": "Prišlo je do napake in skupina ni bila spremenjena. Poskusite znova.",
+    "revoke-successfully": "Prenos pooblastila je bil preklican.",
+    "reject-successfully": "Prenos pooblastila je bil zavrnjen.",
+    "revoke-error": "Prišlo je do napake in prenos pooblastila ni bil preklican. Poskusite znova.",
+    "reject-error": "Prišlo je do napake in prenos pooblastila ni bil zavrnjen. Poskusite znova.",
+    "validation": {
+      "pIvaAndFiscalCode": {
+        "wrong": "Vnesena davčna številka ni pravilna"
+      }
+    }
   },
   "nuovaDelega": {
-    "breadcrumb": "Novo pooblastilo",
-    "backToDelegations": "Nazaj na pooblastila",
-    "createdTitle": "Zahteva za pooblastilo je bila uspešno ustvarjena",
-    "createdDescription": "Kodo za preverjanje delite s pooblaščencem: ta jo bo moral vnesti ob prvem dostopu v SEND in sprejeti zahtevo.",
-    "title": "Dodaj pooblastilo",
-    "subtitle": "Vnesite podatke fizične ali pravne osebe, na katero želite prenesti branje obvestil o {{organizationName}}",
+    "breadcrumb": "Nov prenos pooblastila",
+    "backToDelegations": "Nazaj na prenos pooblastil",
+    "createdTitle": "Zahteva za prenos pooblastila je bila ustvarjena",
+    "createdDescription": "Delite potrditveno kodo s pooblaščencem: moral jo bo vnesti, ko se bo prvič prijavil v SEND in sprejeti zahtevo.",
+    "title": "Dodajte prenos pooblastila",
+    "subtitle": "Vnesite podatke fizične ali pravne osebe, na katero želite prenesti pooblastilo za branje vaših obvestil.",
     "form": {
-      "personType": "Pravna oseba*:",
+      "personType": "Pravni subjekt*:",
       "naturalPerson": "Fizična oseba",
       "legalPerson": "Pravna oseba",
       "firstName": "Ime*",
       "lastName": "Priimek*",
       "fiscalCode": "Davčna številka*",
-      "email": "Elektronska pošta*",
       "businessName": "Ime podjetja*",
-      "viewFrom": "Ogledali si boste lahko obvestila s strani*:",
-      "allEntities": "Vsi subjekti",
-      "onlySelected": "Samo izbrani subjekti",
-      "selectEntities": "Izberite subjekte",
-      "endDate": "Konec pooblastila",
+      "viewFrom": "Ogledali si boste laho obvestila s strani*:",
+      "allEntities": "Vseh organizacij",
+      "onlySelected": "Samo izbranih organizacij",
+      "selectEntities": "Izberite organizacije*",
+      "date-duration": "Obdobje veljavnosti prenosa pooblastila*",
+      "endDate": "Konec prenosa pooblastila",
       "verificationCode": "Koda za preverjanje",
-      "verificationCodeDescr": "To kodo delite s pooblaščencem: ta jo bo moral vnesti ob sprejemu pooblastila.",
+      "verificationCodeDescr": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila.",
       "submit": "Pošlji zahtevo",
       "mandatoryField": "Obvezna polja*",
-      "party-not-found": "Ni najdenih subjektov"
+      "party-not-found": "Najdena ni bila nobena organizacija"
     },
     "validation": {
       "fiscalCode": {
         "required": "Davčna številka je obvezna",
         "wrong": "Vnesena davčna številka ni pravilna"
-      },
-      "email": {
-        "wrong": "E-pošta ni pravilno oblikovana",
-        "required": "E-poštni naslov je obvezen"
       },
       "name": {
         "required": "Ime je obvezno"
@@ -113,36 +118,36 @@
       "businessName": {
         "required": "Ime podjetja je obvezno"
       },
+      "entiSelected": { "required": "Izberite vsaj eno organizacijo" },
       "expirationDate": {
-        "required": "Datum zaključka pooblastila je obvezen",
-        "wrong": "Nepravilen datum"
+        "required": "Datum zaključka prenosa pooblastila je obvezen",
+        "wrong": "Napačen datum"
+      },
+      "pIvaAndFiscalCode": {
+        "wrong": "Vnesena davčna številka ni pravilna"
       }
     }
   },
   "errors": {
     "not_found": {
       "title": "Napaka",
-      "message": "Pooblastila ni bilo mogoče najti"
+      "message": "Prenosa pooblastila ni mogoče najti"
     },
     "already_exists": {
-      "title": "Pooblastilo je že prisotno",
-      "message": "Oseba, ki ste jo navedli, že ima pooblastilo za ta subjekt."
+      "title": "Prenos pooblastila je že prisoten",
+      "message": "Oseba, ki ste jo navedli, že ima pooblastilo. Izbrišite jo in ustvarite novo."
     },
     "not_acceptable": {
-      "title": "Neveljavno pooblastilo",
-      "message": "Vneseno pooblastilo ni veljavno"
+      "title": "Neveljaven prenos pooblastila",
+      "message": "Vnesen prenos pooblastila ni veljaven"
     },
     "delegate_himself": {
-      "title": "Napaka pri vnosu pooblastila",
-      "message": "Ne morete pooblastiti sami sebe"
+      "title": "Napaka pri vnosu prenosa pooblastila",
+      "message": "Ne morete prenesti pooblastila nase"
     },
     "invalid_verification_code": {
-      "title": "Neveljavna koda",
-      "message": "Vnesena koda ni pravilna. Poskusite znova."
-    },
-    "invalid_verification_code_ua": {
-      "title": "Neveljavna koda",
-      "message": "Neveljavna koda za preverjanje"
+      "title": "Koda je napačna",
+      "message": "Preverite in jo ponovno vnesite"
     }
   }
 }

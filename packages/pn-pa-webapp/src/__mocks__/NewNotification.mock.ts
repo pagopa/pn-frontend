@@ -13,7 +13,7 @@ import {
   PaymentModel,
 } from '../models/NewNotification';
 import { GroupStatus, UserGroup } from '../models/user';
-import { newNotificationMapper } from '../utils/notification.utility';
+import { newNotificationMapper } from '../utility/notification.utility';
 import { userResponse } from './Auth.mock';
 
 export const newNotificationGroups: Array<UserGroup> = [

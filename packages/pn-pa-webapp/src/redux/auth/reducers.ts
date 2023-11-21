@@ -7,31 +7,44 @@ import {
   basicUserDataMatcherContents,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
+import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PNRole, PartyRole } from '../../models/user';
+import { PNRole, PartyRole, Role } from '../../models/user';
 import {
   acceptPrivacy,
   acceptToS,
   exchangeToken,
+  getInstitutions,
   getPrivacyApproval,
+  getProductsOfInstitution,
   getToSApproval,
   logout,
 } from './actions';
-import { User } from './types';
+import { Organization, User } from './types';
 
-const roleMatcher = yup.object({
-  role: yup.string().oneOf(Object.values(PNRole)),
-  partyRole: yup.string().oneOf(Object.values(PartyRole)),
+const roleMatcher: yup.SchemaOf<Role> = yup.object({
+  role: yup.mixed<PNRole>().required(),
+  partyRole: yup.mixed<PartyRole>().required(),
 });
 
-const organizationMatcher = yup.object({
-  id: yup.string(),
-  roles: yup.array().of(roleMatcher),
-  fiscal_code: yup.string().matches(dataRegex.pIva),
-  groups: yup.array().of(yup.string()),
-  name: yup.string(),
+const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
+  id: yup.string().required(),
+  roles: yup.array().of(roleMatcher).required(),
+  fiscal_code: yup.string().matches(dataRegex.pIva).required(),
+  groups: yup.array().of(yup.string()).notRequired(),
+  name: yup.string().required(),
   hasGroups: yup.boolean(),
+  parentDescription: yup.string().notRequired(),
+  aooParent: yup.string().notRequired(),
+  subUnitCode: yup.string().notRequired(),
+  subUnitType: yup.string().notRequired(),
+  rootParent: yup
+    .object({
+      id: yup.string().notRequired(),
+      description: yup.string().notRequired(),
+    })
+    .notRequired(),
 });
 
 const userDataMatcher = yup
@@ -81,6 +94,8 @@ const userSlice = createSlice({
       isFirstAccept: false,
       consentVersion: '',
     },
+    institutions: [] as Array<PartyEntity>,
+    productsOfInstitution: [] as Array<ProductEntity>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -143,6 +158,12 @@ const userSlice = createSlice({
     });
     builder.addCase(acceptPrivacy.rejected, (state) => {
       state.privacyConsent.accepted = false;
+    });
+    builder.addCase(getInstitutions.fulfilled, (state, action) => {
+      state.institutions = action.payload;
+    });
+    builder.addCase(getProductsOfInstitution.fulfilled, (state, action) => {
+      state.productsOfInstitution = action.payload;
     });
   },
 });

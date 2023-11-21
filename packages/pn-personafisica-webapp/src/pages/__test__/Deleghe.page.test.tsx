@@ -13,7 +13,7 @@ import {
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
 } from '../../api/delegations/delegations.routes';
-import { DelegationStatus } from '../../utils/status.utility';
+import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
 jest.mock('react-i18next', () => ({
@@ -21,6 +21,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('Deleghe page', () => {
@@ -96,7 +97,7 @@ describe('Deleghe page', () => {
     const revokeDelegate = await waitFor(() => result.getByTestId('menuItem-revokeDelegate'));
     // show confirmation dialog
     fireEvent.click(revokeDelegate);
-    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    const dialog = await waitFor(() => result.getByTestId('dialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.revocation_question');
     const confirmButton = within(dialog).getByRole('button', {
@@ -135,7 +136,7 @@ describe('Deleghe page', () => {
     const rejectDelegator = await waitFor(() => result.getByTestId('menuItem-rejectDelegator'));
     // show confirmation dialog
     fireEvent.click(rejectDelegator);
-    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    const dialog = await waitFor(() => result.getByTestId('dialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.rejection_question');
     const confirmButton = within(dialog).getByRole('button', {

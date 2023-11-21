@@ -13,12 +13,12 @@ interface PgConfigurationFromFile {
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
   SELFCARE_BASE_URL: string;
-  URL_FE_LOGIN: string;
   URL_CHECKOUT: string;
   LANDING_SITE_URL: string;
   // this will be removed when delegations to pg works correctly
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS?: boolean;
+  F24_DOWNLOAD_WAIT_TIME: number;
 }
 
 interface PgConfiguration extends PgConfigurationFromFile {
@@ -37,13 +37,13 @@ interface PgConfiguration extends PgConfigurationFromFile {
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
   WORK_IN_PROGRESS: boolean;
+  F24_DOWNLOAD_WAIT_TIME: number;
 }
 
 class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
   constructor() {
     super();
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.ruleFor('MIXPANEL_TOKEN').isString();
@@ -54,6 +54,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.makeRequired(this.ruleFor('LANDING_SITE_URL').isString());
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();
+    this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber();
   }
 
   makeRequired(rule: StringRuleValidator<PgConfigurationFromFile, string>): void {
@@ -77,11 +78,12 @@ export function getConfiguration(): PgConfiguration {
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
-    URL_FE_LOGOUT: `${configurationFromFile.URL_FE_LOGIN}logout`,
+    URL_FE_LOGOUT: `${configurationFromFile.SELFCARE_BASE_URL}/auth/logout`,
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
     WORK_IN_PROGRESS: Boolean(configurationFromFile.WORK_IN_PROGRESS),
+    F24_DOWNLOAD_WAIT_TIME: configurationFromFile.F24_DOWNLOAD_WAIT_TIME || 0,
   };
 }
 

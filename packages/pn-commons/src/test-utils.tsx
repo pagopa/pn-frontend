@@ -1,23 +1,63 @@
 import mediaQuery from 'css-mediaquery';
-import { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import {
+  Matcher,
+  MatcherOptions,
+  RenderOptions,
+  fireEvent,
+  queryByAttribute,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
+import { initLocalization } from './utility/localization.utility';
 
-const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
-  const theme = createTheme({});
+type NavigationRouter = 'default' | 'none';
+
+const theme = createTheme({});
+
+const AllTheProviders = ({
+  children,
+  testStore,
+  navigationRouter,
+}: {
+  children: ReactNode;
+  testStore: Store;
+  navigationRouter: NavigationRouter;
+}) => {
+  if (navigationRouter === 'default') {
+    return (
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <Provider store={testStore}>{children}</Provider>
+        </ThemeProvider>
+      </BrowserRouter>
+    );
+  }
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <Provider store={testStore}>{children}</Provider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <Provider store={testStore}>{children}</Provider>
+    </ThemeProvider>
   );
+};
+
+const createTestStore = (preloadedState = {}) => {
+  return configureStore({
+    reducer: { appState: appStateSlice.reducer },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+    preloadedState,
+  });
 };
 
 const customRender = (
@@ -25,16 +65,25 @@ const customRender = (
   {
     preloadedState,
     renderOptions,
-  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+    navigationRouter = 'default',
+  }: {
+    preloadedState?: any;
+    renderOptions?: Omit<RenderOptions, 'wrapper'>;
+    navigationRouter?: NavigationRouter;
+  } = {}
 ) => {
-  const testStore = configureStore({
-    reducer: { appState: appStateSlice.reducer },
-    preloadedState,
-  });
-  return render(ui, {
-    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
-    ...renderOptions,
-  });
+  const testStore = createTestStore(preloadedState);
+  return {
+    ...render(ui, {
+      wrapper: ({ children }) => (
+        <AllTheProviders testStore={testStore} navigationRouter={navigationRouter}>
+          {children}
+        </AllTheProviders>
+      ),
+      ...renderOptions,
+    }),
+    testStore,
+  };
 };
 
 // utility function
@@ -203,6 +252,50 @@ async function testRadio(
   }
 }
 
+/**
+ * Init localization and set the translate function to a default value
+ */
+function initLocalizationForTest() {
+  const mockedTranslationFn = (
+    namespace: string | Array<string>,
+    path: string,
+    data?: { [key: string]: any | undefined }
+  ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
+  initLocalization(mockedTranslationFn);
+}
+/**
+ * Get element by id
+ * @param container
+ * @param id
+ * @param options
+ * @returns HTMLElement | null
+ */
+const queryById: (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions
+) => HTMLElement | null = (container: HTMLElement, id: Matcher, options?: MatcherOptions) =>
+  queryByAttribute('id', container, id, options);
+
+/**
+ * Get element by id
+ * @param container
+ * @param id
+ * @param options
+ * @returns HTMLElement
+ */
+const getById: (container: HTMLElement, id: Matcher, options?: MatcherOptions) => HTMLElement = (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions
+) => {
+  const elem = queryByAttribute('id', container, id, options);
+  if (!elem) {
+    throw new Error(`cannot find an element with id ${id}`);
+  }
+  return elem;
+};
+
 export * from '@testing-library/react';
 export {
   customRender as render,
@@ -212,4 +305,9 @@ export {
   testFormElements,
   testInput,
   testRadio,
+  initLocalizationForTest,
+  getById,
+  queryById,
+  createTestStore,
+  theme,
 };

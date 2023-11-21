@@ -2,7 +2,7 @@ import { ExitToApp } from '@mui/icons-material';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
 
-import { SideMenuItem } from '../../types';
+import { SideMenuItem } from '../../models';
 import NotificationBadge from './NotificationBadge';
 
 type Props = {
@@ -60,7 +60,7 @@ const SideMenuListItem = ({
     {item.icon && (
       <ListItemIcon>
         {item.dotBadge ? (
-          <Badge color="primary" variant="dot">
+          <Badge color="primary" variant="dot" id={`sideMenuItem-${item.label}-badge`}>
             <item.icon />
           </Badge>
         ) : (

@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import {
   Box,
   Card,
@@ -9,9 +11,8 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { Fragment } from 'react';
 
-import { CardElement, CardAction, Item } from '../../types';
+import { CardAction, CardElement, Item } from '../../models';
 
 type Props = {
   /* Card header elements */
@@ -26,6 +27,8 @@ type Props = {
   sx?: SxProps;
   /** Custom header grid props */
   headerGridProps?: GridProps;
+  /** Cards test id */
+  testId?: string;
 };
 
 const cardStyle = {
@@ -39,7 +42,15 @@ const cardStyle = {
   },
 };
 
-const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGridProps }: Props) => {
+const ItemsCard: React.FC<Props> = ({
+  cardHeader,
+  cardBody,
+  cardData,
+  cardActions,
+  sx,
+  headerGridProps,
+  testId = 'mobileCards',
+}) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
       <Grid
@@ -64,7 +75,7 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
   );
 
   return (
-    <Box sx={{ ...cardStyle, ...sx }}>
+    <Box sx={{ ...cardStyle, ...sx }} data-testid={testId}>
       {cardData.map((data) => (
         <Card
           key={data.id}

@@ -21,7 +21,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-} from '../../types';
+} from '../../models';
 import {
   formatDay,
   formatMonthString,
@@ -29,14 +29,14 @@ import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utils';
+} from '../../utility';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
   // legalFact can be either a LegalFactId, or a NotificationDetailOtherDocument
   // (generated from details.generatedAarUrl in ANALOG_FAILURE_WORKFLOW timeline elements).
-  // Cfr. comment in the definition of INotificationDetailTimeline in src/types/NotificationDetail.ts.
+  // Cfr. comment in the definition of INotificationDetailTimeline in src/models/NotificationDetail.ts.
   clickHandler: (legalFactId: LegalFactId | NotificationDetailOtherDocument) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
@@ -47,6 +47,7 @@ type Props = {
   eventTrackingCallbackShowMore?: () => void;
   disableDownloads?: boolean;
   isParty?: boolean;
+  language?: string;
 };
 
 /**
@@ -79,6 +80,9 @@ const timelineStepCmp = (
 
 /**
  * Notification detail timeline
+ * This component used to display a timeline of events or notifications,
+ * allowing users to expand and collapse additional details as needed.
+ * The component's behavior and appearance can be customized by passing various props to it.
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
@@ -92,6 +96,7 @@ const timelineStepCmp = (
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  * @param disableDownloads if notification is disabled
  * @param isParty if is party chip rendered with opacity for status cancellation in progress
+ * @param language used to translate months in timeline
  */
 
 const NotificationDetailTimelineStep = ({
@@ -107,6 +112,7 @@ const NotificationDetailTimelineStep = ({
   eventTrackingCallbackShowMore,
   disableDownloads,
   isParty = true,
+  language = 'it',
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -136,7 +142,7 @@ const NotificationDetailTimelineStep = ({
     undefined,
     <Fragment>
       <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-        {formatMonthString(timelineStep.activeFrom)}
+        {formatMonthString(timelineStep.activeFrom, language)}
       </Typography>
       <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
         {formatDay(timelineStep.activeFrom)}
@@ -216,6 +222,7 @@ const NotificationDetailTimelineStep = ({
     <Box data-testid="moreLessButton">
       <ButtonNaked
         id="more-less-timeline-step"
+        data-testid="more-less-timeline-step"
         startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
         onClick={handleShowMoreClick}
       >
@@ -237,16 +244,16 @@ const NotificationDetailTimelineStep = ({
     return timelineStepCmp(
       s.elementId,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-          {formatMonthString(s.timestamp)}
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
+          {formatMonthString(s.timestamp, language)}
         </Typography>
-        <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+        <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
           {formatDay(s.timestamp)}
         </Typography>
       </Fragment>,
       undefined,
       <Fragment>
-        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
           {formatTime(s.timestamp)}
         </Typography>
         <Typography
@@ -274,7 +281,7 @@ const NotificationDetailTimelineStep = ({
                   key={
                     (lf as LegalFactId).key || (lf as NotificationDetailOtherDocument).documentId
                   }
-                  data-testid="download-legalfact"
+                  data-testid="download-legalfact-micro"
                 >
                   {getLegalFactLabel(
                     s,

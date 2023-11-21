@@ -6,7 +6,8 @@ import {
   LegalFactId,
   NotificationDetail,
   NotificationDetailOtherDocument,
-  formatDate,
+  PaymentAttachment,
+  PaymentAttachmentNameType,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
@@ -22,6 +23,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
 
@@ -42,14 +44,7 @@ export const NotificationsApi = {
   getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
       if (response.data?.resultsPage) {
-        const notifications = response.data.resultsPage.map((d) => ({
-          ...d,
-          sentAt: formatDate(d.sentAt),
-        }));
-        return {
-          ...response.data,
-          resultsPage: notifications,
-        };
+        return response.data;
       }
       return {
         resultsPage: [],
@@ -171,6 +166,26 @@ export const NotificationsApi = {
   createNewNotification: (notification: NewNotificationDTO): Promise<NewNotificationResponse> =>
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
+      .then((response) => response.data),
+
+  /**
+   * Gets current user specified Payment Attachment
+   * @param  {string} iun
+   * @param  {PaymentAttachmentNameType} attachmentName
+   * @param  {number} recIndex
+   * @param  {number} attachmentIdx
+   * @returns Promise
+   */
+  getPaymentAttachment: (
+    iun: string,
+    attachmentName: PaymentAttachmentNameType,
+    recIndex: number,
+    attachmentIdx?: number
+  ): Promise<PaymentAttachment> =>
+    apiClient
+      .get<PaymentAttachment>(
+        NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, recIndex, attachmentIdx)
+      )
       .then((response) => response.data),
 
   /**

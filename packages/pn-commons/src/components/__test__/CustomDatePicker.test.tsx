@@ -1,44 +1,69 @@
-import { TextField } from "@mui/material";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import currentLocale from 'date-fns/locale/it';
+import React from 'react';
 
-import { render } from "../../test-utils";
-import CustomDatePicker from "../CustomDatePicker";
-import {fireEvent} from "@testing-library/react";
+import { TextField } from '@mui/material';
 
-const WrappedCustomDatePicker = () => {
-    return (
-        <LocalizationProvider
-            id="startDate"
-            name="startDate"
-            dateAdapter={AdapterDateFns}
-            adapterLocale={currentLocale}
-        >
-            <CustomDatePicker
-                label={"DatePicker"}
-                onChange={() => {}}
-                value={new Date()}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        inputProps={{
-                            ...params.inputProps,
-                            placeholder: 'datepickerinput',
-                        }}
-                    />
-                )}
-            />
-        </LocalizationProvider>
-    )
-}
+import { fireEvent, render, screen } from '../../test-utils';
+import { DATE_FORMAT } from '../../utility';
+import CustomDatePicker from '../CustomDatePicker';
 
-describe("test CustomDatePicker component", () => {
-    it('renders the component', () => {
-        const result = render(<WrappedCustomDatePicker />)
-        const input = result.getByPlaceholderText(/datepickerinput/i)
+const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
+  <CustomDatePicker
+    label={'DatePicker'}
+    onChange={() => {}}
+    value={new Date('01/01/2023')}
+    language={language}
+    inputFormat={DATE_FORMAT}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        inputProps={{
+          ...params.inputProps,
+          placeholder: 'datepickerinput',
+        }}
+      />
+    )}
+  />
+);
 
-        expect(result.container).toHaveTextContent(/datepicker/i)
-        fireEvent.click(input)
-    })
-})
+describe('test CustomDatePicker component', () => {
+  it('renders the component', () => {
+    const { getByPlaceholderText, container } = render(<RenderDatePicker />);
+    const input = getByPlaceholderText(/datepickerinput/i);
+    expect(container).toHaveTextContent(/datepicker/i);
+    expect(input).toBeInTheDocument();
+  });
+});
+
+describe('test CustomDatePicker languages', () => {
+  const languages = [
+    {
+      language: 'it',
+      month: 'gennaio',
+    },
+    {
+      language: 'en',
+      month: 'january',
+    },
+    {
+      language: 'fr',
+      month: 'janvier',
+    },
+    {
+      language: 'de',
+      month: 'januar',
+    },
+    {
+      language: 'sl',
+      month: 'januar',
+    },
+  ];
+
+  it.each(languages)('check january month to be $month in $language', (language) => {
+    const { container, getByRole } = render(<RenderDatePicker language={language.language} />);
+    expect(container).toHaveTextContent(/datepicker/i);
+    const button = getByRole('button');
+    fireEvent.click(button);
+    const regExMonth = new RegExp(`${language.month}`, 'i');
+    expect(screen.getByText(regExMonth)).toBeInTheDocument();
+  });
+});
