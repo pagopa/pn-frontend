@@ -4,7 +4,6 @@ import {
   GetNotificationsResponse,
   NotificationStatus,
   formatToTimezoneString,
-  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -63,7 +62,7 @@ describe('Dashboard redux state tests', () => {
   it('Should be able to fetch the notifications list', async () => {
     const mockRequest = {
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getEndOfDay(today)),
+      endDate: formatToTimezoneString(today),
       status: '',
       recipientId: '',
       iunMatch: '',

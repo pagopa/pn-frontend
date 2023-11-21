@@ -11,6 +11,7 @@ import {
   calculatePages,
   formatToTimezoneString,
   getEndOfDay,
+  getStartOfDay,
   useHasPermissions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -88,6 +89,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     void dispatch(
       getReceivedNotifications({
         ...params,
+        startDate: formatToTimezoneString(getStartOfDay(new Date(params.startDate))),
         endDate: formatToTimezoneString(getEndOfDay(new Date(params.endDate))),
       })
     ).then(() => setPageReady(true));

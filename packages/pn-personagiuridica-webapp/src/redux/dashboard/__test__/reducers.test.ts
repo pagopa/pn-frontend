@@ -4,7 +4,6 @@ import {
   NotificationStatus,
   Sort,
   formatToTimezoneString,
-  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -63,14 +62,14 @@ describe('Dashbaord redux state tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(today)),
+          endDate: formatToTimezoneString(today),
         })
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getEndOfDay(today)),
+        endDate: formatToTimezoneString(today),
         isDelegatedPage: false,
       })
     );
