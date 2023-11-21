@@ -4,11 +4,7 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [2.2.0](https://github.com/pagopa/pn-frontend/compare/v2.2.0-RC.2...v2.2.0) (2023-11-16)
-
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
-
-
-
 
 
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
@@ -32,6 +28,22 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-8027:** reworked empty state ([#1004](https://github.com/pagopa/pn-frontend/issues/1004)) ([0ca180c](https://github.com/pagopa/pn-frontend/commit/0ca180cad6afbeccb85013f3452884ee14f7424a))
 * **pn-8129:** deleted the config.json files for those obsolete environments ([#1016](https://github.com/pagopa/pn-frontend/issues/1016)) ([c291ddd](https://github.com/pagopa/pn-frontend/commit/c291dddc250df0e2ee6eed19eed1ced7793f0b49))
 * **pn-8243:** FAQ on multi-payment notification ([#1019](https://github.com/pagopa/pn-frontend/issues/1019)) ([98f12e3](https://github.com/pagopa/pn-frontend/commit/98f12e3d064d5bb70b99d541352ac07344596461))
+
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
 
 
 

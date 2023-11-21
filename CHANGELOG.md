@@ -8,10 +8,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 **Note:** Version bump only for package send-monorepo
 
 
-
-
-
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
+
 
 
 ### Bug Fixes
@@ -21,7 +19,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-8056:** used Trans component to show bold text in Api Keys's modals ([#1006](https://github.com/pagopa/pn-frontend/issues/1006)) ([2b82ee0](https://github.com/pagopa/pn-frontend/commit/2b82ee088e52da2feef0f07cafdd7d20430ca58e))
 * **PN-8100:** fix links in footer for Società Trasparente and Modello 231 ([#1014](https://github.com/pagopa/pn-frontend/issues/1014)) ([26809e7](https://github.com/pagopa/pn-frontend/commit/26809e7f1a810f5b090a26b8be17060b44a197c1))
 * **PN-8128:** fixed copy destinatario sezione recapiti box recapito legale ([#1015](https://github.com/pagopa/pn-frontend/issues/1015)) ([07b07cf](https://github.com/pagopa/pn-frontend/commit/07b07cf2458a54f0cd4f7a3bdce5c0cba14bf10a))
-
+* **PN-7637:** trim values to be pasted as IUN or tax id for notification filter ([#993](https://github.com/pagopa/pn-frontend/issues/993)) ([6bd0ac2](https://github.com/pagopa/pn-frontend/commit/6bd0ac285df3f9ef84c212c32d3a912c5efdac69))
+* **pn-8099:** avoid popup block on ios opening the attachment on the same window ([#1005](https://github.com/pagopa/pn-frontend/issues/1005)) ([73718ba](https://github.com/pagopa/pn-frontend/commit/73718ba9e10825073f6943952ff44f29b7866227))
 
 ### Features
 
@@ -34,26 +33,42 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([d838cf4](https://github.com/pagopa/pn-frontend/commit/d838cf416b8763a7c573f6ece10c1b363301f4de))
 * **PN-8368:** configurated apikey api link in PA in config.json ([#1025](https://github.com/pagopa/pn-frontend/issues/1025)) ([e8c3848](https://github.com/pagopa/pn-frontend/commit/e8c384843663d5b858479b9ed43f98ce5e05d4f9))
 * **pn-8376:** added senderDenomination concatenation when creating a new notification ([#1028](https://github.com/pagopa/pn-frontend/issues/1028)) ([ad68185](https://github.com/pagopa/pn-frontend/commit/ad68185a42593aeab9cd445e4cd2872ee3e383bb))
+* **pn-7487:** Refactored pn-commons tests ([#974](https://github.com/pagopa/pn-frontend/issues/974)) ([9104b3b](https://github.com/pagopa/pn-frontend/commit/9104b3b0640abd7ca2cfc45127973feda7e7a69e))
+* **pn-7747:** restructured project folders and files ([#994](https://github.com/pagopa/pn-frontend/issues/994)) ([84019fc](https://github.com/pagopa/pn-frontend/commit/84019fc476b053b72d284a6733cd6a5b581ec48f))
 
 
 
-## [2.0.2](https://github.com/pagopa/pn-frontend/compare/v2.0.2-RC.0...v2.0.2) (2023-10-02)
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+### Bug Fixes
+* fix correct mixpanel utility, removed old one ([cd83106](https://github.com/pagopa/pn-frontend/commit/cd831063da0cca6352da04d79f4c870896537259))
 
 
 
-## [2.0.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.0...v2.0.2-RC.0) (2023-10-02)
+
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
 
 
 ### Bug Fixes
 
-* **PN-7637:** trim values to be pasted as IUN or tax id for notification filter ([#993](https://github.com/pagopa/pn-frontend/issues/993)) ([6bd0ac2](https://github.com/pagopa/pn-frontend/commit/6bd0ac285df3f9ef84c212c32d3a912c5efdac69))
-* **pn-8099:** avoid popup block on ios opening the attachment on the same window ([#1005](https://github.com/pagopa/pn-frontend/issues/1005)) ([73718ba](https://github.com/pagopa/pn-frontend/commit/73718ba9e10825073f6943952ff44f29b7866227))
+* added mixpanel property to blacklist ([41093d0](https://github.com/pagopa/pn-frontend/commit/41093d07dbdf9a428d167d9fd237786b826c4c2d))
+
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* intesigroup idp data and added relaystate ([85c2e37](https://github.com/pagopa/pn-frontend/commit/85c2e37837ea5389ff75f08928df4effd2a1b8c3))
 
 
 ### Features
 
-* **pn-7487:** Refactored pn-commons tests ([#974](https://github.com/pagopa/pn-frontend/issues/974)) ([9104b3b](https://github.com/pagopa/pn-frontend/commit/9104b3b0640abd7ca2cfc45127973feda7e7a69e))
-* **pn-7747:** restructured project folders and files ([#994](https://github.com/pagopa/pn-frontend/issues/994)) ([84019fc](https://github.com/pagopa/pn-frontend/commit/84019fc476b053b72d284a6733cd6a5b581ec48f))
+* **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([f22cf57](https://github.com/pagopa/pn-frontend/commit/f22cf57e8c9a46fc6a90234bef5d498a01cb841c))
 
 
 
@@ -76,6 +91,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [2.0.2](https://github.com/pagopa/pn-frontend/compare/v2.0.2-RC.0...v2.0.2) (2023-10-02)
 
 
 ## [2.0.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.0.1...v2.0.2-RC.0) (2023-10-02)

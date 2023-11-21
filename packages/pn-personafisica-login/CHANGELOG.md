@@ -7,11 +7,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
 
-
-
-
-
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
+
+
+### Bug Fixes
+
+* intesigroup idp data and added relaystate ([85c2e37](https://github.com/pagopa/pn-frontend/commit/85c2e37837ea5389ff75f08928df4effd2a1b8c3))
 
 
 ### Features
@@ -23,7 +24,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-7747:** restructured project folders and files ([#994](https://github.com/pagopa/pn-frontend/issues/994)) ([84019fc](https://github.com/pagopa/pn-frontend/commit/84019fc476b053b72d284a6733cd6a5b581ec48f))
 * **pn-8129:** deleted the config.json files for those obsolete environments ([#1016](https://github.com/pagopa/pn-frontend/issues/1016)) ([c291ddd](https://github.com/pagopa/pn-frontend/commit/c291dddc250df0e2ee6eed19eed1ced7793f0b49))
 * **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([d838cf4](https://github.com/pagopa/pn-frontend/commit/d838cf416b8763a7c573f6ece10c1b363301f4de))
+* **pn-8255:** Added new IDPS Intesi Group S.p.A ([#1024](https://github.com/pagopa/pn-frontend/issues/1024)) ([f22cf57](https://github.com/pagopa/pn-frontend/commit/f22cf57e8c9a46fc6a90234bef5d498a01cb841c))
 
+
+
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
 
 
 

@@ -7,10 +7,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
 
-
-
-
-
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
 
 
@@ -35,6 +31,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **PN-8368:** configurated apikey api link in PA in config.json ([#1025](https://github.com/pagopa/pn-frontend/issues/1025)) ([e8c3848](https://github.com/pagopa/pn-frontend/commit/e8c384843663d5b858479b9ed43f98ce5e05d4f9))
 * **pn-8376:** added senderDenomination concatenation when creating a new notification ([#1028](https://github.com/pagopa/pn-frontend/issues/1028)) ([ad68185](https://github.com/pagopa/pn-frontend/commit/ad68185a42593aeab9cd445e4cd2872ee3e383bb))
 
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
 
 
 

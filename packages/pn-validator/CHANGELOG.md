@@ -7,10 +7,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @pagopa-pn/pn-validator
 
-
-
-
-
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
 
 
@@ -20,6 +16,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-7747:** restructured project folders and files ([#994](https://github.com/pagopa/pn-frontend/issues/994)) ([84019fc](https://github.com/pagopa/pn-frontend/commit/84019fc476b053b72d284a6733cd6a5b581ec48f))
 
 
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
 
 
 

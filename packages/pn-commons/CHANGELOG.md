@@ -7,10 +7,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
 
-
-
-
-
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
 
 
@@ -27,6 +23,31 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-8243:** FAQ on multi-payment notification ([#1019](https://github.com/pagopa/pn-frontend/issues/1019)) ([98f12e3](https://github.com/pagopa/pn-frontend/commit/98f12e3d064d5bb70b99d541352ac07344596461))
 * **pn-8376:** added senderDenomination concatenation when creating a new notification ([#1028](https://github.com/pagopa/pn-frontend/issues/1028)) ([ad68185](https://github.com/pagopa/pn-frontend/commit/ad68185a42593aeab9cd445e4cd2872ee3e383bb))
 
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+### Bug Fixes
+
+* fix correct mixpanel utility, removed old one ([cd83106](https://github.com/pagopa/pn-frontend/commit/cd831063da0cca6352da04d79f4c870896537259))
+
+
+
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+
+### Bug Fixes
+
+* added mixpanel property to blacklist ([41093d0](https://github.com/pagopa/pn-frontend/commit/41093d07dbdf9a428d167d9fd237786b826c4c2d))
+
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
 
 
 ## [2.0.2](https://github.com/pagopa/pn-frontend/compare/v2.0.2-RC.0...v2.0.2) (2023-10-02)
