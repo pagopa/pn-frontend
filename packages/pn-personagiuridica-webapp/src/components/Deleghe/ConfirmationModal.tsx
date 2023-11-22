@@ -1,10 +1,9 @@
 import * as React from 'react';
 
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { PnDialog, PnDialogContent, useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
@@ -32,67 +31,69 @@ export default function ConfirmationModal({
   const isMobile = useIsMobile();
 
   return (
-    <Dialog
+    <PnDialog
       fullScreen={fullScreen}
       open={open}
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"
       data-testid="confirmationDialog"
     >
-      <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
-        <Box mx={3} mt={4} sx={{ height: '100%' }}>
-          <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
-            {title}
-          </Typography>
-          {subtitle && (
-            <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
-              {subtitle}
+      <PnDialogContent sx={{ p: 0 }}>
+        <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
+          <Box mx={3} mt={4} sx={{ height: '100%' }}>
+            <Typography mb={2} variant="h5" sx={{ fontSize: '24px', fontWeight: '600' }}>
+              {title}
             </Typography>
-          )}
+            {subtitle && (
+              <Typography variant="subtitle2" sx={{ fontSize: '20px', fontWeight: '300' }}>
+                {subtitle}
+              </Typography>
+            )}
 
-          <Stack
-            direction={isMobile ? 'column-reverse' : 'row'}
-            justifyContent={'flex-end'}
-            alignItems={'center'}
-            ml={'auto'}
-            pb={4}
-            data-testid="dialogStack"
-          >
-            <Grid
-              item
-              sx={{ width: isMobile ? '100%' : null }}
-              mt={isMobile ? 2 : 4}
-              mr={isMobile ? 0 : 1}
+            <Stack
+              direction={isMobile ? 'column-reverse' : 'row'}
+              justifyContent={'flex-end'}
+              alignItems={'center'}
+              ml={'auto'}
+              pb={4}
+              data-testid="dialogStack"
             >
-              <Button
-                id="dialog-close-button"
+              <Grid
+                item
                 sx={{ width: isMobile ? '100%' : null }}
-                onClick={onClose}
-                color="primary"
-                variant="outlined"
-                data-testid="dialogAction"
+                mt={isMobile ? 2 : 4}
+                mr={isMobile ? 0 : 1}
               >
-                {onCloseLabel}
-              </Button>
-            </Grid>
-
-            {onConfirm && (
-              <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4}>
                 <Button
-                  id="dialog-action-button"
+                  id="dialog-close-button"
                   sx={{ width: isMobile ? '100%' : null }}
+                  onClick={onClose}
                   color="primary"
-                  variant="contained"
-                  onClick={onConfirm}
+                  variant="outlined"
                   data-testid="dialogAction"
                 >
-                  {onConfirmLabel}
+                  {onCloseLabel}
                 </Button>
               </Grid>
-            )}
-          </Stack>
-        </Box>
-      </Grid>
-    </Dialog>
+
+              {onConfirm && (
+                <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4}>
+                  <Button
+                    id="dialog-action-button"
+                    sx={{ width: isMobile ? '100%' : null }}
+                    color="primary"
+                    variant="contained"
+                    onClick={onConfirm}
+                    data-testid="dialogAction"
+                  >
+                    {onConfirmLabel}
+                  </Button>
+                </Grid>
+              )}
+            </Stack>
+          </Box>
+        </Grid>
+      </PnDialogContent>
+    </PnDialog>
   );
 }

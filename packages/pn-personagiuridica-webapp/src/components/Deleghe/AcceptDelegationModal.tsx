@@ -3,9 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
@@ -20,6 +17,9 @@ import {
   AppResponsePublisher,
   CodeModal,
   PnAutocomplete,
+  PnDialog,
+  PnDialogActions,
+  PnDialogContent,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -143,7 +143,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
     );
   }
   return (
-    <Dialog
+    <PnDialog
       open={open}
       onClose={handleClose}
       aria-labelledby="dialog-title"
@@ -153,7 +153,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
       <DialogTitle id="dialog-title" sx={{ textAlign: textPosition }}>
         {isEditMode ? t('deleghe.edit-groups-title') : t('deleghe.associate-groups-title')}
       </DialogTitle>
-      <DialogContent>
+      <PnDialogContent sx={{}}>
         <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
           {t('deleghe.associate-groups-subtitle')}
         </DialogContentText>
@@ -215,8 +215,8 @@ const AcceptDelegationModal: React.FC<Props> = ({
             sx={{ my: 2 }}
           />
         )}
-      </DialogContent>
-      <DialogActions
+      </PnDialogContent>
+      <PnDialogActions
         disableSpacing={isMobile}
         sx={{
           textAlign: textPosition,
@@ -244,8 +244,8 @@ const AcceptDelegationModal: React.FC<Props> = ({
         >
           {t('button.conferma', { ns: 'common' })}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 
