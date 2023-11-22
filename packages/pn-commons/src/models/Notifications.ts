@@ -30,3 +30,5 @@ export interface GetNotificationsParams {
   iunMatch?: string;
   group?: string;
 }
+
+export type NotificationColumnData = Notification & { badge: string };

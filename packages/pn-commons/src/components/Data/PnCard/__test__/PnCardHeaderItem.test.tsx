@@ -15,7 +15,7 @@ const cardData: Row<Item> = {
   'column-2': 'Row 1-2',
 };
 
-describe('PnCardHeaderTitle', () => {
+describe('PnCardHeaderItem', () => {
   it('render component - left', () => {
     const { getByTestId, queryByTestId } = render(
       <PnCardHeaderItem>

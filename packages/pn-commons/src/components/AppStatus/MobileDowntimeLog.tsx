@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 
+import { useFieldSpecs } from '../../hooks/useFieldSpecs';
 import { CardElement, Downtime, DowntimeLogPage } from '../../models';
 import PnCard from '../Data/PnCard/PnCard';
 import PnCardContent from '../Data/PnCard/PnCardContent';
 import PnCardContentItem from '../Data/PnCard/PnCardContentItem';
 import PnCardHeader from '../Data/PnCard/PnCardHeader';
-import PnCardHeaderTitle from '../Data/PnCard/PnCardHeaderItem';
+import PnCardHeaderItem from '../Data/PnCard/PnCardHeaderItem';
 import PnCardsList from '../Data/PnCardsList';
-import { DowntimeCell, useFieldSpecs } from './downtimeLog.utils';
+import DowntimeLogDataSwitch from './DowntimeLogDataSwitch';
 
 type Props = {
   downtimeLog: DowntimeLogPage;
@@ -43,18 +44,18 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
       {rows.map((row) => (
         <PnCard key={row.id}>
           <PnCardHeader>
-            <PnCardHeaderTitle
+            <PnCardHeaderItem
               key={cardHeader.id}
               gridProps={cardHeader.gridProps}
               position={cardHeader.position}
             >
-              <DowntimeCell
-                row={row}
-                column={cardHeader}
+              <DowntimeLogDataSwitch
+                data={row}
+                type={cardHeader.id}
                 inTwoLines
                 getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
               />
-            </PnCardHeaderTitle>
+            </PnCardHeaderItem>
           </PnCardHeader>
           <PnCardContent>
             {cardBody.map((body) => (
@@ -63,9 +64,9 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
                 wrapValueInTypography={body.wrapValueInTypography}
                 label={body.label}
               >
-                <DowntimeCell
-                  row={row}
-                  column={body}
+                <DowntimeLogDataSwitch
+                  data={row}
+                  type={body.id}
                   inTwoLines={false}
                   getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
                 />

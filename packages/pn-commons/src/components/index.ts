@@ -21,7 +21,7 @@ import PnCardActions from './Data/PnCard/PnCardActions';
 import PnCardContent from './Data/PnCard/PnCardContent';
 import PnCardContentItem from './Data/PnCard/PnCardContentItem';
 import PnCardHeader from './Data/PnCard/PnCardHeader';
-import PnCardHeaderTitle from './Data/PnCard/PnCardHeaderItem';
+import PnCardHeaderItem from './Data/PnCard/PnCardHeaderItem';
 import PnCardsList from './Data/PnCardsList';
 import PnTable from './Data/PnTable';
 import PnTableBody from './Data/PnTable/PnTableBody';
@@ -51,6 +51,7 @@ import NotificationDetailTimeline from './NotificationDetail/NotificationDetailT
 import NotificationPaymentRecipient from './NotificationDetail/NotificationPaymentRecipient';
 import NotificationRelatedDowntimes from './NotificationDetail/NotificationRelatedDowntimes';
 import MobileNotificationsSort from './Notifications/MobileNotificationsSort';
+import NotificationsDataSwitch from './Notifications/NotificationsDataSwitch';
 import StatusTooltip from './Notifications/StatusTooltip';
 import CustomPagination from './Pagination/CustomPagination';
 import PnAutocomplete from './PnAutocomplete';
@@ -99,6 +100,7 @@ export {
   MobileNotificationsSort,
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
+  NotificationsDataSwitch,
   PnAutocomplete,
   PnBreadcrumb,
   Prompt,
@@ -138,5 +140,5 @@ export {
   PnCardContent,
   PnCardActions,
   PnCard,
-  PnCardHeaderTitle,
+  PnCardHeaderItem,
 };

@@ -20,7 +20,7 @@ import PnCardActions from './PnCard/PnCardActions';
 import PnCardContent from './PnCard/PnCardContent';
 import PnCardContentItem from './PnCard/PnCardContentItem';
 import PnCardHeader from './PnCard/PnCardHeader';
-import PnCardHeaderTitle from './PnCard/PnCardHeaderItem';
+import PnCardHeaderItem from './PnCard/PnCardHeaderItem';
 import PnCardsList from './PnCardsList';
 import PnTable from './PnTable';
 import PnTableBody from './PnTable/PnTableBody';
@@ -187,21 +187,21 @@ const SmartTable = <T,>({
             {rowData.map((data) => (
               <PnCard key={data.id}>
                 <PnCardHeader>
-                  <PnCardHeaderTitle
+                  <PnCardHeaderItem
                     key={cardHeader[0].id.toString()}
                     gridProps={cardHeader[0].gridProps}
                     position="left"
                   >
                     {cardHeader[0].getLabel!(data[cardHeader[0].id], data)}
-                  </PnCardHeaderTitle>
+                  </PnCardHeaderItem>
                   {cardHeader[1] && (
-                    <PnCardHeaderTitle
+                    <PnCardHeaderItem
                       key={cardHeader[1].id.toString()}
                       gridProps={cardHeader[1].gridProps}
                       position="right"
                     >
                       {cardHeader[1].getLabel!(data[cardHeader[1].id], data)}
-                    </PnCardHeaderTitle>
+                    </PnCardHeaderItem>
                   )}
                 </PnCardHeader>
                 <PnCardContent>

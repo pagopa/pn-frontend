@@ -16,7 +16,7 @@ import {
   PnCardContent,
   PnCardContentItem,
   PnCardHeader,
-  PnCardHeaderTitle,
+  PnCardHeaderItem,
   PnCardsList,
   Row,
   Sort,
@@ -140,7 +140,7 @@ const MobileNotifications = ({
     id: i.toString(),
   }));
 
-  const sortFields: Array<CardSort<Notification>> = (
+  const sortFields = (
     [
       { id: 'sentAt', label: t('table.date') },
       { id: 'recipients', label: t('table.recipient') },
@@ -199,8 +199,7 @@ const MobileNotifications = ({
                   alignItems: { xs: 'flex-start', sm: 'center' },
                 }}
               >
-                <PnCardHeaderTitle
-                  key="sentAt"
+                <PnCardHeaderItem
                   gridProps={{
                     xs: 4,
                     sm: 5,
@@ -208,9 +207,8 @@ const MobileNotifications = ({
                   position="left"
                 >
                   <Typography>{formatDate(data.sentAt)}</Typography>
-                </PnCardHeaderTitle>
-                <PnCardHeaderTitle
-                  key="notificationStatus"
+                </PnCardHeaderItem>
+                <PnCardHeaderItem
                   gridProps={{
                     xs: 8,
                     sm: 7,
@@ -218,7 +216,7 @@ const MobileNotifications = ({
                   position="right"
                 >
                   <NotificationsDataSwitch data={data} type="notificationStatus" />
-                </PnCardHeaderTitle>
+                </PnCardHeaderItem>
               </PnCardHeader>
               <PnCardContent>
                 {cardBody

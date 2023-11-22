@@ -66,7 +66,12 @@ import {
   ViewedDetails,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
-import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
+import {
+  GetNotificationsParams,
+  GetNotificationsResponse,
+  Notification,
+  NotificationColumnData,
+} from './Notifications';
 import { PaginationData } from './Pagination';
 import { CardAction, CardElement, CardSort } from './PnCard';
 import { Column, Row, Sort } from './PnTable';
@@ -111,6 +116,7 @@ export type {
   EventsType,
   GetNotificationsParams,
   GetNotificationsResponse,
+  NotificationColumnData,
   IAppMessage,
   INotificationDetailTimeline,
   Row,
