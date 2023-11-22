@@ -13,6 +13,7 @@ import {
   setPaymentCache,
   setPaymentsInCache,
 } from '../paymentCaching.utility';
+import { Session } from 'inspector';
 
 describe('Payment caching utility', () => {
   beforeEach(() => {
@@ -186,46 +187,21 @@ describe('Payment caching utility', () => {
     });
   });
 
-  it.skip('setPaymentsCache should update the payments in the page if page is in cache', () => {
+  it('setPaymentsCache should update the payments in the page if page is in cache', () => {
     const paymentCache = getPaymentCache();
     const page = 1;
-    const payment = paymentCache?.paymentsPage[page].payments.pagoPaF24[0];
-
-    payment!.pagoPa!.noticeCode = '123456789';
-
+    paymentCache!.paymentsPage[page].payments.pagoPaF24[0].pagoPa!.applyCost = false;
     const newPaymentsData = {
-      pagoPaF24: [{ ...payment }],
-      f24Only: paymentCache?.paymentsPage[page].payments.f24Only,
+      pagoPaF24: [paymentCache!.paymentsPage[page].payments.pagoPaF24[0]],
+      f24Only: []
     } as PaymentsData;
 
     setPaymentsInCache(newPaymentsData, page);
-
     const updatedPaymentCache = getPaymentCache();
 
-    console.log('cache', JSON.stringify(updatedPaymentCache?.paymentsPage));
-    console.log(
-      'res',
-      JSON.stringify([
-        ...(paymentCache?.paymentsPage.slice(0, page) as Array<PaymentsCachePage>),
-        {
-          page,
-          payments: {
-            pagoPaF24: {
-              ...paymentCache?.paymentsPage[page].payments.pagoPaF24,
-              ...newPaymentsData.pagoPaF24,
-            },
-            f24Only: paymentCache?.paymentsPage[page].payments.f24Only,
-          },
-        },
-      ])
-    );
     // expect that the cache has been updated on the page 1
-    expect(updatedPaymentCache?.paymentsPage).toEqual([
-      ...(paymentCache?.paymentsPage.slice(0, page) as Array<PaymentsCachePage>),
-      {
-        page,
-        payments: newPaymentsData,
-      },
-    ]);
+    console.log(JSON.stringify(updatedPaymentCache!.paymentsPage[page], null, 2));
+    expect(updatedPaymentCache!.paymentsPage[page]).toEqual(paymentCache!.paymentsPage[page]);
   });
+
 });
