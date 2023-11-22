@@ -1,12 +1,13 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { LinkType, loggedUser, partyList, productsList } from '../../../__mocks__/User.mock';
 import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import Header from '../Header';
 
-const handleActionClick = jest.fn();
-const handleClick = jest.fn();
-const assignFn = jest.fn();
+const handleActionClick = vi.fn();
+const handleClick = vi.fn();
+const assignFn = vi.fn();
 
 const userActions = [
   {
@@ -35,7 +36,7 @@ describe('Header Component', () => {
 
   beforeEach(() => {
     window.location.href = '';
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll((): void => {

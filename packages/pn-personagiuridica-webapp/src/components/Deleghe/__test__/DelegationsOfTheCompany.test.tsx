@@ -1,11 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import React, { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -15,7 +16,7 @@ import {
 import { DelegationStatus } from '../../../models/Deleghe';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -70,7 +71,7 @@ describe('DelegationsOfTheCompany Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

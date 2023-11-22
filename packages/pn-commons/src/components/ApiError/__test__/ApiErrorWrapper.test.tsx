@@ -1,11 +1,12 @@
 import React from 'react';
+import { vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import ApiErrorWrapper from '../ApiErrorWrapper';
 import { render, screen, waitFor } from '../../../test-utils';
 
 const mockApiError = 'mockApiId';
 // Mocking the useErrors hook, since the hook is already tested
-jest.mock('../../../hooks', () => ({
+vi.mock('../../../hooks', () => ({
     useErrors: () => ({
         hasApiErrors: (apiId) => apiId === mockApiError, // Mocking hasApiErrors function
     }),
@@ -18,7 +19,7 @@ describe('ApiErrorWrapper', () => {
     beforeAll(() => {
         Object.defineProperty(window, 'location', {
             configurable: true,
-            value: { reload: jest.fn() },
+            value: { reload: vi.fn() },
         });
     });
 
@@ -29,7 +30,7 @@ describe('ApiErrorWrapper', () => {
 
 
     it('mocks reload function', () => {
-        expect(jest.isMockFunction(window.location.reload)).toBe(true);
+        expect(vi.isMockFunction(window.location.reload)).toBe(true);
     });
 
     it('renders children when there are no API errors', () => {
@@ -57,7 +58,7 @@ describe('ApiErrorWrapper', () => {
     });
 
     it('calls reloadAction when errorComponent is clicked and if a reloadAcion is specified', async () => {
-        const reloadActionMock = jest.fn();
+        const reloadActionMock = vi.fn();
 
         render(
             <ApiErrorWrapper apiId={mockApiError} reloadAction={reloadActionMock}>

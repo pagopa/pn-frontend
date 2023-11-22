@@ -10,7 +10,7 @@ import {
 
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
@@ -23,7 +23,7 @@ describe('Dashboard redux state tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

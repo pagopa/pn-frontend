@@ -1,16 +1,17 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import { GET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentType } from '../../models/consents';
 import ToSGuard from '../ToSGuard';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -48,7 +49,7 @@ describe('Tests the ToSGuard component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { RecipientType } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -10,14 +11,14 @@ import {
   fireEvent,
   randomString,
   render,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import Recipient from '../Recipient';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -195,12 +196,12 @@ const testStringFieldValidation = async (
 };
 
 describe('Recipient Component with payment enabled', () => {
-  const confirmHandlerMk = jest.fn();
+  const confirmHandlerMk = vi.fn();
   let result: RenderResult | undefined;
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders component', async () => {
@@ -247,7 +248,7 @@ describe('Recipient Component with payment enabled', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual(
         newNotification.recipients
       );
@@ -364,7 +365,7 @@ describe('Recipient Component with payment enabled', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         newNotification.recipients[0],
       ]);
@@ -373,7 +374,7 @@ describe('Recipient Component with payment enabled', () => {
   }, 10000);
 
   it('changes form values and clicks on back - one recipient', async () => {
-    const previousHandlerMk = jest.fn();
+    const previousHandlerMk = vi.fn();
     // render component
     await act(async () => {
       result = render(
@@ -390,7 +391,7 @@ describe('Recipient Component with payment enabled', () => {
     const backButton = within(form).getByTestId('previous-step');
     fireEvent.click(backButton!);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         newNotification.recipients[0],
       ]);
@@ -475,12 +476,12 @@ describe('Recipient Component with payment enabled', () => {
 });
 
 describe('Recipient Component without payment enabled', () => {
-  const confirmHandlerMk = jest.fn();
+  const confirmHandlerMk = vi.fn();
   let result: RenderResult | undefined;
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders component', async () => {
@@ -509,7 +510,7 @@ describe('Recipient Component without payment enabled', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         { ...newNotification.recipients[0], creditorTaxId: '', noticeCode: '' },
       ]);

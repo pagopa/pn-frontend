@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -9,35 +10,35 @@ import {
   act,
   fireEvent,
   render,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { apiClient, externalClient } from '../../../api/apiClients';
+import { getApiClient, getExternalClient } from '../../../api/apiClients';
 import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import Attachments from '../Attachments';
 
-const mockIsPaymentEnabledGetter = jest.fn();
+const mockIsPaymentEnabledGetter = vi.fn();
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-jest.mock('../../../services/configuration.service', () => {
+vi.mock('../../../services/configuration.service', async () => {
   return {
-    ...jest.requireActual('../../../services/configuration.service'),
+    ...(await vi.importActual('../../../services/configuration.service')) as any,
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
   };
 });
 
-const confirmHandlerMk = jest.fn();
+const confirmHandlerMk = vi.fn();
 
 async function uploadDocument(elem: HTMLElement, index: number, document: NewNotificationDocument) {
   const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
@@ -59,8 +60,8 @@ describe('Attachments Component with payment enabled', () => {
   let extMock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
-    extMock = new MockAdapter(externalClient);
+    mock = new MockAdapter(getApiClient());
+    extMock = new MockAdapter(getExternalClient());
   });
 
   beforeEach(async () => {
@@ -69,7 +70,7 @@ describe('Attachments Component with payment enabled', () => {
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mock.reset();
     extMock.reset();
   });
@@ -149,7 +150,7 @@ describe('Attachments Component with payment enabled', () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(1);
       // check data stored in redux state
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -197,7 +198,7 @@ describe('Attachments Component with payment enabled', () => {
   });
 
   it('changes form values and clicks on back - one document', async () => {
-    const previousHandlerMk = jest.fn();
+    const previousHandlerMk = vi.fn();
     // render component
     await act(async () => {
       result = render(
@@ -216,7 +217,7 @@ describe('Attachments Component with payment enabled', () => {
     fireEvent.click(backButton!);
     await waitFor(() => {
       // check data stored in redux state
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -299,7 +300,7 @@ describe('Attachments Component with payment enabled', () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(2);
       // check data stored in redux state
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -414,7 +415,7 @@ describe('Attachments Component without payment enabled', () => {
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders component', async () => {

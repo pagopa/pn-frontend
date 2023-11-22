@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { vi } from 'vitest';
 
 import { act, render } from '../../test-utils';
 import { WaitForElementResult, waitForElement } from '../dom.utility';
@@ -30,7 +31,7 @@ const MockComponent = ({
 
 describe('waitForElement', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('render MockComponent with injected element', async () => {

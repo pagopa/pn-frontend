@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import {
   testAutocomplete,
@@ -10,22 +11,16 @@ import {
 import { mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../__mocks__/NewApiKey.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { getApiClient } from '../../api/apiClients';
 import { CREATE_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
-
-const mockNavigateFn = jest.fn();
+import { Route, Routes } from 'react-router-dom';
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn,
-}));
-
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -38,12 +33,13 @@ describe('NewApiKey component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
     result = undefined;
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -120,21 +116,39 @@ describe('NewApiKey component', () => {
   });
 
   it('clicks on the breadcrumb button', async () => {
+    // simulate a current URL
+    window.history.pushState({}, '', '/new-api-key');
+
+    // render using an ad-hoc router
     await act(async () => {
-      result = render(<NewApiKey />);
+      result = render(<>
+        <Routes>
+          <Route path='/new-api-key' element={<NewApiKey />} />
+          <Route path={routes.API_KEYS} element={<div data-testid="mock-api-keys-page">hello</div>} />
+        </Routes>
+      </>);
     });
+    // the mocked ApiKeys page does not appear before we click the corresponding link
+    const mockApiKeysPageBefore = result?.queryByTestId('mock-api-keys-page');
+    expect(mockApiKeysPageBefore).not.toBeInTheDocument();
+
+    // simulate click on the breadcrumb link ...
     const links = result?.getAllByRole('link');
     expect(links![0]).toHaveTextContent(/title/i);
     expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
     fireEvent.click(links![0]);
-    // prompt must be shown
+
+    // ... hence prompt must be shown
     const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
     const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
+    expect(confirmExitBtn).toBeInTheDocument();
     fireEvent.click(confirmExitBtn);
+
+    // after clicking the "confirm" button in the prompt, the mocked ApiKeys page should be rendered
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.API_KEYS);
+      const mockApiKeysPageAfter = result?.queryByTestId('mock-api-keys-page');
+      expect(mockApiKeysPageAfter).toBeInTheDocument();
     });
-  });
+});
 });

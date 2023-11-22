@@ -1,27 +1,28 @@
 import type { Transition } from 'history';
 import React from 'react';
+import { vi } from 'vitest';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
 
 import { renderHook } from '../../test-utils';
 import { useBlocker } from '../useBlocker';
 
-const blocker = jest.fn();
+const blocker = vi.fn();
 
 describe('useBlocker', () => {
   let navigator;
 
   beforeEach(() => {
     navigator = {
-      block: jest.fn(),
-      replace: jest.fn(),
-      go: jest.fn(),
-      push: jest.fn(),
-      createHref: jest.fn(),
+      block: vi.fn(),
+      replace: vi.fn(),
+      go: vi.fn(),
+      push: vi.fn(),
+      createHref: vi.fn(),
     };
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should not set up a blocker when "when" is false', () => {
@@ -51,8 +52,8 @@ describe('useBlocker', () => {
   it('should call the provided blocker function when a transition occurs', () => {
     navigator = {
       ...navigator,
-      block: jest.fn((callback) => {
-        callback({ retry: jest.fn() });
+      block: vi.fn((callback) => {
+        callback({ retry: vi.fn() });
       }),
     };
     const { unmount } = renderHook(() => useBlocker(blocker, true), {
@@ -81,8 +82,8 @@ describe('useBlocker', () => {
   // il problema sta nella funzione di unblock che, non venendo restituita, blocca l'esecuzione del codice
   // e fa fallire il test
   it.skip('should unblock the navigation when the blocker callback is retried', () => {
-    const retryCallback = jest.fn();
-    const unblockFn = jest.fn();
+    const retryCallback = vi.fn();
+    const unblockFn = vi.fn();
 
     navigator = {
       ...navigator,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
@@ -6,7 +7,7 @@ import { render } from '../../__test__/test-utils';
 import TermsOfServicePage from '../TermsOfService.page';
 
 describe('TermsOfService page component', () => {
-  const loadNoticesFn = jest.fn();
+  const loadNoticesFn = vi.fn();
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -21,6 +22,10 @@ describe('TermsOfService page component', () => {
         LoadNotices: loadNoticesFn,
       },
     };
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('render component', () => {

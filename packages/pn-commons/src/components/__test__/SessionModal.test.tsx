@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { act, createMatchMedia, render } from '../../test-utils';
 import SessionModal from '../SessionModal';
@@ -44,7 +45,7 @@ describe('test SessionModal component', () => {
 
   it('check that close function is called after timeout', async () => {
     window.matchMedia = createMatchMedia(800);
-    const mockCloseHandler = jest.fn();
+    const mockCloseHandler = vi.fn();
     render(
       <SessionModal
         open

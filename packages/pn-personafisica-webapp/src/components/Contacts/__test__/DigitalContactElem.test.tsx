@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { TextField } from '@mui/material';
 
@@ -17,7 +18,7 @@ import * as trackingFunctions from '../../../utility/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -50,12 +51,12 @@ const fields = [
   },
 ];
 
-const mockResetModifyValue = jest.fn();
-const mockDeleteCbk = jest.fn();
-const mockOnConfirm = jest.fn();
+const mockResetModifyValue = vi.fn();
+const mockDeleteCbk = vi.fn();
+const mockOnConfirm = vi.fn();
 // mock tracking
-const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
-const mockTrackEventFn = jest.fn();
+const createTrackEventSpy = vi.spyOn(trackingFunctions, 'trackEventByType');
+const mockTrackEventFn = vi.fn();
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
@@ -73,11 +74,11 @@ describe('DigitalContactElem Component', () => {
 
   afterEach(() => {
     result = undefined;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders component', async () => {
@@ -110,7 +111,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    jest
+    vi
       .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
     // render component
@@ -161,7 +162,7 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('remove contact', async () => {
-    jest.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
+    vi.spyOn(api.ContactsApi, 'deleteLegalAddress').mockResolvedValueOnce('mocked-senderId');
     // render component
     await act(async () => {
       result = render(

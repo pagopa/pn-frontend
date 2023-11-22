@@ -1,16 +1,17 @@
 import React from 'react';
+import { vi } from 'vitest';
 
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, getTestStore, waitFor } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const mockOpenCodeModalHandler = jest.fn();
+const mockOpenCodeModalHandler = vi.fn();
 
 describe('DelegationElements', () => {
   it('renders the Menu closed', () => {
@@ -51,7 +52,7 @@ describe('DelegationElements', () => {
     const revokeDelegate = await waitFor(() => getByTestId('menuItem-revokeDelegate'));
     fireEvent.click(revokeDelegate);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.modalState).toStrictEqual({
+      expect(getTestStore().getState().delegationsState.modalState).toStrictEqual({
         id: '111',
         open: true,
         type: 'delegates',
@@ -70,7 +71,7 @@ describe('DelegationElements', () => {
     const rejectDelegator = getByTestId('menuItem-rejectDelegator');
     fireEvent.click(rejectDelegator);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.modalState).toStrictEqual({
+      expect(getTestStore().getState().delegationsState.modalState).toStrictEqual({
         id: '111',
         open: true,
         type: 'delegators',
@@ -117,7 +118,7 @@ describe('DelegationElements', () => {
     const acceptButton = getByTestId('acceptButton');
     fireEvent.click(acceptButton);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.acceptModalState).toStrictEqual({
+      expect(getTestStore().getState().delegationsState.acceptModalState).toStrictEqual({
         id: '111',
         open: true,
         name: 'test',

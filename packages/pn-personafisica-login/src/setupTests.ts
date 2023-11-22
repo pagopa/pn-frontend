@@ -4,10 +4,9 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 import 'whatwg-fetch';
+import { Configuration } from '@pagopa-pn/pn-commons';
 
 beforeAll(async () => {
-  const { Configuration } = await import('@pagopa-pn/pn-commons');
-
   Configuration.setForTest<any>({
     MIXPANEL_TOKEN: 'ba1f5101fe34a61bb125cbfe587780d8',
     ONE_TRUST_DRAFT_MODE: false,

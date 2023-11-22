@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { getF24Payments } from '@pagopa-pn/pn-commons';
 
@@ -6,7 +7,7 @@ import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationD
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationPaymentF24 from '../NotificationPaymentF24';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,

@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { RecipientType, formatDate } from '@pagopa-pn/pn-commons';
 import {
@@ -11,26 +12,40 @@ import {
 
 import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
-import { fireEvent, render, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import { act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { getApiClient } from '../../api/apiClients';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
+import { Route, Routes } from 'react-router-dom';
 
-const mockNavigateFn = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn,
-}));
+// The test in which the "indietro" button in the breadcrumb is clicked
+// needs the actual version of navigate; mocking it would be inadequate
+// since the uses inside PnBreadrumb wouldn't be affected by the mock
+// and therefore the test would fail.
+// In that test we instead mock a router and a history, let the actual implementation
+// of navigate(-1) to go on, and then check that the mocked page corresponding to the
+// url in the mocked history is rendered.
+let mustMockNavigate = true;
 
-jest.mock('../../utility/delegation.utility', () => ({
-  ...jest.requireActual('../../utility/delegation.utility'),
+const mockNavigateFn = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const originalImplementation = (await vi.importActual('react-router-dom')) as any;
+  return {
+    ...originalImplementation,
+    useNavigate: () =>  mustMockNavigate ? mockNavigateFn : originalImplementation.useNavigate(),
+  }
+});
+
+vi.mock('../../utility/delegation.utility', async () => ({
+  ...(await vi.importActual('../../utility/delegation.utility')) as any,
   generateVCode: () => '34153',
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -51,15 +66,16 @@ describe('NuovaDelega page', () => {
 
   beforeEach(() => {
     mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
+    mustMockNavigate = true;
   });
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -103,12 +119,49 @@ describe('NuovaDelega page', () => {
     expect(createButton).toBeEnabled();
   });
 
-  it('navigates to Deleghe page', () => {
-    const { getByTestId } = render(<NuovaDelega />);
-    const backButton = getByTestId('breadcrumb-indietro-button');
+  // Cfr the comment in NuovaDelega.page.tsx, when using PnBreadcrumb,
+  // about the inability of vi.mock to affect imports inside files in pn-commons
+  // (in other terms, pn-commons seems to be outside the scope of vi.mock)
+  //
+  // Done analogously in pn-personagiuridica-webapp
+  // --------------------------------------
+  // Carlos Lombardi, 2023-11-14
+  // --------------------------------------
+  it('navigates to Deleghe page', async () => {
+    mustMockNavigate = false;
+
+    let result: any;
+
+    // insert two entries into the history, so the initial render will refer to the path /
+    // and when the back button is pressed and so navigate(-1) is invoked,
+    // the path will change to /mock-path
+    window.history.pushState({}, '', '/mock-path');
+    window.history.pushState({}, '', '/nuova-delega');
+
+    // render with an ad-hoc router, will render initially NuovaDelega 
+    // since it corresponds to the top of the mocked history stack
+    await act(async () => {
+      result = render(<>
+        <Routes>
+          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={'/nuova-delega'} element={<NuovaDelega />} />
+        </Routes>
+      </>);
+    });
+
+    // before pressing "back" button - mocked page not present
+    const mockedPageBefore = result?.queryByTestId('mocked-page');
+    expect(mockedPageBefore).not.toBeInTheDocument();
+
+    // simulate press of "back" button
+    const backButton = result?.getByTestId('breadcrumb-indietro-button');
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(-1);
+
+    // after pressing "back" button - mocked page present
+    await waitFor(() => {
+      const mockedPageAfter = result?.queryByTestId('mocked-page');
+      expect(mockedPageAfter).toBeInTheDocument();
+    });
   });
 
   it('fills the form and calls the create function', async () => {

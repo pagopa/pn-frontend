@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { vi } from 'vitest';
 
 import { act, fireEvent, render } from '../../test-utils';
 import { useMultiEvent } from '../useMultiEvent';
@@ -27,11 +28,11 @@ const Component: React.FC<IProps> = ({ count, interval }) => {
 
 describe('test useMultiEvent hook', () => {
   beforeAll(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('call the completion callback', () => {
@@ -42,7 +43,7 @@ describe('test useMultiEvent hook', () => {
     for (let index = 0; index < count; index++) {
       fireEvent.click(btn);
       if (index < count) {
-        jest.advanceTimersByTime(50);
+        vi.advanceTimersByTime(50);
       }
     }
     const paragraph = getByRole('heading', { name: 'Updated!' });
@@ -57,7 +58,7 @@ describe('test useMultiEvent hook', () => {
     for (let index = 0; index < count - 1; index++) {
       fireEvent.click(btn);
       if (index < count) {
-        jest.advanceTimersByTime(50);
+        vi.advanceTimersByTime(50);
       }
     }
     const paragraph = queryByRole('heading', { name: 'Updated!' });
@@ -73,7 +74,7 @@ describe('test useMultiEvent hook', () => {
       fireEvent.click(btn);
       if (index < count) {
         act(() => {
-          jest.advanceTimersByTime(200);
+          vi.advanceTimersByTime(200);
         });
       }
     }

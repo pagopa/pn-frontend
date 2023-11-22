@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { arrayOfDelegates, arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -15,7 +15,7 @@ import {
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { GroupStatus } from '../../../models/groups';
-import { store } from '../../store';
+import { getStore } from '../../store';
 import {
   acceptDelegation,
   getDelegatesByCompany,
@@ -50,7 +50,7 @@ describe('delegation redux state tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
@@ -64,20 +64,20 @@ describe('delegation redux state tests', () => {
   mockAuthentication();
 
   it('checks the initial state', () => {
-    const state = store.getState().delegationsState;
+    const state = getStore().getState().delegationsState;
     expect(state).toEqual(initialState);
   });
 
   it('should be able to fetch the delegates', async () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
-    const action = await store.dispatch(getDelegatesByCompany());
+    const action = await getStore().dispatch(getDelegatesByCompany());
     expect(action.type).toBe('getDelegatesByCompany/fulfilled');
     expect(action.payload).toEqual(arrayOfDelegates);
   });
 
   it('should be able to fetch the delegates', async () => {
     mock.onGet(DELEGATIONS_BY_DELEGATOR()).reply(200, arrayOfDelegates);
-    const action = await store.dispatch(getDelegatesByCompany());
+    const action = await getStore().dispatch(getDelegatesByCompany());
     expect(action.type).toBe('getDelegatesByCompany/fulfilled');
     expect(action.payload).toEqual(arrayOfDelegates);
   });
@@ -88,7 +88,7 @@ describe('delegation redux state tests', () => {
       nextPagesKey: [],
       moreResult: false,
     });
-    const action = await store.dispatch(getDelegators({ size: 10 }));
+    const action = await getStore().dispatch(getDelegators({ size: 10 }));
     expect(action.type).toBe('getDelegators/fulfilled');
     expect(action.payload).toEqual({
       resultsPage: arrayOfDelegators,
@@ -131,7 +131,7 @@ describe('delegation redux state tests', () => {
 
   it('should throw an error trying to accept a delegation', async () => {
     mock.onPatch(ACCEPT_DELEGATION('1')).reply(500, 'error');
-    const action = await store.dispatch(acceptDelegation({ id: '1', code: '12345', groups: [] }));
+    const action = await getStore().dispatch(acceptDelegation({ id: '1', code: '12345', groups: [] }));
     expect(action.type).toBe('acceptDelegation/rejected');
     expect(action.payload).toStrictEqual({ response: { status: 500, data: 'error' } });
   });
@@ -161,7 +161,7 @@ describe('delegation redux state tests', () => {
 
   it('should throw an error trying to reject a delegation', async () => {
     mock.onPatch(REJECT_DELEGATION('2')).reply(500, 'error');
-    const action = await store.dispatch(rejectDelegation('2'));
+    const action = await getStore().dispatch(rejectDelegation('2'));
     expect(action.type).toBe('rejectDelegation/rejected');
     expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
   });
@@ -190,7 +190,7 @@ describe('delegation redux state tests', () => {
 
   it('should throw an error trying to revoke a delegation', async () => {
     mock.onPatch(REVOKE_DELEGATION('2')).reply(500, 'error');
-    const action = await store.dispatch(revokeDelegation('2'));
+    const action = await getStore().dispatch(revokeDelegation('2'));
     expect(action.type).toBe('revokeDelegation/rejected');
     expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
   });
@@ -205,7 +205,7 @@ describe('delegation redux state tests', () => {
       },
     ];
     mock.onGet(GET_GROUPS()).reply(200, response);
-    const action = await store.dispatch(getGroups());
+    const action = await getStore().dispatch(getGroups());
     expect(action.type).toBe('getGroups/fulfilled');
     expect(action.payload).toEqual(response);
   });
@@ -243,7 +243,7 @@ describe('delegation redux state tests', () => {
 
   it('should throw an error trying to update a delegation', async () => {
     mock.onPatch(UPDATE_DELEGATION('1')).reply(500, 'error');
-    const action = await store.dispatch(updateDelegation({ id: '1', groups: [] }));
+    const action = await getStore().dispatch(updateDelegation({ id: '1', groups: [] }));
     expect(action.type).toBe('updateDelegation/rejected');
     expect(action.payload).toEqual({ response: { status: 500, data: 'error' } });
   });
@@ -256,18 +256,18 @@ describe('delegation redux state tests', () => {
       status: [DelegationStatus.ACTIVE],
       mandateIds: ['mandate-1'],
     };
-    const action = store.dispatch(setFilters(filters));
+    const action = getStore().dispatch(setFilters(filters));
     expect(action.type).toBe('delegationsSlice/setFilters');
     expect(action.payload).toEqual(filters);
-    const state = store.getState().delegationsState;
+    const state = getStore().getState().delegationsState;
     expect(state.filters).toEqual(filters);
   });
 
   it('Should be able to reset state', () => {
-    const action = store.dispatch(resetState());
+    const action = getStore().dispatch(resetState());
     expect(action.type).toBe('delegationsSlice/resetState');
     expect(action.payload).toEqual(undefined);
-    const state = store.getState().delegationsState;
+    const state = getStore().getState().delegationsState;
     expect(state).toEqual(initialState);
   });
 });

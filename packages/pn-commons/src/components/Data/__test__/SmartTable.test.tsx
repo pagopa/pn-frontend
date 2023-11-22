@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { Item, SmartTableAction, SmartTableData, Sort } from '../../../models';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
@@ -6,10 +7,10 @@ import EmptyState from '../../EmptyState';
 import SmartFilter from '../SmartFilter';
 import SmartTable from '../SmartTable';
 
-const handleSort = jest.fn();
-const handleColumnClick = jest.fn();
-const clickActionMockFn = jest.fn();
-const handleChangePagination = jest.fn();
+const handleSort = vi.fn();
+const handleColumnClick = vi.fn();
+const clickActionMockFn = vi.fn();
+const handleChangePagination = vi.fn();
 
 const smartCfg: Array<SmartTableData<'column-1' | 'column-2' | 'column-3'>> = [
   {

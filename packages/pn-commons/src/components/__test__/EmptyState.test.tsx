@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import BalconyIcon from '@mui/icons-material/Balcony';
 import { Button } from '@mui/material';
@@ -8,7 +9,7 @@ import { fireEvent, render } from '../../test-utils';
 import EmptyState from '../EmptyState';
 
 describe('EmptyState component', () => {
-  const mockAction = jest.fn(); // it creates a dummy functions
+  const mockAction = vi.fn(); // it creates a dummy functions
 
   it('render component with default icon and a button cta', async () => {
     const { container, getByTestId } = render(

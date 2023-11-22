@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -7,11 +8,11 @@ import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import LoginError from '../LoginError';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 let spidErrorCode: string;
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -23,8 +24,8 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useNavigate: () => mockNavigateFn,
   useSearchParams: () => [mockCreateMockedSearchParams(), null],
 }));
@@ -38,6 +39,10 @@ function mockCreateMockedSearchParams() {
 }
 
 describe('LoginError component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('login technical error - code generic', async () => {
     spidErrorCode = '2';
     const { container } = render(

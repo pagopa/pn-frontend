@@ -10,6 +10,10 @@ import { RootState, appReducers } from '../redux/store';
 
 let testStore: EnhancedStore<RootState>;
 
+function getTestStore() {
+  return testStore;
+}
+
 const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
   <BrowserRouter>
     <Provider store={testStore}>{children}</Provider>
@@ -60,7 +64,7 @@ function randomString(length: number) {
 expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
-export { customRender as render, testStore };
+export { customRender as render, testStore, getTestStore };
 export { axe };
 // utility functions
 export { randomString };

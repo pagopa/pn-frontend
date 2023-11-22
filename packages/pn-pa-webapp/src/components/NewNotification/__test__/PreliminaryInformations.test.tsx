@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -25,30 +26,30 @@ import {
   fireEvent,
   randomString,
   render,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';
 
-const mockIsPaymentEnabledGetter = jest.fn();
+const mockIsPaymentEnabledGetter = vi.fn();
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-jest.mock('../../../services/configuration.service', () => {
+vi.mock('../../../services/configuration.service', async () => {
   return {
-    ...jest.requireActual('../../../services/configuration.service'),
+    ...(await vi.importActual('../../../services/configuration.service')) as any,
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
@@ -85,11 +86,11 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
 
 describe('PreliminaryInformations component with payment enabled', () => {
   let result: RenderResult | undefined;
-  const confirmHandlerMk = jest.fn();
+  const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   beforeEach(() => {
@@ -99,6 +100,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
   afterEach(() => {
     result = undefined;
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -186,7 +188,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
     expect(button).toBeEnabled();
     fireEvent.click(button!);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',
@@ -333,11 +335,11 @@ describe('PreliminaryInformations component with payment enabled', () => {
 
 describe('PreliminaryInformations Component with payment disabled', () => {
   let result: RenderResult | undefined;
-  const confirmHandlerMk = jest.fn();
+  const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   beforeEach(() => {
@@ -347,6 +349,7 @@ describe('PreliminaryInformations Component with payment disabled', () => {
   afterEach(() => {
     result = undefined;
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -410,7 +413,7 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     expect(button).toBeEnabled();
     fireEvent.click(button!);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = getTestStore().getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',

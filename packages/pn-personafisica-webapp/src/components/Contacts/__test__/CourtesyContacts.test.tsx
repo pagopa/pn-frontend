@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import * as React from 'react';
+import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import {
@@ -7,18 +8,18 @@ import {
   act,
   fireEvent,
   render,
-  testStore,
+  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { getApiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
 import { CourtesyChannelType } from '../../../models/contacts';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -53,7 +54,7 @@ describe('CourtesyContacts Component', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
@@ -143,7 +144,7 @@ describe('CourtesyContacts Component', () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultPhoneAddress,
         senderName: undefined,
@@ -226,7 +227,7 @@ describe('CourtesyContacts Component', () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultPhoneAddress,
         senderName: undefined,
@@ -286,7 +287,7 @@ describe('CourtesyContacts Component', () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
@@ -356,7 +357,7 @@ describe('CourtesyContacts Component', () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultEmailAddress,
         senderName: undefined,
@@ -437,7 +438,7 @@ describe('CourtesyContacts Component', () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       {
         ...defaultEmailAddress,
         senderName: undefined,
@@ -497,7 +498,7 @@ describe('CourtesyContacts Component', () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>

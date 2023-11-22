@@ -1,13 +1,18 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import userEvent from '@testing-library/user-event';
 
 import { fireEvent, render, theme, waitFor } from '../../../test-utils';
 import CodeInput from '../CodeInput';
 
-const handleChangeMock = jest.fn();
+const handleChangeMock = vi.fn();
 
 describe('CodeInput Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders CodeInput (empty inputs)', () => {
     // render component
     const { getAllByTestId } = render(

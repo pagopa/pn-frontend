@@ -1,9 +1,10 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import SmartSort from '../SmartSort';
 
-const sortingHandler = jest.fn();
+const sortingHandler = vi.fn();
 
 const sortFields = [
   {
@@ -21,6 +22,10 @@ const sortFields = [
 ];
 
 describe('Smart Sort Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders component', () => {
     const { getByTestId } = render(
       <SmartSort

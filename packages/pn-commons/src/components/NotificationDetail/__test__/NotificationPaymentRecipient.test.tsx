@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
@@ -29,7 +30,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
         landingSiteUrl=""
@@ -64,7 +65,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
         landingSiteUrl=""
@@ -97,13 +98,13 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should dispatch action on pay button click', async () => {
-    const payClickMk = jest.fn();
+    const payClickMk = vi.fn();
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={payClickMk}
         handleReloadPayment={() => void 0}
         landingSiteUrl=""
@@ -144,7 +145,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={payment}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
         landingSiteUrl=""
@@ -162,7 +163,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={true}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleReloadPayment={() => void 0}
         landingSiteUrl=""
@@ -175,7 +176,7 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleDownloadAttachment on download button click', async () => {
-    const getPaymentAttachmentActionMk = jest
+    const getPaymentAttachmentActionMk = vi
       .fn()
       .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
 

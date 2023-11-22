@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { act, fireEvent, render, waitFor } from '../../test-utils';
 import CopyToClipboard from '../CopyToClipboard';
@@ -9,7 +10,7 @@ describe('CopyToClipboard component', () => {
   beforeAll(() => {
     Object.assign(window.navigator, {
       clipboard: {
-        writeText: jest.fn().mockImplementation(() => Promise.resolve()),
+        writeText: vi.fn().mockImplementation(() => Promise.resolve()),
       },
     });
   });

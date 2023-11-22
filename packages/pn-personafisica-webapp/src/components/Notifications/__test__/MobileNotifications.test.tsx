@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -8,15 +9,15 @@ import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -38,6 +39,10 @@ describe('MobileNotifications Component', () => {
 
   afterAll(() => {
     window.matchMedia = original;
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('renders MobileNotifications - no notifications', async () => {

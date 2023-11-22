@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { KnownFunctionality } from '../../../models';
@@ -37,12 +38,12 @@ const mockAppStatus: AppStatusData = {
 describe('AppStatusRender component', () => {
   let result: RenderResult;
   const original = window.matchMedia;
-  const clearLegalFactDocument = jest.fn();
-  const clearPagination = jest.fn();
-  const fetchCurrentStatus = jest.fn();
-  const fetchDowntimeLegalFactDocumentDetails = jest.fn();
-  const fetchDowntimeLogPage = jest.fn();
-  const setPagination = jest.fn();
+  const clearLegalFactDocument = vi.fn();
+  const clearPagination = vi.fn();
+  const fetchCurrentStatus = vi.fn();
+  const fetchDowntimeLegalFactDocumentDetails = vi.fn();
+  const fetchDowntimeLogPage = vi.fn();
+  const setPagination = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();
@@ -50,7 +51,7 @@ describe('AppStatusRender component', () => {
 
   afterEach(() => {
     window.matchMedia = original;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('empty downtime list', async () => {

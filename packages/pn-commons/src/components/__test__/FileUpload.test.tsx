@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import {
   RenderResult,
@@ -9,9 +10,9 @@ import {
 } from '../../test-utils';
 import FileUpload from '../FileUpload';
 
-const mockUploadFn = jest.fn();
-const mockUploadFileHandler = jest.fn();
-const mockRemoveFileHandler = jest.fn();
+const mockUploadFn = vi.fn();
+const mockUploadFileHandler = vi.fn();
+const mockRemoveFileHandler = vi.fn();
 
 const file = new File(['mocked content'], 'Mocked file', { type: 'text/plain' });
 const bigFile = new File(['mocked content big'], 'Mocked big file', { type: 'text/plain' });
@@ -37,12 +38,12 @@ describe('FileUpload Component', () => {
   });
 
   beforeEach(() => {
-    mockUploadFn.mockImplementation(jest.fn(() => Promise.resolve(null)));
+    mockUploadFn.mockImplementation(vi.fn(() => Promise.resolve(null)));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('renders FileUpload', () => {
@@ -123,7 +124,7 @@ describe('FileUpload Component', () => {
         fileSizeLimit={file.size}
       />
     );
-    mockUploadFn.mockImplementation(jest.fn(() => Promise.reject(null)));
+    mockUploadFn.mockImplementation(vi.fn(() => Promise.reject(null)));
     await testFileUploading(result);
     expect(result.container).toHaveTextContent('common - upload-file.loading-error');
   });
@@ -143,7 +144,7 @@ describe('FileUpload Component', () => {
         }}
       />
     );
-    mockUploadFn.mockImplementation(jest.fn(() => Promise.resolve(null)));
+    mockUploadFn.mockImplementation(vi.fn(() => Promise.resolve(null)));
     await waitFor(() => {
       expect(result.container).toHaveTextContent(/Mocked file/i);
       expect(mockUploadFileHandler).toBeCalledTimes(0);

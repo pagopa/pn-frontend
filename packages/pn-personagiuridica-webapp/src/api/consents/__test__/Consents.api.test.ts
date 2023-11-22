@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { ConsentActionType, ConsentType } from '../../../models/consents';
-import { apiClient } from '../../apiClients';
+import { getApiClient } from '../../apiClients';
 import { ConsentsApi } from '../Consents.api';
 import { GET_CONSENTS, SET_CONSENTS } from '../consents.routes';
 
@@ -12,7 +12,7 @@ describe('Consents api tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {

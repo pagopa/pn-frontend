@@ -1,14 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { RenderResult, fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
+import { RenderResult, fireEvent, render, getTestStore, waitFor } from '../../../__test__/test-utils';
+import { getApiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
 import { CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import IOContact from '../IOContact';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -25,7 +26,7 @@ describe('IOContact component', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(getApiClient());
   });
 
   afterEach(() => {
@@ -104,7 +105,7 @@ describe('IOContact component', () => {
         verificationCode: '00000',
       });
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       { ...IOAddress, value: IOAllowedValues.ENABLED },
     ]);
   });
@@ -151,7 +152,7 @@ describe('IOContact component', () => {
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(getTestStore().getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       { ...IOAddress, value: IOAllowedValues.DISABLED },
     ]);
   });

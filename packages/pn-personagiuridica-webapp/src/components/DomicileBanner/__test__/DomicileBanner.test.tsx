@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
@@ -6,16 +7,16 @@ import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts'
 import * as routes from '../../../navigation/routes.const';
 import DomicileBanner from '../DomicileBanner';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
 
-const mockNavigateFn = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...(jest.requireActual('react-router-dom') as any),
+const mockNavigateFn = vi.fn();
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')) as any,
   useNavigate: () => mockNavigateFn,
 }));
 

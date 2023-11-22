@@ -1,9 +1,10 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../test-utils';
 import CourtesyPage from '../CourtesyPage';
 
-const mockClickFn = jest.fn();
+const mockClickFn = vi.fn();
 
 describe('test CourtesyPage component', () => {
   it('renders the full component', () => {

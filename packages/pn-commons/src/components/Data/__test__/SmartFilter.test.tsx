@@ -1,10 +1,11 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { createMatchMedia, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
-const submitHandler = jest.fn();
-const cancelHandler = jest.fn();
+const submitHandler = vi.fn();
+const cancelHandler = vi.fn();
 
 const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
   const [username, setUsername] = React.useState(inputUsername);
