@@ -3,21 +3,22 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Link, Typography } from '@mui/material';
+import { Box, Button, Link, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CardElement,
   CodeModal,
   EmptyState,
-  Item,
   PnCard,
   PnCardContent,
   PnCardContentItem,
   PnCardHeader,
-  PnCardHeaderTitle,
+  PnCardHeaderItem,
   PnCardsList,
+  Row,
 } from '@pagopa-pn/pn-commons';
 
+import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -25,8 +26,7 @@ import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
-import { Menu, OrganizationsList } from './DelegationsElements';
+import DelegatorsDataSwitch from './DelegationDataSwitch';
 
 const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
   children,
@@ -57,69 +57,26 @@ const MobileDelegates = () => {
   );
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
-  const cardData: Array<Item> = delegationToItem(delegates);
+  const cardData: Array<Row<DelegationData>> = delegationToItem(delegates);
 
-  const cardHeader: [CardElement, CardElement] = [
-    {
-      id: 'status',
-      label: t('deleghe.table.status'),
-      getLabel(value: string) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip label={t(key)} color={color} />;
-      },
-      gridProps: {
-        xs: 8,
-      },
-    },
-    {
-      id: 'id',
-      label: '',
-      getLabel(value: string, row: Item) {
-        return (
-          <Menu
-            menuType={'delegates'}
-            id={value}
-            verificationCode={row.verificationCode}
-            name={row.name}
-            setCodeModal={setShowCodeModal}
-          />
-        );
-      },
-      gridProps: {
-        xs: 4,
-      },
-    },
-  ];
-
-  const cardBody: Array<CardElement> = [
+  const cardBody: Array<CardElement<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
-      getLabel(value: string) {
-        return <b>{value}</b>;
-      },
+      wrapValueInTypography: false,
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
-      getLabel(value: string) {
-        return value;
-      },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
-      getLabel(value: string) {
-        return value;
-      },
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} textVariant="body2" visibleItems={3} />;
-      },
-      notWrappedInTypography: true,
+      wrapValueInTypography: false,
     },
   ];
 
@@ -168,20 +125,38 @@ const MobileDelegates = () => {
             <PnCardsList>
               {cardData.map((data) => (
                 <PnCard key={data.id}>
-                  <PnCardHeader>
-                    <PnCardHeaderTitle
-                      cardHeader={cardHeader}
-                      item={data}
-                      headerGridProps={{
-                        direction: { xs: 'row', sm: 'row' },
-                        alignItems: { xs: 'flex-start', sm: 'center' },
+                  <PnCardHeader
+                    headerGridProps={{
+                      direction: { xs: 'row', sm: 'row' },
+                      alignItems: { xs: 'flex-start', sm: 'center' },
+                    }}
+                  >
+                    <PnCardHeaderItem
+                      position="left"
+                      gridProps={{
+                        xs: 8,
                       }}
-                    />
+                    >
+                      <DelegatorsDataSwitch data={data} type="status" menuType="delegates" />
+                    </PnCardHeaderItem>
+                    <PnCardHeaderItem
+                      position="right"
+                      gridProps={{
+                        xs: 4,
+                      }}
+                    >
+                      <DelegatorsDataSwitch
+                        data={data}
+                        type="menu"
+                        menuType="delegates"
+                        setShowCodeModal={setShowCodeModal}
+                      />
+                    </PnCardHeaderItem>
                   </PnCardHeader>
                   <PnCardContent>
                     {cardBody.map((body) => (
-                      <PnCardContentItem key={body.id} body={body}>
-                        {body.getLabel(data[body.id], data)}
+                      <PnCardContentItem key={body.id} label={body.label}>
+                        <DelegatorsDataSwitch data={data} type={body.id} menuType="delegates" />
                       </PnCardContentItem>
                     ))}
                   </PnCardContent>

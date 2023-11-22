@@ -20,7 +20,7 @@ import {
   PnCardContent,
   PnCardContentItem,
   PnCardHeader,
-  PnCardHeaderTitle,
+  PnCardHeaderItem,
   PnCardsList,
   Sort,
   StatusTooltip,
@@ -271,7 +271,7 @@ const MobileNotifications = ({
           {cardData.map((data) => (
             <PnCard key={data.id}>
               <PnCardHeader>
-                <PnCardHeaderTitle
+                <PnCardHeaderItem
                   cardHeader={cardHeader}
                   item={data}
                   headerGridProps={{

@@ -1,13 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   GetNotificationsParams,
+  Notification,
+  NotificationColumnData,
+  Sort,
+  formatToTimezoneString,
   tenYearsAgo,
   today,
-  Notification,
-  formatToTimezoneString,
-  Sort
 } from '@pagopa-pn/pn-commons';
-import { NotificationColumn } from '../../models/Notifications';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { getReceivedNotifications } from './actions';
 
@@ -32,10 +32,10 @@ const dashboardSlice = createSlice({
     sort: {
       orderBy: '',
       order: 'asc',
-    } as Sort<NotificationColumn>,
+    } as Sort<NotificationColumnData>,
   },
   reducers: {
-    setPagination: (state, action: PayloadAction<{page: number; size: number}>) => {
+    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
       if (state.pagination.size !== action.payload.size) {
         // reset pagination
         state.pagination.nextPagesKey = [];
@@ -44,7 +44,7 @@ const dashboardSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
-    setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
+    setSorting: (state, action: PayloadAction<Sort<NotificationColumnData>>) => {
       state.sort = action.payload;
     },
     setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {

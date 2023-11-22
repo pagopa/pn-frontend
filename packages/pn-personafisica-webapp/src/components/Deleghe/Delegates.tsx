@@ -3,23 +3,23 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CodeModal,
   Column,
   EmptyState,
-  Item,
   PnTable,
   PnTableBody,
   PnTableBodyCell,
   PnTableBodyRow,
   PnTableHeader,
   PnTableHeaderCell,
+  Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
 
-import { DelegatesColumn } from '../../models/Deleghe';
+import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
@@ -28,8 +28,7 @@ import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
-import { Menu, OrganizationsList } from './DelegationsElements';
+import DelegatorsDataSwitch from './DelegationDataSwitch';
 
 const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
   children,
@@ -61,67 +60,40 @@ const Delegates = () => {
   const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
-  const rows: Array<Item> = delegationToItem(delegates);
+  const rows: Array<Row<DelegationData>> = delegationToItem(delegates);
 
-  const delegatesColumns: Array<Column<DelegatesColumn>> = [
+  const delegatesColumns: Array<Column<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
       width: '13%',
       sortable: true,
-      getCellLabel(value: string) {
-        return <Typography fontWeight="bold">{value}</Typography>;
-      },
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
       width: '11%',
-      getCellLabel(value: string) {
-        return value;
-      },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
       width: '11%',
-      getCellLabel(value: string) {
-        return value;
-      },
       sortable: true,
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       width: '14%',
-      getCellLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} visibleItems={3} />;
-      },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
       width: '18%',
-      getCellLabel(value: string) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip label={t(key)} color={color} />;
-      },
     },
     {
-      id: 'id',
+      id: 'menu',
       label: '',
       width: '5%',
-      getCellLabel(value: string, row: Item) {
-        return (
-          <Menu
-            menuType={'delegates'}
-            id={value}
-            verificationCode={row.verificationCode}
-            name={row.name}
-            setCodeModal={setShowCodeModal}
-          />
-        );
-      },
     },
   ];
 
@@ -134,7 +106,7 @@ const Delegates = () => {
     setShowCodeModal({ ...showCodeModal, open: false });
   };
 
-  const handleChangeSorting = (s: Sort<DelegatesColumn>) => {
+  const handleChangeSorting = (s: Sort<DelegationColumnData>) => {
     dispatch(setDelegatesSorting(s));
   };
 
@@ -169,57 +141,59 @@ const Delegates = () => {
           apiId={DELEGATION_ACTIONS.GET_DELEGATES}
           reloadAction={() => dispatch(getDelegates())}
         >
-          <>
-            {rows.length > 0 ? (
-              <PnTable testId="delegatesTable">
-                <PnTableHeader testId="tableHead">
-                  {delegatesColumns.map((column) => (
-                    <PnTableHeaderCell
-                      key={column.id}
-                      sort={sortDelegates}
-                      columnId={column.id}
-                      sortable={column.sortable}
-                      handleClick={handleChangeSorting}
-                    >
-                      {column.label}
-                    </PnTableHeaderCell>
-                  ))}
-                </PnTableHeader>
-                <PnTableBody testId="tableBody">
-                  {rows.map((row, index) => (
-                    <PnTableBodyRow key={row.id} testId="delegatesTable" index={index}>
-                      {delegatesColumns.map((column) => (
-                        <PnTableBodyCell
-                          disableAccessibility={column.disableAccessibility}
-                          key={column.id}
-                          cellProps={{
-                            width: column.width,
-                            align: column.align,
-                            cursor: column.onClick ? 'pointer' : 'auto',
-                          }}
-                        >
-                          {column.getCellLabel(row[column.id as keyof Item], row)}
-                        </PnTableBodyCell>
-                      ))}
-                    </PnTableBodyRow>
-                  ))}
-                </PnTableBody>
-              </PnTable>
-            ) : (
-              <EmptyState>
-                <Trans
-                  i18nKey={'deleghe.no_delegates'}
-                  ns={'deleghe'}
-                  components={[
-                    <LinkAddDelegate
-                      key={'add-delegate'}
-                      handleAddDelegationClick={handleAddDelegationClick}
-                    />,
-                  ]}
-                />
-              </EmptyState>
-            )}
-          </>
+          {rows.length > 0 ? (
+            <PnTable testId="delegatesTable">
+              <PnTableHeader testId="tableHead">
+                {delegatesColumns.map((column) => (
+                  <PnTableHeaderCell
+                    key={column.id}
+                    sort={sortDelegates}
+                    columnId={column.id}
+                    sortable={column.sortable}
+                    handleClick={handleChangeSorting}
+                  >
+                    {column.label}
+                  </PnTableHeaderCell>
+                ))}
+              </PnTableHeader>
+              <PnTableBody testId="tableBody">
+                {rows.map((row, index) => (
+                  <PnTableBodyRow key={row.id} testId="delegatesTable" index={index}>
+                    {delegatesColumns.map((column) => (
+                      <PnTableBodyCell
+                        key={column.id}
+                        cellProps={{
+                          width: column.width,
+                          align: column.align,
+                          cursor: column.onClick ? 'pointer' : 'auto',
+                        }}
+                      >
+                        <DelegatorsDataSwitch
+                          data={row}
+                          type={column.id}
+                          menuType="delegates"
+                          setShowCodeModal={setShowCodeModal}
+                        />
+                      </PnTableBodyCell>
+                    ))}
+                  </PnTableBodyRow>
+                ))}
+              </PnTableBody>
+            </PnTable>
+          ) : (
+            <EmptyState>
+              <Trans
+                i18nKey={'deleghe.no_delegates'}
+                ns={'deleghe'}
+                components={[
+                  <LinkAddDelegate
+                    key={'add-delegate'}
+                    handleAddDelegationClick={handleAddDelegationClick}
+                  />,
+                ]}
+              />
+            </EmptyState>
+          )}
         </ApiErrorWrapper>
       </Box>
     </>
