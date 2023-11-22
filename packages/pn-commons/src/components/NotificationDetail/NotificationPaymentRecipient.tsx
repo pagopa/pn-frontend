@@ -160,7 +160,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    setSelectedPayment(isSinglePayment && hasRequiredPayment ? pagoPaF24[0].pagoPa ?? null : null);
+    if (isSinglePayment && hasRequiredPayment) {
+      setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
+      setPaymentCache({
+        currentPayment: {
+          noticeCode: pagoPaF24[0].pagoPa?.noticeCode ?? '',
+          creditorTaxId: pagoPaF24[0].pagoPa?.creditorTaxId ?? '',
+        },
+      });
+    }
   }, [payments]);
 
   return (

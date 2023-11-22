@@ -1,3 +1,4 @@
+import exp from 'constants';
 import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
@@ -141,16 +142,19 @@ describe('NotificationPaymentRecipient Component', () => {
     });
   });
 
-  it('Should show enabled pay button and hide radio button if having only one payment', async () => {
+  it('Should show enabled pay button, save it to cache and hide radio button if having only one payment', async () => {
     const payment = {
       ...paymentsData,
       pagoPaF24: [
         {
-          ...paymentsData.pagoPaF24[0],
-          status: PaymentStatus.SUCCEEDED,
+          pagoPa: {
+            ...paymentsData.pagoPaF24[0].pagoPa,
+            status: PaymentStatus.REQUIRED,
+          },
         },
       ],
-    };
+    } as PaymentsData;
+
     const { queryByTestId, container } = render(
       <NotificationPaymentRecipient
         payments={payment}
@@ -164,8 +168,14 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const payButton = queryByTestId('pay-button');
     const radioButton = container.querySelector('[data-testid="radio-button"] input');
+    const paymentCache = getPaymentCache();
+    expect(paymentCache?.currentPayment).toEqual({
+      noticeCode: payment.pagoPaF24[0].pagoPa?.noticeCode,
+      creditorTaxId: payment.pagoPaF24[0].pagoPa?.creditorTaxId,
+    });
     expect(radioButton).not.toBeInTheDocument();
-    expect(payButton).not.toBeInTheDocument();
+    expect(payButton).toBeEnabled();
+    sessionStorage.clear();
   });
 
   it('should show alert if notification is cancelled', () => {
