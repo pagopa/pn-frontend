@@ -91,7 +91,7 @@ export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string
   const diff = Math.abs(date1.getTime() - date2.getTime());
   const minutes = Math.floor(diff / 1000 / 60);
 
-  return minutes <= 12;
+  return minutes <= 2;
 };
 
 export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
