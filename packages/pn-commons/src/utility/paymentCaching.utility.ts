@@ -4,6 +4,7 @@ import { PaymentCache, PaymentStatus, PaymentsCachePage, PaymentsData } from '..
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
+// TODO: add validation here
 export const getPaymentCache = (): PaymentCache | null => {
   const paymentCache = sessionStorage.getItem(PAYMENT_CACHE_KEY);
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
@@ -43,7 +44,7 @@ export const setPaymentsInCache = (payments: PaymentsData, page: number): void =
       // eslint-disable-next-line functional/immutable-data
       paymentsPage.payments = {
         pagoPaF24: _.uniqWith(
-          [...paymentsPage.payments.pagoPaF24, ...payments.pagoPaF24],
+          [...payments.pagoPaF24, ...paymentsPage.payments.pagoPaF24],
           (a, b) =>
             a.pagoPa?.noticeCode === b.pagoPa?.noticeCode &&
             a.pagoPa?.creditorTaxId === b.pagoPa?.creditorTaxId
@@ -90,7 +91,7 @@ export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string
   const diff = Math.abs(date1.getTime() - date2.getTime());
   const minutes = Math.floor(diff / 1000 / 60);
 
-  return minutes <= 2;
+  return minutes <= 12;
 };
 
 export const checkIunAndTimestamp = (iun: string, timestamp: string) => {

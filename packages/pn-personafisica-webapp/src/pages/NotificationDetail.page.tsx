@@ -311,12 +311,6 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
-    }
-  }, [currentRecipient.payments]);
-
-  useEffect(() => {
     const currentPayment = getPaymentCache()?.currentPayment;
 
     if (currentPayment) {
@@ -329,7 +323,11 @@ const NotificationDetail = () => {
 
       deletePropertiesInPaymentCache(['currentPayment']);
     }
-  }, []);
+
+    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
+      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
+    }
+  }, [currentRecipient.payments]);
 
   useEffect(() => {
     fetchReceivedNotification();
