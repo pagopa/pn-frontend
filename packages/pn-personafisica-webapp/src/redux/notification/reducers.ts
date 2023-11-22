@@ -119,6 +119,13 @@ const notificationSlice = createSlice({
           const payments = populatePaymentsPagoPaF24(timelineEvents, timelineRecipientPayments, []);
           state.paymentsData.pagoPaF24 = payments;
         } else {
+          const pagoPAPaymentFullDetails = getPagoPaF24Payments(
+            paymentsOfRecipient,
+            recipientIdx,
+            true
+          );
+          const f24Payments = getF24Payments(paymentsOfRecipient, recipientIdx);
+
           const havePaymentInCache = checkIfPaymentsIsAlreadyInCache(
             paymentsOfRecipient.map((payment) => ({
               noticeCode: payment.pagoPa?.noticeCode,
@@ -127,32 +134,28 @@ const notificationSlice = createSlice({
           );
           const isIunValid = checkIunAndTimestamp(action.payload.iun, new Date().toISOString());
 
-          if (isIunValid && havePaymentInCache) {
-            const payments = getPaymentsFromCache();
-            payments?.forEach((payment) => {
-              state.paymentsData.pagoPaF24 = [
-                ...state.paymentsData.pagoPaF24,
-                ...payment.payments.pagoPaF24,
-              ];
-            });
-            state.notification = action.payload;
-            return;
+          if (havePaymentInCache && isIunValid) {
+            const cachedPayments = getPaymentsFromCache();
+            if (cachedPayments) {
+              cachedPayments.forEach((cachedPayment) => {
+                cachedPayment.payments.pagoPaF24.forEach((cachedPagoPaPayment) => {
+                  const index = pagoPAPaymentFullDetails.findIndex(
+                    (payment) =>
+                      payment.pagoPa?.creditorTaxId === cachedPagoPaPayment.pagoPa?.creditorTaxId &&
+                      payment.pagoPa?.noticeCode === cachedPagoPaPayment.pagoPa?.noticeCode
+                  );
+                  if (index !== -1) {
+                    pagoPAPaymentFullDetails[index] = cachedPagoPaPayment;
+                  }
+                });
+              });
+            }
           }
 
-          const pagoPAPaymentFullDetails = getPagoPaF24Payments(
-            paymentsOfRecipient,
-            recipientIdx,
-            true
-          );
-          const f24Payments = getF24Payments(paymentsOfRecipient, recipientIdx);
-
-          if (pagoPAPaymentFullDetails) {
-            state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
-          }
-
-          if (f24Payments) {
-            state.paymentsData.f24Only = f24Payments;
-          }
+          state.paymentsData = {
+            pagoPaF24: pagoPAPaymentFullDetails ?? [],
+            f24Only: f24Payments ?? [],
+          };
         }
       }
       state.notification = action.payload;

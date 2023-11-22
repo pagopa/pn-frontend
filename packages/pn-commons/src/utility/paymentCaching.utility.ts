@@ -40,12 +40,13 @@ export const setPaymentsInCache = (payments: PaymentsData, page: number): void =
     const paymentsPage = newPaymentCache.find((p) => p.page === page);
 
     if (paymentsPage) {
-      console.log(payments.pagoPaF24, paymentsPage.payments.pagoPaF24);
       // eslint-disable-next-line functional/immutable-data
       paymentsPage.payments = {
-        pagoPaF24: _.uniqBy(
+        pagoPaF24: _.uniqWith(
           [...paymentsPage.payments.pagoPaF24, ...payments.pagoPaF24],
-          (payment) => payment.pagoPa?.noticeCode
+          (a, b) =>
+            a.pagoPa?.noticeCode === b.pagoPa?.noticeCode &&
+            a.pagoPa?.creditorTaxId === b.pagoPa?.creditorTaxId
         ),
         f24Only: [...paymentsPage.payments.f24Only, ...payments.f24Only],
       };
@@ -132,7 +133,7 @@ export const checkIfPaymentsIsAlreadyInCache = (
     return false;
   }
 
-  return paymentsInfoRequest.every((paymentInfo) =>
+  return paymentsInfoRequest.some((paymentInfo) =>
     payments.some((cachedPayments) =>
       cachedPayments.payments.pagoPaF24.some(
         (cachedPayment) =>
