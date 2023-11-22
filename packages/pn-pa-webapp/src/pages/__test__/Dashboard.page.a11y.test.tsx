@@ -5,7 +5,6 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToTimezoneString,
-  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -45,7 +44,7 @@ describe('Dashboard Page - accessibility tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -65,7 +64,7 @@ describe('Dashboard Page - accessibility tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -85,7 +84,7 @@ describe('Dashboard Page - accessibility tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )

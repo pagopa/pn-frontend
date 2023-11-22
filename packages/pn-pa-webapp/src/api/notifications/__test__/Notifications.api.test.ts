@@ -56,7 +56,7 @@ describe('Notifications api tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getEndOfDay(today)),
+          endDate: formatToTimezoneString(today),
           iunMatch: '',
           recipientId: '',
           status: '',

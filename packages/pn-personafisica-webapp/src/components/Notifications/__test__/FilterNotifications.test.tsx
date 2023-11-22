@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  formatDate,
-  formatToTimezoneString,
-  getEndOfDay,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { formatDate, formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
@@ -189,7 +183,7 @@ describe('Filter Notifications Table Component', () => {
     todayM.setHours(0, 0, 0, 0);
     nineYearsAgo.setHours(0, 0, 0, 0);
     // wrong id and wrong start date
-    await setFormValues(form!, nineYearsAgo, getEndOfDay(todayM), '1234-5678-910A-BCDFGH-I-OL');
+    await setFormValues(form!, nineYearsAgo, todayM, '1234-5678-910A-BCDFGH-I-OL');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {

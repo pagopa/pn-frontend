@@ -7,13 +7,6 @@ const dateFns = new DateFnsAdapter();
 export const DATE_FORMAT = 'dd/MM/yyyy';
 const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
-// export const today = new Date();
-// export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));
-// today.setHours(0, 0, 0, 0);
-// today.setTime(today.getTime() - today.getTimezoneOffset() * 60 * 1000); // UTC Offset
-// today.setTime(today.getTime() + 120 * 60 * 1000); // Rome Offset (120min)
-// tenYearsAgo.setHours(0, 0, 0, 0);
-
 export const today = dateFns.endOfDay(new Date());
 export const tenYearsAgo = dateFns.startOfDay(
   new Date(new Date().setMonth(today.getMonth() - 120))
