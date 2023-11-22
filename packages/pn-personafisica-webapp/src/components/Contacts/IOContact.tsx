@@ -93,11 +93,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
             {content.text}
           </Typography>
           <Box flexGrow={1} textAlign="right">
-            <ButtonNaked
-              color="primary"
-              data-testid="IO button"
-              onClick={() => handleConfirmationModal}
-            >
+            <ButtonNaked color="primary" data-testid="IO button" onClick={handleConfirmationModal}>
               {content.btn}
             </ButtonNaked>
           </Box>

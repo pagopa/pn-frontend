@@ -6,6 +6,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
+  EventMandateNotificationsListType,
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -94,7 +95,7 @@ const Deleghe = () => {
   const getDelegatorsDelegationCounts = (
     delegates: Array<Delegation>,
     delegators: Array<Delegation>
-  ) => ({
+  ): EventMandateNotificationsListType => ({
     total_mandates_given_count: delegates.length,
     pending_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.PENDING)
       .length,

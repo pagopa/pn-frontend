@@ -93,7 +93,7 @@ const Notifiche = () => {
   };
 
   const getEventNotifications = (): EventNotificationsListType => ({
-    delegate: !!currentDelegator,
+    delegate: delegators.length > 0,
     page_number: pagination.page,
     total_count: notifications.length,
     unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
@@ -122,7 +122,7 @@ const Notifiche = () => {
         getEventNotifications()
       );
     }
-  }, [notifications]);
+  }, [notifications, delegators]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {

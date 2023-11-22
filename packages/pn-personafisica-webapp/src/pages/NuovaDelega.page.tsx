@@ -25,6 +25,7 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
+  EventCreatedDelegationType,
   PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
@@ -65,13 +66,9 @@ const NuovaDelega = () => {
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
-  type CreatedDelegation = {
-    person_type: string;
-    mandate_type: string;
-  };
-  const [createdDelegation, setCreatedDelegation] = useState<CreatedDelegation | undefined>(
-    undefined
-  );
+  const [createdDelegation, setCreatedDelegation] = useState<
+    EventCreatedDelegationType | undefined
+  >(undefined);
 
   useEffect(() => {
     if (createdDelegation && created) {

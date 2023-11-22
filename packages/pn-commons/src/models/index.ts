@@ -25,7 +25,10 @@ import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
 import {
   EventCategory,
+  EventCreatedDelegationType,
   EventDowntimeType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
   EventNotificationsListType,
   EventPageType,
   EventPaymentStatusType,
@@ -121,6 +124,9 @@ export type {
   EventsType,
   EventPaymentStatusType,
   EventNotificationsListType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventCreatedDelegationType,
   GetNotificationsParams,
   GetNotificationsResponse,
   IAppMessage,

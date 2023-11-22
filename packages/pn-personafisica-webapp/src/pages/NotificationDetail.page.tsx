@@ -8,6 +8,8 @@ import {
   ApiError,
   ApiErrorWrapper,
   EventDowntimeType,
+  EventNotificationDetailType,
+  EventPaymentStatusType,
   GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
@@ -309,6 +311,20 @@ const NotificationDetail = () => {
     [currentRecipient.payments]
   );
 
+  const getNotificationDetailData = (
+    typeDowntime: EventDowntimeType
+  ): EventNotificationDetailType => ({
+    notification_owner: !mandateId,
+    notification_status: notification.notificationStatus,
+    contains_payment: checkIfUserHasPayments,
+    disservice_status: typeDowntime,
+    contains_multipayment:
+      userPayments.f24Only.length > 1 || userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
+    count_payment: userPayments.f24Only.length + userPayments.pagoPaF24.length,
+    contains_f24:
+      userPayments.pagoPaF24.length > 0 || userPayments.f24Only.length > 0 ? 'yes' : 'no',
+  });
+
   const sendEventTrackCallbackNotificationDetail = () => {
     // eslint-disable-next-line functional/no-let
     let typeDowntime: EventDowntimeType;
@@ -321,17 +337,10 @@ const NotificationDetail = () => {
           : EventDowntimeType.IN_PROGRESS;
     }
 
-    trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, {
-      notification_owner: !mandateId,
-      notification_status: notification.notificationStatus,
-      contains_payment: checkIfUserHasPayments,
-      disservice_status: typeDowntime,
-      contains_multipayment:
-        userPayments.f24Only.length > 1 || userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
-      count_payment: userPayments.f24Only.length + userPayments.pagoPaF24.length,
-      contains_f24:
-        userPayments.pagoPaF24.length > 0 || userPayments.f24Only.length > 0 ? 'yes' : 'no',
-    });
+    trackEventByType(
+      TrackEventType.SEND_NOTIFICATION_DETAIL,
+      getNotificationDetailData(typeDowntime)
+    );
   };
 
   useEffect(() => {
@@ -403,17 +412,6 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
-  type TrackEventPaymentStatus = {
-    page_number: number;
-    count_payment: number;
-    count_unpaid: number;
-    count_paid: number;
-    count_error: number;
-    count_expired: number;
-    count_canceled: number;
-    count_revoked: number;
-  };
-
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
     trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_REFRESH);
@@ -445,7 +443,7 @@ const NotificationDetail = () => {
     trackEventByType(TrackEventType.SEND_F24_DOWNLOAD_SUCCESS);
   };
 
-  const trackPaymentStatus = (obj: TrackEventPaymentStatus) => {
+  const trackPaymentStatus = (obj: EventPaymentStatusType) => {
     trackEventByType(TrackEventType.SEND_PAYMENT_STATUS, obj);
   };
 

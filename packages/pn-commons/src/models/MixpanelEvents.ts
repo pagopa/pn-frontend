@@ -1,3 +1,5 @@
+import { NotificationStatus } from './NotificationStatus';
+
 export type EventsType = {
   [key: string]: {
     // property category should be of type EventCategory however we should finish all the new implementations in PA and PG first.
@@ -44,6 +46,25 @@ export type EventNotificationsListType = {
   cancelled_count: number;
 };
 
+export type EventNotificationDetailType = {
+  notification_owner: boolean;
+  notification_status: NotificationStatus;
+  contains_payment: boolean;
+  disservice_status: EventDowntimeType;
+  contains_multipayment: 'yes' | 'no';
+  count_payment: number;
+  contains_f24: 'yes' | 'no';
+};
+
+export type EventMandateNotificationsListType = {
+  total_mandates_given_count: number;
+  pending_mandates_given_count: number;
+  active_mandates_given_count: number;
+  total_mandates_received_count: number;
+  pending_mandates_received_count: number;
+  active_mandates_received_count: number;
+};
+
 export enum EventPageType {
   LISTA_NOTIFICHE = 'LISTA_NOTIFICHE',
   DETTAGLIO_NOTIFICA = 'DETTAGLIO_NOTIFICA',
@@ -51,3 +72,8 @@ export enum EventPageType {
   STATUS_PAGE = 'STATUS_PAGE',
   RECAPITI = 'RECAPITI',
 }
+
+export type EventCreatedDelegationType = {
+  person_type: string;
+  mandate_type: string;
+};
