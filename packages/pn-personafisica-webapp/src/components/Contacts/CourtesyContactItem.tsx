@@ -155,6 +155,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           fields={[
             {
               id: `courtesyContatcs-${formik.values[type]}`,
+              key: 'courtesyContactValue',
               component: (
                 <TextField
                   id={type}

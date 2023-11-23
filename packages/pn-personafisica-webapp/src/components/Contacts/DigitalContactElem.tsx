@@ -39,6 +39,7 @@ type Props = {
     id: string;
     isEditable?: boolean;
     size: 'auto' | 'variable';
+    key: string;
   }>;
   recipientId: string;
   senderId: string;
@@ -162,7 +163,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
     const mappedChildren = fields.map((f) => (
-      <Grid key={f.id} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
+      <Grid key={f.key} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
         {!f.isEditable && f.component}
         {f.isEditable && editMode && f.component}
         {f.isEditable && !editMode && (
