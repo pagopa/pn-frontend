@@ -97,7 +97,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       );
     }
 
-    if (pagoPaF24.length > 0) {
+    if (pagoPaF24.length === 1) {
+      return (
+        <>
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.single-payment-subtitle')}
+          &nbsp;
+          {FaqLink}
+        </>
+      );
+    }
+
+    if (pagoPaF24.length > 1) {
       return (
         <>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
