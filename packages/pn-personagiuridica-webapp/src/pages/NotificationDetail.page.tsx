@@ -74,7 +74,7 @@ const NotificationDetail = () => {
    * ---------------------------------
    * Carlos Lombardi, 2023.02.03
    */
-  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+  const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
@@ -299,7 +299,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      fetchPaymentsInfo(currentRecipient.payments ?? []);
+      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
 
@@ -407,7 +407,7 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
-                        handleReloadPayment={fetchPaymentsInfo}
+                        handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}
@@ -465,6 +465,7 @@ const NotificationDetail = () => {
                   }
                 />
                 <NotificationDetailTimeline
+                  language={i18n.language}
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}
                   title={t('detail.timeline-title', { ns: 'notifiche' })}

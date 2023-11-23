@@ -100,7 +100,7 @@ const NotificationDetail: React.FC = () => {
    * ---------------------------------
    * Carlos Lombardi, 2023.02.03
    */
-  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+  const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
 
@@ -336,6 +336,7 @@ const NotificationDetail: React.FC = () => {
                   }
                 />
                 <NotificationDetailTimeline
+                  language={i18n.language}
                   recipients={recipients}
                   statusHistory={notification.notificationStatusHistory}
                   title={t('detail.timeline-title', { ns: 'notifiche' })}
