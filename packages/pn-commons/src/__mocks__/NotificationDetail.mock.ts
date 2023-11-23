@@ -6,15 +6,15 @@ import {
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDetail,
+  NotificationDetailPayment,
   NotificationDetailRecipient,
+  NotificationDetailTimelineDetails,
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  NotificationDetailPayment,
-  NotificationDetailTimelineDetails,
 } from '../models';
 import { parseNotificationDetail } from '../utility';
 
@@ -79,6 +79,34 @@ export const payments: Array<NotificationDetailPayment> = [
           versionToken: 'v1',
         },
       },
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695134',
+      creditorTaxId: '77777777777',
+      applyCost: false,
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695135',
+      creditorTaxId: '77777777777',
+      applyCost: false,
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695136',
+      creditorTaxId: '77777777777',
+      applyCost: true,
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695137',
+      creditorTaxId: '77777777777',
+      applyCost: true,
     },
   },
   {

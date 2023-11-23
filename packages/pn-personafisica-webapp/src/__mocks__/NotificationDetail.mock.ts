@@ -86,6 +86,20 @@ export const payments: Array<NotificationDetailPayment> = [
     },
   },
   {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695136',
+      applyCost: true,
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695137',
+      applyCost: true,
+    },
+  },
+  {
     f24: {
       title: 'F24 prima rata',
       applyCost: false,
