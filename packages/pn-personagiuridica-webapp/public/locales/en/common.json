@@ -137,7 +137,7 @@
     "resources": "Resources",
     "follow": "Follow us on",
     "legal-part-1": "joint stock company with sole shareholder – share capital of 1,000,000 euros fully paid up – registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 – Reg. no. in the Rome Business Register, Tax code and VAT number 15376371009"
+    "legal-part-2": "CAP 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
   },
   "required-fields": "*Required fields",
   "too-long-field-error": "Write maximum {{maxLength}} characters",

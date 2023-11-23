@@ -47,14 +47,14 @@
       "accept": "Accept",
       "notificationsFrom": "Notifications from:",
       "allNotifications": "All notifications",
-      "active": "Activate",
+      "active": "Active",
       "pending": "Pending",
       "rejected": "Declined",
       "groups": "Groups",
       "group": "Group",
       "no-group-found": "No groups found",
       "menu-aria-label": "Actions menu",
-      "tax-id": "Tax code"
+      "tax-id": "Fiscal code"
     },
     "accept-delegation": "Accept authority",
     "associate-groups-title": "Do you want to assign the authority to a group?",
@@ -73,7 +73,7 @@
     "reject-error": "An error occurred and the authority was not declined. Please try again.",
     "validation": {
       "pIvaAndFiscalCode": {
-        "wrong": "The tax code entered is incorrect"
+        "wrong": "The fiscal code entered is incorrect"
       }
     }
   },
@@ -90,7 +90,7 @@
       "legalPerson": "Legal person",
       "firstName": "First name*",
       "lastName": "Surname*",
-      "fiscalCode": "Tax code*",
+      "fiscalCode": "Fiscal code*",
       "businessName": "Company name*",
       "viewFrom": "The person will be able to view notifications from*:",
       "allEntities": "All organisations",
@@ -106,8 +106,8 @@
     },
     "validation": {
       "fiscalCode": {
-        "required": "The tax code is required",
-        "wrong": "The tax code entered is incorrect"
+        "required": "The fiscal code is required",
+        "wrong": "The fiscal code entered is incorrect"
       },
       "name": {
         "required": "First name is required"
@@ -124,7 +124,7 @@
         "wrong": "Incorrect date"
       },
       "pIvaAndFiscalCode": {
-        "wrong": "The tax code entered is incorrect"
+        "wrong": "The fiscal code entered is incorrect"
       }
     }
   },

@@ -2,22 +2,22 @@ import _ from 'lodash';
 
 import {
   AddressSource,
+  AnalogDetails,
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDetail,
+  NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
+  PaidDetails,
+  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
-  AnalogDetails,
-  NotificationDetailPayment,
-  PaidDetails,
-  PaymentsData,
 } from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
@@ -83,6 +83,20 @@ export const payments: Array<NotificationDetailPayment> = [
       creditorTaxId: '77777777777',
       noticeCode: '302011686772695135',
       applyCost: false,
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695136',
+      applyCost: true,
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011686772695137',
+      applyCost: true,
     },
   },
   {

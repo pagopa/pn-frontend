@@ -41,7 +41,7 @@
       "accept": "Accept",
       "notificationsFrom": "Notifications from:",
       "allNotifications": "All notifications",
-      "active": "Activate",
+      "active": "Active",
       "pending": "Awaiting confirmation"
     }
   },
@@ -58,7 +58,7 @@
       "legalPerson": "Legal person",
       "firstName": "First name*",
       "lastName": "Surname*",
-      "fiscalCode": "Tax Code*",
+      "fiscalCode": "Fiscal Code*",
       "businessName": "Company Name*",
       "viewFrom": "You will be able to view notifications from*:",
       "allEntities": "All organisations",
@@ -74,8 +74,8 @@
     },
     "validation": {
       "fiscalCode": {
-        "required": "The Tax Code is required",
-        "wrong": "The Tax Code entered is incorrect"
+        "required": "The Fiscal Code is required",
+        "wrong": "The Fiscal Code entered is incorrect"
       },
       "name": {
         "required": "First name is required"
@@ -119,8 +119,8 @@
       "message": "Please check and re-enter"
     },
     "fiscal_code": {
-      "title": "Invalid tax code",
-      "message": "The tax code is not valid "
+      "title": "Invalid fiscal code",
+      "message": "The fiscal code is not valid "
     },
     "invalid_parameter": {
       "title": "Invalid data",

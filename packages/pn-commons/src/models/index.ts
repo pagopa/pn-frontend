@@ -19,6 +19,7 @@ import {
 } from './AppStatus';
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
+import { Institution, PartyEntityWithUrl } from './Institutions';
 import { CardAction, CardElement, CardSort } from './ItemsCard';
 import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
@@ -26,6 +27,7 @@ import { EventsType } from './MixpanelEvents';
 import {
   AarDetails,
   AddressSource,
+  AnalogDetails,
   AnalogWorkflowDetails,
   AppIoCourtesyMessageEventType,
   DigitalDomicileType,
@@ -69,6 +71,7 @@ import {
 import { NotificationStatus } from './NotificationStatus';
 import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
 import { PaginationData } from './Pagination';
+import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
@@ -98,6 +101,7 @@ export {
 };
 export type {
   AnalogWorkflowDetails,
+  AnalogDetails,
   AppStatusData,
   BasicUser,
   ConsentUser,
@@ -156,4 +160,7 @@ export type {
   PaymentsData,
   ExtRegistriesPaymentDetails,
   NotificationDetailTimelineDetails,
+  Institution,
+  PartyEntityWithUrl,
+  Product,
 };
