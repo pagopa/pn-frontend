@@ -65,7 +65,7 @@ const App = () => {
 };
 
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } = getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -230,9 +230,10 @@ const ActualApp = () => {
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+    window.location.href = sessionToken
+      ? `${SELFCARE_BASE_URL}/assistenza`
+      : `mailto:${PAGOPA_HELP_EMAIL}`;
   };
-
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
       route: source,
