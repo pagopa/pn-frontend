@@ -4,7 +4,8 @@ import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { render } from '../../../__test__/test-utils';
+import { queryByTestId, render } from '../../../__test__/test-utils';
+import { PNRole } from '../../../models/user';
 import NotificationDetailTableSender from '../NotificationDetailTableSender';
 
 jest.mock('react-i18next', () => ({
@@ -57,5 +58,28 @@ describe('NotificationDetailTableSender Component', () => {
         `${notificationToFeMultiRecipient.recipients[index].denomination} - ${notificationToFeMultiRecipient.recipients[index].taxId}`
       );
     });
+  });
+
+  it('renders component - no cancel notification button with operator role', () => {
+    // render component
+    const { queryByTestId } = render(
+      <NotificationDetailTableSender
+        notification={notificationToFe}
+        onCancelNotification={mockCancelHandler}
+      />,
+      {
+        preloadedState: {
+          userState: {
+            user: {
+              organization: {
+                roles: [{ role: PNRole.OPERATOR }],
+              },
+            },
+          },
+        },
+      }
+    );
+    const cancelNotificationBtn = queryByTestId('cancelNotificationBtn');
+    expect(cancelNotificationBtn).not.toBeInTheDocument();
   });
 });
