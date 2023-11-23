@@ -1,8 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
@@ -27,6 +28,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
+import { getConfiguration } from '../services/configuration.service';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -116,7 +118,7 @@ const Dashboard = () => {
             <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
               {t('subtitle')}
             </Typography>
-            <Button
+            {getConfiguration().IS_MANUAL_SEND_ENABLED ? <Button
               id="new-notification-btn"
               variant="contained"
               onClick={handleRouteManualSend}
@@ -125,7 +127,16 @@ const Dashboard = () => {
               sx={{ marginBottom: isMobile ? 3 : undefined }}
             >
               {t('new-notification-button')}
-            </Button>
+            </Button> :
+              <>
+              <Alert severity="warning" action={
+                <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
+                  Controlla lo stato della piattaforma
+                </ButtonNaked>
+              }>
+                In questo momento, non è possibile inviare nuove notifiche.
+              </Alert></>}
+
           </Box>
         }
       />
