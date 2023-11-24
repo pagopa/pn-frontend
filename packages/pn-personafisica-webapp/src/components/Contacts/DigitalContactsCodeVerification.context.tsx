@@ -351,11 +351,13 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={pecValidationOpen} data-testid="validationDialog">
+      <Dialog
+        open={pecValidationOpen}
+        data-testid="validationDialog"
+        aria-labelledby="dialog-title"
+      >
         <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
-          <Typography variant="h5" id="validationPecProgressTitle">
-            {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
-          </Typography>
+          {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
         <DialogContent sx={{ px: 4 }}>
           {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
