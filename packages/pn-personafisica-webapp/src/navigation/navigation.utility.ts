@@ -28,7 +28,13 @@ export function goToLoginPortal(aarToken?: string | null) {
   }
 }
 
-export const getCurrentPage = (location: string): EventPageType | undefined => {
+/**
+ * This method returns an EventPageType used to track user experience base on current location.
+ * In this way, we avoid to share current url and therfore personal information.
+ * @param location 
+ * @returns EventPageType | undefined
+ */
+export const getCurrentEventTypePage = (location: string): EventPageType | undefined => {
   // eslint-disable-next-line functional/no-let
   let pageType: EventPageType | undefined;
   if (

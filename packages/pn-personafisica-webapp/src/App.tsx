@@ -27,7 +27,7 @@ import {
 import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
-import { getCurrentPage, goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -247,7 +247,7 @@ const ActualApp = () => {
   };
 
   const handleEventTrackingCallbackRefreshPage = () => {
-    const pageType = getCurrentPage(pathname);
+    const pageType = getCurrentEventTypePage(pathname);
     if (pageType) {
       trackEventByType(TrackEventType.SEND_REFRESH_PAGE, { page: pageType });
     }
@@ -257,7 +257,7 @@ const ActualApp = () => {
     trackEventByType(TrackEventType.SEND_TOAST_ERROR, {
       reason: error.code,
       traceid,
-      page_name: getCurrentPage(pathname),
+      page_name: getCurrentEventTypePage(pathname),
     });
   };
 

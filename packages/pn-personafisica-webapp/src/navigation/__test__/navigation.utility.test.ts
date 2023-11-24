@@ -1,7 +1,7 @@
 import { EventPageType } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { getCurrentPage, goToLoginPortal } from '../navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import { APP_STATUS, DELEGHE, DETTAGLIO_NOTIFICA, NOTIFICHE, RECAPITI } from '../routes.const';
 
 const replaceFn = jest.fn();
@@ -43,27 +43,27 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('getCurrentPage - test for notifications list page', () => {
-    const currentPage = getCurrentPage(`${NOTIFICHE}`);
+    const currentPage = getCurrentEventTypePage(`${NOTIFICHE}`);
     expect(currentPage).toBe(EventPageType.LISTA_NOTIFICHE);
   });
 
   it('getCurrentPage - test for notification detail page', () => {
-    const currentPage = getCurrentPage(`${DETTAGLIO_NOTIFICA.replace(':id', 'mocked-iun')}`);
+    const currentPage = getCurrentEventTypePage(`${DETTAGLIO_NOTIFICA.replace(':id', 'mocked-iun')}`);
     expect(currentPage).toBe(EventPageType.DETTAGLIO_NOTIFICA);
   });
 
   it('getCurrentPage - test for delegates page', () => {
-    const currentPage = getCurrentPage(`${DELEGHE}`);
+    const currentPage = getCurrentEventTypePage(`${DELEGHE}`);
     expect(currentPage).toBe(EventPageType.LISTA_DELEGHE);
   });
 
   it('getCurrentPage - test for contacts page', () => {
-    const currentPage = getCurrentPage(`${RECAPITI}`);
+    const currentPage = getCurrentEventTypePage(`${RECAPITI}`);
     expect(currentPage).toBe(EventPageType.RECAPITI);
   });
 
   it('getCurrentPage - test for app status page', () => {
-    const currentPage = getCurrentPage(`${APP_STATUS}`);
+    const currentPage = getCurrentEventTypePage(`${APP_STATUS}`);
     expect(currentPage).toBe(EventPageType.STATUS_PAGE);
   });
 });
