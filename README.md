@@ -13,6 +13,7 @@ Starting applications
 
 - `yarn start:pf` to start app for citizens in local
 - `yarn start:pa` to start app for public administration in local
+- `yarn start:pg` to start app for legal entities in local
 - `yarn start:login` to start the login section for citizens in local (url: localhost:3000)
 
 You can also run `yarn start` in the relative package folder:
@@ -31,7 +32,14 @@ To build all the monorepo
 Other scripts
 
 - `yarn refresh:monorepo` reinstalls all the dependencies of the whole workspace
-- `yarn clean:win` or `yarn clean:nx` deletes node_modules folder in the workspace (use win in you use Windows OS or nx if you use linux-based OS)
+- `yarn clean` deletes node_modules folder recursively in the workspace
+
+### How to contribute
+
+Our branching model is based on [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). Usually you can conclude your changes opening a PR.
+To generate a consistent changelog, we use [conventional-commit](https://www.conventionalcommits.org/en/v1.0.0/).
+Keep that in mind when you commit your changes or merge PRs.
+As rule of thumb, merge with squash is preferred over merge. Rebase is not advised as merge procedure.
 
 ### Lerna
 
@@ -55,18 +63,21 @@ You can run a task analysis with sonar-scanner using this script in each package
   To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
   The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
 
-### Version
 
-Use `yarn run version` from branch `main` to tag a new version of the project and generate the relative changelog. This script uses [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md). To generate a consistent changelog, we use [conventional-commit](https://www.conventionalcommits.org/en/v1.0.0/)
+### Versioning
+These scripts use [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md).
 
-The tool automatically detects the modified packages starting from the previous version and then executes git commit and tag.
+Release a prepatch:
 
-Examples:
+`npx lerna version prepatch --conventional-commits --no-push --preid RC`
 
-- `yarn run version 1.0.1` to directly specify a version number
-- `yarn run version patch` to update the project according SemVer mode
-- `yarn run version` to make choices from prompt
+Increment a prerelease RC:
+`npx lerna version prerelease --conventional-prerelease --no-push --preid RC`
 
-When you have chosen desired version, you can end the procedure with `git push origin --tags` which will push the new tag.
+Promote a new version after prereleases:
 
-For more details and options, please visit [github](https://github.com/lerna/lerna/tree/main/commands/version)
+`npx lerna version --conventional-commits --conventional-graduate --no-push`
+
+After you obtain desired versioning, check the generated changelog and version e push commit and tag on desired branch:
+
+`git push --atomic origin <branch name> <tag>`

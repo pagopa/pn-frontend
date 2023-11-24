@@ -36,8 +36,6 @@ type Props = {
   onLanguageChanged?: (langCode: string) => void;
   /** event callback on app crash  */
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
-  /** event callback on change language */
-  eventTrackingCallbackFooterChangeLanguage?: () => void;
   /** Track product switch action */
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
@@ -68,7 +66,6 @@ export default function Layout({
   userActions,
   onLanguageChanged = () => {},
   eventTrackingCallbackAppCrash,
-  eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   eventTrackingCallbackRefreshPage,
   onAssistanceClick,
@@ -76,7 +73,7 @@ export default function Layout({
   showHeader = true,
   showFooter = true,
   hasTermsOfService,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <ErrorBoundary
       sx={{ height: 'calc(100vh - 5px)' }}
@@ -128,7 +125,6 @@ export default function Layout({
             <Footer
               loggedUser={loggedUser.id !== ''}
               onLanguageChanged={onLanguageChanged}
-              eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
               hasTermsOfService={hasTermsOfService}
             />
           )}

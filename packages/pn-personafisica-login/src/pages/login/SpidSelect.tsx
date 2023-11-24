@@ -26,7 +26,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       SPID_IDP_NAME: IDP.name,
       SPID_IDP_ID: IDP.entityId,
     });
-    window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
+    window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`);
   };
 
   return (

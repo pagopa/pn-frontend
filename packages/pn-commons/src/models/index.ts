@@ -37,6 +37,7 @@ import {
 import {
   AarDetails,
   AddressSource,
+  AnalogDetails,
   AnalogWorkflowDetails,
   AppIoCourtesyMessageEventType,
   DigitalDomicileType,
@@ -113,6 +114,7 @@ export {
 };
 export type {
   AnalogWorkflowDetails,
+  AnalogDetails,
   AppStatusData,
   BasicUser,
   ConsentUser,

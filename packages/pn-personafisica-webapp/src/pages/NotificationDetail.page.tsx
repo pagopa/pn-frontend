@@ -345,7 +345,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      fetchPaymentsInfo(currentRecipient.payments ?? []);
+      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
 
@@ -504,6 +504,7 @@ const NotificationDetail = () => {
                         handleReloadPayment={() =>
                           reloadPaymentsInfo(currentRecipient.payments ?? [])
                         }
+                        handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}

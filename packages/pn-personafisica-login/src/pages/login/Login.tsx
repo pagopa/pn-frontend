@@ -43,7 +43,7 @@ const Login = () => {
   const goCIE = () => {
     storageSpidSelectedOps.write(SPID_CIE_ENTITY_ID);
     window.location.assign(
-      `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+      `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
     trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
       SPID_IDP_NAME: 'CIE',
