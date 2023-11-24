@@ -70,7 +70,7 @@ export default function Layout({
   showHeader = true,
   showFooter = true,
   hasTermsOfService,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <ErrorBoundary
       sx={{ height: 'calc(100vh - 5px)' }}

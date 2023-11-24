@@ -45,7 +45,6 @@ export enum TrackEventType {
   USER_PARTY_SWITCH = 'USER_PARTY_SWITCH',
   USER_LOGOUT = 'logout/fulfilled',
   USER_NAV_ITEM = 'USER_NAV_ITEM',
-  FOOTER_ACCESSIBILITY = 'FOOTER_ACCESSIBILITY',
   APIKEYS_TABLE_PAGINATION = 'APIKEYS_TABLE_PAGINATION',
   APIKEYS_TABLE_SIZE = 'APIKEYS_TABLE_SIZE',
 }
@@ -226,10 +225,6 @@ export const events: EventsType = {
   [TrackEventType.USER_NAV_ITEM]: {
     category: 'user',
     action: 'user menu navigation',
-  },
-  [TrackEventType.FOOTER_ACCESSIBILITY]: {
-    category: 'footer',
-    action: 'click on app accessibility',
   },
   [TrackEventType.APIKEYS_TABLE_PAGINATION]: {
     category: 'apikeys',
