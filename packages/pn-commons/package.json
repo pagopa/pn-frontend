@@ -77,5 +77,10 @@
     "react-scripts": "^5.0.1",
     "rimraf": "^3.0.2",
     "sonarqube-scanner": "^3.0.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/browser/axios.cjs"
+    }
   }
 }

@@ -74,7 +74,7 @@
     "@types/mixpanel-browser": "^2.38.0",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
-    "axios-mock-adapter": "^1.20.0",
+    "axios-mock-adapter": "^1.22.0",
     "babel-loader": "^8.0.2",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
@@ -92,5 +92,10 @@
     "rimraf": "^3.0.2",
     "sonarqube-scanner": "^3.0.0",
     "webpack": "^5"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/browser/axios.cjs"
+    }
   }
 }
