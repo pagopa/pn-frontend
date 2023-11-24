@@ -1,12 +1,23 @@
 import _ from 'lodash';
 
 import { PaymentCache, PaymentStatus, PaymentsCachePage, PaymentsData } from '../models';
+import { paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
 // TODO: add validation here
 export const getPaymentCache = (): PaymentCache | null => {
   const paymentCache = sessionStorage.getItem(PAYMENT_CACHE_KEY);
+  if (!paymentCache) {
+    return null;
+  }
+  // const isValid = paymentCacheSchema.isValidSync(JSON.parse(paymentCache || '{}'));
+  // console.log('isValid', isValid);
+
+  paymentCacheSchema.validate(JSON.parse(paymentCache || '{}')).catch((err) => {
+    console.log('err', err);
+  });
+
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
 };
 
@@ -105,7 +116,7 @@ export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
   }
 
   clearPaymentCache();
-  setPaymentCache({ iun, timestamp });
+  setPaymentCache({ iun, timestamp, paymentsPage: [] });
   return false;
 };
 
