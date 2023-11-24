@@ -240,10 +240,6 @@ const ActualApp = () => {
     });
   };
 
-  const handleEventTrackingCallbackFooterChangeLanguage = () => {
-    trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
-  };
-
   const handleEventTrackingCallbackProductSwitch = (target: string) => {
     trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
@@ -271,7 +267,6 @@ const ActualApp = () => {
         showFooter={!isPrivacyPage}
         onExitAction={handleUserLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-        eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
           handleEventTrackingCallbackProductSwitch(target)
         }
