@@ -9,9 +9,6 @@ import {
   PaginationData,
   TitleBox,
   calculatePages,
-  formatToTimezoneString,
-  getEndOfDay,
-  getStartOfDay,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -86,11 +83,16 @@ const Dashboard = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
+
+    console.log('-------------------------');
+    console.log(params);
+    console.log('-------------------------');
+
     void dispatch(
       getSentNotifications({
         ...params,
-        endDate: formatToTimezoneString(getEndOfDay(new Date(params.endDate))),
-        startDate: formatToTimezoneString(getStartOfDay(new Date(params.startDate))),
+        endDate: params.endDate,
+        startDate: params.startDate,
       })
     );
   }, [filters, pagination.size, pagination.page, sort]);

@@ -2,7 +2,6 @@ import {
   GetNotificationsParams,
   Notification,
   Sort,
-  formatToTimezoneString,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -18,12 +17,12 @@ const dashboardSlice = createSlice({
     loading: false,
     notifications: [] as Array<Notification>,
     filters: {
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(today),
+      startDate: tenYearsAgo,
+      endDate: today,
       status: '',
       recipientId: '',
       iunMatch: '',
-    } as GetNotificationsParams,
+    } as GetNotificationsParams<Date>,
     pagination: {
       nextPagesKey: [] as Array<string>,
       size: 10,
@@ -48,7 +47,7 @@ const dashboardSlice = createSlice({
     setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
       state.sort = action.payload;
     },
-    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
+    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams<Date>>) => {
       state.filters = action.payload;
       // reset pagination
       state.pagination.page = 0;

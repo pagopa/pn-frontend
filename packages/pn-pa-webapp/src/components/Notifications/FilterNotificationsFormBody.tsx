@@ -130,7 +130,7 @@ const FilterNotificationsFormBody = ({
         value={startDate}
         onChange={(value: DatePickerTypes) => {
           const value2 = value || tenYearsAgo;
-          void formikInstance.setFieldValue('startDate', value2).then(() => {
+          void formikInstance.setFieldValue('startDate', value).then(() => {
             setStartDate(value2);
             trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
           });
