@@ -20,7 +20,6 @@
     "refresh:monorepo": "lerna clean -y && yarn install",
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
-    "version-preid": "lerna version --no-push --conventional-commits --preid RC",
     "clean": "node bin/cleanup.mjs"
   },
   "workspaces": {
