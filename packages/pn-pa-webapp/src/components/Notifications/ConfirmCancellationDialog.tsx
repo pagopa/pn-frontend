@@ -66,8 +66,8 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
           </FormControl>
         )}
       </PnDialogContent>
-      <PnDialogActions sx={{ px: 4, pb: 4 }}>
-        <Button onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
+      <PnDialogActions sx={{px: 4, pb: 4, gap: 1}}>
+        <Button fullWidth={false} onClick={onClose} variant="outlined" data-testid="modalCloseBtnId" >
           {t('button.indietro', { ns: 'common' })}
         </Button>
         <Button
@@ -75,6 +75,8 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
           disabled={payment ? !checked : false}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
+          fullWidth={false}
+          sx={{mb: 0}}
         >
           {t('detail.cancel-notification')}
         </Button>

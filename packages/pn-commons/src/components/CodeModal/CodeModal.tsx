@@ -155,7 +155,6 @@ const CodeModal = memo(
               onClick={cancelCallback}
               fullWidth={isMobile}
               data-testid="codeCancelButton"
-              sx={{ mt: isMobile ? 2 : 0 }}
             >
               {cancelLabel}
             </Button>
