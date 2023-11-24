@@ -7,6 +7,7 @@ import { downloadDocument } from '../../hooks';
 import {
   F24PaymentDetails,
   NotificationDetailPayment,
+  PaginationData,
   PagoPAPaymentFullDetails,
   PaymentAttachment,
   PaymentAttachmentSName,
@@ -16,6 +17,7 @@ import {
 } from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
 
@@ -32,7 +34,7 @@ type Props = {
     unwrap: () => Promise<PaymentAttachment>;
   };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
+  handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -42,11 +44,24 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   landingSiteUrl,
   getPaymentAttachmentAction,
   onPayClick,
-  handleReloadPayment,
+  handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
+  const [paginationData, setPaginationData] = useState<PaginationData>({
+    page: 0,
+    size: 5,
+    totalElements: payments.pagoPaF24.length,
+  });
+
+  const paginatedPayments = pagoPaF24.slice(
+    paginationData.page * paginationData.size,
+    (paginationData.page + 1) * paginationData.size
+  );
 
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
+  const hasRequiredPayment = pagoPaF24.some(
+    (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+  );
 
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(null);
 
@@ -82,7 +97,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       );
     }
 
-    if (pagoPaF24.length > 0) {
+    if (pagoPaF24.length === 1) {
+      return (
+        <>
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.single-payment-subtitle')}
+          &nbsp;
+          {FaqLink}
+        </>
+      );
+    }
+
+    if (pagoPaF24.length > 1) {
       return (
         <>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
@@ -119,8 +144,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
+  const handlePaginate = (paginationData: PaginationData) => {
+    setPaginationData(paginationData);
+    const payments = pagoPaF24.slice(
+      paginationData.page * paginationData.size,
+      (paginationData.page + 1) * paginationData.size
+    );
+    handleFetchPaymentsInfo(payments ?? []);
+  };
+
   useEffect(() => {
-    setSelectedPayment(isSinglePayment ? pagoPaF24[0].pagoPa ?? null : null);
+    setSelectedPayment(isSinglePayment && hasRequiredPayment ? pagoPaF24[0].pagoPa ?? null : null);
   }, [payments]);
 
   return (
@@ -157,14 +191,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       {pagoPaF24.length > 0 && (
         <>
           <RadioGroup name="radio-buttons-group" value={selectedPayment} onChange={handleClick}>
-            {pagoPaF24.map((payment, index) =>
+            {paginatedPayments.map((payment, index) =>
               payment.pagoPa ? (
                 <Box mb={2} key={`payment-${index}`} data-testid="pagopa-item">
                   <NotificationPaymentPagoPAItem
                     pagoPAItem={payment.pagoPa}
                     loading={payment.isLoading ?? false}
                     isSelected={payment.pagoPa.noticeCode === selectedPayment?.noticeCode}
-                    handleReloadPayment={() => handleReloadPayment([payment])}
+                    handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
                     handleDeselectPayment={handleDeselectPayment}
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
@@ -173,6 +207,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               ) : null
             )}
           </RadioGroup>
+
+          {paginationData.totalElements > paginationData.size && (
+            <Box width="full" display="flex" justifyContent="right" data-testid="pagination-box">
+              <CustomPagination
+                hideSizeSelector
+                paginationData={paginationData}
+                onPageRequest={handlePaginate}
+                sx={{ width: '100%' }}
+              />
+            </Box>
+          )}
 
           {!allPaymentsIsPaid && (
             <Fragment>
@@ -237,7 +282,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           )}
 
           {f24Only.map((f24Item, index) => (
-            <Box key={index}>
+            <Box mb={2} key={index}>
               <NotificationPaymentF24Item
                 f24Item={f24Item}
                 getPaymentAttachmentAction={getPaymentAttachmentAction}
