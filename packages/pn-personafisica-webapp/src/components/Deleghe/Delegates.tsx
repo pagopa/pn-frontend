@@ -120,9 +120,9 @@ const Delegates = () => {
     },
   ];
 
-  const handleAddDelegationClick = () => {
-    trackEventByType(TrackEventType.SEND_ADD_MANDATE_START);
+  const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
@@ -152,7 +152,7 @@ const Delegates = () => {
             <Button
               id="add-delegation-button"
               variant="outlined"
-              onClick={() => handleAddDelegationClick()}
+              onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
               data-testid="add-delegation"
             >
               <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />

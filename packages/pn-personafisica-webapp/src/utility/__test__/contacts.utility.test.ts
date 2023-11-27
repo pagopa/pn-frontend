@@ -1,6 +1,6 @@
 import { digitalAddresses } from '../../__mocks__/Contacts.mock';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { countContactsByType } from '../contacts.utility';
+import { countContactsByType, getContactEventType } from '../contacts.utility';
 import { TrackEventType } from '../events';
 
 const calcExpetcedCount = (courtesyChannelType: CourtesyChannelType) =>
@@ -22,5 +22,16 @@ describe('Contacts utility test', () => {
     result = countContactsByType(digitalAddresses.courtesy, CourtesyChannelType.IOMSG);
     expected = calcExpetcedCount(CourtesyChannelType.IOMSG);
     expect(result).toBe(expected);
+  });
+
+  it('tests getContactEventType', () => {
+    let result = getContactEventType(LegalChannelType.PEC);
+    expect(result).toBe(TrackEventType.CONTACT_LEGAL_CONTACT);
+    result = getContactEventType(CourtesyChannelType.SMS);
+    expect(result).toBe(TrackEventType.CONTACT_TEL_COURTESY);
+    result = getContactEventType(CourtesyChannelType.IOMSG);
+    expect(result).toBe(TrackEventType.CONTACT_IOAPP_COURTESY);
+    result = getContactEventType(CourtesyChannelType.EMAIL);
+    expect(result).toBe(TrackEventType.CONTACT_MAIL_COURTESY);
   });
 });

@@ -98,9 +98,7 @@ export function useFieldSpecs({
   );
 
   const getLegalFactIdFieldSpec = useCallback(
-    (
-      handleTrackDownloadCertificateOpposable3dparties
-    ): Omit<Column<DowntimeLogColumn>, 'width'> => ({
+    (): Omit<Column<DowntimeLogColumn>, 'width'> => ({
       id: 'legalFactId',
       label: getLocalizedOrDefaultLabel(
         'appStatus',
@@ -117,9 +115,6 @@ export function useFieldSpecs({
               data-testid="download-legal-fact"
               onClick={() => {
                 void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
-                if (handleTrackDownloadCertificateOpposable3dparties) {
-                  handleTrackDownloadCertificateOpposable3dparties();
-                }
               }}
             >
               {getLocalizedOrDefaultLabel('appStatus', 'legends.legalFactDownload', 'Scaricare')}

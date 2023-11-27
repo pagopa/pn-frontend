@@ -23,11 +23,11 @@ import {
   initLocalization,
   useMultiEvent,
   useTracking,
+  useUnload,
 } from '@pagopa-pn/pn-commons';
-import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
-import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
+import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -99,6 +99,7 @@ const ActualApp = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
+  const source = path[path.length - 1];
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
@@ -119,7 +120,7 @@ const ActualApp = () => {
       id: 'profile',
       label: t('menu.profilo'),
       onClick: () => {
-        trackEventByType(TrackEventType.SEND_VIEW_PROFILE, { source: 'user_menu' });
+        trackEventByType(TrackEventType.USER_VIEW_PROFILE);
         navigate(routes.PROFILO);
       },
       icon: <SettingsIcon fontSize="small" color="inherit" />,
@@ -134,6 +135,10 @@ const ActualApp = () => {
       ? [profiloAction, logoutAction]
       : [logoutAction];
   }, [tosConsent, privacyConsent, i18n.language]);
+
+  useUnload(() => {
+    trackEventByType(TrackEventType.APP_UNLOAD);
+  });
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
@@ -221,8 +226,20 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
+  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
+    trackEventByType(TrackEventType.APP_CRASH, {
+      route: source,
+      stacktrace: { error: e, errorInfo: eInfo },
+    });
+  };
+
+  const handleEventTrackingCallbackProductSwitch = (target: string) => {
+    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
 
   const [clickVersion] = useMultiEvent({
@@ -240,34 +257,24 @@ const ActualApp = () => {
     goToLoginPortal();
   };
 
-  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
-    trackEventByType(TrackEventType.SEND_GENERIC_ERROR, {
-      reason: { error: e, errorInfo: eInfo },
-    });
-  };
-
-  const handleEventTrackingCallbackRefreshPage = () => {
-    const pageType = getCurrentEventTypePage(pathname);
-    if (pageType) {
-      trackEventByType(TrackEventType.SEND_REFRESH_PAGE, { page: pageType });
-    }
-  };
-
-  const handleEventTrackingToastErrorMessages = (error: AppResponseError, traceid?: string) => {
-    trackEventByType(TrackEventType.SEND_TOAST_ERROR, {
-      reason: error.code,
-      traceid,
-      page_name: getCurrentEventTypePage(pathname),
-    });
-  };
-
   return (
     <>
       <ResponseEventDispatcher />
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
-        sideMenu={<SideMenu menuItems={menuItems} />}
+        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+        eventTrackingCallbackProductSwitch={(target) =>
+          handleEventTrackingCallbackProductSwitch(target)
+        }
+        sideMenu={
+          <SideMenu
+            menuItems={menuItems}
+            eventTrackingCallback={(target) =>
+              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+            }
+          />
+        }
         showSideMenu={
           !!sessionToken &&
           tosConsent &&
@@ -289,14 +296,10 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
         hasTermsOfService={true}
-        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-        eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
       >
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
-        <AppResponseMessage
-          eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
-        />
+        <AppResponseMessage />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

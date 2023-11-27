@@ -8,9 +8,9 @@ import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 
-const handleError = (queryParams: string, errorMessage: string) => {
+const handleError = (queryParams: string) => {
   if (process.env.NODE_ENV !== 'test') {
-    trackEventByType(TrackEventType.SEND_LOGIN_FAILURE, { reason: errorMessage });
+    trackEventByType(TrackEventType.LOGIN_FAILURE, { reason: queryParams });
     console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
   }
 };
@@ -67,7 +67,7 @@ const LoginError = () => {
 
   // log error
   useEffect(() => {
-    handleError(window.location.search, errorCode!);
+    handleError(window.location.search);
   }, []);
 
   useEffect(() => {

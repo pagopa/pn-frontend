@@ -109,7 +109,7 @@ describe('NuovaDelega page', () => {
     const backButton = getByTestId('breadcrumb-indietro-button');
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.DELEGHE);
+    expect(mockNavigateFn).toBeCalledWith(-1);
   });
 
   it('fills the form and calls the create function', async () => {
