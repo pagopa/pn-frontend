@@ -208,9 +208,13 @@ const ActualApp = () => {
   };
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {
+      source: sessionToken ? 'postlogin' : 'prelogin',
+    });
     /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
+    window.location.href = sessionToken
+      ? `${SELFCARE_BASE_URL}/assistenza`
+      : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
   const changeLanguageHandler = async (langCode: string) => {
