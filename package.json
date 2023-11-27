@@ -18,12 +18,9 @@
     "build": "lerna run --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-personafisica-webapp build",
     "test": "lerna run --scope @pagopa-pn/* test",
     "refresh:monorepo": "lerna clean -y && yarn install",
-    "clean:win": "rmdir node_modules /s",
-    "clean:nx": "rm -rf node_modules **/**/node_modules",
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
-    "version-preid": "lerna version --no-push --conventional-commits --preid RC",
-    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
+    "clean": "node bin/cleanup.mjs"
   },
   "workspaces": {
     "packages": [
@@ -44,6 +41,7 @@
     "**/react-scripts/react-dev-utils/loader-utils": "^3.2.1",
     "**/recursive-readdir": "^2.2.3",
     "**/terser": "^5.16.1",
-    "**/react-scripts/react-dev-utils/fork-ts-checker-webpack-plugin": "6.5.3"
+    "**/react-scripts/react-dev-utils/fork-ts-checker-webpack-plugin": "6.5.3",
+    "**/@babel/traverse": "^7.23.2"
   }
 }
