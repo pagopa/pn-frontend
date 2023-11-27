@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/pagopa/pn-frontend/compare/v2.2.2-RC.0...v2.2.2) (2023-11-21)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.2.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.1...v2.2.2-RC.0) (2023-11-21)
+
+
+### Bug Fixes
+
+* **PN-8835:** subtitle copy when having a single payment ([#1066](https://github.com/pagopa/pn-frontend/issues/1066)) ([b96408d](https://github.com/pagopa/pn-frontend/commit/b96408dd8f3ec5d7a27f8711b3ebbb6e19c4a3c9))
+
+
+
+
+
+## [2.2.1](https://github.com/pagopa/pn-frontend/compare/v2.1.4...v2.2.1) (2023-11-21)
+
+
+
+# [2.2.0](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.2.0) (2023-11-16)
+
+
+
+# [2.2.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.2.0-RC.1...v2.2.0-RC.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* **pn-8597:** fixed padding of the ConfirmationModal ([#1036](https://github.com/pagopa/pn-frontend/issues/1036)) ([8356e26](https://github.com/pagopa/pn-frontend/commit/8356e265510da26f6fc6466e7c7823b8959f6a01))
+* **pn-8608:** AppStatus - today label not translated ([#1035](https://github.com/pagopa/pn-frontend/issues/1035)) ([9da483d](https://github.com/pagopa/pn-frontend/commit/9da483d0e7138744234006efa289f9a072fb989c))
+* **pn-8614:** today label localization ([#1037](https://github.com/pagopa/pn-frontend/issues/1037)) ([d62daf8](https://github.com/pagopa/pn-frontend/commit/d62daf8067903b3fc24ecb0c6b8f6d740f588af7))
+* **PN-8627:** Added translation support for timeline ([#1047](https://github.com/pagopa/pn-frontend/issues/1047)) ([190c25b](https://github.com/pagopa/pn-frontend/commit/190c25b3854c051283745757bac5e7ddcc4f65dc))
+* **PN-8633:** Fixed missing translation for Privacy Policy in footer ([#1045](https://github.com/pagopa/pn-frontend/issues/1045)) ([1d8b8fc](https://github.com/pagopa/pn-frontend/commit/1d8b8fc11a07d11baa1d4612d290397840277c48))
+* **PN-8639:** Added translation support for datepicker ([#1046](https://github.com/pagopa/pn-frontend/issues/1046)) ([6912d7e](https://github.com/pagopa/pn-frontend/commit/6912d7e85b2bcad8bd807fbcf7640afc46ee9f3e))
+
+
+### Features
+
+* **pn-7858:** removed disambiguation page from code ([#1031](https://github.com/pagopa/pn-frontend/issues/1031)) ([68a7a32](https://github.com/pagopa/pn-frontend/commit/68a7a32abf2bacb4d90d8e8b64f9bb28599e119b))
+* **pn-8575:** product and party switch refactoring ([#1039](https://github.com/pagopa/pn-frontend/issues/1039)) ([b1b82a7](https://github.com/pagopa/pn-frontend/commit/b1b82a7662398c2aed3e6615751527e4b2aaca94))
+
+
+
+# [2.2.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.2.0-RC.0...v2.2.0-RC.1) (2023-10-25)
+
+
+
 # [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
 
 
@@ -19,6 +70,74 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-8243:** FAQ on multi-payment notification ([#1019](https://github.com/pagopa/pn-frontend/issues/1019)) ([98f12e3](https://github.com/pagopa/pn-frontend/commit/98f12e3d064d5bb70b99d541352ac07344596461))
 * **pn-8376:** added senderDenomination concatenation when creating a new notification ([#1028](https://github.com/pagopa/pn-frontend/issues/1028)) ([ad68185](https://github.com/pagopa/pn-frontend/commit/ad68185a42593aeab9cd445e4cd2872ee3e383bb))
 
+
+
+## [2.0.2](https://github.com/pagopa/pn-frontend/compare/v2.0.2-RC.0...v2.0.2) (2023-10-02)
+
+
+
+## [2.0.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.0...v2.0.2-RC.0) (2023-10-02)
+
+
+### Bug Fixes
+
+* **pn-8099:** avoid popup block on ios opening the attachment on the same window ([#1005](https://github.com/pagopa/pn-frontend/issues/1005)) ([73718ba](https://github.com/pagopa/pn-frontend/commit/73718ba9e10825073f6943952ff44f29b7866227))
+
+
+### Features
+
+* **pn-7487:** Refactored pn-commons tests ([#974](https://github.com/pagopa/pn-frontend/issues/974)) ([9104b3b](https://github.com/pagopa/pn-frontend/commit/9104b3b0640abd7ca2cfc45127973feda7e7a69e))
+* **pn-7747:** restructured project folders and files ([#994](https://github.com/pagopa/pn-frontend/issues/994)) ([84019fc](https://github.com/pagopa/pn-frontend/commit/84019fc476b053b72d284a6733cd6a5b581ec48f))
+
+
+
+
+
+# [2.2.0](https://github.com/pagopa/pn-frontend/compare/v2.2.0-RC.2...v2.2.0) (2023-11-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+# [2.2.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.2.0-RC.0) (2023-10-24)
+
+
+### Bug Fixes
+
+* **PN-8100:** fix links in footer for Società Trasparente and Modello 231 ([#1014](https://github.com/pagopa/pn-frontend/issues/1014)) ([26809e7](https://github.com/pagopa/pn-frontend/commit/26809e7f1a810f5b090a26b8be17060b44a197c1))
+
+
+### Features
+
+* **pn-4392:** added switch institutions and products to PA ([#1020](https://github.com/pagopa/pn-frontend/issues/1020)) ([4d3f23e](https://github.com/pagopa/pn-frontend/commit/4d3f23ed841238910ab9590f10b4c5153454be84))
+* **pn-7317:** Multipagamento, pagamento di notifica annullata ([#1017](https://github.com/pagopa/pn-frontend/issues/1017)) ([d9d2f27](https://github.com/pagopa/pn-frontend/commit/d9d2f27727cb5a6ed10194c8abb848c847b17aa5)), closes [#932](https://github.com/pagopa/pn-frontend/issues/932) [#933](https://github.com/pagopa/pn-frontend/issues/933) [#937](https://github.com/pagopa/pn-frontend/issues/937) [#939](https://github.com/pagopa/pn-frontend/issues/939) [#941](https://github.com/pagopa/pn-frontend/issues/941) [#944](https://github.com/pagopa/pn-frontend/issues/944) [#954](https://github.com/pagopa/pn-frontend/issues/954) [#956](https://github.com/pagopa/pn-frontend/issues/956) [#957](https://github.com/pagopa/pn-frontend/issues/957) [#952](https://github.com/pagopa/pn-frontend/issues/952) [#968](https://github.com/pagopa/pn-frontend/issues/968) [#966](https://github.com/pagopa/pn-frontend/issues/966) [#969](https://github.com/pagopa/pn-frontend/issues/969) [#970](https://github.com/pagopa/pn-frontend/issues/970) [#940](https://github.com/pagopa/pn-frontend/issues/940) [#973](https://github.com/pagopa/pn-frontend/issues/973) [#971](https://github.com/pagopa/pn-frontend/issues/971) [#958](https://github.com/pagopa/pn-frontend/issues/958) [#961](https://github.com/pagopa/pn-frontend/issues/961)
+* **pn-8027:** reworked empty state ([#1004](https://github.com/pagopa/pn-frontend/issues/1004)) ([0ca180c](https://github.com/pagopa/pn-frontend/commit/0ca180cad6afbeccb85013f3452884ee14f7424a))
+* **pn-8243:** FAQ on multi-payment notification ([#1019](https://github.com/pagopa/pn-frontend/issues/1019)) ([98f12e3](https://github.com/pagopa/pn-frontend/commit/98f12e3d064d5bb70b99d541352ac07344596461))
+* **pn-8376:** added senderDenomination concatenation when creating a new notification ([#1028](https://github.com/pagopa/pn-frontend/issues/1028)) ([ad68185](https://github.com/pagopa/pn-frontend/commit/ad68185a42593aeab9cd445e4cd2872ee3e383bb))
+
+## [2.1.4](https://github.com/pagopa/pn-frontend/compare/v2.1.3...v2.1.4) (2023-11-20)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+### Bug Fixes
+
+* fix correct mixpanel utility, removed old one ([cd83106](https://github.com/pagopa/pn-frontend/commit/cd831063da0cca6352da04d79f4c870896537259))
+
+
+
+
+## [2.1.3](https://github.com/pagopa/pn-frontend/compare/v2.1.2...v2.1.3) (2023-11-17)
+
+
+### Bug Fixes
+
+* added mixpanel property to blacklist ([41093d0](https://github.com/pagopa/pn-frontend/commit/41093d07dbdf9a428d167d9fd237786b826c4c2d))
+
+
+
+
+
+## [2.1.2](https://github.com/pagopa/pn-frontend/compare/v2.1.1...v2.1.2) (2023-11-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
 
 
 ## [2.0.2](https://github.com/pagopa/pn-frontend/compare/v2.0.2-RC.0...v2.0.2) (2023-10-02)
