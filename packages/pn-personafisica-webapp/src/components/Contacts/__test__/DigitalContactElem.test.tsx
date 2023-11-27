@@ -53,6 +53,9 @@ const fields = [
 const mockResetModifyValue = jest.fn();
 const mockDeleteCbk = jest.fn();
 const mockOnConfirm = jest.fn();
+// mock tracking
+const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
+const mockTrackEventFn = jest.fn();
 
 /*
 In questo test viene testato solo il rendering dei componenti e non il flusso.
@@ -63,6 +66,10 @@ Andrea Cimini - 6/09/2023
 */
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
+
+  beforeEach(() => {
+    createTrackEventSpy.mockImplementation(mockTrackEventFn);
+  });
 
   afterEach(() => {
     result = undefined;
@@ -194,6 +201,10 @@ describe('DigitalContactElem Component', () => {
     dialog = await waitFor(() => screen.getByRole('dialog'));
     dialogButtons = dialog?.querySelectorAll('button');
     fireEvent.click(dialogButtons![1]);
+    expect(mockTrackEventFn).toBeCalledTimes(1);
+    expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {
+      action: 'delete',
+    });
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });

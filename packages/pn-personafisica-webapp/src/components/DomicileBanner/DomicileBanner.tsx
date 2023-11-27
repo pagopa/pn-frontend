@@ -1,8 +1,7 @@
+import { Alert, Box, Link, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-
-import { Alert, Box, Link, Typography } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
@@ -12,35 +11,31 @@ import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 
-type Props = {
-  source?: string;
-};
 
-const DomicileBanner: React.FC<Props> = ({ source = 'home_notifiche' }) => {
+const DomicileBanner = () => {
   const { t } = useTranslation(['notifiche']);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
-  const defaultAddresses = useAppSelector(
-    (state: RootState) => state.generalInfoState.defaultAddresses
-  );
+  const defaultAddresses = useAppSelector((state: RootState) => state.generalInfoState.defaultAddresses);
+  const path = pathname.split('/');
+  const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
   const handleClose = useCallback(() => {
+    trackEventByType(TrackEventType.DIGITAL_DOMICILE_BANNER_CLOSE, { source });
     dispatch(closeDomicileBanner());
   }, [closeDomicileBanner]);
 
   const handleAddDomicile = useCallback(() => {
-    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source });
+    trackEventByType(TrackEventType.DIGITAL_DOMICILE_LINK);
     navigate(routes.RECAPITI);
   }, []);
 
-  const lackingAddressTypes = useMemo(
-    () =>
-      [LegalChannelType.PEC, CourtesyChannelType.EMAIL, CourtesyChannelType.IOMSG].filter(
-        (type) => !defaultAddresses.some((address) => address.channelType === type)
-      ),
-    [defaultAddresses]
-  );
+  const lackingAddressTypes = useMemo(() => 
+    [LegalChannelType.PEC, CourtesyChannelType.EMAIL, CourtesyChannelType.IOMSG]
+    .filter(type => !defaultAddresses.some(address => address.channelType === type))
+  , [defaultAddresses]);
 
   useEffect(() => {
     if (lackingAddressTypes.length === 0) {

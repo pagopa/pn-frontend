@@ -44,7 +44,7 @@ type Props = {
   showHistoryButton?: boolean;
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
-  handleTrackShowMoreLess?: (collapsed: boolean) => void;
+  eventTrackingCallbackShowMore?: () => void;
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
@@ -109,7 +109,7 @@ const NotificationDetailTimelineStep = ({
   showHistoryButton = false,
   historyButtonLabel,
   historyButtonClickHandler,
-  handleTrackShowMoreLess,
+  eventTrackingCallbackShowMore,
   disableDownloads,
   isParty = true,
   language = 'it',
@@ -211,7 +211,7 @@ const NotificationDetailTimelineStep = ({
 
   const handleShowMoreClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    handleTrackShowMoreLess && handleTrackShowMoreLess(!collapsed);
+    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore();
     setCollapsed(!collapsed);
   };
 

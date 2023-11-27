@@ -19,14 +19,19 @@ export const Menu = (props: any) => {
   const { t } = useTranslation(['deleghe']);
 
   const handleOpenModalClick = () => {
+    if (props.menuType === 'delegates') {
+      trackEventByType(TrackEventType.DELEGATION_DELEGATE_REVOKE);
+    } else {
+      trackEventByType(TrackEventType.DELEGATION_DELEGATOR_REJECT);
+    }
     dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
     setAnchorEl(null);
   };
 
   const handleOpenVerificationCodeModal = () => {
-    trackEventByType(TrackEventType.SEND_SHOW_MANDATE_CODE);
     props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
     setAnchorEl(null);
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

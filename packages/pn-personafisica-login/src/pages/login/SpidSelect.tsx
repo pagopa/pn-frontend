@@ -22,7 +22,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
   const getSPID = (IDP: IdentityProvider) => {
-    trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
+    trackEventByType(TrackEventType.LOGIN_IDP_SELECTED, {
       SPID_IDP_NAME: IDP.name,
       SPID_IDP_ID: IDP.entityId,
     });
