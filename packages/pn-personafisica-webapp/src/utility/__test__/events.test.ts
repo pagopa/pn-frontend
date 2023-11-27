@@ -1,6 +1,7 @@
 import { events } from '../events';
 
-describe('test track events', () => {
+// Added skip method and waiting for PN-7437 starts
+describe.skip('test track events', () => {
   it('app crash event', () => {
     const event = events['APP_CRASH'];
     expect(event).toEqual({

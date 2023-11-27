@@ -7,9 +7,14 @@ import { adaptFieldSpecToMobile, useFieldSpecs } from './downtimeLog.utils';
 type Props = {
   downtimeLog: DowntimeLogPage;
   getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any;
+  handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
 
-const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }: Props) => {
+const MobileDowntimeLog = ({
+  downtimeLog,
+  getDowntimeLegalFactDocumentDetails,
+  handleTrackDownloadCertificateOpposable3dparties,
+}: Props) => {
   const fieldSpecs = useFieldSpecs({ getDowntimeLegalFactDocumentDetails });
   const {
     getDateFieldSpec,
@@ -41,7 +46,12 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
         notWrappedInTypography: true,
       },
       adaptFieldSpecToMobile(getFunctionalityFieldSpec()),
-      { ...adaptFieldSpecToMobile(getLegalFactIdFieldSpec()), notWrappedInTypography: true },
+      {
+        ...adaptFieldSpecToMobile(
+          getLegalFactIdFieldSpec(handleTrackDownloadCertificateOpposable3dparties)
+        ),
+        notWrappedInTypography: true,
+      },
     ],
     [getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec]
   );

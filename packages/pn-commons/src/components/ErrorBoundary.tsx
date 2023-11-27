@@ -9,6 +9,7 @@ type Props = {
   sx?: SxProps;
   printError?: boolean;
   eventTrackingCallback?: (error: Error, errorInfo: ErrorInfo) => void;
+  eventTrackingCallbackRefreshPage?: () => void;
 };
 
 type State = { hasError: boolean };
@@ -31,9 +32,12 @@ class ErrorBoundary extends Component<Props, State> {
     }
   }
 
-  private handleRefreshPage() {
+  private handleRefreshPage = () => {
+    if (this.props.eventTrackingCallbackRefreshPage) {
+      this.props.eventTrackingCallbackRefreshPage();
+    }
     window.location.reload();
-  }
+  };
 
   render() {
     if (this.state.hasError) {
