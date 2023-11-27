@@ -25,6 +25,7 @@ import { EventsType } from './MixpanelEvents';
 import {
   AarDetails,
   AddressSource,
+  AnalogDetails,
   AnalogWorkflowDetails,
   AppIoCourtesyMessageEventType,
   DigitalDomicileType,
@@ -105,6 +106,7 @@ export {
 };
 export type {
   AnalogWorkflowDetails,
+  AnalogDetails,
   AppStatusData,
   BasicUser,
   ConsentUser,
