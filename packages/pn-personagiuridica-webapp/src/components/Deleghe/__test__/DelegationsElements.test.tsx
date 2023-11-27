@@ -225,7 +225,7 @@ describe('DelegationElements', () => {
     const menu = getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
-    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const revokeButton = within(showDialog).getAllByTestId('dialogAction')[1];
     fireEvent.click(revokeButton);
     await waitFor(() => {
@@ -245,7 +245,7 @@ describe('DelegationElements', () => {
     const menu = getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
     fireEvent.click(revoke);
-    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const cancelButton = within(showDialog).getAllByTestId('dialogAction')[0];
     fireEvent.click(cancelButton!);
     await waitFor(() => {
@@ -263,7 +263,7 @@ describe('DelegationElements', () => {
     const menu = getByTestId('delegationMenu');
     const reject = menu.querySelectorAll('[role="menuitem"]')[0];
     fireEvent.click(reject);
-    const showDialog = await waitFor(() => screen.getByTestId('dialogStack'));
+    const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const rejectButton = within(showDialog).getAllByTestId('dialogAction')[1];
     fireEvent.click(rejectButton);
     await waitFor(() => {
