@@ -9,11 +9,11 @@ import {
   RadioGroup,
 } from '@mui/material';
 
-import { CardSort, Sort } from '../../models';
-import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
-import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
-import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
-import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
+import { CardSort, Sort } from '../../../models';
+import CustomMobileDialog from '../../CustomMobileDialog/CustomMobileDialog';
+import CustomMobileDialogAction from '../../CustomMobileDialog/CustomMobileDialogAction';
+import CustomMobileDialogContent from '../../CustomMobileDialog/CustomMobileDialogContent';
+import CustomMobileDialogToggle from '../../CustomMobileDialog/CustomMobileDialogToggle';
 
 type Props<T> = {
   /** label to show for the sort button */

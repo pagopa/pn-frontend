@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render, screen, waitFor, within } from '../../../test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../../test-utils';
 import SmartSort from '../SmartSort';
 
 const sortingHandler = jest.fn();

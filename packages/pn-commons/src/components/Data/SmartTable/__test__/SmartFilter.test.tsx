@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { createMatchMedia, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
+import {
+  createMatchMedia,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../../../test-utils';
 import SmartFilter from '../SmartFilter';
 
 const submitHandler = jest.fn();

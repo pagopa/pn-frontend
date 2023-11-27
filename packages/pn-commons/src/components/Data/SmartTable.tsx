@@ -28,8 +28,8 @@ import PnTableBodyCell from './PnTable/PnTableBodyCell';
 import PnTableBodyRow from './PnTable/PnTableBodyRow';
 import PnTableHeader from './PnTable/PnTableHeader';
 import PnTableHeaderCell from './PnTable/PnTableHeaderCell';
-import SmartFilter from './SmartFilter';
-import SmartSort from './SmartSort';
+import SmartFilter from './SmartTable/SmartFilter';
+import SmartSort from './SmartTable/SmartSort';
 
 type Props<T> = {
   /** smart table configuration */
