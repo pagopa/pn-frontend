@@ -111,4 +111,16 @@ describe('NotificationsDataSwitch Component', () => {
     const regexp = new RegExp(`^${label}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
+
+  it('renders component - recipients', () => {
+    const { container } = render(
+      <NotificationsDataSwitch
+        data={data}
+        type="recipients"
+        handleEventTrackingTooltip={() => {}}
+      />
+    );
+    const regexp = new RegExp(`^${data.recipients.join('')}$`, 'ig');
+    expect(container).toHaveTextContent(regexp);
+  });
 });

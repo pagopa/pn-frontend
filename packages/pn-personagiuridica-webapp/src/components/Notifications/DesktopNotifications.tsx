@@ -2,41 +2,37 @@ import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
 import {
   Column,
   EmptyState,
-  Item,
   KnownSentiment,
   Notification,
-  NotificationStatus,
+  NotificationColumnData,
+  NotificationsDataSwitch,
   PnTable,
   PnTableBody,
   PnTableBodyCell,
   PnTableBodyRow,
   PnTableHeader,
   PnTableHeaderCell,
+  Row,
   Sort,
-  StatusTooltip,
-  formatDate,
-  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<NotificationColumn>;
+  sort?: Sort<NotificationColumnData>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
   /** Defines if the component is in delegated page */
   isDelegatedPage?: boolean;
 };
@@ -74,112 +70,54 @@ const DesktopNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
 
-  const columns: Array<Column<NotificationColumn>> = [
+  const columns: Array<Column<NotificationColumnData>> = [
     {
-      id: 'notificationStatus',
+      id: 'badge',
       label: '',
       width: '1%',
-      getCellLabel(value: string) {
-        return getNewNotificationBadge(value);
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'sentAt',
       label: t('table.data'),
       width: '11%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string) {
-        return formatDate(value);
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
       width: '22%',
-      getCellLabel(value: string) {
-        return value.length > 65 ? value.substring(0, 65) + '...' : value;
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'iun',
       label: t('table.iun'),
       width: '20%',
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
-      id: 'status',
+      id: 'notificationStatus',
       label: t('table.status'),
       width: '18%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(_: string, row: Item) {
-        const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus,
-          { recipients: row.recipients as Array<string> }
-        );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
   ];
 
   if (isDelegatedPage) {
-    const recipientField = {
-      id: 'recipients' as NotificationColumn,
+    const recipientField: Column<NotificationColumnData> = {
+      id: 'recipients',
       label: t('table.destinatario'),
       width: '15%',
       sortable: false,
-      getCellLabel(value: Array<string>) {
-        return value.map((v) => (
-          <Typography key={v} variant="body2">
-            {v}
-          </Typography>
-        ));
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
-      disableAccessibility: true,
     };
     // eslint-disable-next-line functional/immutable-data
     columns.splice(3, 0, recipientField);
   }
 
-  const rows: Array<Item> = notifications.map((n, i) => ({
+  const rows: Array<Row<Notification>> = notifications.map((n, i) => ({
     ...n,
     id: n.paProtocolNumber + i.toString(),
   }));
@@ -189,13 +127,11 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (row: Item) => {
-    if (isDelegatedPage) {
-      navigate(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, row.mandateId as string)
-      );
+  const handleRowClick = (row: Row<Notification>) => {
+    if (isDelegatedPage && row.mandateId) {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, row.mandateId));
     } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     }
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
@@ -224,16 +160,18 @@ const DesktopNotifications = ({
               <PnTableBodyRow key={row.id} testId="notificationsTable" index={index}>
                 {columns.map((column) => (
                   <PnTableBodyCell
-                    disableAccessibility={column.disableAccessibility}
                     key={column.id}
-                    onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
+                    onClick={() => handleRowClick(row)}
                     cellProps={{
                       width: column.width,
-                      align: column.align,
-                      cursor: column.onClick ? 'pointer' : 'auto',
+                      cursor: 'pointer',
                     }}
                   >
-                    {column.getCellLabel(row[column.id as keyof Item], row)}
+                    <NotificationsDataSwitch
+                      data={row}
+                      type={column.id}
+                      handleEventTrackingTooltip={handleEventTrackingTooltip}
+                    />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>

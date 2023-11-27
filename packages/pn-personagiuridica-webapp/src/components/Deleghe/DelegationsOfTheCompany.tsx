@@ -23,10 +23,10 @@ import {
   ApiErrorWrapper,
   CustomTagGroup,
   EmptyState,
-  Item,
   KnownSentiment,
   PaginationData,
   PnAutocomplete,
+  Row,
   SmartFilter,
   SmartTable,
   SmartTableData,
@@ -36,8 +36,8 @@ import {
 import { Tag } from '@pagopa/mui-italia';
 
 import {
+  DelegationColumnData,
   DelegationStatus,
-  DelegatorsColumn,
   DelegatorsFormFilters,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
@@ -97,7 +97,7 @@ const DelegationsOfTheCompany = () => {
     (key) => ({ id: DelegationStatus[key], label: t(`deleghe.table.${DelegationStatus[key]}`) })
   );
   const [groupInputValue, setGroupInputValue] = useState('');
-  const rows: Array<Item> = delegationToItem(delegators);
+  const rows = delegationToItem(delegators) as Array<Row<DelegationColumnData>>;
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -107,7 +107,7 @@ const DelegationsOfTheCompany = () => {
       ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
 
-  const smartCfg: Array<SmartTableData<DelegatorsColumn>> = [
+  const smartCfg: Array<SmartTableData<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
@@ -119,7 +119,7 @@ const DelegationsOfTheCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
@@ -159,7 +159,7 @@ const DelegationsOfTheCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
@@ -184,19 +184,19 @@ const DelegationsOfTheCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
         hideIfEmpty: true,
       },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      getValue(value: string, row: Item) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
+      getValue(value: DelegationStatus, row: Row<DelegationColumnData>) {
+        const { color, key } = getDelegationStatusKeyAndColor(value);
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={t(key)} color={color} />;
         } else {
-          return <AcceptButton id={row.id} name={row.name as string} onAccept={handleAccept} />;
+          return <AcceptButton id={row.id} name={row.name} onAccept={handleAccept} />;
         }
       },
       tableConfiguration: {
@@ -214,10 +214,10 @@ const DelegationsOfTheCompany = () => {
   if (!hasGroup) {
     /* eslint-disable-next-line functional/immutable-data */
     smartCfg.push({
-      id: 'id',
+      id: 'menu',
       label: '',
-      getValue(value: string, data: Item) {
-        return <Menu menuType={'delegators'} id={value} row={data} onAction={handleUpdate} />;
+      getValue(_value: string, data: Row<DelegationColumnData>) {
+        return <Menu menuType={'delegators'} id={data.id} row={data} onAction={handleUpdate} />;
       },
       tableConfiguration: {
         width: '5%',
@@ -397,6 +397,7 @@ const DelegationsOfTheCompany = () => {
                 />
               </EmptyState>
             }
+            testId="delegationsTable"
           >
             <SmartFilter
               filterLabel={t('button.filtra', { ns: 'common' })}

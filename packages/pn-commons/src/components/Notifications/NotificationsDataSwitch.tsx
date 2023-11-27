@@ -48,7 +48,7 @@ const NotificationsDataSwitch: React.FC<{
         </Typography>
       </>
     ) : (
-      <>{formatDate(data.sentAt)}</>
+      <Typography variant="body2">{formatDate(data.sentAt)}</Typography>
     );
   }
   if (type === 'sender') {
@@ -63,6 +63,17 @@ const NotificationsDataSwitch: React.FC<{
   if (type === 'notificationStatus') {
     return (
       <NotificationStatusChip data={data} handleEventTrackingTooltip={handleEventTrackingTooltip} />
+    );
+  }
+  if (type === 'recipients') {
+    return (
+      <>
+        {data.recipients.map((recipient) => (
+          <Typography key={recipient} variant="body2">
+            {recipient}
+          </Typography>
+        ))}
+      </>
     );
   }
 

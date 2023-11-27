@@ -6,13 +6,13 @@ import { Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   EmptyState,
-  Item,
+  Row,
   SmartTable,
   SmartTableData,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
+import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -57,14 +57,14 @@ const DelegatesByCompany = () => {
   );
   const userLogged = useAppSelector((state: RootState) => state.userState.user);
 
-  const rows: Array<Item> = delegationToItem(delegatesByCompany);
+  const rows = delegationToItem(delegatesByCompany) as Array<Row<DelegationColumnData>>;
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
-  const delegatesColumn: Array<SmartTableData<DelegatesColumn>> = [
+  const delegatesColumn: Array<SmartTableData<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
@@ -77,7 +77,7 @@ const DelegatesByCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
@@ -118,7 +118,7 @@ const DelegatesByCompany = () => {
       },
       cardConfiguration: {
         position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
@@ -137,16 +137,16 @@ const DelegatesByCompany = () => {
       },
     },
     {
-      id: 'id',
+      id: 'menu',
       label: '',
       tableConfiguration: {
         width: '5%',
       },
-      getValue(value: string, data: Item) {
+      getValue(_value: string, data: Row<DelegationColumnData>) {
         return (
           <Menu
             menuType={'delegates'}
-            id={value}
+            id={data.id}
             row={data}
             userLogged={userLogged}
             onAction={handleRewoke}
@@ -206,6 +206,7 @@ const DelegatesByCompany = () => {
               dsc: t('sort.desc', { ns: 'notifiche' }),
             }}
             currentSort={{ orderBy: '', order: 'asc' }}
+            testId="delegatesTable"
           ></SmartTable>
         ) : (
           <EmptyState>

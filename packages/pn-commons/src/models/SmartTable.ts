@@ -28,6 +28,7 @@ interface CardConfiguration {
   position: 'header' | 'body';
   gridProps?: GridProps;
   wrapValueInTypography?: boolean;
+  hideIfEmpty?: boolean;
 }
 
 /**

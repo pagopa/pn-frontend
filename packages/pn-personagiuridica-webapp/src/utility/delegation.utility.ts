@@ -1,14 +1,16 @@
-import { Item, formatDate } from '@pagopa-pn/pn-commons';
+import { Row, formatDate } from '@pagopa-pn/pn-commons';
 
-import { Delegation, Person } from '../models/Deleghe';
+import { Delegation, DelegationData, Person } from '../models/Deleghe';
 
 /**
  * Maps Delegation object to Item, in order to be visualised in an PnCardsList or PnTable component
  * @param  {Array<Delegation>} delegations
  * @param  {boolean} isDelegator
- * @returns Array<Item>
+ * @returns Array<Row>
  */
-export default function delegationToItem(delegations: Array<Delegation>): Array<Item> {
+export default function delegationToItem(
+  delegations: Array<Delegation>
+): Array<Row<DelegationData>> {
   return delegations.map((delegation: Delegation) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),
@@ -20,7 +22,7 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     ),
     status: delegation.status,
     verificationCode: delegation.verificationCode,
-    groups: delegation.groups || [],
+    groups: delegation.groups ?? [],
   }));
 }
 

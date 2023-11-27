@@ -3,19 +3,17 @@ import { RecipientType } from '@pagopa-pn/pn-commons';
 import { User } from '../redux/auth/types';
 import { Party } from './party';
 
-export type DelegheColumn =
-  | 'name'
-  | 'startDate'
-  | 'endDate'
-  | 'visibilityIds'
-  | 'groups'
-  | 'status'
-  | 'id'
-  | '';
+export type DelegationData = {
+  name: string;
+  startDate: string;
+  endDate: string;
+  visibilityIds: Array<string>;
+  groups: Array<{ id: string; name: string }>;
+  status: DelegationStatus;
+  verificationCode: string;
+};
 
-export type DelegatesColumn = DelegheColumn;
-
-export type DelegatorsColumn = DelegheColumn;
+export type DelegationColumnData = DelegationData & { menu: string };
 
 export type DelegationParty = { name: string | null; uniqueIdentifier: string };
 
