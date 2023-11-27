@@ -54,7 +54,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   landingSiteUrl,
   getPaymentAttachmentAction,
   onPayClick,
-  handleReloadPayment,
   handleTrackNotificationCancelledRefoundInfo,
   handleTrackMultipaymentMoreInfo,
   handleTrackDownloadPaymentNotice,
