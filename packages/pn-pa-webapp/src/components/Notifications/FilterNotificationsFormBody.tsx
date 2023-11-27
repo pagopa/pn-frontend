@@ -129,9 +129,8 @@ const FilterNotificationsFormBody = ({
         inputFormat={DATE_FORMAT}
         value={startDate}
         onChange={(value: DatePickerTypes) => {
-          const value2 = value || tenYearsAgo;
-          void formikInstance.setFieldValue('startDate', value2).then(() => {
-            setStartDate(value2);
+          void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
+            setStartDate(value);
             trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
           });
         }}
@@ -163,10 +162,9 @@ const FilterNotificationsFormBody = ({
         inputFormat={DATE_FORMAT}
         value={endDate}
         onChange={(value: DatePickerTypes) => {
-          const value2 = value || today;
-          void formikInstance.setFieldValue('endDate', value2).then(() => {
+          void formikInstance.setFieldValue('endDate', value || today).then(() => {
             trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'to date' });
-            setEndDate(value2);
+            setEndDate(value);
           });
         }}
         renderInput={(params) => (
