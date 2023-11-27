@@ -400,12 +400,12 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-          FunctionAssociations:
-            - Fn::If:
-                - IsPortalePfLogin
-                - EventType: viewer-request
-                  FunctionARN: !GetAtt RedirectFunction.FunctionMetadata.FunctionARN
-                - !Ref "AWS::NoValue"
+          #FunctionAssociations:
+          #  - Fn::If:
+          #      - IsPortalePfLogin
+          #      - EventType: viewer-request
+          #        FunctionARN: !GetAtt RedirectFunction.FunctionMetadata.FunctionARN
+          #      - !Ref "AWS::NoValue"
         DefaultRootObject:
           !If [IsPortalePfLogin, "auth/index.html", "index.html"]
         CustomErrorResponses:
