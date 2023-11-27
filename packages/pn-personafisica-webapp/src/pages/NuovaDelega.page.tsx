@@ -252,7 +252,7 @@ const NuovaDelega = () => {
                                 id="recipient-pf"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PF}
-                                control={<Radio id="select-pf" />}
+                                control={<Radio id="select-pf-radio" />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
                                 data-testid="recipientType"
@@ -261,7 +261,7 @@ const NuovaDelega = () => {
                                 id="recipent-pg"
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value={RecipientType.PG}
-                                control={<Radio id="select-pg" />}
+                                control={<Radio id="select-pg-radio" />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}

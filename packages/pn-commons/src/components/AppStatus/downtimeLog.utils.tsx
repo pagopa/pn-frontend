@@ -12,10 +12,18 @@ export function booleanStringToBoolean(booleanString: string): boolean {
 }
 
 /* eslint-disable-next-line arrow-body-style */
-const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?: boolean }) => {
+const FormattedDateAndTime = ({
+  id,
+  date,
+  inTwoLines,
+}: {
+  id: string;
+  date: string;
+  inTwoLines?: boolean;
+}) => {
   if (date) {
     return inTwoLines ? (
-      <Stack direction="column" id="containerDate">
+      <Stack direction="column" id={`containerDate-${id}`}>
         <Typography variant="body2">{formatDate(date)},</Typography>
         <Typography variant="body2">{formatTimeWithLegend(date)}</Typography>
       </Stack>
@@ -70,7 +78,7 @@ export function useFieldSpecs({
       ),
       sortable: false,
       getCellLabel(value: string) {
-        return <FormattedDateAndTime date={value} inTwoLines={inTwoLines} />;
+        return <FormattedDateAndTime id={fieldId} date={value} inTwoLines={inTwoLines} />;
       },
     }),
     []
@@ -86,24 +94,18 @@ export function useFieldSpecs({
       sortable: false,
       id: 'functionality',
       getCellLabel(_: string, i: Item) {
-        return i.knownFunctionality ? (
-          <Typography id={`functionality-${i.knownFunctionality}`}>
-            {getLocalizedOrDefaultLabel(
+        return i.knownFunctionality
+          ? getLocalizedOrDefaultLabel(
               'appStatus',
               `legends.knownFunctionality.${i.knownFunctionality}`,
               'Nome del servizio ben conosciuto'
-            )}
-          </Typography>
-        ) : (
-          <Typography id={`functionality-${i.knownFunctionality}`}>
-            {getLocalizedOrDefaultLabel(
+            )
+          : getLocalizedOrDefaultLabel(
               'appStatus',
               'legends.unknownFunctionality',
               'Un servizio sconosciuto',
               { functionality: i.rawFunctionality }
-            )}
-          </Typography>
-        );
+            );
       },
     }),
 
@@ -126,7 +128,7 @@ export function useFieldSpecs({
               sx={{ px: 0 }}
               startIcon={<DownloadIcon />}
               data-testid="download-legal-fact"
-              id="buttonLegalFact"
+              id={`buttonLegalFact-${i.id}`}
               onClick={() => {
                 void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
               }}
@@ -137,7 +139,7 @@ export function useFieldSpecs({
         } else {
           return (
             <Typography
-              id="errorDownloadLegalFact"
+              id={`erroreDownloadLegalFact-${i.status}-${i.id}`}
               variant="body2"
               sx={{ color: theme.palette.text.secondary }}
             >
