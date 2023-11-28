@@ -238,20 +238,21 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 &nbsp;
                 {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
-
-              <Button
-                fullWidth
-                variant="outlined"
-                data-testid="download-pagoPA-notice-button"
-                disabled={!selectedPayment}
-                onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
-              >
-                <Download fontSize="small" sx={{ mr: 1 }} />
-                {getLocalizedOrDefaultLabel(
-                  'notifications',
-                  'detail.payment.download-pagoPA-notice'
-                )}
-              </Button>
+              {(!selectedPayment || selectedPayment?.attachment) && (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  data-testid="download-pagoPA-notice-button"
+                  disabled={!selectedPayment}
+                  onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
+                >
+                  <Download fontSize="small" sx={{ mr: 1 }} />
+                  {getLocalizedOrDefaultLabel(
+                    'notifications',
+                    'detail.payment.download-pagoPA-notice'
+                  )}
+                </Button>
+              )}
               {selectedPayment &&
               pagoPaF24.find((payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode)
                 ?.f24 ? (

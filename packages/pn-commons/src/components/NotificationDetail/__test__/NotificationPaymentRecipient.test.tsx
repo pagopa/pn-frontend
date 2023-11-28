@@ -267,4 +267,27 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(fetchPaymentsInfoMk).toBeCalledTimes(1);
   });
+
+  it('download pagoPa notice hidden if no attachment is present', () => {
+    const { getAllByTestId, queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+    const paymentIndex = paymentsData.pagoPaF24.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED && !payment.pagoPa.attachment
+    );
+    const item = getAllByTestId('pagopa-item')[paymentIndex];
+    const radioButton = item.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+    // download pagoPA attachments
+    const downloadButton = queryByTestId('download-pagoPA-notice-button');
+    expect(downloadButton).not.toBeInTheDocument();
+  });
 });
