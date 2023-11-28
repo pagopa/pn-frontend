@@ -501,10 +501,9 @@ const NotificationDetail = () => {
                         handleTrackPaymentStatus={trackPaymentStatus}
                         handleTrackDownloadF24Timeout={trackDownloadF24Timeout}
                         onPayClick={onPayClick}
-                        handleReloadPayment={() =>
+                        handleFetchPaymentsInfo={() =>
                           reloadPaymentsInfo(currentRecipient.payments ?? [])
                         }
-                        handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}

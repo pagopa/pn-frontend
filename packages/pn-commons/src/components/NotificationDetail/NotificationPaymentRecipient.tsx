@@ -36,7 +36,6 @@ type Props = {
     unwrap: () => Promise<PaymentAttachment>;
   };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  handleReloadPayment: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
   handleTrackNotificationCancelledRefoundInfo?: () => void;
   handleTrackMultipaymentMoreInfo?: () => void;
   handleTrackDownloadPaymentNotice?: () => void;
