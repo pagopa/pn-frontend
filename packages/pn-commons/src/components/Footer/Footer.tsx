@@ -17,14 +17,20 @@ type Props = {
   eventTrackingCallbackChangeLanguage?: () => void;
   /** Enables the Terms of Service Link */
   hasTermsOfService?: boolean;
+  /** Url to privacy policy page */
+  privacyPolicyHref?: string;
+  /** Url to terms of service page */
+  termsOfServiceHref?: string;
 };
 
-const Footer = ({
+const Footer: React.FC<Props> = ({
   onLanguageChanged = () => {},
   loggedUser = false,
   eventTrackingCallbackChangeLanguage,
   hasTermsOfService,
-}: Props) => {
+  privacyPolicyHref,
+  termsOfServiceHref,
+}) => {
   const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
   const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {
@@ -44,7 +50,7 @@ const Footer = ({
       }}
       legalInfo={companyLegalInfo()}
       postLoginLinks={postLoginLinks()}
-      preLoginLinks={preLoginLinks(hasTermsOfService)}
+      preLoginLinks={preLoginLinks(hasTermsOfService, privacyPolicyHref, termsOfServiceHref)}
       languages={LANGUAGES}
       onLanguageChanged={changeLanguageHandler}
       currentLangCode={currentLangCode}

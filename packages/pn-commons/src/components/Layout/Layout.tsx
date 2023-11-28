@@ -49,9 +49,13 @@ type Props = {
   showFooter?: boolean;
   /** Shows or hides terms of service */
   hasTermsOfService?: boolean;
+  /** Url to privacy policy page */
+  privacyPolicyHref?: string;
+  /** Url to terms of service page */
+  termsOfServiceHref?: string;
 };
 
-export default function Layout({
+const Layout: React.FC<Props> = ({
   children,
   onExitAction,
   sideMenu,
@@ -73,63 +77,67 @@ export default function Layout({
   showHeader = true,
   showFooter = true,
   hasTermsOfService,
-}: Props) {
-  return (
-    <ErrorBoundary
-      sx={{ height: 'calc(100vh - 5px)' }}
-      eventTrackingCallback={eventTrackingCallbackAppCrash}
+  privacyPolicyHref,
+  termsOfServiceHref,
+}) => (
+  <ErrorBoundary
+    sx={{ height: 'calc(100vh - 5px)' }}
+    eventTrackingCallback={eventTrackingCallbackAppCrash}
+  >
+    {/* calc fixes the layout discrepancy given by the version box */}
+    <Stack
+      direction="column"
+      sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
     >
-      {/* calc fixes the layout discrepancy given by the version box */}
-      <Stack
-        direction="column"
-        sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
-      >
-        <>
-          {showHeader && (
-            <Header
-              onExitAction={onExitAction}
-              productsList={productsList}
-              showHeaderProduct={showHeaderProduct}
-              productId={productId}
-              partyId={partyId}
-              partyList={partyList}
-              loggedUser={loggedUser}
-              enableDropdown={enableUserDropdown}
-              userActions={userActions}
-              onAssistanceClick={onAssistanceClick}
-              eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
-              isLogged={isLogged}
-            />
-          )}
-          <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
-            {showSideMenu && (
-              <Box
-                sx={{ width: { lg: 300 }, flexShrink: '0' }}
-                component="nav"
-                data-testid="side-menu"
-              >
-                {sideMenu}
-              </Box>
-            )}
+      <>
+        {showHeader && (
+          <Header
+            onExitAction={onExitAction}
+            productsList={productsList}
+            showHeaderProduct={showHeaderProduct}
+            productId={productId}
+            partyId={partyId}
+            partyList={partyList}
+            loggedUser={loggedUser}
+            enableDropdown={enableUserDropdown}
+            userActions={userActions}
+            onAssistanceClick={onAssistanceClick}
+            eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
+            isLogged={isLogged}
+          />
+        )}
+        <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+          {showSideMenu && (
             <Box
-              sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
-              component="main"
+              sx={{ width: { lg: 300 }, flexShrink: '0' }}
+              component="nav"
+              data-testid="side-menu"
             >
-              <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-                {children}
-              </ErrorBoundary>
+              {sideMenu}
             </Box>
-          </Stack>
-          {showFooter && (
-            <Footer
-              loggedUser={loggedUser.id !== ''}
-              onLanguageChanged={onLanguageChanged}
-              eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
-              hasTermsOfService={hasTermsOfService}
-            />
           )}
-        </>
-      </Stack>
-    </ErrorBoundary>
-  );
-}
+          <Box
+            sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
+            component="main"
+          >
+            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+              {children}
+            </ErrorBoundary>
+          </Box>
+        </Stack>
+        {showFooter && (
+          <Footer
+            loggedUser={loggedUser.id !== ''}
+            onLanguageChanged={onLanguageChanged}
+            eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+            hasTermsOfService={hasTermsOfService}
+            privacyPolicyHref={privacyPolicyHref}
+            termsOfServiceHref={termsOfServiceHref}
+          />
+        )}
+      </>
+    </Stack>
+  </ErrorBoundary>
+);
+
+export default Layout;

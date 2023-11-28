@@ -30,7 +30,8 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const aar = params.get(AppRouteParams.AAR);
-  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL } = getConfiguration();
+  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL, ROUTE_PRIVACY_POLICY } =
+    getConfiguration();
 
   if (aar !== null && aar !== '') {
     storageAarOps.write(aar);
@@ -73,6 +74,7 @@ const Login = () => {
         surname: undefined,
         email: undefined,
       }}
+      privacyPolicyHref={ROUTE_PRIVACY_POLICY}
     >
       <Grid container direction="column" my={isMobile ? 4 : 16} id="loginPage">
         <Grid container item justifyContent="center">
