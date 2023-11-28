@@ -31,6 +31,7 @@ import {
   EventNotificationDetailType,
   EventNotificationsListType,
   EventPageType,
+  EventPaymentRecipientType,
   EventPaymentStatusType,
   EventsType,
 } from './MixpanelEvents';
@@ -99,6 +100,7 @@ export {
   LegalFactType,
   EventPageType,
   EventDowntimeType,
+  EventPaymentRecipientType,
   PhysicalCommunicationType,
   PaymentInfoDetail,
   PaymentStatus,

@@ -5,6 +5,7 @@ import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material'
 
 import { downloadDocument } from '../../hooks';
 import {
+  EventPaymentRecipientType,
   EventPaymentStatusType,
   F24PaymentDetails,
   NotificationDetailPayment,
@@ -36,13 +37,7 @@ type Props = {
     unwrap: () => Promise<PaymentAttachment>;
   };
   onPayClick: (noticeCode?: string, creditorTaxId?: string, amount?: number) => void;
-  handleTrackNotificationCancelledRefoundInfo?: () => void;
-  handleTrackMultipaymentMoreInfo?: () => void;
-  handleTrackDownloadPaymentNotice?: () => void;
-  handleTrackDownloadF24?: () => void;
-  handleTrackDownloadF24Success?: () => void;
-  handleTrackPaymentStatus?: (paymentStatus: EventPaymentStatusType) => void;
-  handleTrackDownloadF24Timeout?: () => void;
+  handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
 
@@ -53,13 +48,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   landingSiteUrl,
   getPaymentAttachmentAction,
   onPayClick,
-  handleTrackNotificationCancelledRefoundInfo,
-  handleTrackMultipaymentMoreInfo,
-  handleTrackDownloadPaymentNotice,
-  handleTrackDownloadF24,
-  handleTrackDownloadF24Success,
-  handleTrackPaymentStatus,
-  handleTrackDownloadF24Timeout,
+  handleTrackEvent,
   handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
@@ -95,7 +84,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     const FaqLink = (
       <Link
         href={notificationCostsFaqLink}
-        onClick={handleTrackMultipaymentMoreInfo}
+        onClick={() => handleTrackEventFn(EventPaymentRecipientType.SEND_MULTIPAYMENT_MORE_INFO)}
         target="_blank"
         fontWeight="bold"
         sx={{ cursor: 'pointer' }}
@@ -149,10 +138,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setSelectedPayment(null);
   };
 
-  // some of following properties in function getPaymentStatus are set to -1
-  // because of still missing features (or not implemented anymore)
   const getPaymentsStatus = (): EventPaymentStatusType => ({
-    page_number: -1,
+    page_number: paginationData.page,
     count_payment: pagoPaF24.length,
     count_canceled: pagoPaF24.filter(
       (f) =>
@@ -171,15 +158,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         f.pagoPa.detail === PaymentInfoDetail.PAYMENT_EXPIRED
     ).length,
     count_paid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length,
-    count_revoked: -1,
     count_unpaid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.REQUIRED).length,
   });
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
     if (selectedPayment) {
-      if (handleTrackDownloadPaymentNotice) {
-        handleTrackDownloadPaymentNotice();
-      }
+      handleTrackEventFn(EventPaymentRecipientType.SEND_DOWNLOAD_PAYMENT_NOTICE);
       void getPaymentAttachmentAction(attachmentName, selectedPayment.attachmentIdx)
         .unwrap()
         .then((response) => {
@@ -197,14 +181,19 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       (paginationData.page + 1) * paginationData.size
     );
     handleFetchPaymentsInfo(payments ?? []);
+    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };
 
   useEffect(() => {
     setSelectedPayment(isSinglePayment && hasRequiredPayment ? pagoPaF24[0].pagoPa ?? null : null);
-    if (handleTrackPaymentStatus) {
-      handleTrackPaymentStatus(getPaymentsStatus());
-    }
+    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, getPaymentsStatus());
   }, [payments]);
+
+  const handleTrackEventFn = (event: EventPaymentRecipientType, param?: object) => {
+    if (handleTrackEvent) {
+      handleTrackEvent(event, param);
+    }
+  };
 
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
@@ -218,7 +207,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           &nbsp;
           <Link
             href={cancelledNotificationFAQ}
-            onClick={handleTrackNotificationCancelledRefoundInfo}
+            onClick={() =>
+              handleTrackEventFn(EventPaymentRecipientType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO)
+            }
             target="_blank"
             fontWeight="bold"
             sx={{ cursor: 'pointer' }}
@@ -307,9 +298,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 ?.f24 ? (
                 <Box key="attachment" data-testid="f24-download">
                   <NotificationPaymentF24Item
-                    handleTrackDownloadF24={handleTrackDownloadF24}
-                    handleTrackDownloadF24Success={handleTrackDownloadF24Success}
-                    handleTrackDownloadF24Timeout={handleTrackDownloadF24Timeout}
+                    handleTrackDownloadF24={
+                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+                    }
+                    handleTrackDownloadF24Success={
+                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+                    }
+                    handleTrackDownloadF24Timeout={
+                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+                    }
                     f24Item={
                       pagoPaF24.find(
                         (payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode
@@ -339,9 +336,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               <NotificationPaymentF24Item
                 f24Item={f24Item}
                 getPaymentAttachmentAction={getPaymentAttachmentAction}
-                handleTrackDownloadF24={handleTrackDownloadF24}
-                handleTrackDownloadF24Success={handleTrackDownloadF24Success}
-                handleTrackDownloadF24Timeout={handleTrackDownloadF24Timeout}
+                handleTrackDownloadF24={
+                  void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+                }
+                handleTrackDownloadF24Success={
+                  void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+                }
+                handleTrackDownloadF24Timeout={
+                  void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+                }
                 timerF24={timerF24}
               />
             </Box>

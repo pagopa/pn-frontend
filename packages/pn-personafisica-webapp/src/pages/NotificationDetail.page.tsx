@@ -9,7 +9,7 @@ import {
   ApiErrorWrapper,
   EventDowntimeType,
   EventNotificationDetailType,
-  EventPaymentStatusType,
+  EventPaymentRecipientType,
   GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
@@ -412,21 +412,17 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
+    // eslint-disable-next-line functional/no-let
+    trackEventByType(
+      event as unknown as TrackEventType,
+      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ? param : undefined
+    );
+  };
+
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
     trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_REFRESH);
-  };
-
-  const trackCancelledNotificationRefoundInfo = () => {
-    trackEventByType(TrackEventType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO);
-  };
-
-  const trackMultipaymentMoreInfo = () => {
-    trackEventByType(TrackEventType.SEND_MULTIPAYMENT_MORE_INFO);
-  };
-
-  const trackDownloadPaymentNotice = () => {
-    trackEventByType(TrackEventType.SEND_DOWNLOAD_PAYMENT_NOTICE);
   };
 
   const trackShowMoreLess = (collapsed: boolean) => {
@@ -435,21 +431,6 @@ const NotificationDetail = () => {
     });
   };
 
-  const trackDownloadF24 = () => {
-    trackEventByType(TrackEventType.SEND_F24_DOWNLOAD);
-  };
-
-  const trackDownloadF24Success = () => {
-    trackEventByType(TrackEventType.SEND_F24_DOWNLOAD_SUCCESS);
-  };
-
-  const trackPaymentStatus = (obj: EventPaymentStatusType) => {
-    trackEventByType(TrackEventType.SEND_PAYMENT_STATUS, obj);
-  };
-
-  const trackDownloadF24Timeout = () => {
-    trackEventByType(TrackEventType.SEND_F24_DOWNLOAD_TIMEOUT);
-  };
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -491,15 +472,7 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
-                        handleTrackNotificationCancelledRefoundInfo={
-                          trackCancelledNotificationRefoundInfo
-                        }
-                        handleTrackMultipaymentMoreInfo={trackMultipaymentMoreInfo}
-                        handleTrackDownloadPaymentNotice={trackDownloadPaymentNotice}
-                        handleTrackDownloadF24={trackDownloadF24}
-                        handleTrackDownloadF24Success={trackDownloadF24Success}
-                        handleTrackPaymentStatus={trackPaymentStatus}
-                        handleTrackDownloadF24Timeout={trackDownloadF24Timeout}
+                        handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
                         handleFetchPaymentsInfo={() =>
                           reloadPaymentsInfo(currentRecipient.payments ?? [])

@@ -31,7 +31,6 @@ export type EventPaymentStatusType = {
   count_error: number;
   count_expired: number;
   count_canceled: number;
-  count_revoked: number;
 };
 
 export type EventNotificationsListType = {
@@ -77,3 +76,15 @@ export type EventCreatedDelegationType = {
   person_type: string;
   mandate_type: string;
 };
+
+export enum EventPaymentRecipientType {
+  SEND_PAYMENT_DETAIL_REFRESH = 'SEND_PAYMENT_DETAIL_REFRESH',
+  SEND_CANCELLED_NOTIFICATION_REFOUND_INFO = 'SEND_CANCELLED_NOTIFICATION_REFOUND_INFO',
+  SEND_MULTIPAYMENT_MORE_INFO = 'SEND_MULTIPAYMENT_MORE_INFO',
+  SEND_DOWNLOAD_PAYMENT_NOTICE = 'SEND_DOWNLOAD_PAYMENT_NOTICE',
+  SEND_F24_DOWNLOAD = 'SEND_F24_DOWNLOAD',
+  SEND_F24_DOWNLOAD_SUCCESS = 'SEND_F24_DOWNLOAD_SUCCESS',
+  SEND_PAYMENT_STATUS = 'SEND_PAYMENT_STATUS',
+  SEND_F24_DOWNLOAD_TIMEOUT = 'SEND_F24_DOWNLOAD_TIMEOUT',
+  SEND_PAYMENT_LIST_CHANGE_PAGE = 'SEND_PAYMENT_LIST_CHANGE_PAGE',
+}
