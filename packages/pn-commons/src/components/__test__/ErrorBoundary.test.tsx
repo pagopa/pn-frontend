@@ -8,6 +8,7 @@ const ThrowError = () => {
 };
 
 const mockEventTrackingCallback = jest.fn();
+const mockEventTrackingCallbackRefreshPage = jest.fn();
 const mockReload = jest.fn();
 
 describe('ErrorBoundary Component', () => {
@@ -54,12 +55,16 @@ describe('ErrorBoundary Component', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
     // render component
     const { container } = render(
-      <ErrorBoundary eventTrackingCallback={mockEventTrackingCallback}>
+      <ErrorBoundary
+        eventTrackingCallback={mockEventTrackingCallback}
+        eventTrackingCallbackRefreshPage={mockEventTrackingCallbackRefreshPage}
+      >
         <ThrowError />
       </ErrorBoundary>
     );
     const reloadButton = getById(container, 'reloadButton');
     fireEvent.click(reloadButton);
+    expect(mockEventTrackingCallbackRefreshPage).toBeCalledTimes(1);
     expect(mockReload).toBeCalledTimes(1);
   });
 });

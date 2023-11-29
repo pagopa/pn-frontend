@@ -7,8 +7,6 @@ import { TableCell, TableRow, TextField, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { EventActions, TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -105,7 +103,6 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
     if (status === 'cancelled') {
       await formik.setFieldValue(id, initialValues[id], true);
     }
-    trackEventByType(TrackEventType.CONTACT_SPECIAL_CONTACTS, { action: EventActions.ADD });
   };
 
   const formik = useFormik({
