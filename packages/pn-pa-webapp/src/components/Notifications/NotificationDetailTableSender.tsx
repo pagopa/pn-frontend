@@ -16,10 +16,14 @@ import {
   dataRegex,
   formatDate,
   formatEurocentToCurrency,
+  useHasPermissions,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
+import { PNRole } from '../../models/user';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import ConfirmCancellationDialog from './ConfirmCancellationDialog';
@@ -40,6 +44,10 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
       (el: INotificationDetailTimeline) => el.category === TimelineCategory.PAYMENT
     ) > -1;
 
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+
   const openModal = () => {
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
@@ -51,7 +59,9 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
 
   const handleModalCloseAndProceed = () => {
     setShowModal(false);
-    onCancelNotification();
+    if (userHasAdminPermissions) {
+      onCancelNotification();
+    }
   };
 
   const getTaxIdLabel = (taxId: string): string =>
@@ -163,7 +173,7 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
             ))}
           </NotificationDetailTableBody>
         </NotificationDetailTableContents>
-        {!cancellationInProgress && !cancelled && (
+        {!cancellationInProgress && !cancelled && userHasAdminPermissions && (
           <NotificationDetailTableAction>
             <Button
               variant="outlined"
@@ -184,12 +194,14 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
           </NotificationDetailTableAction>
         )}
       </NotificationDetailTable>
-      <ConfirmCancellationDialog
-        onClose={handleModalClose}
-        onConfirm={handleModalCloseAndProceed}
-        payment={withPayment}
-        showModal={showModal}
-      />
+      {userHasAdminPermissions && (
+        <ConfirmCancellationDialog
+          onClose={handleModalClose}
+          onConfirm={handleModalCloseAndProceed}
+          payment={withPayment}
+          showModal={showModal}
+        />
+      )}
     </>
   );
 };
