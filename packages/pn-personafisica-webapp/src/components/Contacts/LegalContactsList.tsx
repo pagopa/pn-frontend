@@ -97,7 +97,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 digitalElemRef.current.editContact();
               }}
             >
-              <Typography mb={1} sx={{ fontWeight: 'bold' }}>
+              <Typography mb={1} sx={{ fontWeight: 'bold' }} id="associatedPEC">
                 {t('legal-contacts.pec-added', { ns: 'recapiti' })}
               </Typography>
               <DigitalContactElem
