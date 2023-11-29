@@ -1,203 +1,286 @@
-import { EventsType } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventsType } from '@pagopa-pn/pn-commons';
+
+// All the events are been removed by request of PN-8114 because will be filled again by PN-7437.
+// I added a temporary "PLACEHOLDER" to prevent mixpanel errors in mixpanel.ts
+// Remove PLACEHOLDER when PN-7437 stars.
 
 export enum TrackEventType {
-  APP_CRASH = 'APP_CRASH',
-  APP_UNLOAD = 'APP_UNLOAD',
-  CONTACT_LEGAL_CONTACT = 'CONTACT_LEGAL_CONTACT',
-  CONTACT_IOAPP_COURTESY = 'CONTACT_IOAPP_COURTESY',
-  CONTACT_MAIL_COURTESY = 'CONTACT_MAIL_COURTESY',
-  CONTACT_SPECIAL_CONTACTS = 'CONTACT_SPECIAL_CONTACTS',
-  CONTACT_TEL_COURTESY = 'CONTACT_TEL_COURTESY',
-  CUSTOMER_CARE_MAILTO = 'CUSTOMER_CARE_MAILTO',
-  DELEGATION_DELEGATE_ADD_ACTION = 'DELEGATION_DELEGATE_ADD_ACTION',
-  DELEGATION_DELEGATE_ADD_CTA = 'DELEGATION_DELEGATE_ADD_CTA',
-  DELEGATION_DELEGATE_ADD_ERROR = 'delegationsSlice/createDelegation/rejected',
-  DELEGATION_DELEGATE_REVOKE = 'DELEGATION_DELEGATE_REVOKE',
-  DELEGATION_DELEGATE_VIEW_CODE = 'DELEGATION_DELEGATE_VIEW_CODE',
-  DELEGATION_DELEGATOR_ACCEPT = 'delegationsSlice/openAcceptModal',
-  DELEGATION_DELEGATOR_REJECT = 'DELEGATION_DELEGATOR_REJECT',
-  DIGITAL_DOMICILE_BANNER_CLOSE = 'DIGITAL_DOMICILE_BANNER_CLOSE',
-  DIGITAL_DOMICILE_LINK = 'DIGITAL_DOMICILE_LINK',
-  FOOTER_ACCESSIBILITY = 'FOOTER_ACCESSIBILITY',
-  FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH',
-  NOTIFICATION_DETAIL_ALL_ATTACHMENTS = 'NOTIFICATION_DETAIL_ALL_ATTACHMENTS',
-  NOTIFICATION_DETAIL_HELP_BOX = 'NOTIFICATION_DETAIL_HELP_BOX',
-  NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE = 'NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE',
-  NOTIFICATION_DETAIL_PAYMENT_INTERACTION = 'NOTIFICATION_DETAIL_PAYMENT_INTERACTION',
-  NOTIFICATION_DETAIL_PAYMENT_ERROR = 'getNotificationPaymentInfo/rejected',
-  NOTIFICATION_DETAIL_PAYMENT_F24_FILE = 'NOTIFICATION_DETAIL_PAYMENT_F24_FILE',
-  NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE = 'NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE',
-  NOTIFICATION_DETAIL_PAYMENT_RELOAD = 'NOTIFICATION_DETAIL_PAYMENT_RELOAD',
-  NOTIFICATION_DETAIL_SINGLE_ATTACHMENT = 'getReceivedNotificationDocument/fulfilled',
-  NOTIFICATION_FILTER_REMOVE = 'NOTIFICATION_FILTER_REMOVE',
-  NOTIFICATION_FILTER_SEARCH = 'NOTIFICATION_FILTER_SEARCH',
-  NOTIFICATION_TIMELINE_ALL_ATTACHMENTS = 'NOTIFICATION_TIMELINE_ALL_ATTACHMENTS',
-  NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT = 'getReceivedNotificationLegalfact/fulfilled',
-  NOTIFICATION_TIMELINE_VIEW_MORE = 'NOTIFICATION_TIMELINE_VIEW_MORE',
-  NOTIFICATION_TABLE_PAGINATION = 'NOTIFICATION_TABLE_PAGINATION',
-  NOTIFICATION_TABLE_ROW_INTERACTION = 'NOTIFICATION_TABLE_ROW_INTERACTION',
-  NOTIFICATION_TABLE_ROW_TOOLTIP = 'NOTIFICATION_TABLE_ROW_TOOLTIP',
-  NOTIFICATION_TABLE_SIZE = 'NOTIFICATION_TABLE_SIZE',
-  NOTIFICATION_TABLE_SORT = 'setSorting',
-  USER_LOGOUT = 'logout/fulfilled',
-  USER_NAV_ITEM = 'USER_NAV_ITEM',
-  USER_PRODUCT_SWITCH = 'USER_PRODUCT_SWITCH',
-  USER_VIEW_CONTACTS_PROFILE = 'USER_VIEW_CONTACTS_PROFILE',
-  USER_VIEW_PROFILE = 'USER_VIEW_PROFILE'
+  SEND_VIEW_PROFILE = 'SEND_VIEW_PROFILE',
+  SEND_PROFILE = 'SEND_PROFILE',
+  SEND_VIEW_CONTACT_DETAILS = 'SEND_VIEW_CONTACT_DETAILS',
+  SEND_YOUR_NOTIFICATION = 'SEND_YOUR_NOTIFICATION',
+  SEND_NOTIFICATION_DELEGATED = 'SEND_NOTIFICATION_DELEGATED',
+  SEND_NOTIFICATION_DETAIL = 'SEND_NOTIFICATION_DETAIL',
+  SEND_PAYMENT_STATUS = 'SEND_PAYMENT_STATUS',
+  SEND_PAYMENT_DETAIL_ERROR = 'SEND_PAYMENT_DETAIL_ERROR',
+  SEND_PAYMENT_DETAIL_REFRESH = 'SEND_PAYMENT_DETAIL_REFRESH',
+  SEND_CANCELLED_NOTIFICATION_REFOUND_INFO = 'SEND_CANCELLED_NOTIFICATION_REFOUND_INFO',
+  SEND_MULTIPAYMENT_MORE_INFO = 'SEND_MULTIPAYMENT_MORE_INFO',
+  SEND_PAYMENT_LIST_CHANGE_PAGE = 'SEND_PAYMENT_LIST_CHANGE_PAGE',
+  SEND_F24_DOWNLOAD = 'SEND_F24_DOWNLOAD',
+  SEND_F24_DOWNLOAD_SUCCESS = 'SEND_F24_DOWNLOAD_SUCCESS',
+  SEND_DOWNLOAD_ATTACHMENT = 'SEND_DOWNLOAD_ATTACHMENT',
+  SEND_DOWNLOAD_RECEIPT_NOTICE = 'SEND_DOWNLOAD_RECEIPT_NOTICE',
+  SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES = 'SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES',
+  SEND_DOWNLOAD_PAYMENT_NOTICE = 'SEND_DOWNLOAD_PAYMENT_NOTICE',
+  SEND_START_PAYMENT = 'SEND_START_PAYMENT',
+  SEND_NOTIFICATION_STATUS_DETAIL = 'SEND_NOTIFICATION_STATUS_DETAIL',
+  SEND_YOUR_MANDATES = 'SEND_YOUR_MANDATES',
+  SEND_ADD_MANDATE_START = 'SEND_ADD_MANDATE_START',
+  SEND_ADD_MANDATE_BACK = 'SEND_ADD_MANDATE_BACK',
+  SEND_ADD_MANDATE_DATA_INPUT = 'SEND_ADD_MANDATE_DATA_INPUT',
+  SEND_ADD_MANDATE_UX_CONVERSION = 'SEND_ADD_MANDATE_UX_CONVERSION',
+  SEND_ADD_MANDATE_UX_SUCCESS = 'SEND_ADD_MANDATE_UX_SUCCESS',
+  SEND_SHOW_MANDATE_CODE = 'SEND_SHOW_MANDATE_CODE',
+  SEND_MANDATE_REVOKED = 'SEND_MANDATE_REVOKED',
+  SEND_MANDATE_REJECTED = 'SEND_MANDATE_REJECTED',
+  SEND_MANDATE_ACCEPTED = 'SEND_MANDATE_ACCEPTED',
+  SEND_MANDATE_ACCEPT_CODE_ERROR = 'SEND_MANDATE_ACCEPT_CODE_ERROR',
+  SEND_YOUR_CONTACT_DETAILS = 'SEND_YOUR_CONTACT_DETAILS',
+  SEND_ADD_PEC_START = 'SEND_ADD_PEC_START',
+  SEND_ADD_PEC_UX_CONVERSION = 'SEND_ADD_PEC_UX_CONVERSION',
+  SEND_ADD_PEC_CODE_ERROR = 'SEND_ADD_PEC_CODE_ERROR',
+  SEND_ADD_PEC_UX_SUCCESS = 'SEND_ADD_PEC_UX_SUCCESS',
+  SEND_ACTIVE_IO_START = 'SEND_ACTIVE_IO_START',
+  SEND_ACTIVE_IO_UX_CONVERSION = 'SEND_ACTIVE_IO_UX_CONVERSION',
+  SEND_ACTIVE_IO_UX_SUCCESS = 'SEND_ACTIVE_IO_UX_SUCCESS',
+  SEND_DEACTIVE_IO_START = 'SEND_DEACTIVE_IO_START',
+  SEND_DEACTIVE_IO_UX_CONVERSION = 'SEND_DEACTIVE_IO_UX_CONVERSION',
+  SEND_DEACTIVE_IO_UX_SUCCESS = 'SEND_DEACTIVE_IO_UX_SUCCESS',
+  SEND_ADD_SMS_START = 'SEND_ADD_SMS_START',
+  SEND_ADD_SMS_UX_CONVERSION = 'SEND_ADD_SMS_UX_CONVERSION',
+  SEND_ADD_SMS_CODE_ERROR = 'SEND_ADD_SMS_CODE_ERROR',
+  SEND_ADD_SMS_UX_SUCCESS = 'SEND_ADD_SMS_UX_SUCCESS',
+  SEND_ADD_EMAIL_START = 'SEND_ADD_EMAIL_START',
+  SEND_ADD_EMAIL_UX_CONVERSION = 'SEND_ADD_EMAIL_UX_CONVERSION',
+  SEND_ADD_EMAIL_CODE_ERROR = 'SEND_ADD_EMAIL_CODE_ERROR',
+  SEND_ADD_EMAIL_UX_SUCCESS = 'SEND_ADD_EMAIL_UX_SUCCESS',
+  SEND_SERVICE_STATUS = 'SEND_SERVICE_STATUS',
+  SEND_REFRESH_PAGE = 'SEND_REFRESH_PAGE',
+  SEND_TOAST_ERROR = 'SEND_TOAST_ERROR',
+  SEND_GENERIC_ERROR = 'SEND_GENERIC_ERROR',
+  SEND_F24_DOWNLOAD_TIMEOUT = 'SEND_F24_DOWNLOAD_TIMEOUT',
 }
 
 export const events: EventsType = {
-  [TrackEventType.APP_CRASH]: {
-    category: 'app',
-    action: 'app crashed'
+  [TrackEventType.SEND_VIEW_PROFILE]: {
+    category: EventCategory.UX,
+    action: 'click on view user data',
   },
-  [TrackEventType.APP_UNLOAD]: {
-    category: 'app',
-    action: 'app unloaded'
+  [TrackEventType.SEND_PROFILE]: {
+    category: EventCategory.UX,
+    action: 'view user data',
   },
-  [TrackEventType.CONTACT_LEGAL_CONTACT]: {
-    category: 'contact',
-    action: 'edit legal contact'
+  [TrackEventType.SEND_VIEW_CONTACT_DETAILS]: {
+    category: EventCategory.UX,
+    action: 'click on go contacts page',
   },
-  [TrackEventType.CONTACT_IOAPP_COURTESY]: {
-    category: 'contact',
-    action: 'edit ioapp courtesy contact'
+  [TrackEventType.SEND_YOUR_NOTIFICATION]: {
+    category: EventCategory.UX,
+    action: 'view notifications page',
   },
-  [TrackEventType.CONTACT_MAIL_COURTESY]: {
-    category: 'contact',
-    action: 'edit email courtesy contact'
+  [TrackEventType.SEND_NOTIFICATION_DELEGATED]: {
+    category: EventCategory.UX,
+    action: 'view notifications page as delegate',
   },
-  [TrackEventType.CONTACT_SPECIAL_CONTACTS]: {
-    category: 'contact',
-    action: 'edit special contact'
+  [TrackEventType.SEND_NOTIFICATION_DETAIL]: {
+    category: EventCategory.UX,
+    action: 'view notification detail page',
   },
-  [TrackEventType.CONTACT_TEL_COURTESY]: {
-    category: 'contact',
-    action: 'edit telephone courtesy contact'
+  [TrackEventType.SEND_PAYMENT_STATUS]: {
+    category: EventCategory.TECH,
+    action: 'view payment status in notification detail page',
   },
-  [TrackEventType.CUSTOMER_CARE_MAILTO]: {
-    category: 'customer care',
-    action: 'click on customer care email'
+  [TrackEventType.SEND_PAYMENT_DETAIL_ERROR]: {
+    category: EventCategory.KO,
+    action: 'failed to load payment status in notification detail page',
   },
-  [TrackEventType.DELEGATION_DELEGATE_ADD_ACTION]: {
-    category: 'delegation',
-    action: 'add new delegate'
+  [TrackEventType.SEND_PAYMENT_DETAIL_REFRESH]: {
+    category: EventCategory.UX,
+    action: 'click on reload payment status',
   },
-  [TrackEventType.DELEGATION_DELEGATE_ADD_CTA]: {
-    category: 'delegation',
-    action: 'click/tap on the button that shows the new delegation form'
+  [TrackEventType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO]: {
+    category: EventCategory.UX,
+    action: 'click on more info',
   },
-  [TrackEventType.DELEGATION_DELEGATE_ADD_ERROR]: {
-    category: 'delegation',
-    action: 'error while adding new delegate',
-    getAttributes:  (payload: { [key: string]: any }) => ({
-      type: payload.response.data.title || 'generic error',
-    })
+  [TrackEventType.SEND_MULTIPAYMENT_MORE_INFO]: {
+    category: EventCategory.UX,
+    action: 'click on more info in multipayment status',
   },
-  [TrackEventType.DELEGATION_DELEGATE_REVOKE]: {
-    category: 'delegation',
-    action: 'click/tap on the revoke action'
+  [TrackEventType.SEND_PAYMENT_LIST_CHANGE_PAGE]: {
+    category: EventCategory.UX,
+    action: 'click on change page or size in payment list',
   },
-  [TrackEventType.DELEGATION_DELEGATE_VIEW_CODE]: {
-    category: 'delegation',
-    action: 'click/tap on show code'
+  [TrackEventType.SEND_F24_DOWNLOAD]: {
+    category: EventCategory.UX,
+    action: 'click on download F24 document',
   },
-  [TrackEventType.DELEGATION_DELEGATOR_ACCEPT]: {
-    category: 'delegation',
-    action: 'click/tap on the accept button'
+  [TrackEventType.SEND_F24_DOWNLOAD_SUCCESS]: {
+    category: EventCategory.TECH,
+    action: 'download F24 document success',
   },
-  [TrackEventType.DELEGATION_DELEGATOR_REJECT]: {
-    category: 'delegation',
-    action: 'click/tap on reject action'
+  [TrackEventType.SEND_DOWNLOAD_ATTACHMENT]: {
+    category: EventCategory.UX,
+    action: 'click on download attached document',
   },
-  [TrackEventType.DIGITAL_DOMICILE_BANNER_CLOSE]: {
-    category: 'notification',
-    action: 'close the banner in notifications detail/list'
+  [TrackEventType.SEND_DOWNLOAD_RECEIPT_NOTICE]: {
+    category: EventCategory.UX,
+    action: 'click on download recepit notice',
   },
-  [TrackEventType.DIGITAL_DOMICILE_LINK]: {
-    category: 'notification',
-    action: 'click/tap on  the banner link in notifications detail/list'
+  [TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES]: {
+    category: EventCategory.UX,
+    action: 'click on download certificate opposable to 3rd parties',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE]: {
-    category: 'notification',
-    action: 'contact assistance'
+  [TrackEventType.SEND_DOWNLOAD_PAYMENT_NOTICE]: {
+    category: EventCategory.UX,
+    action: 'click on download payment notice',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ERROR]: {
-    category: 'notification',
-    action: 'failed payment'
+  [TrackEventType.SEND_START_PAYMENT]: {
+    category: EventCategory.UX,
+    action: 'click on pay in detailed notification',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE]: {
-    category: 'notification',
-    action: 'download the F24 file'
+  [TrackEventType.SEND_NOTIFICATION_STATUS_DETAIL]: {
+    category: EventCategory.UX,
+    action: 'click on accordion status details',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION]: {
-    category: 'notification',
-    action: 'click on the pay button'
+  [TrackEventType.SEND_YOUR_MANDATES]: {
+    category: EventCategory.UX,
+    action: 'view delegates page',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE]: {
-    category: 'notification',
-    action: 'download the PagoPA file'
+  [TrackEventType.SEND_ADD_MANDATE_START]: {
+    category: EventCategory.UX,
+    action: 'click on add delegation',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_RELOAD]: {
-    category: 'notification',
-    action: 'reload the payment page'
+  [TrackEventType.SEND_ADD_MANDATE_BACK]: {
+    category: EventCategory.UX,
+    action: 'click on back button in add new delegation page',
   },
-  [TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT]: {
-    category: 'notification',
-    action: 'click/tap on  the banner link in notifications detail/list'
+  [TrackEventType.SEND_ADD_MANDATE_DATA_INPUT]: {
+    category: EventCategory.UX,
+    action: 'view add new delegation page',
   },
-  [TrackEventType.NOTIFICATION_FILTER_SEARCH]: {
-    category: 'notification',
-    action: 'click/tap on  the filter button in notifications filter'
+  [TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION]: {
+    category: EventCategory.UX,
+    action: 'click on submit button in add new delegation page',
   },
-  [TrackEventType.NOTIFICATION_TABLE_PAGINATION]: {
-    category: 'notification',
-    action: 'change page',
+  [TrackEventType.SEND_ADD_MANDATE_UX_SUCCESS]: {
+    category: EventCategory.UX,
+    action: 'view add new delegation success page',
   },
-  [TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION]: {
-    category: 'notification',
-    action: 'go to notification detail'
+  [TrackEventType.SEND_SHOW_MANDATE_CODE]: {
+    category: EventCategory.UX,
+    action: 'click on show otp code of delegation',
   },
-  [TrackEventType.NOTIFICATION_TABLE_SORT]: {
-    category: 'notification',
-    action: 'change notification sorting order',
-    getAttributes:  (payload: { [key: string]: string }) => ({
-      orderBy: payload.orderBy,
-      order: payload.order,
-    })
+  [TrackEventType.SEND_MANDATE_REVOKED]: {
+    category: EventCategory.UX,
+    action: 'click on revoke delegation',
   },
-  [TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT]: {
-    category: 'notification',
-    action: 'click/tap on  the banner link in notifications timeline'
+  [TrackEventType.SEND_MANDATE_REJECTED]: {
+    category: EventCategory.UX,
+    action: 'click on reject delegation',
   },
-  [TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE]: {
-    category: 'notification',
-    action: 'click/tap on timeline view more'
+  [TrackEventType.SEND_MANDATE_ACCEPTED]: {
+    category: EventCategory.UX,
+    action: 'click on accept delegation',
   },
-  [TrackEventType.USER_LOGOUT]: {
-    category: 'user',
-    action: 'user logs out from action'
+  [TrackEventType.SEND_MANDATE_ACCEPT_CODE_ERROR]: {
+    category: EventCategory.UX,
+    action: 'wrong delegation code',
   },
-  [TrackEventType.USER_NAV_ITEM]: {
-    category: 'user',
-    action: 'click on a sidebar link'
+  [TrackEventType.SEND_YOUR_CONTACT_DETAILS]: {
+    category: EventCategory.UX,
+    action: 'view contacts page',
   },
-  [TrackEventType.USER_PRODUCT_SWITCH]: {
-    category: 'user',
-    action: 'switch product'
+  [TrackEventType.SEND_ADD_PEC_START]: {
+    category: EventCategory.UX,
+    action: 'click on confirm in pec card',
   },
-  [TrackEventType.USER_VIEW_PROFILE]: {
-    category: 'user',
-    action: 'go to user profile'
+  [TrackEventType.SEND_ADD_PEC_UX_CONVERSION]: {
+    category: EventCategory.UX,
+    action: 'click on confirm in pec otp code',
   },
-  [TrackEventType.USER_VIEW_CONTACTS_PROFILE]: {
-    category: 'user',
-    action: 'go to contacts from profile'
+  [TrackEventType.SEND_ADD_PEC_CODE_ERROR]: {
+    category: EventCategory.UX,
+    action: 'wrong pec otp code',
+  },
+  [TrackEventType.SEND_ADD_PEC_UX_SUCCESS]: {
+    category: EventCategory.UX,
+    action: 'pec added successfully',
+  },
+  [TrackEventType.SEND_ACTIVE_IO_START]: {
+    category: EventCategory.UX,
+    action: 'click on enable IO app',
+  },
+  [TrackEventType.SEND_ACTIVE_IO_UX_CONVERSION]: {
+    category: EventCategory.UX,
+    action: 'click on enable IO app modal',
+  },
+  [TrackEventType.SEND_ACTIVE_IO_UX_SUCCESS]: {
+    category: EventCategory.UX,
+    action: 'enable IO app successfully',
+  },
+  [TrackEventType.SEND_DEACTIVE_IO_START]: {
+    category: EventCategory.UX,
+    action: 'click on disable IO app',
+  },
+  [TrackEventType.SEND_DEACTIVE_IO_UX_CONVERSION]: {
+    category: EventCategory.UX,
+    action: 'click on disable IO app modal',
+  },
+  [TrackEventType.SEND_DEACTIVE_IO_UX_SUCCESS]: {
+    category: EventCategory.UX,
+    action: 'disable IO app successfully',
+  },
+  [TrackEventType.SEND_ADD_SMS_START]: {
+    category: EventCategory.UX,
+    action: 'click on confirm in sms card',
+  },
+  [TrackEventType.SEND_ADD_SMS_UX_CONVERSION]: {
+    category: EventCategory.UX,
+    action: 'click on confirm in sms otp code',
+  },
+  [TrackEventType.SEND_ADD_SMS_CODE_ERROR]: {
+    category: EventCategory.UX,
+    action: 'wrong sms otp code',
+  },
+  [TrackEventType.SEND_ADD_SMS_UX_SUCCESS]: {
+    category: EventCategory.UX,
+    action: 'sms added successfully',
+  },
+  [TrackEventType.SEND_ADD_EMAIL_START]: {
+    category: EventCategory.UX,
+    action: 'click on confirm in email card',
+  },
+  [TrackEventType.SEND_ADD_EMAIL_UX_CONVERSION]: {
+    category: EventCategory.UX,
+    action: 'click on confirm in email otp code',
+  },
+  [TrackEventType.SEND_ADD_EMAIL_CODE_ERROR]: {
+    category: EventCategory.UX,
+    action: 'wrong email otp code',
+  },
+  [TrackEventType.SEND_ADD_EMAIL_UX_SUCCESS]: {
+    category: EventCategory.UX,
+    action: 'email added successfully',
+  },
+  [TrackEventType.SEND_SERVICE_STATUS]: {
+    category: EventCategory.UX,
+    action: 'view platform status page',
+  },
+  [TrackEventType.SEND_REFRESH_PAGE]: {
+    category: EventCategory.UX,
+    action: 'click on refresh page',
+  },
+  [TrackEventType.SEND_TOAST_ERROR]: {
+    category: EventCategory.KO,
+    action: 'API error',
+  },
+  [TrackEventType.SEND_GENERIC_ERROR]: {
+    category: EventCategory.KO,
+    action: 'somewhat gone wrong',
+  },
+  [TrackEventType.SEND_F24_DOWNLOAD_TIMEOUT]: {
+    category: EventCategory.TECH,
+    action: 'timeout of F24 document download',
   },
 };
-
-export enum EventActions {
-  ADD = 'add',
-  EDIT = 'edit',
-  DELETE = 'delete'
-}

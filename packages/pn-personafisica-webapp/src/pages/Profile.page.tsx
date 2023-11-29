@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,12 +27,16 @@ const Profile = () => {
   const { t } = useTranslation(['profilo']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
+  useEffect(() => {
+    trackEventByType(TrackEventType.SEND_PROFILE);
+  }, []);
+
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
 
   const handleRedirectToContactsPage = () => {
-    trackEventByType(TrackEventType.USER_VIEW_CONTACTS_PROFILE);
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'profilo' });
     navigate(RECAPITI);
   };
 
