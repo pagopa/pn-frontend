@@ -395,6 +395,7 @@ const NotificationDetail = () => {
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
 
+                {visibleDomicileBanner() && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
@@ -430,7 +431,6 @@ const NotificationDetail = () => {
                   </Paper>
                 )}
 
-                {visibleDomicileBanner() && <DomicileBanner />}
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
