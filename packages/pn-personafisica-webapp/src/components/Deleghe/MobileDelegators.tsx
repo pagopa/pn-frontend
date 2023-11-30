@@ -64,7 +64,7 @@ const MobileDelegators = () => {
         {delegators.length > 0 ? (
           <PnCardsList>
             {cardData.map((data) => (
-              <PnCard key={data.id}>
+              <PnCard key={data.id} testId="mobileDelegatorsCards">
                 <PnCardHeader
                   headerGridProps={{
                     direction: { xs: 'row', sm: 'row' },

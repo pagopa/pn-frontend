@@ -189,7 +189,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
       {cardData.length ? (
         <PnCardsList>
           {cardData.map((data) => (
-            <PnCard key={data.id}>
+            <PnCard key={data.id} testId="mobileNotificationsCards">
               <PnCardHeader
                 headerGridProps={{
                   direction: { xs: 'row', sm: 'row' },

@@ -1,35 +1,29 @@
-import { Children, cloneElement, isValidElement } from 'react';
+import { Children, ReactChild, ReactFragment, isValidElement } from 'react';
 
 import { Box, CardActions } from '@mui/material';
 
 export interface IPnCardActionsProps {
   testId?: string;
   disableSpacing?: boolean;
-  children: React.ReactNode;
+  children: ReactChild | ReactFragment | Array<ReactChild>;
 }
 
 const PnCardActions: React.FC<IPnCardActionsProps> = ({
   testId,
   disableSpacing = true,
   children,
-}) => {
-  const actions = children
-    ? Children.toArray(children).map((child) =>
-        isValidElement(child) ? (
-          <Box sx={{ ml: 'auto' }} data-testid={`${testId}.action`} key={child.key}>
-            {cloneElement(child)}
-          </Box>
-        ) : (
-          child
-        )
+}) => (
+  <CardActions disableSpacing={disableSpacing} data-testid={testId} className={'card-actions'}>
+    {Children.map(children, (child) =>
+      isValidElement(child) ? (
+        <Box sx={{ ml: 'auto' }} key={child.key}>
+          {child}
+        </Box>
+      ) : (
+        child
       )
-    : [];
-
-  return (
-    <CardActions disableSpacing={disableSpacing} data-testid={testId} className={'card-actions'}>
-      {actions}
-    </CardActions>
-  );
-};
+    )}
+  </CardActions>
+);
 
 export default PnCardActions;

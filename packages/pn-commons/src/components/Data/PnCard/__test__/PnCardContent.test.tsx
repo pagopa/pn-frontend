@@ -20,16 +20,6 @@ describe('PnCardContent', () => {
     expect(container).toHaveTextContent('mocked-card-label-3mocked-card-content-3');
   });
 
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnCardContent>
-          <Box>Incorrect child</Box>
-        </PnCardContent>
-      )
-    ).toThrowError('PnCardContent must have at least one child');
-  });
-
   it('render component - incorrect child', () => {
     expect(() =>
       render(

@@ -81,10 +81,10 @@ describe('DesktopDowntimeLog component', () => {
       expect(column).toHaveTextContent(`appStatus - downtimeList.columnHeader.${columns[index]}`);
     });
     // check body
-    const rows = result.getAllByTestId('tableDowntimeLog.body.row');
+    const rows = result.getAllByTestId('tableDowntimeLog.row');
     expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length);
     rows.forEach((row, index) => {
-      const dataColumns = within(row).getAllByTestId('tableDowntimeLog.body.row.cell');
+      const dataColumns = within(row).getAllByTestId('tableDowntimeLog.row.cell');
       const currentLog = exampleDowntimeLogPage.downtimes[index];
       dataColumns.forEach((column, jindex) => {
         if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {
@@ -118,7 +118,7 @@ describe('DesktopDowntimeLog component', () => {
       );
     });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
-    const rows = result.getAllByTestId('tableDowntimeLog.body.row');
+    const rows = result.getAllByTestId('tableDowntimeLog.row');
     const logWithFile = exampleDowntimeLogPage.downtimes.findIndex((log) => log.fileAvailable);
     const button = within(rows[logWithFile]).getByRole('button');
     fireEvent.click(button);

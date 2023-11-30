@@ -192,7 +192,7 @@ const MobileNotifications = ({
       {cardData.length ? (
         <PnCardsList>
           {cardData.map((data) => (
-            <PnCard key={data.id}>
+            <PnCard key={data.id} testId="mobileCards">
               <PnCardHeader
                 headerGridProps={{
                   direction: { xs: 'row', sm: 'row' },
@@ -220,7 +220,7 @@ const MobileNotifications = ({
               </PnCardHeader>
               <PnCardContent>
                 {cardBody
-                  .filter((body) => data[body.id] && data[body.id]?.length)
+                  .filter((body) => data[body.id]?.length)
                   .map((body) => (
                     <PnCardContentItem
                       key={body.id}

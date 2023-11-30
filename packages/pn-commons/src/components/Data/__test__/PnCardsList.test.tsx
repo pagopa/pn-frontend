@@ -51,9 +51,9 @@ const cardData: Array<Row<Item>> = [
 ];
 
 const RenderItemsCard: React.FC = () => (
-  <PnCardsList testId="cardsList">
+  <PnCardsList>
     {cardData.map((data) => (
-      <PnCard key={data.id}>
+      <PnCard key={data.id} testId="cards">
         <PnCardHeader>
           <PnCardHeaderItem
             position="left"
@@ -61,6 +61,7 @@ const RenderItemsCard: React.FC = () => (
               direction: { xs: 'row', sm: 'row' },
               alignItems: { xs: 'flex-start', sm: 'center' },
             }}
+            testId="cardHeaderLeft"
           >
             {data['column-1']}
           </PnCardHeaderItem>
@@ -70,13 +71,14 @@ const RenderItemsCard: React.FC = () => (
               direction: { xs: 'row', sm: 'row' },
               alignItems: { xs: 'flex-start', sm: 'center' },
             }}
+            testId="cardHeaderRight"
           >
             {data['column-2']}
           </PnCardHeaderItem>
         </PnCardHeader>
         <PnCardContent>
           {cardBody.map((body) => (
-            <PnCardContentItem key={body.id} label={body.label}>
+            <PnCardContentItem key={body.id} label={body.label} testId="cardBody">
               {data[body.id]}
             </PnCardContentItem>
           ))}
@@ -94,7 +96,7 @@ const RenderItemsCard: React.FC = () => (
 describe('PnCardsList Component', () => {
   it('renders component (with data)', () => {
     const { queryAllByTestId } = render(<RenderItemsCard />);
-    const notificationsCards = queryAllByTestId('cardsList.body');
+    const notificationsCards = queryAllByTestId('cards');
     expect(notificationsCards).toHaveLength(cardData.length);
     notificationsCards.forEach((card, index) => {
       const cardHeaderLeft = within(card).getByTestId('cardHeaderLeft');
@@ -107,7 +109,7 @@ describe('PnCardsList Component', () => {
         expect(label).toHaveTextContent(cardBody[j].label);
         expect(cardBodyValue[j]).toHaveTextContent(cardData[index][cardBody[j].id]);
       });
-      const cardActionsEl = within(card).getAllByTestId('cardsList.body.actions.action');
+      const cardActionsEl = within(card).getAllByTestId('mockedAction');
       expect(cardActionsEl).toHaveLength(1);
       cardActionsEl.forEach((action) => {
         expect(action).toHaveTextContent(/Mocked action/i);
@@ -117,23 +119,13 @@ describe('PnCardsList Component', () => {
 
   it('clicks on action', async () => {
     const { queryAllByTestId } = render(<RenderItemsCard />);
-    const cards = queryAllByTestId('cardsList.body');
+    const cards = queryAllByTestId('cards');
     const cardActionsEl = within(cards[0]).getByTestId('mockedAction');
     fireEvent.click(cardActionsEl!);
     await waitFor(() => {
       expect(clickActionMockFn).toBeCalledTimes(1);
       expect(clickActionMockFn).toBeCalledWith(cardData[0]);
     });
-  });
-
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnCardsList>
-          <Box>Incorrect child</Box>
-        </PnCardsList>
-      )
-    ).toThrowError('PnCardsList must have at least one child');
   });
 
   it('render component - incorrect child', () => {

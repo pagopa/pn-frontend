@@ -22,16 +22,6 @@ describe('PnCard', () => {
     expect(container).toHaveTextContent('mock-card-labelmock-card-body');
   });
 
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnCard>
-          <Box>Incorrect child</Box>
-        </PnCard>
-      )
-    ).toThrowError('PnCard must have at least one child');
-  });
-
   it('render component - no PnContent child', () => {
     expect(() =>
       render(
@@ -42,7 +32,7 @@ describe('PnCard', () => {
           <PnCardActions>Action</PnCardActions>
         </PnCard>
       )
-    ).toThrowError('PnCard must have at least one child of type PnCardContent');
+    ).toThrowError('PnCard must have one child of type PnCardContent');
   });
 
   it('render component - incorrect child', () => {
@@ -55,12 +45,43 @@ describe('PnCard', () => {
           <PnCardContent>
             <PnCardContentItem label="mock-card-label">mock-card-body</PnCardContentItem>
           </PnCardContent>
-          <PnCardActions>Action</PnCardActions>
           <Box>Incorrect child</Box>
         </PnCard>
       )
     ).toThrowError(
       'PnCard must have only children of type PnCardHeader, PnCardContent and PnCardActions'
     );
+  });
+
+  it('render component - more than one PnCardHeader', () => {
+    expect(() =>
+      render(
+        <PnCard>
+          <PnCardHeader>
+            <PnCardHeaderItem>Header</PnCardHeaderItem>
+          </PnCardHeader>
+          <PnCardHeader>
+            <PnCardHeaderItem>Header</PnCardHeaderItem>
+          </PnCardHeader>
+          <PnCardContent>
+            <PnCardContentItem label="mock-card-label">mock-card-body</PnCardContentItem>
+          </PnCardContent>
+        </PnCard>
+      )
+    ).toThrowError('PnCard must have one child of type PnCardHeader');
+  });
+
+  it('render component - more than one PnCardActions', () => {
+    expect(() =>
+      render(
+        <PnCard>
+          <PnCardContent>
+            <PnCardContentItem label="mock-card-label">mock-card-body</PnCardContentItem>
+          </PnCardContent>
+          <PnCardActions>Action</PnCardActions>
+          <PnCardActions>Action</PnCardActions>
+        </PnCard>
+      )
+    ).toThrowError('PnCard must have one child of type PnCardActions');
   });
 });

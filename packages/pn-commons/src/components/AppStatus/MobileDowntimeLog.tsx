@@ -42,12 +42,12 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
   return (
     <PnCardsList testId="mobileTableDowntimeLog">
       {rows.map((row) => (
-        <PnCard key={row.id}>
+        <PnCard key={row.id} testId="mobileTableDowntimeLog.cards">
           <PnCardHeader>
             <PnCardHeaderItem
               key={cardHeader.id}
               gridProps={cardHeader.gridProps}
-              position={cardHeader.position}
+              testId={'cardHeaderLeft'}
             >
               <DowntimeLogDataSwitch
                 data={row}
@@ -63,6 +63,7 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
                 key={body.id}
                 wrapValueInTypography={body.wrapValueInTypography}
                 label={body.label}
+                testId="cardBody"
               >
                 <DowntimeLogDataSwitch
                   data={row}

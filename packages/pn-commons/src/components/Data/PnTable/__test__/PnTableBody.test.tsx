@@ -19,16 +19,6 @@ describe('PnTableBody', () => {
     expect(container).toHaveTextContent(/mocked-cell-content/);
   });
 
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnTableBody>
-          <Box>Incorrect child</Box>
-        </PnTableBody>
-      )
-    ).toThrowError('PnTableBody must have at least one child');
-  });
-
   it('render component - incorrect child', () => {
     expect(() =>
       render(

@@ -1,36 +1,30 @@
-import { Children, cloneElement, isValidElement } from 'react';
+import { Children, ReactElement, isValidElement } from 'react';
 
 import { TableHead, TableRow } from '@mui/material';
 
 import PnTableHeaderCell from './PnTableHeaderCell';
 
-type Props = {
+export type PnTableHeaderProps = {
   testId?: string;
-  children: React.ReactNode;
+  children: ReactElement | Array<ReactElement>;
 };
 
-const PnTableHeader: React.FC<Props> = ({ testId, children }) => {
-  const columns = children
-    ? Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === PnTableHeaderCell)
-        .map((child) =>
-          isValidElement(child)
-            ? cloneElement(child, { ...child.props, testId: `${testId}.cell` })
-            : child
-        )
-    : [];
-
-  if (columns.length === 0) {
-    throw new Error('PnTableHeader must have at least one child');
-  }
-
-  if (columns.length < Children.toArray(children).length) {
-    throw new Error('PnTableHeader must have only children of type PnTableHeaderCell');
-  }
+const PnTableHeader: React.FC<PnTableHeaderProps> = ({ testId, children }) => {
+  // check on children
+  // PnTableHeader can have only children of type PnTableHeaderCell
+  // the cast ReactElement | Array<ReactElement> of property children ensures that the PnTableHeader can have only defined children (not null and not undefined)
+  Children.forEach(children, (element) => {
+    if (!isValidElement(element)) {
+      return;
+    }
+    if (element.type !== PnTableHeaderCell) {
+      throw new Error('PnTableHeader must have only children of type PnTableHeaderCell');
+    }
+  });
 
   return (
     <TableHead role="rowgroup" data-testid={testId}>
-      <TableRow role="row">{columns}</TableRow>
+      <TableRow role="row">{children}</TableRow>
     </TableHead>
   );
 };

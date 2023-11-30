@@ -1,16 +1,24 @@
+import { ReactChild, ReactFragment } from 'react';
+
 import { Grid, GridProps } from '@mui/material';
 
-type Props = {
+export type PnCardHeaderItemProps = {
   gridProps?: GridProps;
-  children: React.ReactNode;
+  children: ReactChild | ReactFragment;
   position?: string;
+  testId?: string;
 };
 
-const PnCardHeaderItem: React.FC<Props> = ({ children, gridProps, position = 'left' }) => (
+const PnCardHeaderItem: React.FC<PnCardHeaderItemProps> = ({
+  children,
+  gridProps,
+  position = 'left',
+  testId,
+}) => (
   <Grid
     item
     sx={{ textAlign: position, fontSize: '14px', fontWeight: 400 }}
-    data-testid={position === 'left' ? 'cardHeaderLeft' : 'cardHeaderRight'}
+    data-testid={testId}
     {...gridProps}
   >
     {children}

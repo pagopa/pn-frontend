@@ -16,16 +16,6 @@ describe('PnTableHeaderCell', () => {
     expect(container).toHaveTextContent(/mock-column-label/);
   });
 
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnTableHeader>
-          <Box>Incorrect child</Box>
-        </PnTableHeader>
-      )
-    ).toThrowError('PnTableHeader must have at least one child');
-  });
-
   it('render component - incorrect child', () => {
     expect(() =>
       render(

@@ -6,7 +6,9 @@ import PnCardContentItem from '../PnCardContentItem';
 describe('PnCardContactItem', () => {
   it('render component', () => {
     const { getByTestId } = render(
-      <PnCardContentItem label="mocked-card-label">mocked-card-content</PnCardContentItem>
+      <PnCardContentItem label="mocked-card-label" testId="cardBody">
+        mocked-card-content
+      </PnCardContentItem>
     );
     const label = getByTestId('cardBodyLabel');
     const body = getByTestId('cardBodyValue');
@@ -16,7 +18,7 @@ describe('PnCardContactItem', () => {
 
   it('render component - no typography', () => {
     const { getByTestId } = render(
-      <PnCardContentItem label="mocked-card-label" wrapValueInTypography={false}>
+      <PnCardContentItem label="mocked-card-label" wrapValueInTypography={false} testId="cardBody">
         mocked-card-content
       </PnCardContentItem>
     );

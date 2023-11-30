@@ -143,7 +143,7 @@ const Delegates = () => {
         >
           {rows.length > 0 ? (
             <PnTable testId="delegatesTable">
-              <PnTableHeader testId="tableHead">
+              <PnTableHeader>
                 {delegatesColumns.map((column) => (
                   <PnTableHeaderCell
                     key={column.id}
@@ -151,14 +151,15 @@ const Delegates = () => {
                     columnId={column.id}
                     sortable={column.sortable}
                     handleClick={handleChangeSorting}
+                    testId="delegatesTable.header.cell"
                   >
                     {column.label}
                   </PnTableHeaderCell>
                 ))}
               </PnTableHeader>
-              <PnTableBody testId="tableBody">
+              <PnTableBody>
                 {rows.map((row, index) => (
-                  <PnTableBodyRow key={row.id} testId="delegatesTable" index={index}>
+                  <PnTableBodyRow key={row.id} testId="delegatesTable.body.row" index={index}>
                     {delegatesColumns.map((column) => (
                       <PnTableBodyCell
                         key={column.id}

@@ -49,31 +49,31 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
 
   return (
     <PnTable testId="tableDowntimeLog">
-      <PnTableHeader testId="tableHead">
+      <PnTableHeader>
         {columns.map((column) => (
           <PnTableHeaderCell
             key={column.id}
-            testId="tableDowntimeLog"
             columnId={column.id}
             sortable={column.sortable}
+            testId="tableDowntimeLog.header.cell"
           >
             {column.label}
           </PnTableHeaderCell>
         ))}
       </PnTableHeader>
-      <PnTableBody testId="tableBody">
+      <PnTableBody>
         {rows.map((row, index) => (
-          <PnTableBodyRow key={row.id} testId="tableDowntimeLog" index={index}>
+          <PnTableBodyRow key={row.id} index={index} testId="tableDowntimeLog.row">
             {columns.map((column) => (
               <PnTableBodyCell
                 key={column.id}
-                testId="tableBodyCell"
                 onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
                 cellProps={{
                   width: column.width,
                   align: column.align,
                   cursor: column.onClick ? 'pointer' : 'auto',
                 }}
+                testId="tableDowntimeLog.row.cell"
               >
                 <DowntimeLogDataSwitch
                   data={row}

@@ -31,16 +31,6 @@ describe('PnCardHeader', () => {
     expect(container).toHaveTextContent('Row 1-1Row 1-2');
   });
 
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnCardHeader>
-          <Box>Incorrect child</Box>
-        </PnCardHeader>
-      )
-    ).toThrowError('PnCardHeader must have at least one child');
-  });
-
   it('render component - incorrect child', () => {
     expect(() =>
       render(
@@ -53,26 +43,5 @@ describe('PnCardHeader', () => {
         </PnCardHeader>
       )
     ).toThrowError('PnCardHeader must have only children of type PnCardHeaderItem');
-  });
-
-  it('render component - too much children', () => {
-    expect(() =>
-      render(
-        <PnCardHeader>
-          <PnCardHeaderItem>
-            <Box>{cardData['column-1']}</Box>
-            <Box>{cardData['column-2']}</Box>
-          </PnCardHeaderItem>
-          <PnCardHeaderItem>
-            <Box>{cardData['column-1']}</Box>
-            <Box>{cardData['column-2']}</Box>
-          </PnCardHeaderItem>
-          <PnCardHeaderItem>
-            <Box>{cardData['column-1']}</Box>
-            <Box>{cardData['column-2']}</Box>
-          </PnCardHeaderItem>
-        </PnCardHeader>
-      )
-    ).toThrowError('PnCardHeader must have a maximum of two children');
   });
 });

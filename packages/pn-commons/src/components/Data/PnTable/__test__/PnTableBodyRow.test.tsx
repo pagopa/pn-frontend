@@ -16,16 +16,6 @@ describe('PnTableBodyRow', () => {
     expect(container).toHaveTextContent(/mocked-cell-content/);
   });
 
-  it('render component - no resulting child', () => {
-    expect(() =>
-      render(
-        <PnTableBodyRow index={1}>
-          <Box>Incorrect child</Box>
-        </PnTableBodyRow>
-      )
-    ).toThrowError('PnTableBodyRow must have at least one child');
-  });
-
   it('render component - incorrect child', () => {
     expect(() =>
       render(

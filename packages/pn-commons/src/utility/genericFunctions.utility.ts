@@ -41,7 +41,7 @@ export function sortArray<TArray>(
   if (sortAttr === '') {
     return values;
   }
-  return [...values].sort((a: TArray, b: TArray) => {
+  return values.sort((a: TArray, b: TArray) => {
     const orderDirection = order === 'desc' ? 1 : -1;
     const dateA = formatFromString(a[sortAttr] as unknown as string);
     const dateB = formatFromString(b[sortAttr] as unknown as string);

@@ -326,7 +326,7 @@ describe('Dashboard Page', () => {
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     const filterForm = result?.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
-    const notificationsCards = result?.getAllByTestId('mobileCards.body');
+    const notificationsCards = result?.getAllByTestId('mobileCards');
     expect(notificationsCards).toHaveLength(notificationsDTO.resultsPage.length);
     const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();

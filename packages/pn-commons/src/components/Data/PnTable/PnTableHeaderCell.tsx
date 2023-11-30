@@ -1,27 +1,29 @@
+import { ReactChild, ReactFragment } from 'react';
+
 import { Box, TableCell, TableCellProps, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
 import { Sort } from '../../../models';
 
-type Props<T> = {
+export type PnTableHeaderCellProps<T> = {
   testId?: string;
   sort?: Sort<T>;
   cellProps?: TableCellProps;
   handleClick?: (s: Sort<T>) => void;
   columnId: keyof T;
-  children: React.ReactNode;
+  children: ReactChild | ReactFragment;
   sortable?: boolean;
 };
 
 const PnTableHeaderCell = <T,>({
-  testId = 'headerCell',
+  testId,
   sort,
   cellProps,
   handleClick,
   sortable,
   columnId,
   children,
-}: Props<T>) => {
+}: PnTableHeaderCellProps<T>) => {
   const sortHandler = (property: keyof T) => () => {
     if (sort && handleClick) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
@@ -46,7 +48,7 @@ const PnTableHeaderCell = <T,>({
           active={sort.orderBy === columnId}
           direction={sort.orderBy === columnId ? sort.order : 'asc'}
           onClick={sortHandler(columnId)}
-          data-testid={`${testId}.sort.${columnId.toString()}`}
+          data-testid={testId ? `${testId}.sort.${columnId.toString()}` : null}
         >
           {children}
           {sort.orderBy === columnId && (

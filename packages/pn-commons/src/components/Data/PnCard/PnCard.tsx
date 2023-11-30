@@ -1,4 +1,4 @@
-import { Children, cloneElement, isValidElement } from 'react';
+import { Children, ReactElement, isValidElement } from 'react';
 
 import { Card } from '@mui/material';
 
@@ -8,52 +8,58 @@ import PnCardHeader from './PnCardHeader';
 
 type Props = {
   testId?: string;
-  children: React.ReactNode;
+  children:
+    | ReactElement
+    | [ReactElement, ReactElement]
+    | [ReactElement, ReactElement, ReactElement];
 };
 
 const PnCard: React.FC<Props> = ({ testId = 'itemCard', children }) => {
-  const header = children
-    ? Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === PnCardHeader)
-        .map((child) =>
-          isValidElement(child)
-            ? cloneElement(child, { ...child.props, testId: `${testId}.header` })
-            : child
-        )
-    : [];
+  // eslint-disable-next-line functional/no-let
+  let header = 0;
+  // eslint-disable-next-line functional/no-let
+  let contents = 0;
+  // eslint-disable-next-line functional/no-let
+  let actions = 0;
 
-  const contents = children
-    ? Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === PnCardContent)
-        .map((child) =>
-          isValidElement(child)
-            ? cloneElement(child, { ...child.props, testId: `${testId}.contents` })
-            : child
-        )
-    : [];
+  // check on children
+  // PnCard can have only one child of type PnCardHeader, only one child of type PnCardContent and only one child of type PnCardActions
+  // the cast ReactElement | [ReactElement, ReactElement] | [ReactElement, ReactElement, ReactElement] of property children
+  // ensures that the PnCard can have two defined children (not null and not undefined)
+  Children.forEach(children, (element) => {
+    if (!isValidElement(element)) {
+      return;
+    }
+    if (
+      element.type !== PnCardHeader &&
+      element.type !== PnCardContent &&
+      element.type !== PnCardActions
+    ) {
+      throw new Error(
+        'PnCard must have only children of type PnCardHeader, PnCardContent and PnCardActions'
+      );
+    }
+    if (element.type === PnCardHeader) {
+      header++;
+    }
+    if (element.type === PnCardContent) {
+      contents++;
+    }
+    if (element.type === PnCardActions) {
+      actions++;
+    }
+  });
 
-  const actions = children
-    ? Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === PnCardActions)
-        .map((child) =>
-          isValidElement(child)
-            ? cloneElement(child, { ...child.props, testId: `${testId}.actions` })
-            : child
-        )
-    : [];
-
-  if (header.length === 0 && contents.length === 0 && actions.length === 0) {
-    throw new Error('PnCard must have at least one child');
+  if (contents === 0 || contents > 1) {
+    throw new Error('PnCard must have one child of type PnCardContent');
   }
 
-  if (contents.length === 0) {
-    throw new Error('PnCard must have at least one child of type PnCardContent');
+  if (header > 1) {
+    throw new Error('PnCard must have one child of type PnCardHeader');
   }
 
-  if (header.length + contents.length + actions.length < Children.toArray(children).length) {
-    throw new Error(
-      'PnCard must have only children of type PnCardHeader, PnCardContent and PnCardActions'
-    );
+  if (actions > 1) {
+    throw new Error('PnCard must have one child of type PnCardActions');
   }
 
   return (
@@ -65,9 +71,7 @@ const PnCard: React.FC<Props> = ({ testId = 'itemCard', children }) => {
         p: 3,
       }}
     >
-      {header}
-      {contents}
-      {actions}
+      {children}
     </Card>
   );
 };

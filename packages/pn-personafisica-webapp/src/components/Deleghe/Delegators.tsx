@@ -76,58 +76,55 @@ const Delegators = () => {
   };
 
   return (
-    <>
-      <Box mb={8} data-testid="delegators-wrapper">
-        <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
-        </Stack>
-        <ApiErrorWrapper
-          apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
-          reloadAction={() => dispatch(getDelegators())}
-          mainText={t('deleghe.delegatorsApiErrorMessage')}
-        >
-          {rows.length > 0 ? (
-            <PnTable testId="delegatorsTable">
-              <PnTableHeader testId="tableHead">
-                {delegatorsColumns.map((column) => (
-                  <PnTableHeaderCell
-                    key={column.id}
-                    sort={sortDelegators}
-                    columnId={column.id}
-                    sortable={column.sortable}
-                    handleClick={handleChangeSorting}
-                  >
-                    {column.label}
-                  </PnTableHeaderCell>
-                ))}
-              </PnTableHeader>
-              <PnTableBody testId="tableBody">
-                {rows.map((row, index) => (
-                  <PnTableBodyRow key={row.id} testId="delegatorsTable" index={index}>
-                    {delegatorsColumns.map((column) => (
-                      <PnTableBodyCell
-                        key={column.id}
-                        cellProps={{
-                          width: column.width,
-                          align: column.align,
-                          cursor: column.onClick ? 'pointer' : 'auto',
-                        }}
-                      >
-                        <DelegatorsDataSwitch data={row} type={column.id} menuType="delegators" />
-                      </PnTableBodyCell>
-                    ))}
-                  </PnTableBodyRow>
-                ))}
-              </PnTableBody>
-            </PnTable>
-          ) : (
-            <EmptyState sentimentIcon={KnownSentiment.NONE}>
-              {t('deleghe.no_delegators')}
-            </EmptyState>
-          )}
-        </ApiErrorWrapper>
-      </Box>
-    </>
+    <Box mb={8} data-testid="delegators-wrapper">
+      <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
+      </Stack>
+      <ApiErrorWrapper
+        apiId={DELEGATION_ACTIONS.GET_DELEGATORS}
+        reloadAction={() => dispatch(getDelegators())}
+        mainText={t('deleghe.delegatorsApiErrorMessage')}
+      >
+        {rows.length > 0 ? (
+          <PnTable testId="delegatorsTable">
+            <PnTableHeader>
+              {delegatorsColumns.map((column) => (
+                <PnTableHeaderCell
+                  key={column.id}
+                  sort={sortDelegators}
+                  columnId={column.id}
+                  sortable={column.sortable}
+                  handleClick={handleChangeSorting}
+                  testId="delegatorsTable.header.cell"
+                >
+                  {column.label}
+                </PnTableHeaderCell>
+              ))}
+            </PnTableHeader>
+            <PnTableBody>
+              {rows.map((row, index) => (
+                <PnTableBodyRow key={row.id} testId="delegatorsTable.body.row" index={index}>
+                  {delegatorsColumns.map((column) => (
+                    <PnTableBodyCell
+                      key={column.id}
+                      cellProps={{
+                        width: column.width,
+                        align: column.align,
+                        cursor: column.onClick ? 'pointer' : 'auto',
+                      }}
+                    >
+                      <DelegatorsDataSwitch data={row} type={column.id} menuType="delegators" />
+                    </PnTableBodyCell>
+                  ))}
+                </PnTableBodyRow>
+              ))}
+            </PnTableBody>
+          </PnTable>
+        ) : (
+          <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('deleghe.no_delegators')}</EmptyState>
+        )}
+      </ApiErrorWrapper>
+    </Box>
   );
 };
 

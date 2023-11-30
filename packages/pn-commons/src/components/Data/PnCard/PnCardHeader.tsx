@@ -1,4 +1,4 @@
-import { Children } from 'react';
+import { Children, ReactElement, isValidElement } from 'react';
 
 import { CardHeader, Grid, GridProps } from '@mui/material';
 
@@ -7,25 +7,22 @@ import PnCardHeaderItem from './PnCardHeaderItem';
 type Props = {
   testId?: string;
   headerGridProps?: GridProps;
-  children: React.ReactNode;
+  children: ReactElement | [ReactElement, ReactElement];
 };
 
 const PnCardHeader: React.FC<Props> = ({ testId, children, headerGridProps }) => {
-  const cells = children
-    ? Children.toArray(children).filter((child) => (child as JSX.Element).type === PnCardHeaderItem)
-    : [];
-
-  if (cells.length === 0) {
-    throw new Error('PnCardHeader must have at least one child');
-  }
-
-  if (cells.length > 2) {
-    throw new Error('PnCardHeader must have a maximum of two children');
-  }
-
-  if (cells.length < Children.toArray(children).length) {
-    throw new Error('PnCardHeader must have only children of type PnCardHeaderItem');
-  }
+  // check on children
+  // PnCardHeader can have max two children of type PnCardHeaderItem
+  // the cast ReactElement | [ReactElement, ReactElement] of property children
+  // ensures that the PnCardHeader can have two defined children (not null and not undefined)
+  Children.forEach(children, (element) => {
+    if (!isValidElement(element)) {
+      return;
+    }
+    if (element.type !== PnCardHeaderItem) {
+      throw new Error('PnCardHeader must have only children of type PnCardHeaderItem');
+    }
+  });
 
   return (
     <CardHeader
@@ -33,7 +30,7 @@ const PnCardHeader: React.FC<Props> = ({ testId, children, headerGridProps }) =>
       className={'card-header'}
       title={
         <Grid container spacing={2} direction="row" alignItems="center" {...headerGridProps}>
-          {cells}
+          {children}
         </Grid>
       }
     />

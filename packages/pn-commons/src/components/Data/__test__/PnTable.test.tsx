@@ -45,7 +45,7 @@ const sort: Sort<Item> = {
 
 const RenderPnTable: React.FC = () => (
   <PnTable testId="table-test">
-    <PnTableHeader>
+    <PnTableHeader testId="table-test.header">
       {columns.map((column) => (
         <PnTableHeaderCell
           key={column.id}
@@ -53,18 +53,20 @@ const RenderPnTable: React.FC = () => (
           sort={sort}
           sortable={column.sortable}
           handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
+          testId="table-test.header.cell"
         >
           {column.label}
         </PnTableHeaderCell>
       ))}
     </PnTableHeader>
-    <PnTableBody>
+    <PnTableBody testId="table-test.body">
       {rows.map((row, index) => (
-        <PnTableBodyRow key={row.id} testId="table-test" index={index}>
+        <PnTableBodyRow key={row.id} testId="table-test.body.row" index={index}>
           {columns.map((column) => (
             <PnTableBodyCell
               key={column.id}
               onClick={() => column.onClick && column.onClick(row, column)}
+              testId="table-test.body.row.cell"
             >
               {row[column.id]}
             </PnTableBodyCell>
@@ -123,20 +125,24 @@ describe('PnTable Component', () => {
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
   });
 
-  it('render component - no resulting child', () => {
+  it('render component - multiple PnTableBody', () => {
     expect(() =>
       render(
         <PnTable>
-          <Box>Incorrect child</Box>
-        </PnTable>
-      )
-    ).toThrowError('PnTable must have at least one child');
-  });
-
-  it('render component - no PnTableHeader child', () => {
-    expect(() =>
-      render(
-        <PnTable>
+          <PnTableBody>
+            {rows.map((row, index) => (
+              <PnTableBodyRow key={row.id} testId="table-test" index={index}>
+                {columns.map((column) => (
+                  <PnTableBodyCell
+                    key={column.id}
+                    onClick={() => column.onClick && column.onClick(row, column)}
+                  >
+                    {row[column.id]}
+                  </PnTableBodyCell>
+                ))}
+              </PnTableBodyRow>
+            ))}
+          </PnTableBody>
           <PnTableBody>
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
@@ -156,7 +162,7 @@ describe('PnTable Component', () => {
     ).toThrowError('PnTable must have one child of type PnTableHeader');
   });
 
-  it('render component - no PnTableBody child', () => {
+  it('render component - multiple PnTableHeader', () => {
     expect(() =>
       render(
         <PnTable>
@@ -173,9 +179,22 @@ describe('PnTable Component', () => {
               </PnTableHeaderCell>
             ))}
           </PnTableHeader>
+          <PnTableHeader>
+            {columns.map((column) => (
+              <PnTableHeaderCell
+                key={column.id}
+                columnId={column.id}
+                sort={sort}
+                sortable={column.sortable}
+                handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
+              >
+                {column.label}
+              </PnTableHeaderCell>
+            ))}
+          </PnTableHeader>
         </PnTable>
       )
-    ).toThrowError('PnTable must have one child of type PnTableBody');
+    ).toThrowError('PnTable must have one child of type PnTableHeader');
   });
 
   it('render component - incorrect child', () => {
@@ -195,23 +214,11 @@ describe('PnTable Component', () => {
               </PnTableHeaderCell>
             ))}
           </PnTableHeader>
-          <PnTableBody>
-            {rows.map((row, index) => (
-              <PnTableBodyRow key={row.id} testId="table-test" index={index}>
-                {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id}
-                    onClick={() => column.onClick && column.onClick(row, column)}
-                  >
-                    {row[column.id]}
-                  </PnTableBodyCell>
-                ))}
-              </PnTableBodyRow>
-            ))}
-          </PnTableBody>
           <Box>Incorrect child</Box>
         </PnTable>
       )
-    ).toThrowError('PnTable must have only children of type PnTableHeader and PnTableBody');
+    ).toThrowError(
+      'PnTable must have one child of type PnTableHeader and one child of type PnTableBody'
+    );
   });
 });

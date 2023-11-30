@@ -173,9 +173,9 @@ const DesktopNotifications = ({
                   </PnTableHeaderCell>
                 ))}
               </PnTableHeader>
-              <PnTableBody testId="tableBody">
+              <PnTableBody>
                 {rows.map((row, index) => (
-                  <PnTableBodyRow key={row.id} index={index}>
+                  <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
                     {columns.map((column) => (
                       <PnTableBodyCell
                         key={column.id}

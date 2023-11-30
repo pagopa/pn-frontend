@@ -125,7 +125,7 @@ export interface GetDelegatorsResponse {
 
 export type GetDelegatorsFilters = GetDelegatorsParams & GetDelegatorsRequest;
 
-export type DelegatorsFormFilters = Exclude<GetDelegatorsFilters, 'nextPageKey'> & { page: number };
+export type DelegatorsFormFilters = Omit<GetDelegatorsFilters, 'nextPageKey'> & { page: number };
 
 /**
  * @deprecated since pn-5795

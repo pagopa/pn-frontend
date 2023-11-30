@@ -142,7 +142,7 @@ const DesktopNotifications = ({
       <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
       {rows.length ? (
         <PnTable testId="notificationsTable">
-          <PnTableHeader testId="tableHead">
+          <PnTableHeader>
             {columns.map((column) => (
               <PnTableHeaderCell
                 key={column.id}
@@ -155,7 +155,7 @@ const DesktopNotifications = ({
               </PnTableHeaderCell>
             ))}
           </PnTableHeader>
-          <PnTableBody testId="tableBody">
+          <PnTableBody>
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="notificationsTable" index={index}>
                 {columns.map((column) => (

@@ -84,7 +84,7 @@ describe('AppStatus page', () => {
     expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.success.main });
     const downtimeLogTable = screen.queryByTestId('tableDowntimeLog');
     expect(downtimeLogTable).toBeInTheDocument();
-    const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.body.row');
+    const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');
     expect(downtimeLogTableRows).toHaveLength(downtimesDTO.result.length);
   });
 
@@ -114,7 +114,7 @@ describe('AppStatus page', () => {
     expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.error.main });
     const downtimeLogTable = screen.queryByTestId('tableDowntimeLog');
     expect(downtimeLogTable).toBeInTheDocument();
-    const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.body.row');
+    const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');
     expect(downtimeLogTableRows).toHaveLength(downtimesDTO.result.length);
   });
 
@@ -196,7 +196,7 @@ describe('AppStatus page', () => {
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
-    const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.body.row');
+    const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');
     const dowloadButton = within(downtimeLogTableRows[0]).queryByTestId('download-legal-fact');
     fireEvent.click(dowloadButton!);
     await waitFor(() => {
@@ -231,7 +231,7 @@ describe('AppStatus page', () => {
     await act(async () => {
       render(<AppStatusWithErrorHandling />);
     });
-    let rows = screen.queryAllByTestId('tableDowntimeLog.body.row');
+    let rows = screen.queryAllByTestId('tableDowntimeLog.row');
     expect(rows).toHaveLength(1);
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(formatDate(downtimesDTO.result[index].startDate));
@@ -246,7 +246,7 @@ describe('AppStatus page', () => {
       expect(mock.history.get).toHaveLength(4);
     });
     await waitFor(() => {
-      rows = screen.getAllByTestId('tableDowntimeLog.body.row');
+      rows = screen.getAllByTestId('tableDowntimeLog.row');
       expect(rows).toHaveLength(1);
       expect(rows[0]).toHaveTextContent(formatDate(downtimesDTO.result[1].startDate));
     });
@@ -260,7 +260,7 @@ describe('AppStatus page', () => {
       expect(mock.history.get).toHaveLength(6);
     });
     await waitFor(() => {
-      rows = screen.getAllByTestId('tableDowntimeLog.body.row');
+      rows = screen.getAllByTestId('tableDowntimeLog.row');
       expect(rows).toHaveLength(2);
       rows.forEach((row, index) => {
         expect(row).toHaveTextContent(formatDate(downtimesDTO.result[index].startDate));

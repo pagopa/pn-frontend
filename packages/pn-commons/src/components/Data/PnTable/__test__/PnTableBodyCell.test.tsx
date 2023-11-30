@@ -17,9 +17,11 @@ describe('PnTableBodyCell', () => {
 
   it('click cell event', () => {
     const { getByTestId } = render(
-      <PnTableBodyCell onClick={() => mockFn()}>mocke-cell-content</PnTableBodyCell>
+      <PnTableBodyCell testId="cell" onClick={() => mockFn()}>
+        mocke-cell-content
+      </PnTableBodyCell>
     );
-    const cell = getByTestId('cell.button');
+    const cell = getByTestId('cell');
     fireEvent.click(cell);
     expect(mockFn).toBeCalledTimes(1);
   });

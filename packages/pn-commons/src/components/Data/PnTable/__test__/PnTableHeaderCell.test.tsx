@@ -18,7 +18,9 @@ describe('PnTableHeaderCell', () => {
 
   it('render component', () => {
     const { container, queryByTestId } = render(
-      <PnTableHeaderCell columnId={'mock-column-id'}>mock-column-label</PnTableHeaderCell>
+      <PnTableHeaderCell columnId={'mock-column-id'} testId="headerCell">
+        mock-column-label
+      </PnTableHeaderCell>
     );
     expect(container).toHaveTextContent(/mock-column-label/);
     const sortBtn = queryByTestId('headerCell.sort.mock-column-id');
@@ -32,6 +34,7 @@ describe('PnTableHeaderCell', () => {
         columnId={'mock-column-id'}
         sortable={true}
         handleClick={mockFn(mockSort.orderBy)}
+        testId="headerCell"
       >
         mock-column-label
       </PnTableHeaderCell>

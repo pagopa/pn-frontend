@@ -1,37 +1,31 @@
-import { Children, cloneElement, isValidElement } from 'react';
+import { Children, ReactElement, isValidElement } from 'react';
 
 import { TableRow } from '@mui/material';
 
 import PnTableBodyCell from './PnTableBodyCell';
 
-type Props = {
+export type PnTableBodyRowProps = {
   testId?: string;
   index: number;
-  children: React.ReactNode;
+  children: ReactElement | Array<ReactElement>;
 };
 
-const PnTableBodyRow: React.FC<Props> = ({ children, index, testId }) => {
-  const columns = children
-    ? Children.toArray(children)
-        .filter((child) => (child as JSX.Element).type === PnTableBodyCell)
-        .map((child) =>
-          isValidElement(child)
-            ? cloneElement(child, { ...child.props, testId: `${testId}.cell` })
-            : child
-        )
-    : [];
-
-  if (columns.length === 0) {
-    throw new Error('PnTableBodyRow must have at least one child');
-  }
-
-  if (columns.length < Children.toArray(children).length) {
-    throw new Error('PnTableBodyRow must have only children of type PnTableBodyCell');
-  }
+const PnTableBodyRow: React.FC<PnTableBodyRowProps> = ({ children, index, testId }) => {
+  // check on children
+  // PnTableBodyRow can have only children of type PnTableBodyCell
+  // the cast ReactElement | Array<ReactElement> of property children ensures that the PnTableBodyRow can have only defined children (not null and not undefined)
+  Children.forEach(children, (element) => {
+    if (!isValidElement(element)) {
+      return;
+    }
+    if (element.type !== PnTableBodyCell) {
+      throw new Error('PnTableBodyRow must have only children of type PnTableBodyCell');
+    }
+  });
 
   return (
     <TableRow id={testId} data-testid={testId} role="row" aria-rowindex={index + 1}>
-      {columns}
+      {children}
     </TableRow>
   );
 };

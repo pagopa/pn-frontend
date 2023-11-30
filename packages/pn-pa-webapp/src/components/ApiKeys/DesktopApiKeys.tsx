@@ -102,7 +102,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
           </PnTableHeader>
           <PnTableBody>
             {rows.map((row, index) => (
-              <PnTableBodyRow key={row.id} index={index}>
+              <PnTableBodyRow key={row.id} index={index} testId="tableApiKeys.body.row">
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
