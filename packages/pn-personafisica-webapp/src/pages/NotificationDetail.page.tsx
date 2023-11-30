@@ -26,6 +26,8 @@ import {
   TimedMessage,
   TitleBox,
   formatDate,
+  formatToTimezoneString,
+  today,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -256,14 +258,15 @@ const NotificationDetail = () => {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
-      } else if (notification.documentsAvailable) {
-        return type === 'aar'
-          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
-      } else {
-        return type === 'aar'
-          ? t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' })
+      } else if (type === 'attachments') {
+        return notification.documentsAvailable === true
+          ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+      } else {
+        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
+          315569520000 // 10 years
+          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
     [isCancelled, notification.documentsAvailable]
@@ -502,7 +505,6 @@ const NotificationDetail = () => {
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                     disableDownloads={isCancelled.cancellationInTimeline}
