@@ -84,10 +84,6 @@ const Dashboard = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    console.log('-------------------------');
-    console.log(params);
-    console.log('-------------------------');
-
     void dispatch(
       getSentNotifications({
         ...params,

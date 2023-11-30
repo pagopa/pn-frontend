@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -44,31 +44,55 @@ const useStyles = makeStyles({
   },
 });
 
-const initialEmptyValues = {
-  startDate: tenYearsAgo,
-  endDate: today,
-  iunMatch: '',
-};
+// const initialEmptyValues = {
+//   startDate: tenYearsAgo,
+//   endDate: today,
+//   iunMatch: '',
+// };
 
 function isFilterApplied(filtersCount: number): boolean {
   return filtersCount > 0;
 }
 
-const initialValues = (
-  filters: GetNotificationsParams,
-  emptyValues: {
-    startDate: string;
-    endDate: string;
-    iunMatch: string;
-    mandateId: string | undefined;
-  }
-) => {
-  if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+// const initialValues = (
+//   filters: GetNotificationsParams<Date>,
+//   emptyValues: {
+//     startDate: Date;
+//     endDate: Date;
+//     iunMatch: string;
+//     mandateId: string | undefined;
+//   }
+// ) => {
+//   if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+//     return initialEmptyValues;
+//   }
+//   return {
+//     startDate: new Date(filters.startDate),
+//     endDate: new Date(filters.endDate),
+//     iunMatch: getValidValue(filters.iunMatch),
+//   };
+// };
+const emptyValues = {
+  startDate: tenYearsAgo,
+  endDate: today,
+  status: '',
+  recipientId: '',
+  iunMatch: '',
+};
+
+const initialEmptyValues = { ...emptyValues };
+console.log('-------------------------------------');
+console.log(initialEmptyValues);
+console.log(initialEmptyValues);
+console.log('-------------------------------------');
+const initialValues = (filters: GetNotificationsParams<Date>): FormikValues => {
+  if (!filters || _.isEqual(filters, emptyValues)) {
     return initialEmptyValues;
   }
   return {
     startDate: new Date(filters.startDate),
     endDate: new Date(filters.endDate),
+    recipientId: getValidValue(filters.recipientId),
     iunMatch: getValidValue(filters.iunMatch),
   };
 };
@@ -84,8 +108,8 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
-    startDate: formatToTimezoneString(tenYearsAgo),
-    endDate: formatToTimezoneString(today),
+    startDate: tenYearsAgo,
+    endDate: today,
     iunMatch: '',
     mandateId: currentDelegator?.mandateId,
   };
@@ -105,14 +129,14 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
-    initialValues: initialValues(filters, emptyValues),
+    initialValues: initialValues(filters),
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
       trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       const currentFilters = {
-        startDate: formatToTimezoneString(values.startDate),
-        endDate: formatToTimezoneString(values.endDate),
+        startDate: values.startDate,
+        endDate: values.endDate,
         iunMatch: values.iunMatch,
         mandateId: currentDelegator?.mandateId,
       };

@@ -1,14 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   GetNotificationsParams,
+  Notification,
+  Sort,
   tenYearsAgo,
   today,
-  Notification,
-  formatToTimezoneString,
-  Sort
 } from '@pagopa-pn/pn-commons';
-import { NotificationColumn } from '../../models/Notifications';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { NotificationColumn } from '../../models/Notifications';
 import { getReceivedNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -18,11 +17,11 @@ const dashboardSlice = createSlice({
     loading: false,
     notifications: [] as Array<Notification>,
     filters: {
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(today),
+      startDate: tenYearsAgo,
+      endDate: today,
       iunMatch: '',
       mandateId: undefined,
-    } as GetNotificationsParams,
+    } as GetNotificationsParams<Date>,
     pagination: {
       nextPagesKey: [] as Array<string>,
       size: 10,
@@ -35,7 +34,7 @@ const dashboardSlice = createSlice({
     } as Sort<NotificationColumn>,
   },
   reducers: {
-    setPagination: (state, action: PayloadAction<{page: number; size: number}>) => {
+    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
       if (state.pagination.size !== action.payload.size) {
         // reset pagination
         state.pagination.nextPagesKey = [];
@@ -47,7 +46,7 @@ const dashboardSlice = createSlice({
     setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
       state.sort = action.payload;
     },
-    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
+    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams<Date>>) => {
       state.filters = action.payload;
       // reset pagination
       state.pagination.page = 0;
@@ -59,8 +58,8 @@ const dashboardSlice = createSlice({
       state.filters = {
         iunMatch: '',
         mandateId: action.payload,
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(today),
+        startDate: tenYearsAgo,
+        endDate: today,
       };
       // reset pagination
       state.pagination.size = 10;

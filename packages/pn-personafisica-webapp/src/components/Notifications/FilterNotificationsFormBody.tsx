@@ -102,10 +102,11 @@ const FilterNotificationsFormBody = ({
           inputFormat={DATE_FORMAT}
           value={startDate}
           onChange={(value: DatePickerTypes) => {
-            formikInstance
-              .setFieldValue('startDate', value || tenYearsAgo)
+            const value2 = value || tenYearsAgo;
+            void formikInstance
+              .setFieldValue('startDate', value)
               .then(() => {
-                setStartDate(value);
+                setStartDate(value2);
               })
               .catch(() => 'error');
           }}
@@ -124,7 +125,6 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
                 placeholder: 'gg/mm/aaaa',
-                'data-testid': 'input(start date)',
               }}
             />
           )}
@@ -162,7 +162,6 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
                 placeholder: 'gg/mm/aaaa',
-                'data-testid': 'input(end date)',
               }}
             />
           )}
