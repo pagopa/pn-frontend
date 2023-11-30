@@ -12,18 +12,10 @@ export function booleanStringToBoolean(booleanString: string): boolean {
 }
 
 /* eslint-disable-next-line arrow-body-style */
-const FormattedDateAndTime = ({
-  id,
-  date,
-  inTwoLines,
-}: {
-  id: string;
-  date: string;
-  inTwoLines?: boolean;
-}) => {
+const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?: boolean }) => {
   if (date) {
     return inTwoLines ? (
-      <Stack direction="column" id={`containerDate-${id}`}>
+      <Stack direction="column">
         <Typography variant="body2">{formatDate(date)},</Typography>
         <Typography variant="body2">{formatTimeWithLegend(date)}</Typography>
       </Stack>
@@ -78,7 +70,7 @@ export function useFieldSpecs({
       ),
       sortable: false,
       getCellLabel(value: string) {
-        return <FormattedDateAndTime id={fieldId} date={value} inTwoLines={inTwoLines} />;
+        return <FormattedDateAndTime date={value} inTwoLines={inTwoLines} />;
       },
     }),
     []
@@ -128,7 +120,6 @@ export function useFieldSpecs({
               sx={{ px: 0 }}
               startIcon={<DownloadIcon />}
               data-testid="download-legal-fact"
-              id={`buttonLegalFact-${i.id}`}
               onClick={() => {
                 void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
               }}
@@ -138,11 +129,7 @@ export function useFieldSpecs({
           );
         } else {
           return (
-            <Typography
-              id={`erroreDownloadLegalFact-${i.status}-${i.id}`}
-              variant="body2"
-              sx={{ color: theme.palette.text.secondary }}
-            >
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
               {getLocalizedOrDefaultLabel(
                 'appStatus',
                 `legends.noFileAvailableByStatus.${i.status}`,
