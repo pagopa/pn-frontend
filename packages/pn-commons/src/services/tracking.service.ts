@@ -39,12 +39,11 @@ export const interceptDispatch =
       const idx = Object.values(trackEventType).indexOf(action.type as string);
       const eventKey = Object.keys(trackEventType)[idx];
       const attributes = events[action.type].getAttributes?.(action.payload);
-
       const eventParameters = attributes
         ? {
-            category: events[action.type].category,
-            action: events[action.type].action,
-            attributes,
+            event_category: events[action.type].event_category,
+            event_type: events[action.type].event_type,
+            ...attributes,
           }
         : events[action.type];
       trackEvent(eventKey, nodeEnv, eventParameters);
