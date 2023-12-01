@@ -7,10 +7,15 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
-  PaymentDetails,
   PaymentNotice,
+  checkIfPaymentsIsAlreadyInCache,
+  checkIunAndTimestamp,
+  deletePropertiesInPaymentCache,
+  getPaymentCache,
+  getPaymentsFromCache,
   performThunkAction,
   populatePaymentsPagoPaF24,
+  setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -101,7 +106,8 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  Array<PaymentDetails>,
+  // Array<PaymentDetails>,
+  any,
   { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
   { state: RootState }
 >(
@@ -115,15 +121,46 @@ export const getNotificationPaymentInfo = createAsyncThunk<
   ) => {
     try {
       const { notificationState } = getState();
+      const paymentCache = getPaymentCache();
+
+      if (checkIunAndTimestamp(notificationState.notification.iun, new Date().toISOString())) {
+        if (paymentCache?.currentPayment) {
+          console.log('paymentCache?.currentPayment', paymentCache?.currentPayment);
+
+          const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
+            paymentCache.currentPayment,
+          ]);
+
+          const payments = populatePaymentsPagoPaF24(
+            notificationState.notification.timeline,
+            notificationState.paymentsData.pagoPaF24,
+            updatedPayment
+          );
+
+          setPaymentsInCache(payments);
+
+          deletePropertiesInPaymentCache(['currentPayment']);
+          return getPaymentsFromCache();
+        }
+
+        if (checkIfPaymentsIsAlreadyInCache(params.paymentInfoRequest)) {
+          return getPaymentsFromCache();
+        }
+      }
+
       const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
         params.paymentInfoRequest
       );
 
-      return populatePaymentsPagoPaF24(
+      const payments = populatePaymentsPagoPaF24(
         notificationState.notification.timeline,
         notificationState.paymentsData.pagoPaF24,
         paymentInfo
       );
+
+      setPaymentsInCache(payments);
+
+      return payments;
     } catch (e) {
       return rejectWithValue(e);
     }

@@ -17,6 +17,7 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
+import { PAYMENT_CACHE_KEY } from '@pagopa-pn/pn-commons/src/utility/paymentCaching.utility';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
@@ -93,7 +94,7 @@ describe('NotificationDetail Page', () => {
   });
 
   afterEach(() => {
-    sessionStorage.removeItem('payments');
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     jest.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
@@ -577,7 +578,7 @@ describe('NotificationDetail Page', () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, paginationData.size))
-      .reply(200, paymentInfo);
+      .reply(200, paymentInfo.slice(0, paginationData.size));
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -608,7 +609,15 @@ describe('NotificationDetail Page', () => {
       (paginationData.page + 1) * paginationData.size
     );
 
-    mock.onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest)
+      .reply(
+        200,
+        paymentInfo.slice(
+          paginationData.page * paginationData.size,
+          (paginationData.page + 1) * paginationData.size
+        )
+      );
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
     });

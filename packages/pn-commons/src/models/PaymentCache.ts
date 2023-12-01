@@ -9,7 +9,6 @@ import {
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
-  PaymentsData,
   RecipientType,
 } from './NotificationDetail';
 
@@ -21,12 +20,7 @@ export type PaymentCache = {
     creditorTaxId: string;
   };
   currentPaymentPage?: number;
-  paymentsPage: Array<PaymentsCachePage>;
-};
-
-export type PaymentsCachePage = {
-  page: number;
-  payments: PaymentsData;
+  payments: Array<PaymentDetails>;
 };
 
 const attachmentSchema: yup.SchemaOf<Attachment> = yup.object().shape({
@@ -40,13 +34,16 @@ const attachmentSchema: yup.SchemaOf<Attachment> = yup.object().shape({
   }),
 });
 
-const f24Schema: yup.SchemaOf<F24PaymentDetails> = yup.object().shape({
-  title: yup.string().required(),
-  applyCost: yup.boolean().required(),
-  recIndex: yup.number(),
-  attachmentIdx: yup.number(),
-  metadataAttachment: attachmentSchema,
-});
+const f24Schema: yup.SchemaOf<F24PaymentDetails> = yup
+  .object()
+  .shape({
+    title: yup.string().required(),
+    applyCost: yup.boolean().required(),
+    recIndex: yup.number(),
+    attachmentIdx: yup.number(),
+    metadataAttachment: attachmentSchema,
+  })
+  .default(undefined);
 
 // todo check how to extends attachmentSchema
 const notificationDetailDocumentSchema: yup.SchemaOf<NotificationDetailDocument> = yup
@@ -74,7 +71,7 @@ const pagoPaSchema: yup.SchemaOf<PagoPAPaymentFullDetails> = yup.object().shape(
   applyCost: yup.boolean().required(),
   status: yup.string().oneOf(Object.values(PaymentStatus)).not([undefined]),
   recipientType: yup.string().oneOf(Object.values(RecipientType)).not([undefined]),
-  paymentSourceChannel: yup.string().required(),
+  paymentSourceChannel: yup.string(),
   attachmentIdx: yup.number(),
   attachment: notificationDetailDocumentSchema.optional(),
   amount: yup.number().optional(),
@@ -104,19 +101,5 @@ export const paymentCacheSchema: yup.SchemaOf<PaymentCache> = yup.object().shape
     })
     .optional(),
   currentPaymentPage: yup.number().optional(),
-  paymentsPage: yup
-    .array()
-    .of(
-      yup.object().shape({
-        page: yup.number().required(),
-        payments: yup
-          .object()
-          .shape({
-            pagoPaF24: yup.array(pagoPaF24Schema).required(),
-            f24Only: yup.array(f24Schema).optional(),
-          })
-          .required(),
-      })
-    )
-    .required(),
+  payments: yup.array(pagoPaF24Schema).required(),
 });

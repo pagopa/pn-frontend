@@ -132,14 +132,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setSelectedPayment(
       pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa || null
     );
-    setPaymentCache({
-      currentPayment: {
-        noticeCode: radioSelection,
-        creditorTaxId:
-          pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa
-            ?.creditorTaxId ?? '',
-      },
-    });
   };
 
   const handleDeselectPayment = () => {
@@ -172,12 +164,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   useEffect(() => {
     if (isSinglePayment && hasRequiredPayment) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
-      setPaymentCache({
-        currentPayment: {
-          noticeCode: pagoPaF24[0].pagoPa?.noticeCode ?? '',
-          creditorTaxId: pagoPaF24[0].pagoPa?.creditorTaxId ?? '',
-        },
-      });
     }
   }, [payments]);
 

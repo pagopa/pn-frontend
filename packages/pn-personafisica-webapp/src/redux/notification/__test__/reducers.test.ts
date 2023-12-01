@@ -12,6 +12,7 @@ import {
   TimelineCategory,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
+import { PAYMENT_CACHE_KEY } from '@pagopa-pn/pn-commons/src/utility/paymentCaching.utility';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
@@ -98,6 +99,7 @@ describe('Notification detail redux state tests', () => {
 
   afterEach(() => {
     mock.reset();
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
   });
 
   afterAll(() => {

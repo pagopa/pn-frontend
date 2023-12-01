@@ -41,6 +41,7 @@ import {
   checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
   clearPaymentCache,
+  deletePropertiesInPaymentCache,
   getPaymentCache,
   getPaymentsFromCache,
   setPaymentCache,
@@ -123,4 +124,5 @@ export {
   getPaymentsFromCache,
   setPaymentsInCache,
   checkIfPaymentsIsAlreadyInCache,
+  deletePropertiesInPaymentCache,
 };

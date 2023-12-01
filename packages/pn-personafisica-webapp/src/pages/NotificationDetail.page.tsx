@@ -22,16 +22,13 @@ import {
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
-  checkIfPaymentsIsAlreadyInCache,
-  checkIunAndTimestamp,
   formatDate,
-  getPaymentCache,
+  setPaymentCache,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { deletePropertiesInPaymentCache } from '@pagopa-pn/pn-commons/src/utility/paymentCaching.utility';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -235,6 +232,12 @@ const NotificationDetail = () => {
         .unwrap()
         .then((res: { checkoutUrl: string }) => {
           window.location.assign(res.checkoutUrl);
+          setPaymentCache({
+            currentPayment: {
+              noticeCode,
+              creditorTaxId,
+            },
+          });
         })
         .catch(() => undefined);
     }
@@ -293,13 +296,6 @@ const NotificationDetail = () => {
         return;
       }
 
-      if (
-        checkIunAndTimestamp(notification.iun, new Date().toISOString()) &&
-        checkIfPaymentsIsAlreadyInCache(paymentInfoRequest)
-      ) {
-        return;
-      }
-
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
@@ -311,19 +307,6 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    const currentPayment = getPaymentCache()?.currentPayment;
-
-    if (currentPayment) {
-      void dispatch(
-        getNotificationPaymentInfo({
-          taxId: currentRecipient.taxId,
-          paymentInfoRequest: [currentPayment],
-        })
-      );
-
-      deletePropertiesInPaymentCache(['currentPayment']);
-    }
-
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }

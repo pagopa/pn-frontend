@@ -63,7 +63,6 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('select and unselect payment', async () => {
-    let paymentCache = getPaymentCache();
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -91,22 +90,15 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(radioButton!);
     expect(downloadPagoPANotice).not.toBeDisabled();
     expect(payButton).not.toBeDisabled();
-    paymentCache = getPaymentCache();
-    expect(paymentCache?.currentPayment).not.toBeNull();
-    expect(paymentCache?.currentPayment).toEqual({
-      noticeCode: paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
-      creditorTaxId: paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
-    });
+
     // check f24
     const f24Download = getByTestId('f24-download');
     expect(f24Download).toBeInTheDocument();
     // unselect payment
     fireEvent.click(radioButton!);
-    paymentCache = getPaymentCache();
     expect(payButton).toBeDisabled();
     expect(downloadPagoPANotice).toBeDisabled();
     expect(f24Download).not.toBeInTheDocument();
-    expect(paymentCache?.currentPayment).toBeUndefined();
   });
 
   it('should dispatch action on pay button click', async () => {
@@ -168,11 +160,7 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const payButton = queryByTestId('pay-button');
     const radioButton = container.querySelector('[data-testid="radio-button"] input');
-    const paymentCache = getPaymentCache();
-    expect(paymentCache?.currentPayment).toEqual({
-      noticeCode: payment.pagoPaF24[0].pagoPa?.noticeCode,
-      creditorTaxId: payment.pagoPaF24[0].pagoPa?.creditorTaxId,
-    });
+
     expect(radioButton).not.toBeInTheDocument();
     expect(payButton).toBeEnabled();
     sessionStorage.clear();

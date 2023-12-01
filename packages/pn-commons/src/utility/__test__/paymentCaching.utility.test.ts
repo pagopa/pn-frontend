@@ -1,7 +1,5 @@
-import _ from 'lodash';
-
 import { cachedPayments, paymentsData } from '../../__mocks__/NotificationDetail.mock';
-import { PaymentsCachePage, PaymentsData } from '../../models';
+import { PaymentDetails, PaymentStatus, RecipientType } from '../../models';
 import {
   checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
@@ -13,7 +11,6 @@ import {
   setPaymentCache,
   setPaymentsInCache,
 } from '../paymentCaching.utility';
-import { Session } from 'inspector';
 
 describe('Payment caching utility', () => {
   beforeEach(() => {
@@ -29,9 +26,9 @@ describe('Payment caching utility', () => {
     expect(paymentCache).toEqual(cachedPayments);
   });
 
-  it('getPaymentsFromCache should return paymentsPage sorted by page', () => {
+  it('getPaymentsFromCache should return payments', () => {
     const paymentsFromCache = getPaymentsFromCache();
-    expect(paymentsFromCache).toEqual(cachedPayments.paymentsPage);
+    expect(paymentsFromCache).toEqual(cachedPayments.payments);
   });
 
   it('setPaymentCache should update the item in sessionStorage', () => {
@@ -47,17 +44,14 @@ describe('Payment caching utility', () => {
   it('should set a new elements in the paymentsPage array', () => {
     const newPaymentItem = {
       ...cachedPayments,
-      paymentsPage: [
-        ...cachedPayments.paymentsPage,
-        {
-          page: 2,
-          payments: {
-            ...paymentsData,
-            pagoPaF24: paymentsData.pagoPaF24.slice(10, 15),
-          },
+      ...{
+        pagoPa: {
+          noticeCode: '123456789',
+          creditorTaxId: '123456789',
         },
-      ],
+      },
     };
+
     setPaymentCache(newPaymentItem);
     const paymentCache = getPaymentCache();
     expect(paymentCache).toEqual(newPaymentItem);
@@ -141,67 +135,27 @@ describe('Payment caching utility', () => {
     expect(result).toEqual(false);
   });
 
-  it('setPaymentsCache should set the payments if cache is empty', () => {
-    sessionStorage.removeItem('payments');
-    const page = 1;
-    const payments = paymentsData;
+  it('setPaymentsInCache should set a new payments in cache', () => {
+    const newPayment: PaymentDetails[] = [
+      {
+        pagoPa: {
+          noticeCode: '123456789',
+          creditorTaxId: '123456789',
+          applyCost: true,
+          recipientType: RecipientType.PF,
+          status: PaymentStatus.REQUIRED,
+          paymentSourceChannel: 'PAGO_PA',
+        },
+        f24: undefined,
+      },
+    ];
 
-    setPaymentsInCache(payments, page);
+    setPaymentsInCache(newPayment);
 
     const paymentCache = getPaymentCache();
-
-    expect(paymentCache).toEqual({
-      paymentsPage: [
-        {
-          page,
-          payments,
-        },
-      ],
-    });
-  });
-
-  it('setPaymentsCache should create a new page if page is not in cache', () => {
-    const page = 2;
-    const payments = {
-      pagoPaF24: [
-        {
-          pagoPa: {
-            noticeCode: '123456789',
-            creditorTaxId: '123456789',
-          },
-        },
-      ],
-    } as PaymentsData;
-    setPaymentsInCache(payments, page);
-    const paymentCache = getPaymentCache();
-
     expect(paymentCache).toEqual({
       ...cachedPayments,
-      paymentsPage: [
-        ...cachedPayments.paymentsPage,
-        {
-          page,
-          payments,
-        },
-      ],
+      payments: [...newPayment, ...cachedPayments.payments],
     });
   });
-
-  it('setPaymentsCache should update the payments in the page if page is in cache', () => {
-    const paymentCache = getPaymentCache();
-    const page = 1;
-    paymentCache!.paymentsPage[page].payments.pagoPaF24[0].pagoPa!.applyCost = false;
-    const newPaymentsData = {
-      pagoPaF24: [paymentCache!.paymentsPage[page].payments.pagoPaF24[0]],
-      f24Only: []
-    } as PaymentsData;
-
-    setPaymentsInCache(newPaymentsData, page);
-    const updatedPaymentCache = getPaymentCache();
-
-    // expect that the cache has been updated on the page 1
-    console.log(JSON.stringify(updatedPaymentCache!.paymentsPage[page], null, 2));
-    expect(updatedPaymentCache!.paymentsPage[page]).toEqual(paymentCache!.paymentsPage[page]);
-  });
-
 });

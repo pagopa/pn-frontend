@@ -11,17 +11,12 @@ import {
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
-  PaymentsData,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  checkIfPaymentsIsAlreadyInCache,
-  checkIunAndTimestamp,
   getF24Payments,
   getPagoPaF24Payments,
-  getPaymentsFromCache,
   populatePaymentsPagoPaF24,
-  setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -90,7 +85,6 @@ const notificationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // eslint-disable-next-line sonarjs/cognitive-complexity
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       const recipientIdx = action.payload.recipients.findIndex(
         (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
@@ -126,36 +120,13 @@ const notificationSlice = createSlice({
           );
           const f24Payments = getF24Payments(paymentsOfRecipient, recipientIdx);
 
-          const havePaymentInCache = checkIfPaymentsIsAlreadyInCache(
-            paymentsOfRecipient.map((payment) => ({
-              noticeCode: payment.pagoPa?.noticeCode,
-              creditorTaxId: payment.pagoPa?.creditorTaxId,
-            }))
-          );
-          const isIunValid = checkIunAndTimestamp(action.payload.iun, new Date().toISOString());
-
-          if (havePaymentInCache && isIunValid) {
-            const cachedPayments = getPaymentsFromCache();
-            if (cachedPayments) {
-              cachedPayments.forEach((cachedPayment) => {
-                cachedPayment.payments.pagoPaF24.forEach((cachedPagoPaPayment) => {
-                  const index = pagoPAPaymentFullDetails.findIndex(
-                    (payment) =>
-                      payment.pagoPa?.creditorTaxId === cachedPagoPaPayment.pagoPa?.creditorTaxId &&
-                      payment.pagoPa?.noticeCode === cachedPagoPaPayment.pagoPa?.noticeCode
-                  );
-                  if (index !== -1) {
-                    pagoPAPaymentFullDetails[index] = cachedPagoPaPayment;
-                  }
-                });
-              });
-            }
+          if (pagoPAPaymentFullDetails) {
+            state.paymentsData.pagoPaF24 = pagoPAPaymentFullDetails;
           }
 
-          state.paymentsData = {
-            pagoPaF24: pagoPAPaymentFullDetails ?? [],
-            f24Only: f24Payments ?? [],
-          };
+          if (f24Payments) {
+            state.paymentsData.f24Only = f24Payments;
+          }
         }
       }
       state.notification = action.payload;
@@ -181,8 +152,7 @@ const notificationSlice = createSlice({
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
         const paymentInfo = action.payload;
-
-        paymentInfo.forEach((payment) => {
+        for (const payment of paymentInfo) {
           const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
             (paymentData) =>
               paymentData.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId &&
@@ -190,24 +160,8 @@ const notificationSlice = createSlice({
           );
           if (paymentInfoIndex !== -1) {
             state.paymentsData.pagoPaF24[paymentInfoIndex] = payment;
-
-            const indexOfPayment = state.notification.recipients[0].payments?.findIndex(
-              (recPayment) =>
-                recPayment.pagoPa?.noticeCode === payment.pagoPa?.noticeCode &&
-                recPayment.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId
-            );
-            if (indexOfPayment !== undefined && indexOfPayment !== -1) {
-              const pageNumber = Math.floor(indexOfPayment / 5);
-
-              const paymentsPage = {
-                pagoPaF24: [{ ...payment }],
-                f24Only: [],
-              } as PaymentsData;
-
-              setPaymentsInCache(paymentsPage, pageNumber);
-            }
           }
-        });
+        }
       }
     });
     builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {

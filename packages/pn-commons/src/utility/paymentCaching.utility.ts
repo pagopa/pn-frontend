@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
-import { PaymentCache, PaymentStatus, PaymentsCachePage, PaymentsData } from '../models';
-import { paymentCacheSchema } from '../models/PaymentCache';
+import { PaymentCache, PaymentDetails, PaymentStatus } from '../models';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
@@ -14,22 +13,17 @@ export const getPaymentCache = (): PaymentCache | null => {
   // const isValid = paymentCacheSchema.isValidSync(JSON.parse(paymentCache || '{}'));
   // console.log('isValid', isValid);
 
-  paymentCacheSchema.validate(JSON.parse(paymentCache || '{}')).catch((err) => {
-    console.log('err', err);
-  });
+  // paymentCacheSchema.validate(JSON.parse(paymentCache || '{}')).catch((err) => {
+  //   console.log('err', err);
+  // });
 
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
 };
 
-export const getPaymentsFromCache = (): Array<PaymentsCachePage> | null => {
+export const getPaymentsFromCache = (): Array<PaymentDetails> | null => {
   const paymentCache = getPaymentCache();
 
-  if (paymentCache?.paymentsPage) {
-    // eslint-disable-next-line functional/immutable-data
-    return paymentCache.paymentsPage.sort((a, b) => a.page - b.page);
-  }
-
-  return null;
+  return paymentCache?.payments || null;
 };
 
 export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
@@ -43,33 +37,20 @@ export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
   sessionStorage.setItem(PAYMENT_CACHE_KEY, JSON.stringify(newPaymentCache));
 };
 
-export const setPaymentsInCache = (payments: PaymentsData, page: number): void => {
+export const setPaymentsInCache = (payments: Array<PaymentDetails>): void => {
   const paymentCache = getPaymentsFromCache();
 
   if (paymentCache) {
-    const newPaymentCache = [...paymentCache];
+    const newPaymentCache = _.uniqWith(
+      [...payments, ...paymentCache],
+      (a, b) =>
+        a.pagoPa?.noticeCode === b.pagoPa?.noticeCode &&
+        a.pagoPa?.creditorTaxId === b.pagoPa?.creditorTaxId
+    );
 
-    const paymentsPage = newPaymentCache.find((p) => p.page === page);
-
-    if (paymentsPage) {
-      // eslint-disable-next-line functional/immutable-data
-      paymentsPage.payments = {
-        pagoPaF24: _.uniqWith(
-          [...payments.pagoPaF24, ...paymentsPage.payments.pagoPaF24],
-          (a, b) =>
-            a.pagoPa?.noticeCode === b.pagoPa?.noticeCode &&
-            a.pagoPa?.creditorTaxId === b.pagoPa?.creditorTaxId
-        ),
-        f24Only: [...paymentsPage.payments.f24Only, ...payments.f24Only],
-      };
-    } else {
-      // eslint-disable-next-line functional/immutable-data
-      newPaymentCache.push({ page, payments });
-    }
-
-    setPaymentCache({ paymentsPage: newPaymentCache });
+    setPaymentCache({ payments: newPaymentCache });
   } else {
-    setPaymentCache({ paymentsPage: [{ page, payments }] });
+    setPaymentCache({ payments });
   }
 };
 
@@ -116,7 +97,7 @@ export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
   }
 
   clearPaymentCache();
-  setPaymentCache({ iun, timestamp, paymentsPage: [] });
+  setPaymentCache({ iun, timestamp, payments: [] });
   return false;
 };
 
@@ -133,25 +114,21 @@ export const checkIfPaymentsIsAlreadyInCache = (
     paymentsInfoRequest.length === 1 &&
     paymentsInfoRequest[0].noticeCode &&
     paymentsInfoRequest[0].creditorTaxId &&
-    payments.some((cachedPayments) =>
-      cachedPayments.payments.pagoPaF24.some(
-        (cachedPayment) =>
-          cachedPayment.pagoPa?.noticeCode === paymentsInfoRequest[0].noticeCode &&
-          cachedPayment.pagoPa?.creditorTaxId === paymentsInfoRequest[0].creditorTaxId &&
-          cachedPayment.pagoPa?.status === PaymentStatus.FAILED
-      )
+    payments.some(
+      (cachedPayment) =>
+        cachedPayment.pagoPa?.noticeCode === paymentsInfoRequest[0].noticeCode &&
+        cachedPayment.pagoPa?.creditorTaxId === paymentsInfoRequest[0].creditorTaxId &&
+        cachedPayment.pagoPa?.status === PaymentStatus.FAILED
     )
   ) {
     return false;
   }
 
   return paymentsInfoRequest.some((paymentInfo) =>
-    payments.some((cachedPayments) =>
-      cachedPayments.payments.pagoPaF24.some(
-        (cachedPayment) =>
-          cachedPayment.pagoPa?.noticeCode === paymentInfo.noticeCode &&
-          cachedPayment.pagoPa?.creditorTaxId === paymentInfo.creditorTaxId
-      )
+    payments.some(
+      (cachedPayment) =>
+        cachedPayment.pagoPa?.noticeCode === paymentInfo.noticeCode &&
+        cachedPayment.pagoPa?.creditorTaxId === paymentInfo.creditorTaxId
     )
   );
 };
