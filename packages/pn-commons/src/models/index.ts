@@ -74,11 +74,11 @@ import {
   NotificationColumnData,
 } from './Notifications';
 import { PaginationData } from './Pagination';
-import { CardAction, CardElement, CardSort } from './PnCard';
+import { CardElement, CardSort } from './PnCard';
 import { Column, Row, Sort } from './PnTable';
 import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
-import { SmartTableAction, SmartTableData } from './SmartTable';
+import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
 
 export {
@@ -110,7 +110,6 @@ export type {
   AppStatusData,
   BasicUser,
   ConsentUser,
-  CardAction,
   CardElement,
   CardSort,
   Column,
@@ -150,7 +149,6 @@ export type {
   ServerResponseError,
   ErrorMessage,
   SmartTableData,
-  SmartTableAction,
   PhysicalAddress,
   DowntimeDTO,
   AppStatusDTO,

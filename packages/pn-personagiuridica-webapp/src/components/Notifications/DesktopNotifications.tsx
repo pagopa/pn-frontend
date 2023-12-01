@@ -74,34 +74,34 @@ const DesktopNotifications = ({
     {
       id: 'badge',
       label: '',
-      width: '1%',
+      cellProps: { width: '1%' },
     },
     {
       id: 'sentAt',
       label: t('table.data'),
-      width: '11%',
+      cellProps: { width: '11%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      width: '13%',
+      cellProps: { width: '13%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      width: '22%',
+      cellProps: { width: '22%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      width: '20%',
+      cellProps: { width: '20%' },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
-      width: '18%',
+      cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
   ];
@@ -110,16 +110,16 @@ const DesktopNotifications = ({
     const recipientField: Column<NotificationColumnData> = {
       id: 'recipients',
       label: t('table.destinatario'),
-      width: '15%',
+      cellProps: { width: '15%' },
       sortable: false,
     };
     // eslint-disable-next-line functional/immutable-data
     columns.splice(3, 0, recipientField);
   }
 
-  const rows: Array<Row<Notification>> = notifications.map((n, i) => ({
+  const rows: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: n.paProtocolNumber + i.toString(),
+    id: n.iun,
   }));
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
@@ -157,13 +157,13 @@ const DesktopNotifications = ({
           </PnTableHeader>
           <PnTableBody>
             {rows.map((row, index) => (
-              <PnTableBodyRow key={row.id} testId="notificationsTable" index={index}>
+              <PnTableBodyRow key={row.id} testId="notificationsTable.body.row" index={index}>
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
                     onClick={() => handleRowClick(row)}
                     cellProps={{
-                      width: column.width,
+                      ...column.cellProps,
                       cursor: 'pointer',
                     }}
                   >

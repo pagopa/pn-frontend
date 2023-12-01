@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
+import { TableCellProps } from '@mui/material';
 
 type Order = 'asc' | 'desc';
-export type Align = 'center' | 'inherit' | 'left' | 'right' | 'justify';
 
 export interface Sort<T> {
   orderBy: keyof T | '';
@@ -11,11 +10,9 @@ export interface Sort<T> {
 export interface Column<T> {
   id: keyof T;
   label: string;
-  width: string;
-  align?: Align;
+  cellProps?: TableCellProps;
   sortable?: boolean;
-  getCellLabel?(value: Row<T>[keyof T], row?: Row<T>): ReactNode;
-  onClick?(row: Row<T>, column: Column<T>): void;
+  onClick?(row?: Row<T>, columnId?: keyof T): void;
 }
 
 export type Row<T> = T & { id: string };

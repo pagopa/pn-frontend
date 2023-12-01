@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import { render } from '../../../../test-utils';
+import { disableConsoleLogging, render } from '../../../../test-utils';
 import PnCard from '../PnCard';
 import PnCardActions from '../PnCardActions';
 import PnCardContent from '../PnCardContent';
@@ -11,6 +11,8 @@ import PnCardHeader from '../PnCardHeader';
 import PnCardHeaderItem from '../PnCardHeaderItem';
 
 describe('PnCard', () => {
+  disableConsoleLogging('error');
+
   it('render component', () => {
     const { container } = render(
       <PnCard>
@@ -32,7 +34,7 @@ describe('PnCard', () => {
           <PnCardActions>Action</PnCardActions>
         </PnCard>
       )
-    ).toThrowError('PnCard must have one child of type PnCardContent');
+    ).toThrowError('PnCard can have only 1 child of type PnCardContent');
   });
 
   it('render component - incorrect child', () => {
@@ -49,7 +51,7 @@ describe('PnCard', () => {
         </PnCard>
       )
     ).toThrowError(
-      'PnCard must have only children of type PnCardHeader, PnCardContent and PnCardActions'
+      'PnCard can have only 1 child of type PnCardHeader, 1 child of type PnCardContent and 1 child of type PnCardActions'
     );
   });
 
@@ -68,7 +70,7 @@ describe('PnCard', () => {
           </PnCardContent>
         </PnCard>
       )
-    ).toThrowError('PnCard must have one child of type PnCardHeader');
+    ).toThrowError('PnCard can have only 1 child of type PnCardHeader');
   });
 
   it('render component - more than one PnCardActions', () => {
@@ -82,6 +84,6 @@ describe('PnCard', () => {
           <PnCardActions>Action</PnCardActions>
         </PnCard>
       )
-    ).toThrowError('PnCard must have one child of type PnCardActions');
+    ).toThrowError('PnCard can have only 1 child of type PnCardActions');
   });
 });

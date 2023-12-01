@@ -1,7 +1,6 @@
-import { Children, ReactElement, isValidElement } from 'react';
-
 import { Box, SxProps } from '@mui/material';
 
+import checkChildren from '../../utility/children.utility';
 import PnCard from './PnCard/PnCard';
 
 type Props = {
@@ -9,7 +8,7 @@ type Props = {
   sx?: SxProps;
   /** Cards test id */
   testId?: string;
-  children: ReactElement | Array<ReactElement>;
+  children: React.ReactNode;
 };
 
 const cardStyle = {
@@ -25,16 +24,7 @@ const cardStyle = {
 
 const PnCardsList: React.FC<Props> = ({ sx, testId, children }) => {
   // check on children
-  // PnCardsList can have only children of type PnCard
-  // the cast ReactElement | Array<ReactElement> of property children ensures that the PnCardsList can have two defined children (not null and not undefined)
-  Children.forEach(children, (element) => {
-    if (!isValidElement(element)) {
-      return;
-    }
-    if (element.type !== PnCard) {
-      throw new Error('PnCardsList must have only children of type PnCard');
-    }
-  });
+  checkChildren(children, [{ cmp: PnCard }], 'PnCardsList');
 
   return (
     <Box sx={{ ...cardStyle, ...sx }} data-testid={testId}>

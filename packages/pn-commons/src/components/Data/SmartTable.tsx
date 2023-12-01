@@ -1,37 +1,34 @@
-import { Children, PropsWithChildren, cloneElement, useMemo, useState } from 'react';
+import { Children, PropsWithChildren } from 'react';
 
 import { Box, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
-import {
-  CardAction,
-  CardElement,
-  Column,
-  PaginationData,
-  Row,
-  SmartTableData,
-  Sort,
-} from '../../models';
-import { SmartTableAction } from '../../models/SmartTable';
-import { calculatePages, sortArray } from '../../utility';
+import { PaginationData, Row, SmartTableData, Sort } from '../../models';
+import { calculatePages } from '../../utility';
+import checkChildren from '../../utility/children.utility';
 import CustomPagination from '../Pagination/CustomPagination';
-import PnCard from './PnCard/PnCard';
-import PnCardActions from './PnCard/PnCardActions';
-import PnCardContent from './PnCard/PnCardContent';
-import PnCardContentItem from './PnCard/PnCardContentItem';
-import PnCardHeader from './PnCard/PnCardHeader';
-import PnCardHeaderItem from './PnCard/PnCardHeaderItem';
-import PnCardsList from './PnCardsList';
-import PnTable from './PnTable';
-import PnTableBody from './PnTable/PnTableBody';
-import PnTableBodyCell from './PnTable/PnTableBodyCell';
-import PnTableBodyRow from './PnTable/PnTableBodyRow';
-import PnTableHeader from './PnTable/PnTableHeader';
-import PnTableHeaderCell from './PnTable/PnTableHeaderCell';
+import SmartBody from './SmartTable/SmartBody';
+import SmartData from './SmartTable/SmartData';
 import SmartFilter from './SmartTable/SmartFilter';
+import SmartHeader from './SmartTable/SmartHeader';
 import SmartSort from './SmartTable/SmartSort';
 
+function getSortFields<T>(conf: Array<SmartTableData<T>>) {
+  const sortFields: Array<{ id: keyof T; label: string }> = [];
+  for (const cfg of conf) {
+    if (cfg.tableConfiguration.sortable) {
+      // eslint-disable-next-line functional/immutable-data
+      sortFields.push({
+        id: cfg.id,
+        label: cfg.label,
+      });
+    }
+  }
+  return { sortFields };
+}
+
 type Props<T> = {
+  children: React.ReactNode;
   /** smart table configuration */
   conf: Array<SmartTableData<T>>;
   /** data */
@@ -48,8 +45,6 @@ type Props<T> = {
   };
   /** the function to be invoked if the user change sorting */
   onChangeSorting?: (sort: Sort<T>) => void;
-  /* actions */
-  actions?: Array<SmartTableAction<T>>;
   /** pagination data */
   pagination?: {
     size: number;
@@ -66,73 +61,36 @@ type Props<T> = {
   ariaTitle?: string;
 };
 
-function getCardElements<T>(conf: Array<SmartTableData<T>>, actions?: Array<SmartTableAction<T>>) {
-  const headerElem: Array<CardElement<T>> = [];
-  const cardBody: Array<CardElement<T>> = [];
-  const sortFields: Array<{ id: keyof T; label: string }> = [];
-  for (const cfg of conf) {
-    /* eslint-disable functional/immutable-data */
-    if (cfg.cardConfiguration.position === 'header') {
-      headerElem.push({
-        id: cfg.id,
-        label: cfg.label,
-        getLabel: (value: Row<T>[keyof T], data?: Row<T>) => cfg.getValue(value, data, true),
-        gridProps: cfg.cardConfiguration.gridProps,
-        position: cfg.cardConfiguration.position,
-      });
-    } else if (cfg.cardConfiguration.position === 'body') {
-      cardBody.push({
-        id: cfg.id,
-        label: cfg.label,
-        getLabel: (value: Row<T>[keyof T], data?: Row<T>) => cfg.getValue(value, data, true),
-        wrapValueInTypography: cfg.cardConfiguration.wrapValueInTypography,
-      });
-    }
-    if (cfg.tableConfiguration.sortable) {
-      sortFields.push({
-        id: cfg.id,
-        label: cfg.label,
-      });
-    }
-    /* eslint-enable functional/immutable-data */
-  }
-  const cardHeader: [CardElement<T>, CardElement<T> | null] = (
-    headerElem.length > 2 ? headerElem.slice(0, 2) : headerElem
-  ) as [CardElement<T>, CardElement<T> | null];
-
-  const cardActions: Array<CardAction<T>> | undefined = actions
-    ?.filter((action) => action.position === 'card' || action.position === 'everywhere')
-    .map((action) => ({
-      id: action.id,
-      component: action.component,
-      onClick: action.onClick,
-    }));
-
-  return { cardHeader, cardBody, cardActions, sortFields };
-}
-
 /**
  * SmartTable show table in desktop view and cards in mobile view.
  */
 const SmartTable = <T,>({
+  children,
   conf,
   data,
   currentSort,
   sortLabels,
-  onChangeSorting,
-  actions,
-  children,
+  onChangeSorting = () => {},
   pagination,
   emptyState,
   testId,
   ariaTitle,
 }: PropsWithChildren<Props<T>>) => {
   const isMobile = useIsMobile();
-  const [sort, setSort] = useState<Sort<T> | undefined>(currentSort);
+
+  checkChildren(
+    children,
+    [
+      { cmp: SmartFilter, maxCount: 1 },
+      { cmp: SmartHeader, required: true, maxCount: 1 },
+      { cmp: SmartBody, required: true, maxCount: 1 },
+    ],
+    'SmartTable'
+  );
 
   const filters = children
-    ? Children.toArray(children).filter((child) => (child as JSX.Element).type === SmartFilter)
-    : [];
+    ? Children.toArray(children).find((child) => (child as JSX.Element).type === SmartFilter)
+    : null;
 
   const pagesToShow = pagination
     ? calculatePages(
@@ -143,24 +101,9 @@ const SmartTable = <T,>({
       )
     : undefined;
 
-  const handleSorting = (newSort: Sort<T>) => {
-    // manage sorting from external
-    if (onChangeSorting && newSort) {
-      onChangeSorting(newSort);
-    } else {
-      setSort(newSort);
-    }
-  };
-
-  const rowData = useMemo(() => {
-    if (sort) {
-      return sortArray(sort.order, sort.orderBy, data);
-    }
-    return data;
-  }, [sort, data]);
-
   if (isMobile) {
-    const { cardHeader, cardBody, cardActions, sortFields } = getCardElements(conf, actions);
+    const { sortFields } = getSortFields(conf);
+
     return (
       <>
         <Grid container direction="row" sx={{ mb: 2 }}>
@@ -168,7 +111,7 @@ const SmartTable = <T,>({
             {filters}
           </Grid>
           <Grid item xs={6} textAlign="right">
-            {sort && sortFields.length > 0 && sortLabels && (
+            {currentSort && sortFields.length > 0 && sortLabels && (
               <SmartSort
                 title={sortLabels.title}
                 optionsTitle={sortLabels.optionsTitle}
@@ -176,54 +119,23 @@ const SmartTable = <T,>({
                 ascLabel={sortLabels.asc}
                 dscLabel={sortLabels.dsc}
                 sortFields={sortFields}
-                sort={sort}
-                onChangeSorting={handleSorting}
+                sort={currentSort}
+                onChangeSorting={onChangeSorting}
               />
             )}
           </Grid>
         </Grid>
-        {rowData.length > 0 && (
-          <PnCardsList>
-            {rowData.map((data) => (
-              <PnCard key={data.id}>
-                <PnCardHeader>
-                  <PnCardHeaderItem
-                    key={cardHeader[0].id.toString()}
-                    gridProps={cardHeader[0].gridProps}
-                    position="left"
-                  >
-                    {cardHeader[0].getLabel!(data[cardHeader[0].id], data)}
-                  </PnCardHeaderItem>
-                  {cardHeader[1] && (
-                    <PnCardHeaderItem
-                      key={cardHeader[1].id.toString()}
-                      gridProps={cardHeader[1].gridProps}
-                      position="right"
-                    >
-                      {cardHeader[1].getLabel!(data[cardHeader[1].id], data)}
-                    </PnCardHeaderItem>
-                  )}
-                </PnCardHeader>
-                <PnCardContent>
-                  {cardBody.map((body) => (
-                    <PnCardContentItem key={body.id.toString()} label={body.label}>
-                      {body.getLabel!(data[body.id], data)}
-                    </PnCardContentItem>
-                  ))}
-                </PnCardContent>
-                <PnCardActions>
-                  {cardActions &&
-                    cardActions.map((action) =>
-                      cloneElement(action.component, {
-                        onClick: () => action.onClick(data),
-                      })
-                    )}
-                </PnCardActions>
-              </PnCard>
-            ))}
-          </PnCardsList>
+        {data.length > 0 && (
+          <SmartData
+            ariaTitle={ariaTitle}
+            testId={testId}
+            sort={currentSort}
+            onChangeSorting={onChangeSorting}
+          >
+            {children}
+          </SmartData>
         )}
-        {rowData.length > 0 && pagination && (
+        {data.length > 0 && pagination && (
           <CustomPagination
             paginationData={{
               size: pagination.size,
@@ -245,62 +157,24 @@ const SmartTable = <T,>({
             }
           />
         )}
-        {rowData.length === 0 && emptyState}
+        {data.length === 0 && emptyState}
       </>
     );
   }
-
-  const columns: Array<Column<T>> = conf.map((cfg) => ({
-    id: cfg.id,
-    label: cfg.label,
-    width: cfg.tableConfiguration.width,
-    align: cfg.tableConfiguration.align,
-    sortable: cfg.tableConfiguration.sortable,
-    getCellLabel: (value: Row<T>[keyof T], data?: Row<T>) => cfg.getValue(value, data, false),
-    onClick: cfg.tableConfiguration.onClick,
-  }));
-
   return (
     <>
       <Box mb={3}>{filters}</Box>
-      {rowData.length > 0 && (
-        <PnTable testId={testId} ariaTitle={ariaTitle}>
-          <PnTableHeader>
-            {columns.map((column) => (
-              <PnTableHeaderCell
-                key={column.id.toString()}
-                sort={sort}
-                columnId={column.id}
-                sortable={column.sortable}
-                handleClick={handleSorting}
-              >
-                {column.label}
-              </PnTableHeaderCell>
-            ))}
-          </PnTableHeader>
-          <PnTableBody testId="tableBody">
-            {rowData.map((row, index) => (
-              <PnTableBodyRow key={row.id} testId={testId} index={index}>
-                {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id.toString()}
-                    testId="tableBodyCell"
-                    onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
-                    cellProps={{
-                      width: column.width,
-                      align: column.align,
-                      cursor: column.onClick ? 'pointer' : 'auto',
-                    }}
-                  >
-                    {column.getCellLabel!(row[column.id], row)}
-                  </PnTableBodyCell>
-                ))}
-              </PnTableBodyRow>
-            ))}
-          </PnTableBody>
-        </PnTable>
+      {data.length > 0 && (
+        <SmartData
+          ariaTitle={ariaTitle}
+          testId={testId}
+          sort={currentSort}
+          onChangeSorting={onChangeSorting}
+        >
+          {children}
+        </SmartData>
       )}
-      {rowData.length > 0 && pagination && (
+      {data.length > 0 && pagination && (
         <CustomPagination
           paginationData={{
             size: pagination.size,
@@ -322,7 +196,7 @@ const SmartTable = <T,>({
           }
         />
       )}
-      {rowData.length === 0 && emptyState}
+      {data.length === 0 && emptyState}
     </>
   );
 };

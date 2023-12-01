@@ -116,9 +116,9 @@ const MobileNotifications = ({
     cardBody.splice(3, 0, recipientField);
   }
 
-  const cardData: Array<Row<Notification>> = notifications.map((n, i) => ({
+  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: i.toString(),
+    id: n.iun,
   }));
 
   const sortFields = (

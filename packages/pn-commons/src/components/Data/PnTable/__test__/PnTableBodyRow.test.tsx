@@ -2,11 +2,13 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import { render } from '../../../../test-utils';
+import { disableConsoleLogging, render } from '../../../../test-utils';
 import PnTableBodyCell from '../PnTableBodyCell';
 import PnTableBodyRow from '../PnTableBodyRow';
 
 describe('PnTableBodyRow', () => {
+  disableConsoleLogging('error');
+
   it('render component', () => {
     const { container } = render(
       <PnTableBodyRow index={1}>
@@ -24,6 +26,6 @@ describe('PnTableBodyRow', () => {
           <Box>Incorrect child</Box>
         </PnTableBodyRow>
       )
-    ).toThrowError('PnTableBodyRow must have only children of type PnTableBodyCell');
+    ).toThrowError('PnTableBodyRow can have only children of type PnTableBodyCell');
   });
 });

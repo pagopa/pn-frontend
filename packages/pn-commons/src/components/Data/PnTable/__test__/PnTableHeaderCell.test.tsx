@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { Sort } from '../../../../models';
-import { fireEvent, render } from '../../../../test-utils';
+import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';
 import PnTableHeaderCell from '../PnTableHeaderCell';
 
 describe('PnTableHeaderCell', () => {
+  disableConsoleLogging('error');
+
   const mockFn = jest.fn();
 
   type Item = {

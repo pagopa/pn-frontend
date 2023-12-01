@@ -105,46 +105,46 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.date'),
-      width: '11%',
+      cellProps: { width: '11%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'recipients',
       label: t('table.recipient'),
-      width: '13%',
+      cellProps: { width: '13%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.subject'),
-      width: '23%',
+      cellProps: { width: '23%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      width: '20%',
+      cellProps: { width: '20%' },
     },
     {
       id: 'group',
       label: t('table.groups'),
-      width: '15%',
+      cellProps: { width: '15%' },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
-      width: '18%',
+      cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
   ];
 
-  const rows = notifications.map((n: Notification, i: number) => ({
+  const rows = notifications.map((n) => ({
     ...n,
-    id: i.toString(),
+    id: n.iun,
   }));
 
   // Navigation handlers
   const handleRowClick = (row: Row<Notification>) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
@@ -181,7 +181,7 @@ const DesktopNotifications = ({
                         key={column.id}
                         onClick={() => handleRowClick(row)}
                         cellProps={{
-                          width: column.width,
+                          ...column.cellProps,
                           cursor: 'pointer',
                         }}
                       >

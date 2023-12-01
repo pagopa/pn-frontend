@@ -23,23 +23,23 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
     () => [
       {
         ...getField('startDate'),
-        width: '15%',
+        cellProps: { width: '15%' },
       },
       {
         ...getField('endDate'),
-        width: '15%',
+        cellProps: { width: '15%' },
       },
       {
         ...getField('knownFunctionality'),
-        width: '30%',
+        cellProps: { width: '30%' },
       },
       {
         ...getField('legalFactId'),
-        width: '30%',
+        cellProps: { width: '30%' },
       },
       {
         ...getField('status'),
-        width: '15%',
+        cellProps: { width: '15%' },
       },
     ],
     [getField]
@@ -67,12 +67,7 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
             {columns.map((column) => (
               <PnTableBodyCell
                 key={column.id}
-                onClick={column.onClick ? () => column.onClick!(row, column) : undefined}
-                cellProps={{
-                  width: column.width,
-                  align: column.align,
-                  cursor: column.onClick ? 'pointer' : 'auto',
-                }}
+                cellProps={column.cellProps}
                 testId="tableDowntimeLog.row.cell"
               >
                 <DowntimeLogDataSwitch

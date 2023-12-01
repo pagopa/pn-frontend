@@ -2,11 +2,13 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import { render } from '../../../../test-utils';
+import { disableConsoleLogging, render } from '../../../../test-utils';
 import PnTableHeader from '../PnTableHeader';
 import PnTableHeaderCell from '../PnTableHeaderCell';
 
 describe('PnTableHeaderCell', () => {
+  disableConsoleLogging('error');
+
   it('render component', () => {
     const { container } = render(
       <PnTableHeader>
@@ -24,6 +26,6 @@ describe('PnTableHeaderCell', () => {
           <Box>Incorrect child</Box>
         </PnTableHeader>
       )
-    ).toThrowError('PnTableHeader must have only children of type PnTableHeaderCell');
+    ).toThrowError('PnTableHeader can have only children of type PnTableHeaderCell');
   });
 });

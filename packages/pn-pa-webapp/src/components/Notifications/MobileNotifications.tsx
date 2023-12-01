@@ -135,9 +135,9 @@ const MobileNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
-  const cardData: Array<Row<Notification>> = notifications.map((n: Notification, i: number) => ({
+  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: i.toString(),
+    id: n.iun,
   }));
 
   const sortFields = (

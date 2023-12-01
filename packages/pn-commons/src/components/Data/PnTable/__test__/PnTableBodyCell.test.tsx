@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { fireEvent, render } from '../../../../test-utils';
+import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';
 import PnTableBodyCell from '../PnTableBodyCell';
 
 describe('PnTableBodyCell', () => {
+  disableConsoleLogging('error');
+
   const mockFn = jest.fn();
 
   it('render component', () => {

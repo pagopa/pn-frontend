@@ -66,34 +66,34 @@ const Delegates = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
-      width: '13%',
+      cellProps: { width: '13%' },
       sortable: true,
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
-      width: '11%',
+      cellProps: { width: '11%' },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
-      width: '11%',
+      cellProps: { width: '11%' },
       sortable: true,
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      width: '14%',
+      cellProps: { width: '14%' },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      width: '18%',
+      cellProps: { width: '18%' },
     },
     {
       id: 'menu',
       label: '',
-      width: '5%',
+      cellProps: { width: '5%' },
     },
   ];
 
@@ -161,14 +161,7 @@ const Delegates = () => {
                 {rows.map((row, index) => (
                   <PnTableBodyRow key={row.id} testId="delegatesTable.body.row" index={index}>
                     {delegatesColumns.map((column) => (
-                      <PnTableBodyCell
-                        key={column.id}
-                        cellProps={{
-                          width: column.width,
-                          align: column.align,
-                          cursor: column.onClick ? 'pointer' : 'auto',
-                        }}
-                      >
+                      <PnTableBodyCell key={column.id} cellProps={column.cellProps}>
                         <DelegatorsDataSwitch
                           data={row}
                           type={column.id}

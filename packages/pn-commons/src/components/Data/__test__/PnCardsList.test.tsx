@@ -3,7 +3,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 
 import { CardElement, Row } from '../../../models';
-import { fireEvent, render, waitFor, within } from '../../../test-utils';
+import { disableConsoleLogging, fireEvent, render, waitFor, within } from '../../../test-utils';
 import PnCard from '../PnCard/PnCard';
 import PnCardActions from '../PnCard/PnCardActions';
 import PnCardContent from '../PnCard/PnCardContent';
@@ -94,6 +94,8 @@ const RenderItemsCard: React.FC = () => (
 );
 
 describe('PnCardsList Component', () => {
+  disableConsoleLogging('error');
+
   it('renders component (with data)', () => {
     const { queryAllByTestId } = render(<RenderItemsCard />);
     const notificationsCards = queryAllByTestId('cards');
@@ -140,6 +142,6 @@ describe('PnCardsList Component', () => {
           <Box>Incorrect child</Box>
         </PnCardsList>
       )
-    ).toThrowError('PnCardsList must have only children of type PnCard');
+    ).toThrowError('PnCardsList can have only children of type PnCard');
   });
 });

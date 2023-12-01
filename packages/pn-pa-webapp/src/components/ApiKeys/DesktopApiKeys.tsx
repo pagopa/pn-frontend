@@ -54,37 +54,35 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
     {
       id: 'name',
       label: t('table.name'),
-      width: '30%',
+      cellProps: { width: '30%' },
       sortable: false,
     },
     {
       id: 'value',
       label: t('table.api-key'),
-      width: '25%',
+      cellProps: { width: '25%' },
       sortable: false,
     },
     {
       id: 'lastUpdate',
       label: t('table.last-update'),
-      width: '15%',
+      cellProps: { width: '15%' },
     },
     {
       id: 'groups',
       label: t('table.groups'),
-      width: '15%',
+      cellProps: { width: '15%' },
     },
     {
       id: 'status',
       label: t('table.status'),
-      width: '10%',
-      align: 'left',
+      cellProps: { width: '10%', align: 'left' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'contextMenu',
       label: '',
-      width: '5%',
-      align: 'left',
+      cellProps: { width: '5%', align: 'left' },
       sortable: false,
     },
   ];
@@ -104,14 +102,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} index={index} testId="tableApiKeys.body.row">
                 {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id}
-                    cellProps={{
-                      width: column.width,
-                      align: column.align,
-                      cursor: 'auto',
-                    }}
-                  >
+                  <PnTableBodyCell key={column.id} cellProps={column.cellProps}>
                     <ApiKeyDataSwitch
                       type={column.id}
                       data={row}

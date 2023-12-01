@@ -30,7 +30,13 @@ import PnTableBodyRow from './Data/PnTable/PnTableBodyRow';
 import PnTableHeader from './Data/PnTable/PnTableHeader';
 import PnTableHeaderCell from './Data/PnTable/PnTableHeaderCell';
 import SmartTable from './Data/SmartTable';
+import SmartActions from './Data/SmartTable/SmartActions';
+import SmartBody from './Data/SmartTable/SmartBody';
+import SmartBodyCell from './Data/SmartTable/SmartBodyCell';
+import SmartBodyRow from './Data/SmartTable/SmartBodyRow';
 import SmartFilter from './Data/SmartTable/SmartFilter';
+import SmartHeader from './Data/SmartTable/SmartHeader';
+import SmartHeaderCell from './Data/SmartTable/SmartHeaderCell';
 import DisclaimerModal from './DisclaimerModal';
 import EmptyState from './EmptyState';
 import FileUpload from './FileUpload';
@@ -109,6 +115,12 @@ export {
   SideMenu,
   SmartFilter,
   SmartTable,
+  SmartHeader,
+  SmartHeaderCell,
+  SmartBody,
+  SmartBodyRow,
+  SmartBodyCell,
+  SmartActions,
   DisclaimerModal,
   EmptyState,
   FileUpload,

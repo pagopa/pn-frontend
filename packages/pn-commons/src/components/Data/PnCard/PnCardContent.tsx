@@ -1,27 +1,18 @@
-import { Children, ReactElement, isValidElement } from 'react';
+import { Children, isValidElement } from 'react';
 
 import { Box, CardContent } from '@mui/material';
 
+import checkChildren from '../../../utility/children.utility';
 import PnCardContentItem from './PnCardContentItem';
 
 type Props = {
   testId?: string;
-  children: ReactElement | Array<ReactElement>;
+  children: React.ReactNode;
 };
 
 const PnCardContent: React.FC<Props> = ({ testId, children }) => {
   // check on children
-  // PnCardContent can have only children of type PnCardContentItem
-  // the cast ReactElement | Array<ReactElement> of property children
-  // ensures that the PnCardContent can have two defined children (not null and not undefined)
-  Children.forEach(children, (element) => {
-    if (!isValidElement(element)) {
-      return;
-    }
-    if (element.type !== PnCardContentItem) {
-      throw new Error('PnCardContent must have only children of type PnCardContentItem');
-    }
-  });
+  checkChildren(children, [{ cmp: PnCardContentItem }], 'PnCardContent');
 
   return (
     <CardContent data-testid={testId} sx={{ padding: 0, mt: 2, ':last-child': { padding: 0 } }}>

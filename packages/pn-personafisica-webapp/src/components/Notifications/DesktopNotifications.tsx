@@ -89,41 +89,41 @@ const DesktopNotifications = ({
     {
       id: 'badge',
       label: '',
-      width: '1%',
+      cellProps: { width: '1%' },
     },
     {
       id: 'sentAt',
       label: t('table.data'),
-      width: '11%',
+      cellProps: { width: '11%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      width: '13%',
+      cellProps: { width: '13%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      width: '23%',
+      cellProps: { width: '23%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      width: '20%',
+      cellProps: { width: '20%' },
     },
     {
       id: 'notificationStatus',
       label: t('table.status'),
-      width: '18%',
+      cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
   ];
 
-  const rows: Array<Row<Notification>> = notifications.map((n, i) => ({
+  const rows: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: n.paProtocolNumber + i.toString(),
+    id: n.iun,
   }));
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
@@ -171,7 +171,7 @@ const DesktopNotifications = ({
                     key={column.id}
                     onClick={() => handleRowClick(row)}
                     cellProps={{
-                      width: column.width,
+                      ...column.cellProps,
                       cursor: 'pointer',
                     }}
                   >

@@ -3,7 +3,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 
 import { Row } from '../../../../models';
-import { render } from '../../../../test-utils';
+import { disableConsoleLogging, render } from '../../../../test-utils';
 import PnCardHeader from '../PnCardHeader';
 import PnCardHeaderItem from '../PnCardHeaderItem';
 
@@ -19,6 +19,8 @@ const cardData: Row<Item> = {
 };
 
 describe('PnCardHeader', () => {
+  disableConsoleLogging('error');
+
   it('render component', () => {
     const { container } = render(
       <PnCardHeader>
@@ -42,6 +44,6 @@ describe('PnCardHeader', () => {
           <Box>Incorrect child</Box>
         </PnCardHeader>
       )
-    ).toThrowError('PnCardHeader must have only children of type PnCardHeaderItem');
+    ).toThrowError('PnCardHeader can have only children of type PnCardHeaderItem');
   });
 });

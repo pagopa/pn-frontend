@@ -112,9 +112,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     },
   ];
 
-  const cardData: Array<Row<Notification>> = notifications.map((n, i) => ({
+  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: i.toString(),
+    id: n.iun,
   }));
 
   const sortFields = (

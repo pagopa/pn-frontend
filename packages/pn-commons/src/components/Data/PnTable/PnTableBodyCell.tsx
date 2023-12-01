@@ -1,5 +1,3 @@
-import { ReactChild, ReactFragment } from 'react';
-
 import { Box, SxProps, TableCell } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -9,7 +7,7 @@ export type PnTableBodyCellProps = {
   testId?: string;
   cellProps?: SxProps;
   onClick?: () => void;
-  children: ReactChild | ReactFragment;
+  children: React.ReactNode;
 };
 
 const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({

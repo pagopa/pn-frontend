@@ -3,7 +3,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 
 import { Column, Row, Sort } from '../../../models';
-import { fireEvent, render, within } from '../../../test-utils';
+import { disableConsoleLogging, fireEvent, render, within } from '../../../test-utils';
 import PnTable from '../PnTable';
 import PnTableBody from '../PnTable/PnTableBody';
 import PnTableBodyCell from '../PnTable/PnTableBodyCell';
@@ -20,14 +20,12 @@ const columns: Array<Column<Item>> = [
   {
     id: 'column-1',
     label: 'Column 1',
-    width: '20%',
     sortable: true,
   },
-  { id: 'column-2', label: 'Column 2', width: '30%' },
+  { id: 'column-2', label: 'Column 2' },
   {
     id: 'column-3',
     label: 'Column 3',
-    width: '50%',
     onClick: handleColumnClick,
   },
 ];
@@ -65,7 +63,7 @@ const RenderPnTable: React.FC = () => (
           {columns.map((column) => (
             <PnTableBodyCell
               key={column.id}
-              onClick={() => column.onClick && column.onClick(row, column)}
+              onClick={() => column.onClick?.(row, column.id)}
               testId="table-test.body.row.cell"
             >
               {row[column.id]}
@@ -78,6 +76,8 @@ const RenderPnTable: React.FC = () => (
 );
 
 describe('PnTable Component', () => {
+  disableConsoleLogging('error');
+
   it('renders component (with rows)', () => {
     const { getByRole } = render(<RenderPnTable />);
     const table = getByRole('table');
@@ -122,7 +122,7 @@ describe('PnTable Component', () => {
     const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
     fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
     expect(handleColumnClick).toBeCalledTimes(1);
-    expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
+    expect(handleColumnClick).toBeCalledWith(rows[0], columns[2].id);
   });
 
   it('render component - multiple PnTableBody', () => {
@@ -133,10 +133,7 @@ describe('PnTable Component', () => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
                 {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id}
-                    onClick={() => column.onClick && column.onClick(row, column)}
-                  >
+                  <PnTableBodyCell key={column.id} onClick={() => column.onClick?.()}>
                     {row[column.id]}
                   </PnTableBodyCell>
                 ))}
@@ -147,10 +144,7 @@ describe('PnTable Component', () => {
             {rows.map((row, index) => (
               <PnTableBodyRow key={row.id} testId="table-test" index={index}>
                 {columns.map((column) => (
-                  <PnTableBodyCell
-                    key={column.id}
-                    onClick={() => column.onClick && column.onClick(row, column)}
-                  >
+                  <PnTableBodyCell key={column.id} onClick={() => column.onClick?.()}>
                     {row[column.id]}
                   </PnTableBodyCell>
                 ))}
@@ -159,7 +153,7 @@ describe('PnTable Component', () => {
           </PnTableBody>
         </PnTable>
       )
-    ).toThrowError('PnTable must have one child of type PnTableHeader');
+    ).toThrowError('PnTable can have only 1 child of type PnTableHeader');
   });
 
   it('render component - multiple PnTableHeader', () => {
@@ -194,7 +188,7 @@ describe('PnTable Component', () => {
           </PnTableHeader>
         </PnTable>
       )
-    ).toThrowError('PnTable must have one child of type PnTableHeader');
+    ).toThrowError('PnTable can have only 1 child of type PnTableHeader');
   });
 
   it('render component - incorrect child', () => {
@@ -218,7 +212,7 @@ describe('PnTable Component', () => {
         </PnTable>
       )
     ).toThrowError(
-      'PnTable must have one child of type PnTableHeader and one child of type PnTableBody'
+      'PnTable can have only 1 child of type PnTableHeader and 1 child of type PnTableBody'
     );
   });
 });

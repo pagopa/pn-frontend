@@ -1,28 +1,17 @@
-import { Children, ReactElement, isValidElement } from 'react';
-
 import { CardHeader, Grid, GridProps } from '@mui/material';
 
+import checkChildren from '../../../utility/children.utility';
 import PnCardHeaderItem from './PnCardHeaderItem';
 
 type Props = {
   testId?: string;
   headerGridProps?: GridProps;
-  children: ReactElement | [ReactElement, ReactElement];
+  children: React.ReactNode;
 };
 
 const PnCardHeader: React.FC<Props> = ({ testId, children, headerGridProps }) => {
   // check on children
-  // PnCardHeader can have max two children of type PnCardHeaderItem
-  // the cast ReactElement | [ReactElement, ReactElement] of property children
-  // ensures that the PnCardHeader can have two defined children (not null and not undefined)
-  Children.forEach(children, (element) => {
-    if (!isValidElement(element)) {
-      return;
-    }
-    if (element.type !== PnCardHeaderItem) {
-      throw new Error('PnCardHeader must have only children of type PnCardHeaderItem');
-    }
-  });
+  checkChildren(children, [{ cmp: PnCardHeaderItem }], 'PnCardHeader');
 
   return (
     <CardHeader

@@ -2,11 +2,13 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import { render } from '../../../../test-utils';
+import { disableConsoleLogging, render } from '../../../../test-utils';
 import PnCardContent from '../PnCardContent';
 import PnCardContentItem from '../PnCardContentItem';
 
 describe('PnCardContent', () => {
+  disableConsoleLogging('error');
+
   it('render component', () => {
     const { container } = render(
       <PnCardContent>
@@ -30,6 +32,6 @@ describe('PnCardContent', () => {
           <Box>Incorrect child</Box>
         </PnCardContent>
       )
-    ).toThrowError('PnCardContent must have only children of type PnCardContentItem');
+    ).toThrowError('PnCardContent can have only children of type PnCardContentItem');
   });
 });
