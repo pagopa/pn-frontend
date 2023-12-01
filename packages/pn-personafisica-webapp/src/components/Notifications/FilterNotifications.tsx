@@ -15,7 +15,6 @@ import {
   IUN_regex,
   dateIsDefined,
   filtersApplied,
-  formatToTimezoneString,
   getValidValue,
   tenYearsAgo,
   today,
@@ -44,34 +43,10 @@ const useStyles = makeStyles({
   },
 });
 
-// const initialEmptyValues = {
-//   startDate: tenYearsAgo,
-//   endDate: today,
-//   iunMatch: '',
-// };
-
 function isFilterApplied(filtersCount: number): boolean {
   return filtersCount > 0;
 }
 
-// const initialValues = (
-//   filters: GetNotificationsParams<Date>,
-//   emptyValues: {
-//     startDate: Date;
-//     endDate: Date;
-//     iunMatch: string;
-//     mandateId: string | undefined;
-//   }
-// ) => {
-//   if (!filters || (filters && _.isEqual(filters, emptyValues))) {
-//     return initialEmptyValues;
-//   }
-//   return {
-//     startDate: new Date(filters.startDate),
-//     endDate: new Date(filters.endDate),
-//     iunMatch: getValidValue(filters.iunMatch),
-//   };
-// };
 const emptyValues = {
   startDate: tenYearsAgo,
   endDate: today,
@@ -81,10 +56,6 @@ const emptyValues = {
 };
 
 const initialEmptyValues = { ...emptyValues };
-console.log('-------------------------------------');
-console.log(initialEmptyValues);
-console.log(initialEmptyValues);
-console.log('-------------------------------------');
 const initialValues = (filters: GetNotificationsParams<Date>): FormikValues => {
   if (!filters || _.isEqual(filters, emptyValues)) {
     return initialEmptyValues;
@@ -155,10 +126,10 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, formatToTimezoneString(tenYearsAgo))) {
+    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
       setStartDate(formik.values.startDate);
     }
-    if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
+    if (!_.isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
   };
