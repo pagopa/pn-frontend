@@ -23,7 +23,18 @@ import { Institution, PartyEntityWithUrl } from './Institutions';
 import { CardAction, CardElement, CardSort } from './ItemsCard';
 import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
-import { EventsType } from './MixpanelEvents';
+import {
+  EventCategory,
+  EventCreatedDelegationType,
+  EventDowntimeType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventNotificationsListType,
+  EventPageType,
+  EventPaymentRecipientType,
+  EventPaymentStatusType,
+  EventsType,
+} from './MixpanelEvents';
 import {
   AarDetails,
   AddressSource,
@@ -88,9 +99,13 @@ export {
   ResponseStatus,
   AddressSource,
   LegalFactType,
+  EventPageType,
+  EventDowntimeType,
+  EventPaymentRecipientType,
   PhysicalCommunicationType,
   PaymentInfoDetail,
   PaymentStatus,
+  EventCategory,
   PaymentAttachmentSName,
   MessageType,
   KnownSentiment,
@@ -112,6 +127,11 @@ export type {
   Column,
   DatePickerTypes,
   EventsType,
+  EventPaymentStatusType,
+  EventNotificationsListType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventCreatedDelegationType,
   GetNotificationsParams,
   GetNotificationsResponse,
   IAppMessage,

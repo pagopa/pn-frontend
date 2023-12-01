@@ -118,9 +118,9 @@ const MobileDelegates = () => {
     },
   ];
 
-  const handleAddDelegationClick = (source: string) => {
+  const handleAddDelegationClick = () => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_START);
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
@@ -147,7 +147,7 @@ const MobileDelegates = () => {
           <Button
             id="add-delegation-button"
             variant="outlined"
-            onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+            onClick={() => handleAddDelegationClick()}
             sx={{ mb: 1 }}
             data-testid="add-delegation"
           >
