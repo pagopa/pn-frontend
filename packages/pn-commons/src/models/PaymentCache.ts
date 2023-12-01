@@ -71,7 +71,7 @@ const pagoPaSchema: yup.SchemaOf<PagoPAPaymentFullDetails> = yup.object().shape(
   applyCost: yup.boolean().required(),
   status: yup.string().oneOf(Object.values(PaymentStatus)).not([undefined]),
   recipientType: yup.string().oneOf(Object.values(RecipientType)).not([undefined]),
-  paymentSourceChannel: yup.string(),
+  paymentSourceChannel: yup.string().not([undefined]),
   attachmentIdx: yup.number(),
   attachment: notificationDetailDocumentSchema.optional(),
   amount: yup.number().optional(),
