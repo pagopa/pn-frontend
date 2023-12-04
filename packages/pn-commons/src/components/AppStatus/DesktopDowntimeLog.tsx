@@ -7,9 +7,14 @@ import { DowntimeLogColumn, useFieldSpecs } from './downtimeLog.utils';
 type Props = {
   downtimeLog: DowntimeLogPage;
   getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any;
+  handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
 
-const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }: Props) => {
+const DesktopDowntimeLog = ({
+  downtimeLog,
+  getDowntimeLegalFactDocumentDetails,
+  handleTrackDownloadCertificateOpposable3dparties,
+}: Props) => {
   const fieldSpecs = useFieldSpecs({ getDowntimeLegalFactDocumentDetails });
   const {
     getDateFieldSpec,
@@ -34,7 +39,7 @@ const DesktopDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }
         width: '30%',
       },
       {
-        ...getLegalFactIdFieldSpec(),
+        ...getLegalFactIdFieldSpec(handleTrackDownloadCertificateOpposable3dparties),
         width: '30%',
       },
       {

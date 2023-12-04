@@ -72,6 +72,10 @@ const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, c
 const LinkRouteContacts: React.FC = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
+  const goToContactsPage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'home_notifiche' });
+    navigate(routes.RECAPITI);
+  };
   return (
     <Link
       component={'button'}
@@ -80,7 +84,7 @@ const LinkRouteContacts: React.FC = ({ children }) => {
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
-      onClick={() => navigate(routes.RECAPITI)}
+      onClick={goToContactsPage}
     >
       {children}
     </Link>
@@ -91,10 +95,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
-
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
 
   const cardHeader: [CardElement, CardElement] = [
     {
@@ -129,14 +129,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
           row.notificationStatus as NotificationStatus,
           { recipients: row.recipients as Array<string> }
         );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
+        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
       },
       gridProps: {
         xs: 8,
@@ -208,8 +201,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const cardActions: Array<CardAction> = [
