@@ -48,11 +48,6 @@ import { LoadingOverlay } from './Loading/LoadingOverlay';
 import LoadingPage from './LoadingPage';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
-import NotificationDetailTableAction from './NotificationDetail/NotificationDetailTable/NotificationDetailTableAction';
-import NotificationDetailTableBody from './NotificationDetail/NotificationDetailTable/NotificationDetailTableBody';
-import NotificationDetailTableBodyRow from './NotificationDetail/NotificationDetailTable/NotificationDetailTableBodyRow';
-import NotificationDetailTableCell from './NotificationDetail/NotificationDetailTable/NotificationDetailTableCell';
-import NotificationDetailTableContents from './NotificationDetail/NotificationDetailTable/NotificationDetailTableContents';
 import NotificationDetailTimeline from './NotificationDetail/NotificationDetailTimeline';
 import NotificationPaymentRecipient from './NotificationDetail/NotificationPaymentRecipient';
 import NotificationRelatedDowntimes from './NotificationDetail/NotificationRelatedDowntimes';
@@ -96,11 +91,6 @@ export {
   CustomPagination,
   PnCardsList,
   NotificationDetailTable,
-  NotificationDetailTableBody,
-  NotificationDetailTableContents,
-  NotificationDetailTableBodyRow,
-  NotificationDetailTableAction,
-  NotificationDetailTableCell,
   NotificationDetailDocuments,
   NotificationRelatedDowntimes,
   MobileNotificationsSort,
