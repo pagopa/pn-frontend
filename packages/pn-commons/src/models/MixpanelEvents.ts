@@ -2,14 +2,24 @@ import { NotificationStatus } from './NotificationStatus';
 
 export type EventsType = {
   [key: string]: {
-    // property category should be of type EventCategory however we should finish all the new implementations in PA and PG first.
+    // property event_category should be of type EventCategory however we should finish all the new implementations in PA and PG first.
     // So when PA and PG events are done, set type of category to EventCategory
     // Nicola Giornetta - 21-11-2023
-    category: string;
-    action: string;
+
+    // property event_type should be of type EventAction only however we should finish all the new implementations in PA and PG first.
+    // When PA and PG events are done then set type on EventAction only
+    // Nicola Giornetta - 30-11-2023
+    event_category: string;
+    event_type?: EventAction | string;
     getAttributes?: (payload: Record<string, any>) => Record<string, string>;
   };
 };
+
+export enum EventAction {
+  ACTION = 'action',
+  ERROR = 'error',
+  SCREEN_VIEW = 'screen_view',
+}
 
 export enum EventCategory {
   UX = 'UX',

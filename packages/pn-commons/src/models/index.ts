@@ -24,6 +24,7 @@ import { CardAction, CardElement, CardSort } from './ItemsCard';
 import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
 import {
+  EventAction,
   EventCategory,
   EventCreatedDelegationType,
   EventDowntimeType,
@@ -101,6 +102,7 @@ export {
   EventPageType,
   EventDowntimeType,
   EventPaymentRecipientType,
+  EventAction,
   PhysicalCommunicationType,
   PaymentInfoDetail,
   PaymentStatus,
