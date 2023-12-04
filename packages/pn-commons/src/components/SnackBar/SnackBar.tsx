@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, IconButton, Snackbar } from '@mui/material';
+import { Alert, AlertTitle, IconButton, Snackbar } from '@mui/material';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MessageType } from '../../models/MessageType';
@@ -11,16 +11,21 @@ type Props = {
   open: boolean;
   /** message type (error, success, info, warning) */
   type: MessageType;
+  /** title to be shown */
+  title?: React.ReactNode;
+  /** message to be shown */
+  message: React.ReactNode;
   /** A closing delay: if specified the sneakbar would close itself */
   closingDelay?: number;
   /** onClose action */
   onClose?: () => void;
+  /** Alert variant */
   variant?: 'outlined' | 'standard' | 'filled';
-  children?: React.ReactNode;
 };
 
 const SnackBar: React.FC<Props> = ({
-  children,
+  title,
+  message,
   open,
   type,
   closingDelay,
@@ -85,7 +90,8 @@ const SnackBar: React.FC<Props> = ({
               }}
               variant={variant}
             >
-              {children}
+              {title && <AlertTitle id={`alert-api-status}`}>{title}</AlertTitle>}
+              {message}
             </Alert>
           </Snackbar>
         </div>

@@ -84,11 +84,10 @@ const SessionGuardRender = () => {
       <SessionModal
         open
         title={goodbyeMessage.title}
+        message={goodbyeMessage.message}
         handleClose={() => goToLoginPortal()}
         initTimeout
-      >
-        {goodbyeMessage.message}
-      </SessionModal>
+      />
     ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
       <Outlet />
     ) : (

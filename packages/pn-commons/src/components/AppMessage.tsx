@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AlertTitle } from '@mui/material';
-
 import { IAppMessage, MessageType } from '../models';
 import { appStateActions, appStateSelectors } from '../redux';
 import SnackBar from './SnackBar/SnackBar';
@@ -79,14 +77,13 @@ const AppMessage = () => {
       {currentMessage && (
         <SnackBar
           key={currentMessage.message.id}
+          title={currentMessage.message.title}
+          message={currentMessage.message.message}
           open
           type={currentMessage.type === MessageType.ERROR ? MessageType.ERROR : MessageType.SUCCESS}
           onClose={() => onCloseToast(currentMessage)}
           closingDelay={5000}
-        >
-          <AlertTitle id={`alert-api-status`}>{currentMessage.message.title}</AlertTitle>
-          {currentMessage.message.message}
-        </SnackBar>
+        />
       )}
     </>
   );

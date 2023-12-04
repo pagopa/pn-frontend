@@ -7,11 +7,11 @@ import { useIsMobile } from '../hooks';
 type Props = {
   open: boolean;
   title: string;
+  message: React.ReactNode;
   onConfirm?: MouseEventHandler<HTMLButtonElement>;
   onConfirmLabel?: string;
   handleClose?: () => void;
   initTimeout?: boolean;
-  children?: React.ReactNode;
 };
 
 /* eslint-disable functional/no-let */
@@ -21,7 +21,7 @@ let timeout: NodeJS.Timeout;
  * Session Modal to handle end of session or unauthenticated scenarios.
  * @param open boolean - if modal is open or no
  * @param title string - title of the modal
- * @param children string - message to show inside the modal
+ * @param message string - message to show inside the modal
  * @param onConfirm action to perform when user click on "confirm" button
  * @param onConfirmLabel label to show on confirm button, default is "Riprova"
  * @param handleClose action to perform when closing modal when clicking outside of it
@@ -30,11 +30,11 @@ let timeout: NodeJS.Timeout;
 const SessionModal: React.FC<Props> = ({
   open,
   title,
+  message,
   onConfirm,
   onConfirmLabel = 'Riprova',
   handleClose,
   initTimeout = false,
-  children,
 }) => {
   const isMobile = useIsMobile();
 
@@ -68,7 +68,7 @@ const SessionModal: React.FC<Props> = ({
     >
       <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
       <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
-        {children}
+        {message}
       </DialogContentText>
       <DialogActions
         sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}

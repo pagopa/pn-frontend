@@ -6,9 +6,12 @@ import SnackBar from '../SnackBar';
 
 const renderSnackBar = (open: boolean, type: MessageType, closingDelay?: number) =>
   render(
-    <SnackBar open={open} type={type} closingDelay={closingDelay}>
-      SnackBar mocked message
-    </SnackBar>
+    <SnackBar
+      open={open}
+      message={'SnackBar mocked message'}
+      type={type}
+      closingDelay={closingDelay}
+    />
   );
 
 describe('SnackBar Component', () => {

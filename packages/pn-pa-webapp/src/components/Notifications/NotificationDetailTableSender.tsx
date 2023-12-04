@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button } from '@mui/material';
@@ -6,11 +6,6 @@ import {
   INotificationDetailTimeline,
   NotificationDetail,
   NotificationDetailTable,
-  NotificationDetailTableAction,
-  NotificationDetailTableBody,
-  NotificationDetailTableBodyRow,
-  NotificationDetailTableCell,
-  NotificationDetailTableContents,
   NotificationDetailTableRow,
   TimelineCategory,
   dataRegex,
@@ -43,11 +38,9 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
     notification.timeline.findIndex(
       (el: INotificationDetailTimeline) => el.category === TimelineCategory.PAYMENT
     ) > -1;
-
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-
   const openModal = () => {
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
@@ -56,23 +49,20 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   const handleModalClose = () => {
     setShowModal(false);
   };
-
   const handleModalCloseAndProceed = () => {
     setShowModal(false);
     if (userHasAdminPermissions) {
       onCancelNotification();
     }
   };
-
   const getTaxIdLabel = (taxId: string): string =>
     dataRegex.pIva.test(taxId)
       ? 'detail.tax-id-organization-recipient'
       : 'detail.tax-id-citizen-recipient';
-
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;
-    value: ReactNode;
+    value: React.ReactNode;
   }> = [
     {
       label: t('detail.sender', { ns: 'notifiche' }),
@@ -141,7 +131,6 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
       ),
     },
   ];
-
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
     .map((row, index) => ({
@@ -152,46 +141,24 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
 
   return (
     <>
-      <NotificationDetailTable>
-        <NotificationDetailTableContents label={t('detail.table-aria-label', { ns: 'notifiche' })}>
-          <NotificationDetailTableBody>
-            {detailTableRows.map((row) => (
-              <NotificationDetailTableBodyRow key={row.id}>
-                <NotificationDetailTableCell
-                  id={`row-label-${row.id}`}
-                  cellProps={{ py: { xs: 0, lg: 1 } }}
-                >
-                  {row.label}
-                </NotificationDetailTableCell>
-                <NotificationDetailTableCell
-                  id={`row-value-${row.id}`}
-                  cellProps={{ pb: 1, pt: { xs: 0, lg: 1 } }}
-                >
-                  {row.value}
-                </NotificationDetailTableCell>
-              </NotificationDetailTableBodyRow>
-            ))}
-          </NotificationDetailTableBody>
-        </NotificationDetailTableContents>
+      <NotificationDetailTable rows={detailTableRows}>
         {!cancellationInProgress && !cancelled && userHasAdminPermissions && (
-          <NotificationDetailTableAction>
-            <Button
-              variant="outlined"
-              sx={{
-                my: {
-                  xs: 3,
-                  md: 2,
-                },
-                borderColor: 'error.dark',
-                outlineColor: 'error.dark',
-                color: 'error.dark',
-              }}
-              onClick={openModal}
-              data-testid="cancelNotificationBtn"
-            >
-              {t('detail.cancel-notification', { ns: 'notifiche' })}
-            </Button>
-          </NotificationDetailTableAction>
+          <Button
+            variant="outlined"
+            sx={{
+              my: {
+                xs: 3,
+                md: 2,
+              },
+              borderColor: 'error.dark',
+              outlineColor: 'error.dark',
+              color: 'error.dark',
+            }}
+            onClick={openModal}
+            data-testid="cancelNotificationBtn"
+          >
+            {t('detail.cancel-notification', { ns: 'notifiche' })}
+          </Button>
         )}
       </NotificationDetailTable>
       {userHasAdminPermissions && (
@@ -205,5 +172,4 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
     </>
   );
 };
-
 export default NotificationDetailTableSender;

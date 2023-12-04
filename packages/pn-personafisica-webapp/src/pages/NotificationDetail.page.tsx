@@ -13,10 +13,6 @@ import {
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
   NotificationDetailTable,
-  NotificationDetailTableBody,
-  NotificationDetailTableBodyRow,
-  NotificationDetailTableCell,
-  NotificationDetailTableContents,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
@@ -395,30 +391,7 @@ const NotificationDetail = () => {
                     {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
                   </Alert>
                 )}
-                <NotificationDetailTable>
-                  <NotificationDetailTableContents
-                    label={t('detail.table-aria-label', { ns: 'notifiche' })}
-                  >
-                    <NotificationDetailTableBody>
-                      {detailTableRows.map((row) => (
-                        <NotificationDetailTableBodyRow key={row.id}>
-                          <NotificationDetailTableCell
-                            id={`row-label-${row.id}`}
-                            cellProps={{ py: { xs: 0, lg: 1 } }}
-                          >
-                            {row.label}
-                          </NotificationDetailTableCell>
-                          <NotificationDetailTableCell
-                            id={`row-value-${row.id}`}
-                            cellProps={{ pb: 1, pt: { xs: 0, lg: 1 } }}
-                          >
-                            {row.value}
-                          </NotificationDetailTableCell>
-                        </NotificationDetailTableBodyRow>
-                      ))}
-                    </NotificationDetailTableBody>
-                  </NotificationDetailTableContents>
-                </NotificationDetailTable>
+                <NotificationDetailTable rows={detailTableRows} />
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper

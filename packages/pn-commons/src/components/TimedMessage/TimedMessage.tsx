@@ -7,6 +7,7 @@ interface TimedMessageProps {
   timeout: number;
   /** Callback function when timeout reachs end */
   callback?: () => void;
+  /** Message to show */
   children?: React.ReactNode;
 }
 

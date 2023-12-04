@@ -14,9 +14,8 @@ describe('DisclaimerModal tests', () => {
         onCancel={mockCancel}
         confirmLabel={'Conferma'}
         checkboxLabel={'Ho capito'}
-      >
-        test content
-      </DisclaimerModal>
+        content={'test content'}
+      />
     );
     expect(baseElement).toHaveTextContent('test content');
     expect(baseElement).toHaveTextContent('Ho capito');

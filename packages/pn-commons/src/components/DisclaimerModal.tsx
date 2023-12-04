@@ -19,8 +19,8 @@ type Props = {
   onCancel: () => void;
   confirmLabel: string;
   title?: string;
+  content?: string;
   checkboxLabel?: string;
-  children?: React.ReactNode;
 };
 
 const DisclaimerModal: React.FC<Props> = ({
@@ -28,7 +28,7 @@ const DisclaimerModal: React.FC<Props> = ({
   onCancel,
   confirmLabel,
   title,
-  children,
+  content,
   checkboxLabel,
 }) => {
   const isMobile = useIsMobile();
@@ -44,7 +44,7 @@ const DisclaimerModal: React.FC<Props> = ({
     <Dialog open={true} data-testid="disclaimerDialog">
       {title && <DialogTitle sx={{ p: 4, pb: 2 }}>{title}</DialogTitle>}
       <DialogContent sx={{ p: 4 }}>
-        {children && <Box>{children}</Box>}
+        {content && <Box>{content}</Box>}
         {checkboxLabel && (
           <Box sx={{ mt: 2, ml: 0.5 }}>
             <FormControlLabel
