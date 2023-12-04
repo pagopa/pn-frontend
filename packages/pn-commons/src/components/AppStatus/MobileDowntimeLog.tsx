@@ -13,9 +13,14 @@ import DowntimeLogDataSwitch from './DowntimeLogDataSwitch';
 type Props = {
   downtimeLog: DowntimeLogPage;
   getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any;
+  handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
 
-const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }: Props) => {
+const MobileDowntimeLog = ({
+  downtimeLog,
+  getDowntimeLegalFactDocumentDetails,
+  handleTrackDownloadCertificateOpposable3dparties,
+}: Props) => {
   const fieldSpecs = useFieldSpecs();
   const { getField, getRows } = fieldSpecs;
 
@@ -70,6 +75,9 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
                   type={body.id}
                   inTwoLines={false}
                   getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
+                  handleTrackDownloadCertificateOpposable3dparties={
+                    handleTrackDownloadCertificateOpposable3dparties
+                  }
                 />
               </PnCardContentItem>
             ))}

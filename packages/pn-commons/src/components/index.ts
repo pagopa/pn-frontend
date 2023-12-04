@@ -52,6 +52,7 @@ import NotificationDetailTimeline from './NotificationDetail/NotificationDetailT
 import NotificationPaymentRecipient from './NotificationDetail/NotificationPaymentRecipient';
 import NotificationRelatedDowntimes from './NotificationDetail/NotificationRelatedDowntimes';
 import MobileNotificationsSort from './Notifications/MobileNotificationsSort';
+import { isNewNotification } from './Notifications/NewNotificationBadge';
 import NotificationsDataSwitch from './Notifications/NotificationsDataSwitch';
 import StatusTooltip from './Notifications/StatusTooltip';
 import CustomPagination from './Pagination/CustomPagination';
@@ -97,6 +98,7 @@ export {
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationsDataSwitch,
+  isNewNotification,
   PnAutocomplete,
   PnBreadcrumb,
   Prompt,

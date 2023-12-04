@@ -6,13 +6,16 @@ import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
+  EventNotificationsListType,
   NotificationColumnData,
+  NotificationStatus,
   PaginationData,
   Sort,
   TitleBox,
   calculatePages,
   formatToTimezoneString,
   getNextDay,
+  isNewNotification,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -79,19 +82,46 @@ const Notifiche = () => {
     ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
 
+  const getEventNotifications = (): EventNotificationsListType => ({
+    delegate: delegators.length > 0,
+    page_number: pagination.page,
+    total_count: notifications.length,
+    unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
+    delivered_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.DELIVERED
+    ).length,
+    opened_count: notifications.filter((n) => n.notificationStatus === NotificationStatus.VIEWED)
+      .length,
+    expired_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+    ).length,
+    not_found_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
+    ).length,
+    cancelled_count: notifications.filter(
+      (n) => n.notificationStatus === NotificationStatus.CANCELLED
+    ).length,
+  });
+
+  useEffect(() => {
+    if (notifications && delegators && pageReady) {
+      trackEventByType(
+        currentDelegator
+          ? TrackEventType.SEND_NOTIFICATION_DELEGATED
+          : TrackEventType.SEND_YOUR_NOTIFICATION,
+        getEventNotifications()
+      );
+    }
+  }, [notifications, delegators, pageReady]);
+
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   // Sort handlers
   const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
     dispatch(setSorting(s));
-  };
-
-  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
   useEffect(() => {
@@ -135,7 +165,6 @@ const Notifiche = () => {
               }}
               onPageRequest={handleChangePage}
               pagesToShow={pagesToShow}
-              eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
               sx={
                 isMobile
                   ? {

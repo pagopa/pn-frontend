@@ -21,7 +21,19 @@ import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
 import { MessageType } from './MessageType';
-import { EventsType } from './MixpanelEvents';
+import {
+  EventAction,
+  EventCategory,
+  EventCreatedDelegationType,
+  EventDowntimeType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventNotificationsListType,
+  EventPageType,
+  EventPaymentRecipientType,
+  EventPaymentStatusType,
+  EventsType,
+} from './MixpanelEvents';
 import {
   AarDetails,
   AddressSource,
@@ -92,9 +104,14 @@ export {
   ResponseStatus,
   AddressSource,
   LegalFactType,
+  EventPageType,
+  EventDowntimeType,
+  EventPaymentRecipientType,
+  EventAction,
   PhysicalCommunicationType,
   PaymentInfoDetail,
   PaymentStatus,
+  EventCategory,
   PaymentAttachmentSName,
   MessageType,
   KnownSentiment,
@@ -115,6 +132,11 @@ export type {
   Column,
   DatePickerTypes,
   EventsType,
+  EventPaymentStatusType,
+  EventNotificationsListType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventCreatedDelegationType,
   GetNotificationsParams,
   GetNotificationsResponse,
   NotificationColumnData,

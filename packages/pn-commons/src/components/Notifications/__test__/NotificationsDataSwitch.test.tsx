@@ -32,17 +32,13 @@ describe('NotificationsDataSwitch Component', () => {
   });
 
   it('renders component - badge', () => {
-    const { getByTestId } = render(
-      <NotificationsDataSwitch data={data} type="badge" handleEventTrackingTooltip={() => {}} />
-    );
+    const { getByTestId } = render(<NotificationsDataSwitch data={data} type="badge" />);
     const badge = getByTestId('new-notification-badge');
     expect(badge).toBeInTheDocument();
   });
 
   it('renders component - sentAt', () => {
-    const { container } = render(
-      <NotificationsDataSwitch data={data} type="sentAt" handleEventTrackingTooltip={() => {}} />
-    );
+    const { container } = render(<NotificationsDataSwitch data={data} type="sentAt" />);
     const regexp = new RegExp(`^${formatDate(data.sentAt)}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
@@ -50,7 +46,7 @@ describe('NotificationsDataSwitch Component', () => {
   it('renders component - sentAt - mobile', () => {
     window.matchMedia = createMatchMedia(800);
     const { container, getByTestId } = render(
-      <NotificationsDataSwitch data={data} type="sentAt" handleEventTrackingTooltip={() => {}} />
+      <NotificationsDataSwitch data={data} type="sentAt" />
     );
     const regexp = new RegExp(`^${formatDate(data.sentAt)}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
@@ -63,7 +59,6 @@ describe('NotificationsDataSwitch Component', () => {
       <NotificationsDataSwitch
         data={{ ...data, notificationStatus: NotificationStatus.VIEWED }}
         type="sentAt"
-        handleEventTrackingTooltip={() => {}}
       />
     );
     const regexp = new RegExp(`^${formatDate(data.sentAt)}$`, 'ig');
@@ -74,25 +69,19 @@ describe('NotificationsDataSwitch Component', () => {
 
   it('renders component - sender', () => {
     window.matchMedia = createMatchMedia(2000);
-    const { container } = render(
-      <NotificationsDataSwitch data={data} type="sender" handleEventTrackingTooltip={() => {}} />
-    );
+    const { container } = render(<NotificationsDataSwitch data={data} type="sender" />);
     const regexp = new RegExp(`^${data.sender}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
 
   it('renders component - subject', () => {
-    const { container } = render(
-      <NotificationsDataSwitch data={data} type="subject" handleEventTrackingTooltip={() => {}} />
-    );
+    const { container } = render(<NotificationsDataSwitch data={data} type="subject" />);
     const regexp = new RegExp(`^${data.subject}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
 
   it('renders component - iun', () => {
-    const { container } = render(
-      <NotificationsDataSwitch data={data} type="iun" handleEventTrackingTooltip={() => {}} />
-    );
+    const { container } = render(<NotificationsDataSwitch data={data} type="iun" />);
     const regexp = new RegExp(`^${data.iun}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
@@ -101,25 +90,13 @@ describe('NotificationsDataSwitch Component', () => {
     const { label } = getNotificationStatusInfos(data.notificationStatus, {
       recipients: data.recipients,
     });
-    const { container } = render(
-      <NotificationsDataSwitch
-        data={data}
-        type="notificationStatus"
-        handleEventTrackingTooltip={() => {}}
-      />
-    );
+    const { container } = render(<NotificationsDataSwitch data={data} type="notificationStatus" />);
     const regexp = new RegExp(`^${label}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });
 
   it('renders component - recipients', () => {
-    const { container } = render(
-      <NotificationsDataSwitch
-        data={data}
-        type="recipients"
-        handleEventTrackingTooltip={() => {}}
-      />
-    );
+    const { container } = render(<NotificationsDataSwitch data={data} type="recipients" />);
     const regexp = new RegExp(`^${data.recipients.join('')}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });

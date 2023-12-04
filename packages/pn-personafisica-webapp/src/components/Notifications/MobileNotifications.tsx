@@ -73,6 +73,10 @@ const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, c
 const LinkRouteContacts: React.FC = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
+  const goToContactsPage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'home_notifiche' });
+    navigate(routes.RECAPITI);
+  };
   return (
     <Link
       component={'button'}
@@ -81,15 +85,11 @@ const LinkRouteContacts: React.FC = ({ children }) => {
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
-      onClick={() => navigate(routes.RECAPITI)}
+      onClick={goToContactsPage}
     >
       {children}
     </Link>
   );
-};
-
-const handleEventTrackingTooltip = () => {
-  trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
 };
 
 const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDelegator }: Props) => {
@@ -153,8 +153,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -203,11 +201,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                   }}
                   position="left"
                 >
-                  <NotificationsDataSwitch
-                    data={data}
-                    type="sentAt"
-                    handleEventTrackingTooltip={handleEventTrackingTooltip}
-                  />
+                  <NotificationsDataSwitch data={data} type="sentAt" />
                 </PnCardHeaderItem>
                 <PnCardHeaderItem
                   gridProps={{
@@ -216,11 +210,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                   }}
                   position="right"
                 >
-                  <NotificationsDataSwitch
-                    data={data}
-                    type="notificationStatus"
-                    handleEventTrackingTooltip={handleEventTrackingTooltip}
-                  />
+                  <NotificationsDataSwitch data={data} type="notificationStatus" />
                 </PnCardHeaderItem>
               </PnCardHeader>
               <PnCardContent>
@@ -230,11 +220,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                     label={body.label}
                     wrapValueInTypography={body.wrapValueInTypography}
                   >
-                    <NotificationsDataSwitch
-                      data={data}
-                      type={body.id}
-                      handleEventTrackingTooltip={handleEventTrackingTooltip}
-                    />
+                    <NotificationsDataSwitch data={data} type={body.id} />
                   </PnCardContentItem>
                 ))}
               </PnCardContent>

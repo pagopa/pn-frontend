@@ -8,26 +8,17 @@ import StatusTooltip from './StatusTooltip';
 
 const NotificationStatusChip: React.FC<{
   data: Row<Notification>;
-  handleEventTrackingTooltip: () => void;
-}> = ({ data, handleEventTrackingTooltip }) => {
+}> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
-  return (
-    <StatusTooltip
-      label={label}
-      tooltip={tooltip}
-      color={color}
-      eventTrackingCallback={handleEventTrackingTooltip}
-    ></StatusTooltip>
-  );
+  return <StatusTooltip label={label} tooltip={tooltip} color={color} />;
 };
 
 const NotificationsDataSwitch: React.FC<{
   data: Row<Notification>;
   type: keyof NotificationColumnData;
-  handleEventTrackingTooltip: () => void;
-}> = ({ data, type, handleEventTrackingTooltip }) => {
+}> = ({ data, type }) => {
   const isMobile = useIsMobile();
 
   if (type === 'badge') {
@@ -61,9 +52,7 @@ const NotificationsDataSwitch: React.FC<{
     return <>{data.iun}</>;
   }
   if (type === 'notificationStatus') {
-    return (
-      <NotificationStatusChip data={data} handleEventTrackingTooltip={handleEventTrackingTooltip} />
-    );
+    return <NotificationStatusChip data={data} />;
   }
   if (type === 'recipients') {
     return (

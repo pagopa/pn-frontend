@@ -56,6 +56,10 @@ const LinkRemoveFilters: React.FC<{ cleanFilters: () => void }> = ({ children, c
 const LinkRouteContacts: React.FC = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
+  const goToContactsPage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'home_notifiche' });
+    navigate(routes.RECAPITI);
+  };
   return (
     <Link
       component={'button'}
@@ -64,15 +68,11 @@ const LinkRouteContacts: React.FC = ({ children }) => {
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
-      onClick={() => navigate(routes.RECAPITI)}
+      onClick={goToContactsPage}
     >
       {children}
     </Link>
   );
-};
-
-const handleEventTrackingTooltip = () => {
-  trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
 };
 
 const DesktopNotifications = ({
@@ -137,8 +137,6 @@ const DesktopNotifications = ({
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   return (
@@ -175,11 +173,7 @@ const DesktopNotifications = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <NotificationsDataSwitch
-                      data={row}
-                      type={column.id}
-                      handleEventTrackingTooltip={handleEventTrackingTooltip}
-                    />
+                    <NotificationsDataSwitch data={row} type={column.id} />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>

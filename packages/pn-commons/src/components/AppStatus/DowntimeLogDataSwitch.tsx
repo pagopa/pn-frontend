@@ -29,7 +29,14 @@ const DowntimeLogDataSwitch: React.FC<{
   type: keyof Downtime;
   inTwoLines: boolean;
   getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any;
-}> = ({ data, type, inTwoLines, getDowntimeLegalFactDocumentDetails }) => {
+  handleTrackDownloadCertificateOpposable3dparties?: () => void;
+}> = ({
+  data,
+  type,
+  inTwoLines,
+  getDowntimeLegalFactDocumentDetails,
+  handleTrackDownloadCertificateOpposable3dparties,
+}) => {
   if (type === 'startDate') {
     return <FormattedDateAndTime date={data.startDate} inTwoLines={inTwoLines} />;
   }
@@ -59,6 +66,9 @@ const DowntimeLogDataSwitch: React.FC<{
         startIcon={<DownloadIcon />}
         data-testid="download-legal-fact"
         onClick={() => {
+          if (handleTrackDownloadCertificateOpposable3dparties) {
+            handleTrackDownloadCertificateOpposable3dparties();
+          }
           void getDowntimeLegalFactDocumentDetails(data.legalFactId as string);
         }}
       >

@@ -92,7 +92,7 @@ describe('NotificationDetailTimelineStep', () => {
         clickHandler={mockClickHandler}
         showMoreButtonLabel="Show More"
         showLessButtonLabel="Show Less"
-        eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
+        handleTrackShowMoreLess={eventTrackingCallbackShowMore}
       />
     );
     // Initially, only macro step should be visible
@@ -150,7 +150,7 @@ describe('NotificationDetailTimelineStep', () => {
     moreLessButton = getByTestId('more-less-timeline-step');
     expect(moreLessButton).toHaveTextContent('Show Less');
     fireEvent.click(moreLessButton);
-    expect(eventTrackingCallbackShowMore).toBeCalledTimes(1);
+    expect(eventTrackingCallbackShowMore).toBeCalledTimes(2);
     // After clicking "Show Less", additional steps should be hidden
     dateItemsMicro = queryAllByTestId('dateItemMicro');
     expect(dateItemsMicro).toHaveLength(0);
