@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import { IAppMessage, MessageType } from '../models';
 import { appStateActions, appStateSelectors } from '../redux';
@@ -12,6 +13,7 @@ type EnqueuedMessage = {
 
 const AppMessage = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
@@ -56,6 +58,11 @@ const AppMessage = () => {
       }));
     setQueue((currentValue) => currentValue.concat(newQueue));
   };
+
+  useEffect(() => {
+    setCurrentMessage(null);
+    setQueue([]);
+  }, [location.key]);
 
   useEffect(() => {
     if (!currentMessage && queue.length > 0) {
