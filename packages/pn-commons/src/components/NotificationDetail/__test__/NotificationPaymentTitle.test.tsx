@@ -25,14 +25,15 @@ describe('NotificationPaymentTite component', () => {
     const { container, getByTestId } = render(
       <NotificationPaymentTitle
         pagoPaF24={paymentsData.pagoPaF24}
-        f24Only={paymentsData.f24Only}
+        f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
       />
     );
 
-    expect(container).toHaveTextContent('notifiche - detail.payment.subtitle-mixed');
-    expect(container).toHaveTextContent('notifiche - detail.detail.payment.how');
+    expect(container).toHaveTextContent(
+      'notifiche - detail.payment.subtitle notifiche - detail.payment.how'
+    );
     const faq = getByTestId('faqNotificationCosts');
     expect(faq).toBeInTheDocument();
   });
@@ -41,14 +42,15 @@ describe('NotificationPaymentTite component', () => {
     const { container, getByTestId } = render(
       <NotificationPaymentTitle
         pagoPaF24={[paymentsData.pagoPaF24[0]]}
-        f24Only={paymentsData.f24Only}
+        f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
       />
     );
 
-    expect(container).toHaveTextContent('notifiche - detail.payment.single-payment-subtitle');
-    expect(container).toHaveTextContent('notifiche - detail.detail.payment.how');
+    expect(container).toHaveTextContent(
+      'notifiche - detail.payment.single-payment-subtitle notifiche - detail.payment.how'
+    );
     const faq = getByTestId('faqNotificationCosts');
     expect(faq).toBeInTheDocument();
   });
@@ -63,8 +65,9 @@ describe('NotificationPaymentTite component', () => {
       />
     );
 
-    expect(container).toHaveTextContent('notifiche - detail.payment.subtitle');
-    expect(container).toHaveTextContent('notifiche - detail.detail.payment.how');
+    expect(container).toHaveTextContent(
+      'notifiche - detail.payment.subtitle notifiche - detail.payment.how'
+    );
     const faq = getByTestId('faqNotificationCosts');
     expect(faq).toBeInTheDocument();
   });
