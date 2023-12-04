@@ -460,6 +460,21 @@ const NotificationDetail = () => {
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
+
+                {!mandateId && <DomicileBanner source="dettaglio_notifica" />}
+                <Paper sx={{ p: 3 }} elevation={0}>
+                  <NotificationDetailDocuments
+                    title={t('detail.acts', { ns: 'notifiche' })}
+                    documents={notification.documents}
+                    clickHandler={documentDowloadHandler}
+                    documentsAvailable={notification.documentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
+                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    titleVariant="h6"
+                  />
+                </Paper>
+
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
@@ -485,18 +500,6 @@ const NotificationDetail = () => {
                   </Paper>
                 )}
 
-                {!mandateId && <DomicileBanner source={'dettaglio_notifica'} />}
-                <Paper sx={{ p: 3 }} elevation={0}>
-                  <NotificationDetailDocuments
-                    title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents}
-                    clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                  />
-                </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
