@@ -1,7 +1,7 @@
-import React, { Fragment, memo, useEffect, useState } from 'react';
+import React, { Fragment, memo, useEffect, useRef, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Link, RadioGroup, Typography } from '@mui/material';
 
 import { downloadDocument } from '../../hooks';
 import {
@@ -23,6 +23,35 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
+import NotificationPaymentTitle from './NotificationPaymentTitle';
+
+const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
+
+const getPaymentsStatus = (
+  paginationData: PaginationData,
+  pagoPaF24: Array<PaymentDetails>
+): EventPaymentStatusType => ({
+  page_number: paginationData.page,
+  count_payment: pagoPaF24.length,
+  count_canceled: pagoPaF24.filter(
+    (f) =>
+      f.pagoPa?.status === PaymentStatus.FAILED &&
+      f.pagoPa.detail === PaymentInfoDetail.PAYMENT_CANCELED
+  ).length,
+  count_error: pagoPaF24.filter(
+    (f) =>
+      f.pagoPa?.status === PaymentStatus.FAILED &&
+      f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
+      f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
+  ).length,
+  count_expired: pagoPaF24.filter(
+    (f) =>
+      f.pagoPa?.status === PaymentStatus.FAILED &&
+      f.pagoPa.detail === PaymentInfoDetail.PAYMENT_EXPIRED
+  ).length,
+  count_paid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length,
+  count_unpaid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.REQUIRED).length,
+});
 
 type Props = {
   payments: PaymentsData;
@@ -57,109 +86,42 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     size: 5,
     totalElements: payments.pagoPaF24.length,
   });
+  const cancelledNotificationFAQ = `${landingSiteUrl}${FAQ_NOTIFICATION_CANCELLED_REFUND}`;
 
   const paginatedPayments = pagoPaF24.slice(
     paginationData.page * paginationData.size,
     (paginationData.page + 1) * paginationData.size
   );
 
-  const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
-  const hasRequiredPayment = pagoPaF24.some(
-    (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
-  );
-
   const [selectedPayment, setSelectedPayment] = useState<PagoPAPaymentFullDetails | null>(null);
+  const [loadingPayment, setLoadingPayment] = useState(false);
+  const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
-  const allPaymentsIsPaid = pagoPaF24.every(
-    (payment) => payment.pagoPa?.status === PaymentStatus.SUCCEEDED
-  );
-
-  const FAQ_NOTIFICATION_COSTS = '/faq#costi-di-notifica';
-  const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
-
-  const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
-  const cancelledNotificationFAQ = `${landingSiteUrl}${FAQ_NOTIFICATION_CANCELLED_REFUND}`;
-
-  const getTitle = () => {
-    const FaqLink = (
-      <Link
-        href={notificationCostsFaqLink}
-        onClick={() => handleTrackEventFn(EventPaymentRecipientType.SEND_MULTIPAYMENT_MORE_INFO)}
-        target="_blank"
-        fontWeight="bold"
-        sx={{ cursor: 'pointer' }}
-      >
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.how')}
-      </Link>
-    );
-
-    if (pagoPaF24.length > 0 && f24Only.length > 0) {
-      return (
-        <>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-mixed')}
-          &nbsp;
-          {FaqLink}
-        </>
-      );
-    }
-
-    if (pagoPaF24.length === 1) {
-      return (
-        <>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.single-payment-subtitle')}
-          &nbsp;
-          {FaqLink}
-        </>
-      );
-    }
-
-    if (pagoPaF24.length > 1) {
-      return (
-        <>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle')}
-          &nbsp;
-          {FaqLink}
-        </>
-      );
-    }
-
-    return getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-f24');
-  };
+  // calc the overall status of the payments and define variables to show/hide content
+  const paymentsStatus = getPaymentsStatus(paginationData, pagoPaF24);
+  const allPaymentsIsPaid = paymentsStatus.count_paid === pagoPaF24.length;
+  const isSinglePayment = paymentsStatus.count_payment === 1 && !isCancelled;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
-
-    setSelectedPayment(
-      pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa || null
-    );
+    setLoadingPayment(true);
+    setSelectedPayment(null);
+    // eslint-disable-next-line functional/immutable-data
+    loadingPaymentTimeout.current = setTimeout(() => {
+      setLoadingPayment(false);
+      setSelectedPayment(
+        pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection)?.pagoPa || null
+      );
+    }, 1000);
   };
 
   const handleDeselectPayment = () => {
+    setLoadingPayment(false);
     setSelectedPayment(null);
+    if (loadingPaymentTimeout.current) {
+      clearTimeout(loadingPaymentTimeout.current);
+    }
   };
-
-  const getPaymentsStatus = (): EventPaymentStatusType => ({
-    page_number: paginationData.page,
-    count_payment: pagoPaF24.length,
-    count_canceled: pagoPaF24.filter(
-      (f) =>
-        f.pagoPa?.status === PaymentStatus.FAILED &&
-        f.pagoPa.detail === PaymentInfoDetail.PAYMENT_CANCELED
-    ).length,
-    count_error: pagoPaF24.filter(
-      (f) =>
-        f.pagoPa?.status === PaymentStatus.FAILED &&
-        f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
-        f.pagoPa.detail !== PaymentInfoDetail.PAYMENT_EXPIRED
-    ).length,
-    count_expired: pagoPaF24.filter(
-      (f) =>
-        f.pagoPa?.status === PaymentStatus.FAILED &&
-        f.pagoPa.detail === PaymentInfoDetail.PAYMENT_EXPIRED
-    ).length,
-    count_paid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length,
-    count_unpaid: pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.REQUIRED).length,
-  });
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
     if (selectedPayment) {
@@ -185,8 +147,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    setSelectedPayment(isSinglePayment && hasRequiredPayment ? pagoPaF24[0].pagoPa ?? null : null);
-    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, getPaymentsStatus());
+    if (isSinglePayment && paymentsStatus.count_unpaid > 0) {
+      setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
+    }
+    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, paymentsStatus);
   }, [payments]);
 
   const handleTrackEventFn = (event: EventPaymentRecipientType, param?: object) => {
@@ -194,6 +158,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       handleTrackEvent(event, param);
     }
   };
+
+  useEffect(
+    () => () => {
+      if (loadingPaymentTimeout.current) {
+        clearTimeout(loadingPaymentTimeout.current);
+      }
+    },
+    []
+  );
 
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
@@ -219,7 +192,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </Alert>
       ) : (
         <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-          {getTitle()}
+          <NotificationPaymentTitle
+            landingSiteUrl={landingSiteUrl}
+            handleTrackEventFn={handleTrackEventFn}
+            pagoPaF24={pagoPaF24}
+            f24Only={f24Only}
+          />
         </Typography>
       )}
 
@@ -266,7 +244,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 fullWidth
                 variant="contained"
                 data-testid="pay-button"
-                disabled={!selectedPayment}
+                disabled={!selectedPayment && !loadingPayment}
                 onClick={() =>
                   onPayClick(
                     selectedPayment?.noticeCode,
@@ -277,9 +255,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               >
                 {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit')}
                 &nbsp;
+                {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
                 {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
-              {(!selectedPayment || selectedPayment?.attachment) && (
+              {selectedPayment && selectedPayment?.attachment && (
                 <Button
                   fullWidth
                   variant="outlined"
@@ -337,14 +316,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               <NotificationPaymentF24Item
                 f24Item={f24Item}
                 getPaymentAttachmentAction={getPaymentAttachmentAction}
-                handleTrackDownloadF24={
-                  void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+                handleTrackDownloadF24={() =>
+                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
                 }
-                handleTrackDownloadF24Success={
-                  void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+                handleTrackDownloadF24Success={() =>
+                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
                 }
-                handleTrackDownloadF24Timeout={
-                  void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+                handleTrackDownloadF24Timeout={() =>
+                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
                 }
                 timerF24={timerF24}
               />
