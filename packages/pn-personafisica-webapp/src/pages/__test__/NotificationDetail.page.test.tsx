@@ -516,6 +516,7 @@ describe('NotificationDetail Page', () => {
   });
 
   it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    jest.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -557,6 +558,11 @@ describe('NotificationDetail Page', () => {
     expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
     expect(payButton).toBeEnabled();
     fireEvent.click(payButton!);
     expect(mock.history.post).toHaveLength(2);

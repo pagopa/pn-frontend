@@ -114,7 +114,7 @@ const Notifiche = () => {
   });
 
   useEffect(() => {
-    if (notifications) {
+    if (notifications && delegators && pageReady) {
       trackEventByType(
         currentDelegator
           ? TrackEventType.SEND_NOTIFICATION_DELEGATED
@@ -122,7 +122,7 @@ const Notifiche = () => {
         getEventNotifications()
       );
     }
-  }, [notifications, delegators]);
+  }, [notifications, delegators, pageReady]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
