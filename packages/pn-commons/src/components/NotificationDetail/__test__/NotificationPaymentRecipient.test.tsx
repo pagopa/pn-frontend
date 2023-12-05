@@ -22,13 +22,13 @@ describe('NotificationPaymentRecipient Component', () => {
     f24Only: getF24Payments(payments, 0),
   };
 
-  beforeAll(() => {
-    setPaymentCache({
-      iun: notificationToFe.iun,
-      timestamp: new Date().toISOString(),
-      payments: [],
-    });
-  });
+  // beforeAll(() => {
+  //   setPaymentCache({
+  //     iun: notificationToFe.iun,
+  //     timestamp: new Date().toISOString(),
+  //     payments: [],
+  //   });
+  // });
 
   const F24TIMER = 15000;
 
@@ -261,6 +261,11 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleFetchPaymentsInfo on pagination click', async () => {
+    setPaymentCache({
+      iun: notificationToFe.iun,
+      timestamp: new Date().toISOString(),
+      payments: [],
+    });
     const fetchPaymentsInfoMk = jest.fn();
     const result = render(
       <NotificationPaymentRecipient
@@ -280,5 +285,31 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(pageButtons[2]);
 
     expect(fetchPaymentsInfoMk).toBeCalledTimes(1);
+  });
+
+  it('should go to specific page if is present on session storage', async () => {
+    setPaymentCache({
+      iun: notificationToFe.iun,
+      timestamp: new Date().toISOString(),
+      payments: [],
+      currentPaymentPage: 1, // pages starts from 0
+    });
+
+    const { getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+
+    const pageSelector = getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+
+    expect(pageButtons[2]).toHaveClass('Mui-selected');
   });
 });

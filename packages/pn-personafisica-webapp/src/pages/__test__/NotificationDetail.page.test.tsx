@@ -568,7 +568,7 @@ describe('NotificationDetail Page', () => {
     });
   });
 
-  it.only('should show correct paginated payments', async () => {
+  it('should show correct paginated payments', async () => {
     let paginationData = {
       page: 0,
       size: 5,
@@ -609,15 +609,6 @@ describe('NotificationDetail Page', () => {
       (paginationData.page + 1) * paginationData.size
     );
 
-    console.log(secondPagePaymentInfoRequest);
-
-    console.log(
-      paymentInfo.slice(
-        paginationData.page * paginationData.size,
-        (paginationData.page + 1) * paginationData.size
-      )
-    );
-
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest)
       .reply(
@@ -627,10 +618,10 @@ describe('NotificationDetail Page', () => {
           (paginationData.page + 1) * paginationData.size
         )
       );
-    console.log(mock.history);
-    // await waitFor(() => {
-    //   expect(mock.history.post).toHaveLength(2);
-    // });
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+    });
 
     // check that the other payments are shown
     const secondPageItems = result?.queryAllByTestId('pagopa-item');
@@ -694,14 +685,15 @@ describe('NotificationDetail Page', () => {
   });
 
   it('should fetch only currentPayment if is present in cache', async () => {
-    const cacheWithCurrentPayment = {
+    const currentPayment = {
+      creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId ?? '',
+      noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode ?? '',
+    };
+
+    setPaymentCache({
       ...cachedPayments,
-      currentPayment: {
-        creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId,
-        noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode,
-      },
-    } as PaymentCache;
-    sessionStorage.setItem('payments', JSON.stringify(cacheWithCurrentPayment));
+      currentPayment,
+    });
 
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock
@@ -711,7 +703,7 @@ describe('NotificationDetail Page', () => {
           noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode,
         },
       ])
-      .reply(200, paymentInfo);
+      .reply(200, paymentInfo.slice(0, 1));
 
     await act(async () => {
       result = render(<NotificationDetail />, {

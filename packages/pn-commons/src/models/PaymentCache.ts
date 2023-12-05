@@ -7,7 +7,9 @@ import {
   NotificationDetailDocument,
   PagoPAPaymentFullDetails,
   PaymentDetails,
+  PaymentInfoDetail,
   PaymentStatus,
+  RecipientType,
 } from './NotificationDetail';
 
 export type PaymentCache = {
@@ -61,26 +63,26 @@ const notificationDetailDocumentSchema: yup.SchemaOf<NotificationDetailDocument>
   )
   .noUnknown(true);
 
-// @ts-expect-error TODO: fix paymentSourceChannel and recipientType
 const pagoPaSchema: yup.SchemaOf<PagoPAPaymentFullDetails> = yup
   .object()
   .shape({
     creditorTaxId: yup.string().required(),
     noticeCode: yup.string().required(),
     applyCost: yup.boolean().required(),
-    status: yup.string().oneOf(Object.values(PaymentStatus)).required(),
-    recipientType: yup.string().optional(),
+    status: yup.mixed().oneOf(Object.values(PaymentStatus)).required(),
+    recipientType: yup.mixed().oneOf(Object.values(RecipientType)).optional(),
     paymentSourceChannel: yup.string().optional(),
     attachmentIdx: yup.number(),
     attachment: notificationDetailDocumentSchema.optional(),
     amount: yup.number().optional(),
     causaleVersamento: yup.string().optional(),
     dueDate: yup.string().optional(),
-    detail: yup.string().optional(),
+    detail: yup.mixed().oneOf(Object.values(PaymentInfoDetail)).optional(),
     detail_v2: yup.string().optional(),
     errorCode: yup.string().optional(),
     url: yup.string().optional(),
     recIndex: yup.number().optional(),
+    uncertainPaymentDate: yup.boolean().optional(),
   })
   .noUnknown(true);
 

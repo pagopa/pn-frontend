@@ -286,7 +286,6 @@ const NotificationDetail = () => {
 
   const fetchPaymentsInfo = useCallback(
     (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
-      console.log({ payments });
       const paymentInfoRequest = payments.reduce((acc: any, payment) => {
         if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
           acc.push({
@@ -296,8 +295,6 @@ const NotificationDetail = () => {
         }
         return acc;
       }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
-
-      console.log('paymentInfoRequest', paymentInfoRequest);
 
       if (paymentInfoRequest.length === 0) {
         return;
@@ -349,7 +346,6 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      console.log('inside useEffect');
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);

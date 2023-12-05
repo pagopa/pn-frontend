@@ -19,9 +19,11 @@ import {
   TimelineCategory,
   getF24Payments,
   getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
 import { parseNotificationDetailForRecipient } from '../utility/notification.utility';
+import { paymentInfo } from './ExternalRegistry.mock';
 
 export const payments: Array<NotificationDetailPayment> = [
   {
@@ -570,5 +572,9 @@ export const cachedPayments: PaymentCache = {
   iun: notificationDTO.iun,
   timestamp: new Date().toISOString(),
   currentPaymentPage: 0,
-  payments: getPagoPaF24Payments(payments, 2),
+  payments: populatePaymentsPagoPaF24(
+    notificationDTO.timeline,
+    paymentsData.pagoPaF24,
+    paymentInfo
+  ),
 };
