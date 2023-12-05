@@ -112,6 +112,9 @@ const NotificationDetail = () => {
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
+  const legalFactDownloadAARetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
+  );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
@@ -383,6 +386,7 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+  const timeoutAARMessage = legalFactDownloadAARetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
@@ -506,6 +510,14 @@ const NotificationDetail = () => {
                 )}
 
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+                  <TimedMessage
+                    timeout={timeoutAARMessage}
+                    message={
+                      <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                        {t('detail.document-not-available', { ns: 'notifiche' })}
+                      </Alert>
+                    }
+                  />
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
