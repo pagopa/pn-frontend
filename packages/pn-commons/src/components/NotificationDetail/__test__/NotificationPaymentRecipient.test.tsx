@@ -22,14 +22,6 @@ describe('NotificationPaymentRecipient Component', () => {
     f24Only: getF24Payments(payments, 0),
   };
 
-  // beforeAll(() => {
-  //   setPaymentCache({
-  //     iun: notificationToFe.iun,
-  //     timestamp: new Date().toISOString(),
-  //     payments: [],
-  //   });
-  // });
-
   const F24TIMER = 15000;
 
   it('should render component', () => {
