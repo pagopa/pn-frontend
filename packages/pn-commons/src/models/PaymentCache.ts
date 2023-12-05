@@ -33,6 +33,7 @@ const attachmentSchema: yup.SchemaOf<Attachment> = yup
       versionToken: yup.string().required(),
     }),
   })
+  .default(undefined)
   .noUnknown(true);
 
 const f24Schema: yup.SchemaOf<F24PaymentDetails> = yup
@@ -105,6 +106,6 @@ export const paymentCacheSchema: yup.SchemaOf<PaymentCache> = yup
       })
       .optional(),
     currentPaymentPage: yup.number().optional(),
-    payments: yup.array(pagoPaF24Schema).required(),
+    payments: yup.array(pagoPaF24Schema).optional(),
   })
   .noUnknown(true);

@@ -176,14 +176,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  const handlePaginate = (pdata: PaginationData) => {
-    setPaginationData(pdata);
+  const handlePaginate = (pageData: PaginationData) => {
+    setPaginationData(pageData);
     const paginatedPayments = pagoPaF24.slice(
-      pdata.page * pdata.size,
-      (pdata.page + 1) * pdata.size
+      pageData.page * pageData.size,
+      (pageData.page + 1) * pageData.size
     );
-    console.log({ paginatedPayments });
-    setPaymentCache({ currentPaymentPage: pdata.page });
+    setPaymentCache({ currentPaymentPage: pageData.page });
     handleFetchPaymentsInfo(paginatedPayments ?? []);
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };

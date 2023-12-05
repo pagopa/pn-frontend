@@ -18,7 +18,13 @@ import {
   RecipientType,
   TimelineCategory,
 } from '../models';
-import { getF24Payments, getPagoPaF24Payments, parseNotificationDetail } from '../utility';
+import {
+  getF24Payments,
+  getPagoPaF24Payments,
+  parseNotificationDetail,
+  populatePaymentsPagoPaF24,
+} from '../utility';
+import { paymentInfo } from './ExternalRegistry.mock';
 
 function getOneRecipientNotification(): NotificationDetail {
   const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
@@ -652,5 +658,9 @@ export const cachedPayments: PaymentCache = {
   iun: notificationDTO.iun,
   timestamp: new Date().toISOString(),
   currentPaymentPage: 0,
-  payments: getPagoPaF24Payments(payments, 2),
+  payments: populatePaymentsPagoPaF24(
+    notificationDTO.timeline,
+    paymentsData.pagoPaF24,
+    paymentInfo
+  ),
 };

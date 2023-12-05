@@ -1,11 +1,10 @@
-import exp from 'constants';
 import React from 'react';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
-import { getPaymentCache } from '../../../utility';
+import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
   getPagoPaF24Payments,
@@ -22,6 +21,14 @@ describe('NotificationPaymentRecipient Component', () => {
     ),
     f24Only: getF24Payments(payments, 0),
   };
+
+  beforeAll(() => {
+    setPaymentCache({
+      iun: notificationToFe.iun,
+      timestamp: new Date().toISOString(),
+      payments: [],
+    });
+  });
 
   const F24TIMER = 15000;
 

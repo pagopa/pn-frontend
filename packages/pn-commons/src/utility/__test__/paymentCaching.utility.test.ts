@@ -38,11 +38,9 @@ describe('Payment caching utility', () => {
   it('should set a new elements in the paymentsPage array', () => {
     const newPaymentItem = {
       ...cachedPayments,
-      ...{
-        pagoPa: {
-          noticeCode: '123456789',
-          creditorTaxId: '123456789',
-        },
+      currentPayment: {
+        noticeCode: '123456789',
+        creditorTaxId: '123456789',
       },
     };
 
@@ -52,17 +50,24 @@ describe('Payment caching utility', () => {
   });
 
   it('should delete a property in the payment cache', () => {
-    const paymentCache = getPaymentCache();
-    expect(paymentCache).toEqual(cachedPayments);
+    const newPaymentItem = {
+      ...cachedPayments,
+      currentPayment: {
+        noticeCode: '123456789',
+        creditorTaxId: '123456789',
+      },
+    };
 
-    deletePropertiesInPaymentCache(['iun']);
+    setPaymentCache(newPaymentItem);
+
+    deletePropertiesInPaymentCache(['currentPayment']);
 
     const result = {
       ...cachedPayments,
-      iun: undefined,
+      currentPayment: undefined,
     };
 
-    delete result.iun;
+    delete result.currentPayment;
 
     const paymentCacheAfterDelete = getPaymentCache();
     expect(paymentCacheAfterDelete).toEqual(result);
