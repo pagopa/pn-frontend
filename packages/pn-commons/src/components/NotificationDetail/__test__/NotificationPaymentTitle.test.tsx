@@ -25,14 +25,14 @@ describe('NotificationPaymentTite component', () => {
     const { container, getByTestId } = render(
       <NotificationPaymentTitle
         pagoPaF24={paymentsData.pagoPaF24}
-        f24Only={[]}
+        f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
       />
     );
 
     expect(container).toHaveTextContent(
-      'notifiche - detail.payment.subtitle notifiche - detail.payment.how'
+      'notifiche - detail.payment.subtitle-mixed notifiche - detail.payment.how'
     );
     const faq = getByTestId('faqNotificationCosts');
     expect(faq).toBeInTheDocument();
