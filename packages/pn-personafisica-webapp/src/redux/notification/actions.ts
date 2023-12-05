@@ -7,14 +7,15 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
+  PaymentDetails,
   PaymentNotice,
   checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
   deletePropertiesInPaymentCache,
   getPaymentCache,
-  getPaymentsFromCache,
   performThunkAction,
   populatePaymentsPagoPaF24,
+  setPaymentCache,
   setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -106,8 +107,7 @@ export const getPaymentAttachment = createAsyncThunk<
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<
-  // Array<PaymentDetails>,
-  any,
+  Array<PaymentDetails>,
   { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
   { state: RootState }
 >(
@@ -123,10 +123,12 @@ export const getNotificationPaymentInfo = createAsyncThunk<
       const { notificationState } = getState();
       const paymentCache = getPaymentCache();
 
-      if (checkIunAndTimestamp(notificationState.notification.iun, new Date().toISOString())) {
+      if (
+        checkIunAndTimestamp(notificationState.notification.iun, new Date().toISOString()) &&
+        paymentCache?.payments
+      ) {
+        // If i have the current payment in cache means that i'm coming from the payment page and i need to update the payment
         if (paymentCache?.currentPayment) {
-          console.log('paymentCache?.currentPayment', paymentCache?.currentPayment);
-
           const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
             paymentCache.currentPayment,
           ]);
@@ -140,14 +142,16 @@ export const getNotificationPaymentInfo = createAsyncThunk<
           setPaymentsInCache(payments);
 
           deletePropertiesInPaymentCache(['currentPayment']);
-          return getPaymentsFromCache();
+          return paymentCache.payments;
         }
 
+        // If all the payments are already in cache i can return them
         if (checkIfPaymentsIsAlreadyInCache(params.paymentInfoRequest)) {
-          return getPaymentsFromCache();
+          return paymentCache.payments;
         }
       }
 
+      // If i don't have the payments in cache i need to request all the payments to ext-registries
       const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
         params.paymentInfoRequest
       );
@@ -175,9 +179,15 @@ export const getNotificationPaymentUrl = createAsyncThunk<
   { paymentNotice: PaymentNotice; returnUrl: string }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_URL,
-  performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) =>
-    NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl)
-  )
+  performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) => {
+    setPaymentCache({
+      currentPayment: {
+        noticeCode: params.paymentNotice.noticeNumber,
+        creditorTaxId: params.paymentNotice.fiscalCode,
+      },
+    });
+    return NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl);
+  })
 );
 
 export const getReceivedNotificationOtherDocument = createAsyncThunk<

@@ -6,7 +6,6 @@ import {
   clearPaymentCache,
   deletePropertiesInPaymentCache,
   getPaymentCache,
-  getPaymentsFromCache,
   isTimestampWithin2Minutes,
   setPaymentCache,
   setPaymentsInCache,
@@ -24,11 +23,6 @@ describe('Payment caching utility', () => {
   it('should return the correct payment item', () => {
     const paymentCache = getPaymentCache();
     expect(paymentCache).toEqual(cachedPayments);
-  });
-
-  it('getPaymentsFromCache should return payments', () => {
-    const paymentsFromCache = getPaymentsFromCache();
-    expect(paymentsFromCache).toEqual(cachedPayments.payments);
   });
 
   it('setPaymentCache should update the item in sessionStorage', () => {

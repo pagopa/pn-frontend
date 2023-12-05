@@ -1,29 +1,21 @@
 import _ from 'lodash';
 
 import { PaymentCache, PaymentDetails, PaymentStatus } from '../models';
+import { paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
-// TODO: add validation here
 export const getPaymentCache = (): PaymentCache | null => {
   const paymentCache = sessionStorage.getItem(PAYMENT_CACHE_KEY);
   if (!paymentCache) {
     return null;
   }
-  // const isValid = paymentCacheSchema.isValidSync(JSON.parse(paymentCache || '{}'));
-  // console.log('isValid', isValid);
 
-  // paymentCacheSchema.validate(JSON.parse(paymentCache || '{}')).catch((err) => {
-  //   console.log('err', err);
-  // });
+  paymentCacheSchema.validateSync(JSON.parse(paymentCache), {
+    stripUnknown: false,
+  });
 
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
-};
-
-export const getPaymentsFromCache = (): Array<PaymentDetails> | null => {
-  const paymentCache = getPaymentCache();
-
-  return paymentCache?.payments || null;
 };
 
 export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
@@ -38,7 +30,7 @@ export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
 };
 
 export const setPaymentsInCache = (payments: Array<PaymentDetails>): void => {
-  const paymentCache = getPaymentsFromCache();
+  const paymentCache = getPaymentCache()?.payments;
 
   if (paymentCache) {
     const newPaymentCache = _.uniqWith(
@@ -104,7 +96,7 @@ export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
 export const checkIfPaymentsIsAlreadyInCache = (
   paymentsInfoRequest: Array<{ noticeCode?: string; creditorTaxId?: string }>
 ): boolean => {
-  const payments = getPaymentsFromCache();
+  const payments = getPaymentCache()?.payments;
   if (!payments) {
     return false;
   }

@@ -20,11 +20,7 @@ import {
 } from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
-import {
-  deletePropertiesInPaymentCache,
-  getPaymentCache,
-  setPaymentCache,
-} from '../../utility/paymentCaching.utility';
+import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
@@ -142,7 +138,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const handleDeselectPayment = () => {
     setSelectedPayment(null);
-    deletePropertiesInPaymentCache(['currentPayment']);
   };
 
   const getPaymentsStatus = (): EventPaymentStatusType => ({
@@ -181,14 +176,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  const handlePaginate = (paginationData: PaginationData) => {
-    setPaginationData(paginationData);
-    const payments = pagoPaF24.slice(
-      paginationData.page * paginationData.size,
-      (paginationData.page + 1) * paginationData.size
+  const handlePaginate = (pdata: PaginationData) => {
+    setPaginationData(pdata);
+    const paginatedPayments = pagoPaF24.slice(
+      pdata.page * pdata.size,
+      (pdata.page + 1) * pdata.size
     );
-    setPaymentCache({ currentPaymentPage: paginationData.page });
-    handleFetchPaymentsInfo(payments ?? []);
+    console.log({ paginatedPayments });
+    setPaymentCache({ currentPaymentPage: pdata.page });
+    handleFetchPaymentsInfo(paginatedPayments ?? []);
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };
 

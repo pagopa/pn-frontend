@@ -26,7 +26,6 @@ import {
   TimedMessage,
   TitleBox,
   formatDate,
-  setPaymentCache,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -242,12 +241,6 @@ const NotificationDetail = () => {
         .unwrap()
         .then((res: { checkoutUrl: string }) => {
           window.location.assign(res.checkoutUrl);
-          setPaymentCache({
-            currentPayment: {
-              noticeCode,
-              creditorTaxId,
-            },
-          });
         })
         .catch(() => undefined);
     }
@@ -293,6 +286,7 @@ const NotificationDetail = () => {
 
   const fetchPaymentsInfo = useCallback(
     (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
+      console.log({ payments });
       const paymentInfoRequest = payments.reduce((acc: any, payment) => {
         if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
           acc.push({
@@ -302,6 +296,8 @@ const NotificationDetail = () => {
         }
         return acc;
       }, []) as Array<{ noticeCode: string; creditorTaxId: string }>;
+
+      console.log('paymentInfoRequest', paymentInfoRequest);
 
       if (paymentInfoRequest.length === 0) {
         return;
@@ -353,6 +349,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
+      console.log('inside useEffect');
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
@@ -482,9 +479,7 @@ const NotificationDetail = () => {
                         isCancelled={isCancelled.cancelled}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
-                        handleFetchPaymentsInfo={() =>
-                          reloadPaymentsInfo(currentRecipient.payments ?? [])
-                        }
+                        handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}

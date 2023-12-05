@@ -43,7 +43,6 @@ import {
   clearPaymentCache,
   deletePropertiesInPaymentCache,
   getPaymentCache,
-  getPaymentsFromCache,
   setPaymentCache,
   setPaymentsInCache,
 } from './paymentCaching.utility';
@@ -121,7 +120,6 @@ export {
   setPaymentCache,
   clearPaymentCache,
   checkIunAndTimestamp,
-  getPaymentsFromCache,
   setPaymentsInCache,
   checkIfPaymentsIsAlreadyInCache,
   deletePropertiesInPaymentCache,

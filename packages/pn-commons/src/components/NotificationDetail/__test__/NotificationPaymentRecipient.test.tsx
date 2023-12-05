@@ -134,7 +134,7 @@ describe('NotificationPaymentRecipient Component', () => {
     });
   });
 
-  it('Should show enabled pay button, save it to cache and hide radio button if having only one payment', async () => {
+  it('Should show enabled pay button, and hide radio button if having only one payment', async () => {
     const payment = {
       ...paymentsData,
       pagoPaF24: [
@@ -163,7 +163,6 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(radioButton).not.toBeInTheDocument();
     expect(payButton).toBeEnabled();
-    sessionStorage.clear();
   });
 
   it('should show alert if notification is cancelled', () => {
