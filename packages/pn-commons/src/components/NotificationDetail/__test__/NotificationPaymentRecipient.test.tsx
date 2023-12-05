@@ -295,6 +295,8 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('download pagoPa notice hidden if no attachment is present', () => {
+    sessionStorage.removeItem('payments');
+
     const { getAllByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
