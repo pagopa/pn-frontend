@@ -11,9 +11,16 @@ export const getPaymentCache = (): PaymentCache | null => {
     return null;
   }
 
-  paymentCacheSchema.validateSync(JSON.parse(paymentCache), {
-    stripUnknown: false,
-  });
+  try {
+    paymentCacheSchema.validateSync(JSON.parse(paymentCache), {
+      stripUnknown: false,
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(error);
+    }
+    return null;
+  }
 
   return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
 };

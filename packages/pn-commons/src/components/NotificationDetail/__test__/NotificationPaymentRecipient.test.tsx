@@ -268,11 +268,6 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleFetchPaymentsInfo on pagination click', async () => {
-    setPaymentCache({
-      iun: notificationToFe.iun,
-      timestamp: new Date().toISOString(),
-      payments: [],
-    });
     const fetchPaymentsInfoMk = jest.fn();
     const result = render(
       <NotificationPaymentRecipient
@@ -295,8 +290,6 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('download pagoPa notice hidden if no attachment is present', () => {
-    sessionStorage.removeItem('payments');
-
     const { getAllByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
