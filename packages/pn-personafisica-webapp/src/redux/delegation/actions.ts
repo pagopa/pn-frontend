@@ -1,7 +1,8 @@
-import { performThunkAction, Sort } from '@pagopa-pn/pn-commons';
-import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { Sort, performThunkAction } from '@pagopa-pn/pn-commons';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
+import { DelegationData } from '../../models/Deleghe';
 import { AcceptDelegationResponse, Delegation } from './types';
 
 export enum DELEGATION_ACTIONS {
@@ -32,8 +33,9 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
 export const acceptDelegation = createAsyncThunk<
   AcceptDelegationResponse,
   { id: string; code: string }
->('acceptDelegation', 
-  performThunkAction(async ({id, code}: { id: string; code: string }) => {
+>(
+  'acceptDelegation',
+  performThunkAction(async ({ id, code }: { id: string; code: string }) => {
     const data = {
       verificationCode: code,
     };
@@ -50,8 +52,8 @@ export const openAcceptModal = createAction<{ id: string; name: string }>('openA
 
 export const closeAcceptModal = createAction<void>('closeAcceptModal');
 
-export const setDelegatorsSorting = createAction<Sort<DelegatorsColumn>>('setDelegatorsSorting');
+export const setDelegatorsSorting = createAction<Sort<DelegationData>>('setDelegatorsSorting');
 
-export const setDelegatesSorting = createAction<Sort<DelegatesColumn>>('setDelegatesSorting');
+export const setDelegatesSorting = createAction<Sort<DelegationData>>('setDelegatesSorting');
 
 export const resetDelegationsState = createAction<void>('resetDelegationsState');

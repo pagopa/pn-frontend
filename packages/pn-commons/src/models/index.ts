@@ -20,8 +20,6 @@ import {
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
-import { CardAction, CardElement, CardSort } from './ItemsCard';
-import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
 import {
   EventAction,
@@ -81,8 +79,15 @@ import {
   ViewedDetails,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
-import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
+import {
+  GetNotificationsParams,
+  GetNotificationsResponse,
+  Notification,
+  NotificationColumnData,
+} from './Notifications';
 import { PaginationData } from './Pagination';
+import { CardElement, CardSort } from './PnCard';
+import { Column, Row, Sort } from './PnTable';
 import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
@@ -122,7 +127,6 @@ export type {
   AppStatusData,
   BasicUser,
   ConsentUser,
-  CardAction,
   CardElement,
   CardSort,
   Column,
@@ -135,9 +139,10 @@ export type {
   EventCreatedDelegationType,
   GetNotificationsParams,
   GetNotificationsResponse,
+  NotificationColumnData,
   IAppMessage,
   INotificationDetailTimeline,
-  Item,
+  Row,
   LegalFactId,
   NotificationDetailOtherDocument,
   NotHandledDetails,

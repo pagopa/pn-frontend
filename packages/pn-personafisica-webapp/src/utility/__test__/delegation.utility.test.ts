@@ -58,10 +58,10 @@ describe('Delegation utility test', () => {
         }
         return (a.delegate?.displayName! < b.delegate?.displayName! ? -1 : 1) * multiplier;
       });
-    let result = sortDelegations('asc', 'displayName', arrayOfDelegates);
+    let result = sortDelegations('asc', 'name', arrayOfDelegates);
     expect(sortedCopy('asc')).toStrictEqual(result);
     // sort descending
-    result = sortDelegations('desc', 'displayName', arrayOfDelegates);
+    result = sortDelegations('desc', 'name', arrayOfDelegates);
     expect(sortedCopy('desc')).toStrictEqual(result);
   });
 
@@ -89,10 +89,10 @@ describe('Delegation utility test', () => {
         }
         return (a.delegator?.displayName! < b.delegator?.displayName! ? -1 : 1) * multiplier;
       });
-    let result = sortDelegations('asc', 'displayName', arrayOfDelegators);
+    let result = sortDelegations('asc', 'name', arrayOfDelegators);
     expect(sortedCopy('asc')).toStrictEqual(result);
     // sort descending
-    result = sortDelegations('desc', 'displayName', arrayOfDelegators);
+    result = sortDelegations('desc', 'name', arrayOfDelegators);
     expect(sortedCopy('desc')).toStrictEqual(result);
   });
 

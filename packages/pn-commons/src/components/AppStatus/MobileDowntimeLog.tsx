@@ -1,8 +1,14 @@
 import { useMemo } from 'react';
 
-import { CardElement, DowntimeLogPage, Item } from '../../models';
-import ItemsCard from '../Data/ItemsCard';
-import { adaptFieldSpecToMobile, useFieldSpecs } from './downtimeLog.utils';
+import { useFieldSpecs } from '../../hooks/useFieldSpecs';
+import { CardElement, Downtime, DowntimeLogPage } from '../../models';
+import PnCard from '../Data/PnCard/PnCard';
+import PnCardContent from '../Data/PnCard/PnCardContent';
+import PnCardContentItem from '../Data/PnCard/PnCardContentItem';
+import PnCardHeader from '../Data/PnCard/PnCardHeader';
+import PnCardHeaderItem from '../Data/PnCard/PnCardHeaderItem';
+import PnCardsList from '../Data/PnCardsList';
+import DowntimeLogDataSwitch from './DowntimeLogDataSwitch';
 
 type Props = {
   downtimeLog: DowntimeLogPage;
@@ -15,58 +21,70 @@ const MobileDowntimeLog = ({
   getDowntimeLegalFactDocumentDetails,
   handleTrackDownloadCertificateOpposable3dparties,
 }: Props) => {
-  const fieldSpecs = useFieldSpecs({ getDowntimeLegalFactDocumentDetails });
-  const {
-    getDateFieldSpec,
-    getFunctionalityFieldSpec,
-    getLegalFactIdFieldSpec,
-    getStatusFieldSpec,
-    getRows,
-  } = fieldSpecs;
+  const fieldSpecs = useFieldSpecs();
+  const { getField, getRows } = fieldSpecs;
 
-  const cardHeader: [CardElement, CardElement | null] = useMemo(
+  const cardHeader: CardElement<Downtime> = useMemo(() => getField('status'), [getField]);
+
+  const cardBody: Array<CardElement<Downtime>> = useMemo(
     () => [
       {
-        ...adaptFieldSpecToMobile(getStatusFieldSpec()),
-        label: '',
+        ...getField('startDate'),
+        wrapValueInTypography: false,
       },
-      null,
+      {
+        ...getField('endDate'),
+        wrapValueInTypography: false,
+      },
+      getField('knownFunctionality'),
+      { ...getField('legalFactId'), wrapValueInTypography: false },
     ],
-    [getStatusFieldSpec]
+    [getField]
   );
 
-  const cardBody: Array<CardElement> = useMemo(
-    () => [
-      {
-        ...adaptFieldSpecToMobile(getDateFieldSpec('startDate', false)),
-        notWrappedInTypography: true,
-      },
-      {
-        ...adaptFieldSpecToMobile(getDateFieldSpec('endDate', false)),
-        notWrappedInTypography: true,
-      },
-      adaptFieldSpecToMobile(getFunctionalityFieldSpec()),
-      {
-        ...adaptFieldSpecToMobile(
-          getLegalFactIdFieldSpec(handleTrackDownloadCertificateOpposable3dparties)
-        ),
-        notWrappedInTypography: true,
-      },
-    ],
-    [getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec]
-  );
-
-  /* eslint-disable-next-line sonarjs/no-identical-functions */
-  const rows: Array<Item> = getRows(downtimeLog);
+  const rows = getRows(downtimeLog);
 
   return (
-    <ItemsCard
-      cardHeader={cardHeader}
-      cardBody={cardBody}
-      cardData={rows}
-      testId="mobileTableDowntimeLog"
-      headerGridProps={{ justifyContent: 'left' }}
-    />
+    <PnCardsList testId="mobileTableDowntimeLog">
+      {rows.map((row) => (
+        <PnCard key={row.id} testId="mobileTableDowntimeLog.cards">
+          <PnCardHeader>
+            <PnCardHeaderItem
+              key={cardHeader.id}
+              gridProps={cardHeader.gridProps}
+              testId={'cardHeaderLeft'}
+            >
+              <DowntimeLogDataSwitch
+                data={row}
+                type={cardHeader.id}
+                inTwoLines
+                getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
+              />
+            </PnCardHeaderItem>
+          </PnCardHeader>
+          <PnCardContent>
+            {cardBody.map((body) => (
+              <PnCardContentItem
+                key={body.id}
+                wrapValueInTypography={body.wrapValueInTypography}
+                label={body.label}
+                testId="cardBody"
+              >
+                <DowntimeLogDataSwitch
+                  data={row}
+                  type={body.id}
+                  inTwoLines={false}
+                  getDowntimeLegalFactDocumentDetails={getDowntimeLegalFactDocumentDetails}
+                  handleTrackDownloadCertificateOpposable3dparties={
+                    handleTrackDownloadCertificateOpposable3dparties
+                  }
+                />
+              </PnCardContentItem>
+            ))}
+          </PnCardContent>
+        </PnCard>
+      ))}
+    </PnCardsList>
   );
 };
 

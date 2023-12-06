@@ -1,18 +1,27 @@
-import { cloneElement, ReactElement, useState } from 'react'; // ReactNode, cloneElement
-import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { cloneElement, useState } from 'react';
+
 import { Box, SxProps } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+// ReactNode, cloneElement
+import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 
 type Props = {
   tooltipContent: any;
   openOnClick: boolean;
-  children: ReactElement<any, any>;
   sx?: SxProps;
   onOpen?: () => void;
+  children: JSX.Element;
   tooltipProps?: Partial<TooltipProps>;
 };
 
-function CustomTooltip({ openOnClick, tooltipContent, children, sx, onOpen, tooltipProps }: Props) {
+const CustomTooltip: React.FC<Props> = ({
+  openOnClick,
+  tooltipContent,
+  children,
+  sx,
+  onOpen,
+  tooltipProps,
+}) => {
   // tooltip state
   const [open, setOpen] = useState(false);
   const handleTooltipClose = () => {
@@ -50,6 +59,6 @@ function CustomTooltip({ openOnClick, tooltipContent, children, sx, onOpen, tool
       </Box>
     </ClickAwayListener>
   );
-}
+};
 
 export default CustomTooltip;

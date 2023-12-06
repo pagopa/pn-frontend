@@ -11,7 +11,7 @@ import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
-interface Props {
+type Props = {
   pagoPAItem: PagoPAPaymentFullDetails;
   loading: boolean;
   isSelected: boolean;
@@ -19,7 +19,7 @@ interface Props {
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
   isCancelled: boolean;
-}
+};
 
 const SkeletonCard: React.FC = () => {
   const isMobile = useIsMobile();

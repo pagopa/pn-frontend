@@ -57,18 +57,17 @@ export const Menu = (props: any) => {
           {t('deleghe.revoke')}
         </MenuItem>,
       ];
-    } else {
-      return [
-        <MenuItem
-          id="reject-delegation-button"
-          key="reject"
-          onClick={handleOpenModalClick}
-          data-testid="menuItem-rejectDelegator"
-        >
-          {t('deleghe.reject')}
-        </MenuItem>,
-      ];
     }
+    return [
+      <MenuItem
+        id="reject-delegation-button"
+        key="reject"
+        onClick={handleOpenModalClick}
+        data-testid="menuItem-rejectDelegator"
+      >
+        {t('deleghe.reject')}
+      </MenuItem>,
+    ];
   };
 
   return (

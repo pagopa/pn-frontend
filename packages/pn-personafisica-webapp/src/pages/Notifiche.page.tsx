@@ -7,6 +7,7 @@ import {
   ApiErrorWrapper,
   CustomPagination,
   EventNotificationsListType,
+  NotificationColumnData,
   NotificationStatus,
   PaginationData,
   Sort,
@@ -14,6 +15,7 @@ import {
   calculatePages,
   formatToTimezoneString,
   getNextDay,
+  isNewNotification,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -21,7 +23,6 @@ import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
-import { NotificationColumn } from '../models/Notifications';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { Delegator } from '../redux/delegation/types';
@@ -81,17 +82,6 @@ const Notifiche = () => {
     ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
 
-  const isNewNotification = (value: string) => {
-    switch (value) {
-      case NotificationStatus.VIEWED:
-      case NotificationStatus.PAID:
-      case NotificationStatus.CANCELLED:
-        return false;
-      default:
-        return true;
-    }
-  };
-
   const getEventNotifications = (): EventNotificationsListType => ({
     delegate: delegators.length > 0,
     page_number: pagination.page,
@@ -130,7 +120,7 @@ const Notifiche = () => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
     dispatch(setSorting(s));
   };
 

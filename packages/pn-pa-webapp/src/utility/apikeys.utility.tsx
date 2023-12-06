@@ -7,7 +7,7 @@ import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ApiKey, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../models/user';
 
-function LocalizeStatus(
+function localizeStatus(
   status: string,
   history: Array<ApiKeyStatusHistory>
 ): {
@@ -15,15 +15,16 @@ function LocalizeStatus(
   tooltip: ReactNode;
   description: string;
 } {
-  const { t } = useTranslation(['apikeys']);
   return {
-    label: t(`status.${status}`),
-    tooltip: TooltipApiKey(history),
-    description: t(`status.${status}-description`),
+    label: `status.${status}`,
+    tooltip: <TooltipApiKey history={history} />,
+    description: `status.${status}-description`,
   };
 }
 
-export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
+type TooltipApiKeyProps = { history: Array<ApiKeyStatusHistory> };
+
+export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
   const { t } = useTranslation(['apikeys']);
   return (
     <Box
@@ -75,17 +76,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...LocalizeStatus('enabled', statusHistory),
+        ...localizeStatus('enabled', statusHistory),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...LocalizeStatus('blocked', statusHistory),
+        ...localizeStatus('blocked', statusHistory),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...LocalizeStatus('rotated', statusHistory),
+        ...localizeStatus('rotated', statusHistory),
       };
     default:
       return {
