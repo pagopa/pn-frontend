@@ -101,6 +101,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const paymentsStatus = getPaymentsStatus(paginationData, pagoPaF24);
   const allPaymentsIsPaid = paymentsStatus.count_paid === pagoPaF24.length;
   const isSinglePayment = paymentsStatus.count_payment === 1 && !isCancelled;
+  console.log(allPaymentsIsPaid);
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -144,6 +145,23 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     );
     handleFetchPaymentsInfo(payments ?? []);
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
+  };
+
+  const getTitle = () => {
+    if (allPaymentsIsPaid) {
+      return null;
+    }
+
+    return (
+      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
+        <NotificationPaymentTitle
+          landingSiteUrl={landingSiteUrl}
+          handleTrackEventFn={handleTrackEventFn}
+          pagoPaF24={pagoPaF24}
+          f24Only={f24Only}
+        />
+      </Typography>
+    );
   };
 
   useEffect(() => {
@@ -191,14 +209,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           </Link>
         </Alert>
       ) : (
-        <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-          <NotificationPaymentTitle
-            landingSiteUrl={landingSiteUrl}
-            handleTrackEventFn={handleTrackEventFn}
-            pagoPaF24={pagoPaF24}
-            f24Only={f24Only}
-          />
-        </Typography>
+        getTitle()
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
