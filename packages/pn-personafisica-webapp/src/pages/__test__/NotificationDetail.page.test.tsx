@@ -8,6 +8,7 @@ import {
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
   NotificationStatus,
+  PAYMENT_CACHE_KEY,
   PaymentCache,
   PaymentStatus,
   ResponseEventDispatcher,
@@ -17,7 +18,6 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
-import { PAYMENT_CACHE_KEY } from '@pagopa-pn/pn-commons/src/utility/paymentCaching.utility';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';

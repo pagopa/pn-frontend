@@ -5,6 +5,7 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   KnownFunctionality,
   LegalFactType,
+  PAYMENT_CACHE_KEY,
   PaidDetails,
   PaymentAttachmentSName,
   PaymentStatus,
@@ -96,6 +97,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   afterEach(() => {
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     mock.reset();
   });
 

@@ -9,8 +9,14 @@ import {
   PaymentAttachmentNameType,
   PaymentDetails,
   PaymentNotice,
+  checkIfPaymentsIsAlreadyInCache,
+  checkIunAndTimestamp,
+  deletePropertiesInPaymentCache,
+  getPaymentCache,
   performThunkAction,
   populatePaymentsPagoPaF24,
+  setPaymentCache,
+  setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -110,15 +116,50 @@ export const getNotificationPaymentInfo = createAsyncThunk<
   ) => {
     try {
       const { notificationState } = getState();
+      const paymentCache = getPaymentCache();
+
+      if (
+        checkIunAndTimestamp(notificationState.notification.iun, new Date().toISOString()) &&
+        paymentCache?.payments
+      ) {
+        // If i have the current payment in cache means that i'm coming from the payment page and i need to update the payment
+        if (paymentCache?.currentPayment) {
+          const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
+            paymentCache.currentPayment,
+          ]);
+
+          const payments = populatePaymentsPagoPaF24(
+            notificationState.notification.timeline,
+            notificationState.paymentsData.pagoPaF24,
+            updatedPayment
+          );
+
+          setPaymentsInCache(payments);
+
+          deletePropertiesInPaymentCache(['currentPayment']);
+          return paymentCache.payments;
+        }
+
+        // If all the payments are already in cache i can return them
+        if (checkIfPaymentsIsAlreadyInCache(params.paymentInfoRequest)) {
+          return paymentCache.payments;
+        }
+      }
+
+      // If i don't have the payments in cache i need to request all the payments to ext-registries
       const paymentInfo = await NotificationsApi.getNotificationPaymentInfo(
         params.paymentInfoRequest
       );
 
-      return populatePaymentsPagoPaF24(
+      const payments = populatePaymentsPagoPaF24(
         notificationState.notification.timeline,
         notificationState.paymentsData.pagoPaF24,
         paymentInfo
       );
+
+      setPaymentsInCache(payments);
+
+      return payments;
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -133,9 +174,15 @@ export const getNotificationPaymentUrl = createAsyncThunk<
   { paymentNotice: PaymentNotice; returnUrl: string }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_URL,
-  performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) =>
-    NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl)
-  )
+  performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) => {
+    setPaymentCache({
+      currentPayment: {
+        noticeCode: params.paymentNotice.noticeNumber,
+        creditorTaxId: params.paymentNotice.fiscalCode,
+      },
+    });
+    return NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl);
+  })
 );
 
 export const getReceivedNotificationOtherDocument = createAsyncThunk<

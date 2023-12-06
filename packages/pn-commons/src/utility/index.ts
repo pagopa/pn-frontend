@@ -38,6 +38,7 @@ import {
 import { compileOneTrustPath } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
 import {
+  PAYMENT_CACHE_KEY,
   checkIfPaymentsIsAlreadyInCache,
   checkIunAndTimestamp,
   deletePropertiesInPaymentCache,
@@ -121,4 +122,5 @@ export {
   setPaymentsInCache,
   checkIfPaymentsIsAlreadyInCache,
   deletePropertiesInPaymentCache,
+  PAYMENT_CACHE_KEY,
 };
