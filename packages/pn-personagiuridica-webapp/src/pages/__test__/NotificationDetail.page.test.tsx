@@ -208,9 +208,11 @@ describe('NotificationDetail Page', () => {
   });
 
   it('checks not available documents', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, documentsAvailable: false });
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      documentsAvailable: false,
+      sentAt: '2012-01-01T00:00:00Z',
+    });
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
