@@ -101,7 +101,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const paymentsStatus = getPaymentsStatus(paginationData, pagoPaF24);
   const allPaymentsIsPaid = paymentsStatus.count_paid === pagoPaF24.length;
   const isSinglePayment = paymentsStatus.count_payment === 1 && !isCancelled;
-  console.log(allPaymentsIsPaid);
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
