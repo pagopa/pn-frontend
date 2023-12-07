@@ -2,7 +2,7 @@ import { cachedPayments, paymentsData } from '../../__mocks__/NotificationDetail
 import { PaymentDetails, PaymentStatus, RecipientType } from '../../models';
 import {
   checkIfPaymentsIsAlreadyInCache,
-  checkIunAndTimestamp,
+  checkIun,
   clearPaymentCache,
   deletePropertiesInPaymentCache,
   getPaymentCache,
@@ -14,24 +14,33 @@ import {
 describe('Payment caching utility', () => {
   beforeEach(() => {
     sessionStorage.setItem('payments', JSON.stringify(cachedPayments));
+    // TODO avoid console.warn
   });
 
   afterEach(() => {
     sessionStorage.clear();
   });
 
+  const iun = cachedPayments.iun;
+
   it('should return the correct payment item', () => {
-    const paymentCache = getPaymentCache();
+    const paymentCache = getPaymentCache(iun);
     expect(paymentCache).toEqual(cachedPayments);
   });
 
   it('setPaymentCache should update the item in sessionStorage', () => {
+    const oldPaymentCache = {
+      ...cachedPayments,
+      currentPaymentPage: 1,
+    };
+    setPaymentCache(oldPaymentCache, iun);
+
     const newPaymentItem = {
       ...cachedPayments,
-      iun: 'ARJP-NLZG-WETM-202311-J-2',
+      currentPaymentPage: 2,
     };
-    setPaymentCache(newPaymentItem);
-    const paymentCache = getPaymentCache();
+    setPaymentCache(newPaymentItem, iun);
+    const paymentCache = getPaymentCache(iun);
     expect(paymentCache).toEqual(newPaymentItem);
   });
 
@@ -44,8 +53,8 @@ describe('Payment caching utility', () => {
       },
     };
 
-    setPaymentCache(newPaymentItem);
-    const paymentCache = getPaymentCache();
+    setPaymentCache(newPaymentItem, iun);
+    const paymentCache = getPaymentCache(iun);
     expect(paymentCache).toEqual(newPaymentItem);
   });
 
@@ -58,9 +67,9 @@ describe('Payment caching utility', () => {
       },
     };
 
-    setPaymentCache(newPaymentItem);
+    setPaymentCache(newPaymentItem, iun);
 
-    deletePropertiesInPaymentCache(['currentPayment']);
+    deletePropertiesInPaymentCache(['currentPayment'], iun);
 
     const result = {
       ...cachedPayments,
@@ -69,13 +78,13 @@ describe('Payment caching utility', () => {
 
     delete result.currentPayment;
 
-    const paymentCacheAfterDelete = getPaymentCache();
+    const paymentCacheAfterDelete = getPaymentCache(iun);
     expect(paymentCacheAfterDelete).toEqual(result);
   });
 
   it('clearPaymentCache should clear the payment cache', () => {
     clearPaymentCache();
-    const paymentCache = getPaymentCache();
+    const paymentCache = getPaymentCache(iun);
     expect(paymentCache).toEqual(null);
   });
 
@@ -87,29 +96,21 @@ describe('Payment caching utility', () => {
 
     timestamp1 = '2023-11-17T14:13:53.165Z';
     timestamp2 = '2023-11-17T14:16:53.165Z';
-    const result2 = isTimestampWithin2Minutes(timestamp1, timestamp2);
-    expect(result2).toEqual(false);
+    expect(() => isTimestampWithin2Minutes(timestamp1, timestamp2)).toThrowError(
+      'Timestamp is not valid'
+    );
   });
 
   it('checkIunAndTimestamp should return false if iun is different from cache', () => {
-    const iun = 'ARJP-NLZG-WETM-202311-J-2';
-    const timestamp = cachedPayments.timestamp;
-    const result = checkIunAndTimestamp(iun, timestamp);
-    expect(result).toEqual(false);
+    const newIun = 'ARJP-NLZG-WETM-202311-J-2';
+    expect(() => checkIun(newIun, iun)).toThrowError('Iun is not valid');
   });
 
-  it('checkIunAndTimestamp should return false if timestamp is not within 2 minutes', () => {
-    const iun = cachedPayments.iun;
+  it('isTimestampWithin2Minutes should throw an error if is not within 2 minutes', () => {
     const timestamp = '2023-11-17T14:50:53.165Z';
-    const result = checkIunAndTimestamp(iun, timestamp);
-    expect(result).toEqual(false);
-  });
-
-  it('checkIunAndTimestamp should return true if iun is equal to cache and timestamp is within 2 minutes', () => {
-    const iun = cachedPayments.iun;
-    const timestamp = cachedPayments.timestamp;
-    const result = checkIunAndTimestamp(iun, timestamp);
-    expect(result).toEqual(true);
+    expect(() => isTimestampWithin2Minutes(timestamp, new Date().toISOString())).toThrowError(
+      'Timestamp is not valid'
+    );
   });
 
   it('checkIfPaymentsIsAlreadyInCache should return true if payments is already in cache', () => {
@@ -118,7 +119,7 @@ describe('Payment caching utility', () => {
       creditorTaxId: payment.pagoPa?.creditorTaxId,
     }));
 
-    const result = checkIfPaymentsIsAlreadyInCache(paymentInfoRequest);
+    const result = checkIfPaymentsIsAlreadyInCache(paymentInfoRequest, iun);
 
     expect(result).toEqual(true);
   });
@@ -130,7 +131,7 @@ describe('Payment caching utility', () => {
         creditorTaxId: '123456789',
       },
     ];
-    const result = checkIfPaymentsIsAlreadyInCache(paymentInfoRequest);
+    const result = checkIfPaymentsIsAlreadyInCache(paymentInfoRequest, iun);
     expect(result).toEqual(false);
   });
 
@@ -149,12 +150,33 @@ describe('Payment caching utility', () => {
       },
     ];
 
-    setPaymentsInCache(newPayment);
+    setPaymentsInCache(newPayment, iun);
 
-    const paymentCache = getPaymentCache();
+    const paymentCache = getPaymentCache(iun);
     expect(paymentCache).toEqual({
       ...cachedPayments,
       payments: [...newPayment, ...cachedPayments.payments],
     });
+  });
+
+  it('should return null if the payment cache is invalid', () => {
+    const invalidCache = {
+      ...cachedPayments,
+      unexpectedProperty: 'unexpectedProperty',
+    };
+
+    setPaymentCache(invalidCache, iun);
+
+    const paymentCache = getPaymentCache(iun);
+
+    expect(paymentCache).toEqual(null);
+  });
+
+  it('should return null if the json is invalid', () => {
+    sessionStorage.setItem('payments', 'invalidJson');
+
+    const paymentCache = getPaymentCache(iun);
+
+    expect(paymentCache).toEqual(null);
   });
 });

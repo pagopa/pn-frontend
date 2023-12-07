@@ -23,6 +23,7 @@ describe('NotificationPaymentRecipient Component', () => {
   };
 
   const F24TIMER = 15000;
+  const iun = notificationToFe.iun;
 
   it('should render component', () => {
     const { getByTestId, queryByTestId, queryAllByTestId } = render(
@@ -30,6 +31,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
@@ -67,6 +69,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
@@ -111,6 +114,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={payClickMk}
         handleFetchPaymentsInfo={() => void 0}
@@ -160,6 +164,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={payment}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
@@ -179,6 +184,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={true}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
@@ -202,6 +208,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
@@ -257,6 +264,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={payments}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
@@ -274,6 +282,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={fetchPaymentsInfoMk}
@@ -295,6 +304,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => {}}
@@ -313,18 +323,22 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should go to specific page if is present on session storage', async () => {
-    setPaymentCache({
-      iun: notificationToFe.iun,
-      timestamp: new Date().toISOString(),
-      payments: [],
-      currentPaymentPage: 1, // pages starts from 0
-    });
+    setPaymentCache(
+      {
+        iun: notificationToFe.iun,
+        timestamp: new Date().toISOString(),
+        payments: [],
+        currentPaymentPage: 1, // pages starts from 0
+      },
+      iun
+    );
 
     const { getByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
+        iun={iun}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}

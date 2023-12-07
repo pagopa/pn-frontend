@@ -10,8 +10,6 @@ import {
   PaymentDetails,
   PaymentNotice,
   checkIfPaymentsIsAlreadyInCache,
-  checkIunAndTimestamp,
-  deletePropertiesInPaymentCache,
   getPaymentCache,
   performThunkAction,
   populatePaymentsPagoPaF24,
@@ -23,7 +21,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
-import { RootState } from '../store';
+import { RootState, store } from '../store';
 import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
@@ -116,12 +114,10 @@ export const getNotificationPaymentInfo = createAsyncThunk<
   ) => {
     try {
       const { notificationState } = getState();
-      const paymentCache = getPaymentCache();
+      const iun = notificationState.notification.iun;
+      const paymentCache = getPaymentCache(iun);
 
-      if (
-        checkIunAndTimestamp(notificationState.notification.iun, new Date().toISOString()) &&
-        paymentCache?.payments
-      ) {
+      if (paymentCache && paymentCache.payments) {
         // If i have the current payment in cache means that i'm coming from the payment page and i need to update the payment
         if (paymentCache?.currentPayment) {
           const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
@@ -133,15 +129,12 @@ export const getNotificationPaymentInfo = createAsyncThunk<
             notificationState.paymentsData.pagoPaF24,
             updatedPayment
           );
-
-          setPaymentsInCache(payments);
-
-          deletePropertiesInPaymentCache(['currentPayment']);
+          setPaymentsInCache(payments, iun);
           return paymentCache.payments;
         }
 
         // If all the payments are already in cache i can return them
-        if (checkIfPaymentsIsAlreadyInCache(params.paymentInfoRequest)) {
+        if (checkIfPaymentsIsAlreadyInCache(params.paymentInfoRequest, iun)) {
           return paymentCache.payments;
         }
       }
@@ -157,7 +150,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
         paymentInfo
       );
 
-      setPaymentsInCache(payments);
+      setPaymentsInCache(payments, iun);
 
       return payments;
     } catch (e) {
@@ -171,16 +164,21 @@ export const getNotificationPaymentInfo = createAsyncThunk<
 
 export const getNotificationPaymentUrl = createAsyncThunk<
   { checkoutUrl: string },
-  { paymentNotice: PaymentNotice; returnUrl: string }
+  { paymentNotice: PaymentNotice; returnUrl: string },
+  { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_URL,
   performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) => {
-    setPaymentCache({
-      currentPayment: {
-        noticeCode: params.paymentNotice.noticeNumber,
-        creditorTaxId: params.paymentNotice.fiscalCode,
+    const iun = store.getState().notificationState.notification.iun;
+    setPaymentCache(
+      {
+        currentPayment: {
+          noticeCode: params.paymentNotice.noticeNumber,
+          creditorTaxId: params.paymentNotice.fiscalCode,
+        },
       },
-    });
+      iun
+    );
     return NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl);
   })
 );

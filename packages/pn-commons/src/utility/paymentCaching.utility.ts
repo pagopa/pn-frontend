@@ -5,28 +5,46 @@ import { paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
-export const getPaymentCache = (): PaymentCache | null => {
+export const getPaymentCache = (iun: string): PaymentCache | null => {
   const paymentCache = sessionStorage.getItem(PAYMENT_CACHE_KEY);
   if (!paymentCache) {
     return null;
   }
 
+  const validCache = validateCache(paymentCache, iun);
+  if (!validCache) {
+    clearPaymentCache();
+    return null;
+  }
+
+  return validCache;
+};
+
+const validateCache = (cache: string, iun: string) => {
   try {
-    paymentCacheSchema.validateSync(JSON.parse(paymentCache), {
+    // parse object
+    const paymentsCache = JSON.parse(cache) as PaymentCache;
+    // validate object based on schema definition
+    paymentCacheSchema.validateSync(JSON.parse(cache), {
       stripUnknown: false,
     });
+    // check if iun requested is the same of the cached one
+    checkIun(iun, paymentsCache.iun);
+    // check if the cache is expired
+    isTimestampWithin2Minutes(paymentsCache.timestamp, new Date().toISOString());
+    // cache is valid, return
+    return paymentsCache;
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(error);
     }
-    return null;
+    clearPaymentCache();
+    return false;
   }
-
-  return paymentCache ? (JSON.parse(paymentCache) as PaymentCache) : null;
 };
 
-export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
-  const paymentCache = getPaymentCache();
+export const setPaymentCache = (updatedObj: Partial<PaymentCache>, iun: string): void => {
+  const paymentCache = getPaymentCache(iun);
 
   const newPaymentCache = {
     ...paymentCache,
@@ -36,25 +54,36 @@ export const setPaymentCache = (updatedObj: Partial<PaymentCache>): void => {
   sessionStorage.setItem(PAYMENT_CACHE_KEY, JSON.stringify(newPaymentCache));
 };
 
-export const setPaymentsInCache = (payments: Array<PaymentDetails>): void => {
-  const paymentCache = getPaymentCache()?.payments;
+export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string): void => {
+  const paymentCache = getPaymentCache(iun);
 
-  if (paymentCache) {
+  if (!paymentCache) {
+    setPaymentCache({ iun, timestamp: new Date().toISOString() }, iun);
+  }
+
+  if (paymentCache?.payments) {
     const newPaymentCache = _.uniqWith(
-      [...payments, ...paymentCache],
+      [...payments, ...paymentCache.payments],
       (a, b) =>
         a.pagoPa?.noticeCode === b.pagoPa?.noticeCode &&
         a.pagoPa?.creditorTaxId === b.pagoPa?.creditorTaxId
     );
 
-    setPaymentCache({ payments: newPaymentCache });
+    if (paymentCache.currentPayment) {
+      deletePropertiesInPaymentCache(['currentPayment'], iun);
+    }
+
+    setPaymentCache({ payments: newPaymentCache }, iun);
   } else {
-    setPaymentCache({ payments });
+    setPaymentCache({ payments }, iun);
   }
 };
 
-export const deletePropertiesInPaymentCache = (properties: Array<keyof PaymentCache>): void => {
-  const paymentCache = getPaymentCache();
+export const deletePropertiesInPaymentCache = (
+  properties: Array<keyof PaymentCache>,
+  iun: string
+): void => {
+  const paymentCache = getPaymentCache(iun);
 
   if (paymentCache) {
     properties.forEach((property) => {
@@ -71,7 +100,7 @@ export const clearPaymentCache = (): void => {
 };
 
 // Timestamp is in ISO format
-export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string): boolean => {
+export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string) => {
   const date1 = new Date(timestamp1);
   const date2 = new Date(timestamp2);
 
@@ -82,28 +111,26 @@ export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string
   const diff = Math.abs(date1.getTime() - date2.getTime());
   const minutes = Math.floor(diff / 1000 / 60);
 
-  return minutes <= 2;
+  if (minutes <= 2) {
+    return true;
+  } else {
+    throw new Error('Timestamp is not valid');
+  }
 };
 
-export const checkIunAndTimestamp = (iun: string, timestamp: string) => {
-  const paymentCache = getPaymentCache();
-  if (
-    paymentCache &&
-    paymentCache.iun === iun &&
-    isTimestampWithin2Minutes(paymentCache.timestamp, timestamp)
-  ) {
+export const checkIun = (iun: string, cachedIun: string): boolean => {
+  if (iun === cachedIun) {
     return true;
+  } else {
+    throw new Error('Iun is not valid');
   }
-
-  clearPaymentCache();
-  setPaymentCache({ iun, timestamp, payments: [] });
-  return false;
 };
 
 export const checkIfPaymentsIsAlreadyInCache = (
-  paymentsInfoRequest: Array<{ noticeCode?: string; creditorTaxId?: string }>
+  paymentsInfoRequest: Array<{ noticeCode?: string; creditorTaxId?: string }>,
+  iun: string
 ): boolean => {
-  const payments = getPaymentCache()?.payments;
+  const payments = getPaymentCache(iun)?.payments;
   if (!payments) {
     return false;
   }

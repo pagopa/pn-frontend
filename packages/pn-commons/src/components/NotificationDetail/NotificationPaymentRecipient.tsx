@@ -59,6 +59,7 @@ type Props = {
   isCancelled: boolean;
   timerF24: number;
   landingSiteUrl: string;
+  iun: string;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -76,13 +77,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   isCancelled,
   timerF24,
   landingSiteUrl,
+  iun,
   getPaymentAttachmentAction,
   onPayClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
-  const pageFromCache = getPaymentCache()?.currentPaymentPage;
+  const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;
   const [paginationData, setPaginationData] = useState<PaginationData>({
     page: pageFromCache ?? 0,
     size: 5,
@@ -144,7 +146,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       pageData.page * pageData.size,
       (pageData.page + 1) * pageData.size
     );
-    setPaymentCache({ currentPaymentPage: pageData.page });
+    setPaymentCache({ currentPaymentPage: pageData.page }, iun);
     handleFetchPaymentsInfo(paginatedPayments ?? []);
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };

@@ -606,7 +606,7 @@ describe('NotificationDetail Page', () => {
       ...paginationData,
       page: 1,
     };
-    const paymentCache = getPaymentCache();
+    const paymentCache = getPaymentCache(notificationDTO.iun);
     expect(paymentCache?.currentPaymentPage).toBe(paginationData.page);
 
     // intercept the next request
@@ -696,10 +696,13 @@ describe('NotificationDetail Page', () => {
       noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode ?? '',
     };
 
-    setPaymentCache({
-      ...cachedPayments,
-      currentPayment,
-    });
+    setPaymentCache(
+      {
+        ...cachedPayments,
+        currentPayment,
+      },
+      notificationDTO.iun
+    );
 
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock
@@ -721,7 +724,7 @@ describe('NotificationDetail Page', () => {
 
     expect(mock.history.post).toHaveLength(1);
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
-    const paymentCache = getPaymentCache();
+    const paymentCache = getPaymentCache(notificationDTO.iun);
     expect(paymentCache?.currentPayment).toBeUndefined();
   });
 });

@@ -40,7 +40,6 @@ import { calculatePages } from './pagination.utility';
 import {
   PAYMENT_CACHE_KEY,
   checkIfPaymentsIsAlreadyInCache,
-  checkIunAndTimestamp,
   deletePropertiesInPaymentCache,
   getPaymentCache,
   setPaymentCache,
@@ -118,7 +117,6 @@ export {
   Configuration,
   getPaymentCache,
   setPaymentCache,
-  checkIunAndTimestamp,
   setPaymentsInCache,
   checkIfPaymentsIsAlreadyInCache,
   deletePropertiesInPaymentCache,
