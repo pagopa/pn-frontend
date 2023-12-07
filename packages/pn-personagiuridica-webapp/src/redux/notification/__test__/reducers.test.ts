@@ -97,7 +97,6 @@ describe('Notification detail redux state tests', () => {
   });
 
   afterEach(() => {
-    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     mock.reset();
   });
 
@@ -288,6 +287,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch payment info and not replace the payment if is equal', async () => {
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     const mockedStore = createMockedStore({
       notificationState: {
         notification: notificationToFe,
