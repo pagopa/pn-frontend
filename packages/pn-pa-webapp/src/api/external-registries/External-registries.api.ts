@@ -53,9 +53,7 @@ export const ExternalRegistriesAPI = {
           title: product.title,
           productUrl: `${
             getConfiguration().SELFCARE_BASE_URL
-          }/token-exchange?institutionId=${institutionId}&productId=${
-            getConfiguration().SELFCARE_SEND_PROD_ID
-          }`,
+          }/token-exchange?institutionId=${institutionId}&productId=${product.id}`,
           linkType: 'external',
         }))
       ),
