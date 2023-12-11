@@ -44,6 +44,7 @@ export type EventPaymentStatusType = {
 };
 
 export type EventNotificationsListType = {
+  banner?: string;
   delegate: boolean;
   page_number: number;
   total_count: number;
@@ -97,4 +98,5 @@ export enum EventPaymentRecipientType {
   SEND_PAYMENT_STATUS = 'SEND_PAYMENT_STATUS',
   SEND_F24_DOWNLOAD_TIMEOUT = 'SEND_F24_DOWNLOAD_TIMEOUT',
   SEND_PAYMENT_LIST_CHANGE_PAGE = 'SEND_PAYMENT_LIST_CHANGE_PAGE',
+  SEND_PAYMENT_DETAIL_ERROR = 'SEND_PAYMENT_DETAIL_ERROR',
 }

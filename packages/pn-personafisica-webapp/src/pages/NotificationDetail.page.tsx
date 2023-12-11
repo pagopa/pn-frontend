@@ -321,8 +321,7 @@ const NotificationDetail = () => {
     contains_multipayment:
       userPayments.f24Only.length > 1 || userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.f24Only.length + userPayments.pagoPaF24.length,
-    contains_f24:
-      userPayments.pagoPaF24.length > 0 || userPayments.f24Only.length > 0 ? 'yes' : 'no',
+    contains_f24: userPayments.pagoPaF24.length > 0 ? 'yes' : 'no',
   });
 
   const sendEventTrackCallbackNotificationDetail = () => {
@@ -354,12 +353,6 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  useMemo(() => {
-    if (pageReady && currentRecipient.denomination !== '' && notification.iun !== '') {
-      sendEventTrackCallbackNotificationDetail();
-    }
-  }, [pageReady, currentRecipient.denomination, notification.iun]);
-
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
     const fetchParams: GetNotificationDowntimeEventsParams = {
@@ -368,6 +361,12 @@ const NotificationDetail = () => {
     };
     void dispatch(getDowntimeEvents(fetchParams));
   }, []);
+
+  useMemo(() => {
+    if (pageReady && currentRecipient.denomination !== '' && notification.iun !== '') {
+      sendEventTrackCallbackNotificationDetail();
+    }
+  }, [pageReady, currentRecipient.denomination, notification.iun, fetchDowntimeEvents]);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {

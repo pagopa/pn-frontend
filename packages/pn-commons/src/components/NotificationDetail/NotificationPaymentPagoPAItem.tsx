@@ -19,6 +19,7 @@ type Props = {
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
   isCancelled: boolean;
+  handleTrackEventDetailPaymentError?: () => void;
 };
 
 const SkeletonCard: React.FC = () => {
@@ -182,6 +183,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   handleDeselectPayment,
   isSinglePayment,
   isCancelled,
+  handleTrackEventDetailPaymentError,
 }) => {
   const isMobile = useIsMobile();
 
@@ -194,6 +196,9 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED;
 
+  if (isError && handleTrackEventDetailPaymentError) {
+    handleTrackEventDetailPaymentError();
+  }
   const getErrorMessage = () => {
     switch (pagoPAItem.detail) {
       case PaymentInfoDetail.GENERIC_ERROR:
