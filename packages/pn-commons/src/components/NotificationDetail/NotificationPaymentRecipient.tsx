@@ -146,23 +146,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };
 
-  const getTitle = () => {
-    if (allPaymentsIsPaid) {
-      return null;
-    }
-
-    return (
-      <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-        <NotificationPaymentTitle
-          landingSiteUrl={landingSiteUrl}
-          handleTrackEventFn={handleTrackEventFn}
-          pagoPaF24={pagoPaF24}
-          f24Only={f24Only}
-        />
-      </Typography>
-    );
-  };
-
   useEffect(() => {
     if (isSinglePayment && paymentsStatus.count_unpaid > 0) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
@@ -208,7 +191,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           </Link>
         </Alert>
       ) : (
-        getTitle()
+        <NotificationPaymentTitle
+          landingSiteUrl={landingSiteUrl}
+          handleTrackEventFn={handleTrackEventFn}
+          pagoPaF24={pagoPaF24}
+          f24Only={f24Only}
+          allPaymentsIsPaid={allPaymentsIsPaid}
+        />
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
