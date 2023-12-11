@@ -174,8 +174,8 @@
       "send-analog-flow-RECRN003C-description-multirecipient": "Das Einschreiben mit Rückschein Nummer {{registeredLetterNumber}} für {{name}} {{taxId}} wurde an einem Lagerort hinterlegt.",
       "send-analog-flow-RECRN004C-description": "Der Empfänger hat die Abholung am Lagerort des Einschreibens mit Rückschein Nummer {{registeredLetterNumber}} abgelehnt.",
       "send-analog-flow-RECRN004C-description-multirecipient": "{{name}} {{taxId}} hat die Abholung am Lagerort des Einschreibens mit Rückschein Nummer {{registeredLetterNumber}} abgelehnt.",
-      "send-analog-flow-RECRN005C-description": "Der Empfänger hat das Einschreiben mit Rückschein Nummer {{registeredLetterNumber}} nicht innerhalb von 6 Monaten am Lagerort abgeholt.",
-      "send-analog-flow-RECRN005C-description-multirecipient": "{{name}} {{taxId}} hat das Einschreiben mit Rückschein Nummer {{registeredLetterNumber}} nicht innerhalb von 6 Monaten am Lagerort abgeholt.",
+      "send-analog-flow-RECRN005C-description": "Der Empfänger hat das Einschreiben mit Rückschein Nummer {{registeredLetterNumber}} nicht innerhalb von 30 Tagen am Lagerort abgeholt.",
+      "send-analog-flow-RECRN005C-description-multirecipient": "{{name}} {{taxId}} hat das Einschreiben mit Rückschein Nummer {{registeredLetterNumber}} nicht innerhalb von 30 Tagen am Lagerort abgeholt.",
       "send-analog-flow-RECAG004-description": "Der Zustellversuch des Einschreibens 890 Nummer {{registeredLetterNumber}} ist fehlgeschlagen {{deliveryFailureCause}}.",
       "send-analog-flow-RECAG004-description-multirecipient": "Der Zustellversuch des Einschreibens 890 Nummer {{registeredLetterNumber}} für{{name}} {{taxId}} ist fehlgeschlagen {{deliveryFailureCause}}.",
       "send-analog-flow-RECRN006-description": "Der Zustellversuch des Einschreibens mit Rückschein Nummer {{registeredLetterNumber}} ist fehlgeschlagen {{deliveryFailureCause}}.",
@@ -281,6 +281,7 @@
       },
       "analog-workflow-attachment-kind": {
         "AR": "Zustellungsbescheinigung",
+        "23I": "Zustellungsbescheinigung",
         "Plico": "Scan des Umschlags",
         "23L": "Empfangsbestätigung",
         "Indagine": "Scan der Nachforschung",

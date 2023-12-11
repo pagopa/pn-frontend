@@ -29,6 +29,7 @@ type Props = {
   clearPagination: () => void;
   setPagination: (data: PaginationData) => void;
   actionIds: { GET_CURRENT_STATUS: string; GET_DOWNTIME_LOG_PAGE: string };
+  handleTrackDownloadCertificateOpposable3dparties?: () => void;
 };
 
 export const AppStatusRender = (props: Props) => {
@@ -41,6 +42,7 @@ export const AppStatusRender = (props: Props) => {
     clearPagination,
     setPagination,
     fetchDowntimeLegalFactDocumentDetails,
+    handleTrackDownloadCertificateOpposable3dparties,
   } = props;
   const {
     currentStatus,
@@ -198,6 +200,9 @@ export const AppStatusRender = (props: Props) => {
             ) : (
               <DesktopDowntimeLog
                 downtimeLog={downtimeLogPage}
+                handleTrackDownloadCertificateOpposable3dparties={
+                  handleTrackDownloadCertificateOpposable3dparties
+                }
                 getDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
               />
             )

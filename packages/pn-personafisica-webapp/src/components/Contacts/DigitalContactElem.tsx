@@ -28,9 +28,6 @@ import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { DeleteDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch } from '../../redux/hooks';
-import { getContactEventType } from '../../utility/contacts.utility';
-import { EventActions, TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -204,11 +201,8 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
       /* eslint-disable-next-line functional/no-let */
       let actionToDispatch: AsyncThunk<string, DeleteDigitalAddressParams, any>;
       if (contactType === LegalChannelType.PEC) {
-        trackEventByType(TrackEventType.CONTACT_LEGAL_CONTACT, { action: EventActions.DELETE });
         actionToDispatch = deleteLegalAddress;
       } else {
-        const eventTypeByChannel = getContactEventType(contactType);
-        trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
         actionToDispatch = deleteCourtesyAddress;
       }
       void dispatch(actionToDispatch({ recipientId, senderId, channelType: contactType }))

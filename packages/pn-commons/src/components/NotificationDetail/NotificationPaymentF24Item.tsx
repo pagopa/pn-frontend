@@ -5,10 +5,10 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { downloadDocument, useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
-interface Props {
+type Props = {
   f24Item: F24PaymentDetails;
   timerF24: number;
   isPagoPaAttachment?: boolean;
@@ -19,13 +19,19 @@ interface Props {
     abort: (reason?: string) => void;
     unwrap: () => Promise<PaymentAttachment>;
   };
-}
+  handleTrackDownloadF24?: () => void;
+  handleTrackDownloadF24Success?: () => void;
+  handleTrackDownloadF24Timeout?: () => void;
+};
 
 const NotificationPaymentF24Item: React.FC<Props> = ({
   f24Item,
   timerF24,
   isPagoPaAttachment = false,
   getPaymentAttachmentAction,
+  handleTrackDownloadF24,
+  handleTrackDownloadF24Success,
+  handleTrackDownloadF24Timeout,
 }) => {
   const isMobile = useIsMobile();
   const [maxTimeError, setMaxTimeError] = useState<string | null>(null);
@@ -49,6 +55,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
       if (response.url) {
         setDownloadingMessage(null);
+        handleTrackDownloadF24Success?.();
         downloadDocument(response.url);
         return;
       }
@@ -84,6 +91,9 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
       }
     } catch (error) {
       setMaxTimeError('detail.payment.f24-download-error');
+      if (handleTrackDownloadF24Timeout) {
+        handleTrackDownloadF24Timeout();
+      }
       setDownloadingMessage(null);
     }
   }, []);
@@ -91,6 +101,9 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   const downloadF24 = () => {
     setMaxTimeError(null);
     setDownloadingMessage('detail.payment.download-f24-in-progress');
+    if (handleTrackDownloadF24) {
+      handleTrackDownloadF24();
+    }
     void getDownloadF24Status(f24Item, 0);
   };
 
