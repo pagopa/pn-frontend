@@ -254,7 +254,7 @@ const NotificationDetail = () => {
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
       } else if (type === 'attachments') {
-        return notification.documentsAvailable === true
+        return notification.documentsAvailable
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
       } else {
@@ -439,14 +439,11 @@ const NotificationDetail = () => {
                 )}
 
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                  <TimedMessage
-                    timeout={timeoutAARMessage}
-                    message={
-                      <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                        {t('detail.document-not-available', { ns: 'notifiche' })}
-                      </Alert>
-                    }
-                  />
+                  <TimedMessage timeout={timeoutAARMessage}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
