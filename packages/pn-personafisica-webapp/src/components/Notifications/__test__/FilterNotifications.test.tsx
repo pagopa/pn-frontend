@@ -29,8 +29,8 @@ jest.mock('react-i18next', () => ({
 }));
 
 const initialState = {
-  startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(today),
+  startDate: tenYearsAgo,
+  endDate: today,
   iunMatch: '',
   mandateId: undefined,
 };
@@ -157,8 +157,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });
@@ -264,8 +264,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });
