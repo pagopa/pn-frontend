@@ -84,13 +84,7 @@ const Dashboard = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    void dispatch(
-      getSentNotifications({
-        ...params,
-        endDate: params.endDate,
-        startDate: params.startDate,
-      })
-    );
+    void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   useEffect(() => {

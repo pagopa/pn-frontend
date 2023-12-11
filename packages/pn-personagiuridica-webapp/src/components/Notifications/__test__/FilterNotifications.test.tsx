@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  formatDate,
-  formatToTimezoneString,
-  getEndOfDay,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,

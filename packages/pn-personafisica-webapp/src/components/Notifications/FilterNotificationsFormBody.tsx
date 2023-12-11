@@ -102,11 +102,10 @@ const FilterNotificationsFormBody = ({
           inputFormat={DATE_FORMAT}
           value={startDate}
           onChange={(value: DatePickerTypes) => {
-            const value2 = value || tenYearsAgo;
             formikInstance
-              .setFieldValue('startDate', value)
+              .setFieldValue('startDate', value || tenYearsAgo)
               .then(() => {
-                setStartDate(value2);
+                setStartDate(value);
               })
               .catch(() => 'error');
           }}

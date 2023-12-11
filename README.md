@@ -28,7 +28,7 @@ To run test for all packages
 
 To run test for one file
 `cd <package name>`
-`yarn test -- --testPathPattern=<filename>`
+`yarn test --testPathPattern=<filename>`
 
 To build all the monorepo
 `yarn build`
@@ -67,8 +67,8 @@ You can run a task analysis with sonar-scanner using this script in each package
   To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
   The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
 
-
 ### Versioning
+
 These scripts use [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md).
 
 Release a prepatch:

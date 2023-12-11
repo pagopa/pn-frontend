@@ -72,13 +72,7 @@ const Notifiche = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    void dispatch(
-      getReceivedNotifications({
-        ...params,
-        startDate: params.startDate,
-        endDate: params.endDate,
-      })
-    ).then(() => setPageReady(true));
+    void dispatch(getReceivedNotifications(params)).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
 
   const getEventNotifications = (): EventNotificationsListType => ({

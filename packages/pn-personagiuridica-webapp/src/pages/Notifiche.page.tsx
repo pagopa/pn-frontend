@@ -83,13 +83,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       isDelegatedPage,
     };
 
-    void dispatch(
-      getReceivedNotifications({
-        ...params,
-        startDate: params.startDate,
-        endDate: params.endDate,
-      })
-    ).then(() => setPageReady(true));
+    void dispatch(getReceivedNotifications(params)).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
 
   // Pagination handlers

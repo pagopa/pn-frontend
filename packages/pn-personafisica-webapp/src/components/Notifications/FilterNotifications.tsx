@@ -45,23 +45,23 @@ function isFilterApplied(filtersCount: number): boolean {
   return filtersCount > 0;
 }
 
-const emptyValues = {
-  startDate: tenYearsAgo,
-  endDate: today,
-  status: '',
-  recipientId: '',
-  iunMatch: '',
-};
+const initialEmptyValues = { startDate: tenYearsAgo, endDate: today, iunMatch: '' };
 
-const initialEmptyValues = { ...emptyValues };
-const initialValues = (filters: GetNotificationsParams<Date>): FormikValues => {
+const initialValues = (
+  filters: GetNotificationsParams<Date>,
+  emptyValues: {
+    startDate: Date;
+    endDate: Date;
+    iunMatch: string;
+    mandateId: string | undefined;
+  }
+): FormikValues => {
   if (!filters || _.isEqual(filters, emptyValues)) {
     return initialEmptyValues;
   }
   return {
     startDate: new Date(filters.startDate),
     endDate: new Date(filters.endDate),
-    recipientId: getValidValue(filters.recipientId),
     iunMatch: getValidValue(filters.iunMatch),
   };
 };
@@ -98,7 +98,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
-    initialValues: initialValues(filters),
+    initialValues: initialValues(filters, emptyValues),
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
