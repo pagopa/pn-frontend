@@ -7,13 +7,12 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
+  NotificationDetailOtherDocument,
   NotificationStatus,
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
-  getF24Payments,
-  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -25,12 +24,21 @@ import {
   notificationToFe,
   paymentsData,
 } from '../../__mocks__/NotificationDetail.mock';
-import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
@@ -199,9 +207,11 @@ describe('NotificationDetail Page', () => {
   });
 
   it('checks not available documents', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, documentsAvailable: false });
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      documentsAvailable: false,
+      sentAt: '2012-01-01T00:00:00Z',
+    });
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -328,6 +338,66 @@ describe('NotificationDetail Page', () => {
     });
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-url-com');
+    });
+  });
+
+  it('executes the other document (aar) download handler', async () => {
+    const otherDocument: NotificationDetailOtherDocument = {
+      documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
+      documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
+    };
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        retryAfter: 1,
+      });
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(2);
+    const AARBox = result?.getByTestId('aarBox');
+    const AARButton = within(AARBox!).getByTestId('documentButton');
+    fireEvent.click(AARButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+
+    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
+    expect(docNotAvailableAlert).toBeInTheDocument();
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-aar-com',
+      });
+    //simulate that legal fact is now available
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 1000));
+    });
+    expect(docNotAvailableAlert).not.toBeInTheDocument();
+    fireEvent.click(AARButton);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get[3].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-aar-com');
     });
   });
 
