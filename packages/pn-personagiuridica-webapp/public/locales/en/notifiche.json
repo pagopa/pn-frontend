@@ -303,6 +303,7 @@
       },
       "analog-workflow-attachment-kind": {
         "AR": "Receipt of delivery",
+        "23I": "Receipt of delivery",
         "Plico": "Scanning the envelope",
         "23L": "Acknowledgement of receipt",
         "Indagine": "Scanning the enquiry",
