@@ -47,7 +47,9 @@ export function taxIdDependingOnRecipientType(
   }
   const isCF16 = dataRegex.fiscalCode.test(value);
   const isCF11 = dataRegex.pIva.test(value);
-  return isCF16 || (recipientType === RecipientType.PG && isCF11);
+  return (
+    (recipientType === RecipientType.PF && isCF16) || (recipientType === RecipientType.PG && isCF11)
+  );
 }
 
 export function identicalTaxIds(

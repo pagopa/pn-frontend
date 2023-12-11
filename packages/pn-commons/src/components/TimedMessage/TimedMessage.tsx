@@ -1,17 +1,17 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 
 interface TimedMessageProps {
-  /** Message to show */
-  message?: ReactNode | string;
   /** Set timeout in milliseconds */
   timeout: number;
   /** Callback function when timeout reachs end */
   callback?: () => void;
+  /** Message to show */
+  children?: React.ReactNode;
 }
 
-const TimedMessage = ({ message = '', timeout = 0, callback }: TimedMessageProps) => {
+const TimedMessage: React.FC<TimedMessageProps> = ({ timeout = 0, callback, children }) => {
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const TimedMessage = ({ message = '', timeout = 0, callback }: TimedMessageProps
     }
   }, [timeout]);
 
-  return <>{showMessage && <Box data-testid="timed-message">{message}</Box>}</>;
+  return <>{showMessage && <Box data-testid="timed-message">{children}</Box>}</>;
 };
 
 export default TimedMessage;

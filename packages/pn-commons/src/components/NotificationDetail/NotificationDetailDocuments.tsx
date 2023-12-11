@@ -1,5 +1,5 @@
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Box, Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography, TypographyProps } from '@mui/material';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -13,6 +13,7 @@ type Props = {
   downloadFilesMessage?: string;
   downloadFilesLink?: string;
   disableDownloads?: boolean;
+  titleVariant?: TypographyProps['variant'];
 };
 
 /**
@@ -34,6 +35,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
     documentsAvailable = true,
     downloadFilesMessage,
     disableDownloads = false,
+    titleVariant = 'overline',
   } // TODO: remove comment when link ready downloadFilesLink
 ) => {
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
@@ -107,10 +109,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
           <Typography
             id="notification-detail-document-attached"
             color="text.primary"
-            variant="overline"
-            fontWeight={700}
-            textTransform="uppercase"
-            fontSize={14}
+            variant={titleVariant}
           >
             {title}
           </Typography>

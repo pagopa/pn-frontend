@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { AppResponse } from '../models/AppResponse';
+import { AppResponse, AppResponseError } from '../models/AppResponse';
 import { appStateActions } from '../redux';
 import { AppResponsePublisher } from '../utility/AppResponse';
 
@@ -12,13 +12,19 @@ import { AppResponsePublisher } from '../utility/AppResponse';
  * Make sure that you have the necessary Redux setup and reducers in place for this code to work correctly.
  * @returns {any}
  */
-const AppResponseMessage = () => {
+type Props = {
+  eventTrackingToastErrorMessages?: (error: AppResponseError, traceid?: string) => void;
+};
+const AppResponseMessage = ({ eventTrackingToastErrorMessages }: Props) => {
   const dispatch = useDispatch();
 
   const showErrorMessage = (response: AppResponse) => {
-    const { errors, action } = response;
+    const { errors, action, traceId } = response;
 
     errors?.forEach((error) => {
+      if (eventTrackingToastErrorMessages) {
+        eventTrackingToastErrorMessages(error, traceId);
+      }
       dispatch(
         appStateActions.addError({
           title: error.message.title,

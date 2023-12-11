@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
+  NotificationColumnData,
   PaginationData,
   Sort,
   TitleBox,
@@ -18,7 +19,6 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
-import { NotificationColumn } from '../models/Notifications';
 import { PNRole } from '../redux/auth/types';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
@@ -99,7 +99,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
     dispatch(setSorting(s));
   };
 

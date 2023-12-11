@@ -19,6 +19,8 @@ type Props = {
   sx?: SxProps;
   /** event tracking function callback for page size */
   eventTrackingCallbackPageSize?: (pageSize: number) => void;
+  /** hide size selector */
+  hideSizeSelector?: boolean;
 };
 
 const getA11yPaginationLabels = (
@@ -75,6 +77,7 @@ export default function CustomPagination({
   pagesToShow,
   sx,
   eventTrackingCallbackPageSize,
+  hideSizeSelector = false,
 }: Props) {
   const size = paginationData.size || elementsPerPage[0];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -105,60 +108,62 @@ export default function CustomPagination({
 
   return (
     <Grid container sx={sx} data-testid="customPagination">
-      <Grid
-        item
-        xs={4}
-        display="flex"
-        justifyContent="start"
-        alignItems={'center'}
-        data-testid="itemsPerPageSelector"
-        className="items-per-page-selector"
-      >
-        <Button
-          sx={{ color: 'text.primary', fontWeight: 400 }}
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          endIcon={<ArrowDropDown />}
-          aria-label={getLocalizedOrDefaultLabel(
-            'common',
-            'paginator.rows-per-page',
-            'Righe per pagina'
-          )}
-          id="rows-per-page"
+      {!hideSizeSelector && (
+        <Grid
+          item
+          xs={4}
+          display="flex"
+          justifyContent="start"
+          alignItems={'center'}
+          data-testid="itemsPerPageSelector"
+          className="items-per-page-selector"
         >
-          {size}
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': getLocalizedOrDefaultLabel(
+          <Button
+            sx={{ color: 'text.primary', fontWeight: 400 }}
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            endIcon={<ArrowDropDown />}
+            aria-label={getLocalizedOrDefaultLabel(
               'common',
               'paginator.rows-per-page',
               'Righe per pagina'
-            ),
-          }}
-          data-testid=""
-        >
-          {elementsPerPage.map((ep) => (
-            <MenuItem
-              id={`pageSize-${ep}`}
-              key={ep}
-              data-testid={`pageSize-${ep}`}
-              onClick={() => handleChangeElementsPerPage(ep)}
-            >
-              {ep}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Grid>
+            )}
+            id="rows-per-page"
+          >
+            {size}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': getLocalizedOrDefaultLabel(
+                'common',
+                'paginator.rows-per-page',
+                'Righe per pagina'
+              ),
+            }}
+            data-testid=""
+          >
+            {elementsPerPage.map((ep) => (
+              <MenuItem
+                id={`pageSize-${ep}`}
+                key={ep}
+                data-testid={`pageSize-${ep}`}
+                onClick={() => handleChangeElementsPerPage(ep)}
+              >
+                {ep}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Grid>
+      )}
       <Grid
         item
-        xs={8}
+        xs={hideSizeSelector ? 12 : 8}
         display="flex"
         justifyContent="end"
         alignItems={'center'}

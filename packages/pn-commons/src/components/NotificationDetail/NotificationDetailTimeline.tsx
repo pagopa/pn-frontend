@@ -29,6 +29,7 @@ type Props = {
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
+  handleTrackShowMoreLess?: (collapsed: boolean) => void;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -57,7 +58,6 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param historyButtonLabel label of the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
- * @param eventTrackingCallbackShowMore event tracking callback
  * @param disableDownloads for disable downloads
  * @param isParty for specific render of notification
  * @param language used to translate months in timeline
@@ -70,10 +70,10 @@ const NotificationDetailTimeline = ({
   historyButtonLabel,
   showMoreButtonLabel,
   showLessButtonLabel,
-  eventTrackingCallbackShowMore,
   disableDownloads = false,
   isParty = true,
   language = 'it',
+  handleTrackShowMoreLess,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -105,7 +105,7 @@ const NotificationDetailTimeline = ({
       key={`timeline_sep_${i}`}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
-      eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
+      handleTrackShowMoreLess={handleTrackShowMoreLess}
       disableDownloads={disableDownloads}
       isParty={isParty}
       language={language}

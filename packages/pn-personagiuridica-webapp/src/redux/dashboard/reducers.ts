@@ -1,13 +1,13 @@
 import {
   GetNotificationsParams,
   Notification,
+  NotificationColumnData,
   Sort,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { NotificationColumn } from '../../models/Notifications';
 import { getReceivedNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -30,7 +30,7 @@ const dashboardSlice = createSlice({
     sort: {
       orderBy: '',
       order: 'asc',
-    } as Sort<NotificationColumn>,
+    } as Sort<NotificationColumnData>,
   },
   reducers: {
     setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
@@ -42,7 +42,7 @@ const dashboardSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
-    setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
+    setSorting: (state, action: PayloadAction<Sort<NotificationColumnData>>) => {
       state.sort = action.payload;
     },
     setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams<Date>>) => {

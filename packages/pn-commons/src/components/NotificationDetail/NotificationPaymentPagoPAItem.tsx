@@ -11,15 +11,15 @@ import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
-interface Props {
+type Props = {
   pagoPAItem: PagoPAPaymentFullDetails;
   loading: boolean;
   isSelected: boolean;
-  handleReloadPayment: () => void;
+  handleFetchPaymentsInfo: () => void;
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
   isCancelled: boolean;
-}
+};
 
 const SkeletonCard: React.FC = () => {
   const isMobile = useIsMobile();
@@ -178,7 +178,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   pagoPAItem,
   loading,
   isSelected,
-  handleReloadPayment,
+  handleFetchPaymentsInfo,
   handleDeselectPayment,
   isSinglePayment,
   isCancelled,
@@ -320,7 +320,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
       </Box>
 
       {isError ? (
-        <ButtonNaked color="primary" data-testid="reload-button" onClick={handleReloadPayment}>
+        <ButtonNaked color="primary" data-testid="reload-button" onClick={handleFetchPaymentsInfo}>
           <Refresh sx={{ width: '20px' }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.reload')}
         </ButtonNaked>
