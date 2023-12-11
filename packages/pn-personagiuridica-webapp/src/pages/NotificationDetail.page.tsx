@@ -438,7 +438,7 @@ const NotificationDetail = () => {
                   </Paper>
                 )}
 
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
                   <TimedMessage
                     timeout={timeoutAARMessage}
                     message={
