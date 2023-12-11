@@ -182,6 +182,8 @@ describe('Filter Notifications Table Component', () => {
     const todayM = new Date();
     const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    tenYearsAgo.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
     await setFormValues(
       form!,
       tenYearsAgo,
@@ -358,8 +360,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
