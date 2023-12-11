@@ -86,10 +86,6 @@ const MobileNotifications = ({
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
   const cardBody: Array<CardElement<Notification>> = [
     {
       id: 'sender',
@@ -201,11 +197,7 @@ const MobileNotifications = ({
                   }}
                   position="left"
                 >
-                  <NotificationsDataSwitch
-                    data={data}
-                    type="sentAt"
-                    handleEventTrackingTooltip={handleEventTrackingTooltip}
-                  />
+                  <NotificationsDataSwitch data={data} type="sentAt" />
                 </PnCardHeaderItem>
                 <PnCardHeaderItem
                   gridProps={{
@@ -214,11 +206,7 @@ const MobileNotifications = ({
                   }}
                   position="right"
                 >
-                  <NotificationsDataSwitch
-                    data={data}
-                    type="notificationStatus"
-                    handleEventTrackingTooltip={handleEventTrackingTooltip}
-                  />
+                  <NotificationsDataSwitch data={data} type="notificationStatus" />
                 </PnCardHeaderItem>
               </PnCardHeader>
               <PnCardContent>
@@ -228,11 +216,7 @@ const MobileNotifications = ({
                     label={body.label}
                     wrapValueInTypography={body.wrapValueInTypography}
                   >
-                    <NotificationsDataSwitch
-                      data={data}
-                      type={body.id}
-                      handleEventTrackingTooltip={handleEventTrackingTooltip}
-                    />
+                    <NotificationsDataSwitch data={data} type={body.id} />
                   </PnCardContentItem>
                 ))}
               </PnCardContent>

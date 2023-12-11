@@ -14,8 +14,6 @@ import {
   Sort,
   TitleBox,
   calculatePages,
-  formatToTimezoneString,
-  getNextDay,
   isNewNotification,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -109,7 +107,6 @@ const Notifiche = () => {
     void dispatch(
       getReceivedNotifications({
         ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
       })
     )
       .unwrap()

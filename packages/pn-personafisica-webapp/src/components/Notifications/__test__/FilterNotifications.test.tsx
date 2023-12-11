@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  formatDate,
-  formatToTimezoneString,
-  getNextDay,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { formatDate, formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
@@ -35,8 +29,8 @@ jest.mock('react-i18next', () => ({
 }));
 
 const initialState = {
-  startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(today),
+  startDate: tenYearsAgo,
+  endDate: today,
   iunMatch: '',
   mandateId: undefined,
 };
@@ -163,8 +157,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });
@@ -189,7 +183,7 @@ describe('Filter Notifications Table Component', () => {
     todayM.setHours(0, 0, 0, 0);
     nineYearsAgo.setHours(0, 0, 0, 0);
     // wrong id and wrong start date
-    await setFormValues(form!, nineYearsAgo, getNextDay(todayM), '1234-5678-910A-BCDFGH-I-OL');
+    await setFormValues(form!, nineYearsAgo, todayM, '1234-5678-910A-BCDFGH-I-OL');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -270,8 +264,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });
