@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import {
   ApiErrorWrapper,
   CustomPagination,
   EventNotificationsListType,
+  Notification,
   NotificationColumnData,
   NotificationStatus,
   PaginationData,
@@ -29,12 +30,44 @@ import { RootState } from '../redux/store';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
+const getEventNotifications = (
+  notifications: Array<Notification>,
+  delegators: Array<Delegator>,
+  pagination: {
+    nextPagesKey: Array<string>;
+    size: number;
+    page: number;
+    moreResult: boolean;
+  },
+  domicileBannerType: string
+): EventNotificationsListType => ({
+  ...(domicileBannerType && { banner: domicileBannerType }),
+  delegate: delegators.length > 0,
+  page_number: pagination.page,
+  total_count: notifications.length,
+  unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
+  delivered_count: notifications.filter(
+    (n) => n.notificationStatus === NotificationStatus.DELIVERED
+  ).length,
+  opened_count: notifications.filter((n) => n.notificationStatus === NotificationStatus.VIEWED)
+    .length,
+  expired_count: notifications.filter(
+    (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+  ).length,
+  not_found_count: notifications.filter(
+    (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
+  ).length,
+  cancelled_count: notifications.filter(
+    (n) => n.notificationStatus === NotificationStatus.CANCELLED
+  ).length,
+});
+
 const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
   const [pageReady, setPageReady] = useState(false);
-
+  const domicileBannerTypeRef = useRef('');
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -71,41 +104,28 @@ const Notifiche = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-
-    void dispatch(getReceivedNotifications(params)).then(() => setPageReady(true));
+    void dispatch(
+      getReceivedNotifications({
+        ...params,
+      })
+    )
+      .unwrap()
+      .then((data) => {
+        setPageReady(true);
+        trackEventByType(
+          currentDelegator
+            ? TrackEventType.SEND_NOTIFICATION_DELEGATED
+            : TrackEventType.SEND_YOUR_NOTIFICATION,
+          getEventNotifications(
+            data.resultsPage,
+            delegators,
+            pagination,
+            domicileBannerTypeRef.current
+          )
+        );
+      })
+      .catch(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
-
-  const getEventNotifications = (): EventNotificationsListType => ({
-    delegate: delegators.length > 0,
-    page_number: pagination.page,
-    total_count: notifications.length,
-    unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
-    delivered_count: notifications.filter(
-      (n) => n.notificationStatus === NotificationStatus.DELIVERED
-    ).length,
-    opened_count: notifications.filter((n) => n.notificationStatus === NotificationStatus.VIEWED)
-      .length,
-    expired_count: notifications.filter(
-      (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
-    ).length,
-    not_found_count: notifications.filter(
-      (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
-    ).length,
-    cancelled_count: notifications.filter(
-      (n) => n.notificationStatus === NotificationStatus.CANCELLED
-    ).length,
-  });
-
-  useEffect(() => {
-    if (notifications && delegators && pageReady) {
-      trackEventByType(
-        currentDelegator
-          ? TrackEventType.SEND_NOTIFICATION_DELEGATED
-          : TrackEventType.SEND_YOUR_NOTIFICATION,
-        getEventNotifications()
-      );
-    }
-  }, [notifications, delegators, pageReady]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -128,7 +148,7 @@ const Notifiche = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {!mandateId && <DomicileBanner />}
+        {!mandateId && <DomicileBanner ref={domicileBannerTypeRef} />}
         <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}

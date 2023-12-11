@@ -79,7 +79,8 @@ const NuovaDelega = () => {
   const handleSubmit = (values: NewDelegationFormProps) => {
     setCreatedDelegation({
       person_type: values.selectPersonaFisicaOrPersonaGiuridica,
-      mandate_type: values.selectTuttiEntiOrSelezionati,
+      mandate_type:
+        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
     });
 
     trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION, {
