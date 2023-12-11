@@ -1,8 +1,8 @@
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../models';
 
-interface Props {
+type Props = {
   notification: NotificationDetail;
-}
+};
 
 /**
  * Checks if notification is cancelled.

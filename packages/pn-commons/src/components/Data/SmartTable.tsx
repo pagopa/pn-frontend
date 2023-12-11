@@ -1,32 +1,40 @@
-import { Children, PropsWithChildren, ReactNode, useMemo, useState } from 'react';
+import { Children, PropsWithChildren } from 'react';
 
 import { Box, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../hooks';
-import {
-  CardAction,
-  CardElement,
-  Column,
-  Item,
-  PaginationData,
-  SmartTableData,
-  Sort,
-} from '../../models';
-import { SmartTableAction } from '../../models/SmartTable';
-import { calculatePages, sortArray } from '../../utility';
+import { PaginationData, Row, SmartTableData, Sort } from '../../models';
+import { calculatePages } from '../../utility';
+import checkChildren from '../../utility/children.utility';
 import CustomPagination from '../Pagination/CustomPagination';
-import ItemsCard from './ItemsCard';
-import ItemsTable from './ItemsTable';
-import SmartFilter from './SmartFilter';
-import SmartSort from './SmartSort';
+import SmartBody from './SmartTable/SmartBody';
+import SmartData from './SmartTable/SmartData';
+import SmartFilter from './SmartTable/SmartFilter';
+import SmartHeader from './SmartTable/SmartHeader';
+import SmartSort from './SmartTable/SmartSort';
 
-type Props<ColumnId> = {
+function getSortFields<T>(conf: Array<SmartTableData<T>>) {
+  const sortFields: Array<{ id: keyof T; label: string }> = [];
+  for (const cfg of conf) {
+    if (cfg.tableConfiguration.sortable) {
+      // eslint-disable-next-line functional/immutable-data
+      sortFields.push({
+        id: cfg.id,
+        label: cfg.label,
+      });
+    }
+  }
+  return { sortFields };
+}
+
+type Props<T> = {
+  children: React.ReactNode;
   /** smart table configuration */
-  conf: Array<SmartTableData<ColumnId>>;
+  conf: Array<SmartTableData<T>>;
   /** data */
-  data: Array<Item>;
+  data: Array<Row<T>>;
   /** current sort value */
-  currentSort?: Sort<ColumnId>;
+  currentSort?: Sort<T>;
   /** labels for the sort fields */
   sortLabels?: {
     title: string;
@@ -36,9 +44,7 @@ type Props<ColumnId> = {
     dsc: string;
   };
   /** the function to be invoked if the user change sorting */
-  onChangeSorting?: (sort: Sort<ColumnId>) => void;
-  /* actions */
-  actions?: Array<SmartTableAction>;
+  onChangeSorting?: (sort: Sort<T>) => void;
   /** pagination data */
   pagination?: {
     size: number;
@@ -48,78 +54,43 @@ type Props<ColumnId> = {
     onChangePage: (paginationData: PaginationData) => void;
   };
   /** EmptyState component */
-  emptyState?: ReactNode;
+  emptyState?: React.ReactNode;
+  /** SmartTable test id */
+  testId?: string;
+  /** Table title used in aria-label */
+  ariaTitle?: string;
 };
-
-function getCardElements<ColumnId extends string>(
-  conf: Array<SmartTableData<ColumnId>>,
-  actions?: Array<SmartTableAction>
-) {
-  const headerElem: Array<CardElement> = [];
-  const cardBody: Array<CardElement> = [];
-  const sortFields: Array<{ id: string; label: string }> = [];
-  for (const cfg of conf) {
-    /* eslint-disable functional/immutable-data */
-    if (cfg.cardConfiguration.position === 'header') {
-      headerElem.push({
-        id: cfg.id,
-        label: cfg.label,
-        getLabel: (value: string | number | Array<string | ReactNode>, data?: Item) =>
-          cfg.getValue(value, data, true),
-        gridProps: cfg.cardConfiguration.gridProps,
-      });
-    } else if (cfg.cardConfiguration.position === 'body') {
-      cardBody.push({
-        id: cfg.id,
-        label: cfg.label,
-        getLabel: (value: string | number | Array<string | ReactNode>, data?: Item) =>
-          cfg.getValue(value, data, true),
-        notWrappedInTypography: cfg.cardConfiguration.notWrappedInTypography,
-        hideIfEmpty: cfg.cardConfiguration.hideIfEmpty,
-      });
-    }
-    if (cfg.tableConfiguration.sortable) {
-      sortFields.push({
-        id: cfg.id,
-        label: cfg.label,
-      });
-    }
-    /* eslint-enable functional/immutable-data */
-  }
-  const cardHeader: [CardElement, CardElement | null] = (
-    headerElem.length > 2 ? headerElem.slice(0, 2) : headerElem
-  ) as [CardElement, CardElement | null];
-  const cardActions: Array<CardAction> | undefined = actions
-    ?.filter((action) => action.position === 'card' || action.position === 'everywhere')
-    .map((action) => ({
-      id: action.id,
-      component: action.component,
-      onClick: action.onClick,
-    }));
-
-  return { cardHeader, cardBody, cardActions, sortFields };
-}
 
 /**
  * SmartTable show table in desktop view and cards in mobile view.
  */
-const SmartTable = <ColumnId extends string>({
+const SmartTable = <T,>({
+  children,
   conf,
   data,
   currentSort,
   sortLabels,
-  onChangeSorting,
-  actions,
-  children,
+  onChangeSorting = () => {},
   pagination,
   emptyState,
-}: PropsWithChildren<Props<ColumnId>>) => {
+  testId,
+  ariaTitle,
+}: PropsWithChildren<Props<T>>) => {
   const isMobile = useIsMobile();
-  const [sort, setSort] = useState<Sort<ColumnId> | undefined>(currentSort);
+
+  checkChildren(
+    children,
+    [
+      { cmp: SmartFilter, maxCount: 1 },
+      { cmp: SmartHeader, required: true, maxCount: 1 },
+      { cmp: SmartBody, required: true, maxCount: 1 },
+    ],
+    'SmartTable'
+  );
 
   const filters = children
-    ? Children.toArray(children).filter((child) => (child as JSX.Element).type === SmartFilter)
-    : [];
+    ? Children.toArray(children).find((child) => (child as JSX.Element).type === SmartFilter)
+    : null;
 
   const pagesToShow = pagination
     ? calculatePages(
@@ -130,24 +101,9 @@ const SmartTable = <ColumnId extends string>({
       )
     : undefined;
 
-  const handleSorting = (newSort: Sort<ColumnId>) => {
-    // manage sorting from external
-    if (onChangeSorting && newSort) {
-      onChangeSorting(newSort);
-    } else {
-      setSort(newSort);
-    }
-  };
-
-  const rowData = useMemo(() => {
-    if (sort) {
-      return sortArray(sort.order, sort.orderBy, data);
-    }
-    return data;
-  }, [sort, data]);
-
   if (isMobile) {
-    const { cardHeader, cardBody, cardActions, sortFields } = getCardElements(conf, actions);
+    const { sortFields } = getSortFields(conf);
+
     return (
       <>
         <Grid container direction="row" sx={{ mb: 2 }}>
@@ -155,7 +111,7 @@ const SmartTable = <ColumnId extends string>({
             {filters}
           </Grid>
           <Grid item xs={6} textAlign="right">
-            {sort && sortFields.length > 0 && sortLabels && (
+            {currentSort && sortFields.length > 0 && sortLabels && (
               <SmartSort
                 title={sortLabels.title}
                 optionsTitle={sortLabels.optionsTitle}
@@ -163,21 +119,23 @@ const SmartTable = <ColumnId extends string>({
                 ascLabel={sortLabels.asc}
                 dscLabel={sortLabels.dsc}
                 sortFields={sortFields}
-                sort={sort}
-                onChangeSorting={handleSorting}
+                sort={currentSort}
+                onChangeSorting={onChangeSorting}
               />
             )}
           </Grid>
         </Grid>
-        {rowData.length > 0 && (
-          <ItemsCard
-            cardHeader={cardHeader}
-            cardBody={cardBody}
-            cardData={rowData}
-            cardActions={cardActions}
-          />
+        {data.length > 0 && (
+          <SmartData
+            ariaTitle={ariaTitle}
+            testId={testId}
+            sort={currentSort}
+            onChangeSorting={onChangeSorting}
+          >
+            {children}
+          </SmartData>
         )}
-        {rowData.length > 0 && pagination && (
+        {data.length > 0 && pagination && (
           <CustomPagination
             paginationData={{
               size: pagination.size,
@@ -199,29 +157,24 @@ const SmartTable = <ColumnId extends string>({
             }
           />
         )}
-        {rowData.length === 0 && emptyState}
+        {data.length === 0 && emptyState}
       </>
     );
   }
-
-  const columns: Array<Column<ColumnId>> = conf.map((cfg) => ({
-    id: cfg.id,
-    label: cfg.label,
-    width: cfg.tableConfiguration.width,
-    align: cfg.tableConfiguration.align,
-    sortable: cfg.tableConfiguration.sortable,
-    getCellLabel: (value: string | number | Array<string | ReactNode>, data?: Item) =>
-      cfg.getValue(value, data, false),
-    onClick: cfg.tableConfiguration.onClick,
-  }));
-
   return (
     <>
       <Box mb={3}>{filters}</Box>
-      {rowData.length > 0 && (
-        <ItemsTable columns={columns} rows={rowData} sort={sort} onChangeSorting={handleSorting} />
+      {data.length > 0 && (
+        <SmartData
+          ariaTitle={ariaTitle}
+          testId={testId}
+          sort={currentSort}
+          onChangeSorting={onChangeSorting}
+        >
+          {children}
+        </SmartData>
       )}
-      {rowData.length > 0 && pagination && (
+      {data.length > 0 && pagination && (
         <CustomPagination
           paginationData={{
             size: pagination.size,
@@ -243,7 +196,7 @@ const SmartTable = <ColumnId extends string>({
           }
         />
       )}
-      {rowData.length === 0 && emptyState}
+      {data.length === 0 && emptyState}
     </>
   );
 };

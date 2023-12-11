@@ -18,7 +18,7 @@ export const productsDTO = [
 export const productsList: Array<ProductEntity> = productsDTO.map((product) => ({
   id: product.id,
   title: product.title,
-  productUrl: `mock-selfcare.base/token-exchange?institutionId=${userResponse.organization.id}&productId=mock-prod-id`,
+  productUrl: `mock-selfcare.base/token-exchange?institutionId=${userResponse.organization.id}&productId=${product.id}`,
   linkType: 'external',
 }));
 

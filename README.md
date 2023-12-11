@@ -26,7 +26,8 @@ yarn start
 To run test for all packages
 `yarn test`
 
-To run test for single file
+To run test for one file
+`cd <package name>`
 `yarn test --testPathPattern=<filename>`
 
 To build all the monorepo

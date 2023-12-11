@@ -1,7 +1,7 @@
 import { Sort } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { DelegatesColumn, DelegatorsColumn } from '../../models/Deleghe';
+import { DelegationColumnData } from '../../models/Deleghe';
 import { sortDelegations } from '../../utility/delegation.utility';
 import {
   acceptDelegation,
@@ -32,11 +32,11 @@ const initialState = {
   sortDelegators: {
     orderBy: '',
     order: 'asc',
-  } as Sort<DelegatorsColumn>,
+  } as Sort<DelegationColumnData>,
   sortDelegates: {
     orderBy: '',
     order: 'asc' as 'asc' | 'desc',
-  } as Sort<DelegatesColumn>,
+  } as Sort<DelegationColumnData>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -63,7 +63,7 @@ const delegationsSlice = createSlice({
       state.acceptModalState.open = false;
       state.acceptModalState.id = '';
     },
-    setDelegatesSorting: (state, action: PayloadAction<Sort<DelegatesColumn>>) => {
+    setDelegatesSorting: (state, action: PayloadAction<Sort<DelegationColumnData>>) => {
       state.sortDelegates = action.payload;
       state.delegations.delegates = sortDelegations(
         action.payload.order,
@@ -71,7 +71,7 @@ const delegationsSlice = createSlice({
         state.delegations.delegates
       );
     },
-    setDelegatorsSorting: (state, action: PayloadAction<Sort<DelegatorsColumn>>) => {
+    setDelegatorsSorting: (state, action: PayloadAction<Sort<DelegationColumnData>>) => {
       state.sortDelegators = action.payload;
       state.delegations.delegators = sortDelegations(
         action.payload.order,

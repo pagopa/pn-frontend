@@ -305,4 +305,34 @@ describe('NotificationPaymentRecipient Component', () => {
     const downloadButton = queryByTestId('download-pagoPA-notice-button');
     expect(downloadButton).not.toBeInTheDocument();
   });
+
+  it('should not show subtitle when all payments are paid', () => {
+    const paidPayments = {
+      pagoPaF24: [
+        ...paymentsData.pagoPaF24.map((payment) => ({
+          ...payment,
+          pagoPa: {
+            ...payment.pagoPa!,
+            status: PaymentStatus.SUCCEEDED,
+          },
+        })),
+      ],
+      f24Only: [...paymentsData.f24Only],
+    };
+
+    const { queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paidPayments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+
+    const subtitle = queryByTestId('notification-payment-recipient-subtitle');
+    expect(subtitle).not.toBeInTheDocument();
+  });
 });

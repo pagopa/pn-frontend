@@ -21,23 +21,26 @@ import {
 } from '@mui/material';
 import {
   ApiErrorWrapper,
-  CustomTagGroup,
   EmptyState,
-  Item,
   KnownSentiment,
   PaginationData,
   PnAutocomplete,
+  Row,
+  SmartBody,
+  SmartBodyCell,
+  SmartBodyRow,
   SmartFilter,
+  SmartHeader,
+  SmartHeaderCell,
   SmartTable,
   SmartTableData,
   dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
 
 import {
+  DelegationColumnData,
   DelegationStatus,
-  DelegatorsColumn,
   DelegatorsFormFilters,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
@@ -47,8 +50,7 @@ import { setFilters } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
-import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
-import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
+import DelegationDataSwitch from './DelegationDataSwitch';
 
 const initialEmptyValues: {
   taxId: string;
@@ -97,7 +99,7 @@ const DelegationsOfTheCompany = () => {
     (key) => ({ id: DelegationStatus[key], label: t(`deleghe.table.${DelegationStatus[key]}`) })
   );
   const [groupInputValue, setGroupInputValue] = useState('');
-  const rows: Array<Item> = delegationToItem(delegators);
+  const rows = delegationToItem(delegators) as Array<Row<DelegationColumnData>>;
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -107,103 +109,60 @@ const DelegationsOfTheCompany = () => {
       ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
 
-  const smartCfg: Array<SmartTableData<DelegatorsColumn>> = [
+  const smartCfg: Array<SmartTableData<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
-      getValue(value: string) {
-        return <Typography fontWeight="bold">{value}</Typography>;
-      },
       tableConfiguration: {
-        width: '18%',
+        cellProps: { width: '18%' },
       },
       cardConfiguration: {
-        position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
-      getValue(value: string) {
-        return value;
-      },
       tableConfiguration: {
-        width: '13%',
-      },
-      cardConfiguration: {
-        position: 'body',
+        cellProps: { width: '13%' },
       },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
-      getValue(value: string) {
-        return value;
-      },
       tableConfiguration: {
-        width: '13%',
-      },
-      cardConfiguration: {
-        position: 'body',
+        cellProps: { width: '13%' },
       },
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      getValue(value: Array<string>) {
-        return <OrganizationsList organizations={value} visibleItems={3} />;
-      },
       tableConfiguration: {
-        width: '18%',
+        cellProps: { width: '18%' },
       },
       cardConfiguration: {
-        position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
       id: 'groups',
       label: t('deleghe.table.groups'),
-      getValue(value: Array<{ id: string; name: string }>) {
-        if (value.length > 0) {
-          return (
-            <CustomTagGroup visibleItems={3}>
-              {value.map((group) => (
-                <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={group.id}>
-                  <Tag value={group.name} />
-                </Box>
-              ))}
-            </CustomTagGroup>
-          );
-        }
-        return '';
-      },
       tableConfiguration: {
-        width: '13%',
+        cellProps: { width: '13%' },
       },
       cardConfiguration: {
-        position: 'body',
-        notWrappedInTypography: true,
         hideIfEmpty: true,
+        wrapValueInTypography: false,
       },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      getValue(value: string, row: Item) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={t(key)} color={color} />;
-        } else {
-          return <AcceptButton id={row.id} name={row.name as string} onAccept={handleAccept} />;
-        }
-      },
       tableConfiguration: {
-        width: '20%',
+        cellProps: { width: '20%' },
       },
       cardConfiguration: {
-        position: 'header',
+        isCardHeader: true,
         gridProps: {
           xs: 8,
         },
@@ -214,19 +173,17 @@ const DelegationsOfTheCompany = () => {
   if (!hasGroup) {
     /* eslint-disable-next-line functional/immutable-data */
     smartCfg.push({
-      id: 'id',
+      id: 'menu',
       label: '',
-      getValue(value: string, data: Item) {
-        return <Menu menuType={'delegators'} id={value} row={data} onAction={handleUpdate} />;
-      },
       tableConfiguration: {
-        width: '5%',
+        cellProps: { width: '5%' },
       },
       cardConfiguration: {
-        position: 'header',
+        isCardHeader: true,
         gridProps: {
           xs: 4,
         },
+        position: 'right',
       },
     });
   }
@@ -397,6 +354,7 @@ const DelegationsOfTheCompany = () => {
                 />
               </EmptyState>
             }
+            testId="delegations"
           >
             <SmartFilter
               filterLabel={t('button.filtra', { ns: 'common' })}
@@ -489,6 +447,44 @@ const DelegationsOfTheCompany = () => {
                 </TextField>
               </Grid>
             </SmartFilter>
+            <SmartHeader>
+              {smartCfg.map((column) => (
+                <SmartHeaderCell
+                  key={column.id.toString()}
+                  columnId={column.id}
+                  sortable={column.tableConfiguration.sortable}
+                >
+                  {column.label}
+                </SmartHeaderCell>
+              ))}
+            </SmartHeader>
+            <SmartBody>
+              {rows.map((row, index) => (
+                <SmartBodyRow key={row.id} index={index} testId="delegationsBodyRow">
+                  {smartCfg.map((column) => (
+                    <SmartBodyCell
+                      key={column.id.toString()}
+                      columnId={column.id}
+                      tableProps={column.tableConfiguration}
+                      cardProps={column.cardConfiguration}
+                      isCardHeader={column.cardConfiguration?.isCardHeader}
+                      hideInCard={
+                        column.cardConfiguration?.hideIfEmpty &&
+                        (!row[column.id] || row[column.id].length === 0)
+                      }
+                    >
+                      <DelegationDataSwitch
+                        data={row}
+                        type={column.id}
+                        menuType="delegators"
+                        onAccept={handleAccept}
+                        onAction={handleUpdate}
+                      />
+                    </SmartBodyCell>
+                  ))}
+                </SmartBodyRow>
+              ))}
+            </SmartBody>
           </SmartTable>
         ) : (
           <EmptyState sentimentIcon={KnownSentiment.NONE}>

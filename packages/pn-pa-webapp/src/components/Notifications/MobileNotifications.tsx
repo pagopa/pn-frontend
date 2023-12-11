@@ -3,38 +3,39 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Box, Grid, Link, Typography } from '@mui/material';
+import { Grid, Link, Typography } from '@mui/material';
 import {
-  CardAction,
   CardElement,
   CardSort,
-  CustomTagGroup,
   EmptyState,
-  Item,
-  ItemsCard,
   KnownSentiment,
   MobileNotificationsSort,
   Notification,
-  NotificationStatus,
+  PnCard,
+  PnCardActions,
+  PnCardContent,
+  PnCardContentItem,
+  PnCardHeader,
+  PnCardHeaderItem,
+  PnCardsList,
+  Row,
   Sort,
-  StatusTooltip,
   formatDate,
-  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, Tag } from '@pagopa/mui-italia';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { NotificationSortField } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import FilterNotifications from './FilterNotifications';
+import NotificationsDataSwitch from './NotificationsDataSwitch';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<NotificationSortField>;
+  sort?: Sort<Notification>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationSortField>) => void;
+  onChangeSorting?: (s: Sort<Notification>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -106,121 +107,46 @@ const MobileNotifications = ({
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche', 'common']);
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
-  const cardHeader: [CardElement, CardElement] = [
-    {
-      id: 'sentAt',
-      label: t('table.date'),
-      getLabel(value: string) {
-        return <Typography>{formatDate(value)}</Typography>;
-      },
-      gridProps: {
-        xs: 4,
-        sm: 5,
-      },
-    },
-    {
-      id: 'notificationStatus',
-      label: t('table.status'),
-      getLabel(_, row: Item) {
-        const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus,
-          { recipients: row.recipients as Array<string> }
-        );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
-      },
-      gridProps: {
-        xs: 8,
-        sm: 7,
-      },
-    },
-  ];
-
-  const cardBody: Array<CardElement> = [
+  const cardBody: Array<CardElement<Notification>> = [
     {
       id: 'recipients',
       label: t('table.recipient'),
-      getLabel(value: Array<string>) {
-        return value.map((v) => (
-          <Typography key={v} variant="body2">
-            {v}
-          </Typography>
-        ));
-      },
-      notWrappedInTypography: true,
+      wrapValueInTypography: false,
     },
     {
       id: 'subject',
       label: t('table.subject'),
-      getLabel(value: string) {
-        return value.length > 65 ? value.substring(0, 65) + '...' : value;
-      },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      getLabel(value: string) {
-        return value;
-      },
     },
     {
       id: 'group',
       label: t('table.groups'),
-      getLabel(value: string, row: Item) {
-        return value ? (
-          <CustomTagGroup visibleItems={1}>
-            {[
-              <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={row.id}>
-                <Tag value={value} />
-              </Box>,
-            ]}
-          </CustomTagGroup>
-        ) : null;
-      },
-      hideIfEmpty: true,
-      notWrappedInTypography: true,
+      wrapValueInTypography: false,
     },
   ];
 
   // Navigation handlers
-  const handleRowClick = (row: Item) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+  const handleRowClick = (row: Row<Notification>) => {
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
-  const cardActions: Array<CardAction> = [
-    {
-      id: 'go-to-detail',
-      component: (
-        <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">
-          {t('table.show-detail')}
-        </ButtonNaked>
-      ),
-      onClick: handleRowClick,
-    },
-  ];
-
-  const cardData: Array<Item> = notifications.map((n: Notification, i: number) => ({
+  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: i.toString(),
+    id: n.iun,
   }));
 
-  const sortFields: Array<CardSort<NotificationSortField>> = [
-    { id: 'sentAt' as NotificationSortField, label: t('table.date') },
-    { id: 'recipients' as NotificationSortField, label: t('table.recipient') },
-    { id: 'notificationStatus' as NotificationSortField, label: t('table.status') },
-  ].reduce((arr, item) => {
+  const sortFields = (
+    [
+      { id: 'sentAt', label: t('table.date') },
+      { id: 'recipients', label: t('table.recipient') },
+      { id: 'notificationStatus', label: t('table.status') },
+    ] as Array<{ id: keyof Notification; label: string }>
+  ).reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
       {
@@ -238,7 +164,7 @@ const MobileNotifications = ({
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort<NotificationSortField>>);
+  }, [] as Array<CardSort<Notification>>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
@@ -264,16 +190,60 @@ const MobileNotifications = ({
         </Grid>
       </Grid>
       {cardData.length ? (
-        <ItemsCard
-          cardData={cardData}
-          cardHeader={cardHeader}
-          cardBody={cardBody}
-          cardActions={cardActions}
-          headerGridProps={{
-            direction: { xs: 'row', sm: 'row' },
-            alignItems: { xs: 'flex-start', sm: 'center' },
-          }}
-        />
+        <PnCardsList>
+          {cardData.map((data) => (
+            <PnCard key={data.id} testId="mobileCards">
+              <PnCardHeader
+                headerGridProps={{
+                  direction: { xs: 'row', sm: 'row' },
+                  alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+              >
+                <PnCardHeaderItem
+                  gridProps={{
+                    xs: 4,
+                    sm: 5,
+                  }}
+                  position="left"
+                >
+                  <Typography>{formatDate(data.sentAt)}</Typography>
+                </PnCardHeaderItem>
+                <PnCardHeaderItem
+                  gridProps={{
+                    xs: 8,
+                    sm: 7,
+                  }}
+                  position="right"
+                >
+                  <NotificationsDataSwitch data={data} type="notificationStatus" />
+                </PnCardHeaderItem>
+              </PnCardHeader>
+              <PnCardContent>
+                {cardBody
+                  .filter((body) => data[body.id]?.length)
+                  .map((body) => (
+                    <PnCardContentItem
+                      key={body.id}
+                      label={body.label}
+                      wrapValueInTypography={body.wrapValueInTypography}
+                    >
+                      <NotificationsDataSwitch data={data} type={body.id} />
+                    </PnCardContentItem>
+                  ))}
+              </PnCardContent>
+              <PnCardActions>
+                <ButtonNaked
+                  endIcon={<ArrowForwardIcon />}
+                  color="primary"
+                  id="go-to-detail"
+                  onClick={() => handleRowClick(data)}
+                >
+                  {t('table.show-detail')}
+                </ButtonNaked>
+              </PnCardActions>
+            </PnCard>
+          ))}
+        </PnCardsList>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

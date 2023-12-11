@@ -4,7 +4,6 @@ import {
   NotificationStatus,
   Sort,
   formatToTimezoneString,
-  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -41,8 +40,8 @@ describe('Dashbaord redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(today),
+        startDate: tenYearsAgo,
+        endDate: today,
         iunMatch: '',
       },
       pagination: {
@@ -63,14 +62,14 @@ describe('Dashbaord redux state tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
         })
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
+        startDate: tenYearsAgo,
+        endDate: today,
         isDelegatedPage: false,
       })
     );
@@ -107,8 +106,8 @@ describe('Dashbaord redux state tests', () => {
 
   it('Should be able to change filters', () => {
     const filters = {
-      startDate: '2022-02-22T14:20:20.566Z',
-      endDate: '2022-02-27T14:20:20.566Z',
+      startDate: new Date('2022-02-22T14:20:20.566Z'),
+      endDate: new Date('2022-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
