@@ -66,10 +66,6 @@ const DesktopNotifications = ({
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
   const columns: Array<Column<NotificationColumnData>> = [
     {
       id: 'badge',
@@ -167,11 +163,7 @@ const DesktopNotifications = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <NotificationsDataSwitch
-                      data={row}
-                      type={column.id}
-                      handleEventTrackingTooltip={handleEventTrackingTooltip}
-                    />
+                    <NotificationsDataSwitch data={row} type={column.id} />
                   </PnTableBodyCell>
                 ))}
               </PnTableBodyRow>

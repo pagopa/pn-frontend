@@ -13,8 +13,6 @@ import {
   Sort,
   TitleBox,
   calculatePages,
-  formatToTimezoneString,
-  getNextDay,
   isNewNotification,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -74,12 +72,7 @@ const Notifiche = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    void dispatch(
-      getReceivedNotifications({
-        ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
-      })
-    ).then(() => setPageReady(true));
+    void dispatch(getReceivedNotifications(params)).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
 
   const getEventNotifications = (): EventNotificationsListType => ({

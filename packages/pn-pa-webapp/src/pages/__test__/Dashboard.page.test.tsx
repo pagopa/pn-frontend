@@ -5,7 +5,6 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToTimezoneString,
-  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -62,7 +61,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -85,7 +84,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -109,7 +108,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -132,7 +131,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -159,7 +158,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -168,7 +167,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 20,
         })
       )
@@ -199,7 +198,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -208,7 +207,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
           nextPagesKey: notificationsDTO.nextPagesKey[0],
         })
@@ -241,7 +240,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -250,7 +249,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
           recipientId: notificationsDTO.resultsPage[1].recipients[0],
         })
@@ -286,7 +285,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -312,7 +311,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
