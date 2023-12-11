@@ -145,8 +145,8 @@ const SpecialContactElem = memo(({ address, recipientId }: Props) => {
             contactType={f.contactType}
             fields={[
               {
-                id: `specialContacts-${formik.values[f.id]}`,
-                key: 'specialContacts',
+                id: `specialContacts-${address.senderId}-${f.contactType}`,
+                key: 'specialContactValue',
                 component: (
                   <TextField
                     id={f.id}

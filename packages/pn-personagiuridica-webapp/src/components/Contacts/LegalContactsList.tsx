@@ -106,7 +106,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 contactType={LegalChannelType.PEC}
                 fields={[
                   {
-                    id: `legalContacts-${formik.values.pec}`,
+                    id: `legalContacts`,
                     key: 'legalContactValue',
                     component: (
                       <TextField
