@@ -142,7 +142,7 @@ export function NOTIFICATION_DETAIL_LEGALFACT(
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
       [API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER]: legalFact.category,
-      [API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER]: legalFact.key,
+      [API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER]: legalFact.key + 'a',
     },
     query: {
       [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
