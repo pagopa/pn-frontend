@@ -150,11 +150,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
     }
     // track event only if payments are changed and there aren't in loading state
-    const paymentLoaded =
-      paginatedPayments.length > 0
-        ? paginatedPayments.every((payment) => !payment.isLoading)
-        : true;
-    if (paymentLoaded) {
+    const paymentsLoaded = paginatedPayments.every((payment) => !payment.isLoading);
+    if (paymentsLoaded) {
       // the tracked event wants only the status of the current paged payments
       const pagePaymentsStatus = getPaymentsStatus(paginationData, paginatedPayments);
       handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, pagePaymentsStatus);
