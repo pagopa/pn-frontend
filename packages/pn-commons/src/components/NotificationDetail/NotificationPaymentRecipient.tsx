@@ -192,14 +192,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           </Link>
         </Alert>
       ) : (
-        <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-          <NotificationPaymentTitle
-            landingSiteUrl={landingSiteUrl}
-            handleTrackEventFn={handleTrackEventFn}
-            pagoPaF24={pagoPaF24}
-            f24Only={f24Only}
-          />
-        </Typography>
+        <NotificationPaymentTitle
+          landingSiteUrl={landingSiteUrl}
+          handleTrackEventFn={handleTrackEventFn}
+          pagoPaF24={pagoPaF24}
+          f24Only={f24Only}
+          allPaymentsIsPaid={allPaymentsIsPaid}
+        />
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (

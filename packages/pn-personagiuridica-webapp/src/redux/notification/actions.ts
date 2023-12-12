@@ -139,7 +139,7 @@ export const getNotificationPaymentUrl = createAsyncThunk<
 );
 
 export const getReceivedNotificationOtherDocument = createAsyncThunk<
-  { url: string },
+  { url: string; retryAfter?: number },
   { iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string }
 >(
   'getReceivedNotificationOtherDocument',
