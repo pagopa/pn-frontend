@@ -1,8 +1,6 @@
 import * as React from 'react';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -25,19 +23,15 @@ export default function ConfirmationModal({
   onClose,
   onCloseLabel = 'Annulla',
 }: Props) {
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
-
   return (
     <PnDialog
-      fullScreen={fullScreen}
       open={open}
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"
       data-testid="confirmationDialog"
     >
       <DialogTitle id="dialog-title">{title}</DialogTitle>
-      <PnDialogContent sx={{ pt: 2 }}>
+      <PnDialogContent>
         <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
       </PnDialogContent>
       <PnDialogActions>
