@@ -16,14 +16,14 @@ type Props = {
   checkboxLabel?: string;
 };
 
-const DisclaimerModal = ({
+const DisclaimerModal: React.FC<Props> = ({
   onConfirm,
   onCancel,
   confirmLabel,
   title,
   content,
   checkboxLabel,
-}: Props) => {
+}) => {
   const [checked, setChecked] = useState(false);
   const disabledConfirm = !checked && !!checkboxLabel;
 

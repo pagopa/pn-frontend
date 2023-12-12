@@ -4,18 +4,13 @@ import { MessageType } from '../../../models';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import SnackBar from '../SnackBar';
 
-const snackBarProps = {
-  message: 'SnackBar mocked message',
-};
-
 const renderSnackBar = (open: boolean, type: MessageType, closingDelay?: number) =>
   render(
     <SnackBar
       open={open}
-      message={snackBarProps.message}
+      message={'SnackBar mocked message'}
       type={type}
       closingDelay={closingDelay}
-      id={'mocked-id'}
     />
   );
 
@@ -30,7 +25,7 @@ describe('SnackBar Component', () => {
     const { getByTestId } = renderSnackBar(true, MessageType.INFO);
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
-    expect(snackBarContainer).toHaveTextContent(snackBarProps.message);
+    expect(snackBarContainer).toHaveTextContent('SnackBar mocked message');
   });
 
   it('closes snack bar by clicking close button', async () => {

@@ -61,7 +61,7 @@ describe('DesktopNotifications Component', () => {
     });
     const filters = result!.getByTestId('filter-form');
     expect(filters).toBeInTheDocument();
-    const norificationTableRows = result!.getAllByTestId('notificationsTable.row');
+    const norificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
     expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
@@ -107,7 +107,7 @@ describe('DesktopNotifications Component', () => {
         />
       );
     });
-    const rows = result!.getAllByTestId('notificationsTable.row');
+    const rows = result!.getAllByTestId('notificationsTable.body.row');
     const notificationsTableCell = within(rows[0]).getAllByRole('cell');
     fireEvent.click(notificationsTableCell[0]);
     await waitFor(() => {

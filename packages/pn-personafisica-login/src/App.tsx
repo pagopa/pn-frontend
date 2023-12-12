@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
-import { initLocalization, useMultiEvent, useTracking } from '@pagopa-pn/pn-commons';
+import { initLocalization, useMultiEvent } from '@pagopa-pn/pn-commons';
 
 import Router from './navigation/routes';
 import { getConfiguration } from './services/configuration.service';
 import './utility/onetrust';
 
 const App = () => {
-  const { MIXPANEL_TOKEN, VERSION } = getConfiguration();
-  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
+  const { VERSION } = getConfiguration();
+  // PN-9008 - turn off Mixpanel tracking in pf-personafisica-login
+  // useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   const [clickVersion] = useMultiEvent({
     callback: () => console.log(`v${VERSION}`),

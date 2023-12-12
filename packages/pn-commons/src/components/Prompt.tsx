@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
@@ -8,20 +8,22 @@ import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
 
-const Prompt = ({
+type Props = {
+  title: string;
+  message: string;
+  eventTrackingCallbackPromptOpened: () => void;
+  eventTrackingCallbackCancel: () => void;
+  eventTrackingCallbackConfirm: () => void;
+  children?: React.ReactNode;
+};
+
+const Prompt: React.FC<Props> = ({
   title,
   message,
   children,
   eventTrackingCallbackPromptOpened,
   eventTrackingCallbackCancel,
   eventTrackingCallbackConfirm,
-}: {
-  title: string;
-  message: string;
-  children: ReactNode;
-  eventTrackingCallbackPromptOpened: () => void;
-  eventTrackingCallbackCancel: () => void;
-  eventTrackingCallbackConfirm: () => void;
 }) => {
   const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(
     true,

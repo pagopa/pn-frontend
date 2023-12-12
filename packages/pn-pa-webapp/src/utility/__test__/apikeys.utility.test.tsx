@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { ApiKeyStatus } from '../../models/ApiKeys';
 import { TooltipApiKey, apikeysMapper, getApiKeyStatusInfos } from '../apikeys.utility';
@@ -20,7 +22,7 @@ describe('test apikeys utilities', () => {
       color: 'success',
       label: 'status.enabled',
       description: 'status.enabled-description',
-      tooltip: TooltipApiKey(mockApiKeysForFE.items[0].statusHistory),
+      tooltip: <TooltipApiKey history={mockApiKeysForFE.items[0].statusHistory} />,
     });
   });
 
