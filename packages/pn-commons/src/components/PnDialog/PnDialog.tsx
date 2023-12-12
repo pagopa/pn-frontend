@@ -9,7 +9,7 @@ import PnDialogContent from './PnDialogContent';
 
 const PnDialog: React.FC<DialogProps> = (props) => {
   const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
+  const paddingSize = useMemo(() => (isMobile ? 3 : 4), [isMobile]);
 
   const title: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === DialogTitle
@@ -17,7 +17,7 @@ const PnDialog: React.FC<DialogProps> = (props) => {
 
   const enrichedTitle = isValidElement(title)
     ? cloneElement(title, {
-        sx: { textAlign: textPosition, p: isMobile ? 3 : 4, pb: 2, ...title.props.sx },
+        sx: { p: paddingSize, ...title.props.sx },
         ...title.props,
       })
     : title;

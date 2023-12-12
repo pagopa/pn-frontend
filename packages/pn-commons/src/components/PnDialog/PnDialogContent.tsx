@@ -7,7 +7,7 @@ import { ReactComponent } from '../../models/PnDialog';
 
 const PnDialogContent: React.FC<DialogContentProps> = (props) => {
   const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
+  const paddingSize = useMemo(() => (isMobile ? 3 : 4), [isMobile]);
 
   const subtitle: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === DialogContentText
@@ -19,17 +19,13 @@ const PnDialogContent: React.FC<DialogContentProps> = (props) => {
 
   const enrichedSubTitle = isValidElement(subtitle)
     ? cloneElement(subtitle, {
-        sx: { textAlign: textPosition, ...subtitle.props.sx },
+        sx: { ...subtitle.props.sx },
         ...subtitle.props,
       })
     : subtitle;
 
   return (
-    <DialogContent
-      data-testid="dialog-content"
-      sx={{ p: isMobile ? 3 : 4, textAlign: textPosition, ...props.sx }}
-      {...props}
-    >
+    <DialogContent data-testid="dialog-content" sx={{ p: paddingSize, ...props.sx }} {...props}>
       {subtitle && enrichedSubTitle}
       {othersChildren}
     </DialogContent>
