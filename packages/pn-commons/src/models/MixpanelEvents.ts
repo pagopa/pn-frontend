@@ -81,6 +81,7 @@ export enum EventPageType {
   LISTA_DELEGHE = 'LISTA_DELEGHE',
   STATUS_PAGE = 'STATUS_PAGE',
   RECAPITI = 'RECAPITI',
+  ROOT_PAGE = 'ROOT',
 }
 
 export type EventCreatedDelegationType = {

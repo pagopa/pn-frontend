@@ -29,11 +29,10 @@ const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
 
 const getPaymentsStatus = (
   paginationData: PaginationData,
-  pagoPaF24: Array<PaymentDetails>,
-  f24only: Array<F24PaymentDetails>
+  pagoPaF24: Array<PaymentDetails>
 ): EventPaymentStatusType => ({
   page_number: paginationData.page,
-  count_payment: pagoPaF24.length + f24only.length,
+  count_payment: pagoPaF24.length,
   count_canceled: pagoPaF24.filter(
     (f) =>
       f.pagoPa?.status === PaymentStatus.FAILED &&
@@ -98,10 +97,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [loadingPayment, setLoadingPayment] = useState(false);
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
-  // calc the overall status of the payments and define variables to show/hide content
-  const paymentsStatus = getPaymentsStatus(paginationData, pagoPaF24, f24Only);
-  const allPaymentsIsPaid = paymentsStatus.count_paid === pagoPaF24.length;
-  const isSinglePayment = paymentsStatus.count_payment === 1 && !isCancelled;
+  const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
+  const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -148,10 +145,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (isSinglePayment && paymentsStatus.count_unpaid > 0) {
+    const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
+    if (isSinglePayment && unpaidPayments) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
     }
-    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, paymentsStatus);
+    // track event only if payments are changed and there aren't in loading state
+    const paymentsLoaded = paginatedPayments.every((payment) => !payment.isLoading);
+    if (paymentsLoaded) {
+      // the tracked event wants only the status of the current paged payments
+      const pagePaymentsStatus = getPaymentsStatus(paginationData, paginatedPayments);
+      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, pagePaymentsStatus);
+    }
   }, [payments]);
 
   const handleTrackEventFn = (event: EventPaymentRecipientType, param?: object) => {
