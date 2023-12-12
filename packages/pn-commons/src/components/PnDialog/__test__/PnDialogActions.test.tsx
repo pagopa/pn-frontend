@@ -18,7 +18,7 @@ describe('PnDialogActions Component', () => {
     const actions = queryByTestId('dialog-actions');
     expect(actions).toBeInTheDocument();
     expect(actions).toHaveClass('MuiDialogActions-spacing');
-    expect(actions).toHaveStyle('text-align: left; flex-direction: row');
+    expect(actions).toHaveStyle('flex-direction: row; padding: 32px; gap: 8px;');
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     for (const button of buttons) {
@@ -39,7 +39,7 @@ describe('PnDialogActions Component', () => {
     const actions = queryByTestId('dialog-actions');
     expect(actions).toBeInTheDocument();
     expect(actions).not.toHaveClass('MuiDialogActions-spacing');
-    expect(actions).toHaveStyle('text-align: center; flex-direction: column-reverse');
+    expect(actions).toHaveStyle('flex-direction: column-reverse; padding: 24px; gap: 0px;');
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     buttons.forEach((button, index) => {
