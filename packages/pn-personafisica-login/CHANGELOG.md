@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.3-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.2...v2.2.3-RC.0) (2023-12-12)
+
+
+### Bug Fixes
+
+* **pn-8589:** updated babel library to fix security vulnerability ([#1040](https://github.com/pagopa/pn-frontend/issues/1040)) ([91bbe13](https://github.com/pagopa/pn-frontend/commit/91bbe13cf3ca2a371526e635e29da038f8e7c453))
+* **PN-8901:** Fixed mixpanel events and renaming, and attributes ([#1078](https://github.com/pagopa/pn-frontend/issues/1078)) ([5a42baf](https://github.com/pagopa/pn-frontend/commit/5a42baf356b4b9e7e31949b36507bffe94b8236c))
+
+
+### Features
+
+* **pn-7437:** Added new mixpanel events for PF ([#1065](https://github.com/pagopa/pn-frontend/issues/1065)) ([64d79ad](https://github.com/pagopa/pn-frontend/commit/64d79adb10ae715b1f0a16133b83c8fbb473daa5))
+* **PN-7437:** added new tracking events for pf ([#1077](https://github.com/pagopa/pn-frontend/issues/1077)) ([b5ff12d](https://github.com/pagopa/pn-frontend/commit/b5ff12d0c8789d0d16ae60c9b23053f3fe853ca3))
+
+
+### Reverts
+
+* Revert "feat(pn-7437): Added new mixpanel events for PF (#1065)" (#1075) ([559a927](https://github.com/pagopa/pn-frontend/commit/559a92768f69e83f4f23848d6fa0408566604aa8)), closes [#1065](https://github.com/pagopa/pn-frontend/issues/1065) [#1075](https://github.com/pagopa/pn-frontend/issues/1075)
+
+
+
+
+
 ## [2.2.2](https://github.com/pagopa/pn-frontend/compare/v2.2.2-RC.0...v2.2.2) (2023-11-21)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
