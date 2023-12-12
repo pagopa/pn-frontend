@@ -35,10 +35,8 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
 
   return (
     <PnDialog open={showModal} data-testid="cancel-notification-modal">
-      <DialogTitle id="dialog-title" sx={{ p: 4 }}>
-        {t('detail.cancel-notification-modal.title')}
-      </DialogTitle>
-      <PnDialogContent sx={{ px: 4, pb: 4 }}>
+      <DialogTitle id="dialog-title">{t('detail.cancel-notification-modal.title')}</DialogTitle>
+      <PnDialogContent>
         <Typography data-testid="dialogText" component="p">
           {payment
             ? t('detail.cancel-notification-modal.message-with-payment')
@@ -66,8 +64,8 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
           </FormControl>
         )}
       </PnDialogContent>
-      <PnDialogActions sx={{px: 4, pb: 4, gap: 1}}>
-        <Button fullWidth={false} onClick={onClose} variant="outlined" data-testid="modalCloseBtnId" >
+      <PnDialogActions>
+        <Button onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
           {t('button.indietro', { ns: 'common' })}
         </Button>
         <Button
@@ -75,8 +73,6 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
           disabled={payment ? !checked : false}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
-          fullWidth={false}
-          sx={{mb: 0}}
         >
           {t('detail.cancel-notification')}
         </Button>
