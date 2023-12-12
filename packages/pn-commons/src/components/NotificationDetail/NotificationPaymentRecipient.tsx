@@ -97,9 +97,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [loadingPayment, setLoadingPayment] = useState(false);
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
-  const allPaymentsIsPaid =
-    pagoPaF24.filter((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED).length ===
-    pagoPaF24.length;
+  const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,10 +145,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    const unpaidPayment = pagoPaF24.filter(
-      (f) => f.pagoPa?.status === PaymentStatus.REQUIRED
-    ).length;
-    if (isSinglePayment && unpaidPayment > 0) {
+    const unpaidPayment = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
+    if (isSinglePayment && unpaidPayment) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
     }
     // track event only if payments are changed and there aren't in loading state
