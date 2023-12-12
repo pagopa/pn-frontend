@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { Box, Button, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
 
-import { useIsMobile } from '../hooks';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
@@ -25,8 +24,6 @@ const DisclaimerModal = ({
   content,
   checkboxLabel,
 }: Props) => {
-  const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const [checked, setChecked] = useState(false);
   const disabledConfirm = !checked && !!checkboxLabel;
 
@@ -36,8 +33,8 @@ const DisclaimerModal = ({
 
   return (
     <PnDialog open={true} data-testid="disclaimerDialog">
-      {title && <DialogTitle sx={{ p: 4, pb: 2 }}>{title}</DialogTitle>}
-      <PnDialogContent sx={{ p: 4 }}>
+      {title && <DialogTitle>{title}</DialogTitle>}
+      <PnDialogContent>
         {content && <Box>{content}</Box>}
         {checkboxLabel && (
           <Box sx={{ mt: 2, ml: 0.5 }}>
@@ -54,30 +51,15 @@ const DisclaimerModal = ({
           </Box>
         )}
       </PnDialogContent>
-      <PnDialogActions
-        disableSpacing={isMobile}
-        sx={{
-          textAlign: textPosition,
-          flexDirection: isMobile ? 'column-reverse' : 'row',
-          p: 4,
-          pt: 0,
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={onCancel}
-          fullWidth={isMobile}
-          data-testid="disclaimer-cancel-button"
-        >
+      <PnDialogActions>
+        <Button variant="outlined" onClick={onCancel} data-testid="disclaimer-cancel-button">
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </Button>
         <Button
           variant="contained"
           onClick={onConfirm}
           disabled={disabledConfirm}
-          fullWidth={isMobile}
           data-testid="disclaimer-confirm-button"
-          sx={{ mb: isMobile ? 2 : 0 }}
         >
           {confirmLabel}
         </Button>

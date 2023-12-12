@@ -93,13 +93,9 @@ const CodeModal = memo(
         data-testid="codeDialog"
         disableEscapeKeyDown
       >
-        <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
-          {title}
-        </DialogTitle>
-        <PnDialogContent sx={{ px: 4 }}>
-          <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
-            {subtitle}
-          </DialogContentText>
+        <DialogTitle id="dialog-title">{title}</DialogTitle>
+        <PnDialogContent>
+          <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
           <Divider sx={{ margin: '20px 0' }} />
           <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
             {codeSectionTitle}
@@ -139,21 +135,12 @@ const CodeModal = memo(
             </Alert>
           )}
         </PnDialogContent>
-        <PnDialogActions
-          disableSpacing={isMobile}
-          sx={{
-            textAlign: textPosition,
-            flexDirection: isMobile ? 'column-reverse' : 'row',
-            px: 4,
-            pb: 4,
-          }}
-        >
+        <PnDialogActions>
           {cancelLabel && cancelCallback && (
             <Button
               id="code-cancel-button"
               variant="outlined"
               onClick={cancelCallback}
-              fullWidth={isMobile}
               data-testid="codeCancelButton"
             >
               {cancelLabel}
@@ -166,7 +153,6 @@ const CodeModal = memo(
               data-testid="codeConfirmButton"
               onClick={confirmHandler}
               disabled={!codeIsValid}
-              fullWidth={isMobile}
             >
               {confirmLabel}
             </Button>

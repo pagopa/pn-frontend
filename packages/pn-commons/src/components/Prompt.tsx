@@ -2,7 +2,6 @@ import { ReactNode, useEffect } from 'react';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
-import { useIsMobile } from '../hooks';
 import { usePrompt } from '../hooks/usePrompt';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import PnDialog from './PnDialog/PnDialog';
@@ -30,9 +29,6 @@ const Prompt = ({
     eventTrackingCallbackConfirm
   );
 
-  const isMobile = useIsMobile();
-  const textPosition = isMobile ? 'center' : 'left';
-
   useEffect(() => {
     if (showPrompt) {
       eventTrackingCallbackPromptOpened();
@@ -41,29 +37,13 @@ const Prompt = ({
 
   return (
     <>
-      <PnDialog
-        onClose={cancelNavigation}
-        open={showPrompt}
-        maxWidth={'xs'}
-        fullWidth
-        data-testid="promptDialog"
-      >
-        <DialogTitle sx={{ p: isMobile ? 3 : 4, pb: 2, textAlign: textPosition }}>
-          {title}
-        </DialogTitle>
-        <PnDialogContent sx={{ p: isMobile ? 3 : 4, textAlign: textPosition }}>
+      <PnDialog onClose={cancelNavigation} open={showPrompt} data-testid="promptDialog">
+        <DialogTitle>{title}</DialogTitle>
+        <PnDialogContent>
           <DialogContentText>{message}</DialogContentText>
         </PnDialogContent>
-        <PnDialogActions
-          disableSpacing={isMobile}
-          sx={{
-            textAlign: textPosition,
-            flexDirection: isMobile ? 'column-reverse' : 'row',
-            p: isMobile ? 3 : 4,
-            pt: 0,
-          }}
-        >
-          <Button variant="outlined" onClick={cancelNavigation} fullWidth={isMobile}>
+        <PnDialogActions>
+          <Button variant="outlined" onClick={cancelNavigation}>
             {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
           </Button>
           <Button
@@ -71,8 +51,6 @@ const Prompt = ({
             variant="contained"
             onClick={confirmNavigation}
             autoFocus
-            sx={{ mb: isMobile ? 2 : 0 }}
-            fullWidth={isMobile}
             data-testid="confirmExitBtn"
           >
             {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
