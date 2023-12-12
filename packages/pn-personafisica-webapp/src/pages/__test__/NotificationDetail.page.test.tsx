@@ -594,6 +594,8 @@ describe('NotificationDetail Page', () => {
     );
     const requiredPayment = paymentHistory[requiredPaymentIndex];
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, { result: [] });
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
       .reply(200, paymentInfo);
@@ -647,8 +649,9 @@ describe('NotificationDetail Page', () => {
       size: 5,
       totalElements: notificationDTO.recipients[2].payments?.length,
     };
-
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, { result: [] });
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, paginationData.size))
       .reply(200, paymentInfo);

@@ -145,14 +145,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    const unpaidPayment = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
-    if (isSinglePayment && unpaidPayment) {
+    const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
+    if (isSinglePayment && unpaidPayments) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
     }
     // track event only if payments are changed and there aren't in loading state
     const paymentLoaded =
-      payments.pagoPaF24.length > 0
-        ? payments.pagoPaF24.every((payment) => !payment.isLoading)
+      paginatedPayments.length > 0
+        ? paginatedPayments.every((payment) => !payment.isLoading)
         : true;
     if (paymentLoaded) {
       // the tracked event wants only the status of the current paged payments
