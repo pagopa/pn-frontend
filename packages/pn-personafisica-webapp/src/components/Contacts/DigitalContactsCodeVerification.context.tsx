@@ -346,7 +346,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         </PnDialogActions>
       </PnDialog>
       <PnDialog open={pecValidationOpen} data-testid="validationDialog">
-        <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
+        <DialogTitle id="dialog-title">
           {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
         <PnDialogContent>
