@@ -1,12 +1,6 @@
 {
   "title": "API-Schlüssel",
-  "subtitle": {
-    "text1": "SEND bietet APIs für ",
-    "text2": "Senden von Bescheiden",
-    "text3": " und ",
-    "text4": "Zugriff zu Daten",
-    "text5": " zu ihrem Status. Hier kannst du die API-Schlüssel generieren und verwalten, die zur Authentifizierung der Anfragen der Körperschaft verwendet werden."
-  },
+  "subtitle": "SEND bietet APIs für <0>Senden von Bescheiden und Zugriff zu Daten</0> zu ihrem Status. Hier kannst du die API-Schlüssel generieren und verwalten, die zur Authentifizierung der Anfragen der Körperschaft verwendet werden.",
   "error-fecth-api-keys": "Die Liste der API-Schlüssel konnte nicht abgerufen werden",
   "api-key-succesfully-generated": "API-Schlüssel erfolgreich generiert!",
   "copy-the-api-key": "Um die Integration zu ermöglichen, kopiere den Code und gib ihn auf der Plattform der jeweiligen Körperschaft ein.",
