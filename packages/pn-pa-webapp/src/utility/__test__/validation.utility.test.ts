@@ -35,6 +35,11 @@ describe('test custom validation for recipients', () => {
     expect(result).toBeFalsy();
   });
 
+  it('taxIdDependingOnRecipientType (PF errors with a taxId legal person formed value)', () => {
+    const result = taxIdDependingOnRecipientType('12345678910', RecipientType.PF);
+    expect(result).toBeFalsy();
+  });
+
   it('taxIdDependingOnRecipientType (PG no errors)', () => {
     const result = taxIdDependingOnRecipientType('12345678910', RecipientType.PG);
     expect(result).toBeTruthy();
@@ -42,6 +47,11 @@ describe('test custom validation for recipients', () => {
 
   it('taxIdDependingOnRecipientType (PG errors)', () => {
     const result = taxIdDependingOnRecipientType('fakePIva', RecipientType.PG);
+    expect(result).toBeFalsy();
+  });
+
+  it('taxIdDependingOnRecipientType (PG errors with a taxId physical person formed value)', () => {
+    const result = taxIdDependingOnRecipientType('LVLDAA85T50G702B', RecipientType.PG);
     expect(result).toBeFalsy();
   });
 

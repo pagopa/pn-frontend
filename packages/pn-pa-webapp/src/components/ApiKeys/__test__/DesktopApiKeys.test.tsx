@@ -47,7 +47,7 @@ describe('DesktopApiKeys component', () => {
     const { getByTestId } = render(<DesktopApiKeys {...defaultProps} />);
     const table = getByTestId('tableApiKeys');
     expect(table).toBeInTheDocument();
-    const rows = within(table).getAllByTestId('tableApiKeys.row');
+    const rows = within(table).getAllByTestId('tableApiKeys.body.row');
     expect(rows).toHaveLength(mockApiKeysForFE.items.length);
   });
 

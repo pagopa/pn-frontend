@@ -3,12 +3,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Delegation, DelegationStatus, DelegatorsFormFilters } from '../../models/Deleghe';
 import { Groups } from '../../models/groups';
 import {
+  acceptDelegation,
   getDelegatesByCompany,
   getDelegators,
-  acceptDelegation,
+  getGroups,
   rejectDelegation,
   revokeDelegation,
-  getGroups,
   updateDelegation,
 } from './actions';
 

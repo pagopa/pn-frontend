@@ -142,7 +142,7 @@ describe('ApiKeys Page', () => {
         preloadedState: reduxInitialState,
       });
     });
-    let rows = result!.getAllByTestId('tableApiKeys.row');
+    let rows = result!.getAllByTestId('tableApiKeys.body.row');
     expect(rows).toHaveLength(2);
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);
@@ -157,7 +157,7 @@ describe('ApiKeys Page', () => {
       expect(mock.history.get).toHaveLength(4);
     });
     await waitFor(() => {
-      rows = result!.getAllByTestId('tableApiKeys.row');
+      rows = result!.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(1);
       expect(rows[0]).toHaveTextContent(`${mockApiKeysForFE.items[2].value.substring(0, 10)}...`);
     });
@@ -171,7 +171,7 @@ describe('ApiKeys Page', () => {
       expect(mock.history.get).toHaveLength(6);
     });
     await waitFor(() => {
-      rows = result!.getAllByTestId('tableApiKeys.row');
+      rows = result!.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(3);
       rows.forEach((row, index) => {
         expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);

@@ -7,6 +7,11 @@ import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
+  Downtime,
+  EventDowntimeType,
+  EventNotificationDetailType,
+  EventPaymentRecipientType,
+  F24PaymentDetails,
   GetNotificationDowntimeEventsParams,
   LegalFactId,
   NotificationDetailDocuments,
@@ -17,12 +22,15 @@ import {
   NotificationDetailTimeline,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  NotificationStatus,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
   formatDate,
+  formatToTimezoneString,
+  today,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -54,6 +62,39 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
+
+const getNotificationDetailData = (
+  downtimeEvents: Array<Downtime>,
+  mandateId: string | undefined,
+  notificationStatus: NotificationStatus,
+  checkIfUserHasPayments: boolean,
+  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> }
+): EventNotificationDetailType => {
+  // eslint-disable-next-line functional/no-let
+  let typeDowntime: EventDowntimeType;
+  if (downtimeEvents.length === 0) {
+    typeDowntime = EventDowntimeType.NOT_DISSERVICE;
+  } else {
+    typeDowntime =
+      downtimeEvents.filter((downtime) => !!downtime.endDate).length === downtimeEvents.length
+        ? EventDowntimeType.COMPLETED
+        : EventDowntimeType.IN_PROGRESS;
+  }
+  const hasF24 =
+    userPayments.f24Only.length > 0 ||
+    userPayments.pagoPaF24.filter((payment) => payment.f24).length > 0;
+
+  return {
+    notification_owner: !mandateId,
+    notification_status: notificationStatus,
+    contains_payment: checkIfUserHasPayments,
+    disservice_status: typeDowntime,
+    contains_multipayment:
+      userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
+    count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
+    contains_f24: hasF24 ? 'yes' : 'no',
+  };
+};
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -106,6 +147,9 @@ const NotificationDetail = () => {
   );
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
+  );
+  const legalFactDownloadAARetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -164,6 +208,7 @@ const NotificationDetail = () => {
     if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
       return;
     }
+
     if (_.isObject(document)) {
       void dispatch(
         getReceivedNotificationOtherDocument({
@@ -172,11 +217,13 @@ const NotificationDetail = () => {
           mandateId,
         })
       );
+      trackEventByType(TrackEventType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
       const documentIndex = document as string;
       void dispatch(
         getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId })
       );
+      trackEventByType(TrackEventType.SEND_DOWNLOAD_ATTACHMENT);
     }
   };
 
@@ -196,6 +243,9 @@ const NotificationDetail = () => {
           mandateId,
         })
       );
+      trackEventByType(TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES, {
+        source: 'dettaglio_notifica',
+      });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(
@@ -216,6 +266,7 @@ const NotificationDetail = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      trackEventByType(TrackEventType.SEND_START_PAYMENT);
       dispatch(
         getNotificationPaymentUrl({
           paymentNotice: {
@@ -234,7 +285,6 @@ const NotificationDetail = () => {
         })
         .catch(() => undefined);
     }
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };
 
   const hasNotificationReceivedApiError = hasApiErrors(
@@ -247,14 +297,15 @@ const NotificationDetail = () => {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
-      } else if (notification.documentsAvailable) {
-        return type === 'aar'
-          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
-      } else {
-        return type === 'aar'
-          ? t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' })
+      } else if (type === 'attachments') {
+        return notification.documentsAvailable
+          ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+      } else {
+        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
+          315569520000 // 10 years
+          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
     [isCancelled, notification.documentsAvailable]
@@ -269,7 +320,9 @@ const NotificationDetail = () => {
           delegatorsFromStore,
           mandateId,
         })
-      ).then(() => setPageReady(true));
+      ).then(() => {
+        setPageReady(true);
+      });
     }
   }, []);
 
@@ -293,14 +346,16 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      );
+      )
+        .unwrap()
+        .catch(() => trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_ERROR));
     },
     [currentRecipient.payments]
   );
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      fetchPaymentsInfo(currentRecipient.payments ?? []);
+      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
 
@@ -310,13 +365,43 @@ const NotificationDetail = () => {
   }, []);
 
   /* function which loads relevant information about donwtimes */
-  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
-    const fetchParams: GetNotificationDowntimeEventsParams = {
-      startDate: fromDate,
-      endDate: toDate,
-    };
-    void dispatch(getDowntimeEvents(fetchParams));
-  }, []);
+  const fetchDowntimeEvents = useCallback(
+    (
+      fromDate: string,
+      toDate: string | undefined,
+      mandateId: string | undefined,
+      notificationStatus: NotificationStatus,
+      checkIfUserHasPayments: boolean,
+      userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> }
+    ) => {
+      const fetchParams: GetNotificationDowntimeEventsParams = {
+        startDate: fromDate,
+        endDate: toDate,
+      };
+      void dispatch(getDowntimeEvents(fetchParams))
+        .unwrap()
+        .then((data) => {
+          // in the notification detail there are three dispatch
+          // 1 - notification detail
+          // 2 - downtimes
+          // 3 - payment info
+          // the third dispatch is useless for the event, because we don't need information from checkout
+          // the second dispatch comes after the first one and only if the first one has finished
+          // so this is the right place to track the event
+          trackEventByType(
+            TrackEventType.SEND_NOTIFICATION_DETAIL,
+            getNotificationDetailData(
+              data.downtimes,
+              mandateId,
+              notificationStatus,
+              checkIfUserHasPayments,
+              userPayments
+            )
+          );
+        });
+    },
+    []
+  );
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
@@ -329,6 +414,7 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+  const timeoutAARMessage = legalFactDownloadAARetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
@@ -363,6 +449,25 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
+    // eslint-disable-next-line functional/no-let
+    trackEventByType(
+      event as unknown as TrackEventType,
+      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ? param : undefined
+    );
+  };
+
+  const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
+    fetchPaymentsInfo(data);
+    trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_REFRESH);
+  };
+
+  const trackShowMoreLess = (collapsed: boolean) => {
+    trackEventByType(TrackEventType.SEND_NOTIFICATION_STATUS_DETAIL, {
+      accordion: collapsed ? 'collapsed' : 'expanded',
+    });
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -392,6 +497,21 @@ const NotificationDetail = () => {
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
+
+                {!mandateId && <DomicileBanner source="dettaglio_notifica" />}
+                <Paper sx={{ p: 3 }} elevation={0}>
+                  <NotificationDetailDocuments
+                    title={t('detail.acts', { ns: 'notifiche' })}
+                    documents={notification.documents}
+                    clickHandler={documentDowloadHandler}
+                    documentsAvailable={notification.documentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
+                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    titleVariant="h6"
+                  />
+                </Paper>
+
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
@@ -404,8 +524,11 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
+                        handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
-                        handleReloadPayment={fetchPaymentsInfo}
+                        handleFetchPaymentsInfo={() =>
+                          reloadPaymentsInfo(currentRecipient.payments ?? [])
+                        }
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}
@@ -414,24 +537,16 @@ const NotificationDetail = () => {
                   </Paper>
                 )}
 
-                {!mandateId && <DomicileBanner />}
-                <Paper sx={{ p: 3 }} elevation={0}>
-                  <NotificationDetailDocuments
-                    title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents}
-                    clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                  />
-                </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
+                  <TimedMessage timeout={timeoutAARMessage}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                     disableDownloads={isCancelled.cancellationInTimeline}
@@ -439,7 +554,16 @@ const NotificationDetail = () => {
                 </Paper>
                 <NotificationRelatedDowntimes
                   downtimeEvents={downtimeEvents}
-                  fetchDowntimeEvents={fetchDowntimeEvents}
+                  fetchDowntimeEvents={(fromDate, toDate) =>
+                    fetchDowntimeEvents(
+                      fromDate,
+                      toDate,
+                      mandateId,
+                      notification.notificationStatus,
+                      checkIfUserHasPayments,
+                      userPayments
+                    )
+                  }
                   notificationStatusHistory={notification.notificationStatusHistory}
                   downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
@@ -454,14 +578,11 @@ const NotificationDetail = () => {
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
               >
-                <TimedMessage
-                  timeout={timeoutMessage}
-                  message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  }
-                />
+                <TimedMessage timeout={timeoutMessage}>
+                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>
+                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}
@@ -471,9 +592,7 @@ const NotificationDetail = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  eventTrackingCallbackShowMore={() =>
-                    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
-                  }
+                  handleTrackShowMoreLess={trackShowMoreLess}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
                 />
