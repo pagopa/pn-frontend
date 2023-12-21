@@ -19,10 +19,11 @@ type Props = {
   closingDelay?: number;
   /** onClose action */
   onClose?: () => void;
+  /** Alert variant */
   variant?: 'outlined' | 'standard' | 'filled';
 };
 
-const SnackBar = ({
+const SnackBar: React.FC<Props> = ({
   title,
   message,
   open,
@@ -30,7 +31,7 @@ const SnackBar = ({
   closingDelay,
   onClose,
   variant = 'outlined',
-}: Props) => {
+}) => {
   const [openStatus, setOpenStatus] = useState(open);
   const isMobile = useIsMobile();
 
@@ -50,6 +51,7 @@ const SnackBar = ({
       return () => clearTimeout(timer);
     }
     // since it returns in a conditional branch, it must return in all cases
+    // eslint-disable-next-line sonarjs/no-redundant-jump
     return;
   }, []);
 

@@ -23,6 +23,8 @@ import {
   TimedMessage,
   TitleBox,
   formatDate,
+  formatToTimezoneString,
+  today,
   useDownloadDocument,
   useErrors,
   useHasPermissions,
@@ -108,6 +110,9 @@ const NotificationDetail = () => {
   );
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
+  );
+  const legalFactDownloadAARRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
   );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -248,14 +253,15 @@ const NotificationDetail = () => {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
-      } else if (notification.documentsAvailable) {
-        return type === 'aar'
-          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
-      } else {
-        return type === 'aar'
-          ? t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' })
+      } else if (type === 'attachments') {
+        return notification.documentsAvailable
+          ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+      } else {
+        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
+          315569520000 // 10 years
+          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
+          : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
     [isCancelled, notification.documentsAvailable]
@@ -299,7 +305,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
-      fetchPaymentsInfo(currentRecipient.payments ?? []);
+      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
 
@@ -328,6 +334,7 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
@@ -394,6 +401,21 @@ const NotificationDetail = () => {
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />
+
+                {visibleDomicileBanner() && <DomicileBanner />}
+                <Paper sx={{ p: 3 }} elevation={0}>
+                  <NotificationDetailDocuments
+                    title={t('detail.acts', { ns: 'notifiche' })}
+                    documents={notification.documents}
+                    clickHandler={documentDowloadHandler}
+                    documentsAvailable={notification.documentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
+                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    titleVariant="h6"
+                  />
+                </Paper>
+
                 {checkIfUserHasPayments && (
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <ApiErrorWrapper
@@ -407,7 +429,7 @@ const NotificationDetail = () => {
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
                         onPayClick={onPayClick}
-                        handleReloadPayment={fetchPaymentsInfo}
+                        handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}
@@ -416,24 +438,16 @@ const NotificationDetail = () => {
                   </Paper>
                 )}
 
-                {visibleDomicileBanner() && <DomicileBanner />}
-                <Paper sx={{ p: 3 }} elevation={0}>
-                  <NotificationDetailDocuments
-                    title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents}
-                    clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                  />
-                </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
+                  <TimedMessage timeout={timeoutAARMessage}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                     disableDownloads={isCancelled.cancellationInTimeline}
@@ -456,14 +470,11 @@ const NotificationDetail = () => {
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
               >
-                <TimedMessage
-                  timeout={timeoutMessage}
-                  message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  }
-                />
+                <TimedMessage timeout={timeoutMessage}>
+                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>
+                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}

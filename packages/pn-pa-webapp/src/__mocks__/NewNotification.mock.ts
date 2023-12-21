@@ -70,7 +70,7 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: 'recipient.1',
     idx: 1,
-    taxId: 'SRAGLL00P48H501U',
+    taxId: '12345678901',
     firstName: 'Sara Gallo srl',
     lastName: '',
     recipientType: RecipientType.PG,

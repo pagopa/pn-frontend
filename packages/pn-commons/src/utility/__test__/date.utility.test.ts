@@ -10,7 +10,8 @@ import {
   formatTimeWithLegend,
   formatToSlicedISOString,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
+  getStartOfDay,
   isToday,
   minutesBeforeNow,
 } from '../date.utility';
@@ -98,11 +99,18 @@ describe('Date utility', () => {
     expect(dateIsDefined(undefined)).toBeFalsy();
   });
 
-  it('return next day', () => {
-    const nextDay = getNextDay(date);
-    const expectedNextDay = new Date(date);
-    expectedNextDay.setDate(expectedNextDay.getDate() + 1);
-    expect(nextDay).toStrictEqual(expectedNextDay);
+  it('return end of the day', () => {
+    const endOfDay = getEndOfDay(date);
+    const expectedEndOfDay = new Date(date);
+    expectedEndOfDay.setHours(23, 59, 59, 999);
+    expect(endOfDay).toStrictEqual(expectedEndOfDay);
+  });
+
+  it('return start of the day', () => {
+    const startOfDay = getStartOfDay(date);
+    const expectedStartOfDay = new Date(date);
+    expectedStartOfDay.setHours(0, 0, 0, 0);
+    expect(startOfDay).toStrictEqual(expectedStartOfDay);
   });
 
   it('return date string with timezone', () => {

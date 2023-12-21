@@ -61,6 +61,7 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
+  legalFactDownloadAARRetryAfter: 0,
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
   paymentsData: {
@@ -79,6 +80,7 @@ const notificationSlice = createSlice({
     resetLegalFactState: (state) => {
       state.legalFactDownloadUrl = '';
       state.legalFactDownloadRetryAfter = 0;
+      state.legalFactDownloadAARRetryAfter = 0;
     },
     clearDowntimeLegalFactData: (state) => {
       state.downtimeLegalFactUrl = '';
@@ -131,14 +133,19 @@ const notificationSlice = createSlice({
       }
       state.notification = action.payload;
     });
+    // ATTO
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.documentDownloadUrl = action.payload.url;
       }
     });
+    // AAR
     builder.addCase(getReceivedNotificationOtherDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.otherDocumentDownloadUrl = action.payload.url;
+      }
+      if (action.payload.retryAfter) {
+        state.legalFactDownloadAARRetryAfter = action.payload.retryAfter;
       }
     });
     builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {
@@ -151,38 +158,29 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
-        // Not single payment reload
-        if (action.payload.length > 1) {
-          state.paymentsData.pagoPaF24 = action.payload;
-          return;
-        }
-
-        if (action.payload.length === 1) {
-          const paymentInfo = action.payload[0];
+        const paymentInfo = action.payload;
+        for (const payment of paymentInfo) {
           const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
-            (payment) =>
-              payment.pagoPa?.creditorTaxId === paymentInfo.pagoPa?.creditorTaxId &&
-              payment.pagoPa?.noticeCode === paymentInfo.pagoPa?.noticeCode
+            (paymentData) =>
+              paymentData.pagoPa?.creditorTaxId === payment.pagoPa?.creditorTaxId &&
+              paymentData.pagoPa?.noticeCode === payment.pagoPa?.noticeCode
           );
           if (paymentInfoIndex !== -1) {
-            state.paymentsData.pagoPaF24[paymentInfoIndex] = paymentInfo;
-            return;
+            state.paymentsData.pagoPaF24[paymentInfoIndex] = payment;
           }
-          state.paymentsData.pagoPaF24 = action.payload;
         }
       }
     });
     builder.addCase(getNotificationPaymentInfo.pending, (state, action) => {
-      if (action.meta.arg.paymentInfoRequest.length === 1) {
-        const payment = state.paymentsData.pagoPaF24.find(
-          (payment) =>
-            payment.pagoPa?.creditorTaxId === action.meta.arg.paymentInfoRequest[0].creditorTaxId &&
-            payment.pagoPa?.noticeCode === action.meta.arg.paymentInfoRequest[0].noticeCode
+      const paymentInfo = action.meta.arg;
+      for (const payment of paymentInfo.paymentInfoRequest) {
+        const paymentInfoIndex = state.paymentsData.pagoPaF24.findIndex(
+          (paymentData) =>
+            paymentData.pagoPa?.creditorTaxId === payment.creditorTaxId &&
+            paymentData.pagoPa?.noticeCode === payment.noticeCode
         );
-
-        if (payment) {
-          payment.isLoading = true;
-          return;
+        if (paymentInfoIndex !== -1) {
+          state.paymentsData.pagoPaF24[paymentInfoIndex].isLoading = true;
         }
       }
     });

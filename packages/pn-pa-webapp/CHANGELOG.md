@@ -3,12 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.2.3-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.2...v2.2.3-RC.0) (2023-11-23)
+## [2.2.3](https://github.com/pagopa/pn-frontend/compare/v2.2.3-RC.0...v2.2.3) (2023-12-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+## [2.2.3-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.2...v2.2.3-RC.0) (2023-12-12)
 
 
 ### Bug Fixes
 
-* added a config variable to enable/disable manual send ([17f4bf5](https://github.com/pagopa/pn-frontend/commit/17f4bf5ae5ba197ca15c7dd9ac96e206fd6cb090))
+* **pn-7067:** Added mobile support for buttons in new notification page ([#1051](https://github.com/pagopa/pn-frontend/issues/1051)) ([fb31399](https://github.com/pagopa/pn-frontend/commit/fb313999fb8f46edfb66596b89108645901f07dd))
+* **pn-8589:** updated babel library to fix security vulnerability ([#1040](https://github.com/pagopa/pn-frontend/issues/1040)) ([91bbe13](https://github.com/pagopa/pn-frontend/commit/91bbe13cf3ca2a371526e635e29da038f8e7c453))
+* **pn-8619:** fixed "from date" and "to date" filters in pa/pf/pg  ([#1067](https://github.com/pagopa/pn-frontend/issues/1067)) ([f37bcb0](https://github.com/pagopa/pn-frontend/commit/f37bcb00b120468b0d442e1db51c4536e9da7a79))
+* **PN-8692:** modify copy for event recrn-005-c-in-timeline ([#1055](https://github.com/pagopa/pn-frontend/issues/1055)) ([f9a645d](https://github.com/pagopa/pn-frontend/commit/f9a645d09b3fab387293593a2d32c71598f18353))
+* **pn-8862:** pa - date filter isn't emptied when the value is manually cancelled ([#1074](https://github.com/pagopa/pn-frontend/issues/1074)) ([c8d6569](https://github.com/pagopa/pn-frontend/commit/c8d656954e7fee1e6451ff2389aa90a61ed1342c))
+* **PN-8901:** Fixed mixpanel events and renaming, and attributes ([#1078](https://github.com/pagopa/pn-frontend/issues/1078)) ([5a42baf](https://github.com/pagopa/pn-frontend/commit/5a42baf356b4b9e7e31949b36507bffe94b8236c))
+* **pn-9001:** Fixed product url calculation using product id ([#1084](https://github.com/pagopa/pn-frontend/issues/1084)) ([e3ddd3f](https://github.com/pagopa/pn-frontend/commit/e3ddd3f2472f3de50dddbcb778958c34a7f3ba8c))
+
+
+### Features
+
+* **PN-8737:** Added taxId validation according to PF (only length 16) or PG (only length 11) recipient ([#1070](https://github.com/pagopa/pn-frontend/issues/1070)) ([507113f](https://github.com/pagopa/pn-frontend/commit/507113f126815069c705facbdb4c5c7efbe1108e))
+* **PN-8789:** Cancel notification button shown as administrator role only ([#1072](https://github.com/pagopa/pn-frontend/issues/1072)) ([3f0946c](https://github.com/pagopa/pn-frontend/commit/3f0946c1d0ef74293dea1c269384a8fdb10d8e0f))
+* **pn-8995:** added copy for new analog-workflow-attachment-kind 23I, in all languages, for PA / PF / PG ([#1085](https://github.com/pagopa/pn-frontend/issues/1085)) ([366ec01](https://github.com/pagopa/pn-frontend/commit/366ec0134a04fdecd7c103d3b455654d5b951622))
 
 
 

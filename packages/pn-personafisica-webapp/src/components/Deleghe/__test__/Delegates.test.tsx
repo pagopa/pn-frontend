@@ -58,7 +58,7 @@ describe('Delegates Component', () => {
     });
     const delegatesTable = getByTestId('delegatesTable');
     expect(delegatesTable).toBeInTheDocument();
-    const delegatesRows = getAllByTestId('delegatesTable.row');
+    const delegatesRows = getAllByTestId('delegatesTable.body.row');
     expect(delegatesRows).toHaveLength(arrayOfDelegates.length);
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
@@ -80,7 +80,7 @@ describe('Delegates Component', () => {
     let delegatesTable = getByTestId('delegatesTable');
     expect(delegatesTable).toBeInTheDocument();
     // sort by name asc
-    let sortName = within(delegatesTable).getByTestId('delegatesTable.sort.name');
+    let sortName = within(delegatesTable).getByTestId('delegatesTable.header.cell.sort.name');
     let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
@@ -89,14 +89,14 @@ describe('Delegates Component', () => {
         orderBy: 'name',
       });
     });
-    let delegatesRows = getAllByTestId('delegatesTable.row');
+    let delegatesRows = getAllByTestId('delegatesTable.body.row');
     let sortedDelegates = sortDelegations('asc', 'name', arrayOfDelegates) as Array<Delegate>;
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
     // sort by name desc
     delegatesTable = getByTestId('delegatesTable');
-    sortName = within(delegatesTable).getByTestId('delegatesTable.sort.name');
+    sortName = within(delegatesTable).getByTestId('delegatesTable.header.cell.sort.name');
     sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
@@ -105,14 +105,16 @@ describe('Delegates Component', () => {
         orderBy: 'name',
       });
     });
-    delegatesRows = getAllByTestId('delegatesTable.row');
+    delegatesRows = getAllByTestId('delegatesTable.body.row');
     sortedDelegates = sortDelegations('desc', 'name', arrayOfDelegates) as Array<Delegate>;
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
     // sort by endDate asc
     delegatesTable = getByTestId('delegatesTable');
-    const sortEndDate = within(delegatesTable).getByTestId('delegatesTable.sort.endDate');
+    const sortEndDate = within(delegatesTable).getByTestId(
+      'delegatesTable.header.cell.sort.endDate'
+    );
     sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
@@ -121,7 +123,7 @@ describe('Delegates Component', () => {
         orderBy: 'endDate',
       });
     });
-    delegatesRows = getAllByTestId('delegatesTable.row');
+    delegatesRows = getAllByTestId('delegatesTable.body.row');
     sortedDelegates = sortDelegations('asc', 'endDate', arrayOfDelegates) as Array<Delegate>;
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
@@ -137,7 +139,7 @@ describe('Delegates Component', () => {
       },
     });
     // get first row
-    const delegatesRows = getAllByTestId('delegatesTable.row');
+    const delegatesRows = getAllByTestId('delegatesTable.body.row');
     const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);

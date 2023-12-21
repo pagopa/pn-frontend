@@ -77,4 +77,12 @@ describe('sortArray function', () => {
       { date: '11/03/2022' },
     ]);
   });
+
+  it('sorts array - empty sort field', () => {
+    const arrayToSort = [{ name: 'Andrea' }, { name: 'Mario' }, { name: 'Sara' }];
+    let sortedArray = sortArray('asc', '', arrayToSort);
+    expect(sortedArray).toStrictEqual(arrayToSort);
+    sortedArray = sortArray('desc', '', arrayToSort);
+    expect(sortedArray).toStrictEqual(arrayToSort);
+  });
 });

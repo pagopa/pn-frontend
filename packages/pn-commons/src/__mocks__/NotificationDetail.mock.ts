@@ -6,15 +6,15 @@ import {
   INotificationDetailTimeline,
   LegalFactType,
   NotificationDetail,
+  NotificationDetailPayment,
   NotificationDetailRecipient,
+  NotificationDetailTimelineDetails,
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  NotificationDetailPayment,
-  NotificationDetailTimelineDetails,
 } from '../models';
 import { parseNotificationDetail } from '../utility';
 
@@ -82,6 +82,34 @@ export const payments: Array<NotificationDetailPayment> = [
     },
   },
   {
+    pagoPa: {
+      noticeCode: '302011686772695134',
+      creditorTaxId: '77777777777',
+      applyCost: false,
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695135',
+      creditorTaxId: '77777777777',
+      applyCost: false,
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695136',
+      creditorTaxId: '77777777777',
+      applyCost: true,
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695137',
+      creditorTaxId: '77777777777',
+      applyCost: true,
+    },
+  },
+  {
     f24: {
       title: 'F24 terza terza TARI',
       applyCost: false,
@@ -92,6 +120,23 @@ export const payments: Array<NotificationDetailPayment> = [
         contentType: 'application/pdf',
         ref: {
           key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38n.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      noticeCode: '302011686772695138',
+      creditorTaxId: '77777777777',
+      applyCost: false,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cD5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed5bc57442fb3df53abe5b5d38d.pdf',
           versionToken: 'v1',
         },
       },

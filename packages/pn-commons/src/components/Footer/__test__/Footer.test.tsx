@@ -48,13 +48,7 @@ describe('Footer Component', () => {
   });
 
   it('shows languages dropdown', async () => {
-    const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const { getAllByRole } = render(
-      <Footer
-        loggedUser={true}
-        eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}
-      />
-    );
+    const { getAllByRole } = render(<Footer loggedUser={true} />);
     const buttons = getAllByRole('button');
     const dropdownLanguageButton = buttons[4];
     const languageKeys = Object.keys(LANGUAGES);
@@ -73,6 +67,5 @@ describe('Footer Component', () => {
       expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
       fireEvent.click(languageOptionsArray[index]);
     });
-    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(languageKeys.length);
   });
 });

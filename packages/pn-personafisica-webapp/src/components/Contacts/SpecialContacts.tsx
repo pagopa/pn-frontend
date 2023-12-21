@@ -189,7 +189,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               await formik.validateForm();
               setSenderInputValue('');
             }
-          }
+          },
+          true
         );
       }
     },

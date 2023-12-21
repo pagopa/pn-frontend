@@ -3,7 +3,7 @@ import React from 'react';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { fireEvent, render, waitFor, within } from '../../../test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
 import {
   getF24Payments,
   getPagoPaF24Payments,
@@ -31,7 +31,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -39,52 +39,57 @@ describe('NotificationPaymentRecipient Component', () => {
     const subtitle = getByTestId('notification-payment-recipient-subtitle');
     const f24Download = queryByTestId('f24-download');
     const pagoPABox = queryAllByTestId('pagopa-item');
-    const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
+    const downloadPagoPANotice = queryByTestId('download-pagoPA-notice-button');
     const payButton = getByTestId('pay-button');
     const f24OnlyBox = getByTestId('f24only-box');
+    const paginationBox = getByTestId('pagination-box');
+
+    const pageLength = paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length;
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('detail.payment.title');
     expect(subtitle).toBeInTheDocument();
     expect(subtitle).toHaveTextContent('detail.payment.subtitle');
     expect(f24Download).not.toBeInTheDocument();
-    expect(pagoPABox).toHaveLength(
-      paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length
-    );
-    expect(downloadPagoPANotice).toBeInTheDocument();
+    expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
+    expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
-    expect(downloadPagoPANotice).toBeDisabled();
     expect(payButton).toBeDisabled();
     expect(f24OnlyBox).toBeInTheDocument();
+    expect(paginationBox).toBeInTheDocument();
   });
 
   it('select and unselect payment', async () => {
-    const { getByTestId, queryAllByTestId } = render(
+    jest.useFakeTimers();
+    const { getByTestId, queryAllByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
-    const downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
+    let downloadPagoPANotice = queryByTestId('download-pagoPA-notice-button');
     const payButton = getByTestId('pay-button');
-
     const paymentIndex = paymentsData.pagoPaF24.findIndex(
-      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED && payment.pagoPa.attachment
     );
-
     const item = queryAllByTestId('pagopa-item')[paymentIndex];
-
     const radioButton = item.querySelector('[data-testid="radio-button"] input');
-    expect(downloadPagoPANotice).toBeDisabled();
+    expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeDisabled();
     // select payment
     fireEvent.click(radioButton!);
-    expect(downloadPagoPANotice).not.toBeDisabled();
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+    downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
+    expect(downloadPagoPANotice).toBeInTheDocument();
     expect(payButton).not.toBeDisabled();
     // check f24
     const f24Download = getByTestId('f24-download');
@@ -92,11 +97,12 @@ describe('NotificationPaymentRecipient Component', () => {
     // unselect payment
     fireEvent.click(radioButton!);
     expect(payButton).toBeDisabled();
-    expect(downloadPagoPANotice).toBeDisabled();
+    expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(f24Download).not.toBeInTheDocument();
   });
 
   it('should dispatch action on pay button click', async () => {
+    jest.useFakeTimers();
     const payClickMk = jest.fn();
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
@@ -105,7 +111,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={payClickMk}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -118,6 +124,11 @@ describe('NotificationPaymentRecipient Component', () => {
 
     const radioButton = item.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
     fireEvent.click(payButton);
     await waitFor(() => {
       expect(payClickMk).toBeCalledTimes(1);
@@ -146,7 +157,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -164,7 +175,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={jest.fn()}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -175,6 +186,7 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleDownloadAttachment on download button click', async () => {
+    jest.useFakeTimers();
     const getPaymentAttachmentActionMk = jest
       .fn()
       .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
@@ -186,7 +198,7 @@ describe('NotificationPaymentRecipient Component', () => {
         timerF24={F24TIMER}
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
       />
     );
@@ -196,6 +208,11 @@ describe('NotificationPaymentRecipient Component', () => {
     const item = getAllByTestId('pagopa-item')[paymentIndex];
     const radioButton = item.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
     // download pagoPA attachments
     const downloadButton = getByTestId('download-pagoPA-notice-button');
     downloadButton.click();
@@ -222,5 +239,100 @@ describe('NotificationPaymentRecipient Component', () => {
       PaymentAttachmentSName.F24,
       paymentsData.f24Only[0].attachmentIdx
     );
+  });
+
+  it('should not show pagination box if there are no more than 5 pagopa payments ', () => {
+    const payments = {
+      pagoPaF24: [...paymentsData.pagoPaF24.slice(0, 2)],
+      f24Only: [...paymentsData.f24Only],
+    };
+    const { queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={payments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+    const paginationBox = queryByTestId('pagination-box');
+    expect(paginationBox).not.toBeInTheDocument();
+  });
+
+  it('should call handleFetchPaymentsInfo on pagination click', async () => {
+    const fetchPaymentsInfoMk = jest.fn();
+    const result = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={fetchPaymentsInfoMk}
+        landingSiteUrl=""
+      />
+    );
+
+    const pageSelector = result.getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    // the buttons are < 1 2 >
+    fireEvent.click(pageButtons[2]);
+
+    expect(fetchPaymentsInfoMk).toBeCalledTimes(1);
+  });
+
+  it('download pagoPa notice hidden if no attachment is present', () => {
+    const { getAllByTestId, queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+    const paymentIndex = paymentsData.pagoPaF24.findIndex(
+      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED && !payment.pagoPa.attachment
+    );
+    const item = getAllByTestId('pagopa-item')[paymentIndex];
+    const radioButton = item.querySelector('[data-testid="radio-button"] input');
+    fireEvent.click(radioButton!);
+    // download pagoPA attachments
+    const downloadButton = queryByTestId('download-pagoPA-notice-button');
+    expect(downloadButton).not.toBeInTheDocument();
+  });
+
+  it('should not show subtitle when all payments are paid', () => {
+    const paidPayments = {
+      pagoPaF24: [
+        ...paymentsData.pagoPaF24.map((payment) => ({
+          ...payment,
+          pagoPa: {
+            ...payment.pagoPa!,
+            status: PaymentStatus.SUCCEEDED,
+          },
+        })),
+      ],
+      f24Only: [...paymentsData.f24Only],
+    };
+
+    const { queryByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paidPayments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        getPaymentAttachmentAction={jest.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+
+    const subtitle = queryByTestId('notification-payment-recipient-subtitle');
+    expect(subtitle).not.toBeInTheDocument();
   });
 });

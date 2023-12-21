@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import {
   Button,
@@ -13,20 +13,22 @@ import { useIsMobile } from '../hooks';
 import { usePrompt } from '../hooks/usePrompt';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
-const Prompt = ({
+type Props = {
+  title: string;
+  message: string;
+  eventTrackingCallbackPromptOpened: () => void;
+  eventTrackingCallbackCancel: () => void;
+  eventTrackingCallbackConfirm: () => void;
+  children?: React.ReactNode;
+};
+
+const Prompt: React.FC<Props> = ({
   title,
   message,
   children,
   eventTrackingCallbackPromptOpened,
   eventTrackingCallbackCancel,
   eventTrackingCallbackConfirm,
-}: {
-  title: string;
-  message: string;
-  children: ReactNode;
-  eventTrackingCallbackPromptOpened: () => void;
-  eventTrackingCallbackCancel: () => void;
-  eventTrackingCallbackConfirm: () => void;
 }) => {
   const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(
     true,

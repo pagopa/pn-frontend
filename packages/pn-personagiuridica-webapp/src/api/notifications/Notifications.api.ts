@@ -43,7 +43,7 @@ export const NotificationsApi = {
    * @returns Promise
    */
   getReceivedNotifications: (
-    params: GetNotificationsParams & { isDelegatedPage: boolean }
+    params: GetNotificationsParams<string> & { isDelegatedPage: boolean }
   ): Promise<GetNotificationsResponse> => {
     const { isDelegatedPage, ...payload } = params;
     return apiClient

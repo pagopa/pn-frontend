@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-validator",
-  "version": "2.2.3-RC.0",
+  "version": "2.2.3",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
@@ -14,9 +14,9 @@
     "sonar": "node sonarqube-scanner.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.18.10",
-    "@babel/preset-typescript": "^7.18.6",
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@babel/preset-typescript": "^7.23.2",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/jest": "^28.0.0",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
