@@ -3,6 +3,7 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
 } from '@pagopa-pn/pn-commons';
+
 import { Party } from '../models/party';
 
 export const parties: Array<Party> = [
@@ -51,5 +52,24 @@ export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [
     errorCode: 'GENERIC_ERROR',
     url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',
     causaleVersamento: 'Quarta rata TARI',
+  },
+  {
+    creditorTaxId: '77777777777',
+    noticeCode: '302011686772695136',
+    status: PaymentStatus.FAILED,
+    detail: PaymentInfoDetail.PAYMENT_EXPIRED,
+    detail_v2: 'PAYMENT_EXPIRED',
+    errorCode: 'PAYMENT_EXPIRED',
+    url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',
+    causaleVersamento: 'Quinta rata TARI',
+  },
+  {
+    creditorTaxId: '77777777777',
+    noticeCode: '302011686772695137',
+    status: PaymentStatus.REQUIRED,
+    amount: 15000,
+    url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',
+    causaleVersamento: 'Sesta rata TARI',
+    dueDate: '2025-12-25',
   },
 ];

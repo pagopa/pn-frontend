@@ -1,7 +1,11 @@
 import React from 'react';
 import { vi } from 'vitest';
 
-import { NotificationDetailPayment, NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+import {
+  NotificationDetailPayment,
+  NotificationDetailRecipient,
+  PaginationData,
+} from '@pagopa-pn/pn-commons';
 
 import {
   notificationToFe,
@@ -112,24 +116,93 @@ describe('NotificationPaymentSender Component', () => {
         />
       );
     });
+    let numberOfPagoPaPayments;
     // select a recipient
     await selectRecipient(0);
     let paymentItems = result?.queryAllByTestId('payment-item');
     let f24Items = result?.queryAllByTestId('f24');
-    expect(paymentItems).toHaveLength(
-      getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'pagoPa')
+    numberOfPagoPaPayments = getPaymentsCount(
+      0,
+      notificationToFeMultiRecipient.recipients,
+      'pagoPa'
     );
+    expect(paymentItems).toHaveLength(numberOfPagoPaPayments > 5 ? 5 : numberOfPagoPaPayments);
     expect(f24Items).toHaveLength(
       getPaymentsCount(0, notificationToFeMultiRecipient.recipients, 'f24')
     );
     await selectRecipient(1);
     paymentItems = result?.queryAllByTestId('payment-item');
     f24Items = result?.queryAllByTestId('f24');
-    expect(paymentItems).toHaveLength(
-      getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPa')
+    numberOfPagoPaPayments = getPaymentsCount(
+      1,
+      notificationToFeMultiRecipient.recipients,
+      'pagoPa'
     );
+    expect(paymentItems).toHaveLength(numberOfPagoPaPayments > 5 ? 5 : numberOfPagoPaPayments);
     expect(f24Items).toHaveLength(
       getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'f24')
     );
+  });
+
+  it('should show pagination if recipient has more than 5 payments', async () => {
+    let result: RenderResult | undefined;
+
+    await act(async () => {
+      result = render(
+        <NotificationPaymentSender
+          iun={notificationToFeMultiRecipient.iun}
+          recipients={notificationToFeMultiRecipient.recipients}
+          timeline={notificationToFeMultiRecipient.timeline}
+        />
+      );
+    });
+
+    await selectRecipient(1);
+
+    const paginationBox = result?.queryByTestId('pagination-box');
+    if (getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPa') > 5) {
+      expect(paginationBox).toBeInTheDocument();
+    } else {
+      expect(paginationBox).not.toBeInTheDocument();
+    }
+  });
+
+  it('should show updated payments when pagination is changed', async () => {
+    let result: RenderResult | undefined;
+    // render component
+    await act(async () => {
+      result = render(
+        <NotificationPaymentSender
+          iun={notificationToFeMultiRecipient.iun}
+          recipients={notificationToFeMultiRecipient.recipients}
+          timeline={notificationToFeMultiRecipient.timeline}
+        />
+      );
+    });
+
+    await selectRecipient(1);
+
+    let paginationData: PaginationData = {
+      page: 0,
+      size: 5,
+      totalElements: getPaymentsCount(1, notificationToFeMultiRecipient.recipients, 'pagoPa'),
+    };
+
+    // should show first 5 payments
+    const paymentItems = result?.queryAllByTestId('payment-item');
+    expect(paymentItems).toHaveLength(5);
+
+    const pageSelector = result?.getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    // the buttons are < 1 2 >
+    fireEvent.click(pageButtons![2]);
+    paginationData = {
+      ...paginationData,
+      page: 1,
+    };
+
+    const numberOfPaymentsSliced = paginationData.totalElements - paginationData.page * 5;
+    const secondPageItems = result?.queryAllByTestId('payment-item');
+    expect(secondPageItems).toHaveLength(numberOfPaymentsSliced);
   });
 });

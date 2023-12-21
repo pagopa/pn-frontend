@@ -1,19 +1,23 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { AppStatusRender, GetDowntimeHistoryParams, PaginationData } from '@pagopa-pn/pn-commons';
+
 import {
   getCurrentAppStatus,
   getDowntimeLegalFactDocumentDetails,
   getDowntimeLogPage,
 } from '../redux/appStatus/actions';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
 import {
   clearLegalFactDocumentData,
   clearPagination,
   setPagination,
 } from '../redux/appStatus/reducers';
-import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { TrackEventType } from '../utility/events';
+import { trackEventByType } from '../utility/mixpanel';
 
 const AppStatus = () => {
   const dispatch = useAppDispatch();
@@ -39,6 +43,18 @@ const AppStatus = () => {
     [dispatch, getDowntimeLegalFactDocumentDetails]
   );
 
+  const handleTrackDownloadCertificateOpposable3dparties = () => {
+    trackEventByType(TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES, {
+      source: 'stato_piattaforma',
+    });
+  };
+
+  useEffect(() => {
+    trackEventByType(TrackEventType.SEND_SERVICE_STATUS, {
+      service_status_OK: appStatus.currentStatus?.appIsFullyOperative,
+    });
+  }, [getCurrentAppStatus]);
+
   return (
     <AppStatusRender
       appStatus={appStatus}
@@ -51,6 +67,9 @@ const AppStatus = () => {
       }
       clearPagination={() => dispatch(clearPagination())}
       actionIds={APP_STATUS_ACTIONS}
+      handleTrackDownloadCertificateOpposable3dparties={
+        handleTrackDownloadCertificateOpposable3dparties
+      }
     />
   );
 };

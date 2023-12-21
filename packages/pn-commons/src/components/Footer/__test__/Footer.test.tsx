@@ -49,14 +49,9 @@ describe('Footer Component', () => {
   });
 
   it('shows languages dropdown', async () => {
-    const mockEventTrackingCallbackChangeLanguage = vi.fn();
-    const { getByRole } = render(
-      <Footer
-        loggedUser={true}
-        eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}
-      />
-    );
-    const dropdownLanguageButton = getByRole('button');
+    const { getAllByRole } = render(<Footer loggedUser={true} />);
+    const buttons = getAllByRole('button');
+    const dropdownLanguageButton = buttons[4];
     const languageKeys = Object.keys(LANGUAGES);
     // This array represents how the options labels should sequentially change when you click the option.
     const expectedLanguagesLabels = new Array();
@@ -73,6 +68,5 @@ describe('Footer Component', () => {
       expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
       fireEvent.click(languageOptionsArray[index]);
     });
-    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(languageKeys.length);
   });
 });

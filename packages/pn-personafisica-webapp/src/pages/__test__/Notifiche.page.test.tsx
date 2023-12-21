@@ -7,7 +7,7 @@ import {
   ResponseEventDispatcher,
   formatDate,
   formatToTimezoneString,
-  getNextDay,
+  getEndOfDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -32,6 +32,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
   Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
     <>
@@ -63,7 +64,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -94,7 +95,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -103,7 +104,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(tenYearsAgo)),
+          endDate: formatToTimezoneString(getEndOfDay(tenYearsAgo)),
           size: 10,
         })
       )
@@ -140,7 +141,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -149,7 +150,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 20,
         })
       )
@@ -159,7 +160,7 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
     const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
@@ -171,7 +172,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
   });
 
@@ -180,7 +181,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -189,7 +190,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
           nextPagesKey: notificationsDTO.nextPagesKey[0],
         })
@@ -200,7 +201,7 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
@@ -212,7 +213,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
@@ -222,7 +223,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -231,7 +232,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
           iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         })
@@ -242,7 +243,7 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
     rows?.forEach((row, index) => {
       expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
@@ -257,7 +258,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result?.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
@@ -267,7 +268,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -293,7 +294,7 @@ describe('Notifiche Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -307,7 +308,7 @@ describe('Notifiche Page', () => {
     expect(mock.history.get[0].url).toContain('/notifications/received');
     const filterForm = result?.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
-    const notificationsCards = result?.getAllByTestId('itemCard');
+    const notificationsCards = result?.getAllByTestId('mobileNotificationsCards');
     expect(notificationsCards).toHaveLength(notificationsDTO.resultsPage.length);
     const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();

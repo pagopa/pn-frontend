@@ -1,5 +1,6 @@
 // PN-1369 leave default import for mixpanel, using named once it won't work
-import mixpanel, { Mixpanel } from 'mixpanel-browser';
+import mixpanel from 'mixpanel-browser';
+
 /**
  * Function that initialize Mixpanel (must be called once)
  */
@@ -19,16 +20,9 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
       ip: false,
       // names of properties/superproperties which should never
       // be sent with track() calls
-      property_blacklist: [],
+      property_blacklist: ['$current_url', '$initial_referrer', '$referrer'],
       debug: true,
       // function called after mixpanel has finished loading
-      loaded(mixpanel: Mixpanel) {
-        // this is useful to obtain a new distinct_id every session
-        // the distinct_id is the user identifier that mixpanel automatically assign
-        if (sessionStorage.getItem('user') === null) {
-          mixpanel.reset();
-        }
-      },
     });
   }
 }

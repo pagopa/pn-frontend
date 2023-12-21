@@ -3,18 +3,23 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CodeModal,
   Column,
   EmptyState,
-  Item,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
+  Row,
   Sort,
-  ItemsTable as Table,
 } from '@pagopa-pn/pn-commons';
 
-import { DelegatesColumn } from '../../models/Deleghe';
+import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
@@ -23,8 +28,7 @@ import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
-import { Menu, OrganizationsList } from './DelegationsElements';
+import DelegatorsDataSwitch from './DelegationDataSwitch';
 
 type Props = {
   handleAddDelegationClick: (source: string) => void;
@@ -58,80 +62,53 @@ const Delegates = () => {
   const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
-  const rows: Array<Item> = delegationToItem(delegates);
+  const rows: Array<Row<DelegationData>> = delegationToItem(delegates);
 
-  const delegatesColumns: Array<Column<DelegatesColumn>> = [
+  const delegatesColumns: Array<Column<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
-      width: '13%',
+      cellProps: { width: '13%' },
       sortable: true,
-      getCellLabel(value: string) {
-        return <Typography fontWeight="bold">{value}</Typography>;
-      },
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
-      width: '11%',
-      getCellLabel(value: string) {
-        return value;
-      },
+      cellProps: { width: '11%' },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
-      width: '11%',
-      getCellLabel(value: string) {
-        return value;
-      },
+      cellProps: { width: '11%' },
       sortable: true,
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      width: '14%',
-      getCellLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} visibleItems={3} />;
-      },
+      cellProps: { width: '14%' },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
-      width: '18%',
-      getCellLabel(value: string) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip label={t(key)} color={color} />;
-      },
+      cellProps: { width: '18%' },
     },
     {
-      id: 'id',
+      id: 'menu',
       label: '',
-      width: '5%',
-      getCellLabel(value: string, row: Item) {
-        return (
-          <Menu
-            menuType={'delegates'}
-            id={value}
-            verificationCode={row.verificationCode}
-            name={row.name}
-            setCodeModal={setShowCodeModal}
-          />
-        );
-      },
+      cellProps: { width: '5%' },
     },
   ];
 
-  const handleAddDelegationClick = (source: string) => {
+  const handleAddDelegationClick = () => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_START);
     navigate(routes.NUOVA_DELEGA);
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
   const handleCloseShowCodeModal = () => {
     setShowCodeModal({ ...showCodeModal, open: false });
   };
 
-  const handleChangeSorting = (s: Sort<DelegatesColumn>) => {
+  const handleChangeSorting = (s: Sort<DelegationColumnData>) => {
     dispatch(setDelegatesSorting(s));
   };
 
@@ -154,7 +131,7 @@ const Delegates = () => {
             <Button
               id="add-delegation-button"
               variant="outlined"
-              onClick={(_e, source = 'default') => handleAddDelegationClick(source)}
+              onClick={() => handleAddDelegationClick()}
               data-testid="add-delegation"
             >
               <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
@@ -166,30 +143,53 @@ const Delegates = () => {
           apiId={DELEGATION_ACTIONS.GET_DELEGATES}
           reloadAction={() => dispatch(getDelegates())}
         >
-          <>
-            {rows.length > 0 ? (
-              <Table
-                columns={delegatesColumns}
-                rows={rows}
-                sort={sortDelegates}
-                onChangeSorting={handleChangeSorting}
-                testId="delegatesTable"
+          {rows.length > 0 ? (
+            <PnTable testId="delegatesTable">
+              <PnTableHeader>
+                {delegatesColumns.map((column) => (
+                  <PnTableHeaderCell
+                    key={column.id}
+                    sort={sortDelegates}
+                    columnId={column.id}
+                    sortable={column.sortable}
+                    handleClick={handleChangeSorting}
+                    testId="delegatesTable.header.cell"
+                  >
+                    {column.label}
+                  </PnTableHeaderCell>
+                ))}
+              </PnTableHeader>
+              <PnTableBody>
+                {rows.map((row, index) => (
+                  <PnTableBodyRow key={row.id} testId="delegatesTable.body.row" index={index}>
+                    {delegatesColumns.map((column) => (
+                      <PnTableBodyCell key={column.id} cellProps={column.cellProps}>
+                        <DelegatorsDataSwitch
+                          data={row}
+                          type={column.id}
+                          menuType="delegates"
+                          setShowCodeModal={setShowCodeModal}
+                        />
+                      </PnTableBodyCell>
+                    ))}
+                  </PnTableBodyRow>
+                ))}
+              </PnTableBody>
+            </PnTable>
+          ) : (
+            <EmptyState>
+              <Trans
+                i18nKey={'deleghe.no_delegates'}
+                ns={'deleghe'}
+                components={[
+                  <LinkAddDelegate
+                    key={'add-delegate'}
+                    handleAddDelegationClick={handleAddDelegationClick}
+                  />,
+                ]}
               />
-            ) : (
-              <EmptyState>
-                <Trans
-                  i18nKey={'deleghe.no_delegates'}
-                  ns={'deleghe'}
-                  components={[
-                    <LinkAddDelegate
-                      key={'add-delegate'}
-                      handleAddDelegationClick={handleAddDelegationClick}
-                    />,
-                  ]}
-                />
-              </EmptyState>
-            )}
-          </>
+            </EmptyState>
+          )}
         </ApiErrorWrapper>
       </Box>
     </>

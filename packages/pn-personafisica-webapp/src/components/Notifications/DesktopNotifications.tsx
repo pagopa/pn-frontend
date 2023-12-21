@@ -6,31 +6,32 @@ import { Link } from '@mui/material';
 import {
   Column,
   EmptyState,
-  Item,
-  ItemsTable,
   KnownSentiment,
   Notification,
-  NotificationStatus,
+  NotificationColumnData,
+  NotificationsDataSwitch,
+  PnTable,
+  PnTableBody,
+  PnTableBodyCell,
+  PnTableBodyRow,
+  PnTableHeader,
+  PnTableHeaderCell,
+  Row,
   Sort,
-  StatusTooltip,
-  formatDate,
-  getNotificationStatusInfos,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationColumn } from '../../models/Notifications';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<NotificationColumn>;
+  sort?: Sort<NotificationColumnData>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -60,6 +61,10 @@ const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFi
 const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
+  const goToContactsPage = () => {
+    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'home_notifiche' });
+    navigate(routes.RECAPITI);
+  };
   return (
     <Link
       component={'button'}
@@ -68,7 +73,7 @@ const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children 
       aria-label={t('empty-state.aria-label-route-contacts')}
       key="route-contacts"
       data-testid="link-route-contacts"
-      onClick={() => navigate(routes.RECAPITI)}
+      onClick={goToContactsPage}
     >
       {children}
     </Link>
@@ -85,95 +90,45 @@ const DesktopNotifications = ({
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
-  const handleEventTrackingTooltip = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
-  };
-
-  const columns: Array<Column<NotificationColumn>> = [
+  const columns: Array<Column<NotificationColumnData>> = [
     {
-      id: 'notificationStatus',
+      id: 'badge',
       label: '',
-      width: '1%',
-      getCellLabel(value: string) {
-        return getNewNotificationBadge(value);
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
+      cellProps: { width: '1%' },
     },
     {
       id: 'sentAt',
       label: t('table.data'),
-      width: '11%',
+      cellProps: { width: '11%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string) {
-        return formatDate(value);
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
-      width: '13%',
+      cellProps: { width: '13%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      width: '23%',
-      getCellLabel(value: string) {
-        return value.length > 65 ? value.substring(0, 65) + '...' : value;
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
+      cellProps: { width: '23%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      width: '20%',
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
+      cellProps: { width: '20%' },
     },
     {
-      id: 'status',
+      id: 'notificationStatus',
       label: t('table.status'),
-      width: '18%',
+      cellProps: { width: '18%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(_: string, row: Item) {
-        const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus,
-          { recipients: row.recipients as Array<string> }
-        );
-        return (
-          <StatusTooltip
-            label={label}
-            tooltip={tooltip}
-            color={color}
-            eventTrackingCallback={handleEventTrackingTooltip}
-          ></StatusTooltip>
-        );
-      },
-      onClick(row: Item) {
-        handleRowClick(row);
-      },
     },
   ];
-  const rows: Array<Item> = notifications.map((n, i) => ({
+
+  const rows: Array<Row<Notification>> = notifications.map((n) => ({
     ...n,
-    id: n.paProtocolNumber + i.toString(),
+    id: n.iun,
   }));
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
@@ -181,16 +136,12 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (row: Item) => {
+  const handleRowClick = (row: Row<Notification>) => {
     if (currentDelegator) {
-      navigate(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
-      );
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, currentDelegator.mandateId));
     } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     }
-    // log event
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   return (
@@ -201,13 +152,39 @@ const DesktopNotifications = ({
         currentDelegator={currentDelegator}
       />
       {rows.length ? (
-        <ItemsTable
-          columns={columns}
-          rows={rows}
-          sort={sort}
-          onChangeSorting={onChangeSorting}
-          testId="notificationsTable"
-        />
+        <PnTable testId="notificationsTable">
+          <PnTableHeader>
+            {columns.map((column) => (
+              <PnTableHeaderCell
+                key={column.id}
+                sort={sort}
+                columnId={column.id}
+                sortable={column.sortable}
+                handleClick={onChangeSorting}
+              >
+                {column.label}
+              </PnTableHeaderCell>
+            ))}
+          </PnTableHeader>
+          <PnTableBody>
+            {rows.map((row, index) => (
+              <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
+                {columns.map((column) => (
+                  <PnTableBodyCell
+                    key={column.id}
+                    onClick={() => handleRowClick(row)}
+                    cellProps={{
+                      ...column.cellProps,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <NotificationsDataSwitch data={row} type={column.id} />
+                  </PnTableBodyCell>
+                ))}
+              </PnTableBodyRow>
+            ))}
+          </PnTableBody>
+        </PnTable>
       ) : (
         <EmptyState
           sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}

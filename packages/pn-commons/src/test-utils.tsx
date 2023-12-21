@@ -89,6 +89,31 @@ const customRender = (
 };
 
 // utility function
+/** This function simulate media query and is useful to test differences between mobile and desktop view */
+function createMatchMedia(width: number) {
+  return (query: string): MediaQueryList => ({
+    matches: mediaQuery.match(query, { width }) as boolean,
+    media: '',
+    addListener: () => {},
+    removeListener: () => {},
+    onchange: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  });
+}
+
+/** This function disable the console logging methods */
+function disableConsoleLogging(method: 'log' | 'error' | 'info' | 'warn') {
+  beforeAll(() => {
+    jest.spyOn(console, method).mockImplementation(jest.fn());
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+}
+
 /**
  * Test the options list of a select, fire change event and check its value
  * @container container element
@@ -117,20 +142,6 @@ async function testSelect(
   fireEvent.click(selectOptionsListItems[optToSelect]);
   await waitFor(() => {
     expect(selectInput).toHaveValue(options[optToSelect].value);
-  });
-}
-
-/** This function simulate media query and is useful to test differences between mobile and desktop view */
-function createMatchMedia(width: number) {
-  return (query: string): MediaQueryList => ({
-    matches: mediaQuery.match(query, { width }) as boolean,
-    media: '',
-    addListener: () => {},
-    removeListener: () => {},
-    onchange: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => true,
   });
 }
 
@@ -312,4 +323,5 @@ export {
   queryById,
   createTestStore,
   theme,
+  disableConsoleLogging,
 };

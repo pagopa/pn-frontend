@@ -6,7 +6,6 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToTimezoneString,
-  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -21,6 +20,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
@@ -45,7 +45,7 @@ describe('Dashboard Page - accessibility tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -65,7 +65,7 @@ describe('Dashboard Page - accessibility tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -85,7 +85,7 @@ describe('Dashboard Page - accessibility tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )

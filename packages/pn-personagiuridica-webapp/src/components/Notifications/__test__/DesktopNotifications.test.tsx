@@ -30,6 +30,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -74,7 +75,7 @@ describe('DesktopNotifications Component', () => {
     expect(filters).toBeInTheDocument();
     const norificationTable = result!.queryByTestId('notificationsTable');
     expect(norificationTable).not.toHaveTextContent('table.destinatario');
-    const norificationTableRows = result!.getAllByTestId('notificationsTable.row');
+    const norificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
     expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
@@ -89,7 +90,7 @@ describe('DesktopNotifications Component', () => {
     expect(filters).toBeInTheDocument();
     const norificationTable = result!.queryByTestId('notificationsTable');
     expect(norificationTable).toHaveTextContent('table.destinatario');
-    const norificationTableRows = result!.getAllByTestId('notificationsTable.row');
+    const norificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
     expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
@@ -119,7 +120,7 @@ describe('DesktopNotifications Component', () => {
     await act(async () => {
       result = render(<DesktopNotifications notifications={notificationsToFe.resultsPage} />);
     });
-    const rows = result!.getAllByTestId('notificationsTable.row');
+    const rows = result!.getAllByTestId('notificationsTable.body.row');
     const notificationsTableCell = within(rows[0]).getAllByRole('cell');
     fireEvent.click(notificationsTableCell[0]);
     await waitFor(() => {
@@ -141,7 +142,7 @@ describe('DesktopNotifications Component', () => {
         />
       );
     });
-    const rows = result!.getAllByTestId('notificationsTable.row');
+    const rows = result!.getAllByTestId('notificationsTable.body.row');
     const notificationsTableCell = within(rows[0]).getAllByRole('cell');
     fireEvent.click(notificationsTableCell[0]);
     await waitFor(() => {

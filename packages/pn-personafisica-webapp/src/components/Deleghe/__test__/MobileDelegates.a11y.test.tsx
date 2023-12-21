@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { axe, render } from '../../../__test__/test-utils';
-import { DELEGATION_ACTIONS } from '../../../redux/delegation/actions';
 import MobileDelegates from '../MobileDelegates';
 
 vi.mock('react-i18next', () => ({

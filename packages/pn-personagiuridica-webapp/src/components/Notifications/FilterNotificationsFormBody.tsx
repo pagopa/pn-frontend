@@ -1,11 +1,8 @@
-import currentLocale from 'date-fns/locale/it';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, TextField } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { Grid, TextField, TextFieldProps } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -42,7 +39,7 @@ const FilterNotificationsFormBody = ({
   setStartDate,
   setEndDate,
 }: Props) => {
-  const { t } = useTranslation(['notifiche']);
+  const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
   const handlePaste = async (e: React.ClipboardEvent) => {
@@ -101,77 +98,79 @@ const FilterNotificationsFormBody = ({
         />
       </Grid>
       <Grid item lg={2} xs={12}>
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
-          <CustomDatePicker
-            label={t('filters.data_da', { ns: 'notifiche' })}
-            format={DATE_FORMAT}
-            value={startDate}
-            onChange={(value: DatePickerTypes) => {
-              formikInstance
-                .setFieldValue('startDate', value || tenYearsAgo)
-                .then(() => {
-                  setStartDate(value);
-                })
-                .catch(() => 'error');
-            }}
-            slotProps={{
-              textField: {
-                id: 'startDate',
-                name: 'startDate',
-                fullWidth: true,
-                sx: { marginBottom: isMobile ? '20px' : '0' },
-                size: 'small',
-                'aria-label': t('filters.data_da-aria-label'),
-                inputProps: {
-                  inputMode: 'text',
-                  'aria-label': t('filters.data_da-input-aria-label'),
-                  type: 'text',
-                  placeholder: 'gg/mm/aaaa',
-                  'data-testid': 'input(start date)',
-                },
-              },
-            }}
-            disableFuture={true}
-            minDate={tenYearsAgo}
-            maxDate={endDate ? endDate : undefined}
-          />
-        </LocalizationProvider>
+        <CustomDatePicker
+          language={i18n.language}
+          label={t('filters.data_da', { ns: 'notifiche' })}
+          inputFormat={DATE_FORMAT}
+          value={startDate}
+          onChange={(value: DatePickerTypes) => {
+            formikInstance
+              .setFieldValue('startDate', value || tenYearsAgo)
+              .then(() => {
+                setStartDate(value);
+              })
+              .catch(() => 'error');
+          }}
+          renderInput={(params) => (
+            <TextField
+              id="startDate"
+              name="startDate"
+              {...params}
+              fullWidth
+              sx={{ marginBottom: isMobile ? '20px' : '0' }}
+              size="small"
+              aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
+              inputProps={{
+                ...params.inputProps,
+                inputMode: 'text',
+                'aria-label': t('filters.data_da-input-aria-label'),
+                type: 'text',
+                placeholder: 'gg/mm/aaaa',
+                'data-testid': 'input(start date)',
+              }}
+            />
+          )}
+          disableFuture={true}
+          minDate={tenYearsAgo}
+          maxDate={endDate ? endDate : undefined}
+        />
       </Grid>
       <Grid item lg={2} xs={12}>
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
-          <CustomDatePicker
-            label={t('filters.data_a', { ns: 'notifiche' })}
-            format={DATE_FORMAT}
-            value={endDate}
-            onChange={(value: DatePickerTypes) => {
-              formikInstance
-                .setFieldValue('endDate', value || today)
-                .then(() => {
-                  setEndDate(value);
-                })
-                .catch(() => 'error');
-            }}
-            slotProps={{
-              textField: {
-                id: 'endDate',
-                name: 'endDate',
-                fullWidth: true,
-                sx: { marginBottom: isMobile ? '20px' : '0' },
-                size: 'small',
-                'aria-label': t('filters.data_a-aria-label'),
-                inputProps: {
-                  inputMode: 'text',
-                  'aria-label': t('filters.data_a-input-aria-label'),
-                  type: 'text',
-                  placeholder: 'gg/mm/aaaa',
-                  'data-testid': 'input(end date)',
-                },
-              },
-            }}
-            disableFuture={true}
-            minDate={startDate ? startDate : tenYearsAgo}
-          />
-        </LocalizationProvider>
+        <CustomDatePicker
+          language={i18n.language}
+          label={t('filters.data_a', { ns: 'notifiche' })}
+          inputFormat={DATE_FORMAT}
+          value={endDate}
+          onChange={(value: DatePickerTypes) => {
+            formikInstance
+              .setFieldValue('endDate', value || today)
+              .then(() => {
+                setEndDate(value);
+              })
+              .catch(() => 'error');
+          }}
+          renderInput={(params: TextFieldProps) => (
+            <TextField
+              id="endDate"
+              name="endDate"
+              {...params}
+              fullWidth
+              sx={{ marginBottom: isMobile ? '20px' : '0' }}
+              size="small"
+              aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
+              inputProps={{
+                ...params.inputProps,
+                inputMode: 'text',
+                'aria-label': t('filters.data_a-input-aria-label'),
+                type: 'text',
+                placeholder: 'gg/mm/aaaa',
+                'data-testid': 'input(end date)',
+              }}
+            />
+          )}
+          disableFuture={true}
+          minDate={startDate ? startDate : tenYearsAgo}
+        />
       </Grid>
     </Fragment>
   );

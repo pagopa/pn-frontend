@@ -1,4 +1,3 @@
-import currentLocale from 'date-fns/locale/it';
 import { Form, Formik, FormikErrors, FormikTouched } from 'formik';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,13 +20,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   CourtesyPage,
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
+  EventCreatedDelegationType,
   PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
@@ -61,17 +59,36 @@ const getError = <TTouch, TError>(
 ) => fieldTouched && fieldError;
 
 const NuovaDelega = () => {
-  const { t } = useTranslation(['deleghe', 'common']);
+  const { t, i18n } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
+  const [createdDelegation, setCreatedDelegation] = useState<
+    EventCreatedDelegationType | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (createdDelegation && created) {
+      trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_SUCCESS, createdDelegation);
+    }
+  }, [createdDelegation, created]);
 
   const handleSubmit = (values: NewDelegationFormProps) => {
+    setCreatedDelegation({
+      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
+      mandate_type:
+        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+    });
+
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION, {
+      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
+      mandate_type:
+        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+    });
     void dispatch(createDelegation(values));
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
@@ -164,6 +181,10 @@ const NuovaDelega = () => {
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_DATA_INPUT);
+  }, []);
+
+  useEffect(() => {
     if (loadAllEntities) {
       void dispatch(getAllEntities({}));
     }
@@ -189,9 +210,15 @@ const NuovaDelega = () => {
 
   const getOptionLabel = (option: Party) => option.name || '';
 
+  const handleGoBackAction = () => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_BACK);
+    navigate(routes.DELEGHE);
+  };
+
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
+        goBackAction={handleGoBackAction}
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>
@@ -437,42 +464,37 @@ const NuovaDelega = () => {
                           {t('nuovaDelega.form.date-duration')}
                         </Typography>
                         <FormControl fullWidth>
-                          <LocalizationProvider
-                            dateAdapter={AdapterDateFns}
-                            adapterLocale={currentLocale}
-                          >
-                            <CustomDatePicker
-                              label={t('nuovaDelega.form.endDate')}
-                              format={DATE_FORMAT}
-                              value={values.expirationDate && new Date(values.expirationDate)}
-                              minDate={tomorrow}
-                              onChange={(value: DatePickerTypes) => {
-                                setFieldTouched('expirationDate', true, false);
-                                setFieldValue('expirationDate', value);
-                              }}
-                              shouldDisableDate={isToday}
-                              slotProps={{
-                                textField: {
-                                  id: 'expirationDate',
-                                  name: 'expirationDate',
-                                  'aria-label': 'Data termine delega', // aria-label for (TextField + Button) Group
-                                  inputProps: {
-                                    inputMode: 'text',
-                                    'aria-label': 'Inserisci la data di termine della delega',
-                                    type: 'text',
-                                  },
-                                  error: Boolean(
-                                    getError(touched.expirationDate, errors.expirationDate)
-                                  ),
-                                  helperText: getError(
-                                    touched.expirationDate,
-                                    errors.expirationDate
-                                  ) as React.ReactNode,
-                                },
-                              }}
-                              disablePast={true}
-                            />
-                          </LocalizationProvider>
+                          <CustomDatePicker
+                            language={i18n.language}
+                            label={t('nuovaDelega.form.endDate')}
+                            inputFormat={DATE_FORMAT}
+                            value={values.expirationDate && new Date(values.expirationDate)}
+                            minDate={tomorrow}
+                            onChange={(value: DatePickerTypes) => {
+                              setFieldTouched('expirationDate', true, false);
+                              setFieldValue('expirationDate', value);
+                            }}
+                            shouldDisableDate={isToday}
+                            renderInput={(params) => (
+                              <TextField
+                                id="expirationDate"
+                                name="expirationDate"
+                                {...params}
+                                aria-label="Data termine delega" // aria-label for (TextField + Button) Group
+                                inputProps={{
+                                  ...params.inputProps,
+                                  inputMode: 'text',
+                                  'aria-label': 'Inserisci la data di termine della delega',
+                                  type: 'text',
+                                }}
+                                error={Boolean(
+                                  getError(touched.expirationDate, errors.expirationDate)
+                                )}
+                                helperText={getError(touched.expirationDate, errors.expirationDate)}
+                              />
+                            )}
+                            disablePast={true}
+                          />
                         </FormControl>
                       </Box>
                       <Divider sx={{ marginTop: '1rem' }} />

@@ -8,13 +8,12 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
+  NotificationDetailOtherDocument,
   NotificationStatus,
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
-  getF24Payments,
-  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -26,12 +25,21 @@ import {
   notificationToFe,
   paymentsData,
 } from '../../__mocks__/NotificationDetail.mock';
-import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { getApiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
@@ -59,6 +67,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
@@ -199,9 +208,11 @@ describe('NotificationDetail Page', () => {
   });
 
   it('checks not available documents', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, documentsAvailable: false });
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      documentsAvailable: false,
+      sentAt: '2012-01-01T00:00:00Z',
+    });
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -328,6 +339,66 @@ describe('NotificationDetail Page', () => {
     });
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-url-com');
+    });
+  });
+
+  it('executes the other document (aar) download handler', async () => {
+    const otherDocument: NotificationDetailOtherDocument = {
+      documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
+      documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
+    };
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        retryAfter: 1,
+      });
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(2);
+    const AARBox = result?.getByTestId('aarBox');
+    const AARButton = within(AARBox!).getByTestId('documentButton');
+    fireEvent.click(AARButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+
+    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
+    expect(docNotAvailableAlert).toBeInTheDocument();
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-aar-com',
+      });
+    //simulate that legal fact is now available
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 1000));
+    });
+    expect(docNotAvailableAlert).not.toBeInTheDocument();
+    fireEvent.click(AARButton);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get[3].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-aar-com');
     });
   });
 
@@ -513,6 +584,7 @@ describe('NotificationDetail Page', () => {
   });
 
   it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    jest.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -522,6 +594,12 @@ describe('NotificationDetail Page', () => {
       (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
     );
     const requiredPayment = paymentHistory[requiredPaymentIndex];
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, { result: [] });
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
+      .reply(200, paymentInfo);
     mock
       .onPost(NOTIFICATION_PAYMENT_URL(), {
         paymentNotice: {
@@ -536,37 +614,83 @@ describe('NotificationDetail Page', () => {
       .reply(200, {
         checkoutUrl: 'https://mocked-url.com',
       });
-    // render component
-    act(() => {
+
+    await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
           userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-          notificationState: {
-            notification: notificationToFe,
-            paymentsData: {
-              pagoPaF24: getPagoPaF24Payments(paymentHistory, 1),
-              f24Only: getF24Payments(paymentHistory, 1),
-            },
-            downtimeEvents: [],
-          },
         },
       });
     });
+
     const payButton = result?.getByTestId('pay-button');
-    const item = result?.getAllByTestId('pagopa-item')[requiredPaymentIndex];
+    const item = result?.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-    await waitFor(() => {
-      expect(payButton).toBeEnabled();
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    act(() => {
+      jest.advanceTimersByTime(1000);
     });
+    expect(payButton).toBeEnabled();
     fireEvent.click(payButton!);
-    await waitFor(() => {
-      expect(mock.history.post).toHaveLength(2);
-      expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
-    });
+    expect(mock.history.post).toHaveLength(2);
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
+    expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
     await waitFor(() => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
+  });
+
+  it('should show correct paginated payments', async () => {
+    let paginationData = {
+      page: 0,
+      size: 5,
+      totalElements: notificationDTO.recipients[2].payments?.length,
+    };
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, { result: [] });
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, paginationData.size))
+      .reply(200, paymentInfo);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    // check that the first 5 payments are shown
+    const pagoPaItems = result?.queryAllByTestId('pagopa-item');
+    expect(pagoPaItems).toHaveLength(5);
+
+    const pageSelector = result?.getByTestId('pageSelector');
+    const pageButtons = pageSelector?.querySelectorAll('button');
+    // the buttons are < 1 2 >
+    fireEvent.click(pageButtons![2]);
+    paginationData = {
+      ...paginationData,
+      page: 1,
+    };
+
+    // intercept the next request
+    const secondPagePaymentInfoRequest = paymentInfoRequest.slice(
+      paginationData.page * paginationData.size,
+      (paginationData.page + 1) * paginationData.size
+    );
+
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+    });
+
+    // check that the other payments are shown
+    const secondPageItems = result?.queryAllByTestId('pagopa-item');
+    expect(secondPageItems).toHaveLength(secondPagePaymentInfoRequest.length);
   });
 });

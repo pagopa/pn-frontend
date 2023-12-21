@@ -9,6 +9,7 @@ const ThrowError = () => {
 };
 
 const mockEventTrackingCallback = vi.fn();
+const mockEventTrackingCallbackRefreshPage = vi.fn();
 const mockReload = vi.fn();
 
 describe('ErrorBoundary Component', () => {
@@ -55,12 +56,16 @@ describe('ErrorBoundary Component', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     // render component
     const { container } = render(
-      <ErrorBoundary eventTrackingCallback={mockEventTrackingCallback}>
+      <ErrorBoundary
+        eventTrackingCallback={mockEventTrackingCallback}
+        eventTrackingCallbackRefreshPage={mockEventTrackingCallbackRefreshPage}
+      >
         <ThrowError />
       </ErrorBoundary>
     );
     const reloadButton = getById(container, 'reloadButton');
     fireEvent.click(reloadButton);
+    expect(mockEventTrackingCallbackRefreshPage).toBeCalledTimes(1);
     expect(mockReload).toBeCalledTimes(1);
   });
 });

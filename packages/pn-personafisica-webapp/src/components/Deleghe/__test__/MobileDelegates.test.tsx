@@ -36,7 +36,7 @@ describe('MobileDelegates Component', () => {
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
     const addDelegation = getByTestId('add-delegation');
     expect(addDelegation).toBeInTheDocument();
-    const itemCards = queryAllByTestId('itemCard');
+    const itemCards = queryAllByTestId('mobileDelegatesCards');
     expect(itemCards).toHaveLength(0);
     expect(container).toHaveTextContent(/deleghe.add/i);
     expect(container).toHaveTextContent(/deleghe.no_delegates/i);
@@ -59,7 +59,7 @@ describe('MobileDelegates Component', () => {
     const { getAllByTestId } = render(<MobileDelegates />, {
       preloadedState: { delegationsState: { delegations: { delegates: arrayOfDelegates } } },
     });
-    const itemCards = getAllByTestId('itemCard');
+    const itemCards = getAllByTestId('mobileDelegatesCards');
     expect(itemCards).toHaveLength(arrayOfDelegates.length);
     itemCards.forEach((card, index) => {
       expect(card).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
@@ -81,7 +81,7 @@ describe('MobileDelegates Component', () => {
       },
     });
     // get first row
-    const itemCards = getAllByTestId('itemCard');
+    const itemCards = getAllByTestId('mobileDelegatesCards');
     const delegationMenuIcon = within(itemCards[0]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);

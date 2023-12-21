@@ -1,13 +1,7 @@
 import React from 'react';
 import { vi } from 'vitest';
 
-import {
-  formatDate,
-  formatToTimezoneString,
-  getNextDay,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { formatDate, formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
@@ -31,12 +25,13 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
 }));
 
 const initialState = {
-  startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(today),
+  startDate: tenYearsAgo,
+  endDate: today,
   iunMatch: '',
   mandateId: undefined,
 };
@@ -179,8 +174,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });
@@ -209,7 +204,7 @@ describe('Filter Notifications Table Component', () => {
     todayM.setHours(0, 0, 0, 0);
     nineYearsAgo.setHours(0, 0, 0, 0);
     // wrong id and wrong start date
-    await setFormValues(form!, nineYearsAgo, getNextDay(todayM), '1234-5678-910A-BCDFGH-I-OL');
+    await setFormValues(form!, nineYearsAgo, todayM, '1234-5678-910A-BCDFGH-I-OL');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -298,8 +293,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });

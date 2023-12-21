@@ -44,9 +44,10 @@ type Props = {
   showHistoryButton?: boolean;
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
-  eventTrackingCallbackShowMore?: () => void;
+  handleTrackShowMoreLess?: (collapsed: boolean) => void;
   disableDownloads?: boolean;
   isParty?: boolean;
+  language?: string;
 };
 
 /**
@@ -95,6 +96,7 @@ const timelineStepCmp = (
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  * @param disableDownloads if notification is disabled
  * @param isParty if is party chip rendered with opacity for status cancellation in progress
+ * @param language used to translate months in timeline
  */
 
 const NotificationDetailTimelineStep = ({
@@ -107,9 +109,10 @@ const NotificationDetailTimelineStep = ({
   showHistoryButton = false,
   historyButtonLabel,
   historyButtonClickHandler,
-  eventTrackingCallbackShowMore,
+  handleTrackShowMoreLess,
   disableDownloads,
   isParty = true,
+  language = 'it',
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -139,7 +142,7 @@ const NotificationDetailTimelineStep = ({
     undefined,
     <Fragment>
       <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-        {formatMonthString(timelineStep.activeFrom)}
+        {formatMonthString(timelineStep.activeFrom, language)}
       </Typography>
       <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
         {formatDay(timelineStep.activeFrom)}
@@ -208,7 +211,7 @@ const NotificationDetailTimelineStep = ({
 
   const handleShowMoreClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore();
+    handleTrackShowMoreLess && handleTrackShowMoreLess(!collapsed);
     setCollapsed(!collapsed);
   };
 
@@ -242,7 +245,7 @@ const NotificationDetailTimelineStep = ({
       s.elementId,
       <Fragment>
         <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
-          {formatMonthString(s.timestamp)}
+          {formatMonthString(s.timestamp, language)}
         </Typography>
         <Typography fontWeight={600} fontSize={18} data-testid="dateItemMicro">
           {formatDay(s.timestamp)}

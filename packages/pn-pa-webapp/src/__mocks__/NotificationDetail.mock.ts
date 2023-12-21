@@ -428,6 +428,74 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
       },
     },
   },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547193',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee2.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547194',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee3.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547195',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee4.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547196',
+      applyCost: true,
+      attachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlA=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-4727f193467c4c5cb26a848f0ea5aee5.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
 ];
 
 const paymentsPagoPaF24: Array<NotificationDetailPayment> = [

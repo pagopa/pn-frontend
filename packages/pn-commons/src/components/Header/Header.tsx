@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { AppBar } from '@mui/material';
 import {
   HeaderAccount,
@@ -11,6 +9,7 @@ import {
   UserAction,
 } from '@pagopa/mui-italia';
 
+import { PartyEntityWithUrl } from '../../models/Institutions';
 import { pagoPALink } from '../../utility/costants';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -39,10 +38,6 @@ type HeaderProps = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
-  /** Base Url of Selfcare for token-exchange */
-  selfcareBaseUrl?: string;
-  /** Product Id of Selfcare for token-exchange */
-  selfcareSendProdId?: string;
 };
 
 const Header = ({
@@ -58,8 +53,6 @@ const Header = ({
   onAssistanceClick,
   eventTrackingCallbackProductSwitch,
   isLogged,
-  selfcareBaseUrl,
-  selfcareSendProdId,
 }: HeaderProps) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -67,56 +60,42 @@ const Header = ({
     title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
   };
 
-  const [isHeaderReady, setIsHeaderReady] = useState(false);
-
-  const trackEvent = (url: string) => {
-    if (eventTrackingCallbackProductSwitch) {
-      eventTrackingCallbackProductSwitch(url);
-    }
-  };
-
   const handleProductSelection = (product: ProductEntity) => {
-    if (!partyId) {
-      return;
+    if (eventTrackingCallbackProductSwitch) {
+      eventTrackingCallbackProductSwitch(product.productUrl);
     }
-    // eslint-disable-next-line functional/no-let
-    let url: string;
-    /** Here is necessary to clear sessionStorage otherwise when navigating throgh Area Riservata
-     * We enter in a state when the user was previously logged in but Area Riservata and PN require
-     * another token-exchange. Since the user "seems" to be logged in due to the presence of the old token
-     * in session storage, the token-exchange doesn't happen and the application enters in a blank state
-     * Further analysis is required when the navigation from PN will be allowed also to other products and
-     * not only to Area Reservata
-     *
-     * Carlotta Dimatteo 07/11/2022
-     */
-    sessionStorage.clear();
-
-    if (product.id === 'selfcare') {
-      url = `${selfcareBaseUrl}/dashboard/${partyId}`;
-      window.location.assign(url);
-      trackEvent(url);
-      return;
+    if (product.productUrl) {
+      /* eslint-disable-next-line functional/immutable-data */
+      window.location.assign(product.productUrl);
+      /** Here is necessary to clear sessionStorage otherwise when navigating through Area Riservata
+       * we enter in a state where the user was previously logged in but Area Riservata and PN require
+       * another token-exchange. Since the user "seems" to be logged in due to the presence of the old token
+       * in session storage, the token-exchange doesn't happen and the application enters in a blank state.
+       *
+       * Carlotta Dimatteo 07/11/2022
+       */
+      sessionStorage.clear();
     }
-
-    url = `${selfcareBaseUrl}/token-exchange?institutionId=${partyId}&productId=${product.id}`;
-    window.location.assign(url);
-    trackEvent(url);
   };
 
-  const handlePartySelection = (party: PartyEntity) => {
-    window.location.assign(
-      `${selfcareBaseUrl}/token-exchange?institutionId=${party.id}&productId=${selfcareSendProdId}`
-    );
+  const handlePartySelection = (party: PartyEntityWithUrl) => {
+    if (party.entityUrl) {
+      window.location.assign(party.entityUrl);
+      /** Here is necessary to clear sessionStorage otherwise when navigating through Parties
+       * we enter in a state where the user was logged with previous party. Due to this, when we login with another party,
+       * we see for a moment the informations about the previous party.
+       *
+       * Andrea Cimini 31/10/2023
+       */
+      sessionStorage.clear();
+    }
   };
 
-  const enableHeaderProduct = showHeaderProduct && (isLogged || isLogged === undefined);
-
-  useEffect(() => {
-    if ((productsList && productsList.length > 0) && (partyList && partyList.length > 0)) {
-      setIsHeaderReady(true);
-    }
-  }, [productsList, partyList]);
+  const enableHeaderProduct =
+    showHeaderProduct &&
+    (isLogged || isLogged === undefined) &&
+    productsList &&
+    productsList.length > 0;
 
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
@@ -129,7 +108,7 @@ const Header = ({
         enableDropdown={enableDropdown}
         userActions={userActions}
       />
-      {enableHeaderProduct && isHeaderReady && (
+      {enableHeaderProduct && (
         <HeaderProduct
           key={partyId}
           productId={productId}
@@ -137,7 +116,7 @@ const Header = ({
           productsList={productsList}
           partyList={partyList}
           onSelectedProduct={handleProductSelection}
-          onSelectedParty={handlePartySelection}
+          onSelectedParty={(party) => handlePartySelection(party as PartyEntityWithUrl)}
         />
       )}
     </AppBar>

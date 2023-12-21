@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Button } from '@mui/material';
 
 import { createMatchMedia, render } from '../../../test-utils';
@@ -38,12 +39,12 @@ describe('PnDialogActions Component', () => {
     const actions = queryByTestId('dialog-actions');
     expect(actions).toBeInTheDocument();
     expect(actions).not.toHaveClass('MuiDialogActions-spacing');
-    expect(actions).toHaveStyle('text-align: center; flex-direction: column');
+    expect(actions).toHaveStyle('text-align: center; flex-direction: column-reverse');
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     buttons.forEach((button, index) => {
       expect(button).toHaveClass('MuiButton-fullWidth');
-      expect(button).toHaveStyle(index === 0 ? 'margin-top: 0' : 'margin-top: 10px');
+      expect(button).toHaveStyle(index === 0 ? 'margin-bottom: 0' : 'margin-bottom: 16px');
     });
   });
 });

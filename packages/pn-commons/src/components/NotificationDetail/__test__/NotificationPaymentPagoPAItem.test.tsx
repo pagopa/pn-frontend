@@ -34,7 +34,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -64,7 +64,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={{ ...pagoPAItem, amount: 999, applyCost: true }}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -81,7 +81,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -103,7 +103,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -121,7 +121,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -140,7 +140,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -159,7 +159,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={true}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={handleDeselectPaymentMk}
         isCancelled={false}
       />
@@ -170,19 +170,19 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     expect(handleDeselectPaymentMk).toBeCalledTimes(1);
   });
 
-  it('Should call handleReloadPayment when reload button is clicked', async () => {
+  it('Should call handleFetchPaymentsInfo when reload button is clicked', async () => {
     const item = {
       ...pagoPAItem,
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.GENERIC_ERROR,
     };
-    const handleReloadPaymentMk = vi.fn();
+    const handleFetchPaymentsInfoMk = vi.fn();
     const { getByTestId } = render(
       <NotificationPaymentPagoPAItem
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={handleReloadPaymentMk}
+        handleFetchPaymentsInfo={handleFetchPaymentsInfoMk}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -190,7 +190,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
     const reloadButton = getByTestId('reload-button');
     fireEvent.click(reloadButton);
     await waitFor(() => {
-      expect(handleReloadPaymentMk).toBeCalledTimes(1);
+      expect(handleFetchPaymentsInfoMk).toBeCalledTimes(1);
     });
   });
 
@@ -205,7 +205,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -229,7 +229,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -251,7 +251,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -274,7 +274,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -297,7 +297,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -320,7 +320,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={item}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={false}
       />
@@ -337,7 +337,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={pagoPAItem}
         loading={false}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={true}
       />
@@ -353,7 +353,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         pagoPAItem={pagoPAItem}
         loading={true}
         isSelected={false}
-        handleReloadPayment={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
         handleDeselectPayment={() => void 0}
         isCancelled={true}
       />

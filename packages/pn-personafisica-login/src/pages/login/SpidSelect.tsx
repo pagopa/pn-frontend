@@ -22,11 +22,11 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
   const getSPID = (IDP: IdentityProvider) => {
-    trackEventByType(TrackEventType.LOGIN_IDP_SELECTED, {
+    trackEventByType(TrackEventType.SEND_IDP_SELECTED, {
       SPID_IDP_NAME: IDP.name,
       SPID_IDP_ID: IDP.entityId,
     });
-    window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
+    window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`);
   };
 
   return (

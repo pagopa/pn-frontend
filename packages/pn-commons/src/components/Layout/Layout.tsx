@@ -36,11 +36,11 @@ type Props = {
   onLanguageChanged?: (langCode: string) => void;
   /** event callback on app crash  */
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
-  /** event callback on change language */
-  eventTrackingCallbackFooterChangeLanguage?: () => void;
   /** Track product switch action */
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
+  eventTrackingCallbackRefreshPage?: () => void;
+  /** event on refresh page click button */
   onAssistanceClick?: () => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
@@ -49,10 +49,6 @@ type Props = {
   showFooter?: boolean;
   /** Shows or hides terms of service */
   hasTermsOfService?: boolean;
-  /** Base Url of Selfcare for token-exchange */
-  selfcareBaseUrl?: string;
-/** Product Id of Selfcare for token-exchange */
-  selfcareSendProdId?: string;
 };
 
 export default function Layout({
@@ -70,20 +66,19 @@ export default function Layout({
   userActions,
   onLanguageChanged = () => {},
   eventTrackingCallbackAppCrash,
-  eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
+  eventTrackingCallbackRefreshPage,
   onAssistanceClick,
   isLogged,
   showHeader = true,
   showFooter = true,
   hasTermsOfService,
-  selfcareBaseUrl,
-  selfcareSendProdId
-}: Props) {
+}: Readonly<Props>) {
   return (
     <ErrorBoundary
       sx={{ height: 'calc(100vh - 5px)' }}
       eventTrackingCallback={eventTrackingCallbackAppCrash}
+      eventTrackingCallbackRefreshPage={eventTrackingCallbackRefreshPage}
     >
       {/* calc fixes the layout discrepancy given by the version box */}
       <Stack
@@ -105,8 +100,6 @@ export default function Layout({
               onAssistanceClick={onAssistanceClick}
               eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
               isLogged={isLogged}
-              selfcareBaseUrl={selfcareBaseUrl}
-              selfcareSendProdId={selfcareSendProdId}
             />
           )}
           <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
@@ -132,7 +125,6 @@ export default function Layout({
             <Footer
               loggedUser={loggedUser.id !== ''}
               onLanguageChanged={onLanguageChanged}
-              eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
               hasTermsOfService={hasTermsOfService}
             />
           )}

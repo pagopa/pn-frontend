@@ -1,16 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import {
-  formatToTimezoneString,
-  getNextDay,
   GetNotificationsResponse,
   NotificationStatus,
+  formatToTimezoneString,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 
-import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { getApiClient } from '../../../api/apiClients';
+import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
 import { store } from '../../store';
 import { getSentNotifications } from '../actions';
@@ -40,8 +40,8 @@ describe('Dashboard redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(today),
+        startDate: tenYearsAgo,
+        endDate: today,
         status: '',
         recipientId: '',
         iunMatch: '',
@@ -61,13 +61,18 @@ describe('Dashboard redux state tests', () => {
 
   it('Should be able to fetch the notifications list', async () => {
     const mockRequest = {
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      startDate: tenYearsAgo,
+      endDate: today,
       status: '',
       recipientId: '',
       iunMatch: '',
     };
-    mock.onGet(NOTIFICATIONS_LIST(mockRequest)).reply(200, notificationsDTO);
+    const mockRequestString = {
+      ...mockRequest,
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(today),
+    };
+    mock.onGet(NOTIFICATIONS_LIST(mockRequestString)).reply(200, notificationsDTO);
     const action = await store.dispatch(getSentNotifications(mockRequest));
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');
@@ -110,8 +115,8 @@ describe('Dashboard redux state tests', () => {
   it('Should be able to change filters', () => {
     const action = store.dispatch(
       setNotificationFilters({
-        startDate: '2022-02-22T14:20:20.566Z',
-        endDate: '2022-02-27T14:20:20.566Z',
+        startDate: new Date('2022-02-22T14:20:20.566Z'),
+        endDate: new Date('2022-02-27T14:20:20.566Z'),
         recipientId: 'mocked-recipientId',
         status: NotificationStatus.PAID,
         subjectRegExp: 'mocked-regexp',
@@ -121,8 +126,8 @@ describe('Dashboard redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('dashboardSlice/setNotificationFilters');
     expect(payload).toEqual({
-      startDate: '2022-02-22T14:20:20.566Z',
-      endDate: '2022-02-27T14:20:20.566Z',
+      startDate: new Date('2022-02-22T14:20:20.566Z'),
+      endDate: new Date('2022-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',

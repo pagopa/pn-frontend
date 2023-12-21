@@ -9,13 +9,13 @@ import {
   AppResponsePublisher,
   CodeModal,
   CustomTagGroup,
-  Item,
+  Row,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
-import { DelegationStatus } from '../../models/Deleghe';
+import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
 import { User } from '../../redux/auth/types';
 import {
   acceptDelegation,
@@ -54,7 +54,7 @@ type Props = {
   menuType: 'delegates' | 'delegators';
   id: string;
   userLogged?: User;
-  row?: Item;
+  row?: Row<DelegationColumnData>;
   onAction?: (data: any) => void;
 };
 

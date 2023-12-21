@@ -282,16 +282,22 @@ describe('Recipient Component with payment enabled', () => {
     expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
     await testInput(form!, 'recipients[1].firstName', randomString(81));
     expect(firstNameError).toHaveTextContent('too-long-field-error');
-    // taxId
+    // taxId empty
     await testInput(form, 'recipients[1].taxId', '', true);
     const taxIdError = form.querySelector('[id="recipients[1].taxId-helper-text"]');
     expect(taxIdError).toHaveTextContent('required-field');
+    // taxId using PF type on PG recipient
+    await testInput(form, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
+    expect(taxIdError).toHaveTextContent('fiscal-code-error');
+    // taxId error
     await testInput(form!, 'recipients[1].taxId', 'wrong-fiscal-code');
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     expect(submitButton).toBeDisabled();
     // identical taxId
-    await testInput(form!, 'recipients[0].taxId', newNotification.recipients[0].taxId);
-    await testInput(form!, 'recipients[1].taxId', newNotification.recipients[0].taxId);
+    const radioPhysicalPerson = result?.queryAllByLabelText('physical-person')[1];
+    fireEvent.click(radioPhysicalPerson!);
+    await testInput(form!, 'recipients[0].taxId', newNotification.recipients[0].taxId, true);
+    await testInput(form!, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
     expect(taxIdError).toHaveTextContent('identical-fiscal-codes-error');
     // identical creditorTaxId and noticeCode
     await testInput(

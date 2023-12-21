@@ -9,8 +9,6 @@ import {
   PaginationData,
   TitleBox,
   calculatePages,
-  formatToTimezoneString,
-  getNextDay,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -85,12 +83,8 @@ const Dashboard = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-    void dispatch(
-      getSentNotifications({
-        ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
-      })
-    );
+
+    void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   useEffect(() => {

@@ -17,7 +17,7 @@ describe('MobileDelegators Component', () => {
   it('renders the empty state', () => {
     const { container, queryAllByTestId } = render(<MobileDelegators />);
     expect(container).toHaveTextContent(/deleghe.delegatorsTitle/i);
-    const itemCards = queryAllByTestId('itemCard');
+    const itemCards = queryAllByTestId('mobileDelegatorsCards');
     expect(itemCards).toHaveLength(0);
     expect(container).toHaveTextContent(/deleghe.no_delegators/i);
   });
@@ -26,7 +26,7 @@ describe('MobileDelegators Component', () => {
     const { getAllByTestId } = render(<MobileDelegators />, {
       preloadedState: { delegationsState: { delegations: { delegators: arrayOfDelegators } } },
     });
-    const itemCards = getAllByTestId('itemCard');
+    const itemCards = getAllByTestId('mobileDelegatorsCards');
     expect(itemCards).toHaveLength(arrayOfDelegators.length);
     itemCards.forEach((card, index) => {
       expect(card).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);

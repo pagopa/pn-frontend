@@ -6,7 +6,7 @@ import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ApiKey, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../models/user';
 
-function LocalizeStatus(
+function localizeStatus(
   status: string,
   history: Array<ApiKeyStatusHistory>,
   translationFunction: any
@@ -75,17 +75,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...LocalizeStatus('enabled', statusHistory, translationFunction),
+        ...localizeStatus('enabled', statusHistory, translationFunction),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...LocalizeStatus('blocked', statusHistory, translationFunction),
+        ...localizeStatus('blocked', statusHistory, translationFunction),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...LocalizeStatus('rotated', statusHistory, translationFunction),
+        ...localizeStatus('rotated', statusHistory, translationFunction),
       };
     default:
       return {

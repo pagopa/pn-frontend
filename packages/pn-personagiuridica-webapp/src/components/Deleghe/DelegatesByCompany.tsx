@@ -1,18 +1,26 @@
+import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   EmptyState,
-  Item,
+  Row,
+  SmartBody,
+  SmartBodyCell,
+  SmartBodyRow,
+  SmartHeader,
+  SmartHeaderCell,
   SmartTable,
   SmartTableData,
+  Sort,
+  sortArray,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { DelegatesColumn, DelegationStatus } from '../../models/Deleghe';
+import { DelegationColumnData } from '../../models/Deleghe';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegatesByCompany } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -20,8 +28,7 @@ import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
 import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
-import { getDelegationStatusKeyAndColor } from '../../utility/status.utility';
-import { Menu, OrganizationsList } from './DelegationsElements';
+import DelegationDataSwitch from './DelegationDataSwitch';
 
 type Props = {
   handleAddDelegationClick: (source: string) => void;
@@ -57,110 +64,74 @@ const DelegatesByCompany = () => {
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
-  const userLogged = useAppSelector((state: RootState) => state.userState.user);
 
-  const rows: Array<Item> = delegationToItem(delegatesByCompany);
+  const [sort, setSort] = useState<Sort<DelegationColumnData>>({ orderBy: '', order: 'asc' });
+  const data = delegationToItem(delegatesByCompany) as Array<Row<DelegationColumnData>>;
+  const rows = sortArray(sort.order, sort.orderBy, data);
 
   const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, { source });
   };
 
-  const delegatesColumn: Array<SmartTableData<DelegatesColumn>> = [
+  const delegatesColumn: Array<SmartTableData<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
       tableConfiguration: {
-        width: '13%',
+        cellProps: { width: '13%' },
         sortable: true,
       },
-      getValue(value) {
-        return (
-          <Typography fontWeight={'bold'}>
-            <>{value}</>
-          </Typography>
-        );
-      },
       cardConfiguration: {
-        position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
       tableConfiguration: {
-        width: '11%',
-      },
-      getValue(value) {
-        return <>{value}</>;
-      },
-      cardConfiguration: {
-        position: 'body',
+        cellProps: { width: '11%' },
       },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
       tableConfiguration: {
-        width: '11%',
+        cellProps: { width: '11%' },
         sortable: true,
-      },
-      getValue(value) {
-        return <>{value}</>;
-      },
-      cardConfiguration: {
-        position: 'body',
       },
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       tableConfiguration: {
-        width: '11%',
-      },
-      getValue(value: Array<string>) {
-        return <OrganizationsList organizations={value} visibleItems={3} />;
+        cellProps: { width: '11%' },
       },
       cardConfiguration: {
-        position: 'body',
-        notWrappedInTypography: true,
+        wrapValueInTypography: false,
       },
     },
     {
       id: 'status',
       label: t('deleghe.table.status'),
       tableConfiguration: {
-        width: '18%',
-      },
-      getValue(value: string) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        return <Chip id={`chip-status-${color}`} label={t(key)} color={color} />;
+        cellProps: { width: '18%' },
       },
       cardConfiguration: {
-        position: 'header',
+        position: 'left',
+        isCardHeader: true,
         gridProps: { xs: 8 },
       },
     },
     {
-      id: 'id',
+      id: 'menu',
       label: '',
       tableConfiguration: {
-        width: '5%',
-      },
-      getValue(value: string, data: Item) {
-        return (
-          <Menu
-            menuType={'delegates'}
-            id={value}
-            row={data}
-            userLogged={userLogged}
-            onAction={handleRewoke}
-          />
-        );
+        cellProps: { width: '5%' },
       },
       cardConfiguration: {
-        position: 'header',
+        position: 'right',
+        isCardHeader: true,
         gridProps: { xs: 4 },
       },
     },
@@ -211,8 +182,44 @@ const DelegatesByCompany = () => {
               asc: t('sort.asc', { ns: 'notifiche' }),
               dsc: t('sort.desc', { ns: 'notifiche' }),
             }}
-            currentSort={{ orderBy: '', order: 'asc' }}
-          ></SmartTable>
+            currentSort={sort}
+            onChangeSorting={setSort}
+            testId="delegatesTable"
+          >
+            <SmartHeader>
+              {delegatesColumn.map((column) => (
+                <SmartHeaderCell
+                  key={column.id.toString()}
+                  columnId={column.id}
+                  sortable={column.tableConfiguration.sortable}
+                >
+                  {column.label}
+                </SmartHeaderCell>
+              ))}
+            </SmartHeader>
+            <SmartBody>
+              {rows.map((row, index) => (
+                <SmartBodyRow key={row.id} index={index} testId="delegatesBodyRow">
+                  {delegatesColumn.map((column) => (
+                    <SmartBodyCell
+                      key={column.id.toString()}
+                      columnId={column.id}
+                      tableProps={column.tableConfiguration}
+                      cardProps={column.cardConfiguration}
+                      isCardHeader={column.cardConfiguration?.isCardHeader}
+                    >
+                      <DelegationDataSwitch
+                        data={row}
+                        type={column.id}
+                        menuType="delegates"
+                        onAction={handleRewoke}
+                      />
+                    </SmartBodyCell>
+                  ))}
+                </SmartBodyRow>
+              ))}
+            </SmartBody>
+          </SmartTable>
         ) : (
           <EmptyState>
             <Trans

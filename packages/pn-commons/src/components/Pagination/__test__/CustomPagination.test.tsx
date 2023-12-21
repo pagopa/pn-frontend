@@ -39,6 +39,20 @@ describe('CustomPagination Component', () => {
     expect(pageSelector).toBeInTheDocument();
   });
 
+  it('should not show size selector if hideSizeSelector is true', () => {
+    // render component
+    const { queryByTestId } = render(
+      <CustomPagination
+        paginationData={paginationData}
+        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
+        onPageRequest={handlePageChange}
+        hideSizeSelector
+      />
+    );
+    const itemsPerPageSelector = queryByTestId('itemsPerPageSelector');
+    expect(itemsPerPageSelector).not.toBeInTheDocument();
+  });
+
   it('changes items per page', async () => {
     const { container, getAllByRole, getByRole } = render(
       <CustomPagination

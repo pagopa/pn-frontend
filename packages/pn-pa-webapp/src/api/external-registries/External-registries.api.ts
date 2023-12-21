@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
 
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { Institution, PartyEntityWithUrl, Product } from '@pagopa-pn/pn-commons';
+import { ProductEntity } from '@pagopa/mui-italia';
 
-import { Institution } from '../../models/Institutions';
-import { Product } from '../../models/Products';
 import { Party } from '../../models/party';
+import { getConfiguration } from '../../services/configuration.service';
 import { apiClient } from '../apiClients';
 import {
   GET_INSTITUTIONS,
@@ -28,7 +28,7 @@ export const ExternalRegistriesAPI = {
       .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
       .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
 
-  getInstitutions: (): Promise<Array<PartyEntity>> =>
+  getInstitutions: (): Promise<Array<PartyEntityWithUrl>> =>
     apiClient
       .get<Array<Institution>>(GET_INSTITUTIONS())
       .then((response: AxiosResponse<Array<Institution>>) =>
@@ -38,6 +38,9 @@ export const ExternalRegistriesAPI = {
           productRole: institution.userProductRoles[0],
           logoUrl: undefined,
           parentName: institution.rootParent?.description,
+          entityUrl: `${getConfiguration().SELFCARE_BASE_URL}/token-exchange?institutionId=${
+            institution.id
+          }&productId=${getConfiguration().SELFCARE_SEND_PROD_ID}`,
         }))
       ),
 
@@ -48,7 +51,9 @@ export const ExternalRegistriesAPI = {
         response.data.map((product) => ({
           id: product.id,
           title: product.title,
-          productUrl: product.urlBO,
+          productUrl: `${
+            getConfiguration().SELFCARE_BASE_URL
+          }/token-exchange?institutionId=${institutionId}&productId=${product.id}`,
           linkType: 'external',
         }))
       ),

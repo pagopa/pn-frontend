@@ -9,6 +9,7 @@ import {
   fireEvent,
   initLocalizationForTest,
   render,
+  theme,
   within,
 } from '../../../test-utils';
 import { formatDate } from '../../../utility';
@@ -62,7 +63,7 @@ const checkStatusField = (status: DowntimeStatus, column: HTMLElement) => {
   const statusChip = within(column).getByTestId('downtime-status');
   expect(statusChip).toHaveStyle({
     'background-color':
-      status === DowntimeStatus.KO ? fakePalette.error.light : fakePalette.success.light,
+      status === DowntimeStatus.KO ? theme.palette.error.light : theme.palette.success.light,
   });
 };
 
@@ -85,7 +86,7 @@ describe('DesktopDowntimeLog component', () => {
       );
     });
     // check header
-    const headerRowColumns = result.getAllByTestId('tableHeadCell');
+    const headerRowColumns = result.getAllByTestId('tableDowntimeLog.header.cell');
     headerRowColumns.forEach((column, index) => {
       expect(column).toHaveTextContent(`appStatus - downtimeList.columnHeader.${columns[index]}`);
     });
@@ -93,7 +94,7 @@ describe('DesktopDowntimeLog component', () => {
     const rows = result.getAllByTestId('tableDowntimeLog.row');
     expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length);
     rows.forEach((row, index) => {
-      const dataColumns = within(row).getAllByTestId('tableBodyCell');
+      const dataColumns = within(row).getAllByTestId('tableDowntimeLog.row.cell');
       const currentLog = exampleDowntimeLogPage.downtimes[index];
       dataColumns.forEach((column, jindex) => {
         if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {

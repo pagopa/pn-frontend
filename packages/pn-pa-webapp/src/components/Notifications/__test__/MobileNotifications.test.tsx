@@ -21,6 +21,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
+    i18n: { language: 'it' },
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
@@ -55,7 +56,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards');
     expect(norificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
@@ -75,7 +76,7 @@ describe('MobileNotifications Component', () => {
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('itemCard');
+    const norificationCards = result!.queryAllByTestId('mobileCards');
     expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
@@ -119,7 +120,7 @@ describe('MobileNotifications Component', () => {
         />
       );
     });
-    const norificationCards = result!.getAllByTestId('itemCard');
+    const norificationCards = result!.getAllByTestId('mobileCards');
     const notificationsCardButton = norificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {

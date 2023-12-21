@@ -91,14 +91,14 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get first delegate row
-    let delegatesRows = result.getAllByTestId('delegatesTable.row');
+    let delegatesRows = result.getAllByTestId('delegatesTable.body.row');
     const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);
     const revokeDelegate = await waitFor(() => result.getByTestId('menuItem-revokeDelegate'));
     // show confirmation dialog
     fireEvent.click(revokeDelegate);
-    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    const dialog = await waitFor(() => result.getByTestId('dialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.revocation_question');
     const confirmButton = within(dialog).getByRole('button', {
@@ -114,7 +114,7 @@ describe('Deleghe page', () => {
       expect(dialog).not.toBeInTheDocument();
     });
     // check that the list of delegates is updated
-    delegatesRows = result.getAllByTestId('delegatesTable.row');
+    delegatesRows = result.getAllByTestId('delegatesTable.body.row');
     expect(delegatesRows).toHaveLength(arrayOfDelegates.length - 1);
     delegatesRows.forEach((row, index) => {
       // index + 1 because i suppose that the first delegate is revoked
@@ -130,14 +130,14 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get second delegator row
-    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     const delegationMenuIcon = within(delegatorsRows[1]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);
     const rejectDelegator = await waitFor(() => result.getByTestId('menuItem-rejectDelegator'));
     // show confirmation dialog
     fireEvent.click(rejectDelegator);
-    const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
+    const dialog = await waitFor(() => result.getByTestId('dialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.rejection_question');
     const confirmButton = within(dialog).getByRole('button', {
@@ -153,7 +153,7 @@ describe('Deleghe page', () => {
       expect(dialog).not.toBeInTheDocument();
     });
     // check that the list of delegators is updated
-    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length - 1);
     const newDelegators = arrayOfDelegators.filter(
       (del) => del.mandateId !== arrayOfDelegators[1].mandateId
@@ -175,7 +175,7 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get first delegator row
-    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     const acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
     fireEvent.click(acceptButton);
@@ -205,7 +205,7 @@ describe('Deleghe page', () => {
       expect(dialog).not.toBeInTheDocument();
     });
     // check that the list of delegators is updated
-    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
@@ -227,7 +227,7 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get first delegator row
-    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     let acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
     fireEvent.click(acceptButton);
@@ -254,7 +254,7 @@ describe('Deleghe page', () => {
       });
     });
     // check that nothing is changed
-    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);

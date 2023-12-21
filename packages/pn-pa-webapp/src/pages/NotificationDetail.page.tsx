@@ -102,7 +102,7 @@ const NotificationDetail: React.FC = () => {
    * ---------------------------------
    * Carlos Lombardi, 2023.02.03
    */
-  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+  const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
 
@@ -329,15 +329,13 @@ const NotificationDetail: React.FC = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}>
-                <TimedMessage
-                  timeout={timeoutMessage}
-                  message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  }
-                />
+                <TimedMessage timeout={timeoutMessage}>
+                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>
+                </TimedMessage>
                 <NotificationDetailTimeline
+                  language={i18n.language}
                   recipients={recipients}
                   statusHistory={notification.notificationStatusHistory}
                   title={t('detail.timeline-title', { ns: 'notifiche' })}
