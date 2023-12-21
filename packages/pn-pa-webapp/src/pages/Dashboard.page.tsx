@@ -13,13 +13,12 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-// import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import * as routes from '../navigation/routes.const';
 import {
   DASHBOARD_ACTIONS,
-  getSentNotifications, // setSorting, // Riabilitare con la issue PN-1124
+  getSentNotifications,
 } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -58,14 +57,6 @@ const Dashboard = () => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
-  // Sort handlers
-  // Riabilitare con la issue PN-1124
-  /*
-  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
-    dispatch(setSorting(s));
-  };
-  */
 
   // route to Manual Send
   const handleRouteManualSend = () => {
@@ -122,14 +113,13 @@ const Dashboard = () => {
             >
               {t('new-notification-button')}
             </Button> :
-              <>
               <Alert severity="warning" action={
                 <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
-                  Controlla lo stato della piattaforma
+                  {t('manual-send-disabled-action')}
                 </ButtonNaked>
               }>
-                In questo momento, non è possibile inviare nuove notifiche.
-              </Alert></>}
+                {t('manual-send-disabled-message')}
+              </Alert>}
 
           </Box>
         }
