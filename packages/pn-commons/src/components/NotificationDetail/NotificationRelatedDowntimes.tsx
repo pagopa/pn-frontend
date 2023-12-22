@@ -27,6 +27,8 @@ type Props = {
   apiId: string;
   // for disabled downloads
   disableDownloads?: boolean;
+  // callback function when component is ready
+  componentReady?: () => void;
 };
 
 /*
@@ -76,6 +78,12 @@ const NotificationRelatedDowntimes = (props: Props) => {
     url: props.downtimeLegalFactUrl,
     clearDownloadAction: props.clearDowntimeLegalFactData,
   });
+
+  const componentReadyFn = () => {
+    if (props.componentReady) {
+      props.componentReady();
+    }
+  };
 
   /*
    * Decide whether the events are to be obtained, in such case it determines the time range
@@ -137,6 +145,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
         completedRecord?.activeFrom || new Date().toISOString()
       );
     }
+    componentReadyFn();
   }, [props.notificationStatusHistory]);
 
   useEffect(() => doFetchEvents(), [doFetchEvents]);
