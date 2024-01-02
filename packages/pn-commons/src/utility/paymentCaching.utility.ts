@@ -38,7 +38,6 @@ const validateCache = (cache: string, iun: string) => {
     if (process.env.NODE_ENV === 'development') {
       console.warn(error);
     }
-    clearPaymentCache();
     return false;
   }
 };
@@ -58,7 +57,7 @@ export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string)
   const paymentCache = getPaymentCache(iun);
 
   if (!paymentCache) {
-    setPaymentCache({ iun, timestamp: new Date().toISOString() }, iun);
+    setPaymentCache({ iun, timestamp: new Date().toISOString(), payments }, iun);
   }
 
   if (paymentCache?.payments) {
@@ -70,37 +69,32 @@ export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string)
     );
 
     if (paymentCache.currentPayment) {
-      deletePropertiesInPaymentCache(['currentPayment'], iun);
+      deletePropertiesInPaymentCache(['currentPayment'], paymentCache);
     }
 
     setPaymentCache({ payments: newPaymentCache }, iun);
-  } else {
-    setPaymentCache({ payments }, iun);
   }
 };
 
-export const deletePropertiesInPaymentCache = (
+const deletePropertiesInPaymentCache = (
   properties: Array<keyof PaymentCache>,
-  iun: string
+  paymentCache: PaymentCache
 ): void => {
-  const paymentCache = getPaymentCache(iun);
+  const cleanedPaymentCache = { ...paymentCache };
+  properties.forEach((property) => {
+    // eslint-disable-next-line functional/immutable-data
+    delete cleanedPaymentCache[property];
+  });
 
-  if (paymentCache) {
-    properties.forEach((property) => {
-      // eslint-disable-next-line functional/immutable-data
-      delete paymentCache[property];
-    });
-
-    sessionStorage.setItem(PAYMENT_CACHE_KEY, JSON.stringify(paymentCache));
-  }
+  sessionStorage.setItem(PAYMENT_CACHE_KEY, JSON.stringify(cleanedPaymentCache));
 };
 
-export const clearPaymentCache = (): void => {
+const clearPaymentCache = (): void => {
   sessionStorage.removeItem(PAYMENT_CACHE_KEY);
 };
 
 // Timestamp is in ISO format
-export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string) => {
+const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string) => {
   const date1 = new Date(timestamp1);
   const date2 = new Date(timestamp2);
 
@@ -118,7 +112,7 @@ export const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string
   }
 };
 
-export const checkIun = (iun: string, cachedIun: string): boolean => {
+const checkIun = (iun: string, cachedIun: string): boolean => {
   if (iun === cachedIun) {
     return true;
   } else {

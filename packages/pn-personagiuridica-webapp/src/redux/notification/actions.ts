@@ -117,7 +117,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
       const iun = notificationState.notification.iun;
       const paymentCache = getPaymentCache(iun);
 
-      if (paymentCache && paymentCache.payments) {
+      if (paymentCache?.payments) {
         // If i have the current payment in cache means that i'm coming from the payment page and i need to update the payment
         if (paymentCache?.currentPayment) {
           const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
