@@ -25,6 +25,7 @@ beforeAll(async () => {
     SELFCARE_SEND_PROD_ID: 'mock-prod-id',
     IS_PAYMENT_ENABLED: false,
     MIXPANEL_TOKEN: 'DUMMY',
+    IS_MANUAL_SEND_ENABLED: true
   });
   initStore(false);
   initAxiosClients();

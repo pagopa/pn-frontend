@@ -32,20 +32,9 @@ import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-const SubTitle = () => {
-  const { t } = useTranslation(['apikeys']);
+const LinkApiB2b: React.FC = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
-  return (
-    <Fragment>
-      {t('subtitle.text1')}
-      <Link target="_blank" href={`${API_B2B_LINK}`}>
-        {t('subtitle.text2')}
-        {t('subtitle.text3')}
-        {t('subtitle.text4')}
-      </Link>
-      {t('subtitle.text5')}
-    </Fragment>
-  );
+  return <Link href={API_B2B_LINK}>{children}</Link>;
 };
 
 const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
@@ -179,9 +168,15 @@ const ApiKeys = () => {
       <TitleBox
         variantTitle="h4"
         title={t('title')}
-        subTitle={<SubTitle />}
+        subTitle={
+          <Trans
+            ns={'apikeys'}
+            i18nKey={'subtitle'}
+            components={[<LinkApiB2b key={'LinkApiB2b'} />]}
+          />
+        }
         variantSubTitle="body1"
-      ></TitleBox>
+      />
       <Box
         sx={{
           display: isMobile ? 'block' : 'flex',
