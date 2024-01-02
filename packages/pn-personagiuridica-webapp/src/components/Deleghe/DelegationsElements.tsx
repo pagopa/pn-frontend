@@ -102,6 +102,11 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     setAnchorEl(null);
   };
 
+  const handleOpenUpdateModalClick = () => {
+    setShowUpdateModal(true);
+    setAnchorEl(null);
+  };
+
   const handleOpenVerificationCodeModal = () => {
     if (row?.name && row?.verificationCode) {
       setShowCodeModal(true);
@@ -167,6 +172,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
           onAction(groups);
         }
       });
+    handleCloseAcceptModal();
   };
 
   useEffect(() => {
@@ -221,11 +227,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     if (row?.status === DelegationStatus.ACTIVE && groups.length) {
       // eslint-disable-next-line functional/immutable-data
       menuItems.push(
-        <MenuItem
-          id="update-delegation-button"
-          key="update"
-          onClick={() => setShowUpdateModal(true)}
-        >
+        <MenuItem id="update-delegation-button" key="update" onClick={handleOpenUpdateModalClick}>
           {t('deleghe.update')}
         </MenuItem>
       );
