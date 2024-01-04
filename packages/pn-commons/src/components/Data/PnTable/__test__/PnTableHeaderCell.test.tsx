@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { Sort } from '../../../../models';
 import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';
@@ -7,7 +8,7 @@ import PnTableHeaderCell from '../PnTableHeaderCell';
 describe('PnTableHeaderCell', () => {
   disableConsoleLogging('error');
 
-  const mockFn = jest.fn();
+  const mockFn = vi.fn();
 
   type Item = {
     'mock-column-id': string;

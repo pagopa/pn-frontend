@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
-import { renderHook, waitFor } from '../../test-utils';
-import { act } from '../../test-utils';
+
+import { act, renderHook, waitFor } from '../../test-utils';
 import { useProcess } from '../useProcess';
 
 describe('useProcess Hook', () => {

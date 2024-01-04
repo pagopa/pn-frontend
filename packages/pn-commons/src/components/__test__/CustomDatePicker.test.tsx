@@ -1,9 +1,6 @@
 import React from 'react';
 
-import { TextField } from '@mui/material';
-
 import { fireEvent, render, screen } from '../../test-utils';
-import { DATE_FORMAT } from '../../utility';
 import CustomDatePicker from '../CustomDatePicker';
 
 const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
@@ -12,16 +9,13 @@ const RenderDatePicker = ({ language = 'it' }: { language?: string }) => (
     onChange={() => {}}
     value={new Date('01/01/2023')}
     language={language}
-    inputFormat={DATE_FORMAT}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        inputProps={{
-          ...params.inputProps,
+    slotProps={{
+      textField: {
+        inputProps: {
           placeholder: 'datepickerinput',
-        }}
-      />
-    )}
+        },
+      },
+    }}
   />
 );
 

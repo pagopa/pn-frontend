@@ -2,6 +2,7 @@ import mediaQuery from 'css-mediaquery';
 import React, { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Store, configureStore } from '@reduxjs/toolkit';
@@ -106,11 +107,11 @@ function createMatchMedia(width: number) {
 /** This function disable the console logging methods */
 function disableConsoleLogging(method: 'log' | 'error' | 'info' | 'warn') {
   beforeAll(() => {
-    jest.spyOn(console, method).mockImplementation(jest.fn());
+    vi.spyOn(console, method).mockImplementation(() => {});
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 }
 

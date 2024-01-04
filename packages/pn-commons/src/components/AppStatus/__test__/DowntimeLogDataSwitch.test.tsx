@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { fireEvent, initLocalizationForTest, render } from '../../../test-utils';
@@ -112,7 +113,7 @@ describe('DowntimeLogDataSwitch Component', () => {
       id: '0',
       ...exampleDowntimeLogPage.downtimes.find((d) => d.fileAvailable)!,
     };
-    const getDowntimeLegalFactDocumentDetailsMock = jest.fn();
+    const getDowntimeLegalFactDocumentDetailsMock = vi.fn();
     const { container, getByTestId } = render(
       <DowntimeLogDataSwitch
         data={data}
