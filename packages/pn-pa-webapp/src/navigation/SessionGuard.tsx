@@ -80,7 +80,10 @@ const SessionGuardRender = () => {
         open
         title={goodbyeMessage.title}
         message={goodbyeMessage.message}
-        handleClose={goToSelfcareLogin}
+        handleClose={async () => {
+          await dispatch(logout());
+          goToSelfcareLogin();
+        }}
         initTimeout
       />
     ) : isAnonymousUser || getConfiguration().DISABLE_INACTIVITY_HANDLER ? (

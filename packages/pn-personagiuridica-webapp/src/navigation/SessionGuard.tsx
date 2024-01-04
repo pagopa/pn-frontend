@@ -85,7 +85,10 @@ const SessionGuardRender = () => {
         open
         title={goodbyeMessage.title}
         message={goodbyeMessage.message}
-        handleClose={() => goToLoginPortal()}
+        handleClose={async () => {
+          await dispatch(logout());
+          goToLoginPortal();
+        }}
         initTimeout
       />
     ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
