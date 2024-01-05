@@ -1,7 +1,7 @@
 import logger from 'redux-logger';
 
 import { appStateReducer } from '@pagopa-pn/pn-commons';
-import { Middleware, MiddlewareArray, ThunkMiddleware, configureStore } from '@reduxjs/toolkit';
+import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
 import { getConfiguration } from '../services/configuration.service';
 import { trackingMiddleware } from '../utility/mixpanel';
