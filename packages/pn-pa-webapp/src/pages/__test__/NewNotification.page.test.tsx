@@ -1,25 +1,21 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
-import { Route, Routes } from 'react-router-dom';
 
-// const mockNavigateFn = vi.fn();
-
-// // mock imports
-// vi.mock('react-router-dom', async () => ({
-//   ...(await vi.importActual('react-router-dom')) as any,
-//   useNavigate: () => mockNavigateFn,
-// }));
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -31,7 +27,7 @@ vi.mock('react-i18next', () => ({
 const mockIsPaymentEnabledGetter = vi.fn();
 vi.mock('../../services/configuration.service', async () => {
   return {
-    ...(await vi.importActual('../../services/configuration.service')) as any,
+    ...(await vi.importActual<any>('../../services/configuration.service')),
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
@@ -39,11 +35,11 @@ vi.mock('../../services/configuration.service', async () => {
 });
 
 describe('NewNotification Page without payment', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   beforeEach(() => {
@@ -52,7 +48,6 @@ describe('NewNotification Page without payment', () => {
   });
 
   afterEach(() => {
-    result = undefined;
     mock.reset();
     vi.clearAllMocks();
   });
@@ -70,97 +65,103 @@ describe('NewNotification Page without payment', () => {
         },
       });
     });
-    expect(result?.getByTestId('titleBox')).toHaveTextContent('new-notification.title');
-    const stepper = result?.getByTestId('stepper');
+    expect(result.getByTestId('titleBox')).toHaveTextContent('new-notification.title');
+    const stepper = result.getByTestId('stepper');
     expect(stepper).toBeInTheDocument();
-    const preliminaryInformation = result?.getByTestId('preliminaryInformationsForm');
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
     expect(preliminaryInformation).toBeInTheDocument();
-    const recipientForm = result?.queryByTestId('recipientForm');
+    const recipientForm = result.queryByTestId('recipientForm');
     expect(recipientForm).not.toBeInTheDocument();
-    const attachmentsForm = result?.queryByTestId('attachmentsForm');
+    const attachmentsForm = result.queryByTestId('attachmentsForm');
     expect(attachmentsForm).not.toBeInTheDocument();
-    const finalStep = result?.queryByTestId('finalStep');
+    const finalStep = result.queryByTestId('finalStep');
     expect(finalStep).not.toBeInTheDocument();
-    const alert = result?.queryByTestId('alert');
+    const alert = result.queryByTestId('alert');
     expect(alert).toBeInTheDocument();
   });
 
   it('clicks on the breadcrumb button', async () => {
-    // insert one entry into the history, so the initial render will refer 
+    // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
     window.history.pushState({}, '', '/new-notification');
 
-    // render with an ad-hoc router, will render initially NewNotification 
+    // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={routes.DASHBOARD} element={<div data-testid="mocked-dashboard">hello</div>} />
-          <Route path='/new-notification' element={<NewNotification />} />
-        </Routes>, 
+          <Route
+            path={routes.DASHBOARD}
+            element={<div data-testid="mocked-dashboard">hello</div>}
+          />
+          <Route path="/new-notification" element={<NewNotification />} />
+        </Routes>,
         { preloadedState: { userState: { user: userResponse } } }
       );
     });
 
     // before clicking link - mocked dashboard not present
-    const mockedPageBefore = result?.queryByTestId('mocked-dashboard');
+    const mockedPageBefore = result.queryByTestId('mocked-dashboard');
     expect(mockedPageBefore).not.toBeInTheDocument();
-    
+
     // simulate clicking the link
-    const links = result?.getAllByRole('link');
+    const links = result.getAllByRole('link');
     expect(links![0]).toHaveTextContent(/new-notification.breadcrumb-root/i);
     expect(links![0]).toHaveAttribute('href', routes.DASHBOARD);
     fireEvent.click(links![0]);
 
     // prompt must be shown
-    const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
+    const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
     const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
     fireEvent.click(confirmExitBtn);
 
     // after clicking link - mocked dashboard present
     await waitFor(() => {
-      const mockedPageAfter = result?.queryByTestId('mocked-dashboard');
+      const mockedPageAfter = result.queryByTestId('mocked-dashboard');
       expect(mockedPageAfter).toBeInTheDocument();
     });
   });
 
   it('clicks on api keys button', async () => {
-    // insert one entry into the history, so the initial render will refer 
+    // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
     window.history.pushState({}, '', '/new-notification');
 
-    // render with an ad-hoc router, will render initially NewNotification 
+    // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={routes.API_KEYS} element={<div data-testid="mocked-api-keys-page">hello</div>} />
-          <Route path='/new-notification' element={<NewNotification />} />
-        </Routes>, 
+          <Route
+            path={routes.API_KEYS}
+            element={<div data-testid="mocked-api-keys-page">hello</div>}
+          />
+          <Route path="/new-notification" element={<NewNotification />} />
+        </Routes>,
         { preloadedState: { userState: { user: userResponse } } }
       );
     });
 
     // before clicking link - mocked api keys page not present
-    const mockedPageBefore = result?.queryByTestId('mocked-api-keys-page');
+    const mockedPageBefore = result.queryByTestId('mocked-api-keys-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
-    
+
     // simulate clicking the link
-    const links = result?.getAllByRole('link');
+    const links = result.getAllByRole('link');
     expect(links![1]).toHaveTextContent(/menu.api-key/i);
     expect(links![1]).toHaveAttribute('href', routes.API_KEYS);
 
     fireEvent.click(links![1]);
     // prompt must be shown
-    const promptDialog = await waitFor(() => result?.getByTestId('promptDialog'));
+    const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
     const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
     fireEvent.click(confirmExitBtn);
 
     // after clicking link - mocked api keys page present
     await waitFor(() => {
-      const mockedPageAfter = result?.queryByTestId('mocked-api-keys-page');
+      const mockedPageAfter = result.queryByTestId('mocked-api-keys-page');
       expect(mockedPageAfter).toBeInTheDocument();
     });
   });
@@ -176,43 +177,43 @@ describe('NewNotification Page without payment', () => {
         },
       });
     });
-    const stepper = result?.getByTestId('stepper');
+    const stepper = result.getByTestId('stepper');
     const step1 = within(stepper!).getByTestId('step-0');
     const step2 = within(stepper!).getByTestId('step-1');
     // STEP 1
-    let buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
-    let preliminaryInformation = result?.getByTestId('preliminaryInformationsForm');
+    let preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
     expect(preliminaryInformation).toBeInTheDocument();
     fireEvent.click(buttonSubmit!);
     // STEP 2
     await waitFor(() => {
       expect(preliminaryInformation).not.toBeInTheDocument();
     });
-    buttonSubmit = result?.getByTestId('step-submit');
-    let recipientForm = result?.getByTestId('recipientForm');
+    buttonSubmit = result.getByTestId('step-submit');
+    let recipientForm = result.getByTestId('recipientForm');
     expect(recipientForm).toBeInTheDocument();
     fireEvent.click(buttonSubmit!);
     // STEP 3
     await waitFor(() => {
       expect(recipientForm).not.toBeInTheDocument();
     });
-    buttonSubmit = result?.getByTestId('step-submit');
-    const attachmentsForm = result?.getByTestId('attachmentsForm');
+    buttonSubmit = result.getByTestId('step-submit');
+    const attachmentsForm = result.getByTestId('attachmentsForm');
     expect(attachmentsForm).toBeInTheDocument();
     // return to step 2
     fireEvent.click(step2);
     await waitFor(() => {
       expect(attachmentsForm).not.toBeInTheDocument();
     });
-    recipientForm = result?.getByTestId('recipientForm');
+    recipientForm = result.getByTestId('recipientForm');
     expect(recipientForm).toBeInTheDocument();
     // return to step 1
     fireEvent.click(step1);
     await waitFor(() => {
       expect(recipientForm).not.toBeInTheDocument();
     });
-    preliminaryInformation = result?.getByTestId('preliminaryInformationsForm');
+    preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
     expect(preliminaryInformation).toBeInTheDocument();
   });
 
@@ -235,32 +236,32 @@ describe('NewNotification Page without payment', () => {
       });
     });
     // STEP 1
-    let buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
-    const preliminaryInformation = result?.getByTestId('preliminaryInformationsForm');
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
     expect(preliminaryInformation).toBeInTheDocument();
     fireEvent.click(buttonSubmit!);
     // STEP 2
     await waitFor(() => {
       expect(preliminaryInformation).not.toBeInTheDocument();
     });
-    buttonSubmit = result?.getByTestId('step-submit');
-    const recipientForm = result?.getByTestId('recipientForm');
+    buttonSubmit = result.getByTestId('step-submit');
+    const recipientForm = result.getByTestId('recipientForm');
     expect(recipientForm).toBeInTheDocument();
     fireEvent.click(buttonSubmit!);
     // STEP 3
     await waitFor(() => {
       expect(recipientForm).not.toBeInTheDocument();
     });
-    buttonSubmit = result?.getByTestId('step-submit');
-    const attachmentsForm = result?.getByTestId('attachmentsForm');
+    buttonSubmit = result.getByTestId('step-submit');
+    const attachmentsForm = result.getByTestId('attachmentsForm');
     expect(attachmentsForm).toBeInTheDocument();
     // FINAL
     fireEvent.click(buttonSubmit!);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
     });
-    const finalStep = result?.getByTestId('finalStep');
+    const finalStep = result.getByTestId('finalStep');
     expect(finalStep).toBeInTheDocument();
   });
 });

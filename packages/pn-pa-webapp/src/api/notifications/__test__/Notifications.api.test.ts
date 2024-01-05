@@ -18,7 +18,7 @@ import {
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { getApiClient, getExternalClient } from '../../apiClients';
+import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CANCEL_NOTIFICATION,
@@ -39,7 +39,7 @@ describe('Notifications api tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -141,7 +141,7 @@ describe('Notifications api tests', () => {
 
   it('uploadNotificationAttachment', async () => {
     const file = new Uint8Array();
-    const extMock = new MockAdapter(getExternalClient());
+    const extMock = new MockAdapter(externalClient);
     extMock.onPut(`https://mocked-url.com`).reply(200, undefined, {
       'x-amz-version-id': 'mocked-versionToken',
     });

@@ -6,7 +6,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 
 import { mockApiKeysDTO, mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
+import { apiClient } from '../../api/apiClients';
 import { APIKEY_LIST } from '../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import ApiKeys from '../ApiKeys.page';
@@ -35,7 +35,7 @@ describe('ApiKeys Page - accessibility tests', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

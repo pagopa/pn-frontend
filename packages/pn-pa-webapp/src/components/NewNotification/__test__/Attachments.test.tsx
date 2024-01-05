@@ -10,16 +10,20 @@ import {
   act,
   fireEvent,
   render,
-  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { getApiClient, getExternalClient } from '../../../api/apiClients';
 import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import Attachments from '../Attachments';
 
 const mockIsPaymentEnabledGetter = vi.fn();
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../../api/apiClients');
+const testUtils = await import('../../../__test__/test-utils');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -31,7 +35,7 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../../services/configuration.service', async () => {
   return {
-    ...(await vi.importActual('../../../services/configuration.service')) as any,
+    ...(await vi.importActual<any>('../../../services/configuration.service')),
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
@@ -55,13 +59,13 @@ async function uploadDocument(elem: HTMLElement, index: number, document: NewNot
 }
 
 describe('Attachments Component with payment enabled', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
-    extMock = new MockAdapter(getExternalClient());
+    mock = new MockAdapter(apiClients.apiClient);
+    extMock = new MockAdapter(apiClients.externalClient);
   });
 
   beforeEach(async () => {
@@ -69,7 +73,6 @@ describe('Attachments Component with payment enabled', () => {
   });
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
     mock.reset();
     extMock.reset();
@@ -85,7 +88,7 @@ describe('Attachments Component with payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     expect(form).toHaveTextContent(/attach-for-recipients/i);
     const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     expect(attachmentBoxes).toHaveLength(1);
@@ -96,8 +99,8 @@ describe('Attachments Component with payment enabled', () => {
     expect(fileInput).toBeInTheDocument();
     const attachmentNameInput = within(attachmentBoxes![0]).getByTestId('attachmentNameInput');
     expect(attachmentNameInput).toBeInTheDocument();
-    const buttonSubmit = result?.getByTestId('step-submit');
-    const buttonPrevious = result?.getByTestId('previous-step');
+    const buttonSubmit = result.getByTestId('step-submit');
+    const buttonPrevious = result.getByTestId('previous-step');
     expect(buttonSubmit).toBeDisabled();
     expect(buttonSubmit).toHaveTextContent('button.continue');
     expect(buttonPrevious).toBeInTheDocument();
@@ -127,12 +130,12 @@ describe('Attachments Component with payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
-    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     // add second document form
-    const addButton = result?.getByTestId('add-another-doc');
+    const addButton = result.getByTestId('add-another-doc');
     fireEvent.click(addButton!);
     await waitFor(() => {
       attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
@@ -150,7 +153,7 @@ describe('Attachments Component with payment enabled', () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(1);
       // check data stored in redux state
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -178,11 +181,11 @@ describe('Attachments Component with payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     // upload first document
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
-    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
     // remove document uploaded
     const removeDocument = within(attachmentBoxes[0]).getByTestId('removeDocument');
@@ -209,7 +212,7 @@ describe('Attachments Component with payment enabled', () => {
         />
       );
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     // upload first document
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
@@ -217,7 +220,7 @@ describe('Attachments Component with payment enabled', () => {
     fireEvent.click(backButton!);
     await waitFor(() => {
       // check data stored in redux state
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -278,14 +281,14 @@ describe('Attachments Component with payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     // upload first document
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
-    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
     // add and upload second document
-    const addButton = result?.getByTestId('add-another-doc');
+    const addButton = result.getByTestId('add-another-doc');
     fireEvent.click(addButton!);
     attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
     expect(attachmentBoxes).toHaveLength(2);
@@ -300,7 +303,7 @@ describe('Attachments Component with payment enabled', () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(2);
       // check data stored in redux state
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -343,14 +346,14 @@ describe('Attachments Component with payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     let attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     // upload first document
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
-    const buttonSubmit = await waitFor(() => result?.getByTestId('step-submit'));
+    const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
     // add and upload second document
-    const addButton = result?.getByTestId('add-another-doc');
+    const addButton = result.getByTestId('add-another-doc');
     fireEvent.click(addButton!);
     attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
     expect(attachmentBoxes).toHaveLength(2);
@@ -383,7 +386,7 @@ describe('Attachments Component with payment enabled', () => {
         />
       );
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     expect(attachmentBoxes).toHaveLength(newNotification.documents.length);
     const submitButton = within(form!).getByTestId('step-submit');
@@ -395,7 +398,7 @@ describe('Attachments Component with payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     const buttonAddAnotherDoc = within(form!).getByTestId('add-another-doc');
     for (let i = 0; i < 10; i++) {
       await act(async () => {
@@ -407,14 +410,13 @@ describe('Attachments Component with payment enabled', () => {
 });
 
 describe('Attachments Component without payment enabled', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   beforeEach(async () => {
     mockIsPaymentEnabledGetter.mockReturnValue(false);
   });
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
   });
 
@@ -423,7 +425,7 @@ describe('Attachments Component without payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     const buttonSubmit = within(form!).getByTestId('step-submit');
     expect(buttonSubmit).toHaveTextContent('button.send');
   });
@@ -434,7 +436,7 @@ describe('Attachments Component without payment enabled', () => {
     await act(async () => {
       result = render(<Attachments isCompleted={true} onConfirm={confirmHandlerMk} />);
     });
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
     const buttonSubmit = await waitFor(() => within(form!).getByTestId('step-submit'));

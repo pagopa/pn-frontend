@@ -12,7 +12,7 @@ import {
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
+import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import Dashboard from '../Dashboard.page';
 
@@ -29,7 +29,7 @@ describe('Dashboard Page - accessibility tests', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

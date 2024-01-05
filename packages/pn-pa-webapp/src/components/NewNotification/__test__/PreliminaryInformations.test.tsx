@@ -26,11 +26,9 @@ import {
   fireEvent,
   randomString,
   render,
-  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { getApiClient } from '../../../api/apiClients';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
@@ -38,6 +36,12 @@ import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions
 import PreliminaryInformations from '../PreliminaryInformations';
 
 const mockIsPaymentEnabledGetter = vi.fn();
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../../api/apiClients');
+const testUtils = await import('../../../__test__/test-utils');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -49,7 +53,7 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../../services/configuration.service', async () => {
   return {
-    ...(await vi.importActual('../../../services/configuration.service')) as any,
+    ...(await vi.importActual<any>('../../../services/configuration.service')),
     getConfiguration: () => ({
       IS_PAYMENT_ENABLED: mockIsPaymentEnabledGetter(),
     }),
@@ -85,12 +89,12 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
 };
 
 describe('PreliminaryInformations component with payment enabled', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   beforeEach(() => {
@@ -98,7 +102,6 @@ describe('PreliminaryInformations component with payment enabled', () => {
   });
 
   afterEach(() => {
-    result = undefined;
     mock.reset();
     vi.clearAllMocks();
   });
@@ -114,8 +117,8 @@ describe('PreliminaryInformations component with payment enabled', () => {
         <PreliminaryInformations notification={newNotificationEmpty} onConfirm={confirmHandlerMk} />
       );
     });
-    expect(result!.container).toHaveTextContent(/title/i);
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    expect(result.container).toHaveTextContent(/title/i);
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     testFormElements(form!, 'paProtocolNumber', 'protocol-number*');
     testFormElements(form!, 'subject', 'subject*');
     testFormElements(form!, 'abstract', 'abstract');
@@ -156,7 +159,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
         }
       );
     });
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     testFormElements(form!, 'group', 'group');
   });
 
@@ -181,14 +184,14 @@ describe('PreliminaryInformations component with payment enabled', () => {
         }
       );
     });
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
     await populateForm(form, true);
     expect(button).toBeEnabled();
     fireEvent.click(button!);
     await waitFor(() => {
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',
@@ -227,7 +230,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
         }
       );
     });
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     await populateForm(form, true);
     // set invalid values
     // paProtocolNumber
@@ -283,7 +286,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
         }
       );
     });
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     testFormElements(
       form!,
       'paProtocolNumber',
@@ -326,7 +329,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
         }
       );
     });
-    const statusApiErrorComponent = result?.queryByTestId(
+    const statusApiErrorComponent = result.queryByTestId(
       `api-error-${NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}`
     );
     expect(statusApiErrorComponent).toBeInTheDocument();
@@ -334,12 +337,12 @@ describe('PreliminaryInformations component with payment enabled', () => {
 });
 
 describe('PreliminaryInformations Component with payment disabled', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   beforeEach(() => {
@@ -347,7 +350,6 @@ describe('PreliminaryInformations Component with payment disabled', () => {
   });
 
   afterEach(() => {
-    result = undefined;
     mock.reset();
     vi.clearAllMocks();
   });
@@ -377,8 +379,8 @@ describe('PreliminaryInformations Component with payment disabled', () => {
         }
       );
     });
-    expect(result!.container).toHaveTextContent(/title/i);
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    expect(result.container).toHaveTextContent(/title/i);
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     const paymentMethodRadio = within(form!).queryAllByTestId('paymentMethodRadio');
     expect(paymentMethodRadio).toHaveLength(0);
     const button = within(form).getByTestId('step-submit');
@@ -406,14 +408,14 @@ describe('PreliminaryInformations Component with payment disabled', () => {
         }
       );
     });
-    const form = result!.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
+    const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
     await populateForm(form, false);
     expect(button).toBeEnabled();
     fireEvent.click(button!);
     await waitFor(() => {
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',

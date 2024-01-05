@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newApiKeyDTO, newApiKeyResponse } from '../../../__mocks__/NewApiKey.mock';
-import { getApiClient } from '../../../api/apiClients';
+import { apiClient } from '../../../api/apiClients';
 import { CREATE_APIKEY } from '../../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { GroupStatus, UserGroup } from '../../../models/user';
@@ -24,7 +24,7 @@ describe('api keys page redux state test', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

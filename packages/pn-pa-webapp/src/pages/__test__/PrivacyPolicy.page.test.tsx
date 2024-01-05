@@ -8,7 +8,7 @@ import PrivacyPolicyPage from '../PrivacyPolicy.page';
 
 vi.mock('../../services/configuration.service', async () => {
   return {
-    ...(await vi.importActual('../../services/configuration.service')) as any,
+    ...(await vi.importActual<any>('../../services/configuration.service')),
     getConfiguration: () => ({
       ONE_TRUST_DRAFT_MODE: false,
       ONE_TRUST_PP: 'mocked-id',

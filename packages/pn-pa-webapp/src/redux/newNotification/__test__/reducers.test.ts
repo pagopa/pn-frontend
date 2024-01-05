@@ -4,7 +4,7 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
-import { getApiClient, getExternalClient } from '../../../api/apiClients';
+import { apiClient, externalClient } from '../../../api/apiClients';
 import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
@@ -56,7 +56,7 @@ describe('New notification redux state tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -146,7 +146,7 @@ describe('New notification redux state tests', () => {
           key: 'mocked-preload-key',
         }))
       );
-    const extMock = new MockAdapter(getExternalClient());
+    const extMock = new MockAdapter(externalClient);
     for (const document of newNotification.documents) {
       extMock.onPost(`https://mocked-url.com`).reply(200, document.file.data, {
         'x-amz-version-id': 'mocked-versionToken',
@@ -233,7 +233,7 @@ describe('New notification redux state tests', () => {
           key: 'mocked-preload-key',
         },
       ]);
-    const extMock = new MockAdapter(getExternalClient());
+    const extMock = new MockAdapter(externalClient);
     for (const payment of Object.values(newNotification.payment!)) {
       if (payment.pagoPaForm) {
         extMock.onPost(`https://mocked-url.com`).reply(200, payment.pagoPaForm.file.data, {

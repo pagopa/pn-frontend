@@ -9,7 +9,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
 import * as routes from '../../navigation/routes.const';
@@ -17,9 +16,14 @@ import ToSAcceptance from '../ToSAcceptance.page';
 
 const mockNavigateFn = vi.fn();
 
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
+
 // mock imports
 vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
@@ -52,7 +56,7 @@ describe('test Terms of Service page', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {

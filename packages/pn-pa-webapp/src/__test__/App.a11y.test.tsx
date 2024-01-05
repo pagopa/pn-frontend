@@ -8,7 +8,7 @@ import { theme } from '@pagopa/mui-italia';
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
-import { getApiClient } from '../api/apiClients';
+import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
@@ -55,7 +55,7 @@ describe('App - accessbility tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>

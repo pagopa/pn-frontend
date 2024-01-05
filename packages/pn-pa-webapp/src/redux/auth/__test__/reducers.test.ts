@@ -1,13 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
-import { getApiClient } from '../../../api/apiClients';
 import {
   institutionsDTO,
   institutionsList,
   productsDTO,
   productsList,
 } from '../../../__mocks__/User.mock';
+import { apiClient } from '../../../api/apiClients';
 import { GET_CONSENTS, SET_CONSENTS } from '../../../api/consents/consents.routes';
 import {
   GET_INSTITUTIONS,
@@ -30,7 +30,7 @@ describe('Auth redux state tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
@@ -8,22 +9,23 @@ import { GroupStatus, UserGroup } from '../models/user';
 
 function localizeStatus(
   status: string,
-  history: Array<ApiKeyStatusHistory>,
-  translationFunction: any
+  history: Array<ApiKeyStatusHistory>
 ): {
   label: string;
   tooltip: ReactNode;
   description: string;
 } {
   return {
-    label: translationFunction(`status.${status}`),
-    tooltip: TooltipApiKey(history, translationFunction),
-    description: translationFunction(`status.${status}-description`),
+    label: `status.${status}`,
+    tooltip: <TooltipApiKey history={history} />,
+    description: `status.${status}-description`,
   };
 }
 
-// eslint-disable-next-line arrow-body-style
-export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>, translationFunction: any) => {
+type TooltipApiKeyProps = { history: Array<ApiKeyStatusHistory> };
+
+export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
+  const { t } = useTranslation(['apikeys']);
   return (
     <Box
       sx={{
@@ -32,39 +34,37 @@ export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>, translationFu
         },
       }}
     >
-      {history &&
-        history.map((h, index) => {
-          const output = (p: string, h: ApiKeyStatusHistory) => (
-            <Box sx={{ textAlign: 'left' }} key={index}>
-              <Box>
-                {translationFunction(`tooltip.${p}`)} {formatDate(h.date)}
-              </Box>
+      {history?.map((h, index) => {
+        const output = (p: string, h: ApiKeyStatusHistory) => (
+          <Box sx={{ textAlign: 'left' }} key={index}>
+            <Box>
+              {t(`tooltip.${p}`)} {formatDate(h.date)}
             </Box>
-          );
+          </Box>
+        );
 
-          const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
+        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
 
-          switch (h.status) {
-            case ApiKeyStatus.ENABLED:
-              return output(`enabled${suffixToday}`, h);
-            case ApiKeyStatus.CREATED:
-              return output(`created${suffixToday}`, h);
-            case ApiKeyStatus.BLOCKED:
-              return output(`blocked${suffixToday}`, h);
-            case ApiKeyStatus.ROTATED:
-              return output(`rotated${suffixToday}`, h);
-            default:
-              return <></>;
-          }
-        })}
+        switch (h.status) {
+          case ApiKeyStatus.ENABLED:
+            return output(`enabled${suffixToday}`, h);
+          case ApiKeyStatus.CREATED:
+            return output(`created${suffixToday}`, h);
+          case ApiKeyStatus.BLOCKED:
+            return output(`blocked${suffixToday}`, h);
+          case ApiKeyStatus.ROTATED:
+            return output(`rotated${suffixToday}`, h);
+          default:
+            return <></>;
+        }
+      })}
     </Box>
   );
 };
 
 export function getApiKeyStatusInfos(
   status: ApiKeyStatus,
-  statusHistory: Array<ApiKeyStatusHistory>,
-  translationFunction: any,
+  statusHistory: Array<ApiKeyStatusHistory>
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -75,17 +75,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...localizeStatus('enabled', statusHistory, translationFunction),
+        ...localizeStatus('enabled', statusHistory),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...localizeStatus('blocked', statusHistory, translationFunction),
+        ...localizeStatus('blocked', statusHistory),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...localizeStatus('rotated', statusHistory, translationFunction),
+        ...localizeStatus('rotated', statusHistory),
       };
     default:
       return {

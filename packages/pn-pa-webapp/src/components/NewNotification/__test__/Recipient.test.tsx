@@ -11,12 +11,16 @@ import {
   fireEvent,
   randomString,
   render,
-  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import Recipient from '../Recipient';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -197,10 +201,9 @@ const testStringFieldValidation = async (
 
 describe('Recipient Component with payment enabled', () => {
   const confirmHandlerMk = vi.fn();
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
   });
 
@@ -211,8 +214,8 @@ describe('Recipient Component with payment enabled', () => {
         <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
-    expect(result?.container).toHaveTextContent(/title/i);
-    const form = result!.getByTestId('recipientForm');
+    expect(result.container).toHaveTextContent(/title/i);
+    const form = result.getByTestId('recipientForm');
     await testRecipientFormRendering(form, 0, true);
     const addButton = within(form).getByTestId('add-recipient');
     expect(addButton).toBeInTheDocument();
@@ -229,7 +232,7 @@ describe('Recipient Component with payment enabled', () => {
         <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
     await populateForm(form, 0, true, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
@@ -238,8 +241,8 @@ describe('Recipient Component with payment enabled', () => {
     const addButton = within(form).getByTestId('add-recipient');
     fireEvent.click(addButton);
     await waitFor(() => {
-      expect(result?.container).toHaveTextContent(/title 1/i);
-      expect(result?.container).toHaveTextContent(/title 2/i);
+      expect(result.container).toHaveTextContent(/title 1/i);
+      expect(result.container).toHaveTextContent(/title 2/i);
       expect(submitButton).toBeDisabled();
     });
     await testRecipientFormRendering(form, 1, true);
@@ -248,7 +251,7 @@ describe('Recipient Component with payment enabled', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual(
         newNotification.recipients
       );
@@ -264,7 +267,7 @@ describe('Recipient Component with payment enabled', () => {
         <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
     await populateForm(form, 0, true, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
@@ -294,7 +297,7 @@ describe('Recipient Component with payment enabled', () => {
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     expect(submitButton).toBeDisabled();
     // identical taxId
-    const radioPhysicalPerson = result?.queryAllByLabelText('physical-person')[1];
+    const radioPhysicalPerson = result.queryAllByLabelText('physical-person')[1];
     fireEvent.click(radioPhysicalPerson!);
     await testInput(form!, 'recipients[0].taxId', newNotification.recipients[0].taxId, true);
     await testInput(form!, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
@@ -315,7 +318,7 @@ describe('Recipient Component with payment enabled', () => {
     const noticeCodeError = form.querySelector('[id="recipients[1].noticeCode-helper-text"]');
     expect(noticeCodeError).toHaveTextContent('identical-notice-codes-error');
     // remove second recipient and check that the form returns valid
-    const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
+    const deleteIcon = result.queryAllByTestId('DeleteRecipientIcon');
     fireEvent.click(deleteIcon![1]);
     await waitFor(() => expect(submitButton).toBeEnabled());
   }, 10000);
@@ -331,9 +334,9 @@ describe('Recipient Component with payment enabled', () => {
         />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
-    expect(result?.container).toHaveTextContent(/title 1/i);
-    expect(result?.container).toHaveTextContent(/title 2/i);
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
+    expect(result.container).toHaveTextContent(/title 1/i);
+    expect(result.container).toHaveTextContent(/title 2/i);
     await testRecipientFormRendering(form, 0, true, newNotification.recipients[0]);
     await testRecipientFormRendering(form, 1, true, newNotification.recipients[1]);
     const submitButton = within(form).getByTestId('step-submit');
@@ -348,7 +351,7 @@ describe('Recipient Component with payment enabled', () => {
         <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
     await populateForm(form, 0, true, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
@@ -357,21 +360,21 @@ describe('Recipient Component with payment enabled', () => {
     const addButton = within(form).getByTestId('add-recipient');
     fireEvent.click(addButton);
     await waitFor(() => {
-      expect(result?.container).toHaveTextContent(/title 1/i);
-      expect(result?.container).toHaveTextContent(/title 2/i);
+      expect(result.container).toHaveTextContent(/title 1/i);
+      expect(result.container).toHaveTextContent(/title 2/i);
       expect(submitButton).toBeDisabled();
     });
-    const deleteIcon = result?.queryAllByTestId('DeleteRecipientIcon');
+    const deleteIcon = result.queryAllByTestId('DeleteRecipientIcon');
     expect(deleteIcon).toHaveLength(2);
     // remove the second recipient
     fireEvent.click(deleteIcon![1]);
     await waitFor(() => {
-      expect(result?.container).not.toHaveTextContent(/title 2/i);
+      expect(result.container).not.toHaveTextContent(/title 2/i);
     });
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         newNotification.recipients[0],
       ]);
@@ -391,13 +394,13 @@ describe('Recipient Component with payment enabled', () => {
         />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
     await populateForm(form, 0, true, newNotification.recipients[0]);
     const backButton = within(form).getByTestId('previous-step');
     fireEvent.click(backButton!);
     await waitFor(() => {
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         newNotification.recipients[0],
       ]);
@@ -412,7 +415,7 @@ describe('Recipient Component with payment enabled', () => {
         <Recipient paymentMode={newNotification.paymentMode} onConfirm={confirmHandlerMk} />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeDisabled();
     await populateForm(form, 0, true, newNotification.recipients[0]);
@@ -483,10 +486,9 @@ describe('Recipient Component with payment enabled', () => {
 
 describe('Recipient Component without payment enabled', () => {
   const confirmHandlerMk = vi.fn();
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
   });
 
@@ -497,8 +499,8 @@ describe('Recipient Component without payment enabled', () => {
         <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
       );
     });
-    expect(result?.container).toHaveTextContent(/title/i);
-    const form = result!.getByTestId('recipientForm');
+    expect(result.container).toHaveTextContent(/title/i);
+    const form = result.getByTestId('recipientForm');
     await testRecipientFormRendering(form, 0, false);
   });
 
@@ -509,14 +511,14 @@ describe('Recipient Component without payment enabled', () => {
         <Recipient paymentMode={PaymentModel.NOTHING} onConfirm={confirmHandlerMk} />
       );
     });
-    const form = result!.getByTestId('recipientForm') as HTMLFormElement;
+    const form = result.getByTestId('recipientForm') as HTMLFormElement;
     // fill the first recipient
     await populateForm(form, 0, false, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      const state = getTestStore().getState();
+      const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         { ...newNotification.recipients[0], creditorTaxId: '', noticeCode: '' },
       ]);

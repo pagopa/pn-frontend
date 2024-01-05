@@ -14,7 +14,7 @@ import {
   simpleDowntimeLogPage,
 } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import { getApiClient } from '../../../api/apiClients';
+import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
 import { getCurrentAppStatus, getDowntimeLogPage } from '../actions';
 
@@ -25,7 +25,7 @@ describe('App Status redux state tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

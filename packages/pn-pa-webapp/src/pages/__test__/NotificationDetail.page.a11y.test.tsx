@@ -14,7 +14,7 @@ import {
   notificationDTOMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
+import { apiClient } from '../../api/apiClients';
 import { NOTIFICATION_DETAIL } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -30,7 +30,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

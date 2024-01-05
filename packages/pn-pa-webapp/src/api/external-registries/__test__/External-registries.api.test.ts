@@ -8,7 +8,7 @@ import {
   productsList,
 } from '../../../__mocks__/User.mock';
 import { Party } from '../../../models/party';
-import { getApiClient } from '../../apiClients';
+import { apiClient } from '../../apiClients';
 import { ExternalRegistriesAPI } from '../External-registries.api';
 import {
   GET_INSTITUTIONS,
@@ -21,8 +21,8 @@ describe('External registries api tests', () => {
 
   mockAuthentication();
 
-  beforeAll(()=> {
-    mock = new MockAdapter(getApiClient());
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
