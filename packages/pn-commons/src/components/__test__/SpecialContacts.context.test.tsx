@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, getById, render, waitFor } from '../../test-utils';
+import { disableConsoleLogging, fireEvent, getById, render, waitFor } from '../../test-utils';
 import { SpecialContactsProvider, useSpecialContactsContext } from '../SpecialContacts.context';
 
 const Component: React.FC = () => {
@@ -14,6 +14,8 @@ const Component: React.FC = () => {
 };
 
 describe('test SpecialContacts context', () => {
+  disableConsoleLogging('error');
+
   it('throw error when using context outside provider', () => {
     expect(() => render(<Component />)).toThrowError(
       'useSpecialContactsContext must be used within a SpecialContactsProvider'
