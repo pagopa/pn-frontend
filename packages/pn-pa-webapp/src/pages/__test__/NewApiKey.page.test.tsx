@@ -65,8 +65,7 @@ describe('NewApiKey component', () => {
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
   });
 
-  // TO-FIX: il test fallisce perchè il bottone di submit non viene abilitato
-  it.skip('empty and invalid form', async () => {
+  it('empty and invalid form', async () => {
     mock.onGet(GET_USER_GROUPS(GroupStatus.ACTIVE)).reply(200, mockGroups);
     await act(async () => {
       result = render(<NewApiKey />);
@@ -125,15 +124,13 @@ describe('NewApiKey component', () => {
     // render using an ad-hoc router
     await act(async () => {
       result = render(
-        <>
-          <Routes>
-            <Route path="/new-api-key" element={<NewApiKey />} />
-            <Route
-              path={routes.API_KEYS}
-              element={<div data-testid="mock-api-keys-page">hello</div>}
-            />
-          </Routes>
-        </>
+        <Routes>
+          <Route path="/new-api-key" element={<NewApiKey />} />
+          <Route
+            path={routes.API_KEYS}
+            element={<div data-testid="mock-api-keys-page">hello</div>}
+          />
+        </Routes>
       );
     });
     // the mocked ApiKeys page does not appear before we click the corresponding link

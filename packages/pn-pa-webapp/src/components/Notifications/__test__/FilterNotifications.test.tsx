@@ -245,8 +245,7 @@ describe('Filter Notifications Table Component', () => {
     expect(form!).toHaveTextContent('filters.errors.fiscal-code');
   });
 
-  // TO-FIX: il test fallisce perchè non viene visualizzato il messaggio di errore
-  it.skip('test form submission - iunMatch (invalid)', async () => {
+  it('test form submission - iunMatch (invalid)', async () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);

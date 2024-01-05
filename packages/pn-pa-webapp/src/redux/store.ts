@@ -28,14 +28,16 @@ export const appReducers = {
 
 const createStore = (logReduxActions?: boolean) => {
   const mustLogActions = logReduxActions ?? getConfiguration().LOG_REDUX_ACTIONS;
-  const additionalMiddlewares = [mustLogActions ? logger : undefined, trackingMiddleware];
   return configureStore({
     reducer: appReducers,
-    middleware: (getDefaultMiddleware) =>
-      additionalMiddlewares.reduce(
-        (array, middleware) => (middleware ? array.concat(middleware) : array) as any,
-        getDefaultMiddleware({ serializableCheck: false })
-      ),
+    middleware: (getDefaultMiddleware) => {
+      const middlewares = getDefaultMiddleware({ serializableCheck: false });
+      if (mustLogActions) {
+        middlewares.concat(logger);
+      }
+      middlewares.concat(trackingMiddleware);
+      return middlewares;
+    },
   });
 };
 
