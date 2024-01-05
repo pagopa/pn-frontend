@@ -37,6 +37,7 @@ describe('Footer Component', () => {
     });
     const dropdownLanguageButton = getByRole('button');
     expect(dropdownLanguageButton).toBeInTheDocument();
+    expect(dropdownLanguageButton).toHaveTextContent(LANGUAGES.it.it); // language 'it' is default selected
   });
 
   it('clicks on company link', () => {

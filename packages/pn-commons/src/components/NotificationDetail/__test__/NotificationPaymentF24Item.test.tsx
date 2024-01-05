@@ -6,7 +6,7 @@ import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../../models';
 import { appStateReducer } from '../../../redux';
-import { act, fireEvent, prettyDOM, render, waitFor } from '../../../test-utils';
+import { act, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
 
 function createTestStore() {
@@ -125,19 +125,19 @@ describe('NotificationPaymentF24Item Component', () => {
   });
 
   it('should call function handleDownloadAttachment when click on download button', () => {
-    const getPaymentAttachmentActionMkLocal = vi.fn();
+    const getPaymentAttachmentActionMk = vi.fn();
     const item = { ...f24Item, attachmentIdx: 1 };
     const { getByTestId } = render(
       <NotificationPaymentF24Item
         f24Item={item}
         timerF24={TIMERF24}
-        getPaymentAttachmentAction={getPaymentAttachmentActionMkLocal}
+        getPaymentAttachmentAction={getPaymentAttachmentActionMk}
       />
     );
     const downloadButton = getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
-    expect(getPaymentAttachmentActionMkLocal).toHaveBeenCalledTimes(1);
-    expect(getPaymentAttachmentActionMkLocal).toHaveBeenCalledWith(
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
       item.attachmentIdx
     );

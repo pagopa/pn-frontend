@@ -14,7 +14,7 @@ import { AppStatusBar } from '../AppStatusBar';
 const fakePalette = { success: { main: '#00FF00' }, error: { main: '#FF0000' } };
 
 vi.mock('@mui/material', async () => {
-  const original = await vi.importActual('@mui/material');
+  const original = await vi.importActual<any>('@mui/material');
   return {
     ...original,
     useTheme: () => ({

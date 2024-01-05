@@ -16,16 +16,7 @@ import { formatDate } from '../../../utility';
 import { formatTimeWithLegend } from '../../../utility/date.utility';
 import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
-const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
 const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'];
-
-vi.mock('@mui/material', async () => {
-  const original = await vi.importActual('@mui/material') as any;
-  return {
-    ...original,
-    useTheme: () => ({ palette: { ...original.useTheme().palette, ...fakePalette } }),
-  };
-});
 
 const checkDateField = (date: string, column: HTMLElement) => {
   const text = date ? `${formatDate(date)},${formatTimeWithLegend(date)}` : '-';

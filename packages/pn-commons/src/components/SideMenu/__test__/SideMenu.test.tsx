@@ -8,12 +8,12 @@ import SideMenu from '../SideMenu';
 const mockNavigate = vi.fn();
 let mockPathname = '';
 
-vi.mock('react-router-dom', async () => ({ 
-  ...await vi.importActual('react-router-dom') as any,
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigate,
   useLocation: () => ({
     pathname: mockPathname,
-  })
+  }),
 }));
 
 describe('SideMenu', () => {

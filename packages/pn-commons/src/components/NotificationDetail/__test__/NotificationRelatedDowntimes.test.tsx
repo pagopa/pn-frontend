@@ -21,7 +21,7 @@ const fakePalette = {
 };
 
 vi.mock('@mui/material', async () => {
-  const original = await vi.importActual('@mui/material') as any;
+  const original = await vi.importActual<any>('@mui/material');
   return {
     ...original,
     useTheme: () => ({ ...original.useTheme(), palette: fakePalette }),

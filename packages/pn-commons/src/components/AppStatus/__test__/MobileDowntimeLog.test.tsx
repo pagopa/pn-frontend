@@ -16,16 +16,6 @@ import { formatDate } from '../../../utility';
 import { formatTimeWithLegend } from '../../../utility/date.utility';
 import MobileDowntimeLog from '../MobileDowntimeLog';
 
-const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
-
-vi.mock('@mui/material', async () => {
-  const original = await vi.importActual('@mui/material') as any;
-  return {
-    ...original,
-    useTheme: () => ({ palette: { ...original.useTheme().palette, ...fakePalette } }),
-  };
-});
-
 const data = ['startDate', 'endDate', 'functionality', 'legalFactId'];
 
 const checkStatusField = (status: DowntimeStatus, cardElem: HTMLElement) => {

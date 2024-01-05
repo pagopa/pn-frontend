@@ -3,13 +3,13 @@ import { vi } from 'vitest';
 
 import userEvent from '@testing-library/user-event';
 
-import { fireEvent, render, theme, waitFor } from '../../../test-utils';
+import { act, fireEvent, render, theme, waitFor } from '../../../test-utils';
 import CodeInput from '../CodeInput';
 
 const handleChangeMock = vi.fn();
 
 describe('CodeInput Component', () => {
-  beforeEach(() => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -87,8 +87,7 @@ describe('CodeInput Component', () => {
     });
     // change the value of the input and check that it is updated correctly
     // set the cursor position to the end
-    // TO-FIX: this line causes the error "not wrappend in act". With act, the error disappear, but why?
-    (codeInputs[2] as HTMLInputElement).focus();
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
     (codeInputs[2] as HTMLInputElement).setSelectionRange(1, 1);
     // when we try to edit an input, we insert a second value and after, based on cursor position, we change the value
     // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
@@ -97,16 +96,15 @@ describe('CodeInput Component', () => {
       expect(codeInputs[2]).toHaveValue('4');
     });
     // move the cursor at the start of the input and try to edit again
-    (codeInputs[2] as HTMLInputElement).focus();
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
     await userEvent.keyboard('3');
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('3');
     });
     // delete the value
-    (codeInputs[2] as HTMLInputElement).focus();
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
     await userEvent.keyboard('{Backspace}');
-
     await waitFor(() => {
       expect(codeInputs[2]).toHaveValue('');
     });
@@ -119,7 +117,7 @@ describe('CodeInput Component', () => {
     );
     // focus on first input and moove to the next
     const codeInputs = getAllByTestId(/code-input-[0-4]/);
-    (codeInputs[0] as HTMLInputElement).focus();
+    act(() => (codeInputs[0] as HTMLInputElement).focus());
     // press enter
     fireEvent.keyDown(codeInputs[0], { key: 'Enter', code: 'Enter' });
     await waitFor(() => {
@@ -147,7 +145,7 @@ describe('CodeInput Component', () => {
       expect(document.body).toBe(document.activeElement);
     });
     // focus on last input and moove back
-    (codeInputs[4] as HTMLInputElement).focus();
+    act(() => (codeInputs[4] as HTMLInputElement).focus());
     // press backspace
     fireEvent.keyDown(codeInputs[4], { key: 'Backspace', code: 'Backspace' });
     await waitFor(() => {
@@ -164,7 +162,7 @@ describe('CodeInput Component', () => {
       expect(codeInputs[1]).toBe(document.activeElement);
     });
     // focus on first element and try to go back
-    (codeInputs[0] as HTMLInputElement).focus();
+    act(() => (codeInputs[0] as HTMLInputElement).focus());
     fireEvent.keyDown(codeInputs[0], { key: 'Backspace', code: 'Backspace' });
     // nothing happens
     await waitFor(() => {

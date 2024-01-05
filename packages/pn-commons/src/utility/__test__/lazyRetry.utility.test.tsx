@@ -32,8 +32,8 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loaded at first try', async () => {
-    const LazyComponent = lazyRetry(() => Promise.resolve(
-      {default: ({children}) => <div>{children}</div>})
+    const LazyComponent = lazyRetry<any>(() =>
+      Promise.resolve({ default: ({ children }) => <div>{children}</div> })
     );
     let result: RenderResult;
     await act(async () => {
@@ -43,18 +43,17 @@ describe('test lazy loading retry', () => {
         </Suspense>
       );
     });
-    await waitFor(() => {
-      const refreshFlag = sessionStorage.getItem('retry-lazy-refreshed');
-      expect(result.container).toHaveTextContent('mocked-empty-message');
-      expect(refreshFlag).toBeNull();
-    }, { timeout: 10000, interval: 200 });
+    await waitFor(
+      () => {
+        const refreshFlag = sessionStorage.getItem('retry-lazy-refreshed');
+        expect(result.container).toHaveTextContent('mocked-empty-message');
+        expect(refreshFlag).toBeNull();
+      },
+      { timeout: 10000, interval: 1000 }
+    );
   }, 20000);
 
   it('test lazyRetry - component loading fails at first try', async () => {
-    // vi.mock('../../components/EmptyState', () => {
-    //   throw new Error('Chunk loading error');
-    // });
-    // const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));
     const LazyComponent = lazyRetry(() => Promise.reject('Error loading component'));
     render(
       <Suspense fallback={'Loading...'}>
@@ -69,10 +68,6 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loading fails at second try', async () => {
-    // vi.mock('../../components/EmptyState', () => {
-    //   throw new Error('Chunk loading error');
-    // });
-    // const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));
     const LazyComponent = lazyRetry(() => Promise.reject('Error loading component'));
     sessionStorage.setItem('retry-lazy-refreshed', 'true');
     const result = render(
