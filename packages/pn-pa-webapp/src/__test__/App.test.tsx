@@ -89,9 +89,9 @@ describe('App', () => {
     await act(async () => {
       result = render(<Component />);
     });
-    const header = document.querySelector('header');
+    const header = result.container.querySelector('header');
     expect(header).toBeInTheDocument();
-    const footer = document.querySelector('footer');
+    const footer = result.container.querySelector('footer');
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();

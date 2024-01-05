@@ -273,12 +273,10 @@ describe('NotificationDetail Page', () => {
     // render with an ad-hoc router
     await act(async () => {
       result = render(
-        <>
-          <Routes>
-            <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
-            <Route path={'/'} element={<NotificationDetail />} />
-          </Routes>
-        </>
+        <Routes>
+          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={'/'} element={<NotificationDetail />} />
+        </Routes>
       );
     });
 

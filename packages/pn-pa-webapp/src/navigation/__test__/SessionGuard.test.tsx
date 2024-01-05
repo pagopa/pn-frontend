@@ -6,7 +6,6 @@ import { vi } from 'vitest';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
-import { getStore } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 
@@ -14,6 +13,7 @@ import * as routes from '../routes.const';
 // https://github.com/vitest-dev/vitest/issues/3300
 // maybe with vitest 1, we can remove the workaround
 const apiClients = await import('../../api/apiClients');
+const reduxStore = await import('../../redux/store');
 
 const mockNavigateFn = vi.fn();
 
@@ -71,7 +71,7 @@ describe('SessionGuard Component', () => {
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
-      expect(getStore().getState().userState.user.sessionToken).toEqual('');
+      expect(reduxStore.store.getState().userState.user.sessionToken).toEqual('');
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
       const logoutTitleComponent = screen.queryByText('leaving-app.title');

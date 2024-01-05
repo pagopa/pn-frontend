@@ -42,10 +42,6 @@ const createStore = (logReduxActions?: boolean) => {
 // eslint-disable-next-line functional/no-let
 export let store: ReturnType<typeof createStore>;
 
-export function getStore() {
-  return store;
-}
-
 export function initStore(logReduxActions?: boolean): void {
   // eslint-disable-next-line prefer-const
   store = createStore(logReduxActions);
