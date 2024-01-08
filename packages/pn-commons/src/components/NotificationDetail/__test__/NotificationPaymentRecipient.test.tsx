@@ -352,7 +352,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(pageButtons[2]).toHaveClass('Mui-selected');
   });
 
-  it('should not show subtitle when all payments are paid', () => {
+  it('should not show subtitle when all payments are paid and has only one page', () => {
     const paidPayments = {
       pagoPaF24: [
         ...paymentsData.pagoPaF24.map((payment) => ({
@@ -362,7 +362,7 @@ describe('NotificationPaymentRecipient Component', () => {
             status: PaymentStatus.SUCCEEDED,
           },
         })),
-      ],
+      ].slice(0, 3),
       f24Only: [...paymentsData.f24Only],
     };
 
