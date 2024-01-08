@@ -10,7 +10,7 @@ import Logout from '../Logout';
 const mockNavigateFn = vi.fn();
 
 vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
