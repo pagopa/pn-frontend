@@ -24,7 +24,6 @@ describe('CourtesyContactItem component', () => {
     const INPUT_VALID_PHONE = '3331234567';
     const INPUT_INVALID_PHONE = '33312345';
 
-    // TO-FIX: il test fallisce perchè non viene renderizzato il messaggio di errore
     it('type in an invalid number', async () => {
       const result = render(
         <DigitalContactsCodeVerificationProvider>

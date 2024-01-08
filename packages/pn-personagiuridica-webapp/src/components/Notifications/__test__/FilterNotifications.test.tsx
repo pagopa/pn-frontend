@@ -70,10 +70,6 @@ async function setFormValues(
   await testInput(form, 'iunMatch', iunMatch);
 }
 
-/**
- *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
- *   until the testing framework is changed (vitest);
- */
 describe('Filter Notifications Table Component', () => {
   let result: RenderResult;
   let form: HTMLFormElement;

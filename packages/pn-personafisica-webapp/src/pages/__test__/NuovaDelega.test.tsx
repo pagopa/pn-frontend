@@ -137,10 +137,7 @@ describe('NuovaDelega page', () => {
 
     let result: RenderResult | undefined;
 
-    // insert two entries into the history, so the initial render will refer to the path /
-    // and when the back button is pressed and so navigate(-1) is invoked,
-    // the path will change to /mock-path
-    window.history.pushState({}, '', '/mock-path');
+    // simulate the current URL
     window.history.pushState({}, '', '/nuova-delega');
 
     // render with an ad-hoc router, will render initially NuovaDelega
@@ -148,7 +145,7 @@ describe('NuovaDelega page', () => {
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={'/deleghe'} element={<div data-testid="mocked-page">hello</div>} />
           <Route path={'/nuova-delega'} element={<NuovaDelega />} />
         </Routes>
       );
