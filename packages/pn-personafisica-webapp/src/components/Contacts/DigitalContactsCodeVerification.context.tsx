@@ -339,12 +339,10 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
             ` ${modalProps.value}`
           }
           subtitle={
-            <Typography variant="body1">
-              <Trans
-                i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
-                ns="recapiti"
-              />
-            </Typography>
+            <Trans
+              i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+              ns="recapiti"
+            />
           }
           open={open}
           initialValues={new Array(5).fill('')}

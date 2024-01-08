@@ -19,11 +19,7 @@ Il flusso completo viene testato nella pagina dei contatti, dove si può testare
 
 Andrea Cimini - 6/09/2023
 */
-/**
- *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
- *   until the testing framework is changed (vitest);
- */
-describe.skip('CourtesyContactItem component', () => {
+describe('CourtesyContactItem component', () => {
   describe('test component having type "phone"', () => {
     const INPUT_VALID_PHONE = '3331234567';
     const INPUT_INVALID_PHONE = '33312345';
@@ -42,7 +38,9 @@ describe.skip('CourtesyContactItem component', () => {
       const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
       // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-      expect(input!).toHaveValue(INPUT_INVALID_PHONE);
+      await waitFor(() => {
+        expect(input!).toHaveValue(INPUT_INVALID_PHONE);
+      });
       const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       fireEvent.change(input!, { target: { value: '' } });
@@ -80,11 +78,7 @@ describe.skip('CourtesyContactItem component', () => {
     });
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  describe.skip('testing component having type "email"', () => {
+  describe('testing component having type "email"', () => {
     const VALID_EMAIL = 'prova@pagopa.it';
     const INVALID_EMAIL = 'testpagopa.it';
 

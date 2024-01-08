@@ -68,10 +68,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
 
   it('renders NotificationDetail page', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 250,
-    });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -89,10 +86,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun, delegator?.mandateId))
       .reply(200, notificationDTO);
-    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, {
-      status: 'SUCCEEDED',
-      amount: 250,
-    });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {

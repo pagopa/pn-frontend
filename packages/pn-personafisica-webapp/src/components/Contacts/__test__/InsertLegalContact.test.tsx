@@ -20,11 +20,7 @@ Il flusso completo viene testato nella pagina dei contatti, dove si può testare
 Andrea Cimini - 6/09/2023
 */
 describe('InsertLegalContact component', () => {
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('renders InsertLegalContact', async () => {
+  it('renders InsertLegalContact', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />
@@ -42,11 +38,7 @@ describe('InsertLegalContact component', () => {
     expect(disclaimer).toBeInTheDocument();
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('checks invalid pec', async () => {
+  it('checks invalid pec', async () => {
     const result = render(
       <DigitalContactsCodeVerificationProvider>
         <InsertLegalContact recipientId={'mocked-recipientId'} />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
@@ -96,11 +97,7 @@ describe('SpecialContactElem Component', () => {
     expect(inputError).not.toBeInTheDocument();
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('changes a pec - new value invalid', async () => {
+  it('changes a pec - new value invalid', async () => {
     // render component
     await act(async () => {
       result = render(
@@ -179,11 +176,7 @@ describe('SpecialContactElem Component', () => {
     expect(inputError).not.toBeInTheDocument();
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('changes a mail - new value invalid', async () => {
+  it('changes a mail - new value invalid', async () => {
     // render component
     await act(async () => {
       result = render(
@@ -225,11 +218,7 @@ describe('SpecialContactElem Component', () => {
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('changes a phone number - new value valid', async () => {
+  it('changes a phone number - new value valid', async () => {
     // render component
     await act(async () => {
       result = render(
@@ -266,11 +255,7 @@ describe('SpecialContactElem Component', () => {
     expect(inputError).not.toBeInTheDocument();
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('changes a phone number - new value invalid', async () => {
+  it('changes a phone number - new value invalid', async () => {
     // render component
     await act(async () => {
       result = render(

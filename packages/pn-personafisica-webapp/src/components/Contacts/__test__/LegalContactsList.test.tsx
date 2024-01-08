@@ -193,8 +193,7 @@ describe('LegalContactsList Component', () => {
     });
   });
 
-  // TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-  it.skip('edits pec', async () => {
+  it('edits pec', async () => {
     const pecValue = 'nome.utente-modificata@pec.it';
     mock
       .onPost(LEGAL_CONTACT('default', LegalChannelType.PEC), {
@@ -293,11 +292,7 @@ describe('LegalContactsList Component', () => {
     });
   });
 
-  /**
-   *   16/10/2023 TO-FIX: Test skipped in order to proceed with the upgrade to React 18
-   *   until the testing framework is changed (vitest);
-   */
-  it.skip('checks invalid pec', async () => {
+  it('checks invalid pec', async () => {
     // render component
     await act(async () => {
       result = render(
