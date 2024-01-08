@@ -1,7 +1,7 @@
 import React from 'react';
 import { vi } from 'vitest';
 
-import { formatDate, formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
@@ -15,11 +15,15 @@ import {
   fireEvent,
   render,
   screen,
-  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -173,7 +177,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -185,7 +189,7 @@ describe('Filter Notifications Table Component', () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -208,7 +212,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form!).toHaveTextContent('filters.errors.iun');
   });
@@ -233,7 +237,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -256,7 +260,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -292,7 +296,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -312,6 +316,6 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
     });
-    expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+    expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });
 });

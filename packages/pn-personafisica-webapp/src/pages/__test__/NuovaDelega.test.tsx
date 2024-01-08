@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { RecipientType, formatDate } from '@pagopa-pn/pn-commons';
@@ -13,13 +14,16 @@ import {
 import { createDelegationPayload } from '../../__mocks__/CreateDelegation.mock';
 import { parties } from '../../__mocks__/ExternalRegistry.mock';
 import { act, fireEvent, render, waitFor } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
-import { Route, Routes } from 'react-router-dom';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
 
 // The test in which the "indietro" button in the breadcrumb is clicked
 // needs the actual version of navigate; mocking it would be inadequate
@@ -33,15 +37,15 @@ let mustMockNavigate = true;
 const mockNavigateFn = vi.fn();
 
 vi.mock('react-router-dom', async () => {
-  const originalImplementation = (await vi.importActual('react-router-dom')) as any;
+  const originalImplementation = await vi.importActual<any>('react-router-dom');
   return {
     ...originalImplementation,
-    useNavigate: () =>  mustMockNavigate ? mockNavigateFn : originalImplementation.useNavigate(),
-  }
+    useNavigate: () => (mustMockNavigate ? mockNavigateFn : originalImplementation.useNavigate()),
+  };
 });
 
 vi.mock('../../utility/delegation.utility', async () => ({
-  ...(await vi.importActual('../../utility/delegation.utility')) as any,
+  ...(await vi.importActual<any>('../../utility/delegation.utility')),
   generateVCode: () => '34153',
 }));
 
@@ -71,7 +75,7 @@ describe('NuovaDelega page', () => {
   });
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -133,21 +137,18 @@ describe('NuovaDelega page', () => {
 
     let result: any;
 
-    // insert two entries into the history, so the initial render will refer to the path /
-    // and when the back button is pressed and so navigate(-1) is invoked,
-    // the path will change to /mock-path
-    window.history.pushState({}, '', '/mock-path');
+    // simulate the current URL
     window.history.pushState({}, '', '/nuova-delega');
 
-    // render with an ad-hoc router, will render initially NuovaDelega 
+    // render with an ad-hoc router, will render initially NuovaDelega
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
-      result = render(<>
+      result = render(
         <Routes>
-          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={'/deleghe'} element={<div data-testid="mocked-page">hello</div>} />
           <Route path={'/nuova-delega'} element={<NuovaDelega />} />
         </Routes>
-      </>);
+      );
     });
 
     // before pressing "back" button - mocked page not present

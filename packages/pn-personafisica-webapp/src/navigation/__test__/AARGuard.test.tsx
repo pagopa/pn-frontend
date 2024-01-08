@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import { NOTIFICATION_ID_FROM_QRCODE } from '../../api/notifications/notifications.routes';
 import AARGuard from '../AARGuard';
 import {
@@ -13,11 +12,16 @@ import {
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
 
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
+
 const mockNavigateFn = vi.fn(() => {});
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
@@ -40,7 +44,7 @@ describe('Notification from QR code', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { search: '' },

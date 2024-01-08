@@ -157,7 +157,11 @@ const MobileDelegates = () => {
                   </PnCardHeader>
                   <PnCardContent>
                     {cardBody.map((body) => (
-                      <PnCardContentItem key={body.id} label={body.label}>
+                      <PnCardContentItem
+                        key={body.id}
+                        label={body.label}
+                        wrapValueInTypography={body.wrapValueInTypography}
+                      >
                         <DelegatorsDataSwitch data={data} type={body.id} menuType="delegates" />
                       </PnCardContentItem>
                     ))}

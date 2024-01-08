@@ -103,7 +103,11 @@ const FilterNotificationsFormBody = ({
         label={t('filters.fiscal-code-tax-code')}
         name="recipientId"
         error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
-        helperText={formikInstance.touched.recipientId && String(formikInstance.errors.recipientId)}
+        helperText={
+          formikInstance.touched.recipientId &&
+          formikInstance.errors.recipientId &&
+          String(formikInstance.errors.recipientId)
+        }
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
@@ -116,7 +120,11 @@ const FilterNotificationsFormBody = ({
         label={t('filters.iun')}
         name="iunMatch"
         error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
-        helperText={formikInstance.touched.iunMatch && String(formikInstance.errors.iunMatch)}
+        helperText={
+          formikInstance.touched.iunMatch &&
+          formikInstance.errors.iunMatch &&
+          String(formikInstance.errors.iunMatch)
+        }
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}

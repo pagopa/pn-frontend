@@ -10,12 +10,16 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
-import { getApiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../api/apiClients');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -27,7 +31,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('../pages/Notifiche.page', () => ({default: () => <div>Generic Page</div>}));
+vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
 const unmockedFetch = global.fetch;
 
@@ -59,7 +63,7 @@ describe('App - accessbility tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>

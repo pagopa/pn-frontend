@@ -1,8 +1,13 @@
 import React from 'react';
 import { vi } from 'vitest';
 
-import { fireEvent, render, screen, getTestStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -52,7 +57,7 @@ describe('DelegationElements', () => {
     const revokeDelegate = await waitFor(() => getByTestId('menuItem-revokeDelegate'));
     fireEvent.click(revokeDelegate);
     await waitFor(() => {
-      expect(getTestStore().getState().delegationsState.modalState).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.modalState).toStrictEqual({
         id: '111',
         open: true,
         type: 'delegates',
@@ -71,7 +76,7 @@ describe('DelegationElements', () => {
     const rejectDelegator = getByTestId('menuItem-rejectDelegator');
     fireEvent.click(rejectDelegator);
     await waitFor(() => {
-      expect(getTestStore().getState().delegationsState.modalState).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.modalState).toStrictEqual({
         id: '111',
         open: true,
         type: 'delegators',
@@ -118,7 +123,7 @@ describe('DelegationElements', () => {
     const acceptButton = getByTestId('acceptButton');
     fireEvent.click(acceptButton);
     await waitFor(() => {
-      expect(getTestStore().getState().delegationsState.acceptModalState).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.acceptModalState).toStrictEqual({
         id: '111',
         open: true,
         name: 'test',

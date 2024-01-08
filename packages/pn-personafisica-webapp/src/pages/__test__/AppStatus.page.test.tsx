@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
 import {
@@ -11,13 +12,16 @@ import {
   formatDate,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
-import { vi } from 'vitest';
 
 import { currentStatusDTO, downtimesDTO, openIncidents } from '../../__mocks__/AppStatus.mock';
 import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -40,7 +44,7 @@ describe('AppStatus page', () => {
   const original = window.location;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '' },

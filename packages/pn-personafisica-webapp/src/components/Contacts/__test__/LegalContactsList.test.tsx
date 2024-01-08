@@ -8,16 +8,20 @@ import {
   act,
   fireEvent,
   render,
-  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { getApiClient } from '../../../api/apiClients';
-import { CONTACTS_LIST, LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
+import { LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
 import LegalContactsList from '../LegalContactsList';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../../api/apiClients');
+const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -68,7 +72,7 @@ describe('LegalContactsList Component', () => {
   let result: RenderResult | undefined;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -155,7 +159,7 @@ describe('LegalContactsList Component', () => {
     await waitFor(() => {
       expect(validationDialog).not.toBeInTheDocument();
     });
-    expect(getTestStore().getState().contactsState.digitalAddresses.legal).toStrictEqual([
+    expect(testUtils.testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([
       { ...defaultAddress, pecValid: false, value: '', senderName: undefined },
     ]);
     // simulate rerendering due to redux changes
@@ -178,7 +182,7 @@ describe('LegalContactsList Component', () => {
     const buttons = within(cancelVerificationModal!).getAllByRole('button');
     fireEvent.click(buttons[1]);
     await waitFor(() => {
-      expect(getTestStore().getState().contactsState.digitalAddresses.legal).toStrictEqual([]);
+      expect(testUtils.testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([]);
     });
     // simulate rerendering due to redux changes
     result?.rerender(<IntegrationComponent digitalAddresses={[]} />);
@@ -234,7 +238,7 @@ describe('LegalContactsList Component', () => {
       });
     });
     expect(dialog).not.toBeInTheDocument();
-    expect(getTestStore().getState().contactsState.digitalAddresses.legal).toStrictEqual([
+    expect(testUtils.testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([
       {
         ...defaultAddress,
         value: pecValue,
@@ -279,7 +283,7 @@ describe('LegalContactsList Component', () => {
       expect(dialogBox).not.toBeVisible();
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(getTestStore().getState().contactsState.digitalAddresses.legal).toStrictEqual([]);
+    expect(testUtils.testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual([]);
     // simulate rerendering due to redux changes
     result.rerender(<IntegrationComponent digitalAddresses={[]} />);
     await waitFor(() => {

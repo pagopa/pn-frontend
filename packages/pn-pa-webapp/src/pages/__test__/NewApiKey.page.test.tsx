@@ -118,7 +118,7 @@ describe('NewApiKey component', () => {
   });
 
   it('clicks on the breadcrumb button', async () => {
-    // simulate a current URL
+    // simulate the current URL
     window.history.pushState({}, '', '/new-api-key');
 
     // render using an ad-hoc router
