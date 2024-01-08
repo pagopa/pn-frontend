@@ -6,11 +6,15 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 
 import { digitalAddresses } from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILE } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
 
 const mockOpenFn = vi.fn();
 
@@ -29,7 +33,7 @@ describe('Contacts page', () => {
   const original = window.open;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'open', {
       configurable: true,
       value: mockOpenFn,

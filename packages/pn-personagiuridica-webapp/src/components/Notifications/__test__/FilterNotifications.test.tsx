@@ -15,11 +15,15 @@ import {
   fireEvent,
   render,
   screen,
-  getTestStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it.skip without a warning being shown
@@ -71,8 +75,8 @@ async function setFormValues(
  *   until the testing framework is changed (vitest);
  */
 describe('Filter Notifications Table Component', () => {
-  let result: RenderResult | undefined;
-  let form: HTMLFormElement | undefined;
+  let result: RenderResult;
+  let form: HTMLFormElement;
 
   const original = window.matchMedia;
 
@@ -112,7 +116,7 @@ describe('Filter Notifications Table Component', () => {
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
     });
-    form = result?.container.querySelector('form') as HTMLFormElement;
+    form = result.container.querySelector('form') as HTMLFormElement;
     const inputIunMatch = form!.querySelector(`input[name="iunMatch"]`);
     const paste = createEvent.paste(inputIunMatch!, {
       clipboardData: {
@@ -128,7 +132,7 @@ describe('Filter Notifications Table Component', () => {
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
     });
-    form = result?.container.querySelector('form') as HTMLFormElement;
+    form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form!, 'startDate', '23/02/2022');
     await testCalendar(form!, 'startDate');
   });
@@ -159,7 +163,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -170,7 +174,7 @@ describe('Filter Notifications Table Component', () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -189,7 +193,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form!).toHaveTextContent('filters.errors.iun');
   });
@@ -210,7 +214,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -229,7 +233,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -240,7 +244,7 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
-    const button = result!.getByTestId('dialogToggleButton');
+    const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     expect(form).not.toBeInTheDocument(); // the desktop form
     const dialogForm = await waitFor(() => screen.getByTestId('filter-form'));
@@ -257,7 +261,7 @@ describe('Filter Notifications Table Component', () => {
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     nineYearsAgo.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
-    const button = result!.getByTestId('dialogToggleButton');
+    const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     let dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
     await setFormValues(dialogForm!, nineYearsAgo, oneYearAgo, 'ABCD-EFGH-ILMN-123456-A-1');
@@ -265,7 +269,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(getTestStore().getState().dashboardState.filters).toStrictEqual({
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -273,7 +277,7 @@ describe('Filter Notifications Table Component', () => {
     });
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
-      expect(result?.container).toHaveTextContent('3');
+      expect(result.container).toHaveTextContent('3');
     });
     // cancel filters
     fireEvent.click(button);
@@ -284,6 +288,6 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
     });
-    expect(getTestStore().getState().dashboardState.filters).toStrictEqual(initialState);
+    expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });
 });

@@ -7,7 +7,7 @@ import {
   mockCreateDelegation,
 } from '../../../__mocks__/Delegations.mock';
 import { DelegationStatus } from '../../../models/Deleghe';
-import { getApiClient } from '../../apiClients';
+import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
 import {
   ACCEPT_DELEGATION,
@@ -26,7 +26,7 @@ describe('Delegations api tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

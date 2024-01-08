@@ -9,7 +9,6 @@ import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
-import { getApiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
@@ -17,6 +16,11 @@ import { DelegationStatus } from '../models/Deleghe';
 import { ConsentType } from '../models/consents';
 import { PNRole, PartyRole } from '../redux/auth/types';
 import { RenderResult, act, render } from './test-utils';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../api/apiClients');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
@@ -60,7 +64,7 @@ describe('App', () => {
   const original = window.location;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>

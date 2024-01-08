@@ -63,7 +63,7 @@ const getOptionLabel = (option: Party) => option.name || '';
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
   fieldError: undefined | string | FormikErrors<TError> | Array<string>
-) => fieldTouched && fieldError;
+) => fieldTouched && fieldError && String(fieldError);
 
 const NuovaDelega = () => {
   const { t, i18n } = useTranslation(['deleghe', 'common']);
@@ -191,7 +191,7 @@ const NuovaDelega = () => {
   const breadcrumbs = (
     <>
       <PnBreadcrumb
-        linkRoute={routes.DELEGHEACARICO}
+        linkRoute={routes.DELEGATI}
         linkLabel={
           <>
             <PeopleIcon sx={{ mr: 0.5 }} />
@@ -289,7 +289,7 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
                                 error={Boolean(getError(touched.nome, errors.nome))}
-                                helperText={getError(touched.nome, errors.nome) as React.ReactNode}
+                                helperText={getError(touched.nome, errors.nome)}
                                 fullWidth
                               />
                             )}
@@ -305,9 +305,7 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
                                 error={Boolean(getError(touched.cognome, errors.cognome))}
-                                helperText={
-                                  getError(touched.cognome, errors.cognome) as React.ReactNode
-                                }
+                                helperText={getError(touched.cognome, errors.cognome)}
                                 fullWidth
                               />
                             )}
@@ -324,12 +322,7 @@ const NuovaDelega = () => {
                                 error={Boolean(
                                   getError(touched.ragioneSociale, errors.ragioneSociale)
                                 )}
-                                helperText={
-                                  getError(
-                                    touched.ragioneSociale,
-                                    errors.ragioneSociale
-                                  ) as React.ReactNode
-                                }
+                                helperText={getError(touched.ragioneSociale, errors.ragioneSociale)}
                                 fullWidth
                               />
                             )}
@@ -346,9 +339,7 @@ const NuovaDelega = () => {
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
                         error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
-                        helperText={
-                          getError(touched.codiceFiscale, errors.codiceFiscale) as React.ReactNode
-                        }
+                        helperText={getError(touched.codiceFiscale, errors.codiceFiscale)}
                         fullWidth
                       />
                       <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
@@ -418,9 +409,7 @@ const NuovaDelega = () => {
                                       {...params}
                                       label={entitySearchLabel(senderInputValue)}
                                       error={Boolean(getError(touched.enti, errors.enti))}
-                                      helperText={
-                                        getError(touched.enti, errors.enti) as React.ReactNode
-                                      }
+                                      helperText={getError(touched.enti, errors.enti)}
                                     />
                                   )}
                                 />
@@ -437,7 +426,7 @@ const NuovaDelega = () => {
                           <CustomDatePicker
                             language={i18n.language}
                             label={t('nuovaDelega.form.endDate')}
-                            inputFormat={DATE_FORMAT}
+                            format={DATE_FORMAT}
                             value={values.expirationDate && new Date(values.expirationDate)}
                             minDate={tomorrow}
                             onChange={(value: DatePickerTypes) => {
@@ -445,24 +434,22 @@ const NuovaDelega = () => {
                               setFieldValue('expirationDate', value);
                             }}
                             shouldDisableDate={isToday}
-                            renderInput={(params) => (
-                              <TextField
-                                id="expirationDate"
-                                name="expirationDate"
-                                {...params}
-                                aria-label="Data termine delega" // aria-label for (TextField + Button) Group
-                                inputProps={{
-                                  ...params.inputProps,
+                            slotProps={{
+                              textField: {
+                                id: 'expirationDate',
+                                name: 'expirationDate',
+                                'aria-label': t('nuovaDelega.form.endDate-aria-label'), // aria-label for (TextField + Button) Group
+                                inputProps: {
                                   inputMode: 'text',
-                                  'aria-label': 'Inserisci la data di termine della delega',
+                                  'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),
                                   type: 'text',
-                                }}
-                                error={Boolean(
+                                },
+                                error: Boolean(
                                   getError(touched.expirationDate, errors.expirationDate)
-                                )}
-                                helperText={getError(touched.expirationDate, errors.expirationDate)}
-                              />
-                            )}
+                                ),
+                                helperText: getError(touched.expirationDate, errors.expirationDate),
+                              },
+                            }}
                             disablePast={true}
                           />
                         </FormControl>

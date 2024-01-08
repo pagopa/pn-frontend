@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
-import { getConfiguration } from "../services/configuration.service";
+
+import { getConfiguration } from '../services/configuration.service';
 
 // eslint-disable-next-line functional/no-let
 export let authClient: AxiosInstance;
@@ -15,12 +16,4 @@ export function initAxiosClients() {
   apiClient = axios.create({
     baseURL: getConfiguration().API_BASE_URL,
   });
-}
-
-export function getApiClient() { 
-  return apiClient;
-}
-
-export function getAuthClient() {
-  return authClient;
 }

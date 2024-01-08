@@ -2,19 +2,24 @@ import MockAdapter from 'axios-mock-adapter';
 import React from 'react';
 import { vi } from 'vitest';
 
+import { Row } from '@pagopa-pn/pn-commons';
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
-import { getApiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   REJECT_DELEGATION,
   REVOKE_DELEGATION,
   UPDATE_DELEGATION,
 } from '../../../api/delegations/delegations.routes';
-import { DelegationStatus } from '../../../models/Deleghe';
+import { DelegationColumnData, DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../../api/apiClients');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -29,7 +34,7 @@ describe('DelegationElements', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -190,7 +195,7 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi', verificationCode }}
+        row={{ id: 'row-id', name: 'Mario Rossi', verificationCode } as Row<DelegationColumnData>}
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
@@ -218,7 +223,7 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' }}
+        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
         onAction={actionCbk}
       />
     );
@@ -240,7 +245,11 @@ describe('DelegationElements', () => {
 
   it('check close confimationDialog', async () => {
     const { getByTestId } = render(
-      <Menu menuType="delegates" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
+      <Menu
+        menuType="delegates"
+        id="111"
+        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
+      />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     fireEvent.click(menuIcon);
@@ -258,7 +267,11 @@ describe('DelegationElements', () => {
   it('check reject for delegator', async () => {
     mock.onPatch(REJECT_DELEGATION('111')).reply(204);
     const { getByTestId } = render(
-      <Menu menuType="delegators" id="111" row={{ id: 'row-id', name: 'Mario Rossi' }} />
+      <Menu
+        menuType="delegators"
+        id="111"
+        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
+      />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     fireEvent.click(menuIcon);
@@ -280,7 +293,13 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegators"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi', status: DelegationStatus.ACTIVE }}
+        row={
+          {
+            id: 'row-id',
+            name: 'Mario Rossi',
+            status: DelegationStatus.ACTIVE,
+          } as Row<DelegationColumnData>
+        }
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
@@ -300,12 +319,14 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegators"
         id="111"
-        row={{
-          id: 'row-id',
-          name: 'Mario Rossi',
-          status: DelegationStatus.ACTIVE,
-          groups: [groups[1]],
-        }}
+        row={
+          {
+            id: 'row-id',
+            name: 'Mario Rossi',
+            status: DelegationStatus.ACTIVE,
+            groups: [groups[1]],
+          } as Row<DelegationColumnData>
+        }
       />,
       {
         preloadedState: {
@@ -341,12 +362,14 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegators"
         id="4"
-        row={{
-          id: 'row-id',
-          name: 'Mario Rossi',
-          status: DelegationStatus.ACTIVE,
-          groups: [groups[1]],
-        }}
+        row={
+          {
+            id: 'row-id',
+            name: 'Mario Rossi',
+            status: DelegationStatus.ACTIVE,
+            groups: [groups[1]] as Array<{ id: string; name: string }>,
+          } as Row<DelegationColumnData>
+        }
         onAction={actionCbk}
       />,
       {

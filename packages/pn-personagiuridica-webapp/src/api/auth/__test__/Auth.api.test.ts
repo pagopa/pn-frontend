@@ -1,14 +1,14 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { userResponse } from '../../../__mocks__/Auth.mock';
-import { getAuthClient } from '../../apiClients';
+import { authClient } from '../../apiClients';
 import { AuthApi } from '../Auth.api';
 import { AUTH_TOKEN_EXCHANGE } from '../auth.routes';
 
 describe('Auth api tests', () => {
   it('exchangeToken', async () => {
     const token = 'mocked-token';
-    const mock = new MockAdapter(getAuthClient());
+    const mock = new MockAdapter(authClient);
     mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: token }).reply(200, userResponse);
     const res = await AuthApi.exchangeToken(token);
     expect(res).toStrictEqual(userResponse);

@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
+  NotificationColumnData,
   NotificationStatus,
   Sort,
   formatToTimezoneString,
@@ -10,10 +11,9 @@ import {
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { getApiClient } from '../../../api/apiClients';
+import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
-import { NotificationColumn } from '../../../models/Notifications';
-import { getStore } from '../../store';
+import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 
@@ -21,7 +21,7 @@ describe('Dashbaord redux state tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -35,7 +35,7 @@ describe('Dashbaord redux state tests', () => {
   mockAuthentication();
 
   it('Initial state', () => {
-    const state = getStore().getState().dashboardState;
+    const state = store.getState().dashboardState;
     expect(state).toEqual({
       loading: false,
       notifications: [],
@@ -66,7 +66,7 @@ describe('Dashbaord redux state tests', () => {
         })
       )
       .reply(200, notificationsDTO);
-    const action = await getStore().dispatch(
+    const action = await store.dispatch(
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
@@ -78,7 +78,7 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change pagination', () => {
-    const action = getStore().dispatch(
+    const action = store.dispatch(
       setPagination({
         page: 2,
         size: 50,
@@ -92,14 +92,14 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change sort', () => {
-    const sort: Sort<NotificationColumn> = {
-      orderBy: 'status',
+    const sort: Sort<NotificationColumnData> = {
+      orderBy: 'notificationStatus',
       order: 'desc',
     };
-    const action = getStore().dispatch(setSorting(sort));
+    const action = store.dispatch(setSorting(sort));
     expect(action.type).toBe('dashboardSlice/setSorting');
     expect(action.payload).toEqual({
-      orderBy: 'status',
+      orderBy: 'notificationStatus',
       order: 'desc',
     });
   });
@@ -112,7 +112,7 @@ describe('Dashbaord redux state tests', () => {
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
     };
-    const action = getStore().dispatch(setNotificationFilters(filters));
+    const action = store.dispatch(setNotificationFilters(filters));
     expect(action.type).toBe('dashboardSlice/setNotificationFilters');
     expect(action.payload).toEqual(filters);
   });

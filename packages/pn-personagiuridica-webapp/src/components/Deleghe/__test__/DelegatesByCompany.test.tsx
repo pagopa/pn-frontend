@@ -4,10 +4,14 @@ import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
-import { getApiClient } from '../../../api/apiClients';
 import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../../api/apiClients');
 
 const mockNavigateFn = vi.fn();
 
@@ -24,7 +28,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
@@ -32,7 +36,7 @@ describe('Delegates Component - assuming delegates API works properly', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {

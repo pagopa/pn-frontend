@@ -2,8 +2,8 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
+import { apiClient } from '../../../api/apiClients';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
-import { getApiClient } from '../../apiClients';
 import { ContactsApi } from '../Contacts.api';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from '../contacts.routes';
 
@@ -13,7 +13,7 @@ describe('Contacts api tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

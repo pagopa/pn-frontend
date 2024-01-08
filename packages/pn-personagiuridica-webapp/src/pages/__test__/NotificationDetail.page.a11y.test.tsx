@@ -7,20 +7,25 @@ import { DOWNTIME_HISTORY } from '@pagopa-pn/pn-commons';
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
+import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
-import { getApiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_PAYMENT_INFO,
 } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
 
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
+
 let mockIsDelegate = false;
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
+  ...(await vi.importActual<any>('react-router-dom')),
   useParams: () =>
     mockIsDelegate
       ? { id: 'DAPQ-LWQV-DKQH-202308-A-1', mandateId: '5' }
@@ -38,12 +43,17 @@ const delegator = arrayOfDelegators.find(
   (delegator) => delegator.delegator?.fiscalCode === notificationDTO.recipients[1].taxId
 );
 
+const paymentInfoRequest = paymentInfo.map((payment) => ({
+  creditorTaxId: payment.creditorTaxId,
+  noticeCode: payment.noticeCode,
+}));
+
 describe('NotificationDetail Page - accessibility tests', () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -59,17 +69,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
 
   it('renders NotificationDetail page', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -89,17 +89,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
     mock
       .onGet(NOTIFICATION_DETAIL(notificationDTO.iun, delegator?.mandateId))
       .reply(200, notificationDTO);
-    mock
-      .onGet(
-        NOTIFICATION_PAYMENT_INFO(
-          notificationDTO.recipients[1].payment?.creditorTaxId!,
-          notificationDTO.recipients[1].payment?.noticeCode!
-        )
-      )
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 250,
-      });
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {

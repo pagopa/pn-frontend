@@ -70,15 +70,15 @@ const createMockedStore = (preloadedState: any) =>
   configureStore({
     reducer: appReducers,
     preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
 
 expect.extend(toHaveNoViolations);
 
-function getTestStore() {
-  return testStore;
-}
-
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
-export { axe, createMockedStore, customRender as render, testStore, getTestStore };
+export { axe, createMockedStore, customRender as render, testStore };

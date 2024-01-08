@@ -14,7 +14,7 @@ import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { getApiClient } from '../../apiClients';
+import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   NOTIFICATIONS_LIST,
@@ -33,7 +33,7 @@ describe('Notifications api tests', () => {
   mockAuthentication();
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

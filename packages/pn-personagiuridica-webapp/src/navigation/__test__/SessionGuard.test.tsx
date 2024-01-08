@@ -5,17 +5,21 @@ import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
-import { getAuthClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
-import { getStore } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../api/apiClients');
+const reduxStore = await import('../../redux/store');
 
 const mockNavigateFn = vi.fn();
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')) as any,
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
@@ -39,7 +43,7 @@ describe('SessionGuard Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getAuthClient());
+    mock = new MockAdapter(apiClients.authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { hash: '', pathname: '/' },
@@ -69,7 +73,7 @@ describe('SessionGuard Component', () => {
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
-      expect(getStore().getState().userState.user.sessionToken).toEqual('');
+      expect(reduxStore.store.getState().userState.user.sessionToken).toEqual('');
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
       const logoutTitleComponent = screen.queryByText('leaving-app.title');

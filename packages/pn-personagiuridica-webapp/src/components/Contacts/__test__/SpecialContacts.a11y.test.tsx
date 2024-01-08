@@ -7,10 +7,14 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
-import { getApiClient } from '../../../api/apiClients';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const apiClients = await import('../../../api/apiClients');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -25,7 +29,7 @@ describe('SpecialContacts Component - accessibility tests', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(getApiClient());
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {

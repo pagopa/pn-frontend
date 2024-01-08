@@ -2,8 +2,13 @@ import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, getTestStore, within } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
 import CancelVerificationModal from '../CancelVerificationModal';
+
+// this is needed because there is a bug when vi.mock is used
+// https://github.com/vitest-dev/vitest/issues/3300
+// maybe with vitest 1, we can remove the workaround
+const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -18,7 +23,7 @@ describe('CancelVerificationModal component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('renders component and clicks on cancel button', () => {
     render(<CancelVerificationModal open handleClose={mockCloseHandler} />);
     const dialog = screen.getByTestId('cancelVerificationModal');
@@ -39,7 +44,7 @@ describe('CancelVerificationModal component', () => {
     const dialog = screen.getByTestId('cancelVerificationModal');
     const buttons = within(dialog).getAllByRole('button');
     fireEvent.click(buttons[1]);
-    expect(getTestStore().getState().contactsState.digitalAddresses.legal).toStrictEqual(
+    expect(testUtils.testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual(
       digitalAddresses.legal.filter((addr) => addr.senderId !== 'default')
     );
   });
