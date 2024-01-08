@@ -303,6 +303,7 @@
       },
       "analog-workflow-attachment-kind": {
         "AR": "Ricevuta di consegna",
+        "23I": "Ricevuta di consegna",
         "Plico": "Scansione del plico",
         "23L": "Avviso di ricevimento",
         "Indagine": "Scansione dell'indagine",

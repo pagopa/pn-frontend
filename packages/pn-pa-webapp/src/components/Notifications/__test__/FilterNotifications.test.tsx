@@ -38,8 +38,8 @@ jest.mock('react-i18next', () => ({
 const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const initialState = {
-  startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(today),
+  startDate: tenYearsAgo,
+  endDate: today,
   recipientId: '',
   status: '',
   iunMatch: '',
@@ -180,13 +180,13 @@ describe('Filter Notifications Table Component', () => {
       form = result.container.querySelector('form') as HTMLFormElement;
     });
     const todayM = new Date();
-    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
-    nineYearsAgo.setHours(0, 0, 0, 0);
+    tenYearsAgo.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
     await setFormValues(
       form!,
-      nineYearsAgo,
+      tenYearsAgo,
       oneYearAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
@@ -197,8 +197,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: tenYearsAgo,
+        endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -360,8 +360,8 @@ describe('Filter Notifications Table Component', () => {
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: formatToTimezoneString(nineYearsAgo),
-        endDate: formatToTimezoneString(oneYearAgo),
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',

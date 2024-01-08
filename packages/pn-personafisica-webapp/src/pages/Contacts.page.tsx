@@ -51,7 +51,7 @@ const Contacts = () => {
 
   useEffect(() => {
     if (pageReady) {
-      trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, {
+      trackEventByType(TrackEventType.SEND_YOUR_CONTACT_DETAILS, {
         PEC_exists: digitalAddresses.legal.length > 0,
         email_exists:
           digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)

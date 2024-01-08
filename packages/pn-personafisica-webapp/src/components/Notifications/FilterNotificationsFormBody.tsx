@@ -124,7 +124,6 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
                 placeholder: 'gg/mm/aaaa',
-                'data-testid': 'input(start date)',
               }}
             />
           )}
@@ -162,7 +161,6 @@ const FilterNotificationsFormBody = ({
                 'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
                 placeholder: 'gg/mm/aaaa',
-                'data-testid': 'input(end date)',
               }}
             />
           )}

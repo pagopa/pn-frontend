@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ type Props = {
   source?: string;
 };
 
-const DomicileBanner: React.FC<Props> = ({ source = 'home_notifiche' }) => {
+const DomicileBanner = forwardRef(({ source = 'home_notifiche' }: Props, ref) => {
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -42,14 +42,20 @@ const DomicileBanner: React.FC<Props> = ({ source = 'home_notifiche' }) => {
     [defaultAddresses]
   );
 
+  const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
+  const messageType = lackingAddressTypes[messageIndex] as string;
+
+  /* if (returnDomicileBannerType) {
+    returnDomicileBannerType(messageType);
+  } */
+
   useEffect(() => {
     if (lackingAddressTypes.length === 0) {
       dispatch(closeDomicileBanner());
     }
   }, [lackingAddressTypes]);
 
-  const messageIndex = Math.floor(Math.random() * lackingAddressTypes.length);
-  const messageType = lackingAddressTypes[messageIndex] as string;
+  useImperativeHandle(ref, () => messageType);
 
   return open ? (
     <Box mb={5}>
@@ -87,6 +93,6 @@ const DomicileBanner: React.FC<Props> = ({ source = 'home_notifiche' }) => {
   ) : (
     <></>
   );
-};
+});
 
 export default DomicileBanner;

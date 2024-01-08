@@ -18,9 +18,9 @@ export interface GetNotificationsResponse {
   nextPagesKey: Array<string>;
 }
 
-export interface GetNotificationsParams {
-  startDate: string;
-  endDate: string;
+export interface GetNotificationsParams<TDate extends string | Date> {
+  startDate: TDate;
+  endDate: TDate;
   mandateId?: string;
   recipientId?: string;
   status?: string;
@@ -30,3 +30,5 @@ export interface GetNotificationsParams {
   iunMatch?: string;
   group?: string;
 }
+
+export type NotificationColumnData = Notification & { badge: string };

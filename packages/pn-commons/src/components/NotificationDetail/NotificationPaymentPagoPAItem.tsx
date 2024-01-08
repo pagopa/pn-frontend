@@ -11,7 +11,7 @@ import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
 
-interface Props {
+type Props = {
   pagoPAItem: PagoPAPaymentFullDetails;
   loading: boolean;
   isSelected: boolean;
@@ -19,7 +19,8 @@ interface Props {
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
   isCancelled: boolean;
-}
+  handleTrackEventDetailPaymentError?: () => void;
+};
 
 const SkeletonCard: React.FC = () => {
   const isMobile = useIsMobile();
@@ -182,6 +183,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   handleDeselectPayment,
   isSinglePayment,
   isCancelled,
+  handleTrackEventDetailPaymentError,
 }) => {
   const isMobile = useIsMobile();
 
@@ -194,6 +196,9 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_CANCELED &&
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED;
 
+  if (isError && handleTrackEventDetailPaymentError) {
+    handleTrackEventDetailPaymentError();
+  }
   const getErrorMessage = () => {
     switch (pagoPAItem.detail) {
       case PaymentInfoDetail.GENERIC_ERROR:

@@ -101,10 +101,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [loadingPayment, setLoadingPayment] = useState(false);
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
-  // calc the overall status of the payments and define variables to show/hide content
-  const paymentsStatus = getPaymentsStatus(paginationData, pagoPaF24);
-  const allPaymentsIsPaid = paymentsStatus.count_paid === pagoPaF24.length;
-  const isSinglePayment = paymentsStatus.count_payment === 1 && !isCancelled;
+  const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
+  const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -152,10 +150,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (isSinglePayment && paymentsStatus.count_unpaid > 0) {
+    const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
+    if (isSinglePayment && unpaidPayments) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
     }
-    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, paymentsStatus);
+    // track event only if payments are changed and there aren't in loading state
+    const paymentsLoaded = paginatedPayments.every((payment) => !payment.isLoading);
+    if (paymentsLoaded) {
+      // the tracked event wants only the status of the current paged payments
+      const pagePaymentsStatus = getPaymentsStatus(paginationData, paginatedPayments);
+      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, pagePaymentsStatus);
+    }
   }, [payments]);
 
   const handleTrackEventFn = (event: EventPaymentRecipientType, param?: object) => {
@@ -196,14 +201,13 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           </Link>
         </Alert>
       ) : (
-        <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">
-          <NotificationPaymentTitle
-            landingSiteUrl={landingSiteUrl}
-            handleTrackEventFn={handleTrackEventFn}
-            pagoPaF24={pagoPaF24}
-            f24Only={f24Only}
-          />
-        </Typography>
+        <NotificationPaymentTitle
+          landingSiteUrl={landingSiteUrl}
+          handleTrackEventFn={handleTrackEventFn}
+          pagoPaF24={pagoPaF24}
+          f24Only={f24Only}
+          allPaymentsIsPaid={allPaymentsIsPaid}
+        />
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
@@ -226,6 +230,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     handleDeselectPayment={handleDeselectPayment}
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
+                    handleTrackEventDetailPaymentError={() =>
+                      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR)
+                    }
                   />
                 </Box>
               ) : null
