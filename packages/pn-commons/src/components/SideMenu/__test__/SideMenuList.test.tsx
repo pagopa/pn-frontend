@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { selfcareMenuItems, sideMenuItems } from '../../../__mocks__/SideMenu.mock';

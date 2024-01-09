@@ -1,6 +1,4 @@
-import * as React from 'react';
 import { vi } from 'vitest';
-
 
 import { axe, fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import AcceptDelegationModal from '../AcceptDelegationModal';

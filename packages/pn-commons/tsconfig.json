@@ -9,8 +9,7 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "moduleResolution": "node",
-    "declaration": true,
-    "outDir": "dist",
+    "outDir": "build",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -25,15 +24,5 @@
     "resolveJsonModule": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "__mocks__",
-    "**/__mocks__/*",
-    "dist",
-    "lib",
-    "node_modules",
-    "**/__tests__/*",
-    "**/__test__/*",
-    "src/test-utils.tsx",
-    "src/setupTests.ts"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

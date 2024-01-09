@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { Row } from '@pagopa-pn/pn-commons';

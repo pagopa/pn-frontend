@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { RenderResult, act, fireEvent, render, waitFor } from '../../test-utils';

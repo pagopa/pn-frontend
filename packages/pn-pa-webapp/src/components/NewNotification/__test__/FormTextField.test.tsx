@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
@@ -27,7 +26,7 @@ describe('FormTextField Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('renders the component', () => {
     const { container } = render(
       <FormTextField

@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
+
 import { performThunkAction } from '../redux.utility';
 
 // Mock an asynchronous action function for testing
-const mockAsyncAction = async (params) => {
+const mockAsyncAction = async (params: string) => {
   if (params === 'error') {
     throw new Error('Test Error');
   } else if (params === 'error_response_no_status') {

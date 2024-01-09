@@ -1,9 +1,6 @@
-import React from 'react';
 import { vi } from 'vitest';
 
-import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
-import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
-import { CourtesyChannelType } from '../../../models/contacts';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 

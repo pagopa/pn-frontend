@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -8,11 +7,6 @@ import { act, render, screen } from '../../__test__/test-utils';
 import { GET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentType } from '../../models/consents';
 import ToSGuard from '../ToSGuard';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -49,8 +43,12 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Tests the ToSGuard component', () => {
+describe('Tests the ToSGuard component', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

@@ -1,14 +1,8 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
 import CancelVerificationModal from '../CancelVerificationModal';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -19,7 +13,12 @@ vi.mock('react-i18next', () => ({
 
 const mockCloseHandler = vi.fn();
 
-describe('CancelVerificationModal component', () => {
+describe('CancelVerificationModal component', async () => {
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
+
   afterEach(() => {
     vi.clearAllMocks();
   });

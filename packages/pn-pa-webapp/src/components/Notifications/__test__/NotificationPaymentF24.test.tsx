@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { getF24Payments } from '@pagopa-pn/pn-commons';
@@ -54,7 +53,7 @@ describe('NotificationPaymentF24 Component', () => {
       if (index >= 3) {
         return false;
       }
-      expect(f24).toHaveTextContent(f24LotPayments[index].title);
+      return expect(f24).toHaveTextContent(f24LotPayments[index].title);
     });
     const remainingF24 = queryByTestId('remaining-f24');
     expect(remainingF24).toBeInTheDocument();

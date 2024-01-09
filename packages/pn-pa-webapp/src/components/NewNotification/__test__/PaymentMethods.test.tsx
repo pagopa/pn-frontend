@@ -1,6 +1,5 @@
-import React from 'react';
 import * as redux from 'react-redux';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
@@ -26,7 +25,6 @@ vi.mock('react-i18next', () => ({
 const file = new File(['mocked content'], 'Mocked file', { type: 'application/pdf' });
 
 function uploadDocument(elem: HTMLElement) {
-  // const fileInput = elem.querySelector('[data-testid="fileInput"]');
   const fileInput = within(elem).getByTestId('fileInput');
   const input = fileInput?.querySelector('input');
   fireEvent.change(input!, { target: { files: [file] } });
@@ -35,8 +33,8 @@ function uploadDocument(elem: HTMLElement) {
 // Tutto il blocco di test su PaymentMethods è skippato
 describe.skip('PaymentMethods Component', () => {
   let result: RenderResult;
-  let mockDispatchFn: vi.Mock;
-  let mockActionFn: vi.Mock;
+  let mockDispatchFn: Mock;
+  let mockActionFn: Mock;
   const confirmHandlerMk = vi.fn();
 
   beforeEach(async () => {
@@ -66,7 +64,7 @@ describe.skip('PaymentMethods Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('renders PaymentMethods', () => {
     expect(result.container).toHaveTextContent(
       `${newNotification.recipients[0].firstName} ${newNotification.recipients[0].lastName}`
@@ -74,7 +72,6 @@ describe.skip('PaymentMethods Component', () => {
     expect(result.container).toHaveTextContent(
       `${newNotification.recipients[1].firstName} ${newNotification.recipients[1].lastName}`
     );
-    const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     expect(paymentBoxes).toHaveLength(4);
     paymentBoxes.forEach((paymentBox, index) => {
@@ -95,11 +92,11 @@ describe.skip('PaymentMethods Component', () => {
   });
 
   it('adds first and second pagoPa documents (confirm disabled)', async () => {
-    const form = result.container.querySelector('form');
+    // const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     uploadDocument(paymentBoxes[0].parentElement!);
     uploadDocument(paymentBoxes[2].parentElement!);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
+    // const buttons = await waitFor(() => form?.querySelectorAll('button'));
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022

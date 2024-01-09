@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -18,11 +17,6 @@ import { CREATE_DELEGATION } from '../../api/delegations/delegations.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/external-registries-routes';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 // The test in which the "indietro" button in the breadcrumb is clicked
 // needs the actual version of navigate; mocking it would be inadequate
@@ -65,8 +59,13 @@ const yesterday = new Date(today);
 yesterday.setDate(yesterday.getDate() - 1);
 yesterday.setHours(0, 0, 0, 0);
 
-describe('NuovaDelega page', () => {
+describe('NuovaDelega page', async () => {
   let mock: MockAdapter;
+  let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeEach(() => {
     mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
@@ -126,8 +125,6 @@ describe('NuovaDelega page', () => {
   it('navigates to Deleghe page', async () => {
     mustMockNavigate = false;
 
-    let result: RenderResult | undefined;
-
     // insert two entries into the history, so the initial render will refer to the path /
     // and when the back button is pressed and so navigate(-1) is invoked,
     // the path will change to /mock-path
@@ -146,16 +143,16 @@ describe('NuovaDelega page', () => {
     });
 
     // before clicking "back" button - mocked page not present
-    const mockedPageBefore = result?.queryByTestId('mocked-page');
+    const mockedPageBefore = result.queryByTestId('mocked-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
     // simulate click of "back" button
-    const backButton = result?.getByTestId('breadcrumb-indietro-button');
+    const backButton = result.getByTestId('breadcrumb-indietro-button');
     fireEvent.click(backButton!);
 
     // after clicking "back" button - mocked page present
     await waitFor(() => {
-      const mockedPageAfter = result?.queryByTestId('mocked-page');
+      const mockedPageAfter = result.queryByTestId('mocked-page');
       expect(mockedPageAfter).toBeInTheDocument();
     });
   });

@@ -25,9 +25,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "tsc -w --sourceMap=true",
-    "build": "tsc",
-    "test": "tsc && vitest --run",
+    "build": "tsc -p tsconfig.prod.json",
+    "test": "tsc --noEmit && vitest --run",
     "test:fast": "vitest --run",
     "test:a11y": "vitest --run --config ./vite.config.a11y.ts",
     "test:all": "vitest --run --config ./vite.config.all.ts",

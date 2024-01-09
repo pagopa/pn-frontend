@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -37,12 +36,6 @@ import PreliminaryInformations from '../PreliminaryInformations';
 
 const mockIsPaymentEnabledGetter = vi.fn();
 
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../../api/apiClients');
-const testUtils = await import('../../../__test__/test-utils');
-
 // mock imports
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -61,17 +54,17 @@ vi.mock('../../../services/configuration.service', async () => {
 });
 
 const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
-  await testInput(form!, 'paProtocolNumber', newNotification.paProtocolNumber);
-  await testInput(form!, 'subject', newNotification.subject);
-  await testInput(form!, 'taxonomyCode', newNotification.taxonomyCode);
+  await testInput(form, 'paProtocolNumber', newNotification.paProtocolNumber);
+  await testInput(form, 'subject', newNotification.subject);
+  await testInput(form, 'taxonomyCode', newNotification.taxonomyCode);
   await testSelect(
-    form!,
+    form,
     'group',
     newNotificationGroups.map((g) => ({ label: g.name, value: g.id })),
     1
   );
   await testRadio(
-    form!,
+    form,
     'comunicationTypeRadio',
     ['registered-letter-890', 'simple-registered-letter'],
     1,
@@ -79,7 +72,7 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
   );
   if (hasPayment) {
     await testRadio(
-      form!,
+      form,
       'paymentMethodRadio',
       ['pagopa-notice', 'pagopa-notice-f24-flatrate', 'pagopa-notice-f24', 'nothing'],
       1,
@@ -88,10 +81,15 @@ const populateForm = async (form: HTMLFormElement, hasPayment: boolean) => {
   }
 };
 
-describe('PreliminaryInformations component with payment enabled', () => {
+describe('PreliminaryInformations component with payment enabled', async () => {
   let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
+  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -119,23 +117,20 @@ describe('PreliminaryInformations component with payment enabled', () => {
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    testFormElements(form!, 'paProtocolNumber', 'protocol-number*');
-    testFormElements(form!, 'subject', 'subject*');
-    testFormElements(form!, 'abstract', 'abstract');
-    testFormElements(form!, 'group', 'group');
-    testFormElements(form!, 'taxonomyCode', 'taxonomy-id*');
-    testRadio(form!, 'comunicationTypeRadio', [
-      'registered-letter-890',
-      'simple-registered-letter',
-    ]);
-    testRadio(form!, 'paymentMethodRadio', [
+    testFormElements(form, 'paProtocolNumber', 'protocol-number*');
+    testFormElements(form, 'subject', 'subject*');
+    testFormElements(form, 'abstract', 'abstract');
+    testFormElements(form, 'group', 'group');
+    testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
+    testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
+    testRadio(form, 'paymentMethodRadio', [
       'pagopa-notice',
       'pagopa-notice-f24-flatrate',
       'pagopa-notice-f24',
       'nothing',
     ]);
     const button = within(form).getByTestId('step-submit');
-    expect(button!).toBeDisabled();
+    expect(button).toBeDisabled();
   });
 
   it('renders - required groups', async () => {
@@ -160,7 +155,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
       );
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    testFormElements(form!, 'group', 'group');
+    testFormElements(form, 'group', 'group');
   });
 
   it('changes form values and clicks on confirm', async () => {
@@ -189,7 +184,7 @@ describe('PreliminaryInformations component with payment enabled', () => {
     expect(button).toBeDisabled();
     await populateForm(form, true);
     expect(button).toBeEnabled();
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification).toEqual({
@@ -234,34 +229,34 @@ describe('PreliminaryInformations component with payment enabled', () => {
     await populateForm(form, true);
     // set invalid values
     // paProtocolNumber
-    await testInput(form!, 'paProtocolNumber', '');
+    await testInput(form, 'paProtocolNumber', '');
     const potrocolNumberError = form.querySelector('#paProtocolNumber-helper-text');
     expect(potrocolNumberError).toHaveTextContent('required-field');
-    await testInput(form!, 'paProtocolNumber', ' text-with-spaces ');
+    await testInput(form, 'paProtocolNumber', ' text-with-spaces ');
     expect(potrocolNumberError).toHaveTextContent('no-spaces-at-edges');
-    await testInput(form!, 'paProtocolNumber', randomString(257));
+    await testInput(form, 'paProtocolNumber', randomString(257));
     expect(potrocolNumberError).toHaveTextContent('too-long-field-error');
     // subject
-    await testInput(form!, 'subject', '');
+    await testInput(form, 'subject', '');
     const subjectError = form.querySelector('#subject-helper-text');
     expect(subjectError).toHaveTextContent('required-field');
-    await testInput(form!, 'subject', ' text-with-spaces ');
+    await testInput(form, 'subject', ' text-with-spaces ');
     expect(subjectError).toHaveTextContent('no-spaces-at-edges');
-    await testInput(form!, 'subject', randomString(135));
+    await testInput(form, 'subject', randomString(135));
     expect(subjectError).toHaveTextContent('too-long-field-error');
-    await testInput(form!, 'subject', randomString(9));
+    await testInput(form, 'subject', randomString(9));
     expect(subjectError).toHaveTextContent('too-short-field-error');
     // abstract
-    await testInput(form!, 'abstract', ' text-with-spaces ');
+    await testInput(form, 'abstract', ' text-with-spaces ');
     const abstractError = form.querySelector('#abstract-helper-text');
     expect(abstractError).toHaveTextContent('no-spaces-at-edges');
-    await testInput(form!, 'abstract', randomString(1025));
+    await testInput(form, 'abstract', randomString(1025));
     expect(abstractError).toHaveTextContent('too-long-field-error');
     // taxonomyCode
-    await testInput(form!, 'taxonomyCode', '');
+    await testInput(form, 'taxonomyCode', '');
     const taxonomyCodeError = form.querySelector('#taxonomyCode-helper-text');
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id required');
-    await testInput(form!, 'taxonomyCode', randomString(4));
+    await testInput(form, 'taxonomyCode', randomString(4));
     expect(taxonomyCodeError).toHaveTextContent('taxonomy-id invalid');
     // check submit button state
     const button = within(form).getByTestId('step-submit');
@@ -288,15 +283,15 @@ describe('PreliminaryInformations component with payment enabled', () => {
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
     testFormElements(
-      form!,
+      form,
       'paProtocolNumber',
       'protocol-number*',
       newNotification.paProtocolNumber
     );
-    testFormElements(form!, 'subject', 'subject*', newNotification.subject);
-    testFormElements(form!, 'abstract', 'abstract', newNotification.abstract);
-    testFormElements(form!, 'group', 'group', newNotification.group);
-    testFormElements(form!, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
+    testFormElements(form, 'subject', 'subject*', newNotification.subject);
+    testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
+    testFormElements(form, 'group', 'group', newNotification.group);
+    testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
@@ -336,10 +331,15 @@ describe('PreliminaryInformations component with payment enabled', () => {
   });
 });
 
-describe('PreliminaryInformations Component with payment disabled', () => {
+describe('PreliminaryInformations Component with payment disabled', async () => {
   let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
+  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -381,10 +381,10 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    const paymentMethodRadio = within(form!).queryAllByTestId('paymentMethodRadio');
+    const paymentMethodRadio = within(form).queryAllByTestId('paymentMethodRadio');
     expect(paymentMethodRadio).toHaveLength(0);
     const button = within(form).getByTestId('step-submit');
-    expect(button!).toBeDisabled();
+    expect(button).toBeDisabled();
   });
 
   it('changes form values and clicks on confirm', async () => {
@@ -413,7 +413,7 @@ describe('PreliminaryInformations Component with payment disabled', () => {
     expect(button).toBeDisabled();
     await populateForm(form, false);
     expect(button).toBeEnabled();
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification).toEqual({

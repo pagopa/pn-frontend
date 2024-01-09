@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';

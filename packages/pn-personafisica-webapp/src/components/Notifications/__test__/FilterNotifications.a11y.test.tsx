@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';

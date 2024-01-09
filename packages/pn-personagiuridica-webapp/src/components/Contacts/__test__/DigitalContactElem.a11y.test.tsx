@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { TextField } from '@mui/material';
@@ -50,7 +49,7 @@ const fields = [
 ];
 
 describe('DigitalContactElem Component - accessibility tests', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   it('does not have basic accessibility issues', async () => {
     // render component
@@ -99,9 +98,9 @@ describe('DigitalContactElem Component - accessibility tests', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const buttons = result?.container.querySelectorAll('button');
+    const buttons = result.container.querySelectorAll('button');
     fireEvent.click(buttons![0]);
-    const input = await waitFor(() => result?.container.querySelector('[name="pec"]'));
+    const input = await waitFor(() => result.container.querySelector('[name="pec"]'));
     expect(input).toBeInTheDocument();
 
     if (result) {
@@ -131,7 +130,7 @@ describe('DigitalContactElem Component - accessibility tests', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const buttons = result?.container.querySelectorAll('button');
+    const buttons = result.container.querySelectorAll('button');
     fireEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();

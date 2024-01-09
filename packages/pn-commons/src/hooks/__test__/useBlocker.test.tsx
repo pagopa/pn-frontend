@@ -1,7 +1,6 @@
 import type { Transition } from 'history';
-import React from 'react';
-import { vi } from 'vitest';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { renderHook } from '../../test-utils';
 import { useBlocker } from '../useBlocker';
@@ -9,7 +8,13 @@ import { useBlocker } from '../useBlocker';
 const blocker = vi.fn();
 
 describe('useBlocker', () => {
-  let navigator;
+  let navigator: {
+    block: (cbk: (obj: { retry: () => void }) => void) => void;
+    replace: () => void;
+    go: () => void;
+    push: () => void;
+    createHref: () => string;
+  };
 
   beforeEach(() => {
     navigator = {

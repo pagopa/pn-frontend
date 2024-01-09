@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { RenderResult, act, axe, render } from '../../../__test__/test-utils';
@@ -14,7 +13,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('InsertLegalContact component', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   it('does not have basic accessibility issues', async () => {
     await act(async () => {

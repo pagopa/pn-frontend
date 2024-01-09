@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';

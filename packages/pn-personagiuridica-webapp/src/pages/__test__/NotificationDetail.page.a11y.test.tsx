@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { DOWNTIME_HISTORY } from '@pagopa-pn/pn-commons';
@@ -15,11 +14,6 @@ import {
   NOTIFICATION_PAYMENT_INFO,
 } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 let mockIsDelegate = false;
 
@@ -48,16 +42,19 @@ const paymentInfoRequest = paymentInfo.map((payment) => ({
   noticeCode: payment.noticeCode,
 }));
 
-describe('NotificationDetail Page - accessibility tests', () => {
-  let result: RenderResult | undefined;
+describe('NotificationDetail Page - accessibility tests', async () => {
+  let result: RenderResult;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
     mock.reset();
     mockIsDelegate = false;
@@ -81,7 +78,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
         },
       });
     });
-    expect(await axe(result?.container!)).toHaveNoViolations();
+    expect(await axe(result.container!)).toHaveNoViolations();
   }, 15000);
 
   it('renders NotificationDetail page with delegator logged', async () => {
@@ -99,6 +96,6 @@ describe('NotificationDetail Page - accessibility tests', () => {
         },
       });
     });
-    expect(await axe(result?.container!)).toHaveNoViolations(); // Accesibility test
+    expect(await axe(result.container!)).toHaveNoViolations(); // Accesibility test
   }, 15000);
 });

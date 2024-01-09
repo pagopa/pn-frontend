@@ -7,8 +7,11 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "test": "vitest --run",
+    "build": "tsc",
+    "test": "tsc --noEmit && vitest --run",
     "test:coverage": "vitest run --coverage",
+    "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
+    "format": "prettier \"./**/*.{ts,tsx}\" --write",
     "sonar": "node sonarqube-scanner.js"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
@@ -18,7 +17,7 @@ describe('NewNotificationCard Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('renders NewNotificationCard (no title and no subtitle)', () => {
     // render component
     const { queryByTestId } = render(

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { axe, render } from '../../../__test__/test-utils';
@@ -14,7 +13,7 @@ vi.mock('react-i18next', () => ({
 describe('DomicileBanner component - accessibility tests', () => {
   it('is Domicile Banner component accessible', async () => {
     const result = render(<DomicileBanner />);
-    const results = await axe(result?.container);
+    const results = await axe(result.container);
     expect(results).toHaveNoViolations();
   });
 });

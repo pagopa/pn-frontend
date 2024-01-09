@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { TextField } from '@mui/material';
@@ -13,8 +12,6 @@ import {
 } from '../../../__test__/test-utils';
 import * as api from '../../../api/contacts/Contacts.api';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
-import { TrackEventType } from '../../../utility/events';
-import * as trackingFunctions from '../../../utility/mixpanel';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
@@ -76,7 +73,7 @@ describe('DigitalContactElem Component', () => {
 
   it('renders component', async () => {
     // render component
-    await act(async () => {
+    act(() => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
           <DigitalContactElem
@@ -104,9 +101,9 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    vi
-      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
-      .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce({
+      pecValid: true,
+    } as DigitalAddress);
     // render component
     await act(async () => {
       result = render(
@@ -183,10 +180,10 @@ describe('DigitalContactElem Component', () => {
     expect(dialog).toHaveTextContent('mocked-body');
     let dialogButtons = dialog?.querySelectorAll('button');
     expect(dialogButtons).toHaveLength(2);
-    expect(dialogButtons![0]).toHaveTextContent('button.annulla');
-    expect(dialogButtons![1]).toHaveTextContent('button.conferma');
+    expect(dialogButtons[0]).toHaveTextContent('button.annulla');
+    expect(dialogButtons[1]).toHaveTextContent('button.conferma');
     // click on cancel
-    fireEvent.click(dialogButtons![0]);
+    fireEvent.click(dialogButtons[0]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
@@ -194,7 +191,7 @@ describe('DigitalContactElem Component', () => {
     fireEvent.click(buttons![1]);
     dialog = await waitFor(() => screen.getByRole('dialog'));
     dialogButtons = dialog?.querySelectorAll('button');
-    fireEvent.click(dialogButtons![1]);
+    fireEvent.click(dialogButtons[1]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
@@ -228,7 +225,7 @@ describe('DigitalContactElem Component', () => {
     const dialog = await waitFor(() => screen.getByRole('dialog'));
     const dialogButtons = dialog?.querySelectorAll('button');
     expect(dialogButtons).toHaveLength(1);
-    expect(dialogButtons![0]).toHaveTextContent('button.close');
+    expect(dialogButtons[0]).toHaveTextContent('button.close');
   });
 
   it('save disabled', async () => {

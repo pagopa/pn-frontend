@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -38,10 +37,9 @@ Per questo motivo non è necessario mockare le api, ma va bene anche usare lo sp
 Andrea Cimini - 11/09/2023
 */
 describe('DigitalContactsCodeVerification Context', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
   });
 
@@ -57,7 +55,7 @@ describe('DigitalContactsCodeVerification Context', () => {
         <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const dialog = await showDialog(result!);
+    const dialog = await showDialog(result);
     expect(dialog).toBeInTheDocument();
     const title = dialog?.querySelector('#dialog-title');
     expect(title).toHaveTextContent(`legal-contacts.pec-verify ${pecValue}`);
@@ -80,8 +78,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('validation modal - pec to verify', async () => {
-    vi
-      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce(void 0)
       .mockResolvedValueOnce({ pecValid: false } as DigitalAddress);
     // render component
@@ -90,7 +87,7 @@ describe('DigitalContactsCodeVerification Context', () => {
         <Component type={LegalChannelType.PEC} value={pecValueToVerify} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const dialog = await showDialog(result!);
+    const dialog = await showDialog(result);
     const codeInputs = dialog?.querySelectorAll('input');
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
@@ -114,8 +111,7 @@ describe('DigitalContactsCodeVerification Context', () => {
   });
 
   it('validation modal - pec verified', async () => {
-    vi
-      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce(void 0)
       .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
     // render component
@@ -124,7 +120,7 @@ describe('DigitalContactsCodeVerification Context', () => {
         <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const dialog = await showDialog(result!);
+    const dialog = await showDialog(result);
     const codeInputs = dialog?.querySelectorAll('input');
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
@@ -150,7 +146,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     const button = result.container.querySelector('button');
     fireEvent.click(button!);
     // show disclaimer modal
-    const disclaimerDialog = await waitFor(() => result?.getByTestId('disclaimerDialog'));
+    const disclaimerDialog = await waitFor(() => result.getByTestId('disclaimerDialog'));
     expect(disclaimerDialog).toBeInTheDocument();
     const confirmButton = within(disclaimerDialog!).getByTestId('disclaimer-confirm-button');
     expect(confirmButton).toBeDisabled();
@@ -183,7 +179,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     );
     const button = screen.getByRole('button', { name: 'Click me' });
     fireEvent.click(button);
-    const duplicateDialog = await waitFor(() => result?.getByTestId('duplicateDialog'));
+    const duplicateDialog = await waitFor(() => result.getByTestId('duplicateDialog'));
     expect(duplicateDialog).toBeInTheDocument();
     const confirmButton = within(duplicateDialog!).getByRole('button', { name: 'button.conferma' });
     fireEvent.click(confirmButton);

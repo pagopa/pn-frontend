@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../../test-utils';

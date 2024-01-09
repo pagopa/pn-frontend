@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -18,11 +17,6 @@ import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
 
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
-
 // mock imports
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -31,10 +25,13 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-describe('NewApiKey component', () => {
+describe('NewApiKey component', async () => {
   let result: RenderResult;
-
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -57,10 +54,10 @@ describe('NewApiKey component', () => {
     });
     expect(result.container).toHaveTextContent(/page-title/i);
     const form = result.getByTestId('new-api-key-form');
-    testFormElements(form!, 'name', 'form-placeholder-name');
-    testFormElements(form!, 'groups', 'form-placeholder-groups');
-    const submitButton = within(form!).getByTestId('submit-new-api-key');
-    expect(submitButton!).toBeDisabled();
+    testFormElements(form, 'name', 'form-placeholder-name');
+    testFormElements(form, 'groups', 'form-placeholder-groups');
+    const submitButton = within(form).getByTestId('submit-new-api-key');
+    expect(submitButton).toBeDisabled();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/ext-registry/pa/v1/groups?statusFilter=ACTIVE');
   });
@@ -73,17 +70,17 @@ describe('NewApiKey component', () => {
     const form = result.getByTestId('new-api-key-form');
 
     // initial status: empty form, submit is disabled, no error message
-    const submitButton = within(form!).getByTestId('submit-new-api-key');
+    const submitButton = within(form).getByTestId('submit-new-api-key');
     expect(submitButton).toBeDisabled();
     expect(result.container).not.toHaveTextContent(/form-error-name/);
 
     // fill api key name: valid form, submit is enabled, no error message
-    await testInput(form!, 'name', newApiKeyDTO.name);
+    await testInput(form, 'name', newApiKeyDTO.name);
     expect(submitButton).toBeEnabled();
     expect(result.container).not.toHaveTextContent(/form-error-name/);
 
     // set back api key name to empty text field, submit is disabled, error message shown
-    await testInput(form!, 'name', '');
+    await testInput(form, 'name', '');
     expect(submitButton).toBeDisabled();
     expect(result.container).toHaveTextContent(/form-error-name/);
   });
@@ -96,17 +93,17 @@ describe('NewApiKey component', () => {
       result = render(<NewApiKey />);
     });
     const form = result.getByTestId('new-api-key-form');
-    await testInput(form!, 'name', newApiKeyDTO.name);
+    await testInput(form, 'name', newApiKeyDTO.name);
     await testAutocomplete(
-      form!,
+      form,
       'groups',
       mockGroups.map((g) => ({ id: g.id, name: g.name })),
       true,
       0
     );
-    const submitButton = within(form!).getByTestId('submit-new-api-key');
+    const submitButton = within(form).getByTestId('submit-new-api-key');
     expect(submitButton).toBeEnabled();
-    fireEvent.click(submitButton!);
+    fireEvent.click(submitButton);
     await waitFor(() => {
       expect(result.container).toHaveTextContent(/api-key-succesfully-generated/);
     });
@@ -139,14 +136,14 @@ describe('NewApiKey component', () => {
 
     // simulate click on the breadcrumb link ...
     const links = result.getAllByRole('link');
-    expect(links![0]).toHaveTextContent(/title/i);
-    expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
-    fireEvent.click(links![0]);
+    expect(links[0]).toHaveTextContent(/title/i);
+    expect(links[0]).toHaveAttribute('href', routes.API_KEYS);
+    fireEvent.click(links[0]);
 
     // ... hence prompt must be shown
     const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));
     expect(promptDialog).toBeInTheDocument();
-    const confirmExitBtn = within(promptDialog!).getByTestId('confirmExitBtn');
+    const confirmExitBtn = within(promptDialog).getByTestId('confirmExitBtn');
     expect(confirmExitBtn).toBeInTheDocument();
     fireEvent.click(confirmExitBtn);
 

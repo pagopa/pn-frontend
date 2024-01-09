@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { LinkType, loggedUser, partyList, productsList } from '../../../__mocks__/User.mock';

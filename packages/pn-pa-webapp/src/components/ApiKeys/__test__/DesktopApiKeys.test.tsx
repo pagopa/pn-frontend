@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { mockApiKeysForFE } from '../../../__mocks__/ApiKeys.mock';
@@ -37,7 +37,7 @@ describe('DesktopApiKeys component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('render component without API keys list', async () => {
     const { container, getByTestId } = render(<DesktopApiKeys {...defaultProps} apiKeys={[]} />);
     expect(container).toHaveTextContent(/empty-message/i);

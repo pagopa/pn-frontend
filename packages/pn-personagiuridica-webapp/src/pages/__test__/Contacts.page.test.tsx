@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
@@ -10,11 +9,6 @@ import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILE } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 const mockOpenFn = vi.fn();
 
@@ -27,10 +21,14 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Contacts page', () => {
+describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
   const original = window.open;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

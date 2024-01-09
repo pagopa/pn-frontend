@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { CardSort, Sort } from '../../../models';
@@ -13,7 +12,7 @@ import {
 } from '../../../test-utils';
 import MobileNotificationsSort from '../MobileNotificationsSort';
 
-type MockOrderByFields = 'mocked-field-1' | 'mocked-field-2' | '';
+type MockOrderByFields = { 'mocked-field-1': string; 'mocked-field-2': string };
 
 const sortFields: Array<CardSort<MockOrderByFields>> = [
   { id: 'mocked-field-1-asc', label: 'Mocked label 1 asc', value: 'asc', field: 'mocked-field-1' },
@@ -76,7 +75,7 @@ describe('MobileNotifications Component', () => {
       />
     );
     const button = getByTestId('dialogToggleButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const dialog = await waitFor(() => screen.queryByTestId('mobileDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/sort.title/i);
@@ -84,13 +83,13 @@ describe('MobileNotifications Component', () => {
     expect(radioGroup).toBeInTheDocument();
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels).toHaveLength(sortFields.length);
-    radioLabels!.forEach((label, index) => {
+    radioLabels.forEach((label, index) => {
       expect(label).toHaveTextContent(sortFields[index].label);
     });
     const actions = within(dialog!).getAllByTestId('dialogAction');
     expect(actions).toHaveLength(2);
-    expect(actions![0]).toHaveTextContent(/sort.title/i);
-    expect(actions![1]).toHaveTextContent(/sort.cancel/i);
+    expect(actions[0]).toHaveTextContent(/sort.title/i);
+    expect(actions[1]).toHaveTextContent(/sort.cancel/i);
   });
 
   it('checks radioGroup initial value', async () => {
@@ -106,11 +105,11 @@ describe('MobileNotifications Component', () => {
       />
     );
     const button = getByTestId('dialogToggleButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
-    const radioGroup = within(dialog!).getByRole('radiogroup');
+    const radioGroup = within(dialog).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
-    expect(radioLabels![0].children[0].classList.contains('Mui-checked')).toBe(true);
+    expect(radioLabels[0].children[0].classList.contains('Mui-checked')).toBe(true);
   });
 
   it('changes radioGroup value', async () => {
@@ -126,9 +125,9 @@ describe('MobileNotifications Component', () => {
       />
     );
     const button = getByTestId('dialogToggleButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
-    const radioGroup = within(dialog!).queryByRole('radiogroup');
+    const radioGroup = within(dialog).queryByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
     expect(radioLabels![0].children[0].classList.contains('Mui-checked')).toBe(true);
     fireEvent.click(radioLabels![3]);
@@ -151,13 +150,13 @@ describe('MobileNotifications Component', () => {
       />
     );
     const button = getByTestId('dialogToggleButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
-    const radioGroup = within(dialog!).getByRole('radiogroup');
+    const radioGroup = within(dialog).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
-    fireEvent.click(radioLabels![3]);
+    fireEvent.click(radioLabels[3]);
     const actions = dialog?.querySelectorAll('[data-testid="dialogAction"] > button');
-    fireEvent.click(actions![0]);
+    fireEvent.click(actions[0]);
     await waitFor(() => {
       expect(onChangeSortingMk).toBeCalledTimes(1);
       expect(onChangeSortingMk).toBeCalledWith({
@@ -199,13 +198,13 @@ describe('MobileNotifications Component', () => {
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveTextContent('1');
     const button = getByTestId('dialogToggleButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
-    const radioGroup = within(dialog!).getByRole('radiogroup');
+    const radioGroup = within(dialog).getByRole('radiogroup');
     const radioLabels = radioGroup?.querySelectorAll('label');
-    fireEvent.click(radioLabels![3]);
+    fireEvent.click(radioLabels[3]);
     const actions = dialog?.querySelectorAll('[data-testid="dialogAction"] > button');
-    fireEvent.click(actions![1]);
+    fireEvent.click(actions[1]);
     await waitFor(() => {
       expect(onChangeSortingMk).toBeCalledTimes(1);
       expect(onChangeSortingMk).toBeCalledWith({

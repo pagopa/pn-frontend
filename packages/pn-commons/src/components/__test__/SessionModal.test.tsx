@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { act, createMatchMedia, render } from '../../test-utils';

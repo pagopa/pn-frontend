@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';

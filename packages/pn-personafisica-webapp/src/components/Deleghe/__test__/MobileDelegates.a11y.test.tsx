@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
@@ -17,7 +16,7 @@ describe('MobileDelegates Component - accessibility tests', () => {
     const result = render(<MobileDelegates />, {
       preloadedState: { delegationsState: { delegations: { delegates: [] } } },
     });
-    const results = await axe(result?.container);
+    const results = await axe(result.container);
     expect(results).toHaveNoViolations();
   });
 
@@ -25,7 +24,7 @@ describe('MobileDelegates Component - accessibility tests', () => {
     const result = render(<MobileDelegates />, {
       preloadedState: { delegationsState: { delegations: { delegates: arrayOfDelegates } } },
     });
-    const results = await axe(result?.container);
+    const results = await axe(result.container);
     expect(results).toHaveNoViolations();
   });
 });

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
@@ -7,12 +7,6 @@ import * as routes from '../../../navigation/routes.const';
 import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegates from '../Delegates';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../../api/apiClients');
-const testUtils = await import('../../../__test__/test-utils');
 
 const mockNavigateFn = vi.fn();
 
@@ -34,7 +28,12 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-describe('Delegates Component', () => {
+describe('Delegates Component', async () => {
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
+
   afterEach(() => {
     vi.clearAllMocks();
   });

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -15,7 +14,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('CourtesyContacts Component', async () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   it('does not have basic accessibility issues - no contacts', async () => {
     await act(async () => {
@@ -25,10 +24,8 @@ describe('CourtesyContacts Component', async () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
+    const results = await axe(result.container);
+    expect(results).toHaveNoViolations();
   });
 
   it('does not have basic accessibility issues - contacts', async () => {
@@ -39,9 +36,7 @@ describe('CourtesyContacts Component', async () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
+    const results = await axe(result.container);
+    expect(results).toHaveNoViolations();
   });
 });

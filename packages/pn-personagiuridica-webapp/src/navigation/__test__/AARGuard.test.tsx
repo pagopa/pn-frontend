@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -11,11 +10,6 @@ import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 const mockNavigateFn = vi.fn(() => {});
 
@@ -39,9 +33,13 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Notification from QR code', () => {
+describe('Notification from QR code', async () => {
   const original = window.location;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

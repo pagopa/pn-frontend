@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
@@ -33,7 +33,7 @@ vi.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
     <>
-      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+      {props.i18nKey} {props.components && props.components.map((c) => c)}
     </>
   ),
 }));

@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -14,11 +13,6 @@ import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationD
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
 import NotificationPaymentPagoPa from '../NotificationPaymentPagoPa';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../../api/apiClients');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -35,8 +29,12 @@ vi.mock('@pagopa-pn/pn-commons', async () => {
   };
 });
 
-describe('NotificationPaymentPagoPa Component', () => {
+describe('NotificationPaymentPagoPa Component', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

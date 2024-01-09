@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { vi } from 'vitest';
 
 import { render } from '../../test-utils';

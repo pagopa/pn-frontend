@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
@@ -19,11 +18,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it.skip without a warning being shown
@@ -70,11 +64,15 @@ async function setFormValues(
   await testInput(form, 'iunMatch', iunMatch);
 }
 
-describe('Filter Notifications Table Component', () => {
+describe('Filter Notifications Table Component', async () => {
   let result: RenderResult;
   let form: HTMLFormElement;
 
   const original = window.matchMedia;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
 
   afterAll(() => {
     window.matchMedia = original;

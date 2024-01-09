@@ -1,13 +1,7 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -18,7 +12,12 @@ vi.mock('react-i18next', () => ({
 
 const mockOpenCodeModalHandler = vi.fn();
 
-describe('DelegationElements', () => {
+describe('DelegationElements', async () => {
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
+
   it('renders the Menu closed', () => {
     const { queryByTestId } = render(<Menu />);
     const menuIcon = queryByTestId('delegationMenuIcon');

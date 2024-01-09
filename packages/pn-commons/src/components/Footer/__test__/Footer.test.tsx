@@ -1,5 +1,6 @@
-import React from 'react';
 import { vi } from 'vitest';
+
+import { Languages } from '@pagopa/mui-italia';
 
 import { fireEvent, render, screen } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
@@ -52,19 +53,21 @@ describe('Footer Component', () => {
   it('shows languages dropdown', async () => {
     const { getByRole } = render(<Footer loggedUser={true} />);
     const dropdownLanguageButton = getByRole('button');
-    const languageKeys = Object.keys(LANGUAGES);
+    const languageKeys = Object.keys(LANGUAGES) as Array<keyof Languages>;
     // This array represents how the options labels should sequentially change when you click the option.
     const expectedLanguagesLabels = new Array();
     for (let i = 0; i < languageKeys.length; i++) {
-      expectedLanguagesLabels.push(LANGUAGES[languageKeys[i - 1 < 0 ? 0 : i - 1]][languageKeys[i]]);
+      expectedLanguagesLabels.push(
+        LANGUAGES[languageKeys[i - 1 < 0 ? 0 : i - 1]]![languageKeys[i]]
+      );
     }
     languageKeys.forEach((currentDropdownLanguage, index) => {
       fireEvent.click(dropdownLanguageButton);
       const languageSelector = screen.getByRole('presentation');
       expect(languageSelector).toBeInTheDocument();
       const languageOptions = languageSelector?.querySelectorAll('ul li');
-      expect(languageOptions).toHaveLength(Object.keys(LANGUAGES[currentDropdownLanguage]).length);
-      const languageOptionsArray = Array.from(languageOptions!);
+      expect(languageOptions).toHaveLength(Object.keys(LANGUAGES[currentDropdownLanguage]!).length);
+      const languageOptionsArray = Array.from(languageOptions);
       expect(languageOptionsArray[index]).toHaveTextContent(expectedLanguagesLabels[index]);
       fireEvent.click(languageOptionsArray[index]);
     });

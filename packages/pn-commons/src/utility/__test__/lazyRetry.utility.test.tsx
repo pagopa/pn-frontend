@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { vi } from 'vitest';
 
 import { RenderResult, act, render, waitFor } from '../../test-utils';
@@ -33,7 +33,7 @@ describe('test lazy loading retry', () => {
 
   it('test lazyRetry - component loaded at first try', async () => {
     const LazyComponent = lazyRetry<any>(() =>
-      Promise.resolve({ default: ({ children }) => <div>{children}</div> })
+      Promise.resolve({ default: ({ children }: { children: ReactNode }) => <div>{children}</div> })
     );
     let result: RenderResult;
     await act(async () => {

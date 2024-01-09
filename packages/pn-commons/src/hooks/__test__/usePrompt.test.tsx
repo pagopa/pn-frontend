@@ -1,6 +1,5 @@
-import React from 'react';
-import { vi } from 'vitest';
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../test-utils';
 import { usePrompt } from '../usePrompt';

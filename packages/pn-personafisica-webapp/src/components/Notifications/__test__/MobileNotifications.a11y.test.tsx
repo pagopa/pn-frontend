@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
@@ -19,7 +18,7 @@ describe('MobileNotifications Component - accessibility tests', () => {
   it('does not have basic accessibility issues', async () => {
     let result: RenderResult | undefined;
     await act(async () => {
-      result = await render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
+      result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
     });
 
     if (result) {
@@ -33,7 +32,7 @@ describe('MobileNotifications Component - accessibility tests', () => {
   it('does not have basic accessibility issues (empty notifications)', async () => {
     let result: RenderResult | undefined;
     await act(async () => {
-      result = await render(<MobileNotifications notifications={[]} />);
+      result = render(<MobileNotifications notifications={[]} />);
     });
 
     if (result) {

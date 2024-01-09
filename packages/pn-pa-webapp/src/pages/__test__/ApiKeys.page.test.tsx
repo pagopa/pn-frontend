@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
@@ -19,11 +18,6 @@ import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 const mockNavigateFn = vi.fn();
 
@@ -82,9 +76,13 @@ async function testApiKeyChangeStatus(
   });
 }
 
-describe('ApiKeys Page', () => {
+describe('ApiKeys Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

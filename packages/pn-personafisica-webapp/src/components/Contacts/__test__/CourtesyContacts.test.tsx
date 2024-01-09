@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -16,12 +15,6 @@ import { CourtesyChannelType } from '../../../models/contacts';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import CourtesyContacts from '../CourtesyContacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../../api/apiClients');
-const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -41,7 +34,7 @@ const fillCodeDialog = async (result: RenderResult) => {
   });
   // confirm the addition
   const dialogButtons = dialog?.querySelectorAll('button');
-  fireEvent.click(dialogButtons![1]);
+  fireEvent.click(dialogButtons[1]);
   return dialog;
 };
 
@@ -53,9 +46,14 @@ const defaultPhoneAddress = digitalAddresses.courtesy.find(
   (addr) => addr.senderId === 'default' && addr.channelType === CourtesyChannelType.SMS
 );
 
-describe('CourtesyContacts Component', () => {
+describe('CourtesyContacts Component', async () => {
   let mock: MockAdapter;
-  let result: RenderResult | undefined;
+  let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
+  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -77,19 +75,19 @@ describe('CourtesyContacts Component', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    const avatar = result?.getByText('Email');
+    const avatar = result.getByText('Email');
     expect(avatar).toBeInTheDocument();
-    const title = result?.getByRole('heading');
+    const title = result.getByRole('heading');
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('courtesy-contacts.subtitle');
-    const body = result?.getByTestId('DigitalContactsCardBody');
+    const body = result.getByTestId('DigitalContactsCardBody');
     expect(body).toHaveTextContent('courtesy-contacts.title');
     expect(body).toHaveTextContent('courtesy-contacts.description');
-    const disclaimer = result?.getByTestId('contacts disclaimer');
+    const disclaimer = result.getByTestId('contacts disclaimer');
     expect(disclaimer).toBeInTheDocument();
     // check inputs
-    const phoneInput = result?.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
-    const emailInput = result?.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
+    const phoneInput = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
+    const emailInput = result.container.querySelector(`[name="${CourtesyFieldType.EMAIL}"]`);
     expect(phoneInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
   });
@@ -123,7 +121,7 @@ describe('CourtesyContacts Component', () => {
     const button = result.getByRole('button');
     expect(button).toBeEnabled();
     // save the phone
-    fireEvent.click(button!);
+    fireEvent.click(button);
     // Confirms the disclaimer dialog
     const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
     fireEvent.click(disclaimerCheckbox);
@@ -330,7 +328,7 @@ describe('CourtesyContacts Component', () => {
     const button = result.getByRole('button');
     expect(button).toBeEnabled();
     // save the email
-    fireEvent.click(button!);
+    fireEvent.click(button);
     // Confirms the disclaimer dialog
     const disclaimerCheckbox = await waitFor(() => result.getByTestId('disclaimer-checkbox'));
     fireEvent.click(disclaimerCheckbox);

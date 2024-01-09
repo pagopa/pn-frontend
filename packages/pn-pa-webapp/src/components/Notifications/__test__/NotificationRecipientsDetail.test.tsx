@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -74,7 +73,7 @@ describe('NotificationRecipientsDetail Component', () => {
       if (index >= 3) {
         return false;
       }
-      expect(recipientElem).toHaveTextContent(
+      return expect(recipientElem).toHaveTextContent(
         recipients[index].denomination + ' - ' + recipients[index].taxId
       );
     });

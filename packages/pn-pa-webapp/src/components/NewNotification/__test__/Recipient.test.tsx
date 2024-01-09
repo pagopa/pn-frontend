@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { RecipientType } from '@pagopa-pn/pn-commons';
@@ -16,11 +15,6 @@ import {
 } from '../../../__test__/test-utils';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import Recipient from '../Recipient';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -42,21 +36,21 @@ const testRecipientFormRendering = async (
     recipient ? recipientIndex : undefined,
     true
   );
-  await testFormElements(
+  testFormElements(
     form,
     `recipients[${recipientIndex}].firstName`,
     'name*',
     recipient ? recipient.firstName : undefined
   );
   if (!recipient || (recipient && recipient.recipientType === RecipientType.PF)) {
-    await testFormElements(
+    testFormElements(
       form,
       `recipients[${recipientIndex}].lastName`,
       'surname*',
       recipient ? recipient.lastName : undefined
     );
   }
-  await testFormElements(
+  testFormElements(
     form,
     `recipients[${recipientIndex}].taxId`,
     recipient && recipient.recipientType === RecipientType.PG
@@ -65,13 +59,13 @@ const testRecipientFormRendering = async (
     recipient ? recipient.taxId : undefined
   );
   if (hasPayment) {
-    await testFormElements(
+    testFormElements(
       form,
       `recipients[${recipientIndex}].creditorTaxId`,
       'creditor-fiscal-code*',
       recipient ? recipient.creditorTaxId : undefined
     );
-    await testFormElements(
+    testFormElements(
       form,
       `recipients[${recipientIndex}].noticeCode`,
       'notice-code*',
@@ -161,7 +155,7 @@ const populateForm = async (
   // show physical address form
   if (recipient.showPhysicalAddress) {
     const checkbox = within(form).getByTestId(`showPhysicalAddress${recipientIndex}`);
-    fireEvent.click(checkbox!);
+    fireEvent.click(checkbox);
     await testInput(form, `recipients[${recipientIndex}].address`, recipient.address);
     await testInput(form, `recipients[${recipientIndex}].houseNumber`, recipient.houseNumber);
     await testInput(form, `recipients[${recipientIndex}].municipality`, recipient.municipality);
@@ -172,7 +166,7 @@ const populateForm = async (
   // show digital address form
   if (recipient.showDigitalDomicile) {
     const checkbox = within(form).getByTestId(`showDigitalDomicile${recipientIndex}`);
-    fireEvent.click(checkbox!);
+    fireEvent.click(checkbox);
     await testInput(
       form,
       `recipients[${recipientIndex}].digitalDomicile`,
@@ -190,18 +184,22 @@ const testStringFieldValidation = async (
   await testInput(form, `recipients[${recipientIndex}].${fieldName}`, '', true);
   const error = form.querySelector(`[id="recipients[${recipientIndex}].${fieldName}-helper-text"]`);
   expect(error).toHaveTextContent('required-field');
-  await testInput(form!, `recipients[${recipientIndex}].${fieldName}`, ' text-with-spaces ');
+  await testInput(form, `recipients[${recipientIndex}].${fieldName}`, ' text-with-spaces ');
   expect(error).toHaveTextContent('no-spaces-at-edges');
   if (maxLength) {
-    await testInput(form!, `recipients[${recipientIndex}].${fieldName}`, randomString(maxLength));
+    await testInput(form, `recipients[${recipientIndex}].${fieldName}`, randomString(maxLength));
     expect(error).toHaveTextContent('too-long-field-error');
   }
   return error!;
 };
 
-describe('Recipient Component with payment enabled', () => {
+describe('Recipient Component with payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -249,7 +247,7 @@ describe('Recipient Component with payment enabled', () => {
     // fill the second recipient
     await populateForm(form, 1, true, newNotification.recipients[1]);
     expect(submitButton).toBeEnabled();
-    fireEvent.click(submitButton!);
+    fireEvent.click(submitButton);
     await waitFor(() => {
       const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual(
@@ -280,9 +278,9 @@ describe('Recipient Component with payment enabled', () => {
     // compared to PF case, only firstName and taxId validations change
     // firstName
     const firstNameError = await testStringFieldValidation(form, 1, 'firstName');
-    await testInput(form!, 'recipients[1].firstName', 'text-with-invalid-char’');
+    await testInput(form, 'recipients[1].firstName', 'text-with-invalid-char’');
     expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
-    await testInput(form!, 'recipients[1].firstName', randomString(81));
+    await testInput(form, 'recipients[1].firstName', randomString(81));
     expect(firstNameError).toHaveTextContent('too-long-field-error');
     // taxId empty
     await testInput(form, 'recipients[1].taxId', '', true);
@@ -292,33 +290,33 @@ describe('Recipient Component with payment enabled', () => {
     await testInput(form, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     // taxId error
-    await testInput(form!, 'recipients[1].taxId', 'wrong-fiscal-code');
+    await testInput(form, 'recipients[1].taxId', 'wrong-fiscal-code');
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     expect(submitButton).toBeDisabled();
     // identical taxId
     const radioPhysicalPerson = result.queryAllByLabelText('physical-person')[1];
-    fireEvent.click(radioPhysicalPerson!);
-    await testInput(form!, 'recipients[0].taxId', newNotification.recipients[0].taxId, true);
-    await testInput(form!, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
+    fireEvent.click(radioPhysicalPerson);
+    await testInput(form, 'recipients[0].taxId', newNotification.recipients[0].taxId, true);
+    await testInput(form, 'recipients[1].taxId', newNotification.recipients[0].taxId, true);
     expect(taxIdError).toHaveTextContent('identical-fiscal-codes-error');
     // identical creditorTaxId and noticeCode
     await testInput(
-      form!,
+      form,
       'recipients[0].creditorTaxId',
       newNotification.recipients[0].creditorTaxId
     );
     await testInput(
-      form!,
+      form,
       'recipients[1].creditorTaxId',
       newNotification.recipients[0].creditorTaxId
     );
-    await testInput(form!, 'recipients[0].noticeCode', newNotification.recipients[0].noticeCode);
-    await testInput(form!, 'recipients[1].noticeCode', newNotification.recipients[0].noticeCode);
+    await testInput(form, 'recipients[0].noticeCode', newNotification.recipients[0].noticeCode);
+    await testInput(form, 'recipients[1].noticeCode', newNotification.recipients[0].noticeCode);
     const noticeCodeError = form.querySelector('[id="recipients[1].noticeCode-helper-text"]');
     expect(noticeCodeError).toHaveTextContent('identical-notice-codes-error');
     // remove second recipient and check that the form returns valid
     const deleteIcon = result.queryAllByTestId('DeleteRecipientIcon');
-    fireEvent.click(deleteIcon![1]);
+    fireEvent.click(deleteIcon[1]);
     await waitFor(() => expect(submitButton).toBeEnabled());
   }, 10000);
 
@@ -365,12 +363,12 @@ describe('Recipient Component with payment enabled', () => {
     const deleteIcon = result.queryAllByTestId('DeleteRecipientIcon');
     expect(deleteIcon).toHaveLength(2);
     // remove the second recipient
-    fireEvent.click(deleteIcon![1]);
+    fireEvent.click(deleteIcon[1]);
     await waitFor(() => {
       expect(result.container).not.toHaveTextContent(/title 2/i);
     });
     expect(submitButton).toBeEnabled();
-    fireEvent.click(submitButton!);
+    fireEvent.click(submitButton);
     await waitFor(() => {
       const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
@@ -396,7 +394,7 @@ describe('Recipient Component with payment enabled', () => {
     // fill the first recipient
     await populateForm(form, 0, true, newNotification.recipients[0]);
     const backButton = within(form).getByTestId('previous-step');
-    fireEvent.click(backButton!);
+    fireEvent.click(backButton);
     await waitFor(() => {
       const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
@@ -421,26 +419,26 @@ describe('Recipient Component with payment enabled', () => {
     // set invalid values
     // firstName
     const firstNameError = await testStringFieldValidation(form, 0, 'firstName');
-    await testInput(form!, 'recipients[0].firstName', 'text-with-invalid-char’');
+    await testInput(form, 'recipients[0].firstName', 'text-with-invalid-char’');
     expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
     // lastName
     const lastNameError = await testStringFieldValidation(form, 0, 'lastName');
-    await testInput(form!, 'recipients[0].lastName', 'text-with-invalid-char’');
+    await testInput(form, 'recipients[0].lastName', 'text-with-invalid-char’');
     expect(lastNameError).toBeInTheDocument();
     // firstName + lastName
-    await testInput(form!, 'recipients[0].firstName', randomString(40));
-    await testInput(form!, 'recipients[0].lastName', randomString(45));
+    await testInput(form, 'recipients[0].firstName', randomString(40));
+    await testInput(form, 'recipients[0].lastName', randomString(45));
     expect(firstNameError).toHaveTextContent('too-long-field-error');
     expect(lastNameError).toBeInTheDocument();
     // taxId
     await testInput(form, 'recipients[0].taxId', '', true);
     const taxIdError = form.querySelector('[id="recipients[0].taxId-helper-text"]');
     expect(taxIdError).toHaveTextContent('required-field');
-    await testInput(form!, 'recipients[0].taxId', 'wrong-fiscal-code');
+    await testInput(form, 'recipients[0].taxId', 'wrong-fiscal-code');
     expect(taxIdError).toHaveTextContent('fiscal-code-error');
     // digitalDomicile
     const digitalDomicileError = await testStringFieldValidation(form, 0, 'digitalDomicile', 321);
-    await testInput(form!, 'recipients[0].digitalDomicile', 'wrong-email-format');
+    await testInput(form, 'recipients[0].digitalDomicile', 'wrong-email-format');
     expect(digitalDomicileError).toHaveTextContent('pec-error');
     // address
     await testStringFieldValidation(form, 0, 'address', 1025);
@@ -458,7 +456,7 @@ describe('Recipient Component with payment enabled', () => {
       '[id="recipients[0].municipalityDetails-helper-text"]'
     );
     expect(municipalityDetailsError).toHaveTextContent('no-spaces-at-edges');
-    await testInput(form!, 'recipients[0].municipalityDetails', randomString(257));
+    await testInput(form, 'recipients[0].municipalityDetails', randomString(257));
     expect(municipalityDetailsError).toHaveTextContent('too-long-field-error');
     // municipality
     await testStringFieldValidation(form, 0, 'municipality', 257);
@@ -470,21 +468,25 @@ describe('Recipient Component with payment enabled', () => {
     await testInput(form, 'recipients[0].creditorTaxId', '', true);
     const creditorTaxIdError = form.querySelector('[id="recipients[0].creditorTaxId-helper-text"]');
     expect(creditorTaxIdError).toHaveTextContent('required-field');
-    await testInput(form!, 'recipients[0].creditorTaxId', 'wrong-fiscal-code');
+    await testInput(form, 'recipients[0].creditorTaxId', 'wrong-fiscal-code');
     expect(creditorTaxIdError).toHaveTextContent('fiscal-code-error');
     // noticeCode
     await testInput(form, 'recipients[0].noticeCode', '', true);
     const noticeCodeError = form.querySelector('[id="recipients[0].noticeCode-helper-text"]');
     expect(noticeCodeError).toHaveTextContent('required-field');
-    await testInput(form!, 'recipients[0].noticeCode', 'wrong-notice-code');
+    await testInput(form, 'recipients[0].noticeCode', 'wrong-notice-code');
     expect(noticeCodeError).toHaveTextContent('notice-code-error');
     expect(submitButton).toBeDisabled();
   }, 10000);
 });
 
-describe('Recipient Component without payment enabled', () => {
+describe('Recipient Component without payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -514,7 +516,7 @@ describe('Recipient Component without payment enabled', () => {
     await populateForm(form, 0, false, newNotification.recipients[0]);
     const submitButton = within(form).getByTestId('step-submit');
     expect(submitButton).toBeEnabled();
-    fireEvent.click(submitButton!);
+    fireEvent.click(submitButton);
     await waitFor(() => {
       const state = testUtils.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([

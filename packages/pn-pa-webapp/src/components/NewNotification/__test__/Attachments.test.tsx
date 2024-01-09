@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -18,12 +17,6 @@ import { NewNotificationDocument } from '../../../models/NewNotification';
 import Attachments from '../Attachments';
 
 const mockIsPaymentEnabledGetter = vi.fn();
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../../api/apiClients');
-const testUtils = await import('../../../__test__/test-utils');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -58,10 +51,15 @@ async function uploadDocument(elem: HTMLElement, index: number, document: NewNot
   });
 }
 
-describe('Attachments Component with payment enabled', () => {
+describe('Attachments Component with payment enabled', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
+  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -92,12 +90,12 @@ describe('Attachments Component with payment enabled', () => {
     expect(form).toHaveTextContent(/attach-for-recipients/i);
     const attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
     expect(attachmentBoxes).toHaveLength(1);
-    expect(attachmentBoxes![0]).toHaveTextContent(/act-attachment*/i);
-    const deleteIcon = within(attachmentBoxes![0]).queryByTestId('deletebutton');
+    expect(attachmentBoxes[0]).toHaveTextContent(/act-attachment*/i);
+    const deleteIcon = within(attachmentBoxes[0]).queryByTestId('deletebutton');
     expect(deleteIcon).not.toBeInTheDocument();
-    const fileInput = within(attachmentBoxes![0]).getByTestId('fileInput');
+    const fileInput = within(attachmentBoxes[0]).getByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
-    const attachmentNameInput = within(attachmentBoxes![0]).getByTestId('attachmentNameInput');
+    const attachmentNameInput = within(attachmentBoxes[0]).getByTestId('attachmentNameInput');
     expect(attachmentNameInput).toBeInTheDocument();
     const buttonSubmit = result.getByTestId('step-submit');
     const buttonPrevious = result.getByTestId('previous-step');
@@ -136,7 +134,7 @@ describe('Attachments Component with payment enabled', () => {
     const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     // add second document form
     const addButton = result.getByTestId('add-another-doc');
-    fireEvent.click(addButton!);
+    fireEvent.click(addButton);
     await waitFor(() => {
       attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
       expect(buttonSubmit).toBeDisabled();
@@ -147,7 +145,7 @@ describe('Attachments Component with payment enabled', () => {
     await waitFor(() => {
       expect(buttonSubmit).toBeEnabled();
     });
-    fireEvent.click(buttonSubmit!);
+    fireEvent.click(buttonSubmit);
     await waitFor(() => {
       // check api call
       expect(mock.history.post).toHaveLength(1);
@@ -216,7 +214,7 @@ describe('Attachments Component with payment enabled', () => {
     // upload first document
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
     const backButton = await waitFor(() => within(form!).getByTestId('previous-step'));
-    fireEvent.click(backButton!);
+    fireEvent.click(backButton);
     await waitFor(() => {
       // check data stored in redux state
       const state = testUtils.testStore.getState();
@@ -287,7 +285,7 @@ describe('Attachments Component with payment enabled', () => {
     expect(buttonSubmit).toBeEnabled();
     // add and upload second document
     const addButton = result.getByTestId('add-another-doc');
-    fireEvent.click(addButton!);
+    fireEvent.click(addButton);
     attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
     expect(attachmentBoxes).toHaveLength(2);
     expect(buttonSubmit).toBeDisabled();
@@ -295,7 +293,7 @@ describe('Attachments Component with payment enabled', () => {
     await waitFor(() => {
       expect(buttonSubmit).toBeEnabled();
     });
-    fireEvent.click(buttonSubmit!);
+    fireEvent.click(buttonSubmit);
     await waitFor(() => {
       // check api call
       expect(mock.history.post).toHaveLength(1);
@@ -351,7 +349,7 @@ describe('Attachments Component with payment enabled', () => {
     expect(buttonSubmit).toBeEnabled();
     // add and upload second document
     const addButton = result.getByTestId('add-another-doc');
-    fireEvent.click(addButton!);
+    fireEvent.click(addButton);
     attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
     expect(attachmentBoxes).toHaveLength(2);
     expect(buttonSubmit).toBeDisabled();

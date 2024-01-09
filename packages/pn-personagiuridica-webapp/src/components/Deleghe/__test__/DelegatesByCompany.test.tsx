@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
@@ -7,11 +7,6 @@ import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils
 import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../../api/apiClients');
 
 const mockNavigateFn = vi.fn();
 
@@ -32,8 +27,12 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-describe('Delegates Component - assuming delegates API works properly', () => {
+describe('Delegates Component - assuming delegates API works properly', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

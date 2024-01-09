@@ -1,6 +1,6 @@
-import React from 'react';
-import { TextField } from '@mui/material';
 import { vi } from 'vitest';
+
+import { TextField } from '@mui/material';
 
 import {
   RenderResult,
@@ -110,9 +110,9 @@ describe('DigitalContactElem Component', () => {
   });
 
   it('edits contact', async () => {
-    vi
-      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
-      .mockResolvedValueOnce({ pecValid: true } as DigitalAddress);
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress').mockResolvedValueOnce({
+      pecValid: true,
+    } as DigitalAddress);
     // render component
     await act(async () => {
       result = render(

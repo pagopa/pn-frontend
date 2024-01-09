@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -15,8 +15,8 @@ const submitHandler = vi.fn();
 const cancelHandler = vi.fn();
 
 const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
-  const [username, setUsername] = React.useState(inputUsername);
-  const [email, setEmail] = React.useState(inputEmail);
+  const [username, setUsername] = useState(inputUsername);
+  const [email, setEmail] = useState(inputEmail);
   return (
     <SmartFilter
       filterLabel="Filter"

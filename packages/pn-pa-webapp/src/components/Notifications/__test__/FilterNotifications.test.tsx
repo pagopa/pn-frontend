@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -25,11 +24,6 @@ import {
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const testUtils = await import('../../../__test__/test-utils');
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -84,11 +78,15 @@ async function setFormValues(
   iunMatch !== '' && (await testInput(form, 'iunMatch', iunMatch));
 }
 
-describe('Filter Notifications Table Component', () => {
+describe('Filter Notifications Table Component', async () => {
   let result: RenderResult;
   let form: HTMLFormElement | undefined;
 
   const original = window.matchMedia;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
 
   afterAll(() => {
     window.matchMedia = original;
@@ -101,14 +99,14 @@ describe('Filter Notifications Table Component', () => {
     });
     form = result.container.querySelector('form') as HTMLFormElement;
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'recipientId', 'filters.fiscal-code-tax-code', '');
-    testFormElements(form!, 'startDate', 'filters.data_da', '');
-    testFormElements(form!, 'endDate', 'filters.data_a', '');
-    testFormElements(form!, 'status', 'filters.status', localizedNotificationStatus[0].value);
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    testFormElements(form, 'recipientId', 'filters.fiscal-code-tax-code', '');
+    testFormElements(form, 'startDate', 'filters.data_da', '');
+    testFormElements(form, 'endDate', 'filters.data_a', '');
+    testFormElements(form, 'status', 'filters.status', localizedNotificationStatus[0].value);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent(/button.filtra/i);
-    const cancelButton = within(form!).getByTestId('cancelButton');
+    const cancelButton = within(form).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
   });
@@ -119,7 +117,7 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form!, 'recipientId', 'mocked-recipientId');
+    await testInput(form, 'recipientId', 'mocked-recipientId');
   });
 
   it('test recipientId input onPaste event', async () => {
@@ -128,14 +126,14 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    const inputRecipientId = form!.querySelector(`input[name="recipientId"]`);
+    const inputRecipientId = form.querySelector(`input[name="recipientId"]`);
     const paste = createEvent.paste(inputRecipientId!, {
       clipboardData: {
         getData: () => ' mocked-recipientId ',
       },
     });
     fireEvent(inputRecipientId!, paste);
-    expect(inputRecipientId!).toHaveValue('mocked-recipientId');
+    expect(inputRecipientId).toHaveValue('mocked-recipientId');
   });
 
   it('test iunMatch input', async () => {
@@ -144,7 +142,7 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form!, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
+    await testInput(form, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
   });
 
   it('test startDate input', async () => {
@@ -153,8 +151,8 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form!, 'startDate', '23/02/2022');
-    await testCalendar(form!, 'startDate');
+    await testInput(form, 'startDate', '23/02/2022');
+    await testCalendar(form, 'startDate');
   });
 
   it('test endDate input', async () => {
@@ -163,8 +161,8 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form!, 'endDate', '23/02/2022');
-    await testCalendar(form!, 'endDate');
+    await testInput(form, 'endDate', '23/02/2022');
+    await testCalendar(form, 'endDate');
   });
 
   it('test status select', async () => {
@@ -173,8 +171,8 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    expect(form!.querySelector(`input[name="status"]`)).toBeInTheDocument();
-    await testSelect(form!, 'status', localizedNotificationStatus, 2);
+    expect(form.querySelector(`input[name="status"]`)).toBeInTheDocument();
+    await testSelect(form, 'status', localizedNotificationStatus, 2);
   });
 
   it('test form submission - valid fields', async () => {
@@ -189,14 +187,14 @@ describe('Filter Notifications Table Component', () => {
     tenYearsAgo.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
     await setFormValues(
-      form!,
+      form,
       tenYearsAgo,
       oneYearAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
 
@@ -230,19 +228,19 @@ describe('Filter Notifications Table Component', () => {
     nineYearsAgo.setHours(0, 0, 0, 0);
     // wrong id and wrong start date
     await setFormValues(
-      form!,
+      form,
       nineYearsAgo,
       todayM,
       localizedNotificationStatus[2].value,
       'mocked-wrongId',
       ''
     );
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
-    expect(form!).toHaveTextContent('filters.errors.fiscal-code');
+    expect(form).toHaveTextContent('filters.errors.fiscal-code');
   });
 
   it('test form submission - iunMatch (invalid)', async () => {
@@ -257,19 +255,19 @@ describe('Filter Notifications Table Component', () => {
     nineYearsAgo.setHours(0, 0, 0, 0);
     // wrong id and wrong start date
     await setFormValues(
-      form!,
+      form,
       nineYearsAgo,
       todayM,
       localizedNotificationStatus[2].value,
       '',
       '1234-5678-910A-BCDFGH-I-OL'
     );
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
-    expect(form!).toHaveTextContent('filters.errors.iun');
+    expect(form).toHaveTextContent('filters.errors.iun');
   });
 
   it('test invalid date range - end before start', async () => {
@@ -285,14 +283,14 @@ describe('Filter Notifications Table Component', () => {
     oneYearAgo.setHours(0, 0, 0, 0);
     // wrong since endDate is before startDate
     await setFormValues(
-      form!,
+      form,
       oneYearAgo,
       nineYearsAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
     );
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
@@ -311,14 +309,14 @@ describe('Filter Notifications Table Component', () => {
     oneMonthAhead.setHours(0, 0, 0, 0);
     // wrong since endDate is before startDate
     await setFormValues(
-      form!,
+      form,
       todayM,
       oneMonthAhead,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
     );
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
@@ -351,16 +349,16 @@ describe('Filter Notifications Table Component', () => {
     oneYearAgo.setHours(0, 0, 0, 0);
     const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
-    let dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
+    let dialogForm = await waitFor(() => screen.getByTestId<HTMLFormElement>('filter-form'));
     await setFormValues(
-      dialogForm!,
+      dialogForm,
       nineYearsAgo,
       oneYearAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
-    const submitButton = dialogForm!.querySelector(`button[type="submit"]`);
+    const submitButton = dialogForm.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -378,8 +376,8 @@ describe('Filter Notifications Table Component', () => {
     });
     // cancel filters
     fireEvent.click(button);
-    dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
-    const cancelButton = within(dialogForm!).getByTestId('cancelButton');
+    dialogForm = await waitFor(() => screen.getByTestId<HTMLFormElement>('filter-form'));
+    const cancelButton = within(dialogForm).getByTestId('cancelButton');
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {

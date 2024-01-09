@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
@@ -11,11 +10,6 @@ import { CourtesyChannelType } from '../../models/contacts';
 import { PROFILO } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 const mockNavigateFn = vi.fn();
 
@@ -34,9 +28,13 @@ vi.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Contacts page', () => {
+describe('Contacts page', async () => {
   let mock: MockAdapter;
-  let result: RenderResult | undefined;
+  let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -55,17 +53,17 @@ describe('Contacts page', () => {
   it('renders Contacts (no contacts)', async () => {
     mock.onGet(CONTACTS_LIST()).reply(200, []);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
-    expect(result?.container).toHaveTextContent(/title/i);
-    expect(result?.container).toHaveTextContent(/subtitle/i);
-    const insertLegalContact = result?.getByTestId('insertLegalContact');
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/subtitle/i);
+    const insertLegalContact = result.getByTestId('insertLegalContact');
     expect(insertLegalContact).toBeInTheDocument();
-    const courtesyContacts = result?.getByTestId('courtesyContacts');
+    const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result?.queryByTestId('legalContacts');
+    const legalContacts = result.queryByTestId('legalContacts');
     expect(legalContacts).not.toBeInTheDocument();
-    const specialContact = result?.queryByTestId('specialContact');
+    const specialContact = result.queryByTestId('specialContact');
     expect(specialContact).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain(CONTACTS_LIST());
@@ -77,71 +75,71 @@ describe('Contacts page', () => {
     );
     mock.onGet(CONTACTS_LIST()).reply(200, { courtesy: [appIO] });
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
-    const insertLegalContact = result?.getByTestId('insertLegalContact');
+    const insertLegalContact = result.getByTestId('insertLegalContact');
     expect(insertLegalContact).toBeInTheDocument();
-    const courtesyContacts = result?.getByTestId('courtesyContacts');
+    const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result?.queryByTestId('legalContacts');
+    const legalContacts = result.queryByTestId('legalContacts');
     expect(legalContacts).not.toBeInTheDocument();
-    const specialContact = result?.queryByTestId('specialContact');
+    const specialContact = result.queryByTestId('specialContact');
     expect(specialContact).not.toBeInTheDocument();
   });
 
   it('renders Contacts (legal contacts)', async () => {
     mock.onGet(CONTACTS_LIST()).reply(200, { legal: digitalAddresses.legal });
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
-    const insertLegalContact = result?.queryByTestId('insertLegalContact');
+    const insertLegalContact = result.queryByTestId('insertLegalContact');
     expect(insertLegalContact).not.toBeInTheDocument();
-    const courtesyContacts = result?.getByTestId('courtesyContacts');
+    const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result?.getByTestId('legalContacts');
+    const legalContacts = result.getByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
-    const specialContact = result?.getByTestId('specialContact');
+    const specialContact = result.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
   });
 
   it('renders Contacts (courtesy contacts)', async () => {
     mock.onGet(CONTACTS_LIST()).reply(200, { courtesy: digitalAddresses.courtesy });
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
-    const insertLegalContact = result?.getByTestId('insertLegalContact');
+    const insertLegalContact = result.getByTestId('insertLegalContact');
     expect(insertLegalContact).toBeInTheDocument();
-    const courtesyContacts = result?.getByTestId('courtesyContacts');
+    const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result?.queryByTestId('legalContacts');
+    const legalContacts = result.queryByTestId('legalContacts');
     expect(legalContacts).not.toBeInTheDocument();
-    const specialContact = result?.getByTestId('specialContact');
+    const specialContact = result.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
   });
 
   it('renders Contacts (courtesy and legal contacts filled)', async () => {
     mock.onGet(CONTACTS_LIST()).reply(200, digitalAddresses);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
-    const insertLegalContact = result?.queryByTestId('insertLegalContact');
+    const insertLegalContact = result.queryByTestId('insertLegalContact');
     expect(insertLegalContact).not.toBeInTheDocument();
-    const courtesyContacts = result?.getByTestId('courtesyContacts');
+    const courtesyContacts = result.getByTestId('courtesyContacts');
     expect(courtesyContacts).toBeInTheDocument();
-    const legalContacts = result?.getByTestId('legalContacts');
+    const legalContacts = result.getByTestId('legalContacts');
     expect(legalContacts).toBeInTheDocument();
-    const specialContact = result?.getByTestId('specialContact');
+    const specialContact = result.getByTestId('specialContact');
     expect(specialContact).toBeInTheDocument();
   });
 
   it('subtitle link properly redirects to profile page', async () => {
     mock.onGet(CONTACTS_LIST()).reply(200, []);
     await act(async () => {
-      result = await render(<Contacts />);
+      result = render(<Contacts />);
     });
-    const subtitleLink = result?.getByText('subtitle-link-3');
+    const subtitleLink = result.getByText('subtitle-link-3');
     expect(subtitleLink).toBeInTheDocument();
-    fireEvent.click(subtitleLink!);
+    fireEvent.click(subtitleLink);
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(PROFILO);
   });

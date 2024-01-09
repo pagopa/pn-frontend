@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';

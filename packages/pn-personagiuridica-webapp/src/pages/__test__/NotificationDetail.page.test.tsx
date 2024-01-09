@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -47,11 +46,6 @@ import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
-
 const mockNavigateFn = vi.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
@@ -94,11 +88,15 @@ const delegator = arrayOfDelegators.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', () => {
+describe('NotificationDetail Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
   const original = window.location;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

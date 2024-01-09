@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { DOWNTIME_HISTORY } from '@pagopa-pn/pn-commons';
@@ -14,11 +13,6 @@ import {
   NOTIFICATION_PAYMENT_INFO,
 } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 let mockIsDelegate = false;
 
@@ -47,9 +41,13 @@ const paymentInfoRequest = paymentInfo.map((payment) => ({
   noticeCode: payment.noticeCode,
 }));
 
-describe('NotificationDetail Page - accessibility tests', () => {
+describe('NotificationDetail Page - accessibility tests', async () => {
   let result: RenderResult | undefined;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

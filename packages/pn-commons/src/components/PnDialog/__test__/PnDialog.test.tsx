@@ -1,4 +1,3 @@
-import React from 'react';
 import { DialogTitle } from '@mui/material';
 
 import { createMatchMedia, render } from '../../../test-utils';

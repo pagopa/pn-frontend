@@ -1,23 +1,11 @@
-import React from 'react';
 import { vi } from 'vitest';
 
-import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../../models';
-import { appStateReducer } from '../../../redux';
-import { act, fireEvent, render, waitFor } from '../../../test-utils';
+import { act, createTestStore, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
-
-function createTestStore() {
-  return configureStore({
-    reducer: { appState: appStateReducer },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
-}
 
 let counter = 0;
 const downloadUrl = 'https://www.mocked-url.com';
@@ -63,12 +51,11 @@ const getPaymentAttachment = createAsyncThunk<
 describe('NotificationPaymentF24Item Component', () => {
   const f24Item = payments.find((item) => !item.pagoPa && item.f24)?.f24 as F24PaymentDetails;
   const TIMERF24 = 5000;
-  let store;
+  const store = createTestStore();
 
   const original = window.location;
 
   beforeAll(() => {
-    store = createTestStore();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '' },

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';

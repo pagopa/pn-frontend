@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';

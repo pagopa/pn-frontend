@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -15,11 +14,6 @@ import {
 } from '../api/external-registries/external-registries-routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, render } from './test-utils';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../api/apiClients');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -62,9 +56,13 @@ const reduxInitialState = {
   },
 };
 
-describe('App', () => {
+describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

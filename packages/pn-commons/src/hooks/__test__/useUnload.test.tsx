@@ -1,10 +1,9 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { render } from '../../test-utils';
 import { useUnload } from '../useUnload';
 
-const MockComponent = ({ fn }) => {
+const MockComponent = ({ fn }: { fn: () => void }) => {
   useUnload(fn);
   return <div>Mock Component</div>;
 };

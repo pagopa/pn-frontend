@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
@@ -21,7 +20,7 @@ describe('ApiKeyModal component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('render component', () => {
     const { container, queryByTestId } = render(<ApiKeyModal {...defaultProps} />);
     expect(container).toHaveTextContent('mock-title');

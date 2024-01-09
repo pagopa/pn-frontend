@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { disableConsoleLogging, fireEvent, getById, render, waitFor } from '../../test-utils';
 import { SpecialContactsProvider, useSpecialContactsContext } from '../SpecialContacts.context';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { ServerResponse, ServerResponseErrorCode } from '../../../models/AppResponse';

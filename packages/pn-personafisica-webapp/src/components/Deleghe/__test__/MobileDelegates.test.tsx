@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';

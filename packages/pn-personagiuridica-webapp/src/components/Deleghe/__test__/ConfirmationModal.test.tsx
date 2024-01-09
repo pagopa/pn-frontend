@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';

@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -19,11 +18,6 @@ import { GET_ALL_ACTIVATED_PARTIES } from '../../api/external-registries/externa
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 // The test in which the "indietro" button in the breadcrumb is clicked
 // needs the actual version of navigate; mocking it would be inadequate
@@ -66,8 +60,12 @@ const yesterday = new Date(today);
 yesterday.setDate(yesterday.getDate() - 1);
 yesterday.setHours(0, 0, 0, 0);
 
-describe('NuovaDelega page', () => {
+describe('NuovaDelega page', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeEach(() => {
     mock.onGet(GET_ALL_ACTIVATED_PARTIES()).reply(200, parties);
@@ -180,7 +178,7 @@ describe('NuovaDelega page', () => {
     await testInput(form, 'codiceFiscale', createDelegationPayload.codiceFiscale);
     await testInput(form, 'expirationDate', '01/01/2122');
     const button = getByTestId('createButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());
@@ -203,7 +201,7 @@ describe('NuovaDelega page', () => {
     // the form is validate on submit
     await testInput(container, 'expirationDate', '');
     const button = getByTestId('createButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     // check errors on required field
     const nameError = container.querySelector('#nome-helper-text');
     expect(nameError).toHaveTextContent('nuovaDelega.validation.name.required');
@@ -245,7 +243,7 @@ describe('NuovaDelega page', () => {
     const businessName = container.querySelector('input[name="ragioneSociale"]');
     expect(businessName).toBeInTheDocument();
     // rerun form submission
-    fireEvent.click(button!);
+    fireEvent.click(button);
     const businessNameError = await waitFor(() =>
       container.querySelector('#ragioneSociale-helper-text')
     );
@@ -288,7 +286,7 @@ describe('NuovaDelega page', () => {
     await testAutocomplete(container, 'enti', parties, true, 1);
     // create delegation
     const button = getByTestId('createButton');
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(mock.history.post[0].url).toBe(CREATE_DELEGATION());

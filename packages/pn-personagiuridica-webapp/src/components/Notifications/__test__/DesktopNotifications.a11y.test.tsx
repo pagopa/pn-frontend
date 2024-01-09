@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';

@@ -1,11 +1,10 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { queryByTestId, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { PNRole } from '../../../models/user';
 import NotificationDetailTableSender from '../NotificationDetailTableSender';
 

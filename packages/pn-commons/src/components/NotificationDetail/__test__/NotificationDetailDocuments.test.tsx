@@ -1,12 +1,11 @@
-import React from 'react';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
 describe('NotificationDetailDocuments Component', () => {
-  let mockClickFn: vi.Mock;
+  let mockClickFn: Mock;
 
   beforeEach(() => {
     mockClickFn = vi.fn();

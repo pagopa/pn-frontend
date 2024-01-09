@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 

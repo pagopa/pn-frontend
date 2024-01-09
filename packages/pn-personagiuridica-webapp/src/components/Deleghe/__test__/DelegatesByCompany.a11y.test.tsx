@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
@@ -23,7 +22,7 @@ describe('Delegates Component - accessibility tests', () => {
         },
       },
     });
-    const results = await axe(result?.container);
+    const results = await axe(result.container);
     expect(results).toHaveNoViolations();
   });
 });

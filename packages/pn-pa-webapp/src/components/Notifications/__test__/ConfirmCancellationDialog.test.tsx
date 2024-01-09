@@ -1,17 +1,7 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import ConfirmCancellationDialog from '../ConfirmCancellationDialog';
-
-type Props = {
-  showModal: boolean;
-  onConfirm: React.MouseEventHandler<HTMLButtonElement>;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
-  payment: boolean;
-};
-
-// const renderConfirmCancellatioDialog = ({ showModal, onConfirm, onClose, payment }: Props) =>
 
 vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

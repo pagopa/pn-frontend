@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';

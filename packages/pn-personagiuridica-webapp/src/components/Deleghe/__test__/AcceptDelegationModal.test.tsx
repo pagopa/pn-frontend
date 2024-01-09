@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';

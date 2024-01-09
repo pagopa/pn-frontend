@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@emotion/react';
@@ -15,11 +14,6 @@ import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
 import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../api/apiClients');
 
 // mock imports
 vi.mock('react-i18next', () => ({
@@ -59,8 +53,12 @@ const reduxInitialState = {
   },
 };
 
-describe('App - accessbility tests', () => {
+describe('App - accessbility tests', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -82,13 +80,14 @@ describe('App - accessbility tests', () => {
   });
 
   it('Test if automatic accessibility tests passes - user not logged in', async () => {
-    let container;
+    let renderResult: RenderResult | undefined;
     await act(async () => {
-      const renderResult = render(<Component />);
-      container = renderResult.container;
+      renderResult = render(<Component />);
     });
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
+    if (renderResult) {
+      const result = await axe(renderResult.container);
+      expect(result).toHaveNoViolations();
+    }
   });
 
   it('Test if automatic accessibility tests passes - user logged in', async () => {

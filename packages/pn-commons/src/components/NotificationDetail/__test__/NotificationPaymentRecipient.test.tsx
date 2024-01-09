@@ -1,10 +1,9 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
+import { act, fireEvent, render, within } from '../../../test-utils';
 import {
   getF24Payments,
   getPagoPaF24Payments,

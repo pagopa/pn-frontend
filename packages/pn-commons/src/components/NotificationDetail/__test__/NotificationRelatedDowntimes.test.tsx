@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import React from 'react';
 import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';

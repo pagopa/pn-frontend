@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';

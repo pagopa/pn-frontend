@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';

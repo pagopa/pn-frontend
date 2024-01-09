@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -13,11 +13,6 @@ import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 const mockNavigateFn = vi.fn();
 
@@ -51,8 +46,12 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', () => {
+describe('test Terms of Service page', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);

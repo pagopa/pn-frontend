@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 
 import { formatDate } from '@pagopa-pn/pn-commons';

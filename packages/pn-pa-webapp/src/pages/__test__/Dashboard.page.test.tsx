@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import {
@@ -16,11 +16,6 @@ import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__t
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Dashboard from '../Dashboard.page';
-
-// this is needed because there is a bug when vi.mock is used
-// https://github.com/vitest-dev/vitest/issues/3300
-// maybe with vitest 1, we can remove the workaround
-const apiClients = await import('../../api/apiClients');
 
 const mockNavigateFn = vi.fn();
 
@@ -43,10 +38,14 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-describe('Dashboard Page', () => {
+describe('Dashboard Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
     mock = new MockAdapter(apiClients.apiClient);
@@ -226,7 +225,7 @@ describe('Dashboard Page', () => {
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
     const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
@@ -238,7 +237,7 @@ describe('Dashboard Page', () => {
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('filter', async () => {
@@ -274,7 +273,7 @@ describe('Dashboard Page', () => {
     // filter
     const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'recipientId', notificationsDTO.resultsPage[1].recipients[0]);
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
@@ -283,7 +282,7 @@ describe('Dashboard Page', () => {
     });
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('errors on api', async () => {

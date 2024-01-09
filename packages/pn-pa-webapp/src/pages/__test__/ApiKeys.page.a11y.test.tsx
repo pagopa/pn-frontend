@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';

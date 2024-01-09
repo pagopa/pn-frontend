@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -36,10 +35,9 @@ Il componente, infatti, si trova in pn-commons e qualora sia necessario un test 
 Andrea Cimini - 6/09/2023
 */
 describe('DigitalContactsCodeVerification Context - accessibility tests', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
   });
 
@@ -55,7 +53,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
         <Component type={LegalChannelType.PEC} value={pecValue} senderId={senderId} />
       </DigitalContactsCodeVerificationProvider>
     );
-    const dialog = await showDialog(result!);
+    const dialog = await showDialog(result);
     expect(dialog).toBeInTheDocument();
     if (result) {
       const res = await axe(result.container);
@@ -66,8 +64,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
   });
 
   it('does not have basic accessibility issues (pec to verify)', async () => {
-    vi
-      .spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
+    vi.spyOn(api.ContactsApi, 'createOrUpdateLegalAddress')
       .mockResolvedValueOnce(void 0)
       .mockResolvedValueOnce({ pecValid: false } as DigitalAddress);
     // render component
@@ -111,7 +108,7 @@ describe('DigitalContactsCodeVerification Context - accessibility tests', () => 
     );
     const button = screen.getByRole('button', { name: 'Click me' });
     fireEvent.click(button);
-    const duplicateDialog = await waitFor(() => result?.getByTestId('duplicateDialog'));
+    const duplicateDialog = await waitFor(() => result.getByTestId('duplicateDialog'));
     expect(duplicateDialog).toBeInTheDocument();
     if (result) {
       const res = await axe(result.container);
