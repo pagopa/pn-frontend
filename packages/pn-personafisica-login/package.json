@@ -73,7 +73,6 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-sonarjs": "^0.10.0",
-    "identity-obj-proxy": "^3.0.0",
     "prettier": "^2.4.1",
     "sonarqube-scanner": "^3.0.0",
     "vite": "^4.5.0",
