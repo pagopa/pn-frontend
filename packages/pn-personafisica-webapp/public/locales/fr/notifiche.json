@@ -301,6 +301,7 @@
       },
       "analog-workflow-attachment-kind": {
         "AR": "Reçu de livraison",
+        "23I": "Reçu de livraison",
         "Plico": "Scan du pli",
         "23L": "Accusé de réception",
         "Indagine": "Scan de l’enquête",

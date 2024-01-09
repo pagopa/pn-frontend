@@ -1,32 +1,31 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
   PaginationData,
   TitleBox,
   calculatePages,
-  formatToTimezoneString,
-  getNextDay,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-// import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import * as routes from '../navigation/routes.const';
 import {
   DASHBOARD_ACTIONS,
-  getSentNotifications, // setSorting, // Riabilitare con la issue PN-1124
+  getSentNotifications,
 } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
+import { getConfiguration } from '../services/configuration.service';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -58,14 +57,6 @@ const Dashboard = () => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
-  // Sort handlers
-  // Riabilitare con la issue PN-1124
-  /*
-  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
-    dispatch(setSorting(s));
-  };
-  */
 
   // route to Manual Send
   const handleRouteManualSend = () => {
@@ -85,12 +76,8 @@ const Dashboard = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-    void dispatch(
-      getSentNotifications({
-        ...params,
-        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
-      })
-    );
+
+    void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   useEffect(() => {
@@ -116,7 +103,7 @@ const Dashboard = () => {
             <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
               {t('subtitle')}
             </Typography>
-            <Button
+            {getConfiguration().IS_MANUAL_SEND_ENABLED ? <Button
               id="new-notification-btn"
               variant="contained"
               onClick={handleRouteManualSend}
@@ -125,7 +112,15 @@ const Dashboard = () => {
               sx={{ marginBottom: isMobile ? 3 : undefined }}
             >
               {t('new-notification-button')}
-            </Button>
+            </Button> :
+              <Alert severity="warning" action={
+                <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
+                  {t('manual-send-disabled-action')}
+                </ButtonNaked>
+              }>
+                {t('manual-send-disabled-message')}
+              </Alert>}
+
           </Box>
         }
       />

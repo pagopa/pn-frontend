@@ -1,12 +1,6 @@
 {
   "title": "API Key",
-  "subtitle": {
-    "text1": "SEND offre API di ",
-    "text2": "invio notifiche",
-    "text3": " e ",
-    "text4": "accesso alle informazioni",
-    "text5": " sul loro stato. Qui puoi generare e gestire le API Key da utilizzare per autenticare le richieste dell’ente."
-  },
+  "subtitle": "SEND offre API di <0>invio notifiche e accesso alle informazioni</0> sul loro stato. Qui puoi generare e gestire le API Key da utilizzare per autenticare le richieste dell’ente.",
   "error-fecth-api-keys": "Non è stato possibile recuperare la lista delle API Key",
   "api-key-succesfully-generated": "API Key generata con successo!",
   "copy-the-api-key": "Per consentire l'integrazione, copia il codice e inseriscilo nella piattaforma proprietaria dell'ente.",

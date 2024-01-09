@@ -23,14 +23,14 @@ type Props = {
   checkboxLabel?: string;
 };
 
-const DisclaimerModal = ({
+const DisclaimerModal: React.FC<Props> = ({
   onConfirm,
   onCancel,
   confirmLabel,
   title,
   content,
   checkboxLabel,
-}: Props) => {
+}) => {
   const isMobile = useIsMobile();
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const [checked, setChecked] = useState(false);

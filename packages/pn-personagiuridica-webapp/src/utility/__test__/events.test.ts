@@ -4,8 +4,8 @@ describe('test track events', () => {
   it('app crash event', () => {
     const event = events['APP_CRASH'];
     expect(event).toEqual({
-      category: 'app',
-      action: 'app crashed',
+      event_category: 'app',
+      event_type: 'app crashed',
     });
   });
 
@@ -16,8 +16,8 @@ describe('test track events', () => {
 
   it('app crash event', () => {
     const event = events['delegationsSlice/createDelegation/rejected'];
-    expect(event.category).toEqual('delegation');
-    expect(event.action).toEqual('error while adding new delegate');
+    expect(event.event_category).toEqual('delegation');
+    expect(event.event_type).toEqual('error while adding new delegate');
 
     const attributes = event.getAttributes!({ response: { data: { title: 'test' } } });
     expect(attributes).toEqual({ type: 'test' });
@@ -28,8 +28,8 @@ describe('test track events', () => {
 
   it('error adding new delegate event', () => {
     const event = events['delegationsSlice/createDelegation/rejected'];
-    expect(event.category).toEqual('delegation');
-    expect(event.action).toEqual('error while adding new delegate');
+    expect(event.event_category).toEqual('delegation');
+    expect(event.event_type).toEqual('error while adding new delegate');
 
     const error = event.getAttributes!({ response: { data: { title: 'test error' } } });
     expect(error).toEqual({ type: 'test error' });
@@ -40,8 +40,8 @@ describe('test track events', () => {
 
   it('error adding new delegate event', () => {
     const event = events['setSorting'];
-    expect(event.category).toEqual('notification');
-    expect(event.action).toEqual('change notification sorting order');
+    expect(event.event_category).toEqual('notification');
+    expect(event.event_type).toEqual('change notification sorting order');
 
     const error = event.getAttributes!({ orderBy: 'date', order: 'asc' });
     expect(error).toEqual({

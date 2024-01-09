@@ -1,21 +1,26 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Chip, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CardElement,
   EmptyState,
-  Item,
-  ItemsCard,
   KnownSentiment,
+  PnCard,
+  PnCardContent,
+  PnCardContentItem,
+  PnCardHeader,
+  PnCardHeaderItem,
+  PnCardsList,
+  Row,
 } from '@pagopa-pn/pn-commons';
 
+import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utility/delegation.utility';
-import { DelegationStatus, getDelegationStatusKeyAndColor } from '../../utility/status.utility';
-import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
+import DelegatorsDataSwitch from './DelegationDataSwitch';
 
 const MobileDelegators = () => {
   const { t } = useTranslation(['deleghe']);
@@ -24,65 +29,26 @@ const MobileDelegators = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
 
-  const cardData: Array<Item> = delegationToItem(delegators);
+  const cardData: Array<Row<DelegationData>> = delegationToItem(delegators);
 
-  const cardHeader: [CardElement, CardElement] = [
-    {
-      id: 'status',
-      label: t('deleghe.table.status'),
-      getLabel(value: string, row: Item) {
-        const { color, key } = getDelegationStatusKeyAndColor(value as DelegationStatus);
-        if (value === DelegationStatus.ACTIVE) {
-          return <Chip label={t(key)} color={color} />;
-        } else {
-          return <AcceptButton id={row.id} name={row.name as string} />;
-        }
-      },
-      gridProps: {
-        xs: 8,
-      },
-    },
-    {
-      id: 'id',
-      label: '',
-      getLabel(value: string) {
-        return <Menu menuType={'delegators'} id={value} />;
-      },
-      gridProps: {
-        xs: 4,
-      },
-    },
-  ];
-
-  const cardBody: Array<CardElement> = [
+  const cardBody: Array<CardElement<DelegationColumnData>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
-      getLabel(value: string) {
-        return <b>{value}</b>;
-      },
+      wrapValueInTypography: false,
     },
     {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
-      getLabel(value: string) {
-        return value;
-      },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
-      getLabel(value: string) {
-        return value;
-      },
     },
     {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
-      getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} textVariant="body2" visibleItems={3} />;
-      },
-      notWrappedInTypography: true,
+      wrapValueInTypography: false,
     },
   ];
 
@@ -96,7 +62,46 @@ const MobileDelegators = () => {
         reloadAction={() => dispatch(getDelegators())}
       >
         {delegators.length > 0 ? (
-          <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+          <PnCardsList>
+            {cardData.map((data) => (
+              <PnCard key={data.id} testId="mobileDelegatorsCards">
+                <PnCardHeader
+                  headerGridProps={{
+                    direction: { xs: 'row', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                  }}
+                >
+                  <PnCardHeaderItem
+                    position="left"
+                    gridProps={{
+                      xs: 8,
+                    }}
+                  >
+                    <DelegatorsDataSwitch data={data} type="status" menuType="delegators" />
+                  </PnCardHeaderItem>
+                  <PnCardHeaderItem
+                    position="right"
+                    gridProps={{
+                      xs: 4,
+                    }}
+                  >
+                    <DelegatorsDataSwitch data={data} type="menu" menuType="delegators" />
+                  </PnCardHeaderItem>
+                </PnCardHeader>
+                <PnCardContent>
+                  {cardBody.map((body) => (
+                    <PnCardContentItem
+                      key={body.id}
+                      label={body.label}
+                      wrapValueInTypography={body.wrapValueInTypography}
+                    >
+                      <DelegatorsDataSwitch data={data} type={body.id} menuType="delegators" />
+                    </PnCardContentItem>
+                  ))}
+                </PnCardContent>
+              </PnCard>
+            ))}
+          </PnCardsList>
         ) : (
           <EmptyState sentimentIcon={KnownSentiment.NONE}>{t('deleghe.no_delegators')}</EmptyState>
         )}

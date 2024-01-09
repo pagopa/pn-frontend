@@ -25,6 +25,7 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
+  EventCreatedDelegationType,
   PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
@@ -65,10 +66,29 @@ const NuovaDelega = () => {
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
+  const [createdDelegation, setCreatedDelegation] = useState<
+    EventCreatedDelegationType | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (createdDelegation && created) {
+      trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_SUCCESS, createdDelegation);
+    }
+  }, [createdDelegation, created]);
 
   const handleSubmit = (values: NewDelegationFormProps) => {
+    setCreatedDelegation({
+      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
+      mandate_type:
+        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+    });
+
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_UX_CONVERSION, {
+      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
+      mandate_type:
+        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+    });
     void dispatch(createDelegation(values));
-    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
@@ -161,6 +181,10 @@ const NuovaDelega = () => {
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_DATA_INPUT);
+  }, []);
+
+  useEffect(() => {
     if (loadAllEntities) {
       void dispatch(getAllEntities({}));
     }
@@ -186,9 +210,15 @@ const NuovaDelega = () => {
 
   const getOptionLabel = (option: Party) => option.name || '';
 
+  const handleGoBackAction = () => {
+    trackEventByType(TrackEventType.SEND_ADD_MANDATE_BACK);
+    navigate(routes.DELEGHE);
+  };
+
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
+        goBackAction={handleGoBackAction}
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>

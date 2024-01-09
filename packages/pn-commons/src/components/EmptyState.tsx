@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 
 import { KnownSentiment, iconForKnownSentiment } from '../models/EmptyState';
 
-export type Props = {
+type Props = {
   sentimentIcon?: KnownSentiment | SvgIconComponent;
 };
 
