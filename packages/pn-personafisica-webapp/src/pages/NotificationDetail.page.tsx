@@ -68,7 +68,8 @@ const getNotificationDetailData = (
   mandateId: string | undefined,
   notificationStatus: NotificationStatus,
   checkIfUserHasPayments: boolean,
-  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> }
+  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> },
+  fromQrCode: boolean
 ): EventNotificationDetailType => {
   // eslint-disable-next-line functional/no-let
   let typeDowntime: EventDowntimeType;
@@ -93,6 +94,8 @@ const getNotificationDetailData = (
       userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
     contains_f24: hasF24 ? 'yes' : 'no',
+    first_time_opening: notificationStatus === NotificationStatus.EFFECTIVE_DATE,
+    source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
   };
 };
 
@@ -448,7 +451,8 @@ const NotificationDetail = () => {
           mandateId,
           notification.notificationStatus,
           checkIfUserHasPayments,
-          userPayments
+          userPayments,
+          fromQrCode
         )
       );
     }
