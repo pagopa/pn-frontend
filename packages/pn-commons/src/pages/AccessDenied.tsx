@@ -1,6 +1,8 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-
+import { Box, Button, Stack, Typography,  } from '@mui/material';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+
+// import { IllusError } from '@pagopa/mui-italia';
+import Icon from '../assets/question.svg';
 
 type Props = {
   isLogged: boolean;
@@ -8,6 +10,7 @@ type Props = {
   goToHomePage: () => void;
   message?: string;
   subtitle?: string;
+  qrError?: boolean
 };
 
 const AccessDenied: React.FC<Props> = ({
@@ -16,6 +19,7 @@ const AccessDenied: React.FC<Props> = ({
   goToHomePage,
   message,
   subtitle,
+  qrError
 }) => {
   const finalMessage =
     message ??
@@ -31,17 +35,21 @@ const AccessDenied: React.FC<Props> = ({
     <Stack
       direction="column"
       alignItems="center"
-      my={4}
+      my={6}
       px={4}
-      sx={{ minHeight: '50vh' }}
+      sx={{ minHeight: '50vh'}}
       data-testid="access-denied"
     >
-      <Box mt={4}>
+      {qrError && <Box mt={9}>
+        <img src={qrError ? Icon : ''} alt={qrError ? 'icona di domanda' : ''} width={60}/>
+      </Box>}
+      
+      <Box mt={2}>
         <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
           {finalMessage}
         </Typography>
       </Box>
-      <Box my={2}>
+      <Box my={2} maxWidth={700}>
         <Typography align="center" color="text.primary" variant="body1">
           {finalSubTitle}
         </Typography>
@@ -57,7 +65,7 @@ const AccessDenied: React.FC<Props> = ({
           }}
         >
           {isLogged
-            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla home page')
+            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla homepage')
             : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
         </Button>
       </Box>

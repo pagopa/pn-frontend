@@ -2,7 +2,7 @@ import { AccessDenied, LoadingPage } from '@pagopa-pn/pn-commons';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import { NotificationsApi } from '../api/notifications/Notifications.api';
+// import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
@@ -22,7 +22,7 @@ const AARGuard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
-  const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
+  const [notificationId] = useState<NotificationId | undefined>();
 
   const aar = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -32,12 +32,12 @@ const AARGuard = () => {
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {
       if (aar) {
-        try {
-          const fetchedData = await NotificationsApi.exchangeNotificationQrCode(aar);
-          setNotificationId(fetchedData);
-        } catch {
+        // try {
+        //   const fetchedData = await NotificationsApi.exchangeNotificationQrCode(aar);
+        //   setNotificationId(fetchedData);
+        // } catch {
           setFetchError(true);
-        }
+        // }
       }
     };
     void fetchNotificationFromQrCode();
@@ -55,11 +55,12 @@ const AARGuard = () => {
   if (!aar) {
     return <Outlet />;
   }
-
   if (fetchError) {
     return (
       <AccessDenied
+        qrError={true}
         message={t('from-qrcode.not-found')}
+        subtitle='Può essere letta solo dal destinatario o da un suo delegato. Per leggerla, chiedi al destinatario di effettuare l’accesso a SEND e delegarti.'
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
         goToLogin={() => {}}
