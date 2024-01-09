@@ -30,9 +30,14 @@ export default defineConfig(({ mode }) => {
       outDir: 'build',
       assetsDir: 'static',
       target: 'ES2020',
+      rollupOptions: {
+        external: ['**/*.test.tsx', '**/*.test.ts', '**/test-utils.ts', '**/*.mock.ts'],
+      },
     },
     preview: {
       port: 443,
     },
+    // Exclude the test and the mock folders from being processed by Vite
+    exclude: ['**/__test__/**', '**/__mocks__/**'],
   };
 });
