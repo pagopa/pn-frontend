@@ -8,9 +8,7 @@ import SuccessPage from '../pages/success/Success';
 import { getConfiguration } from '../services/configuration.service';
 
 /** login request operations */
-const onLoginRequest = () => {
-  return <Login />;
-};
+const onLoginRequest = () => <Login />;
 
 function Router() {
   const { ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT, ROUTE_SUCCESS, ROUTE_PRIVACY_POLICY } =
