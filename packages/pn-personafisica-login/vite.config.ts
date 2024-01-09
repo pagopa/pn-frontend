@@ -1,12 +1,13 @@
-import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite';
+
 import basicSsl from '@vitejs/plugin-basic-ssl';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    plugins: [react(), basicSsl()],
+    plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
     server: {
       host: env.HOST,
       https: true,
@@ -21,7 +22,7 @@ export default defineConfig(({mode}) => {
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
-        exclude: [ 'src/models/**'],
+        exclude: ['src/models/**'],
         reportOnFailure: true,
       },
     },
