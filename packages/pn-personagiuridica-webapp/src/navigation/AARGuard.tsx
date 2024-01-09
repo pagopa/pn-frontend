@@ -74,7 +74,9 @@ const AARGuard = () => {
   if (fetchError) {
     return (
       <AccessDenied
+        qrError={true}
         message={t('from-qrcode.not-found')}
+        subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
         goToLogin={() => {}}
