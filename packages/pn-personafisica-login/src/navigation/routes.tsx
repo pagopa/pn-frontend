@@ -6,22 +6,10 @@ import Logout from '../pages/logout/Logout';
 import PrivacyPolicy from '../pages/privacyPolicy/PrivacyPolicy';
 import SuccessPage from '../pages/success/Success';
 import { getConfiguration } from '../services/configuration.service';
-import { storageOnSuccessOps } from '../utility/storage';
 
 /** login request operations */
 const onLoginRequest = () => {
-  storageOnSuccessOps.delete();
-  handleLoginRequestOnSuccessRequest();
   return <Login />;
-};
-
-const handleLoginRequestOnSuccessRequest = () => {
-  const onSuccess: string | null = new URLSearchParams(window.location.search).get('onSuccess');
-  // mixpanel tracking event
-  // trackEvent('LOGIN_INTENT', { target: onSuccess ?? 'dashboard' });
-  if (onSuccess) {
-    storageOnSuccessOps.write(onSuccess);
-  }
 };
 
 function Router() {
