@@ -1,9 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import { NOTIFICATION_ID_FROM_QRCODE } from '../../api/notifications/notifications.routes';
 import AARGuard from '../AARGuard';
 import {
@@ -12,15 +11,15 @@ import {
   GET_DETTAGLIO_NOTIFICA_PATH,
 } from '../routes.const';
 
-const mockNavigateFn = jest.fn(() => {});
+const mockNavigateFn = vi.fn(() => {});
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
@@ -34,12 +33,16 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Notification from QR code', () => {
+describe('Notification from QR code', async () => {
   const original = window.location;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { search: '' },
@@ -48,7 +51,7 @@ describe('Notification from QR code', () => {
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {

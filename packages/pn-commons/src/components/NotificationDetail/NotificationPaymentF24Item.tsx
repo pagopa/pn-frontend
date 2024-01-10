@@ -8,7 +8,7 @@ import { downloadDocument, useIsMobile } from '../../hooks';
 import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
-interface Props {
+type Props = {
   f24Item: F24PaymentDetails;
   timerF24: number;
   isPagoPaAttachment?: boolean;
@@ -22,7 +22,7 @@ interface Props {
   handleTrackDownloadF24?: () => void;
   handleTrackDownloadF24Success?: () => void;
   handleTrackDownloadF24Timeout?: () => void;
-}
+};
 
 const NotificationPaymentF24Item: React.FC<Props> = ({
   f24Item,
@@ -55,9 +55,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
       if (response.url) {
         setDownloadingMessage(null);
-        if (handleTrackDownloadF24Success) {
-          handleTrackDownloadF24Success();
-        }
+        handleTrackDownloadF24Success?.();
         downloadDocument(response.url);
         return;
       }
@@ -113,9 +111,13 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     () => () => {
       action.current?.abort();
       if (timer.current) {
+        // eslint-disable-next-line functional/immutable-data
+        timer.current = undefined;
         clearTimeout(timer.current);
       }
       if (interval.current) {
+        // eslint-disable-next-line functional/immutable-data
+        interval.current = undefined;
         clearInterval(interval.current);
       }
     },

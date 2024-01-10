@@ -14,7 +14,6 @@ import {
   dataRegex,
   dateIsDefined,
   filtersApplied,
-  formatToTimezoneString,
   getNotificationAllowedStatus,
   getValidValue,
   tenYearsAgo,
@@ -37,22 +36,16 @@ type Props = {
 const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const emptyValues = {
-  startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(today),
+  startDate: tenYearsAgo,
+  endDate: today,
   status: '',
   recipientId: '',
   iunMatch: '',
 };
 
-const initialEmptyValues = {
-  startDate: tenYearsAgo,
-  endDate: today,
-  status: localizedNotificationStatus[0].value,
-  recipientId: '',
-  iunMatch: '',
-};
+const initialEmptyValues = { ...emptyValues, status: localizedNotificationStatus[0].value };
 
-const initialValues = (filters: GetNotificationsParams): FormikValues => {
+const initialValues = (filters: GetNotificationsParams<Date>): FormikValues => {
   if (!filters || _.isEqual(filters, emptyValues)) {
     return initialEmptyValues;
   }
@@ -103,8 +96,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const currentFilters = {
-        startDate: formatToTimezoneString(values.startDate),
-        endDate: formatToTimezoneString(values.endDate),
+        startDate: values.startDate,
+        endDate: values.endDate,
         recipientId: getValidValue(values.recipientId),
         iunMatch: getValidValue(values.iunMatch),
         status: getValidStatus(values.status),
@@ -125,10 +118,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, formatToTimezoneString(tenYearsAgo))) {
+    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
       setStartDate(formik.values.startDate);
     }
-    if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
+    if (!_.isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
   };

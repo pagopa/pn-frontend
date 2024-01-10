@@ -49,9 +49,11 @@ import { ServerResponseErrorCode } from '../utility/AppError/types';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-const AlertNotificationCancel: React.FC<{ notification: NotificationDetailType }> = (
-  notification
-) => {
+type Props = {
+  notification: NotificationDetailType;
+};
+
+const AlertNotificationCancel: React.FC<Props> = (notification) => {
   const { t } = useTranslation(['notifiche']);
   const { cancelled, cancellationInProgress } = useIsCancelled(notification);
   if (cancelled || cancellationInProgress) {
@@ -327,14 +329,11 @@ const NotificationDetail: React.FC = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}>
-                <TimedMessage
-                  timeout={timeoutMessage}
-                  message={
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  }
-                />
+                <TimedMessage timeout={timeoutMessage}>
+                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>
+                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={recipients}

@@ -13,7 +13,6 @@ test-report.xml
 # production
 /build
 /dist
-/lib
 
 # misc
 .DS_Store

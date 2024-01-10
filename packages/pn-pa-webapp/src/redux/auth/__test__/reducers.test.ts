@@ -256,7 +256,7 @@ describe('Auth redux state tests', () => {
     const institutionId = '1';
     const products = productsList.map((product) => ({
       ...product,
-      productUrl: `mock-selfcare.base/token-exchange?institutionId=${institutionId}&productId=mock-prod-id`,
+      productUrl: `mock-selfcare.base/token-exchange?institutionId=${institutionId}&productId=${product.id}`,
     }));
 
     mock.onGet(GET_INSTITUTION_PRODUCTS(institutionId)).reply(200, productsDTO);

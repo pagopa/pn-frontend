@@ -302,7 +302,8 @@
         "RIS": "international einfach"
       },
       "analog-workflow-attachment-kind": {
-        "AR": "Zustellbescheinigung",
+        "AR": "Zustellungsbescheinigung",
+        "23I": "Zustellungsbescheinigung",
         "Plico": "Scan des Umschlags",
         "23L": "Empfangsbestätigung",
         "Indagine": "Scan der Nachforschung",

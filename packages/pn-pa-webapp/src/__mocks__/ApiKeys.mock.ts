@@ -36,7 +36,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       value: '9e522ef5-a024-4dbd-8a59-3e090c637650',
       name: 'Rimborso e multe',
       lastUpdate: '21/09/2022',
-      groups: ['mock-id-1', 'mock-id-2', 'mock-id-3', 'mock-id-4', 'mock-id-5'],
+      groups: ['mock-group-1', 'mock-group-2', 'mock-group-3', 'mock-group-4', 'mock-group-5'],
       status: ApiKeyStatus.ENABLED,
       statusHistory: [
         {
@@ -61,7 +61,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       value: '9e522ef5-a024-4dbd-8a59-3e090c637652',
       name: 'Cartelle esattoriali',
       lastUpdate: '22/09/2022',
-      groups: ['mock-id-2'],
+      groups: ['mock-group-2'],
       status: ApiKeyStatus.BLOCKED,
       statusHistory: [
         {
@@ -86,7 +86,7 @@ export const mockApiKeysDTO: ApiKeys<string> = {
       value: '9e522ef5-a024-4dbd-8a59-3e090c637654',
       name: 'Rimborsi',
       lastUpdate: '22/09/2022',
-      groups: ['mock-id-3'],
+      groups: ['mock-group-3'],
       status: ApiKeyStatus.ROTATED,
       statusHistory: [
         {

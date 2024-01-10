@@ -1,15 +1,18 @@
-import { Item, formatDate } from '@pagopa-pn/pn-commons';
+import { Row, formatDate } from '@pagopa-pn/pn-commons';
 
+import { DelegationColumnData, DelegationData } from '../models/Deleghe';
 import { Delegation, Person } from '../redux/delegation/types';
 
 /**
- * Maps Delegation object to Item, in order to be visualised in an ItemsCard or ItemsTable component
+ * Maps Delegation object to Item, in order to be visualised in an PnCardsList or PnTable component
  * @param  {Array<Delegation>} delegations
  * @param  {boolean} isDelegator
  * @returns Array<Item>
  */
 
-export default function delegationToItem(delegations: Array<Delegation>): Array<Item> {
+export default function delegationToItem(
+  delegations: Array<Delegation>
+): Array<Row<DelegationData>> {
   return delegations.map((delegation: Delegation) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),
@@ -30,9 +33,12 @@ export function generateVCode() {
 
 export function sortDelegations(
   order: string,
-  sortAttr: string,
+  sortAttr: keyof DelegationColumnData | '',
   values: Array<Delegation>
 ): Array<Delegation> {
+  if (sortAttr === '') {
+    return values;
+  }
   /* eslint-disable-next-line functional/immutable-data */
   return values.sort((a: Delegation, b: Delegation) => {
     const orderDirection = order === 'desc' ? 1 : -1;

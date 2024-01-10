@@ -1,11 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -16,7 +15,7 @@ import {
 import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -24,13 +23,17 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Deleghe page', () => {
+describe('Deleghe page', async () => {
   const original = window.matchMedia;
   let result: RenderResult;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -90,7 +93,7 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get first delegate row
-    let delegatesRows = result.getAllByTestId('delegatesTable.row');
+    let delegatesRows = result.getAllByTestId('delegatesTable.body.row');
     const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);
@@ -113,7 +116,7 @@ describe('Deleghe page', () => {
       expect(dialog).not.toBeInTheDocument();
     });
     // check that the list of delegates is updated
-    delegatesRows = result.getAllByTestId('delegatesTable.row');
+    delegatesRows = result.getAllByTestId('delegatesTable.body.row');
     expect(delegatesRows).toHaveLength(arrayOfDelegates.length - 1);
     delegatesRows.forEach((row, index) => {
       // index + 1 because i suppose that the first delegate is revoked
@@ -129,7 +132,7 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get second delegator row
-    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     const delegationMenuIcon = within(delegatorsRows[1]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);
@@ -152,7 +155,7 @@ describe('Deleghe page', () => {
       expect(dialog).not.toBeInTheDocument();
     });
     // check that the list of delegators is updated
-    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length - 1);
     const newDelegators = arrayOfDelegators.filter(
       (del) => del.mandateId !== arrayOfDelegators[1].mandateId
@@ -174,7 +177,7 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get first delegator row
-    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     const acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
     fireEvent.click(acceptButton);
@@ -204,7 +207,7 @@ describe('Deleghe page', () => {
       expect(dialog).not.toBeInTheDocument();
     });
     // check that the list of delegators is updated
-    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
@@ -226,7 +229,7 @@ describe('Deleghe page', () => {
       result = render(<Deleghe />);
     });
     // get first delegator row
-    let delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     let acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
     fireEvent.click(acceptButton);
@@ -253,14 +256,14 @@ describe('Deleghe page', () => {
       });
     });
     // check that nothing is changed
-    delegatorsRows = result.getAllByTestId('delegatorsTable.row');
+    delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(arrayOfDelegators.length);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
     });
     acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
-    const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
+    const error = await waitFor(() => within(dialog).queryByTestId('errorAlert'));
     expect(error).toBeInTheDocument();
   });
 });

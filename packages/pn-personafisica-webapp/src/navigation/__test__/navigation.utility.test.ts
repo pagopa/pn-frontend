@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import { EventPageType } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../../services/configuration.service';
 import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import { APP_STATUS, DELEGHE, DETTAGLIO_NOTIFICA, NOTIFICHE, RECAPITI } from '../routes.const';
 
-const replaceFn = jest.fn();
+const replaceFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
   const original = window.location;
@@ -17,7 +18,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll((): void => {

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button } from '@mui/material';
@@ -38,11 +38,9 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
     notification.timeline.findIndex(
       (el: INotificationDetailTimeline) => el.category === TimelineCategory.PAYMENT
     ) > -1;
-
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-
   const openModal = () => {
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
@@ -51,23 +49,20 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   const handleModalClose = () => {
     setShowModal(false);
   };
-
   const handleModalCloseAndProceed = () => {
     setShowModal(false);
     if (userHasAdminPermissions) {
       onCancelNotification();
     }
   };
-
   const getTaxIdLabel = (taxId: string): string =>
     dataRegex.pIva.test(taxId)
       ? 'detail.tax-id-organization-recipient'
       : 'detail.tax-id-citizen-recipient';
-
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;
-    value: ReactNode;
+    value: React.ReactNode;
   }> = [
     {
       label: t('detail.sender', { ns: 'notifiche' }),
@@ -136,7 +131,6 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
       ),
     },
   ];
-
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
     .map((row, index) => ({
@@ -178,5 +172,4 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
     </>
   );
 };
-
 export default NotificationDetailTableSender;

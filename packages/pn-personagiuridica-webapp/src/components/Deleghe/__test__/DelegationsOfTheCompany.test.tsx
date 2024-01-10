@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -15,7 +15,7 @@ import {
 import { DelegationStatus } from '../../../models/Deleghe';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -66,11 +66,15 @@ const initialState = {
   },
 };
 
-describe('DelegationsOfTheCompany Component', () => {
+describe('DelegationsOfTheCompany Component', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -112,9 +116,9 @@ describe('DelegationsOfTheCompany Component', () => {
     expect(container).toHaveTextContent(/deleghe.table.permissions/i);
     expect(container).toHaveTextContent(/deleghe.table.groups/i);
     expect(container).toHaveTextContent(/deleghe.table.status/i);
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('delegationsDesktop');
     expect(table).toBeInTheDocument();
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(arrayOfDelegators.length);
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegators[index].delegator?.displayName!);
@@ -181,7 +185,7 @@ describe('DelegationsOfTheCompany Component', () => {
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
       });
     });
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
     expect(cancelButton).toBeEnabled();
@@ -251,7 +255,7 @@ describe('DelegationsOfTheCompany Component', () => {
         status: [DelegationStatus.ACTIVE, DelegationStatus.REJECTED],
       });
     });
-    let table = queryByTestId('table(notifications)');
+    let table = queryByTestId('delegationsDesktop');
     expect(table).not.toBeInTheDocument();
     expect(container).toHaveTextContent(/deleghe.no_delegators_after_filters/i);
     // clicks on empty state action
@@ -262,7 +266,7 @@ describe('DelegationsOfTheCompany Component', () => {
       expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=10');
     });
     expect(container).not.toHaveTextContent(/deleghe.no_delegators_after_filters/i);
-    table = getByTestId('table(notifications)');
+    table = getByTestId('delegationsDesktop');
     expect(table).toBeInTheDocument();
   });
 
@@ -283,7 +287,7 @@ describe('DelegationsOfTheCompany Component', () => {
       },
     });
 
-    let rows = getAllByTestId('table(notifications).row');
+    let rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(arrayOfDelegators[0].delegator?.displayName!);
     const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
@@ -300,7 +304,7 @@ describe('DelegationsOfTheCompany Component', () => {
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain('mandate/api/v1/mandates-by-delegate?size=20');
     });
-    rows = getAllByTestId('table(notifications).row');
+    rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
   });
@@ -325,7 +329,7 @@ describe('DelegationsOfTheCompany Component', () => {
         },
       },
     });
-    let rows = getAllByTestId('table(notifications).row');
+    let rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(arrayOfDelegators[0].delegator?.displayName!);
     const pageSelector = getByTestId('pageSelector');
@@ -343,7 +347,7 @@ describe('DelegationsOfTheCompany Component', () => {
         'mandate/api/v1/mandates-by-delegate?size=10&nextPageKey=page-1'
       );
     });
-    rows = getAllByTestId('table(notifications).row');
+    rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(arrayOfDelegators[1].delegator?.displayName!);
   });
@@ -380,7 +384,7 @@ describe('DelegationsOfTheCompany Component', () => {
       );
       expect(dialog).not.toBeInTheDocument();
     });
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows).toHaveLength(arrayOfDelegators.length - 1);
     // the index + 1 is because we reject the first delegator
     rows.forEach((row, index) => {
@@ -401,7 +405,7 @@ describe('DelegationsOfTheCompany Component', () => {
         },
       },
     });
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('delegationsDesktop');
     expect(table).toBeInTheDocument();
     const acceptButton = within(table).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
@@ -449,7 +453,7 @@ describe('DelegationsOfTheCompany Component', () => {
         },
       },
     });
-    let rows = getAllByTestId('table(notifications).row');
+    let rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows[1]).not.toHaveTextContent('Group 3');
     const menu = within(rows[1]).getByTestId('delegationMenuIcon');
     fireEvent.click(menu);
@@ -474,7 +478,7 @@ describe('DelegationsOfTheCompany Component', () => {
         groups: ['group-3'],
       });
     });
-    rows = getAllByTestId('table(notifications).row');
+    rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows[1]).toHaveTextContent('Group 3');
   });
 });

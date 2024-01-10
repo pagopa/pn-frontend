@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import {
   CustomMobileDialog,
   CustomMobileDialogContent,
@@ -15,7 +14,6 @@ import {
   IUN_regex,
   dateIsDefined,
   filtersApplied,
-  formatToTimezoneString,
   getValidValue,
   tenYearsAgo,
   today,
@@ -34,13 +32,6 @@ type Props = {
   showFilters: boolean;
 };
 
-const useStyles = makeStyles({
-  helperTextFormat: {
-    // Use existing space / prevents shifting content below field
-    alignItems: 'flex',
-  },
-});
-
 const initialEmptyValues = {
   startDate: tenYearsAgo,
   endDate: today,
@@ -52,10 +43,10 @@ function isFilterApplied(filtersCount: number): boolean {
 }
 
 const initialValues = (
-  filters: GetNotificationsParams,
+  filters: GetNotificationsParams<Date>,
   emptyValues: {
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     iunMatch: string;
   }
 ) => {
@@ -76,12 +67,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
-  const classes = useStyles();
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
-    startDate: formatToTimezoneString(tenYearsAgo),
-    endDate: formatToTimezoneString(today),
+    startDate: tenYearsAgo,
+    endDate: today,
     iunMatch: '',
   };
 
@@ -106,8 +96,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     onSubmit: (values) => {
       trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       const currentFilters = {
-        startDate: formatToTimezoneString(values.startDate),
-        endDate: formatToTimezoneString(values.endDate),
+        startDate: values.startDate,
+        endDate: values.endDate,
         iunMatch: values.iunMatch,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
@@ -125,10 +115,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, formatToTimezoneString(tenYearsAgo))) {
+    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
       setStartDate(formik.values.startDate);
     }
-    if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
+    if (!_.isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
   };
@@ -200,7 +190,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} className={classes.helperTextFormat}>
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            // Use existing space / prevents shifting content below field
+            alignItems: 'flex',
+          }}
+        >
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}

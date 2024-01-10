@@ -1,7 +1,8 @@
 import mediaQuery from 'css-mediaquery';
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Store, configureStore } from '@reduxjs/toolkit';
@@ -49,8 +50,8 @@ const AllTheProviders = ({
   );
 };
 
-const createTestStore = (preloadedState = {}) => {
-  return configureStore({
+const createTestStore = (preloadedState = {}) =>
+  configureStore({
     reducer: { appState: appStateSlice.reducer },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -58,7 +59,6 @@ const createTestStore = (preloadedState = {}) => {
       }),
     preloadedState,
   });
-};
 
 const customRender = (
   ui: ReactElement,
@@ -87,6 +87,31 @@ const customRender = (
 };
 
 // utility function
+/** This function simulate media query and is useful to test differences between mobile and desktop view */
+function createMatchMedia(width: number) {
+  return (query: string): MediaQueryList => ({
+    matches: mediaQuery.match(query, { width }),
+    media: '',
+    addListener: () => {},
+    removeListener: () => {},
+    onchange: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  });
+}
+
+/** This function disable the console logging methods */
+function disableConsoleLogging(method: 'log' | 'error' | 'info' | 'warn') {
+  beforeAll(() => {
+    vi.spyOn(console, method).mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+}
+
 /**
  * Test the options list of a select, fire change event and check its value
  * @container container element
@@ -118,20 +143,6 @@ async function testSelect(
   });
 }
 
-/** This function simulate media query and is useful to test differences between mobile and desktop view */
-function createMatchMedia(width: number) {
-  return (query: string): MediaQueryList => ({
-    matches: mediaQuery.match(query, { width }) as boolean,
-    media: '',
-    addListener: () => {},
-    removeListener: () => {},
-    onchange: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => true,
-  });
-}
-
 /**
  * Utility function to test autocomplete component
  * @param form html element representing the form
@@ -158,7 +169,7 @@ async function testAutocomplete(
     document.querySelector('[role="presentation"][class*="MuiAutocomplete-popper"')
   )) as HTMLElement;
   expect(dropdown).toBeInTheDocument();
-  const dropdownOptionsList = within(dropdown).getByRole('listbox') as HTMLElement;
+  const dropdownOptionsList = within(dropdown).getByRole('listbox');
   expect(dropdownOptionsList).toBeInTheDocument();
   const dropdownOptionsListItems = within(dropdownOptionsList).getAllByRole('option');
   expect(dropdownOptionsListItems).toHaveLength(options.length);
@@ -259,7 +270,7 @@ function initLocalizationForTest() {
   const mockedTranslationFn = (
     namespace: string | Array<string>,
     path: string,
-    data?: { [key: string]: any | undefined }
+    data?: { [key: string]: any }
   ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
   initLocalization(mockedTranslationFn);
 }
@@ -310,4 +321,5 @@ export {
   queryById,
   createTestStore,
   theme,
+  disableConsoleLogging,
 };

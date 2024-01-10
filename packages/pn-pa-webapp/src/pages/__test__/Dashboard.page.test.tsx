@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToTimezoneString,
-  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -13,20 +13,19 @@ import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-util
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Dashboard from '../Dashboard.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -39,17 +38,22 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-describe('Dashboard Page', () => {
-  let result: RenderResult | undefined;
+describe('Dashboard Page', async () => {
+  let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -62,7 +66,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -70,10 +74,10 @@ describe('Dashboard Page', () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(result?.container).toHaveTextContent(/empty-state/);
+    expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const newNotificationBtn = result?.queryByTestId('link-create-notification');
+    const newNotificationBtn = result.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
@@ -85,7 +89,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -93,10 +97,10 @@ describe('Dashboard Page', () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(result?.container).toHaveTextContent(/empty-state/);
+    expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
+    const newNotificationBtn = result.queryByTestId('newNotificationBtn');
     expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
@@ -109,7 +113,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -117,10 +121,10 @@ describe('Dashboard Page', () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(result?.container).toHaveTextContent(/empty-state/);
+    expect(result.container).toHaveTextContent(/empty-state/);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const apiKeysBtn = result?.queryByTestId('link-api-keys');
+    const apiKeysBtn = result.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
@@ -132,7 +136,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -144,13 +148,13 @@ describe('Dashboard Page', () => {
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const filterForm = result?.getByTestId('filter-form');
+    const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
-    const notificationsTable = result?.container.querySelector('table');
+    const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
-    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = result?.queryByTestId('pageSelector');
+    const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
 
@@ -159,7 +163,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -168,7 +172,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 20,
         })
       )
@@ -178,10 +182,10 @@ describe('Dashboard Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
-    const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
     const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
@@ -190,7 +194,7 @@ describe('Dashboard Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/sent');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
   });
 
@@ -199,7 +203,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -208,7 +212,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
           nextPagesKey: notificationsDTO.nextPagesKey[0],
         })
@@ -219,11 +223,11 @@ describe('Dashboard Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
-    const pageSelector = result!.getByTestId('pageSelector');
+    const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
     // the buttons are < 1 2 >
     fireEvent.click(pageButtons[2]);
@@ -231,9 +235,9 @@ describe('Dashboard Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/sent');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('filter', async () => {
@@ -241,7 +245,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -250,7 +254,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
           recipientId: notificationsDTO.resultsPage[1].recipients[0],
         })
@@ -261,24 +265,24 @@ describe('Dashboard Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    let rows = result?.getAllByTestId('notificationsTable.row');
+    let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(4);
     rows?.forEach((row, index) => {
       expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
     });
     // filter
-    const form = result?.container.querySelector('form') as HTMLFormElement;
+    const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'recipientId', notificationsDTO.resultsPage[1].recipients[0]);
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/sent');
     });
-    rows = result?.getAllByTestId('notificationsTable.row');
+    rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
-    expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+    expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
   it('errors on api', async () => {
@@ -286,7 +290,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -312,7 +316,7 @@ describe('Dashboard Page', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           size: 10,
         })
       )
@@ -324,13 +328,13 @@ describe('Dashboard Page', () => {
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
-    const filterForm = result?.getByTestId('dialogToggle');
+    const filterForm = result.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
-    const notificationsCards = result?.getAllByTestId('itemCard');
+    const notificationsCards = result.getAllByTestId('mobileCards');
     expect(notificationsCards).toHaveLength(notificationsDTO.resultsPage.length);
-    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = result?.queryByTestId('pageSelector');
+    const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
 });

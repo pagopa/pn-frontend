@@ -1,19 +1,20 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileDelegates from '../MobileDelegates';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -26,12 +27,16 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('MobileDelegates Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders the empty state', () => {
     const { container, queryAllByTestId, getByTestId } = render(<MobileDelegates />);
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
     const addDelegation = getByTestId('add-delegation');
     expect(addDelegation).toBeInTheDocument();
-    const itemCards = queryAllByTestId('itemCard');
+    const itemCards = queryAllByTestId('mobileDelegatesCards');
     expect(itemCards).toHaveLength(0);
     expect(container).toHaveTextContent(/deleghe.add/i);
     expect(container).toHaveTextContent(/deleghe.no_delegates/i);
@@ -54,7 +59,7 @@ describe('MobileDelegates Component', () => {
     const { getAllByTestId } = render(<MobileDelegates />, {
       preloadedState: { delegationsState: { delegations: { delegates: arrayOfDelegates } } },
     });
-    const itemCards = getAllByTestId('itemCard');
+    const itemCards = getAllByTestId('mobileDelegatesCards');
     expect(itemCards).toHaveLength(arrayOfDelegates.length);
     itemCards.forEach((card, index) => {
       expect(card).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
@@ -76,7 +81,7 @@ describe('MobileDelegates Component', () => {
       },
     });
     // get first row
-    const itemCards = getAllByTestId('itemCard');
+    const itemCards = getAllByTestId('mobileDelegatesCards');
     const delegationMenuIcon = within(itemCards[0]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);

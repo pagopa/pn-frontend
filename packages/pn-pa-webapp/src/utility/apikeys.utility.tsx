@@ -7,7 +7,7 @@ import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ApiKey, ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 import { GroupStatus, UserGroup } from '../models/user';
 
-function LocalizeStatus(
+function localizeStatus(
   status: string,
   history: Array<ApiKeyStatusHistory>
 ): {
@@ -15,15 +15,16 @@ function LocalizeStatus(
   tooltip: ReactNode;
   description: string;
 } {
-  const { t } = useTranslation(['apikeys']);
   return {
-    label: t(`status.${status}`),
-    tooltip: TooltipApiKey(history),
-    description: t(`status.${status}-description`),
+    label: `status.${status}`,
+    tooltip: <TooltipApiKey history={history} />,
+    description: `status.${status}-description`,
   };
 }
 
-export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
+type TooltipApiKeyProps = { history: Array<ApiKeyStatusHistory> };
+
+export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
   const { t } = useTranslation(['apikeys']);
   return (
     <Box
@@ -33,31 +34,30 @@ export const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
         },
       }}
     >
-      {history &&
-        history.map((h, index) => {
-          const output = (p: string, h: ApiKeyStatusHistory) => (
-            <Box sx={{ textAlign: 'left' }} key={index}>
-              <Box>
-                {t(`tooltip.${p}`)} {formatDate(h.date)}
-              </Box>
+      {history?.map((h, index) => {
+        const output = (p: string, h: ApiKeyStatusHistory) => (
+          <Box sx={{ textAlign: 'left' }} key={index}>
+            <Box>
+              {t(`tooltip.${p}`)} {formatDate(h.date)}
             </Box>
-          );
+          </Box>
+        );
 
-          const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
+        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
 
-          switch (h.status) {
-            case ApiKeyStatus.ENABLED:
-              return output(`enabled${suffixToday}`, h);
-            case ApiKeyStatus.CREATED:
-              return output(`created${suffixToday}`, h);
-            case ApiKeyStatus.BLOCKED:
-              return output(`blocked${suffixToday}`, h);
-            case ApiKeyStatus.ROTATED:
-              return output(`rotated${suffixToday}`, h);
-            default:
-              return <></>;
-          }
-        })}
+        switch (h.status) {
+          case ApiKeyStatus.ENABLED:
+            return output(`enabled${suffixToday}`, h);
+          case ApiKeyStatus.CREATED:
+            return output(`created${suffixToday}`, h);
+          case ApiKeyStatus.BLOCKED:
+            return output(`blocked${suffixToday}`, h);
+          case ApiKeyStatus.ROTATED:
+            return output(`rotated${suffixToday}`, h);
+          default:
+            return <></>;
+        }
+      })}
     </Box>
   );
 };
@@ -75,17 +75,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...LocalizeStatus('enabled', statusHistory),
+        ...localizeStatus('enabled', statusHistory),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...LocalizeStatus('blocked', statusHistory),
+        ...localizeStatus('blocked', statusHistory),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...LocalizeStatus('rotated', statusHistory),
+        ...localizeStatus('rotated', statusHistory),
       };
     default:
       return {

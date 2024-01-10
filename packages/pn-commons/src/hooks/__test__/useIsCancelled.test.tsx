@@ -1,13 +1,11 @@
-import React from 'react';
-
 import { notificationToFe } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../models';
 import { render } from '../../test-utils';
 import { useIsCancelled } from '../useIsCancelled';
 
-interface Props {
+type Props = {
   notification: NotificationDetail;
-}
+};
 
 const Component: React.FC<Props> = ({ notification }) => {
   const { cancellationInProgress, cancellationInTimeline, cancelled } = useIsCancelled({

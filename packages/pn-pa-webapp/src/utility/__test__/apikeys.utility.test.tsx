@@ -1,9 +1,11 @@
+import { vi } from 'vitest';
+
 import { mockApiKeysDTO, mockApiKeysForFE, mockGroups } from '../../__mocks__/ApiKeys.mock';
 import { ApiKeyStatus } from '../../models/ApiKeys';
 import { TooltipApiKey, apikeysMapper, getApiKeyStatusInfos } from '../apikeys.utility';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -20,7 +22,7 @@ describe('test apikeys utilities', () => {
       color: 'success',
       label: 'status.enabled',
       description: 'status.enabled-description',
-      tooltip: TooltipApiKey(mockApiKeysForFE.items[0].statusHistory),
+      tooltip: <TooltipApiKey history={mockApiKeysForFE.items[0].statusHistory} />,
     });
   });
 

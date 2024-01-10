@@ -1,10 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
+  NotificationColumnData,
   NotificationStatus,
   Sort,
   formatToTimezoneString,
-  getNextDay,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -13,7 +13,6 @@ import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
-import { NotificationColumn } from '../../../models/Notifications';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setNotificationFilters, setPagination, setSorting } from '../reducers';
@@ -41,8 +40,8 @@ describe('Dashbaord redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(today),
+        startDate: tenYearsAgo,
+        endDate: today,
         iunMatch: '',
       },
       pagination: {
@@ -63,14 +62,14 @@ describe('Dashbaord redux state tests', () => {
       .onGet(
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
         })
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
+        startDate: tenYearsAgo,
+        endDate: today,
         isDelegatedPage: false,
       })
     );
@@ -93,22 +92,22 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change sort', () => {
-    const sort: Sort<NotificationColumn> = {
-      orderBy: 'status',
+    const sort: Sort<NotificationColumnData> = {
+      orderBy: 'notificationStatus',
       order: 'desc',
     };
     const action = store.dispatch(setSorting(sort));
     expect(action.type).toBe('dashboardSlice/setSorting');
     expect(action.payload).toEqual({
-      orderBy: 'status',
+      orderBy: 'notificationStatus',
       order: 'desc',
     });
   });
 
   it('Should be able to change filters', () => {
     const filters = {
-      startDate: '2022-02-22T14:20:20.566Z',
-      endDate: '2022-02-27T14:20:20.566Z',
+      startDate: new Date('2022-02-22T14:20:20.566Z'),
+      endDate: new Date('2022-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',

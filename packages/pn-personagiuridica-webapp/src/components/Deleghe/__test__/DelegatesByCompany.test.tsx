@@ -1,16 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
-import { apiClient } from '../../../api/apiClients';
 import { REVOKE_DELEGATION } from '../../../api/delegations/delegations.routes';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -22,24 +22,29 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-describe('Delegates Component - assuming delegates API works properly', () => {
+describe('Delegates Component - assuming delegates API works properly', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mock.restore();
   });
 
@@ -76,9 +81,9 @@ describe('Delegates Component - assuming delegates API works properly', () => {
       },
     });
     expect(container).not.toHaveTextContent(/deleghe.no_delegates/i);
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('delegatesTableDesktop');
     expect(table).toBeInTheDocument();
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('delegatesBodyRowDesktop');
     expect(rows).toHaveLength(arrayOfDelegates.length);
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
@@ -151,9 +156,9 @@ describe('Delegates Component - assuming delegates API works properly', () => {
       );
       expect(dialog).not.toBeInTheDocument();
     });
-    const table = getByTestId('table(notifications)');
+    const table = getByTestId('delegatesTableDesktop');
     expect(table).toBeInTheDocument();
-    const rows = getAllByTestId('table(notifications).row');
+    const rows = getAllByTestId('delegatesBodyRowDesktop');
     expect(rows).toHaveLength(arrayOfDelegates.length - 1);
     // the index + 1 is because wie revoke the first delegation
     rows.forEach((row, index) => {

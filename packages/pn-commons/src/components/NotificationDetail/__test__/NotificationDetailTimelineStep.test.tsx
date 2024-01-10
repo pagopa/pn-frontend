@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import {
@@ -23,7 +23,7 @@ const mockTimelineStep = notificationToFe.notificationStatusHistory.find(
 );
 const mockRecipients = notificationToFe.recipients;
 // Mock the clickHandler function
-const mockClickHandler = jest.fn();
+const mockClickHandler = vi.fn();
 
 const getLegalFacts = (collapsed: boolean = true) =>
   mockTimelineStep!.steps!.reduce((arr, s) => {
@@ -84,7 +84,7 @@ describe('NotificationDetailTimelineStep', () => {
   });
 
   it('expands and collapses additional steps when "Show More" and "Show Less" buttons are clicked', () => {
-    const eventTrackingCallbackShowMore = jest.fn();
+    const eventTrackingCallbackShowMore = vi.fn();
     const { getByTestId, getAllByTestId, queryAllByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}

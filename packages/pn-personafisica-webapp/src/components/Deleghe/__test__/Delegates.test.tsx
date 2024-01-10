@@ -1,21 +1,22 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegates from '../Delegates';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -27,7 +28,16 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-describe('Delegates Component', () => {
+describe('Delegates Component', async () => {
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders the empty state', () => {
     const { container, queryByTestId, getByTestId } = render(<Delegates />);
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
@@ -58,7 +68,7 @@ describe('Delegates Component', () => {
     });
     const delegatesTable = getByTestId('delegatesTable');
     expect(delegatesTable).toBeInTheDocument();
-    const delegatesRows = getAllByTestId('delegatesTable.row');
+    const delegatesRows = getAllByTestId('delegatesTable.body.row');
     expect(delegatesRows).toHaveLength(arrayOfDelegates.length);
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(arrayOfDelegates[index].delegate?.displayName!);
@@ -80,48 +90,50 @@ describe('Delegates Component', () => {
     let delegatesTable = getByTestId('delegatesTable');
     expect(delegatesTable).toBeInTheDocument();
     // sort by name asc
-    let sortName = within(delegatesTable).getByTestId('delegatesTable.sort.name');
+    let sortName = within(delegatesTable).getByTestId('delegatesTable.header.cell.sort.name');
     let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'asc',
         orderBy: 'name',
       });
     });
-    let delegatesRows = getAllByTestId('delegatesTable.row');
+    let delegatesRows = getAllByTestId('delegatesTable.body.row');
     let sortedDelegates = sortDelegations('asc', 'name', arrayOfDelegates) as Array<Delegate>;
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
     // sort by name desc
     delegatesTable = getByTestId('delegatesTable');
-    sortName = within(delegatesTable).getByTestId('delegatesTable.sort.name');
+    sortName = within(delegatesTable).getByTestId('delegatesTable.header.cell.sort.name');
     sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'desc',
         orderBy: 'name',
       });
     });
-    delegatesRows = getAllByTestId('delegatesTable.row');
+    delegatesRows = getAllByTestId('delegatesTable.body.row');
     sortedDelegates = sortDelegations('desc', 'name', arrayOfDelegates) as Array<Delegate>;
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
     // sort by endDate asc
     delegatesTable = getByTestId('delegatesTable');
-    const sortEndDate = within(delegatesTable).getByTestId('delegatesTable.sort.endDate');
+    const sortEndDate = within(delegatesTable).getByTestId(
+      'delegatesTable.header.cell.sort.endDate'
+    );
     sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'asc',
         orderBy: 'endDate',
       });
     });
-    delegatesRows = getAllByTestId('delegatesTable.row');
+    delegatesRows = getAllByTestId('delegatesTable.body.row');
     sortedDelegates = sortDelegations('asc', 'endDate', arrayOfDelegates) as Array<Delegate>;
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
@@ -137,7 +149,7 @@ describe('Delegates Component', () => {
       },
     });
     // get first row
-    const delegatesRows = getAllByTestId('delegatesTable.row');
+    const delegatesRows = getAllByTestId('delegatesTable.body.row');
     const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
     // open menu
     fireEvent.click(delegationMenuIcon);

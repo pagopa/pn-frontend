@@ -1,10 +1,10 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { RenderResult, act, render } from '../../../test-utils';
 import TimedMessage from '../TimedMessage';
 
 describe('TimedMessage component', () => {
-  const callbackFn = jest.fn();
+  const callbackFn = vi.fn();
 
   let result: RenderResult;
 
@@ -12,7 +12,9 @@ describe('TimedMessage component', () => {
     // Render component
     await act(async () => {
       result = render(
-        <TimedMessage message={'mock-message'} timeout={2000} callback={callbackFn} />
+        <TimedMessage timeout={2000} callback={callbackFn}>
+          mock-message
+        </TimedMessage>
       );
     });
     // Expect the message to be rendered
@@ -29,7 +31,11 @@ describe('TimedMessage component', () => {
   it('no message if timeout is 0', async () => {
     // Render component
     await act(async () => {
-      result = render(<TimedMessage message={'mock-message'} timeout={0} callback={callbackFn} />);
+      result = render(
+        <TimedMessage timeout={0} callback={callbackFn}>
+          mock-message
+        </TimedMessage>
+      );
     });
     // Expect the message to be rendered
     const messageRendered = result.queryByTestId('timed-message');

@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
@@ -8,24 +8,16 @@ import {
   fireEvent,
   initLocalizationForTest,
   render,
+  theme,
   within,
 } from '../../../test-utils';
 import { formatDate } from '../../../utility';
 import { formatTimeWithLegend } from '../../../utility/date.utility';
 import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
-const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
 const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'];
 
-jest.mock('@mui/material', () => {
-  const original = jest.requireActual('@mui/material');
-  return {
-    ...original,
-    useTheme: () => ({ palette: { ...original.useTheme().palette, ...fakePalette } }),
-  };
-});
-
-const checkDateField = (date: string, column: HTMLElement) => {
+const checkDateField = (date: string | undefined, column: HTMLElement) => {
   const text = date ? `${formatDate(date)},${formatTimeWithLegend(date)}` : '-';
   expect(column).toHaveTextContent(text);
 };
@@ -61,13 +53,13 @@ const checkStatusField = (status: DowntimeStatus, column: HTMLElement) => {
   const statusChip = within(column).getByTestId('downtime-status');
   expect(statusChip).toHaveStyle({
     'background-color':
-      status === DowntimeStatus.KO ? fakePalette.error.light : fakePalette.success.light,
+      status === DowntimeStatus.KO ? theme.palette.error.light : theme.palette.success.light,
   });
 };
 
 describe('DesktopDowntimeLog component', () => {
   let result: RenderResult;
-  const getLegalFactDetailsMock = jest.fn();
+  const getLegalFactDetailsMock = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();
@@ -84,7 +76,7 @@ describe('DesktopDowntimeLog component', () => {
       );
     });
     // check header
-    const headerRowColumns = result.getAllByTestId('tableHeadCell');
+    const headerRowColumns = result.getAllByTestId('tableDowntimeLog.header.cell');
     headerRowColumns.forEach((column, index) => {
       expect(column).toHaveTextContent(`appStatus - downtimeList.columnHeader.${columns[index]}`);
     });
@@ -92,11 +84,11 @@ describe('DesktopDowntimeLog component', () => {
     const rows = result.getAllByTestId('tableDowntimeLog.row');
     expect(rows).toHaveLength(exampleDowntimeLogPage.downtimes.length);
     rows.forEach((row, index) => {
-      const dataColumns = within(row).getAllByTestId('tableBodyCell');
+      const dataColumns = within(row).getAllByTestId('tableDowntimeLog.row.cell');
       const currentLog = exampleDowntimeLogPage.downtimes[index];
       dataColumns.forEach((column, jindex) => {
         if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {
-          checkDateField(currentLog[columns[jindex]], column);
+          checkDateField(currentLog[columns[jindex] as 'startDate' | 'endDate'], column);
         }
         if (columns[jindex] === 'functionality') {
           checkFunctionalityField(

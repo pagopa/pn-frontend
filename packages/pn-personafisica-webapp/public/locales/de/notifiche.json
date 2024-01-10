@@ -301,6 +301,7 @@
       },
       "analog-workflow-attachment-kind": {
         "AR": "Zustellungsbescheinigung",
+        "23I": "Zustellungsbescheinigung",
         "Plico": "Scan des Umschlags",
         "23L": "Empfangsbestätigung",
         "Indagine": "Scan der Nachforschung",

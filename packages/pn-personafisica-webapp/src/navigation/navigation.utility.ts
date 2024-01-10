@@ -31,7 +31,7 @@ export function goToLoginPortal(aarToken?: string | null) {
 /**
  * This method returns an EventPageType used to track user experience base on current location.
  * In this way, we avoid to share current url and therfore personal information.
- * @param location 
+ * @param location
  * @returns EventPageType | undefined
  */
 export const getCurrentEventTypePage = (location: string): EventPageType | undefined => {
@@ -53,6 +53,8 @@ export const getCurrentEventTypePage = (location: string): EventPageType | undef
     pageType = EventPageType.RECAPITI;
   } else if (matchPath({ path: APP_STATUS }, location)) {
     pageType = EventPageType.STATUS_PAGE;
+  } else if (matchPath({ path: '/' }, location)) {
+    pageType = EventPageType.ROOT_PAGE;
   }
 
   return pageType;

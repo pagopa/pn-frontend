@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -7,13 +7,12 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
+  NotificationDetailOtherDocument,
   NotificationStatus,
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
-  getF24Payments,
-  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -26,12 +25,20 @@ import {
   notificationToFe,
   paymentsData,
 } from '../../__mocks__/NotificationDetail.mock';
-import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PAYMENT_INFO,
   NOTIFICATION_PAYMENT_URL,
 } from '../../api/notifications/notifications.routes';
@@ -39,14 +46,14 @@ import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
-const mockAssignFn = jest.fn();
+const mockAssignFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useParams: () =>
     mockIsDelegate
       ? { id: 'RPTH-YULD-WKMA-202305-T-1', mandateId: '5' }
@@ -55,7 +62,7 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -81,14 +88,18 @@ const delegator = arrayOfDelegators.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', () => {
+describe('NotificationDetail Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
   const original = window.location;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
@@ -96,7 +107,7 @@ describe('NotificationDetail Page', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
@@ -208,9 +219,11 @@ describe('NotificationDetail Page', () => {
   });
 
   it('checks not available documents', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, documentsAvailable: false });
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      documentsAvailable: false,
+      sentAt: '2012-01-01T00:00:00Z',
+    });
     mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -336,6 +349,66 @@ describe('NotificationDetail Page', () => {
     });
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-url-com');
+    });
+  });
+
+  it('executes the other document (aar) download handler', async () => {
+    const otherDocument: NotificationDetailOtherDocument = {
+      documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
+      documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
+    };
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest).reply(200, paymentInfo);
+    // we use regexp to not set the query parameters
+    mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        retryAfter: 1,
+      });
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+    expect(mock.history.get).toHaveLength(2);
+    const AARBox = result?.getByTestId('aarBox');
+    const AARButton = within(AARBox!).getByTestId('documentButton');
+    fireEvent.click(AARButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+
+    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
+    expect(docNotAvailableAlert).toBeInTheDocument();
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-aar-com',
+      });
+    //simulate that legal fact is now available
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 1000));
+    });
+    expect(docNotAvailableAlert).not.toBeInTheDocument();
+    fireEvent.click(AARButton);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get[3].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-aar-com');
     });
   });
 
@@ -583,7 +656,9 @@ describe('NotificationDetail Page', () => {
     expect(addDomicileBanner).not.toBeInTheDocument();
   });
 
-  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+  // TO-FIX: il test fallisce perchè fakeTimers non funziona bene con waitFor
+  it.skip('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -625,6 +700,11 @@ describe('NotificationDetail Page', () => {
     expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
+    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
+    // wait...
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
     expect(payButton).toBeEnabled();
     fireEvent.click(payButton!);
     expect(mock.history.post).toHaveLength(2);
@@ -634,6 +714,7 @@ describe('NotificationDetail Page', () => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
+    vi.useRealTimers();
   });
 
   it('should show correct paginated payments', async () => {

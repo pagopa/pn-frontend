@@ -32,7 +32,9 @@ function Router() {
           <Route path="/" element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-            <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
+            {getConfiguration().IS_MANUAL_SEND_ENABLED &&
+              <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
+            }
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             {/**
              * Refers to PN-1741

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
@@ -12,7 +11,7 @@ const mockReduxState = {
   },
 };
 
-const Guard = ({ roles }) => (
+const Guard = ({ roles }: { roles: Array<PNRole> | null }) => (
   <Routes>
     <Route path="/" element={<RouteGuard roles={roles} />}>
       <Route path="/" element={<div>Generic Page</div>} />

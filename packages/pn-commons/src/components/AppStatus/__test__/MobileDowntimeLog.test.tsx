@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
@@ -8,21 +8,12 @@ import {
   fireEvent,
   initLocalizationForTest,
   render,
+  theme,
   within,
 } from '../../../test-utils';
 import { formatDate } from '../../../utility';
 import { formatTimeWithLegend } from '../../../utility/date.utility';
 import MobileDowntimeLog from '../MobileDowntimeLog';
-
-const fakePalette = { success: { light: '#00FF00' }, error: { light: '#FF0000' } };
-
-jest.mock('@mui/material', () => {
-  const original = jest.requireActual('@mui/material');
-  return {
-    ...original,
-    useTheme: () => ({ palette: { ...original.useTheme().palette, ...fakePalette } }),
-  };
-});
 
 const data = ['startDate', 'endDate', 'functionality', 'legalFactId'];
 
@@ -31,11 +22,11 @@ const checkStatusField = (status: DowntimeStatus, cardElem: HTMLElement) => {
   const statusChip = within(cardElem).getByTestId('downtime-status');
   expect(statusChip).toHaveStyle({
     'background-color':
-      status === DowntimeStatus.KO ? fakePalette.error.light : fakePalette.success.light,
+      status === DowntimeStatus.KO ? theme.palette.error.light : theme.palette.success.light,
   });
 };
 
-const checkDateField = (date: string, cardElem: HTMLElement) => {
+const checkDateField = (date: string | undefined, cardElem: HTMLElement) => {
   const text = date ? `${formatDate(date)}, ${formatTimeWithLegend(date)}` : '-';
   expect(cardElem).toHaveTextContent(text);
 };
@@ -68,7 +59,7 @@ const checkLegalFactField = (
 
 describe('MobileDowntimeLog component', () => {
   let result: RenderResult;
-  const getLegalFactDetailsMock = jest.fn();
+  const getLegalFactDetailsMock = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();
@@ -84,7 +75,7 @@ describe('MobileDowntimeLog component', () => {
         />
       );
     });
-    const itemCards = result.getAllByTestId('itemCard');
+    const itemCards = result.getAllByTestId('mobileTableDowntimeLog.cards');
     expect(itemCards).toHaveLength(exampleDowntimeLogPage.downtimes.length);
     itemCards.forEach((card, index) => {
       const currentLog = exampleDowntimeLogPage.downtimes[index];
@@ -97,7 +88,10 @@ describe('MobileDowntimeLog component', () => {
       cardBodyLabel.forEach((label, jindex) => {
         expect(label).toHaveTextContent(`appStatus - downtimeList.columnHeader.${data[jindex]}`);
         if (data[jindex] === 'startDate' || data[jindex] === 'endDate') {
-          checkDateField(currentLog[data[jindex]], cardBodyValue[jindex]);
+          checkDateField(
+            currentLog[data[jindex] as 'startDate' | 'endDate'],
+            cardBodyValue[jindex]
+          );
         }
         if (data[jindex] === 'functionality') {
           checkFunctionalityField(
@@ -124,7 +118,7 @@ describe('MobileDowntimeLog component', () => {
       );
     });
     expect(getLegalFactDetailsMock).toHaveBeenCalledTimes(0);
-    const itemCards = result.getAllByTestId('itemCard');
+    const itemCards = result.getAllByTestId('mobileTableDowntimeLog.cards');
     const logWithFile = exampleDowntimeLogPage.downtimes.findIndex((log) => log.fileAvailable);
     const button = within(itemCards[logWithFile]).getByRole('button');
     fireEvent.click(button);

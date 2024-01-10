@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { render } from '../../test-utils';

@@ -1,14 +1,12 @@
-export type DelegheColumn =
-  | 'name'
-  | 'startDate'
-  | 'endDate'
-  | 'visibilityIds'
-  | 'status'
-  | 'id'
-  | '';
+export type DelegationParty = { name: string; uniqueIdentifier: string };
 
-export type DelegatesColumn = DelegheColumn;
+export type DelegationData = {
+  name: string;
+  startDate: string;
+  endDate: string;
+  visibilityIds: Array<string>;
+  status: 'active' | 'pending';
+  verificationCode: string;
+};
 
-export type DelegatorsColumn = DelegheColumn;
-
-export type DelegationParty = { name: string | null; uniqueIdentifier: string };
+export type DelegationColumnData = DelegationData & { menu: string };
