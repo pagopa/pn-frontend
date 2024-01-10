@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { TextField } from '@mui/material';
 
 import { fireEvent, render, waitFor, within } from '../../test-utils';

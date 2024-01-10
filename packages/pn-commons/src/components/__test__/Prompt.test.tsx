@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { fireEvent, render } from '../../test-utils';

@@ -12,7 +12,7 @@ function createTestStore() {
   });
 }
 
-let mockedActionResult;
+let mockedActionResult: string | undefined;
 const mockedAction = createAsyncThunk<string, void>(
   'mockedAction',
   async (_, { rejectWithValue }) => {
@@ -28,11 +28,7 @@ const mockedAction = createAsyncThunk<string, void>(
 );
 
 describe('App state slice tests', () => {
-  let store;
-
-  beforeAll(() => {
-    store = createTestStore();
-  });
+  const store = createTestStore();
 
   it('Initial state', () => {
     const state = store.getState();
@@ -80,7 +76,7 @@ describe('App state slice tests', () => {
 
   it('removeErrorsByAction', () => {
     const payload = { title: 'mocked-title', message: 'mocked-message', action: 'action-name' };
-    let action = store.dispatch(appStateActions.addError(payload));
+    store.dispatch(appStateActions.addError(payload));
     let state = store.getState().appState;
     expect(state.messages.errors).toEqual([
       {
@@ -94,7 +90,7 @@ describe('App state slice tests', () => {
         action: 'action-name',
       },
     ]);
-    action = store.dispatch(appStateActions.removeErrorsByAction('action-name'));
+    const action = store.dispatch(appStateActions.removeErrorsByAction('action-name'));
     state = store.getState().appState;
     expect(action.type).toBe('appState/removeErrorsByAction');
     expect(state.messages.errors).toEqual([]);
@@ -102,7 +98,7 @@ describe('App state slice tests', () => {
 
   it('setErrorAsAlreadyShown', () => {
     const payload = { title: 'mocked-title', message: 'mocked-message', action: 'action-name' };
-    let action = store.dispatch(appStateActions.addError(payload));
+    store.dispatch(appStateActions.addError(payload));
     let state = store.getState().appState;
     expect(state.messages.errors).toEqual([
       {
@@ -116,7 +112,7 @@ describe('App state slice tests', () => {
         action: 'action-name',
       },
     ]);
-    action = store.dispatch(appStateActions.setErrorAsAlreadyShown('3'));
+    const action = store.dispatch(appStateActions.setErrorAsAlreadyShown('3'));
     state = store.getState().appState;
     expect(action.type).toBe('appState/setErrorAsAlreadyShown');
     expect(state.messages.errors).toEqual([
@@ -171,14 +167,14 @@ describe('App state slice tests', () => {
 
   it('fulfilled matcher', async () => {
     const payload = { title: 'mocked-title', message: 'mocked-message', action: 'mockedAction' };
-    let action = store.dispatch(appStateActions.addError(payload));
+    store.dispatch(appStateActions.addError(payload));
     // dispatch async action
     mockedActionResult = 'OK';
-    action = await store.dispatch(mockedAction());
+    const action = await store.dispatch(mockedAction());
     expect(action.type).toBe('mockedAction/fulfilled');
     expect(action.payload).toStrictEqual('OK');
     const state = store.getState().appState;
-    expect(state.messages.errors.find((er) => er.action === mockedAction)).toBeUndefined();
+    expect(state.messages.errors.find((er) => er.action === mockedAction.name)).toBeUndefined();
     expect(state.responseEvent).toStrictEqual({
       outcome: 'success',
       name: 'mockedAction',
@@ -190,14 +186,14 @@ describe('App state slice tests', () => {
 
   it('rejected matcher', async () => {
     const payload = { title: 'mocked-title', message: 'mocked-message', action: 'mockedAction' };
-    let action = store.dispatch(appStateActions.addError(payload));
+    store.dispatch(appStateActions.addError(payload));
     // dispatch async action
     mockedActionResult = undefined;
-    action = await store.dispatch(mockedAction());
+    const action = await store.dispatch(mockedAction());
     expect(action.type).toBe('mockedAction/rejected');
     expect(action.payload).toStrictEqual('action-failed');
     const state = store.getState().appState;
-    expect(state.messages.errors.find((er) => er.action === mockedAction)).toBeUndefined();
+    expect(state.messages.errors.find((er) => er.action === mockedAction.name)).toBeUndefined();
     expect(state.responseEvent).toStrictEqual({
       outcome: 'error',
       name: 'mockedAction',

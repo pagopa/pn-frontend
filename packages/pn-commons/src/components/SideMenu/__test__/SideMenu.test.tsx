@@ -1,14 +1,14 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { sideMenuItems } from '../../../__mocks__/SideMenu.mock';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
 import SideMenu from '../SideMenu';
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 let mockPathname = '';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigate,
   useLocation: () => ({
     pathname: mockPathname,
@@ -102,8 +102,8 @@ describe('SideMenu', () => {
   });
 
   it('menu navigation', async () => {
-    const mockedAction = jest.fn();
-    const eventTrackingCallback = jest.fn();
+    const mockedAction = vi.fn();
+    const eventTrackingCallback = vi.fn();
     const menuItems = sideMenuItems.map((item) =>
       item.action ? { ...item, action: mockedAction } : item
     );

@@ -1,10 +1,10 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../test-utils';
 import DisclaimerModal from '../DisclaimerModal';
 
-const mockConfirm = jest.fn();
-const mockCancel = jest.fn();
+const mockConfirm = vi.fn();
+const mockCancel = vi.fn();
 
 describe('DisclaimerModal tests', () => {
   it('checks that the modal renders correctly', () => {

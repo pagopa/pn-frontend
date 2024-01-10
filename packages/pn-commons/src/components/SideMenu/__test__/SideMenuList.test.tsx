@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { selfcareMenuItems, sideMenuItems } from '../../../__mocks__/SideMenu.mock';
 import { SideMenuItem } from '../../../models';
@@ -19,11 +19,11 @@ async function testMenuItem(
   });
 }
 
-const handleLinkClick = jest.fn();
+const handleLinkClick = vi.fn();
 
 describe('SideMenuList', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders component', async () => {

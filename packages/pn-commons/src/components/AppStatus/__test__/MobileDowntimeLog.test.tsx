@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
@@ -26,7 +26,7 @@ const checkStatusField = (status: DowntimeStatus, cardElem: HTMLElement) => {
   });
 };
 
-const checkDateField = (date: string, cardElem: HTMLElement) => {
+const checkDateField = (date: string | undefined, cardElem: HTMLElement) => {
   const text = date ? `${formatDate(date)}, ${formatTimeWithLegend(date)}` : '-';
   expect(cardElem).toHaveTextContent(text);
 };
@@ -59,7 +59,7 @@ const checkLegalFactField = (
 
 describe('MobileDowntimeLog component', () => {
   let result: RenderResult;
-  const getLegalFactDetailsMock = jest.fn();
+  const getLegalFactDetailsMock = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();
@@ -88,7 +88,10 @@ describe('MobileDowntimeLog component', () => {
       cardBodyLabel.forEach((label, jindex) => {
         expect(label).toHaveTextContent(`appStatus - downtimeList.columnHeader.${data[jindex]}`);
         if (data[jindex] === 'startDate' || data[jindex] === 'endDate') {
-          checkDateField(currentLog[data[jindex]], cardBodyValue[jindex]);
+          checkDateField(
+            currentLog[data[jindex] as 'startDate' | 'endDate'],
+            cardBodyValue[jindex]
+          );
         }
         if (data[jindex] === 'functionality') {
           checkFunctionalityField(

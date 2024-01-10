@@ -34,31 +34,30 @@ export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
         },
       }}
     >
-      {history &&
-        history.map((h, index) => {
-          const output = (p: string, h: ApiKeyStatusHistory) => (
-            <Box sx={{ textAlign: 'left' }} key={index}>
-              <Box>
-                {t(`tooltip.${p}`)} {formatDate(h.date)}
-              </Box>
+      {history?.map((h, index) => {
+        const output = (p: string, h: ApiKeyStatusHistory) => (
+          <Box sx={{ textAlign: 'left' }} key={index}>
+            <Box>
+              {t(`tooltip.${p}`)} {formatDate(h.date)}
             </Box>
-          );
+          </Box>
+        );
 
-          const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
+        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
 
-          switch (h.status) {
-            case ApiKeyStatus.ENABLED:
-              return output(`enabled${suffixToday}`, h);
-            case ApiKeyStatus.CREATED:
-              return output(`created${suffixToday}`, h);
-            case ApiKeyStatus.BLOCKED:
-              return output(`blocked${suffixToday}`, h);
-            case ApiKeyStatus.ROTATED:
-              return output(`rotated${suffixToday}`, h);
-            default:
-              return <></>;
-          }
-        })}
+        switch (h.status) {
+          case ApiKeyStatus.ENABLED:
+            return output(`enabled${suffixToday}`, h);
+          case ApiKeyStatus.CREATED:
+            return output(`created${suffixToday}`, h);
+          case ApiKeyStatus.BLOCKED:
+            return output(`blocked${suffixToday}`, h);
+          case ApiKeyStatus.ROTATED:
+            return output(`rotated${suffixToday}`, h);
+          default:
+            return <></>;
+        }
+      })}
     </Box>
   );
 };

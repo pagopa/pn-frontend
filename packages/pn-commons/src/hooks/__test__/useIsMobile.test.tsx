@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { createMatchMedia, render } from '../../test-utils';
 import { useIsMobile } from '../useIsMobile';
 

@@ -1,21 +1,22 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegates from '../Delegates';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -27,7 +28,16 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-describe('Delegates Component', () => {
+describe('Delegates Component', async () => {
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders the empty state', () => {
     const { container, queryByTestId, getByTestId } = render(<Delegates />);
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
@@ -84,7 +94,7 @@ describe('Delegates Component', () => {
     let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'asc',
         orderBy: 'name',
       });
@@ -100,7 +110,7 @@ describe('Delegates Component', () => {
     sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'desc',
         orderBy: 'name',
       });
@@ -118,7 +128,7 @@ describe('Delegates Component', () => {
     sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'asc',
         orderBy: 'endDate',
       });

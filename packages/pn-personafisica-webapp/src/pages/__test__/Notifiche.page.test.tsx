@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -14,20 +15,19 @@ import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-util
 
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../api/notifications/notifications.routes';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -35,18 +35,22 @@ jest.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
     <>
-      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+      {props.i18nKey} {props.components && props.components.map((c) => c)}
     </>
   ),
 }));
 
-describe('Notifiche Page', () => {
-  let result: RenderResult | undefined;
+describe('Notifiche Page', async () => {
+  let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -75,13 +79,13 @@ describe('Notifiche Page', () => {
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    const filterForm = result?.getByTestId('filter-form');
+    const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
-    const notificationsTable = result?.container.querySelector('table');
+    const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
-    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = result?.queryByTestId('pageSelector');
+    const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
 
@@ -110,25 +114,25 @@ describe('Notifiche Page', () => {
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
     // filter
-    const form = result?.container.querySelector('form') as HTMLFormElement;
+    const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'startDate', formatDate(tenYearsAgo.toISOString()));
     await testInput(form, 'endDate', formatDate(tenYearsAgo.toISOString()));
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    expect(result?.container).toHaveTextContent(/empty-state.filtered/);
+    expect(result.container).toHaveTextContent(/empty-state.filtered/);
     // remove filters
-    const routeContactsBtn = result?.getByTestId('link-remove-filters');
+    const routeContactsBtn = result.getByTestId('link-remove-filters');
     fireEvent.click(routeContactsBtn!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    expect(result?.container).not.toHaveTextContent(/empty-state.filtered/);
+    expect(result.container).not.toHaveTextContent(/empty-state.filtered/);
   });
 
   it('change pagination', async () => {
@@ -155,10 +159,10 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.body.row');
+    let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     // change size
-    const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
     const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
@@ -167,7 +171,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.body.row');
+    rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
   });
 
@@ -196,11 +200,11 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.body.row');
+    let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[0].iun);
     // change page
-    const pageSelector = result!.getByTestId('pageSelector');
+    const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
     // the buttons are < 1 2 >
     fireEvent.click(pageButtons[2]);
@@ -208,7 +212,7 @@ describe('Notifiche Page', () => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.body.row');
+    rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
@@ -238,22 +242,22 @@ describe('Notifiche Page', () => {
     });
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    let rows = result?.getAllByTestId('notificationsTable.body.row');
+    let rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(3);
     rows?.forEach((row, index) => {
       expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
     });
     // filter
-    const form = result?.container.querySelector('form') as HTMLFormElement;
+    const form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-1');
-    const submitButton = form!.querySelector(`button[type="submit"]`);
+    const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
       expect(mock.history.get[1].url).toContain('/notifications/received');
     });
-    rows = result?.getAllByTestId('notificationsTable.body.row');
+    rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows![0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
@@ -301,13 +305,13 @@ describe('Notifiche Page', () => {
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/notifications/received');
-    const filterForm = result?.getByTestId('dialogToggle');
+    const filterForm = result.getByTestId('dialogToggle');
     expect(filterForm).toBeInTheDocument();
-    const notificationsCards = result?.getAllByTestId('mobileNotificationsCards');
+    const notificationsCards = result.getAllByTestId('mobileNotificationsCards');
     expect(notificationsCards).toHaveLength(notificationsDTO.resultsPage.length);
-    const itemsPerPageSelector = result?.queryByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
-    const pageSelector = result?.queryByTestId('pageSelector');
+    const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
 });

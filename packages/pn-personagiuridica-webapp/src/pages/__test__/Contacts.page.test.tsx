@@ -1,19 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import { digitalAddresses } from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILE } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
-const mockOpenFn = jest.fn();
+const mockOpenFn = vi.fn();
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -22,13 +21,17 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Contacts page', () => {
+describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
   const original = window.open;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'open', {
       configurable: true,
       value: mockOpenFn,
@@ -37,12 +40,12 @@ describe('Contacts page', () => {
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { AppResponse, ServerResponseErrorCode } from '../../models/AppResponse';
 import { render, waitFor } from '../../test-utils';
 import { AppResponsePublisher } from '../../utility';

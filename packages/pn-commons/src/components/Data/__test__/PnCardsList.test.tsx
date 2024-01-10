@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
 
@@ -12,7 +12,7 @@ import PnCardHeader from '../PnCard/PnCardHeader';
 import PnCardHeaderItem from '../PnCard/PnCardHeaderItem';
 import PnCardsList from '../PnCardsList';
 
-const clickActionMockFn = jest.fn();
+const clickActionMockFn = vi.fn();
 
 type Item = {
   'column-1': string;
@@ -84,9 +84,9 @@ const RenderItemsCard: React.FC = () => (
           ))}
         </PnCardContent>
         <PnCardActions>
-          <div onClick={() => clickActionMockFn(data)} data-testid="mockedAction">
+          <Box onClick={() => clickActionMockFn(data)} data-testid="mockedAction">
             Mocked action
-          </div>
+          </Box>
         </PnCardActions>
       </PnCard>
     ))}

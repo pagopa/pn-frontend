@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentsData } from '../../../models';

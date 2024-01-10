@@ -272,7 +272,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
                 {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
-              {selectedPayment && selectedPayment?.attachment && (
+              {selectedPayment?.attachment && (
                 <Button
                   fullWidth
                   variant="outlined"

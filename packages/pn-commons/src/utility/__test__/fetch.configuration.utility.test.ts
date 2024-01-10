@@ -22,9 +22,10 @@ describe('fetch configuration service', () => {
 
   it('success', async () => {
     mockFetchConfigurationResult = { a: 42 };
+    process.env.BASE_URL = '/';
     const result = await fetchConfiguration();
     expect(result.response).toStrictEqual(mockFetchConfigurationResult);
-    expect(result.path).toBe('conf/config.json');
+    expect(result.path).toBe('/conf/config.json');
     expect(result.options).toStrictEqual({
       headers: {
         'Content-Type': 'application/json',

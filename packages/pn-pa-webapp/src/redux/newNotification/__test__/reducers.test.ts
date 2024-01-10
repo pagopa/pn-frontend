@@ -10,7 +10,7 @@ import {
   GET_USER_GROUPS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../../../api/notifications/notifications.routes';
-import { PaymentModel } from '../../../models/NewNotification';
+import { PaymentModel, PaymentObject } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { newNotificationMapper } from '../../../utility/notification.utility';
 import { store } from '../../store';
@@ -255,9 +255,9 @@ describe('New notification redux state tests', () => {
       uploadNotificationPaymentDocument(newNotification.payment!)
     );
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
-    const response = {};
+    const response: { [key: string]: PaymentObject } = {};
     for (const [key, value] of Object.entries(newNotification.payment!)) {
-      response[key] = {};
+      response[key] = {} as PaymentObject;
       if (value.pagoPaForm) {
         response[key].pagoPaForm = {
           ...value.pagoPaForm,
