@@ -1,5 +1,6 @@
 import { Badge } from '@mui/material';
-import { NotificationStatus } from '@pagopa-pn/pn-commons';
+
+import { NotificationStatus } from '../../models';
 
 export const isNewNotification = (value: NotificationStatus) => {
   switch (value) {
