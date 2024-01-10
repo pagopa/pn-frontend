@@ -13,8 +13,6 @@ import {
 type Props = {
   onLanguageChanged?: (langCode: string) => void;
   loggedUser?: boolean;
-  /** Event tracking callback on change language */
-  eventTrackingCallbackChangeLanguage?: () => void;
   /** Enables the Terms of Service Link */
   hasTermsOfService?: boolean;
   /** Url to privacy policy page */
@@ -26,7 +24,6 @@ type Props = {
 const Footer: React.FC<Props> = ({
   onLanguageChanged = () => {},
   loggedUser = false,
-  eventTrackingCallbackChangeLanguage,
   hasTermsOfService,
   privacyPolicyHref,
   termsOfServiceHref,
@@ -34,9 +31,6 @@ const Footer: React.FC<Props> = ({
   const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
   const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {
-    if (eventTrackingCallbackChangeLanguage) {
-      eventTrackingCallbackChangeLanguage();
-    }
     setCurrentLangCode(langCode);
     onLanguageChanged(langCode);
   };

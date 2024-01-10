@@ -65,4 +65,13 @@ export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [
     causaleVersamento: 'Sesta rata TARI',
     dueDate: '2025-12-25',
   },
+  {
+    creditorTaxId: '77777777777',
+    noticeCode: '302011686772695138',
+    status: PaymentStatus.REQUIRED,
+    amount: 5000,
+    url: 'https://api.uat.platform.pagopa.it/checkout/auth/payments/v2',
+    causaleVersamento: 'Settima rata TARI',
+    dueDate: '2027-12-31',
+  },
 ];

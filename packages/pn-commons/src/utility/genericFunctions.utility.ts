@@ -34,11 +34,14 @@ export function filtersApplied<TFilters extends object>(
  */
 export function sortArray<TArray>(
   order: 'desc' | 'asc',
-  sortAttr: keyof TArray,
+  sortAttr: keyof TArray | '',
   values: Array<TArray>
 ) {
   /* eslint-disable functional/immutable-data */
-  return [...values].sort((a: TArray, b: TArray) => {
+  if (sortAttr === '') {
+    return values;
+  }
+  return values.sort((a: TArray, b: TArray) => {
     const orderDirection = order === 'desc' ? 1 : -1;
     const dateA = formatFromString(a[sortAttr] as unknown as string);
     const dateB = formatFromString(b[sortAttr] as unknown as string);

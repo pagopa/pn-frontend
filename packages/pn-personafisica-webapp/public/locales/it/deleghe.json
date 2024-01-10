@@ -26,7 +26,7 @@
     "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche. <0>Aggiungi una delega</0>",
     "no_delegators": "Non hai deleghe a tuo carico.",
     "show_code_title": "Codice di verifica per la delega a {{name}}",
-    "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega. Il codice è valido per 7 giorni dalla creazione della richiesta di delega.",
+    "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
     "verification_code": "Codice di verifica",
     "code_copied": "Codice copiato",
     "table": {
@@ -67,7 +67,7 @@
       "date-duration": "Periodo di validità della delega*",
       "endDate": "Termine delega",
       "verificationCode": "Codice di verifica",
-      "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega. Il codice è valido per 7 giorni dalla creazione della richiesta di delega.",
+      "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
       "submit": "Invia la richiesta",
       "mandatoryField": "Campi obbligatori*",
       "party-not-found": "Nessun ente trovato"

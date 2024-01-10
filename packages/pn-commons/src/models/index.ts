@@ -20,10 +20,20 @@ import {
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
-import { CardAction, CardElement, CardSort } from './ItemsCard';
-import { Column, Item, Sort } from './ItemsTable';
 import { MessageType } from './MessageType';
-import { EventsType } from './MixpanelEvents';
+import {
+  EventAction,
+  EventCategory,
+  EventCreatedDelegationType,
+  EventDowntimeType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventNotificationsListType,
+  EventPageType,
+  EventPaymentRecipientType,
+  EventPaymentStatusType,
+  EventsType,
+} from './MixpanelEvents';
 import {
   AarDetails,
   AddressSource,
@@ -69,8 +79,15 @@ import {
   ViewedDetails,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
-import { GetNotificationsParams, GetNotificationsResponse, Notification } from './Notifications';
+import {
+  GetNotificationsParams,
+  GetNotificationsResponse,
+  Notification,
+  NotificationColumnData,
+} from './Notifications';
 import { PaginationData } from './Pagination';
+import { CardElement, CardSort } from './PnCard';
+import { Column, Row, Sort } from './PnTable';
 import { Product } from './Products';
 import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
@@ -87,9 +104,14 @@ export {
   ResponseStatus,
   AddressSource,
   LegalFactType,
+  EventPageType,
+  EventDowntimeType,
+  EventPaymentRecipientType,
+  EventAction,
   PhysicalCommunicationType,
   PaymentInfoDetail,
   PaymentStatus,
+  EventCategory,
   PaymentAttachmentSName,
   MessageType,
   KnownSentiment,
@@ -105,17 +127,22 @@ export type {
   AppStatusData,
   BasicUser,
   ConsentUser,
-  CardAction,
   CardElement,
   CardSort,
   Column,
   DatePickerTypes,
   EventsType,
+  EventPaymentStatusType,
+  EventNotificationsListType,
+  EventMandateNotificationsListType,
+  EventNotificationDetailType,
+  EventCreatedDelegationType,
   GetNotificationsParams,
   GetNotificationsResponse,
+  NotificationColumnData,
   IAppMessage,
   INotificationDetailTimeline,
-  Item,
+  Row,
   LegalFactId,
   NotificationDetailOtherDocument,
   NotHandledDetails,
