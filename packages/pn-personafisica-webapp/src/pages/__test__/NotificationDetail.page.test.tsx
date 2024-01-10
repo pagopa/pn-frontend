@@ -9,17 +9,21 @@ import {
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
   NotificationStatus,
+  PAYMENT_CACHE_KEY,
   PaymentStatus,
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
+  getPaymentCache,
   populatePaymentsPagoPaF24,
+  setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import { arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
+  cachedPayments,
   notificationDTO,
   notificationToFe,
   paymentsData,
@@ -102,6 +106,7 @@ describe('NotificationDetail Page', async () => {
   });
 
   afterEach(() => {
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
@@ -654,7 +659,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, { result: [] });
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, paginationData.size))
-      .reply(200, paymentInfo);
+      .reply(200, paymentInfo.slice(0, paginationData.size));
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -676,6 +681,8 @@ describe('NotificationDetail Page', async () => {
       ...paginationData,
       page: 1,
     };
+    const paymentCache = getPaymentCache(notificationDTO.iun);
+    expect(paymentCache?.currentPaymentPage).toBe(paginationData.page);
 
     // intercept the next request
     const secondPagePaymentInfoRequest = paymentInfoRequest.slice(
@@ -683,7 +690,16 @@ describe('NotificationDetail Page', async () => {
       (paginationData.page + 1) * paginationData.size
     );
 
-    mock.onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), secondPagePaymentInfoRequest)
+      .reply(
+        200,
+        paymentInfo.slice(
+          paginationData.page * paginationData.size,
+          (paginationData.page + 1) * paginationData.size
+        )
+      );
+
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
     });
@@ -691,5 +707,99 @@ describe('NotificationDetail Page', async () => {
     // check that the other payments are shown
     const secondPageItems = result.queryAllByTestId('pagopa-item');
     expect(secondPageItems).toHaveLength(secondPagePaymentInfoRequest.length);
+  });
+
+  it('should load payments from cache when reloading the page, so it does not make the same request twice', async () => {
+    let pagoPaItems: HTMLElement[] | undefined;
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
+      .reply(200, paymentInfo);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    pagoPaItems = result?.queryAllByTestId('pagopa-item');
+    expect(pagoPaItems).toHaveLength(5);
+
+    mock.resetHistory();
+
+    await act(async () => {
+      result?.rerender(<NotificationDetail />);
+    });
+
+    expect(mock.history.post).toHaveLength(0);
+    pagoPaItems = result?.queryAllByTestId('pagopa-item');
+    expect(pagoPaItems).toHaveLength(5);
+  });
+
+  it('should call payment info if reload after 3 minutes', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
+      .reply(200, paymentInfo);
+
+    const date = new Date();
+    const isoDate = new Date(date.setMinutes(date.getMinutes() - 3)).toISOString();
+    const cacheWithOldDate = {
+      ...cachedPayments,
+      timestamp: isoDate,
+    };
+    sessionStorage.setItem('payments', JSON.stringify(cacheWithOldDate));
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
+  });
+
+  it('should fetch only currentPayment if is present in cache', async () => {
+    const currentPayment = {
+      creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId ?? '',
+      noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode ?? '',
+    };
+
+    setPaymentCache(
+      {
+        ...cachedPayments,
+        currentPayment,
+      },
+      notificationDTO.iun
+    );
+
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_INFO(), [
+        {
+          creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId,
+          noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode,
+        },
+      ])
+      .reply(200, paymentInfo.slice(0, 1));
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
+    const paymentCache = getPaymentCache(notificationDTO.iun);
+    expect(paymentCache?.currentPayment).toBeUndefined();
   });
 });
