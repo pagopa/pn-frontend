@@ -13,6 +13,7 @@ import {
   EventPaymentRecipientType,
   F24PaymentDetails,
   GetNotificationDowntimeEventsParams,
+  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -27,6 +28,7 @@ import {
   PaymentDetails,
   PnBreadcrumb,
   TimedMessage,
+  TimelineCategory,
   TitleBox,
   formatDate,
   formatToTimezoneString,
@@ -69,7 +71,8 @@ const getNotificationDetailData = (
   notificationStatus: NotificationStatus,
   checkIfUserHasPayments: boolean,
   userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> },
-  fromQrCode: boolean
+  fromQrCode: boolean,
+  timeline: Array<INotificationDetailTimeline>
 ): EventNotificationDetailType => {
   // eslint-disable-next-line functional/no-let
   let typeDowntime: EventDowntimeType;
@@ -94,7 +97,8 @@ const getNotificationDetailData = (
       userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
     contains_f24: hasF24 ? 'yes' : 'no',
-    first_time_opening: notificationStatus === NotificationStatus.EFFECTIVE_DATE,
+    first_time_opening:
+      timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
     source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
   };
 };
@@ -453,7 +457,8 @@ const NotificationDetail = () => {
           notification.notificationStatus,
           checkIfUserHasPayments,
           userPayments,
-          fromQrCode
+          fromQrCode,
+          notification.timeline
         )
       );
     }

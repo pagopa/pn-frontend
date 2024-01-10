@@ -41,7 +41,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
     documents.map((d) => {
       const document = {
-        key: d.digests?.sha256 ? d.digests.sha256 : d.documentId,
+        key: d.ref.key || d.documentId,
         name: d.title || d.ref.key,
         downloadHandler: d.documentId
           ? ({
