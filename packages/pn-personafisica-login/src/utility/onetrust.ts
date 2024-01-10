@@ -9,7 +9,7 @@ export function initOneTrust() {
   const scriptEl = document.createElement('script');
   scriptEl.setAttribute(
     'src',
-    '/auth/onetrust/scripttemplates/otSDKStub.js'
+    '/onetrust/scripttemplates/otSDKStub.js'
   );
   scriptEl.setAttribute('type', 'text/javascript');
   scriptEl.setAttribute('charset', 'UTF-8');
