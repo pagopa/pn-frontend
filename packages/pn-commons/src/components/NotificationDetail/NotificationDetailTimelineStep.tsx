@@ -53,7 +53,6 @@ type Props = {
 
 /**
  * Timeline step component
- * @param key unique key
  * @param oppositeContent element on the left
  * @param variant dot type
  * @param content element on the right
@@ -61,7 +60,6 @@ type Props = {
  * @param size dot size
  */
 type StepProps = {
-  key?: string;
   oppositeContent?: ReactNode;
   variant?: 'outlined' | 'filled';
   content?: ReactNode;
@@ -70,7 +68,6 @@ type StepProps = {
 };
 
 const TimelineStepCmp: React.FC<StepProps> = ({
-  key,
   oppositeContent,
   variant,
   content,
@@ -79,7 +76,7 @@ const TimelineStepCmp: React.FC<StepProps> = ({
 }) => {
   const isMobile = useIsMobile();
   return (
-    <TimelineNotificationItem key={key}>
+    <TimelineNotificationItem>
       <TimelineNotificationOppositeContent sx={{ pr: isMobile ? 1 : 2, justifyContent: 'center' }}>
         {oppositeContent}
       </TimelineNotificationOppositeContent>
