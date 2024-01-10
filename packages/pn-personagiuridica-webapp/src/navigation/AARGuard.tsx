@@ -2,7 +2,6 @@ import { AccessDenied, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
@@ -22,7 +21,7 @@ const AARGuard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
-  const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
+  const [notificationId, ] = useState<NotificationId | undefined>();
 
   // momentarily added for pn-5157
   const storedAar = localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
@@ -43,14 +42,14 @@ const AARGuard = () => {
 
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {
-      if (aar) {
-        try {
-          const fetchedData = await NotificationsApi.exchangeNotificationQrCode(aar);
-          setNotificationId(fetchedData);
-        } catch {
+      // if (aar) {
+      //   try {
+      //     const fetchedData = await NotificationsApi.exchangeNotificationQrCode(aar);
+      //     setNotificationId(fetchedData);
+      //   } catch {
           setFetchError(true);
-        }
-      }
+      //   }
+      // }
     };
     // momentarily updated for pn-5157
     void fetchNotificationFromQrCode().then(() =>

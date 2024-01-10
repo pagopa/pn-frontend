@@ -22,8 +22,8 @@ const AARGuard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
-const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
-
+  const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
+  
   const aar = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
     return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);

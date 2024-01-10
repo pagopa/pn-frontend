@@ -1,8 +1,6 @@
-import { Box, Button, Stack, Typography,  } from '@mui/material';
+import { Box, Button, Stack, Typography  } from '@mui/material';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-
-// import { IllusError } from '@pagopa/mui-italia';
-import Icon from '../assets/question.svg';
+import { IllusQuestion } from '../components';
 
 type Props = {
   isLogged: boolean;
@@ -10,7 +8,7 @@ type Props = {
   goToHomePage: () => void;
   message?: string;
   subtitle?: string;
-  qrError?: boolean
+  qrError?: boolean;
 };
 
 const AccessDenied: React.FC<Props> = ({
@@ -19,7 +17,7 @@ const AccessDenied: React.FC<Props> = ({
   goToHomePage,
   message,
   subtitle,
-  qrError
+  qrError = false
 }) => {
   const finalMessage =
     message ??
@@ -37,11 +35,11 @@ const AccessDenied: React.FC<Props> = ({
       alignItems="center"
       my={6}
       px={4}
-      sx={{ minHeight: '50vh'}}
+      sx={{ minHeight: '50vh' }}
       data-testid="access-denied"
     >
       {qrError && <Box mt={9}>
-        <img src={qrError ? Icon : ''} alt={qrError ? 'icona di domanda' : ''} width={60}/>
+        <IllusQuestion/>
       </Box>}
       
       <Box mt={2}>
