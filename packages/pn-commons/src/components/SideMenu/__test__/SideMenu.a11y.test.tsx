@@ -1,5 +1,4 @@
 import { axe, toHaveNoViolations } from 'jest-axe';
-import * as React from 'react';
 
 import { sideMenuItems } from '../../../__mocks__/SideMenu.mock';
 import { render } from '../../../test-utils';

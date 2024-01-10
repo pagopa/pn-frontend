@@ -1,5 +1,5 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen } from '../../__test__/test-utils';
@@ -31,7 +31,7 @@ describe('RouteGuard component', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {

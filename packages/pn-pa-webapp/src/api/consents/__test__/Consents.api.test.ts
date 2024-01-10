@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { ConsentActionType, ConsentType } from '../../../models/consents';
 import { apiClient } from '../../apiClients';
 import { ConsentsApi } from '../Consents.api';
 import { GET_CONSENTS, SET_CONSENTS } from '../consents.routes';

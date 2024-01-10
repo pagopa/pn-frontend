@@ -1,9 +1,11 @@
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 
 interface TabPanelProps {
   index: number;
   value: number;
+  children?: React.ReactNode;
 }
 const TabPanel: React.FC<TabPanelProps> = ({ index, value, children }) => (
   <Box

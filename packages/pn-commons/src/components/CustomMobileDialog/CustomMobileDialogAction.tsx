@@ -4,6 +4,7 @@ import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
 
 type Props = {
   closeOnClick?: boolean;
+  children?: React.ReactNode;
 };
 
 /**

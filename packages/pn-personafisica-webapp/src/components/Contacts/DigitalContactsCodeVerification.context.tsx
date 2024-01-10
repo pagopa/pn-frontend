@@ -58,7 +58,7 @@ const eventAttributes = (isSpecialContact?: boolean) => ({
   other_contact: isSpecialContact ? 'yes' : 'no',
 });
 
-const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
+const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
@@ -333,12 +333,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             ` ${modalProps.value}`
           }
           subtitle={
-            <Typography variant="body1">
-              <Trans
-                i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
-                ns="recapiti"
-              />
-            </Typography>
+            <Trans
+              i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+              ns="recapiti"
+            />
           }
           open={open}
           initialValues={new Array(5).fill('')}

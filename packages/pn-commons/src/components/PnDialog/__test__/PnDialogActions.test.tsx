@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
 
 import { createMatchMedia, render } from '../../../test-utils';
@@ -29,7 +27,7 @@ describe('PnDialogActions Component', () => {
 
   it('renders component - mobile', () => {
     window.matchMedia = createMatchMedia(800);
-    const { container, queryByTestId, queryAllByTestId } = render(
+    const { queryByTestId, queryAllByTestId } = render(
       <PnDialogActions>
         <Button data-testid="button">Test confirm button</Button>
         <Button data-testid="button">Test cancel button</Button>

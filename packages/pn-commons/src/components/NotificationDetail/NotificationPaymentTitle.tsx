@@ -9,6 +9,7 @@ type Props = {
   pagoPaF24: Array<PaymentDetails>;
   f24Only: Array<F24PaymentDetails>;
   allPaymentsIsPaid: boolean;
+  hasMoreThenOnePage: boolean;
 };
 
 const NotificationPaymentTitle: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
   pagoPaF24,
   f24Only,
   allPaymentsIsPaid,
+  hasMoreThenOnePage,
 }) => {
   const FAQ_NOTIFICATION_COSTS = '/faq#costi-di-notifica';
   const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
@@ -67,7 +69,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
     return <>{getLocalizedOrDefaultLabel('notifications', 'detail.payment.subtitle-f24')}</>;
   };
 
-  return allPaymentsIsPaid ? (
+  return allPaymentsIsPaid && !hasMoreThenOnePage ? (
     <></>
   ) : (
     <Typography variant="body2" data-testid="notification-payment-recipient-subtitle">

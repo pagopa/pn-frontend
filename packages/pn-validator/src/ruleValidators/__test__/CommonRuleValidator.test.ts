@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { IsEqual } from './../../rules/IsEqual';
 import { IsNull } from '../../rules/IsNull';
 import { IsUndefined } from '../../rules/IsUndefined';
@@ -7,43 +8,43 @@ import { CommonRuleValidator } from '../CommonRuleValidator';
 
 class DummyRuleValidator<TModel, TValue> extends CommonRuleValidator<TModel, TValue> {}
 
-const pushRuleMk = jest.fn();
+const pushRuleMk = vi.fn();
 const dummyRuleValidator = new DummyRuleValidator(pushRuleMk);
 
-jest.mock('../../rules/IsNull', () => {
+vi.mock('../../rules/IsNull', () => {
     return {
-        IsNull: jest.fn()
+        IsNull: vi.fn()
     }
 });
 
-jest.mock('../../rules/IsUndefined', () => {
+vi.mock('../../rules/IsUndefined', () => {
     return {
-        IsUndefined: jest.fn()
+        IsUndefined: vi.fn()
     }
 });
 
-jest.mock('../../rules/IsEqual', () => {
+vi.mock('../../rules/IsEqual', () => {
     return {
-        IsEqual: jest.fn()
+        IsEqual: vi.fn()
     }
 });
 
-jest.mock('../../rules/CustomValidator', () => {
+vi.mock('../../rules/CustomValidator', () => {
     return {
-        CustomValidator: jest.fn()
+        CustomValidator: vi.fn()
     }
 });
 
-jest.mock('../../rules/IsOneOf', () => {
+vi.mock('../../rules/IsOneOf', () => {
   return {
-      IsOneOf: jest.fn()
+      IsOneOf: vi.fn()
   }
 });
 
 describe('Test CommonRuleValidator', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('check if methods exist', () => {

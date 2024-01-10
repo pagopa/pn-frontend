@@ -1,10 +1,10 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import ApiKeyModal, { ApiKeyModalProps } from '../ApiKeyModal';
 
-const closeModalFn = jest.fn();
-const actionModalFn = jest.fn();
+const closeModalFn = vi.fn();
+const actionModalFn = vi.fn();
 
 const defaultProps: ApiKeyModalProps = {
   title: 'mock-title',
@@ -18,6 +18,10 @@ const defaultProps: ApiKeyModalProps = {
 };
 
 describe('ApiKeyModal component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('render component', () => {
     const { container, queryByTestId } = render(<ApiKeyModal {...defaultProps} />);
     waitFor(() => {
