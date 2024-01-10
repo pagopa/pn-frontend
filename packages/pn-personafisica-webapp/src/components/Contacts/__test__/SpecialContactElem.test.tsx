@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
@@ -6,7 +6,7 @@ import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -21,7 +21,7 @@ Il flusso completo viene testato nella pagina dei contatti, dove si può testare
 Andrea Cimini - 6/09/2023
 */
 describe('SpecialContactElem Component', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
 
   it('renders SpecialContactElem', async () => {
     // render component
@@ -43,8 +43,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForms = result?.getAllByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForms = result.getAllByTestId('specialContactForm');
     expect(specialContactForms).toHaveLength(2);
     expect(specialContactForms![0]).toHaveTextContent('mocked@pec.it');
     expect(specialContactForms![1]).toHaveTextContent('mocked@mail.it');
@@ -56,7 +56,7 @@ describe('SpecialContactElem Component', () => {
     expect(secondFormButtons).toHaveLength(2);
     expect(secondFormButtons[0]).toHaveTextContent('button.modifica');
     expect(secondFormButtons[1]).toHaveTextContent('button.elimina');
-    expect(result?.container).toHaveTextContent('-');
+    expect(result.container).toHaveTextContent('-');
   });
 
   it('changes a pec - new value valid', async () => {
@@ -78,8 +78,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForm = result?.getByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForm = result.getByTestId('specialContactForm');
     const firstFormButtons = specialContactForm!.querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     const input = await waitFor(() => specialContactForm!.querySelector('input'));
@@ -92,7 +92,7 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: 'new.long-pec-123@456.it' } });
     await waitFor(() => expect(input!).toHaveValue('new.long-pec-123@456.it'));
     expect(newButtons![0]).toBeEnabled();
-    const inputError = result?.container.querySelector(`#mocked-senderId_pec-helper-text`);
+    const inputError = result.container.querySelector(`#mocked-senderId_pec-helper-text`);
     expect(inputError).not.toBeInTheDocument();
   });
 
@@ -115,8 +115,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForm = result?.getByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForm = result.getByTestId('specialContactForm');
     const firstFormButtons = specialContactForm!.querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     const input = await waitFor(() => specialContactForm!.querySelector('input'));
@@ -129,12 +129,12 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: 'new.bad.-pec-123]@456.it' } });
     await waitFor(() => expect(input!).toHaveValue('new.bad.-pec-123]@456.it'));
     expect(newButtons![0]).toBeDisabled();
-    let inputError = result?.container.querySelector(`#mocked-senderId_pec-helper-text`);
+    let inputError = result.container.querySelector(`#mocked-senderId_pec-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
-    inputError = result?.container.querySelector(`#mocked-senderId_pec-helper-text`);
+    inputError = result.container.querySelector(`#mocked-senderId_pec-helper-text`);
     expect(inputError).toHaveTextContent('legal-contacts.valid-pec');
   });
 
@@ -157,8 +157,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForm = result?.getByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForm = result.getByTestId('specialContactForm');
     const firstFormButtons = specialContactForm!.querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     const input = await waitFor(() => specialContactForm!.querySelector('input'));
@@ -171,7 +171,7 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: 'new.long-mail-123@456.it' } });
     await waitFor(() => expect(input!).toHaveValue('new.long-mail-123@456.it'));
     expect(newButtons![0]).toBeEnabled();
-    const inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
+    const inputError = result.container.querySelector(`#mocked-senderId_mail-helper-text`);
     expect(inputError).not.toBeInTheDocument();
   });
 
@@ -194,8 +194,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForm = result?.getByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForm = result.getByTestId('specialContactForm');
     const firstFormButtons = specialContactForm!.querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     const input = await waitFor(() => specialContactForm!.querySelector('input'));
@@ -208,12 +208,12 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: 'new.bad.-mail-123]@456.it' } });
     await waitFor(() => expect(input!).toHaveValue('new.bad.-mail-123]@456.it'));
     expect(newButtons![0]).toBeDisabled();
-    let inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
+    let inputError = result.container.querySelector(`#mocked-senderId_mail-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
-    inputError = result?.container.querySelector(`#mocked-senderId_mail-helper-text`);
+    inputError = result.container.querySelector(`#mocked-senderId_mail-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
   });
 
@@ -236,8 +236,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForm = result?.getByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForm = result.getByTestId('specialContactForm');
     const firstFormButtons = specialContactForm!.querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     const input = await waitFor(() => specialContactForm!.querySelector('input'));
@@ -250,7 +250,7 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: '+39333333334' } });
     await waitFor(() => expect(input!).toHaveValue('+39333333334'));
     expect(newButtons![0]).toBeEnabled();
-    const inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
+    const inputError = result.container.querySelector(`#mocked-senderId_phone-helper-text`);
     expect(inputError).not.toBeInTheDocument();
   });
 
@@ -273,8 +273,8 @@ describe('SpecialContactElem Component', () => {
       );
     });
 
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForm = result?.getByTestId('specialContactForm');
+    expect(result.container).toHaveTextContent('Mocked Sender');
+    const specialContactForm = result.getByTestId('specialContactForm');
     const firstFormButtons = specialContactForm!.querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     const input = await waitFor(() => specialContactForm!.querySelector('input'));
@@ -287,12 +287,12 @@ describe('SpecialContactElem Component', () => {
     fireEvent.change(input!, { target: { value: '123456789' } });
     await waitFor(() => expect(input!).toHaveValue('123456789'));
     expect(newButtons![0]).toBeDisabled();
-    let inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
+    let inputError = result.container.querySelector(`#mocked-senderId_phone-helper-text`);
     expect(inputError).toBeInTheDocument();
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
     fireEvent.change(input!, { target: { value: '' } });
     await waitFor(() => expect(input!).toHaveValue(''));
-    inputError = result?.container.querySelector(`#mocked-senderId_phone-helper-text`);
+    inputError = result.container.querySelector(`#mocked-senderId_phone-helper-text`);
     expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
   });
 
@@ -325,7 +325,7 @@ describe('SpecialContactElem Component', () => {
       );
     });
     // edit the first contact of the first row
-    const specialContactForms = result?.getAllByTestId('specialContactForm');
+    const specialContactForms = result.getAllByTestId('specialContactForm');
     let firstFormButtons = specialContactForms![0].querySelectorAll('button');
     fireEvent.click(firstFormButtons[0]);
     let input = await waitFor(() => specialContactForms![0].querySelector('input'));

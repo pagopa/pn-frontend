@@ -1,5 +1,5 @@
-import React from 'react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -7,7 +7,7 @@ import App from '../App';
 import { render } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -15,9 +15,9 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
+  useNavigate: () => vi.fn(),
 }));
 
 describe('App', () => {

@@ -97,7 +97,10 @@ const CodeModal = memo(
           {title}
         </DialogTitle>
         <DialogContent sx={{ px: 4 }}>
-          <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
+          <DialogContentText
+            id="dialog-description"
+            sx={{ textAlign: textPosition, color: 'text.primary' }}
+          >
             {subtitle}
           </DialogContentText>
           <Divider sx={{ margin: '20px 0' }} />

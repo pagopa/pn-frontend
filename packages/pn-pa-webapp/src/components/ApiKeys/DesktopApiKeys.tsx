@@ -22,9 +22,10 @@ import ApiKeyDataSwitch from './ApiKeyDataSwitch';
 type Props = {
   apiKeys: Array<ApiKey<UserGroup>>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
+  children?: React.ReactNode;
 };
 
-const LinkNewApiKey: React.FC = ({ children }) => {
+const LinkNewApiKey: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['apikeys']);
   return (

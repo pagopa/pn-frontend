@@ -345,6 +345,7 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
+
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
@@ -518,11 +519,10 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
+                        iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
-                        handleFetchPaymentsInfo={() =>
-                          reloadPaymentsInfo(currentRecipient.payments ?? [])
-                        }
+                        handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}

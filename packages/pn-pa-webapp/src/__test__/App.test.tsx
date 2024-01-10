@@ -1,14 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
-import { ThemeProvider } from '@emotion/react';
-import { theme } from '@pagopa/mui-italia';
+import { ThemeProvider, createTheme } from '@mui/material';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { institutionsList, productsList } from '../__mocks__/User.mock';
-import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import {
   GET_INSTITUTIONS,
@@ -18,7 +16,7 @@ import { ConsentType } from '../models/consents';
 import { RenderResult, act, render } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -27,10 +25,11 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
+vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</div> }));
 
 const unmockedFetch = global.fetch;
 
+const theme = createTheme({});
 const Component = () => (
   <ThemeProvider theme={theme}>
     <App />
@@ -57,11 +56,16 @@ const reduxInitialState = {
   },
 };
 
-describe('App', () => {
+describe('App', async () => {
   let mock: MockAdapter;
+  let result: RenderResult;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -80,17 +84,16 @@ describe('App', () => {
   });
 
   it('render component - user not logged in', async () => {
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />);
     });
-    const header = document.querySelector('header');
+    const header = result.container.querySelector('header');
     expect(header).toBeInTheDocument();
-    const footer = document.querySelector('footer');
+    const footer = result.container.querySelector('footer');
     expect(footer).toBeInTheDocument();
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(
+    expect(result.container).toHaveTextContent(
       'Non hai le autorizzazioni necessarie per accedere a questa pagina'
     );
   });
@@ -109,17 +112,16 @@ describe('App', () => {
     mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
     mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const header = document.querySelector('header');
+    const header = result.container.querySelector('header');
     expect(header).toBeInTheDocument();
-    const footer = document.querySelector('footer');
+    const footer = result.container.querySelector('footer');
     expect(footer).toBeInTheDocument();
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent('Generic Page');
+    expect(result.container).toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -133,13 +135,12 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
     mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -153,13 +154,12 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
     mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -177,15 +177,14 @@ describe('App', () => {
     mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
     mock.onGet(GET_INSTITUTIONS()).reply(200, institutionsList);
     mock.onGet(GET_INSTITUTION_PRODUCTS('1')).reply(200, productsList);
-    let result: RenderResult;
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    const tosPage = result!.queryByTestId('tos-acceptance-page');
+    const tosPage = result.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 });
