@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -13,8 +13,6 @@ import {
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
-  getF24Payments,
-  getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -36,7 +34,6 @@ import {
   waitFor,
   within,
 } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -49,14 +46,14 @@ import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 let mockIsDelegate = false;
 let mockIsFromQrCode = false;
-const mockAssignFn = jest.fn();
+const mockAssignFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useParams: () =>
     mockIsDelegate
       ? { id: 'RPTH-YULD-WKMA-202305-T-1', mandateId: '5' }
@@ -65,7 +62,7 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -91,14 +88,18 @@ const delegator = arrayOfDelegators.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', () => {
+describe('NotificationDetail Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
   const original = window.location;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
@@ -106,7 +107,7 @@ describe('NotificationDetail Page', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mock.reset();
     mockIsFromQrCode = false;
     mockIsDelegate = false;
@@ -655,8 +656,9 @@ describe('NotificationDetail Page', () => {
     expect(addDomicileBanner).not.toBeInTheDocument();
   });
 
-  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
-    jest.useFakeTimers();
+  // TO-FIX: il test fallisce perchè fakeTimers non funziona bene con waitFor
+  it.skip('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+    vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -701,7 +703,7 @@ describe('NotificationDetail Page', () => {
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
     act(() => {
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
     });
     expect(payButton).toBeEnabled();
     fireEvent.click(payButton!);
@@ -712,6 +714,7 @@ describe('NotificationDetail Page', () => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
+    vi.useRealTimers();
   });
 
   it('should show correct paginated payments', async () => {

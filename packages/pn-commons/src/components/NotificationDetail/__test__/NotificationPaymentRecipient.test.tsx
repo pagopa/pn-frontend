@@ -1,9 +1,9 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
+import { act, fireEvent, render, within } from '../../../test-utils';
 import {
   getF24Payments,
   getPagoPaF24Payments,
@@ -29,7 +29,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
@@ -60,13 +60,13 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('select and unselect payment', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     const { getByTestId, queryAllByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
@@ -86,7 +86,7 @@ describe('NotificationPaymentRecipient Component', () => {
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
     act(() => {
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
     });
     downloadPagoPANotice = getByTestId('download-pagoPA-notice-button');
     expect(downloadPagoPANotice).toBeInTheDocument();
@@ -102,14 +102,14 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should dispatch action on pay button click', async () => {
-    jest.useFakeTimers();
-    const payClickMk = jest.fn();
+    vi.useFakeTimers();
+    const payClickMk = vi.fn();
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={payClickMk}
         handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
@@ -127,17 +127,15 @@ describe('NotificationPaymentRecipient Component', () => {
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
     act(() => {
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
     });
     fireEvent.click(payButton);
-    await waitFor(() => {
-      expect(payClickMk).toBeCalledTimes(1);
-      expect(payClickMk).toBeCalledWith(
-        paymentsData.pagoPaF24[paymentIndex].pagoPa!.noticeCode,
-        paymentsData.pagoPaF24[paymentIndex].pagoPa!.creditorTaxId,
-        paymentsData.pagoPaF24[paymentIndex].pagoPa!.amount
-      );
-    });
+    expect(payClickMk).toBeCalledTimes(1);
+    expect(payClickMk).toBeCalledWith(
+      paymentsData.pagoPaF24[paymentIndex].pagoPa!.noticeCode,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa!.creditorTaxId,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa!.amount
+    );
   });
 
   it('Should show enabled pay button and hide radio button if having only one payment', async () => {
@@ -155,7 +153,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={payment}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
@@ -173,7 +171,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={true}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
@@ -186,8 +184,8 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleDownloadAttachment on download button click', async () => {
-    jest.useFakeTimers();
-    const getPaymentAttachmentActionMk = jest
+    vi.useFakeTimers();
+    const getPaymentAttachmentActionMk = vi
       .fn()
       .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
 
@@ -211,7 +209,7 @@ describe('NotificationPaymentRecipient Component', () => {
     // after radio button click, there is a timer of 1 second after that the paymeny is enabled
     // wait...
     act(() => {
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
     });
     // download pagoPA attachments
     const downloadButton = getByTestId('download-pagoPA-notice-button');
@@ -251,7 +249,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={payments}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         landingSiteUrl=""
@@ -262,13 +260,13 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should call handleFetchPaymentsInfo on pagination click', async () => {
-    const fetchPaymentsInfoMk = jest.fn();
+    const fetchPaymentsInfoMk = vi.fn();
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={fetchPaymentsInfoMk}
         landingSiteUrl=""
@@ -289,7 +287,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => {}}
         landingSiteUrl=""
@@ -325,7 +323,7 @@ describe('NotificationPaymentRecipient Component', () => {
         payments={paidPayments}
         isCancelled={false}
         timerF24={F24TIMER}
-        getPaymentAttachmentAction={jest.fn()}
+        getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => {}}
         landingSiteUrl=""

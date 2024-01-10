@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentsData } from '../../../models';
@@ -28,6 +26,7 @@ describe('NotificationPaymentTite component', () => {
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
+        allPaymentsIsPaid={false}
       />
     );
 
@@ -45,6 +44,7 @@ describe('NotificationPaymentTite component', () => {
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
+        allPaymentsIsPaid={false}
       />
     );
 
@@ -62,6 +62,7 @@ describe('NotificationPaymentTite component', () => {
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
+        allPaymentsIsPaid={false}
       />
     );
 
@@ -79,6 +80,7 @@ describe('NotificationPaymentTite component', () => {
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
         handleTrackEventFn={() => {}}
+        allPaymentsIsPaid={false}
       />
     );
 

@@ -1,6 +1,5 @@
 import { ForEachElement } from './../ForEachElement';
 
-
 describe('Test custom validator rule', () => {
   it('value not defined', () => {
     const rule = new ForEachElement<any, null | undefined>(() => {});
@@ -12,7 +11,7 @@ describe('Test custom validator rule', () => {
 
   it('valid value (array of string)', () => {
     const rule = new ForEachElement<any, String[]>((rules) => {
-        rules.isString().isEmpty()
+      rules.isString().isEmpty();
     });
     const result = rule.valueValidator([], null);
     expect(result).toBe(null);
@@ -20,7 +19,7 @@ describe('Test custom validator rule', () => {
 
   it('invalid value (array of string)', () => {
     const rule = new ForEachElement<any, String[]>((rules) => {
-        rules.isString().isEmpty()
+      rules.isString().isEmpty();
     });
     const result = rule.valueValidator(['prova'], null);
     expect(result).toStrictEqual(['Value must be empty']);
@@ -28,23 +27,31 @@ describe('Test custom validator rule', () => {
 
   it('valid value (array of object)', () => {
     class Prova {
-        property: number
+      property: number;
+
+      constructor(property: number) {
+        this.property = property;
+      }
     }
     const rule = new ForEachElement<any, Prova[]>((rules) => {
-        rules.isObject().isEqual({property: 1})
+      rules.isObject().isEqual({ property: 1 });
     });
-    const result = rule.valueValidator([{property: 1}, {property: 1}], null);
+    const result = rule.valueValidator([{ property: 1 }, { property: 1 }], null);
     expect(result).toStrictEqual([null, null]);
   });
 
   it('invalid value (array of object)', () => {
     class Prova {
-        property: number
+      property: number;
+
+      constructor(property: number) {
+        this.property = property;
+      }
     }
     const rule = new ForEachElement<any, Prova[]>((rules) => {
-        rules.isObject().isEqual({property: 1})
+      rules.isObject().isEqual({ property: 1 });
     });
-    const result = rule.valueValidator([{property: 1}, {property: 3}], null);
-    expect(result).toStrictEqual([null, 'Value must be equal to {\"property\":1}']);
+    const result = rule.valueValidator([{ property: 1 }, { property: 3 }], null);
+    expect(result).toStrictEqual([null, 'Value must be equal to {"property":1}']);
   });
 });

@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { FC, ReactNode, createContext, useContext, useState } from 'react';
 
 interface ICustomMobileDialogContext {
   open: boolean;
@@ -7,7 +7,7 @@ interface ICustomMobileDialogContext {
 
 const CustomMobileDialogContext = createContext<ICustomMobileDialogContext | undefined>(undefined);
 
-const CustomMobileDialogProvider: FC<ReactNode> = ({ children }) => {
+const CustomMobileDialogProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {

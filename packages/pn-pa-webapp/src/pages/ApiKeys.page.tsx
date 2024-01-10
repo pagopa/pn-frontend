@@ -32,7 +32,7 @@ import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
-const LinkApiB2b: React.FC = ({ children }) => {
+const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
   return <Link href={API_B2B_LINK}>{children}</Link>;
 };

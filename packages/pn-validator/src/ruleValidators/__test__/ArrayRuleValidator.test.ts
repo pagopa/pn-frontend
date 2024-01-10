@@ -1,26 +1,27 @@
+import { vi } from 'vitest';
 import { ForEachElement } from '../../rules/ForEachElement';
 import { IsEmpty } from '../../rules/IsEmpty';
 import { ArrayRuleValidator } from '../ArrayRuleValidator';
 
-const pushRuleMk = jest.fn();
+const pushRuleMk = vi.fn();
 const dummyRuleValidator = new ArrayRuleValidator(pushRuleMk);
 
-jest.mock('../../rules/IsEmpty', () => {
+vi.mock('../../rules/IsEmpty', () => {
     return {
-        IsEmpty: jest.fn()
+        IsEmpty: vi.fn()
     }
 });
 
-jest.mock('../../rules/ForEachElement', () => {
+vi.mock('../../rules/ForEachElement', () => {
     return {
-        ForEachElement: jest.fn()
+        ForEachElement: vi.fn()
     }
 });
 
 describe('Test ArrayRuleValidator', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('check if methods exist', () => {

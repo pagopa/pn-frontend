@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
@@ -16,15 +17,15 @@ import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import * as routes from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -32,13 +33,17 @@ jest.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string; components?: Array<ReactNode> }) => (
     <>
-      {props.i18nKey} {props.components && props.components!.map((c) => c)}
+      {props.i18nKey} {props.components && props.components.map((c) => c)}
     </>
   ),
 }));
 
 describe('DesktopNotifications Component', () => {
   let result: RenderResult;
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('renders component - no notification', async () => {
     // render component

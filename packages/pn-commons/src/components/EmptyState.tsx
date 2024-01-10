@@ -5,6 +5,7 @@ import { KnownSentiment, iconForKnownSentiment } from '../models/EmptyState';
 
 type Props = {
   sentimentIcon?: KnownSentiment | SvgIconComponent;
+  children?: React.ReactNode;
 };
 
 const EmptyState: React.FC<Props> = ({ sentimentIcon = KnownSentiment.DISSATISFIED, children }) => {
