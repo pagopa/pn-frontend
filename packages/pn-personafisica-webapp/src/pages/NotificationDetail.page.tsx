@@ -13,6 +13,7 @@ import {
   EventPaymentRecipientType,
   F24PaymentDetails,
   GetNotificationDowntimeEventsParams,
+  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -27,6 +28,7 @@ import {
   PaymentDetails,
   PnBreadcrumb,
   TimedMessage,
+  TimelineCategory,
   TitleBox,
   formatDate,
   formatToTimezoneString,
@@ -68,7 +70,9 @@ const getNotificationDetailData = (
   mandateId: string | undefined,
   notificationStatus: NotificationStatus,
   checkIfUserHasPayments: boolean,
-  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> }
+  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> },
+  fromQrCode: boolean,
+  timeline: Array<INotificationDetailTimeline>
 ): EventNotificationDetailType => {
   // eslint-disable-next-line functional/no-let
   let typeDowntime: EventDowntimeType;
@@ -93,6 +97,9 @@ const getNotificationDetailData = (
       userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
     contains_f24: hasF24 ? 'yes' : 'no',
+    first_time_opening:
+      timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
+    source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
   };
 };
 
@@ -342,6 +349,7 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
+
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
@@ -448,7 +456,9 @@ const NotificationDetail = () => {
           mandateId,
           notification.notificationStatus,
           checkIfUserHasPayments,
-          userPayments
+          userPayments,
+          fromQrCode,
+          notification.timeline
         )
       );
     }
@@ -514,11 +524,10 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
+                        iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
-                        handleFetchPaymentsInfo={() =>
-                          reloadPaymentsInfo(currentRecipient.payments ?? [])
-                        }
+                        handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}

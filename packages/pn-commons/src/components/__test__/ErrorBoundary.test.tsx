@@ -1,18 +1,26 @@
-import React from 'react';
+import { vi } from 'vitest';
 
-import { fireEvent, getById, initLocalizationForTest, render } from '../../test-utils';
+import {
+  disableConsoleLogging,
+  fireEvent,
+  getById,
+  initLocalizationForTest,
+  render,
+} from '../../test-utils';
 import ErrorBoundary from '../ErrorBoundary';
 
 const ThrowError = () => {
   throw new Error('Test');
 };
 
-const mockEventTrackingCallback = jest.fn();
-const mockEventTrackingCallbackRefreshPage = jest.fn();
-const mockReload = jest.fn();
+const mockEventTrackingCallback = vi.fn();
+const mockEventTrackingCallbackRefreshPage = vi.fn();
+const mockReload = vi.fn();
 
 describe('ErrorBoundary Component', () => {
   const original = window.location;
+
+  disableConsoleLogging('error');
 
   beforeAll(() => {
     initLocalizationForTest();
@@ -37,8 +45,6 @@ describe('ErrorBoundary Component', () => {
   });
 
   it('renders ErrorBoundary (with errors)', async () => {
-    // prevent error logging
-    jest.spyOn(console, 'error').mockImplementation(() => {});
     // render component
     const { container } = render(
       <ErrorBoundary eventTrackingCallback={mockEventTrackingCallback}>
@@ -51,8 +57,6 @@ describe('ErrorBoundary Component', () => {
   });
 
   it('reload page', async () => {
-    // prevent error logging
-    jest.spyOn(console, 'error').mockImplementation(() => {});
     // render component
     const { container } = render(
       <ErrorBoundary

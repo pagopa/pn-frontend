@@ -1,7 +1,5 @@
-import React from 'react';
-import CollapsedList from '../CollapsedList';
-
 import { render } from '../../test-utils';
+import CollapsedList from '../CollapsedList';
 
 const people = [
   { id: 'mario', label: 'Mario Rossi' },
@@ -55,7 +53,7 @@ describe('CollapsedList Component', () => {
       if (index === maxNumberOfItems) {
         return false;
       }
-      expect(renderedPerson).toHaveTextContent(people[index].label);
+      return expect(renderedPerson).toHaveTextContent(people[index].label);
     });
     const remainingPeople = result.queryByTestId('remainingPeople');
     expect(remainingPeople).toBeInTheDocument();

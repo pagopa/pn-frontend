@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { AppCurrentStatus } from '../../../models';
 import {
@@ -12,8 +12,8 @@ import { AppStatusBar } from '../AppStatusBar';
 
 const fakePalette = { success: { main: '#00FF00' }, error: { main: '#FF0000' } };
 
-jest.mock('@mui/material', () => {
-  const original = jest.requireActual('@mui/material');
+vi.mock('@mui/material', async () => {
+  const original = await vi.importActual<any>('@mui/material');
   return {
     ...original,
     useTheme: () => ({

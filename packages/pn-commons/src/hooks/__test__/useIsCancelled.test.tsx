@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { notificationToFe } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../models';
 import { render } from '../../test-utils';

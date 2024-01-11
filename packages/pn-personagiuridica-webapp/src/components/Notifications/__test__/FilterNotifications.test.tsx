@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import {
@@ -14,14 +14,13 @@ import {
   fireEvent,
   render,
   screen,
-  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
+vi.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it.skip without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
     i18n: { language: 'it' },
@@ -65,11 +64,15 @@ async function setFormValues(
   await testInput(form, 'iunMatch', iunMatch);
 }
 
-describe('Filter Notifications Table Component', () => {
-  let result: RenderResult | undefined;
-  let form: HTMLFormElement | undefined;
+describe('Filter Notifications Table Component', async () => {
+  let result: RenderResult;
+  let form: HTMLFormElement;
 
   const original = window.matchMedia;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const testUtils = await import('../../../__test__/test-utils');
 
   afterAll(() => {
     window.matchMedia = original;
@@ -79,8 +82,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     expect(form).toBeInTheDocument();
     testFormElements(form!, 'iunMatch', 'filters.iun', '');
     testFormElements(form!, 'startDate', 'filters.data_da', '');
@@ -97,8 +100,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form!, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
   });
 
@@ -106,8 +109,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     const inputIunMatch = form!.querySelector(`input[name="iunMatch"]`);
     const paste = createEvent.paste(inputIunMatch!, {
       clipboardData: {
@@ -122,8 +125,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form!, 'startDate', '23/02/2022');
     await testCalendar(form!, 'startDate');
   });
@@ -132,8 +135,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form!, 'endDate', '23/02/2022');
     await testCalendar(form!, 'endDate');
   });
@@ -142,8 +145,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
@@ -154,7 +157,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -165,7 +168,7 @@ describe('Filter Notifications Table Component', () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -173,8 +176,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -184,7 +187,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form!).toHaveTextContent('filters.errors.iun');
   });
@@ -193,8 +196,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
@@ -205,7 +208,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -213,8 +216,8 @@ describe('Filter Notifications Table Component', () => {
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
-      form = result.container.querySelector('form') as HTMLFormElement;
     });
+    form = result.container.querySelector('form') as HTMLFormElement;
     const todayM = new Date();
     const oneMonthAhead = new Date(new Date().setMonth(todayM.getMonth() + 1));
     todayM.setHours(0, 0, 0, 0);
@@ -224,7 +227,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -235,7 +238,7 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
-    const button = result!.getByTestId('dialogToggleButton');
+    const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     expect(form).not.toBeInTheDocument(); // the desktop form
     const dialogForm = await waitFor(() => screen.getByTestId('filter-form'));
@@ -252,7 +255,7 @@ describe('Filter Notifications Table Component', () => {
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     nineYearsAgo.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
-    const button = result!.getByTestId('dialogToggleButton');
+    const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     let dialogForm = await waitFor(() => screen.getByTestId('filter-form') as HTMLFormElement);
     await setFormValues(dialogForm!, nineYearsAgo, oneYearAgo, 'ABCD-EFGH-ILMN-123456-A-1');
@@ -260,7 +263,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -268,7 +271,7 @@ describe('Filter Notifications Table Component', () => {
     });
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
-      expect(result?.container).toHaveTextContent('3');
+      expect(result.container).toHaveTextContent('3');
     });
     // cancel filters
     fireEvent.click(button);
@@ -279,6 +282,6 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
     });
-    expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+    expect(testUtils.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });
 });

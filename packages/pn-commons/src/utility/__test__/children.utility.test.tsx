@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { disableConsoleLogging } from '../../test-utils';
 import checkChildren from '../children.utility';
 

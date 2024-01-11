@@ -1,10 +1,10 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import CourtesyContactItem, { CourtesyFieldType } from '../CourtesyContactItem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -36,11 +36,13 @@ describe('CourtesyContactItem component', () => {
       const input = result.container.querySelector(`[name="${CourtesyFieldType.PHONE}"]`);
       // set invalid values
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-      await waitFor(() => expect(input!).toHaveValue(INPUT_INVALID_PHONE));
+      await waitFor(() => {
+        expect(input!).toHaveValue(INPUT_INVALID_PHONE);
+      });
       const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       fireEvent.change(input!, { target: { value: '' } });
-      await waitFor(() => expect(input!).toHaveValue(''));
+      expect(input!).toHaveValue('');
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
       const button = result.getByRole('button');
       expect(button).toHaveTextContent('courtesy-contacts.phone-add');
@@ -65,7 +67,9 @@ describe('CourtesyContactItem component', () => {
       expect(input).toHaveValue(INPUT_VALID_PHONE);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
-      await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
+      await waitFor(() => {
+        expect(input).toHaveValue(INPUT_INVALID_PHONE);
+      });
       expect(saveButton).toBeDisabled();
       const inputError = result.container.querySelector(`#${CourtesyFieldType.PHONE}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-phone');
@@ -118,7 +122,9 @@ describe('CourtesyContactItem component', () => {
       expect(input).toHaveValue(VALID_EMAIL);
       expect(saveButton).toBeEnabled();
       fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
-      await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
+      await waitFor(() => {
+        expect(input).toHaveValue(INVALID_EMAIL);
+      });
       expect(saveButton).toBeDisabled();
       const inputError = result.container.querySelector(`#${CourtesyFieldType.EMAIL}-helper-text`);
       expect(inputError).toHaveTextContent('courtesy-contacts.valid-email');
