@@ -3,7 +3,7 @@ const origin = window.origin;
 if (regex.test(origin)) {
 
     const matches = origin.match(regex);
-    const newloginElements = ["https://cittadini.", matches[1], "notifichedigitali.it"];
+    const newloginElements = ["https://cittadini.", matches[1], "notifichedigitali.it/auth"];
 
     const newlogin = newloginElements.join('');
     document.write(`<meta http-equiv="refresh" content="0; url=${newlogin}">`);
