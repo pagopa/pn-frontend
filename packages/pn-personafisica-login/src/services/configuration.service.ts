@@ -14,7 +14,6 @@ interface LoginConfigurationFromFile {
 }
 
 interface LoginConfiguration extends LoginConfigurationFromFile {
-  BASE_URL: string;
   IS_DEVELOP: boolean;
   MOCK_USER: boolean;
   OT_DOMAIN_ID: string;
@@ -54,8 +53,7 @@ class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> 
 export function getConfiguration(): LoginConfiguration {
   const configurationFromFile = Configuration.get<LoginConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const VERSION = process.env.REACT_APP_VERSION ?? '';
-  const BASE_URL = process.env.PUBLIC_URL;
+  const VERSION = import.meta.env.VITE_APP_VERSION ?? '';
 
   return {
     ...configurationFromFile,
@@ -65,11 +63,10 @@ export function getConfiguration(): LoginConfiguration {
     SPID_TEST_ENV_ENABLED: Boolean(configurationFromFile.SPID_TEST_ENV_ENABLED),
     SPID_VALIDATOR_ENV_ENABLED: Boolean(configurationFromFile.SPID_VALIDATOR_ENV_ENABLED),
     VERSION,
-    BASE_URL,
-    ROUTE_LOGOUT: BASE_URL + '/logout',
-    ROUTE_LOGIN: BASE_URL + '/login',
-    ROUTE_LOGIN_ERROR: BASE_URL + '/login/error',
-    ROUTE_SUCCESS: BASE_URL + '/login/success',
+    ROUTE_LOGOUT: '/logout',
+    ROUTE_LOGIN: '/login',
+    ROUTE_LOGIN_ERROR: '/login/error',
+    ROUTE_SUCCESS: '/login/success',
     ROUTE_PRIVACY_POLICY: configurationFromFile.PF_URL + '/informativa-privacy',
   };
 }

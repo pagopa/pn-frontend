@@ -1,11 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import {
   ACCEPT_DELEGATION,
   DELEGATIONS_BY_DELEGATE,
@@ -16,7 +15,7 @@ import {
 import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -24,13 +23,17 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('Deleghe page', () => {
+describe('Deleghe page', async () => {
   const original = window.matchMedia;
   let result: RenderResult;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
@@ -260,7 +263,7 @@ describe('Deleghe page', () => {
     });
     acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
-    const error = await waitFor(() => within(dialog!).queryByTestId('errorAlert'));
+    const error = await waitFor(() => within(dialog).queryByTestId('errorAlert'));
     expect(error).toBeInTheDocument();
   });
 });

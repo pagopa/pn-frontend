@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
-import { getConfiguration } from "../services/configuration.service";
+
+import { getConfiguration } from '../services/configuration.service';
 
 // eslint-disable-next-line functional/no-let
 export let authClient: AxiosInstance;

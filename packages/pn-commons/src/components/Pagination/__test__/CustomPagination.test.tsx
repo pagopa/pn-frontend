@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { PaginationData } from '../../../models/Pagination';
 import { fireEvent, getById, render, waitFor, within } from '../../../test-utils';
@@ -10,8 +10,8 @@ let paginationData: PaginationData = {
   totalElements: 500,
 };
 
-const handlePageChange = jest.fn();
-const mockEventTrackingPageSize = jest.fn();
+const handlePageChange = vi.fn();
+const mockEventTrackingPageSize = vi.fn();
 
 describe('CustomPagination Component', () => {
   afterEach(() => {

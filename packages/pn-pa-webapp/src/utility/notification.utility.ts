@@ -55,9 +55,9 @@ const newNotificationRecipientsMapper = (
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
       ? {
-          type: recipient.type,
-          address: recipient.digitalDomicile,
-        }
+        type: recipient.type,
+        address: recipient.digitalDomicile,
+      }
       : undefined;
     const parsedRecipient: NotificationDetailRecipient = {
       denomination:

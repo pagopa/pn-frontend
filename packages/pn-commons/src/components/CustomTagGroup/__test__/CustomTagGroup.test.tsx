@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
 
@@ -8,7 +8,11 @@ import CustomTagGroup from '../CustomTagGroup';
 describe('CustomTagGroup component', () => {
   const tagsArray = ['mock-tag-1', 'mock-tag-2', 'mock-tag-3', 'mock-tag-4'];
   const tags = tagsArray.map((v, i) => <Box key={i}>{v}</Box>);
-  const mockCallbackFn = jest.fn();
+  const mockCallbackFn = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('renders component with all tags', () => {
     const { container } = render(<CustomTagGroup>{tags}</CustomTagGroup>);

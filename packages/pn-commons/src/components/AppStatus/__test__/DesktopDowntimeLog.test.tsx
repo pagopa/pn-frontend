@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { DowntimeStatus, KnownFunctionality } from '../../../models';
@@ -17,7 +17,7 @@ import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
 const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'];
 
-const checkDateField = (date: string, column: HTMLElement) => {
+const checkDateField = (date: string | undefined, column: HTMLElement) => {
   const text = date ? `${formatDate(date)},${formatTimeWithLegend(date)}` : '-';
   expect(column).toHaveTextContent(text);
 };
@@ -59,7 +59,7 @@ const checkStatusField = (status: DowntimeStatus, column: HTMLElement) => {
 
 describe('DesktopDowntimeLog component', () => {
   let result: RenderResult;
-  const getLegalFactDetailsMock = jest.fn();
+  const getLegalFactDetailsMock = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();
@@ -88,7 +88,7 @@ describe('DesktopDowntimeLog component', () => {
       const currentLog = exampleDowntimeLogPage.downtimes[index];
       dataColumns.forEach((column, jindex) => {
         if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {
-          checkDateField(currentLog[columns[jindex]], column);
+          checkDateField(currentLog[columns[jindex] as 'startDate' | 'endDate'], column);
         }
         if (columns[jindex] === 'functionality') {
           checkFunctionalityField(
