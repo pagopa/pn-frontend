@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      outDir: 'build',
+      outDir: 'build/auth',
       assetsDir: 'static',
       target: 'ES2020',
       rollupOptions: {
