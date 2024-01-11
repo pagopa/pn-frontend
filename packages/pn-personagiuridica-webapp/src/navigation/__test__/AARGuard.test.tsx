@@ -136,6 +136,21 @@ describe('Notification from QR code', async () => {
     expect(accessDeniedComponent).toHaveTextContent('from-qrcode.not-found');
   });
 
+  it('invalid recipient accesses to QR code', async () => {
+    const mockQrCode = 'bad-qr-code';
+    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode }).reply(404);
+    await act(async () => {
+      render(<Guard />);
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    const accessDeniedComponent = screen.queryByTestId('access-denied');
+    const titleAccessDeniedComponent = await screen.findByText('from-qrcode.not-found');
+    expect(pageComponent).toBeNull();
+    expect(accessDeniedComponent).toBeTruthy();
+    expect(titleAccessDeniedComponent).toBeInTheDocument();
+  });
+
   it('no QR code', async () => {
     const mockQrCode = '';
     window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
@@ -144,6 +159,7 @@ describe('Notification from QR code', async () => {
     });
     expect(mock.history.post).toHaveLength(0);
     expect(mockNavigateFn).toBeCalledTimes(0);
+
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
   });
