@@ -6,7 +6,7 @@ import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageSpidSelectedOps } from '../../../utility/storage';
+import { storageAarOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
@@ -44,7 +44,6 @@ describe('test login page', () => {
 
   afterEach(() => {
     storageAarOps.delete();
-    storageSpidSelectedOps.delete();
     vi.clearAllMocks();
   });
 
@@ -94,7 +93,6 @@ describe('test login page', () => {
     expect(mockAssign).toBeCalledWith(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
     );
-    expect(storageSpidSelectedOps.read()).toBe(SPID_CIE_ENTITY_ID);
   });
 
   it('not store data in session storage', () => {

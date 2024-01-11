@@ -9,6 +9,14 @@ Parameters:
     Description: "Domain for webapp"
     Type: String
 
+  SubCdnDomain:
+    Description: "Domain for sub cdn"
+    Type: String
+
+  RootWebDomain:
+    Description: "Domain for root webapp"
+    Type: String
+
   WebDomainReferenceToSite:
     Description: true if the website must be reachable using the WebDomain
     Type: String
@@ -63,10 +71,21 @@ Parameters:
 
   S3LogsBucket:
     Type: String
-    Default: '-'
+    Default: "-"
     Description: Access Log bucket name
 
 Conditions:
+  # Is Portale PF site if name startsWith 'webapp-pf-cdn-'
+  IsPortalePf:
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [!Select [0, !Split [webapp-pf-cdn-, !Ref Name]], ""]
+
+  # Is Portale PF Login site if name startsWith 'webapp-pfl-cdn-'
+  IsPortalePfLogin:
+    Fn::And:
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [!Select [0, !Split [webapp-pfl-cdn-, !Ref Name]], ""]
 
   # Is Portale PG site if name startsWith 'webapp-pg-cdn-'
   IsPortalePg:
@@ -78,7 +97,7 @@ Conditions:
   IsPortalePgProd:
     Fn::And:
       - !Not [!Equals [!Ref Name, ""]]
-      - !Equals [ webapp-pg-cdn-prod, !Ref Name ]
+      - !Equals [webapp-pg-cdn-prod, !Ref Name]
 
   # If domain is used in certificate, add this domain to CloudFront
   CreateDNSname: !Equals
@@ -86,7 +105,7 @@ Conditions:
     - "true"
 
   # If domain is used in certificate, add this domain to CloudFront
-  HasLogsBucket: !Not [!Equals [!Ref S3LogsBucket, "-" ]]
+  HasLogsBucket: !Not [!Equals [!Ref S3LogsBucket, "-"]]
 
   # If alternate domain is provided and is used in certificate, add this domain to CloudFront
   CreateAlternateDNSname:
@@ -287,19 +306,19 @@ Resources:
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
             PathPattern: /icons*
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /auth*
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /auth*
+              - !Ref "AWS::NoValue"
           - Fn::If:
             - IsPortalePg
             - AllowedMethods:
@@ -329,47 +348,61 @@ Resources:
               PathPattern: /assistenza*
             - !Ref "AWS::NoValue"  
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /onboarding*
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /onboarding*
+              - !Ref "AWS::NoValue"
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /assets*
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /assets*
+              - !Ref "AWS::NoValue"
           - Fn::If:
-            - IsPortalePg
-            - AllowedMethods:
-                - GET
-                - HEAD
-              CachedMethods:
-                - GET
-                - HEAD
-              TargetOriginId: pn-SelfCare-PG
-              ViewerProtocolPolicy: redirect-to-https
-              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
-              ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
-              PathPattern: /microcomponents*
-            - !Ref "AWS::NoValue"                          
+              - IsPortalePg
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-SelfCare-PG
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+                ResponseHeadersPolicyId: !Ref SelfcareHeaderPolicy
+                PathPattern: /microcomponents*
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePf
+              - AllowedMethods:
+                  - GET
+                  - HEAD
+                CachedMethods:
+                  - GET
+                  - HEAD
+                TargetOriginId: pn-Login-PF
+                ViewerProtocolPolicy: redirect-to-https
+                CachePolicyId: f87d7751-a2f0-4d25-9344-b58e628f158e
+                ResponseHeadersPolicyId: ff72f6d8-f96a-4f71-9119-ff93d362c67c
+                PathPattern: /auth*
+              - !Ref "AWS::NoValue"
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -381,15 +414,23 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-          FunctionAssociations: !Ref "AWS::NoValue"
-        DefaultRootObject: "index.html"
+          #FunctionAssociations:
+          #  - Fn::If:
+          #      - IsPortalePfLogin
+          #      - EventType: viewer-request
+          #        FunctionARN: !GetAtt RedirectFunction.FunctionMetadata.FunctionARN
+          #      - !Ref "AWS::NoValue"
+        DefaultRootObject:
+          !If [IsPortalePfLogin, "auth/index.html", "index.html"]
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: "/index.html"
+            ResponsePagePath:
+              !If [IsPortalePfLogin, "/auth/index.html", "/index.html"]
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: "/index.html"
+            ResponsePagePath:
+              !If [IsPortalePfLogin, "/auth/index.html", "/index.html"]
         Origins:
           - DomainName: !Sub "${S3BucketForWebsiteContent.RegionalDomainName}"
             Id: !Sub "S3-${S3BucketForWebsiteContent}"
@@ -400,14 +441,28 @@ Resources:
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
           - Fn::If:
-            - IsPortalePg
-            - DomainName: !If [ IsPortalePgProd, 'pnpg.selfcare.pagopa.it', 'pnpg.uat.selfcare.pagopa.it' ]
-              Id: "pn-SelfCare-PG"
-              CustomOriginConfig:
-                OriginProtocolPolicy: 'https-only'
-                OriginSSLProtocols:
-                  - TLSv1.2
-            - !Ref "AWS::NoValue"
+              - IsPortalePg
+              - DomainName:
+                  !If [
+                    IsPortalePgProd,
+                    "pnpg.selfcare.pagopa.it",
+                    "pnpg.uat.selfcare.pagopa.it",
+                  ]
+                Id: "pn-SelfCare-PG"
+                CustomOriginConfig:
+                  OriginProtocolPolicy: "https-only"
+                  OriginSSLProtocols:
+                    - TLSv1.2
+              - !Ref "AWS::NoValue"
+          - Fn::If:
+              - IsPortalePf
+              - DomainName: !Ref SubCdnDomain
+                Id: "pn-Login-PF"
+                CustomOriginConfig:
+                  OriginProtocolPolicy: "https-only"
+                  OriginSSLProtocols:
+                    - TLSv1.2
+              - !Ref "AWS::NoValue"
         Logging:
           Fn::If:
             - HasLogsBucket
@@ -430,7 +485,7 @@ Resources:
           # add_header Content-Security-Policy
           ContentSecurityPolicy:
             ContentSecurityPolicy:
-              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \ 
+              "default-src 'self' https://pnpg.uat.selfcare.pagopa.it/ https://pnpg.selfcare.pagopa.it/ ; \
               connect-src 'self' https://api-eu.mixpanel.com/track/ \
               https://uat.selfcare.pagopa.it/assets/ \
               https://selfcare.pagopa.it/assets/ \
@@ -443,7 +498,7 @@ Resources:
               https://pnpg.uat.selfcare.pagopa.it/ \
               https://pnpg.selfcare.pagopa.it/ \
               https://privacyportalde-cdn.onetrust.com/ ; \
-              worker-src 'none'; \ 
+              worker-src 'none'; \
               font-src 'self'; \
               frame-ancestors 'self' ; \
               img-src 'self' https://assets.cdn.io.italia.it/ https://selcpweupnpgcheckoutsa.z6.web.core.windows.net/ https://selcuweupnpgcheckoutsa.z6.web.core.windows.net/ https://imprese.uat.notifichedigitali.it/ https://imprese.notifichedigitali.it/ data:"
@@ -562,6 +617,35 @@ Resources:
         Comment: "Rewriting the request between a CloudFront Distribution and an origin"
         Runtime: cloudfront-js-1.0
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
+
+  RedirectFunction:
+    Condition: IsPortalePfLogin
+    Type: AWS::CloudFront::Function
+    Properties:
+      AutoPublish: true
+      FunctionCode: !Sub |
+        function handler(event) {
+          var request = event.request;
+          var headers = request.headers;
+          var domain = "${WebDomain}";
+          var uri = request.uri;
+
+          if (headers.host.value === domain) {
+            return {
+              statusCode: 301,
+              statusDescription: "Moved Permanently",
+              headers: {
+                  location: { value: "https://${RootWebDomain}/auth" + uri },
+              },
+            };
+          }
+
+          return request;
+        }
+      FunctionConfig:
+        Comment: "Redirect the request from a sub-domain CloudFront Distribution to the root one"
+        Runtime: cloudfront-js-1.0
+      Name: !Sub "${AWS::StackName}-RedirectSubDomainRequest"
 
   # Alarms
   TooManyRequestsAlarm:
@@ -683,7 +767,7 @@ Outputs:
   DistributionId:
     Description: Cloudfront distribution ID
     Value: !Ref WebsiteCDN
-    
+
   TooManyErrorsAlarmArn:
     Value: !GetAtt TooManyErrorsAlarm.Arn
     Description: ARN of distribution too many errors alarm

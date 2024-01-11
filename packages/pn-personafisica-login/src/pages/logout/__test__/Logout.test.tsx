@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
-import { storageAarOps, storageOnSuccessOps } from '../../../utility/storage';
+import { storageAarOps } from '../../../utility/storage';
 import Logout from '../Logout';
 
 const mockNavigateFn = vi.fn();
@@ -19,14 +19,12 @@ describe('Logout page', () => {
   });
 
   it('test logout', () => {
-    storageOnSuccessOps.write('ON_SUCCESS');
     storageAarOps.write('aar-test');
     render(
       <BrowserRouter>
         <Logout />
       </BrowserRouter>
     );
-    expect(storageOnSuccessOps.read()).toBeUndefined();
     expect(storageAarOps.read()).toBeUndefined();
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);

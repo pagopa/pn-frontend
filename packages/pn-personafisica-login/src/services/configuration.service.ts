@@ -4,8 +4,6 @@ import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/
 
 interface LoginConfigurationFromFile {
   MIXPANEL_TOKEN: string;
-  ONE_TRUST_DRAFT_MODE?: boolean;
-  ONE_TRUST_PP: string;
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PF_URL: string;
@@ -18,7 +16,6 @@ interface LoginConfigurationFromFile {
 interface LoginConfiguration extends LoginConfigurationFromFile {
   IS_DEVELOP: boolean;
   MOCK_USER: boolean;
-  ONE_TRUST_DRAFT_MODE: boolean;
   OT_DOMAIN_ID: string;
   PAGOPA_HELP_EMAIL: string;
   PF_URL: string;
@@ -42,10 +39,6 @@ class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> 
     this.makeRequired(
       this.ruleFor('SPID_CIE_ENTITY_ID').isString().matches(dataRegex.lettersNumbersAndDashs)
     );
-    this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
-    this.makeRequired(
-      this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.lettersNumbersAndDashs)
-    );
     this.makeRequired(this.ruleFor('URL_API_LOGIN').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.ruleFor('OT_DOMAIN_ID').isString().matches(dataRegex.lettersNumbersAndDashs);
@@ -65,7 +58,6 @@ export function getConfiguration(): LoginConfiguration {
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID ?? '',
-    ONE_TRUST_DRAFT_MODE: Boolean(configurationFromFile.ONE_TRUST_DRAFT_MODE),
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     SPID_TEST_ENV_ENABLED: Boolean(configurationFromFile.SPID_TEST_ENV_ENABLED),
@@ -75,7 +67,7 @@ export function getConfiguration(): LoginConfiguration {
     ROUTE_LOGIN: '/login',
     ROUTE_LOGIN_ERROR: '/login/error',
     ROUTE_SUCCESS: '/login/success',
-    ROUTE_PRIVACY_POLICY: '/informativa-privacy',
+    ROUTE_PRIVACY_POLICY: configurationFromFile.PF_URL + '/informativa-privacy',
   };
 }
 
