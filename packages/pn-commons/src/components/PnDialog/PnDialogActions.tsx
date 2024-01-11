@@ -31,6 +31,7 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
       sx={{
         flexDirection: isMobile ? 'column-reverse' : 'row',
         p: paddingSize,
+        pt: paddingSize - 1,
         gap: gapSize,
         ...props.sx,
       }}

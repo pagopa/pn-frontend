@@ -25,7 +25,11 @@ const PnDialogContent: React.FC<DialogContentProps> = (props) => {
     : subtitle;
 
   return (
-    <DialogContent data-testid="dialog-content" sx={{ p: paddingSize, ...props.sx }} {...props}>
+    <DialogContent
+      data-testid="dialog-content"
+      sx={{ p: paddingSize, pb: paddingSize - 1, ...props.sx }}
+      {...props}
+    >
       {subtitle && enrichedSubTitle}
       {othersChildren}
     </DialogContent>

@@ -20,7 +20,7 @@ describe('PnDialog Component', () => {
     expect(content).toBeInTheDocument();
     const subtitle = queryByTestId('dialog-title');
     expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveStyle('padding: 32px');
+    expect(subtitle).toHaveStyle('padding: 32px 32px 24px 32px;');
     const otherContent = queryByTestId('dialog-other-content');
     expect(otherContent).toBeInTheDocument();
   });
@@ -40,7 +40,7 @@ describe('PnDialog Component', () => {
     expect(content).toBeInTheDocument();
     const subtitle = queryByTestId('dialog-title');
     expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveStyle('padding: 24px');
+    expect(subtitle).toHaveStyle('padding: 24px 24px 16px 24px');
     const otherContent = queryByTestId('dialog-other-content');
     expect(otherContent).toBeInTheDocument();
   });
