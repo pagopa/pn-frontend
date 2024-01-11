@@ -7,6 +7,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
+    base: '/auth/',
     plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
     server: {
       host: env.HOST,
