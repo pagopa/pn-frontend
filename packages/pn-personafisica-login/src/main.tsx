@@ -24,7 +24,7 @@ async function doTheRender() {
 
     root.render(
       <React.StrictMode>
-        <BrowserRouter>
+        <BrowserRouter basename='/auth'>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Suspense fallback={'loading...'}>
