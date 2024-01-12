@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/pagopa/pn-frontend/compare/v2.2.4-RC.0...v2.2.4) (2024-01-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.2.4-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.3...v2.2.4-RC.0) (2024-01-03)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
 ## [2.2.3](https://github.com/pagopa/pn-frontend/compare/v2.2.3-RC.0...v2.2.3) (2023-12-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
