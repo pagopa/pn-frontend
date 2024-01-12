@@ -28,6 +28,12 @@ export default defineConfig(({ mode }) => {
       host: env.HOST,
       https: true,
       port: 443,
+      proxy: {
+        '^/auth/.*': {
+          target: 'https://login.dev.notifichedigitali.it',
+          changeOrigin: true,
+        },
+      },
     },
     build: {
       outDir: 'build',

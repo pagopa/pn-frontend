@@ -7,6 +7,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
+    base: '/auth/',
     plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
     server: {
       host: env.HOST,
@@ -27,7 +28,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      outDir: 'build',
+      outDir: 'build/auth',
       assetsDir: 'static',
       target: 'ES2020',
       rollupOptions: {
