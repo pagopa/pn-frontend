@@ -3,6 +3,7 @@ import ApiError from './ApiError';
 
 interface ApiErrorWrapperCommonProps {
   apiId?: string;
+  children?: React.ReactNode;
 }
 
 interface ApiErrorWrapperProps extends ApiErrorWrapperCommonProps {

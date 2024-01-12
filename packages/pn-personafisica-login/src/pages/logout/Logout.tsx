@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { getConfiguration } from '../../services/configuration.service';
-import { storageAarOps, storageOnSuccessOps } from '../../utility/storage';
+import { storageAarOps } from '../../utility/storage';
 
 const Logout = () => {
   const { ROUTE_LOGIN } = getConfiguration();
@@ -10,7 +10,6 @@ const Logout = () => {
   const searchParams = window.location.search ?? '';
 
   useEffect(() => {
-    storageOnSuccessOps.delete();
     storageAarOps.delete();
 
     navigate(ROUTE_LOGIN + searchParams);

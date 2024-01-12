@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
@@ -9,24 +10,14 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { arrayOfDelegators } from '../__mocks__/Delegations.mock';
-import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { DELEGATIONS_BY_DELEGATE } from '../api/delegations/delegations.routes';
 import { ConsentType } from '../models/consents';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from './test-utils';
+import { RenderResult, act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -35,8 +26,8 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../pages/Notifiche.page', () => () => <div>Generic Page</div>);
-jest.mock('../pages/Profile.page', () => () => <div>Profile Page</div>);
+vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
+vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
 
 const unmockedFetch = global.fetch;
 
@@ -66,13 +57,18 @@ const reduxInitialState = {
   },
 };
 
-describe('App', () => {
+describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
   const original = window.location;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../api/apiClients');
+  const testUtils = await import('../__test__/test-utils');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -83,7 +79,7 @@ describe('App', () => {
 
   afterEach(() => {
     mock.reset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -99,9 +95,9 @@ describe('App', () => {
     expect(header).toBeInTheDocument();
     const footer = document.querySelector('footer');
     expect(footer).toBeInTheDocument();
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(
+    expect(result.container).toHaveTextContent(
       'Non hai le autorizzazioni necessarie per accedere a questa pagina'
     );
   });
@@ -127,9 +123,9 @@ describe('App', () => {
     expect(header).toBeInTheDocument();
     const footer = document.querySelector('footer');
     expect(footer).toBeInTheDocument();
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent('Generic Page');
+    expect(result.container).toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -160,18 +156,18 @@ describe('App', () => {
     expect(menuItems[1]).toHaveTextContent('header.logout');
     fireEvent.click(menuItems[0]);
     await waitFor(() => {
-      expect(result!.container).toHaveTextContent('Profile Page');
+      expect(result.container).toHaveTextContent('Profile Page');
     });
     Object.defineProperty(window, 'location', {
       writable: true,
-      value: { href: '', replace: jest.fn() },
+      value: { href: '', replace: vi.fn() },
     });
     fireEvent.click(userButton!);
     menu = await waitFor(() => screen.getByRole('presentation'));
     menuItems = within(menu).getAllByRole('menuitem');
     fireEvent.click(menuItems[1]);
     await waitFor(() => {
-      expect(testStore.getState().userState.user.sessionToken).toBe('');
+      expect(testUtils.testStore.getState().userState.user.sessionToken).toBe('');
     });
     Object.defineProperty(window, 'location', { writable: true, value: original });
   });
@@ -189,9 +185,9 @@ describe('App', () => {
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -208,9 +204,9 @@ describe('App', () => {
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -231,11 +227,11 @@ describe('App', () => {
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.queryByTestId('side-menu');
+    const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
-    const tosPage = result!.queryByTestId('tos-acceptance-page');
+    const tosPage = result.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
-    expect(result!.container).not.toHaveTextContent('Generic Page');
+    expect(result.container).not.toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });
 
@@ -282,7 +278,7 @@ describe('App', () => {
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenu = result.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     expect(sideMenuItems).toHaveLength(4);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
@@ -306,7 +302,7 @@ describe('App', () => {
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
-    const sideMenu = result!.getByTestId('side-menu');
+    const sideMenu = result.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     expect(sideMenuItems).toHaveLength(4);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');

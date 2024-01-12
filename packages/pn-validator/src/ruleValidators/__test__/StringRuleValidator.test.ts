@@ -1,33 +1,34 @@
+import { vi } from 'vitest';
 import { IsEmpty } from '../../rules/IsEmpty';
 import { Length } from '../../rules/Length';
 import { Matches } from '../../rules/Matches';
 import { StringRuleValidator } from '../StringRuleValidator';
 
-const pushRuleMk = jest.fn();
+const pushRuleMk = vi.fn();
 const dummyRuleValidator = new StringRuleValidator(pushRuleMk);
 
-jest.mock('../../rules/IsEmpty', () => {
+vi.mock('../../rules/IsEmpty', () => {
   return {
-    IsEmpty: jest.fn(),
+    IsEmpty: vi.fn(),
   };
 });
 
-jest.mock('../../rules/Length', () => {
+vi.mock('../../rules/Length', () => {
   return {
-    Length: jest.fn(),
+    Length: vi.fn(),
   };
 });
 
-jest.mock('../../rules/Matches', () => {
+vi.mock('../../rules/Matches', () => {
   return {
-    Matches: jest.fn(),
+    Matches: vi.fn(),
   };
 });
 
 describe('Test StringRuleValidator', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('check if methods exist', () => {

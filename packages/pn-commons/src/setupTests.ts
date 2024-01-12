@@ -2,4 +2,10 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+import matchers from "@testing-library/jest-dom/matchers"; 
+import { expect } from 'vitest';
+
+// inject jest-dom matchers into vitest, 
+// cfr. https://markus.oberlehner.net/blog/using-testing-library-jest-dom-with-vitest/
+expect.extend(matchers);
+

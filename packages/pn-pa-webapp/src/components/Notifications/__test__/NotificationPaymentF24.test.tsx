@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { getF24Payments } from '@pagopa-pn/pn-commons';
 
@@ -6,7 +6,7 @@ import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationD
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationPaymentF24 from '../NotificationPaymentF24';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -53,7 +53,7 @@ describe('NotificationPaymentF24 Component', () => {
       if (index >= 3) {
         return false;
       }
-      expect(f24).toHaveTextContent(f24LotPayments[index].title);
+      return expect(f24).toHaveTextContent(f24LotPayments[index].title);
     });
     const remainingF24 = queryByTestId('remaining-f24');
     expect(remainingF24).toBeInTheDocument();

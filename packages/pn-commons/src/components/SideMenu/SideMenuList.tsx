@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { SideMenuItem } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -23,21 +22,18 @@ type Props = {
   selectedItem: { index: number; label: string; route: string; parent?: string };
 };
 
-const useStyles = makeStyles(() => ({
-  root: {
-    maxWidth: '90vw',
-    ['@media only screen and (max-width: 1200px)']: {
-      width: '300px',
-    },
+const style = {
+  maxWidth: '90vw',
+  ['@media only screen and (max-width: 1200px)']: {
+    width: '300px',
   },
-}));
+};
 
 const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<string>('');
   const [selectedIndex, setSelectedIndex] =
     useState<{ label: string; index: number; route: string }>();
-  const classes = useStyles();
   // store previous values
   const prevOpenId = useRef(openId);
 
@@ -79,7 +75,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           'menu.aria-label',
           'piattaforma-notifiche navigazione principale'
         )}
-        className={classes.root}
+        sx={style}
       >
         {menuItems.map((item: SideMenuItem, index: number) =>
           item.children ? (
@@ -164,7 +160,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
             'menu.aria-label-inner',
             'piattaforma-notifiche navigazione mittente'
           )}
-          className={classes.root}
+          sx={style}
         >
           {selfCareItems?.map((selfcareItem: SideMenuItem) => (
             <SideMenuListItem

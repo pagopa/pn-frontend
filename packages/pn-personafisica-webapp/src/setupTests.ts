@@ -2,16 +2,23 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+import { expect } from 'vitest';
+
+import { Configuration } from '@pagopa-pn/pn-commons';
+import matchers from '@testing-library/jest-dom/matchers';
+
+import { initAxiosClients } from './api/apiClients';
+import { initStore } from './redux/store';
+
+// inject jest-dom matchers into vitest,
+// cfr. https://markus.oberlehner.net/blog/using-testing-library-jest-dom-with-vitest/
+expect.extend(matchers);
 
 // This is a workaround related to this issue https://github.com/nickcolley/jest-axe/issues/147
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
-beforeAll(async () => {
-  const { Configuration } = await import('@pagopa-pn/pn-commons');
-  const { initStore } = await import('./redux/store');
-  const { initAxiosClients } = await import('./api/apiClients');
+beforeAll(() => {
   Configuration.setForTest<any>({
     API_BASE_URL: 'mock-api-base-url',
     DISABLE_INACTIVITY_HANDLER: true,
@@ -29,7 +36,6 @@ beforeAll(async () => {
     SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
     SELFCARE_BASE_URL: 'mock-selfcare.base',
     IS_PAYMENT_ENABLED: false,
-    URL_FE_LOGIN: 'https://portale-login.dev.pn.pagopa.it/',
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
   });

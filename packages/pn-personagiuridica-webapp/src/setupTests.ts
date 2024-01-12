@@ -4,15 +4,15 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
+import { Configuration } from '@pagopa-pn/pn-commons';
+import { initStore } from './redux/store';
+import { initAxiosClients } from './api/apiClients';
+
 // This is a workaround related to this issue https://github.com/nickcolley/jest-axe/issues/147
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(async () => {
-  const { Configuration } = await import('@pagopa-pn/pn-commons');
-  const { initStore } = await import('./redux/store');
-  const { initAxiosClients } = await import('./api/apiClients');
-
   Configuration.setForTest<any>({
     API_BASE_URL: 'mock-api-base-url',
     DISABLE_INACTIVITY_HANDLER: true,
