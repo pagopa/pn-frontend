@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/pagopa/pn-frontend/compare/v2.2.4-RC.0...v2.2.4) (2024-01-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.2.4-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.3...v2.2.4-RC.0) (2024-01-03)
+
+
+### Bug Fixes
+
+* **PN-7003:** updated sentence for pf in proxy creation page and modal for watching code ([d73399f](https://github.com/pagopa/pn-frontend/commit/d73399fe12b104eac97d8f92d952791a791ef6ef))
+
+
+
+
+
 ## [2.2.3](https://github.com/pagopa/pn-frontend/compare/v2.2.3-RC.0...v2.2.3) (2023-12-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
