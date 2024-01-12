@@ -82,7 +82,7 @@ export function getConfiguration(): PfConfiguration {
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
-    URL_FE_LOGOUT: `${process.env.PUBLIC_URL}/auth/logout`,
+    URL_FE_LOGOUT: "/auth/logout",
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),
