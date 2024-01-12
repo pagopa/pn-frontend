@@ -4,11 +4,4 @@ export type PaginationData = {
   totalElements: number;
 };
 
-export type A11yPaginationLabelsTypes =
-  | 'page'
-  | 'first'
-  | 'last'
-  | 'next'
-  | 'previous'
-  | 'start-ellipsis'
-  | 'end-ellipsis';
+export type A11yPaginationLabelsTypes = "next" | "previous" | "page" | "first" | "last";
