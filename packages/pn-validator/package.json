@@ -27,7 +27,7 @@
     "eslint-plugin-functional": "^3.7.2",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-sonarjs": "^0.10.0",
-    "sonarqube-scanner": "^3.0.0",
+    "sonarqube-scanner": "^3.3.0",
     "vitest": "0.34.6",
     "vitest-sonar-reporter": "0.5.0"
   }
