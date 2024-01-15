@@ -38,6 +38,10 @@ Other scripts
 - `yarn refresh:monorepo` reinstalls all the dependencies of the whole workspace
 - `yarn clean` deletes node_modules folder recursively in the workspace
 
+### Development mode
+
+When running the application in development mode, uncheck the "Disable cache" flag in chrome console. Vite uses the dependency pre-building (https://vitejs.dev/guide/dep-pre-bundling) and if the flag is checked, the code is runned twice at start-up.
+
 ### How to contribute
 
 Our branching model is based on [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). Usually you can conclude your changes opening a PR.

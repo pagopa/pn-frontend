@@ -1,7 +1,9 @@
-import { AccessDenied, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import { AccessDenied, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons';
+
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import {
@@ -53,8 +55,9 @@ const AARGuard = () => {
       }
     };
     // momentarily updated for pn-5157
-    void fetchNotificationFromQrCode().then(() =>
-      localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)
+    void fetchNotificationFromQrCode().then(
+      () => {}
+      // localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)
     );
   }, [aar]);
 
