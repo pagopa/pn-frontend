@@ -29,7 +29,7 @@ const getA11yPaginationLabels = (
   selected: boolean
 ): string => {
   // eslint-disable-next-line functional/no-let
-  let ariaStr;
+  let ariaStr = '';
   switch (type) {
     case 'first':
       ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.first', 'primo elemento');
