@@ -1,10 +1,12 @@
+import React from 'react';
+
 import { render, waitFor } from '../../test-utils';
-import { useRewriteLinks } from '../useRewriteLinks';
+import { rewriteLinks } from '../onetrust.utility';
 
 const ROUTE = '/informativa-privacy';
 
 const Component = () => {
-  useRewriteLinks(true, ROUTE, '.otnotice-content');
+  rewriteLinks(ROUTE, '.otnotice-content');
   return (
     <div>
       <a className=".otnotice-content" href="#abc-123"></a>
@@ -12,8 +14,8 @@ const Component = () => {
   );
 };
 
-describe('test useRewriteLinks hook', () => {
-  it('hook set new href', () => {
+describe('test rewrite links', () => {
+  it('function set new href', () => {
     const { getByRole } = render(<Component />);
     const link = getByRole('link');
     waitFor(() => {
