@@ -34,12 +34,6 @@ describe('waitForElement', () => {
     vi.resetAllMocks();
   });
 
-  it('render MockComponent with injected element', async () => {
-    render(<MockComponent renderInjectedElement={true} />);
-    const waitResult = await waitForElement('.mocked-class');
-    expect(waitResult).toBe(WaitForElementResult.DOM_ELEMENT_ALREADY_EXISTS);
-  });
-
   it('render MockComponent with injected element after a while simulating time request', async () => {
     render(<MockComponent renderInjectedElement={true} delay={1000} />);
     const waitResult = await waitForElement('.mocked-class');

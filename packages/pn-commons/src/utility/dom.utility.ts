@@ -12,22 +12,12 @@ export enum WaitForElementResult {
  * // waits for myQuerySelector to be injected in the DOM.
  * waitForElem('.myQuerySelector').then(() => successCbk());
  */
-export function waitForElement(selector: string) {
-  return new Promise((resolve) => {
-    if (document.querySelector(selector)) {
-      return resolve(WaitForElementResult.DOM_ELEMENT_ALREADY_EXISTS);
-    }
-
-    const observer = new MutationObserver(() => {
+export const waitForElement = (selector: string) =>
+  new Promise((resolve) => {
+    const intervalId = setInterval(() => {
       if (document.querySelector(selector)) {
-        observer.disconnect();
-        return resolve(WaitForElementResult.DOM_ELEMENT_FOUND);
+        clearInterval(intervalId);
+        resolve(WaitForElementResult.DOM_ELEMENT_FOUND);
       }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+    }, 100);
   });
-}
