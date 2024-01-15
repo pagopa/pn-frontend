@@ -141,7 +141,7 @@ const NotificationDetailTimeline = ({
       {/* 
       If is mobile, then render a small preview of timeline with the possibility to open the customDrawer
       */}
-      <TimelineNotification>
+      <TimelineNotification sx={{ my: isMobile ? 0 : 3, py: 0 }}>
         {isMobile && statusHistory.length > 0 ? (
           <NotificationDetailTimelineStep
             timelineStep={statusHistory[0]}
@@ -169,7 +169,7 @@ const NotificationDetailTimeline = ({
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          sx={{ p: 3 }}
+          sx={{ p: 3, pb: 0 }}
           data-testid="notification-history-drawer-content"
         >
           <Grid item>
