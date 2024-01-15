@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { AccessDenied, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons';
+import { AccessDenied, IllusQuestion, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
@@ -77,7 +77,7 @@ const AARGuard = () => {
   if (fetchError) {
     return (
       <AccessDenied
-        qrError={true}
+        icon={<IllusQuestion />}
         message={t('from-qrcode.not-found')}
         subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}

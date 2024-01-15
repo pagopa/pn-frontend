@@ -1,7 +1,9 @@
-import { AccessDenied, LoadingPage } from '@pagopa-pn/pn-commons';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
+
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import {
@@ -23,7 +25,7 @@ const AARGuard = () => {
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
-  
+
   const aar = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
     return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
@@ -58,7 +60,7 @@ const AARGuard = () => {
   if (fetchError) {
     return (
       <AccessDenied
-        qrError={true}
+        icon={<IllusQuestion />}
         message={t('from-qrcode.not-found')}
         subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}

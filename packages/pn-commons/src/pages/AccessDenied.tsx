@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Typography  } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
+
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-import { IllusQuestion } from '../components';
 
 type Props = {
   isLogged: boolean;
@@ -8,7 +8,7 @@ type Props = {
   goToHomePage: () => void;
   message?: string;
   subtitle?: string;
-  qrError?: boolean;
+  icon?: JSX.Element;
 };
 
 const AccessDenied: React.FC<Props> = ({
@@ -17,7 +17,7 @@ const AccessDenied: React.FC<Props> = ({
   goToHomePage,
   message,
   subtitle,
-  qrError = false
+  icon,
 }) => {
   const finalMessage =
     message ??
@@ -33,15 +33,13 @@ const AccessDenied: React.FC<Props> = ({
     <Stack
       direction="column"
       alignItems="center"
-      my={6}
+      my={4}
       px={4}
       sx={{ minHeight: '50vh' }}
       data-testid="access-denied"
     >
-      {qrError && <Box mt={9}>
-        <IllusQuestion/>
-      </Box>}
-      
+      {icon && <Box mt={11}>{icon}</Box>}
+
       <Box mt={2}>
         <Typography align="center" color="text.primary" variant="h4" id="login-page-title">
           {finalMessage}
