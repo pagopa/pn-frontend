@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
 import { compileOneTrustPath, rewriteLinks, waitForElement } from '@pagopa-pn/pn-commons';
 
@@ -15,9 +15,7 @@ declare const OneTrust: {
 };
 
 const TermsOfServicePage = () => {
-  const configuration = useMemo(() => getConfiguration(), []);
-
-  const { ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE } = configuration;
+  const { ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE } = getConfiguration();
 
   useEffect(() => {
     if (ONE_TRUST_TOS) {
@@ -26,10 +24,10 @@ const TermsOfServicePage = () => {
           [compileOneTrustPath(ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE)],
           false
         );
-      });
 
-      void waitForElement('.otnotice-content').then(() => {
-        rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+        void waitForElement('.otnotice-content').then(() => {
+          rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+        });
       });
     }
   }, []);

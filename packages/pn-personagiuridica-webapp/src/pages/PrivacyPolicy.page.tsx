@@ -24,10 +24,10 @@ const PrivacyPolicyPage = () => {
           [compileOneTrustPath(ONE_TRUST_PP, ONE_TRUST_DRAFT_MODE)],
           false
         );
-      });
 
-      void waitForElement('.otnotice-content').then(() => {
-        rewriteLinks(routes.PRIVACY_POLICY, '.otnotice-content a');
+        void waitForElement('.otnotice-content').then(() => {
+          rewriteLinks(routes.PRIVACY_POLICY, '.otnotice-content a');
+        });
       });
     }
   }, []);

@@ -24,10 +24,10 @@ const TermsOfServicePage = () => {
           [compileOneTrustPath(ONE_TRUST_TOS, ONE_TRUST_DRAFT_MODE)],
           false
         );
-      });
 
-      void waitForElement('.otnotice-content').then(() => {
-        rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+        void waitForElement('.otnotice-content').then(() => {
+          rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+        });
       });
     }
   }, []);
