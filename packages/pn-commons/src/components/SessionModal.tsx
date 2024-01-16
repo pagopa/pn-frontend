@@ -2,7 +2,6 @@ import { MouseEventHandler, useEffect } from 'react';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
-import { useIsMobile } from '../hooks';
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
