@@ -39,8 +39,6 @@ const SessionModal: React.FC<Props> = ({
   handleClose,
   initTimeout = false,
 }) => {
-  const isMobile = useIsMobile();
-
   useEffect(() => {
     if (!initTimeout) {
       return;
@@ -71,22 +69,15 @@ const SessionModal: React.FC<Props> = ({
     >
       <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
       <PnDialogContent>
-        <DialogContentText
-          id="session-dialog-description"
-          sx={{ textAlign: 'center', px: 3, pb: 1 }}
-        >
-          {message}
-        </DialogContentText>
+        <DialogContentText id="session-dialog-description">{message}</DialogContentText>
       </PnDialogContent>
-      <PnDialogActions
-        sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}
-      >
-        {onConfirm && (
+      {onConfirm && (
+        <PnDialogActions>
           <Button sx={{ width: '100%' }} color="primary" variant="contained" onClick={onConfirm}>
             {onConfirmLabel}
           </Button>
-        )}
-      </PnDialogActions>
+        </PnDialogActions>
+      )}
     </PnDialog>
   );
 };

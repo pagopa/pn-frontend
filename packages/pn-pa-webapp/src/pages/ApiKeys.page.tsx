@@ -227,7 +227,6 @@ const ApiKeys = () => {
         <Box sx={{ minWidth: isMobile ? '0' : '600px' }}>
           {modal.view === ModalApiKeyView.VIEW && (
             <ApiKeyModal
-              open
               aria-modal="true"
               title={`API Key ${modal.apiKey?.name}`}
               subTitle={t('copy-api-key-info')}
@@ -254,7 +253,6 @@ const ApiKeys = () => {
           )}
           {modal.view === ModalApiKeyView.BLOCK && (
             <ApiKeyModal
-              open
               title={t('block-api-key')}
               subTitle={
                 <Trans
@@ -272,7 +270,6 @@ const ApiKeys = () => {
           )}
           {modal.view === ModalApiKeyView.ENABLE && (
             <ApiKeyModal
-              open
               title={t('enable-api-key')}
               subTitle={
                 <Trans
@@ -289,7 +286,6 @@ const ApiKeys = () => {
           )}
           {modal.view === ModalApiKeyView.ROTATE && (
             <ApiKeyModal
-              open
               title={t('rotate-api-key')}
               subTitle={
                 <Trans
@@ -307,7 +303,6 @@ const ApiKeys = () => {
           )}
           {modal.view === ModalApiKeyView.DELETE && (
             <ApiKeyModal
-              open
               title={t('delete-api-key')}
               subTitle={
                 <Trans
@@ -324,7 +319,6 @@ const ApiKeys = () => {
           )}
           {modal.view === ModalApiKeyView.VIEW_GROUPS_ID && (
             <ApiKeyModal
-              open
               title={t('view-groups-id', { apikey: modal.apiKey?.name })}
               subTitle={t('view-groups-id-message')}
               subTitleAtBottom

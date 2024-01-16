@@ -12,7 +12,6 @@ export type ApiKeyModalProps = {
   closeModalHandler: () => void;
   actionButtonLabel?: string;
   actionHandler?: () => void;
-  open: boolean;
 };
 
 const ApiKeyModal = ({
@@ -24,13 +23,17 @@ const ApiKeyModal = ({
   closeModalHandler,
   actionButtonLabel,
   actionHandler,
-  open,
 }: ApiKeyModalProps) => (
-  <PnDialog open={open} onClose={closeModalHandler}>
+  <PnDialog open onClose={closeModalHandler}>
     {title && <DialogTitle>{title}</DialogTitle>}
     <PnDialogContent>
       {subTitle && !subTitleAtBottom && (
-        <Typography id="subtitle-top" data-testid="subtitle-top" variant="body1" sx={{ mb: 3 }}>
+        <Typography
+          id="subtitle-top"
+          data-testid="subtitle-top"
+          variant="body1"
+          sx={{ mb: content ? 2 : 0, mt: content ? 2 : 0 }}
+        >
           {subTitle}
         </Typography>
       )}

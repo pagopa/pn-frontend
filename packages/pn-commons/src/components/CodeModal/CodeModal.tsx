@@ -96,11 +96,11 @@ const CodeModal = memo(
         <DialogTitle id="dialog-title">{title}</DialogTitle>
         <PnDialogContent>
           <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
-          <Divider sx={{ margin: '20px 0' }} />
-          <Typography fontSize={16} fontWeight={600} sx={{ textAlign: textPosition }}>
+          <Divider sx={{ my: 2 }} />
+          <Typography fontSize={16} fontWeight={600} sx={{ textAlign: 'left' }}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ mt: 2, textAlign: textPosition }}>
+          <Box sx={{ mt: 2, textAlign: isMobile ? 'left' : 'center' }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -121,8 +121,7 @@ const CodeModal = memo(
               />
             )}
           </Box>
-          <Box sx={{ marginTop: '10px', textAlign: textPosition }}>{codeSectionAdditional}</Box>
-          <Divider sx={{ margin: '20px 0' }} />
+          <Box sx={{ mt: 2, textAlign: isMobile ? 'left' : 'center' }}>{codeSectionAdditional}</Box>
           {hasError && (
             <Alert
               id="error-alert"

@@ -33,11 +33,11 @@ const DisclaimerModal: React.FC<Props> = ({
 
   return (
     <PnDialog open={true} data-testid="disclaimerDialog">
-      {title && <DialogTitle>{title}</DialogTitle>}
+      <DialogTitle>{title}</DialogTitle>
       <PnDialogContent>
         {content && <Box>{content}</Box>}
         {checkboxLabel && (
-          <Box sx={{ mt: 2, ml: 0.5 }}>
+          <Box sx={{ mt: 2 }}>
             <FormControlLabel
               control={
                 <Checkbox

@@ -154,7 +154,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         <DialogContentText id="dialog-description">
           {t('deleghe.associate-groups-subtitle')}
         </DialogContentText>
-        <Divider sx={{ margin: '20px 0' }} />
+        <Divider sx={{ my: 2 }} />
         <FormControl>
           <RadioGroup
             aria-label={t('deleghe.associate-group')}
@@ -209,7 +209,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
             data-testid="groups"
             inputValue={groupInputValue}
             onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
-            sx={{ my: 2 }}
+            sx={{ mt: 2 }}
           />
         )}
       </PnDialogContent>

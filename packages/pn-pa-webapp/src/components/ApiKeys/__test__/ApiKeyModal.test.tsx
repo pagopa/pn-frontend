@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
 import ApiKeyModal, { ApiKeyModalProps } from '../ApiKeyModal';
 
 const closeModalFn = vi.fn();
@@ -14,7 +14,6 @@ const defaultProps: ApiKeyModalProps = {
   closeModalHandler: closeModalFn,
   actionButtonLabel: 'mock-action',
   actionHandler: actionModalFn,
-  open: true,
 };
 
 describe('ApiKeyModal component', () => {
@@ -24,27 +23,23 @@ describe('ApiKeyModal component', () => {
 
   it('render component', () => {
     const { container, queryByTestId } = render(<ApiKeyModal {...defaultProps} />);
-    waitFor(() => {
-      expect(container).toHaveTextContent('mock-title');
-      expect(container).toHaveTextContent('mocked-content');
-    });
+    expect(container).toHaveTextContent('mock-title');
+    expect(container).toHaveTextContent('mocked-content');
     expect(queryByTestId('subtitle-top')).toBeInTheDocument();
     expect(queryByTestId('subtitle-bottom')).not.toBeInTheDocument();
   });
 
   it('render component with subtitle at bottom', () => {
     const { container, queryByTestId } = render(<ApiKeyModal {...defaultProps} subTitleAtBottom />);
-    waitFor(() => {
-      expect(container).toHaveTextContent('mock-title');
-      expect(container).toHaveTextContent('mocked-content');
-    });
+    expect(container).toHaveTextContent('mock-title');
+    expect(container).toHaveTextContent('mocked-content');
     expect(queryByTestId('subtitle-top')).not.toBeInTheDocument();
     expect(queryByTestId('subtitle-bottom')).toBeInTheDocument();
   });
 
   it('render component and click close button', () => {
     const { container, getByTestId } = render(<ApiKeyModal {...defaultProps} />);
-    waitFor(() => expect(container).toHaveTextContent('mock-title'));
+    expect(container).toHaveTextContent('mock-title');
     const closeButton = getByTestId('close-modal-button');
     fireEvent.click(closeButton);
     expect(closeModalFn).toBeCalledTimes(1);
@@ -52,7 +47,7 @@ describe('ApiKeyModal component', () => {
 
   it('render component and click action button', () => {
     const { container, getByTestId } = render(<ApiKeyModal {...defaultProps} />);
-    waitFor(() => expect(container).toHaveTextContent('mock-title'));
+    expect(container).toHaveTextContent('mock-title');
     const actionButton = getByTestId('action-modal-button');
     fireEvent.click(actionButton);
     expect(actionModalFn).toBeCalledTimes(1);
