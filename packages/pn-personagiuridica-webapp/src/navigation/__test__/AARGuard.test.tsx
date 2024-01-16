@@ -184,6 +184,7 @@ describe('Notification from QR code', async () => {
         replace: true,
         state: { fromQrCode: true },
       });
+      localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
     });
     const accessDeniedComponent = screen.queryByTestId('access-denied');
     expect(accessDeniedComponent).not.toBeInTheDocument();
