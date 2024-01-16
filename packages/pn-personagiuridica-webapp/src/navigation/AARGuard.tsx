@@ -55,9 +55,8 @@ const AARGuard = () => {
       }
     };
     // momentarily updated for pn-5157
-    void fetchNotificationFromQrCode().then(
-      () => {}
-      // localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)
+    void fetchNotificationFromQrCode().then(() =>
+      localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)
     );
   }, [aar]);
 
