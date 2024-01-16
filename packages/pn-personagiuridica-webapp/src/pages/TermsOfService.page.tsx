@@ -25,12 +25,12 @@ const TermsOfServicePage = () => {
           false
         );
       });
+
+      void waitForElement('.otnotice-content').then(() => {
+        rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
+      });
     }
   }, []);
-
-  void waitForElement('.otnotice-content').then(() => {
-    rewriteLinks(routes.TERMS_OF_SERVICE, '.otnotice-content a');
-  });
 
   return (
     <>

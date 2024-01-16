@@ -32,16 +32,16 @@ async function doTheRender() {
 
     root.render(
       <Provider store={store}>
-        <React.StrictMode>
-          <BrowserRouter>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Suspense fallback="loading...">
-                <App />
-              </Suspense>
-            </ThemeProvider>
-          </BrowserRouter>
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Suspense fallback="loading...">
+              <App />
+            </Suspense>
+          </ThemeProvider>
+        </BrowserRouter>
+        {/* </React.StrictMode> */}
       </Provider>
     );
 
