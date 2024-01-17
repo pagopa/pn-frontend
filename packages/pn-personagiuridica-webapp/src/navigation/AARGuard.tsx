@@ -1,7 +1,9 @@
-import { AccessDenied, LoadingPage, sanitizeString } from '@pagopa-pn/pn-commons';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons';
+
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import {
@@ -24,22 +26,10 @@ const AARGuard = () => {
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
 
-  // momentarily added for pn-5157
-  const storedAar = localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
-
   const aar = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
-    // momentarily updated for pn-5157
-    const queryAar = queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
-    if (queryAar) {
-      return queryAar;
-    }
-    // get from localstorage
-    if (storedAar) {
-      return sanitizeString(storedAar);
-    }
-    return null;
-  }, [location.search, storedAar]);
+    return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
+  }, [location]);
 
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {
@@ -52,10 +42,7 @@ const AARGuard = () => {
         }
       }
     };
-    // momentarily updated for pn-5157
-    void fetchNotificationFromQrCode().then(() =>
-      localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)
-    );
+    void fetchNotificationFromQrCode();
   }, [aar]);
 
   useEffect(() => {
@@ -74,7 +61,9 @@ const AARGuard = () => {
   if (fetchError) {
     return (
       <AccessDenied
+        icon={<IllusQuestion />}
         message={t('from-qrcode.not-found')}
+        subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
         goToLogin={() => {}}

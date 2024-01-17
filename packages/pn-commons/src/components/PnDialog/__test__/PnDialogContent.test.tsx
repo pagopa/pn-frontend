@@ -17,7 +17,7 @@ describe('PnDialogContent Component', () => {
     expect(content).toBeInTheDocument();
     const subtitle = queryByTestId('dialog-subtitle');
     expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveStyle('text-align: left');
+    expect(subtitle).toHaveStyle('padding: 32');
     const otherContent = queryByTestId('dialog-other-content');
     expect(otherContent).toBeInTheDocument();
   });
@@ -35,7 +35,7 @@ describe('PnDialogContent Component', () => {
     expect(content).toBeInTheDocument();
     const subtitle = queryByTestId('dialog-subtitle');
     expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveStyle('text-align: center');
+    expect(subtitle).toHaveStyle('padding: 24');
     const otherContent = queryByTestId('dialog-other-content');
     expect(otherContent).toBeInTheDocument();
   });

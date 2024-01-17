@@ -1,11 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
@@ -20,7 +17,9 @@ import {
   AppResponsePublisher,
   CodeModal,
   PnAutocomplete,
-  useIsMobile,
+  PnDialog,
+  PnDialogActions,
+  PnDialogContent,
 } from '@pagopa-pn/pn-commons';
 
 import { GroupStatus } from '../../models/groups';
@@ -59,8 +58,6 @@ const AcceptDelegationModal: React.FC<Props> = ({
   const [code, setCode] = useState<Array<string>>([]);
   const [error, setError] = useState<{ title: string; content: string }>();
   const { t } = useTranslation(['deleghe']);
-  const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
 
   const getOptionLabel = (option: { name: string; id: string }) => option.name || '';
@@ -139,25 +136,25 @@ const AcceptDelegationModal: React.FC<Props> = ({
         errorTitle={error?.title}
         errorMessage={error?.content}
         hasError={Boolean(error)}
-      ></CodeModal>
+      />
     );
   }
   return (
-    <Dialog
+    <PnDialog
       open={open}
       onClose={handleClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
       data-testid="groupDialog"
     >
-      <DialogTitle id="dialog-title" sx={{ textAlign: textPosition }}>
+      <DialogTitle id="dialog-title">
         {isEditMode ? t('deleghe.edit-groups-title') : t('deleghe.associate-groups-title')}
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText id="dialog-description" sx={{ textAlign: textPosition }}>
+      <PnDialogContent>
+        <DialogContentText id="dialog-description">
           {t('deleghe.associate-groups-subtitle')}
         </DialogContentText>
-        <Divider sx={{ margin: '20px 0' }} />
+        <Divider sx={{ my: 2 }} />
         <FormControl>
           <RadioGroup
             aria-label={t('deleghe.associate-group')}
@@ -212,21 +209,14 @@ const AcceptDelegationModal: React.FC<Props> = ({
             data-testid="groups"
             inputValue={groupInputValue}
             onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
-            sx={{ my: 2 }}
+            sx={{ mt: 2 }}
           />
         )}
-      </DialogContent>
-      <DialogActions
-        disableSpacing={isMobile}
-        sx={{
-          textAlign: textPosition,
-          flexDirection: isMobile ? 'column' : 'row',
-        }}
-      >
+      </PnDialogContent>
+      <PnDialogActions>
         <Button
           variant="outlined"
           onClick={isEditMode ? handleClose : handleBack}
-          fullWidth={isMobile}
           data-testid="groupCancelButton"
         >
           {isEditMode
@@ -239,13 +229,11 @@ const AcceptDelegationModal: React.FC<Props> = ({
           data-testid="groupConfirmButton"
           onClick={() => handleConfirm(code, groupForm.value)}
           disabled={groupForm.value.length === 0 && associateGroup}
-          fullWidth={isMobile}
-          sx={{ marginTop: isMobile ? '10px' : 0 }}
         >
           {t('button.conferma', { ns: 'common' })}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 

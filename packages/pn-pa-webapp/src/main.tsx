@@ -30,18 +30,21 @@ async function doTheRender() {
     // move initialization of the Axios interceptor - PN-7557
     setUpInterceptor(store);
 
+    // We need to comment out the StrictMode because it causes a rerender that
+    // breaks the navigation inside TermsOfService and PrivacyPolicy pages.
+    // PN-9549
     root.render(
       <Provider store={store}>
-        <React.StrictMode>
-          <BrowserRouter>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Suspense fallback="loading...">
-                <App />
-              </Suspense>
-            </ThemeProvider>
-          </BrowserRouter>
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Suspense fallback="loading...">
+              <App />
+            </Suspense>
+          </ThemeProvider>
+        </BrowserRouter>
+        {/* </React.StrictMode> */}
       </Provider>
     );
 
