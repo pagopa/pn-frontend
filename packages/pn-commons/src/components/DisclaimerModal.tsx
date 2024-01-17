@@ -54,10 +54,10 @@ const DisclaimerModal: React.FC<Props> = ({
       </PnDialogContent>
       <PnDialogActions>
         <Button
+          id="cancelButton"
           variant="outlined"
           onClick={onCancel}
           data-testid="disclaimer-cancel-button"
-          id="cancelButton"
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </Button>
