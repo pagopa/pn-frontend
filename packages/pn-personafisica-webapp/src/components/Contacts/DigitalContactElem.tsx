@@ -245,12 +245,12 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   onClick={toggleEdit}
                   sx={{ mr: 2 }}
                   disabled={editDisabled}
-                  id="modifyContact"
+                  id={`modifyContact-${senderId}`}
                 >
                   {t('button.modifica')}
                 </ButtonNaked>
                 <ButtonNaked
-                  id="cancelContact"
+                  id={`cancelContact-${senderId}`}
                   color="primary"
                   onClick={removeHandler}
                   disabled={editDisabled}
