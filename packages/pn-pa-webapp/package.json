@@ -36,9 +36,9 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "dev": "vite --open",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --host=selfcare.dev.notifichedigitali.it --port=443",
+    "preview": "vite preview",
     "test": "tsc && vitest --run",
     "test:fast": "vitest --run",
     "test:a11y": "vitest --run --config ./vite.config.a11y.ts",
