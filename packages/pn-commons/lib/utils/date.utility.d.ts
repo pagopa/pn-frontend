@@ -1,0 +1,17 @@
+import { DatePickerTypes } from '../types';
+export declare const DATE_FORMAT = "dd/MM/yyyy";
+export declare const today: Date;
+export declare const tenYearsAgo: Date;
+export declare function dateIsDefined(date: Date | null | undefined): boolean | null | undefined;
+export declare function formatMonthString(dateString: string): string;
+export declare function formatTimeWithLegend(dateString: string): string;
+export declare function formatDay(dateString: string): string;
+export declare function formatTime(dateString: string): string;
+export declare function getNextDay(date: Date): Date;
+export declare function minutesBeforeNow(n: number): Date;
+export declare function formatToTimezoneString(date: Date): string;
+export declare function isToday(date: DatePickerTypes): boolean;
+export declare function formatDate(dateString: string, todayLabelizzation?: boolean): string;
+export declare function formatDateTime(dateString: string): string;
+export declare function formatToSlicedISOString(date: Date): string;
+export declare function formatFromString(date: string): Date | null;

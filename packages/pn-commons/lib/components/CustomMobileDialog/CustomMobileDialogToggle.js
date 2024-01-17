@@ -1,0 +1,26 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { Badge, Box, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
+const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+        backgroundColor: theme.palette.primary.main,
+        position: 'unset',
+        transform: 'translate(0, 0)',
+    },
+}));
+/**
+ * Button to open/close dialog
+ * @param children the react component for the button
+ * @param hasCounterBadge add counter near the button
+ * @param bagdeCount number to display into the counter
+ * @param sx style to be addded to the button
+ */
+const CustomMobileDialogToggle = ({ children, hasCounterBadge, bagdeCount = 0, sx, }) => {
+    const { toggleOpen } = useCustomMobileDialogContext();
+    const handleClickOpen = () => {
+        toggleOpen();
+    };
+    return (_jsxs(Box, { "data-testid": "dialogToggle", children: [_jsx(Button, { onClick: handleClickOpen, sx: sx, "data-testid": "dialogToggleButton", children: children }), hasCounterBadge && bagdeCount > 0 && (_jsx(StyledBadge, { id: "dialogToggleBadge", badgeContent: bagdeCount, color: "secondary" }))] }));
+};
+export default CustomMobileDialogToggle;
