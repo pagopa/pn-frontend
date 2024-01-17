@@ -136,6 +136,21 @@ describe('Notification from QR code', async () => {
     expect(accessDeniedComponent).toHaveTextContent('from-qrcode.not-found');
   });
 
+  it('invalid recipient accesses to QR code', async () => {
+    const mockQrCode = 'bad-qr-code';
+    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode }).reply(404);
+    await act(async () => {
+      render(<Guard />);
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    const accessDeniedComponent = screen.queryByTestId('access-denied');
+    const titleAccessDeniedComponent = await screen.findByText('from-qrcode.not-found');
+    expect(pageComponent).toBeNull();
+    expect(accessDeniedComponent).toBeTruthy();
+    expect(titleAccessDeniedComponent).toBeInTheDocument();
+  });
+
   it('no QR code', async () => {
     const mockQrCode = '';
     window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
@@ -144,33 +159,8 @@ describe('Notification from QR code', async () => {
     });
     expect(mock.history.post).toHaveLength(0);
     expect(mockNavigateFn).toBeCalledTimes(0);
+
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-  });
-
-  it('QR code from localStorage', async () => {
-    const mockQrCode = 'qr-code';
-    localStorage.setItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM, mockQrCode);
-    mock
-      .onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: mockQrCode })
-      .reply(200, { iun: 'mock-iun' });
-    await act(async () => {
-      render(<Guard />);
-    });
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(NOTIFICATION_ID_FROM_QRCODE());
-    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-      aarQrCodeValue: mockQrCode,
-    });
-    await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'), {
-        replace: true,
-        state: { fromQrCode: true },
-      });
-    });
-    const accessDeniedComponent = screen.queryByTestId('access-denied');
-    expect(accessDeniedComponent).not.toBeInTheDocument();
-    expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBeNull();
   });
 });

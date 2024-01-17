@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite';
 import { configDefaults } from 'vitest/config';
 
@@ -28,6 +27,8 @@ export default defineConfig(({ mode }) => {
       host: env.HOST,
       https: true,
       port: 443,
+      strictPort: true,
+      open: true,
       proxy: {
         '^/auth/.*': {
           target: 'https://login.dev.notifichedigitali.it',
@@ -45,6 +46,8 @@ export default defineConfig(({ mode }) => {
     },
     preview: {
       port: 443,
+      host: env.HOST,
+      https: true,
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
