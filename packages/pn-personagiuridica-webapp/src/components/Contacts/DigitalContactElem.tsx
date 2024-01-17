@@ -72,10 +72,10 @@ const DeleteDialog: React.FC<DialogProps> = ({
     </Button>
   ) : (
     [
-      <Button key="cancel" onClick={handleModalClose} variant="outlined">
+      <Button id="buttonAnnulla" key="cancel" onClick={handleModalClose} variant="outlined">
         {t('button.annulla')}
       </Button>,
-      <Button key="confirm" onClick={confirmHandler} variant="contained">
+      <Button id="buttonConferma" key="confirm" onClick={confirmHandler} variant="contained">
         {t('button.conferma')}
       </Button>,
     ]
@@ -212,10 +212,16 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   onClick={toggleEdit}
                   sx={{ marginRight: '10px' }}
                   disabled={editDisabled}
+                  id={`modifyContact-${senderId}`}
                 >
                   {t('button.modifica')}
                 </ButtonNaked>
-                <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
+                <ButtonNaked
+                  id={`cancelContact-${senderId}`}
+                  color="primary"
+                  onClick={removeHandler}
+                  disabled={editDisabled}
+                >
                   {t('button.elimina')}
                 </ButtonNaked>
               </>
@@ -227,6 +233,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   type="button"
                   onClick={editHandler}
                   sx={{ marginRight: '10px' }}
+                  id={`saveModifyButton-${senderId}`}
                 >
                   {t('button.salva')}
                 </ButtonNaked>
