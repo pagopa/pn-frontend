@@ -100,7 +100,7 @@ const CodeModal = memo(
           <Typography fontSize={16} fontWeight={600} sx={{ textAlign: 'left' }}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ mt: 2, textAlign: isMobile ? 'left' : 'center' }}>
+          <Box sx={{ mt: 2, textAlign: 'left' }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -127,7 +127,7 @@ const CodeModal = memo(
               id="error-alert"
               data-testid="errorAlert"
               severity="error"
-              sx={{ textAlign: textPosition }}
+              sx={{ textAlign: textPosition, mt: 2 }}
             >
               <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
