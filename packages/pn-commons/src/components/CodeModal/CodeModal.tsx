@@ -121,7 +121,9 @@ const CodeModal = memo(
           {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           {hasError && (
             <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
-              <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
+              <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
+                {errorTitle}
+              </AlertTitle>
               {errorMessage}
             </Alert>
           )}
