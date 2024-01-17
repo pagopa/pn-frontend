@@ -164,8 +164,12 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
 
 export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
   'createNewNotification',
-  performThunkAction(async (notification: NewNotification) => {
-    const mappedNotification = newNotificationMapper(notification);
-    return await NotificationsApi.createNewNotification(mappedNotification);
-  })
+  async (notification: NewNotification, { rejectWithValue }) => {
+    try {
+      const mappedNotification = newNotificationMapper(notification);
+      return await NotificationsApi.createNewNotification(mappedNotification);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );
