@@ -17,14 +17,22 @@ const PnDialog: React.FC<DialogProps> = (props) => {
 
   const enrichedTitle = isValidElement(title)
     ? cloneElement(title, {
-        sx: { p: paddingSize, pb: 2, ...title.props.sx },
         ...title.props,
+        sx: { p: paddingSize, pb: 2, ...title.props.sx },
       })
     : title;
 
   const content: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === PnDialogContent
   );
+
+  const paddingTop = isMobile ? 3 : 4;
+  const enrichedContent = isValidElement(content)
+    ? cloneElement(content, {
+        ...content.props,
+        sx: { pt: title ? 0 : paddingTop, ...content.props.sx },
+      })
+    : content;
 
   const actions: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === PnDialogActions
@@ -33,7 +41,7 @@ const PnDialog: React.FC<DialogProps> = (props) => {
   return (
     <Dialog data-testid="dialog" {...props}>
       {title && enrichedTitle}
-      {content}
+      {content && enrichedContent}
       {actions}
     </Dialog>
   );

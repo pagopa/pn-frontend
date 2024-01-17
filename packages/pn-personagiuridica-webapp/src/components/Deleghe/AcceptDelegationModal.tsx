@@ -136,7 +136,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         errorTitle={error?.title}
         errorMessage={error?.content}
         hasError={Boolean(error)}
-      ></CodeModal>
+      />
     );
   }
   return (

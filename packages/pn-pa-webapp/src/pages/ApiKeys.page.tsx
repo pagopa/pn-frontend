@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,40 +40,39 @@ const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 const TableGroupsId = ({ groups }: { groups?: Array<UserGroup> }) => {
   const { t } = useTranslation(['apikeys']);
   return (
-    <Box sx={{ my: 3 }}>
+    <Box>
       {groups &&
-        groups.map((group) => (
-          <Fragment key={group.name}>
-            <Box
+        groups.map((group, index) => (
+          <Box
+            key={group.name}
+            sx={{
+              display: 'flex',
+              alignContent: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              <strong>{group.name}</strong>
+            </Typography>
+            <TextField
+              label={t('group-id')}
+              defaultValue={group.id}
+              fullWidth
               sx={{
-                display: 'flex',
-                alignContent: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
+                mb: index < groups.length - 1 ? 2 : 0,
               }}
-            >
-              <Typography variant="body2" sx={{ mb: 2 }}>
-                <strong>{group.name}</strong>
-              </Typography>
-              <TextField
-                label={t('group-id')}
-                defaultValue={group.id}
-                fullWidth
-                sx={{
-                  mb: 3,
-                }}
-                InputProps={{
-                  readOnly: true,
-                  endAdornment: (
-                    <CopyToClipboardButton
-                      value={() => group.id}
-                      tooltipTitle={t('group-id-copied')}
-                    />
-                  ),
-                }}
-              ></TextField>
-            </Box>
-          </Fragment>
+              InputProps={{
+                readOnly: true,
+                endAdornment: (
+                  <CopyToClipboardButton
+                    value={() => group.id}
+                    tooltipTitle={t('group-id-copied')}
+                  />
+                ),
+              }}
+            />
+          </Box>
         ))}
     </Box>
   );

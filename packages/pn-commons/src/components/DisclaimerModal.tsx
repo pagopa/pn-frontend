@@ -33,7 +33,7 @@ const DisclaimerModal: React.FC<Props> = ({
 
   return (
     <PnDialog open={true} data-testid="disclaimerDialog">
-      <DialogTitle>{title}</DialogTitle>
+      {title && <DialogTitle>{title}</DialogTitle>}
       <PnDialogContent>
         {content && <Box>{content}</Box>}
         {checkboxLabel && (

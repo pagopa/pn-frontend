@@ -17,9 +17,9 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
   const enrichedButtons = buttons.map((button, index) =>
     isValidElement(button)
       ? cloneElement(button, {
+          ...button.props,
           fullWidth: isMobile,
           sx: { marginBottom: isMobile && index > 0 ? 2 : 0, ...button.props.sx },
-          ...button.props,
         })
       : button
   );
@@ -28,6 +28,7 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
     <DialogActions
       data-testid="dialog-actions"
       disableSpacing={isMobile}
+      {...props}
       sx={{
         flexDirection: isMobile ? 'column-reverse' : 'row',
         p: paddingSize,
@@ -35,7 +36,6 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
         gap: gapSize,
         ...props.sx,
       }}
-      {...props}
     >
       {enrichedButtons}
     </DialogActions>

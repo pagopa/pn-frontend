@@ -1,4 +1,4 @@
-import { ReactNode, memo, useCallback, useMemo, useState } from 'react';
+import { ReactNode, memo, useCallback, useState } from 'react';
 
 import {
   Alert,
@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import { CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../hooks';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnDialog from '../PnDialog/PnDialog';
 import PnDialogActions from '../PnDialog/PnDialogActions';
@@ -69,8 +68,6 @@ const CodeModal = memo(
     errorMessage,
   }: Props) => {
     const [code, setCode] = useState(initialValues);
-    const isMobile = useIsMobile();
-    const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
     const codeIsValid = code.every((v) => v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
@@ -97,10 +94,10 @@ const CodeModal = memo(
         <PnDialogContent>
           <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
           <Divider sx={{ my: 2 }} />
-          <Typography fontSize={16} fontWeight={600} sx={{ textAlign: 'left' }}>
+          <Typography fontSize={16} fontWeight={600}>
             {codeSectionTitle}
           </Typography>
-          <Box sx={{ mt: 2, textAlign: 'left' }}>
+          <Box sx={{ mt: 2 }}>
             <CodeInput
               initialValues={initialValues}
               isReadOnly={isReadOnly}
@@ -121,14 +118,9 @@ const CodeModal = memo(
               />
             )}
           </Box>
-          <Box sx={{ mt: 2, textAlign: 'left' }}>{codeSectionAdditional}</Box>
+          {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           {hasError && (
-            <Alert
-              id="error-alert"
-              data-testid="errorAlert"
-              severity="error"
-              sx={{ textAlign: textPosition, mt: 2 }}
-            >
+            <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
               <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
             </Alert>

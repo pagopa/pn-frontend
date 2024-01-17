@@ -32,14 +32,14 @@ const ApiKeyModal = ({
           id="subtitle-top"
           data-testid="subtitle-top"
           variant="body1"
-          sx={{ mb: content ? 2 : 0, mt: content ? 2 : 0 }}
+          sx={{ mb: content ? 2 : 0 }}
         >
           {subTitle}
         </Typography>
       )}
       {content}
       {subTitle && subTitleAtBottom && (
-        <Typography data-testid="subtitle-bottom" variant="body1" sx={{ my: 3 }}>
+        <Typography data-testid="subtitle-bottom" variant="body1" sx={{ mt: content ? 2 : 0 }}>
           {subTitle}
         </Typography>
       )}
