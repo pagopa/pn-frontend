@@ -121,7 +121,7 @@ const CodeModal = memo(
               />
             )}
           </Box>
-          <Box sx={{ mt: 2, textAlign: isMobile ? 'left' : 'center' }}>{codeSectionAdditional}</Box>
+          <Box sx={{ mt: 2, textAlign: 'left' }}>{codeSectionAdditional}</Box>
           {hasError && (
             <Alert
               id="error-alert"
