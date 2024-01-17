@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
@@ -9,11 +9,12 @@ import { getConfiguration } from './services/configuration.service';
 import './utility/onetrust';
 
 const App = () => {
-  const { MIXPANEL_TOKEN, VERSION } = getConfiguration();
-  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
+  const configuration = useMemo(() => getConfiguration(), []);
+  
+  useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   const [clickVersion] = useMultiEvent({
-    callback: () => console.log(`v${VERSION}`),
+    callback: () => console.log(`v${configuration.VERSION}`),
   });
 
   const { t } = useTranslation(['common']);

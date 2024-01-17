@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/pagopa/pn-frontend/compare/v2.2.4-RC.0...v2.2.4) (2024-01-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.2.4-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.3...v2.2.4-RC.0) (2024-01-03)
+
+
+### Bug Fixes
+
+* **PN-7004:** update sentences for pg in proxy page and modal ([6923246](https://github.com/pagopa/pn-frontend/commit/6923246826aae8edac9b063ae77feb05c136f14d))
+
+
+
+
+
+## [2.2.3](https://github.com/pagopa/pn-frontend/compare/v2.2.3-RC.0...v2.2.3) (2023-12-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+## [2.2.3-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.2...v2.2.3-RC.0) (2023-12-12)
+
+
+### Bug Fixes
+
+* **pn-8287:** pg - fixed links to selfcare users and groups pages ([#1050](https://github.com/pagopa/pn-frontend/issues/1050)) ([76e6b2d](https://github.com/pagopa/pn-frontend/commit/76e6b2d66be91a0349752359875e183b701b8ac8))
+* **pn-8589:** updated babel library to fix security vulnerability ([#1040](https://github.com/pagopa/pn-frontend/issues/1040)) ([91bbe13](https://github.com/pagopa/pn-frontend/commit/91bbe13cf3ca2a371526e635e29da038f8e7c453))
+* **pn-8619:** fixed "from date" and "to date" filters in pa/pf/pg  ([#1067](https://github.com/pagopa/pn-frontend/issues/1067)) ([f37bcb0](https://github.com/pagopa/pn-frontend/commit/f37bcb00b120468b0d442e1db51c4536e9da7a79))
+* **PN-8692:** modify copy for event recrn-005-c-in-timeline ([#1055](https://github.com/pagopa/pn-frontend/issues/1055)) ([f9a645d](https://github.com/pagopa/pn-frontend/commit/f9a645d09b3fab387293593a2d32c71598f18353))
+* **pn-8850:** Moved documents above payments box and changed title variant ([#1069](https://github.com/pagopa/pn-frontend/issues/1069)) ([3050dff](https://github.com/pagopa/pn-frontend/commit/3050dff56926ef08f5c486303bec314b57abd9a2))
+* **PN-8869:** No "download" button for payments having no attachment ([#1079](https://github.com/pagopa/pn-frontend/issues/1079)) ([e5d26fc](https://github.com/pagopa/pn-frontend/commit/e5d26fcb5cadc0fb409b24191c68273e854825ba))
+* **PN-8874:** fix aar to make it dowloadable after 120 days ([#1082](https://github.com/pagopa/pn-frontend/issues/1082)) ([d578f50](https://github.com/pagopa/pn-frontend/commit/d578f50b500bfb056b25512f8ec05cd616047bfd))
+* **PN-8901:** Fixed mixpanel events and renaming, and attributes ([#1078](https://github.com/pagopa/pn-frontend/issues/1078)) ([5a42baf](https://github.com/pagopa/pn-frontend/commit/5a42baf356b4b9e7e31949b36507bffe94b8236c))
+
+
+### Features
+
+* **pn-7003:** added 7-days expiration message to the delegation creation page and to the modal for the code viewing ([#1054](https://github.com/pagopa/pn-frontend/issues/1054)) ([94ee1df](https://github.com/pagopa/pn-frontend/commit/94ee1dfc0c8a8bfdee401a41586c2e26ecf4080a))
+* **pn-7341:** payment pagination for pg/pf webapp [#1049](https://github.com/pagopa/pn-frontend/issues/1049) ([0438504](https://github.com/pagopa/pn-frontend/commit/04385044f09ad93f859a87fb0c7143528f5ae1df))
+* **pn-8995:** added copy for new analog-workflow-attachment-kind 23I, in all languages, for PA / PF / PG ([#1085](https://github.com/pagopa/pn-frontend/issues/1085)) ([366ec01](https://github.com/pagopa/pn-frontend/commit/366ec0134a04fdecd7c103d3b455654d5b951622))
+* **pn-9009:** removed note about limit of 7 days to accept a delegation (PF and PG). ([#1088](https://github.com/pagopa/pn-frontend/issues/1088)) ([aec5766](https://github.com/pagopa/pn-frontend/commit/aec5766e31afc547e06472e21d0f03632769a6fe))
+
+
+
+
+
 ## [2.2.2](https://github.com/pagopa/pn-frontend/compare/v2.2.2-RC.0...v2.2.2) (2023-11-21)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp

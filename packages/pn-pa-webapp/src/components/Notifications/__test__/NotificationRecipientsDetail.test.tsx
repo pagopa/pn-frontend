@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import {
   notificationToFeMultiRecipient,
@@ -7,7 +7,7 @@ import {
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import NotificationRecipientsDetail from '../NotificationRecipientsDetail';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
@@ -17,7 +17,7 @@ jest.mock('react-i18next', () => ({
 describe('NotificationRecipientsDetail Component', () => {
   const original = navigator.clipboard;
 
-  const writeTextFn = jest.fn();
+  const writeTextFn = vi.fn();
 
   beforeAll(() => {
     Object.defineProperty(navigator, 'clipboard', {
@@ -28,6 +28,10 @@ describe('NotificationRecipientsDetail Component', () => {
 
   afterAll(() => {
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: original });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('renders component - no remaining items', () => {
@@ -69,7 +73,7 @@ describe('NotificationRecipientsDetail Component', () => {
       if (index >= 3) {
         return false;
       }
-      expect(recipientElem).toHaveTextContent(
+      return expect(recipientElem).toHaveTextContent(
         recipients[index].denomination + ' - ' + recipients[index].taxId
       );
     });

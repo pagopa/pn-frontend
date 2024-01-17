@@ -1,12 +1,18 @@
-import React, { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
+import { vi } from 'vitest';
 
 import { RenderResult, act, render, waitFor } from '../../test-utils';
 import { lazyRetry } from '../lazyRetry.utility';
 
+// When passing from jest to vitest, I changed the lazy action, since it seems that vitest
+// yields an error whenever a dynamic import must be solved.
+// ---------------------------------
+// Carlos Lombardi, 2023-11-10
+// ---------------------------------
 describe('test lazy loading retry', () => {
   const original = window.location;
 
-  const reloadFn = jest.fn();
+  const reloadFn = vi.fn();
 
   beforeAll(() => {
     Object.defineProperty(window, 'location', {
@@ -17,7 +23,8 @@ describe('test lazy loading retry', () => {
 
   afterEach(() => {
     reloadFn.mockRestore();
-    jest.resetModules();
+    vi.resetModules();
+    sessionStorage.removeItem('retry-lazy-refreshed');
   });
 
   afterAll(() => {
@@ -25,7 +32,9 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loaded at first try', async () => {
-    const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));
+    const LazyComponent = lazyRetry<any>(() =>
+      Promise.resolve({ default: ({ children }: { children: ReactNode }) => <div>{children}</div> })
+    );
     let result: RenderResult;
     await act(async () => {
       result = render(
@@ -34,18 +43,18 @@ describe('test lazy loading retry', () => {
         </Suspense>
       );
     });
-    await waitFor(() => {
-      const refreshFlag = sessionStorage.getItem('retry-lazy-refreshed');
-      expect(result.container).toHaveTextContent('mocked-empty-message');
-      expect(refreshFlag).toBeNull();
-    });
+    await waitFor(
+      () => {
+        const refreshFlag = sessionStorage.getItem('retry-lazy-refreshed');
+        expect(result.container).toHaveTextContent('mocked-empty-message');
+        expect(refreshFlag).toBeNull();
+      },
+      { timeout: 10000, interval: 1000 }
+    );
   }, 20000);
 
   it('test lazyRetry - component loading fails at first try', async () => {
-    jest.mock('../../components/EmptyState', () => {
-      throw new Error('Chunk loading error');
-    });
-    const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));
+    const LazyComponent = lazyRetry(() => Promise.reject('Error loading component'));
     render(
       <Suspense fallback={'Loading...'}>
         <LazyComponent />
@@ -59,10 +68,7 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loading fails at second try', async () => {
-    jest.mock('../../components/EmptyState', () => {
-      throw new Error('Chunk loading error');
-    });
-    const LazyComponent = lazyRetry(() => import('../../components/EmptyState'));
+    const LazyComponent = lazyRetry(() => Promise.reject('Error loading component'));
     sessionStorage.setItem('retry-lazy-refreshed', 'true');
     const result = render(
       <Suspense fallback={'Loading...'}>

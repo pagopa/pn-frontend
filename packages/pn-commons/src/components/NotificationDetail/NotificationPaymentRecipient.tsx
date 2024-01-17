@@ -20,6 +20,7 @@ import {
 } from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
@@ -29,11 +30,10 @@ const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
 
 const getPaymentsStatus = (
   paginationData: PaginationData,
-  pagoPaF24: Array<PaymentDetails>,
-  f24only: Array<F24PaymentDetails>
+  pagoPaF24: Array<PaymentDetails>
 ): EventPaymentStatusType => ({
   page_number: paginationData.page,
-  count_payment: pagoPaF24.length + f24only.length,
+  count_payment: pagoPaF24.length,
   count_canceled: pagoPaF24.filter(
     (f) =>
       f.pagoPa?.status === PaymentStatus.FAILED &&
@@ -59,6 +59,7 @@ type Props = {
   isCancelled: boolean;
   timerF24: number;
   landingSiteUrl: string;
+  iun: string;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -76,14 +77,16 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   isCancelled,
   timerF24,
   landingSiteUrl,
+  iun,
   getPaymentAttachmentAction,
   onPayClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
 }) => {
   const { pagoPaF24, f24Only } = payments;
+  const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;
   const [paginationData, setPaginationData] = useState<PaginationData>({
-    page: 0,
+    page: pageFromCache ?? 0,
     size: 5,
     totalElements: payments.pagoPaF24.length,
   });
@@ -98,10 +101,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const [loadingPayment, setLoadingPayment] = useState(false);
   const loadingPaymentTimeout = useRef<NodeJS.Timeout>();
 
-  // calc the overall status of the payments and define variables to show/hide content
-  const paymentsStatus = getPaymentsStatus(paginationData, pagoPaF24, f24Only);
-  const allPaymentsIsPaid = paymentsStatus.count_paid === pagoPaF24.length;
-  const isSinglePayment = paymentsStatus.count_payment === 1 && !isCancelled;
+  const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
+  const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
+  const hasMoreThenOnePage = paginationData.totalElements > paginationData.size;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -137,21 +139,29 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  const handlePaginate = (paginationData: PaginationData) => {
-    setPaginationData(paginationData);
-    const payments = pagoPaF24.slice(
-      paginationData.page * paginationData.size,
-      (paginationData.page + 1) * paginationData.size
+  const handlePaginate = (pageData: PaginationData) => {
+    setPaginationData(pageData);
+    const paginatedPayments = pagoPaF24.slice(
+      pageData.page * pageData.size,
+      (pageData.page + 1) * pageData.size
     );
-    handleFetchPaymentsInfo(payments ?? []);
+    setPaymentCache({ currentPaymentPage: pageData.page }, iun);
+    handleFetchPaymentsInfo(paginatedPayments ?? []);
     handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_LIST_CHANGE_PAGE);
   };
 
   useEffect(() => {
-    if (isSinglePayment && paymentsStatus.count_unpaid > 0) {
+    const unpaidPayments = pagoPaF24.some((f) => f.pagoPa?.status === PaymentStatus.REQUIRED);
+    if (isSinglePayment && unpaidPayments) {
       setSelectedPayment(pagoPaF24[0].pagoPa ?? null);
     }
-    handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, paymentsStatus);
+    // track event only if payments are changed and there aren't in loading state
+    const paymentsLoaded = paginatedPayments.every((payment) => !payment.isLoading);
+    if (paymentsLoaded) {
+      // the tracked event wants only the status of the current paged payments
+      const pagePaymentsStatus = getPaymentsStatus(paginationData, paginatedPayments);
+      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_STATUS, pagePaymentsStatus);
+    }
   }, [payments]);
 
   const handleTrackEventFn = (event: EventPaymentRecipientType, param?: object) => {
@@ -198,6 +208,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           pagoPaF24={pagoPaF24}
           f24Only={f24Only}
           allPaymentsIsPaid={allPaymentsIsPaid}
+          hasMoreThenOnePage={hasMoreThenOnePage}
         />
       )}
 
@@ -261,7 +272,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                 {loadingPayment && <CircularProgress size={18} sx={{ ml: 1 }} color="inherit" />}
                 {selectedPayment?.amount ? formatEurocentToCurrency(selectedPayment.amount) : null}
               </Button>
-              {selectedPayment && selectedPayment?.attachment && (
+              {selectedPayment?.attachment && (
                 <Button
                   fullWidth
                   variant="outlined"

@@ -1,14 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as React from 'react';
+import { vi } from 'vitest';
 
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
-import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import { CONTACTS_LIST } from '../api/contacts/contacts.routes';
 import { COUNT_DELEGATORS } from '../api/delegations/delegations.routes';
@@ -17,7 +16,7 @@ import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -26,7 +25,7 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
+vi.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
 
 const unmockedFetch = global.fetch;
 
@@ -54,11 +53,15 @@ const reduxInitialState = {
   },
 };
 
-describe('App.tsx - accessibility tests', () => {
+describe('App.tsx - accessibility tests', async () => {
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>

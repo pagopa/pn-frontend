@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { RenderResult, act, fireEvent, render, waitFor } from '../../test-utils';
 import CustomTooltip from '../CustomTooltip';
@@ -20,7 +20,7 @@ describe('CustomTooltip Component', () => {
 
   it('toggle tooltip on hover', async () => {
     // render component
-    const mockOnOpenCallback = jest.fn();
+    const mockOnOpenCallback = vi.fn();
     await act(async () => {
       result = render(
         <CustomTooltip

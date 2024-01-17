@@ -17,14 +17,14 @@ type Props = {
 };
 
 /**
- * Notification detail documents
- * @param title title to show
- * @param documents data to show
- * @param clickHandler function called when user clicks on the download button
- * @param documentsAvailable flag that allows download file or not (after 120 days)
- * @param downloadFilesMessage disclaimer to show about downloadable acts
- * @param downloadFilesLink text to bring to
- * @param disableDownloads if notification is cancelled button naked is disabled
+ *  Notification detail documents
+ *  @param title title to show
+ *  @param documents data to show
+ *  @param clickHandler function called when user clicks on the download button
+ *  @param documentsAvailable flag that allows download file or not (after 120 days)
+ *  @param downloadFilesMessage disclaimer to show about downloadable acts
+ *  @param downloadFilesLink text to bring to
+ *  @param disableDownloads if notification is cancelled button naked is disabled
  */
 
 const NotificationDetailDocuments: React.FC<Props> = (
@@ -41,7 +41,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) =>
     documents.map((d) => {
       const document = {
-        key: d.digests && d.digests.sha256 ? d.digests.sha256 : d.documentId,
+        key: d.ref.key || d.documentId,
         name: d.title || d.ref.key,
         downloadHandler: d.documentId
           ? ({

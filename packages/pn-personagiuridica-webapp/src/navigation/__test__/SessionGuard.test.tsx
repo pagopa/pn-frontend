@@ -1,24 +1,22 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { act, render, screen, testStore, waitFor } from '../../__test__/test-utils';
-import { authClient } from '../../api/apiClients';
+import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
-import { store } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
@@ -33,12 +31,17 @@ const Guard = () => (
   </Routes>
 );
 
-describe('SessionGuard Component', () => {
+describe('SessionGuard Component', async () => {
   const original = window.location;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
+  const reduxStore = await import('../../redux/store');
 
   beforeAll(() => {
-    mock = new MockAdapter(authClient);
+    mock = new MockAdapter(apiClients.authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { hash: '', pathname: '/' },
@@ -47,6 +50,7 @@ describe('SessionGuard Component', () => {
 
   afterEach(() => {
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -67,7 +71,7 @@ describe('SessionGuard Component', () => {
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
-      expect(store.getState().userState.user.sessionToken).toEqual('');
+      expect(reduxStore.store.getState().userState.user.sessionToken).toEqual('');
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
       const logoutTitleComponent = screen.queryByText('leaving-app.title');

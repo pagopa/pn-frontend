@@ -1,7 +1,6 @@
 import { digitalAddresses } from '../../__mocks__/Contacts.mock';
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { CourtesyChannelType } from '../../models/contacts';
 import { countContactsByType } from '../contacts.utility';
-import { TrackEventType } from '../events';
 
 const calcExpetcedCount = (courtesyChannelType: CourtesyChannelType) =>
   digitalAddresses.courtesy.reduce((count, elem) => {

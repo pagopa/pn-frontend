@@ -1,13 +1,6 @@
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
+import React from 'react';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    fontSize: '1.5rem',
-    fontWeight: 600,
-    marginTop: 0,
-  },
-}));
+import Typography from '@mui/material/Typography';
 
 type Props = {
   children?: React.ReactNode;
@@ -17,13 +10,15 @@ type Props = {
  * Renders a section heading with the style of an H6 element using an H3 element.
  * This solves some a11y issues in manual send sections
  */
-const SectionHeading: React.FC<Props> = ({ children }) => {
-  const classes = useStyles();
-  return (
-    <Typography id="title-heading-section" component="h3" variant="h6" className={classes.root}>
-      {children}
-    </Typography>
-  );
-};
+const SectionHeading: React.FC<Props> = ({ children }) => (
+  <Typography
+    id="title-heading-section"
+    component="h3"
+    variant="h6"
+    sx={{ fontSize: '1.5rem', fontWeight: 600, marginTop: 0 }}
+  >
+    {children}
+  </Typography>
+);
 
 export default SectionHeading;

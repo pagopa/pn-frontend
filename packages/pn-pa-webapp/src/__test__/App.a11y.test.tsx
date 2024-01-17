@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as React from 'react';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@pagopa/mui-italia';
@@ -13,7 +13,7 @@ import { ConsentType } from '../models/consents';
 import { RenderResult, act, axe, render } from './test-utils';
 
 // mock imports
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translation hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -22,7 +22,7 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
+vi.mock('../pages/Dashboard.page', () => () => <div>Generic Page</div>);
 
 const unmockedFetch = global.fetch;
 

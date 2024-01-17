@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import {
+  NotificationColumnData,
   NotificationStatus,
   Sort,
   formatToTimezoneString,
@@ -12,7 +13,6 @@ import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATIONS_LIST } from '../../../api/notifications/notifications.routes';
-import { NotificationColumn } from '../../../models/Notifications';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
 import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
@@ -90,14 +90,14 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change sort', () => {
-    const sort: Sort<NotificationColumn> = {
-      orderBy: 'status',
+    const sort: Sort<NotificationColumnData> = {
+      orderBy: 'notificationStatus',
       order: 'desc',
     };
     const action = store.dispatch(setSorting(sort));
     expect(action.type).toBe('dashboardSlice/setSorting');
     expect(action.payload).toEqual({
-      orderBy: 'status',
+      orderBy: 'notificationStatus',
       order: 'desc',
     });
   });

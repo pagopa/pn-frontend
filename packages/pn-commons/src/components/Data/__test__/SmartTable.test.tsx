@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
 
@@ -13,9 +13,9 @@ import SmartFilter from '../SmartTable/SmartFilter';
 import SmartHeader from '../SmartTable/SmartHeader';
 import SmartHeaderCell from '../SmartTable/SmartHeaderCell';
 
-const handleSort = jest.fn();
-const handleColumnClick = jest.fn();
-const handleChangePagination = jest.fn();
+const handleSort = vi.fn();
+const handleColumnClick = vi.fn();
+const handleChangePagination = vi.fn();
 
 type Item = {
   'column-1': string;

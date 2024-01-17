@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { TextField } from '@mui/material';
 
 import { fireEvent, render, waitFor, within } from '../../test-utils';
@@ -18,7 +16,7 @@ describe('PnAutocomplete Component', () => {
     const button = result.container.querySelector('.MuiAutocomplete-popupIndicator');
     fireEvent.click(button!);
     const dropdown = await waitFor(() =>
-      result.baseElement.querySelector('[role="presentation"][class^="MuiAutocomplete-popper"')
+      result.baseElement.querySelector('[role="presentation"][class*="MuiAutocomplete-popper"')
     );
     expect(dropdown).toBeInTheDocument();
     const dropdownOptionsList = within(dropdown as HTMLElement).getByRole('listbox');

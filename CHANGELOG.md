@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/pagopa/pn-frontend/compare/v2.2.4-RC.0...v2.2.4) (2024-01-12)
+
+**Note:** Version bump only for package send-monorepo
+
+
+
+
+
+## [2.2.4-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.3...v2.2.4-RC.0) (2024-01-03)
+
+
+### Bug Fixes
+
+* **PN-7003:** updated sentence for pf in proxy creation page and modal for watching code ([d73399f](https://github.com/pagopa/pn-frontend/commit/d73399fe12b104eac97d8f92d952791a791ef6ef))
+* **PN-7004:** update sentences for pg in proxy page and modal ([6923246](https://github.com/pagopa/pn-frontend/commit/6923246826aae8edac9b063ae77feb05c136f14d))
+
+
+
+
+
+## [2.2.3](https://github.com/pagopa/pn-frontend/compare/v2.2.3-RC.0...v2.2.3) (2023-12-14)
+
+**Note:** Version bump only for package send-monorepo
+
+
+
+
+
+## [2.2.3-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.2.2...v2.2.3-RC.0) (2023-12-12)
+
+
+### Bug Fixes
+
+* **pn-7067:** Added mobile support for buttons in new notification page ([#1051](https://github.com/pagopa/pn-frontend/issues/1051)) ([fb31399](https://github.com/pagopa/pn-frontend/commit/fb313999fb8f46edfb66596b89108645901f07dd))
+* **pn-8287:** pg - fixed links to selfcare users and groups pages ([#1050](https://github.com/pagopa/pn-frontend/issues/1050)) ([76e6b2d](https://github.com/pagopa/pn-frontend/commit/76e6b2d66be91a0349752359875e183b701b8ac8))
+* **pn-8589:** updated babel library to fix security vulnerability ([#1040](https://github.com/pagopa/pn-frontend/issues/1040)) ([91bbe13](https://github.com/pagopa/pn-frontend/commit/91bbe13cf3ca2a371526e635e29da038f8e7c453))
+* **pn-8619:** fixed "from date" and "to date" filters in pa/pf/pg  ([#1067](https://github.com/pagopa/pn-frontend/issues/1067)) ([f37bcb0](https://github.com/pagopa/pn-frontend/commit/f37bcb00b120468b0d442e1db51c4536e9da7a79))
+* **PN-8692:** modify copy for event recrn-005-c-in-timeline ([#1055](https://github.com/pagopa/pn-frontend/issues/1055)) ([f9a645d](https://github.com/pagopa/pn-frontend/commit/f9a645d09b3fab387293593a2d32c71598f18353))
+* **pn-8850:** Moved documents above payments box and changed title variant ([#1069](https://github.com/pagopa/pn-frontend/issues/1069)) ([3050dff](https://github.com/pagopa/pn-frontend/commit/3050dff56926ef08f5c486303bec314b57abd9a2))
+* **pn-8862:** pa - date filter isn't emptied when the value is manually cancelled ([#1074](https://github.com/pagopa/pn-frontend/issues/1074)) ([c8d6569](https://github.com/pagopa/pn-frontend/commit/c8d656954e7fee1e6451ff2389aa90a61ed1342c))
+* **PN-8869:** No "download" button for payments having no attachment ([#1079](https://github.com/pagopa/pn-frontend/issues/1079)) ([e5d26fc](https://github.com/pagopa/pn-frontend/commit/e5d26fcb5cadc0fb409b24191c68273e854825ba))
+* **PN-8874:** fix aar to make it dowloadable after 120 days ([#1082](https://github.com/pagopa/pn-frontend/issues/1082)) ([d578f50](https://github.com/pagopa/pn-frontend/commit/d578f50b500bfb056b25512f8ec05cd616047bfd))
+* **PN-8900:** Removed loaded method from mixpanel ([#1080](https://github.com/pagopa/pn-frontend/issues/1080)) ([a86022f](https://github.com/pagopa/pn-frontend/commit/a86022f0a55b610a724fb236db62eb5d382b6d8e))
+* **PN-8901:** Fixed mixpanel events and renaming, and attributes ([#1078](https://github.com/pagopa/pn-frontend/issues/1078)) ([5a42baf](https://github.com/pagopa/pn-frontend/commit/5a42baf356b4b9e7e31949b36507bffe94b8236c))
+* **pn-8912:** Removed title when all payments are paid ([#1083](https://github.com/pagopa/pn-frontend/issues/1083)) ([151d8bc](https://github.com/pagopa/pn-frontend/commit/151d8bcdec67bc34cbd45ea70d21acf9b4fc70f5))
+* **PN-8984:** Fixed issues with mixPanel events ([#1086](https://github.com/pagopa/pn-frontend/issues/1086)) ([729121a](https://github.com/pagopa/pn-frontend/commit/729121a8abe947d0d2a273dc29da4f611a3292dc))
+* **pn-9001:** Fixed product url calculation using product id ([#1084](https://github.com/pagopa/pn-frontend/issues/1084)) ([e3ddd3f](https://github.com/pagopa/pn-frontend/commit/e3ddd3f2472f3de50dddbcb778958c34a7f3ba8c))
+
+
+### Features
+
+* **pn-7003:** added 7-days expiration message to the delegation creation page and to the modal for the code viewing ([#1054](https://github.com/pagopa/pn-frontend/issues/1054)) ([94ee1df](https://github.com/pagopa/pn-frontend/commit/94ee1dfc0c8a8bfdee401a41586c2e26ecf4080a))
+* **pn-7341:** payment pagination for pg/pf webapp [#1049](https://github.com/pagopa/pn-frontend/issues/1049) ([0438504](https://github.com/pagopa/pn-frontend/commit/04385044f09ad93f859a87fb0c7143528f5ae1df))
+* **pn-7437:** Added new mixpanel events for PF ([#1065](https://github.com/pagopa/pn-frontend/issues/1065)) ([64d79ad](https://github.com/pagopa/pn-frontend/commit/64d79adb10ae715b1f0a16133b83c8fbb473daa5))
+* **PN-7437:** added new tracking events for pf ([#1077](https://github.com/pagopa/pn-frontend/issues/1077)) ([b5ff12d](https://github.com/pagopa/pn-frontend/commit/b5ff12d0c8789d0d16ae60c9b23053f3fe853ca3))
+* **PN-8737:** Added taxId validation according to PF (only length 16) or PG (only length 11) recipient ([#1070](https://github.com/pagopa/pn-frontend/issues/1070)) ([507113f](https://github.com/pagopa/pn-frontend/commit/507113f126815069c705facbdb4c5c7efbe1108e))
+* **PN-8789:** Cancel notification button shown as administrator role only ([#1072](https://github.com/pagopa/pn-frontend/issues/1072)) ([3f0946c](https://github.com/pagopa/pn-frontend/commit/3f0946c1d0ef74293dea1c269384a8fdb10d8e0f))
+* **pn-8995:** added copy for new analog-workflow-attachment-kind 23I, in all languages, for PA / PF / PG ([#1085](https://github.com/pagopa/pn-frontend/issues/1085)) ([366ec01](https://github.com/pagopa/pn-frontend/commit/366ec0134a04fdecd7c103d3b455654d5b951622))
+* **pn-9009:** removed note about limit of 7 days to accept a delegation (PF and PG). ([#1088](https://github.com/pagopa/pn-frontend/issues/1088)) ([aec5766](https://github.com/pagopa/pn-frontend/commit/aec5766e31afc547e06472e21d0f03632769a6fe))
+
+
+### Reverts
+
+* Revert "feat(pn-7437): Added new mixpanel events for PF (#1065)" (#1075) ([559a927](https://github.com/pagopa/pn-frontend/commit/559a92768f69e83f4f23848d6fa0408566604aa8)), closes [#1065](https://github.com/pagopa/pn-frontend/issues/1065) [#1075](https://github.com/pagopa/pn-frontend/issues/1075)
+
+
+
+
+
 ## [2.2.2](https://github.com/pagopa/pn-frontend/compare/v2.2.2-RC.0...v2.2.2) (2023-11-21)
 
 **Note:** Version bump only for package send-monorepo

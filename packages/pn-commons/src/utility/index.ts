@@ -36,8 +36,15 @@ import {
   parseNotificationDetail,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
-import { compileOneTrustPath } from './onetrust.utility';
+import { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
 import { calculatePages } from './pagination.utility';
+import {
+  PAYMENT_CACHE_KEY,
+  checkIfPaymentsIsAlreadyInCache,
+  getPaymentCache,
+  setPaymentCache,
+  setPaymentsInCache,
+} from './paymentCaching.utility';
 import { performThunkAction } from './redux.utility';
 import { AppRouteParams, compileRoute } from './routes.utility';
 import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
@@ -109,4 +116,10 @@ export {
   waitForElement,
   initLocalization,
   Configuration,
+  getPaymentCache,
+  setPaymentCache,
+  setPaymentsInCache,
+  checkIfPaymentsIsAlreadyInCache,
+  PAYMENT_CACHE_KEY,
+  rewriteLinks,
 };
