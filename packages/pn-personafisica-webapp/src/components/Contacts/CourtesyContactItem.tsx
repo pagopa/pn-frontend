@@ -155,7 +155,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           fields={[
             {
               id: `courtesyContacts-${type}`,
-              key: 'courtesyContactValue',
+              key: `courtesyContactsValue-${type}`,
               component: (
                 <TextField
                   id={type}

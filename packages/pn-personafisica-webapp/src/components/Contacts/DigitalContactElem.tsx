@@ -266,7 +266,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   type="button"
                   onClick={editHandler}
                   sx={{ mr: 2 }}
-                  id="saveModifyButton"
+                  id={`saveModifyButton-${senderId}`}
                 >
                   {t('button.salva')}
                 </ButtonNaked>
