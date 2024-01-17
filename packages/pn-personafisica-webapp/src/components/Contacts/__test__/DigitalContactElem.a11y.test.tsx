@@ -28,9 +28,11 @@ const fields = [
     id: 'label',
     component: 'PEC',
     size: 'variable' as 'variable' | 'auto',
+    key: 'key',
   },
   {
     id: 'value',
+    key: 'key',
     component: (
       <TextField
         id="pec"
