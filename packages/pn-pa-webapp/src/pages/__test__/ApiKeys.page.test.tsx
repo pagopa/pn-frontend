@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { vi } from 'vitest';
 
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
@@ -13,22 +13,21 @@ import {
   waitFor,
   within,
 } from '../../__test__/test-utils';
-import { apiClient } from '../../api/apiClients';
 import { APIKEY_LIST, DELETE_APIKEY, STATUS_APIKEY } from '../../api/apiKeys/apiKeys.routes';
 import { GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
 
-const mockNavigateFn = jest.fn();
+const mockNavigateFn = vi.fn();
 
 // mock imports
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
@@ -77,17 +76,21 @@ async function testApiKeyChangeStatus(
   });
 }
 
-describe('ApiKeys Page', () => {
-  let result: RenderResult | undefined;
+describe('ApiKeys Page', async () => {
+  let result: RenderResult;
   let mock: MockAdapter;
+  // this is needed because there is a bug when vi.mock is used
+  // https://github.com/vitest-dev/vitest/issues/3300
+  // maybe with vitest 1, we can remove the workaround
+  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(apiClients.apiClient);
   });
 
   afterEach(() => {
-    result = undefined;
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -100,11 +103,11 @@ describe('ApiKeys Page', () => {
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
-    expect(result!.container).toHaveTextContent(/title/i);
-    expect(result!.container).toHaveTextContent(/generated-api-keys/i);
-    const newApiKeyButton = result?.getByTestId('generateApiKey');
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/generated-api-keys/i);
+    const newApiKeyButton = result.getByTestId('generateApiKey');
     expect(newApiKeyButton).toBeInTheDocument();
-    expect(result!.getByTestId('tableApiKeys')).toBeInTheDocument();
+    expect(result.getByTestId('tableApiKeys')).toBeInTheDocument();
     expect(mock.history.get).toHaveLength(2);
   });
 
@@ -114,7 +117,7 @@ describe('ApiKeys Page', () => {
     await act(async () => {
       result = render(<ApiKeys />, { preloadedState: reduxInitialState });
     });
-    const button = result?.queryByTestId('generateApiKey');
+    const button = result.queryByTestId('generateApiKey');
     fireEvent.click(button!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
@@ -142,14 +145,14 @@ describe('ApiKeys Page', () => {
         preloadedState: reduxInitialState,
       });
     });
-    let rows = result!.getAllByTestId('tableApiKeys.body.row');
+    let rows = result.getAllByTestId('tableApiKeys.body.row');
     expect(rows).toHaveLength(2);
     rows.forEach((row, index) => {
       expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);
     });
     expect(mock.history.get).toHaveLength(2);
     // change page
-    const pageSelector = result!.getByTestId('pageSelector');
+    const pageSelector = result.getByTestId('pageSelector');
     const pageButtons = pageSelector?.querySelectorAll('button');
     // the buttons are < 1 2 >
     fireEvent.click(pageButtons[2]);
@@ -157,12 +160,12 @@ describe('ApiKeys Page', () => {
       expect(mock.history.get).toHaveLength(4);
     });
     await waitFor(() => {
-      rows = result!.getAllByTestId('tableApiKeys.body.row');
+      rows = result.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(1);
       expect(rows[0]).toHaveTextContent(`${mockApiKeysForFE.items[2].value.substring(0, 10)}...`);
     });
     // change size
-    const itemsPerPageSelector = result?.getByTestId('itemsPerPageSelector');
+    const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
     const button = itemsPerPageSelector?.querySelector('button');
     fireEvent.click(button!);
     const itemsPerPageList = screen.getAllByRole('menuitem');
@@ -171,7 +174,7 @@ describe('ApiKeys Page', () => {
       expect(mock.history.get).toHaveLength(6);
     });
     await waitFor(() => {
-      rows = result!.getAllByTestId('tableApiKeys.body.row');
+      rows = result.getAllByTestId('tableApiKeys.body.row');
       expect(rows).toHaveLength(3);
       rows.forEach((row, index) => {
         expect(row).toHaveTextContent(`${mockApiKeysForFE.items[index].value.substring(0, 10)}...`);
@@ -190,7 +193,7 @@ describe('ApiKeys Page', () => {
       0,
       ApiKeyStatus.BLOCKED,
       ApiKeySetStatus.BLOCK,
-      result!,
+      result,
       'buttonBlock'
     );
   });
@@ -206,7 +209,7 @@ describe('ApiKeys Page', () => {
       1,
       ApiKeyStatus.ENABLED,
       ApiKeySetStatus.ENABLE,
-      result!,
+      result,
       'buttonEnable'
     );
   });
@@ -222,7 +225,7 @@ describe('ApiKeys Page', () => {
       0,
       ApiKeyStatus.ROTATED,
       ApiKeySetStatus.ROTATE,
-      result!,
+      result,
       'buttonRotate'
     );
   });
@@ -234,7 +237,7 @@ describe('ApiKeys Page', () => {
       result = render(<ApiKeys />);
     });
     mock.onDelete(DELETE_APIKEY(mockApiKeysForFE.items[1].id)).reply(200);
-    const contextMenuButton = result!.getAllByTestId('contextMenuButton')[1];
+    const contextMenuButton = result.getAllByTestId('contextMenuButton')[1];
     fireEvent.click(contextMenuButton);
     const actionButton = await waitFor(() => screen.getByTestId('buttonDelete'));
     fireEvent.click(actionButton);
@@ -263,6 +266,6 @@ describe('ApiKeys Page', () => {
         </>
       );
     });
-    expect(result?.container).toHaveTextContent('error-fecth-api-keys');
+    expect(result.container).toHaveTextContent('error-fecth-api-keys');
   });
 });

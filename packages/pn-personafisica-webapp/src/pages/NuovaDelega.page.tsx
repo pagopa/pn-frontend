@@ -56,7 +56,7 @@ import { trackEventByType } from '../utility/mixpanel';
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
   fieldError: undefined | string | FormikErrors<TError> | Array<string>
-) => fieldTouched && fieldError;
+) => Boolean(fieldTouched) && fieldError && String(fieldError);
 
 const NuovaDelega = () => {
   const { t, i18n } = useTranslation(['deleghe', 'common']);
@@ -456,7 +456,7 @@ const NuovaDelega = () => {
                           <CustomDatePicker
                             language={i18n.language}
                             label={t('nuovaDelega.form.endDate')}
-                            inputFormat={DATE_FORMAT}
+                            format={DATE_FORMAT}
                             value={values.expirationDate && new Date(values.expirationDate)}
                             minDate={tomorrow}
                             onChange={(value: DatePickerTypes) => {
@@ -464,24 +464,22 @@ const NuovaDelega = () => {
                               setFieldValue('expirationDate', value);
                             }}
                             shouldDisableDate={isToday}
-                            renderInput={(params) => (
-                              <TextField
-                                id="expirationDate"
-                                name="expirationDate"
-                                {...params}
-                                aria-label="Data termine delega" // aria-label for (TextField + Button) Group
-                                inputProps={{
-                                  ...params.inputProps,
+                            slotProps={{
+                              textField: {
+                                id: 'expirationDate',
+                                name: 'expirationDate',
+                                'aria-label': t('nuovaDelega.form.endDate-aria-label'), // aria-label for (TextField + Button) Group
+                                inputProps: {
                                   inputMode: 'text',
-                                  'aria-label': 'Inserisci la data di termine della delega',
+                                  'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),
                                   type: 'text',
-                                }}
-                                error={Boolean(
+                                },
+                                error: Boolean(
                                   getError(touched.expirationDate, errors.expirationDate)
-                                )}
-                                helperText={getError(touched.expirationDate, errors.expirationDate)}
-                              />
-                            )}
+                                ),
+                                helperText: getError(touched.expirationDate, errors.expirationDate),
+                              },
+                            }}
                             disablePast={true}
                           />
                         </FormControl>

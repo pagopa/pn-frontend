@@ -30,10 +30,12 @@ import { TrackEventType } from '../../utility/events';
 import { trackEventByType } from '../../utility/mixpanel';
 import DelegatorsDataSwitch from './DelegationDataSwitch';
 
-const LinkAddDelegate: React.FC<{ handleAddDelegationClick: (source: string) => void }> = ({
-  children,
-  handleAddDelegationClick,
-}) => {
+type Props = {
+  handleAddDelegationClick: (source: string) => void;
+  children?: React.ReactNode;
+};
+
+const LinkAddDelegate: React.FC<Props> = ({ children, handleAddDelegationClick }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <Link

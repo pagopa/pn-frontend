@@ -7,6 +7,7 @@ type Props = {
   sx?: SxProps<Theme>;
   hasCounterBadge?: boolean;
   bagdeCount?: number;
+  children?: React.ReactNode;
 };
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({

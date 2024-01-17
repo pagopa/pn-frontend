@@ -2,22 +2,16 @@ import _ from 'lodash';
 import { FC, ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Typography,
-} from '@mui/material';
+import { Box, Button, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
   DisclaimerModal,
   ErrorMessage,
+  PnDialog,
+  PnDialogActions,
+  PnDialogContent,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -64,7 +58,7 @@ const eventAttributes = (isSpecialContact?: boolean) => ({
   other_contact: isSpecialContact ? 'yes' : 'no',
 });
 
-const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
+const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
@@ -339,12 +333,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             ` ${modalProps.value}`
           }
           subtitle={
-            <Typography variant="body1">
-              <Trans
-                i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
-                ns="recapiti"
-              />
-            </Typography>
+            <Trans
+              i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+              ns="recapiti"
+            />
           }
           open={open}
           initialValues={new Array(5).fill('')}
@@ -380,7 +372,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           errorMessage={errorMessage?.content}
         />
       )}
-      <Dialog
+      <PnDialog
         open={isConfirmationModalVisible}
         onClose={handleDiscard}
         aria-labelledby="dialog-title"
@@ -390,32 +382,34 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         <DialogTitle id="dialog-title">
           {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
         </DialogTitle>
-        <DialogContent>
+        <PnDialogContent>
           <DialogContentText id="dialog-description">
             {t(`common.duplicate-contact-descr`, { value: modalProps.value, ns: 'recapiti' })}
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
+        </PnDialogContent>
+        <PnDialogActions>
           <Button onClick={handleDiscard} variant="outlined">
             {t('button.annulla')}
           </Button>
           <Button onClick={handleConfirm} variant="contained">
             {t('button.conferma')}
           </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
+        </PnDialogActions>
+      </PnDialog>
+      <PnDialog
         open={pecValidationOpen}
         data-testid="validationDialog"
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title" sx={{ pt: 4, px: 4 }}>
+        <DialogTitle id="dialog-title">
           {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
-        <DialogContent sx={{ px: 4 }}>
-          {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
-        </DialogContent>
-        <DialogActions sx={{ pb: 4, px: 4 }}>
+        <PnDialogContent>
+          <DialogContentText>
+            {t('legal-contacts.validation-progress-content', { ns: 'recapiti' })}
+          </DialogContentText>
+        </PnDialogContent>
+        <PnDialogActions>
           <Button
             id="confirmDialog"
             onClick={() => setPecValidationOpen(false)}
@@ -423,8 +417,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           >
             {t('button.conferma')}
           </Button>
-        </DialogActions>
-      </Dialog>
+        </PnDialogActions>
+      </PnDialog>
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };

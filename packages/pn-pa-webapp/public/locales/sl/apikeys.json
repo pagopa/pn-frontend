@@ -1,12 +1,6 @@
 {
   "title": "Ključ API",
-  "subtitle": {
-    "text1": "SEND ponuja API za ",
-    "text2": "pošiljanje obvestil",
-    "text3": " in ",
-    "text4": "dostop do informacij",
-    "text5": " o njihovem stanju. Tukaj lahko ustvarite in upravljate ključe API, ki se uporabljajo za preverjanje pristnosti zahtev organizacije."
-  },
+  "subtitle": "SEND ponuja API za <0>pošiljanje obvestil in dostop do informacij</0> o njihovem stanju. Tukaj lahko ustvarite in upravljate ključe API, ki se uporabljajo za preverjanje pristnosti zahtev organizacije.",
   "error-fecth-api-keys": "Seznama ključev API ni bilo mogoče pridobiti",
   "api-key-succesfully-generated": "Ključ API je bil uspešno ustvarjen!",
   "copy-the-api-key": "Če želite omogočiti integracijo, kopirajte kodo in jo vnesite v lastniško platformo organizacije.",

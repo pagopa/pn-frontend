@@ -4,8 +4,8 @@
     "module": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
-    "noEmit": true,
     "strict": true,
+    "noEmit": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
@@ -24,14 +24,5 @@
     "resolveJsonModule": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "__mocks__",
-    "**/__mocks__/*",
-    "dist",
-    "lib",
-    "node_modules",
-    "**/__tests__/*",
-    "**/__test__/*",
-    "src/setupTests.ts"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

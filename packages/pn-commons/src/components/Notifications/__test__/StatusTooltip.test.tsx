@@ -1,4 +1,4 @@
-import React from 'react';
+import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import StatusTooltip from '../StatusTooltip';
@@ -6,7 +6,7 @@ import StatusTooltip from '../StatusTooltip';
 const tooltip = 'mocked tooltip test';
 const label = 'mocked label';
 const classRoot = 'MuiChip-color';
-const mockEventTrackingCallback = jest.fn();
+const mockEventTrackingCallback = vi.fn();
 
 async function testStatusTooltip(
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'

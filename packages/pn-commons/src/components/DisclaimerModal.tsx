@@ -1,18 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-} from '@mui/material';
+import { Box, Button, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
 
-import { useIsMobile } from '../hooks';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import PnDialog from './PnDialog/PnDialog';
+import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   onConfirm: () => void;
@@ -31,8 +24,6 @@ const DisclaimerModal: React.FC<Props> = ({
   content,
   checkboxLabel,
 }) => {
-  const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const [checked, setChecked] = useState(false);
   const disabledConfirm = !checked && !!checkboxLabel;
 
@@ -41,12 +32,12 @@ const DisclaimerModal: React.FC<Props> = ({
   };
 
   return (
-    <Dialog open={true} data-testid="disclaimerDialog">
-      {title && <DialogTitle sx={{ p: 4, pb: 2 }}>{title}</DialogTitle>}
-      <DialogContent sx={{ p: 4 }}>
+    <PnDialog open={true} data-testid="disclaimerDialog">
+      {title && <DialogTitle>{title}</DialogTitle>}
+      <PnDialogContent>
         {content && <Box>{content}</Box>}
         {checkboxLabel && (
-          <Box sx={{ mt: 2, ml: 0.5 }}>
+          <Box sx={{ mt: 2 }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -60,21 +51,12 @@ const DisclaimerModal: React.FC<Props> = ({
             />
           </Box>
         )}
-      </DialogContent>
-      <DialogActions
-        disableSpacing={isMobile}
-        sx={{
-          textAlign: textPosition,
-          flexDirection: isMobile ? 'column-reverse' : 'row',
-          p: 4,
-          pt: 0,
-        }}
-      >
+      </PnDialogContent>
+      <PnDialogActions>
         <Button
           id="cancelButton"
           variant="outlined"
           onClick={onCancel}
-          fullWidth={isMobile}
           data-testid="disclaimer-cancel-button"
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
@@ -84,14 +66,12 @@ const DisclaimerModal: React.FC<Props> = ({
           variant="contained"
           onClick={onConfirm}
           disabled={disabledConfirm}
-          fullWidth={isMobile}
           data-testid="disclaimer-confirm-button"
-          sx={{ mb: isMobile ? 2 : 0 }}
         >
           {confirmLabel}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </PnDialogActions>
+    </PnDialog>
   );
 };
 
