@@ -1,6 +1,0 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Box, Typography } from '@mui/material';
-import { IllusInProgress } from '@pagopa/mui-italia';
-import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-const AppNotAccessible = ({ onAssistanceClick }) => (_jsx(Box, { sx: { minHeight: '350px', height: '100%', display: 'flex' }, children: _jsxs(Box, { sx: { margin: 'auto', textAlign: 'center', width: '80vw' }, children: [_jsx(IllusInProgress, {}), _jsx(Typography, { variant: "h4", color: "text.primary", sx: { margin: '20px 0 10px 0' }, children: getLocalizedOrDefaultLabel('common', 'not-accessible.title', 'Non è possibile accedere alla piattaforma') }), _jsx(Typography, { variant: "body1", color: "text.primary", display: "inline", children: getLocalizedOrDefaultLabel('common', 'not-accessible.description', 'Riprova tra qualche ora. Se hai bisogno di assistenza') }), "\u00A0", _jsx(Typography, { variant: "body1", color: "primary", display: "inline", fontWeight: "700", sx: { cursor: 'pointer', textDecoration: 'underline' }, onClick: onAssistanceClick, "data-testid": "assistance-button", children: `${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.` })] }) }));
-export default AppNotAccessible;
