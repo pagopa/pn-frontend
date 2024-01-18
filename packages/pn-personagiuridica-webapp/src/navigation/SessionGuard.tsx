@@ -119,13 +119,14 @@ const SessionGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
-  const { hasApiErrors } = useErrors();
+  const { hasApiErrors, hasForbiddenError } = useErrors();
   const { WORK_IN_PROGRESS } = getConfiguration();
 
   // vedi il commentone in useProcess
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+  const hasAnyForbiddenError = hasForbiddenError();
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
@@ -250,6 +251,12 @@ const SessionGuard = () => {
       }
     };
   }, [isInitialized, isFinished]);
+
+  useEffect(() => {
+    if(hasAnyForbiddenError){
+      dispatch(logout());
+    }
+  }, [hasAnyForbiddenError])
 
   return <SessionGuardRender />;
 };

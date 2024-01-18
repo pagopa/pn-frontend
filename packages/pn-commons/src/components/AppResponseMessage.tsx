@@ -19,7 +19,7 @@ const AppResponseMessage = ({ eventTrackingToastErrorMessages }: Props) => {
   const dispatch = useDispatch();
 
   const showErrorMessage = (response: AppResponse) => {
-    const { errors, action, traceId } = response;
+    const { errors, action, traceId, status  } = response;
 
     errors?.forEach((error) => {
       if (eventTrackingToastErrorMessages) {
@@ -29,6 +29,7 @@ const AppResponseMessage = ({ eventTrackingToastErrorMessages }: Props) => {
         appStateActions.addError({
           title: error.message.title,
           message: error.message.content,
+          status: status,
           action,
         })
       );
