@@ -20,11 +20,11 @@ export default defineConfig(({ mode }) => {
       globals: true,
       setupFiles: './src/setupTests.ts',
       environment: 'jsdom',
-      reporters: ['vitest-sonar-reporter', 'default'],
+      reporters: ['vitest-sonar-reporter'],
       outputFile: 'test-report.xml',
       coverage: {
         provider: 'v8',
-        reporter: ['text', 'json', 'html'],
+        reporter: ['lcov'],
         exclude: ['src/models/**'],
         reportOnFailure: true,
       },
