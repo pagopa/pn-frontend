@@ -1,15 +1,15 @@
 {
   "name": "@pagopa-pn/pn-personafisica-webapp",
   "description": "SEND - Servizio Notifiche Digitali per il cittadino",
-  "version": "2.2.4",
+  "version": "2.3.0-RC.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.3",
+    "@mui/lab": "^5.0.0-alpha.140",
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.5",
-    "@mui/lab": "^5.0.0-alpha.140",
     "@mui/x-date-pickers": "^6.10.1",
     "@pagopa/mui-italia": "^1.1.0",
     "@reduxjs/toolkit": "^1.9.5",
