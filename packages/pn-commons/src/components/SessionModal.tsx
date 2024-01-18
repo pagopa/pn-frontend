@@ -67,7 +67,7 @@ const SessionModal: React.FC<Props> = ({
       data-testid="session-modal"
     >
       <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
-      <PnDialogContent>
+      <PnDialogContent sx={{ textAlign: 'center' }}>
         <DialogContentText id="session-dialog-description">{message}</DialogContentText>
       </PnDialogContent>
       {onConfirm && (
