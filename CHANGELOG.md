@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.3.0-RC.0...v2.3.0-RC.1) (2024-01-19)
+
+**Note:** Version bump only for package send-monorepo
+
+
+
+
+
 ## [2.2.4](https://github.com/pagopa/pn-frontend/compare/v2.2.4-RC.0...v2.2.4) (2024-01-12)
 
 **Note:** Version bump only for package send-monorepo
