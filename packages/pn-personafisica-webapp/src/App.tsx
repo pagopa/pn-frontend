@@ -236,8 +236,12 @@ const ActualApp = () => {
   });
 
   const handleUserLogout = () => {
+    const isPpOrTosPage =
+      path[1] === routes.PRIVACY_POLICY.split('/')[1] ||
+      path[1] === routes.TERMS_OF_SERVICE.split('/')[1];
+
     void dispatch(logout());
-    goToLoginPortal();
+    !isPpOrTosPage && goToLoginPortal();
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
