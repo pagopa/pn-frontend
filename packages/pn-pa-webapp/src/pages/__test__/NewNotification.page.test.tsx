@@ -261,6 +261,55 @@ describe('NewNotification Page without payment', async () => {
     const finalStep = result.getByTestId('finalStep');
     expect(finalStep).toBeInTheDocument();
   });
+
+  it.only('notification failed for duplicated protocol number', async () => {
+    const mappedNotification = newNotificationMapper(newNotification);
+    const mockResponse = {
+      errors: [
+        {
+          code: 'PN_GENERIC_INVALIDPARAMETER_DUPLICATED',
+        },
+      ],
+    };
+    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(409, mockResponse);
+
+    await act(async () => {
+      result = render(<NewNotification />, {
+        preloadedState: {
+          newNotificationState: { notification: newNotification, groups: [] },
+          userState: { user: userResponse },
+        },
+      });
+    });
+    // STEP 1
+    let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+    // STEP 2
+    await waitFor(() => {
+      expect(preliminaryInformation).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const recipientForm = result.getByTestId('recipientForm');
+    expect(recipientForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+    // STEP 3
+    await waitFor(() => {
+      expect(recipientForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const attachmentsForm = result.getByTestId('attachmentsForm');
+    expect(attachmentsForm).toBeInTheDocument();
+    // FINAL
+    fireEvent.click(buttonSubmit);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+    });
+
+    // ci aspettiamo che il toast di errore sia nel documento
+  });
 });
 
 // TODO: to be enriched when payment is enabled again
