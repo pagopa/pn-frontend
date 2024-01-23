@@ -41,6 +41,7 @@ const DisclaimerModal: React.FC<Props> = ({
             <FormControlLabel
               control={
                 <Checkbox
+                  id="checkbox-agree"
                   checked={checked}
                   onChange={handleChange}
                   data-testid="disclaimer-checkbox"
@@ -52,10 +53,16 @@ const DisclaimerModal: React.FC<Props> = ({
         )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button variant="outlined" onClick={onCancel} data-testid="disclaimer-cancel-button">
+        <Button
+          id="cancelButton"
+          variant="outlined"
+          onClick={onCancel}
+          data-testid="disclaimer-cancel-button"
+        >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </Button>
         <Button
+          id="confirmButton"
           variant="contained"
           onClick={onConfirm}
           disabled={disabledConfirm}
