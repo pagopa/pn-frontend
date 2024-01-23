@@ -2,6 +2,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import { AppMessage, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
@@ -262,9 +264,11 @@ describe('NewNotification Page without payment', async () => {
     expect(finalStep).toBeInTheDocument();
   });
 
-  it.only('notification failed for duplicated protocol number', async () => {
+  it('notification failed for duplicated protocol number', async () => {
     const mappedNotification = newNotificationMapper(newNotification);
     const mockResponse = {
+      type: 'GENERIC_ERROR',
+      status: 409,
       errors: [
         {
           code: 'PN_GENERIC_INVALIDPARAMETER_DUPLICATED',
@@ -274,12 +278,20 @@ describe('NewNotification Page without payment', async () => {
     mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(409, mockResponse);
 
     await act(async () => {
-      result = render(<NewNotification />, {
-        preloadedState: {
-          newNotificationState: { notification: newNotification, groups: [] },
-          userState: { user: userResponse },
-        },
-      });
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <AppMessage />
+          <NewNotification />
+        </>,
+        {
+          preloadedState: {
+            newNotificationState: { notification: newNotification, groups: [] },
+            userState: { user: userResponse },
+          },
+        }
+      );
     });
     // STEP 1
     let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
@@ -307,8 +319,12 @@ describe('NewNotification Page without payment', async () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
     });
+    const finalStep = result.queryByTestId('finalStep');
+    expect(finalStep).not.toBeInTheDocument();
 
-    // ci aspettiamo che il toast di errore sia nel documento
+    // check if toast is in the document
+    const snackBar = await waitFor(() => result.getByTestId('snackBarContainer'));
+    expect(snackBar).toBeInTheDocument();
   });
 });
 
