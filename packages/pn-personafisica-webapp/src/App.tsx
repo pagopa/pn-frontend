@@ -27,7 +27,7 @@ import {
 import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
-import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentEventTypePage } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -236,12 +236,7 @@ const ActualApp = () => {
   });
 
   const handleUserLogout = () => {
-    const isPpOrTosPage =
-      path[1] === routes.PRIVACY_POLICY.split('/')[1] ||
-      path[1] === routes.TERMS_OF_SERVICE.split('/')[1];
-
     void dispatch(logout());
-    !isPpOrTosPage && goToLoginPortal();
   };
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
