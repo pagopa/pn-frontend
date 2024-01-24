@@ -102,13 +102,13 @@ const NewNotification = () => {
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
         .catch((e) => {
-          console.log(e);
+          console.debug(e);
           /** Without this catch vitest return errors of unhandle errors.
            * The error is handled in other parts of the application with
            * the appearance of a toast with the related error, but it's
            * necessary to use this catch here too.
            *
-           * Sarah Donvito, 2024.01.23
+           * Sarah Donvito e Carlos Lombardi, 2024.01.23
            */
         });
     }
