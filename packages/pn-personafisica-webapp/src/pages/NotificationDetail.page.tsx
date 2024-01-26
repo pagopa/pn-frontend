@@ -156,7 +156,7 @@ const NotificationDetail = () => {
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
-  const legalFactDownloadAARetryAfter = useAppSelector(
+  const legalFactDownloadAARRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
   );
 
@@ -393,7 +393,7 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARetryAfter * 1000;
+  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
