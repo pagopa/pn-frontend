@@ -56,6 +56,7 @@ export enum TrackEventType {
   SEND_TOAST_ERROR = 'SEND_TOAST_ERROR',
   SEND_GENERIC_ERROR = 'SEND_GENERIC_ERROR',
   SEND_F24_DOWNLOAD_TIMEOUT = 'SEND_F24_DOWNLOAD_TIMEOUT',
+  SEND_DOWNLOAD_RESPONSE = 'SEND_DOWNLOAD_RESPONSE',
 }
 
 export const events: EventsType = {
@@ -273,4 +274,15 @@ export const events: EventsType = {
   [TrackEventType.SEND_F24_DOWNLOAD_TIMEOUT]: {
     event_category: EventCategory.TECH,
   },
+  [TrackEventType.SEND_DOWNLOAD_RESPONSE]: {
+    event_category: EventCategory.TECH,
+    // TODO gestire questa function
+    // getAttributes(payload: {url: string; retryAfter?:number}) {
+    //   return {doc_type: "AAR", url_available: payload.url ? 'ready' : 'retry_after'};
+    // }
+  },
+};
+
+export const eventsActionsMap: Record<string, TrackEventType> = {
+  'getReceivedNotificationOtherDocument/fulfilled': TrackEventType.SEND_DOWNLOAD_RESPONSE
 };

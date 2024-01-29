@@ -32,22 +32,24 @@ export const interceptDispatch =
     next: Dispatch<AnyAction>,
     trackEventType: { [s: number]: string },
     events: EventsType,
+    eventsActionsMap: Record<string, string>,
     nodeEnv: string
   ) =>
-  (action: PayloadAction<any, string>): any => {
-    if (action.type in events) {
-      const idx = Object.values(trackEventType).indexOf(action.type as string);
-      const eventKey = Object.keys(trackEventType)[idx];
-      const attributes = events[action.type].getAttributes?.(action.payload);
-      const eventParameters = attributes
-        ? {
-            event_category: events[action.type].event_category,
-            event_type: events[action.type].event_type,
+    (action: PayloadAction<any, string>): any => {
+      if (eventsActionsMap[action.type]) {
+        // const idx = Object.values(trackEventType).indexOf(action.type as string);
+        const eventKey = eventsActionsMap[action.type];
+        // TODO check payload
+        const attributes = events[eventKey].getAttributes?.(action.payload);
+        const eventParameters = attributes
+          ? {
+            event_category: events[eventKey].event_category,
+            event_type: events[eventKey].event_type,
             ...attributes,
           }
-        : events[action.type];
-      trackEvent(eventKey, nodeEnv, eventParameters);
-    }
+          : events[eventKey];
+        trackEvent(eventKey, nodeEnv, eventParameters);
+      }
 
-    return next(action);
-  };
+      return next(action);
+    };
