@@ -276,10 +276,10 @@ export const events: EventsType = {
   },
   [TrackEventType.SEND_DOWNLOAD_RESPONSE]: {
     event_category: EventCategory.TECH,
-    // TODO gestire questa function
-    // getAttributes(payload: {url: string; retryAfter?:number}) {
-    //   return {doc_type: "AAR", url_available: payload.url ? 'ready' : 'retry_after'};
-    // }
+    // TODO gestire: il doct_type e il type del metodo
+    getAttributes(payload: {url: string; retryAfter?: number}): Record<string, string> {
+      return { doc_type: "AAR", url_available: payload.url ? 'ready' : 'retry_after' };
+    }
   },
 };
 

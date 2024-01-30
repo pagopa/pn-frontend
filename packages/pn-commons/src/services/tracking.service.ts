@@ -30,7 +30,6 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 export const interceptDispatch =
   (
     next: Dispatch<AnyAction>,
-    trackEventType: { [s: number]: string },
     events: EventsType,
     eventsActionsMap: Record<string, string>,
     nodeEnv: string
