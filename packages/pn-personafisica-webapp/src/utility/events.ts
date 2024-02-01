@@ -276,13 +276,13 @@ export const events: EventsType = {
   },
   [TrackEventType.SEND_DOWNLOAD_RESPONSE]: {
     event_category: EventCategory.TECH,
-    // TODO gestire: il doct_type e il type del metodo
-    getAttributes(payload: {url: string; retryAfter?: number}): Record<string, string> {
-      return { doc_type: "AAR", url_available: payload.url ? 'ready' : 'retry_after' };
+    getAttributes(payload: { url: string; retryAfter?: number; docType?: string }): Record<string, string> {
+      return { doc_type: payload.docType ? payload.docType : "", url_available: payload.url ? 'ready' : 'retry_after' };
     }
   },
 };
 
 export const eventsActionsMap: Record<string, TrackEventType> = {
-  'getReceivedNotificationOtherDocument/fulfilled': TrackEventType.SEND_DOWNLOAD_RESPONSE
+  'getReceivedNotificationOtherDocument/fulfilled': TrackEventType.SEND_DOWNLOAD_RESPONSE,
+  'getReceivedNotificationLegalfact/fulfilled': TrackEventType.SEND_DOWNLOAD_RESPONSE
 };
