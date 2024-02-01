@@ -92,6 +92,8 @@ const currentRecipient = notificationDTO.recipients.find((rec) => rec.taxId);
 
 describe('Notification detail redux state tests', () => {
   let mock: MockAdapter;
+  
+  const mockedUrl = 'http://mocked-url.com';
   mockAuthentication();
 
   beforeAll(() => {
@@ -147,10 +149,10 @@ describe('Notification detail redux state tests', () => {
     const documentIndex = '0';
     mock
       .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: 'http://mocked-url.com' });
+      .reply(200, { url: mockedUrl });
     const action = await store.dispatch(getReceivedNotificationDocument({ iun, documentIndex }));
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
-    expect(action.payload).toEqual({ url: 'http://mocked-url.com' });
+    expect(action.payload).toEqual({ url: mockedUrl });
   });
 
   it('Should be able to fetch the notification other document', async () => {
@@ -161,12 +163,12 @@ describe('Notification detail redux state tests', () => {
     };
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
-      .reply(200, { url: 'http://mocked-url.com' });
+      .reply(200, { url: mockedUrl });
     const action = await store.dispatch(
       getReceivedNotificationOtherDocument({ iun, otherDocument })
     );
     expect(action.type).toBe('getReceivedNotificationOtherDocument/fulfilled');
-    expect(action.payload).toEqual({ url: 'http://mocked-url.com' });
+    expect(action.payload).toEqual({ url: mockedUrl, docType: "AAR" });
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
@@ -177,10 +179,10 @@ describe('Notification detail redux state tests', () => {
     };
     mock
       .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .reply(200, { url: 'http://mocked-url.com', retryAfter: true });
+      .reply(200, { url: mockedUrl, retryAfter: 1000 });
     const action = await store.dispatch(getReceivedNotificationLegalfact({ iun, legalFact }));
     expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
-    expect(action.payload).toEqual({ url: 'http://mocked-url.com', retryAfter: true });
+    expect(action.payload).toEqual({ url: mockedUrl, retryAfter: 1000, docType: "AO3" });
   });
 
   it('Should be able to reset state', () => {

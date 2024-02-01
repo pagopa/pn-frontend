@@ -31,7 +31,7 @@ import {
 
 const getDownloadUrl = (response: AxiosResponse, docType?: DocType): DownloadFileResponse => {
   if (response.data) {
-    return { url: response.data.url, retryAfter: response.data.retryAfter, docType } as DownloadFileResponse;
+    return { ...response.data, docType } as DownloadFileResponse;
   }
   return { url: '' } as DownloadFileResponse;
 };
