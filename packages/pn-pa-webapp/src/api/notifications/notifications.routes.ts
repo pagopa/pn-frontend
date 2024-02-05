@@ -28,8 +28,6 @@ const API_NOTIFICATIONS_REQUESTS = 'requests';
 const API_NOTIFICATIONS_PA = 'pa';
 const API_VERSION_SEGMENT = 'v1';
 const API_VERSION_SEGMENT_2_0 = 'v2.0';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const API_VERSION_SEGMENT_2_1 = 'v2.1';
 const API_VERSION_SEGMENT_2_3 = 'v2.3';
 const API_NOTIFICATIONS_GROUPS = 'groups';
 const API_NOTIFICATIONS_PAYMENT = 'payment';
