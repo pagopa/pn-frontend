@@ -396,7 +396,11 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           </Button>
         </PnDialogActions>
       </PnDialog>
-      <PnDialog open={pecValidationOpen} data-testid="validationDialog">
+      <PnDialog
+        open={pecValidationOpen}
+        data-testid="validationDialog"
+        aria-labelledby="dialog-title"
+      >
         <DialogTitle id="dialog-title">
           {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
@@ -406,7 +410,11 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
           </DialogContentText>
         </PnDialogContent>
         <PnDialogActions>
-          <Button onClick={() => setPecValidationOpen(false)} variant="contained">
+          <Button
+            id="confirmDialog"
+            onClick={() => setPecValidationOpen(false)}
+            variant="contained"
+          >
             {t('button.conferma')}
           </Button>
         </PnDialogActions>

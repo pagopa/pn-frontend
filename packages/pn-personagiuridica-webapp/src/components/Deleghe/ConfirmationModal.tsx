@@ -25,6 +25,7 @@ export default function ConfirmationModal({
 }: Props) {
   return (
     <PnDialog
+      id="confirmation-dialog"
       open={open}
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"

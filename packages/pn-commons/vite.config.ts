@@ -17,7 +17,7 @@ export default defineConfig(() => {
       outputFile: 'test-report.xml',
       coverage: {
         provider: 'v8',
-        reporter: ['text', 'json', 'html'],
+        reporter: ['lcov'],
         exclude: ['**/*.a11y.test.ts', '**/*.a11y.test.tsx'],
         reportOnFailure: true,
       },

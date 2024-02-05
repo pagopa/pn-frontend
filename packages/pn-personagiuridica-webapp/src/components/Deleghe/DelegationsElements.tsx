@@ -275,6 +275,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
       )}
 
       <IconButton
+        id={`delegation-menu-icon-${id}`}
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label="menu-aria-label"
@@ -282,6 +283,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
       <MUIMenu
+        id={`delegation-menu-${id}`}
         anchorEl={anchorEl}
         open={openMenu}
         onClose={handleClose}

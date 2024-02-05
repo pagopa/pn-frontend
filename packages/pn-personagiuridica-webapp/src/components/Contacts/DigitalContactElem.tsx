@@ -29,6 +29,7 @@ type Props = {
     id: string;
     isEditable?: boolean;
     size: 'auto' | 'variable';
+    key: string;
   }>;
   recipientId: string;
   senderId: string;
@@ -71,10 +72,10 @@ const DeleteDialog: React.FC<DialogProps> = ({
     </Button>
   ) : (
     [
-      <Button key="cancel" onClick={handleModalClose} variant="outlined">
+      <Button id="buttonAnnulla" key="cancel" onClick={handleModalClose} variant="outlined">
         {t('button.annulla')}
       </Button>,
-      <Button key="confirm" onClick={confirmHandler} variant="contained">
+      <Button id="buttonConferma" key="confirm" onClick={confirmHandler} variant="contained">
         {t('button.conferma')}
       </Button>,
     ]
@@ -123,7 +124,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
     const mappedChildren = fields.map((f) => (
-      <Grid key={f.id} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
+      <Grid key={f.key} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
         {!f.isEditable && f.component}
         {f.isEditable && editMode && f.component}
         {f.isEditable && !editMode && (
@@ -131,6 +132,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
             sx={{
               wordBreak: 'break-word',
             }}
+            id={f.id}
           >
             {(f.component as any).props.value}
           </Typography>
@@ -210,10 +212,16 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   onClick={toggleEdit}
                   sx={{ marginRight: '10px' }}
                   disabled={editDisabled}
+                  id={`modifyContact-${senderId}`}
                 >
                   {t('button.modifica')}
                 </ButtonNaked>
-                <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
+                <ButtonNaked
+                  id={`cancelContact-${senderId}`}
+                  color="primary"
+                  onClick={removeHandler}
+                  disabled={editDisabled}
+                >
                   {t('button.elimina')}
                 </ButtonNaked>
               </>
@@ -225,6 +233,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   type="button"
                   onClick={editHandler}
                   sx={{ marginRight: '10px' }}
+                  id={`saveModifyButton-${senderId}`}
                 >
                   {t('button.salva')}
                 </ButtonNaked>
