@@ -29,7 +29,7 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_DETAIL', () => {
     const route = NOTIFICATION_DETAIL('mocked-iun');
-    expect(route).toEqual('/delivery/v2.1/notifications/sent/mocked-iun');
+    expect(route).toEqual('/delivery/v2.3/notifications/sent/mocked-iun');
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
@@ -65,7 +65,7 @@ describe('Notifications routes', () => {
 
   it('should compile CREATE_NOTIFICATION', () => {
     const route = CREATE_NOTIFICATION();
-    expect(route).toEqual('/delivery/v2.1/requests');
+    expect(route).toEqual('/delivery/v2.3/requests');
   });
 
   it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {
