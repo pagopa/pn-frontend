@@ -16,6 +16,7 @@ const API_EXTERNAL_REGISTRY_PREFIX = 'ext-registry';
 // Segments
 const API_VERSION_SEGMENT = 'v1';
 const API_VERSION_V2_1_SEGMENT = 'v2.1';
+const API_VERSION_V2_3_SEGMENT = 'v2.3';
 const API_NOTIFICATIONS_BASE = 'notifications';
 const API_NOTIFICATIONS_RECEIVED = 'received';
 const API_NOTIFICATIONS_DOCUMENTS = 'documents';
@@ -81,7 +82,7 @@ export function NOTIFICATIONS_LIST(params: GetNotificationsParams<string>) {
 export function NOTIFICATION_DETAIL(iun: string, mandateId?: string) {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
-    version: API_VERSION_V2_1_SEGMENT,
+    version: API_VERSION_V2_3_SEGMENT,
     path: API_NOTIFICATION_DETAIL_PATH,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
