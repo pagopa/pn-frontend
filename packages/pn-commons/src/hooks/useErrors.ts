@@ -6,9 +6,9 @@ import { appStateSelectors } from '../redux';
 /**
  * A custom React hook for handling and checking API errors in the application state.
  *
- * @returns {Object} An object containing the `hasApiErrors` function.
+ * @returns {Object} An object containing the `hasApiErrors` and `hasSpecificStatusError` function.
  */
-export function useErrors(): { hasApiErrors: (actionType?: string) => boolean, hasForbiddenError: (actionType?: string) => boolean } {
+export function useErrors(): { hasApiErrors: (actionType?: string) => boolean; hasSpecificStatusError: (status: number, actionType?: string) => boolean } {
   const errors = useSelector(appStateSelectors.selectErrors);
 
   function hasApiErrors(actionType?: string) {
@@ -17,11 +17,11 @@ export function useErrors(): { hasApiErrors: (actionType?: string) => boolean, h
       : !!errors.find((err: IAppMessage) => err.action != null);
   }
 
-  function hasForbiddenError(actionType?: string) {
+  function hasSpecificStatusError(status: number, actionType?: string) {
     return actionType
-      ? !!errors.find((err: IAppMessage) => err.action === actionType && err.status === 403)
-      : !!errors.find((err: IAppMessage) => err.action != null && err.status === 403);
+      ? !!errors.find((err: IAppMessage) => err.status === status && err.action === actionType)
+      : !!errors.find((err: IAppMessage) => err.status === status && err.action != null);
   }
 
-  return { hasApiErrors, hasForbiddenError };
+  return { hasApiErrors, hasSpecificStatusError };
 }

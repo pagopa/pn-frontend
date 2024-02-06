@@ -61,17 +61,21 @@ const SessionGuardRender = () => {
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
+  const hasErrorMessage = {
+    title: hasTosApiErrors
+      ? t('error-when-fetching-tos-status.title')
+      : t('leaving-app.title'), message: hasTosApiErrors
+        ? t('error-when-fetching-tos-status.message')
+        : t('leaving-app.message')
+  };
+
   const goodbyeMessage = {
     title: isUnauthorizedUser
       ? messageUnauthorizedUser.title
-      : hasTosApiErrors
-      ? t('error-when-fetching-tos-status.title')
-      : t('leaving-app.title'),
+      : hasErrorMessage.title,
     message: isUnauthorizedUser
       ? messageUnauthorizedUser.message
-      : hasTosApiErrors
-      ? t('error-when-fetching-tos-status.message')
-      : t('leaving-app.message'),
+      : hasErrorMessage.message,
   };
 
   const renderIfInitialized = () =>
@@ -109,13 +113,13 @@ const SessionGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
-  const { hasApiErrors, hasForbiddenError } = useErrors();
+  const { hasApiErrors, hasSpecificStatusError } = useErrors();
   const { WORK_IN_PROGRESS } = getConfiguration();
 
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
-  const hasAnyForbiddenError = hasForbiddenError();
+  const hasAnyForbiddenError = hasSpecificStatusError(403);
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
@@ -189,12 +193,12 @@ const SessionGuard = () => {
       }
     };
   }, [isInitialized, isFinished]);
-  
+
   useEffect(() => {
-    if(hasAnyForbiddenError){
-      dispatch(logout());
+    if (hasAnyForbiddenError) {
+      void dispatch(logout());
     }
-  }, [hasAnyForbiddenError])
+  }, [hasAnyForbiddenError]);
 
   return <SessionGuardRender />;
 };
