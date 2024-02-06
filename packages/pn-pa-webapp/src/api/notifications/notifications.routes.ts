@@ -28,7 +28,7 @@ const API_NOTIFICATIONS_REQUESTS = 'requests';
 const API_NOTIFICATIONS_PA = 'pa';
 const API_VERSION_SEGMENT = 'v1';
 const API_VERSION_SEGMENT_2_0 = 'v2.0';
-const API_VERSION_SEGMENT_2_1 = 'v2.1';
+const API_VERSION_SEGMENT_2_3 = 'v2.3';
 const API_NOTIFICATIONS_GROUPS = 'groups';
 const API_NOTIFICATIONS_PAYMENT = 'payment';
 
@@ -86,7 +86,7 @@ export function NOTIFICATION_DETAIL(iun: string) {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_DETAIL_PATH,
-    version: API_VERSION_SEGMENT_2_1,
+    version: API_VERSION_SEGMENT_2_3,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
     },
@@ -151,7 +151,7 @@ export function NOTIFICATION_PRELOAD_DOCUMENT() {
 export function CREATE_NOTIFICATION() {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
-    version: API_VERSION_SEGMENT_2_1,
+    version: API_VERSION_SEGMENT_2_3,
     path: API_NOTIFICATIONS_REQUESTS,
   });
 }
