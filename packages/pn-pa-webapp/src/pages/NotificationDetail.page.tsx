@@ -317,7 +317,7 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarDownload">
                   <TimedMessage timeout={timeoutAARMessage}>
                     <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="aarNotAvailableAlert">
                       {t('detail.document-not-available', { ns: 'notifiche' })}
@@ -327,6 +327,10 @@ const NotificationDetail: React.FC = () => {
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
+                    disableDownloads={
+                      Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) >=
+                      315569520000
+                    }
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
