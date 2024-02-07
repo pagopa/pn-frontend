@@ -23,14 +23,13 @@ import {
   TimedMessage,
   TitleBox,
   formatDate,
-  formatToTimezoneString,
-  today,
   useDownloadDocument,
   useErrors,
   useHasPermissions,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { dateIsLessThan10Years } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -258,8 +257,7 @@ const NotificationDetail = () => {
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
       } else {
-        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
-          315569520000 // 10 years
+        return dateIsLessThan10Years(notification.sentAt)
           ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }

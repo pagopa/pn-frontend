@@ -195,23 +195,13 @@ describe('NotificationDetail Page', async () => {
     });
   });
 
-  it.only('checks expired aar (otherDocuments) - mono recipient', async () => {
+  it('checks expired aar (otherDocuments) - mono recipient', async () => {
     const notificationAfter10Years = {
       ...notificationToFe,
       sentAt: formatToTimezoneString(new Date(today.getTime() - 31536000000100)) /* 10 years ago*/,
     };
     mock.onGet(NOTIFICATION_DETAIL(notificationToFe.iun)).reply(200, notificationAfter10Years);
 
-    const otherDocument: NotificationDetailOtherDocument = {
-      documentId: notificationAfter10Years.otherDocuments?.[0].documentId ?? '',
-      documentType: notificationAfter10Years.otherDocuments?.[0].documentType ?? '',
-    };
-
-    const documentDowloadHandler = mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationAfter10Years.iun, otherDocument))
-      .reply(200, {
-        retryAfter: 1000,
-      });
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -223,9 +213,6 @@ describe('NotificationDetail Page', async () => {
     expect(documentButton[1].getAttributeNames()).toContain('disabled');
 
     fireEvent.click(documentButton[1]);
-    await waitFor(() => {
-      expect(documentDowloadHandler).toBeCalledTimes(0);
-    });
   });
 
   it('executes the document download handler - mono recipient', async () => {

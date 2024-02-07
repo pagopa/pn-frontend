@@ -19,13 +19,12 @@ import {
   TimedMessage,
   TitleBox,
   appStateActions,
-  formatToTimezoneString,
-  today,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { dateIsLessThan10Years } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
@@ -199,8 +198,7 @@ const NotificationDetail: React.FC = () => {
           ? t('detail.download-message-available', { ns: 'notifiche' })
           : t('detail.download-message-expired', { ns: 'notifiche' });
       } else {
-        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
-          315569520000 // 10 years
+        return dateIsLessThan10Years(notification.sentAt) // 10 years
           ? t('detail.download-aar-available', { ns: 'notifiche' })
           : t('detail.download-aar-expired', { ns: 'notifiche' });
       }
@@ -327,10 +325,7 @@ const NotificationDetail: React.FC = () => {
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
-                    disableDownloads={
-                      Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) >=
-                      315569520000
-                    }
+                    disableDownloads={!dateIsLessThan10Years(notification.sentAt)}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
