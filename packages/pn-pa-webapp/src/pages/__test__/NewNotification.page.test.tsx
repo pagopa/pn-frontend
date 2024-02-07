@@ -2,14 +2,28 @@ import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { AppMessage, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  AppResponseMessage,
+  ResponseEventDispatcher,
+  errorFactoryManager,
+} from '@pagopa-pn/pn-commons';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  prettyDOM,
+  render,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
+import { PAAppErrorFactory } from '../../utility/AppError/PAAppErrorFactory';
 import { newNotificationMapper } from '../../utility/notification.utility';
 import NewNotification from '../NewNotification.page';
 
@@ -278,20 +292,23 @@ describe('NewNotification Page without payment', async () => {
     mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(409, mockResponse);
 
     await act(async () => {
-      result = render(
-        <>
-          <ResponseEventDispatcher />
-          <AppResponseMessage />
-          <AppMessage />
-          <NewNotification />
-        </>,
-        {
-          preloadedState: {
-            newNotificationState: { notification: newNotification, groups: [] },
-            userState: { user: userResponse },
-          },
-        }
-      );
+      const Component = () => {
+        errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => `${path}.${ns}`);
+        return (
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <AppMessage />
+            <NewNotification />
+          </>
+        );
+      };
+      result = render(<Component />, {
+        preloadedState: {
+          newNotificationState: { notification: newNotification, groups: [] },
+          userState: { user: userResponse },
+        },
+      });
     });
     // STEP 1
     let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
