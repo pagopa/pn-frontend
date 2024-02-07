@@ -21,6 +21,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { RootState, store } from '../store';
 import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
 
@@ -128,6 +130,10 @@ export const getNotificationPaymentInfo = createAsyncThunk<
           const updatedPayment = await NotificationsApi.getNotificationPaymentInfo([
             paymentCache.currentPayment,
           ]);
+
+          trackEventByType(TrackEventType.SEND_PAYMENT_OUTCOME, {
+            outcome: updatedPayment[0].status,
+          });
 
           const payments = populatePaymentsPagoPaF24(
             notificationState.notification.timeline,
