@@ -126,6 +126,7 @@ export interface PrepareAnalogDomicileFailureDetails extends BaseDetails {
 
 interface BaseDetails {
   recIndex?: number;
+  eventTimestamp?: string;
 }
 
 interface DelegateInfo {
@@ -219,7 +220,6 @@ export interface PaidDetails extends BaseDetails {
   creditorTaxId: string;
   noticeCode: string;
   uncertainPaymentDate?: boolean;
-  eventTimestamp?: string;
 }
 
 // PN-1647
