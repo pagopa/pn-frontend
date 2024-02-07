@@ -219,6 +219,7 @@ export interface PaidDetails extends BaseDetails {
   creditorTaxId: string;
   noticeCode: string;
   uncertainPaymentDate?: boolean;
+  eventTimestamp?: string;
 }
 
 // PN-1647
