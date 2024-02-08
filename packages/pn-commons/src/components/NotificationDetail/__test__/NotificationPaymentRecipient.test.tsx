@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, prettyDOM, render, within } from '../../../test-utils';
+import { act, fireEvent, prettyDOM, render, waitFor, within } from '../../../test-utils';
 import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
@@ -381,8 +381,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it.only('should disable other button for downloading f24 document when another one is downloading', () => {
-    // renderizzare il componente con f24 multipli
+  it('should disable other button for downloading f24 document when another one is downloading', async () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -395,11 +394,12 @@ describe('NotificationPaymentRecipient Component', () => {
         landingSiteUrl=""
       />
     );
-    console.log('---------------------------------');
-    console.log(prettyDOM(result.queryAllByTestId('f24only-box')[0], 100000));
-    console.log('---------------------------------');
-
-    // cliccare su un button di download
-    // verificare che gli altri button abbiano tutti l'attributo disabled
+    const f24ButtonToClick = result.queryAllByTestId('download-f24-button')[0];
+    const f24ButtonToCheck = result.queryAllByTestId('download-f24-button')[1];
+    fireEvent.click(f24ButtonToClick);
+    await waitFor(() => {
+      expect(f24ButtonToClick.hasAttribute('disabled')).toBe(true);
+      expect(f24ButtonToCheck.hasAttribute('disabled')).toBe(true);
+    });
   });
 });
