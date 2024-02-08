@@ -16,10 +16,13 @@ import {
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+
+import { trackEventByType } from '../utility/mixpanel';
+import { TrackEventType } from '../utility/events';
+
 import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
-
 enum INITIALIZATION_STEPS {
   USER_DETERMINATION = 'UserDetermination',
   INITIAL_PAGE_DETERMINATION = 'InitialPageDetermination',
@@ -71,13 +74,13 @@ const SessionGuardRender = () => {
     title: isUnauthorizedUser
       ? messageUnauthorizedUser.title
       : hasTosApiErrors
-      ? t('error-when-fetching-tos-status.title')
-      : t('leaving-app.title'),
+        ? t('error-when-fetching-tos-status.title')
+        : t('leaving-app.title'),
     message: isUnauthorizedUser
       ? messageUnauthorizedUser.message
       : hasTosApiErrors
-      ? t('error-when-fetching-tos-status.message')
-      : t('leaving-app.message'),
+        ? t('error-when-fetching-tos-status.message')
+        : t('leaving-app.message'),
   };
 
   const renderIfInitialized = () =>
@@ -183,6 +186,7 @@ const SessionGuard = () => {
           // ----------------------
           // Andrea Cimini, 2023.01.27
           // ----------------------
+          trackEventByType(TrackEventType.SEND_AUTH_SUCCESS);
           navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
         } else {
           const hashAsObject = new URLSearchParams(location.hash);
@@ -197,6 +201,7 @@ const SessionGuard = () => {
           // ----------------------
           // Carlos Lombardi, 2022.12.27
           // ----------------------
+          trackEventByType(TrackEventType.SEND_AUTH_SUCCESS, { source: "QRcode" });
           const newHash = hashAsObject.toString().replace(/%23/g, '#');
           navigate(
             { pathname: location.pathname, search: location.search, hash: newHash },
