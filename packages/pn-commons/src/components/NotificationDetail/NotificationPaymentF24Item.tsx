@@ -22,6 +22,8 @@ type Props = {
   handleTrackDownloadF24?: () => void;
   handleTrackDownloadF24Success?: () => void;
   handleTrackDownloadF24Timeout?: () => void;
+  disableDownload: boolean;
+  handleDownload: (param: boolean) => any;
 };
 
 const NotificationPaymentF24Item: React.FC<Props> = ({
@@ -32,6 +34,8 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   handleTrackDownloadF24,
   handleTrackDownloadF24Success,
   handleTrackDownloadF24Timeout,
+  disableDownload,
+  handleDownload,
 }) => {
   const isMobile = useIsMobile();
   const [maxTimeError, setMaxTimeError] = useState<string | null>(null);
@@ -99,6 +103,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   }, []);
 
   const downloadF24 = () => {
+    handleDownload(true);
     setMaxTimeError(null);
     setDownloadingMessage('detail.payment.download-f24-in-progress');
     if (handleTrackDownloadF24) {
@@ -127,7 +132,12 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   const getElement = () => {
     if (!downloadingMessage) {
       return (
-        <ButtonNaked color="primary" onClick={downloadF24} data-testid="download-f24-button">
+        <ButtonNaked
+          color="primary"
+          onClick={disableDownload ? '' : downloadF24}
+          disabled={disableDownload}
+          data-testid="download-f24-button"
+        >
           <Download fontSize="small" sx={{ mr: 1 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </ButtonNaked>
