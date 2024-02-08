@@ -30,13 +30,13 @@ import {
   TimedMessage,
   TimelineCategory,
   TitleBox,
+  dateIsLessThan10Years,
   formatDate,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { dateIsLessThan10Years } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';

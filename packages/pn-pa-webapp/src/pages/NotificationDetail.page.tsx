@@ -19,12 +19,12 @@ import {
   TimedMessage,
   TitleBox,
   appStateActions,
+  dateIsLessThan10Years,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { dateIsLessThan10Years } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
