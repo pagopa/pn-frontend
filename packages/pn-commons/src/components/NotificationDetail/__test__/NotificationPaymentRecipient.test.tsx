@@ -381,7 +381,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it('should disable other button for downloading f24 document when another one is downloading', async () => {
+  it('should disable other button for downloading f24 document when another one is downloading', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
@@ -397,9 +397,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const f24ButtonToClick = result.queryAllByTestId('download-f24-button')[0];
     const f24ButtonToCheck = result.queryAllByTestId('download-f24-button')[1];
     fireEvent.click(f24ButtonToClick);
-    await waitFor(() => {
-      expect(f24ButtonToClick.hasAttribute('disabled')).toBe(true);
-      expect(f24ButtonToCheck.hasAttribute('disabled')).toBe(true);
-    });
+    expect(f24ButtonToClick.hasAttribute('disabled')).toBe(true);
+    expect(f24ButtonToCheck.hasAttribute('disabled')).toBe(true);
   });
 });
