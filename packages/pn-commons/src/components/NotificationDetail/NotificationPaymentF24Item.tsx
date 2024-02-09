@@ -103,6 +103,9 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
   }, []);
 
   const downloadF24 = () => {
+    if (disableDownload) {
+      return;
+    }
     handleDownload(true);
     setMaxTimeError(null);
     setDownloadingMessage('detail.payment.download-f24-in-progress');
@@ -134,7 +137,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
       return (
         <ButtonNaked
           color="primary"
-          onClick={disableDownload ? '' : downloadF24}
+          onClick={downloadF24}
           disabled={disableDownload}
           data-testid="download-f24-button"
         >

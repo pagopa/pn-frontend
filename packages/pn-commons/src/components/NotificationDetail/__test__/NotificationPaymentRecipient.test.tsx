@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
+import { act, fireEvent, render, within } from '../../../test-utils';
 import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
@@ -394,8 +394,9 @@ describe('NotificationPaymentRecipient Component', () => {
         landingSiteUrl=""
       />
     );
-    const f24ButtonToClick = result.queryAllByTestId('download-f24-button')[0];
-    const f24ButtonToCheck = result.queryAllByTestId('download-f24-button')[1];
+    const f24Buttons = result.queryAllByTestId('download-f24-button');
+    const f24ButtonToClick = f24Buttons[0];
+    const f24ButtonToCheck = f24Buttons[1];
     fireEvent.click(f24ButtonToClick);
     expect(f24ButtonToClick.hasAttribute('disabled')).toBe(true);
     expect(f24ButtonToCheck.hasAttribute('disabled')).toBe(true);
