@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
-import { act, fireEvent, prettyDOM, render, waitFor, within } from '../../../test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
 import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
