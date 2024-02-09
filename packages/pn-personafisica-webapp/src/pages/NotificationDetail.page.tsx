@@ -546,7 +546,10 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
+                    disableDownloads={
+                      isCancelled.cancellationInTimeline ||
+                      !dateIsLessThan10Years(notification.sentAt)
+                    }
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
