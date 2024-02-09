@@ -1,4 +1,4 @@
-export type HTTPStatusCode = number | string;
+export type HTTPStatusCode = number;
 
 export type AppResponseOutcome = 'success' | 'error';
 

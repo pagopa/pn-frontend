@@ -1,7 +1,7 @@
 import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AppResponse, IAppMessage } from '../../models';
-import { AppResponseOutcome } from '../../models/AppResponse';
+import { AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
 import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
 
@@ -52,7 +52,7 @@ export const appStateSlice = createSlice({
   reducers: {
     addError(
       state,
-      action: PayloadAction<{ title: string; message: string; status?: number; action?: string }>
+      action: PayloadAction<{ title: string; message: string; status?: HTTPStatusCode; action?: string }>
     ) {
       const message = createAppMessage(
         action.payload.title,

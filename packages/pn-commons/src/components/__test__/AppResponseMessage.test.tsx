@@ -33,7 +33,7 @@ describe('AppResponseMessage Component', () => {
       const message = createAppMessage(
         appErrorResponse.errors![0].message.title,
         appErrorResponse.errors![0].message.content,
-        undefined,
+        appErrorResponse.status,
         action
       );
       expect(state.messages.errors).toStrictEqual([{ ...message, id: '1' }]);
