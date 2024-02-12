@@ -13,7 +13,6 @@ interface PfConfigurationFromFile {
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
-  URL_FE_LOGIN: string;
   URL_CHECKOUT: string;
   LANDING_SITE_URL: string;
   // this will be removed when delegations to pg works correctly
@@ -46,7 +45,6 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
   constructor() {
     super();
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
-    this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
@@ -70,7 +68,7 @@ class PfConfigurationValidator extends Validator<PfConfigurationFromFile> {
 export function getConfiguration(): PfConfiguration {
   const configurationFromFile = Configuration.get<PfConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
-  const VERSION = process.env.REACT_APP_VERSION ?? '';
+  const VERSION = import.meta.env.VITE_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
     DISABLE_INACTIVITY_HANDLER: Boolean(configurationFromFile.DISABLE_INACTIVITY_HANDLER),
@@ -84,7 +82,7 @@ export function getConfiguration(): PfConfiguration {
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
-    URL_FE_LOGOUT: `${configurationFromFile.URL_FE_LOGIN}logout`,
+    URL_FE_LOGOUT: "/auth/logout",
     VERSION,
     LANDING_SITE_URL: configurationFromFile.LANDING_SITE_URL || '',
     DELEGATIONS_TO_PG_ENABLED: Boolean(configurationFromFile.DELEGATIONS_TO_PG_ENABLED),

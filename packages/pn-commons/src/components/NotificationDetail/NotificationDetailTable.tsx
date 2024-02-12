@@ -5,6 +5,7 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;
+  children?: React.ReactNode;
 };
 
 /**

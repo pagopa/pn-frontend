@@ -155,7 +155,12 @@ export const AppStatusRender = (props: Props) => {
         >
           {currentStatus && <AppStatusBar status={currentStatus} />}
           {currentStatus && (
-            <Stack direction="row" justifyContent="center" data-testid="appStatus-lastCheck">
+            <Stack
+              direction="row"
+              justifyContent="center"
+              data-testid="appStatus-lastCheck"
+              id="appStatusLastCheck"
+            >
               <Typography
                 variant="caption"
                 sx={{ mt: 2, color: 'text.secondary' }}

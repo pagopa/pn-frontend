@@ -13,6 +13,7 @@ import {
   EventPaymentRecipientType,
   F24PaymentDetails,
   GetNotificationDowntimeEventsParams,
+  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -27,6 +28,7 @@ import {
   PaymentDetails,
   PnBreadcrumb,
   TimedMessage,
+  TimelineCategory,
   TitleBox,
   formatDate,
   formatToTimezoneString,
@@ -68,7 +70,9 @@ const getNotificationDetailData = (
   mandateId: string | undefined,
   notificationStatus: NotificationStatus,
   checkIfUserHasPayments: boolean,
-  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> }
+  userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> },
+  fromQrCode: boolean,
+  timeline: Array<INotificationDetailTimeline>
 ): EventNotificationDetailType => {
   // eslint-disable-next-line functional/no-let
   let typeDowntime: EventDowntimeType;
@@ -93,6 +97,9 @@ const getNotificationDetailData = (
       userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
     contains_f24: hasF24 ? 'yes' : 'no',
+    first_time_opening:
+      timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
+    source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
   };
 };
 
@@ -118,6 +125,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [downtimesReady, setDowntimesReady] = useState(false);
   const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL } = getConfiguration();
   const navigate = useNavigate();
 
@@ -341,6 +349,7 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
+
       void dispatch(
         getNotificationPaymentInfo({
           taxId: currentRecipient.taxId,
@@ -365,43 +374,13 @@ const NotificationDetail = () => {
   }, []);
 
   /* function which loads relevant information about donwtimes */
-  const fetchDowntimeEvents = useCallback(
-    (
-      fromDate: string,
-      toDate: string | undefined,
-      mandateId: string | undefined,
-      notificationStatus: NotificationStatus,
-      checkIfUserHasPayments: boolean,
-      userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> }
-    ) => {
-      const fetchParams: GetNotificationDowntimeEventsParams = {
-        startDate: fromDate,
-        endDate: toDate,
-      };
-      void dispatch(getDowntimeEvents(fetchParams))
-        .unwrap()
-        .then((data) => {
-          // in the notification detail there are three dispatch
-          // 1 - notification detail
-          // 2 - downtimes
-          // 3 - payment info
-          // the third dispatch is useless for the event, because we don't need information from checkout
-          // the second dispatch comes after the first one and only if the first one has finished
-          // so this is the right place to track the event
-          trackEventByType(
-            TrackEventType.SEND_NOTIFICATION_DETAIL,
-            getNotificationDetailData(
-              data.downtimes,
-              mandateId,
-              notificationStatus,
-              checkIfUserHasPayments,
-              userPayments
-            )
-          );
-        });
-    },
-    []
-  );
+  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
+    const fetchParams: GetNotificationDowntimeEventsParams = {
+      startDate: fromDate,
+      endDate: toDate,
+    };
+    void dispatch(getDowntimeEvents(fetchParams));
+  }, []);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
@@ -468,6 +447,27 @@ const NotificationDetail = () => {
     });
   };
 
+  useEffect(() => {
+    if (downtimesReady && pageReady) {
+      trackEventByType(
+        TrackEventType.SEND_NOTIFICATION_DETAIL,
+        getNotificationDetailData(
+          downtimeEvents,
+          mandateId,
+          notification.notificationStatus,
+          checkIfUserHasPayments,
+          userPayments,
+          fromQrCode,
+          notification.timeline
+        )
+      );
+    }
+  }, [downtimesReady, pageReady]);
+
+  const handleDowntimesReadyEvent = () => {
+    setDowntimesReady(true);
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -524,11 +524,10 @@ const NotificationDetail = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         isCancelled={isCancelled.cancelled}
+                        iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
-                        handleFetchPaymentsInfo={() =>
-                          reloadPaymentsInfo(currentRecipient.payments ?? [])
-                        }
+                        handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         landingSiteUrl={LANDING_SITE_URL}
@@ -554,16 +553,8 @@ const NotificationDetail = () => {
                 </Paper>
                 <NotificationRelatedDowntimes
                   downtimeEvents={downtimeEvents}
-                  fetchDowntimeEvents={(fromDate, toDate) =>
-                    fetchDowntimeEvents(
-                      fromDate,
-                      toDate,
-                      mandateId,
-                      notification.notificationStatus,
-                      checkIfUserHasPayments,
-                      userPayments
-                    )
-                  }
+                  componentReady={handleDowntimesReadyEvent}
+                  fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
                   notificationStatusHistory={notification.notificationStatusHistory}
                   downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}

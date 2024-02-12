@@ -123,13 +123,15 @@ const ApiKeyContextMenu = ({
             {t('context-menu.enable')}
           </MenuItem>
         )}
-        <MenuItem
-          id="button-view-groups-id"
-          data-testid="buttonViewGroupsId"
-          onClick={() => handleModalClick(ModalApiKeyView.VIEW_GROUPS_ID, apiKeyId)}
-        >
-          {t('context-menu.view-groups-id')}
-        </MenuItem>
+        {data.groups.length > 0 && (
+          <MenuItem
+            id="button-view-groups-id"
+            data-testid="buttonViewGroupsId"
+            onClick={() => handleModalClick(ModalApiKeyView.VIEW_GROUPS_ID, apiKeyId)}
+          >
+            {t('context-menu.view-groups-id')}
+          </MenuItem>
+        )}
       </Menu>
     </Box>
   );
@@ -183,33 +185,37 @@ const ApiKeyDataSwitch: React.FC<{
   if (type === 'groups') {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <CustomTooltip
-          openOnClick={false}
-          tooltipContent={
-            <Box sx={{ textAlign: 'left' }}>
-              {data.groups.map((v) => (
-                <Box key={`tooltip_${v.id}`} sx={{ fontWeight: 'normal' }}>
-                  <strong>Group ID</strong> {v.id}
+        {data.groups.length > 0 && (
+          <>
+            <CustomTooltip
+              openOnClick={false}
+              tooltipContent={
+                <Box sx={{ textAlign: 'left' }}>
+                  {data.groups.map((v) => (
+                    <Box key={`tooltip_${v.id}`} sx={{ fontWeight: 'normal' }}>
+                      <strong>Group ID</strong> {v.id}
+                    </Box>
+                  ))}
                 </Box>
-              ))}
-            </Box>
-          }
-        >
-          <Box>
-            <CustomTagGroup visibleItems={3} disableTooltip>
-              {data.groups.map((v, i) => (
-                <Box key={i} sx={{ my: 1 }}>
-                  <Tag value={v.name} />
-                </Box>
-              ))}
-            </CustomTagGroup>
-          </Box>
-        </CustomTooltip>
-        <CopyToClipboardButton
-          data-testid="copyToClipboardGroupsId"
-          tooltipTitle={t('groups-id-copied')}
-          value={() => data.groups.map((g) => g.id).join(',') || ''}
-        />
+              }
+            >
+              <Box>
+                <CustomTagGroup visibleItems={3} disableTooltip>
+                  {data.groups.map((v, i) => (
+                    <Box key={i} sx={{ my: 1 }}>
+                      <Tag value={v.name} />
+                    </Box>
+                  ))}
+                </CustomTagGroup>
+              </Box>
+            </CustomTooltip>
+            <CopyToClipboardButton
+              data-testid="copyToClipboardGroupsId"
+              tooltipTitle={t('groups-id-copied')}
+              value={() => data.groups.map((g) => g.id).join(',') || ''}
+            />
+          </>
+        )}
       </Box>
     );
   }

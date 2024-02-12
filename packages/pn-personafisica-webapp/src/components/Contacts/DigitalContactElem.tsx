@@ -5,22 +5,12 @@ import {
   forwardRef,
   memo,
   useImperativeHandle,
-  useMemo,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-  Typography,
-} from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { Button, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
+import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { AsyncThunk } from '@reduxjs/toolkit';
 
@@ -36,6 +26,7 @@ type Props = {
     id: string;
     isEditable?: boolean;
     size: 'auto' | 'variable';
+    key: string;
   }>;
   recipientId: string;
   senderId: string;
@@ -71,52 +62,34 @@ const DeleteDialog: React.FC<DialogProps> = ({
   confirmHandler,
 }) => {
   const { t } = useTranslation(['common']);
-  const isMobile = useIsMobile();
-  const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
 
   const deleteModalActions = blockDelete ? (
-    <Button onClick={handleModalClose} variant="outlined" sx={{ width: isMobile ? '100%' : null }}>
+    <Button id="closeModalButton" onClick={handleModalClose} variant="outlined">
       {t('button.close')}
     </Button>
   ) : (
-    <>
-      <Button
-        onClick={handleModalClose}
-        variant="outlined"
-        sx={isMobile ? { width: '100%', mt: 2 } : null}
-      >
+    [
+      <Button key="cancel" onClick={handleModalClose} variant="outlined" id="buttonAnnulla">
         {t('button.annulla')}
-      </Button>
-      <Button onClick={confirmHandler} variant="contained" sx={{ width: isMobile ? '100%' : null }}>
+      </Button>,
+      <Button id="buttonConferma" key="confirm" onClick={confirmHandler} variant="contained">
         {t('button.conferma')}
-      </Button>
-    </>
+      </Button>,
+    ]
   );
   return (
-    <Dialog
+    <PnDialog
       open={showModal}
       onClose={handleModalClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title" sx={{ textAlign: textPosition, pt: 4, px: 4 }}>
-        {removeModalTitle}
-      </DialogTitle>
-      <DialogContent sx={{ px: 4 }}>
+      <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
+      <PnDialogContent>
         <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
-      </DialogContent>
-      <DialogActions
-        disableSpacing={isMobile}
-        sx={{
-          textAlign: textPosition,
-          flexDirection: isMobile ? 'column-reverse' : 'row',
-          px: 4,
-          pb: 4,
-        }}
-      >
-        {deleteModalActions}
-      </DialogActions>
-    </Dialog>
+      </PnDialogContent>
+      <PnDialogActions>{deleteModalActions}</PnDialogActions>
+    </PnDialog>
   );
 };
 
@@ -148,7 +121,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
     const mappedChildren = fields.map((f) => (
-      <Grid key={f.id} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
+      <Grid key={f.key} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
         {!f.isEditable && f.component}
         {f.isEditable && editMode && f.component}
         {f.isEditable && !editMode && (
@@ -156,6 +129,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
             sx={{
               wordBreak: 'break-word',
             }}
+            id={f.id}
           >
             {(f.component as any).props.value}
           </Typography>
@@ -232,10 +206,16 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   onClick={toggleEdit}
                   sx={{ mr: 2 }}
                   disabled={editDisabled}
+                  id={`modifyContact-${senderId}`}
                 >
                   {t('button.modifica')}
                 </ButtonNaked>
-                <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
+                <ButtonNaked
+                  id={`cancelContact-${senderId}`}
+                  color="primary"
+                  onClick={removeHandler}
+                  disabled={editDisabled}
+                >
                   {t('button.elimina')}
                 </ButtonNaked>
               </>
@@ -247,6 +227,7 @@ const DigitalContactElem = forwardRef<{ editContact: () => void }, Props>(
                   type="button"
                   onClick={editHandler}
                   sx={{ mr: 2 }}
+                  id={`saveModifyButton-${senderId}`}
                 >
                   {t('button.salva')}
                 </ButtonNaked>

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IAppMessage } from '../../models';
 import { act, render } from '../../test-utils';
 import AppMessage from '../AppMessage';

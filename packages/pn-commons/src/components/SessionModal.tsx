@@ -1,8 +1,10 @@
 import { MouseEventHandler, useEffect } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
-import { useIsMobile } from '../hooks';
+import PnDialog from './PnDialog/PnDialog';
+import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   open: boolean;
@@ -36,8 +38,6 @@ const SessionModal: React.FC<Props> = ({
   handleClose,
   initTimeout = false,
 }) => {
-  const isMobile = useIsMobile();
-
   useEffect(() => {
     if (!initTimeout) {
       return;
@@ -60,26 +60,24 @@ const SessionModal: React.FC<Props> = ({
   }, []);
 
   return (
-    <Dialog
+    <PnDialog
       open={open}
       onClose={handleClose}
       aria-labelledby="session-dialog-title"
       data-testid="session-modal"
     >
-      <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
-      <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
-        {message}
-      </DialogContentText>
-      <DialogActions
-        sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}
-      >
-        {onConfirm && (
+      <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
+      <PnDialogContent>
+        <DialogContentText id="session-dialog-description">{message}</DialogContentText>
+      </PnDialogContent>
+      {onConfirm && (
+        <PnDialogActions>
           <Button sx={{ width: '100%' }} color="primary" variant="contained" onClick={onConfirm}>
             {onConfirmLabel}
           </Button>
-        )}
-      </DialogActions>
-    </Dialog>
+        </PnDialogActions>
+      )}
+    </PnDialog>
   );
 };
 
