@@ -296,14 +296,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     handleTrackDownloadF24={
                       void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
                     }
-                    handleTrackDownloadF24Success={() => {
-                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS);
-                      setAreOtherDowloading(false);
-                    }}
-                    handleTrackDownloadF24Timeout={() => {
-                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT);
-                      setAreOtherDowloading(false);
-                    }}
+                    handleTrackDownloadF24Success={() =>
+                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+                    }
+                    handleTrackDownloadF24Timeout={() =>
+                      void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+                    }
                     f24Item={
                       pagoPaF24.find(
                         (payment) => payment.pagoPa?.noticeCode === selectedPayment.noticeCode

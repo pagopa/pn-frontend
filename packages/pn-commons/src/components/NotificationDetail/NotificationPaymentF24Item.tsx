@@ -95,6 +95,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
       }
     } catch (error) {
       setMaxTimeError('detail.payment.f24-download-error');
+
       if (handleTrackDownloadF24Timeout) {
         handleTrackDownloadF24Timeout();
       }
