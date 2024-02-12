@@ -90,6 +90,7 @@ describe('NotificationDetailDocuments Component', () => {
     notificationDetailDocuments.forEach((doc) => {
       const button = within(doc).getByTestId('documentButton');
       expect(button).toHaveAttribute('disabled');
+      expect(mockClickFn).not.toBeCalled();
     });
   });
 
