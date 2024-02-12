@@ -21,8 +21,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+import { TrackEventType } from '../../utility/events';
+import { trackEventByType } from '../../utility/mixpanel';
 import { RootState, store } from '../store';
-import { GetReceivedNotificationParams } from './types';
+import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
@@ -48,7 +50,7 @@ export const getReceivedNotification = createAsyncThunk<
 );
 
 export const getReceivedNotificationLegalfact = createAsyncThunk<
-  { url: string; retryAfter?: number },
+  DownloadFileResponse,
   { iun: string; legalFact: LegalFactId; mandateId?: string }
 >(
   'getReceivedNotificationLegalfact',
@@ -62,7 +64,7 @@ export const getReceivedNotificationLegalfact = createAsyncThunk<
 );
 
 export const getReceivedNotificationDocument = createAsyncThunk<
-  { url: string },
+  DownloadFileResponse,
   { iun: string; documentIndex: string; mandateId?: string }
 >(
   'getReceivedNotificationDocument',
@@ -129,6 +131,10 @@ export const getNotificationPaymentInfo = createAsyncThunk<
             paymentCache.currentPayment,
           ]);
 
+          trackEventByType(TrackEventType.SEND_PAYMENT_OUTCOME, {
+            outcome: updatedPayment[0].status,
+          });
+
           const payments = populatePaymentsPagoPaF24(
             notificationState.notification.timeline,
             notificationState.paymentsData.pagoPaF24,
@@ -189,7 +195,7 @@ export const getNotificationPaymentUrl = createAsyncThunk<
 );
 
 export const getReceivedNotificationOtherDocument = createAsyncThunk<
-  { url: string; retryAfter?: number },
+  DownloadFileResponse,
   { iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string }
 >(
   'getReceivedNotificationOtherDocument',
