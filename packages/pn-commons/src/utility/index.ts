@@ -6,6 +6,7 @@ import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
   DATE_FORMAT,
   dateIsDefined,
+  dateIsLessThan10Years,
   formatDate,
   formatDateTime,
   formatDay,
@@ -122,4 +123,5 @@ export {
   checkIfPaymentsIsAlreadyInCache,
   PAYMENT_CACHE_KEY,
   rewriteLinks,
+  dateIsLessThan10Years,
 };
