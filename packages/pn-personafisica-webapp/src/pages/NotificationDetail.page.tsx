@@ -30,9 +30,8 @@ import {
   TimedMessage,
   TimelineCategory,
   TitleBox,
+  dateIsLessThan10Years,
   formatDate,
-  formatToTimezoneString,
-  today,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -156,7 +155,7 @@ const NotificationDetail = () => {
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
-  const legalFactDownloadAARetryAfter = useAppSelector(
+  const legalFactDownloadAARRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
   );
 
@@ -310,8 +309,7 @@ const NotificationDetail = () => {
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
       } else {
-        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
-          315569520000 // 10 years
+        return dateIsLessThan10Years(notification.sentAt)
           ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
@@ -393,7 +391,7 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARetryAfter * 1000;
+  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
@@ -548,7 +546,10 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
+                    disableDownloads={
+                      isCancelled.cancellationInTimeline ||
+                      !dateIsLessThan10Years(notification.sentAt)
+                    }
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
