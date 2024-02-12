@@ -66,23 +66,19 @@ export const getSentNotificationDocument = createAsyncThunk<
 );
 
 export const getSentNotificationOtherDocument = createAsyncThunk<
-  { url: string },
+  { url: string; retryAfter?: number },
   { iun: string; otherDocument: NotificationDetailOtherDocument }
 >(
   'getSentNotificationOtherDocument',
-  async (
-    params: { iun: string; otherDocument: { documentId: string; documentType: string } },
-    { rejectWithValue }
-  ) => {
-    try {
-      return await NotificationsApi.getSentNotificationOtherDocument(
-        params.iun,
-        params.otherDocument
-      );
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(
+    (params: {
+      iun: string;
+      otherDocument: {
+        documentId: string;
+        documentType: string;
+      };
+    }) => NotificationsApi.getSentNotificationOtherDocument(params.iun, params.otherDocument)
+  )
 );
 
 export const getDowntimeEvents = createAsyncThunk<

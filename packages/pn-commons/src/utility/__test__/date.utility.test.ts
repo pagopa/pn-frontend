@@ -1,6 +1,7 @@
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
   dateIsDefined,
+  dateIsLessThan10Years,
   formatDate,
   formatDateTime,
   formatDay,
@@ -17,6 +18,7 @@ import {
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
+const sentAt = '2012-02-22T14:20:20.566Z';
 const date = new Date(dateString);
 
 describe('Date utility', () => {
@@ -166,5 +168,10 @@ describe('Date utility', () => {
     const dateString = '23/07/2023';
     const date = formatFromString(dateString);
     expect(date).toBeInstanceOf(Date);
+  });
+
+  it('return a boolean value if the sentAt is less than 10 years far from today', () => {
+    const isLessThan10Years = dateIsLessThan10Years(sentAt);
+    expect(isLessThan10Years).toBe(false);
   });
 });
