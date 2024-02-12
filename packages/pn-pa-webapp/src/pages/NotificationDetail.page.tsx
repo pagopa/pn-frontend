@@ -19,6 +19,7 @@ import {
   TimedMessage,
   TitleBox,
   appStateActions,
+  dateIsLessThan10Years,
   useDownloadDocument,
   useErrors,
   useIsCancelled,
@@ -56,6 +57,7 @@ type Props = {
 const AlertNotificationCancel: React.FC<Props> = (notification) => {
   const { t } = useTranslation(['notifiche']);
   const { cancelled, cancellationInProgress } = useIsCancelled(notification);
+
   if (cancelled || cancellationInProgress) {
     return (
       <Alert tabIndex={0} data-testid="alert" sx={{ mt: 1 }} severity={'warning'}>
@@ -77,6 +79,7 @@ const NotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
@@ -95,6 +98,10 @@ const NotificationDetail: React.FC = () => {
   const legalFactDownloadRetryAfter = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
+  const legalFactDownloadAARRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
+  );
+
   const { recipients } = notification;
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
@@ -186,14 +193,15 @@ const NotificationDetail: React.FC = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (notification.documentsAvailable) {
-        return type === 'aar'
+      if (type === 'attachments') {
+        return notification.documentsAvailable
+          ? t('detail.download-message-available', { ns: 'notifiche' })
+          : t('detail.download-message-expired', { ns: 'notifiche' });
+      } else {
+        return dateIsLessThan10Years(notification.sentAt) // 10 years
           ? t('detail.download-aar-available', { ns: 'notifiche' })
-          : t('detail.download-message-available', { ns: 'notifiche' });
+          : t('detail.download-aar-expired', { ns: 'notifiche' });
       }
-      return type === 'aar'
-        ? t('detail.download-aar-expired', { ns: 'notifiche' })
-        : t('detail.download-message-expired', { ns: 'notifiche' });
     },
     [notification.documentsAvailable]
   );
@@ -238,6 +246,7 @@ const NotificationDetail: React.FC = () => {
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const properBreadcrumb = (
     <PnBreadcrumb
@@ -306,12 +315,17 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
+                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarDownload">
+                  <TimedMessage timeout={timeoutAARMessage}>
+                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="aarNotAvailableAlert">
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
-                    documents={notification.otherDocuments}
+                    documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
+                    disableDownloads={!dateIsLessThan10Years(notification.sentAt)}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
