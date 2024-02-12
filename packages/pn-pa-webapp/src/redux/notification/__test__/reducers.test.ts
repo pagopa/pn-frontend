@@ -60,6 +60,7 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
+  legalFactDownloadAARRetryAfter: 0,
   downtimeLegalFactUrl: '',
   downtimeEvents: [],
 };
