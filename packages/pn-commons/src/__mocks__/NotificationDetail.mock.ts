@@ -150,6 +150,22 @@ export const payments: Array<NotificationDetailPayment> = [
       },
     },
   },
+  {
+    f24: {
+      title: 'F24 quarta TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlu=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38n.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
 ];
 
 const recipients: Array<NotificationDetailRecipient> = [
