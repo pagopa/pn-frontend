@@ -1028,6 +1028,7 @@ export function parseNotificationDetail(
   const parsedNotification = {
     ...notificationDetail,
     otherDocuments: populateOtherDocuments(notificationDetail),
+    radd: true,
   };
   insertCancelledStatusInTimeline(parsedNotification);
   /* eslint-disable functional/immutable-data */

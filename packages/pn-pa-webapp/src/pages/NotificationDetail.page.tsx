@@ -3,7 +3,7 @@ import React, { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   AppResponse,
@@ -305,6 +305,14 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
+                  {notification.radd && (
+                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                      <AlertTitle>
+                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      </AlertTitle>
+                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                    </Alert>
+                  )}
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0}>
                   <NotificationDetailDocuments
