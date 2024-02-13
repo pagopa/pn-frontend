@@ -319,7 +319,7 @@ const NotificationDetail: React.FC = () => {
                       <AlertTitle>
                         {t('detail.timeline.radd.title', { ns: 'notifiche' })}
                       </AlertTitle>
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      {t('detail.timeline.radd.description-mono-recipient', { ns: 'notifiche' })}
                     </Alert>
                   )}
                 </Paper>

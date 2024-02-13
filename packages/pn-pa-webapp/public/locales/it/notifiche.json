@@ -306,7 +306,8 @@
       },
       "radd": {
         "title": "I documenti sono stati ritirati",
-        "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
+        "description-mono-recipient": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi.",
+        "description-multi-recipients": "Uno dei destinatari o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
       }
     },
     "downtimes": {

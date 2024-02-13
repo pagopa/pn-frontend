@@ -26,7 +26,7 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
-  radd: boolean; // da definire
+  radd?: boolean; // da definire
 
   // only fe
   otherDocuments?: Array<NotificationDetailDocument>;
