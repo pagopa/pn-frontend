@@ -191,7 +191,7 @@ const SessionGuard = () => {
           // ----------------------
           // Andrea Cimini, 2023.01.27
           // ----------------------
-          trackEventByType(TrackEventType.SEND_AUTH_SUCCESS);
+          trackEventByType(TrackEventType.SEND_AUTH_SUCCESS, { from_qrcode: false });
           navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
         } else {
           const hashAsObject = new URLSearchParams(location.hash);
@@ -206,7 +206,7 @@ const SessionGuard = () => {
           // ----------------------
           // Carlos Lombardi, 2022.12.27
           // ----------------------
-          trackEventByType(TrackEventType.SEND_AUTH_SUCCESS, { source: "QRcode" });
+          trackEventByType(TrackEventType.SEND_AUTH_SUCCESS, { from_qrcode: true });
           const newHash = hashAsObject.toString().replace(/%23/g, '#');
           navigate(
             { pathname: location.pathname, search: location.search, hash: newHash },
