@@ -23,15 +23,7 @@ import {
   notificationDTOMultiRecipient,
   notificationToFe,
 } from '../../__mocks__/NotificationDetail.mock';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  prettyDOM,
-  render,
-  waitFor,
-  within,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import {
   CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
