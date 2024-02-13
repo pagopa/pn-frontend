@@ -544,7 +544,7 @@ describe('NotificationDetail Page', async () => {
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 
-  it.only('render success alert when documents have been picked up - multirecipient', async () => {
+  it('render success alert when documents have been picked up - multirecipient', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
       ...notificationDTO,
       radd: true,
