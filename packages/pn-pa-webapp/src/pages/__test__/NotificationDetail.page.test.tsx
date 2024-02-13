@@ -23,7 +23,15 @@ import {
   notificationDTOMultiRecipient,
   notificationToFe,
 } from '../../__mocks__/NotificationDetail.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  prettyDOM,
+  render,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import {
   CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
@@ -529,5 +537,33 @@ describe('NotificationDetail Page', async () => {
     });
     const paymentsTable = result.queryByTestId('paymentInfoBox');
     expect(paymentsTable).not.toBeInTheDocument();
+  });
+
+  it('render success alert when documents have been picked up - monorecipient', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
+      .reply(200, { ...notificationDTO, radd: true });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+  });
+
+  it.only('render success alert when documents have been picked up - multirecipient', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
+      ...notificationDTO,
+      radd: true,
+      recipients: ['CLMCST42R12D969Z', '20517490320'],
+    });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 });

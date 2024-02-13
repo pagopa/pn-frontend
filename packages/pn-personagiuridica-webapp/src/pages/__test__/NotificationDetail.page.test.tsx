@@ -874,4 +874,17 @@ describe('NotificationDetail Page', async () => {
     const paymentCache = getPaymentCache(notificationDTO.iun);
     expect(paymentCache?.currentPayment).toBeUndefined();
   });
+
+  it('render success alert when documents have been picked up', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
+      .reply(200, { ...notificationDTO, radd: true });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+  });
 });
