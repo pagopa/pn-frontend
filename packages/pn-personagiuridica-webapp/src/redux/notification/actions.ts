@@ -130,7 +130,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
             updatedPayment
           );
           setPaymentsInCache(payments, iun);
-          return paymentCache.payments;
+          return payments;
         }
 
         // If all the payments are already in cache i can return them

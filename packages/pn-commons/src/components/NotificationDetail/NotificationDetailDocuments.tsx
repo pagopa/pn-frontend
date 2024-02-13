@@ -50,6 +50,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
             } as NotificationDetailOtherDocument)
           : d.docIdx,
       };
+
       return (
         <Box key={document.key} data-testid="notificationDetailDocuments">
           {!documentsAvailable ? (
