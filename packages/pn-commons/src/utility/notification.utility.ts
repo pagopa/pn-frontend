@@ -866,6 +866,11 @@ const populateOtherDocuments = (
   return [];
 };
 
+export const checkRaddInTimeline = (notificationDetail: NotificationDetail) =>
+  notificationDetail.timeline.find(
+    (element) => element.category === TimelineCategory.NOTIFICATION_RADD_RETRIEVED
+  );
+
 export const getF24Payments = (
   payments: Array<NotificationDetailPayment>,
   recIndex: number,
@@ -1021,14 +1026,13 @@ const insertCancelledStatusInTimeline = (notificationDetail: NotificationDetail)
     }
   }
 };
-
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
     otherDocuments: populateOtherDocuments(notificationDetail),
-    radd: true,
+    radd: checkRaddInTimeline(notificationDetail),
   };
   insertCancelledStatusInTimeline(parsedNotification);
   /* eslint-disable functional/immutable-data */
