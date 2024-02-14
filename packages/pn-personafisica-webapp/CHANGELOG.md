@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.3.0...v2.3.1-RC.0) (2024-02-14)
+
+
+### Bug Fixes
+
+* **PN-8916:** logging out user when receiving a 403 ([#1116](https://github.com/pagopa/pn-frontend/issues/1116)) ([afed98a](https://github.com/pagopa/pn-frontend/commit/afed98a569ee446177d8b9214eed099a44c88fac))
+* **PN-9412:** fix alert message when AAR not available for PA ([#1123](https://github.com/pagopa/pn-frontend/issues/1123)) ([3200b08](https://github.com/pagopa/pn-frontend/commit/3200b08df59c4139423aa4c8fe8cb285d5183c66))
+* **PN-9689:** replaced copy '10 minuti' with '15 minuti' in pop-up message when update o insert email, pec and sms address for PG and PF ([#1121](https://github.com/pagopa/pn-frontend/issues/1121)) ([e5df8dc](https://github.com/pagopa/pn-frontend/commit/e5df8dc0701bd616e97587fa1ecfaecd18e4cd70))
+* **PN-9774:** added SEND_RAPID_ACCESS event and made some fixes ([#1135](https://github.com/pagopa/pn-frontend/issues/1135)) ([f2cf4d1](https://github.com/pagopa/pn-frontend/commit/f2cf4d18d33ba4901c4bacab9c13b1be7b9dcdf0))
+
+
+### Features
+
+* **pn-9774:** added some new tracking events for user monitoring ([#1129](https://github.com/pagopa/pn-frontend/issues/1129)) ([45704ff](https://github.com/pagopa/pn-frontend/commit/45704fffcc1c1d89a41bf21ecc942defd49dcf57))
+* **PN-9883:** added new version segment for notification detail and creation API ([#1126](https://github.com/pagopa/pn-frontend/issues/1126)) ([6599a2d](https://github.com/pagopa/pn-frontend/commit/6599a2d8a05b73ea11cdd7ffcbb9c4d837abafb8))
+
+
+
+
+
 # [2.3.0](https://github.com/pagopa/pn-frontend/compare/v2.3.0-RC.2...v2.3.0) (2024-01-25)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
