@@ -22,6 +22,7 @@ import {
   notificationDTO,
   notificationDTOMultiRecipient,
   notificationToFe,
+  raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import {
@@ -552,6 +553,21 @@ describe('NotificationDetail Page', async () => {
     });
     await act(async () => {
       result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+  });
+
+  it('render success alert when documents have been retrieved', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+        },
+      });
     });
 
     const alertRadd = result.getAllByTestId('raddAlert')[0];

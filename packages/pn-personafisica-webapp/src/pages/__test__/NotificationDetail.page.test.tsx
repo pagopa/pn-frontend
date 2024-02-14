@@ -804,7 +804,7 @@ describe('NotificationDetail Page', async () => {
     expect(paymentCache?.currentPayment).toBeUndefined();
   });
 
-  it('render success alert when documents have been picked up', async () => {
+  it('render success alert when documents have been retrieved', async () => {
     mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
