@@ -28,6 +28,7 @@ import {
   notificationDTO,
   notificationToFe,
   paymentsData,
+  raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import {
   RenderResult,
@@ -876,11 +877,13 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('render success alert when documents have been retrieved', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, radd: true });
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+        },
+      });
     });
 
     const alertRadd = result.getAllByTestId('raddAlert')[0];
