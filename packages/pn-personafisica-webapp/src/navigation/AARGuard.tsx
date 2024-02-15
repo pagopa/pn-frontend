@@ -6,12 +6,15 @@ import { AccessDenied, IllusQuestion, LoadingPage } from '@pagopa-pn/pn-commons'
 
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
+import { trackEventByType } from '../utility/mixpanel';
+import { TrackEventType } from '../utility/events';
 import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
   NOTIFICHE,
 } from './routes.const';
+
 
 function notificationDetailPath(notificationId: NotificationId): string {
   return notificationId.mandateId
@@ -47,6 +50,7 @@ const AARGuard = () => {
 
   useEffect(() => {
     if (notificationId) {
+      trackEventByType(TrackEventType.SEND_RAPID_ACCESS);
       navigate(notificationDetailPath(notificationId), {
         replace: true,
         state: { fromQrCode: true },
@@ -58,6 +62,7 @@ const AARGuard = () => {
     return <Outlet />;
   }
   if (fetchError) {
+    trackEventByType(TrackEventType.SEND_NOTIFICATION_NOT_ALLOWED);
     return (
       <AccessDenied
         icon={<IllusQuestion />}
@@ -65,7 +70,7 @@ const AARGuard = () => {
         subtitle={t('from-qrcode.not-found-subtitle')}
         isLogged={true}
         goToHomePage={() => navigate(NOTIFICHE, { replace: true })}
-        goToLogin={() => {}}
+        goToLogin={() => { }}
       />
     );
   }

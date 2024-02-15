@@ -126,6 +126,7 @@ export interface PrepareAnalogDomicileFailureDetails extends BaseDetails {
 
 interface BaseDetails {
   recIndex?: number;
+  eventTimestamp?: string;
 }
 
 interface DelegateInfo {

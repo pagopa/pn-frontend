@@ -5,6 +5,8 @@ import { paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
+const PAYMENT_CACHE_TIME = 5;
+
 export const getPaymentCache = (iun: string): PaymentCache | null => {
   const paymentCache = sessionStorage.getItem(PAYMENT_CACHE_KEY);
   if (!paymentCache) {
@@ -105,7 +107,7 @@ const isTimestampWithin2Minutes = (timestamp1: string, timestamp2: string) => {
   const diff = Math.abs(date1.getTime() - date2.getTime());
   const minutes = Math.floor(diff / 1000 / 60);
 
-  if (minutes <= 2) {
+  if (minutes <= PAYMENT_CACHE_TIME) {
     return true;
   } else {
     throw new Error('Timestamp is not valid');
