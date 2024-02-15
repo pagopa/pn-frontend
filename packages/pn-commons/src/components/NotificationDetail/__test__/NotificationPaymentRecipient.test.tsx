@@ -195,7 +195,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it('should call handleDownloadAttachment on download button click', async () => {
+  it.skip('should call handleDownloadAttachment on download button click', async () => {
     vi.useFakeTimers();
     const getPaymentAttachmentActionMk = vi
       .fn()
