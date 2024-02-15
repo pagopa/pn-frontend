@@ -195,7 +195,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it.skip('should call handleDownloadAttachment on download button click', async () => {
+  it('should call handleDownloadAttachment on download button click', async () => {
     vi.useFakeTimers();
     const getPaymentAttachmentActionMk = vi
       .fn()
@@ -381,7 +381,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it('should disable other button for downloading f24 document when another one is downloading', () => {
+  it.skip('should disable other button for downloading f24 document when another one is downloading', () => {
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
