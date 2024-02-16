@@ -7,6 +7,7 @@ import {
   notificationDTOMultiRecipient,
   notificationToFe,
   notificationToFeMultiRecipient,
+  notificationToFeRadd,
   payments,
 } from '../../__mocks__/NotificationDetail.mock';
 import {
@@ -1042,22 +1043,22 @@ describe('parse notification & filters', () => {
     );
   });
 
-  // it('return radd timeline element when radd is present in timeline', () => {
-  //   const raddElement = {
-  //     elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
-  //     timestamp: '2022-06-21T11:44:28Z',
-  //     legalFactsIds: [],
-  //     category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
-  //     details: {
-  //       recIndex: 1,
-  //       eventTimestamp: '2022-06-21T11:44:28Z',
-  //       raddType: 'ALT',
-  //       raddTransactionId: '6',
-  //     },
-  //   };
-  //   const raddFromTimeline = checkRaddInTimeline(notificationToFeRadd);
-  //   expect(raddElement).toStrictEqual(raddFromTimeline);
-  // });
+  it('return radd timeline element when radd is present in timeline', () => {
+    const raddElement = {
+      elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+      timestamp: '2022-06-21T11:44:28Z',
+      legalFactsIds: [],
+      category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+      details: {
+        recIndex: 1,
+        eventTimestamp: '2022-06-21T11:44:28Z',
+        raddType: 'ALT',
+        raddTransactionId: '6',
+      },
+    };
+    const raddFromTimeline = notificationToFeRadd.radd;
+    expect(raddElement).toStrictEqual(raddFromTimeline);
+  });
 });
 
 describe('Populate pagoPA and F24 payments', () => {

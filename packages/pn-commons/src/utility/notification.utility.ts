@@ -1034,6 +1034,7 @@ export function parseNotificationDetail(
     otherDocuments: populateOtherDocuments(notificationDetail),
     radd: checkRaddInTimeline(notificationDetail),
   };
+
   insertCancelledStatusInTimeline(parsedNotification);
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */

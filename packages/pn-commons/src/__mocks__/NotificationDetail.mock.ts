@@ -696,6 +696,7 @@ export const notificationDTORadd: NotificationDetail = {
   notificationStatus: NotificationStatus.EFFECTIVE_DATE,
   notificationStatusHistory,
   timeline: [
+    ...timeline,
     {
       elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
       timestamp: '2022-06-21T11:44:28Z',
