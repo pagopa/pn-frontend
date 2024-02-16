@@ -50,6 +50,7 @@ const AARGuard = () => {
 
   useEffect(() => {
     if (notificationId) {
+      trackEventByType(TrackEventType.SEND_RAPID_ACCESS);
       navigate(notificationDetailPath(notificationId), {
         replace: true,
         state: { fromQrCode: true },

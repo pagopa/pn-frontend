@@ -195,7 +195,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(subtitle).not.toBeInTheDocument();
   });
 
-  it.skip('should call handleDownloadAttachment on download button click', async () => {
+  it('should call handleDownloadAttachment on download button click - attached f24', async () => {
     vi.useFakeTimers();
     const getPaymentAttachmentActionMk = vi
       .fn()
@@ -241,11 +241,32 @@ describe('NotificationPaymentRecipient Component', () => {
       PaymentAttachmentSName.F24,
       paymentsData.pagoPaF24[paymentIndex].f24!.attachmentIdx
     );
+  });
+
+  it('should call handleDownloadAttachment on download button click - isolated f24', async () => {
+    vi.useFakeTimers();
+    const getPaymentAttachmentActionMk = vi
+      .fn()
+      .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
+
+    const result = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={getPaymentAttachmentActionMk}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+
     // download isolated f24
     const isolatedF24Item = result.getByTestId('f24only-box');
     const isolatedF24RadioButton = within(isolatedF24Item).getAllByTestId('download-f24-button');
     fireEvent.click(isolatedF24RadioButton[0]);
-    expect(getPaymentAttachmentActionMk).toBeCalledTimes(3);
+    expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
       paymentsData.f24Only[0].attachmentIdx
@@ -382,23 +403,27 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should disable other button for downloading f24 document when another one is downloading', () => {
+    const getPaymentAttachmentActionMk = vi
+      .fn()
+      .mockImplementation(() => ({ unwrap: () => new Promise(() => void 0), abort: () => void 0 }));
     const result = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
         timerF24={F24TIMER}
         iun={iun}
-        getPaymentAttachmentAction={vi.fn()}
+        getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => {}}
         landingSiteUrl=""
       />
     );
     const f24Buttons = result.queryAllByTestId('download-f24-button');
+
     const f24ButtonToClick = f24Buttons[0];
     const f24ButtonToCheck = f24Buttons[1];
     fireEvent.click(f24ButtonToClick);
-    expect(f24ButtonToClick.hasAttribute('disabled')).toBe(true);
-    expect(f24ButtonToCheck.hasAttribute('disabled')).toBe(true);
+    fireEvent.click(f24ButtonToCheck);
+    expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
   });
 });
