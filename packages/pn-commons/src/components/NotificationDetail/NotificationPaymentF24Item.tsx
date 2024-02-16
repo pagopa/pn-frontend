@@ -59,6 +59,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
 
       if (response.url) {
         setDownloadingMessage(null);
+        handleDownload(false);
         handleTrackDownloadF24Success?.();
         downloadDocument(response.url);
         return;
@@ -91,6 +92,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         if (attempt !== 0) {
           setMaxTimeError('detail.payment.f24-download-error');
           setDownloadingMessage(null);
+          handleDownload(false);
         }
       }
     } catch (error) {
@@ -100,6 +102,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
         handleTrackDownloadF24Timeout();
       }
       setDownloadingMessage(null);
+      handleDownload(false);
     }
   }, []);
 
