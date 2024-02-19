@@ -534,8 +534,8 @@ describe('NotificationDetail Page', async () => {
 
   it('render success alert when documents have been picked up - monorecipient', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTO.iun))
-      .reply(200, { ...notificationDTO, radd: true });
+      .onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun))
+      .reply(200, { ...raddNotificationDTO, radd: true });
     await act(async () => {
       result = render(<NotificationDetail />);
     });
@@ -543,11 +543,12 @@ describe('NotificationDetail Page', async () => {
     const alertRadd = result.getAllByTestId('raddAlert')[0];
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-mono-recipient');
   });
 
   it('render success alert when documents have been picked up - multirecipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, {
-      ...notificationDTO,
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, {
+      ...raddNotificationDTO,
       radd: true,
       recipients: ['CLMCST42R12D969Z', '20517490320'],
     });
@@ -558,20 +559,6 @@ describe('NotificationDetail Page', async () => {
     const alertRadd = result.getAllByTestId('raddAlert')[0];
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
-  });
-
-  it('render success alert when documents have been retrieved', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
-    await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
-        },
-      });
-    });
-
-    const alertRadd = result.getAllByTestId('raddAlert')[0];
-    expect(alertRadd).toBeInTheDocument();
-    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-multi-recipients');
   });
 });
