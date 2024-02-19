@@ -314,20 +314,16 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
-                  {notification.radd && notification.recipients.length === 1 && (
+                  {notification.radd && (
                     <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
                       <AlertTitle>
                         {t('detail.timeline.radd.title', { ns: 'notifiche' })}
                       </AlertTitle>
-                      {t('detail.timeline.radd.description-mono-recipient', { ns: 'notifiche' })}
-                    </Alert>
-                  )}
-                  {notification.radd && notification.recipients.length > 1 && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {t('detail.timeline.radd.description-multi-recipients', { ns: 'notifiche' })}
+                      {notification.recipients.length === 1
+                        ? t('detail.timeline.radd.description-mono-recipient', { ns: 'notifiche' })
+                        : t('detail.timeline.radd.description-multi-recipients', {
+                            ns: 'notifiche',
+                          })}
                     </Alert>
                   )}
                 </Paper>
