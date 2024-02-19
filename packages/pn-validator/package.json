@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-validator",
-  "version": "2.3.1-RC.1",
+  "version": "2.3.1",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
