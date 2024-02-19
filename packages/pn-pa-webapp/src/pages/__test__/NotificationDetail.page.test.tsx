@@ -22,6 +22,7 @@ import {
   notificationDTO,
   notificationDTOMultiRecipient,
   notificationToFe,
+  raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import {
@@ -529,5 +530,35 @@ describe('NotificationDetail Page', async () => {
     });
     const paymentsTable = result.queryByTestId('paymentInfoBox');
     expect(paymentsTable).not.toBeInTheDocument();
+  });
+
+  it('render success alert when documents have been picked up - monorecipient', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun))
+      .reply(200, { ...raddNotificationDTO, radd: true });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-mono-recipient');
+  });
+
+  it('render success alert when documents have been picked up - multirecipient', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, {
+      ...raddNotificationDTO,
+      radd: true,
+      recipients: ['CLMCST42R12D969Z', '20517490320'],
+    });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-multi-recipients');
   });
 });
