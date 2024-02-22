@@ -3,40 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.3.2](https://github.com/pagopa/pn-frontend/compare/v2.3.1...v2.3.2) (2024-02-20)
-
-**Note:** Version bump only for package @pagopa-pn/pn-commons
-
-
-
-
-
-## [2.3.1](https://github.com/pagopa/pn-frontend/compare/v2.3.1-RC.1...v2.3.1) (2024-02-19)
-
-**Note:** Version bump only for package @pagopa-pn/pn-commons
-
-
-
-
-
-## [2.3.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.3.0...v2.3.1-RC.0) (2024-02-14)
-
-
-### Bug Fixes
-
-* **PN-8916:** logging out user when receiving a 403 ([#1116](https://github.com/pagopa/pn-frontend/issues/1116)) ([afed98a](https://github.com/pagopa/pn-frontend/commit/afed98a569ee446177d8b9214eed099a44c88fac))
-* **PN-9412:** fix alert message when AAR not available for PA ([#1123](https://github.com/pagopa/pn-frontend/issues/1123)) ([3200b08](https://github.com/pagopa/pn-frontend/commit/3200b08df59c4139423aa4c8fe8cb285d5183c66))
-* **PN-9873:** disabled button for downloading f24 when another f24 is already downloading ([#1128](https://github.com/pagopa/pn-frontend/issues/1128)) ([95fcd5e](https://github.com/pagopa/pn-frontend/commit/95fcd5e1bfe61b25f6fe82dc88dcafc166c1cf88))
-
-
-### Features
-
-* **pn-9774:** added some new tracking events for user monitoring ([#1129](https://github.com/pagopa/pn-frontend/issues/1129)) ([45704ff](https://github.com/pagopa/pn-frontend/commit/45704fffcc1c1d89a41bf21ecc942defd49dcf57))
-
-
-
-
-
 # [2.3.0](https://github.com/pagopa/pn-frontend/compare/v2.3.0-RC.2...v2.3.0) (2024-01-25)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
