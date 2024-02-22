@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -81,7 +82,8 @@ describe('NewNotification Page without payment', async () => {
   it('clicks on the breadcrumb button', async () => {
     // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
-    window.history.pushState({}, '', '/new-notification');
+    const history = createBrowserHistory();
+    history.push(routes.NUOVA_NOTIFICA);
 
     // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
@@ -92,7 +94,7 @@ describe('NewNotification Page without payment', async () => {
             path={routes.DASHBOARD}
             element={<div data-testid="mocked-dashboard">hello</div>}
           />
-          <Route path="/new-notification" element={<NewNotification />} />
+          <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
         </Routes>,
         { preloadedState: { userState: { user: userResponse } } }
       );
@@ -124,7 +126,8 @@ describe('NewNotification Page without payment', async () => {
   it('clicks on api keys button', async () => {
     // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
-    window.history.pushState({}, '', '/new-notification');
+    const history = createBrowserHistory();
+    history.push(routes.NUOVA_NOTIFICA);
 
     // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
@@ -135,7 +138,7 @@ describe('NewNotification Page without payment', async () => {
             path={routes.API_KEYS}
             element={<div data-testid="mocked-api-keys-page">hello</div>}
           />
-          <Route path="/new-notification" element={<NewNotification />} />
+          <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
         </Routes>,
         { preloadedState: { userState: { user: userResponse } } }
       );
