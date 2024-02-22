@@ -150,6 +150,22 @@ export const payments: Array<NotificationDetailPayment> = [
       },
     },
   },
+  {
+    f24: {
+      title: 'F24 quarta TARI',
+      applyCost: false,
+      metadataAttachment: {
+        digests: {
+          sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlu=',
+        },
+        contentType: 'application/pdf',
+        ref: {
+          key: 'PN_NOTIFICATION_ATTACHMENTS-5641ed2bc57442fb3df53abe5b5d38n.pdf',
+          versionToken: 'v1',
+        },
+      },
+    },
+  },
 ];
 
 const recipients: Array<NotificationDetailRecipient> = [
@@ -649,12 +665,60 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   timeline,
 };
 
+export const notificationDTORadd: NotificationDetail = {
+  abstract: 'Abstract della notifica',
+  paProtocolNumber: '302011692956029071',
+  subject: 'notifica analogica con cucumber',
+  recipients,
+  documents: [
+    {
+      title: 'Document 0',
+      digests: {
+        sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+      },
+      contentType: 'application/pdf',
+      ref: {
+        key: 'PN_NOTIFICATION_ATTACHMENTS-abb7804b6e442c8b2223648af970cd1.pdf',
+        versionToken: 'v1',
+      },
+      docIdx: '0',
+    },
+  ],
+  notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+  physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+  senderDenomination: 'Comune di palermo',
+  senderTaxId: '80016350821',
+  group: '000',
+  senderPaId: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
+  iun: 'RTRD-UDGU-QTQY-202308-P-1',
+  sentAt: '2023-08-25T09:33:58.709695008Z',
+  documentsAvailable: true,
+  notificationStatus: NotificationStatus.EFFECTIVE_DATE,
+  notificationStatusHistory,
+  timeline: [
+    ...timeline,
+    {
+      elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+      timestamp: '2022-06-21T11:44:28Z',
+      legalFactsIds: [],
+      category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+      details: {
+        recIndex: 1,
+        eventTimestamp: '2022-06-21T11:44:28Z',
+        raddType: 'ALT',
+        raddTransactionId: '6',
+      },
+    },
+  ],
+};
+
 export const notificationDTO = getOneRecipientNotification();
 
 export const notificationToFe = parseNotificationDetail(_.cloneDeep(notificationDTO));
 export const notificationToFeMultiRecipient = parseNotificationDetail(
   _.cloneDeep(notificationDTOMultiRecipient)
 );
+export const notificationToFeRadd = parseNotificationDetail(_.cloneDeep(notificationDTORadd));
 
 export const getTimelineElem = (
   category: TimelineCategory,

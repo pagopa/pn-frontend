@@ -83,6 +83,7 @@ const pagoPaSchema: yup.SchemaOf<PagoPAPaymentFullDetails> = yup
     url: yup.string().optional(),
     recIndex: yup.number().optional(),
     uncertainPaymentDate: yup.boolean().optional(),
+    eventTimestamp: yup.string().optional(),
   })
   .noUnknown(true);
 

@@ -8,16 +8,21 @@ import {
   DOWNTIME_LEGAL_FACT_DETAILS,
   LegalFactId,
   NotificationDetail as NotificationDetailModel,
+  NotificationDetailOtherDocument,
   NotificationStatus,
   ResponseEventDispatcher,
   TimelineCategory,
   formatDate,
+  formatToTimezoneString,
+  today,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import {
   notificationDTO,
   notificationDTOMultiRecipient,
+  notificationToFe,
+  raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import {
@@ -25,6 +30,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
 } from '../../api/notifications/notifications.routes';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
@@ -150,11 +156,64 @@ describe('NotificationDetail Page', async () => {
     });
     // check documents box
     const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
-      expect(notificationDetailDocumentMessage).toHaveTextContent(
-        /detail.download-aar-expired|detail.download-message-expired/
-      );
-    }
+    expect(notificationDetailDocumentsMessage[0]).toHaveTextContent(
+      'detail.download-message-expired'
+    );
+  });
+
+  it('checks not immediately available aar (otherDocuments) - mono recipient', async () => {
+    const notificationAfter150Days = {
+      ...notificationToFe,
+      sentAt: formatToTimezoneString(new Date(today.getTime() - 12960000000)) /* 150 days ago*/,
+    };
+    mock.onGet(NOTIFICATION_DETAIL(notificationToFe.iun)).reply(200, notificationAfter150Days);
+
+    const otherDocument: NotificationDetailOtherDocument = {
+      documentId: notificationAfter150Days.otherDocuments?.[0].documentId ?? '',
+      documentType: notificationAfter150Days.otherDocuments?.[0].documentType ?? '',
+    };
+
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationAfter150Days.iun, otherDocument))
+      .reply(200, {
+        retryAfter: 1000,
+      });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
+    expect(notificationDetailDocumentsMessage[1]).toHaveTextContent(
+      'detail.download-aar-available'
+    );
+
+    const documentButton = result.getAllByTestId('documentButton');
+    fireEvent.click(documentButton[1]);
+
+    await waitFor(() => {
+      const alertMessage = result.getAllByTestId('aarNotAvailableAlert')[0];
+      expect(alertMessage).toBeInTheDocument();
+    });
+  });
+
+  it('checks expired aar (otherDocuments) - mono recipient', async () => {
+    const notificationAfter10Years = {
+      ...notificationToFe,
+      sentAt: formatToTimezoneString(new Date(today.getTime() - 31536000000100)) /* 10 years ago*/,
+    };
+    mock.onGet(NOTIFICATION_DETAIL(notificationToFe.iun)).reply(200, notificationAfter10Years);
+
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
+    expect(notificationDetailDocumentsMessage[1]).toHaveTextContent('detail.download-aar-expired');
+
+    const documentButton = result.getAllByTestId('documentButton');
+    expect(documentButton[1].getAttributeNames()).toContain('disabled');
+
+    fireEvent.click(documentButton[1]);
   });
 
   it('executes the document download handler - mono recipient', async () => {
@@ -471,5 +530,35 @@ describe('NotificationDetail Page', async () => {
     });
     const paymentsTable = result.queryByTestId('paymentInfoBox');
     expect(paymentsTable).not.toBeInTheDocument();
+  });
+
+  it('render success alert when documents have been picked up - monorecipient', async () => {
+    mock
+      .onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun))
+      .reply(200, { ...raddNotificationDTO, radd: true });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-mono-recipient');
+  });
+
+  it('render success alert when documents have been picked up - multirecipient', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, {
+      ...raddNotificationDTO,
+      radd: true,
+      recipients: ['CLMCST42R12D969Z', '20517490320'],
+    });
+    await act(async () => {
+      result = render(<NotificationDetail />);
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-multi-recipients');
   });
 });

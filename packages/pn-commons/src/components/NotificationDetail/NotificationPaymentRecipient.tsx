@@ -91,6 +91,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     totalElements: payments.pagoPaF24.length,
   });
   const cancelledNotificationFAQ = `${landingSiteUrl}${FAQ_NOTIFICATION_CANCELLED_REFUND}`;
+  const [areOtherDowloading, setAreOtherDowloading] = useState(false);
 
   const paginatedPayments = pagoPaF24.slice(
     paginationData.page * paginationData.size,
@@ -295,10 +296,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     handleTrackDownloadF24={
                       void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
                     }
-                    handleTrackDownloadF24Success={
+                    handleTrackDownloadF24Success={() =>
                       void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
                     }
-                    handleTrackDownloadF24Timeout={
+                    handleTrackDownloadF24Timeout={() =>
                       void handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
                     }
                     f24Item={
@@ -309,6 +310,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     getPaymentAttachmentAction={getPaymentAttachmentAction}
                     isPagoPaAttachment
                     timerF24={timerF24}
+                    disableDownload={areOtherDowloading}
+                    handleDownload={setAreOtherDowloading}
                   />
                 </Box>
               ) : null}
@@ -340,6 +343,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                   handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
                 }
                 timerF24={timerF24}
+                disableDownload={areOtherDowloading}
+                handleDownload={setAreOtherDowloading}
               />
             </Box>
           ))}

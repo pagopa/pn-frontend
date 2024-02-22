@@ -19,7 +19,6 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
-
 enum INITIALIZATION_STEPS {
   USER_DETERMINATION = 'UserDetermination',
   INITIAL_PAGE_DETERMINATION = 'InitialPageDetermination',

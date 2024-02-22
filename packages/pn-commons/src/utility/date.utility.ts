@@ -12,6 +12,10 @@ export const tenYearsAgo = dateFns.startOfDay(
   new Date(new Date().setMonth(today.getMonth() - 120))
 );
 
+export function dateIsLessThan10Years(sentAt: string): boolean {
+  return Date.parse(formatToTimezoneString(today)) - Date.parse(sentAt) < 315569520000;
+}
+
 export function dateIsDefined(date: Date | null | undefined) {
   return date && !isNaN(date.getTime());
 }

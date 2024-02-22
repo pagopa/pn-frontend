@@ -27,6 +27,7 @@ import {
   notificationDTO,
   notificationToFe,
   paymentsData,
+  raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import {
   RenderResult,
@@ -739,14 +740,14 @@ describe('NotificationDetail Page', async () => {
     expect(pagoPaItems).toHaveLength(5);
   });
 
-  it('should call payment info if reload after 3 minutes', async () => {
+  it('should call payment info if reload after 6 minutes', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     mock
       .onPost(NOTIFICATION_PAYMENT_INFO(), paymentInfoRequest.slice(0, 5))
       .reply(200, paymentInfo);
 
     const date = new Date();
-    const isoDate = new Date(date.setMinutes(date.getMinutes() - 3)).toISOString();
+    const isoDate = new Date(date.setMinutes(date.getMinutes() - 6)).toISOString();
     const cacheWithOldDate = {
       ...cachedPayments,
       timestamp: isoDate,
@@ -801,5 +802,20 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     const paymentCache = getPaymentCache(notificationDTO.iun);
     expect(paymentCache?.currentPayment).toBeUndefined();
+  });
+
+  it('render success alert when documents have been retrieved', async () => {
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    expect(alertRadd).toBeInTheDocument();
+    expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 });

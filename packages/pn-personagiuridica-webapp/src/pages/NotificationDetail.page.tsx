@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
@@ -22,9 +22,8 @@ import {
   PnBreadcrumb,
   TimedMessage,
   TitleBox,
+  dateIsLessThan10Years,
   formatDate,
-  formatToTimezoneString,
-  today,
   useDownloadDocument,
   useErrors,
   useHasPermissions,
@@ -258,8 +257,7 @@ const NotificationDetail = () => {
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
       } else {
-        return Date.parse(formatToTimezoneString(today)) - Date.parse(notification.sentAt) <
-          315569520000 // 10 years
+        return dateIsLessThan10Years(notification.sentAt)
           ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
@@ -414,6 +412,14 @@ const NotificationDetail = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     titleVariant="h6"
                   />
+                  {notification.radd && (
+                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                      <AlertTitle>
+                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      </AlertTitle>
+                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                    </Alert>
+                  )}
                 </Paper>
 
                 {checkIfUserHasPayments && (
@@ -451,7 +457,10 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     downloadFilesMessage={getDownloadFilesMessage('aar')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
+                    disableDownloads={
+                      isCancelled.cancellationInTimeline ||
+                      !dateIsLessThan10Years(notification.sentAt)
+                    }
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
