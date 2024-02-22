@@ -76,6 +76,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
                   id={`spid-select-${IDP.entityId}`}
                   onClick={() => getSPID(IDP)}
                   sx={{ width: '100px', padding: '0' }}
+                  aria-label={IDP.name}
                 >
                   <Icon sx={{ width: '100px', height: '48px' }}>
                     <img width="100px" src={IDP.imageUrl} alt={IDP.name} />
