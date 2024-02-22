@@ -11,7 +11,15 @@ import {
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import {
+  RenderResult,
+  act,
+  fireEvent,
+  prettyDOM,
+  render,
+  waitFor,
+  within,
+} from '../../__test__/test-utils';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
@@ -278,6 +286,7 @@ describe('NewNotification Page without payment', async () => {
       errors: [
         {
           code: 'PN_GENERIC_INVALIDPARAMETER_DUPLICATED',
+          element: 'Duplicated notification for senderPaId##paProtocolNumber##idempotenceToken',
         },
       ],
     };
@@ -334,6 +343,12 @@ describe('NewNotification Page without payment', async () => {
     // check if toast is in the document
     const snackBar = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(snackBar).toBeInTheDocument();
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_protocol_number_duplicate.title.notifiche'
+    );
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_protocol_number_duplicate.message.notifiche'
+    );
   });
 });
 
