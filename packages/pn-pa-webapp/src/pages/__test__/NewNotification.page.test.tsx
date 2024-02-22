@@ -11,15 +11,7 @@ import {
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
-import {
-  RenderResult,
-  act,
-  fireEvent,
-  prettyDOM,
-  render,
-  waitFor,
-  within,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
