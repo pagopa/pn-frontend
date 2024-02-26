@@ -15,7 +15,6 @@ import {
   RenderResult,
   act,
   fireEvent,
-  prettyDOM,
   render,
   waitFor,
   within,
