@@ -13,10 +13,11 @@ export type IAppMessage = {
   status?: number;
   /** The identifier of the rejected action that triggered this error */
   action?: string;
-  /** Whether the error has been already shown. 
+  /** Whether the error has been already shown.
    *  Errors must be kept after they have been shown because they signal failed Redux dispatchs (probably API calls),
    *  this information is used to decide whether to show the normal component showing the obtained data
    *  or else an ApiError component.
    */
   alreadyShown: boolean;
+  retryAfter?: number;
 };

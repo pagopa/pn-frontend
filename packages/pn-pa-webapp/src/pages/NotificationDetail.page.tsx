@@ -145,7 +145,20 @@ const NotificationDetail: React.FC = () => {
             category: legalFactAsLegalFact.category,
           },
         })
-      );
+      )
+        .unwrap()
+        .then(() => {
+          dispatch(
+            appStateActions.addInfo({
+              title: '',
+              message: t(`detail.document-not-available`, {
+                ns: 'notifiche',
+              }),
+            })
+          );
+          // reload notification detail
+          fetchSentNotification();
+        });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));

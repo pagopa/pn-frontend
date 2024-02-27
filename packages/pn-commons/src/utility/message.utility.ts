@@ -7,7 +7,8 @@ export const createAppMessage = (
   title: string,
   message: string,
   status?: number,
-  action?: string
+  action?: string,
+  retryAfter?: number
 ): IAppMessage => {
   const e: IAppMessage = {
     id: _.uniqueId(),
@@ -18,6 +19,7 @@ export const createAppMessage = (
     status,
     alreadyShown: false,
     action,
+    retryAfter,
   };
   return e;
 };

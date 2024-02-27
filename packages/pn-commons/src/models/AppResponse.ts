@@ -1,6 +1,6 @@
 export type HTTPStatusCode = number;
 
-export type AppResponseOutcome = 'success' | 'error';
+export type AppResponseOutcome = 'success' | 'error' | 'info';
 
 /**
  * The following ServerResponse interfaces is used to model DTO
@@ -9,6 +9,7 @@ export type AppResponseOutcome = 'success' | 'error';
 export interface ServerResponse {
   status?: HTTPStatusCode;
   data?: ServerResponseData;
+  retryAfter?: number;
 }
 
 export interface ServerResponseError {
@@ -28,6 +29,7 @@ export interface AppResponse {
   traceId?: string;
   timestamp?: string;
   errors?: Array<AppResponseError>;
+  retryAfter?: number;
 }
 
 export interface AppResponseError {

@@ -6,7 +6,7 @@ import { appStateActions, appStateSelectors } from '../redux';
 import SnackBar from './SnackBar/SnackBar';
 
 type EnqueuedMessage = {
-  type: 'error' | 'success';
+  type: 'error' | 'success' | 'info';
   message: IAppMessage;
 };
 
@@ -14,6 +14,7 @@ const AppMessage = () => {
   const dispatch = useDispatch();
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
+  const info = useSelector(appStateSelectors.selectInfo);
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
   const [queue, setQueue] = useState<Array<EnqueuedMessage>>([]);
 
@@ -28,14 +29,15 @@ const AppMessage = () => {
        */
       // dispatch(appStateActions.removeError(id));
       dispatch(appStateActions.setErrorAsAlreadyShown(message.message.id));
-    } else {
+    } else if (message.type === MessageType.SUCCESS) {
       dispatch(appStateActions.removeSuccess(message.message.id));
     }
+    dispatch(appStateActions.removeInfo(message.message.id));
 
     setCurrentMessage(null);
   };
 
-  const enqueueMessages = (messages: Array<IAppMessage>, type: 'success' | 'error') => {
+  const enqueueMessages = (messages: Array<IAppMessage>, type: 'success' | 'error' | 'info') => {
     const newQueue: Array<EnqueuedMessage> = messages
       .filter(
         (message: IAppMessage) =>
@@ -72,6 +74,25 @@ const AppMessage = () => {
     enqueueMessages(success, 'success');
   }, [success]);
 
+  useEffect(() => {
+    enqueueMessages(info, 'info');
+  }, [info]);
+
+  const getTypeOfMessage = (messageType: string | undefined) => {
+    if (messageType === 'error') {
+      return MessageType.ERROR;
+    } else if (messageType === 'success') {
+      return MessageType.SUCCESS;
+    } else if (messageType === 'info') {
+      return MessageType.INFO;
+    } else {
+      return MessageType.ERROR;
+    }
+  };
+
+  const typeOfMessage = currentMessage?.type
+    ? getTypeOfMessage(currentMessage.type)
+    : MessageType.INFO;
   return (
     <>
       {currentMessage && (
@@ -80,7 +101,7 @@ const AppMessage = () => {
           title={currentMessage.message.title}
           message={currentMessage.message.message}
           open
-          type={currentMessage.type === MessageType.ERROR ? MessageType.ERROR : MessageType.SUCCESS}
+          type={typeOfMessage}
           onClose={() => onCloseToast(currentMessage)}
           closingDelay={5000}
         />

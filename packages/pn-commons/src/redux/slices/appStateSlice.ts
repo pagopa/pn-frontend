@@ -2,7 +2,11 @@ import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AppResponse, IAppMessage } from '../../models';
 import { AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
-import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
+import {
+  createAppResponseError,
+  createAppResponseInfo,
+  createAppResponseSuccess,
+} from '../../utility/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
 
 export interface AppStateState {
@@ -13,6 +17,7 @@ export interface AppStateState {
   messages: {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
+    info: Array<IAppMessage>;
   };
   responseEvent: {
     outcome: AppResponseOutcome;
@@ -30,6 +35,7 @@ const initialState: AppStateState = {
   messages: {
     errors: [],
     success: [],
+    info: [],
   },
   responseEvent: null,
   isInitialized: false,
@@ -52,7 +58,13 @@ export const appStateSlice = createSlice({
   reducers: {
     addError(
       state,
-      action: PayloadAction<{ title: string; message: string; status?: HTTPStatusCode; action?: string }>
+      action: PayloadAction<{
+        title: string;
+        message: string;
+        status?: HTTPStatusCode;
+        action?: string;
+        retryAfter?: number;
+      }>
     ) {
       const message = createAppMessage(
         action.payload.title,
@@ -85,6 +97,25 @@ export const appStateSlice = createSlice({
     removeSuccess(state, action: PayloadAction<string>) {
       state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
     },
+    addInfo(
+      state,
+      action: PayloadAction<{
+        title: string;
+        message: string;
+        status?: number;
+        retryAfter?: number;
+      }>
+    ) {
+      const message = createAppMessage(
+        action.payload.title,
+        action.payload.message,
+        action.payload.status
+      );
+      state.messages.info.push(message);
+    },
+    removeInfo(state, action: PayloadAction<string>) {
+      state.messages.info = state.messages.info.filter((e) => e.id !== action.payload);
+    },
     finishInitialization(state) {
       state.isInitialized = true;
     },
@@ -100,8 +131,18 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
-        const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
-        state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
+        if (
+          actionBeingFulfilled === 'getSentNotificationLegalfact' &&
+          action.payload?.response?.retryAfter &&
+          action.payload?.response?.retryAfter > 0
+        ) {
+          const response = createAppResponseInfo(actionBeingFulfilled, action.payload);
+          state.responseEvent = { outcome: 'info', name: actionBeingFulfilled, response };
+          console.log('----------------------add response info-------------------');
+        } else {
+          const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
+          state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
+        }
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
@@ -120,5 +161,6 @@ export const appStateSelectors = {
   selectLoading: (state: any) => state.appState.loading.result,
   selectErrors: (state: any) => state.appState.messages.errors,
   selectSuccess: (state: any) => state.appState.messages.success,
+  selectInfo: (state: any) => state.appState.messages.info,
   selectIsInitialized: (state: any) => state.appState.isInitialized,
 };
