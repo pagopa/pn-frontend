@@ -63,7 +63,6 @@ export const appStateSlice = createSlice({
         message: string;
         status?: HTTPStatusCode;
         action?: string;
-        retryAfter?: number;
       }>
     ) {
       const message = createAppMessage(
@@ -137,7 +136,6 @@ export const appStateSlice = createSlice({
         ) {
           const response = createAppResponseInfo(actionBeingFulfilled, action.payload);
           state.responseEvent = { outcome: 'info', name: actionBeingFulfilled, response };
-          console.log('----------------------add response info-------------------');
         } else {
           const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
           state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };

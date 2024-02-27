@@ -19,6 +19,7 @@ class AppResponsePublisher {
   private static instance: {
     success: AppResponsePublisher | undefined;
     error: AppResponsePublisher | undefined;
+    info: AppResponsePublisher | undefined;
   };
   private regularQueue: EventsList = {};
   private fallbackQueue: Array<CallBackFunction> = [];
@@ -28,6 +29,7 @@ class AppResponsePublisher {
       AppResponsePublisher.instance = {
         success: undefined,
         error: undefined,
+        info: undefined,
       };
     }
     if (!AppResponsePublisher.instance[type]) {

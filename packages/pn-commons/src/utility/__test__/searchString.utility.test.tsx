@@ -53,6 +53,7 @@ describe('searchString utility', () => {
         message: 'common - validation.invalid-characters-not-inserted',
         status: undefined,
         title: 'common - validation.invalid-characters-not-inserted',
+        retryAfter: undefined,
         toNotify: true,
       },
     ]);
