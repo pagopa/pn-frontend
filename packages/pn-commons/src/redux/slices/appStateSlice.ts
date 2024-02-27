@@ -103,7 +103,6 @@ export const appStateSlice = createSlice({
         title: string;
         message: string;
         status?: number;
-        retryAfter?: number;
       }>
     ) {
       const message = createAppMessage(
