@@ -42,16 +42,10 @@ export const createAppResponseInfo = (action: string, response: ServerResponse):
   const retryAfter = response.retryAfter;
 
   if (retryAfter && retryAfter > 0) {
-    console.log('----------------------nell if-------------------');
-    console.log(retryAfter);
-    console.log('-----------------------------------------');
     return {
       action,
       retryAfter,
     };
   }
-  console.log('----------------------fuori if-------------------');
-  console.log(retryAfter);
-  console.log('-----------------------------------------');
   return { action };
 };

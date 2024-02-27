@@ -147,15 +147,17 @@ const NotificationDetail: React.FC = () => {
         })
       )
         .unwrap()
-        .then(() => {
-          dispatch(
-            appStateActions.addInfo({
-              title: '',
-              message: t(`detail.document-not-available`, {
-                ns: 'notifiche',
-              }),
-            })
-          );
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
           // reload notification detail
           fetchSentNotification();
         });
