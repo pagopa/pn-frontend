@@ -19,5 +19,4 @@ export type IAppMessage = {
    *  or else an ApiError component.
    */
   alreadyShown: boolean;
-  retryAfter?: number;
 };

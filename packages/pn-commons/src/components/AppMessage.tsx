@@ -31,8 +31,9 @@ const AppMessage = () => {
       dispatch(appStateActions.setErrorAsAlreadyShown(message.message.id));
     } else if (message.type === MessageType.SUCCESS) {
       dispatch(appStateActions.removeSuccess(message.message.id));
+    } else {
+      dispatch(appStateActions.removeInfo(message.message.id));
     }
-    dispatch(appStateActions.removeInfo(message.message.id));
 
     setCurrentMessage(null);
   };

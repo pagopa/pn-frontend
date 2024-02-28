@@ -43,7 +43,7 @@ describe('AppMessage Component', () => {
           messages: {
             errors,
             success: [],
-            info,
+            info: [],
           },
         },
       },
@@ -64,7 +64,7 @@ describe('AppMessage Component', () => {
           messages: {
             errors: [],
             success: success,
-            info,
+            info: [],
           },
         },
       },
