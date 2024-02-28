@@ -16,7 +16,6 @@ import {
   NotificationDetail as NotificationDetailType,
   NotificationRelatedDowntimes,
   PnBreadcrumb,
-  TimedMessage,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
@@ -95,12 +94,6 @@ const NotificationDetail: React.FC = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const legalFactDownloadRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
-  );
-  const legalFactDownloadAARRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
-  );
 
   const { recipients } = notification;
   /*
@@ -163,7 +156,20 @@ const NotificationDetail: React.FC = () => {
         });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
-      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }))
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
     }
   };
 
@@ -260,9 +266,6 @@ const NotificationDetail: React.FC = () => {
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
-  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
-
   const properBreadcrumb = (
     <PnBreadcrumb
       linkRoute={routes.DASHBOARD}
@@ -343,11 +346,6 @@ const NotificationDetail: React.FC = () => {
                   )}
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarDownload">
-                  <TimedMessage timeout={timeoutAARMessage}>
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="aarNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
@@ -370,11 +368,6 @@ const NotificationDetail: React.FC = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}>
-                <TimedMessage timeout={timeoutMessage}>
-                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>
-                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={recipients}
