@@ -90,9 +90,6 @@ const AppMessage = () => {
     }
   };
 
-  const typeOfMessage = currentMessage?.type
-    ? getTypeOfMessage(currentMessage.type)
-    : MessageType.INFO;
   return (
     <>
       {currentMessage && (
@@ -101,7 +98,7 @@ const AppMessage = () => {
           title={currentMessage.message.title}
           message={currentMessage.message.message}
           open
-          type={typeOfMessage}
+          type={currentMessage?.type ? getTypeOfMessage(currentMessage.type) : MessageType.ERROR}
           onClose={() => onCloseToast(currentMessage)}
           closingDelay={5000}
         />
