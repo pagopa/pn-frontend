@@ -88,7 +88,8 @@ const NuovaDelega = () => {
       mandate_type:
         values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
     });
-    void dispatch(createDelegation(values));
+    void dispatch(createDelegation({ ...values, codiceFiscale: 'a' }));
+    // void dispatch(createDelegation(values));
   };
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
