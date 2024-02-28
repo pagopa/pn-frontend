@@ -4,13 +4,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Alert, AlertTitle, IconButton, Snackbar } from '@mui/material';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
-import { MessageType } from '../../models/MessageType';
+import { AppResponseOutcome } from '../../models/AppResponse';
 
 type Props = {
   /** whether the sneakbar should be open or not */
   open: boolean;
   /** message type (error, success, info, warning) */
-  type: MessageType;
+  type: AppResponseOutcome;
   /** title to be shown */
   title?: React.ReactNode;
   /** message to be shown */
@@ -55,11 +55,11 @@ const SnackBar: React.FC<Props> = ({
     return;
   }, []);
 
-  const getColor = new Map<MessageType, 'error' | 'warning' | 'success' | 'info'>([
-    [MessageType.ERROR, 'error'],
-    [MessageType.WARNING, 'warning'],
-    [MessageType.SUCCESS, 'success'],
-    [MessageType.INFO, 'info'],
+  const getColor = new Map<AppResponseOutcome, 'error' | 'warning' | 'success' | 'info'>([
+    [AppResponseOutcome.ERROR, 'error'],
+    [AppResponseOutcome.WARNING, 'warning'],
+    [AppResponseOutcome.SUCCESS, 'success'],
+    [AppResponseOutcome.INFO, 'info'],
   ]);
 
   const action = (

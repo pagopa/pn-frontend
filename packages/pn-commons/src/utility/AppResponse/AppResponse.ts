@@ -37,15 +37,3 @@ export const createAppResponseSuccess = (action: string, response: ServerRespons
   }
   return { action };
 };
-
-export const createAppResponseInfo = (action: string, response: ServerResponse): AppResponse => {
-  const retryAfter = response.retryAfter;
-
-  if (retryAfter && retryAfter > 0) {
-    return {
-      action,
-      retryAfter,
-    };
-  }
-  return { action };
-};

@@ -1,10 +1,10 @@
 import { vi } from 'vitest';
 
-import { MessageType } from '../../../models';
+import { AppResponseOutcome } from '../../../models/AppResponse';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import SnackBar from '../SnackBar';
 
-const renderSnackBar = (open: boolean, type: MessageType, closingDelay?: number) =>
+const renderSnackBar = (open: boolean, type: AppResponseOutcome, closingDelay?: number) =>
   render(
     <SnackBar
       open={open}
@@ -16,20 +16,20 @@ const renderSnackBar = (open: boolean, type: MessageType, closingDelay?: number)
 
 describe('SnackBar Component', () => {
   it('renders snack bar (closed)', () => {
-    const { queryByTestId } = renderSnackBar(false, MessageType.INFO);
+    const { queryByTestId } = renderSnackBar(false, AppResponseOutcome.INFO);
     const snackBarContainer = queryByTestId('snackBarContainer');
     expect(snackBarContainer).not.toBeInTheDocument();
   });
 
   it('renders snack bar (opened)', () => {
-    const { getByTestId } = renderSnackBar(true, MessageType.INFO);
+    const { getByTestId } = renderSnackBar(true, AppResponseOutcome.INFO);
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     expect(snackBarContainer).toHaveTextContent('SnackBar mocked message');
   });
 
   it('closes snack bar by clicking close button', async () => {
-    const { getByTestId } = renderSnackBar(true, MessageType.INFO);
+    const { getByTestId } = renderSnackBar(true, AppResponseOutcome.INFO);
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     const closeButton = within(snackBarContainer!).getByRole('button');
@@ -49,7 +49,7 @@ describe('SnackBar Component', () => {
   // ---------------------------------
   it.skip('closes snack bar after delay', async () => {
     vi.useFakeTimers();
-    const { getByTestId } = renderSnackBar(true, MessageType.INFO, 400);
+    const { getByTestId } = renderSnackBar(true, AppResponseOutcome.INFO, 400);
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     // wait...

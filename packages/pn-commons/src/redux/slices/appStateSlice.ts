@@ -2,11 +2,7 @@ import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AppResponse, IAppMessage } from '../../models';
 import { AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
-import {
-  createAppResponseError,
-  createAppResponseInfo,
-  createAppResponseSuccess,
-} from '../../utility/AppResponse';
+import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
 
 export interface AppStateState {
@@ -129,24 +125,23 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
-        if (
-          actionBeingFulfilled === 'getSentNotificationLegalfact' &&
-          action.payload?.response?.retryAfter &&
-          action.payload?.response?.retryAfter > 0
-        ) {
-          const response = createAppResponseInfo(actionBeingFulfilled, action.payload);
-          state.responseEvent = { outcome: 'info', name: actionBeingFulfilled, response };
-        } else {
-          const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
-          state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
-        }
+        const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
+        state.responseEvent = {
+          outcome: AppResponseOutcome.SUCCESS,
+          name: actionBeingFulfilled,
+          response,
+        };
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
         const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
-        state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };
+        state.responseEvent = {
+          outcome: AppResponseOutcome.ERROR,
+          name: actionBeingRejected,
+          response,
+        };
       });
   },
 });
