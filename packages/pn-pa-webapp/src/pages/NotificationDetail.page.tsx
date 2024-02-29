@@ -116,7 +116,20 @@ const NotificationDetail: React.FC = () => {
     if (_.isObject(document)) {
       void dispatch(
         getSentNotificationOtherDocument({ iun: notification.iun, otherDocument: document })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
     } else {
       const documentIndex = document as string;
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
@@ -156,20 +169,7 @@ const NotificationDetail: React.FC = () => {
         });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
-      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }))
-        .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
     }
   };
 
