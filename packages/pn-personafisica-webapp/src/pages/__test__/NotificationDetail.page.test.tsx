@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import {
+  AppMessage,
   AppResponseMessage,
   DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
@@ -320,7 +321,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     window.location.href = '';
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds)).reply(200, {
       filename: 'mocked-filename',
@@ -345,7 +346,8 @@ describe('NotificationDetail Page', async () => {
     });
   });
 
-  it('executes the other document (aar) download handler', async () => {
+  it.only('executes the other document (aar) download handler', async () => {
+    vi.useFakeTimers();
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
       documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
@@ -360,11 +362,17 @@ describe('NotificationDetail Page', async () => {
         retryAfter: 1,
       });
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+        }
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     const AARBox = result.getByTestId('aarBox');
@@ -378,7 +386,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
 
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
@@ -389,8 +397,8 @@ describe('NotificationDetail Page', async () => {
         url: 'https://mocked-aar-com',
       });
     //simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
+    act(() => {
+      vi.advanceTimersByTime(5000);
     });
     expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(AARButton);

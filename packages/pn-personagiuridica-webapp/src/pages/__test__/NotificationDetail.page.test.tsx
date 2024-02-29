@@ -331,7 +331,7 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds as LegalFactId))
@@ -391,7 +391,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
 
-    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))

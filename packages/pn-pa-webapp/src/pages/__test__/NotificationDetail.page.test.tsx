@@ -264,7 +264,7 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationDTO.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
       filename: 'mocked-filename',
