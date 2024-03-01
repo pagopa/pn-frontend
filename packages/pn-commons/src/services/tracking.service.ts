@@ -37,7 +37,13 @@ export function setProfileProperty(property: any, nodeEnv: string): void {
   } else if (nodeEnv === 'test') {
     return;
   } else {
-    mixpanel.people.set(property);
+    try {
+      mixpanel.identify(mixpanel.get_distinct_id());
+      mixpanel.people.set(property);
+    } catch (_) {
+      // eslint-disable-next-line no-console
+      console.log(property);
+    }
   }
 }
 
