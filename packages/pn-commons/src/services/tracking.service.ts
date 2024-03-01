@@ -27,6 +27,20 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
   }
 }
 
+/**
+ * Set profile properties
+ */
+export function setProfileProperty(property: any, nodeEnv: string): void {
+  if (!nodeEnv || nodeEnv === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('Mixpanel events mock on console log - profile properties');
+  } else if (nodeEnv === 'test') {
+    return;
+  } else {
+    mixpanel.people.set(property);
+  }
+}
+
 export const interceptDispatch =
   (
     next: Dispatch<AnyAction>,
