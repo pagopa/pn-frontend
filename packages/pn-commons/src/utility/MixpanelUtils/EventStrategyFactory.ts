@@ -10,7 +10,7 @@ import EventType from './EventType';
  * @typedef {EventStrategyFactory}
  * @implements {IEventStrategyFactory<EventType>}
  */
-export default class EventStrategyFactory implements IEventStrategyFactory<EventType> {
+export default class EventStrategyFactory implements IEventStrategyFactory {
   /**
    * Description placeholder
    * @date 23/2/2024 - 17:29:49
