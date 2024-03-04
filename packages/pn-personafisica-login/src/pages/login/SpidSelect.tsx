@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { setProfileProperty } from '@pagopa-pn/pn-commons';
 
 import SpidBig from '../../assets/spid_big.svg';
 import { getConfiguration } from '../../services/configuration.service';
@@ -26,6 +27,8 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       SPID_IDP_NAME: IDP.name,
       SPID_IDP_ID: IDP.entityId,
     });
+    setProfileProperty({ idp: IDP.name}, process.env.NODE_ENV);
+
     window.location.assign(`${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`);
   };
 
