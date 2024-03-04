@@ -26,20 +26,6 @@ export default defineConfig(({ mode }) => {
 
   return mergeConfig(vitestConfig, {
     plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
-    test: {
-      globals: true,
-      setupFiles: './src/setupTests.ts',
-      environment: 'jsdom',
-      exclude: [...configDefaults.exclude, '**/*.a11y.test.ts', '**/*.a11y.test.tsx'],
-      reporters: ['vitest-sonar-reporter', 'default'],
-      outputFile: 'test-report.xml',
-      coverage: {
-        provider: 'v8',
-        reporter: ['lcov'],
-        exclude: ['**/*.a11y.test.ts', '**/*.a11y.test.tsx', 'src/models/**'],
-        reportOnFailure: true,
-      },
-    },
     server: {
       host: env.HOST,
       https: true,
