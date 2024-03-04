@@ -305,11 +305,17 @@ describe('NotificationDetail Page', async () => {
       retryAfter: 1,
     });
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+        }
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     const legalFactButton = result.getAllByTestId('download-legalfact');
@@ -320,7 +326,6 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationToFe.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    window.location.href = '';
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationToFe.iun, mockLegalIds)).reply(200, {
@@ -331,7 +336,7 @@ describe('NotificationDetail Page', async () => {
     });
     // simulate that legal fact is now available
     await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, 5000));
     });
     expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton[0]);
@@ -344,10 +349,9 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-url-com');
     });
-  });
+  }, 10000);
 
-  it.only('executes the other document (aar) download handler', async () => {
-    vi.useFakeTimers();
+  it('executes the other document (aar) download handler', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationToFe.otherDocuments?.[0].documentId ?? '',
       documentType: notificationToFe.otherDocuments?.[0].documentType ?? '',
@@ -374,6 +378,7 @@ describe('NotificationDetail Page', async () => {
         }
       );
     });
+
     expect(mock.history.get).toHaveLength(2);
     const AARBox = result.getByTestId('aarBox');
     const AARButton = within(AARBox).getByTestId('documentButton');
@@ -385,7 +390,6 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationToFe.iun}/document/AAR`
       );
     });
-
     const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
     mock
@@ -396,22 +400,25 @@ describe('NotificationDetail Page', async () => {
         retryAfter: null,
         url: 'https://mocked-aar-com',
       });
+
     //simulate that legal fact is now available
-    act(() => {
-      vi.advanceTimersByTime(5000);
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 5000));
     });
     expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(AARButton);
+
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
         `/delivery-push/${notificationToFe.iun}/document/AAR`
       );
     });
+
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-aar-com');
     });
-  });
+  }, 100000);
 
   it('executes the downtimws legal fact download handler', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
