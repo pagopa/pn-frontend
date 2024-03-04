@@ -9,7 +9,7 @@ const vitestConfig = defineVitestConfig({
     globals: true,
     setupFiles: './src/setupTests.ts',
     environment: 'jsdom',
-    reporters: ['vitest-sonar-reporter'],
+    reporters: ['vitest-sonar-reporter', 'default'],
     outputFile: 'test-report.xml',
     coverage: {
       provider: 'v8',
