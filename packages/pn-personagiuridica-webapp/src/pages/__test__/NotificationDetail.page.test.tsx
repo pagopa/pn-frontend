@@ -39,6 +39,7 @@ import {
   waitFor,
   within,
 } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -98,13 +99,9 @@ describe('NotificationDetail Page', async () => {
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
   const original = window.location;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },

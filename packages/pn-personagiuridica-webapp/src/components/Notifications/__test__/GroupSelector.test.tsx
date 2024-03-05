@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { GET_GROUPS } from '../../../api/external-registries/external-registries-routes';
 import GroupSelector from '../GroupSelector';
 
@@ -16,13 +17,9 @@ const onGroupSelectionCbk = vi.fn();
 
 describe('GroupSelector component', async () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
