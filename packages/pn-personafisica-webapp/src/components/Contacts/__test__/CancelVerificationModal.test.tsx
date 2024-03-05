@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, testStore, within } from '../../../__test__/test-utils';
 import CancelVerificationModal from '../CancelVerificationModal';
 
 vi.mock('react-i18next', () => ({
@@ -14,11 +14,6 @@ vi.mock('react-i18next', () => ({
 const mockCloseHandler = vi.fn();
 
 describe('CancelVerificationModal component', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
-
   it('renders component and clicks on cancel button', () => {
     render(<CancelVerificationModal open handleClose={mockCloseHandler} />);
     const dialog = screen.getByTestId('cancelVerificationModal');
@@ -39,7 +34,7 @@ describe('CancelVerificationModal component', async () => {
     const dialog = screen.getByTestId('cancelVerificationModal');
     const buttons = within(dialog).getAllByRole('button');
     fireEvent.click(buttons[1]);
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual(
+    expect(testStore.getState().contactsState.digitalAddresses.legal).toStrictEqual(
       digitalAddresses.legal.filter((addr) => addr.senderId !== 'default')
     );
   });
