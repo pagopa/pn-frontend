@@ -14,6 +14,7 @@ import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
+import { DocType } from '../../../redux/notification/types';
 import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -77,11 +78,9 @@ describe('Notifications api tests', () => {
   it('getReceivedNotificationDocument', async () => {
     const iun = notificationDTO.iun;
     const documentIndex = '0';
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: mockedUrl });
+    mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex)).reply(200, { url: mockedUrl });
     const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
-    expect(res).toContain({ url: mockedUrl });
+    expect(res).toHaveProperty('url', mockedUrl);
   });
 
   it('getReceivedNotificationOtherDocument', async () => {
@@ -94,7 +93,7 @@ describe('Notifications api tests', () => {
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
       .reply(200, { url: mockedUrl });
     const res = await NotificationsApi.getReceivedNotificationOtherDocument(iun, otherDocument);
-    expect(res).toContain({ url: mockedUrl });
+    expect(res).toHaveProperty('url', mockedUrl);
   });
 
   it('getReceivedNotificationOtherDocument - retryAfter', async () => {
@@ -105,9 +104,9 @@ describe('Notifications api tests', () => {
     };
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
-      .reply(200, { url: mockedUrl, retryAfter: 1000, docType: "AAR" });
+      .reply(200, { url: mockedUrl, retryAfter: 1000, docType: 'AAR' });
     const res = await NotificationsApi.getReceivedNotificationOtherDocument(iun, otherDocument);
-    expect(res).toStrictEqual({ url: mockedUrl, retryAfter: 1000, docType: "AAR" });
+    expect(res).toStrictEqual({ url: mockedUrl, retryAfter: 1000, docType: 'AAR' });
   });
 
   it('getReceivedNotificationLegalfact', async () => {
@@ -118,7 +117,7 @@ describe('Notifications api tests', () => {
     };
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, { url: mockedUrl });
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
-    expect(res).toContain({ url: mockedUrl });
+    expect(res).toHaveProperty('url', mockedUrl);
   });
 
   it('getReceivedNotificationLegalfact - retryAfter', async () => {
@@ -127,17 +126,17 @@ describe('Notifications api tests', () => {
       key: 'mocked-key',
       category: LegalFactType.ANALOG_DELIVERY,
     };
-    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, { url: "", retryAfter: 1000, docType: "AO3" });
+    mock
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
+      .reply(200, { url: '', retryAfter: 1000, docType: 'AO3' });
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
-    expect(res).toStrictEqual({ url: "", retryAfter: 1000, docType: "AO3" });
+    expect(res).toStrictEqual({ url: '', retryAfter: 1000, docType: 'AO3' });
   });
 
   it('getPaymentAttachment', async () => {
     const iun = notificationDTO.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
-    mock
-      .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
-      .reply(200, { url: mockedUrl });
+    mock.onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName)).reply(200, { url: mockedUrl });
     const res = await NotificationsApi.getPaymentAttachment(
       iun,
       attachmentName as PaymentAttachmentNameType
