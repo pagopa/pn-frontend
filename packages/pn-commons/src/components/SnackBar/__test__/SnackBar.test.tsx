@@ -54,9 +54,9 @@ describe('SnackBar Component', () => {
     expect(snackBarContainer).toBeInTheDocument();
     // wait...
     vi.advanceTimersByTime(500);
+    vi.useRealTimers();
     await waitFor(() => {
       expect(snackBarContainer).not.toBeInTheDocument();
     });
-    vi.useRealTimers();
   });
 });
