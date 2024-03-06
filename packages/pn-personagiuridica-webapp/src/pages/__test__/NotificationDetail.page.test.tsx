@@ -712,11 +712,11 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.post).toHaveLength(2);
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
-    vi.useRealTimers();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
+    vi.useRealTimers();
   });
 
   it('should show correct paginated payments', async () => {

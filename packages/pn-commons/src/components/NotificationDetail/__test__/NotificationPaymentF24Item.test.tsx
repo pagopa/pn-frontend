@@ -205,8 +205,7 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(window.location.href).toBe(downloadUrl);
   });
 
-  // TO-FIX: il test fallisce perchè sembra che in jest 27, useFakeTimers non funzioni correttamente
-  it.skip('should show error when interval is finished', async () => {
+  it.only('should show error when interval is finished', async () => {
     const item = { ...f24Item, attachmentIdx: 1 };
     const { getByTestId } = render(
       <NotificationPaymentF24Item
@@ -223,24 +222,20 @@ describe('NotificationPaymentF24Item Component', () => {
     const downloadButton = getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // show downloading message and after recall the api to download the file
-    const downloadingMessage = await waitFor(() => getByTestId('f24-download-message'));
+    const downloadingMessage = await vi.waitFor(() => getByTestId('f24-download-message'));
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
     vi.useFakeTimers();
     // wait...
-    act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
-    });
+    vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
-    act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
-    });
+    vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // show the error
     vi.advanceTimersByTime(1000);
     vi.useRealTimers();
-    const error = await waitFor(() => getByTestId('f24-maxTime-error'));
+    const error = await vi.waitFor(() => getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
   });
