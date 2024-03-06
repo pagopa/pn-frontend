@@ -2,7 +2,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { RenderResult, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { RenderResult, fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT } from '../../../api/contacts/contacts.routes';
 import { CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import IOContact from '../IOContact';
@@ -22,14 +23,9 @@ const IOAddress = digitalAddresses.courtesy.find(
 describe('IOContact component', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
-  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -108,7 +104,7 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       });
     });
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       { ...IOAddress, value: IOAllowedValues.ENABLED },
     ]);
   });
@@ -155,7 +151,7 @@ describe('IOContact component', async () => {
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(1);
     });
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
+    expect(testStore.getState().contactsState.digitalAddresses.courtesy).toStrictEqual([
       { ...IOAddress, value: IOAllowedValues.DISABLED },
     ]);
   });

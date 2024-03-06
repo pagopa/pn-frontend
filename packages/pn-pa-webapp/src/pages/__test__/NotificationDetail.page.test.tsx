@@ -25,6 +25,7 @@ import {
   raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
@@ -58,10 +59,6 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
 };
 
 describe('NotificationDetail Page', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
   const mockLegalIds = getLegalFactIds(notificationDTO, 0);
   const original = window.location;
 
@@ -69,7 +66,7 @@ describe('NotificationDetail Page', async () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: vi.fn() },

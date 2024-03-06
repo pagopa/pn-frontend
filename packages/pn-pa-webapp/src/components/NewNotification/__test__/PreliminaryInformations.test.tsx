@@ -25,9 +25,11 @@ import {
   fireEvent,
   randomString,
   render,
+  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
 import { PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
@@ -85,14 +87,9 @@ describe('PreliminaryInformations component with payment enabled', async () => {
   let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
-  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   beforeEach(() => {
@@ -186,7 +183,7 @@ describe('PreliminaryInformations component with payment enabled', async () => {
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',
@@ -335,14 +332,9 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
   let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
-  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   beforeEach(() => {
@@ -415,7 +407,7 @@ describe('PreliminaryInformations Component with payment disabled', async () => 
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',

@@ -7,6 +7,7 @@ import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { institutionsList, productsList } from '../__mocks__/User.mock';
+import { apiClient } from '../api/apiClients';
 import { GET_CONSENTS } from '../api/consents/consents.routes';
 import {
   GET_INSTITUTIONS,
@@ -59,13 +60,9 @@ const reduxInitialState = {
 describe('App', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>

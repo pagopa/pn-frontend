@@ -12,6 +12,7 @@ import {
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { newNotification, newNotificationGroups } from '../../__mocks__/NewNotification.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { CREATE_NOTIFICATION, GET_USER_GROUPS } from '../../api/notifications/notifications.routes';
 import { GroupStatus } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
@@ -39,13 +40,9 @@ vi.mock('../../services/configuration.service', async () => {
 describe('NewNotification Page without payment', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   beforeEach(() => {

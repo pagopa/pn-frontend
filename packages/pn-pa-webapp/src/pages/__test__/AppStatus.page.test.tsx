@@ -14,6 +14,7 @@ import { theme } from '@pagopa/mui-italia';
 
 import { currentStatusDTO, downtimesDTO, openIncidents } from '../../__mocks__/AppStatus.mock';
 import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
 
@@ -35,13 +36,9 @@ const AppStatusWithErrorHandling = () => (
 describe('AppStatus page', async () => {
   let mock: MockAdapter;
   const original = window.location;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '' },
