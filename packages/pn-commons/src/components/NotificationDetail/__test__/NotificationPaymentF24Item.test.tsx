@@ -162,8 +162,8 @@ describe('NotificationPaymentF24Item Component', () => {
     expect(window.location.href).toBe(downloadUrl);
   });
 
-  // TO-FIX: il test fallisce perchè sembra che in jest 27, useFakeTimers non funzioni correttamente
-  it.skip('download the attachment after retryAfter', async () => {
+  it('download the attachment after retryAfter', async () => {
+    vi.useFakeTimers();
     const item = { ...f24Item, attachmentIdx: 1 };
     const { getByTestId } = render(
       <NotificationPaymentF24Item
@@ -183,29 +183,29 @@ describe('NotificationPaymentF24Item Component', () => {
     const downloadingMessage = getByTestId('f24-download-message');
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
-    vi.useFakeTimers();
     // wait...
-    act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2 + 200);
+    await act(async () => {
+      vi.advanceTimersToNextTimerAsync();
     });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
-    act(() => {
-      vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
+    await act(async () => {
+      vi.advanceTimersToNextTimerAsync();
     });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // download the file
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    vi.useRealTimers();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(downloadingMessage).not.toBeInTheDocument();
     });
     expect(window.location.href).toBe(downloadUrl);
+    vi.useRealTimers();
   });
 
-  it.only('should show error when interval is finished', async () => {
+  it('should show error when interval is finished', async () => {
+    vi.useFakeTimers();
     const item = { ...f24Item, attachmentIdx: 1 };
     const { getByTestId } = render(
       <NotificationPaymentF24Item
@@ -225,19 +225,24 @@ describe('NotificationPaymentF24Item Component', () => {
     const downloadingMessage = await vi.waitFor(() => getByTestId('f24-download-message'));
     expect(downloadingMessage).toBeInTheDocument();
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
-    vi.useFakeTimers();
     // wait...
-    vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
+    await act(async () => {
+      vi.advanceTimersToNextTimerAsync();
+    });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
     // wait...
-    vi.advanceTimersByTime((retryAfterDelay - 1000) / 2);
+    await act(async () => {
+      vi.advanceTimersToNextTimerAsync();
+    });
     expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
     // show the error
-    vi.advanceTimersByTime(1000);
-    vi.useRealTimers();
+    await act(async () => {
+      vi.advanceTimersByTimeAsync(1000);
+    });
     const error = await vi.waitFor(() => getByTestId('f24-maxTime-error'));
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('detail.payment.f24-download-error');
+    vi.useRealTimers();
   });
 
   it('should show error when api goes in error', async () => {
