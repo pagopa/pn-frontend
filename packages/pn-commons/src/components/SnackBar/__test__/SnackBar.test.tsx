@@ -47,16 +47,17 @@ describe('SnackBar Component', () => {
   // ---------------------------------
   // Carlos Lombardi, 2023-11-10
   // ---------------------------------
-  it.skip('closes snack bar after delay', async () => {
+  it('closes snack bar after delay', async () => {
     vi.useFakeTimers();
     const { getByTestId } = renderSnackBar(true, MessageType.INFO, 400);
     const snackBarContainer = getByTestId('snackBarContainer');
     expect(snackBarContainer).toBeInTheDocument();
     // wait...
     vi.advanceTimersByTime(500);
+
+    vi.useRealTimers();
     await waitFor(() => {
       expect(snackBarContainer).not.toBeInTheDocument();
     });
-    vi.useRealTimers();
   });
 });

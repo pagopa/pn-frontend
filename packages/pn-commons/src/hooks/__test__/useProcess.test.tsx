@@ -6,11 +6,10 @@ import { useProcess } from '../useProcess';
 describe('useProcess Hook', () => {
   // Test setup
   beforeEach(() => {
-    vi.useFakeTimers(); // Optional: Use fake timers to control setTimeout
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    vi.runOnlyPendingTimers();
     vi.useRealTimers();
   });
 
@@ -54,7 +53,7 @@ describe('useProcess Hook', () => {
   // ---------------------------------
   // Carlos Lombardi, 2023-11-10
   // ---------------------------------
-  it.skip('should perform a step with an async action', async () => {
+  it('should perform a step with an async action', async () => {
     const asyncAction = vi.fn(() => Promise.resolve());
     const { result } = renderHook(() => useProcess(['Step1']));
     act(() => {
@@ -62,6 +61,9 @@ describe('useProcess Hook', () => {
     });
     expect(result.current.currentSituation.step).toBe('Step1');
     expect(result.current.currentSituation.isActive).toBeTruthy();
+
+    vi.useRealTimers();
+
     await waitFor(() => {
       expect(asyncAction).toHaveBeenCalled();
       expect(result.current.currentSituation.isActive).toBeFalsy();
