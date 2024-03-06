@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 vi.mock('react-i18next', () => ({
@@ -13,11 +13,6 @@ vi.mock('react-i18next', () => ({
 const mockOpenCodeModalHandler = vi.fn();
 
 describe('DelegationElements', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
-
   it('renders the Menu closed', () => {
     const { queryByTestId } = render(<Menu />);
     const menuIcon = queryByTestId('delegationMenuIcon');
@@ -56,7 +51,7 @@ describe('DelegationElements', async () => {
     const revokeDelegate = await waitFor(() => getByTestId('menuItem-revokeDelegate'));
     fireEvent.click(revokeDelegate);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.modalState).toStrictEqual({
+      expect(testStore.getState().delegationsState.modalState).toStrictEqual({
         id: '111',
         open: true,
         type: 'delegates',
@@ -75,7 +70,7 @@ describe('DelegationElements', async () => {
     const rejectDelegator = getByTestId('menuItem-rejectDelegator');
     fireEvent.click(rejectDelegator);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.modalState).toStrictEqual({
+      expect(testStore.getState().delegationsState.modalState).toStrictEqual({
         id: '111',
         open: true,
         type: 'delegators',
@@ -122,7 +117,7 @@ describe('DelegationElements', async () => {
     const acceptButton = getByTestId('acceptButton');
     fireEvent.click(acceptButton);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.acceptModalState).toStrictEqual({
+      expect(testStore.getState().delegationsState.acceptModalState).toStrictEqual({
         id: '111',
         open: true,
         name: 'test',

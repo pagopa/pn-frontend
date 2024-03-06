@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { arrayOfDelegates, arrayOfDelegators } from '../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   DELEGATIONS_BY_DELEGATE,
   DELEGATIONS_BY_DELEGATOR,
@@ -25,13 +26,9 @@ vi.mock('react-i18next', () => ({
 
 describe('Deleghe page', async () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

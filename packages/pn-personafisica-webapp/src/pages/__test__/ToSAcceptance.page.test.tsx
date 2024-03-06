@@ -9,6 +9,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
 import * as routes from '../../navigation/routes.const';
@@ -48,13 +49,9 @@ const privacyConsent: ConsentUser = {
 
 describe('test Terms of Service page', async () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
