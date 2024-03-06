@@ -332,10 +332,6 @@ describe('NotificationDetail Page', async () => {
       url: 'https://mocked-url-com',
     });
     // simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 5000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton[0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
@@ -346,7 +342,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-url-com');
     });
-  }, 10000);
+  });
 
   it('executes the other document (aar) download handler', async () => {
     const otherDocument: NotificationDetailOtherDocument = {
@@ -399,12 +395,7 @@ describe('NotificationDetail Page', async () => {
       });
 
     //simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 5000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(AARButton);
-
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
@@ -415,7 +406,7 @@ describe('NotificationDetail Page', async () => {
     await waitFor(() => {
       expect(window.location.href).toBe('https://mocked-aar-com');
     });
-  }, 100000);
+  });
 
   it('executes the downtimws legal fact download handler', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);

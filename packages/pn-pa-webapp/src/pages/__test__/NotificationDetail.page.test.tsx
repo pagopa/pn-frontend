@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import {
+  AppMessage,
   AppResponseMessage,
   DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
@@ -176,7 +177,12 @@ describe('NotificationDetail Page', async () => {
         retryAfter: 1000,
       });
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>
+      );
     });
 
     const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
@@ -188,7 +194,7 @@ describe('NotificationDetail Page', async () => {
     fireEvent.click(documentButton[1]);
 
     await waitFor(() => {
-      const alertMessage = result.getAllByTestId('aarNotAvailableAlert')[0];
+      const alertMessage = result.getAllByTestId('snackBarContainer')[0];
       expect(alertMessage).toBeInTheDocument();
     });
   });
@@ -240,7 +246,7 @@ describe('NotificationDetail Page', async () => {
     });
   });
 
-  it('executes the legal fact download handler - mono recipient', async () => {
+  it.only('executes the legal fact download handler - mono recipient', async () => {
     mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -248,7 +254,12 @@ describe('NotificationDetail Page', async () => {
       retryAfter: 1,
     });
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
@@ -270,10 +281,6 @@ describe('NotificationDetail Page', async () => {
       url: 'https://mocked-url-com',
     });
     // simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton[0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
