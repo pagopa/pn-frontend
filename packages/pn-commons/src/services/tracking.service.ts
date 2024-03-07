@@ -30,16 +30,20 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 /**
  * Set profile properties
  */
-export function setProfileProperty(property: any, nodeEnv: string): void {
+export function setProfileProperty(property: any, nodeEnv: string, isIncremental = false): void {
   if (!nodeEnv || nodeEnv === 'development') {
     // eslint-disable-next-line no-console
-    console.log('Mixpanel events mock on console log - profile properties');
+    console.log('Mixpanel events mock on console log - profile properties', property);
   } else if (nodeEnv === 'test') {
     return;
   } else {
     try {
       mixpanel.identify(mixpanel.get_distinct_id());
-      mixpanel.people.set(property);
+      if (isIncremental) {
+        mixpanel.people.increment(property);
+      } else {
+        mixpanel.people.set(property);
+      }
     } catch (_) {
       // eslint-disable-next-line no-console
       console.log(property);
@@ -54,21 +58,21 @@ export const interceptDispatch =
     eventsActionsMap: Record<string, string>,
     nodeEnv: string
   ) =>
-    (action: PayloadAction<any, string>): any => {
-      if (eventsActionsMap[action.type]) {
-        // const idx = Object.values(trackEventType).indexOf(action.type as string);
-        const eventKey = eventsActionsMap[action.type];
-        // TODO check payload
-        const attributes = events[eventKey].getAttributes?.(action.payload);
-        const eventParameters = attributes
-          ? {
+  (action: PayloadAction<any, string>): any => {
+    if (eventsActionsMap[action.type]) {
+      // const idx = Object.values(trackEventType).indexOf(action.type as string);
+      const eventKey = eventsActionsMap[action.type];
+      // TODO check payload
+      const attributes = events[eventKey].getAttributes?.(action.payload);
+      const eventParameters = attributes
+        ? {
             event_category: events[eventKey].event_category,
             event_type: events[eventKey].event_type,
             ...attributes,
           }
-          : events[eventKey];
-        trackEvent(eventKey, nodeEnv, eventParameters);
-      }
+        : events[eventKey];
+      trackEvent(eventKey, nodeEnv, eventParameters);
+    }
 
-      return next(action);
-    };
+    return next(action);
+  };

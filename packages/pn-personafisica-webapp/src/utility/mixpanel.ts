@@ -1,7 +1,8 @@
-import { interceptDispatch, trackEvent } from '@pagopa-pn/pn-commons';
+import { interceptDispatch, setProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
 import { TrackEventType, events, eventsActionsMap } from './events';
+import { ProfilePropertyParams } from './profileProperties';
 
 /**
  * Redux middleware to track events
@@ -21,3 +22,22 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
 
   trackEvent(trackEventType, process.env.NODE_ENV, eventParameters);
 };
+
+export function setProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
+  propertyName: TProperty,
+  attributes?: ProfilePropertyParams[TProperty],
+  isIncremental = false
+) {
+  // eslint-disable-next-line functional/no-let
+  let property: any;
+
+  if (attributes) {
+    property = {
+      [propertyName]: attributes,
+    };
+  } else {
+    property = propertyName;
+  }
+
+  setProfileProperty(property, process.env.NODE_ENV, isIncremental);
+}
