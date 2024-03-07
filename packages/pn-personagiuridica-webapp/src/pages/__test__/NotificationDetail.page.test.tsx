@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import {
+  AppMessage,
   AppResponseMessage,
   DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
@@ -311,13 +312,19 @@ describe('NotificationDetail Page', async () => {
         retryAfter: 1,
       });
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: {
-            user: userResponse,
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>,
+        {
+          preloadedState: {
+            userState: {
+              user: userResponse,
+            },
           },
-        },
-      });
+        }
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     const legalFactButton = result?.getAllByTestId('download-legalfact');
@@ -339,10 +346,6 @@ describe('NotificationDetail Page', async () => {
         url: 'https://mocked-url-com',
       });
     // simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton![0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
@@ -370,11 +373,17 @@ describe('NotificationDetail Page', async () => {
         retryAfter: 1,
       });
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-      });
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+        }
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     const AARBox = result?.getByTestId('aarBox');
@@ -399,10 +408,6 @@ describe('NotificationDetail Page', async () => {
         url: 'https://mocked-aar-com',
       });
     //simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(AARButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);

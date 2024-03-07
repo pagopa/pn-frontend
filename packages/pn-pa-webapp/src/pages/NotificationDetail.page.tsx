@@ -164,8 +164,6 @@ const NotificationDetail: React.FC = () => {
               })
             );
           }
-          // reload notification detail
-          fetchSentNotification();
         });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;

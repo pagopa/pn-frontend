@@ -394,7 +394,7 @@ describe('NotificationDetail Page', async () => {
         url: 'https://mocked-aar-com',
       });
 
-    //simulate that legal fact is now available
+    //simulate that aar is now available
     fireEvent.click(AARButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
