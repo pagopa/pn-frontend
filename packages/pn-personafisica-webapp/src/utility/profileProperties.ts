@@ -6,4 +6,5 @@ export type ProfilePropertyParams = {
   SEND_HAS_MANDATE: 'yes' | 'no';
   SEND_MANDATE_GIVEN: 'yes' | 'no';
   SEND_PAYMENTS_COUNT: number;
+  SEND_NOTIFICATIONS_COUNT: number;
 };

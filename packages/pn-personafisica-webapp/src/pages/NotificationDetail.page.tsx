@@ -62,7 +62,7 @@ import {
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
+import { setProfilePropertyValues, trackEventByType } from '../utility/mixpanel';
 
 const getNotificationDetailData = (
   downtimeEvents: Array<Downtime>,
@@ -447,18 +447,19 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (downtimesReady && pageReady) {
-      trackEventByType(
-        TrackEventType.SEND_NOTIFICATION_DETAIL,
-        getNotificationDetailData(
-          downtimeEvents,
-          mandateId,
-          notification.notificationStatus,
-          checkIfUserHasPayments,
-          userPayments,
-          fromQrCode,
-          notification.timeline
-        )
+      const notificationDetailData = getNotificationDetailData(
+        downtimeEvents,
+        mandateId,
+        notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        fromQrCode,
+        notification.timeline
       );
+      trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, notificationDetailData);
+      if (notificationDetailData.first_time_opening) {
+        setProfilePropertyValues('SEND_NOTIFICATIONS_COUNT', undefined, true);
+      }
     }
   }, [downtimesReady, pageReady]);
 
