@@ -1,15 +1,50 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { ProfileAddresses, performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { CourtesyChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
+import {
+  CourtesyChannelType,
+  DigitalAddress,
+  DigitalAddresses,
+  IOAllowedValues,
+} from '../../models/contacts';
 import { setProfilePropertyValues } from '../../utility/mixpanel';
 import { Delegator } from '../delegation/types';
 
 export enum SIDEMENU_ACTIONS {
   GET_SIDEMENU_INFORMATION = 'getSidemenuInformation',
 }
+
+/**
+ * Function to get the profile addresses data for mixpanel profile properties
+ * @param addresses
+ */
+const getProfileAddressesData = (addresses: DigitalAddresses): ProfileAddresses => {
+  const hasPec = addresses.legal.length > 0 ? 'yes' : 'no';
+  const hasEmail = addresses.courtesy.some(
+    (address) => address.channelType === CourtesyChannelType.EMAIL
+  )
+    ? 'yes'
+    : 'no';
+  const hasSMS = addresses.courtesy.some(
+    (address) => address.channelType === CourtesyChannelType.SMS
+  )
+    ? 'yes'
+    : 'no';
+  const hasAppIO = addresses.courtesy.some(
+    (address) => address.channelType === CourtesyChannelType.IOMSG
+  )
+    ? 'activated'
+    : 'deactivated';
+
+  return {
+    hasPec,
+    hasEmail,
+    hasSMS,
+    hasAppIO,
+  };
+};
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
@@ -37,22 +72,7 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
         address.value !== IOAllowedValues.DISABLED);
     const allAddresses = await ContactsApi.getDigitalAddresses();
 
-    const hasPec = allAddresses.legal.length > 0 ? 'yes' : 'no';
-    const hasEmail = allAddresses.courtesy.some(
-      (address) => address.channelType === CourtesyChannelType.EMAIL
-    )
-      ? 'yes'
-      : 'no';
-    const hasSMS = allAddresses.courtesy.some(
-      (address) => address.channelType === CourtesyChannelType.SMS
-    )
-      ? 'yes'
-      : 'no';
-    const hasAppIO = allAddresses.courtesy.some(
-      (address) => address.channelType === CourtesyChannelType.IOMSG
-    )
-      ? 'activated'
-      : 'deactivated';
+    const { hasPec, hasEmail, hasSMS, hasAppIO } = getProfileAddressesData(allAddresses);
 
     setProfilePropertyValues('profile', 'SEND_HAS_PEC', hasPec);
     setProfilePropertyValues('profile', 'SEND_HAS_EMAIL', hasEmail);

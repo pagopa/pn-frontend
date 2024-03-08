@@ -33,6 +33,7 @@ import {
   EventPaymentRecipientType,
   EventPaymentStatusType,
   EventsType,
+  ProfileAddresses,
   ProfilePropertyType,
 } from './MixpanelEvents';
 import {
@@ -194,4 +195,5 @@ export type {
   Product,
   PaymentCache,
   ProfilePropertyType,
+  ProfileAddresses,
 };
