@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import EventStrategy from '../utility/MixpanelUtils/EventStrategy';
 import EventType from '../utility/MixpanelUtils/EventType';
 
@@ -10,5 +11,5 @@ import EventType from '../utility/MixpanelUtils/EventType';
  * @typedef {IEventStrategyFactory}
  */
 export default interface IEventStrategyFactory {
-  getStrategy(eventType: EventType): EventStrategy | null;
+  getStrategy(eventType: typeof EventType): EventStrategy | null;
 }

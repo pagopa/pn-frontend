@@ -8,7 +8,7 @@ import EventType from './EventType';
  * @export
  * @class EventStrategyFactory
  * @typedef {EventStrategyFactory}
- * @implements {IEventStrategyFactory<EventType>}
+ * @implements {IEventStrategyFactory}
  */
 export default class EventStrategyFactory implements IEventStrategyFactory {
   /**
@@ -16,7 +16,7 @@ export default class EventStrategyFactory implements IEventStrategyFactory {
    * @date 23/2/2024 - 17:29:49
    *
    * @param {EventType} eventType
-   * @returns {*}
+   * @returns {EventStrategy}
    */
   getStrategy(eventType: EventType) {
     switch (eventType) {

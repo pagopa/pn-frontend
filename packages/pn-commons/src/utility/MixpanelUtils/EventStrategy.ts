@@ -9,14 +9,16 @@
  * @class EventStrategy
  * @typedef {EventStrategy}
  */
-export interface EventStrategy<T> {
+interface EventStrategy {
   /**
    * This function manage receiving data as input
    * of the event and make the necessary transformations
    * @date 01/03/2024 - 17:34:29
    *
-   * @param {unknown} data - The incoming data associated to event X
-   * @returns {T}
+   * @param data - The incoming data associated to event X
+   * @returns - The event object to be track
    */
-  performComputations(data: unknown): T;
+  performComputations(data: unknown): unknown;
 }
+
+export default EventStrategy;
