@@ -20,8 +20,8 @@ import {
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
-  TimedMessage,
   TitleBox,
+  appStateActions,
   dateIsLessThan10Years,
   formatDate,
   useDownloadDocument,
@@ -107,12 +107,6 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const legalFactDownloadRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
-  );
-  const legalFactDownloadAARRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
-  );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
@@ -176,7 +170,20 @@ const NotificationDetail = () => {
           otherDocument: document,
           mandateId,
         })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
     } else {
       const documentIndex = document as string;
       void dispatch(
@@ -200,7 +207,20 @@ const NotificationDetail = () => {
           legalFact: legalFact as LegalFactId,
           mandateId,
         })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(
@@ -331,9 +351,6 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
 
-  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
-
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
     [location]
@@ -446,11 +463,6 @@ const NotificationDetail = () => {
                 )}
 
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                  <TimedMessage timeout={timeoutAARMessage}>
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
@@ -480,11 +492,6 @@ const NotificationDetail = () => {
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
               >
-                <TimedMessage timeout={timeoutMessage}>
-                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>
-                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}

@@ -13,6 +13,7 @@ export interface AppStateState {
   messages: {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
+    info: Array<IAppMessage>;
   };
   responseEvent: {
     outcome: AppResponseOutcome;
@@ -30,6 +31,7 @@ const initialState: AppStateState = {
   messages: {
     errors: [],
     success: [],
+    info: [],
   },
   responseEvent: null,
   isInitialized: false,
@@ -52,7 +54,12 @@ export const appStateSlice = createSlice({
   reducers: {
     addError(
       state,
-      action: PayloadAction<{ title: string; message: string; status?: HTTPStatusCode; action?: string }>
+      action: PayloadAction<{
+        title: string;
+        message: string;
+        status?: HTTPStatusCode;
+        action?: string;
+      }>
     ) {
       const message = createAppMessage(
         action.payload.title,
@@ -85,6 +92,24 @@ export const appStateSlice = createSlice({
     removeSuccess(state, action: PayloadAction<string>) {
       state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
     },
+    addInfo(
+      state,
+      action: PayloadAction<{
+        title: string;
+        message: string;
+        status?: number;
+      }>
+    ) {
+      const message = createAppMessage(
+        action.payload.title,
+        action.payload.message,
+        action.payload.status
+      );
+      state.messages.info.push(message);
+    },
+    removeInfo(state, action: PayloadAction<string>) {
+      state.messages.info = state.messages.info.filter((e) => e.id !== action.payload);
+    },
     finishInitialization(state) {
       state.isInitialized = true;
     },
@@ -101,14 +126,22 @@ export const appStateSlice = createSlice({
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
-        state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
+        state.responseEvent = {
+          outcome: AppResponseOutcome.SUCCESS,
+          name: actionBeingFulfilled,
+          response,
+        };
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
         const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
-        state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };
+        state.responseEvent = {
+          outcome: AppResponseOutcome.ERROR,
+          name: actionBeingRejected,
+          response,
+        };
       });
   },
 });
@@ -120,5 +153,6 @@ export const appStateSelectors = {
   selectLoading: (state: any) => state.appState.loading.result,
   selectErrors: (state: any) => state.appState.messages.errors,
   selectSuccess: (state: any) => state.appState.messages.success,
+  selectInfo: (state: any) => state.appState.messages.info,
   selectIsInitialized: (state: any) => state.appState.isInitialized,
 };

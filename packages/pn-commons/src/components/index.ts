@@ -42,6 +42,7 @@ import EmptyState from './EmptyState';
 import FileUpload from './FileUpload';
 import Footer from './Footer/Footer';
 import Header from './Header/Header';
+import { IllusQuestion } from './Illustrations/IllusQuestion';
 import InactivityHandler from './InactivityHandler';
 import Layout from './Layout/Layout';
 import { LoadingOverlay } from './Loading/LoadingOverlay';
@@ -68,9 +69,7 @@ import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import { SpecialContactsProvider, useSpecialContactsContext } from './SpecialContacts.context';
 import TabPanel from './TabPanel';
-import TimedMessage from './TimedMessage/TimedMessage';
 import TitleBox from './TitleBox';
-import { IllusQuestion } from './Illustrations/IllusQuestion';
 
 export {
   ApiError,
@@ -127,7 +126,6 @@ export {
   SpecialContactsProvider,
   StatusTooltip,
   TabPanel,
-  TimedMessage,
   TitleBox,
   useSpecialContactsContext,
   CollapsedList,
@@ -146,5 +144,5 @@ export {
   PnCardActions,
   PnCard,
   PnCardHeaderItem,
-  IllusQuestion
+  IllusQuestion,
 };
