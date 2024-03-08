@@ -583,8 +583,7 @@ describe('NotificationDetail Page', async () => {
     );
   });
 
-  // TO-FIX: il test fallisce perchè fakeTimers non funziona bene con waitFor
-  it.skip('should dispatch getNotificationPaymentUrl on pay button click', async () => {
+  it('should dispatch getNotificationPaymentUrl on pay button click', async () => {
     vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
@@ -639,7 +638,7 @@ describe('NotificationDetail Page', async () => {
     expect(mock.history.post).toHaveLength(2);
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(mockAssignFn).toBeCalledTimes(1);
       expect(mockAssignFn).toBeCalledWith('https://mocked-url.com');
     });
