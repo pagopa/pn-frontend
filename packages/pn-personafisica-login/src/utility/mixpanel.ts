@@ -1,4 +1,4 @@
-import { setProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
+import { PropertyType, setProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
 
 import { TrackEventType, events } from './events';
 import { ProfilePropertyParams } from './profileProperties';
@@ -17,12 +17,20 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
 };
 
 export function setProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
+  type: PropertyType,
   propertyName: TProperty,
-  attributes: ProfilePropertyParams[TProperty]
+  attributes?: ProfilePropertyParams[TProperty]
 ) {
-  const property = {
-    [propertyName]: attributes,
-  };
+  // eslint-disable-next-line functional/no-let
+  let property: any;
 
-  setProfileProperty(property, process.env.NODE_ENV);
+  if (attributes) {
+    property = {
+      [propertyName]: attributes,
+    };
+  } else {
+    property = propertyName;
+  }
+
+  setProfileProperty(type, property, process.env.NODE_ENV);
 }

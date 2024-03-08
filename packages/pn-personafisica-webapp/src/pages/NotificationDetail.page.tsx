@@ -458,7 +458,7 @@ const NotificationDetail = () => {
       );
       trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, notificationDetailData);
       if (notificationDetailData.first_time_opening) {
-        setProfilePropertyValues('SEND_NOTIFICATIONS_COUNT', undefined, true);
+        setProfilePropertyValues('incremental', 'SEND_NOTIFICATIONS_COUNT');
       }
     }
   }, [downtimesReady, pageReady]);

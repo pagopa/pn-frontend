@@ -27,7 +27,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       SPID_IDP_ID: IDP.entityId,
     });
     // TODO : Fix any
-    setProfilePropertyValues('SEND_LOGIN_METHOD', IDP.name as any);
+    setProfilePropertyValues('profile', 'SEND_LOGIN_METHOD', IDP.name as any);
 
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`

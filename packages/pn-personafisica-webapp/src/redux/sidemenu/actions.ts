@@ -17,7 +17,7 @@ export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   async () => {
     try {
       const delegators = await DelegationsApi.getDelegators();
-      setProfilePropertyValues('SEND_HAS_MANDATE', delegators.length > 0 ? 'yes' : 'no');
+      setProfilePropertyValues('profile', 'SEND_HAS_MANDATE', delegators.length > 0 ? 'yes' : 'no');
       return delegators;
     } catch (e) {
       return [];
@@ -37,20 +37,27 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
         address.value !== IOAllowedValues.DISABLED);
     const allAddresses = await ContactsApi.getDigitalAddresses();
 
-    setProfilePropertyValues('SEND_HAS_PEC', allAddresses.legal.length > 0 ? 'yes' : 'no');
     setProfilePropertyValues(
+      'profile',
+      'SEND_HAS_PEC',
+      allAddresses.legal.length > 0 ? 'yes' : 'no'
+    );
+    setProfilePropertyValues(
+      'profile',
       'SEND_HAS_EMAIL',
       allAddresses.courtesy.some((address) => address.channelType === CourtesyChannelType.EMAIL)
         ? 'yes'
         : 'no'
     );
     setProfilePropertyValues(
+      'profile',
       'SEND_HAS_SMS',
       allAddresses.courtesy.some((address) => address.channelType === CourtesyChannelType.SMS)
         ? 'yes'
         : 'no'
     );
     setProfilePropertyValues(
+      'profile',
       'SEND_APPIO_STATUS',
       allAddresses.courtesy.some((address) => address.channelType === CourtesyChannelType.IOMSG)
         ? 'activated'

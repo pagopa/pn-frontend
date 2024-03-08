@@ -1,4 +1,9 @@
-import { interceptDispatch, setProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
+import {
+  PropertyType,
+  interceptDispatch,
+  setProfileProperty,
+  trackEvent,
+} from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
 import { TrackEventType, events, eventsActionsMap } from './events';
@@ -24,9 +29,9 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
 };
 
 export function setProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
+  type: PropertyType,
   propertyName: TProperty,
-  attributes?: ProfilePropertyParams[TProperty],
-  isIncremental = false
+  attributes?: ProfilePropertyParams[TProperty]
 ) {
   // eslint-disable-next-line functional/no-let
   let property: any;
@@ -39,5 +44,5 @@ export function setProfilePropertyValues<TProperty extends keyof ProfileProperty
     property = propertyName;
   }
 
-  setProfileProperty(property, process.env.NODE_ENV, isIncremental);
+  setProfileProperty(type, property, process.env.NODE_ENV);
 }

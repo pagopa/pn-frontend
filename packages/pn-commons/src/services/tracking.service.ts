@@ -30,7 +30,34 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 /**
  * Set profile properties
  */
-export function setProfileProperty(property: any, nodeEnv: string, isIncremental = false): void {
+// export function setProfileProperty(property: any, nodeEnv: string, isIncremental = false): void {
+//   if (!nodeEnv || nodeEnv === 'development') {
+//     // eslint-disable-next-line no-console
+//     console.log('Mixpanel events mock on console log - profile properties', property);
+//   } else if (nodeEnv === 'test') {
+//     return;
+//   } else {
+//     try {
+//       mixpanel.identify(mixpanel.get_distinct_id());
+//       if (isIncremental) {
+//         mixpanel.people.increment(property);
+//       } else {
+//         mixpanel.people.set(property);
+//       }
+//     } catch (_) {
+//       // eslint-disable-next-line no-console
+//       console.log(property);
+//     }
+//   }
+// }
+
+export type PropertyType = 'profile' | 'incremental' | 'superProperty';
+
+export function setProfileProperty(
+  propertyType: PropertyType,
+  property: any,
+  nodeEnv: string
+): void {
   if (!nodeEnv || nodeEnv === 'development') {
     // eslint-disable-next-line no-console
     console.log('Mixpanel events mock on console log - profile properties', property);
@@ -39,10 +66,19 @@ export function setProfileProperty(property: any, nodeEnv: string, isIncremental
   } else {
     try {
       mixpanel.identify(mixpanel.get_distinct_id());
-      if (isIncremental) {
-        mixpanel.people.increment(property);
-      } else {
-        mixpanel.people.set(property);
+
+      switch (propertyType) {
+        case 'profile':
+          mixpanel.people.set(property);
+          break;
+        case 'incremental':
+          mixpanel.people.increment(property);
+          break;
+        case 'superProperty':
+          mixpanel.register(property);
+          break;
+        default:
+          mixpanel.people.set(property);
       }
     } catch (_) {
       // eslint-disable-next-line no-console
