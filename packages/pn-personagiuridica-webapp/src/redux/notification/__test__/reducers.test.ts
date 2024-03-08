@@ -78,8 +78,6 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  legalFactDownloadRetryAfter: 0,
-  legalFactDownloadAARRetryAfter: 0,
   paymentsData: {
     pagoPaF24: [],
     f24Only: [],
@@ -195,8 +193,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('notificationSlice/resetLegalFactState');
     expect(action.payload).toEqual(undefined);
     const state = store.getState().notificationState;
-    expect(state.legalFactDownloadRetryAfter).toEqual(0);
-    expect(state.legalFactDownloadAARRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 
