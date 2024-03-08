@@ -37,32 +37,32 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
         address.value !== IOAllowedValues.DISABLED);
     const allAddresses = await ContactsApi.getDigitalAddresses();
 
-    setProfilePropertyValues(
-      'profile',
-      'SEND_HAS_PEC',
-      allAddresses.legal.length > 0 ? 'yes' : 'no'
-    );
-    setProfilePropertyValues(
-      'profile',
-      'SEND_HAS_EMAIL',
-      allAddresses.courtesy.some((address) => address.channelType === CourtesyChannelType.EMAIL)
-        ? 'yes'
-        : 'no'
-    );
-    setProfilePropertyValues(
-      'profile',
-      'SEND_HAS_SMS',
-      allAddresses.courtesy.some((address) => address.channelType === CourtesyChannelType.SMS)
-        ? 'yes'
-        : 'no'
-    );
-    setProfilePropertyValues(
-      'profile',
-      'SEND_APPIO_STATUS',
-      allAddresses.courtesy.some((address) => address.channelType === CourtesyChannelType.IOMSG)
-        ? 'activated'
-        : 'deactivated'
-    );
+    const hasPec = allAddresses.legal.length > 0 ? 'yes' : 'no';
+    const hasEmail = allAddresses.courtesy.some(
+      (address) => address.channelType === CourtesyChannelType.EMAIL
+    )
+      ? 'yes'
+      : 'no';
+    const hasSMS = allAddresses.courtesy.some(
+      (address) => address.channelType === CourtesyChannelType.SMS
+    )
+      ? 'yes'
+      : 'no';
+    const hasAppIO = allAddresses.courtesy.some(
+      (address) => address.channelType === CourtesyChannelType.IOMSG
+    )
+      ? 'activated'
+      : 'deactivated';
+
+    setProfilePropertyValues('profile', 'SEND_HAS_PEC', hasPec);
+    setProfilePropertyValues('profile', 'SEND_HAS_EMAIL', hasEmail);
+    setProfilePropertyValues('profile', 'SEND_HAS_SMS', hasSMS);
+    setProfilePropertyValues('profile', 'SEND_APPIO_STATUS', hasAppIO);
+
+    setProfilePropertyValues('superProperty', 'SEND_HAS_PEC', hasPec);
+    setProfilePropertyValues('superProperty', 'SEND_HAS_EMAIL', hasEmail);
+    setProfilePropertyValues('superProperty', 'SEND_HAS_SMS', hasSMS);
+    setProfilePropertyValues('superProperty', 'SEND_APPIO_STATUS', hasAppIO);
 
     return [
       ...allAddresses.legal.filter(isDefaultAddress),
