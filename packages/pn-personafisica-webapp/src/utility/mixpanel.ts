@@ -1,5 +1,5 @@
 import {
-  PropertyType,
+  ProfilePropertyType,
   interceptDispatch,
   setProfileProperty,
   trackEvent,
@@ -29,7 +29,7 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
 };
 
 export function setProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
-  type: PropertyType,
+  type: ProfilePropertyType,
   propertyName: TProperty,
   attributes?: ProfilePropertyParams[TProperty]
 ) {

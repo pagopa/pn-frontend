@@ -3,7 +3,7 @@ import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { EventsType } from '../models/MixpanelEvents';
+import { EventsType, ProfilePropertyType } from '../models/MixpanelEvents';
 
 /**
  * Function that tracks event
@@ -30,31 +30,8 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 /**
  * Set profile properties
  */
-// export function setProfileProperty(property: any, nodeEnv: string, isIncremental = false): void {
-//   if (!nodeEnv || nodeEnv === 'development') {
-//     // eslint-disable-next-line no-console
-//     console.log('Mixpanel events mock on console log - profile properties', property);
-//   } else if (nodeEnv === 'test') {
-//     return;
-//   } else {
-//     try {
-//       mixpanel.identify(mixpanel.get_distinct_id());
-//       if (isIncremental) {
-//         mixpanel.people.increment(property);
-//       } else {
-//         mixpanel.people.set(property);
-//       }
-//     } catch (_) {
-//       // eslint-disable-next-line no-console
-//       console.log(property);
-//     }
-//   }
-// }
-
-export type PropertyType = 'profile' | 'incremental' | 'superProperty';
-
 export function setProfileProperty(
-  propertyType: PropertyType,
+  propertyType: ProfilePropertyType,
   property: any,
   nodeEnv: string
 ): void {

@@ -33,6 +33,7 @@ import {
   EventPaymentRecipientType,
   EventPaymentStatusType,
   EventsType,
+  ProfilePropertyType,
 } from './MixpanelEvents';
 import {
   AarDetails,
@@ -192,4 +193,5 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
+  ProfilePropertyType,
 };

@@ -1,4 +1,4 @@
-import { PropertyType, setProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
+import { ProfilePropertyType, setProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
 
 import { TrackEventType, events } from './events';
 import { ProfilePropertyParams } from './profileProperties';
@@ -17,7 +17,7 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
 };
 
 export function setProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
-  type: PropertyType,
+  type: ProfilePropertyType,
   propertyName: TProperty,
   attributes?: ProfilePropertyParams[TProperty]
 ) {
