@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IAppMessage, MessageType } from '../models';
+import { IAppMessage } from '../models';
+import { AppResponseOutcome } from '../models/AppResponse';
 import { appStateActions, appStateSelectors } from '../redux';
 import SnackBar from './SnackBar/SnackBar';
 
 type EnqueuedMessage = {
-  type: 'error' | 'success';
+  type: AppResponseOutcome;
   message: IAppMessage;
 };
 
@@ -14,6 +15,7 @@ const AppMessage = () => {
   const dispatch = useDispatch();
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
+  const info = useSelector(appStateSelectors.selectInfo);
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
   const [queue, setQueue] = useState<Array<EnqueuedMessage>>([]);
 
@@ -21,21 +23,23 @@ const AppMessage = () => {
     queue.findIndex((elem) => elem.message.id === message.id) >= 0 ? true : false;
 
   const onCloseToast = (message: EnqueuedMessage) => {
-    if (message.type === MessageType.ERROR) {
+    if (message.type === AppResponseOutcome.ERROR) {
       /**
        * keep "alreadyShown" property on IAppMessage to ensure back-compatibility with ApiErrorWrapper Component
        * this property can be removed and ApiErrorWrapper refactored to take advantage of the pub/sub mechanism
        */
       // dispatch(appStateActions.removeError(id));
       dispatch(appStateActions.setErrorAsAlreadyShown(message.message.id));
-    } else {
+    } else if (message.type === AppResponseOutcome.SUCCESS) {
       dispatch(appStateActions.removeSuccess(message.message.id));
+    } else {
+      dispatch(appStateActions.removeInfo(message.message.id));
     }
 
     setCurrentMessage(null);
   };
 
-  const enqueueMessages = (messages: Array<IAppMessage>, type: 'success' | 'error') => {
+  const enqueueMessages = (messages: Array<IAppMessage>, type: AppResponseOutcome) => {
     const newQueue: Array<EnqueuedMessage> = messages
       .filter(
         (message: IAppMessage) =>
@@ -65,12 +69,16 @@ const AppMessage = () => {
   }, [currentMessage, queue]);
 
   useEffect(() => {
-    enqueueMessages(errors, 'error');
+    enqueueMessages(errors, AppResponseOutcome.ERROR);
   }, [errors]);
 
   useEffect(() => {
-    enqueueMessages(success, 'success');
+    enqueueMessages(success, AppResponseOutcome.SUCCESS);
   }, [success]);
+
+  useEffect(() => {
+    enqueueMessages(info, AppResponseOutcome.INFO);
+  }, [info]);
 
   return (
     <>
@@ -80,7 +88,7 @@ const AppMessage = () => {
           title={currentMessage.message.title}
           message={currentMessage.message.message}
           open
-          type={currentMessage.type === MessageType.ERROR ? MessageType.ERROR : MessageType.SUCCESS}
+          type={currentMessage.type}
           onClose={() => onCloseToast(currentMessage)}
           closingDelay={5000}
         />
