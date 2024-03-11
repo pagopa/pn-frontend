@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { arrayOfDelegators } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import { Delegator } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegators from '../Delegators';
@@ -15,11 +15,6 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('Delegators Component', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
-
   it('renders the empty state', () => {
     const { container, queryByTestId } = render(<Delegators />);
     expect(container).toHaveTextContent(/deleghe.delegatorsTitle/i);
@@ -60,7 +55,7 @@ describe('Delegators Component', async () => {
     let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.sortDelegators).toStrictEqual({
+      expect(testStore.getState().delegationsState.sortDelegators).toStrictEqual({
         order: 'asc',
         orderBy: 'name',
       });
@@ -76,7 +71,7 @@ describe('Delegators Component', async () => {
     sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.sortDelegators).toStrictEqual({
+      expect(testStore.getState().delegationsState.sortDelegators).toStrictEqual({
         order: 'desc',
         orderBy: 'name',
       });
@@ -94,7 +89,7 @@ describe('Delegators Component', async () => {
     sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.sortDelegators).toStrictEqual({
+      expect(testStore.getState().delegationsState.sortDelegators).toStrictEqual({
         order: 'asc',
         orderBy: 'endDate',
       });

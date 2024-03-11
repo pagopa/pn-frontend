@@ -5,6 +5,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 
 import { digitalAddresses } from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, fireEvent, render, screen } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import { PROFILE } from '../../navigation/routes.const';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
@@ -25,13 +26,9 @@ describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
   const original = window.open;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'open', {
       configurable: true,
       value: mockOpenFn,

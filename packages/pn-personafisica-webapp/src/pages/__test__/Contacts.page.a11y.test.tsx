@@ -5,6 +5,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 
 import { digitalAddresses } from '../../__mocks__/Contacts.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { CONTACTS_LIST } from '../../api/contacts/contacts.routes';
 import Contacts from '../Contacts.page';
 
@@ -20,13 +21,9 @@ vi.mock('react-i18next', () => ({
 describe('Contacts page - accessibility tests', async () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {

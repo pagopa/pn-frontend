@@ -546,6 +546,25 @@ export const cancelledNotificationDTO: NotificationDetail = {
   ],
 };
 
+export const raddNotificationDTO: NotificationDetail = {
+  ...notificationDTO,
+  timeline: [
+    ...notificationDTO.timeline,
+    {
+      elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+      timestamp: '2022-06-21T11:44:28Z',
+      legalFactsIds: [],
+      category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+      details: {
+        recIndex: 1,
+        eventTimestamp: '2022-06-21T11:44:28Z',
+        raddType: 'ALT',
+        raddTransactionId: '6',
+      },
+    },
+  ],
+};
+
 export const paymentsData: PaymentsData = {
   pagoPaF24: getPagoPaF24Payments(payments, 2),
   f24Only: getF24Payments(payments, 2),

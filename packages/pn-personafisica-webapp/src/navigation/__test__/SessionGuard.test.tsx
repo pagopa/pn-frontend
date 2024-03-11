@@ -4,7 +4,9 @@ import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
+import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
+import { store } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 
@@ -34,14 +36,9 @@ const Guard = () => (
 describe('SessionGuard Component', async () => {
   const original = window.location;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
-  const reduxStore = await import('../../redux/store');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.authClient);
+    mock = new MockAdapter(authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { hash: '', pathname: '/' },
@@ -70,7 +67,7 @@ describe('SessionGuard Component', async () => {
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
-      expect(reduxStore.store.getState().userState.user.sessionToken).toEqual('');
+      expect(store.getState().userState.user.sessionToken).toEqual('');
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
       const logoutTitleComponent = screen.queryByText('leaving-app.title');

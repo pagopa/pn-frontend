@@ -1,33 +1,37 @@
-import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite';
+import { defineConfig, loadEnv, mergeConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig as defineVitestConfig } from 'vitest/config';
 
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
+const vitestConfig = defineVitestConfig({
+  test: {
+    globals: true,
+    setupFiles: './src/setupTests.ts',
+    environment: 'jsdom',
+    reporters: ['vitest-sonar-reporter', 'default'],
+    outputFile: 'test-report.xml',
+    coverage: {
+      provider: 'v8',
+      reporter: ['lcov'],
+      exclude: ['src/models/**'],
+      reportOnFailure: true,
+    },
+  },
+});
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  return {
+
+  return mergeConfig(vitestConfig, {
     base: '/auth/',
     plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
     server: {
       host: env.HOST,
-      https: true,
       port: 443,
+      https: true,
       strictPort: true,
       open: true,
-    },
-    test: {
-      globals: true,
-      setupFiles: './src/setupTests.ts',
-      environment: 'jsdom',
-      reporters: ['vitest-sonar-reporter'],
-      outputFile: 'test-report.xml',
-      coverage: {
-        provider: 'v8',
-        reporter: ['lcov'],
-        exclude: ['src/models/**'],
-        reportOnFailure: true,
-      },
     },
     build: {
       outDir: 'build/auth',
@@ -44,5 +48,5 @@ export default defineConfig(({ mode }) => {
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
-  };
+  });
 });
