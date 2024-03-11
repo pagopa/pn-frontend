@@ -16,6 +16,7 @@ import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
 const mockNavigateFn = vi.fn();
+window.open = vi.fn();
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
@@ -122,11 +123,11 @@ describe('test Terms of Service page', async () => {
     });
     const tosLink = result?.getByTestId('tos-link');
     fireEvent.click(tosLink!);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(TOS_LINK_RELATIVE_PATH);
+    expect(window.open).toBeCalledTimes(1);
+    expect(window.open).toBeCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
     const privacyLink = result?.getByTestId('privacy-link');
     fireEvent.click(privacyLink!);
-    expect(mockNavigateFn).toBeCalledTimes(2);
-    expect(mockNavigateFn).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH);
+    expect(window.open).toBeCalledTimes(2);
+    expect(window.open).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });
 });
