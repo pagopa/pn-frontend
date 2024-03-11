@@ -137,11 +137,11 @@ describe('test Terms of Service page', async () => {
     );
     const tosLink = getByTestId('terms-and-conditions');
     fireEvent.click(tosLink!);
-    expect(mockWindowOpen).toBeCalledTimes(1);
-    expect(mockWindowOpen).toBeCalledWith(TOS_LINK_RELATIVE_PATH);
+    expect(window.open).toBeCalledTimes(1);
+    expect(window.open).toBeCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
     const privacyLink = getByTestId('privacy-link');
     fireEvent.click(privacyLink!);
-    expect(mockWindowOpen).toBeCalledTimes(2);
-    expect(mockWindowOpen).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH);
+    expect(window.open).toBeCalledTimes(2);
+    expect(window.open).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });
 });
