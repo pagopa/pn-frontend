@@ -12,7 +12,7 @@ import SpidBig from '../../assets/spid_big.svg';
 import { getConfiguration } from '../../services/configuration.service';
 import { IdentityProvider, getIDPS } from '../../utility/IDPS';
 import { TrackEventType } from '../../utility/events';
-import { setProfilePropertyValues, trackEventByType } from '../../utility/mixpanel';
+import { setSuperOrProfilePropertyValues, trackEventByType } from '../../utility/mixpanel';
 import { shuffleList } from '../../utility/utils';
 
 const SpidSelect = ({ onBack }: { onBack: () => void }) => {
@@ -27,7 +27,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
       SPID_IDP_ID: IDP.entityId,
     });
     // TODO : Fix any
-    setProfilePropertyValues('profile', 'SEND_LOGIN_METHOD', IDP.name as any);
+    setSuperOrProfilePropertyValues('profile', 'SEND_LOGIN_METHOD', IDP.name as any);
 
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2&RelayState=send`

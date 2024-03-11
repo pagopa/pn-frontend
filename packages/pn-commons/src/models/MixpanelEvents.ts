@@ -15,6 +15,13 @@ export type EventsType = {
   };
 };
 
+export type ProfilePropertiesActionsMap = {
+  [key: string]: {
+    profilePropertyType: ProfilePropertyType;
+    getAttributes: (payload?: any) => Record<string, any>;
+  };
+};
+
 export enum EventAction {
   ACTION = 'action',
   ERROR = 'error',
@@ -33,7 +40,11 @@ export enum EventDowntimeType {
   IN_PROGRESS = 'in_progress',
 }
 
-export type ProfilePropertyType = 'profile' | 'incremental' | 'superProperty';
+export enum ProfilePropertyType {
+  PROFILE = 'profile',
+  INCREMENTAL = 'incremental',
+  SUPER_PROPERTY = 'superProperty',
+}
 
 export type EventPaymentStatusType = {
   page_number: number;

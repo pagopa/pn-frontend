@@ -23,7 +23,7 @@ import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { TrackEventType } from '../../utility/events';
-import { setProfilePropertyValues, trackEventByType } from '../../utility/mixpanel';
+import { setSuperOrProfilePropertyValues, trackEventByType } from '../../utility/mixpanel';
 import { RootState, store } from '../store';
 import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
 
@@ -137,7 +137,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
-            setProfilePropertyValues('incremental', 'SEND_PAYMENTS_COUNT');
+            setSuperOrProfilePropertyValues('incremental', 'SEND_PAYMENTS_COUNT');
           }
 
           const payments = populatePaymentsPagoPaF24(

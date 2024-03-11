@@ -62,7 +62,7 @@ import {
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
-import { setProfilePropertyValues, trackEventByType } from '../utility/mixpanel';
+import { setSuperOrProfilePropertyValues, trackEventByType } from '../utility/mixpanel';
 
 const getNotificationDetailData = (
   downtimeEvents: Array<Downtime>,
@@ -458,7 +458,7 @@ const NotificationDetail = () => {
       );
       trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, notificationDetailData);
       if (notificationDetailData.first_time_opening) {
-        setProfilePropertyValues('incremental', 'SEND_NOTIFICATIONS_COUNT');
+        setSuperOrProfilePropertyValues('incremental', 'SEND_NOTIFICATIONS_COUNT');
       }
     }
   }, [downtimesReady, pageReady]);

@@ -30,7 +30,7 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 /**
  * Set profile properties
  */
-export function setProfileProperty(
+export function setSuperOrProfileProperty(
   propertyType: ProfilePropertyType,
   property: any,
   nodeEnv: string
@@ -42,8 +42,6 @@ export function setProfileProperty(
     return;
   } else {
     try {
-      mixpanel.identify(mixpanel.get_distinct_id());
-
       switch (propertyType) {
         case 'profile':
           mixpanel.people.set(property);
@@ -85,6 +83,21 @@ export const interceptDispatch =
           }
         : events[eventKey];
       trackEvent(eventKey, nodeEnv, eventParameters);
+    }
+
+    return next(action);
+  };
+
+export const interceptDispatchSuperOrProfileProperty =
+  (next: Dispatch<AnyAction>, eventsActionsMap: Record<string, any>, nodeEnv: string) =>
+  (action: PayloadAction<any, string>): any => {
+    if (eventsActionsMap[action.type]) {
+      const eventKey = eventsActionsMap[action.type];
+      const profilePropertyType = eventKey?.profilePropertyType;
+      const attributes = eventKey?.getAttributes?.(action.payload);
+      console.log('action.payload', action.payload);
+
+      setSuperOrProfileProperty(profilePropertyType, attributes, nodeEnv);
     }
 
     return next(action);

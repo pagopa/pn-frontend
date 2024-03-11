@@ -34,6 +34,7 @@ import {
   EventPaymentStatusType,
   EventsType,
   ProfileAddresses,
+  ProfilePropertiesActionsMap,
   ProfilePropertyType,
 } from './MixpanelEvents';
 import {
@@ -123,6 +124,7 @@ export {
   KnownFunctionality,
   AppIoCourtesyMessageEventType,
   PrivateRoute,
+  ProfilePropertyType,
 };
 export type {
   AnalogWorkflowDetails,
@@ -194,6 +196,6 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
-  ProfilePropertyType,
   ProfileAddresses,
+  ProfilePropertiesActionsMap,
 };

@@ -1,19 +1,23 @@
 import {
   ProfilePropertyType,
   interceptDispatch,
-  setProfileProperty,
+  interceptDispatchSuperOrProfileProperty,
+  setSuperOrProfileProperty,
   trackEvent,
 } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
 import { TrackEventType, events, eventsActionsMap } from './events';
-import { ProfilePropertyParams } from './profileProperties';
+import { ProfilePropertyParams, profilePropertiesActionsMap } from './profileProperties';
 
 /**
  * Redux middleware to track events
  */
 export const trackingMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
   interceptDispatch(next, events, eventsActionsMap, process.env.NODE_ENV);
+
+export const trackingProfileMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
+  interceptDispatchSuperOrProfileProperty(next, profilePropertiesActionsMap, process.env.NODE_ENV);
 
 /**
  * Function to track events outside redux
@@ -28,7 +32,7 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
   trackEvent(trackEventType, process.env.NODE_ENV, eventParameters);
 };
 
-export function setProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
+export function setSuperOrProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
   type: ProfilePropertyType,
   propertyName: TProperty,
   attributes?: ProfilePropertyParams[TProperty]
@@ -44,5 +48,5 @@ export function setProfilePropertyValues<TProperty extends keyof ProfileProperty
     property = propertyName;
   }
 
-  setProfileProperty(type, property, process.env.NODE_ENV);
+  setSuperOrProfileProperty(type, property, process.env.NODE_ENV);
 }

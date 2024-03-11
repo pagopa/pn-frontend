@@ -4,7 +4,7 @@ import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 
 import { getConfiguration } from '../services/configuration.service';
-import { trackingMiddleware } from '../utility/mixpanel';
+import { trackingMiddleware, trackingProfileMiddleware } from '../utility/mixpanel';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
 import contactsSlice from './contact/reducers';
@@ -28,7 +28,11 @@ export const appReducers = {
 
 const createStore = (logReduxActions?: boolean) => {
   const mustLogActions = logReduxActions ?? getConfiguration().LOG_REDUX_ACTIONS;
-  const additionalMiddlewares = [mustLogActions ? logger : undefined, trackingMiddleware];
+  const additionalMiddlewares = [
+    mustLogActions ? logger : undefined,
+    trackingMiddleware,
+    trackingProfileMiddleware,
+  ];
   return configureStore({
     reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
