@@ -26,8 +26,8 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   const { t } = useTranslation('common');
   const [accepted, setAccepted] = useState(false);
 
-  const redirectPrivacyLink = () => navigate(`${PRIVACY_LINK_RELATIVE_PATH}`);
-  const redirectToSLink = () => navigate(`${TOS_LINK_RELATIVE_PATH}`);
+  const redirectPrivacyLink = () => window.open(`${PRIVACY_LINK_RELATIVE_PATH}`, '_blank');
+  const redirectToSLink = () => window.open(`${TOS_LINK_RELATIVE_PATH}`, '_blank');
 
   const PrivacyLink = ({ children }: { children?: ReactNode }) => (
     <Link
