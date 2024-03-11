@@ -1,8 +1,10 @@
 import { vi } from 'vitest';
+
 import { getConfiguration } from '../../services/configuration.service';
 import { goToLoginPortal } from '../navigation.utility';
 
 const replaceFn = vi.fn();
+window.open = vi.fn();
 
 describe('Tests navigation utility methods', () => {
   const original = window.location;
@@ -24,8 +26,8 @@ describe('Tests navigation utility methods', () => {
 
   it('goToLoginPortal', () => {
     goToLoginPortal();
-    expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`);
+    expect(window.open).toBeCalledTimes(1);
+    expect(window.open).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   // it('goToLoginPortal - aar', () => {
