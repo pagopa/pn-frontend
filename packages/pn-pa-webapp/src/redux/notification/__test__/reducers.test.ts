@@ -59,8 +59,6 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  legalFactDownloadRetryAfter: 0,
-  legalFactDownloadAARRetryAfter: 0,
   downtimeLegalFactUrl: '',
   downtimeEvents: [],
 };
@@ -218,7 +216,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('notificationSlice/resetLegalFactState');
     expect(payload).toEqual(undefined);
     const state = store.getState().notificationState;
-    expect(state.legalFactDownloadRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 

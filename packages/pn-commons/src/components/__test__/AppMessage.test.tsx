@@ -24,6 +24,17 @@ const success: Array<IAppMessage> = [
   },
 ];
 
+const info: Array<IAppMessage> = [
+  {
+    id: 'mocked-id',
+    blocking: false,
+    message: 'Mocked message',
+    title: 'Mocked title',
+    toNotify: true,
+    alreadyShown: false,
+  },
+];
+
 describe('AppMessage Component', () => {
   it('renders toast and dispacthes event on close - error', async () => {
     const { testStore, getByTestId } = render(<AppMessage />, {
@@ -32,6 +43,7 @@ describe('AppMessage Component', () => {
           messages: {
             errors,
             success: [],
+            info: [],
           },
         },
       },
@@ -52,6 +64,7 @@ describe('AppMessage Component', () => {
           messages: {
             errors: [],
             success: success,
+            info: [],
           },
         },
       },
@@ -61,5 +74,24 @@ describe('AppMessage Component', () => {
     // wait toast auto closing
     await act(() => new Promise((t) => setTimeout(t, 6000)));
     expect(testStore.getState().appState.messages.success).toStrictEqual([]);
+  }, 10000);
+
+  it('renders toast and dispacthes event on close - info', async () => {
+    const { testStore, getByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success: [],
+            info: info,
+          },
+        },
+      },
+    });
+    const snackBarContainer = getByTestId('snackBarContainer');
+    expect(snackBarContainer).toBeInTheDocument();
+    // wait toast auto closing
+    await act(() => new Promise((t) => setTimeout(t, 6000)));
+    expect(testStore.getState().appState.messages.info).toStrictEqual([]);
   }, 10000);
 });

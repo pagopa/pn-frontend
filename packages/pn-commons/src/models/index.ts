@@ -20,7 +20,6 @@ import {
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
-import { MessageType } from './MessageType';
 import {
   EventAction,
   EventCategory,
@@ -118,7 +117,6 @@ export {
   PaymentStatus,
   EventCategory,
   PaymentAttachmentSName,
-  MessageType,
   KnownSentiment,
   DowntimeStatus,
   isKnownFunctionality,
