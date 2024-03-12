@@ -16,7 +16,7 @@ export type EventsType = {
 };
 
 export type ProfileMapAttributes = {
-  profilePropertyType: ProfilePropertyType;
+  profilePropertyType: Array<ProfilePropertyType>;
   getAttributes: (payload?: any) => Record<string, string>;
 };
 

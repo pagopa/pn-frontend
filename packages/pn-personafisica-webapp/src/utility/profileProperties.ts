@@ -4,7 +4,7 @@ import {
   ProfilePropertyType,
 } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType } from '../models/contacts';
+import { CourtesyChannelType, DigitalAddresses } from '../models/contacts';
 import { SaveDigitalAddressParams } from '../redux/contact/types';
 import { Delegation } from '../redux/delegation/types';
 import { DelegationStatus } from './status.utility';
@@ -21,10 +21,28 @@ export type ProfilePropertyParams = {
 };
 
 const profileProperties: ProfilePropertiesActionsMap = {
+  ['SEND_HAS_ADDRESSES']: {
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
+    getAttributes(payload: DigitalAddresses): Record<string, string> {
+      const hasLegalAddresses = payload?.legal?.length > 0;
+      const hasCourtesyEmailAddresses =
+        payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.EMAIL)
+          .length > 0;
+      const hasCourtesySmsAddresses =
+        payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.SMS)
+          .length > 0;
+
+      return {
+        SEND_HAS_PEC: hasLegalAddresses ? 'yes' : 'no',
+        SEND_HAS_EMAIL: hasCourtesyEmailAddresses ? 'yes' : 'no',
+        SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
+      };
+    },
+  },
   ['ADD_COURTESY_ADDRESS']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(payload: SaveDigitalAddressParams): Record<string, string> {
-      if (payload.channelType === CourtesyChannelType.EMAIL) {
+      if (payload?.channelType === CourtesyChannelType.EMAIL) {
         return { SEND_HAS_EMAIL: 'yes' };
       }
 
@@ -32,9 +50,9 @@ const profileProperties: ProfilePropertiesActionsMap = {
     },
   },
   ['REMOVE_COURTESY_ADDRESS']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(payload: SaveDigitalAddressParams): Record<string, string> {
-      if (payload.channelType === CourtesyChannelType.EMAIL) {
+      if (payload?.channelType === CourtesyChannelType.EMAIL) {
         return { SEND_HAS_EMAIL: 'no' };
       }
 
@@ -42,33 +60,33 @@ const profileProperties: ProfilePropertiesActionsMap = {
     },
   },
   ['ADD_LEGAL_ADDRESS']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(): Record<string, string> {
       return { SEND_HAS_PEC: 'yes' };
     },
   },
   ['REMOVE_LEGAL_ADDRESS']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(): Record<string, string> {
       return { SEND_HAS_PEC: 'no' };
     },
   },
   ['ENABLE_APP_IO']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(): Record<string, string> {
       return { SEND_APPIO_STATUS: 'activated' };
     },
   },
   ['DISABLE_APP_IO']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(): Record<any, string> {
       return { SEND_APPIO_STATUS: 'deactivated' };
     },
   },
   ['GET_DELEGATES']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE],
     getAttributes(payload: Array<Delegation>): Record<string, string> {
-      const hasDelegates = payload.filter(
+      const hasDelegates = payload?.filter(
         (delegation) => delegation.status === DelegationStatus.ACTIVE
       );
 
@@ -76,9 +94,9 @@ const profileProperties: ProfilePropertiesActionsMap = {
     },
   },
   ['GET_DELEGATORS']: {
-    profilePropertyType: ProfilePropertyType.PROFILE,
+    profilePropertyType: [ProfilePropertyType.PROFILE],
     getAttributes(payload: Array<Delegation>): Record<string, string> {
-      const hasDelegators = payload.filter(
+      const hasDelegators = payload?.filter(
         (delegator) => delegator.status === DelegationStatus.ACTIVE
       );
 
@@ -88,6 +106,7 @@ const profileProperties: ProfilePropertiesActionsMap = {
 };
 
 export const profilePropertiesActionsMap: Record<string, ProfileMapAttributes> = {
+  'getDigitalAddresses/fulfilled': profileProperties.SEND_HAS_ADDRESSES,
   'createOrUpdateCourtesyAddress/fulfilled': profileProperties.ADD_COURTESY_ADDRESS,
   'deleteCourtesyAddress/fulfilled': profileProperties.REMOVE_COURTESY_ADDRESS,
   'createOrUpdateLegalAddress/fulfilled': profileProperties.ADD_LEGAL_ADDRESS,

@@ -37,7 +37,11 @@ export function setSuperOrProfileProperty(
 ): void {
   if (!nodeEnv || nodeEnv === 'development') {
     // eslint-disable-next-line no-console
-    console.log('Mixpanel events mock on console log - profile properties', property);
+    console.log(
+      'Mixpanel events mock on console log - profile properties',
+      { propertyType },
+      property
+    );
   } else if (nodeEnv === 'test') {
     return;
   } else {
@@ -100,7 +104,10 @@ export const interceptDispatchSuperOrProfileProperty =
       const profilePropertyType = eventKey?.profilePropertyType;
       const attributes = eventKey?.getAttributes?.(action?.payload);
 
-      setSuperOrProfileProperty(profilePropertyType, attributes, nodeEnv);
+      profilePropertyType.forEach((type) => {
+        setSuperOrProfileProperty(type, attributes, nodeEnv);
+      });
+      // setSuperOrProfileProperty(profilePropertyType, attributes, nodeEnv);
     }
 
     return next(action);
