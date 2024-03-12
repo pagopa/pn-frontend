@@ -418,7 +418,7 @@ export enum AppIoCourtesyMessageEventType {
 export enum AddressSource {
   PLATFORM = 'PLATFORM',
   SPECIAL = 'SPECIAL',
-  GENERAL = 'GENERAL ',
+  GENERAL = 'GENERAL',
 }
 
 export enum LegalFactType {

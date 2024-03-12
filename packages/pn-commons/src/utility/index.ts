@@ -35,7 +35,6 @@ import {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
   getPagoPaF24Payments,
-  parseNotificationDetail,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
 import { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
@@ -62,7 +61,6 @@ import {
 export {
   getNotificationAllowedStatus,
   getNotificationStatusInfos,
-  parseNotificationDetail,
   filtersApplied,
   calculatePages,
   isToday,

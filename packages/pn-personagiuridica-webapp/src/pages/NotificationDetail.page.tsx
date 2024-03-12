@@ -157,6 +157,22 @@ const NotificationDetail = () => {
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
+  const showInfoMessageIfRetryAfter = (response: {
+    url: string;
+    retryAfter?: number | undefined;
+  }) => {
+    if (response.retryAfter) {
+      dispatch(
+        appStateActions.addInfo({
+          title: '',
+          message: t(`detail.document-not-available`, {
+            ns: 'notifiche',
+          }),
+        })
+      );
+    }
+  };
+
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
@@ -172,18 +188,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+        .then(showInfoMessageIfRetryAfter);
     } else {
       const documentIndex = document as string;
       void dispatch(
@@ -209,18 +214,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+        .then(showInfoMessageIfRetryAfter);
     } else if ((legalFact as NotificationDetailOtherDocument).documentId) {
       const otherDocument = legalFact as NotificationDetailOtherDocument;
       void dispatch(
