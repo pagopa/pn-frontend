@@ -27,6 +27,7 @@ import {
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
+  ProfilePropertyType,
   TimedMessage,
   TimelineCategory,
   TitleBox,
@@ -458,7 +459,10 @@ const NotificationDetail = () => {
       );
       trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, notificationDetailData);
       if (notificationDetailData.first_time_opening) {
-        setSuperOrProfilePropertyValues('incremental', 'SEND_NOTIFICATIONS_COUNT');
+        setSuperOrProfilePropertyValues(
+          ProfilePropertyType.INCREMENTAL,
+          'SEND_NOTIFICATIONS_COUNT'
+        );
       }
     }
   }, [downtimesReady, pageReady]);

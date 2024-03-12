@@ -3,7 +3,7 @@ import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { EventsType, ProfilePropertyType } from '../models/MixpanelEvents';
+import { EventsType, ProfileMapAttributes, ProfilePropertyType } from '../models/MixpanelEvents';
 
 /**
  * Function that tracks event
@@ -89,13 +89,16 @@ export const interceptDispatch =
   };
 
 export const interceptDispatchSuperOrProfileProperty =
-  (next: Dispatch<AnyAction>, eventsActionsMap: Record<string, any>, nodeEnv: string) =>
+  (
+    next: Dispatch<AnyAction>,
+    eventsActionsMap: Record<string, ProfileMapAttributes>,
+    nodeEnv: string
+  ) =>
   (action: PayloadAction<any, string>): any => {
     if (eventsActionsMap[action.type]) {
       const eventKey = eventsActionsMap[action.type];
       const profilePropertyType = eventKey?.profilePropertyType;
-      const attributes = eventKey?.getAttributes?.(action.payload);
-      console.log('action.payload', action.payload);
+      const attributes = eventKey?.getAttributes?.(action?.payload);
 
       setSuperOrProfileProperty(profilePropertyType, attributes, nodeEnv);
     }

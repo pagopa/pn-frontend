@@ -15,11 +15,13 @@ export type EventsType = {
   };
 };
 
+export type ProfileMapAttributes = {
+  profilePropertyType: ProfilePropertyType;
+  getAttributes: (payload?: any) => Record<string, string>;
+};
+
 export type ProfilePropertiesActionsMap = {
-  [key: string]: {
-    profilePropertyType: ProfilePropertyType;
-    getAttributes: (payload?: any) => Record<string, any>;
-  };
+  [key: string]: ProfileMapAttributes;
 };
 
 export enum EventAction {

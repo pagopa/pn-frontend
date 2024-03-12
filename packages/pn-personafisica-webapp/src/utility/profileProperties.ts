@@ -1,4 +1,8 @@
-import { ProfilePropertiesActionsMap, ProfilePropertyType } from '@pagopa-pn/pn-commons';
+import {
+  ProfileMapAttributes,
+  ProfilePropertiesActionsMap,
+  ProfilePropertyType,
+} from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../models/contacts';
 
@@ -60,7 +64,7 @@ const profileProperties: ProfilePropertiesActionsMap = {
   },
 };
 
-export const profilePropertiesActionsMap: Record<string, any> = {
+export const profilePropertiesActionsMap: Record<string, ProfileMapAttributes> = {
   'createOrUpdateCourtesyAddress/fulfilled': profileProperties.ADD_COURTESY_ADDRESS,
   'deleteCourtesyAddress/fulfilled': profileProperties.REMOVE_COURTESY_ADDRESS,
   'createOrUpdateLegalAddress/fulfilled': profileProperties.ADD_LEGAL_ADDRESS,

@@ -10,6 +10,7 @@ import {
   PaymentDetails,
   PaymentNotice,
   PaymentStatus,
+  ProfilePropertyType,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
   performThunkAction,
@@ -137,7 +138,7 @@ export const getNotificationPaymentInfo = createAsyncThunk<
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
-            setSuperOrProfilePropertyValues('incremental', 'SEND_PAYMENTS_COUNT');
+            setSuperOrProfilePropertyValues(ProfilePropertyType.INCREMENTAL, 'SEND_PAYMENTS_COUNT');
           }
 
           const payments = populatePaymentsPagoPaF24(

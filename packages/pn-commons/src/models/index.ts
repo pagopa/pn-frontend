@@ -34,6 +34,7 @@ import {
   EventPaymentStatusType,
   EventsType,
   ProfileAddresses,
+  ProfileMapAttributes,
   ProfilePropertiesActionsMap,
   ProfilePropertyType,
 } from './MixpanelEvents';
@@ -198,4 +199,5 @@ export type {
   PaymentCache,
   ProfileAddresses,
   ProfilePropertiesActionsMap,
+  ProfileMapAttributes,
 };
