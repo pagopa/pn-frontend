@@ -223,6 +223,7 @@ export interface PaidDetails extends BaseDetails {
   creditorTaxId: string;
   noticeCode: string;
   uncertainPaymentDate?: boolean;
+  notRefinedRecipientIndexes?: Array<number>;
 }
 
 export interface RaddDetails extends BaseDetails {
