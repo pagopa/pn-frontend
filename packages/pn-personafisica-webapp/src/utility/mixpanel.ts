@@ -32,6 +32,12 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
   trackEvent(trackEventType, process.env.NODE_ENV, eventParameters);
 };
 
+/**
+ * Function to set super or profile property values
+ * @param type type of property (Super, Profile or Incremental)
+ * @param propertyName name of the property to set
+ * @param attributes values of the property to set. If not provided, the property will be set to the name of the property
+ */
 export function setSuperOrProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
   type: ProfilePropertyType,
   propertyName: TProperty,

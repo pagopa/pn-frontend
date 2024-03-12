@@ -28,7 +28,7 @@ export function trackEvent(event_name: string, nodeEnv: string, properties?: any
 }
 
 /**
- * Set profile properties
+ * Set mixpanel user properties
  */
 export function setSuperOrProfileProperty(
   propertyType: ProfilePropertyType,

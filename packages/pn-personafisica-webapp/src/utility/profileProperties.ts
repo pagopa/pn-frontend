@@ -5,7 +5,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, DigitalAddresses } from '../models/contacts';
-import { SaveDigitalAddressParams } from '../redux/contact/types';
+import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from '../redux/contact/types';
 import { Delegation } from '../redux/delegation/types';
 import { DelegationStatus } from './status.utility';
 
@@ -51,7 +51,7 @@ const profileProperties: ProfilePropertiesActionsMap = {
   },
   ['REMOVE_COURTESY_ADDRESS']: {
     profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
-    getAttributes(payload: SaveDigitalAddressParams): Record<string, string> {
+    getAttributes(payload: DeleteDigitalAddressParams): Record<string, string> {
       if (payload?.channelType === CourtesyChannelType.EMAIL) {
         return { SEND_HAS_EMAIL: 'no' };
       }
