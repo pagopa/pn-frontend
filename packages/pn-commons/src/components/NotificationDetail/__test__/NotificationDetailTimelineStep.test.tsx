@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import {
   INotificationDetailTimeline,
   LegalFactId,
@@ -18,10 +18,10 @@ import {
 import NotificationDetailTimelineStep from '../NotificationDetailTimelineStep';
 
 // Define mock data for testing
-const mockTimelineStep = notificationToFe.notificationStatusHistory.find(
+const mockTimelineStep = notificationDTO.notificationStatusHistory.find(
   (item) => item.status === NotificationStatus.DELIVERING
 );
-const mockRecipients = notificationToFe.recipients;
+const mockRecipients = notificationDTO.recipients;
 // Mock the clickHandler function
 const mockClickHandler = vi.fn();
 

@@ -406,7 +406,7 @@ enum DeliveryMode {
 }
 
 // PN-4484 - only the messages of the SENT_COURTESY kind are meaningful to the user
-export enum AppIoCourtesyMessageEventType {
+enum AppIoCourtesyMessageEventType {
   // message effettively sent
   SENT_COURTESY = 'SENT_COURTESY',
   // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN"

@@ -1,4 +1,4 @@
-import { getTimelineElem, notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { PhysicalCommunicationType, TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendAnalogDomicileStep } from '../SendAnalogDomicileStep';
@@ -25,7 +25,7 @@ describe('SendAnalogDomicileStep', () => {
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendAnalogDomicileStep = new SendAnalogDomicileStep();
@@ -60,7 +60,7 @@ describe('SendAnalogDomicileStep', () => {
     });
     const payload = {
       step: timelineElem,
-      recipient: notificationToFe.recipients[0],
+      recipient: notificationDTO.recipients[0],
       isMultiRecipient: false,
     };
     const sendAnalogDomicileStep = new SendAnalogDomicileStep();

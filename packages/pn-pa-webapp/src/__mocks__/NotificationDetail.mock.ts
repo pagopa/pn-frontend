@@ -27,6 +27,9 @@ function getOneRecipientNotification(): NotificationDetail {
     oneRecipientNotification.notificationStatusHistory.map((status) => ({
       ...status,
       steps: status.steps?.filter((step) => !step.details.recIndex),
+      relatedTimelineElements: status.relatedTimelineElements.filter(
+        (elem) => elem.indexOf('RECINDEX_0') > -1
+      ),
     }));
   return oneRecipientNotification;
 }

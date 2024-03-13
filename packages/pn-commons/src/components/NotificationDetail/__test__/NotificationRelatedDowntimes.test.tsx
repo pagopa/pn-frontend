@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { vi } from 'vitest';
 
 import { exampleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
-import { notificationToFe } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import {
   Downtime,
   IAppMessage,
@@ -130,12 +130,12 @@ describe('NotificationRelatedDowntimes component', () => {
   it('normal history - one complete downtime, one not finished, one finished but yet without link', () => {
     const { getByTestId, getAllByTestId, queryByTestId } = renderComponent(
       exampleDowntimeLogPage.downtimes,
-      notificationToFe.notificationStatusHistory
+      notificationDTO.notificationStatusHistory
     );
-    const accepted = notificationToFe.notificationStatusHistory.find(
+    const accepted = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
@@ -156,11 +156,11 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('normal history - no downtimes', () => {
-    const { queryByTestId } = renderComponent([], notificationToFe.notificationStatusHistory);
-    const accepted = notificationToFe.notificationStatusHistory.find(
+    const { queryByTestId } = renderComponent([], notificationDTO.notificationStatusHistory);
+    const accepted = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(1);
@@ -173,7 +173,7 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with VIEWED status and without EFFECTIVE_DATE status', () => {
-    const newMockHistory = notificationToFe.notificationStatusHistory.map((el) =>
+    const newMockHistory = notificationDTO.notificationStatusHistory.map((el) =>
       el.status !== NotificationStatus.EFFECTIVE_DATE
         ? el
         : { ...el, status: NotificationStatus.VIEWED }
@@ -193,17 +193,17 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with VIEWED and EFFECTIVE_DATE statuses - EFFECTIVE_DATE earlier than VIEWED', () => {
-    const accepted = notificationToFe.notificationStatusHistory.find(
+    const accepted = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     const viewedDate = new Date(effectiveDate?.activeFrom!);
     // add one second
     viewedDate.setSeconds(viewedDate.getSeconds() + 1);
     const newMockHistory = [
-      ...notificationToFe.notificationStatusHistory,
+      ...notificationDTO.notificationStatusHistory,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: viewedDate.toISOString(),
@@ -226,17 +226,17 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with VIEWED and EFFECTIVE_DATE statuses - EFFECTIVE_DATE later than VIEWED', () => {
-    const accepted = notificationToFe.notificationStatusHistory.find(
+    const accepted = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     const viewedDate = new Date(effectiveDate?.activeFrom!);
     // remove one second
     viewedDate.setSeconds(viewedDate.getSeconds() - 1);
     const newMockHistory = [
-      ...notificationToFe.notificationStatusHistory,
+      ...notificationDTO.notificationStatusHistory,
       {
         status: NotificationStatus.VIEWED,
         activeFrom: viewedDate.toISOString(),
@@ -257,7 +257,7 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with UNREACHABLE status and without EFFECTIVE_DATE and VIEWED', async () => {
-    const newMockHistory = notificationToFe.notificationStatusHistory
+    const newMockHistory = notificationDTO.notificationStatusHistory
       .filter((el) => el.status !== NotificationStatus.VIEWED)
       .map((el) =>
         el.status !== NotificationStatus.EFFECTIVE_DATE
@@ -282,17 +282,17 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with UNREACHABLE and EFFECTIVE_DATE statuses - EFFECTIVE_DATE earlier than UNREACHABLE', () => {
-    const accepted = notificationToFe.notificationStatusHistory.find(
+    const accepted = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     const unreachableDate = new Date(effectiveDate?.activeFrom!);
     // add one second
     unreachableDate.setSeconds(unreachableDate.getSeconds() + 1);
     const newMockHistory = [
-      ...notificationToFe.notificationStatusHistory,
+      ...notificationDTO.notificationStatusHistory,
       {
         status: NotificationStatus.UNREACHABLE,
         activeFrom: unreachableDate.toISOString(),
@@ -315,17 +315,17 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with UNREACHABLE and EFFECTIVE_DATE statuses - EFFECTIVE_DATE later than UNREACHABLE', () => {
-    const accepted = notificationToFe.notificationStatusHistory.find(
+    const accepted = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.ACCEPTED
     );
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     const unreachableDate = new Date(effectiveDate?.activeFrom!);
     // remove one second
     unreachableDate.setSeconds(unreachableDate.getSeconds() - 1);
     const newMockHistory = [
-      ...notificationToFe.notificationStatusHistory,
+      ...notificationDTO.notificationStatusHistory,
       {
         status: NotificationStatus.UNREACHABLE,
         activeFrom: unreachableDate.toISOString(),
@@ -349,7 +349,7 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history does not include ACCEPTED status', () => {
-    const newMockHistory = notificationToFe.notificationStatusHistory.filter(
+    const newMockHistory = notificationDTO.notificationStatusHistory.filter(
       (el) => el.status !== NotificationStatus.ACCEPTED
     );
     const { queryByTestId } = renderComponent(exampleDowntimeLogPage.downtimes, newMockHistory);
@@ -359,7 +359,7 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('cancelled modification', async () => {
-    const newMockHistory = _.cloneDeep(notificationToFe.notificationStatusHistory);
+    const newMockHistory = _.cloneDeep(notificationDTO.notificationStatusHistory);
     newMockHistory[0].status = NotificationStatus.CANCELLED;
     const { queryByTestId } = renderComponent(exampleDowntimeLogPage.downtimes, newMockHistory);
     expect(fetchDowntimeEventsMock).toHaveBeenCalledTimes(0);
@@ -368,13 +368,13 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('history with ACCEPTED status later than EFFECTIVE_DATE', () => {
-    const effectiveDate = notificationToFe.notificationStatusHistory.find(
+    const effectiveDate = notificationDTO.notificationStatusHistory.find(
       (s) => s.status === NotificationStatus.EFFECTIVE_DATE
     );
     const acceptedDate = new Date(effectiveDate?.activeFrom!);
     // add one second
     acceptedDate.setSeconds(acceptedDate.getSeconds() + 1);
-    const newMockHistory = notificationToFe.notificationStatusHistory.map((el) =>
+    const newMockHistory = notificationDTO.notificationStatusHistory.map((el) =>
       el.status !== NotificationStatus.ACCEPTED
         ? el
         : { ...el, activeFrom: acceptedDate.toISOString() }
