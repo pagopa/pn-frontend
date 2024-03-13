@@ -374,9 +374,7 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      )
-        .unwrap()
-        .catch(() => trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_ERROR));
+      );
     },
     [currentRecipient.payments]
   );

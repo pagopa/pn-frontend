@@ -1,7 +1,7 @@
 import { DatePickerTypes } from '../components/CustomDatePicker';
 import PrivateRoute from '../navigation/PrivateRoute';
 import { IAppMessage } from './AppMessage';
-import { AppResponse, ErrorMessage, ServerResponseError } from './AppResponse';
+import { AppResponse, AppResponseError, ErrorMessage, ServerResponseError } from './AppResponse';
 import {
   AppCurrentStatus,
   AppStatusDTO,
@@ -172,6 +172,7 @@ export type {
   SideMenuItem,
   Sort,
   AppResponse,
+  AppResponseError,
   ServerResponseError,
   ErrorMessage,
   SmartTableData,

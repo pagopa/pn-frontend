@@ -31,7 +31,7 @@ const SpidSelect = ({ onBack }: { onBack: () => void }) => {
     setSuperOrProfilePropertyValues(
       ProfilePropertyType.PROFILE,
       'SEND_LOGIN_METHOD',
-      IDP.name as any // TODO : Fix any
+      IDP.entityId as any // FIX this any
     );
 
     window.location.assign(
