@@ -19,6 +19,7 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
+
 enum INITIALIZATION_STEPS {
   USER_DETERMINATION = 'UserDetermination',
   INITIAL_PAGE_DETERMINATION = 'InitialPageDetermination',
@@ -67,20 +68,15 @@ const SessionGuardRender = () => {
   const { DISABLE_INACTIVITY_HANDLER } = getConfiguration();
 
   const hasErrorMessage = {
-    title: hasTosApiErrors
-      ? t('error-when-fetching-tos-status.title')
-      : t('leaving-app.title'), message: hasTosApiErrors
-        ? t('error-when-fetching-tos-status.message')
-        : t('leaving-app.message')
+    title: hasTosApiErrors ? t('error-when-fetching-tos-status.title') : t('leaving-app.title'),
+    message: hasTosApiErrors
+      ? t('error-when-fetching-tos-status.message')
+      : t('leaving-app.message'),
   };
 
   const goodbyeMessage = {
-    title: isUnauthorizedUser
-      ? messageUnauthorizedUser.title
-      : hasErrorMessage.title,
-    message: isUnauthorizedUser
-      ? messageUnauthorizedUser.message
-      : hasErrorMessage.message,
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : hasErrorMessage.title,
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : hasErrorMessage.message,
   };
 
   const renderIfInitialized = () =>
