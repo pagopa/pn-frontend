@@ -43,16 +43,7 @@ export function setSuperOrProfilePropertyValues<TProperty extends keyof ProfileP
   propertyName: TProperty,
   attributes?: ProfilePropertyParams[TProperty]
 ) {
-  // eslint-disable-next-line functional/no-let
-  let property: any;
-
-  if (attributes) {
-    property = {
-      [propertyName]: attributes,
-    };
-  } else {
-    property = propertyName;
-  }
+  const property = attributes ? { [propertyName]: attributes } : propertyName;
 
   setSuperOrProfileProperty(type, property, process.env.NODE_ENV);
 }
