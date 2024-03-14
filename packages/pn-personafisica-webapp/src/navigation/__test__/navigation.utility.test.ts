@@ -23,7 +23,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+    Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 
   it('goToLoginPortal', () => {
