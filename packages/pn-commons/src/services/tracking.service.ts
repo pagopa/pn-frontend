@@ -98,16 +98,15 @@ export const interceptDispatchSuperOrProfileProperty =
     eventsActionsMap: Record<string, ProfileMapAttributes>,
     nodeEnv: string
   ) =>
-  (action: PayloadAction<any, string>): any => {
+  (action: PayloadAction<any, string, any>): any => {
     if (eventsActionsMap[action.type]) {
       const eventKey = eventsActionsMap[action.type];
       const profilePropertyType = eventKey?.profilePropertyType;
-      const attributes = eventKey?.getAttributes?.(action?.payload);
+      const attributes = eventKey?.getAttributes?.(action?.payload, action?.meta);
 
       profilePropertyType.forEach((type) => {
         setSuperOrProfileProperty(type, attributes, nodeEnv);
       });
-      // setSuperOrProfileProperty(profilePropertyType, attributes, nodeEnv);
     }
 
     return next(action);

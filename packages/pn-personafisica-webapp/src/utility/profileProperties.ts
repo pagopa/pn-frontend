@@ -4,7 +4,7 @@ import {
   ProfilePropertyType,
 } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, DigitalAddresses } from '../models/contacts';
+import { CourtesyChannelType, DigitalAddresses, IOAllowedValues } from '../models/contacts';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from '../redux/contact/types';
 import { Delegation } from '../redux/delegation/types';
 import { DelegationStatus } from './status.utility';
@@ -31,22 +31,36 @@ const profileProperties: ProfilePropertiesActionsMap = {
       const hasCourtesySmsAddresses =
         payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.SMS)
           .length > 0;
-      const hasCourtesyAppIoAddresses =
-        payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.IOMSG)
-          .length > 0;
+      const contactIO = payload?.courtesy?.find(
+        (address) => address.channelType === CourtesyChannelType.IOMSG
+      );
+
+      // eslint-disable-next-line functional/no-let
+      let ioStatus;
+
+      if (!contactIO) {
+        ioStatus = 'nd';
+      } else if (contactIO?.value === IOAllowedValues.DISABLED) {
+        ioStatus = 'deactivated';
+      } else {
+        ioStatus = 'activated';
+      }
 
       return {
         SEND_HAS_PEC: hasLegalAddresses ? 'yes' : 'no',
         SEND_HAS_EMAIL: hasCourtesyEmailAddresses ? 'yes' : 'no',
         SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
-        SEND_APPIO_STATUS: hasCourtesyAppIoAddresses ? 'activated' : 'nd',
+        SEND_APPIO_STATUS: ioStatus,
       };
     },
   },
   ['ADD_COURTESY_ADDRESS']: {
     profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
-    getAttributes(payload: SaveDigitalAddressParams): Record<string, string> {
-      if (payload?.channelType === CourtesyChannelType.EMAIL) {
+    getAttributes(
+      _,
+      meta: { requestStatus: string; requestId: string; arg: SaveDigitalAddressParams }
+    ): Record<string, string> {
+      if (meta?.arg?.channelType === CourtesyChannelType.EMAIL) {
         return { SEND_HAS_EMAIL: 'yes' };
       }
 
@@ -55,8 +69,11 @@ const profileProperties: ProfilePropertiesActionsMap = {
   },
   ['REMOVE_COURTESY_ADDRESS']: {
     profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
-    getAttributes(payload: DeleteDigitalAddressParams): Record<string, string> {
-      if (payload?.channelType === CourtesyChannelType.EMAIL) {
+    getAttributes(
+      _,
+      meta: { requestStatus: string; requestId: string; arg: DeleteDigitalAddressParams }
+    ): Record<string, string> {
+      if (meta?.arg?.channelType === CourtesyChannelType.EMAIL) {
         return { SEND_HAS_EMAIL: 'no' };
       }
 
@@ -107,6 +124,12 @@ const profileProperties: ProfilePropertiesActionsMap = {
       return hasDelegators.length > 0 ? { SEND_HAS_MANDATE: 'yes' } : { SEND_HAS_MANDATE: 'no' };
     },
   },
+  ['ACCEPT_DELEGATION']: {
+    profilePropertyType: [ProfilePropertyType.PROFILE],
+    getAttributes(): Record<string, string> {
+      return { SEND_HAS_MANDATE: 'yes' };
+    },
+  },
 };
 
 export const profilePropertiesActionsMap: Record<string, ProfileMapAttributes> = {
@@ -119,4 +142,5 @@ export const profilePropertiesActionsMap: Record<string, ProfileMapAttributes> =
   'disableIOAddress/fulfilled': profileProperties.DISABLE_APP_IO,
   'getDelegates/fulfilled': profileProperties.GET_DELEGATES,
   'getDelegators/fulfilled': profileProperties.GET_DELEGATORS,
+  'acceptDelegation/fulfilled': profileProperties.ACCEPT_DELEGATION,
 };
