@@ -3,16 +3,15 @@ import { vi } from 'vitest';
 import { getConfiguration } from '../../services/configuration.service';
 import { goToLoginPortal } from '../navigation.utility';
 
-const replaceFn = vi.fn();
-window.open = vi.fn();
+const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
   const original = window.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { href: '', replace: replaceFn },
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
     });
   });
 
@@ -26,8 +25,8 @@ describe('Tests navigation utility methods', () => {
 
   it('goToLoginPortal', () => {
     goToLoginPortal();
-    expect(window.open).toBeCalledTimes(1);
-    expect(window.open).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   // it('goToLoginPortal - aar', () => {

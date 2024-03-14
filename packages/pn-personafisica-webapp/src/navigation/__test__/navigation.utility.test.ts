@@ -6,16 +6,15 @@ import { getConfiguration } from '../../services/configuration.service';
 import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import { APP_STATUS, DELEGHE, DETTAGLIO_NOTIFICA, NOTIFICHE, RECAPITI } from '../routes.const';
 
-const replaceFn = vi.fn();
-window.open = vi.fn();
+const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
   const original = window.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { href: '', replace: replaceFn },
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
     });
   });
 
@@ -29,14 +28,14 @@ describe('Tests navigation utility methods', () => {
 
   it('goToLoginPortal', () => {
     goToLoginPortal();
-    expect(window.open).toBeCalledTimes(1);
-    expect(window.open).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   it('goToLoginPortal - aar', () => {
     goToLoginPortal('fake-aar-token');
-    expect(window.open).toBeCalledTimes(1);
-    expect(window.open).toBeCalledWith(
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(
       `${getConfiguration().URL_FE_LOGOUT}?aar=fake-aar-token`,
       '_self'
     );
@@ -44,8 +43,8 @@ describe('Tests navigation utility methods', () => {
 
   it('goToLoginPortal - aar with malicious code', () => {
     goToLoginPortal('<script>malicious code</script>malicious-aar-token');
-    expect(window.open).toBeCalledTimes(1);
-    expect(window.open).toBeCalledWith(
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(
       `${getConfiguration().URL_FE_LOGOUT}?aar=malicious-aar-token`,
       '_self'
     );
