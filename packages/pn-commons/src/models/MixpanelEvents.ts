@@ -92,13 +92,6 @@ export type EventMandateNotificationsListType = {
   active_mandates_received_count: number;
 };
 
-export type ProfileAddresses = {
-  hasPec: 'yes' | 'no';
-  hasEmail: 'yes' | 'no';
-  hasSMS: 'yes' | 'no';
-  hasAppIO: 'activated' | 'deactivated' | 'nd';
-};
-
 export enum EventPageType {
   LISTA_NOTIFICHE = 'LISTA_NOTIFICHE',
   DETTAGLIO_NOTIFICA = 'DETTAGLIO_NOTIFICA',

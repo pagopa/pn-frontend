@@ -12,6 +12,7 @@ const handleError = (queryParams: string, errorMessage: string) => {
   if (process.env.NODE_ENV !== 'test') {
     const IDP = sessionStorage.getItem('IDP');
     trackEventByType(TrackEventType.SEND_LOGIN_FAILURE, { reason: errorMessage, IDP });
+    sessionStorage.removeItem('IDP');
     console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
   }
 };

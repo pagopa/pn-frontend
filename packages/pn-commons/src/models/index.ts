@@ -32,7 +32,6 @@ import {
   EventPaymentRecipientType,
   EventPaymentStatusType,
   EventsType,
-  ProfileAddresses,
   ProfileMapAttributes,
   ProfilePropertiesActionsMap,
   ProfilePropertyType,
@@ -196,7 +195,6 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
-  ProfileAddresses,
   ProfilePropertiesActionsMap,
   ProfileMapAttributes,
 };
