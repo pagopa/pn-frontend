@@ -25,7 +25,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const dispatch = useAppDispatch();
 
   const dowloadHandler = () => {
-    if (!_.isNil(payment.recIndex)) {
+    if (!_.isNil(payment.recIndex) && payment.attachment) {
       trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
       dispatch(
         getPaymentAttachment({
