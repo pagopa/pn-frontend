@@ -1,12 +1,14 @@
+import * as yup from 'yup';
+
 import {
+  adaptedTokenExchangeError,
   basicInitialUserData,
   basicNoLoggedUserData,
   basicUserDataMatcherContents,
   dataRegex,
-  adaptedTokenExchangeError,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
-import * as yup from 'yup';
+
 import {
   acceptPrivacy,
   acceptToS,
