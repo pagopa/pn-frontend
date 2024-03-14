@@ -31,11 +31,15 @@ const profileProperties: ProfilePropertiesActionsMap = {
       const hasCourtesySmsAddresses =
         payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.SMS)
           .length > 0;
+      const hasCourtesyAppIoAddresses =
+        payload?.courtesy?.filter((address) => address.channelType === CourtesyChannelType.IOMSG)
+          .length > 0;
 
       return {
         SEND_HAS_PEC: hasLegalAddresses ? 'yes' : 'no',
         SEND_HAS_EMAIL: hasCourtesyEmailAddresses ? 'yes' : 'no',
         SEND_HAS_SMS: hasCourtesySmsAddresses ? 'yes' : 'no',
+        SEND_APPIO_STATUS: hasCourtesyAppIoAddresses ? 'activated' : 'nd',
       };
     },
   },
