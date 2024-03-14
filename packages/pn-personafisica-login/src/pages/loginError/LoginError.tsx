@@ -86,13 +86,8 @@ const LoginError = () => {
   }, []);
 
   return (
-    <Dialog
-      fullScreen={true}
-      open={true}
-      aria-labelledby="dialog-per-messaggi-di-errore"
-      id="errorDialog"
-    >
-      <Box m="auto" sx={{ textAlign: 'center', width: '100%' }}>
+    <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
+      <Box m="auto" sx={{ textAlign: 'center', width: '100%' }} id="errorDialog">
         <IllusError />
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }} mt={5}>
           {title}

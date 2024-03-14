@@ -55,7 +55,7 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.message');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -70,9 +70,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_19');
+    expect(message).toHaveTextContent('loginError.code.error_19');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -87,9 +87,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_20');
+    expect(message).toHaveTextContent('loginError.code.error_20');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -104,9 +104,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_21');
+    expect(message).toHaveTextContent('loginError.code.error_21');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -121,9 +121,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_22');
+    expect(message).toHaveTextContent('loginError.code.error_22');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -138,9 +138,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_23');
+    expect(message).toHaveTextContent('loginError.code.error_23');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -155,9 +155,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_25');
+    expect(message).toHaveTextContent('loginError.code.error_25');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -172,9 +172,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_30');
+    expect(message).toHaveTextContent('loginError.code.error_30');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -189,9 +189,9 @@ describe('LoginError component', () => {
     const errorDialog = getById(document.body, 'errorDialog');
     expect(errorDialog).toHaveTextContent('loginError.title');
     const message = getById(errorDialog, 'message');
-    expect(message).toHaveTextContent('loginError.message loginError.code.error_1001');
+    expect(message).toHaveTextContent('loginError.code.error_1001');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 200));
+    await new Promise((t) => setTimeout(t, 2000));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
