@@ -1,5 +1,6 @@
 import {
   ChangeEvent,
+  ClipboardEvent,
   Fragment,
   KeyboardEvent,
   memo,
@@ -116,6 +117,17 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     }
   };
 
+  const pasteHandler = (event: ClipboardEvent<HTMLDivElement>, index: number) => {
+    const copiedCode = event.clipboardData.getData('text');
+    if (Number(copiedCode)) {
+      const values = copiedCode.split('');
+      values.map((element, i) => {
+        changeInputValue(element, i);
+        focusInput(index + 1);
+      });
+    }
+  };
+
   useEffect(() => {
     onChange(currentValues);
   }, [currentValues]);
@@ -143,6 +155,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}
           onFocus={(event) => event.target.select()}
+          onPaste={(event) => pasteHandler(event, index)}
           value={currentValues[index]}
           // eslint-disable-next-line functional/immutable-data
           inputRef={(node) => (inputsRef.current[index] = node)}
