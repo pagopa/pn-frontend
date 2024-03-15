@@ -168,4 +168,24 @@ describe('CodeInput Component', () => {
       expect(codeInputs[0]).toBe(document.activeElement);
     });
   });
+
+  it('handles paste event', async () => {
+    // render component
+    const { getAllByTestId } = render(
+      <CodeInput initialValues={new Array(5).fill('')} onChange={handleChangeMock} />
+    );
+    const codeInputs = getAllByTestId(/code-input-[0-4]/);
+
+    // paste the value of the input and check that it is updated correctly
+    // set the cursor position to the beggining
+    act(() => (codeInputs[2] as HTMLInputElement).focus());
+    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
+
+    // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
+    await userEvent.paste('12345');
+    await waitFor(() => {
+      expect(codeInputs[0]).toHaveValue('1');
+      expect(codeInputs[4]).toHaveValue('5');
+    });
+  });
 });
