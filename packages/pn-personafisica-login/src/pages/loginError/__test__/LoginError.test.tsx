@@ -1,8 +1,7 @@
-import { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { act, getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
@@ -17,11 +16,6 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: { i18nKey: string; children: ReactNode }) => (
-    <>
-      {props.i18nKey} {props.children}
-    </>
-  ),
 }));
 
 vi.mock('react-router-dom', async () => ({
@@ -44,6 +38,7 @@ describe('LoginError component', () => {
   });
 
   it('login technical error - code generic', async () => {
+    vi.useFakeTimers();
     spidErrorCode = '2';
     render(
       <BrowserRouter>
@@ -55,7 +50,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.message');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -72,7 +69,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_19');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -89,7 +88,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_20');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -106,7 +107,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_21');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -123,7 +126,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_22');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -140,7 +145,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_23');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -157,7 +164,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_25');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -174,7 +183,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_30');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });
@@ -191,7 +202,9 @@ describe('LoginError component', () => {
     const message = getById(errorDialog, 'message');
     expect(message).toHaveTextContent('loginError.code.error_1001');
     // Wait login redirect
-    await new Promise((t) => setTimeout(t, 2000));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
   });

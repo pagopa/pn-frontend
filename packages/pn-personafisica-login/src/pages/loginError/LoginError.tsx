@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Dialog, Typography } from '@mui/material';
@@ -61,13 +61,6 @@ const LoginError = () => {
   };
 
   const goToLogin = () => navigate(ROUTE_LOGIN);
-  const title = t('loginError.title');
-  const errorMessage = (
-    <Trans i18nKey={getErrorMessage()} ns="login">
-      {getErrorMessage()}
-    </Trans>
-  );
-
   // log error
   useEffect(() => {
     handleError(window.location.search, errorCode!);
@@ -90,10 +83,10 @@ const LoginError = () => {
       <Box m="auto" sx={{ textAlign: 'center', width: '100%' }} id="errorDialog">
         <IllusError />
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }} mt={5}>
-          {title}
+          {t('loginError.title')}
         </Typography>
         <Typography variant="body2" id="message" mb={8}>
-          {errorMessage}
+          {getErrorMessage()}
         </Typography>
         <Button id="login-button" variant="contained" onClick={goToLogin}>
           {getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
