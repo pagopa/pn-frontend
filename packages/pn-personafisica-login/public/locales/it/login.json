@@ -15,7 +15,7 @@
   },
   "loginError": {
     "title": "A causa di un errore del sistema non è possibile completare la procedura.",
-    "message": "A causa di un errore del sistema non è possibile completare la procedura.<1 />Ti chiediamo di riprovare più tardi.",
+    "message": "A causa di un errore del sistema non è possibile completare la procedura. Ti chiediamo di riprovare più tardi.",
     "code": {
       "error_19": "Hai inserito troppe volte un nome utente o una password non corretti: riprova fra qualche minuto o contatta il tuo fornitore di identità SPID per cambiare le tue credenziali.",
       "error_20": "Per motivi di sicurezza, è richiesto un login con un secondo fattore di autenticazione: contatta il tuo fornitore di identità SPID per capire come si usa.",
