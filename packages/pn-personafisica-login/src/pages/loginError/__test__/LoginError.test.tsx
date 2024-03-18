@@ -55,9 +55,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('login too many retry error - code 19', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '19';
     render(
       <BrowserRouter>
@@ -74,9 +77,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('login two authentication factor error - code 20', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '20';
     render(
       <BrowserRouter>
@@ -93,9 +99,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('login waiting for too long error - code 21', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '21';
     render(
       <BrowserRouter>
@@ -112,9 +121,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('login consent necessary error - code 22', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '22';
     render(
       <BrowserRouter>
@@ -131,9 +143,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('login spid identity rewoked or suspended error - code 23', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '23';
     render(
       <BrowserRouter>
@@ -150,9 +165,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('user cancelled the login - code 25', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '25';
     render(
       <BrowserRouter>
@@ -169,9 +187,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it('user used a different spid type - code 30', async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '30';
     render(
       <BrowserRouter>
@@ -188,9 +209,12 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 
   it("user doesn't have the minimum required age - code 1001", async () => {
+    vi.useFakeTimers();
+
     spidErrorCode = '1001';
     render(
       <BrowserRouter>
@@ -207,5 +231,6 @@ describe('LoginError component', () => {
     });
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(getConfiguration().ROUTE_LOGIN);
+    vi.useRealTimers();
   });
 });
