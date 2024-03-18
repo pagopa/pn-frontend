@@ -90,7 +90,7 @@ const SnackBar: React.FC<Props> = ({
               }}
               variant={variant}
             >
-              {title && <AlertTitle id={`alert-api-status}`}>{title}</AlertTitle>}
+              {title && <AlertTitle id="alert-api-status">{title}</AlertTitle>}
               {message}
             </Alert>
           </Snackbar>
