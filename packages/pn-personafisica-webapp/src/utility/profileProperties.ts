@@ -4,7 +4,12 @@ import {
   ProfilePropertyType,
 } from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, DigitalAddresses, IOAllowedValues } from '../models/contacts';
+import {
+  CourtesyChannelType,
+  DigitalAddress,
+  DigitalAddresses,
+  IOAllowedValues,
+} from '../models/contacts';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from '../redux/contact/types';
 import { Delegation } from '../redux/delegation/types';
 import { DelegationStatus } from './status.utility';
@@ -66,6 +71,11 @@ const profileProperties: ProfilePropertiesActionsMap = {
 
       return { SEND_HAS_SMS: 'yes' };
     },
+    shouldBlock(payload: DigitalAddress | void): boolean {
+      // Check payload to distinguish between the action called before PIN validation and after
+      // We have to track only the action after the PIN validation
+      return !payload;
+    },
   },
   ['REMOVE_COURTESY_ADDRESS']: {
     profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
@@ -84,6 +94,11 @@ const profileProperties: ProfilePropertiesActionsMap = {
     profilePropertyType: [ProfilePropertyType.PROFILE, ProfilePropertyType.SUPER_PROPERTY],
     getAttributes(): Record<string, string> {
       return { SEND_HAS_PEC: 'yes' };
+    },
+    shouldBlock(payload: DigitalAddress | void): boolean {
+      // Check payload to distinguish between the action called before PIN validation and after
+      // We have to track only the action after the PIN validation and PEC validation
+      return !(payload && payload.pecValid);
     },
   },
   ['REMOVE_LEGAL_ADDRESS']: {

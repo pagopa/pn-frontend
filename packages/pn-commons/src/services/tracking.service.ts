@@ -104,6 +104,10 @@ export const interceptDispatchSuperOrProfileProperty =
       const profilePropertyType = eventKey?.profilePropertyType;
       const attributes = eventKey?.getAttributes?.(action?.payload, action?.meta);
 
+      if (eventKey?.shouldBlock && eventKey?.shouldBlock(action?.payload, action?.meta)) {
+        return next(action);
+      }
+
       profilePropertyType.forEach((type) => {
         setSuperOrProfileProperty(type, attributes, nodeEnv);
       });
