@@ -59,25 +59,29 @@ const Deleghe = () => {
     dispatch(closeRevocationModal());
   };
 
-  const setProfilePropertyOnRejectOrRevoke = () => {
-    setSuperOrProfilePropertyValues(
-      ProfilePropertyType.PROFILE,
-      'SEND_HAS_MANDATE',
-      delegates.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
-    );
-  };
-
   const handleConfirmClick = () => {
     if (type === 'delegates') {
       trackEventByType(TrackEventType.SEND_MANDATE_REVOKED);
       void dispatch(revokeDelegation(id))
         .unwrap()
-        .then(() => setProfilePropertyOnRejectOrRevoke());
+        .then(() =>
+          setSuperOrProfilePropertyValues(
+            ProfilePropertyType.PROFILE,
+            'SEND_MANDATE_GIVEN',
+            delegators.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
+          )
+        );
     } else {
       trackEventByType(TrackEventType.SEND_MANDATE_REJECTED);
       void dispatch(rejectDelegation(id))
         .unwrap()
-        .then(() => setProfilePropertyOnRejectOrRevoke());
+        .then(() =>
+          setSuperOrProfilePropertyValues(
+            ProfilePropertyType.PROFILE,
+            'SEND_HAS_MANDATE',
+            delegates.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
+          )
+        );
     }
   };
 
