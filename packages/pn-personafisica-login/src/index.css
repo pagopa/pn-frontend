@@ -59,6 +59,7 @@ body {
 .otnotice .otnotice-content .otnotice-section:first-child h2 {
   font-size: 2.375rem;
   color: #17324d;
+  line-height: 3.25rem;
 }
 
 .otnotice .otnotice-content .otnotice-section:not(:first-child) h2 {
