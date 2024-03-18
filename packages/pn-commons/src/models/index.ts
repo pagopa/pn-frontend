@@ -1,7 +1,7 @@
 import { DatePickerTypes } from '../components/CustomDatePicker';
 import PrivateRoute from '../navigation/PrivateRoute';
 import { IAppMessage } from './AppMessage';
-import { AppResponse, ErrorMessage, ServerResponseError } from './AppResponse';
+import { AppResponse, AppResponseError, ErrorMessage, ServerResponseError } from './AppResponse';
 import {
   AppCurrentStatus,
   AppStatusDTO,
@@ -32,6 +32,9 @@ import {
   EventPaymentRecipientType,
   EventPaymentStatusType,
   EventsType,
+  ProfileMapAttributes,
+  ProfilePropertiesActionsMap,
+  ProfilePropertyType,
 } from './MixpanelEvents';
 import {
   AarDetails,
@@ -119,6 +122,7 @@ export {
   KnownFunctionality,
   AppIoCourtesyMessageEventType,
   PrivateRoute,
+  ProfilePropertyType,
 };
 export type {
   AnalogWorkflowDetails,
@@ -167,6 +171,7 @@ export type {
   SideMenuItem,
   Sort,
   AppResponse,
+  AppResponseError,
   ServerResponseError,
   ErrorMessage,
   SmartTableData,
@@ -190,4 +195,6 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
+  ProfilePropertiesActionsMap,
+  ProfileMapAttributes,
 };
