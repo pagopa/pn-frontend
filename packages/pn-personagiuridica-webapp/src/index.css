@@ -6,8 +6,8 @@ body {
 
 /* START: ONETRUST STYLES */
 .otnotice .otnotice-content {
-  font-family: "Titillium Web",sans-serif;
-  color: #17324D;
+  font-family: 'Titillium Web', sans-serif;
+  color: #17324d;
   padding-top: 64px;
 }
 
@@ -48,21 +48,22 @@ body {
   font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.5;
-  color: #17324D !important;
+  color: #17324d !important;
 }
 
 .otnotice-menu-mobile .otnotice-menu-selected-container .otnotice-menu-display__expand::after,
 .otnotice-menu-mobile .otnotice-menu-selected-container .otnotice-menu-display__collapse::after {
-  color: #17324D !important;
+  color: #17324d !important;
 }
 
 .otnotice .otnotice-content .otnotice-section:first-child h2 {
   font-size: 2.375rem;
-  color: #17324D;
+  color: #17324d;
 }
 
 .otnotice .otnotice-content .otnotice-section:not(:first-child) h2 {
   font-size: 1.75rem;
-  color: #17324D;
+  color: #17324d;
+  line-height: 2.25rem;
 }
 /* END: ONETRUST STYLES */
