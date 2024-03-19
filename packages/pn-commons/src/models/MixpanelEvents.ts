@@ -15,6 +15,12 @@ export type EventsType = {
   };
 };
 
+export type StrategyEventType = {
+  event_category: string;
+  event_type?: EventAction | string;
+  getAttributes?: (payload: any) => Record<string, string>;
+};
+
 export type ProfileMapAttributes = {
   profilePropertyType: Array<ProfilePropertyType>;
   getAttributes: (payload?: any, meta?: any) => Record<string, string>;

@@ -1,6 +1,9 @@
 import { Configuration } from '../services/configuration.service';
 import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
 import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
+import eventContext from './MixpanelUtils/EventContext';
+import EventStrategy from './MixpanelUtils/EventStrategy';
+import EventType from './MixpanelUtils/EventType';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
@@ -126,4 +129,8 @@ export {
   rewriteLinks,
   dateIsLessThan10Years,
   checkRaddInTimeline,
+  eventContext,
+  EventType,
 };
+
+export type { EventStrategy };

@@ -1,5 +1,6 @@
 import IEventStrategyFactory from '../../models/IEventStrategyFactory';
 import EventType from './EventType';
+import { MultiPaymentsMoreInfoStrategy } from './Strategies/payments';
 
 /**
  * Description placeholder
@@ -20,10 +21,8 @@ export default class EventStrategyFactory implements IEventStrategyFactory {
    */
   getStrategy(eventType: EventType) {
     switch (eventType) {
-      case EventType.PAGE_VIEW:
-        return new PageViewStrategy();
-      case EventType.BUTTON_CLICK:
-        return new ButtonClickStrategy();
+      case EventType.SEND_MULTIPAYMENT_MORE_INFO:
+        return new MultiPaymentsMoreInfoStrategy();
       default:
         return null;
     }

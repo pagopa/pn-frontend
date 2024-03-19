@@ -14,11 +14,12 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { TitleBox, eventContext, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { PFEventsType } from '../utility/MixpanelUtils/PFEventsType';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 
@@ -28,7 +29,7 @@ const Profile = () => {
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
   useEffect(() => {
-    trackEventByType(TrackEventType.SEND_PROFILE);
+    eventContext.triggerEvent(PFEventsType.SEND_PROFILE);
   }, []);
 
   const alertButtonStyle: SxProps<Theme> = useIsMobile()

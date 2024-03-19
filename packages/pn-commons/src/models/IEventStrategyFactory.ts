@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import EventStrategy from '../utility/MixpanelUtils/EventStrategy';
 import EventType from '../utility/MixpanelUtils/EventType';
 

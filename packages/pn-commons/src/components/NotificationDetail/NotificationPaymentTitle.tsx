@@ -1,11 +1,11 @@
 import { Link, Typography } from '@mui/material';
 
-import { EventPaymentRecipientType, F24PaymentDetails, PaymentDetails } from '../../models';
+import { F24PaymentDetails, PaymentDetails } from '../../models';
+import { EventType, eventContext } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
   landingSiteUrl: string;
-  handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
   pagoPaF24: Array<PaymentDetails>;
   f24Only: Array<F24PaymentDetails>;
   allPaymentsIsPaid: boolean;
@@ -14,7 +14,6 @@ type Props = {
 
 const NotificationPaymentTitle: React.FC<Props> = ({
   landingSiteUrl,
-  handleTrackEventFn,
   pagoPaF24,
   f24Only,
   allPaymentsIsPaid,
@@ -22,10 +21,15 @@ const NotificationPaymentTitle: React.FC<Props> = ({
 }) => {
   const FAQ_NOTIFICATION_COSTS = '/faq#costi-di-notifica';
   const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
+
+  const trackEvent = () => {
+    eventContext.triggerEvent(EventType.SEND_MULTIPAYMENT_MORE_INFO);
+  };
+
   const FaqLink = (
     <Link
       href={notificationCostsFaqLink}
-      onClick={() => handleTrackEventFn(EventPaymentRecipientType.SEND_MULTIPAYMENT_MORE_INFO)}
+      onClick={trackEvent}
       target="_blank"
       fontWeight="bold"
       sx={{ cursor: 'pointer' }}

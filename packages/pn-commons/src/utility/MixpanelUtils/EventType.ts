@@ -9,6 +9,5 @@
  * @typedef {EventType}
  */
 export default abstract class EventType {
-  static readonly PAGE_VIEW = 'pageView';
-  static readonly BUTTON_CLICK = 'buttonClick';
+  static readonly SEND_MULTIPAYMENT_MORE_INFO = 'SEND_MULTIPAYMENT_MORE_INFO';
 }
