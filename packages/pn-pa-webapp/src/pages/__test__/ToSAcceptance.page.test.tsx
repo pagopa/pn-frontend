@@ -51,6 +51,7 @@ const privacyConsent: ConsentUser = {
 describe('test Terms of Service page', async () => {
   let mock: MockAdapter;
   let result: RenderResult | undefined;
+  const original = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -68,6 +69,7 @@ describe('test Terms of Service page', async () => {
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 
   it('checks the texts in the page - First ToS acceptance', async () => {

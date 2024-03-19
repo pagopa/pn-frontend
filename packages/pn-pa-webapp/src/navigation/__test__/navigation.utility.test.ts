@@ -1,6 +1,7 @@
+import { vi } from 'vitest';
+
 import { getConfiguration } from '../../services/configuration.service';
 import { goToSelfcareLogin } from '../navigation.utility';
-import { vi } from 'vitest';
 
 const exitFn = vi.fn();
 
@@ -15,7 +16,7 @@ describe('Tests notification.utility', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 
   it('goToSelfcareLogin', () => {
