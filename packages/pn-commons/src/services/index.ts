@@ -1,4 +1,15 @@
 import { Configuration } from './configuration.service';
-import { interceptDispatch, setProfileProperty, trackEvent } from './tracking.service';
+import {
+  interceptDispatch,
+  interceptDispatchSuperOrProfileProperty,
+  setSuperOrProfileProperty,
+  trackEvent,
+} from './tracking.service';
 
-export { trackEvent, interceptDispatch, Configuration, setProfileProperty };
+export {
+  trackEvent,
+  interceptDispatch,
+  Configuration,
+  setSuperOrProfileProperty,
+  interceptDispatchSuperOrProfileProperty,
+};

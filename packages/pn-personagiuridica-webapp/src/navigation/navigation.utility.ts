@@ -5,6 +5,6 @@ export function goToLoginPortal() {
   const urlToRiderect = `${URL_FE_LOGOUT}`;
   // the indexOf check is to prevent xss attacks
   if (urlToRiderect.startsWith(URL_FE_LOGOUT)) {
-    window.location.replace(`${urlToRiderect}`);
+    window.open(`${urlToRiderect}`, '_self');
   }
 }
