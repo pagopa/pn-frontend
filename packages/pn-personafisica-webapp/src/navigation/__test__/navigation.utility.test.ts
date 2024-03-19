@@ -1,19 +1,20 @@
 import { vi } from 'vitest';
+
 import { EventPageType } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../../services/configuration.service';
 import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import { APP_STATUS, DELEGHE, DETTAGLIO_NOTIFICA, NOTIFICHE, RECAPITI } from '../routes.const';
 
-const replaceFn = vi.fn();
+const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
   const original = window.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { href: '', replace: replaceFn },
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
     });
   });
 
@@ -22,25 +23,31 @@ describe('Tests navigation utility methods', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'location', { writable: true, value: original });
+    Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 
   it('goToLoginPortal', () => {
     goToLoginPortal();
-    expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`);
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}`, '_self');
   });
 
   it('goToLoginPortal - aar', () => {
     goToLoginPortal('fake-aar-token');
-    expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?aar=fake-aar-token`);
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(
+      `${getConfiguration().URL_FE_LOGOUT}?aar=fake-aar-token`,
+      '_self'
+    );
   });
 
   it('goToLoginPortal - aar with malicious code', () => {
     goToLoginPortal('<script>malicious code</script>malicious-aar-token');
-    expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${getConfiguration().URL_FE_LOGOUT}?aar=malicious-aar-token`);
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(
+      `${getConfiguration().URL_FE_LOGOUT}?aar=malicious-aar-token`,
+      '_self'
+    );
   });
 
   it('getCurrentPage - test for notifications list page', () => {
@@ -49,7 +56,9 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('getCurrentPage - test for notification detail page', () => {
-    const currentPage = getCurrentEventTypePage(`${DETTAGLIO_NOTIFICA.replace(':id', 'mocked-iun')}`);
+    const currentPage = getCurrentEventTypePage(
+      `${DETTAGLIO_NOTIFICA.replace(':id', 'mocked-iun')}`
+    );
     expect(currentPage).toBe(EventPageType.DETTAGLIO_NOTIFICA);
   });
 

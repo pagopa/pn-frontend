@@ -10,6 +10,7 @@ import {
   fireEvent,
   randomString,
   render,
+  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -196,10 +197,6 @@ const testStringFieldValidation = async (
 describe('Recipient Component with payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -249,7 +246,7 @@ describe('Recipient Component with payment enabled', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual(
         newNotification.recipients
       );
@@ -370,7 +367,7 @@ describe('Recipient Component with payment enabled', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         newNotification.recipients[0],
       ]);
@@ -396,7 +393,7 @@ describe('Recipient Component with payment enabled', async () => {
     const backButton = within(form).getByTestId('previous-step');
     fireEvent.click(backButton);
     await waitFor(() => {
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         newNotification.recipients[0],
       ]);
@@ -483,10 +480,6 @@ describe('Recipient Component with payment enabled', async () => {
 describe('Recipient Component without payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -518,7 +511,7 @@ describe('Recipient Component without payment enabled', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         { ...newNotification.recipients[0], creditorTaxId: '', noticeCode: '' },
       ]);

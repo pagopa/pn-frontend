@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
@@ -27,9 +27,10 @@ import {
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
-  TimedMessage,
+  ProfilePropertyType,
   TimelineCategory,
   TitleBox,
+  appStateActions,
   dateIsLessThan10Years,
   formatDate,
   useDownloadDocument,
@@ -62,7 +63,7 @@ import {
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
+import { setSuperOrProfilePropertyValues, trackEventByType } from '../utility/mixpanel';
 
 const getNotificationDetailData = (
   downtimeEvents: Array<Downtime>,
@@ -152,12 +153,6 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const legalFactDownloadRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
-  );
-  const legalFactDownloadAARRetryAfter = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadAARRetryAfter
-  );
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
@@ -223,7 +218,20 @@ const NotificationDetail = () => {
           otherDocument: document,
           mandateId,
         })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
       trackEventByType(TrackEventType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
       const documentIndex = document as string;
@@ -249,7 +257,20 @@ const NotificationDetail = () => {
           legalFact: legalFact as LegalFactId,
           mandateId,
         })
-      );
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.retryAfter) {
+            dispatch(
+              appStateActions.addInfo({
+                title: '',
+                message: t(`detail.document-not-available`, {
+                  ns: 'notifiche',
+                }),
+              })
+            );
+          }
+        });
       trackEventByType(TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES, {
         source: 'dettaglio_notifica',
       });
@@ -353,9 +374,7 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      )
-        .unwrap()
-        .catch(() => trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_ERROR));
+      );
     },
     [currentRecipient.payments]
   );
@@ -389,9 +408,6 @@ const NotificationDetail = () => {
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
-
-  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  const timeoutAARMessage = legalFactDownloadAARRetryAfter * 1000;
 
   const fromQrCode = useMemo(
     () => !!(location.state && (location.state as LocationState).fromQrCode),
@@ -447,18 +463,22 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (downtimesReady && pageReady) {
-      trackEventByType(
-        TrackEventType.SEND_NOTIFICATION_DETAIL,
-        getNotificationDetailData(
-          downtimeEvents,
-          mandateId,
-          notification.notificationStatus,
-          checkIfUserHasPayments,
-          userPayments,
-          fromQrCode,
-          notification.timeline
-        )
+      const notificationDetailData = getNotificationDetailData(
+        downtimeEvents,
+        mandateId,
+        notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        fromQrCode,
+        notification.timeline
       );
+      trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, notificationDetailData);
+      if (notificationDetailData.first_time_opening) {
+        setSuperOrProfilePropertyValues(
+          ProfilePropertyType.INCREMENTAL,
+          'SEND_NOTIFICATIONS_COUNT'
+        );
+      }
     }
   }, [downtimesReady, pageReady]);
 
@@ -508,6 +528,14 @@ const NotificationDetail = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     titleVariant="h6"
                   />
+                  {notification.radd && (
+                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                      <AlertTitle>
+                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      </AlertTitle>
+                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                    </Alert>
+                  )}
                 </Paper>
 
                 {checkIfUserHasPayments && (
@@ -535,11 +563,6 @@ const NotificationDetail = () => {
                 )}
 
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                  <TimedMessage timeout={timeoutAARMessage}>
-                    <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                      {t('detail.document-not-available', { ns: 'notifiche' })}
-                    </Alert>
-                  </TimedMessage>
                   <NotificationDetailDocuments
                     title={t('detail.aar-acts', { ns: 'notifiche' })}
                     documents={notification.otherDocuments ?? []}
@@ -570,11 +593,6 @@ const NotificationDetail = () => {
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
               >
-                <TimedMessage timeout={timeoutMessage}>
-                  <Alert severity={'warning'} sx={{ mb: 3 }} data-testid="docNotAvailableAlert">
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>
-                </TimedMessage>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}

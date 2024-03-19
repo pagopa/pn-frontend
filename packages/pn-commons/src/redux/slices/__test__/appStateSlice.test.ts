@@ -40,6 +40,7 @@ describe('App state slice tests', () => {
       messages: {
         errors: [],
         success: [],
+        info: [],
       },
       responseEvent: null,
       isInitialized: false,
@@ -155,6 +156,34 @@ describe('App state slice tests', () => {
     expect(action.payload).toStrictEqual('4');
     const state = store.getState().appState;
     expect(state.messages.success).toEqual([]);
+  });
+
+  it('addInfo', () => {
+    const payload = { title: 'mocked-title', message: 'mocked-message' };
+    const action = store.dispatch(appStateActions.addInfo(payload));
+    expect(action.type).toBe('appState/addInfo');
+    expect(action.payload).toStrictEqual(payload);
+    const state = store.getState().appState;
+    expect(state.messages.info).toEqual([
+      {
+        id: '5',
+        title: 'mocked-title',
+        message: 'mocked-message',
+        blocking: false,
+        toNotify: true,
+        status: undefined,
+        alreadyShown: false,
+        action: undefined,
+      },
+    ]);
+  });
+
+  it('removeInfo', () => {
+    const action = store.dispatch(appStateActions.removeInfo('5'));
+    expect(action.type).toBe('appState/removeInfo');
+    expect(action.payload).toStrictEqual('5');
+    const state = store.getState().appState;
+    expect(state.messages.info).toEqual([]);
   });
 
   it('finishInitialization', () => {

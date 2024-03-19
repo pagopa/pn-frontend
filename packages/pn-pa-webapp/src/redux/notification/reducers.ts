@@ -41,8 +41,6 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  legalFactDownloadRetryAfter: 0,
-  legalFactDownloadAARRetryAfter: 0,
   downtimeLegalFactUrl: '', // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
   // analogous for other URLs
   downtimeEvents: [] as Array<Downtime>,
@@ -56,8 +54,6 @@ const notificationSlice = createSlice({
     resetState: () => initialState,
     resetLegalFactState: (state) => {
       state.legalFactDownloadUrl = '';
-      state.legalFactDownloadRetryAfter = 0;
-      state.legalFactDownloadAARRetryAfter = 0;
     },
     clearDowntimeLegalFactData: (state) => {
       state.downtimeLegalFactUrl = '';
@@ -78,16 +74,10 @@ const notificationSlice = createSlice({
       if (action.payload.url) {
         state.otherDocumentDownloadUrl = action.payload.url;
       }
-      if (action.payload.retryAfter) {
-        state.legalFactDownloadAARRetryAfter = action.payload.retryAfter;
-      }
     });
     builder.addCase(getSentNotificationLegalfact.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.legalFactDownloadUrl = action.payload.url;
-      }
-      if (action.payload.retryAfter) {
-        state.legalFactDownloadRetryAfter = action.payload.retryAfter;
       }
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {

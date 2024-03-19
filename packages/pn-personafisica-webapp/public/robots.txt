@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /notifiche
+Disallow: /notifiche/
+Disallow: /deleghe
+Disallow: /deleghe/
+Disallow: /recapiti
+Disallow: /profilo
+Disallow: /app-status

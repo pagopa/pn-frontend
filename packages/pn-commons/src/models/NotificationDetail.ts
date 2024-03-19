@@ -26,6 +26,8 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
+  radd?: INotificationDetailTimeline;
+
   // only fe
   otherDocuments?: Array<NotificationDetailDocument>;
 }
@@ -60,6 +62,7 @@ export type NotificationDetailTimelineDetails =
   | SendDigitalDetails
   | SendPaperDetails
   | PaidDetails
+  | RaddDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -222,6 +225,13 @@ export interface PaidDetails extends BaseDetails {
   uncertainPaymentDate?: boolean;
 }
 
+export interface RaddDetails extends BaseDetails {
+  recIndex?: number;
+  eventTimestamp?: string;
+  raddType?: string;
+  raddTransactionId?: string;
+}
+
 // PN-1647
 export interface NotHandledDetails extends BaseDetails {
   reasonCode: string;
@@ -357,6 +367,8 @@ export enum TimelineCategory {
   AAR_GENERATION = 'AAR_GENERATION',
   NOTIFICATION_CANCELLATION_REQUEST = 'NOTIFICATION_CANCELLATION_REQUEST',
   NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
+  // PN-9684
+  NOTIFICATION_RADD_RETRIEVED = 'NOTIFICATION_RADD_RETRIEVED',
 }
 
 interface DigitalAddress {

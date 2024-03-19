@@ -1,6 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-// PN-2028
-// import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +6,6 @@ import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/mat
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import Attachments from '../components/NewNotification/Attachments';
-// import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -103,7 +100,17 @@ const NewNotification = () => {
     if (activeStep === steps.length - 1 && isCompleted) {
       void dispatch(createNewNotification(notification))
         .unwrap()
-        .then(() => setActiveStep((previousStep) => previousStep + 1));
+        .then(() => setActiveStep((previousStep) => previousStep + 1))
+        .catch((e) => {
+          console.debug(e);
+          /** Without this catch vitest return errors of unhandle errors.
+           * The error is handled in other parts of the application with
+           * the appearance of a toast with the related error, but it's
+           * necessary to use this catch here too.
+           *
+           * Sarah Donvito e Carlos Lombardi, 2024.01.23
+           */
+        });
     }
   };
 
@@ -114,7 +121,9 @@ const NewNotification = () => {
   useEffect(() => {
     dispatch(
       setSenderInfos({
-        senderDenomination: organization.parentDescription ? organization.parentDescription + ' - ' + organization.name : organization.name,
+        senderDenomination: organization.parentDescription
+          ? organization.parentDescription + ' - ' + organization.name
+          : organization.name,
         senderTaxId: organization.fiscal_code,
       })
     );

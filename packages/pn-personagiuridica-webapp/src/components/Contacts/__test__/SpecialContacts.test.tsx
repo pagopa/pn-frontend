@@ -17,9 +17,11 @@ import {
   fireEvent,
   render,
   screen,
+  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
 import { COURTESY_CONTACT, LEGAL_CONTACT } from '../../../api/contacts/contacts.routes';
 import { GET_ALL_ACTIVATED_PARTIES } from '../../../api/external-registries/external-registries-routes';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
@@ -77,14 +79,9 @@ const fillCodeDialog = async (result: RenderResult) => {
 describe('SpecialContacts Component', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
-  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
@@ -400,7 +397,7 @@ describe('SpecialContacts Component', async () => {
       ],
       courtesy: digitalAddresses.courtesy,
     };
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>
@@ -480,7 +477,7 @@ describe('SpecialContacts Component', async () => {
         ...digitalAddresses.courtesy.slice(1),
       ],
     };
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
     // simulate rerendering due to redux changes
     result.rerender(
@@ -534,7 +531,7 @@ describe('SpecialContacts Component', async () => {
       legal: digitalAddresses.legal,
       courtesy: [...digitalAddresses.courtesy.slice(1)],
     };
-    expect(testUtils.testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result.rerender(
       <DigitalContactsCodeVerificationProvider>

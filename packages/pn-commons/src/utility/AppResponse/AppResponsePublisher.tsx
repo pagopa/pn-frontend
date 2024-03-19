@@ -19,6 +19,8 @@ class AppResponsePublisher {
   private static instance: {
     success: AppResponsePublisher | undefined;
     error: AppResponsePublisher | undefined;
+    warning: AppResponsePublisher | undefined;
+    info: AppResponsePublisher | undefined;
   };
   private regularQueue: EventsList = {};
   private fallbackQueue: Array<CallBackFunction> = [];
@@ -28,6 +30,8 @@ class AppResponsePublisher {
       AppResponsePublisher.instance = {
         success: undefined,
         error: undefined,
+        warning: undefined,
+        info: undefined,
       };
     }
     if (!AppResponsePublisher.instance[type]) {
@@ -115,8 +119,8 @@ class AppResponsePublisher {
   /* eslint-enable functional/immutable-data */
 }
 
-const success = new AppResponsePublisher('success');
-const error = new AppResponsePublisher('error');
+const success = new AppResponsePublisher(AppResponseOutcome.SUCCESS);
+const error = new AppResponsePublisher(AppResponseOutcome.ERROR);
 
 export const ResponseEventDispatcher = () => {
   const responseEvent = useSelector((state: any) => state.appState.responseEvent);

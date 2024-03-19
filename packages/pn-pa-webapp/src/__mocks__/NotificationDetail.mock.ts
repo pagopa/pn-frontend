@@ -496,6 +496,13 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
       },
     },
   },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547197',
+      applyCost: true,
+    },
+  },
 ];
 
 const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
@@ -645,3 +652,22 @@ export const notificationToFe = parseNotificationDetail(_.cloneDeep(notification
 export const notificationToFeMultiRecipient = parseNotificationDetail(
   _.cloneDeep(notificationDTOMultiRecipient)
 );
+
+export const raddNotificationDTO: NotificationDetail = {
+  ...notificationDTO,
+  timeline: [
+    ...notificationDTO.timeline,
+    {
+      elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+      timestamp: '2022-06-21T11:44:28Z',
+      legalFactsIds: [],
+      category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+      details: {
+        recIndex: 1,
+        eventTimestamp: '2022-06-21T11:44:28Z',
+        raddType: 'ALT',
+        raddTransactionId: '6',
+      },
+    },
+  ],
+};

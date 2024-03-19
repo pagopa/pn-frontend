@@ -1,7 +1,7 @@
 import { DatePickerTypes } from '../components/CustomDatePicker';
 import PrivateRoute from '../navigation/PrivateRoute';
 import { IAppMessage } from './AppMessage';
-import { AppResponse, ErrorMessage, ServerResponseError } from './AppResponse';
+import { AppResponse, AppResponseError, ErrorMessage, ServerResponseError } from './AppResponse';
 import {
   AppCurrentStatus,
   AppStatusDTO,
@@ -20,7 +20,6 @@ import {
 import { KnownSentiment } from './EmptyState';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
-import { MessageType } from './MessageType';
 import {
   EventAction,
   EventCategory,
@@ -33,6 +32,9 @@ import {
   EventPaymentRecipientType,
   EventPaymentStatusType,
   EventsType,
+  ProfileMapAttributes,
+  ProfilePropertiesActionsMap,
+  ProfilePropertyType,
 } from './MixpanelEvents';
 import {
   AarDetails,
@@ -114,13 +116,13 @@ export {
   PaymentStatus,
   EventCategory,
   PaymentAttachmentSName,
-  MessageType,
   KnownSentiment,
   DowntimeStatus,
   isKnownFunctionality,
   KnownFunctionality,
   AppIoCourtesyMessageEventType,
   PrivateRoute,
+  ProfilePropertyType,
 };
 export type {
   AnalogWorkflowDetails,
@@ -169,6 +171,7 @@ export type {
   SideMenuItem,
   Sort,
   AppResponse,
+  AppResponseError,
   ServerResponseError,
   ErrorMessage,
   SmartTableData,
@@ -192,4 +195,6 @@ export type {
   PartyEntityWithUrl,
   Product,
   PaymentCache,
+  ProfilePropertiesActionsMap,
+  ProfileMapAttributes,
 };
