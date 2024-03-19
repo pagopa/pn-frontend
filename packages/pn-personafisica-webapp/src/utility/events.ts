@@ -60,7 +60,10 @@ export enum TrackEventType {
   SEND_PAYMENT_OUTCOME = 'SEND_PAYMENT_OUTCOME',
   SEND_AUTH_SUCCESS = 'SEND_AUTH_SUCCESS',
   SEND_NOTIFICATION_NOT_ALLOWED = 'SEND_NOTIFICATION_NOT_ALLOWED',
-  SEND_RAPID_ACCESS = 'SEND_RAPID_ACCESS'
+  SEND_RAPID_ACCESS = 'SEND_RAPID_ACCESS',
+  SEND_REMOVE_PEC_SUCCESS = 'SEND_REMOVE_PEC_SUCCESS',
+  SEND_REMOVE_SMS_SUCCESS = 'SEND_REMOVE_SMS_SUCCESS',
+  SEND_REMOVE_EMAIL_SUCCESS = 'SEND_REMOVE_EMAIL_SUCCESS',
 }
 
 export const events: EventsType = {
@@ -292,22 +295,22 @@ export const events: EventsType = {
     },
   },
   [TrackEventType.SEND_PAYMENT_OUTCOME]: {
-    event_category: EventCategory.TECH
+    event_category: EventCategory.TECH,
   },
   [TrackEventType.SEND_AUTH_SUCCESS]: {
-    event_category: EventCategory.TECH
+    event_category: EventCategory.TECH,
   },
   [TrackEventType.SEND_NOTIFICATION_NOT_ALLOWED]: {
     event_category: EventCategory.TECH,
-    event_type: EventAction.SCREEN_VIEW
+    event_type: EventAction.SCREEN_VIEW,
   },
   [TrackEventType.SEND_RAPID_ACCESS]: {
-    event_category: EventCategory.TECH
-  }
+    event_category: EventCategory.TECH,
+  },
 };
 
 export const eventsActionsMap: Record<string, TrackEventType> = {
   'getReceivedNotificationOtherDocument/fulfilled': TrackEventType.SEND_DOWNLOAD_RESPONSE,
   'getReceivedNotificationLegalfact/fulfilled': TrackEventType.SEND_DOWNLOAD_RESPONSE,
-  'exchangeToken/fulfilled': TrackEventType.SEND_AUTH_SUCCESS
+  'exchangeToken/fulfilled': TrackEventType.SEND_AUTH_SUCCESS,
 };

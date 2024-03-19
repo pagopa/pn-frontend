@@ -1019,6 +1019,13 @@ const paymentsPagoPa: Array<NotificationDetailPayment> = [
       },
     },
   },
+  {
+    pagoPa: {
+      creditorTaxId: '77777777777',
+      noticeCode: '302011689142547197',
+      applyCost: true,
+    },
+  },
 ];
 
 const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
