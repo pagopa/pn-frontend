@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,10 @@ import { Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { SupportForm } from '../models/Support';
+import ZendeskForm from '../components/Support/ZendeskForm';
+import { SupportForm, ZendeskAuthorizationDTO } from '../models/Support';
+import { useAppDispatch } from '../redux/hooks';
+import { zendeskAuthorization } from '../redux/support/actions';
 import { getConfiguration } from '../services/configuration.service';
 import validator from '../validators/SupportFormValidator';
 
@@ -72,7 +75,7 @@ const SupportPPButton: React.FC<{ children?: React.ReactNode }> = ({ children })
 const SupportPage: React.FC = () => {
   const { t } = useTranslation(['support', 'common']);
   const isMobile = useIsMobile();
-  const [formData, dispatch] = useReducer(reducer, {
+  const [formData, formDispatch] = useReducer(reducer, {
     email: {
       value: '',
       touched: false,
@@ -83,17 +86,34 @@ const SupportPage: React.FC = () => {
     },
     errors: validator.validate({ email: '', confirmEmail: '' }),
   });
+  const [zendeskAuthData, setZendeskAuthData] = useState<ZendeskAuthorizationDTO>({
+    action: '',
+    return_to: '',
+    jwt: '',
+  });
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleChange = (
     type: 'UPDATE_EMAIL' | 'UPDATE_CONFIRM_EMAIL',
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    dispatch({ type, payload: event.target.value });
+    formDispatch({ type, payload: event.target.value });
   };
 
-  const handleClick = () => {
+  const handleCancel = () => {
     navigate(-1);
+  };
+
+  const handleConfirm = () => {
+    if (!formData.errors) {
+      dispatch(zendeskAuthorization(formData.email.value))
+        .unwrap()
+        .then((response) => {
+          setZendeskAuthData(response);
+        })
+        .catch(() => {});
+    }
   };
 
   return (
@@ -170,6 +190,7 @@ const SupportPage: React.FC = () => {
               size="small"
               fullWidth={isMobile}
               disabled={!!formData.errors}
+              onClick={handleConfirm}
               data-testid="continueButton"
             >
               {t('button.continue', { ns: 'common' })}
@@ -179,7 +200,7 @@ const SupportPage: React.FC = () => {
               size="small"
               fullWidth={isMobile}
               sx={{ mt: isMobile ? 2 : 0 }}
-              onClick={handleClick}
+              onClick={handleCancel}
               data-testid="backButton"
             >
               {t('button.indietro', { ns: 'common' })}
@@ -187,6 +208,7 @@ const SupportPage: React.FC = () => {
           </Box>
         </Grid>
       </Grid>
+      <ZendeskForm data={zendeskAuthData} />
     </Prompt>
   );
 };
