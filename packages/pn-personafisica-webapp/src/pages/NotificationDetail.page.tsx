@@ -27,6 +27,7 @@ import {
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
+  ProfilePropertyType,
   TimelineCategory,
   TitleBox,
   appStateActions,
@@ -62,7 +63,7 @@ import {
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
+import { setSuperOrProfilePropertyValues, trackEventByType } from '../utility/mixpanel';
 
 const getNotificationDetailData = (
   downtimeEvents: Array<Downtime>,
@@ -367,9 +368,7 @@ const NotificationDetail = () => {
           taxId: currentRecipient.taxId,
           paymentInfoRequest,
         })
-      )
-        .unwrap()
-        .catch(() => trackEventByType(TrackEventType.SEND_PAYMENT_DETAIL_ERROR));
+      );
     },
     [currentRecipient.payments]
   );
@@ -458,18 +457,22 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (downtimesReady && pageReady) {
-      trackEventByType(
-        TrackEventType.SEND_NOTIFICATION_DETAIL,
-        getNotificationDetailData(
-          downtimeEvents,
-          mandateId,
-          notification.notificationStatus,
-          checkIfUserHasPayments,
-          userPayments,
-          fromQrCode,
-          notification.timeline
-        )
+      const notificationDetailData = getNotificationDetailData(
+        downtimeEvents,
+        mandateId,
+        notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        fromQrCode,
+        notification.timeline
       );
+      trackEventByType(TrackEventType.SEND_NOTIFICATION_DETAIL, notificationDetailData);
+      if (notificationDetailData.first_time_opening) {
+        setSuperOrProfilePropertyValues(
+          ProfilePropertyType.INCREMENTAL,
+          'SEND_NOTIFICATIONS_COUNT'
+        );
+      }
     }
   }, [downtimesReady, pageReady]);
 

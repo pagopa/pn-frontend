@@ -25,7 +25,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const dispatch = useAppDispatch();
 
   const dowloadHandler = () => {
-    if (!_.isNil(payment.recIndex)) {
+    if (!_.isNil(payment.recIndex) && payment.attachment) {
       trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
       dispatch(
         getPaymentAttachment({
@@ -66,9 +66,11 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <ButtonNaked color="primary" onClick={dowloadHandler}>
-            {t('payment.pagopa-notice')}
-          </ButtonNaked>
+          {payment.attachment && (
+            <ButtonNaked color="primary" onClick={dowloadHandler}>
+              {t('payment.pagopa-notice')}
+            </ButtonNaked>
+          )}
         </Grid>
       </Grid>
       {payment.status === PaymentStatus.SUCCEEDED && (

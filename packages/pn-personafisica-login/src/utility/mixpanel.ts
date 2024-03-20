@@ -1,6 +1,7 @@
-import { trackEvent } from '@pagopa-pn/pn-commons';
+import { ProfilePropertyType, setSuperOrProfileProperty, trackEvent } from '@pagopa-pn/pn-commons';
 
 import { TrackEventType, events } from './events';
+import { ProfilePropertyParams } from './profileProperties';
 
 /**
  * Function to track events outside redux
@@ -14,3 +15,13 @@ export const trackEventByType = (trackEventType: TrackEventType, attributes?: ob
 
   trackEvent(trackEventType, process.env.NODE_ENV, eventParameters);
 };
+
+export function setSuperOrProfilePropertyValues<TProperty extends keyof ProfilePropertyParams>(
+  type: ProfilePropertyType,
+  propertyName: TProperty,
+  attributes?: ProfilePropertyParams[TProperty]
+) {
+  const property = attributes ? { [propertyName]: attributes } : propertyName;
+
+  setSuperOrProfileProperty(type, property, process.env.NODE_ENV);
+}

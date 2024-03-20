@@ -233,9 +233,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     handleDeselectPayment={handleDeselectPayment}
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
-                    handleTrackEventDetailPaymentError={() =>
-                      handleTrackEventFn(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR)
-                    }
+                    handleTrackEventDetailPaymentError={handleTrackEventFn}
                   />
                 </Box>
               ) : null

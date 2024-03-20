@@ -117,7 +117,7 @@ describe('NotificationPaymentPagoPa Component', async () => {
     });
   });
 
-  it('dowload payment attachment - no recIndex', async () => {
+  it('download payment attachment - no recIndex', async () => {
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationDTOMultiRecipient.timeline,
       notificationDTOMultiRecipient.recipients[1].payments ?? [],
@@ -135,5 +135,21 @@ describe('NotificationPaymentPagoPa Component', async () => {
       expect(mock.history.get).toHaveLength(0);
       expect(downloadDocument).toBeCalledTimes(0);
     });
+  });
+
+  it('payment attachment not available', async () => {
+    const paymentHistory = populatePaymentsPagoPaF24(
+      notificationDTOMultiRecipient.timeline,
+      notificationDTOMultiRecipient.recipients[1].payments ?? [],
+      []
+    );
+    const indexItem = paymentHistory.findIndex((item) => !item.pagoPa?.attachment);
+    const { container } = render(
+      <NotificationPaymentPagoPa
+        iun={notificationDTOMultiRecipient.iun}
+        payment={paymentHistory[indexItem].pagoPa!}
+      />
+    );
+    expect(container).not.toHaveTextContent('payment.pagopa-notice');
   });
 });
