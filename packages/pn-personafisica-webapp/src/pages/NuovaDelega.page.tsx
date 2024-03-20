@@ -304,7 +304,7 @@ const NuovaDelega = () => {
                             alignItems="center"
                             direction={isMobile ? 'column' : 'row'}
                             spacing={1}
-                            flex="1 0 100px"
+                            flex="1 0"
                           >
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
@@ -358,7 +358,7 @@ const NuovaDelega = () => {
                         </Stack>
                       </FormControl>
                       <TextField
-                        sx={{ marginTop: '2rem' }}
+                        sx={{ marginTop: isMobile ? 1 : 4 }}
                         id="codiceFiscale"
                         value={values.codiceFiscale.toString()}
                         onChange={(event) => {
