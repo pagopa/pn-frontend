@@ -14,7 +14,6 @@ import {
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, axe, render } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { NOTIFICATION_DETAIL } from '../../api/notifications/notifications.routes';
 import NotificationDetail from '../NotificationDetail.page';
 
 vi.mock('react-i18next', () => ({
@@ -42,7 +41,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
   });
 
   it('one recipient - does not have basic accessibility issues rendering the page', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationDTO);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -55,7 +54,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
   }, 15000);
 
   it('one recipient - does not have basic accessibility issues rendering the page when API call returns error', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(500);
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(500);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {
@@ -74,7 +73,9 @@ describe('NotificationDetail Page - accessibility tests', () => {
   }, 15000);
 
   it('multi recipient - does not have basic accessibility issues rendering the page', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(notificationDTOMultiRecipient.iun)).reply(200, notificationDTO);
+    mock
+      .onGet(`/bff/v1/notifications/sent/${notificationDTOMultiRecipient.iun}`)
+      .reply(200, notificationDTOMultiRecipient);
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
     await act(async () => {

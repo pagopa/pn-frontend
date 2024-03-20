@@ -5,6 +5,7 @@ import { NotificationStatus } from './NotificationStatus';
 /** Notification Detail */
 export interface NotificationDetail {
   idempotenceToken?: string;
+  taxonomyCode: string;
   paProtocolNumber: string;
   subject: string;
   abstract?: string;

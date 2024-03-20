@@ -17,7 +17,6 @@ import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDe
 import { apiClient } from '../../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
-  NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
@@ -84,7 +83,7 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification detail', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationDTOMultiRecipient.iun))
+      .onGet(`/bff/v1/notifications/sent/${notificationDTOMultiRecipient.iun}`)
       .reply(200, notificationDTOMultiRecipient);
     const action = await store.dispatch(getSentNotification(notificationDTOMultiRecipient.iun));
     const payload = action.payload as NotificationDetail;

@@ -14,6 +14,8 @@ import {
   NotificationStatusHistory,
   PhysicalCommunicationType,
   RecipientType,
+  ResponseStatus,
+  SendDigitalDetails,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
 
@@ -21,12 +23,12 @@ function getOneRecipientNotification(): NotificationDetail {
   const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
   oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
   oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
-    (t) => !t.details.recIndex
+    (t) => 'recIndex' in t.details && !t.details.recIndex
   );
   oneRecipientNotification.notificationStatusHistory =
     oneRecipientNotification.notificationStatusHistory.map((status) => ({
       ...status,
-      steps: status.steps?.filter((step) => !step.details.recIndex),
+      steps: status.steps?.filter((step) => 'recIndex' in step.details && !step.details.recIndex),
       relatedTimelineElements: status.relatedTimelineElements.filter(
         (elem) => elem.indexOf('RECINDEX_0') > -1
       ),
@@ -245,10 +247,10 @@ const timeline: Array<INotificationDetailTimeline> = [
         address: 'notifichedigitali-uat@pec.pagopa.it',
       },
       digitalAddressSource: AddressSource.SPECIAL,
-      responseStatus: 'OK',
+      responseStatus: ResponseStatus.OK,
       notificationDate: '2023-08-25T09:35:58.40995459Z',
       deliveryDetailCode: 'C003',
-    },
+    } as SendDigitalDetails,
     index: 12,
     hidden: false,
   },
@@ -280,10 +282,10 @@ const timeline: Array<INotificationDetailTimeline> = [
         address: 'testpagopa3@pec.pagopa.it',
       },
       digitalAddressSource: AddressSource.SPECIAL,
-      responseStatus: 'OK',
+      responseStatus: ResponseStatus.OK,
       notificationDate: '2023-08-25T09:36:01.184038269Z',
       deliveryDetailCode: 'C003',
-    },
+    } as SendDigitalDetails,
     index: 14,
     hidden: false,
   },
@@ -551,7 +553,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             address: 'testpagopa3@pec.pagopa.it',
           },
           digitalAddressSource: AddressSource.SPECIAL,
-          responseStatus: 'OK',
+          responseStatus: ResponseStatus.OK,
           notificationDate: '2023-08-25T09:36:01.184038269Z',
           deliveryDetailCode: 'C003',
         },
@@ -578,7 +580,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             category: LegalFactType.PEC_RECEIPT,
           },
         ],
-        category: TimelineCategory.SEND_DIGITAL_FEEDBACK,
+        category: TimelineCategory.SEND_DIGITAL_DOMICILE,
         details: {
           recIndex: 0,
           digitalAddress: {
@@ -586,7 +588,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
             address: 'notifichedigitali-uat@pec.pagopa.it',
           },
           digitalAddressSource: AddressSource.SPECIAL,
-          responseStatus: 'OK',
+          responseStatus: ResponseStatus.OK,
           notificationDate: '2023-08-25T09:35:58.40995459Z',
           deliveryDetailCode: 'C003',
         },
@@ -1141,6 +1143,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   abstract: 'Abstract della notifica',
   paProtocolNumber: '302011692956029071',
   subject: 'notifica analogica con cucumber',
+  taxonomyCode: '010202N',
   recipients,
   documents: [
     {

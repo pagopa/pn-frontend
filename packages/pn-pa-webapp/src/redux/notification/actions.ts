@@ -8,12 +8,15 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
+  parseError,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { apiClient } from '../../api/apiClients';
 import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { NotificationSentApiFactory } from '../../generated-client';
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
@@ -24,7 +27,19 @@ export enum NOTIFICATION_ACTIONS {
 
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION,
-  performThunkAction((params: string) => NotificationsApi.getSentNotification(params))
+  async (params: string, { rejectWithValue }) => {
+    try {
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.retrieveSentNotificationV1(params);
+      return response.data as NotificationDetail;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
 );
 
 // da cambiare il ritorno nel caso venga restituito qualcosa
