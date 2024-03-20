@@ -182,10 +182,13 @@ describe('CodeInput Component', () => {
     (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
 
     // we must use userEvent because the keyboard event must trigger also the change event (fireEvent doesn't do that)
-    await userEvent.paste('12345');
+    const codePasted = '12345';
+    await userEvent.paste(codePasted);
+
     await waitFor(() => {
-      expect(codeInputs[0]).toHaveValue('1');
-      expect(codeInputs[4]).toHaveValue('5');
+      for (let i = 0; i < codeInputs.length; i++) {
+        expect(codeInputs[i]).toHaveValue(codePasted[i]);
+      }
     });
   });
 });

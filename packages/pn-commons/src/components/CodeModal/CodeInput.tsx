@@ -83,6 +83,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       focusInput(index - 1);
     } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
       event.preventDefault();
+    } else if (event.metaKey && event.key === 'v') {
+      focusInput(index + 1);
     }
   };
 
@@ -117,15 +119,17 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     }
   };
 
-  const pasteHandler = (event: ClipboardEvent<HTMLDivElement>, index: number) => {
+  const pasteHandler = (event: ClipboardEvent<HTMLDivElement>) => {
+    event.preventDefault();
     const copiedCode = event.clipboardData.getData('text');
-    if (Number(copiedCode)) {
-      const values = copiedCode.split('');
-      values.map((element, i) => {
-        changeInputValue(element, i);
-        focusInput(index + 1);
-      });
-    }
+    // Ensure the copied code matches the required length
+    const requiredCode = copiedCode.slice(0, initialValues.length);
+
+    const values = requiredCode.split('');
+    setCurrentValues(values);
+
+    // Focus the last input and set cursor at the end
+    focusInput(values.length - 1);
   };
 
   useEffect(() => {
@@ -155,7 +159,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}
           onFocus={(event) => event.target.select()}
-          onPaste={(event) => pasteHandler(event, index)}
+          onPaste={(event) => pasteHandler(event)}
           value={currentValues[index]}
           // eslint-disable-next-line functional/immutable-data
           inputRef={(node) => (inputsRef.current[index] = node)}
