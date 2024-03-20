@@ -276,7 +276,7 @@ const NuovaDelega = () => {
                             alignItems="center"
                             direction={isMobile ? 'column' : 'row'}
                             spacing={1}
-                            flex={isMobile ? '1 0' : '1 0 100px'}
+                            flex="1 0"
                           >
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
