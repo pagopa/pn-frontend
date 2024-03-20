@@ -1,6 +1,11 @@
 export type HTTPStatusCode = number;
 
-export type AppResponseOutcome = 'success' | 'error';
+export enum AppResponseOutcome {
+  ERROR = 'error',
+  WARNING = 'warning',
+  INFO = 'info',
+  SUCCESS = 'success',
+}
 
 /**
  * The following ServerResponse interfaces is used to model DTO

@@ -13,6 +13,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Box } from '@mui/material';
 import {
   AppMessage,
+  AppResponse,
+  AppResponseError,
   AppResponseMessage,
   Layout,
   ResponseEventDispatcher,
@@ -24,7 +26,6 @@ import {
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { AppResponseError } from '@pagopa-pn/pn-commons/src/models/AppResponse';
 import { ProductEntity } from '@pagopa/mui-italia';
 
 import { getCurrentEventTypePage } from './navigation/navigation.utility';
@@ -239,11 +240,19 @@ const App = () => {
     }
   };
 
-  const handleEventTrackingToastErrorMessages = (error: AppResponseError, traceid?: string) => {
+  const handleEventTrackingToastErrorMessages = (
+    error: AppResponseError,
+    response: AppResponse
+  ) => {
+    const { traceId, status, action } = response;
+
     trackEventByType(TrackEventType.SEND_TOAST_ERROR, {
       reason: error.code,
-      traceid,
+      traceid: traceId,
       page_name: getCurrentEventTypePage(pathname),
+      message: error.message,
+      httpStatusCode: status,
+      action,
     });
   };
 

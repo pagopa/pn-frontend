@@ -24,5 +24,6 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
       debug: true,
       // function called after mixpanel has finished loading
     });
+    mixpanel.identify(mixpanel.get_distinct_id());
   }
 }

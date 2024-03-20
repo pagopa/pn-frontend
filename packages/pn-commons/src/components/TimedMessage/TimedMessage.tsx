@@ -10,7 +10,10 @@ interface TimedMessageProps {
   /** Message to show */
   children?: React.ReactNode;
 }
-
+/**
+ * Show timed message
+ * @deprecated since PN-8718
+ */
 const TimedMessage: React.FC<TimedMessageProps> = ({ timeout = 0, callback, children }) => {
   const [showMessage, setShowMessage] = useState(false);
 

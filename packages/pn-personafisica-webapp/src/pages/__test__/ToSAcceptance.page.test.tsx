@@ -9,12 +9,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { SET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentActionType, ConsentType } from '../../models/consents';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
 const mockNavigateFn = vi.fn();
+const mockOpenFn = vi.fn();
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
@@ -47,14 +49,15 @@ const privacyConsent: ConsentUser = {
 };
 
 describe('test Terms of Service page', async () => {
+  const original = window.open;
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
+    Object.defineProperty(window, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
@@ -64,6 +67,7 @@ describe('test Terms of Service page', async () => {
 
   afterAll(() => {
     mock.restore();
+    Object.defineProperty(window, 'open', { configurable: true, value: original });
   });
 
   it('checks the texts in the page - First ToS acceptance', () => {
@@ -139,11 +143,11 @@ describe('test Terms of Service page', async () => {
     );
     const tosLink = getByTestId('terms-and-conditions');
     fireEvent.click(tosLink!);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(TOS_LINK_RELATIVE_PATH);
+    expect(mockOpenFn).toBeCalledTimes(1);
+    expect(mockOpenFn).toBeCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
     const privacyLink = getByTestId('privacy-link');
     fireEvent.click(privacyLink!);
-    expect(mockNavigateFn).toBeCalledTimes(2);
-    expect(mockNavigateFn).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH);
+    expect(mockOpenFn).toBeCalledTimes(2);
+    expect(mockOpenFn).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });
 });

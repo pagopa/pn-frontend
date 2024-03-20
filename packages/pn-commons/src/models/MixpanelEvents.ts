@@ -1,6 +1,5 @@
 import { NotificationStatus } from './NotificationStatus';
 
-
 export type EventsType = {
   [key: string]: {
     // property event_category should be of type EventCategory however we should finish all the new implementations in PA and PG first.
@@ -12,8 +11,18 @@ export type EventsType = {
     // Nicola Giornetta - 30-11-2023
     event_category: string;
     event_type?: EventAction | string;
-    getAttributes?: (payload:any) => Record<string, string>;
+    getAttributes?: (payload: any) => Record<string, string>;
   };
+};
+
+export type ProfileMapAttributes = {
+  profilePropertyType: Array<ProfilePropertyType>;
+  getAttributes: (payload?: any, meta?: any) => Record<string, string>;
+  shouldBlock?: (payload?: any, meta?: any) => boolean;
+};
+
+export type ProfilePropertiesActionsMap = {
+  [key: string]: ProfileMapAttributes;
 };
 
 export enum EventAction {
@@ -32,6 +41,12 @@ export enum EventDowntimeType {
   NOT_DISSERVICE = 'not_disservice',
   COMPLETED = 'completed',
   IN_PROGRESS = 'in_progress',
+}
+
+export enum ProfilePropertyType {
+  PROFILE = 'profile',
+  INCREMENTAL = 'incremental',
+  SUPER_PROPERTY = 'superProperty',
 }
 
 export type EventPaymentStatusType = {

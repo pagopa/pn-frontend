@@ -7,6 +7,7 @@ import {
   AppResponsePublisher,
   CodeModal,
   EventMandateNotificationsListType,
+  ProfilePropertyType,
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -30,7 +31,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
+import { setSuperOrProfilePropertyValues, trackEventByType } from '../utility/mixpanel';
 import { DelegationStatus } from '../utility/status.utility';
 
 const Deleghe = () => {
@@ -61,10 +62,26 @@ const Deleghe = () => {
   const handleConfirmClick = () => {
     if (type === 'delegates') {
       trackEventByType(TrackEventType.SEND_MANDATE_REVOKED);
-      void dispatch(revokeDelegation(id));
+      void dispatch(revokeDelegation(id))
+        .unwrap()
+        .then(() =>
+          setSuperOrProfilePropertyValues(
+            ProfilePropertyType.PROFILE,
+            'SEND_MANDATE_GIVEN',
+            delegators.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
+          )
+        );
     } else {
       trackEventByType(TrackEventType.SEND_MANDATE_REJECTED);
-      void dispatch(rejectDelegation(id));
+      void dispatch(rejectDelegation(id))
+        .unwrap()
+        .then(() =>
+          setSuperOrProfilePropertyValues(
+            ProfilePropertyType.PROFILE,
+            'SEND_HAS_MANDATE',
+            delegates.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
+          )
+        );
     }
   };
 

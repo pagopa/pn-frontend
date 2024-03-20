@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import {
+  AppMessage,
   AppResponseMessage,
   DOWNTIME_HISTORY,
   DOWNTIME_LEGAL_FACT_DETAILS,
@@ -26,6 +27,7 @@ import {
   raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
   NOTIFICATION_DETAIL,
@@ -59,10 +61,6 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
 };
 
 describe('NotificationDetail Page', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
   const mockLegalIds = getLegalFactIds(notificationDTO, 0);
   const original = window.location;
 
@@ -70,7 +68,7 @@ describe('NotificationDetail Page', async () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { href: '', assign: vi.fn() },
@@ -177,10 +175,15 @@ describe('NotificationDetail Page', async () => {
     mock
       .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationAfter150Days.iun, otherDocument))
       .reply(200, {
-        retryAfter: 1000,
+        retryAfter: 1,
       });
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>
+      );
     });
 
     const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
@@ -192,8 +195,27 @@ describe('NotificationDetail Page', async () => {
     fireEvent.click(documentButton[1]);
 
     await waitFor(() => {
-      const alertMessage = result.getAllByTestId('aarNotAvailableAlert')[0];
+      const alertMessage = result.getAllByTestId('snackBarContainer')[0];
       expect(alertMessage).toBeInTheDocument();
+    });
+    // simulate that aar is now available
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
+      .reply(200, {
+        filename: 'mocked-filename',
+        contentLength: 1000,
+        retryAfter: null,
+        url: 'https://mocked-aar-com',
+      });
+    fireEvent.click(documentButton[1]);
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(4);
+      expect(mock.history.get[3].url).toContain(
+        `/delivery-push/${notificationToFe.iun}/document/AAR`
+      );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-aar-com');
     });
   });
 
@@ -252,12 +274,18 @@ describe('NotificationDetail Page', async () => {
       retryAfter: 1,
     });
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationDetail />
+        </>
+      );
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/notifications/sent');
     expect(mock.history.get[1].url).toContain('/downtime/v1/history');
     const legalFactButton = result.getAllByTestId('download-legalfact');
+
     fireEvent.click(legalFactButton[0]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
@@ -265,8 +293,9 @@ describe('NotificationDetail Page', async () => {
         `/delivery-push/${notificationDTO.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
     });
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('docNotAvailableAlert'));
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
     expect(docNotAvailableAlert).toBeInTheDocument();
+
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(notificationDTO.iun, mockLegalIds)).reply(200, {
       filename: 'mocked-filename',
       contentLength: 1000,
@@ -274,16 +303,16 @@ describe('NotificationDetail Page', async () => {
       url: 'https://mocked-url-com',
     });
     // simulate that legal fact is now available
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-    });
-    expect(docNotAvailableAlert).not.toBeInTheDocument();
     fireEvent.click(legalFactButton[0]);
+
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
         `/delivery-push/${notificationDTO.iun}/legal-facts/${mockLegalIds.category}/${mockLegalIds.key}`
       );
+    });
+    await waitFor(() => {
+      expect(window.location.href).toBe('https://mocked-url-com');
     });
   });
 

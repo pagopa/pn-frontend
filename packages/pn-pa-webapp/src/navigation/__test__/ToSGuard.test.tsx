@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
 import { GET_CONSENTS } from '../../api/consents/consents.routes';
 import { ConsentType } from '../../models/consents';
 import ToSGuard from '../ToSGuard';
@@ -45,13 +46,9 @@ const Guard = () => (
 
 describe('Tests the ToSGuard component', async () => {
   let mock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../api/apiClients');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
+    mock = new MockAdapter(apiClient);
   });
 
   afterEach(() => {
