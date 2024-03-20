@@ -16,11 +16,11 @@ import {
 } from '@mui/material';
 import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../models/PFEventsType';
 import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { PFEventsType } from '../utility/MixpanelUtils/PFEventsType';
 import { TrackEventType } from '../utility/events';
 import { trackEventByType } from '../utility/mixpanel';
 

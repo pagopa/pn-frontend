@@ -1,5 +1,5 @@
+import { EventType } from '../../models/EventType';
 import EventStrategyFactory from './EventStrategyFactory';
-import { EventType } from './EventType';
 import { MultiPaymentsMoreInfoStrategy } from './Strategies/payments';
 
 /**

@@ -1,8 +1,8 @@
 import { Link, Typography } from '@mui/material';
 
 import { F24PaymentDetails, PaymentDetails } from '../../models';
+import { EventType } from '../../models/EventType';
 import CommonEventStrategyFactory from '../../utility/MixpanelUtils/CommonEventStrategyFactory';
-import { EventType } from '../../utility/MixpanelUtils/EventType';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {

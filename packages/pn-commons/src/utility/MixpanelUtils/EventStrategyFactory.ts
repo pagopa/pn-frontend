@@ -1,5 +1,5 @@
+import EventStrategy from '../../models/EventStrategy';
 import { trackEvent } from '../../services';
-import EventStrategy from './EventStrategy';
 
 /**
  * The abstract factory that must be extended by each application to define

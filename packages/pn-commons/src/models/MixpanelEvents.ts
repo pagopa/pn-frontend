@@ -11,11 +11,11 @@ export type EventsType = {
     // Nicola Giornetta - 30-11-2023
     event_category: string;
     event_type?: EventAction | string;
-    getAttributes?: (payload: any) => Record<string, string>;
+    getAttributes?: <T>(payload: T) => Record<string, string>;
   };
 };
 
-export type StrategyEventType = {
+export type TrackedEvent = {
   event_category: string;
   event_type?: EventAction | string;
   getAttributes?: (payload: any) => Record<string, string>;

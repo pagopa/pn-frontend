@@ -18,6 +18,8 @@ import {
   isKnownFunctionality,
 } from './AppStatus';
 import { KnownSentiment } from './EmptyState';
+import EventStrategy from './EventStrategy';
+import { EventType } from './EventType';
 import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import { Institution, PartyEntityWithUrl } from './Institutions';
 import {
@@ -35,7 +37,7 @@ import {
   ProfileMapAttributes,
   ProfilePropertiesActionsMap,
   ProfilePropertyType,
-  StrategyEventType,
+  TrackedEvent,
 } from './MixpanelEvents';
 import {
   AarDetails,
@@ -198,5 +200,7 @@ export type {
   PaymentCache,
   ProfilePropertiesActionsMap,
   ProfileMapAttributes,
-  StrategyEventType,
+  TrackedEvent,
+  EventStrategy,
+  EventType,
 };

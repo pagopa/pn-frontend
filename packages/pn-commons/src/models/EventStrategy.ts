@@ -1,4 +1,4 @@
-import { StrategyEventType } from '../../models';
+import { StrategyEventType } from '.';
 
 /**
  * It is the set of all those operations that taken the type of event

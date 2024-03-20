@@ -1,6 +1,6 @@
 import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from './PFEventsType';
+import { PFEventsType } from '../../models/PFEventsType';
 import { SendProfileStrategy } from './Strategies/profile';
 
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
