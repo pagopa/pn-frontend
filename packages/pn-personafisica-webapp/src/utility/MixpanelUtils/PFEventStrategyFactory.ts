@@ -1,11 +1,10 @@
-import { EventType, IEventStrategyFactory } from '@pagopa-pn/pn-commons';
-import EventStrategy from '@pagopa-pn/pn-commons/src/utility/MixpanelUtils/EventStrategy';
+import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from './PFEventsType';
 import { SendProfileStrategy } from './Strategies/profile';
 
-export class PFEventStrategyFactory implements IEventStrategyFactory {
-  getStrategy(eventType: EventType): EventStrategy | null {
+class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
+  getStrategy(eventType: PFEventsType): EventStrategy | null {
     switch (eventType) {
       case PFEventsType.SEND_PROFILE:
         return new SendProfileStrategy();
@@ -14,3 +13,5 @@ export class PFEventStrategyFactory implements IEventStrategyFactory {
     }
   }
 }
+
+export default new PFEventStrategyFactory();

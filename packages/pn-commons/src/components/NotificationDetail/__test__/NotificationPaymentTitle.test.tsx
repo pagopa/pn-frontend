@@ -25,7 +25,6 @@ describe('NotificationPaymentTite component', () => {
         pagoPaF24={paymentsData.pagoPaF24}
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
         hasMoreThenOnePage={true}
       />
@@ -44,7 +43,6 @@ describe('NotificationPaymentTite component', () => {
         pagoPaF24={[paymentsData.pagoPaF24[0]]}
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
         hasMoreThenOnePage={true}
       />
@@ -63,7 +61,6 @@ describe('NotificationPaymentTite component', () => {
         pagoPaF24={paymentsData.pagoPaF24}
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
         hasMoreThenOnePage={true}
       />
@@ -82,7 +79,6 @@ describe('NotificationPaymentTite component', () => {
         pagoPaF24={[]}
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
         allPaymentsIsPaid={false}
         hasMoreThenOnePage={true}
       />
@@ -99,7 +95,6 @@ describe('NotificationPaymentTite component', () => {
         pagoPaF24={[]}
         f24Only={[]}
         landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
         allPaymentsIsPaid={true}
         hasMoreThenOnePage={false}
       />
@@ -114,7 +109,6 @@ describe('NotificationPaymentTite component', () => {
         pagoPaF24={paymentsData.pagoPaF24}
         f24Only={paymentsData.f24Only}
         landingSiteUrl="https://www.mocked-url.com"
-        handleTrackEventFn={() => {}}
         allPaymentsIsPaid={true}
         hasMoreThenOnePage={true}
       />

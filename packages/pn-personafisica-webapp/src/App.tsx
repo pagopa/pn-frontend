@@ -22,7 +22,6 @@ import {
   SideMenuItem,
   appStateActions,
   errorFactoryManager,
-  eventContext,
   initLocalization,
   useMultiEvent,
   useTracking,
@@ -40,7 +39,6 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
-import { PFEventStrategyFactory } from './utility/MixpanelUtils/PFEventStrategyFactory';
 import { TrackEventType } from './utility/events';
 import { trackEventByType } from './utility/mixpanel';
 import './utility/onetrust';
@@ -139,7 +137,6 @@ const ActualApp = () => {
   }, [tosConsent, privacyConsent, i18n.language]);
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
-  eventContext.setStrategy(new PFEventStrategyFactory());
 
   useEffect(() => {
     if (sessionToken !== '') {

@@ -1,13 +1,12 @@
 /**
  * List of events to track.
- * This is a class containing events common for all applications.
- * It can be extended by every single app to add its own events.
+ * This is an enum containing events common for all applications.
  * @date 23/2/2024 - 17:04:29
  *
  * @export
  * @class EventType
  * @typedef {EventType}
  */
-export default abstract class EventType {
-  static readonly SEND_MULTIPAYMENT_MORE_INFO = 'SEND_MULTIPAYMENT_MORE_INFO';
+export enum EventType {
+  SEND_MULTIPAYMENT_MORE_INFO = 'SEND_MULTIPAYMENT_MORE_INFO',
 }

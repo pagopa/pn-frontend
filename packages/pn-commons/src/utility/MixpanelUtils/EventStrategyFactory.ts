@@ -1,30 +1,52 @@
-import IEventStrategyFactory from '../../models/IEventStrategyFactory';
-import EventType from './EventType';
-import { MultiPaymentsMoreInfoStrategy } from './Strategies/payments';
+import { trackEvent } from '../../services';
+import EventStrategy from './EventStrategy';
 
 /**
- * Description placeholder
- * @date 23/2/2024 - 17:30:05
+ * The abstract factory that must be extended by each application to define
+ * its own factory for event tracking management.
+ *
+ * @date 20/3/2024 - 10:16:08
  *
  * @export
+ * @abstract
  * @class EventStrategyFactory
  * @typedef {EventStrategyFactory}
- * @implements {IEventStrategyFactory}
+ * @template {string} T
  */
-export default class EventStrategyFactory implements IEventStrategyFactory {
+export default abstract class EventStrategyFactory<T extends string> {
   /**
-   * Description placeholder
-   * @date 23/2/2024 - 17:29:49
+   * This method must be implemented by each applications.
+   * It defines the event strategy management.
    *
-   * @param {EventType} eventType
-   * @returns {EventStrategy}
+   * @date 20/3/2024 - 10:14:37
+   *
+   * @abstract
+   * @param {T} eventType
+   * @returns {(EventStrategy | null)}
+   * @see EventStrategy
    */
-  getStrategy(eventType: EventType) {
-    switch (eventType) {
-      case EventType.SEND_MULTIPAYMENT_MORE_INFO:
-        return new MultiPaymentsMoreInfoStrategy();
-      default:
-        return null;
+  abstract getStrategy(eventType: T): EventStrategy | null;
+
+  /**
+   * This is the method that, given a specific event, gets the strategy, does the needed computations
+   * and track the event.
+   * It must not be overwritten unless strictly necessary.
+   *
+   * @date 20/3/2024 - 10:18:02
+   *
+   * @public
+   * @param {T} eventType
+   * @param {?unknown} [data]
+   */
+  public triggerEvent(eventType: T, data?: unknown) {
+    const strategy = this.getStrategy(eventType);
+
+    if (!strategy) {
+      throw new Error('Unknown event type ' + eventType);
     }
+
+    const eventParameters = strategy.performComputations(data);
+
+    trackEvent(eventType, process.env.NODE_ENV!, eventParameters);
   }
 }

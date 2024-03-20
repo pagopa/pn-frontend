@@ -1,3 +1,5 @@
+import { StrategyEventType } from '../../models';
+
 /**
  * It is the set of all those operations that taken the type of event
  * and the data associated with it generates the event to track.
@@ -13,12 +15,13 @@ interface EventStrategy {
   /**
    * This function manage receiving data as input
    * of the event and make the necessary transformations
-   * @date 01/03/2024 - 17:34:29
    *
-   * @param data - The incoming data associated to event X
-   * @returns - The event object to be track
+   * @date 20/3/2024 - 10:23:25
+   *
+   * @param {unknown} data
+   * @returns {StrategyEventType}
    */
-  performComputations(data: unknown): unknown;
+  performComputations(data: unknown): StrategyEventType;
 }
 
 export default EventStrategy;

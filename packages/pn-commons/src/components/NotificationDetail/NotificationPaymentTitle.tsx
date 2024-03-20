@@ -1,7 +1,8 @@
 import { Link, Typography } from '@mui/material';
 
 import { F24PaymentDetails, PaymentDetails } from '../../models';
-import { EventType, eventContext } from '../../utility';
+import CommonEventStrategyFactory from '../../utility/MixpanelUtils/CommonEventStrategyFactory';
+import { EventType } from '../../utility/MixpanelUtils/EventType';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {
@@ -23,7 +24,7 @@ const NotificationPaymentTitle: React.FC<Props> = ({
   const notificationCostsFaqLink = `${landingSiteUrl}${FAQ_NOTIFICATION_COSTS}`;
 
   const trackEvent = () => {
-    eventContext.triggerEvent(EventType.SEND_MULTIPAYMENT_MORE_INFO);
+    CommonEventStrategyFactory.triggerEvent(EventType.SEND_MULTIPAYMENT_MORE_INFO);
   };
 
   const FaqLink = (
