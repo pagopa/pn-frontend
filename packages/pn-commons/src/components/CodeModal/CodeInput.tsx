@@ -83,8 +83,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       focusInput(index - 1);
     } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
       event.preventDefault();
-    } else if (event.metaKey && event.key === 'v') {
-      focusInput(index + 1);
     }
   };
 
@@ -125,11 +123,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
     // Ensure the copied code matches the required length
     const requiredCode = copiedCode.slice(0, initialValues.length);
 
-    const values = requiredCode.split('');
-    setCurrentValues(values);
+    if (Number(requiredCode)) {
+      const values = requiredCode.split('');
+      setCurrentValues(values);
 
-    // Focus the last input and set cursor at the end
-    focusInput(values.length - 1);
+      // Focus the last input and set cursor at the end
+      focusInput(values.length - 1);
+    }
   };
 
   useEffect(() => {
