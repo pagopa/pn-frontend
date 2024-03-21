@@ -4,7 +4,7 @@ export interface SupportForm {
 }
 
 export interface ZendeskAuthorizationDTO {
-  action: string;
+  action_url: string;
   jwt: string;
   return_to: string;
 }

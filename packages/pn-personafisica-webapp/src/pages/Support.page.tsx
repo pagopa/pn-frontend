@@ -87,7 +87,7 @@ const SupportPage: React.FC = () => {
     errors: validator.validate({ email: '', confirmEmail: '' }),
   });
   const [zendeskAuthData, setZendeskAuthData] = useState<ZendeskAuthorizationDTO>({
-    action: '',
+    action_url: '',
     return_to: '',
     jwt: '',
   });
