@@ -1,18 +1,16 @@
 import { EventCategory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { events } from '../events';
+import PFEventStrategyFactory from '../MixpanelUtils/PFEventStrategyFactory';
 
 describe('test track events', () => {
   it('app crash event', () => {
-    const event = events[PFEventsType.SEND_GENERIC_ERROR];
+    const event = PFEventStrategyFactory.getStrategy(
+      PFEventsType.SEND_GENERIC_ERROR
+    )?.performComputations({});
+
     expect(event).toEqual({
       event_category: EventCategory.KO,
     });
-  });
-
-  it('undefined event', () => {
-    const event = events['TEST'];
-    expect(event).toEqual(undefined);
   });
 });
