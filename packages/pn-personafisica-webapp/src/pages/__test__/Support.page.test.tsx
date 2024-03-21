@@ -1,3 +1,4 @@
+import MockAdapter from 'axios-mock-adapter';
 import { createBrowserHistory } from 'history';
 import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -6,6 +7,8 @@ import { vi } from 'vitest';
 import { getById, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { apiClient } from '../../api/apiClients';
+import { ZENDESK_AUTHORIZATION } from '../../api/support/support.routes';
 import * as routes from '../../navigation/routes.const';
 import SupportPage from '../Support.page';
 
@@ -24,6 +27,19 @@ vi.mock('react-i18next', () => ({
 
 describe('Support page', async () => {
   let result: RenderResult;
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+  afterAll(() => {
+    mock.restore();
+  });
 
   it('render page', () => {
     const { container, getByTestId } = render(<SupportPage />);
@@ -117,6 +133,29 @@ describe('Support page', async () => {
     await waitFor(() => {
       const mockedPageAfter = result.queryByTestId('mocked-dashboard');
       expect(mockedPageAfter).toBeInTheDocument();
+    });
+  });
+
+  it('submit form', async () => {
+    const mail = 'mail@example.it';
+    const response = {
+      action: 'https://zendesk-url.com',
+      jwt: 'zendesk-jwt',
+      return_to: 'https://suuport-url.com',
+    };
+
+    mock.onPost(ZENDESK_AUTHORIZATION(), { email: mail }).reply(200, response);
+
+    const { getByTestId } = render(<SupportPage />);
+    const form = getByTestId('supportForm');
+    testInput(form, 'mail', mail);
+    testInput(form, 'confirmMail', mail);
+    const continueButton = getByTestId('continueButton');
+    expect(continueButton).toBeEnabled();
+    fireEvent.click(continueButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(ZENDESK_AUTHORIZATION());
     });
   });
 });
