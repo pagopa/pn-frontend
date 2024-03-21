@@ -11,15 +11,18 @@ export type EventsType = {
     // Nicola Giornetta - 30-11-2023
     event_category: string;
     event_type?: EventAction | string;
-    getAttributes?: <T>(payload: T) => Record<string, string>;
+    getAttributes?: (payload: any) => Record<string, string>;
   };
 };
 
-export type TrackedEvent = {
+type BaseTrackedEvent = {
   event_category: string;
   event_type?: EventAction | string;
-  getAttributes?: (payload: any) => Record<string, string>;
 };
+
+export type TrackedEvent<T extends object | undefined = undefined> = T extends undefined
+  ? BaseTrackedEvent
+  : BaseTrackedEvent & T;
 
 export type ProfileMapAttributes = {
   profilePropertyType: Array<ProfilePropertyType>;

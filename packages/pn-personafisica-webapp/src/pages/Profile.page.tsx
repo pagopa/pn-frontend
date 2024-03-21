@@ -21,8 +21,6 @@ import { RECAPITI } from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -38,7 +36,9 @@ const Profile = () => {
     : { textAlign: 'center', minWidth: 'max-content' };
 
   const handleRedirectToContactsPage = () => {
-    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'profilo' });
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
+      source: 'profilo',
+    });
     navigate(RECAPITI);
   };
 

@@ -1,4 +1,4 @@
-import { StrategyEventType } from '.';
+import { TrackedEvent } from '.';
 
 /**
  * It is the set of all those operations that taken the type of event
@@ -21,7 +21,7 @@ interface EventStrategy {
    * @param {unknown} data
    * @returns {StrategyEventType}
    */
-  performComputations(data: unknown): StrategyEventType;
+  performComputations(data: unknown): TrackedEvent;
 }
 
 export default EventStrategy;

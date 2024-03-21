@@ -1,10 +1,10 @@
 import { EventAction, EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
-export class MultiPaymentsMoreInfoStrategy implements EventStrategy {
+export class TechScreenViewStrategy implements EventStrategy {
   performComputations(): TrackedEvent {
     return {
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
+      event_category: EventCategory.TECH,
+      event_type: EventAction.SCREEN_VIEW,
     };
   }
 }
