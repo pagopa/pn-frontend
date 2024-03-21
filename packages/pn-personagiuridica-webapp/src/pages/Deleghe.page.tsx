@@ -52,6 +52,11 @@ const Deleghe = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (pathname === routes.DELEGHEACARICO) {
+      setValue(0);
+    }
+  }, [pathname]);
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box
@@ -78,8 +83,8 @@ const Deleghe = () => {
                 centered
                 variant="fullWidth"
               >
-                <Tab id="tab-2" data-testid="tab2" label={t('deleghe.tab_deleghe')} />
-                <Tab id="tab-1" data-testid="tab1" label={t('deleghe.tab_delegati')} />
+                <Tab id="tab-2" value={0} data-testid="tab2" label={t('deleghe.tab_deleghe')} />
+                <Tab id="tab-1" value={1} data-testid="tab1" label={t('deleghe.tab_delegati')} />
               </Tabs>
             </Box>
             <TabPanel value={-1} index={-1}>
