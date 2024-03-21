@@ -3,7 +3,7 @@ import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { EventsType, ProfileMapAttributes, ProfilePropertyType } from '../models/MixpanelEvents';
+import { ProfileMapAttributes, ProfilePropertyType } from '../models/MixpanelEvents';
 
 /**
  * Function that tracks event
@@ -66,29 +66,44 @@ export function setSuperOrProfileProperty(
   }
 }
 
+// export const interceptDispatch =
+//   (
+//     next: Dispatch<AnyAction>,
+//     events: EventsType,
+//     eventsActionsMap: Record<string, string>,
+//     nodeEnv: string
+//   ) =>
+//   (action: PayloadAction<any, string>): any => {
+//     if (eventsActionsMap[action.type]) {
+//       // const idx = Object.values(trackEventType).indexOf(action.type as string);
+//       const eventKey = eventsActionsMap[action.type];
+//       // TODO check payload
+//       const attributes = events[eventKey].getAttributes?.(action.payload);
+//       const eventParameters = attributes
+//         ? {
+//             event_category: events[eventKey].event_category,
+//             event_type: events[eventKey].event_type,
+//             ...attributes,
+//           }
+//         : events[eventKey];
+//       trackEvent(eventKey, nodeEnv, eventParameters);
+//     }
+
+//     return next(action);
+//   };
+
 export const interceptDispatch =
   (
     next: Dispatch<AnyAction>,
-    events: EventsType,
-    eventsActionsMap: Record<string, string>,
-    nodeEnv: string
+    eventStrategyFactory: any,
+    eventsActionsMap: Record<string, string>
   ) =>
-  (action: PayloadAction<any, string>): any => {
+  (action: PayloadAction<any, string, any>): any => {
     if (eventsActionsMap[action.type]) {
-      // const idx = Object.values(trackEventType).indexOf(action.type as string);
-      const eventKey = eventsActionsMap[action.type];
-      // TODO check payload
-      const attributes = events[eventKey].getAttributes?.(action.payload);
-      const eventParameters = attributes
-        ? {
-            event_category: events[eventKey].event_category,
-            event_type: events[eventKey].event_type,
-            ...attributes,
-          }
-        : events[eventKey];
-      trackEvent(eventKey, nodeEnv, eventParameters);
+      const eventName = eventsActionsMap[action.type];
+      console.log('eventName', eventName);
+      eventStrategyFactory.triggerEvent(eventName, action.payload);
     }
-
     return next(action);
   };
 

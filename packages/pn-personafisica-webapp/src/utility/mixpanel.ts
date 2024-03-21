@@ -7,6 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
+import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
 import { TrackEventType, events, eventsActionsMap } from './events';
 import { ProfilePropertyParams, profilePropertiesActionsMap } from './profileProperties';
 
@@ -14,7 +15,7 @@ import { ProfilePropertyParams, profilePropertiesActionsMap } from './profilePro
  * Redux middleware to track events
  */
 export const trackingMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
-  interceptDispatch(next, events, eventsActionsMap, process.env.NODE_ENV);
+  interceptDispatch(next, PFEventStrategyFactory, eventsActionsMap);
 
 export const trackingProfileMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
   interceptDispatchSuperOrProfileProperty(next, profilePropertiesActionsMap, process.env.NODE_ENV);

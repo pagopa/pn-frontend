@@ -1,11 +1,8 @@
 import { EventAction, EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
 type SendDownloadResponse = {
-  payload: {
-    url: string;
-    retryAfter?: number;
-    docType?: string;
-  };
+  url: string;
+  docType?: string;
 };
 
 type SendDownloadResponseReturn = {
@@ -14,13 +11,16 @@ type SendDownloadResponseReturn = {
 };
 
 export class SendDownloadResponseStrategy implements EventStrategy {
-  performComputations({ payload }: SendDownloadResponse): TrackedEvent<SendDownloadResponseReturn> {
+  performComputations({
+    url,
+    docType,
+  }: SendDownloadResponse): TrackedEvent<SendDownloadResponseReturn> {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
       ...{
-        doc_type: payload.docType ? payload.docType : '',
-        url_available: payload.url ? 'ready' : 'retry_after',
+        doc_type: docType ? docType : '',
+        url_available: url ? 'ready' : 'retry_after',
       },
     };
   }
