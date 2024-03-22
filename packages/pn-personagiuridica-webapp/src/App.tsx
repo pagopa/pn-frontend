@@ -185,7 +185,7 @@ const ActualApp = () => {
     menuItems.splice(1, 0, {
       label: t('menu.deleghe'),
       icon: () => <AltRouteIcon />,
-      route: routes.DELEGHEACARICO,
+      route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     });
   }
