@@ -11,9 +11,7 @@ export class SendRefreshPageStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...{
-        page,
-      },
+      page,
     };
   }
 }

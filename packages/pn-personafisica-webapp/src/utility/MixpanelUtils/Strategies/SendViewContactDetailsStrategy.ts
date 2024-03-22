@@ -5,11 +5,11 @@ type SendViewContactDetails = {
 };
 
 export class SendViewContactDetailsStrategy implements EventStrategy {
-  performComputations(data: SendViewContactDetails): TrackedEvent<SendViewContactDetails> {
+  performComputations({ source }: SendViewContactDetails): TrackedEvent<SendViewContactDetails> {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...data,
+      source,
     };
   }
 }

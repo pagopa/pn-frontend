@@ -5,11 +5,11 @@ type SendViewProfile = {
 };
 
 export class SendViewProfileStrategy implements EventStrategy {
-  performComputations(data: SendViewProfile): TrackedEvent<SendViewProfile> {
+  performComputations({ source }: SendViewProfile): TrackedEvent<SendViewProfile> {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...data,
+      source,
     };
   }
 }

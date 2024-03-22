@@ -5,9 +5,7 @@ export class SendServiceStatusStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...{
-        service_status_OK,
-      },
+      service_status_OK,
     };
   }
 }

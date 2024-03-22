@@ -49,19 +49,17 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.SCREEN_VIEW,
-      ...{
-        notification_owner: !mandateId,
-        notification_status: notificationStatus,
-        contains_payment: checkIfUserHasPayments,
-        disservice_status: typeDowntime,
-        contains_multipayment:
-          userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
-        count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
-        contains_f24: hasF24 ? 'yes' : 'no',
-        first_time_opening:
-          timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
-        source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
-      },
+      notification_owner: !mandateId,
+      notification_status: notificationStatus,
+      contains_payment: checkIfUserHasPayments,
+      disservice_status: typeDowntime,
+      contains_multipayment:
+        userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
+      count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
+      contains_f24: hasF24 ? 'yes' : 'no',
+      first_time_opening:
+        timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
+      source: fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE',
     };
   }
 }

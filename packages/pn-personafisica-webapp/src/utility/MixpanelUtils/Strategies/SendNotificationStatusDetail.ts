@@ -5,13 +5,13 @@ type SendNotificationStatusDetail = {
 };
 
 export class SendNotificationStatusDetailStrategy implements EventStrategy {
-  performComputations(
-    data: SendNotificationStatusDetail
-  ): TrackedEvent<SendNotificationStatusDetail> {
+  performComputations({
+    accordion,
+  }: SendNotificationStatusDetail): TrackedEvent<SendNotificationStatusDetail> {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...data,
+      accordion,
     };
   }
 }

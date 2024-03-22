@@ -5,10 +5,10 @@ type SendPaymentOutcome = {
 };
 
 export class SendPaymentOutcomeStrategy implements EventStrategy {
-  performComputations(data: SendPaymentOutcome): TrackedEvent<SendPaymentOutcome> {
+  performComputations({ outcome }: SendPaymentOutcome): TrackedEvent<SendPaymentOutcome> {
     return {
       event_category: EventCategory.TECH,
-      ...data,
+      outcome,
     };
   }
 }

@@ -27,20 +27,18 @@ export class SendYourContactDetailsStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.SCREEN_VIEW,
-      ...{
-        PEC_exists: digitalAddresses.legal.length > 0,
-        email_exists:
-          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
-            .length > 0,
-        telephone_exists:
-          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS)
-            .length > 0,
-        appIO_status: contactIO
-          ? contactIO.value === IOAllowedValues.ENABLED
-            ? 'activated'
-            : 'deactivated'
-          : 'nd',
-      },
+      PEC_exists: digitalAddresses.legal.length > 0,
+      email_exists:
+        digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
+          .length > 0,
+      telephone_exists:
+        digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS).length >
+        0,
+      appIO_status: contactIO
+        ? contactIO.value === IOAllowedValues.ENABLED
+          ? 'activated'
+          : 'deactivated'
+        : 'nd',
     };
   }
 }

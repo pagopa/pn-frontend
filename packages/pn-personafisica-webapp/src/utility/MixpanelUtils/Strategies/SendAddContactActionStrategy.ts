@@ -5,9 +5,7 @@ export class SendAddContactActionStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...{
-        other_contact: isSpecialContact ? 'yes' : 'no',
-      },
+      other_contact: isSpecialContact ? 'yes' : 'no',
     };
   }
 }

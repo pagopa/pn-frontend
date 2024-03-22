@@ -18,10 +18,8 @@ export class SendDownloadResponseStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...{
-        doc_type: docType ? docType : '',
-        url_available: url ? 'ready' : 'retry_after',
-      },
+      doc_type: docType ? docType : '',
+      url_available: url ? 'ready' : 'retry_after',
     };
   }
 }

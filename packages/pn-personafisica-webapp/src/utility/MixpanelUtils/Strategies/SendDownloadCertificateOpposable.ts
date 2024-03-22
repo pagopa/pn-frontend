@@ -5,13 +5,13 @@ type SendDownloadCertificateSource = {
 };
 
 export class SendDownloadCertificateOpposable implements EventStrategy {
-  performComputations(
-    data: SendDownloadCertificateSource
-  ): TrackedEvent<SendDownloadCertificateSource> {
+  performComputations({
+    source,
+  }: SendDownloadCertificateSource): TrackedEvent<SendDownloadCertificateSource> {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.ACTION,
-      ...data,
+      source,
     };
   }
 }

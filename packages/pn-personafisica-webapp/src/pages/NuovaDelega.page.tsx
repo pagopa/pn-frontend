@@ -87,9 +87,8 @@ const NuovaDelega = () => {
     });
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_MANDATE_UX_CONVERSION, {
-      person_type: values.selectPersonaFisicaOrPersonaGiuridica,
-      mandate_type:
-        values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+      selectPersonaFisicaOrPersonaGiuridica: values.selectPersonaFisicaOrPersonaGiuridica,
+      selectTuttiEntiOrSelezionati: values.selectTuttiEntiOrSelezionati,
     });
     void dispatch(createDelegation(values));
   };

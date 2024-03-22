@@ -5,9 +5,7 @@ export class SendAddContactScreenViewStrategy implements EventStrategy {
     return {
       event_category: EventCategory.UX,
       event_type: EventAction.SCREEN_VIEW,
-      ...{
-        other_contact: isSpecialContact ? 'yes' : 'no',
-      },
+      other_contact: isSpecialContact ? 'yes' : 'no',
     };
   }
 }

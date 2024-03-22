@@ -1,6 +1,6 @@
 import { EventType } from '../../models/EventType';
 import EventStrategyFactory from './EventStrategyFactory';
-import { MultiPaymentsMoreInfoStrategy } from './Strategies/payments';
+import { MultiPaymentsMoreInfoStrategy } from './Strategies/MultiPaymentsMoreInfoStrategy';
 
 /**
  * The EventStrategyFactory for the pn-commons library.

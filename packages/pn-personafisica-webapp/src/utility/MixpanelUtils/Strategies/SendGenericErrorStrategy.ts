@@ -13,7 +13,7 @@ export class SendGenericErrorStrategy implements EventStrategy {
   performComputations(data: SendGenericError): TrackedEvent<SendGenericError> {
     return {
       event_category: EventCategory.KO,
-      ...data,
+      reason: data.reason,
     };
   }
 }
