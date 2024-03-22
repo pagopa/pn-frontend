@@ -10,7 +10,9 @@ import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse'
 import { SendGenericErrorStrategy } from './Strategies/SendGenericErrorStrategy';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
+import { SendPaymentDetailErrorStrategy } from './Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
+import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrategy';
 import { SendRefreshPageStrategy } from './Strategies/SendRefreshPageStrategy';
 import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContactSuccess';
 import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
@@ -63,6 +65,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
         return new SendPaymentOutcomeStrategy();
       case PFEventsType.SEND_DOWNLOAD_RESPONSE:
         return new SendDownloadResponseStrategy();
+      case PFEventsType.SEND_PAYMENT_STATUS:
+        return new SendPaymentStatusStrategy();
+      case PFEventsType.SEND_PAYMENT_DETAIL_ERROR:
+        return new SendPaymentDetailErrorStrategy();
 
       case PFEventsType.SEND_REMOVE_EMAIL_SUCCESS:
       case PFEventsType.SEND_REMOVE_SMS_SUCCESS:
@@ -102,6 +108,11 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       case PFEventsType.SEND_DEACTIVE_IO_START:
       case PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION:
       case PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION:
+      case PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO:
+      case PFEventsType.SEND_MULTIPAYMENT_MORE_INFO:
+      case PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE:
+      case PFEventsType.SEND_F24_DOWNLOAD:
+      case PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE:
         return new UXActionStrategy();
 
       case PFEventsType.SEND_MANDATE_ACCEPT_CODE_ERROR:
@@ -112,6 +123,8 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
       case PFEventsType.SEND_RAPID_ACCESS:
       case PFEventsType.SEND_AUTH_SUCCESS:
+      case PFEventsType.SEND_F24_DOWNLOAD_SUCCESS:
+      case PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT:
         return new TechStrategy();
 
       case PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED:

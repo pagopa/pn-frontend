@@ -1,6 +1,5 @@
 import { EventType } from '../../models/EventType';
 import EventStrategyFactory from './EventStrategyFactory';
-import { MultiPaymentsMoreInfoStrategy } from './Strategies/MultiPaymentsMoreInfoStrategy';
 
 /**
  * The EventStrategyFactory for the pn-commons library.
@@ -23,8 +22,6 @@ class CommonEventStrategyFactory extends EventStrategyFactory<EventType> {
    */
   getStrategy(eventType: EventType) {
     switch (eventType) {
-      case EventType.SEND_MULTIPAYMENT_MORE_INFO:
-        return new MultiPaymentsMoreInfoStrategy();
       default:
         return null;
     }

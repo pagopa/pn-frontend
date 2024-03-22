@@ -205,6 +205,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       ) : (
         <NotificationPaymentTitle
           landingSiteUrl={landingSiteUrl}
+          handleTrackEventFn={handleTrackEventFn}
           pagoPaF24={pagoPaF24}
           f24Only={f24Only}
           allPaymentsIsPaid={allPaymentsIsPaid}

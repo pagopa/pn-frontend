@@ -56,8 +56,6 @@ import {
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { TrackEventType } from '../utility/events';
-import { trackEventByType } from '../utility/mixpanel';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -402,10 +400,9 @@ const NotificationDetail = () => {
   );
 
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
-    // TODO questo potrebbe non servire piu in quanto si possono tracciare direttamenete dentro pn-commons
-    trackEventByType(
-      event as unknown as TrackEventType,
-      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ? param : undefined
+    PFEventStrategyFactory.triggerEvent(
+      event as unknown as PFEventsType,
+      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ? { param } : undefined
     );
   };
 

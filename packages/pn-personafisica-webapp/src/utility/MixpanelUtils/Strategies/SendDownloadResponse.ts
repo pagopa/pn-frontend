@@ -1,7 +1,7 @@
 import { EventAction, EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
 
 type SendDownloadResponse = {
-  url: string;
+  url?: string;
   docType?: string;
 };
 

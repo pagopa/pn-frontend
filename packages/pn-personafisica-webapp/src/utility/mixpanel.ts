@@ -3,12 +3,11 @@ import {
   interceptDispatch,
   interceptDispatchSuperOrProfileProperty,
   setSuperOrProfileProperty,
-  trackEvent,
 } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
-import { TrackEventType, events, eventsActionsMap } from './events';
+import { eventsActionsMap } from './events';
 import { ProfilePropertyParams, profilePropertiesActionsMap } from './profileProperties';
 
 /**
@@ -19,19 +18,6 @@ export const trackingMiddleware: Middleware = () => (next: Dispatch<AnyAction>) 
 
 export const trackingProfileMiddleware: Middleware = () => (next: Dispatch<AnyAction>) =>
   interceptDispatchSuperOrProfileProperty(next, profilePropertiesActionsMap, process.env.NODE_ENV);
-
-/**
- * Function to track events outside redux
- * @param trackEventType event name
- * @param attributes event attributes
- */
-export const trackEventByType = (trackEventType: TrackEventType, attributes?: object) => {
-  const eventParameters = attributes
-    ? { ...events[trackEventType], ...attributes }
-    : events[trackEventType];
-
-  trackEvent(trackEventType, process.env.NODE_ENV, eventParameters);
-};
 
 /**
  * Function to set super or profile property values

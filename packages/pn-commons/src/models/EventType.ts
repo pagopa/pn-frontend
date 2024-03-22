@@ -8,5 +8,5 @@
  * @typedef {EventType}
  */
 export enum EventType {
-  SEND_MULTIPAYMENT_MORE_INFO = 'SEND_MULTIPAYMENT_MORE_INFO',
+  PAGE_CLICK = 'PAGE_CLICK',
 }
