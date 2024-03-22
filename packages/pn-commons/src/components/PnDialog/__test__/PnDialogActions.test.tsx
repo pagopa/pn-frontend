@@ -7,7 +7,14 @@ describe('PnDialogActions Component', () => {
   it('renders component - desktop', () => {
     window.matchMedia = createMatchMedia(2000);
     const { queryByTestId, queryAllByTestId } = render(
-      <PnDialogActions>
+      <PnDialogActions
+        sx={{
+          flexDirection: 'row',
+          p: 4,
+          pt: 0,
+          gap: 1,
+        }}
+      >
         <Button data-testid="button">Test confirm button</Button>
         <Button data-testid="button">Test cancel button</Button>
       </PnDialogActions>
@@ -28,9 +35,18 @@ describe('PnDialogActions Component', () => {
   it('renders component - mobile', () => {
     window.matchMedia = createMatchMedia(800);
     const { queryByTestId, queryAllByTestId } = render(
-      <PnDialogActions>
+      <PnDialogActions
+        sx={{
+          flexDirection: 'column-reverse',
+          p: 3,
+          pt: 0,
+          gap: 0,
+        }}
+      >
         <Button data-testid="button">Test confirm button</Button>
-        <Button data-testid="button">Test cancel button</Button>
+        <Button sx={{ marginBottom: 2, width: 1 }} data-testid="button">
+          Test cancel button
+        </Button>
       </PnDialogActions>
     );
 
@@ -41,8 +57,9 @@ describe('PnDialogActions Component', () => {
     const buttons = queryAllByTestId('button');
     expect(buttons).toHaveLength(2);
     buttons.forEach((button, index) => {
-      expect(button).toHaveClass('MuiButton-fullWidth');
-      expect(button).toHaveStyle(index === 0 ? 'margin-bottom: 0' : 'margin-bottom: 16px');
+      expect(button).toHaveStyle(
+        index === 0 ? 'margin-bottom: 0' : 'margin-bottom: 16px; width: 100%'
+      );
     });
   });
 });

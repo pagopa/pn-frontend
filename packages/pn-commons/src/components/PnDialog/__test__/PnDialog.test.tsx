@@ -9,8 +9,10 @@ describe('PnDialog Component', () => {
     window.matchMedia = createMatchMedia(2000);
     const { queryByTestId } = render(
       <PnDialog open>
-        <DialogTitle data-testid="dialog-title">Title</DialogTitle>
-        <PnDialogContent>
+        <DialogTitle sx={{ p: 4, pb: 2 }} data-testid="dialog-title">
+          Title
+        </DialogTitle>
+        <PnDialogContent sx={{ p: 4 }}>
           <div data-testid="dialog-other-content">Other content</div>
         </PnDialogContent>
       </PnDialog>
@@ -29,8 +31,10 @@ describe('PnDialog Component', () => {
     window.matchMedia = createMatchMedia(800);
     const { queryByTestId } = render(
       <PnDialog open>
-        <DialogTitle data-testid="dialog-title">Title</DialogTitle>
-        <PnDialogContent>
+        <DialogTitle sx={{ p: 3, pb: 2 }} data-testid="dialog-title">
+          Title
+        </DialogTitle>
+        <PnDialogContent sx={{ p: 3 }}>
           <div data-testid="dialog-other-content">Other content</div>
         </PnDialogContent>
       </PnDialog>
