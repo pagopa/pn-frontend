@@ -78,8 +78,6 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  legalFactDownloadRetryAfter: 0,
-  legalFactDownloadAARRetryAfter: 0,
   paymentsData: {
     pagoPaF24: [],
     f24Only: [],
@@ -92,7 +90,7 @@ const currentRecipient = notificationDTO.recipients.find((rec) => rec.taxId);
 
 describe('Notification detail redux state tests', () => {
   let mock: MockAdapter;
-  
+
   const mockedUrl = 'http://mocked-url.com';
   mockAuthentication();
 
@@ -147,9 +145,7 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification document', async () => {
     const iun = notificationDTO.iun;
     const documentIndex = '0';
-    mock
-      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .reply(200, { url: mockedUrl });
+    mock.onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex)).reply(200, { url: mockedUrl });
     const action = await store.dispatch(getReceivedNotificationDocument({ iun, documentIndex }));
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
     expect(action.payload).toEqual({ url: mockedUrl });
@@ -168,7 +164,7 @@ describe('Notification detail redux state tests', () => {
       getReceivedNotificationOtherDocument({ iun, otherDocument })
     );
     expect(action.type).toBe('getReceivedNotificationOtherDocument/fulfilled');
-    expect(action.payload).toEqual({ url: mockedUrl, docType: "AAR" });
+    expect(action.payload).toEqual({ url: mockedUrl, docType: 'AAR' });
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
@@ -182,7 +178,7 @@ describe('Notification detail redux state tests', () => {
       .reply(200, { url: mockedUrl, retryAfter: 1000 });
     const action = await store.dispatch(getReceivedNotificationLegalfact({ iun, legalFact }));
     expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
-    expect(action.payload).toEqual({ url: mockedUrl, retryAfter: 1000, docType: "AO3" });
+    expect(action.payload).toEqual({ url: mockedUrl, retryAfter: 1000, docType: 'AO3' });
   });
 
   it('Should be able to reset state', () => {
@@ -198,8 +194,6 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('notificationSlice/resetLegalFactState');
     expect(action.payload).toEqual(undefined);
     const state = store.getState().notificationState;
-    expect(state.legalFactDownloadRetryAfter).toEqual(0);
-    expect(state.legalFactDownloadAARRetryAfter).toEqual(0);
     expect(state.legalFactDownloadUrl).toEqual('');
   });
 

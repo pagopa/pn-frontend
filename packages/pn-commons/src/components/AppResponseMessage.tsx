@@ -13,17 +13,17 @@ import { AppResponsePublisher } from '../utility/AppResponse';
  * @returns {any}
  */
 type Props = {
-  eventTrackingToastErrorMessages?: (error: AppResponseError, traceid?: string) => void;
+  eventTrackingToastErrorMessages?: (error: AppResponseError, response: AppResponse) => void;
 };
 const AppResponseMessage = ({ eventTrackingToastErrorMessages }: Props) => {
   const dispatch = useDispatch();
 
   const showErrorMessage = (response: AppResponse) => {
-    const { errors, action, traceId, status  } = response;
+    const { errors, action, status } = response;
 
     errors?.forEach((error) => {
       if (eventTrackingToastErrorMessages) {
-        eventTrackingToastErrorMessages(error, traceId);
+        eventTrackingToastErrorMessages(error, response);
       }
       dispatch(
         appStateActions.addError({

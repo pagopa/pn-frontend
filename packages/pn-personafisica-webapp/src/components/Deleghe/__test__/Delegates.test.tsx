@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
 import { arrayOfDelegates } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
@@ -29,11 +29,6 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('Delegates Component', async () => {
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const testUtils = await import('../../../__test__/test-utils');
-
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -94,7 +89,7 @@ describe('Delegates Component', async () => {
     let sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'asc',
         orderBy: 'name',
       });
@@ -110,7 +105,7 @@ describe('Delegates Component', async () => {
     sortIcon = within(sortName).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'desc',
         orderBy: 'name',
       });
@@ -128,7 +123,7 @@ describe('Delegates Component', async () => {
     sortIcon = within(sortEndDate).getByTestId('ArrowDownwardIcon');
     fireEvent.click(sortIcon);
     await waitFor(() => {
-      expect(testUtils.testStore.getState().delegationsState.sortDelegates).toStrictEqual({
+      expect(testStore.getState().delegationsState.sortDelegates).toStrictEqual({
         order: 'asc',
         orderBy: 'endDate',
       });

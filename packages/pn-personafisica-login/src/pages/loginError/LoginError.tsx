@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Dialog, Typography } from '@mui/material';
+import { Box, Button, Dialog, Typography } from '@mui/material';
+import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
+import { IllusError } from '@pagopa/mui-italia';
 
 import { getConfiguration } from '../../services/configuration.service';
 import { TrackEventType } from '../../utility/events';
@@ -10,7 +12,9 @@ import { trackEventByType } from '../../utility/mixpanel';
 
 const handleError = (queryParams: string, errorMessage: string) => {
   if (process.env.NODE_ENV !== 'test') {
-    trackEventByType(TrackEventType.SEND_LOGIN_FAILURE, { reason: errorMessage });
+    const IDP = sessionStorage.getItem('IDP');
+    trackEventByType(TrackEventType.SEND_LOGIN_FAILURE, { reason: errorMessage, IDP });
+    sessionStorage.removeItem('IDP');
     console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
   }
 };
@@ -21,7 +25,7 @@ const LoginError = () => {
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const errorCode = urlSearchParams.has('errorCode') ? urlSearchParams.get('errorCode') : null;
-  const navigationTimeout = process.env.NODE_ENV !== 'test' ? 5000 : 200;
+  const navigationTimeout = process.env.NODE_ENV !== 'test' ? 15000 : 2000;
 
   // PN-1989 - per alcune causali di errore, si evita il passaggio transitorio per la pagina di errore
   //           e si fa il redirect verso la pagina di login immediatamente
@@ -54,17 +58,11 @@ const LoginError = () => {
       case '1001':
         return t('loginError.code.error_1001');
       default:
-        return '';
+        return t('loginError.message');
     }
   };
 
-  const title = t('loginError.title');
-  const message = (
-    <Trans i18nKey="loginError.message" ns="login">
-      {getErrorMessage()}
-    </Trans>
-  );
-
+  const goToLogin = () => navigate(ROUTE_LOGIN);
   // log error
   useEffect(() => {
     handleError(window.location.search, errorCode!);
@@ -83,19 +81,18 @@ const LoginError = () => {
   }, []);
 
   return (
-    <Dialog
-      fullScreen={true}
-      open={true}
-      aria-labelledby="dialog-per-messaggi-di-errore"
-      id="errorDialog"
-    >
-      <Box m="auto" sx={{ textAlign: 'center', width: '100%' }}>
-        <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
-          {title}
+    <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
+      <Box m="auto" sx={{ textAlign: 'center', width: '100%' }} id="errorDialog">
+        <IllusError />
+        <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }} mt={5}>
+          {t('loginError.title')}
         </Typography>
-        <Typography variant="body2" id="message">
-          {message}
+        <Typography variant="body2" id="message" mb={8}>
+          {getErrorMessage()}
         </Typography>
+        <Button id="login-button" variant="contained" onClick={goToLogin}>
+          {getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
+        </Button>
       </Box>
     </Dialog>
   );

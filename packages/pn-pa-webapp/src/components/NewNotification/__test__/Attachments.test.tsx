@@ -9,9 +9,11 @@ import {
   act,
   fireEvent,
   render,
+  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
+import { apiClient, externalClient } from '../../../api/apiClients';
 import { NOTIFICATION_PRELOAD_DOCUMENT } from '../../../api/notifications/notifications.routes';
 import { NewNotificationDocument } from '../../../models/NewNotification';
 import Attachments from '../Attachments';
@@ -55,15 +57,10 @@ describe('Attachments Component with payment enabled', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;
-  // this is needed because there is a bug when vi.mock is used
-  // https://github.com/vitest-dev/vitest/issues/3300
-  // maybe with vitest 1, we can remove the workaround
-  const apiClients = await import('../../../api/apiClients');
-  const testUtils = await import('../../../__test__/test-utils');
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClients.apiClient);
-    extMock = new MockAdapter(apiClients.externalClient);
+    mock = new MockAdapter(apiClient);
+    extMock = new MockAdapter(externalClient);
   });
 
   beforeEach(async () => {
@@ -151,7 +148,7 @@ describe('Attachments Component with payment enabled', async () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(1);
       // check data stored in redux state
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -217,7 +214,7 @@ describe('Attachments Component with payment enabled', async () => {
     fireEvent.click(backButton);
     await waitFor(() => {
       // check data stored in redux state
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -299,7 +296,7 @@ describe('Attachments Component with payment enabled', async () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(2);
       // check data stored in redux state
-      const state = testUtils.testStore.getState();
+      const state = testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],

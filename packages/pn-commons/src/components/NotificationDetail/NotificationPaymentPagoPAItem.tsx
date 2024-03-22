@@ -5,7 +5,12 @@ import { Box, Radio, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import { PagoPAPaymentFullDetails, PaymentInfoDetail, PaymentStatus } from '../../models';
+import {
+  EventPaymentRecipientType,
+  PagoPAPaymentFullDetails,
+  PaymentInfoDetail,
+  PaymentStatus,
+} from '../../models';
 import { formatEurocentToCurrency } from '../../utility';
 import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -19,7 +24,7 @@ type Props = {
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
   isCancelled: boolean;
-  handleTrackEventDetailPaymentError?: () => void;
+  handleTrackEventDetailPaymentError?: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
 const SkeletonCard: React.FC = () => {
@@ -197,8 +202,12 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
     pagoPAItem.detail !== PaymentInfoDetail.PAYMENT_EXPIRED;
 
   if (isError && handleTrackEventDetailPaymentError) {
-    handleTrackEventDetailPaymentError();
+    handleTrackEventDetailPaymentError(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR, {
+      detail: pagoPAItem.detail,
+      errorCode: pagoPAItem.errorCode,
+    });
   }
+
   const getErrorMessage = () => {
     switch (pagoPAItem.detail) {
       case PaymentInfoDetail.GENERIC_ERROR:
