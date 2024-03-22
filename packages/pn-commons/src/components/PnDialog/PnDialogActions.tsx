@@ -1,4 +1,4 @@
-import { Children, cloneElement, isValidElement, useMemo } from 'react';
+import { Children, cloneElement, isValidElement } from 'react';
 
 import { Button, DialogActions, DialogActionsProps } from '@mui/material';
 
@@ -7,19 +7,16 @@ import { ReactComponent } from '../../models/PnDialog';
 
 const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
   const isMobile = useIsMobile();
-  const paddingSize = useMemo(() => (isMobile ? 3 : 4), [isMobile]);
-  const gapSize = useMemo(() => (isMobile ? 0 : 1), [isMobile]);
 
   const buttons: Array<ReactComponent> | undefined = Children.toArray(props.children).filter(
     (child) => isValidElement(child) && child.type === Button
   );
 
-  const enrichedButtons = buttons.map((button, index) =>
+  const enrichedButtons = buttons.map((button) =>
     isValidElement(button)
       ? cloneElement(button, {
           ...button.props,
-          fullWidth: isMobile,
-          sx: { marginBottom: isMobile && index > 0 ? 2 : 0, ...button.props.sx },
+          sx: { marginBottom: { xs: 2, sm: 0 }, width: { xs: 1, sm: 'auto' }, ...button.props.sx },
         })
       : button
   );
@@ -30,10 +27,10 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
       disableSpacing={isMobile}
       {...props}
       sx={{
-        flexDirection: isMobile ? 'column-reverse' : 'row',
-        p: paddingSize,
-        pt: 0,
-        gap: gapSize,
+        flexDirection: { xs: 'column-reverse', sm: 'row' },
+        p: { xs: 3, sm: 4 },
+        pt: { xs: 0, sm: 0 },
+        gap: { xs: 0, sm: 1 },
         ...props.sx,
       }}
     >
