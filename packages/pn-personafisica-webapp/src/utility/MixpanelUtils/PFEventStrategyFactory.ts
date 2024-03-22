@@ -1,30 +1,30 @@
 import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
+import { SendAddContactActionStrategy } from './Strategies/SendAddContactActionStrategy';
+import { SendAddContactScreenViewStrategy } from './Strategies/SendAddContactScreenViewStrategy';
 import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
+import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSuccessStrategy';
+import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
+import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
+import { SendGenericErrorStrategy } from './Strategies/SendGenericErrorStrategy';
+import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
+import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
+import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
+import { SendRefreshPageStrategy } from './Strategies/SendRefreshPageStrategy';
+import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContactSuccess';
+import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
+import { SendToastErrorStrategy } from './Strategies/SendToastErrorStrategy';
+import { SendViewContactDetailsStrategy } from './Strategies/SendViewContactDetailsStrategy';
+import { SendViewProfileStrategy } from './Strategies/SendViewProfileStrategy';
+import { SendYourContactDetailsStrategy } from './Strategies/SendYourContactDetailsStrategy';
+import { SendYourMandatesStrategy } from './Strategies/SendYourMandatesStrategy';
+import { SendYourNotificationsStrategy } from './Strategies/SendYourNotificationsStrategy';
+import { TechScreenViewStrategy } from './Strategies/TechScreenViewStrategy';
+import { TechStrategy } from './Strategies/TechStrategy';
 import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
-import { SendAddContactActionStrategy } from './Strategies/sendAddContactActionStrategy';
-import { SendAddContactScreenViewStrategy } from './Strategies/sendAddContactScreenViewStrategy';
-import { SendAddMandateUXSuccessStrategy } from './Strategies/sendAddMandateUXSuccessStrategy';
-import { SendDownloadCertificateOpposable } from './Strategies/sendDownloadCertificateOpposable';
-import { SendDownloadResponseStrategy } from './Strategies/sendDownloadResponse';
-import { SendGenericErrorStrategy } from './Strategies/sendGenericErrorStrategy';
-import { SendNotificationDetailStrategy } from './Strategies/sendNotificationDetailStrategy';
-import { SendNotificationStatusDetailStrategy } from './Strategies/sendNotificationStatusDetail';
-import { SendPaymentOutcomeStrategy } from './Strategies/sendPaymentOutcomeStrategy';
-import { SendRefreshPageStrategy } from './Strategies/sendRefreshPageStrategy';
-import { SendRemoveContactSuccessStrategy } from './Strategies/sendRemoveContactSuccess';
-import { SendServiceStatusStrategy } from './Strategies/sendServiceStatusStrategy';
-import { SendToastErrorStrategy } from './Strategies/sendToastErrorStrategy';
-import { SendViewContactDetailsStrategy } from './Strategies/sendViewContactDetailsStrategy';
-import { SendViewProfileStrategy } from './Strategies/sendViewProfileStrategy';
-import { SendYourContactDetailsStrategy } from './Strategies/sendYourContactDetailsStrategy';
-import { SendYourMandatesStrategy } from './Strategies/sendYourMandatesStrategy';
-import { SendYourNotificationsStrategy } from './Strategies/sendYourNotificationsStrategy';
-import { TechScreenViewStrategy } from './Strategies/techScreenViewStrategy';
-import { TechStrategy } from './Strategies/techStrategy';
 
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
   // eslint-disable-next-line complexity
