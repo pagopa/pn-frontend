@@ -40,7 +40,7 @@ const Prompt: React.FC<Props> = ({
   return (
     <>
       <PnDialog onClose={cancelNavigation} open={showPrompt} data-testid="promptDialog">
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }}>{title}</DialogTitle>
         <PnDialogContent>
           <DialogContentText>{message}</DialogContentText>
         </PnDialogContent>
