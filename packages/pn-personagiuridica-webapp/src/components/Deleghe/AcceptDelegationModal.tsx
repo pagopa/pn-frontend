@@ -147,7 +147,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
       aria-describedby="dialog-description"
       data-testid="groupDialog"
     >
-      <DialogTitle id="dialog-title">
+      <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
         {isEditMode ? t('deleghe.edit-groups-title') : t('deleghe.associate-groups-title')}
       </DialogTitle>
       <PnDialogContent>

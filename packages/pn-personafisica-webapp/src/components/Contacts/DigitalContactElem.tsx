@@ -85,7 +85,9 @@ const DeleteDialog: React.FC<DialogProps> = ({
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
+      <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
+        {removeModalTitle}
+      </DialogTitle>
       <PnDialogContent>
         <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
       </PnDialogContent>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Box, Button, DialogTitle, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
+import { Box, Button, DialogTitle, Grid, Typography } from '@mui/material';
 import {
   CollapsedList,
   NotificationDetailRecipient,
@@ -28,7 +29,9 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, iun }) => {
         aria-labelledby="dialog-title"
         maxWidth="lg"
       >
-        <DialogTitle id="dialog-title">{t('detail.recipients-dialog-title', { iun })}</DialogTitle>
+        <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
+          {t('detail.recipients-dialog-title', { iun })}
+        </DialogTitle>
         <PnDialogContent>
           {recipients.map((recipient) => (
             <Grid

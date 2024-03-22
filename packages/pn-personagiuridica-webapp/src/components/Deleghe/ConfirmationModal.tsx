@@ -31,7 +31,9 @@ export default function ConfirmationModal({
       aria-labelledby="responsive-dialog-title"
       data-testid="confirmationDialog"
     >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
+      <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
+        {title}
+      </DialogTitle>
       <PnDialogContent>
         <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
       </PnDialogContent>

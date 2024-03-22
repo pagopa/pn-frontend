@@ -379,7 +379,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         aria-describedby="dialog-description"
         data-testid="duplicateDialog"
       >
-        <DialogTitle id="dialog-title">
+        <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
           {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
         </DialogTitle>
         <PnDialogContent>
@@ -401,7 +401,7 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         data-testid="validationDialog"
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title">
+        <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
           {t('legal-contacts.validation-progress-title', { ns: 'recapiti' })}
         </DialogTitle>
         <PnDialogContent>
