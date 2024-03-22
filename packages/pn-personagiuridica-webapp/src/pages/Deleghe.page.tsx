@@ -53,8 +53,9 @@ const Deleghe = () => {
   }, []);
 
   useEffect(() => {
-    if (pathname === routes.DELEGHEACARICO) {
-      setValue(0);
+    const tabToBeSelected = pathname === routes.DELEGATI ? 1 : 0;
+    if (value !== tabToBeSelected) {
+      setValue(tabToBeSelected);
     }
   }, [pathname]);
   return (
