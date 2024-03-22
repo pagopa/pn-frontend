@@ -1,12 +1,12 @@
 import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
+import { SendAddMandateUXConversionStrategy } from './Strategies/SendAddMandateUXConversionStrategy';
 import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { SendAddContactActionStrategy } from './Strategies/sendAddContactActionStrategy';
 import { SendAddContactScreenViewStrategy } from './Strategies/sendAddContactScreenViewStrategy';
-import { SendAddMandateUXConversionStrategy } from './Strategies/sendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from './Strategies/sendAddMandateUXSuccessStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/sendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/sendDownloadResponse';
