@@ -117,13 +117,7 @@ const SupportPage: React.FC = () => {
   };
 
   return (
-    <Prompt
-      title={t('exit-title')}
-      message={t('exit-message')}
-      eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
-      eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
-      eventTrackingCallbackConfirm={() => {}} // impostare eventi tracking previsti
-    >
+    <Prompt title={t('exit-title')} message={t('exit-message')}>
       <Grid container justifyContent="center" alignContent="center">
         <Grid item xs={6}>
           <TitleBox
