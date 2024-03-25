@@ -12,11 +12,15 @@ const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
     (child) => isValidElement(child) && child.type === Button
   );
 
-  const enrichedButtons = buttons.map((button) =>
+  const enrichedButtons = buttons.map((button, index) =>
     isValidElement(button)
       ? cloneElement(button, {
           ...button.props,
-          sx: { marginBottom: { xs: 2, sm: 0 }, width: { xs: 1, sm: 'auto' }, ...button.props.sx },
+          sx: {
+            marginBottom: { xs: index > 0 ? 2 : 0, sm: 0 },
+            width: { xs: 1, sm: 'auto' },
+            ...button.props.sx,
+          },
         })
       : button
   );

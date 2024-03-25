@@ -28,9 +28,7 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
         aria-labelledby="dialog-title"
         maxWidth="lg"
       >
-        <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
-          {t('payment.f24-dialog-title', { iun })}
-        </DialogTitle>
+        <DialogTitle id="dialog-title">{t('payment.f24-dialog-title', { iun })}</DialogTitle>
         <PnDialogContent>
           {payments.map((payment, index) => (
             <Fragment key={`${payment.recIndex} - ${payment.attachmentIdx}`}>

@@ -66,7 +66,7 @@ const SessionModal: React.FC<Props> = ({
       aria-labelledby="session-dialog-title"
       data-testid="session-modal"
     >
-      <DialogTitle sx={{ textAlign: 'center', pb: { xs: 2, sm: 2 } }}>{title}</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
       <PnDialogContent>
         <DialogContentText id="session-dialog-description">{message}</DialogContentText>
       </PnDialogContent>

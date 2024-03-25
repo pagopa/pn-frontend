@@ -90,9 +90,7 @@ const CodeModal = memo(
         data-testid="codeDialog"
         disableEscapeKeyDown
       >
-        <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
-          {title}
-        </DialogTitle>
+        <DialogTitle id="dialog-title">{title}</DialogTitle>
         <PnDialogContent>
           <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
           <Divider sx={{ my: 2 }} />

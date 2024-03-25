@@ -24,7 +24,7 @@ const CancelVerificationModal = ({ open, handleClose }: Props) => {
 
   return (
     <PnDialog open={open} onClose={handleClose} data-testid="cancelVerificationModal">
-      <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }} id="dialog-title">
+      <DialogTitle id="dialog-title">
         {t('legal-contacts.validation-cancel-title', { ns: 'recapiti' })}
       </DialogTitle>
       <PnDialogContent>

@@ -25,7 +25,7 @@ const ApiKeyModal = ({
   actionHandler,
 }: ApiKeyModalProps) => (
   <PnDialog open onClose={closeModalHandler}>
-    {title && <DialogTitle sx={{ pb: { xs: 2, sm: 2 } }}>{title}</DialogTitle>}
+    {title && <DialogTitle>{title}</DialogTitle>}
     <PnDialogContent>
       {subTitle && !subTitleAtBottom && (
         <Typography
