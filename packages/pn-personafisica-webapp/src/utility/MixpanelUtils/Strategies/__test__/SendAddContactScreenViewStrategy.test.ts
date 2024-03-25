@@ -3,7 +3,7 @@ import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
 import { SendAddContactScreenViewStrategy } from '../SendAddContactScreenViewStrategy';
 
 describe('Mixpanel - Add contact screen view Strategy', () => {
-  it('should return ass contact screen view event', () => {
+  it('should return add contact screen view event', () => {
     const strategy = new SendAddContactScreenViewStrategy();
 
     const isOtherContactEvent = strategy.performComputations(true);
