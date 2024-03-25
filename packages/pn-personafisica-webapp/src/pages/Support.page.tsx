@@ -2,8 +2,8 @@ import { useReducer, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
-import { Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -74,7 +74,6 @@ const SupportPPButton: React.FC<{ children?: React.ReactNode }> = ({ children })
 
 const SupportPage: React.FC = () => {
   const { t } = useTranslation(['support', 'common']);
-  const isMobile = useIsMobile();
   const [formData, formDispatch] = useReducer(reducer, {
     email: {
       value: '',
@@ -118,8 +117,8 @@ const SupportPage: React.FC = () => {
 
   return (
     <Prompt title={t('exit-title')} message={t('exit-message')}>
-      <Grid container justifyContent="center" alignContent="center">
-        <Grid item xs={6}>
+      <Stack alignItems="center" sx={{ flexGrow: 1 }}>
+        <Box width={{ xs: 0.8, sm: 0.5 }}>
           <TitleBox
             mtGrid={3}
             title={t('title')}
@@ -175,14 +174,14 @@ const SupportPage: React.FC = () => {
           <Box
             sx={{ my: 3 }}
             display="flex"
-            flexDirection={isMobile ? 'column' : 'row-reverse'}
+            flexDirection={{ xs: 'column', sm: 'row-reverse' }}
             justifyContent="space-between"
             alignItems="center"
           >
             <Button
               variant="contained"
               size="small"
-              fullWidth={isMobile}
+              sx={{ width: { xs: 1, sm: 'auto' } }}
               disabled={!!formData.errors}
               onClick={handleConfirm}
               data-testid="continueButton"
@@ -192,17 +191,16 @@ const SupportPage: React.FC = () => {
             <Button
               variant="outlined"
               size="small"
-              fullWidth={isMobile}
-              sx={{ mt: isMobile ? 2 : 0 }}
+              sx={{ mt: { xs: 2, sm: 0 }, width: { xs: 1, sm: 'auto' } }}
               onClick={handleCancel}
               data-testid="backButton"
             >
               {t('button.indietro', { ns: 'common' })}
             </Button>
           </Box>
-        </Grid>
-      </Grid>
-      <ZendeskForm data={zendeskAuthData} />
+        </Box>
+        <ZendeskForm data={zendeskAuthData} />
+      </Stack>
     </Prompt>
   );
 };
