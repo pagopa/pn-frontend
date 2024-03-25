@@ -402,7 +402,10 @@ const NotificationDetail = () => {
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
     PFEventStrategyFactory.triggerEvent(
       event as unknown as PFEventsType,
-      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ? { param } : undefined
+      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ||
+        event === EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR
+        ? { param }
+        : undefined
     );
   };
 
