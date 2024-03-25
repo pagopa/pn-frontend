@@ -7,11 +7,11 @@ import { Alert, Box, Stack, Typography } from '@mui/material';
 import { DisclaimerModal } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
@@ -46,26 +46,26 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const status = parseContact();
 
   const enableIO = () => {
-    trackEventByType(TrackEventType.SEND_ACTIVE_IO_UX_CONVERSION);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
     void dispatch(enableIOAddress(recipientId)).then(() => {
       setIsConfirmModalOpen(false);
-      trackEventByType(TrackEventType.SEND_ACTIVE_IO_UX_SUCCESS);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS);
     });
   };
 
   const disableIO = () => {
-    trackEventByType(TrackEventType.SEND_DEACTIVE_IO_UX_CONVERSION);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION);
     void dispatch(disableIOAddress(recipientId)).then(() => {
       setIsConfirmModalOpen(false);
-      trackEventByType(TrackEventType.SEND_DEACTIVE_IO_UX_SUCCESS);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
     });
   };
 
   const handleConfirmationModal = () => {
-    trackEventByType(
+    PFEventStrategyFactory.triggerEvent(
       status === IOContactStatus.ENABLED
-        ? TrackEventType.SEND_DEACTIVE_IO_START
-        : TrackEventType.SEND_ACTIVE_IO_START
+        ? PFEventsType.SEND_DEACTIVE_IO_START
+        : PFEventsType.SEND_ACTIVE_IO_START
     );
     setIsConfirmModalOpen(true);
   };

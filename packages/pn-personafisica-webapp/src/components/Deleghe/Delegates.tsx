@@ -20,14 +20,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
+import { PFEventsType } from '../../models/PFEventsType';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import delegationToItem from '../../utility/delegation.utility';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
 import DelegatorsDataSwitch from './DelegationDataSwitch';
 
 type Props = {
@@ -100,7 +100,7 @@ const Delegates = () => {
   ];
 
   const handleAddDelegationClick = () => {
-    trackEventByType(TrackEventType.SEND_ADD_MANDATE_START);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_MANDATE_START);
     navigate(routes.NUOVA_DELEGA);
   };
 

@@ -16,6 +16,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import {
   createOrUpdateCourtesyAddress,
@@ -24,8 +25,7 @@ import {
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 type ModalProps = {
   labelRoot: string;
@@ -53,10 +53,6 @@ interface IDigitalContactsCodeVerificationContext {
 const DigitalContactsCodeVerificationContext = createContext<
   IDigitalContactsCodeVerificationContext | undefined
 >(undefined);
-
-const eventAttributes = (isSpecialContact?: boolean) => ({
-  other_contact: isSpecialContact ? 'yes' : 'no',
-});
 
 const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
@@ -116,17 +112,18 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
 
   const sendSuccessEvent = (type: LegalChannelType | CourtesyChannelType) => {
     if (type === LegalChannelType.PEC) {
-      trackEventByType(
-        TrackEventType.SEND_ADD_PEC_UX_SUCCESS,
-        eventAttributes(isSpecialContactMode)
-      );
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, {
+        isSpecialContact: isSpecialContactMode,
+      });
       return;
     }
-    trackEventByType(
+    PFEventStrategyFactory.triggerEvent(
       type === CourtesyChannelType.SMS
-        ? TrackEventType.SEND_ADD_SMS_UX_SUCCESS
-        : TrackEventType.SEND_ADD_EMAIL_UX_SUCCESS,
-      eventAttributes(isSpecialContactMode)
+        ? PFEventsType.SEND_ADD_SMS_UX_SUCCESS
+        : PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
+      {
+        isSpecialContact: isSpecialContactMode,
+      }
     );
   };
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
@@ -139,20 +136,17 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     }
     if (verificationCode) {
       if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
-        trackEventByType(
-          TrackEventType.SEND_ADD_PEC_UX_CONVERSION,
-          eventAttributes(isSpecialContactMode)
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, {
+          isSpecialContact: isSpecialContactMode,
+        });
       } else if (modalProps.digitalDomicileType === CourtesyChannelType.SMS) {
-        trackEventByType(
-          TrackEventType.SEND_ADD_SMS_UX_CONVERSION,
-          eventAttributes(isSpecialContactMode)
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, {
+          isSpecialContact: isSpecialContactMode,
+        });
       } else if (modalProps.digitalDomicileType === CourtesyChannelType.EMAIL) {
-        trackEventByType(
-          TrackEventType.SEND_ADD_EMAIL_UX_CONVERSION,
-          eventAttributes(isSpecialContactMode)
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, {
+          isSpecialContact: isSpecialContactMode,
+        });
       }
     }
     if (!actionToBeDispatched) {
@@ -220,15 +214,19 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
     if (digitalDomicileType === LegalChannelType.PEC) {
       labelRoot = 'legal-contacts';
       labelType = 'pec';
-      trackEventByType(TrackEventType.SEND_ADD_PEC_START, eventAttributes(isSpecialContact));
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
+        isSpecialContact,
+      });
     } else {
       labelRoot = 'courtesy-contacts';
       labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
-      trackEventByType(
+      PFEventStrategyFactory.triggerEvent(
         digitalDomicileType === CourtesyChannelType.SMS
-          ? TrackEventType.SEND_ADD_SMS_START
-          : TrackEventType.SEND_ADD_EMAIL_START,
-        eventAttributes(isSpecialContact)
+          ? PFEventsType.SEND_ADD_SMS_START
+          : PFEventsType.SEND_ADD_EMAIL_START,
+        {
+          isSpecialContact,
+        }
       );
     }
     setModalProps({
@@ -282,11 +280,11 @@ const DigitalContactsCodeVerificationProvider: FC<{ children?: ReactNode }> = ({
         });
         setCodeNotValid(true);
         if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
-          trackEventByType(TrackEventType.SEND_ADD_PEC_CODE_ERROR);
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
         } else if (modalProps.digitalDomicileType === CourtesyChannelType.SMS) {
-          trackEventByType(TrackEventType.SEND_ADD_SMS_CODE_ERROR);
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
         } else if (modalProps.digitalDomicileType === CourtesyChannelType.EMAIL) {
-          trackEventByType(TrackEventType.SEND_ADD_EMAIL_CODE_ERROR);
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
         }
       }
       return false;

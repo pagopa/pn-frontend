@@ -15,6 +15,15 @@ export type EventsType = {
   };
 };
 
+type BaseTrackedEvent = {
+  event_category: string;
+  event_type?: EventAction | string;
+};
+
+export type TrackedEvent<T extends object | undefined = undefined> = T extends undefined
+  ? BaseTrackedEvent
+  : BaseTrackedEvent & T;
+
 export type ProfileMapAttributes = {
   profilePropertyType: Array<ProfilePropertyType>;
   getAttributes: (payload?: any, meta?: any) => Record<string, string>;

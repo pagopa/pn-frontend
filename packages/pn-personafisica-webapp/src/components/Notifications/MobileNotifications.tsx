@@ -25,10 +25,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import { TrackEventType } from '../../utility/events';
-import { trackEventByType } from '../../utility/mixpanel';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -79,7 +79,9 @@ const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children 
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   const goToContactsPage = () => {
-    trackEventByType(TrackEventType.SEND_VIEW_CONTACT_DETAILS, { source: 'home_notifiche' });
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
+      source: 'home_notifiche',
+    });
     navigate(routes.RECAPITI);
   };
   return (
