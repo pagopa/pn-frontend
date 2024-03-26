@@ -1,11 +1,11 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
+import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
 import {
   CourtesyChannelType,
   DigitalAddress,
   DigitalAddresses,
   IOAllowedValues,
-  LegalChannelType,
 } from '../../../../models/contacts';
 import { SendYourContactDetailsStrategy } from '../SendYourContactDetailsStrategy';
 
@@ -36,34 +36,6 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
   it('filled addresses', () => {
     const strategy = new SendYourContactDetailsStrategy();
 
-    const digitalAddresses: DigitalAddresses = {
-      legal: [
-        {
-          addressType: 'addressType',
-          recipientId: 'recipientId',
-          senderId: 'senderId',
-          channelType: LegalChannelType.PEC,
-          value: 'pec@pec.it',
-        },
-      ],
-      courtesy: [
-        {
-          addressType: 'addressType',
-          recipientId: 'recipientId',
-          senderId: 'senderId',
-          channelType: CourtesyChannelType.EMAIL,
-          value: 'email@email.it',
-        },
-        {
-          addressType: 'addressType',
-          recipientId: 'recipientId',
-          senderId: 'senderId',
-          channelType: CourtesyChannelType.SMS,
-          value: '1234567890',
-        },
-      ],
-    };
-
     const contactIO: DigitalAddress | null = {
       addressType: 'addressType',
       recipientId: 'recipientId',
@@ -77,10 +49,18 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
-        PEC_exists: true,
-        email_exists: true,
-        telephone_exists: true,
-        appIO_status: 'activated',
+        PEC_exists: digitalAddresses.legal.length > 0,
+        email_exists:
+          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
+            .length > 0,
+        telephone_exists:
+          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS)
+            .length > 0,
+        appIO_status: contactIO
+          ? contactIO.value === IOAllowedValues.ENABLED
+            ? 'activated'
+            : 'deactivated'
+          : 'nd',
       },
     });
   });
