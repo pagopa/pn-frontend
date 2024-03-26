@@ -432,13 +432,9 @@ const NotificationDetail = () => {
         timeline: notification.timeline,
       });
 
-      // TODO Aggiungere strategy per profile property
-      // if (notificationDetailData.first_time_opening) {
-      //   setSuperOrProfilePropertyValues(
-      //     ProfilePropertyType.INCREMENTAL,
-      //     'SEND_NOTIFICATIONS_COUNT'
-      //   );
-      // }
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {
+        timeline: notification.timeline,
+      });
     }
   }, [downtimesReady, pageReady]);
 

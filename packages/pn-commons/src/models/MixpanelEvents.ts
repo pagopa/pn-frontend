@@ -21,17 +21,25 @@ type BaseTrackedEvent = {
 };
 
 export type TrackedEvent<T extends object | undefined = undefined> = T extends undefined
-  ? BaseTrackedEvent
-  : BaseTrackedEvent & T;
+  ? Partial<Record<EventPropertyType, BaseTrackedEvent | string | boolean>>
+  : Partial<Record<EventPropertyType, (BaseTrackedEvent & T) | string | boolean>>;
 
 export type ProfileMapAttributes = {
-  profilePropertyType: Array<ProfilePropertyType>;
+  profilePropertyType: Array<EventPropertyType>;
   getAttributes: (payload?: any, meta?: any) => Record<string, string>;
   shouldBlock?: (payload?: any, meta?: any) => boolean;
 };
 
 export type ProfilePropertiesActionsMap = {
   [key: string]: ProfileMapAttributes;
+};
+
+// Type for interceptors
+export type MixpanelActionMap<T> = {
+  [key: string]: {
+    eventName: T;
+    eventType: Array<EventPropertyType>;
+  };
 };
 
 export enum EventAction {
@@ -52,7 +60,8 @@ export enum EventDowntimeType {
   IN_PROGRESS = 'in_progress',
 }
 
-export enum ProfilePropertyType {
+export enum EventPropertyType {
+  TRACK = 'track',
   PROFILE = 'profile',
   INCREMENTAL = 'incremental',
   SUPER_PROPERTY = 'superProperty',

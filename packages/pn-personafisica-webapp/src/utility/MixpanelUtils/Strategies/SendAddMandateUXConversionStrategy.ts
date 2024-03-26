@@ -1,6 +1,7 @@
 import {
   EventAction,
   EventCategory,
+  EventPropertyType,
   EventStrategy,
   RecipientType,
   TrackedEvent,
@@ -21,10 +22,13 @@ export class SendAddMandateUXConversionStrategy implements EventStrategy {
     data: SendAddMandateUXConversion
   ): TrackedEvent<SendAddMandateUXConversionReturn> {
     return {
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      person_type: data.selectPersonaFisicaOrPersonaGiuridica,
-      mandate_type: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        person_type: data.selectPersonaFisicaOrPersonaGiuridica,
+        mandate_type:
+          data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+      },
     };
   }
 }

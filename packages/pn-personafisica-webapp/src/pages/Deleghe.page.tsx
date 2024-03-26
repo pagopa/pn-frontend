@@ -6,7 +6,6 @@ import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
-  ProfilePropertyType,
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -30,8 +29,6 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { setSuperOrProfilePropertyValues } from '../utility/mixpanel';
-import { DelegationStatus } from '../utility/status.utility';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -64,22 +61,14 @@ const Deleghe = () => {
       void dispatch(revokeDelegation(id))
         .unwrap()
         .then(() =>
-          setSuperOrProfilePropertyValues(
-            ProfilePropertyType.PROFILE,
-            'SEND_MANDATE_GIVEN',
-            delegators.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
-          )
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_GIVEN, { delegators })
         );
     } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_REJECTED);
       void dispatch(rejectDelegation(id))
         .unwrap()
         .then(() =>
-          setSuperOrProfilePropertyValues(
-            ProfilePropertyType.PROFILE,
-            'SEND_HAS_MANDATE',
-            delegates.filter((d) => d.status === DelegationStatus.ACTIVE).length > 0 ? 'yes' : 'no'
-          )
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_HAS_MANDATE, { delegates })
         );
     }
   };

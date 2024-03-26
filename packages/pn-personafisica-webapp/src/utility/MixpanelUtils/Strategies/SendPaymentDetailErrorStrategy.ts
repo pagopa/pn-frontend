@@ -1,5 +1,6 @@
 import {
   EventCategory,
+  EventPropertyType,
   EventStrategy,
   PaymentInfoDetail,
   TrackedEvent,
@@ -13,9 +14,11 @@ type SendPaymentError = {
 export class SendPaymentDetailErrorStrategy implements EventStrategy {
   performComputations({ detail, errorCode }: SendPaymentError): TrackedEvent<SendPaymentError> {
     return {
-      event_category: EventCategory.KO,
-      detail,
-      errorCode,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.KO,
+        detail,
+        errorCode,
+      },
     };
   }
 }

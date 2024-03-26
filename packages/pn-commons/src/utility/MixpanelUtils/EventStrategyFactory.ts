@@ -1,3 +1,4 @@
+import { EventPropertyType } from '../../models';
 import EventStrategy from '../../models/EventStrategy';
 import { trackEvent } from '../../services';
 
@@ -47,6 +48,8 @@ export default abstract class EventStrategyFactory<T extends string> {
 
     const eventParameters = strategy.performComputations(data);
 
-    trackEvent(eventType, process.env.NODE_ENV!, eventParameters);
+    Object.entries(eventParameters).forEach(([type, parameters]) => {
+      trackEvent(type as EventPropertyType, eventType, process.env.NODE_ENV!, parameters);
+    });
   }
 }

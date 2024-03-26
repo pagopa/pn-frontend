@@ -1,6 +1,11 @@
 import { ErrorInfo } from 'react';
 
-import { EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
+import {
+  EventCategory,
+  EventPropertyType,
+  EventStrategy,
+  TrackedEvent,
+} from '@pagopa-pn/pn-commons';
 
 type SendGenericError = {
   reason: {
@@ -12,8 +17,10 @@ type SendGenericError = {
 export class SendGenericErrorStrategy implements EventStrategy {
   performComputations(data: SendGenericError): TrackedEvent<SendGenericError> {
     return {
-      event_category: EventCategory.KO,
-      reason: data.reason,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.KO,
+        reason: data.reason,
+      },
     };
   }
 }

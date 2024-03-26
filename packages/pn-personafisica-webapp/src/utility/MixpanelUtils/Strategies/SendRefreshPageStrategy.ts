@@ -2,6 +2,7 @@ import {
   EventAction,
   EventCategory,
   EventPageType,
+  EventPropertyType,
   EventStrategy,
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
@@ -9,9 +10,11 @@ import {
 export class SendRefreshPageStrategy implements EventStrategy {
   performComputations(page: EventPageType): TrackedEvent<{ page: EventPageType }> {
     return {
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      page,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        page,
+      },
     };
   }
 }

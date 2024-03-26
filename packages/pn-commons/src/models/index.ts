@@ -33,10 +33,11 @@ import {
   EventPageType,
   EventPaymentRecipientType,
   EventPaymentStatusType,
+  EventPropertyType,
   EventsType,
+  MixpanelActionMap,
   ProfileMapAttributes,
   ProfilePropertiesActionsMap,
-  ProfilePropertyType,
   TrackedEvent,
 } from './MixpanelEvents';
 import {
@@ -125,7 +126,7 @@ export {
   KnownFunctionality,
   AppIoCourtesyMessageEventType,
   PrivateRoute,
-  ProfilePropertyType,
+  EventPropertyType,
 };
 export type {
   AnalogWorkflowDetails,
@@ -203,4 +204,5 @@ export type {
   TrackedEvent,
   EventStrategy,
   EventType,
+  MixpanelActionMap,
 };

@@ -1,4 +1,10 @@
-import { EventCategory, EventStrategy, PaymentStatus, TrackedEvent } from '@pagopa-pn/pn-commons';
+import {
+  EventCategory,
+  EventPropertyType,
+  EventStrategy,
+  PaymentStatus,
+  TrackedEvent,
+} from '@pagopa-pn/pn-commons';
 
 type SendPaymentOutcome = {
   outcome: PaymentStatus;
@@ -7,8 +13,10 @@ type SendPaymentOutcome = {
 export class SendPaymentOutcomeStrategy implements EventStrategy {
   performComputations({ outcome }: SendPaymentOutcome): TrackedEvent<SendPaymentOutcome> {
     return {
-      event_category: EventCategory.TECH,
-      outcome,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.TECH,
+        outcome,
+      },
     };
   }
 }

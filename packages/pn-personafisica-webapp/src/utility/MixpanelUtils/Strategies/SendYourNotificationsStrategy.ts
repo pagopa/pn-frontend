@@ -2,6 +2,7 @@ import {
   EventAction,
   EventCategory,
   EventNotificationsListType,
+  EventPropertyType,
   EventStrategy,
   Notification,
   NotificationStatus,
@@ -31,27 +32,30 @@ export class SendYourNotificationsStrategy implements EventStrategy {
     domicileBannerType,
   }: SendYourNotifications): TrackedEvent<EventNotificationsListType> {
     return {
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      ...(domicileBannerType && { banner: domicileBannerType }),
-      delegate: delegators.length > 0,
-      page_number: pagination.page,
-      total_count: notifications.length,
-      unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
-      delivered_count: notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.DELIVERED
-      ).length,
-      opened_count: notifications.filter((n) => n.notificationStatus === NotificationStatus.VIEWED)
-        .length,
-      expired_count: notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
-      ).length,
-      not_found_count: notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
-      ).length,
-      cancelled_count: notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.CANCELLED
-      ).length,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        ...(domicileBannerType && { banner: domicileBannerType }),
+        delegate: delegators.length > 0,
+        page_number: pagination.page,
+        total_count: notifications.length,
+        unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
+        delivered_count: notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.DELIVERED
+        ).length,
+        opened_count: notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.VIEWED
+        ).length,
+        expired_count: notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+        ).length,
+        not_found_count: notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
+        ).length,
+        cancelled_count: notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.CANCELLED
+        ).length,
+      },
     };
   }
 }

@@ -8,11 +8,15 @@ import { SendAddMandateUXSuccessStrategy } from './Strategies/SendAddMandateUXSu
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
 import { SendGenericErrorStrategy } from './Strategies/SendGenericErrorStrategy';
+import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
+import { SendMandateGivenStrategy } from './Strategies/SendMandateGivenStrategy';
+import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from './Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
 import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrategy';
+import { SendPaymentsCountStrategy } from './Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from './Strategies/SendRefreshPageStrategy';
 import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContactSuccess';
 import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
@@ -129,6 +133,17 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
       case PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED:
         return new TechScreenViewStrategy();
+
+      // case PFEventsType.SEND_HAS_PEC:
+      //   return new SendHasPecStrategy();
+      case PFEventsType.SEND_NOTIFICATIONS_COUNT:
+        return new SendNotificationCountStrategy();
+      case PFEventsType.SEND_PAYMENTS_COUNT:
+        return new SendPaymentsCountStrategy();
+      case PFEventsType.SEND_HAS_MANDATE:
+        return new SendHasMandateStrategy();
+      case PFEventsType.SEND_MANDATE_GIVEN:
+        return new SendMandateGivenStrategy();
       default:
         return null;
     }

@@ -1,4 +1,10 @@
-import { EventCategory, EventPageType, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
+import {
+  EventCategory,
+  EventPageType,
+  EventPropertyType,
+  EventStrategy,
+  TrackedEvent,
+} from '@pagopa-pn/pn-commons';
 
 type SendToastError = {
   reason: string;
@@ -15,13 +21,15 @@ type SendToastError = {
 export class SendToastErrorStrategy implements EventStrategy {
   performComputations(data: SendToastError): TrackedEvent<SendToastError> {
     return {
-      event_category: EventCategory.KO,
-      reason: data.reason,
-      traceId: data.traceId,
-      page_name: data.page_name,
-      message: data.message,
-      httpStatusCode: data.httpStatusCode,
-      action: data.action,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.KO,
+        reason: data.reason,
+        traceId: data.traceId,
+        page_name: data.page_name,
+        message: data.message,
+        httpStatusCode: data.httpStatusCode,
+        action: data.action,
+      },
     };
   }
 }

@@ -1,4 +1,10 @@
-import { EventAction, EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
+import {
+  EventAction,
+  EventCategory,
+  EventPropertyType,
+  EventStrategy,
+  TrackedEvent,
+} from '@pagopa-pn/pn-commons';
 
 import {
   CourtesyChannelType,
@@ -25,20 +31,22 @@ export class SendYourContactDetailsStrategy implements EventStrategy {
     contactIO,
   }: SendYourContactDetails): TrackedEvent<SendYourContactDetailsReturn> {
     return {
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      PEC_exists: digitalAddresses.legal.length > 0,
-      email_exists:
-        digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
-          .length > 0,
-      telephone_exists:
-        digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS).length >
-        0,
-      appIO_status: contactIO
-        ? contactIO.value === IOAllowedValues.ENABLED
-          ? 'activated'
-          : 'deactivated'
-        : 'nd',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        PEC_exists: digitalAddresses.legal.length > 0,
+        email_exists:
+          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.EMAIL)
+            .length > 0,
+        telephone_exists:
+          digitalAddresses.courtesy.filter((c) => c.channelType === CourtesyChannelType.SMS)
+            .length > 0,
+        appIO_status: contactIO
+          ? contactIO.value === IOAllowedValues.ENABLED
+            ? 'activated'
+            : 'deactivated'
+          : 'nd',
+      },
     };
   }
 }

@@ -10,7 +10,6 @@ import {
   PaymentDetails,
   PaymentNotice,
   PaymentStatus,
-  ProfilePropertyType,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
   performThunkAction,
@@ -25,7 +24,6 @@ import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import { setSuperOrProfilePropertyValues } from '../../utility/mixpanel';
 import { RootState, store } from '../store';
 import { DownloadFileResponse, GetReceivedNotificationParams } from './types';
 
@@ -139,7 +137,8 @@ export const getNotificationPaymentInfo = createAsyncThunk<
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
-            setSuperOrProfilePropertyValues(ProfilePropertyType.INCREMENTAL, 'SEND_PAYMENTS_COUNT');
+            // setSuperOrProfilePropertyValues(ProfilePropertyType.INCREMENTAL, 'SEND_PAYMENTS_COUNT');
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENTS_COUNT, undefined);
           }
 
           const payments = populatePaymentsPagoPaF24(

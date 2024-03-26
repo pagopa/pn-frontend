@@ -7,10 +7,14 @@ import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXS
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from '../Strategies/SendDownloadResponse';
 import { SendGenericErrorStrategy } from '../Strategies/SendGenericErrorStrategy';
+import { SendHasMandateStrategy } from '../Strategies/SendHasMandateStrategy';
+import { SendMandateGivenStrategy } from '../Strategies/SendMandateGivenStrategy';
+import { SendNotificationCountStrategy } from '../Strategies/SendNotificationCount';
 import { SendNotificationStatusDetailStrategy } from '../Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from '../Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from '../Strategies/SendPaymentOutcomeStrategy';
 import { SendPaymentStatusStrategy } from '../Strategies/SendPaymentStatusStrategy';
+import { SendPaymentsCountStrategy } from '../Strategies/SendPaymentsCountStrategy';
 import { SendRefreshPageStrategy } from '../Strategies/SendRefreshPageStrategy';
 import { SendRemoveContactSuccessStrategy } from '../Strategies/SendRemoveContactSuccess';
 import { SendServiceStatusStrategy } from '../Strategies/SendServiceStatusStrategy';
@@ -181,6 +185,30 @@ describe('Event Strategy Factory', () => {
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
     });
+  });
+
+  it('should return SendNotificationCountStrategy for SEND_NOTIFICATIONS_COUNT event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATIONS_COUNT)).toBeInstanceOf(
+      SendNotificationCountStrategy
+    );
+  });
+
+  it('should return SendPaymentsCountStrategy for SEND_PAYMENTS_COUNT event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_PAYMENTS_COUNT)).toBeInstanceOf(
+      SendPaymentsCountStrategy
+    );
+  });
+
+  it('should return SendHasMandateStrategy for SEND_HAS_MANDATE event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_HAS_MANDATE)).toBeInstanceOf(
+      SendHasMandateStrategy
+    );
+  });
+
+  it('should return SendMandateGivenStrategy for SEND_MANDATE_GIVEN event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_MANDATE_GIVEN)).toBeInstanceOf(
+      SendMandateGivenStrategy
+    );
   });
 
   it('should return UXActionStrategy for UX Action events', () => {

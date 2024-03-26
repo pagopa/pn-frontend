@@ -1,4 +1,9 @@
-import { EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
+import {
+  EventCategory,
+  EventPropertyType,
+  EventStrategy,
+  TrackedEvent,
+} from '@pagopa-pn/pn-commons';
 
 type SendPaymentStatus = {
   param?: object;
@@ -7,8 +12,10 @@ type SendPaymentStatus = {
 export class SendPaymentStatusStrategy implements EventStrategy {
   performComputations({ param }: SendPaymentStatus): TrackedEvent<SendPaymentStatus> {
     return {
-      event_category: EventCategory.TECH,
-      param,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.TECH,
+        ...param,
+      },
     };
   }
 }

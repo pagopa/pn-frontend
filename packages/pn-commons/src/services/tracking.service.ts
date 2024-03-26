@@ -3,66 +3,62 @@ import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { ProfileMapAttributes, ProfilePropertyType } from '../models/MixpanelEvents';
+import { EventPropertyType } from '../models/MixpanelEvents';
 import { EventStrategyFactory } from '../utility';
 
 /**
- * Function that tracks event
- * @param event_name event name
- * @param nodeEnv current environment
- * @param properties event data
+ * Function that calls the mixpanel tracking method based on the property type
+ * @param propertyType the type of property
+ * @param event_name the event name to track
+ * @param properties the event data
  */
-export function trackEvent(event_name: string, nodeEnv: string, properties?: any): void {
-  if (nodeEnv === 'test') {
-    return;
-  } else if (!nodeEnv || nodeEnv === 'development') {
-    // eslint-disable-next-line no-console
-    console.log(event_name, properties);
-  } else {
-    try {
+function callMixpanelTrackingMethod(
+  propertyType: EventPropertyType,
+  event_name: string,
+  properties?: any
+) {
+  switch (propertyType) {
+    case EventPropertyType.TRACK:
       mixpanel.track(event_name, properties);
-    } catch (_) {
-      // eslint-disable-next-line no-console
-      console.log(event_name, properties);
-    }
+      break;
+    case EventPropertyType.PROFILE:
+      mixpanel.people.set({ event_name: properties });
+      break;
+    case EventPropertyType.INCREMENTAL:
+      mixpanel.people.increment(properties ? { event_name: properties } : event_name);
+      break;
+    case EventPropertyType.SUPER_PROPERTY:
+      mixpanel.register({ event_name: properties });
+      break;
+    default:
+      mixpanel.track(event_name, properties);
   }
 }
 
 /**
- * Set mixpanel user properties
+ * Function that tracks event
+ * @param propertyType event property type
+ * @param nodeEnv current environment
+ * @param properties event data
  */
-export function setSuperOrProfileProperty(
-  propertyType: ProfilePropertyType,
-  property: any,
-  nodeEnv: string
+export function trackEvent(
+  propertyType: EventPropertyType,
+  event_name: string,
+  nodeEnv: string,
+  properties?: any
 ): void {
-  if (!nodeEnv || nodeEnv === 'development') {
-    // eslint-disable-next-line no-console
-    console.log(
-      'Mixpanel events mock on console log - profile properties',
-      { propertyType },
-      property
-    );
-  } else if (nodeEnv === 'test') {
+  if (nodeEnv === 'test') {
     return;
+  } else if (!nodeEnv || nodeEnv === 'development') {
+    // eslint-disable-next-line no-console
+    console.log(event_name, properties, propertyType);
   } else {
     try {
-      switch (propertyType) {
-        case 'profile':
-          mixpanel.people.set(property);
-          break;
-        case 'incremental':
-          mixpanel.people.increment(property);
-          break;
-        case 'superProperty':
-          mixpanel.register(property);
-          break;
-        default:
-          mixpanel.people.set(property);
-      }
+      // mixpanel.track(event_name, properties);
+      callMixpanelTrackingMethod(propertyType, event_name, properties);
     } catch (_) {
       // eslint-disable-next-line no-console
-      console.log(property);
+      console.log(event_name, properties);
     }
   }
 }
@@ -78,29 +74,5 @@ export const interceptDispatch =
       const eventName = eventsActionsMap[action.type];
       eventStrategyFactory.triggerEvent(eventName, action.payload);
     }
-    return next(action);
-  };
-
-export const interceptDispatchSuperOrProfileProperty =
-  (
-    next: Dispatch<AnyAction>,
-    eventsActionsMap: Record<string, ProfileMapAttributes>,
-    nodeEnv: string
-  ) =>
-  (action: PayloadAction<any, string, any>): any => {
-    if (eventsActionsMap[action.type]) {
-      const eventKey = eventsActionsMap[action.type];
-      const profilePropertyType = eventKey?.profilePropertyType;
-      const attributes = eventKey?.getAttributes?.(action?.payload, action?.meta);
-
-      if (eventKey?.shouldBlock && eventKey?.shouldBlock(action?.payload, action?.meta)) {
-        return next(action);
-      }
-
-      profilePropertyType.forEach((type) => {
-        setSuperOrProfileProperty(type, attributes, nodeEnv);
-      });
-    }
-
     return next(action);
   };

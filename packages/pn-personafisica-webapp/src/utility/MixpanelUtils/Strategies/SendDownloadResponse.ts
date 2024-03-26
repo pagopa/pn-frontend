@@ -1,4 +1,10 @@
-import { EventAction, EventCategory, EventStrategy, TrackedEvent } from '@pagopa-pn/pn-commons';
+import {
+  EventAction,
+  EventCategory,
+  EventPropertyType,
+  EventStrategy,
+  TrackedEvent,
+} from '@pagopa-pn/pn-commons';
 
 type SendDownloadResponse = {
   url?: string;
@@ -16,10 +22,12 @@ export class SendDownloadResponseStrategy implements EventStrategy {
     docType,
   }: SendDownloadResponse): TrackedEvent<SendDownloadResponseReturn> {
     return {
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      doc_type: docType ? docType : '',
-      url_available: url ? 'ready' : 'retry_after',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        doc_type: docType ? docType : '',
+        url_available: url ? 'ready' : 'retry_after',
+      },
     };
   }
 }
