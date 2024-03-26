@@ -1,5 +1,5 @@
-import { ValidationResult } from "./ValidationResult";
+import { ValidationResult } from './ValidationResult';
 
 export type ValidationError<TModel> = {
-    [propertyName in keyof TModel]?: ValidationResult<TModel[propertyName]>
-}
+  [propertyName in keyof TModel]?: ValidationResult<TModel[propertyName]>;
+};

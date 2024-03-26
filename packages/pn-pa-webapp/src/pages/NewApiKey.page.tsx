@@ -90,13 +90,7 @@ const NewApiKey = () => {
   return (
     <>
       {!apiKeySent && (
-        <Prompt
-          title={tkp('cancel-title')}
-          message={tkp('cancel-prompt')}
-          eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
-          eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
-          eventTrackingCallbackConfirm={() => {}} // impostare eventi tracking previsti
-        >
+        <Prompt title={tkp('cancel-title')} message={tkp('cancel-prompt')}>
           <Box p={3}>
             <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
               <Grid item xs={12} lg={8}>
