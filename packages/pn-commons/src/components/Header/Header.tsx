@@ -38,9 +38,11 @@ type HeaderProps = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
+  /** Enable assistance button */
+  enableAssistanceButton?: boolean;
 };
 
-const Header = ({
+const Header: React.FC<HeaderProps> = ({
   onExitAction = () => window.location.assign(''),
   productsList,
   showHeaderProduct = true,
@@ -53,7 +55,8 @@ const Header = ({
   onAssistanceClick,
   eventTrackingCallbackProductSwitch,
   isLogged,
-}: HeaderProps) => {
+  enableAssistanceButton,
+}) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
     label: 'PagoPA S.p.A.',
@@ -107,6 +110,7 @@ const Header = ({
         onLogout={onExitAction}
         enableDropdown={enableDropdown}
         userActions={userActions}
+        enableAssistanceButton={enableAssistanceButton}
       />
       {enableHeaderProduct && (
         <HeaderProduct
