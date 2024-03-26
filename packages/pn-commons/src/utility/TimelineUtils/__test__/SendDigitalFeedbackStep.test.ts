@@ -1,5 +1,5 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { DigitalDomicileType, TimelineCategory } from '../../../models';
+import { DigitalDomicileType, ResponseStatus, TimelineCategory } from '../../../models';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 
@@ -14,7 +14,7 @@ describe('SendDigitalFeedbackStep', () => {
         address: 'nome.cognome@pec.it',
         type: DigitalDomicileType.PEC,
       },
-      responseStatus: 'OK',
+      responseStatus: ResponseStatus.OK,
     });
     const payload = {
       step: timelineElem,
@@ -52,7 +52,7 @@ describe('SendDigitalFeedbackStep', () => {
         address: 'nome.cognome@pec.it',
         type: DigitalDomicileType.PEC,
       },
-      responseStatus: 'KO',
+      responseStatus: ResponseStatus.KO,
     });
     const payload = {
       step: timelineElem,

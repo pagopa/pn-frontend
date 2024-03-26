@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
-  NotificationFeePolicy,
   PhysicalCommunicationType,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
@@ -31,7 +30,7 @@ import {
 } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { GET_USER_GROUPS } from '../../../api/notifications/notifications.routes';
-import { PaymentModel } from '../../../models/NewNotification';
+import { NotificationFeePolicy, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
 import PreliminaryInformations from '../PreliminaryInformations';

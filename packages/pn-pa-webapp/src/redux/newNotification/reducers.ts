@@ -1,10 +1,11 @@
-import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
   NewNotification,
   NewNotificationDocument,
   NewNotificationRecipient,
+  NotificationFeePolicy,
   PaymentModel,
   PaymentObject,
 } from '../../models/NewNotification';

@@ -5,10 +5,8 @@ import {
   NotificationDetailDocument,
   NotificationDetailOtherDocument,
   NotificationDetailRecipient,
-  NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PhysicalCommunicationType,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -24,14 +22,10 @@ import {
 const initialState = {
   loading: false,
   notification: {
-    paProtocolNumber: '',
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     documents: [] as Array<NotificationDetailDocument>,
     otherDocuments: [] as Array<NotificationDetailOtherDocument>,
-    notificationFeePolicy: '' as NotificationFeePolicy,
-    physicalCommunicationType: '' as PhysicalCommunicationType,
-    senderPaId: '',
     iun: '',
     sentAt: '',
     notificationStatus: '' as NotificationStatus,

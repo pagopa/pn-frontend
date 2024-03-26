@@ -38,14 +38,10 @@ import { resetLegalFactState, resetState } from '../reducers';
 const initialState = {
   loading: false,
   notification: {
-    paProtocolNumber: '',
     subject: '',
     recipients: [],
     documents: [],
     otherDocuments: [],
-    notificationFeePolicy: '',
-    physicalCommunicationType: '',
-    senderPaId: '',
     iun: '',
     sentAt: '',
     notificationStatus: '',
