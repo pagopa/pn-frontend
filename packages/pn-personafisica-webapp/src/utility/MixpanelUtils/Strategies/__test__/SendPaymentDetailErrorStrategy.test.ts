@@ -1,4 +1,4 @@
-import { EventCategory, PaymentInfoDetail } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventPropertyType, PaymentInfoDetail } from '@pagopa-pn/pn-commons';
 
 import { SendPaymentDetailErrorStrategy } from '../SendPaymentDetailErrorStrategy';
 
@@ -11,9 +11,11 @@ describe('Mixpanel - Payment Detail Error Strategy', () => {
       errorCode: '500',
     });
     expect(paymentDetailErrorEvent).toEqual({
-      event_category: EventCategory.KO,
-      detail: PaymentInfoDetail.PAYMENT_EXPIRED,
-      errorCode: '500',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.KO,
+        detail: PaymentInfoDetail.PAYMENT_EXPIRED,
+        errorCode: '500',
+      },
     });
   });
 });

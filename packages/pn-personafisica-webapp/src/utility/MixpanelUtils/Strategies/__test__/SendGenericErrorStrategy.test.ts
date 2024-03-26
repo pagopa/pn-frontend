@@ -1,4 +1,4 @@
-import { EventCategory } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendGenericErrorStrategy } from '../SendGenericErrorStrategy';
 
@@ -20,8 +20,10 @@ describe('Mixpanel - Generic Error Strategy', () => {
       reason,
     });
     expect(genericErrorEvent).toEqual({
-      event_category: EventCategory.KO,
-      reason,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.KO,
+        reason,
+      },
     });
   });
 });

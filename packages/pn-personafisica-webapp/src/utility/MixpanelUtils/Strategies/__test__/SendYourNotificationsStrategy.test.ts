@@ -1,6 +1,7 @@
 import {
   EventAction,
   EventCategory,
+  EventPropertyType,
   NotificationStatus,
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
@@ -38,30 +39,32 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
 
     const yourNotificationEvent = strategy.performComputations(yourNotification);
     expect(yourNotificationEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      ...(yourNotification.domicileBannerType && { banner: yourNotification.domicileBannerType }),
-      delegate: yourNotification.delegators.length > 0,
-      page_number: yourNotification.pagination.page,
-      total_count: yourNotification.notifications.length,
-      unread_count: yourNotification.notifications.filter((n) =>
-        isNewNotification(n.notificationStatus)
-      ).length,
-      delivered_count: yourNotification.notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.DELIVERED
-      ).length,
-      opened_count: yourNotification.notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.VIEWED
-      ).length,
-      expired_count: yourNotification.notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
-      ).length,
-      not_found_count: yourNotification.notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
-      ).length,
-      cancelled_count: yourNotification.notifications.filter(
-        (n) => n.notificationStatus === NotificationStatus.CANCELLED
-      ).length,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        ...(yourNotification.domicileBannerType && { banner: yourNotification.domicileBannerType }),
+        delegate: yourNotification.delegators.length > 0,
+        page_number: yourNotification.pagination.page,
+        total_count: yourNotification.notifications.length,
+        unread_count: yourNotification.notifications.filter((n) =>
+          isNewNotification(n.notificationStatus)
+        ).length,
+        delivered_count: yourNotification.notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.DELIVERED
+        ).length,
+        opened_count: yourNotification.notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.VIEWED
+        ).length,
+        expired_count: yourNotification.notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+        ).length,
+        not_found_count: yourNotification.notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
+        ).length,
+        cancelled_count: yourNotification.notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.CANCELLED
+        ).length,
+      },
     });
   });
 });

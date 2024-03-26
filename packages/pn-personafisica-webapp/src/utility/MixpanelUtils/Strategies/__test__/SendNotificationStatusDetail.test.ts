@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendNotificationStatusDetailStrategy } from '../SendNotificationStatusDetail';
 
@@ -12,9 +12,11 @@ describe('Mixpanel - Notification Status Detail Strategy', () => {
       accordion,
     });
     expect(notificationStatusDetailEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      accordion,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        accordion,
+      },
     });
   });
 });

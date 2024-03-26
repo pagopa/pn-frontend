@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import {
   CourtesyChannelType,
@@ -22,12 +22,14 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
 
     const yourContactDetailsEvent = strategy.performComputations({ digitalAddresses, contactIO });
     expect(yourContactDetailsEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      PEC_exists: false,
-      email_exists: false,
-      telephone_exists: false,
-      appIO_status: 'nd',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        PEC_exists: false,
+        email_exists: false,
+        telephone_exists: false,
+        appIO_status: 'nd',
+      },
     });
   });
 
@@ -72,12 +74,14 @@ describe('Mixpanel - Your Contact Details Strategy', () => {
 
     const yourContactDetailsEvent = strategy.performComputations({ digitalAddresses, contactIO });
     expect(yourContactDetailsEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      PEC_exists: true,
-      email_exists: true,
-      telephone_exists: true,
-      appIO_status: 'activated',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        PEC_exists: true,
+        email_exists: true,
+        telephone_exists: true,
+        appIO_status: 'activated',
+      },
     });
   });
 });

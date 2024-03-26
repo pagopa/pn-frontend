@@ -1,4 +1,9 @@
-import { EventAction, EventCategory, EventPageType } from '@pagopa-pn/pn-commons';
+import {
+  EventAction,
+  EventCategory,
+  EventPageType,
+  EventPropertyType,
+} from '@pagopa-pn/pn-commons';
 
 import { SendRefreshPageStrategy } from '../SendRefreshPageStrategy';
 
@@ -10,9 +15,11 @@ describe('Mixpanel - Refresh Page Strategy', () => {
 
     const refreshPageEvent = strategy.performComputations(page);
     expect(refreshPageEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      page,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        page,
+      },
     });
   });
 });

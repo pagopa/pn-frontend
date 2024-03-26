@@ -1,4 +1,4 @@
-import { EventCategory } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { TechStrategy } from '../TechStrategy';
 
@@ -8,7 +8,9 @@ describe('Mixpanel - Tech Strategy', () => {
 
     const techEvent = strategy.performComputations();
     expect(techEvent).toEqual({
-      event_category: EventCategory.TECH,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.TECH,
+      },
     });
   });
 });

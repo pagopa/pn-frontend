@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendDownloadCertificateOpposable } from '../SendDownloadCertificateOpposable';
 
@@ -11,9 +11,11 @@ describe('Mixpanel - Download Certificate Opposable Strategy', () => {
       source,
     });
     expect(downloadCertificateEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      source,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        source,
+      },
     });
   });
 });

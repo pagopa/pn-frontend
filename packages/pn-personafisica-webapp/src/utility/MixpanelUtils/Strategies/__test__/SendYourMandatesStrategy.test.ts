@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { arrayOfDelegates, arrayOfDelegators } from '../../../../__mocks__/Delegations.mock';
 import { DelegationStatus } from '../../../status.utility';
@@ -13,19 +13,22 @@ describe('Mixpanel - Send Your Mandates Strategy', () => {
 
     const yourMandatesEvents = strategy.performComputations({ delegates, delegators });
     expect(yourMandatesEvents).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      total_mandates_given_count: delegates.length,
-      pending_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.PENDING)
-        .length,
-      active_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.ACTIVE)
-        .length,
-      total_mandates_received_count: delegators.length,
-      pending_mandates_received_count: delegators.filter(
-        (d) => d.status === DelegationStatus.PENDING
-      ).length,
-      active_mandates_received_count: delegators.filter((d) => d.status === DelegationStatus.ACTIVE)
-        .length,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        total_mandates_given_count: delegates.length,
+        pending_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.PENDING)
+          .length,
+        active_mandates_given_count: delegates.filter((d) => d.status === DelegationStatus.ACTIVE)
+          .length,
+        total_mandates_received_count: delegators.length,
+        pending_mandates_received_count: delegators.filter(
+          (d) => d.status === DelegationStatus.PENDING
+        ).length,
+        active_mandates_received_count: delegators.filter(
+          (d) => d.status === DelegationStatus.ACTIVE
+        ).length,
+      },
     });
   });
 });

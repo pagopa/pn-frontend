@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendRemoveContactSuccessStrategy } from '../SendRemoveContactSuccess';
 
@@ -10,18 +10,22 @@ describe('Mixpanel - Remove contact success Strategy', () => {
 
     const removeDefaultSenderEvent = strategy.performComputations(defaultSender);
     expect(removeDefaultSenderEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      other_contact: 'no',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        other_contact: 'no',
+      },
     });
 
     const senderId = 'senderId';
 
     const removeSenderEvent = strategy.performComputations(senderId);
     expect(removeSenderEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      other_contact: 'yes',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        other_contact: 'yes',
+      },
     });
   });
 });

@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendViewContactDetailsStrategy } from '../SendViewContactDetailsStrategy';
 
@@ -9,9 +9,11 @@ describe('Mixpanel - View Contact Details Strategy', () => {
 
     const viewContactDetailsEvent = strategy.performComputations({ source });
     expect(viewContactDetailsEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      source,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        source,
+      },
     });
   });
 });

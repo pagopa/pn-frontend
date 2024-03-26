@@ -1,4 +1,4 @@
-import { EventCategory, EventPageType } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventPageType, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendToastErrorStrategy } from '../SendToastErrorStrategy';
 
@@ -20,13 +20,15 @@ describe('Mixpanel - Toast error Strategy', () => {
 
     const toastErrorEvent = strategy.performComputations(error);
     expect(toastErrorEvent).toEqual({
-      event_category: EventCategory.KO,
-      reason: error.reason,
-      traceId: error.traceId,
-      page_name: error.page_name,
-      message: error.message,
-      httpStatusCode: error.httpStatusCode,
-      action: error.action,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.KO,
+        reason: error.reason,
+        traceId: error.traceId,
+        page_name: error.page_name,
+        message: error.message,
+        httpStatusCode: error.httpStatusCode,
+        action: error.action,
+      },
     });
   });
 });

@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendAddContactScreenViewStrategy } from '../SendAddContactScreenViewStrategy';
 
@@ -8,16 +8,20 @@ describe('Mixpanel - Add contact screen view Strategy', () => {
 
     const isOtherContactEvent = strategy.performComputations(true);
     expect(isOtherContactEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      other_contact: 'yes',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        other_contact: 'yes',
+      },
     });
 
     const isNotOtherContactEvent = strategy.performComputations(false);
     expect(isNotOtherContactEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      other_contact: 'no',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        other_contact: 'no',
+      },
     });
   });
 });

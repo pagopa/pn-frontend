@@ -1,4 +1,9 @@
-import { EventAction, EventCategory, RecipientType } from '@pagopa-pn/pn-commons';
+import {
+  EventAction,
+  EventCategory,
+  EventPropertyType,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
 
 import { SendAddMandateUXSuccessStrategy } from '../SendAddMandateUXSuccessStrategy';
 
@@ -13,10 +18,12 @@ describe('Mixpanel - Add mandate UX success Strategy', () => {
       mandate_type,
     });
     expect(addMandateSuccessEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.SCREEN_VIEW,
-      person_type,
-      mandate_type,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+        person_type,
+        mandate_type,
+      },
     });
   });
 });

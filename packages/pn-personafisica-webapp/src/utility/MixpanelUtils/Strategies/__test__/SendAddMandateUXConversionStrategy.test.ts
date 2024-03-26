@@ -1,4 +1,9 @@
-import { EventAction, EventCategory, RecipientType } from '@pagopa-pn/pn-commons';
+import {
+  EventAction,
+  EventCategory,
+  EventPropertyType,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
 
 import { SendAddMandateUXConversionStrategy } from '../SendAddMandateUXConversionStrategy';
 
@@ -12,10 +17,12 @@ describe('Mixpanel - Add mandate UX conversion Strategy', () => {
       selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     });
     expect(allMandateTypeEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      person_type: recipientType,
-      mandate_type: 'all',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        person_type: recipientType,
+        mandate_type: 'all',
+      },
     });
 
     const selectedPartyEvent = strategy.performComputations({
@@ -23,10 +30,12 @@ describe('Mixpanel - Add mandate UX conversion Strategy', () => {
       selectTuttiEntiOrSelezionati: 'comune di milano',
     });
     expect(selectedPartyEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      person_type: recipientType,
-      mandate_type: 'selected_party',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        person_type: recipientType,
+        mandate_type: 'selected_party',
+      },
     });
   });
 });

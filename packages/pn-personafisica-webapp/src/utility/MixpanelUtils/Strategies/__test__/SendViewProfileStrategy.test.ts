@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendViewProfileStrategy } from '../SendViewProfileStrategy';
 
@@ -9,9 +9,11 @@ describe('Mixpanel - View Profile Strategy', () => {
 
     const viewProfileEvent = strategy.performComputations({ source });
     expect(viewProfileEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      source,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        source,
+      },
     });
   });
 });

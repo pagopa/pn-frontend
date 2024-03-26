@@ -1,4 +1,4 @@
-import { EventCategory, PaymentStatus } from '@pagopa-pn/pn-commons';
+import { EventCategory, EventPropertyType, PaymentStatus } from '@pagopa-pn/pn-commons';
 
 import { SendPaymentOutcomeStrategy } from '../SendPaymentOutcomeStrategy';
 
@@ -12,8 +12,10 @@ describe('Mixpanel - Payment Outcome Strategy', () => {
       outcome,
     });
     expect(paymentOutcomeEvent).toEqual({
-      event_category: EventCategory.TECH,
-      outcome,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.TECH,
+        outcome,
+      },
     });
   });
 });

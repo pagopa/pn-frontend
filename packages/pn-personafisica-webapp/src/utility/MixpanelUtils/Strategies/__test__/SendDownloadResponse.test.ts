@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendDownloadResponseStrategy } from '../SendDownloadResponse';
 
@@ -11,10 +11,12 @@ describe('Mixpanel - Download Response Strategy', () => {
       docType: 'docType',
     });
     expect(downloadCertificate).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      doc_type: 'docType',
-      url_available: 'ready',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        doc_type: 'docType',
+        url_available: 'ready',
+      },
     });
   });
 
@@ -23,10 +25,12 @@ describe('Mixpanel - Download Response Strategy', () => {
 
     const downloadResponseEvent = strategy.performComputations({});
     expect(downloadResponseEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ACTION,
-      doc_type: '',
-      url_available: 'retry_after',
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+        doc_type: '',
+        url_available: 'retry_after',
+      },
     });
   });
 });

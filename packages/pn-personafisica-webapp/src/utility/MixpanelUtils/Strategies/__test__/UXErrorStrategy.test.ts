@@ -1,4 +1,4 @@
-import { EventAction, EventCategory } from '@pagopa-pn/pn-commons';
+import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { UXErrorStrategy } from '../UXErrorStrategy';
 
@@ -8,8 +8,10 @@ describe('Mixpanel - UX Error Strategy', () => {
 
     const uxErrorEvent = strategy.performComputations();
     expect(uxErrorEvent).toEqual({
-      event_category: EventCategory.UX,
-      event_type: EventAction.ERROR,
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ERROR,
+      },
     });
   });
 });
