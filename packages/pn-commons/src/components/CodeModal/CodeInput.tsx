@@ -127,8 +127,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       const values = requiredCode.split('');
       setCurrentValues(values);
 
-      // Focus the last input and set cursor at the end
-      focusInput(values.length - 1);
+      // Focus the last input and set cursor at the end, then remove focus.
+      // it's needed to focus on lastInput before to step on to lastInput + 1
+      const lastInput = values.length - 1;
+      focusInput(lastInput);
+      focusInput(lastInput + 1);
+    } else {
+      console.log('errore da gestire');
     }
   };
 
