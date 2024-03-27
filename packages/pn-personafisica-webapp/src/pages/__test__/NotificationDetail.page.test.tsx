@@ -640,7 +640,10 @@ describe('NotificationDetail Page', async () => {
       vi.advanceTimersByTime(1000);
     });
     expect(payButton).toBeEnabled();
-    fireEvent.click(payButton);
+    // we need the act method, because the loading overlay is shown at button click
+    await act(async () => {
+      fireEvent.click(payButton);
+    });
     expect(mock.history.post).toHaveLength(2);
     expect(mock.history.post[0].url).toBe(NOTIFICATION_PAYMENT_INFO());
     expect(mock.history.post[1].url).toBe(NOTIFICATION_PAYMENT_URL());
@@ -816,7 +819,7 @@ describe('NotificationDetail Page', async () => {
       });
     });
 
-    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });

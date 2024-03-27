@@ -13,10 +13,7 @@ import {
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { newNotificationDTO } from '../../../__mocks__/NewNotification.mock';
-import {
-  notificationDTOMultiRecipient,
-  notificationToFeMultiRecipient,
-} from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { apiClient, externalClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
@@ -76,7 +73,7 @@ describe('Notifications api tests', () => {
     const iun = notificationDTOMultiRecipient.iun;
     mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationDTOMultiRecipient);
     const res = await NotificationsApi.getSentNotification(iun);
-    expect(res).toStrictEqual(notificationToFeMultiRecipient);
+    expect(res).toStrictEqual(notificationDTOMultiRecipient);
   });
 
   it('getSentNotificationDocument', async () => {

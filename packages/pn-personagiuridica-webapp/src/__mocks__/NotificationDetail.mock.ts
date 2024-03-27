@@ -11,7 +11,6 @@ import {
   NotificationFeePolicy,
   NotificationStatus,
   NotificationStatusHistory,
-  PaidDetails,
   PaymentCache,
   PaymentsData,
   PhysicalCommunicationType,
@@ -122,6 +121,304 @@ export const payments: Array<NotificationDetailPayment> = [
 
 const statusHistory: Array<NotificationStatusHistory> = [
   {
+    status: NotificationStatus.VIEWED,
+    activeFrom: '2023-05-09T13:22:09.863901492Z',
+    relatedTimelineElements: [
+      'NOTIFICATION_VIEWED.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+      'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_1',
+      'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_2',
+      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+      'SEND_ANALOG_FEEDBACK.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+      'ANALOG_SUCCESS_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+    ],
+    steps: [
+      {
+        elementId: 'SCHEDULE_REFINEMENT_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:22:27.251102669Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SCHEDULE_REFINEMENT,
+        details: {
+          recIndex: 1,
+        },
+        index: 15,
+        hidden: true,
+      },
+      {
+        elementId: 'ANALOG_SUCCESS_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:22:27.156517343Z',
+        legalFactsIds: [],
+        category: TimelineCategory.ANALOG_SUCCESS_WORKFLOW,
+        details: {
+          recIndex: 1,
+          physicalAddress: {
+            at: '',
+            address: 'VIA MESSI 2022',
+            addressDetails: '',
+            zip: '98036',
+            municipality: 'GRANITI',
+            municipalityDetails: '',
+            province: 'MESSINA',
+            foreignState: 'ITALIA',
+          },
+        },
+        index: 14,
+        hidden: true,
+      },
+      {
+        elementId: 'SEND_ANALOG_FEEDBACK.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+        timestamp: '2023-05-09T13:22:25.001Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SEND_ANALOG_FEEDBACK,
+        details: {
+          recIndex: 1,
+          physicalAddress: {
+            at: '',
+            address: 'VIA MESSI 2022',
+            addressDetails: '',
+            zip: '98036',
+            municipality: 'GRANITI',
+            municipalityDetails: '',
+            province: 'MESSINA',
+            foreignState: 'ITALIA',
+          },
+          sentAttemptMade: 0,
+          responseStatus: 'OK',
+          notificationDate: '2023-05-09T13:22:25.001Z',
+          deliveryDetailCode: 'RECRN001C',
+          serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+          sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+          registeredLetterCode: 'bcaf92f26c634eb08a5ece4633117816',
+        } as AnalogDetails,
+        index: 13,
+        hidden: false,
+      },
+      {
+        elementId: 'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_2',
+        timestamp: '2023-05-09T13:22:19.001Z',
+        legalFactsIds: [
+          {
+            key: 'PN_EXTERNAL_LEGAL_FACTS-2e53ade5875b4e77a242103e7db6ddc4.pdf',
+            category: LegalFactType.ANALOG_DELIVERY,
+          },
+        ],
+        category: TimelineCategory.SEND_ANALOG_PROGRESS,
+        details: {
+          recIndex: 1,
+          notificationDate: '2023-05-09T13:22:19.001Z',
+          deliveryDetailCode: 'RECRN001B',
+          attachments: [
+            {
+              id: 'RPTH-YULD-WKMA-202305-T-1DOCMock_1|UaMdYj7cAVO6EZTC9ddUBD7pbkG6zdEZ0LaL/3cmphU=',
+              documentType: 'AR',
+              url: 'PN_EXTERNAL_LEGAL_FACTS-2e53ade5875b4e77a242103e7db6ddc4.pdf',
+            },
+          ],
+          sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+          registeredLetterCode: 'bcaf92f26c634eb08a5ece4633117816',
+        },
+        index: 12,
+        hidden: false,
+      },
+      {
+        elementId: 'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_1',
+        timestamp: '2023-05-09T13:22:10.001Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SEND_ANALOG_PROGRESS,
+        details: {
+          recIndex: 1,
+          notificationDate: '2023-05-09T13:22:10.001Z',
+          deliveryDetailCode: 'CON080',
+          sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+          registeredLetterCode: 'bcaf92f26c634eb08a5ece4633117816',
+        },
+        index: 11,
+        hidden: false,
+      },
+      {
+        elementId: 'NOTIFICATION_VIEWED.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:22:09.863901492Z',
+        legalFactsIds: [
+          {
+            key: 'PN_LEGAL_FACTS-5ac83de87d2f4dd38ae7af4270088a80.pdf',
+            category: LegalFactType.RECIPIENT_ACCESS,
+          },
+        ],
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        details: {
+          recIndex: 1,
+        },
+        index: 10,
+        hidden: true,
+      },
+    ],
+  },
+  {
+    status: NotificationStatus.DELIVERING,
+    activeFrom: '2023-05-09T13:22:02.736668855Z',
+    relatedTimelineElements: [
+      'REQUEST_ACCEPTED.IUN_RPTH-YULD-WKMA-202305-T-1',
+      'AAR_CREATION_REQUEST.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+      'AAR_GEN.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+      'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
+      'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
+      'NATIONAL_REGISTRY_CALL.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+      'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
+      'SCHEDULE_ANALOG_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+      'PREPARE_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+      'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+    ],
+    steps: [
+      {
+        elementId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+        timestamp: '2023-05-09T13:22:02.736668855Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SEND_ANALOG_DOMICILE,
+        details: {
+          recIndex: 1,
+          physicalAddress: {
+            address: 'VIA MESSI 2022',
+            zip: '98036',
+            municipality: 'GRANITI',
+            province: 'MESSINA',
+            foreignState: 'ITALIA',
+          },
+          sentAttemptMade: 0,
+          serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+          productType: 'AR',
+          numberOfPages: 2,
+        },
+        index: 9,
+        hidden: false,
+      },
+      {
+        elementId: 'PREPARE_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+        timestamp: '2023-05-09T13:22:00.371575913Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PREPARE_ANALOG_DOMICILE,
+        details: {
+          recIndex: 1,
+          physicalAddress: {
+            at: '',
+            address: 'VIA MESSI 2022',
+            addressDetails: '',
+            zip: '98036',
+            municipality: 'GRANITI',
+            municipalityDetails: '',
+            province: 'MESSINA',
+            foreignState: 'ITALIA',
+          },
+          sentAttemptMade: 0,
+          serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+        },
+        index: 8,
+        hidden: true,
+      },
+      {
+        elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:21:45.986098643Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
+        details: {
+          recIndex: 1,
+        },
+        index: 7,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
+        timestamp: '2023-05-09T13:21:45.961667427Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 1,
+          digitalAddressSource: AddressSource.GENERAL,
+          isAvailable: false,
+          attemptDate: '2023-05-09T13:21:45.9616657Z',
+        },
+        index: 6,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-05-09T13:21:45.934270082Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_RESPONSE,
+        details: {
+          recIndex: 1,
+        },
+        index: 5,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_CALL.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-05-09T13:20:29.876161477Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_CALL,
+        details: {
+          recIndex: 1,
+          sentAttemptMade: 0,
+          sendDate: '2023-05-09T13:20:29.876148931Z',
+        },
+        index: 4,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
+        timestamp: '2023-05-09T13:20:29.761493263Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 1,
+          digitalAddressSource: AddressSource.SPECIAL,
+          isAvailable: false,
+          attemptDate: '2023-05-09T13:20:29.761491883Z',
+        },
+        index: 3,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
+        timestamp: '2023-05-09T13:20:29.739081206Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 1,
+          digitalAddressSource: AddressSource.PLATFORM,
+          isAvailable: false,
+          attemptDate: '2023-05-09T13:20:29.739079404Z',
+        },
+        index: 2,
+        hidden: true,
+      },
+      {
+        elementId: 'AAR_GEN.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:19:59.460058075Z',
+        legalFactsIds: [],
+        category: TimelineCategory.AAR_GENERATION,
+        details: {
+          recIndex: 1,
+          generatedAarUrl: 'PN_AAR-7b9cfda7870346248daf669191ec2cf1.pdf',
+          numberOfPages: 1,
+        },
+        index: 1,
+        hidden: true,
+      },
+      {
+        elementId: 'REQUEST_ACCEPTED.IUN_RPTH-YULD-WKMA-202305-T-1',
+        timestamp: '2023-05-09T13:18:59.380111301Z',
+        legalFactsIds: [],
+        category: TimelineCategory.REQUEST_ACCEPTED,
+        details: {},
+        index: 0,
+        hidden: true,
+      },
+    ],
+  },
+  {
     status: NotificationStatus.ACCEPTED,
     activeFrom: '2023-05-09T13:17:31.401700947Z',
     relatedTimelineElements: [
@@ -136,25 +433,136 @@ const statusHistory: Array<NotificationStatusHistory> = [
       'SCHEDULE_ANALOG_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
       'PREPARE_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
     ],
-  },
-  {
-    status: NotificationStatus.DELIVERING,
-    activeFrom: '2023-05-09T13:22:02.736668855Z',
-    relatedTimelineElements: [
-      'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
-    ],
-  },
-  {
-    status: NotificationStatus.VIEWED,
-    activeFrom: '2023-05-09T13:22:09.863901492Z',
-    relatedTimelineElements: [
-      'NOTIFICATION_VIEWED.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
-      'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_1',
-      'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_2',
-      'NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
-      'SEND_ANALOG_FEEDBACK.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
-      'ANALOG_SUCCESS_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
-      'SCHEDULE_REFINEMENT_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+    steps: [
+      {
+        elementId: 'PREPARE_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
+        timestamp: '2023-05-09T13:22:00.371575913Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PREPARE_ANALOG_DOMICILE,
+        details: {
+          recIndex: 1,
+          physicalAddress: {
+            at: '',
+            address: 'VIA MESSI 2022',
+            addressDetails: '',
+            zip: '98036',
+            municipality: 'GRANITI',
+            municipalityDetails: '',
+            province: 'MESSINA',
+            foreignState: 'ITALIA',
+          },
+          sentAttemptMade: 0,
+          serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
+        },
+        index: 8,
+        hidden: true,
+      },
+      {
+        elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:21:45.986098643Z',
+        legalFactsIds: [],
+        category: TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
+        details: {
+          recIndex: 1,
+        },
+        index: 7,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
+        timestamp: '2023-05-09T13:21:45.961667427Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 1,
+          digitalAddressSource: AddressSource.GENERAL,
+          isAvailable: false,
+          attemptDate: '2023-05-09T13:21:45.9616657Z',
+        },
+        index: 6,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_RESPONSE.CORRELATIONID_NATIONAL_REGISTRY_CALL.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-05-09T13:21:45.934270082Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_RESPONSE,
+        details: {
+          recIndex: 1,
+        },
+        index: 5,
+        hidden: true,
+      },
+      {
+        elementId:
+          'NATIONAL_REGISTRY_CALL.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.DELIVERYMODE_DIGITAL.CONTACTPHASE_CHOOSE_DELIVERY.ATTEMPT_0',
+        timestamp: '2023-05-09T13:20:29.876161477Z',
+        legalFactsIds: [],
+        category: TimelineCategory.PUBLIC_REGISTRY_CALL,
+        details: {
+          recIndex: 1,
+          sentAttemptMade: 0,
+          sendDate: '2023-05-09T13:20:29.876148931Z',
+        },
+        index: 4,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
+        timestamp: '2023-05-09T13:20:29.761493263Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 1,
+          digitalAddressSource: AddressSource.SPECIAL,
+          isAvailable: false,
+          attemptDate: '2023-05-09T13:20:29.761491883Z',
+        },
+        index: 3,
+        hidden: true,
+      },
+      {
+        elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
+        timestamp: '2023-05-09T13:20:29.739081206Z',
+        legalFactsIds: [],
+        category: TimelineCategory.GET_ADDRESS,
+        details: {
+          recIndex: 1,
+          digitalAddressSource: AddressSource.PLATFORM,
+          isAvailable: false,
+          attemptDate: '2023-05-09T13:20:29.739079404Z',
+        },
+        index: 2,
+        hidden: true,
+      },
+      {
+        elementId: 'AAR_GEN.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
+        timestamp: '2023-05-09T13:19:59.460058075Z',
+        legalFactsIds: [],
+        category: TimelineCategory.AAR_GENERATION,
+        details: {
+          recIndex: 1,
+          generatedAarUrl: 'PN_AAR-7b9cfda7870346248daf669191ec2cf1.pdf',
+          numberOfPages: 1,
+        },
+        index: 1,
+        hidden: true,
+      },
+      {
+        elementId: 'REQUEST_ACCEPTED.IUN_RPTH-YULD-WKMA-202305-T-1',
+        timestamp: '2023-05-09T13:18:59.380111301Z',
+        legalFactsIds: [
+          {
+            key: 'PN_LEGAL_FACTS-4c3db79198f84e27a108c7446bd803f5.pdf',
+            category: LegalFactType.SENDER_ACK,
+          },
+        ],
+        category: TimelineCategory.REQUEST_ACCEPTED,
+        details: {},
+        index: 0,
+        hidden: true,
+      },
     ],
   },
 ];
@@ -171,6 +579,8 @@ const timeline: Array<INotificationDetailTimeline> = [
     ],
     category: TimelineCategory.REQUEST_ACCEPTED,
     details: {},
+    index: 0,
+    hidden: true,
   },
   {
     elementId: 'AAR_GEN.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
@@ -182,6 +592,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       generatedAarUrl: 'PN_AAR-7b9cfda7870346248daf669191ec2cf1.pdf',
       numberOfPages: 1,
     },
+    index: 1,
+    hidden: true,
   },
   {
     elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_PLATFORM.ATTEMPT_0',
@@ -194,6 +606,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       isAvailable: false,
       attemptDate: '2023-05-09T13:20:29.739079404Z',
     },
+    index: 2,
+    hidden: true,
   },
   {
     elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_SPECIAL.ATTEMPT_0',
@@ -206,6 +620,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       isAvailable: false,
       attemptDate: '2023-05-09T13:20:29.761491883Z',
     },
+    index: 3,
+    hidden: true,
   },
   {
     elementId:
@@ -218,6 +634,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       sentAttemptMade: 0,
       sendDate: '2023-05-09T13:20:29.876148931Z',
     },
+    index: 4,
+    hidden: true,
   },
   {
     elementId:
@@ -228,6 +646,8 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 1,
     },
+    index: 5,
+    hidden: true,
   },
   {
     elementId: 'GET_ADDRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.SOURCE_GENERAL.ATTEMPT_0',
@@ -240,6 +660,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       isAvailable: false,
       attemptDate: '2023-05-09T13:21:45.9616657Z',
     },
+    index: 6,
+    hidden: true,
   },
   {
     elementId: 'SCHEDULE_ANALOG_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
@@ -249,6 +671,8 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 1,
     },
+    index: 7,
+    hidden: true,
   },
   {
     elementId: 'PREPARE_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
@@ -270,6 +694,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       sentAttemptMade: 0,
       serviceLevel: PhysicalCommunicationType.AR_REGISTERED_LETTER,
     },
+    index: 8,
+    hidden: true,
   },
   {
     elementId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
@@ -290,6 +716,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       productType: 'AR',
       numberOfPages: 2,
     },
+    index: 9,
+    hidden: false,
   },
   {
     elementId: 'NOTIFICATION_VIEWED.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
@@ -304,6 +732,8 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 1,
     },
+    index: 10,
+    hidden: true,
   },
   {
     elementId: 'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_1',
@@ -317,6 +747,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
       registeredLetterCode: 'bcaf92f26c634eb08a5ece4633117816',
     },
+    index: 11,
+    hidden: false,
   },
   {
     elementId: 'SEND_ANALOG_PROGRESS.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0.IDX_2',
@@ -342,6 +774,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
       registeredLetterCode: 'bcaf92f26c634eb08a5ece4633117816',
     },
+    index: 12,
+    hidden: false,
   },
   {
     elementId: 'SEND_ANALOG_FEEDBACK.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
@@ -368,6 +802,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       sendRequestId: 'SEND_ANALOG_DOMICILE.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0.ATTEMPT_0',
       registeredLetterCode: 'bcaf92f26c634eb08a5ece4633117816',
     } as AnalogDetails,
+    index: 13,
+    hidden: false,
   },
   {
     elementId: 'ANALOG_SUCCESS_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
@@ -387,6 +823,8 @@ const timeline: Array<INotificationDetailTimeline> = [
         foreignState: 'ITALIA',
       },
     },
+    index: 14,
+    hidden: true,
   },
   {
     elementId: 'SCHEDULE_REFINEMENT_WORKFLOW.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_0',
@@ -396,6 +834,8 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       recIndex: 1,
     },
+    index: 15,
+    hidden: true,
   },
   {
     elementId: 'NOTIFICATION_PAID.IUN_RPTH-YULD-WKMA-202305-T-1.RECINDEX_1',
@@ -409,7 +849,9 @@ const timeline: Array<INotificationDetailTimeline> = [
       noticeCode: '302011686772695132',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
       amount: 8000,
-    } as PaidDetails,
+    },
+    index: 16,
+    hidden: true,
   },
 ];
 
@@ -469,6 +911,22 @@ export const notificationDTO: NotificationDetail = {
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory: statusHistory,
   timeline,
+  otherDocuments: [
+    {
+      recIndex: 1,
+      documentId: 'PN_AAR-7b9cfda7870346248daf669191ec2cf1.pdf',
+      documentType: 'AAR',
+      title: 'Avviso di avvenuta ricezione',
+      digests: {
+        sha256: '',
+      },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+      contentType: '',
+    },
+  ],
 };
 
 export const cancelledNotificationDTO: NotificationDetail = {
@@ -539,4 +997,16 @@ export const raddNotificationDTO: NotificationDetail = {
       },
     },
   ],
+  radd: {
+    elementId: 'NOTIFICATION_RADD_RETRIEVED_mock',
+    timestamp: '2022-06-21T11:44:28Z',
+    legalFactsIds: [],
+    category: TimelineCategory.NOTIFICATION_RADD_RETRIEVED,
+    details: {
+      recIndex: 1,
+      eventTimestamp: '2022-06-21T11:44:28Z',
+      raddType: 'ALT',
+      raddTransactionId: '6',
+    },
+  },
 };

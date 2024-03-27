@@ -41,7 +41,6 @@ import {
   AddressSource,
   AnalogDetails,
   AnalogWorkflowDetails,
-  AppIoCourtesyMessageEventType,
   DigitalDomicileType,
   DigitalWorkflowDetails,
   ExtRegistriesPaymentDetails,
@@ -120,7 +119,6 @@ export {
   DowntimeStatus,
   isKnownFunctionality,
   KnownFunctionality,
-  AppIoCourtesyMessageEventType,
   PrivateRoute,
   ProfilePropertyType,
 };

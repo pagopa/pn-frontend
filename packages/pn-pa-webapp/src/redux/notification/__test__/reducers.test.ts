@@ -13,10 +13,7 @@ import {
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
-import {
-  notificationDTOMultiRecipient,
-  notificationToFeMultiRecipient,
-} from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { apiClient } from '../../../api/apiClients';
 import {
   CANCEL_NOTIFICATION,
@@ -87,20 +84,20 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification detail', async () => {
     mock
-      .onGet(NOTIFICATION_DETAIL(notificationToFeMultiRecipient.iun))
+      .onGet(NOTIFICATION_DETAIL(notificationDTOMultiRecipient.iun))
       .reply(200, notificationDTOMultiRecipient);
-    const action = await store.dispatch(getSentNotification(notificationToFeMultiRecipient.iun));
+    const action = await store.dispatch(getSentNotification(notificationDTOMultiRecipient.iun));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getSentNotification/fulfilled');
-    expect(payload).toEqual(notificationToFeMultiRecipient);
+    expect(payload).toEqual(notificationDTOMultiRecipient);
     expect(store.getState().notificationState.notification).toStrictEqual(
-      notificationToFeMultiRecipient
+      notificationDTOMultiRecipient
     );
   });
 
   it('Should be able to fetch the notification document', async () => {
     const mockRequest = {
-      iun: notificationToFeMultiRecipient.iun,
+      iun: notificationDTOMultiRecipient.iun,
       documentIndex: '0',
     };
     const mockResponse = { url: 'http://mocked-url.com' };
@@ -115,7 +112,7 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification legalfact', async () => {
     const mockRequest = {
-      iun: notificationToFeMultiRecipient.iun,
+      iun: notificationDTOMultiRecipient.iun,
       legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
     };
     const mockResponse = { url: 'http://mocked-url.com' };
@@ -130,7 +127,7 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification AAR document', async () => {
     const mockRequest = {
-      iun: notificationToFeMultiRecipient.iun,
+      iun: notificationDTOMultiRecipient.iun,
       otherDocument: {
         documentId: 'mocked-document-id',
         documentType: 'mocked-document-type',
@@ -190,10 +187,10 @@ describe('Notification detail redux state tests', () => {
       url: 'mocked-url',
     };
     mock
-      .onGet(DOWNTIME_LEGAL_FACT_DETAILS(notificationToFeMultiRecipient.iun))
+      .onGet(DOWNTIME_LEGAL_FACT_DETAILS(notificationDTOMultiRecipient.iun))
       .reply(200, mockResponse);
     const action = await store.dispatch(
-      getDowntimeLegalFactDocumentDetails(notificationToFeMultiRecipient.iun)
+      getDowntimeLegalFactDocumentDetails(notificationDTOMultiRecipient.iun)
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');

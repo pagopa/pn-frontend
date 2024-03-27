@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Box, Button, DialogTitle, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
+import { Box, Button, DialogTitle, Grid, Typography } from '@mui/material';
 import {
   CollapsedList,
   NotificationDetailRecipient,
@@ -62,37 +63,39 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, iun }) => {
           </Button>
         </PnDialogActions>
       </PnDialog>
-      <CollapsedList
-        maxNumberOfItems={3}
-        items={recipients}
-        renderItem={(recipient) => (
-          <Box key={recipient.taxId} fontWeight={600} data-testid="recipients">
-            {recipients.length > 1
-              ? `${recipient.denomination} - ${recipient.taxId}`
-              : recipient.taxId}
-          </Box>
-        )}
-        renderRemainingItem={(count) => (
-          <Box fontWeight={600} data-testid="remaining-recipients">
-            +&nbsp;{count}&nbsp;{t('detail.recipients', { ns: 'notifiche' }).toLowerCase()}&nbsp;
-            <ButtonNaked
-              sx={{ verticalAlign: 'inherit' }}
-              onClick={() => setOpen(true)}
-              data-testid="show-all-recipients"
-            >
-              <Typography
-                color="primary"
-                variant="body2"
-                tabIndex={0}
-                aria-label={t('detail.show-all')}
-                fontWeight={'bold'}
+      {
+        <CollapsedList
+          maxNumberOfItems={3}
+          items={recipients}
+          renderItem={(recipient) => (
+            <Box key={recipient.taxId} fontWeight={600} data-testid="recipients">
+              {recipients.length > 1
+                ? `${recipient.denomination} - ${recipient.taxId}`
+                : recipient.taxId}
+            </Box>
+          )}
+          renderRemainingItem={(count) => (
+            <Box fontWeight={600} data-testid="remaining-recipients">
+              +&nbsp;{count}&nbsp;{t('detail.recipients', { ns: 'notifiche' }).toLowerCase()}&nbsp;
+              <ButtonNaked
+                sx={{ verticalAlign: 'inherit' }}
+                onClick={() => setOpen(true)}
+                data-testid="show-all-recipients"
               >
-                {t('detail.show-all')}
-              </Typography>
-            </ButtonNaked>
-          </Box>
-        )}
-      />
+                <Typography
+                  color="primary"
+                  variant="body2"
+                  tabIndex={0}
+                  aria-label={t('detail.show-all')}
+                  fontWeight={'bold'}
+                >
+                  {t('detail.show-all')}
+                </Typography>
+              </ButtonNaked>
+            </Box>
+          )}
+        />
+      }
     </>
   );
 };

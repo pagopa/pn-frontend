@@ -9,7 +9,7 @@ import {
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
-import { notificationToFeMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { NOTIFICATION_PAYMENT_ATTACHMENT } from '../../../api/notifications/notifications.routes';
@@ -48,13 +48,13 @@ describe('NotificationPaymentPagoPa Component', async () => {
 
   it('renders component', () => {
     const paymentHistory = populatePaymentsPagoPaF24(
-      notificationToFeMultiRecipient.timeline,
-      notificationToFeMultiRecipient.recipients[1].payments ?? [],
+      notificationDTOMultiRecipient.timeline,
+      notificationDTOMultiRecipient.recipients[1].payments ?? [],
       []
     );
     const { container, queryByTestId, rerender } = render(
       <NotificationPaymentPagoPa
-        iun={notificationToFeMultiRecipient.iun}
+        iun={notificationDTOMultiRecipient.iun}
         payment={paymentHistory[0].pagoPa!}
       />
     );
@@ -68,7 +68,7 @@ describe('NotificationPaymentPagoPa Component', async () => {
     paymentHistory[0].pagoPa!.status = PaymentStatus.SUCCEEDED;
     rerender(
       <NotificationPaymentPagoPa
-        iun={notificationToFeMultiRecipient.iun}
+        iun={notificationDTOMultiRecipient.iun}
         payment={paymentHistory[0].pagoPa!}
       />
     );
@@ -76,12 +76,12 @@ describe('NotificationPaymentPagoPa Component', async () => {
     expect(paymentChip).toBeInTheDocument();
   });
 
-  it('download payment attachment', async () => {
-    const iun = notificationToFeMultiRecipient.iun;
+  it('dowload payment attachment', async () => {
+    const iun = notificationDTOMultiRecipient.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
     const paymentHistory = populatePaymentsPagoPaF24(
-      notificationToFeMultiRecipient.timeline,
-      getPagoPaF24Payments(notificationToFeMultiRecipient.recipients[1].payments ?? [], 1, false),
+      notificationDTOMultiRecipient.timeline,
+      getPagoPaF24Payments(notificationDTOMultiRecipient.recipients[1].payments ?? [], 1, false),
       []
     );
     mock
@@ -96,7 +96,7 @@ describe('NotificationPaymentPagoPa Component', async () => {
       .reply(200, { url: 'http://mocked-url.com' });
     const { getByRole } = render(
       <NotificationPaymentPagoPa
-        iun={notificationToFeMultiRecipient.iun}
+        iun={notificationDTOMultiRecipient.iun}
         payment={paymentHistory[0].pagoPa!}
       />
     );
@@ -119,13 +119,13 @@ describe('NotificationPaymentPagoPa Component', async () => {
 
   it('download payment attachment - no recIndex', async () => {
     const paymentHistory = populatePaymentsPagoPaF24(
-      notificationToFeMultiRecipient.timeline,
-      notificationToFeMultiRecipient.recipients[1].payments ?? [],
+      notificationDTOMultiRecipient.timeline,
+      notificationDTOMultiRecipient.recipients[1].payments ?? [],
       []
     );
     const { getByRole } = render(
       <NotificationPaymentPagoPa
-        iun={notificationToFeMultiRecipient.iun}
+        iun={notificationDTOMultiRecipient.iun}
         payment={paymentHistory[0].pagoPa!}
       />
     );
@@ -139,14 +139,14 @@ describe('NotificationPaymentPagoPa Component', async () => {
 
   it('payment attachment not available', async () => {
     const paymentHistory = populatePaymentsPagoPaF24(
-      notificationToFeMultiRecipient.timeline,
-      notificationToFeMultiRecipient.recipients[1].payments ?? [],
+      notificationDTOMultiRecipient.timeline,
+      notificationDTOMultiRecipient.recipients[1].payments ?? [],
       []
     );
     const indexItem = paymentHistory.findIndex((item) => !item.pagoPa?.attachment);
     const { container } = render(
       <NotificationPaymentPagoPa
-        iun={notificationToFeMultiRecipient.iun}
+        iun={notificationDTOMultiRecipient.iun}
         payment={paymentHistory[indexItem].pagoPa!}
       />
     );

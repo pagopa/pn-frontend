@@ -204,6 +204,22 @@ const NotificationDetail = () => {
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
+  const showInfoMessageIfRetryAfter = (response: {
+    url: string;
+    retryAfter?: number | undefined;
+  }) => {
+    if (response.retryAfter) {
+      dispatch(
+        appStateActions.addInfo({
+          title: '',
+          message: t(`detail.document-not-available`, {
+            ns: 'notifiche',
+          }),
+        })
+      );
+    }
+  };
+
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
@@ -220,18 +236,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+        .then(showInfoMessageIfRetryAfter);
       trackEventByType(TrackEventType.SEND_DOWNLOAD_RECEIPT_NOTICE);
     } else {
       const documentIndex = document as string;
@@ -259,18 +264,7 @@ const NotificationDetail = () => {
         })
       )
         .unwrap()
-        .then((response) => {
-          if (response.retryAfter) {
-            dispatch(
-              appStateActions.addInfo({
-                title: '',
-                message: t(`detail.document-not-available`, {
-                  ns: 'notifiche',
-                }),
-              })
-            );
-          }
-        });
+        .then(showInfoMessageIfRetryAfter);
       trackEventByType(TrackEventType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES, {
         source: 'dettaglio_notifica',
       });

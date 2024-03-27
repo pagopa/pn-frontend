@@ -1,5 +1,5 @@
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, payments } from '../../../__mocks__/NotificationDetail.mock';
+import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
 import { PaymentsData } from '../../../models';
 import { initLocalizationForTest, render } from '../../../test-utils';
 import { getF24Payments, getPagoPaF24Payments, populatePaymentsPagoPaF24 } from '../../../utility';
@@ -8,7 +8,7 @@ import NotificationPaymentTitle from '../NotificationPaymentTitle';
 describe('NotificationPaymentTite component', () => {
   const paymentsData: PaymentsData = {
     pagoPaF24: populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
+      notificationDTO.timeline,
       getPagoPaF24Payments(payments, 0),
       paymentInfo
     ),

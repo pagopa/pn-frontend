@@ -20,10 +20,11 @@ import {
 
 import { downtimesDTO, simpleDowntimeLogPage } from '../../__mocks__/AppStatus.mock';
 import {
+  cancelledNotificationDTO,
   notificationDTO,
   notificationDTOMultiRecipient,
-  notificationToFe,
   raddNotificationDTO,
+  raddNotificationDTOMultiRecipient,
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -161,10 +162,10 @@ describe('NotificationDetail Page', async () => {
 
   it('checks not immediately available aar (otherDocuments) - mono recipient', async () => {
     const notificationAfter150Days = {
-      ...notificationToFe,
+      ...notificationDTO,
       sentAt: formatToTimezoneString(new Date(today.getTime() - 12960000000)) /* 150 days ago*/,
     };
-    mock.onGet(NOTIFICATION_DETAIL(notificationToFe.iun)).reply(200, notificationAfter150Days);
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationAfter150Days);
 
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: notificationAfter150Days.otherDocuments?.[0].documentId ?? '',
@@ -198,19 +199,17 @@ describe('NotificationDetail Page', async () => {
       expect(alertMessage).toBeInTheDocument();
     });
     // simulate that aar is now available
-    mock
-      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationToFe.iun, otherDocument))
-      .reply(200, {
-        filename: 'mocked-filename',
-        contentLength: 1000,
-        retryAfter: null,
-        url: 'https://mocked-aar-com',
-      });
+    mock.onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(notificationDTO.iun, otherDocument)).reply(200, {
+      filename: 'mocked-filename',
+      contentLength: 1000,
+      retryAfter: null,
+      url: 'https://mocked-aar-com',
+    });
     fireEvent.click(documentButton[1]);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/delivery-push/${notificationToFe.iun}/document/AAR`
+        `/delivery-push/${notificationDTO.iun}/document/AAR`
       );
     });
     await waitFor(() => {
@@ -220,10 +219,10 @@ describe('NotificationDetail Page', async () => {
 
   it('checks expired aar (otherDocuments) - mono recipient', async () => {
     const notificationAfter10Years = {
-      ...notificationToFe,
+      ...notificationDTO,
       sentAt: formatToTimezoneString(new Date(today.getTime() - 31536000000100)) /* 10 years ago*/,
     };
-    mock.onGet(NOTIFICATION_DETAIL(notificationToFe.iun)).reply(200, notificationAfter10Years);
+    mock.onGet(NOTIFICATION_DETAIL(notificationDTO.iun)).reply(200, notificationAfter10Years);
 
     await act(async () => {
       result = render(<NotificationDetail />);
@@ -423,22 +422,7 @@ describe('NotificationDetail Page', async () => {
       if (count === 0) {
         return [200, notificationDTO];
       }
-      return [
-        200,
-        {
-          ...notificationDTO,
-          timeline: [
-            ...notificationDTO.timeline,
-            {
-              elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
-              timestamp: '2033-08-14T13:42:54.17675939Z',
-              legalFactsIds: [],
-              category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
-              details: {},
-            },
-          ],
-        },
-      ];
+      return [200, cancelledNotificationDTO];
     });
     // we use regexp to not set the query parameters
     mock.onGet(new RegExp(DOWNTIME_HISTORY({ startDate: '' }))).reply(200, downtimesDTO);
@@ -562,30 +546,26 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('render success alert when documents have been picked up - monorecipient', async () => {
-    mock
-      .onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun))
-      .reply(200, { ...raddNotificationDTO, radd: true });
+    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, raddNotificationDTO);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
 
-    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-mono-recipient');
   });
 
   it('render success alert when documents have been picked up - multirecipient', async () => {
-    mock.onGet(NOTIFICATION_DETAIL(raddNotificationDTO.iun)).reply(200, {
-      ...raddNotificationDTO,
-      radd: true,
-      recipients: ['CLMCST42R12D969Z', '20517490320'],
-    });
+    mock
+      .onGet(NOTIFICATION_DETAIL(raddNotificationDTOMultiRecipient.iun))
+      .reply(200, raddNotificationDTOMultiRecipient);
     await act(async () => {
       result = render(<NotificationDetail />);
     });
 
-    const alertRadd = result.getAllByTestId('raddAlert')[0];
+    const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.description-multi-recipients');

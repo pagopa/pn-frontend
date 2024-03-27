@@ -8,7 +8,6 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachment,
   PaymentAttachmentNameType,
-  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
@@ -63,7 +62,7 @@ export const NotificationsApi = {
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
       if (response.data) {
-        return parseNotificationDetail(response.data);
+        return response.data;
       }
       return {} as NotificationDetail;
     }),
