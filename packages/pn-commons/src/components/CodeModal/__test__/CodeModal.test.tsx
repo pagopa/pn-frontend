@@ -24,6 +24,7 @@ const openedModalComponent = (
     confirmCallback={confirmButtonMock}
     hasError={hasError}
     errorMessage="mocked-errorMessage"
+    errorInputTypeMessage="mocked-errorTypeMessage"
     isReadOnly={readonly}
   />
 );
