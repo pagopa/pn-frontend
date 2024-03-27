@@ -2,19 +2,20 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+import { Configuration } from '@pagopa-pn/pn-commons';
 import '@testing-library/jest-dom';
 
-import { Configuration } from '@pagopa-pn/pn-commons';
-import { initStore } from './redux/store';
 import { initAxiosClients } from './api/apiClients';
+import { initStore } from './redux/store';
 
 // This is a workaround related to this issue https://github.com/nickcolley/jest-axe/issues/147
 const { getComputedStyle } = window;
+// eslint-disable-next-line functional/immutable-data
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(async () => {
   Configuration.setForTest<any>({
-    API_BASE_URL: 'mock-api-base-url',
+    API_BASE_URL: 'https://mock-api-base-url',
     DISABLE_INACTIVITY_HANDLER: true,
     ONE_TRUST_DRAFT_MODE: false,
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
