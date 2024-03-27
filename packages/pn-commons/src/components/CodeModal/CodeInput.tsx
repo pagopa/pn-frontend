@@ -15,6 +15,7 @@ import { TextField } from '@mui/material';
 type Props = {
   initialValues: Array<string>;
   onChange: (values: Array<string>) => void;
+  onInputError: () => void;
   isReadOnly?: boolean;
   hasError?: boolean;
 };
@@ -25,8 +26,9 @@ type Props = {
  * @param isReadOnly set if code is in readonly mode
  * @param hasError set if there is an error
  * @param onChange function to listen on inputs changes
+ * @param onInputError function to listen on inputs type errors
  */
-const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => {
+const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError }: Props) => {
   const [currentValues, setCurrentValues] = useState(initialValues);
   const inputsRef = useRef(new Array(initialValues.length).fill(undefined));
 
@@ -91,6 +93,9 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       const inputsValues = [...previousValues];
       // eslint-disable-next-line functional/immutable-data
       inputsValues[index] = value;
+      if (!Number(inputsValues[index])) {
+        onInputError();
+      }
       return inputsValues;
     });
   };
@@ -103,8 +108,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       changeInputValue(value, index);
       return;
     }
-    // remove non numeric char from value
-    value = value.replace(/[^\d]/g, '');
     if (value !== '') {
       // case maxLength 2
       if (value.length > 1) {
@@ -119,21 +122,29 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
 
   const pasteHandler = (event: ClipboardEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const copiedCode = event.clipboardData.getData('text');
+    const pastedCode = event.clipboardData.getData('text');
     // Ensure the copied code matches the required length
-    const requiredCode = copiedCode.slice(0, initialValues.length);
+    const maxLengthRequiredCode = pastedCode.slice(0, initialValues.length);
+    const values = maxLengthRequiredCode.split('');
 
-    if (Number(requiredCode)) {
-      const values = requiredCode.split('');
-      setCurrentValues(values);
-
-      // Focus the last input and set cursor at the end, then remove focus.
-      // it's needed to focus on lastInput before to step on to lastInput + 1
-      const lastInput = values.length - 1;
-      focusInput(lastInput);
-      focusInput(lastInput + 1);
-    } else {
-      console.log('errore da gestire');
+    if (values.length !== initialValues.length) {
+      const fillEmptyInputs = () => {
+        if (initialValues.length - values.length !== 0) {
+          // eslint-disable-next-line functional/immutable-data
+          values.push('');
+          fillEmptyInputs();
+        }
+      };
+      fillEmptyInputs();
+    }
+    setCurrentValues(values);
+    // Focus the last input and set cursor at the end, then remove focus.
+    // it's needed to focus on lastInput before to step on to lastInput + 1
+    const lastInput = values.length - 1;
+    focusInput(lastInput);
+    focusInput(lastInput + 1);
+    if (!Number(maxLengthRequiredCode)) {
+      onInputError();
     }
   };
 
@@ -157,8 +168,6 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
             maxLength: 2,
             sx: { padding: '16.5px 10px', textAlign: 'center' },
             readOnly: isReadOnly,
-            pattern: '^[0-9]{1}$',
-            inputMode: 'numeric',
             'data-testid': `code-input-${index}`,
           }}
           onKeyDown={(event) => keyDownHandler(event, index)}

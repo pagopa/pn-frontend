@@ -33,6 +33,7 @@ type Props = {
   hasError?: boolean;
   errorTitle?: string;
   errorMessage?: string;
+  errorInputTypeMessage: string;
 };
 
 /**
@@ -49,6 +50,7 @@ type Props = {
  * @param hasError set if there is an error
  * @param errorTitle title to show when there is an error
  * @param errorMessage message to show when there is an error
+ * @param errorInputTypeMessage message to show when there is an error on type of input
  */
 const CodeModal = memo(
   ({
@@ -66,13 +68,20 @@ const CodeModal = memo(
     hasError = false,
     errorTitle,
     errorMessage,
+    errorInputTypeMessage,
   }: Props) => {
     const [code, setCode] = useState(initialValues);
+    const [inputTypeError, setInputTypeError] = useState(false);
     const codeIsValid = code.every((v) => v);
 
     const changeHandler = useCallback((inputsValues: Array<string>) => {
       setCode(inputsValues);
     }, []);
+
+    const inputErrorHandler = () => {
+      console.log('errore di testo');
+      setInputTypeError(true);
+    };
 
     const confirmHandler = () => {
       if (!confirmCallback) {
@@ -103,6 +112,7 @@ const CodeModal = memo(
               isReadOnly={isReadOnly}
               hasError={hasError}
               onChange={changeHandler}
+              onInputError={inputErrorHandler}
             />
             {isReadOnly && (
               <CopyToClipboardButton
@@ -125,6 +135,16 @@ const CodeModal = memo(
                 {errorTitle}
               </AlertTitle>
               {errorMessage}
+            </Alert>
+          )}
+          {inputTypeError && !hasError && (
+            <Alert
+              id="error-type-alert"
+              data-testid="errorTypeAlert"
+              severity="error"
+              sx={{ mt: 2 }}
+            >
+              {errorInputTypeMessage}
             </Alert>
           )}
         </PnDialogContent>
