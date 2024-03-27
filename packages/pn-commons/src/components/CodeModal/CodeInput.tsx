@@ -128,6 +128,8 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
     const values = maxLengthRequiredCode.split('');
 
     if (values.length !== initialValues.length) {
+      const lastInput = values.length;
+      focusInput(lastInput);
       const fillEmptyInputs = () => {
         if (initialValues.length - values.length !== 0) {
           // eslint-disable-next-line functional/immutable-data
@@ -136,13 +138,15 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange, onInputError
         }
       };
       fillEmptyInputs();
+    } else {
+      // Focus the last input and set cursor at the end, then remove focus.
+      // it's needed to focus on lastInput before to step on to lastInput + 1
+      const lastInput = values.length - 1;
+      focusInput(lastInput);
+      focusInput(lastInput + 1);
     }
     setCurrentValues(values);
-    // Focus the last input and set cursor at the end, then remove focus.
-    // it's needed to focus on lastInput before to step on to lastInput + 1
-    const lastInput = values.length - 1;
-    focusInput(lastInput);
-    focusInput(lastInput + 1);
+
     if (!Number(maxLengthRequiredCode)) {
       onInputError();
     }
