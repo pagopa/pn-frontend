@@ -15,13 +15,7 @@ const WrappedPrompt = () => {
       <Route
         path={'/'}
         element={
-          <Prompt
-            title={'Test title'}
-            message={'Test subtitle'}
-            eventTrackingCallbackPromptOpened={() => {}}
-            eventTrackingCallbackCancel={() => {}}
-            eventTrackingCallbackConfirm={() => {}}
-          >
+          <Prompt title={'Test title'} message={'Test subtitle'}>
             <div onClick={handleNavigate}>navigate</div>
           </Prompt>
         }

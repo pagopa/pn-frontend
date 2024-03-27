@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -351,8 +352,9 @@ describe('NotificationDetail Page', async () => {
     // insert two entries into the history, so the initial render will refer to the path /
     // and when the back button is pressed and so navigate(-1) is invoked,
     // the path will change to /mock-path
-    window.history.pushState({}, '', '/mock-path');
-    window.history.pushState({}, '', '/');
+    const history = createBrowserHistory();
+    history.push('/mock-path');
+    history.push('/');
 
     // render with an ad-hoc router
     await act(async () => {

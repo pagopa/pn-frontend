@@ -21,7 +21,6 @@ beforeAll(() => {
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
     IS_DEVELOP: false,
     MIXPANEL_TOKEN: 'DUMMY',
-    MOCK_USER: false,
     LOG_REDUX_ACTIONS: false,
     APP_VERSION: 'mock-version',
     SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
@@ -29,6 +28,7 @@ beforeAll(() => {
     IS_PAYMENT_ENABLED: false,
     DELEGATIONS_TO_PG_ENABLED: true,
     LANDING_SITE_URL: 'https://www.dev.notifichedigitali.it',
+    PAGOPA_HELP_PP: 'https://www.fake-page.it',
   });
   initStore(false);
   initAxiosClients();
